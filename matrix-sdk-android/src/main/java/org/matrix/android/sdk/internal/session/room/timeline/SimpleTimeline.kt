@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2021 New Vector Ltd
  *
@@ -17,14 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
-import io.realm.OrderedCollectionChangeSet
-import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
-import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
-import io.realm.RealmList
-import io.realm.RealmQuery
-import io.realm.RealmResults
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -34,13 +27,8 @@ import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
-import org.matrix.android.sdk.internal.database.model.ChunkEntity
-import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
-import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
@@ -56,6 +44,7 @@ class SimpleTimeline internal constructor(val roomId: String,
                                           private val realmConfiguration: RealmConfiguration,
                                           private val paginationTask: PaginationTask,
                                           private val getEventTask: GetContextOfEventTask,
+                                          private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
                                           private val timelineEventMapper: TimelineEventMapper,
                                           private val timelineInput: TimelineInput,
                                           private val eventDecryptor: TimelineEventDecryptor) {
@@ -72,7 +61,16 @@ class SimpleTimeline internal constructor(val roomId: String,
 
     val timelineId = UUID.randomUUID().toString()
 
-    private val originEventId = AtomicReference<String>(null)
+    private val timelineChunkFactory = TimelineChunk.Factory(
+            roomId = roomId,
+            timelineId = timelineId,
+            eventDecryptor=eventDecryptor,
+            paginationTask = paginationTask,
+            fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
+            timelineEventMapper = timelineEventMapper,
+            onBuiltEvents = this::postSnapshot
+    )
+
     private val listeners = CopyOnWriteArrayList<Listener>()
     private val isStarted = AtomicBoolean(false)
     private val forwardState = AtomicReference(PaginationState())
@@ -82,17 +80,7 @@ class SimpleTimeline internal constructor(val roomId: String,
     private val timelineDispatcher = BACKGROUND_HANDLER.asCoroutineDispatcher()
     private val timelineScope = CoroutineScope(SupervisorJob() + timelineDispatcher)
     private val sequencer = SemaphoreCoroutineSequencer()
-    private var strategy: LoadTimelineStrategy = LiveTimelineStrategy(
-            roomId = roomId,
-            realm = backgroundRealm,
-            paginationTask = paginationTask,
-            timelineInput = timelineInput,
-            timelineEventMapper = timelineEventMapper,
-            timelineId = timelineId,
-            eventDecryptor = eventDecryptor,
-            onEventsUpdated = this::postSnapshot,
-            onNewTimelineEvents = this::onNewTimelineEvents
-    )
+    private var strategy: LoadTimelineStrategy = buildLiveStrategy(null)
 
     val isLive: Boolean
         get() = strategy is LiveTimelineStrategy
@@ -130,9 +118,6 @@ class SimpleTimeline internal constructor(val roomId: String,
                 strategy.onStart()
             }
         }
-        updateState(Direction.FORWARDS) {
-            it.copy(hasMoreToLoad = false)
-        }
     }
 
     fun stop() = timelineScope.launch {
@@ -147,19 +132,6 @@ class SimpleTimeline internal constructor(val roomId: String,
 
     fun getIndexOfEvent(eventId: String): Int? {
         return strategy.getBuiltEventIndex(eventId)
-    }
-
-    private fun updateState(direction: Direction, update: (PaginationState) -> PaginationState) {
-        val stateReference = when (direction) {
-            Direction.FORWARDS -> forwardState
-            Direction.BACKWARDS -> backwardState
-        }
-        val currentValue = stateReference.get()
-        val newValue = update(currentValue)
-        stateReference.set(newValue)
-        listeners.forEach {
-            tryOrNull { it.onStateUpdated() }
-        }
     }
 
     fun getPaginationState(direction: Direction): PaginationState {
@@ -197,6 +169,40 @@ class SimpleTimeline internal constructor(val roomId: String,
         }
     }
 
+    suspend fun resetToLive() = loadAround(null)
+
+    suspend fun loadAround(eventId: String?) = withContext(timelineDispatcher) {
+        sequencer.post {
+            strategy.onStop()
+            if(eventId == null){
+                strategy = buildLiveStrategy(eventId)
+            }else {
+                val realm = backgroundRealm.get() ?: return@post
+                val timelineEntity = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
+                // We don't know this event
+                strategy = if (timelineEntity == null) {
+                    buildPastStrategy(eventId)
+                } else {
+                    val chunk = timelineEntity.chunk?.firstOrNull()
+                    // We know this event and is last forward, so we use LiveTimelineStrategy
+                    if (chunk?.isLastForward.orFalse()) {
+                        buildLiveStrategy(eventId)
+                    } else {
+                        buildPastStrategy(eventId)
+                    }
+                }
+            }
+            updateState(Direction.FORWARDS) {
+                it.copy(loading = false, hasMoreToLoad = true)
+            }
+            updateState(Direction.BACKWARDS) {
+                it.copy(loading = false, hasMoreToLoad = true)
+            }
+            strategy.onStart()
+            postSnapshot()
+        }
+    }
+
     private fun postSnapshot() = timelineScope.launch {
         val snapshot = measureTimeData { strategy.buildSnapshot() }
         Timber.v("Building snapshot took ${snapshot.duration} ms")
@@ -207,9 +213,49 @@ class SimpleTimeline internal constructor(val roomId: String,
         }
     }
 
+    private fun updateState(direction: Direction, update: (PaginationState) -> PaginationState) {
+        val stateReference = when (direction) {
+            Direction.FORWARDS -> forwardState
+            Direction.BACKWARDS -> backwardState
+        }
+        val currentValue = stateReference.get()
+        val newValue = update(currentValue)
+        stateReference.set(newValue)
+        listeners.forEach {
+            tryOrNull { it.onStateUpdated() }
+        }
+    }
+
     private fun onNewTimelineEvents(eventIds: List<String>) = timelineScope.launch(Dispatchers.Main) {
         listeners.forEach {
             tryOrNull { it.onNewTimelineEvents(eventIds) }
         }
     }
+
+    private fun buildLiveStrategy(originEventId: String?): LiveTimelineStrategy {
+        return LiveTimelineStrategy(
+                roomId = roomId,
+                originEventId = originEventId,
+                realm = backgroundRealm,
+                timelineInput = timelineInput,
+                timelineChunkFactory = timelineChunkFactory,
+                timelineEventMapper = timelineEventMapper,
+                onEventsUpdated = this::postSnapshot,
+                onNewTimelineEvents = this::onNewTimelineEvents
+        )
+    }
+
+    private fun buildPastStrategy(originEventId: String): PastTimelineStrategy {
+        return PastTimelineStrategy(
+                roomId = roomId,
+                timelineChunkFactory = timelineChunkFactory,
+                originEventId = originEventId,
+                realm = backgroundRealm,
+                timelineInput = timelineInput,
+                getContextOfEventTask = getEventTask,
+                onEventsUpdated = this::postSnapshot
+        )
+    }
+
+
 }

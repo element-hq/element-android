@@ -68,6 +68,7 @@ internal class DefaultTimelineService @AssistedInject constructor(
                 realmConfiguration = monarchy.realmConfiguration,
                 paginationTask = paginationTask,
                 getEventTask = contextOfEventTask,
+                fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 timelineEventMapper = timelineEventMapper,
                 timelineInput = timelineInput,
                 eventDecryptor = eventDecryptor

@@ -37,15 +37,41 @@ import java.util.Collections
  */
 private const val PAGINATION_COUNT = 50
 
-internal class TimelineChunk(private val chunkEntity: ChunkEntity,
-                             private val roomId: String,
-                             private val timelineId: String,
-                             private val eventDecryptor: TimelineEventDecryptor,
-                             private val paginationTask: PaginationTask,
-                             private val timelineEventMapper: TimelineEventMapper,
-                             private val uiEchoManager: UIEchoManager? = null,
-                             private val initialEventId: String?,
-                             private val onBuiltEvents: () -> Unit) {
+internal class TimelineChunk private constructor(private val chunkEntity: ChunkEntity,
+                                                 private val roomId: String,
+                                                 private val timelineId: String,
+                                                 private val eventDecryptor: TimelineEventDecryptor,
+                                                 private val paginationTask: PaginationTask,
+                                                 private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+                                                 private val timelineEventMapper: TimelineEventMapper,
+                                                 private val uiEchoManager: UIEchoManager? = null,
+                                                 private val initialEventId: String?,
+                                                 private val onBuiltEvents: () -> Unit) {
+
+    class Factory(private val roomId: String,
+                  private val timelineId: String,
+                  private val eventDecryptor: TimelineEventDecryptor,
+                  private val paginationTask: PaginationTask,
+                  private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+                  private val timelineEventMapper: TimelineEventMapper,
+                  private val onBuiltEvents: () -> Unit){
+
+
+        fun create(chunkEntity: ChunkEntity,uiEchoManager: UIEchoManager? = null, initialEventId: String?): TimelineChunk {
+            return TimelineChunk(
+                    chunkEntity = chunkEntity,
+                    roomId = roomId,
+                    timelineId = timelineId,
+                    eventDecryptor = eventDecryptor,
+                    paginationTask = paginationTask,
+                    fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
+                    timelineEventMapper = timelineEventMapper,
+                    uiEchoManager = uiEchoManager,
+                    initialEventId = initialEventId,
+                    onBuiltEvents = onBuiltEvents
+            )
+        }
+    }
 
     private val chunkObjectListener = RealmObjectChangeListener<ChunkEntity> { _, changeSet ->
         Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${changeSet?.changedFields?.joinToString(",")}")
@@ -132,8 +158,8 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         val displayIndex = getNextDisplayIndex(direction) ?: return 0
         val baseQuery = timelineEventEntities.where()
         val timelineEvents = baseQuery.offsets(direction, count, displayIndex).findAll().orEmpty()
-        if(timelineEvents.isEmpty()) return 0
-        if(direction == SimpleTimeline.Direction.FORWARDS){
+        if (timelineEvents.isEmpty()) return 0
+        if (direction == SimpleTimeline.Direction.FORWARDS) {
             builtEventsIndexes.entries.forEach { it.setValue(it.value + timelineEvents.size) }
         }
         timelineEvents
@@ -175,9 +201,10 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                 eventDecryptor = eventDecryptor,
                 roomId = roomId,
                 paginationTask = paginationTask,
+                fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 timelineEventMapper = timelineEventMapper,
                 uiEchoManager = uiEchoManager,
-                initialEventId = initialEventId,
+                initialEventId = null,
                 onBuiltEvents = onBuiltEvents
         )
     }
@@ -194,28 +221,28 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
 
     fun getBuiltEventIndex(eventId: String, searchInNext: Boolean, searchInPrev: Boolean): Int? {
         val builtEventIndex = builtEventsIndexes[eventId]
-        if(builtEventIndex != null){
+        if (builtEventIndex != null) {
             return getOffsetIndex() + builtEventIndex
         }
-        if(searchInNext){
+        if (searchInNext) {
             val nextBuiltEventIndex = nextChunk?.getBuiltEventIndex(eventId, searchInNext = true, searchInPrev = false)
-            if(nextBuiltEventIndex != null){
+            if (nextBuiltEventIndex != null) {
                 return nextBuiltEventIndex
             }
         }
-        if(searchInPrev){
+        if (searchInPrev) {
             val prevBuiltEventIndex = prevChunk?.getBuiltEventIndex(eventId, searchInNext = false, searchInPrev = true)
-            if(prevBuiltEventIndex != null){
+            if (prevBuiltEventIndex != null) {
                 return prevBuiltEventIndex
             }
         }
         return null
     }
 
-    private fun getOffsetIndex(): Int{
+    private fun getOffsetIndex(): Int {
         var offset = 0
         var currentNextChunk = nextChunk
-        while(currentNextChunk != null){
+        while (currentNextChunk != null) {
             offset += currentNextChunk.builtEvents.size
             currentNextChunk = currentNextChunk.nextChunk
         }
@@ -228,7 +255,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
             val newItems = frozenResults
                     .subList(range.startIndex, range.startIndex + range.length)
                     .map { it.buildAndDecryptIfNeeded() }
-            builtEventsIndexes.entries.filter { it.value >= range.startIndex}.forEach { it.setValue(it.value + range.length) }
+            builtEventsIndexes.entries.filter { it.value >= range.startIndex }.forEach { it.setValue(it.value + range.length) }
             newItems.mapIndexed { index, timelineEvent ->
                 val correctedIndex = range.startIndex + index
                 builtEvents.add(correctedIndex, timelineEvent)
@@ -313,11 +340,10 @@ private fun RealmQuery<TimelineEventEntity>.offsets(
         count: Long,
         startDisplayIndex: Int
 ): RealmQuery<TimelineEventEntity> {
+    sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
     if (direction == SimpleTimeline.Direction.BACKWARDS) {
-        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
         lessThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
     } else {
-        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
         greaterThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
     }
     return limit(count)

@@ -168,6 +168,7 @@ import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
@@ -662,7 +663,9 @@ class RoomDetailFragment @Inject constructor(
             views.jumpToBottomView.visibility = View.INVISIBLE
             if (!roomDetailViewModel.simpleTimeline.isLive) {
                 scrollOnNewMessageCallback.forceScrollOnNextUpdate()
-                //roomDetailViewModel.timeline.restartWithEventId(null)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    roomDetailViewModel.simpleTimeline.resetToLive()
+                }
             } else {
                 layoutManager.scrollToPosition(0)
             }

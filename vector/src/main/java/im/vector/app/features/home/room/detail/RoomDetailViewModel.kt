@@ -47,7 +47,6 @@ import im.vector.app.features.crypto.verification.SupportedVerificationMethodsPr
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
-import im.vector.app.features.home.room.detail.timeline.helper.TimelineSettingsFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
@@ -1171,8 +1170,10 @@ class RoomDetailViewModel @AssistedInject constructor(
         val targetEventId: String = action.eventId
         val indexOfEvent = simpleTimeline.getIndexOfEvent(targetEventId)
         if (indexOfEvent == null) {
-            // Event is not already in RAM
-            //timeline.restartWithEventId(targetEventId)
+            // Event is not already built
+            viewModelScope.launch {
+                simpleTimeline.loadAround(targetEventId)
+            }
         }
         if (action.highlight) {
             setState { copy(highlightedEventId = targetEventId) }
@@ -1480,7 +1481,9 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     override fun onTimelineFailure(throwable: Throwable) {
         // If we have a critical timeline issue, we get back to live.
-        //timeline.restartWithEventId(null)
+        viewModelScope.launch {
+            simpleTimeline.resetToLive()
+        }
         _viewEvents.post(RoomDetailViewEvents.Failure(throwable))
     }
 
