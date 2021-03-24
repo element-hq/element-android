@@ -3266,6 +3266,7 @@
     <string name="your_public_space">Your public space</string>
     <string name="create_spaces_type_header">Spaces are a new way to group rooms and people</string>
     <string name="create_spaces_choose_type_label">What type of space do you want to create?</string>
+    <string name="create_spaces_you_can_change_later">You can change this later</string>
     <string name="create_spaces_join_info_help">To join an existing space, you need an invite.</string>
     <string name="space_type_public">Public</string>
     <string name="space_type_public_desc">Open to anyone, best for communities</string>
@@ -3276,10 +3277,11 @@
     <string name="create_spaces_details_private_header">Add some details to help people identify it. You can change these at any point.</string>
     <string name="create_space_error_empty_field_space_name">Give it a name to continue.</string>
     <string name="create_spaces_room_public_header">What are some discussions you want to have in %s?</string>
-    <string name="create_spaces_room_public_header_desc">We’ll create rooms for them, and auto-join everyone. You can add more later too.</string>
+    <string name="create_spaces_room_public_header_desc">We’ll create rooms for them. You can add more later too.</string>
     <string name="create_spaces_default_public_room_name">General</string>
     <string name="create_spaces_default_public_random_room_name">Random</string>
     <string name="create_spaces_loading_message">Creating Space…</string>
+    <string name="create_space_topic_hint">Description</string>
     <string name="invite_people_to_your_space">Invite people to your space</string>
     <string name="invite_people_menu">Invite people</string>
     <string name="invite_people_to_your_space_desc">It’s just you at the moment.  %s will be even better with others.</string>
@@ -3294,6 +3296,8 @@
     <string name="room_alias_preview_not_found">This alias is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
 
     <string name="suggested_rooms_pills_on_empty_text">You’re not in any rooms yet. Below are some suggested rooms, but you can see more with the green button bottom right.</string>
+    <!-- First one is the space name, and the second one is user name -->
+    <string name="suggested_rooms_pills_on_empty_header">Welcome to %1$s, %2$s.</string>
 
     <string name="space_explore_activity_title">Explore rooms</string>
     <string name="leave_space">Leave Space</string>

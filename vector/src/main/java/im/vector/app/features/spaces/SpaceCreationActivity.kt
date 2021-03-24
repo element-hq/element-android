@@ -66,6 +66,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
 
     override fun initUiAndData() {
         super.initUiAndData()
+
         viewModel.subscribe(this) {
             renderState(it)
         }

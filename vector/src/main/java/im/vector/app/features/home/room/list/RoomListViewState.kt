@@ -24,6 +24,8 @@ data class RoomListViewState(
         val displayMode: RoomListDisplayMode,
         val roomFilter: String = "",
         val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap()
+        val asyncSuggestedRooms: Async<List<SpaceChildInfo>> = Uninitialized,
+        val suggestedRoomJoiningState: Map<String, Async<Unit>> = emptyMap()
 ) : MvRxState {
 
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)

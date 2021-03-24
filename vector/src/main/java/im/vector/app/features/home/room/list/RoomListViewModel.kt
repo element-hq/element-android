@@ -27,6 +27,8 @@ import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.utils.DataSource
+import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import io.reactivex.schedulers.Schedulers
