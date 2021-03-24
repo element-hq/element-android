@@ -21,6 +21,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -64,6 +65,8 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
         val spaceName = summary?.name
         views.descriptionText.text = getString(R.string.invite_people_to_your_space_desc, spaceName)
 
+        // XXX enable back when supported
+        views.inviteByMailButton.isVisible = false
         views.inviteByMailButton.debouncedClicks {
         }
 
@@ -84,9 +87,9 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
             }
         }
 
-        views.skipButton.debouncedClicks {
-            dismiss()
-        }
+//        views.skipButton.debouncedClicks {
+//            dismiss()
+//        }
     }
 
     companion object {

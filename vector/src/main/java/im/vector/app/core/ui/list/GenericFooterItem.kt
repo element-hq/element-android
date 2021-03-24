@@ -15,6 +15,7 @@
  */
 package im.vector.app.core.ui.list
 
+import android.graphics.Typeface
 import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.ColorInt
@@ -36,7 +37,7 @@ import im.vector.app.features.themes.ThemeUtils
 abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() {
 
     @EpoxyAttribute
-    var text: String? = null
+    var text: CharSequence? = null
 
     @EpoxyAttribute
     var style: GenericItem.STYLE = GenericItem.STYLE.NORMAL_TEXT
@@ -53,10 +54,17 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+
         holder.text.setTextOrHide(text)
+        holder.text.typeface = Typeface.DEFAULT
         when (style) {
             GenericItem.STYLE.BIG_TEXT    -> holder.text.textSize = 18f
             GenericItem.STYLE.NORMAL_TEXT -> holder.text.textSize = 14f
+            GenericItem.STYLE.SUBHEADER -> holder.text.textSize = 16f
+            GenericItem.STYLE.TITLE -> {
+                holder.text.textSize = 20f
+                holder.text.typeface = Typeface.DEFAULT_BOLD
+            }
         }
         holder.text.gravity = if (centered) Gravity.CENTER_HORIZONTAL else Gravity.START
 
