@@ -339,6 +339,7 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.launchToCallback(coroutineDispatchers.crypto, NoOpMatrixCallback()) {
             // Open the store
             cryptoStore.open()
+
             // this can throw if no backup
             tryOrNull {
                 keysBackupService.checkAndStartKeysBackup()

@@ -47,7 +47,6 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
                                                        private val roomSyncHandler: RoomSyncHandler,
                                                        private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
                                                        private val groupSyncHandler: GroupSyncHandler,
-                                                       private val cryptoSyncHandler: CryptoSyncHandler,
                                                        private val cryptoService: DefaultCryptoService,
                                                        private val tokenStore: SyncTokenStore,
                                                        private val processEventForPushTask: ProcessEventForPushTask,
@@ -127,7 +126,7 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
         }
 
         Timber.v("On sync completed")
-        cryptoSyncHandler.onSyncCompleted()
+        cryptoService.onSyncCompleted()
     }
 
     /**
