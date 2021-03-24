@@ -141,8 +141,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         // Room encryptors store
         private val roomEncryptorsStore: RoomEncryptorsStore,
-        // Olm device
-        private val olmDevice: MXOlmDevice,
         // Set of parameters used to configure/customize the end-to-end crypto.
         private val mxCryptoConfig: MXCryptoConfig,
         // Device list manager
@@ -422,7 +420,6 @@ internal class DefaultCryptoService @Inject constructor(
     fun close() = runBlocking(coroutineDispatchers.crypto) {
         cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
         incomingGossipingRequestManager.close()
-        olmDevice.release()
         cryptoStore.close()
     }
 
@@ -746,15 +743,6 @@ internal class DefaultCryptoService @Inject constructor(
     @Throws(MXCryptoError::class)
     private fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
        return eventDecryptor.decryptEvent(event, timeline)
-    }
-
-    /**
-     * Reset replay attack data for the given timeline.
-     *
-     * @param timelineId the timeline id
-     */
-    fun resetReplayAttackCheckInTimeline(timelineId: String) {
-        olmDevice.resetReplayAttackCheckInTimeline(timelineId)
     }
 
     /**
