@@ -34,6 +34,8 @@ class SpaceDetailEpoxyController @Inject constructor(
 
     var listener: Listener? = null
 
+//    var shouldForceFocusOnce = true
+
     override fun buildModels(data: CreateSpaceState?) {
         genericFooterItem {
             id("info_help")
@@ -61,8 +63,18 @@ class SpaceDetailEpoxyController @Inject constructor(
             enabled(true)
             value(data?.name)
             hint(stringProvider.getString(R.string.create_room_name_hint))
+            singleLine(true)
             showBottomSeparator(false)
             errorMessage(data?.nameInlineError)
+//            onBind { _, view, _ ->
+//                if (shouldForceFocusOnce && data?.name.isNullOrBlank()) {
+//                    shouldForceFocusOnce = false
+//                    // sad face :(
+//                    view.textInputEditText.post {
+//                        view.textInputEditText.showKeyboard(true)
+//                    }
+//                }
+//            }
             onTextChange { text ->
                 listener?.onNameChange(text)
             }
@@ -72,9 +84,9 @@ class SpaceDetailEpoxyController @Inject constructor(
             id("topic")
             enabled(true)
             value(data?.topic)
-            hint(stringProvider.getString(R.string.create_room_topic_hint))
+            hint(stringProvider.getString(R.string.create_space_topic_hint))
             showBottomSeparator(false)
-            textSizeSp(15)
+            textSizeSp(16)
             onTextChange { text ->
                 listener?.onTopicChange(text)
             }
