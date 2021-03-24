@@ -21,8 +21,10 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Success
 import im.vector.app.R
 import im.vector.app.core.epoxy.helpFooterItem
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
+import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
@@ -36,7 +38,8 @@ import javax.inject.Inject
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
                                                 private val roomSummaryItemFactory: RoomSummaryItemFactory,
                                                 private val roomListNameFilter: RoomListNameFilter,
-                                                private val userPreferencesProvider: UserPreferencesProvider
+                                                private val userPreferencesProvider: UserPreferencesProvider,
+                                                private val colorProvider: ColorProvider
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -118,6 +121,17 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                     }
             if (suggested?.isNotEmpty() == true) {
                 if (roomSummaries.isNullOrEmpty()) {
+                    genericFooterItem {
+                        id("empty_suggested_header")
+                        centered(false)
+                        style(GenericItem.STYLE.TITLE)
+                        text(stringProvider.getString(
+                                R.string.suggested_rooms_pills_on_empty_header,
+                                viewState.currentSpace.invoke()?.name,
+                                viewState.currentUserName
+                        ))
+                        textColor(colorProvider.getColorFromAttribute(R.attr.riot_primary_text_color))
+                    }
                     genericFooterItem {
                         id("empty_suggested")
                         centered(false)

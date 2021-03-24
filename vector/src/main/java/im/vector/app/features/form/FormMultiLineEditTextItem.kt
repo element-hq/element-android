@@ -73,7 +73,7 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
         holder.textInputLayout.error = errorMessage
 
         holder.textInputEditText.typeface = typeFace
-        holder.textInputEditText.textSize = textSizeSp?.toFloat() ?: 12f
+        holder.textInputEditText.textSize = textSizeSp?.toFloat() ?: 14f
         holder.textInputEditText.minLines = minLines
 
         // Update only if text is different and value is not null

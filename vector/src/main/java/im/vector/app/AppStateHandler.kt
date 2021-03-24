@@ -163,7 +163,9 @@ class AppStateHandler @Inject constructor(
                                                 }
                                             }
 
-                                            val rooms = currentSession.getFlattenRoomSummaryChildOf(currentSpace?.roomId?.takeIf { it != ALL_COMMUNITIES_GROUP_ID })
+                                            val rooms = currentSession.getFlattenRoomSummaryChildOf(
+                                                    currentSpace?.roomId?.takeIf { it != ALL_COMMUNITIES_GROUP_ID }
+                                            )
                                             (filteredDm + rooms).sortedWith(chronologicalRoomComparator)
 //                                                    .also {
 //                                                Timber.w("VAL: live summaries update filter done ${System.currentTimeMillis() - startime}")

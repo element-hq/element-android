@@ -26,6 +26,7 @@ import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.utils.DataSource
+import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,7 +47,8 @@ import javax.inject.Inject
 class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             private val session: Session,
                                             private val roomSummariesSource: DataSource<List<RoomSummary>>,
-                                            suggestedRoomListDataSource: DataSource<List<SpaceChildInfo>>)
+                                            suggestedRoomListDataSource: DataSource<List<SpaceChildInfo>>,
+                                            selectedSpaceDataSource: SelectedSpaceDataSource)
     : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
     interface Factory {
@@ -73,20 +75,38 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 .execute { info ->
                     copy(asyncSuggestedRooms = info)
                 }.disposeOnClear()
+
+        selectedSpaceDataSource.observe()
+                .map { it.orNull() }
+                .distinctUntilChanged()
+                .execute {
+                    copy(
+                            currentSpace = it
+                    )
+                }
+
+        session.rx().liveUser(session.myUserId)
+                .map { it.getOrNull()?.getBestName() }
+                .distinctUntilChanged()
+                .execute {
+                    copy(
+                            currentUserName = it.invoke() ?: session.myUserId
+                    )
+                }
     }
 
     override fun handle(action: RoomListAction) {
         when (action) {
-            is RoomListAction.SelectRoom                  -> handleSelectRoom(action)
-            is RoomListAction.ToggleCategory              -> handleToggleCategory(action)
-            is RoomListAction.AcceptInvitation            -> handleAcceptInvitation(action)
-            is RoomListAction.RejectInvitation            -> handleRejectInvitation(action)
-            is RoomListAction.FilterWith                  -> handleFilter(action)
-            is RoomListAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
-            is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
+            is RoomListAction.SelectRoom -> handleSelectRoom(action)
+            is RoomListAction.ToggleCategory -> handleToggleCategory(action)
+            is RoomListAction.AcceptInvitation -> handleAcceptInvitation(action)
+            is RoomListAction.RejectInvitation -> handleRejectInvitation(action)
+            is RoomListAction.FilterWith -> handleFilter(action)
+            is RoomListAction.MarkAllRoomsRead -> handleMarkAllRoomsRead()
+            is RoomListAction.LeaveRoom -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-            is RoomListAction.ToggleTag                   -> handleToggleTag(action)
-            is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
+            is RoomListAction.ToggleTag -> handleToggleTag(action)
+            is RoomListAction.JoinSuggestedRoom -> handleJoinSuggestedRoom(action)
         }.exhaustive
     }
 

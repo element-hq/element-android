@@ -33,10 +33,12 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
 
     var listener: Listener? = null
 
+//    var shouldForceFocusOnce = true
+
     override fun buildModels(data: CreateSpaceState?) {
         genericFooterItem {
             id("info_help_header")
-            style(GenericItem.STYLE.BIG_TEXT)
+            style(GenericItem.STYLE.TITLE)
             text(stringProvider.getString(R.string.create_spaces_room_public_header, data?.name))
             textColor(colorProvider.getColorFromAttribute(R.attr.riot_primary_text_color))
         }
@@ -47,10 +49,12 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
             textColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary))
         }
 
+        val firstRoomName = data?.defaultRooms?.get(0)
         formEditTextItem {
             id("roomName1")
             enabled(true)
-            value(data?.defaultRooms?.get(0))
+            value(firstRoomName)
+            singleLine(true)
             hint(stringProvider.getString(R.string.create_room_name_section))
             endIconMode(TextInputLayout.END_ICON_CLEAR_TEXT)
             showBottomSeparator(false)
@@ -59,10 +63,12 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
             }
         }
 
+        val secondRoomName = data?.defaultRooms?.get(1)
         formEditTextItem {
             id("roomName2")
             enabled(true)
-            value(data?.defaultRooms?.get(1))
+            value(secondRoomName)
+            singleLine(true)
             hint(stringProvider.getString(R.string.create_room_name_section))
             endIconMode(TextInputLayout.END_ICON_CLEAR_TEXT)
             showBottomSeparator(false)
@@ -71,23 +77,35 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
             }
         }
 
+        val thirdRoomName = data?.defaultRooms?.get(2)
         formEditTextItem {
             id("roomName3")
             enabled(true)
-            value(data?.defaultRooms?.get(2))
+            value(thirdRoomName)
+            singleLine(true)
             hint(stringProvider.getString(R.string.create_room_name_section))
             endIconMode(TextInputLayout.END_ICON_CLEAR_TEXT)
             showBottomSeparator(false)
             onTextChange { text ->
                 listener?.onNameChange(2, text)
             }
+//            onBind { _, view, _ ->
+//                if (shouldForceFocusOnce
+//                        && thirdRoomName.isNullOrBlank()
+//                        && firstRoomName.isNullOrBlank().not()
+//                        && secondRoomName.isNullOrBlank().not()
+//                ) {
+//                    shouldForceFocusOnce = false
+//                    // sad face :(
+//                    view.textInputEditText.post {
+//                        view.textInputEditText.showKeyboard(true)
+//                    }
+//                }
+//            }
         }
     }
 
     interface Listener {
-        //        fun onAvatarDelete()
-//        fun onAvatarChange()
         fun onNameChange(index: Int, newName: String)
-//        fun onTopicChange(newTopic: String)
     }
 }

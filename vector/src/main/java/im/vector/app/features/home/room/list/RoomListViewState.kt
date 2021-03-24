@@ -33,6 +33,8 @@ data class RoomListViewState(
         val roomFilter: String = "",
         val asyncFilteredRooms: Async<RoomSummaries> = Uninitialized,
         val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap(),
+        val currentUserName: String = "",
+        val currentSpace: Async<RoomSummary?> = Uninitialized,
         val isInviteExpanded: Boolean = true,
         val isFavouriteRoomsExpanded: Boolean = true,
         val isDirectRoomsExpanded: Boolean = true,

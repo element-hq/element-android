@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.list
 
+import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import im.vector.app.features.home.CurrentSpaceSuggestedRoomListDataSource
 import im.vector.app.features.home.HomeRoomListDataSource
 import org.matrix.android.sdk.api.session.Session
@@ -24,7 +25,8 @@ import javax.inject.Provider
 
 class RoomListViewModelFactory @Inject constructor(private val session: Provider<Session>,
                                                    private val homeRoomListDataSource: Provider<HomeRoomListDataSource>,
-                                                   private val suggestedRoomDataSource: Provider<CurrentSpaceSuggestedRoomListDataSource>)
+                                                   private val suggestedRoomDataSource: Provider<CurrentSpaceSuggestedRoomListDataSource>,
+                                                   private val selectedSpaceDataSource: Provider<SelectedSpaceDataSource>)
     : RoomListViewModel.Factory {
 
     override fun create(initialState: RoomListViewState): RoomListViewModel {
@@ -32,7 +34,8 @@ class RoomListViewModelFactory @Inject constructor(private val session: Provider
                 initialState,
                 session.get(),
                 homeRoomListDataSource.get(),
-                suggestedRoomDataSource.get()
+                suggestedRoomDataSource.get(),
+                selectedSpaceDataSource.get()
         )
     }
 }
