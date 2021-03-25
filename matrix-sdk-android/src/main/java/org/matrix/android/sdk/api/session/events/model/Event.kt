@@ -289,3 +289,7 @@ fun Event.getRelationContent(): RelationDefaultContent? {
 fun Event.isReply(): Boolean {
     return getRelationContent()?.inReplyTo?.eventId != null
 }
+
+fun Event.isEdition(): Boolean {
+    return getRelationContent()?.takeIf { it.type == RelationType.REPLACE }?.eventId != null
+}

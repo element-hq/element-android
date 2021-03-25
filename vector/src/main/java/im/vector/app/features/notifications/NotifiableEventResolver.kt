@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isEdition
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -89,7 +90,9 @@ class NotifiableEventResolver @Inject constructor(
     fun resolveInMemoryEvent(session: Session, event: Event): NotifiableEvent? {
         if (event.getClearType() != EventType.MESSAGE) return null
 
-        // TODO Ignore message edition
+        // Ignore message edition
+        if (event.isEdition()) return null
+
         val user = session.getUser(event.senderId!!) ?: return null
 
         val timelineEvent = TimelineEvent(
