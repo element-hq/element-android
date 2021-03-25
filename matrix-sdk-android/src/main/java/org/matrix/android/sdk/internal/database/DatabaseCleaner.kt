@@ -48,13 +48,15 @@ internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val 
                                                    private val taskExecutor: TaskExecutor) : SessionLifecycleObserver {
 
     override fun onSessionStarted() {
-        taskExecutor.executorScope.launch(Dispatchers.Default) {
+        // TODO: Enable new clean up
+        /*taskExecutor.executorScope.launch(Dispatchers.Default) {
             awaitTransaction(realmConfiguration) { realm ->
                 val allRooms = realm.where(RoomEntity::class.java).findAll()
                 Timber.v("There are ${allRooms.size} rooms in this session")
                 cleanUp(realm, MAX_NUMBER_OF_EVENTS_IN_DB / 2L)
             }
         }
+         */
     }
 
     private fun cleanUp(realm: Realm, threshold: Long) {
