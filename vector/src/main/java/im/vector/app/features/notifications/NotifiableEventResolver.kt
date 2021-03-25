@@ -93,22 +93,39 @@ class NotifiableEventResolver @Inject constructor(
         // Ignore message edition
         if (event.isEdition()) return null
 
-        val user = session.getUser(event.senderId!!) ?: return null
+        val actions = session.getActions(event)
+        val notificationAction = actions.toNotificationAction()
 
-        val timelineEvent = TimelineEvent(
-                root = event,
-                localId = -1,
-                eventId = event.eventId!!,
-                displayIndex = 0,
-                senderInfo = SenderInfo(
-                        userId = user.userId,
-                        displayName = user.getBestName(),
-                        isUniqueDisplayName = true,
-                        avatarUrl = user.avatarUrl
-                )
-        )
+        return if (notificationAction.shouldNotify) {
+            val user = session.getUser(event.senderId!!) ?: return null
 
-        return resolveMessageEvent(timelineEvent, session)
+            val timelineEvent = TimelineEvent(
+                    root = event,
+                    localId = -1,
+                    eventId = event.eventId!!,
+                    displayIndex = 0,
+                    senderInfo = SenderInfo(
+                            userId = user.userId,
+                            displayName = user.getBestName(),
+                            isUniqueDisplayName = true,
+                            avatarUrl = user.avatarUrl
+                    )
+            )
+
+            val notifiableEvent = resolveMessageEvent(timelineEvent, session)
+
+            if (notifiableEvent == null) {
+                Timber.d("## Failed to resolve event")
+                // TODO
+                null
+            } else {
+                notifiableEvent.noisy = !notificationAction.soundName.isNullOrBlank()
+                notifiableEvent
+            }
+        } else {
+            Timber.d("Matched push rule is set to not notify")
+            null
+        }
     }
 
     private fun resolveMessageEvent(event: TimelineEvent, session: Session): NotifiableEvent? {

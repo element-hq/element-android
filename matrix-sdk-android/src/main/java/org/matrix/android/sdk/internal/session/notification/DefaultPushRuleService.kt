@@ -16,8 +16,11 @@
 package org.matrix.android.sdk.internal.session.notification
 
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.pushrules.Action
+import org.matrix.android.sdk.api.pushrules.ConditionResolver
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleKind
+import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
 import org.matrix.android.sdk.api.pushrules.getActions
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
@@ -45,6 +48,7 @@ internal class DefaultPushRuleService @Inject constructor(
         private val addPushRuleTask: AddPushRuleTask,
         private val updatePushRuleActionsTask: UpdatePushRuleActionsTask,
         private val removePushRuleTask: RemovePushRuleTask,
+        private val conditionResolver: ConditionResolver,
         private val taskExecutor: TaskExecutor,
         @SessionDatabase private val monarchy: Monarchy
 ) : PushRuleService {
@@ -127,6 +131,22 @@ internal class DefaultPushRuleService @Inject constructor(
     override fun addPushRuleListener(listener: PushRuleService.PushRuleListener) {
         synchronized(listeners) {
             listeners.add(listener)
+        }
+    }
+
+    override fun getActions(event: Event): List<Action> {
+        val rules = getPushRules(RuleScope.GLOBAL).getAllRules()
+
+        return fulfilledBingRule(event, rules)?.getActions().orEmpty()
+    }
+
+    // TODO This is a copy paste, try to have only once this code
+    private fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule? {
+        return rules.firstOrNull { rule ->
+            // All conditions must hold true for an event in order to apply the action for the event.
+            rule.enabled && rule.conditions?.all {
+                it.asExecutableCondition(rule)?.isSatisfied(event, conditionResolver) ?: false
+            } ?: false
         }
     }
 
