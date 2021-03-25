@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.room.model.create
 
 import android.net.Uri
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContentOverride
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
@@ -67,6 +68,8 @@ open class CreateRoomParams {
      * A list of objects representing third party IDs to invite into the room.
      */
     val invite3pids = mutableListOf<ThreePid>()
+
+    var guestAccess: GuestAccess? = null
 
     /**
      * If set to true, when the room will be created, if cross-signing is enabled and we can get keys for every invited users,
