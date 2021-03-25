@@ -416,4 +416,18 @@
     <string name="summary_you_sent_image">നിങ്ങൾ ഒരു ചിത്രം അയച്ചു.</string>
     <string name="summary_user_sent_image">%1$s ഒരു ചിത്രം അയച്ചു.</string>
     <string name="summary_message">%1$s: %2$s</string>
+    <string name="notice_room_kick_by_you">നിങ്ങൾ %1$s-നെ(യെ) പുറത്താക്കി</string>
+    <string name="notice_room_kick">%1$s %2$s-നെ(യെ) പുറത്താക്കി</string>
+    <string name="notice_direct_room_join_by_you">നിങ്ങൾ ചേർന്നു</string>
+    <string name="notice_direct_room_join">%1$s ചേർന്നു</string>
+    <string name="notice_room_join_by_you">നിങ്ങൾ മുറിയിൽ ചേർന്നു</string>
+    <string name="notice_room_join">%1$s മുറിയിൽ ചേർന്നു</string>
+    <string name="notice_room_invite_you">%1$s നിങ്ങളെ ക്ഷണിച്ചു</string>
+    <string name="notice_room_invite_by_you">നിങ്ങൾ %1$s-നെ(യെ) ക്ഷണിച്ചു</string>
+    <string name="notice_room_invite">%1$s %2$s-നെ(യെ) ക്ഷണിച്ചു</string>
+    <string name="notice_room_created_by_you">നിങ്ങൾ മുറി സൃഷ്ടിച്ചു</string>
+    <string name="notice_room_created">%1$s മുറി സൃഷ്ടിച്ചു</string>
+    <string name="notice_room_invite_no_invitee_by_you">നിങ്ങളുടെ ക്ഷണം</string>
+    <string name="notice_room_invite_no_invitee">%s-ന്റെ ക്ഷണം</string>
+    <string name="summary_you_sent_sticker">നിങ്ങൾ ഒരു സ്റ്റിക്കർ അയച്ചു.</string>
 </resources>
