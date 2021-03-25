@@ -1172,7 +1172,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (indexOfEvent == null) {
             // Event is not already built
             viewModelScope.launch {
-                simpleTimeline.loadAround(targetEventId)
+                simpleTimeline.openAround(targetEventId)
             }
         }
         if (action.highlight) {

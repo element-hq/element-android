@@ -37,41 +37,16 @@ import java.util.Collections
  */
 private const val PAGINATION_COUNT = 50
 
-internal class TimelineChunk private constructor(private val chunkEntity: ChunkEntity,
-                                                 private val roomId: String,
-                                                 private val timelineId: String,
-                                                 private val eventDecryptor: TimelineEventDecryptor,
-                                                 private val paginationTask: PaginationTask,
-                                                 private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-                                                 private val timelineEventMapper: TimelineEventMapper,
-                                                 private val uiEchoManager: UIEchoManager? = null,
-                                                 private val initialEventId: String?,
-                                                 private val onBuiltEvents: () -> Unit) {
-
-    class Factory(private val roomId: String,
-                  private val timelineId: String,
-                  private val eventDecryptor: TimelineEventDecryptor,
-                  private val paginationTask: PaginationTask,
-                  private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-                  private val timelineEventMapper: TimelineEventMapper,
-                  private val onBuiltEvents: () -> Unit){
-
-
-        fun create(chunkEntity: ChunkEntity,uiEchoManager: UIEchoManager? = null, initialEventId: String?): TimelineChunk {
-            return TimelineChunk(
-                    chunkEntity = chunkEntity,
-                    roomId = roomId,
-                    timelineId = timelineId,
-                    eventDecryptor = eventDecryptor,
-                    paginationTask = paginationTask,
-                    fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
-                    timelineEventMapper = timelineEventMapper,
-                    uiEchoManager = uiEchoManager,
-                    initialEventId = initialEventId,
-                    onBuiltEvents = onBuiltEvents
-            )
-        }
-    }
+internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
+                                         private val roomId: String,
+                                         private val timelineId: String,
+                                         private val eventDecryptor: TimelineEventDecryptor,
+                                         private val paginationTask: PaginationTask,
+                                         private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+                                         private val timelineEventMapper: TimelineEventMapper,
+                                         private val uiEchoManager: UIEchoManager? = null,
+                                         private val initialEventId: String?,
+                                         private val onBuiltEvents: () -> Unit) {
 
     private val chunkObjectListener = RealmObjectChangeListener<ChunkEntity> { _, changeSet ->
         Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${changeSet?.changedFields?.joinToString(",")}")
@@ -93,6 +68,14 @@ internal class TimelineChunk private constructor(private val chunkEntity: ChunkE
     init {
         timelineEventEntities.addChangeListener(timelineEventCollectionListener)
         chunkEntity.addChangeListener(chunkObjectListener)
+    }
+
+    fun hasReachedLastForward(): Boolean {
+        return if (chunkEntity.isLastForward) {
+            true
+        } else {
+            nextChunk?.hasReachedLastForward().orFalse()
+        }
     }
 
     fun builtItems(includesNext: Boolean, includesPrev: Boolean): List<TimelineEvent> {

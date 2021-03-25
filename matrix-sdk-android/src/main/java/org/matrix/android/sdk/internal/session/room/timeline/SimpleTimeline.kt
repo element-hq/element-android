@@ -42,13 +42,12 @@ import java.util.concurrent.atomic.AtomicReference
 
 class SimpleTimeline internal constructor(val roomId: String,
                                           private val realmConfiguration: RealmConfiguration,
-                                          private val paginationTask: PaginationTask,
-                                          private val getEventTask: GetContextOfEventTask,
-                                          private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-                                          private val timelineEventMapper: TimelineEventMapper,
-                                          private val timelineInput: TimelineInput,
-                                          private val eventDecryptor: TimelineEventDecryptor) {
-
+                                          paginationTask: PaginationTask,
+                                          getEventTask: GetContextOfEventTask,
+                                          fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+                                          timelineEventMapper: TimelineEventMapper,
+                                          timelineInput: TimelineInput,
+                                          eventDecryptor: TimelineEventDecryptor) {
     interface Listener {
         fun onStateUpdated()
         fun onEventsUpdated(snapshot: List<TimelineEvent>)
@@ -61,16 +60,6 @@ class SimpleTimeline internal constructor(val roomId: String,
 
     val timelineId = UUID.randomUUID().toString()
 
-    private val timelineChunkFactory = TimelineChunk.Factory(
-            roomId = roomId,
-            timelineId = timelineId,
-            eventDecryptor=eventDecryptor,
-            paginationTask = paginationTask,
-            fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
-            timelineEventMapper = timelineEventMapper,
-            onBuiltEvents = this::postSnapshot
-    )
-
     private val listeners = CopyOnWriteArrayList<Listener>()
     private val isStarted = AtomicBoolean(false)
     private val forwardState = AtomicReference(PaginationState())
@@ -80,10 +69,22 @@ class SimpleTimeline internal constructor(val roomId: String,
     private val timelineDispatcher = BACKGROUND_HANDLER.asCoroutineDispatcher()
     private val timelineScope = CoroutineScope(SupervisorJob() + timelineDispatcher)
     private val sequencer = SemaphoreCoroutineSequencer()
-    private var strategy: LoadTimelineStrategy = buildLiveStrategy(null)
+
+    private val strategyDependencies = LoadTimelineStrategy.Dependencies(
+            eventDecryptor = eventDecryptor,
+            paginationTask = paginationTask,
+            fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
+            timelineInput = timelineInput,
+            timelineEventMapper = timelineEventMapper,
+            realm = backgroundRealm,
+            getContextOfEventTask = getEventTask,
+            onEventsUpdated = this::postSnapshot,
+            onNewTimelineEvents = this::onNewTimelineEvents
+    )
+    private var strategy: LoadTimelineStrategy = buildStrategy(LoadTimelineStrategy.Mode.Default)
 
     val isLive: Boolean
-        get() = strategy is LiveTimelineStrategy
+        get() = !getPaginationState(Direction.FORWARDS).hasMoreToLoad
 
     data class PaginationState(
             val hasMoreToLoad: Boolean = true,
@@ -113,8 +114,10 @@ class SimpleTimeline internal constructor(val roomId: String,
         sequencer.post {
             if (isStarted.compareAndSet(false, true)) {
                 val realm = Realm.getInstance(realmConfiguration)
+                updateState(Direction.FORWARDS) {
+                    it.copy(loading = false, hasMoreToLoad = false)
+                }
                 backgroundRealm.set(realm)
-                eventDecryptor.start()
                 strategy.onStart()
             }
         }
@@ -123,7 +126,6 @@ class SimpleTimeline internal constructor(val roomId: String,
     fun stop() = timelineScope.launch {
         sequencer.post {
             if (isStarted.compareAndSet(true, false)) {
-                eventDecryptor.destroy()
                 strategy.onStop()
                 backgroundRealm.get().closeQuietly()
             }
@@ -162,38 +164,31 @@ class SimpleTimeline internal constructor(val roomId: String,
                 it.copy(loading = true)
             }
             val loadMoreResult = strategy.loadMore(count, direction)
+            val hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END
             updateState(direction) {
-                it.copy(loading = false, hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END)
+                it.copy(loading = false, hasMoreToLoad = hasMoreToLoad)
             }
             postSnapshot()
         }
     }
 
-    suspend fun resetToLive() = loadAround(null)
+    suspend fun resetToLive() = openAround(null)
 
-    suspend fun loadAround(eventId: String?) = withContext(timelineDispatcher) {
+    suspend fun openAround(eventId: String?) = withContext(timelineDispatcher) {
+        val baseLogMessage = "openAround(eventId: $eventId)"
         sequencer.post {
+            Timber.v("$baseLogMessage started")
+            if (!isStarted.get()) {
+                throw IllegalStateException("You should call start before using timeline")
+            }
             strategy.onStop()
-            if(eventId == null){
-                strategy = buildLiveStrategy(eventId)
-            }else {
-                val realm = backgroundRealm.get() ?: return@post
-                val timelineEntity = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
-                // We don't know this event
-                strategy = if (timelineEntity == null) {
-                    buildPastStrategy(eventId)
-                } else {
-                    val chunk = timelineEntity.chunk?.firstOrNull()
-                    // We know this event and is last forward, so we use LiveTimelineStrategy
-                    if (chunk?.isLastForward.orFalse()) {
-                        buildLiveStrategy(eventId)
-                    } else {
-                        buildPastStrategy(eventId)
-                    }
-                }
+            strategy = if (eventId == null) {
+                buildStrategy(LoadTimelineStrategy.Mode.Default)
+            } else {
+                buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
             }
             updateState(Direction.FORWARDS) {
-                it.copy(loading = false, hasMoreToLoad = true)
+                it.copy(loading = false, hasMoreToLoad = eventId != null)
             }
             updateState(Direction.BACKWARDS) {
                 it.copy(loading = false, hasMoreToLoad = true)
@@ -213,7 +208,7 @@ class SimpleTimeline internal constructor(val roomId: String,
         }
     }
 
-    private fun updateState(direction: Direction, update: (PaginationState) -> PaginationState) {
+    private suspend fun updateState(direction: Direction, update: (PaginationState) -> PaginationState) {
         val stateReference = when (direction) {
             Direction.FORWARDS -> forwardState
             Direction.BACKWARDS -> backwardState
@@ -221,8 +216,10 @@ class SimpleTimeline internal constructor(val roomId: String,
         val currentValue = stateReference.get()
         val newValue = update(currentValue)
         stateReference.set(newValue)
-        listeners.forEach {
-            tryOrNull { it.onStateUpdated() }
+        withContext(Dispatchers.Main) {
+            listeners.forEach {
+                tryOrNull { it.onStateUpdated() }
+            }
         }
     }
 
@@ -232,30 +229,13 @@ class SimpleTimeline internal constructor(val roomId: String,
         }
     }
 
-    private fun buildLiveStrategy(originEventId: String?): LiveTimelineStrategy {
-        return LiveTimelineStrategy(
+    private fun buildStrategy(mode: LoadTimelineStrategy.Mode): LoadTimelineStrategy {
+        return LoadTimelineStrategy(
                 roomId = roomId,
-                originEventId = originEventId,
-                realm = backgroundRealm,
-                timelineInput = timelineInput,
-                timelineChunkFactory = timelineChunkFactory,
-                timelineEventMapper = timelineEventMapper,
-                onEventsUpdated = this::postSnapshot,
-                onNewTimelineEvents = this::onNewTimelineEvents
+                timelineId = timelineId,
+                mode = mode,
+                dependencies = strategyDependencies
         )
     }
-
-    private fun buildPastStrategy(originEventId: String): PastTimelineStrategy {
-        return PastTimelineStrategy(
-                roomId = roomId,
-                timelineChunkFactory = timelineChunkFactory,
-                originEventId = originEventId,
-                realm = backgroundRealm,
-                timelineInput = timelineInput,
-                getContextOfEventTask = getEventTask,
-                onEventsUpdated = this::postSnapshot
-        )
-    }
-
 
 }

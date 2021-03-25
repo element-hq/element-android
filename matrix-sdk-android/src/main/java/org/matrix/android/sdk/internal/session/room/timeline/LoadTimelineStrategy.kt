@@ -19,8 +19,6 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
-import io.realm.RealmChangeListener
-import io.realm.RealmList
 import io.realm.RealmResults
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -29,239 +27,172 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
-import org.matrix.android.sdk.internal.database.model.RoomEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.findAllIncludingEvents
 import org.matrix.android.sdk.internal.database.query.where
 import java.util.concurrent.atomic.AtomicReference
 
-internal interface LoadTimelineStrategy : TimelineInput.Listener {
-    fun onStart()
-    fun onStop()
-    suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction): LoadMoreResult
-    fun buildSnapshot(): List<TimelineEvent>
-    fun getBuiltEventIndex(eventId: String): Int?
-}
-
-internal class LiveTimelineStrategy(private val roomId: String,
-                                    private val originEventId: String?,
-                                    private val realm: AtomicReference<Realm>,
-                                    private val timelineChunkFactory: TimelineChunk.Factory,
-                                    private val timelineInput: TimelineInput,
-                                    private val timelineEventMapper: TimelineEventMapper,
-                                    private val onEventsUpdated: () -> Unit,
-                                    private val onNewTimelineEvents: (List<String>) -> Unit)
-    : LoadTimelineStrategy, UIEchoManager.Listener {
-
-    private var roomEntity: RoomEntity? = null
-    private var sendingTimelineEvents: RealmList<TimelineEventEntity>? = null
-    private var chunkEntity: RealmResults<ChunkEntity>? = null
-    private var timelineChunk: TimelineChunk? = null
-    private val uiEchoManager = UIEchoManager(TimelineSettings(10), this)
-
-    private val chunkEntityListener = OrderedRealmCollectionChangeListener { _: RealmResults<ChunkEntity>, changeSet: OrderedCollectionChangeSet ->
-        val syncHasGap = changeSet.deletions.isNotEmpty() && changeSet.insertions.isNotEmpty()
-        if (syncHasGap) {
-            timelineChunk?.close(closeNext = false, closePrev = true)
-            timelineChunk = chunkEntity?.createTimelineChunk()
-            onEventsUpdated()
-        }
-    }
-
-    private val sendingTimelineEventsListener = RealmChangeListener<RealmList<TimelineEventEntity>> { events ->
-        uiEchoManager.onSentEventsInDatabase(events.map { it.eventId })
-        onEventsUpdated()
-    }
-
-    override fun onStart() {
-        timelineInput.listeners.add(this)
-        val safeRealm = realm.get()
-        roomEntity = RoomEntity.where(safeRealm, roomId = roomId).findFirst()
-        sendingTimelineEvents = roomEntity?.sendingTimelineEvents
-        sendingTimelineEvents?.addChangeListener(sendingTimelineEventsListener)
-        chunkEntity = getChunkEntity(safeRealm).also {
-            it.addChangeListener(chunkEntityListener)
-            timelineChunk = it.createTimelineChunk()
-        }
-    }
-
-    override fun onStop() {
-        timelineInput.listeners.remove(this)
-        chunkEntity?.removeChangeListener(chunkEntityListener)
-        sendingTimelineEvents?.removeChangeListener(sendingTimelineEventsListener)
-        timelineChunk?.close(closeNext = false, closePrev = true)
-        sendingTimelineEvents = null
-        roomEntity = null
-        chunkEntity = null
-        timelineChunk = null
-    }
-
-    override suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction): LoadMoreResult {
-        return timelineChunk?.loadMore(count, direction) ?: LoadMoreResult.FAILURE
-    }
-
-    override fun buildSnapshot(): List<TimelineEvent> {
-        return buildSendingEvents() + timelineChunk?.builtItems(includesNext = false, includesPrev = true).orEmpty()
-    }
-
-    override fun getBuiltEventIndex(eventId: String): Int? {
-        return timelineChunk?.getBuiltEventIndex(eventId, searchInNext = false, searchInPrev = true)
-    }
-
-    private fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
-        return ChunkEntity.where(realm, roomId)
-                .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
-                .findAll()
-    }
-
-    private fun buildSendingEvents(): List<TimelineEvent> {
-        val builtSendingEvents = mutableListOf<TimelineEvent>()
-        uiEchoManager.getInMemorySendingEvents()
-                .filterSendingEventsTo(builtSendingEvents)
-        sendingTimelineEvents?.freeze()
-                ?.filter { timelineEvent ->
-                    builtSendingEvents.none { it.eventId == timelineEvent.eventId }
-                }
-                ?.map {
-                    timelineEventMapper.map(it)
-                }?.filterSendingEventsTo(builtSendingEvents)
-
-        return builtSendingEvents
-    }
-
-    private fun RealmResults<ChunkEntity>.createTimelineChunk(): TimelineChunk? {
-        return firstOrNull()?.let {
-            timelineChunkFactory.create(it, uiEchoManager, originEventId)
-        }
-    }
-
-    override fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
-        return timelineChunk?.rebuildEvent(eventId, builder, searchInNext = true, searchInPrev = true).orFalse()
-    }
-
-    override fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {
-        if (roomId != this.roomId) {
-            return
-        }
-        onNewTimelineEvents(listOf(timelineEvent.eventId))
-        if (uiEchoManager.onLocalEchoCreated(timelineEvent)) {
-            onEventsUpdated()
-        }
-    }
-
-    override fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState) {
-        if (roomId != this.roomId) {
-            return
-        }
-        if (uiEchoManager.onSendStateUpdated(eventId, sendState)) {
-            onEventsUpdated()
-        }
-    }
-
-    override fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
-        if (roomId == this.roomId) {
-            onNewTimelineEvents(eventIds)
-        }
-    }
-
-    private fun List<TimelineEvent>.filterSendingEventsTo(target: MutableList<TimelineEvent>) {
-        target.addAll(
-                map { uiEchoManager.updateSentStateWithUiEcho(it) }
-        )
-    }
-}
-
-internal class PastTimelineStrategy(
+internal class LoadTimelineStrategy(
         private val roomId: String,
-        private val realm: AtomicReference<Realm>,
-        private val timelineChunkFactory: TimelineChunk.Factory,
-        private val originEventId: String,
-        private val timelineInput: TimelineInput,
-        private val getContextOfEventTask: GetContextOfEventTask,
-        private val onEventsUpdated: () -> Unit
-) : LoadTimelineStrategy, UIEchoManager.Listener {
+        private val timelineId: String,
+        private val mode: Mode,
+        private val dependencies: Dependencies) {
 
-    private val uiEchoManager = UIEchoManager(TimelineSettings(10), this)
+    sealed class Mode {
+        object Default : Mode()
+        data class Permalink(val originEventId: String) : Mode()
+
+        fun originEventId(): String? {
+            return if (this is Permalink) {
+                originEventId
+            } else {
+                null
+            }
+        }
+    }
+
+    data class Dependencies(
+            val realm: AtomicReference<Realm>,
+            val eventDecryptor: TimelineEventDecryptor,
+            val paginationTask: PaginationTask,
+            val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+            val getContextOfEventTask: GetContextOfEventTask,
+            val timelineInput: TimelineInput,
+            val timelineEventMapper: TimelineEventMapper,
+            val onEventsUpdated: () -> Unit,
+            val onNewTimelineEvents: (List<String>) -> Unit
+    )
+
     private var chunkEntity: RealmResults<ChunkEntity>? = null
     private var timelineChunk: TimelineChunk? = null
 
     private val chunkEntityListener = OrderedRealmCollectionChangeListener { _: RealmResults<ChunkEntity>, changeSet: OrderedCollectionChangeSet ->
-        if (changeSet.insertions.isNotEmpty()) {
-            timelineChunk?.close(closeNext = false, closePrev = true)
+        val shouldRebuildChunk = changeSet.insertions.isNotEmpty()
+        if (shouldRebuildChunk) {
+            timelineChunk?.close(closeNext = true, closePrev = true)
             timelineChunk = chunkEntity?.createTimelineChunk()
-            onEventsUpdated()
+            dependencies.onEventsUpdated()
         }
     }
 
-    override fun onStart() {
-        timelineInput.listeners.add(this)
-        val safeRealm = realm.get()
-        chunkEntity = getChunkEntity(safeRealm).also {
+    private val uiEchoManagerListener = object : UIEchoManager.Listener {
+        override fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
+            return timelineChunk?.rebuildEvent(eventId, builder, searchInNext = true, searchInPrev = true).orFalse()
+        }
+    }
+
+    private val timelineInputListener = object : TimelineInput.Listener {
+        override fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {
+            if (roomId != this@LoadTimelineStrategy.roomId) {
+                return
+            }
+            dependencies.onNewTimelineEvents(listOf(timelineEvent.eventId))
+            if (uiEchoManager.onLocalEchoCreated(timelineEvent)) {
+                dependencies.onEventsUpdated()
+            }
+        }
+
+        override fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState) {
+            if (roomId != this@LoadTimelineStrategy.roomId) {
+                return
+            }
+            if (uiEchoManager.onSendStateUpdated(eventId, sendState)) {
+                dependencies.onEventsUpdated()
+            }
+        }
+
+        override fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
+            if (roomId == this@LoadTimelineStrategy.roomId) {
+                dependencies.onNewTimelineEvents(eventIds)
+            }
+        }
+    }
+
+    private val uiEchoManager = UIEchoManager(TimelineSettings(10), uiEchoManagerListener)
+    private val sendingEventsDataSource: SendingEventsDataSource = RealmSendingEventsDataSource(
+            roomId = roomId,
+            realm = dependencies.realm,
+            uiEchoManager = uiEchoManager,
+            timelineEventMapper = dependencies.timelineEventMapper,
+            onEventsUpdated = dependencies.onEventsUpdated
+    )
+
+    fun onStart() {
+        dependencies.eventDecryptor.start()
+        dependencies.timelineInput.listeners.add(timelineInputListener)
+        val realm = dependencies.realm.get()
+        sendingEventsDataSource.start()
+        chunkEntity = getChunkEntity(realm).also {
             it.addChangeListener(chunkEntityListener)
             timelineChunk = it.createTimelineChunk()
         }
     }
 
-    override fun onStop() {
-        timelineInput.listeners.remove(this)
-        timelineChunk?.close(closeNext = false, closePrev = true)
+    fun onStop() {
+        dependencies.eventDecryptor.destroy()
+        dependencies.timelineInput.listeners.remove(timelineInputListener)
         chunkEntity?.removeChangeListener(chunkEntityListener)
+        sendingEventsDataSource.stop()
+        timelineChunk?.close(closeNext = true, closePrev = true)
         chunkEntity = null
         timelineChunk = null
     }
 
-    override suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction): LoadMoreResult {
-        if (timelineChunk == null) {
-            val params = GetContextOfEventTask.Params(roomId, originEventId)
-            return try {
-                getContextOfEventTask.execute(params)
+    suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction): LoadMoreResult {
+        return if (mode is Mode.Permalink && timelineChunk == null) {
+            val params = GetContextOfEventTask.Params(roomId, mode.originEventId)
+            try {
+                dependencies.getContextOfEventTask.execute(params)
                 LoadMoreResult.SUCCESS
             } catch (failure: Throwable) {
                 LoadMoreResult.FAILURE
             }
+        } else {
+            timelineChunk?.loadMore(count, direction) ?: LoadMoreResult.FAILURE
         }
-        return timelineChunk?.loadMore(count, direction) ?: LoadMoreResult.FAILURE
     }
 
-    override fun buildSnapshot(): List<TimelineEvent> {
-        return timelineChunk?.builtItems(includesNext = true, includesPrev = true).orEmpty()
+    fun getBuiltEventIndex(eventId: String): Int? {
+        return timelineChunk?.getBuiltEventIndex(eventId, searchInNext = true, searchInPrev = true)
     }
 
-    override fun getBuiltEventIndex(eventId: String): Int? {
-        return timelineChunk?.getBuiltEventIndex(eventId, searchInNext = false, searchInPrev = true)
+    fun buildSnapshot(): List<TimelineEvent> {
+        return buildSendingEvents() + timelineChunk?.builtItems(includesNext = true, includesPrev = true).orEmpty()
+    }
+
+    private fun buildSendingEvents(): List<TimelineEvent> {
+        return if (timelineChunk?.hasReachedLastForward().orFalse()) {
+            sendingEventsDataSource.buildSendingEvents()
+        } else {
+            emptyList()
+        }
     }
 
     private fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
-        return ChunkEntity.findAllIncludingEvents(realm, listOf(originEventId))
+        return if (mode is Mode.Permalink) {
+            ChunkEntity.findAllIncludingEvents(realm, listOf(mode.originEventId))
+        } else {
+            ChunkEntity.where(realm, roomId)
+                    .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
+                    .findAll()
+        }
     }
 
     private fun RealmResults<ChunkEntity>.createTimelineChunk(): TimelineChunk? {
         return firstOrNull()?.let {
-            timelineChunkFactory.create(it, uiEchoManager, originEventId)
+            return TimelineChunk(
+                    chunkEntity = it,
+                    roomId = roomId,
+                    timelineId = timelineId,
+                    eventDecryptor = dependencies.eventDecryptor,
+                    paginationTask = dependencies.paginationTask,
+                    fetchTokenAndPaginateTask = dependencies.fetchTokenAndPaginateTask,
+                    timelineEventMapper = dependencies.timelineEventMapper,
+                    uiEchoManager = uiEchoManager,
+                    initialEventId = mode.originEventId(),
+                    onBuiltEvents = dependencies.onEventsUpdated
+            )
         }
-    }
-
-    override fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
-        return timelineChunk?.rebuildEvent(eventId, builder, searchInNext = true, searchInPrev = true).orFalse()
-    }
-
-    override fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {
-        if (roomId == this.roomId) {
-            uiEchoManager.onLocalEchoCreated(timelineEvent)
-        }
-    }
-
-    override fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState) {
-        //NOOP
-    }
-
-    override fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
-        //NOOP
-    }
-
-    private fun List<TimelineEvent>.filterSendingEventsTo(target: MutableList<TimelineEvent>) {
-        target.addAll(
-                map { uiEchoManager.updateSentStateWithUiEcho(it) }
-        )
     }
 }
+
+
