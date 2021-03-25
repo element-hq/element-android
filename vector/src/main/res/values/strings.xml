@@ -3288,6 +3288,10 @@
     <string name="invite_by_email">Invite by email</string>
     <string name="invite_by_mxid">Invite by username</string>
     <string name="invite_by_link">Share link</string>
+    <string name="invite_to_space_with_name">Invite to %s</string>
+    <string name="invite_to_space_with_name_desc">"They’ll be able to explore %s"</string>
+    <string name="invite_just_to_this_room">Just to this room</string>
+    <string name="invite_just_to_this_room_desc">"They won’t be a part of %s"</string>
     <!-- First one is the space name, and the second one is the matrix.to link -->
     <string name="share_space_link_message">Join my space %1$s %2$s</string>
     <string name="skip_for_now">Skip for now</string>
