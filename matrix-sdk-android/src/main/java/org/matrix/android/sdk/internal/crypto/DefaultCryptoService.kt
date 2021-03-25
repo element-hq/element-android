@@ -165,7 +165,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val eventDecryptor: EventDecryptor
 ) : CryptoService {
 
     private val isStarting = AtomicBoolean(false)
@@ -638,7 +637,8 @@ internal class DefaultCryptoService @Inject constructor(
      * @param callback the callback to return data or null
      */
     override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>) {
-        eventDecryptor.decryptEventAsync(event, timeline, callback)
+        // This isn't really used anywhere, maybe just remove it?
+        // TODO
     }
 
     /**
