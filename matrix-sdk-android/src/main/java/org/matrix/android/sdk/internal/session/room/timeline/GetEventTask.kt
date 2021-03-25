@@ -29,7 +29,7 @@ import javax.inject.Inject
 internal interface GetEventTask : Task<GetEventTask.Params, Event> {
     data class Params(
             val roomId: String,
-            val eventId: String,
+            val eventId: String
     )
 }
 
