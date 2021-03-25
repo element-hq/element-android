@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Server url prefix -->
+    <string name="server_url_prefix" translatable="false">https://matrix.</string>
+
+</resources>

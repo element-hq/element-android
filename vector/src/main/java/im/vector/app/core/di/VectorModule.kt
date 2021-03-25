@@ -23,6 +23,7 @@ import android.content.res.Resources
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import fr.gouv.tchap.android.sdk.api.services.threepidplatformdiscover.ThreePidPlatformDiscoverService
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.features.navigation.DefaultNavigator
@@ -85,6 +86,12 @@ abstract class VectorModule {
         @JvmStatic
         fun providesRawService(matrix: Matrix): RawService {
             return matrix.rawService()
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesIdentityService(matrix: Matrix): ThreePidPlatformDiscoverService {
+            return matrix.threePidPlatformDiscoverService()
         }
 
         @Provides

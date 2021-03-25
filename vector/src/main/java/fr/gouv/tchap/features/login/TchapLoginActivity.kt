@@ -29,7 +29,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.viewModel
-import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -45,9 +44,7 @@ import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginFragment
 import im.vector.app.features.login.LoginGenericTextInputFormFragment
 import im.vector.app.features.login.LoginGenericTextInputFormFragmentArgument
-import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.LoginResetPasswordFragment
-import im.vector.app.features.login.LoginSignUpSignInSelectionFragment
 import im.vector.app.features.login.LoginViewState
 import im.vector.app.features.login.LoginWaitForEmailFragment
 import im.vector.app.features.login.LoginWaitForEmailFragmentArgument
@@ -59,7 +56,6 @@ import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.login.terms.toLocalizedLoginTerms
 import im.vector.app.features.pin.UnlockedActivity
-
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -70,7 +66,7 @@ import javax.inject.Inject
  */
 open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
 
-    private val TchapLoginViewModel: TchapLoginViewModel by viewModel()
+    private val tchapLoginViewModel: TchapLoginViewModel by viewModel()
 
     @Inject lateinit var tchapLoginViewModelFactory: TchapLoginViewModel.Factory
 
@@ -108,18 +104,18 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
             addFirstFragment()
         }
 
-        TchapLoginViewModel
+        tchapLoginViewModel
                 .subscribe(this) {
                     updateWithState(it)
                 }
 
-        TchapLoginViewModel.observeViewEvents { handleLoginViewEvents(it) }
+        tchapLoginViewModel.observeViewEvents { handleLoginViewEvents(it) }
 
         // Get config extra
         val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
         if (isFirstCreation()) {
             // TODO Check this
-            TchapLoginViewModel.handle(TchapLoginAction.InitWith(loginConfig))
+            tchapLoginViewModel.handle(TchapLoginAction.InitWith(loginConfig))
         }
     }
 
@@ -159,10 +155,9 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                 Unit
             }
             is TchapLoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
-            is TchapLoginViewEvents.OnLoginFlowRetrieved                       ->
-                addFragmentToBackstack(R.id.loginFragmentContainer,
-                        LoginSignUpSignInSelectionFragment::class.java,
-                        option = commonOption)
+            is TchapLoginViewEvents.OnLoginFlowRetrieved                       -> {
+                // Handled by the Tchap login fragment
+            }
             is TchapLoginViewEvents.OnWebLoginError                            -> onWebLoginError(loginViewEvents)
             is TchapLoginViewEvents.OnForgetPasswordClicked                    ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
@@ -208,30 +203,20 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                 .show()
     }
 
-    private fun onSignModeSelected(loginViewEvents: TchapLoginViewEvents.OnSignModeSelected) = withState(TchapLoginViewModel) { state ->
+    private fun onSignModeSelected(loginViewEvents: TchapLoginViewEvents.OnSignModeSelected) {
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (loginViewEvents.signMode) {
             SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
             SignMode.SignUp             -> {
                 // This is managed by the LoginViewEvents
             }
-            SignMode.SignIn             -> {
-                // It depends on the LoginMode
-                when (state.loginMode) {
-                    LoginMode.Unknown,
-                    is LoginMode.Sso      -> error("Developer error")
-                    is LoginMode.SsoAndPassword,
-                    LoginMode.Password    -> addFragmentToBackstack(R.id.loginFragmentContainer,
-                            TchapFirstLoginFragment::class.java,
-                            tag = FRAGMENT_LOGIN_TAG,
-                            option = commonOption)
-                    LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
-                }.exhaustive
-            }
-            SignMode.SignInWithMatrixId -> addFragmentToBackstack(R.id.loginFragmentContainer,
-                    LoginFragment::class.java,
+            SignMode.SignIn             -> addFragmentToBackstack(R.id.loginFragmentContainer,
+                    TchapFirstLoginFragment::class.java,
                     tag = FRAGMENT_LOGIN_TAG,
                     option = commonOption)
+            SignMode.SignInWithMatrixId -> {
+                // Do nothing on Tchap
+            }
         }.exhaustive
     }
 
@@ -243,7 +228,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
 
         intent?.data
                 ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
-                ?.let { TchapLoginViewModel.handle(TchapLoginAction.LoginWithToken(it)) }
+                ?.let { tchapLoginViewModel.handle(TchapLoginAction.LoginWithToken(it)) }
     }
 
     private fun onRegistrationStageNotSupported() {

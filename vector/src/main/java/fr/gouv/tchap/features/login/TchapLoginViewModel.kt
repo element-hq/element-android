@@ -422,7 +422,7 @@ class TchapLoginViewModel @AssistedInject constructor(
 
         when (action.signMode) {
             SignMode.SignUp             -> startRegistrationFlow()
-            SignMode.SignIn             -> startAuthenticationFlow()
+            SignMode.SignIn             -> _viewEvents.post(TchapLoginViewEvents.OnSignModeSelected(SignMode.SignIn))
             SignMode.SignInWithMatrixId -> _viewEvents.post(TchapLoginViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown            -> Unit
         }
@@ -622,13 +622,6 @@ class TchapLoginViewModel @AssistedInject constructor(
         currentTask = registrationWizard?.getRegistrationFlow(registrationCallback)
     }
 
-    private fun startAuthenticationFlow() {
-        // Ensure Wizard is ready
-        loginWizard
-
-        _viewEvents.post(TchapLoginViewEvents.OnSignModeSelected(SignMode.SignIn))
-    }
-
     private fun onFlowResponse(flowResult: FlowResult) {
         // If dummy stage is mandatory, and password is already sent, do the dummy stage now
         if (isRegistrationStarted
@@ -671,7 +664,6 @@ class TchapLoginViewModel @AssistedInject constructor(
     }
 
     private fun handleUpdateHomeserver(action: TchapLoginAction.UpdateHomeServer) {
-        //TODO add tchap homeservers from config by flavour
         val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
         if (homeServerConnectionConfig == null) {
             // This is invalid
@@ -738,6 +730,8 @@ class TchapLoginViewModel @AssistedInject constructor(
                                 || data.isOutdatedHomeserver) {
                             // Notify the UI
                             _viewEvents.post(TchapLoginViewEvents.OutdatedHomeserver)
+                        } else {
+                            _viewEvents.post(TchapLoginViewEvents.OnLoginFlowRetrieved)
                         }
                     }
                 }

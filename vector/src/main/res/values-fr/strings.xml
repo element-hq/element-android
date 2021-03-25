@@ -1734,7 +1734,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Évènement supprimé par l’utilisateur, motif : %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Évènement modéré par l’administrateur du salon, motif : %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Les clés sont déjà à jour !</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">Tchap Android</string>
     <string name="settings_key_requests">Demandes de clé</string>
     <string name="e2e_use_keybackup">Déverrouiller l’historique des messages chiffrés</string>
     <string name="refresh">Actualiser</string>

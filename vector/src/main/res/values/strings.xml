@@ -2421,7 +2421,7 @@
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Keys are already up to date!</string>
 
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">Tchap Android</string>
 
     <string name="settings_key_requests">Key Requests</string>
     <string name="settings_export_trail">Export Audit</string>

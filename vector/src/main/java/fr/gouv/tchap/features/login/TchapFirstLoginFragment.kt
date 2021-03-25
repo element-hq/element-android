@@ -21,9 +21,15 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.mvrx.fragmentViewModel
+import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
+import fr.gouv.tchap.core.utils.PlatformAction
+import fr.gouv.tchap.core.utils.PlatformViewEvents
+import fr.gouv.tchap.core.utils.PlatformViewModel
+import fr.gouv.tchap.core.utils.PlatformViewState
 import im.vector.app.R
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.databinding.FragmentTchapFirstLoginBinding
-
 import javax.inject.Inject
 
 /**
@@ -34,9 +40,14 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class TchapFirstLoginFragment @Inject constructor() : TchapAbstractLoginFragment<FragmentTchapFirstLoginBinding>() {
+class TchapFirstLoginFragment @Inject constructor(
+        private val platformViewModelFactory: PlatformViewModel.Factory
+) : TchapAbstractLoginFragment<FragmentTchapFirstLoginBinding>(), PlatformViewModel.Factory {
 
+    private val viewModel: PlatformViewModel by fragmentViewModel()
     private var isSignupMode = false
+    private lateinit var login: String
+    private lateinit var password: String
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapFirstLoginBinding {
         return FragmentTchapFirstLoginBinding.inflate(inflater, container, false)
@@ -46,6 +57,30 @@ class TchapFirstLoginFragment @Inject constructor() : TchapAbstractLoginFragment
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.toolbar)
         views.toolbar.setTitle(R.string.tchap_connection_title)
+
+        viewModel.observeViewEvents {
+            when (it) {
+                is PlatformViewEvents.Loading -> showLoading(it.message)
+                is PlatformViewEvents.Failure -> {
+                    // Dialog is displayed by the Activity
+                }
+                is PlatformViewEvents.Success -> updateHomeServer(it.platform)
+            }.exhaustive
+        }
+
+        loginViewModel.observeViewEvents {
+            when (it) {
+                is TchapLoginViewEvents.Failure                -> TODO()
+                is TchapLoginViewEvents.Loading                -> TODO()
+                TchapLoginViewEvents.OnForgetPasswordClicked   -> TODO()
+                TchapLoginViewEvents.OnLoginFlowRetrieved      -> loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                is TchapLoginViewEvents.OnSendEmailSuccess     -> TODO()
+                is TchapLoginViewEvents.OnSignModeSelected     -> TODO()
+                is TchapLoginViewEvents.OnWebLoginError        -> TODO()
+                TchapLoginViewEvents.OutdatedHomeserver        -> TODO()
+                is TchapLoginViewEvents.RegistrationFlowResult -> TODO()
+            }.exhaustive
+        }
     }
 
     override fun getMenuRes() = R.menu.tchap_menu_next
@@ -64,8 +99,8 @@ class TchapFirstLoginFragment @Inject constructor() : TchapAbstractLoginFragment
     private fun submit() {
         cleanupUi()
 
-        val login = views.tchapFirstLoginEmail.text.toString()
-        val password = views.tchapFirstLoginPassword.text.toString()
+        login = views.tchapFirstLoginEmail.text.toString()
+        password = views.tchapFirstLoginPassword.text.toString()
 
         // This can be called by the IME action, so deal with empty cases
         var error = 0
@@ -87,7 +122,7 @@ class TchapFirstLoginFragment @Inject constructor() : TchapAbstractLoginFragment
         }
 
         if (error == 0) {
-            loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+            viewModel.handle(PlatformAction.DiscoverTchapPlatform(login))
         }
     }
 
@@ -97,7 +132,15 @@ class TchapFirstLoginFragment @Inject constructor() : TchapAbstractLoginFragment
         views.tchapFirstLoginPassword.error = null
     }
 
+    private fun updateHomeServer(platform: Platform) {
+        loginViewModel.handle(TchapLoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
+    }
+
     override fun resetViewModel() {
         loginViewModel.handle(TchapLoginAction.ResetLogin)
+    }
+
+    override fun create(initialState: PlatformViewState): PlatformViewModel {
+        return platformViewModelFactory.create(initialState)
     }
 }

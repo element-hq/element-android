@@ -37,7 +37,6 @@ class TchapFirstWelcomeFragment @Inject constructor() : TchapAbstractLoginFragme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupHomeServer()
         setupViews()
     }
 
@@ -52,11 +51,6 @@ class TchapFirstWelcomeFragment @Inject constructor() : TchapAbstractLoginFragme
 
     private fun signIn() {
         loginViewModel.handle(TchapLoginAction.UpdateSignMode(SignMode.SignIn))
-    }
-
-    private fun setupHomeServer() {
-        //TODO add tchap homeservers from config by flavour
-        loginViewModel.handle(TchapLoginAction.UpdateHomeServer("https://matrix.i.tchap.gouv.fr"))
     }
 
     override fun resetViewModel() {
