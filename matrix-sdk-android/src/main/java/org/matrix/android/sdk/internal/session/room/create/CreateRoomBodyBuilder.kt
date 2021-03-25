@@ -20,8 +20,10 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.toMedium
+import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
@@ -71,7 +73,8 @@ internal class CreateRoomBodyBuilder @Inject constructor(
         val initialStates = listOfNotNull(
                 buildEncryptionWithAlgorithmEvent(params),
                 buildHistoryVisibilityEvent(params),
-                buildAvatarEvent(params)
+                buildAvatarEvent(params),
+                buildGuestAccess(params)
         )
                 .takeIf { it.isNotEmpty() }
 
@@ -116,6 +119,17 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                             type = EventType.STATE_ROOM_HISTORY_VISIBILITY,
                             stateKey = "",
                             content = mapOf("history_visibility" to it)
+                    )
+                }
+    }
+
+    private fun buildGuestAccess(params: CreateRoomParams): Event? {
+        return params.guestAccess
+                ?.let {
+                    Event(
+                            type = EventType.STATE_ROOM_GUEST_ACCESS,
+                            stateKey = "",
+                            content = RoomGuestAccessContent(it).toContent()
                     )
                 }
     }
