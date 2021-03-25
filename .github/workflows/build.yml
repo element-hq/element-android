@@ -24,15 +24,23 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - name: Lint ${{ matrix.target }} release
+        run: ./gradlew clean lint${{ matrix.target }}Release --stacktrace
+      - name: Upload ${{ matrix.target }} linting report
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: release-debug-linting-report-${{ matrix.target }}
+          path: |
+            vector/build/reports/*.*
       - name: Assemble ${{ matrix.target }} debug apk
-        run: ./gradlew clean lint${{ matrix.target }}Release assemble${{ matrix.target }}Debug --stacktrace
-      - name: Upload APKs
+        run: ./gradlew assemble${{ matrix.target }}Debug --stacktrace
+      - name: Upload ${{ matrix.target }} debug APKs
         uses: actions/upload-artifact@v2
         with:
-          name: release-debug-${{ matrix.target }}
+          name: release-apk-debug-${{ matrix.target }}
           path: |
             vector/build/outputs/apk/*/debug/*.apk
-            vector/build/reports/*.*
 
   gplay:
     name: Build unsigned GPlay APK
@@ -50,10 +58,10 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Assemble GPlay unsigned apk
         run: ./gradlew clean assembleGplayRelease --stacktrace
-      - name: Upload APKs
+      - name: Upload Gplay unsigned APKs
         uses: actions/upload-artifact@v2
         with:
-          name: release-unsigned-GPlay
+          name: release-apk-unsigned-GPlay
           path: |
             vector/build/outputs/apk/*/debug/*.apk
 
