@@ -23,6 +23,10 @@ interface EventService {
     /**
      * Ask the homeserver for an event content. The SDK will try to decrypt it if it is possible
      * The result will not be stored into cache
+     * @param onlyOnWifi if true and if WiFi is not available, no request will be done,
+     * and null will be returned
      */
-    suspend fun getEvent(roomId: String, eventId: String): Event
+    suspend fun getEvent(roomId: String,
+                         eventId: String,
+                         onlyOnWifi: Boolean): Event?
 }

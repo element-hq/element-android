@@ -18,16 +18,24 @@ package org.matrix.android.sdk.internal.session.events
 
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.internal.network.WifiDetector
 import org.matrix.android.sdk.internal.session.call.CallEventProcessor
 import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class DefaultEventService @Inject constructor(
         private val getEventTask: GetEventTask,
-        private val callEventProcessor: CallEventProcessor
+        private val callEventProcessor: CallEventProcessor,
+        private val wifiDetector: WifiDetector
 ) : EventService {
 
-    override suspend fun getEvent(roomId: String, eventId: String): Event {
+    override suspend fun getEvent(roomId: String, eventId: String, onlyOnWifi: Boolean): Event? {
+        if (onlyOnWifi && !wifiDetector.isConnectedToWifi()) {
+            Timber.d("No WiFi network, do not get Event")
+            return null
+        }
+
         val event = getEventTask.execute(GetEventTask.Params(roomId, eventId))
 
         // Fast lane to the call event processors: try to make the incoming call ring faster
