@@ -17,6 +17,7 @@
 
 package im.vector.app.features.grouplist
 
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.util.TypedValue
 import android.widget.ImageView
@@ -29,6 +30,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableConstraintLayout
+import im.vector.app.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_space)
 abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Holder>() {
@@ -40,6 +42,7 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
         // mm.. it's reusing the same layout for basic space item
         return R.id.space_item_home
     }
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.rootView.setOnClickListener { listener?.invoke() }
@@ -48,6 +51,7 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
         holder.rootView.context.resources
         holder.avatarImageView.background = ContextCompat.getDrawable(holder.view.context, R.drawable.space_home_background)
         holder.avatarImageView.setImageResource(R.drawable.ic_space_home)
+        holder.avatarImageView.imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(holder.view.context, R.attr.riot_primary_text_color))
         holder.avatarImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
         holder.leaveView.isVisible = false
     }
