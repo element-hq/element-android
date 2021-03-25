@@ -748,11 +748,7 @@ internal class DefaultCryptoService @Inject constructor(
             // This request can only be a keys claim request.
             when (request) {
                 is Request.KeysClaim -> {
-                    val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(request.oneTimeKeys)
-                    val response = oneTimeKeysForUsersDeviceTask.execute(claimParams)
-                    val adapter = MoshiProvider.providesMoshi().adapter<KeysClaimResponse>(KeysClaimResponse::class.java)
-                    val json_response = adapter.toJson(response)!!
-                    olmMachine!!.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, json_response)
+                    claimKeys(request)
                 }
             }
         }
@@ -761,17 +757,7 @@ internal class DefaultCryptoService @Inject constructor(
             // This request can only be a to-device request.
             when (toDeviceRequest) {
                 is Request.ToDevice -> {
-                    // TODO this produces floats for the Olm type fields, which
-                    // are integers originally.
-                    val adapter = MoshiProvider.providesMoshi().adapter<Map<String, HashMap<String, Any>>>(Map::class.java)
-                    val body = adapter.fromJson(toDeviceRequest.body)!!
-
-                    val userMap = MXUsersDevicesMap<Any>()
-                    userMap.join(body)
-
-                    val sendToDeviceParams = SendToDeviceTask.Params(toDeviceRequest.eventType, userMap)
-                    sendToDeviceTask.execute(sendToDeviceParams)
-                    olmMachine!!.markRequestAsSent(toDeviceRequest.requestId, RequestType.TO_DEVICE, "{}")
+                    sendToDevice(toDeviceRequest)
                 }
             }
         }
@@ -781,35 +767,78 @@ internal class DefaultCryptoService @Inject constructor(
         return olmMachine!!.encrypt(roomId, eventType, content)
     }
 
+    private suspend fun uploadKeys(outgoingRequest: Request.KeysUpload) {
+        val body = MoshiProvider
+            .providesMoshi()
+            .adapter<JsonDict>(Map::class.java)
+            .fromJson(outgoingRequest.body)!!
+
+        val request = UploadKeysTask.Params(body)
+
+        val response = uploadKeysTask.execute(request)
+        val adapter = MoshiProvider
+            .providesMoshi()
+            .adapter<KeysUploadResponse>(KeysUploadResponse::class.java)
+
+        val json_response = adapter.toJson(response)!!
+
+        olmMachine!!.markRequestAsSent(
+            outgoingRequest.requestId,
+            RequestType.KEYS_UPLOAD,
+            json_response
+        )
+    }
+
+    private suspend fun queryKeys(outgoingRequest: Request.KeysQuery) {
+        Timber.v("HELLO KEYS QUERY REQUEST ${outgoingRequest.users}")
+        val params = DownloadKeysForUsersTask.Params(outgoingRequest.users, null)
+
+        try {
+            val response = downloadKeysForUsersTask.execute(params)
+            val adapter = MoshiProvider.providesMoshi().adapter<KeysQueryResponse>(KeysQueryResponse::class.java)
+            val json_response = adapter.toJson(response)!!
+            olmMachine!!.markRequestAsSent(outgoingRequest.requestId, RequestType.KEYS_QUERY, json_response)
+        } catch (throwable: Throwable) {
+            Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
+        }
+    }
+
+    private suspend fun sendToDevice(request: Request.ToDevice) {
+        // TODO this produces floats for the Olm type fields, which
+        // are integers originally.
+        val adapter = MoshiProvider
+            .providesMoshi()
+            .adapter<Map<String, HashMap<String, Any>>>(Map::class.java)
+        val body = adapter.fromJson(request.body)!!
+
+        val userMap = MXUsersDevicesMap<Any>()
+        userMap.join(body)
+
+        val sendToDeviceParams = SendToDeviceTask.Params(request.eventType, userMap)
+        sendToDeviceTask.execute(sendToDeviceParams)
+        olmMachine!!.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}")
+    }
+
+    private suspend fun claimKeys(request: Request.KeysClaim) {
+        val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(request.oneTimeKeys)
+        val response = oneTimeKeysForUsersDeviceTask.execute(claimParams)
+        val adapter = MoshiProvider
+            .providesMoshi()
+            .adapter<KeysClaimResponse>(KeysClaimResponse::class.java)
+        val json_response = adapter.toJson(response)!!
+
+        olmMachine!!.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, json_response)
+    }
+
     private suspend fun sendOutgoingRequests() {
         // TODO these requests should be sent out in parallel
         for (outgoingRequest in olmMachine!!.outgoingRequests()) {
             when (outgoingRequest) {
                 is Request.KeysUpload -> {
-                    Timber.v("HELLO UPLOADING RUSTY KEYS")
-                    val body = MoshiProvider.providesMoshi().adapter<JsonDict>(Map::class.java).fromJson(outgoingRequest.body)!!
-                    val request = UploadKeysTask.Params(body)
-
-                    val response = uploadKeysTask.execute(request)
-                    val adapter = MoshiProvider.providesMoshi().adapter<KeysUploadResponse>(KeysUploadResponse::class.java)
-                    val json_response = adapter.toJson(response)!!
-                    olmMachine!!.markRequestAsSent(outgoingRequest.requestId, RequestType.KEYS_UPLOAD, json_response)
-                    Timber.v("HELLO UPLOADED KEYS $response")
+                    uploadKeys(outgoingRequest)
                 }
                 is Request.KeysQuery -> {
-                    Timber.v("HELLO KEYS QUERY REQUEST ${outgoingRequest.users}")
-                    val params = DownloadKeysForUsersTask.Params(outgoingRequest.users, null)
-
-                    try {
-                        val response = downloadKeysForUsersTask.execute(params)
-                        val adapter = MoshiProvider.providesMoshi().adapter<KeysQueryResponse>(KeysQueryResponse::class.java)
-                        val json_response = adapter.toJson(response)!!
-                        olmMachine!!.markRequestAsSent(outgoingRequest.requestId, RequestType.KEYS_QUERY, json_response)
-                    } catch (throwable: Throwable) {
-                        Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
-                    }
-
-
+                    queryKeys(outgoingRequest)
                 }
                 is Request.ToDevice -> {
                     // Timber.v("HELLO TO DEVICE REQUEST ${outgoingRequest.body}")
