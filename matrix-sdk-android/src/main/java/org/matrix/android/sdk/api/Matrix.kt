@@ -21,6 +21,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
+import fr.gouv.tchap.android.sdk.api.services.threepidplatformdiscover.ThreePidPlatformDiscoverService
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
@@ -43,6 +44,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
     @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService
+    @Inject internal lateinit var threePidPlatformDiscoverService: ThreePidPlatformDiscoverService
     @Inject internal lateinit var rawService: RawService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
@@ -64,6 +66,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     fun authenticationService(): AuthenticationService {
         return authenticationService
     }
+
+    fun threePidPlatformDiscoverService() = threePidPlatformDiscoverService
 
     fun rawService() = rawService
 

@@ -20,6 +20,10 @@ import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import fr.gouv.tchap.android.sdk.api.services.threepidplatformdiscover.ThreePidPlatformDiscoverService
+import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.TchapThreePidPlatformDiscoverService
+import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.TchapThreePidPlatformDiscoverTask
+import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.ThreePidPlatformDiscoverTask
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.internal.auth.db.AuthRealmMigration
@@ -77,10 +81,16 @@ internal abstract class AuthModule {
     abstract fun bindAuthenticationService(service: DefaultAuthenticationService): AuthenticationService
 
     @Binds
+    abstract fun bindThreePidPlatformDiscoverService(service: TchapThreePidPlatformDiscoverService): ThreePidPlatformDiscoverService
+
+    @Binds
     abstract fun bindSessionCreator(creator: DefaultSessionCreator): SessionCreator
 
     @Binds
     abstract fun bindDirectLoginTask(task: DefaultDirectLoginTask): DirectLoginTask
+
+    @Binds
+    abstract fun bindThreePidPlatformDiscoverTask(task: TchapThreePidPlatformDiscoverTask): ThreePidPlatformDiscoverTask
 
     @Binds
     abstract fun bindHomeServerHistoryService(service: DefaultHomeServerHistoryService): HomeServerHistoryService
