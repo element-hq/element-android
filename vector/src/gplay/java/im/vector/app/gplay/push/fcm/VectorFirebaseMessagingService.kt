@@ -194,7 +194,6 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
             val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event)
 
-            // TODO Test the Event against the push rules
             resolvedEvent
                     ?.also { Timber.d("Fast lane: notify drawer") }
                     ?.let {
