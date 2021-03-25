@@ -28,8 +28,12 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
@@ -79,6 +83,16 @@ class SpaceCreationTest : InstrumentedTest {
             }
         }
         assertEquals(100, powerLevelsContent?.eventsDefault, "Space-rooms should be created with a power level for events_default of 100")
+
+        val guestAccess =  syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_GUEST_ACCESS)?.content
+                ?.toModel<RoomGuestAccessContent>()?.guestAccess
+
+        assertEquals(GuestAccess.CanJoin, guestAccess, "Public space room should be peekable by guest")
+
+        val historyVisibility =  syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY)?.content
+                ?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility
+
+        assertEquals(RoomHistoryVisibility.WORLD_READABLE, historyVisibility, "Public space room should be world readable")
 
         commonTestHelper.signOutAndClose(session)
     }
