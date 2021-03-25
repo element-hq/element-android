@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContentOverride
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
@@ -70,6 +71,11 @@ internal class DefaultSpaceService @Inject constructor(
             this.topic = topic
             this.preset = if (isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
             this.avatarUri = avatarUri
+            if (isPublic) {
+                this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContentOverride()).copy(
+                        invite = 0
+                )
+            }
         })
     }
 
