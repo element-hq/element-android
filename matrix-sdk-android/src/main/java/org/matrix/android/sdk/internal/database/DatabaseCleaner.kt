@@ -48,7 +48,7 @@ internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val 
                                                    private val taskExecutor: TaskExecutor) : SessionLifecycleObserver {
 
     override fun onSessionStarted() {
-        // TODO: Enable new clean up
+        // TODO: Enable new clean up strategy
         /*taskExecutor.executorScope.launch(Dispatchers.Default) {
             awaitTransaction(realmConfiguration) { realm ->
                 val allRooms = realm.where(RoomEntity::class.java).findAll()
@@ -57,34 +57,5 @@ internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val 
             }
         }
          */
-    }
-
-    private fun cleanUp(realm: Realm, threshold: Long) {
-        val numberOfEvents = realm.where(EventEntity::class.java).findAll().size
-        val numberOfTimelineEvents = realm.where(TimelineEventEntity::class.java).findAll().size
-        Timber.v("Number of events in db: $numberOfEvents | Number of timeline events in db: $numberOfTimelineEvents")
-        if (threshold <= MIN_NUMBER_OF_EVENTS_BY_CHUNK || numberOfTimelineEvents < MAX_NUMBER_OF_EVENTS_IN_DB) {
-            Timber.v("Db is low enough")
-        } else {
-            val thresholdChunks = realm.where(ChunkEntity::class.java)
-                    .greaterThan(ChunkEntityFields.NUMBER_OF_TIMELINE_EVENTS, threshold)
-                    .findAll()
-
-            Timber.v("There are ${thresholdChunks.size} chunks to clean with more than $threshold events")
-            for (chunk in thresholdChunks) {
-                val maxDisplayIndex = chunk.nextDisplayIndex(PaginationDirection.FORWARDS)
-                val thresholdDisplayIndex = maxDisplayIndex - threshold
-                val eventsToRemove = chunk.timelineEvents.where().lessThan(TimelineEventEntityFields.DISPLAY_INDEX, thresholdDisplayIndex).findAll()
-                Timber.v("There are ${eventsToRemove.size} events to clean in chunk: ${chunk.identifier()} from room ${chunk.room?.first()?.roomId}")
-                chunk.numberOfTimelineEvents = chunk.numberOfTimelineEvents - eventsToRemove.size
-                eventsToRemove.forEach {
-                    val canDeleteRoot = it.root?.stateKey == null
-                    it.deleteOnCascade(canDeleteRoot)
-                }
-                // We reset the prevToken so we will need to fetch again.
-                chunk.prevToken = null
-            }
-            cleanUp(realm, (threshold / 1.5).toLong())
-        }
     }
 }
