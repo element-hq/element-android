@@ -1,0 +1,59 @@
+name: Build
+
+on:
+  pull_request: {}
+  push:
+    branches: [master, develop]
+
+jobs:
+  debug:
+    name: Build debug APK (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/master'
+    strategy:
+      matrix:
+        target: [ Gplay, Fdroid ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Assemble ${{ matrix.target }} debug apk
+        run: ./gradlew clean lint${{ matrix.target }}Release assemble${{ matrix.target }}Debug --stacktrace
+      - name: Upload APKs
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-debug-${{ matrix.target }}
+          path: |
+            vector/build/outputs/apk/*/debug/*.apk
+            vector/build/reports/*.*
+
+  gplay:
+    name: Build unsigned GPlay APK
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Assemble GPlay unsigned apk
+        run: ./gradlew clean assembleGplayRelease --stacktrace
+      - name: Upload APKs
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-unsigned-GPlay
+          path: |
+            vector/build/outputs/apk/*/debug/*.apk
+
+# TODO: add exodus checks
