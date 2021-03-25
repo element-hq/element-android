@@ -29,6 +29,7 @@ import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.find
@@ -195,24 +196,21 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             if (event.eventId == null || event.senderId == null) {
                 return@forEach
             }
-            // We check for the timeline event with this id
-            /*
+            //We check for the timeline event with this id
             val eventId = event.eventId
             val existingTimelineEvent = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
             // If it exists, we want to skip here
             val existingChunk = existingTimelineEvent?.chunk?.firstOrNull()
             if (existingChunk != null) {
-                if (direction == PaginationDirection.BACKWARDS && existingChunk.nextToken == null) {
+                if (direction == PaginationDirection.BACKWARDS) {
                     currentChunk.prevChunk = existingChunk
-                    currentChunk.prevToken = existingChunk.nextToken
                     existingChunk.nextChunk = currentChunk
-                } else if (direction == PaginationDirection.FORWARDS && existingChunk.prevChunk == null) {
+                } else if (direction == PaginationDirection.FORWARDS) {
                     currentChunk.nextChunk = existingChunk
-                    currentChunk.nextToken = existingChunk.prevToken
                     existingChunk.prevChunk = currentChunk
                 }
                 return@forEach
-            }*/
+            }
             val ageLocalTs = event.unsignedData?.age?.let { now - it }
             eventIds.add(event.eventId)
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
