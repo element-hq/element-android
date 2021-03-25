@@ -42,5 +42,5 @@ jobs:
       - name: Upload reports
         uses: actions/upload-artifact@v2
         with:
-          name: report-lint-andorid-sdk
+          name: linting-report-android-sdk
           path: matrix-sdk-android/build/reports/*.*
