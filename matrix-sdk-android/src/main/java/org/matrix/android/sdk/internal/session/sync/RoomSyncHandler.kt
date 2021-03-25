@@ -408,6 +408,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
     private fun decryptIfNeeded(event: Event, roomId: String) {
         try {
+            // Event from sync does not have roomId, so add it to the event first
             val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")
             event.mxDecryptionResult = OlmDecryptionResult(
                     payload = result.clearEvent,
