@@ -258,7 +258,13 @@ class HomeDetailFragment @Inject constructor(
                 // Special case
                 views.groupToolbarAvatarImageView.background = ContextCompat.getDrawable(requireContext(), R.drawable.space_home_background)
                 views.groupToolbarAvatarImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
-                views.groupToolbarAvatarImageView.setImageResource(R.drawable.ic_space_home)
+                ThemeUtils.tintDrawableWithColor(
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_space_home)!!,
+                        ThemeUtils.getColor(requireContext(), R.attr.riot_primary_text_color)
+                ).let {
+                    views.groupToolbarAvatarImageView.setImageDrawable(it)
+                }
+
                 views.groupToolbarSpaceTitleView.isVisible = false
             } else {
                 views.groupToolbarAvatarImageView.background = null
