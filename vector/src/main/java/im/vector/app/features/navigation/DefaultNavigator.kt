@@ -71,6 +71,7 @@ import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
+import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.terms.ReviewTermsActivity
@@ -275,8 +276,32 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openInviteUsersToRoom(context: Context, roomId: String) {
-        val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
-        context.startActivity(intent)
+        val selectedSpace = selectedSpaceDataSource.currentValue?.orNull()?.let {
+            sessionHolder.getSafeActiveSession()?.getRoomSummary(it.roomId)
+        }
+        if (vectorPreferences.labSpaces() && selectedSpace != null) {
+            // let user decides if he does it from space or room
+            (context as? AppCompatActivity)?.supportFragmentManager?.let { fm ->
+                InviteRoomSpaceChooserBottomSheet.newInstance(
+                        selectedSpace.roomId,
+                        roomId,
+                        object : InviteRoomSpaceChooserBottomSheet.InteractionListener {
+                            override fun inviteToSpace(spaceId: String) {
+                                val intent = InviteUsersToRoomActivity.getIntent(context, spaceId)
+                                context.startActivity(intent)
+                            }
+
+                            override fun inviteToRoom(roomId: String) {
+                                val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
+                                context.startActivity(intent)
+                            }
+                        }
+                ).show(fm, InviteRoomSpaceChooserBottomSheet::class.java.name)
+            }
+        } else {
+            val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
+            context.startActivity(intent)
+        }
     }
 
     override fun openRoomsFiltering(context: Context) {
