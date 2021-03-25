@@ -59,7 +59,6 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.OlmMachine
 import org.matrix.android.sdk.internal.setRustLogger
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
-import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXWithHeldExtension
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
@@ -137,8 +136,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
-        // Room encryptors store
-        private val roomEncryptorsStore: RoomEncryptorsStore,
         // Set of parameters used to configure/customize the end-to-end crypto.
         private val mxCryptoConfig: MXCryptoConfig,
         // Device list manager
@@ -152,14 +149,10 @@ internal class DefaultCryptoService @Inject constructor(
 
         private val crossSigningService: DefaultCrossSigningService,
         // Actions
-        private val setDeviceVerificationAction: SetDeviceVerificationAction,
         private val megolmSessionDataImporter: MegolmSessionDataImporter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
-        // Repository
-        private val megolmEncryptionFactory: MXMegolmEncryptionFactory,
-        private val olmEncryptionFactory: MXOlmEncryptionFactory,
-        private val deleteDeviceTask: DeleteDeviceTask,
         // Tasks
+        private val deleteDeviceTask: DeleteDeviceTask,
         private val getDevicesTask: GetDevicesTask,
         private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
         private val sendToDeviceTask: SendToDeviceTask,
@@ -501,7 +494,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param deviceId   the unique identifier for the device.
      */
     override fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
-        setDeviceVerificationAction.handle(trustLevel, userId, deviceId)
+        // TODO
     }
 
     /**
@@ -524,21 +517,12 @@ internal class DefaultCryptoService @Inject constructor(
             return false
         }
 
-        val encryptingClass = MXCryptoAlgorithms.hasEncryptorClassForAlgorithm(algorithm)
-
-        if (!encryptingClass) {
+        if (algorithm != MXCRYPTO_ALGORITHM_MEGOLM) {
             Timber.e("## CRYPTO | setEncryptionInRoom() : Unable to encrypt room $roomId with $algorithm")
             return false
         }
 
-        cryptoStore.storeRoomAlgorithm(roomId, algorithm!!)
-
-        val alg: IMXEncrypting = when (algorithm) {
-            MXCRYPTO_ALGORITHM_MEGOLM -> megolmEncryptionFactory.create(roomId)
-            else                      -> olmEncryptionFactory.create(roomId)
-        }
-
-        roomEncryptorsStore.put(roomId, alg)
+        cryptoStore.storeRoomAlgorithm(roomId, algorithm)
 
         // if encryption was not previously enabled in this room, we will have been
         // ignoring new device events for these users so far. We may well have
@@ -606,18 +590,10 @@ internal class DefaultCryptoService @Inject constructor(
                                      callback: MatrixCallback<MXEncryptEventContentResult>) {
         // moved to crypto scope to have uptodate values
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            val userIds = getRoomUserIds(roomId)
-            var alg = roomEncryptorsStore.get(roomId)
-            if (alg == null) {
-                val algorithm = getEncryptionAlgorithm(roomId)
-                if (algorithm != null) {
-                    if (setEncryptionInRoom(roomId, algorithm, userIds)) {
-                        alg = roomEncryptorsStore.get(roomId)
-                    }
-                }
-            }
-            val safeAlgorithm = alg
-            if (safeAlgorithm != null) {
+            val algorithm = getEncryptionAlgorithm(roomId)
+
+            if (algorithm != null) {
+                val userIds = getRoomUserIds(roomId)
                 val t0 = System.currentTimeMillis()
                 Timber.v("## CRYPTO | encryptEventContent() starts")
                 runCatching {
@@ -627,9 +603,7 @@ internal class DefaultCryptoService @Inject constructor(
                     MXEncryptEventContentResult(content, EventType.ENCRYPTED)
                 }.foldToCallback(callback)
             } else {
-                val algorithm = getEncryptionAlgorithm(roomId)
-                val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
-                        algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
                 Timber.e("## CRYPTO | encryptEventContent() : $reason")
                 callback.onFailure(Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT, reason)))
             }
@@ -637,9 +611,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun discardOutboundSession(roomId: String) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            roomEncryptorsStore.get(roomId)?.discardSessionKey()
-        }
+        // TODO
     }
 
     /**
@@ -706,7 +678,10 @@ internal class DefaultCryptoService @Inject constructor(
      * @param event the membership event causing the change
      */
     private suspend fun onRoomMembershipEvent(roomId: String, event: Event) {
-        roomEncryptorsStore.get(roomId) ?: /* No encrypting in this room */ return
+        // We only care about the memberships if this room is encrypted
+        if (isRoomEncrypted(roomId)) {
+            return
+        }
 
         event.stateKey?.let { userId ->
             val roomMember: RoomMemberContent? = event.content.toModel()
