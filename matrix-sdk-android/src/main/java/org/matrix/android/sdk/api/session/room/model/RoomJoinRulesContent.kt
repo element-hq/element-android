@@ -19,11 +19,23 @@ package org.matrix.android.sdk.api.session.room.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import timber.log.Timber
 
 /**
  * Class representing the EventType.STATE_ROOM_JOIN_RULES state event content
  */
 @JsonClass(generateAdapter = true)
 data class RoomJoinRulesContent(
-        @Json(name = "join_rule") val joinRules: RoomJoinRules? = null
-)
+        @Json(name = "join_rule") val _joinRules: String? = null
+) {
+    val joinRules: RoomJoinRules? = when (_joinRules) {
+        "public"  -> RoomJoinRules.PUBLIC
+        "invite"  -> RoomJoinRules.INVITE
+        "knock"   -> RoomJoinRules.KNOCK
+        "private" -> RoomJoinRules.PRIVATE
+        else      -> {
+            Timber.w("Invalid value for RoomJoinRules: `$_joinRules`")
+            null
+        }
+    }
+}

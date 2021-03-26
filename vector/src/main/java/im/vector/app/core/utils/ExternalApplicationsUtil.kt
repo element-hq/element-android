@@ -514,7 +514,7 @@ fun selectTxtFileToWrite(
 @Suppress("DEPRECATION")
 fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?): File? {
     // defines another name for the external media
-    val dstFileName: String
+    var dstFileName: String
 
     // build a filename is not provided
     if (null == outputFilename) {
@@ -528,6 +528,9 @@ fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: Strin
     } else {
         dstFileName = outputFilename
     }
+
+    // remove dangerous characters from the filename
+    dstFileName = dstFileName.replace(Regex("""[/\\]"""), "_")
 
     var dstFile = File(dstDirPath, dstFileName)
 
