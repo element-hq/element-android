@@ -3304,7 +3304,7 @@
     <string name="suggested_rooms_pills_on_empty_header">Welcome to %1$s, %2$s.</string>
 
     <plurals name="space_people_you_know">
-        <item quantity="one">%d people you know have already joined</item>
+        <item quantity="one">%d person you know has already joined</item>
         <item quantity="other">%d people you know have already joined</item>
     </plurals>
 
