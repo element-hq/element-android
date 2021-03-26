@@ -130,7 +130,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val deviceId: String?,
         @SessionFilesDirectory
         private val dataDir: File,
-        private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
         // Set of parameters used to configure/customize the end-to-end crypto.
@@ -218,7 +217,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun getMyDevice(): CryptoDeviceInfo {
-        return myDeviceInfoHolder.get().myDevice
+        return olmMachine!!.ownDevice()
     }
 
     override fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>) {

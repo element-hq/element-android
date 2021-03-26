@@ -27,6 +27,9 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
 import org.matrix.android.sdk.api.session.events.model.Content
 import timber.log.Timber
 import uniffi.olm.Device as InnerDevice
@@ -67,6 +70,26 @@ class Device(inner: InnerDevice, machine: InnerMachine) {
     fun startVerification(): InnerSas {
         return this.machine.startVerification(this.inner)
     }
+
+    fun toCryptoDeviceInfo(): CryptoDeviceInfo {
+        return CryptoDeviceInfo(
+            this.deviceId(),
+            this.userId(),
+            // TODO pass the algorithms here.
+            listOf(),
+            this.keys(),
+            // TODO pass the signatures here.
+            mapOf(),
+            // TODO pass the display name here.
+            UnsignedDeviceInfo(),
+            // TODO pass trust levels here
+            DeviceTrustLevel(false, false),
+            // TODO is the device blacklisted
+            false,
+            // TODO
+            null
+        )
+    }
 }
 
 internal class OlmMachine(user_id: String, device_id: String, path: File) {
@@ -82,6 +105,22 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
 
     fun identityKeys(): Map<String, String> {
         return this.inner.identityKeys()
+    }
+
+    fun ownDevice(): CryptoDeviceInfo {
+        return CryptoDeviceInfo(
+            this.deviceId(),
+            this.userId(),
+            // TODO pass the algorithms here.
+            listOf(),
+            this.identityKeys(),
+            mapOf(),
+            UnsignedDeviceInfo(),
+            DeviceTrustLevel(false, true),
+            false,
+            null
+        )
+
     }
 
     suspend fun outgoingRequests(): List<Request> = withContext(Dispatchers.IO) {
