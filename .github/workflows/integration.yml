@@ -12,7 +12,9 @@ jobs:
     services:
       synapse:
         image: docker.io/matrixdotorg/synapse:latest
-        options: "--entrypoint tail"
+        options: >-
+          --entrypoint=tail
+          --no-healthcheck
         ports: [ 8080, 8480, 8081, 8481, 8082, 8482 ]
     steps:
       - uses: actions/checkout@v2
