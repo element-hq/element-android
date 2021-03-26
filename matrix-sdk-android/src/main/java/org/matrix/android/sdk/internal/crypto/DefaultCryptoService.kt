@@ -108,7 +108,6 @@ import org.matrix.android.sdk.internal.task.TaskThread
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import org.matrix.olm.OlmManager
 import timber.log.Timber
 import uniffi.olm.Request
 import uniffi.olm.RequestType
@@ -125,8 +124,6 @@ import uniffi.olm.RequestType
  */
 @SessionScope
 internal class DefaultCryptoService @Inject constructor(
-        // Olm Manager
-        private val olmManager: OlmManager,
         @UserId
         private val userId: String,
         @DeviceId
@@ -218,7 +215,8 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun getCryptoVersion(context: Context, longFormat: Boolean): String {
-        return if (longFormat) olmManager.getDetailedVersion(context) else olmManager.version
+        // TODO we should provide olm and rust-sdk version from the rust-sdk
+        return if (longFormat) "Rust SDK 0.3" else "0.3"
     }
 
     override fun getMyDevice(): CryptoDeviceInfo {
