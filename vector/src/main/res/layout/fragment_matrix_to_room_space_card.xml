@@ -16,6 +16,7 @@
         android:elevation="4dp"
         android:transitionName="profile"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
@@ -24,10 +25,10 @@
         android:id="@+id/matrixToCardNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/layout_vertical_margin_big"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
         android:maxLines="1"
         android:singleLine="true"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textColor="?riotx_text_primary"
         android:textSize="15sp"
         android:textStyle="bold"
@@ -41,10 +42,12 @@
         android:layout_marginTop="4dp"
         android:maxLines="1"
         android:singleLine="true"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textColor="?riotx_text_secondary"
         android:textSize="15sp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
+        app:layout_goneMarginTop="0dp"
         tools:text="@sample/matrix.json/data/roomAlias" />
 
     <LinearLayout
@@ -60,6 +63,7 @@
         android:paddingEnd="12dp"
         android:paddingBottom="8dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/matrixToCardAliasText">
 
@@ -89,11 +93,78 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:maxLines="4"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textColor="?riotx_text_secondary"
         android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@id/matrixToMemberPills"
         tools:text="@sample/matrix.json/data/roomTopic" />
+
+    <ImageView
+        android:id="@+id/knownMember5"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintCircle="@id/knownMember4"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/knownMember4"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintCircle="@id/knownMember3"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/knownMember3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintCircle="@id/knownMember2"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/knownMember2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintCircle="@id/knownMember1"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/knownMember1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/matrixToCardDescText"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/peopleYouMayKnowText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@id/knownMember1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/knownMember5"
+        app:layout_constraintTop_toTopOf="@id/knownMember1"
+        tools:text="7 people you may know" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/matrixToCardMainButton"
@@ -103,7 +174,7 @@
         android:layout_marginBottom="@dimen/layout_vertical_margin_big"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/matrixToCardDescText"
+        app:layout_constraintTop_toBottomOf="@id/knownMember1"
         app:layout_constraintWidth_max="400dp"
         tools:text="@string/join" />
 
@@ -135,10 +206,18 @@
         tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Group
+        android:id="@+id/matrixToCardPeopleYouKnowVisibility"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="knownMember1,knownMember2,knownMember3,knownMember4,knownMember5,peopleYouMayKnowText"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/matrixToCardContentVisibility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="matrixToCardNameText,matrixToCardAvatar,matrixToCardNameText,matrixToCardDescText, matrixToCardMainButton, matrixToCardAliasText, matrixToCardSecondaryButton, matrixToMemberPills"
+        android:visibility="gone"
+        app:constraint_referenced_ids="matrixToCardNameText,matrixToCardAvatar,matrixToCardNameText,matrixToCardDescText, matrixToCardMainButton, matrixToCardAliasText, matrixToCardSecondaryButton, matrixToMemberPills,matrixToCardPeopleYouKnowVisibility"
         tools:visibility="visible" />
 
 
