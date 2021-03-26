@@ -49,8 +49,8 @@ internal abstract class SpaceModule {
     abstract fun bindJoinSpaceTask(task: DefaultJoinSpaceTask): JoinSpaceTask
 
     @Binds
-    abstract fun bindSpaceGetter(getter: DefaultSpaceGetter): SpaceGetter
+    abstract fun bindCreateSpaceTask(task: DefaultCreateSpaceTask): CreateSpaceTask
 
     @Binds
-    abstract fun bindCreateSpaceTask(getter: DefaultCreateSpaceTask): CreateSpaceTask
+    abstract fun bindSpaceGetter(getter: DefaultSpaceGetter): SpaceGetter
 }

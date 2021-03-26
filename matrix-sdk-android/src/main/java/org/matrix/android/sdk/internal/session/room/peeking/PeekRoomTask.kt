@@ -145,7 +145,9 @@ internal class DefaultPeekRoomTask @Inject constructor(
 
             val roomType = stateEvents
                     .lastOrNull { it.type == EventType.STATE_ROOM_CREATE }
-                    ?.let { it.content?.toModel<RoomCreateContent>()?.type }
+                    ?.content
+                    ?.toModel<RoomCreateContent>()
+                    ?.type
 
             return PeekResult.Success(
                     roomId = roomId,

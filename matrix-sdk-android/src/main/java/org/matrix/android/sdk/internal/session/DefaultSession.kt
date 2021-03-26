@@ -121,9 +121,9 @@ internal class DefaultSession @Inject constructor(
         private val integrationManagerService: IntegrationManagerService,
         private val thirdPartyService: Lazy<ThirdPartyService>,
         private val callSignalingService: Lazy<CallSignalingService>,
+        private val spaceService: Lazy<SpaceService>,
         @UnauthenticatedWithCertificate
-        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
-        private val spaceService: Lazy<SpaceService>
+        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
 ) : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),

@@ -180,13 +180,13 @@ class SpaceHierarchyTest : InstrumentedTest {
 
         assertEquals(9, allRooms.size, "Unexpected number of rooms")
 
-        val orphans = session.getFlattenRoomSummaryChildOf(null)
+        val orphans = session.getFlattenRoomSummaryChildrenOf(null)
 
         assertEquals(2, orphans.size, "Unexpected number of orphan rooms")
         assertTrue(orphans.indexOfFirst { it.roomId == orphan1 } != -1, "O1 should be an orphan")
         assertTrue(orphans.indexOfFirst { it.roomId == orphan2 } != -1, "O2 should be an orphan ${orphans.map { it.name }}")
 
-        val aChildren = session.getFlattenRoomSummaryChildOf(spaceAInfo.spaceId)
+        val aChildren = session.getFlattenRoomSummaryChildrenOf(spaceAInfo.spaceId)
 
         assertEquals(4, aChildren.size, "Unexpected number of flatten child rooms")
         assertTrue(aChildren.indexOfFirst { it.name == "A1" } != -1, "A1 should be a child of A")
@@ -204,7 +204,7 @@ class SpaceHierarchyTest : InstrumentedTest {
             // here we do not set the parent!!
         }
 
-        val orphansUpdate = session.getFlattenRoomSummaryChildOf(null)
+        val orphansUpdate = session.getFlattenRoomSummaryChildrenOf(null)
         assertEquals(2, orphansUpdate.size, "Unexpected number of orphan rooms ${orphansUpdate.map { it.name }}")
     }
 
@@ -240,7 +240,7 @@ class SpaceHierarchyTest : InstrumentedTest {
 
         // A -> C -> A
 
-        val aChildren = session.getFlattenRoomSummaryChildOf(spaceAInfo.spaceId)
+        val aChildren = session.getFlattenRoomSummaryChildrenOf(spaceAInfo.spaceId)
 
         assertEquals(4, aChildren.size, "Unexpected number of flatten child rooms ${aChildren.map { it.name }}")
         assertTrue(aChildren.indexOfFirst { it.name == "A1" } != -1, "A1 should be a child of A")
@@ -273,7 +273,7 @@ class SpaceHierarchyTest : InstrumentedTest {
         }
 
         val flatAChildren = runBlocking(Dispatchers.Main) {
-            session.getFlattenRoomSummaryChildOfLive(spaceAInfo.spaceId)
+            session.getFlattenRoomSummaryChildrenOfLive(spaceAInfo.spaceId)
         }
 
         commonTestHelper.waitWithLatch { latch ->

@@ -55,7 +55,9 @@ internal class DefaultPeekSpaceTask @Inject constructor(
         }
         val isSpace = stateEvents
                 .lastOrNull { it.type == EventType.STATE_ROOM_CREATE && it.stateKey == "" }
-                ?.let { it.content?.toModel<RoomCreateContent>()?.type } == RoomType.SPACE
+                ?.content
+                ?.toModel<RoomCreateContent>()
+                ?.type == RoomType.SPACE
 
         if (!isSpace) return SpacePeekResult.NotSpaceType(params.roomIdOrAlias)
 
