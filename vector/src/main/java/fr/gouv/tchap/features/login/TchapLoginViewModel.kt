@@ -108,7 +108,7 @@ class TchapLoginViewModel @AssistedInject constructor(
 
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
-    val currentThreePid: String?
+    private val currentThreePid: String?
         get() = registrationWizard?.currentThreePid
 
     // True when login and password has been sent with success to the homeserver
@@ -127,12 +127,10 @@ class TchapLoginViewModel @AssistedInject constructor(
 
     override fun handle(action: TchapLoginAction) {
         when (action) {
-            is TchapLoginAction.UpdateServerType           -> handleUpdateServerType(action)
             is TchapLoginAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is TchapLoginAction.InitWith                   -> handleInitWith(action)
             is TchapLoginAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
             is TchapLoginAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
-            is TchapLoginAction.LoginWithToken             -> handleLoginWithToken(action)
             is TchapLoginAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is TchapLoginAction.ResetPassword              -> handleResetPassword()
             is TchapLoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
@@ -174,41 +172,6 @@ class TchapLoginViewModel @AssistedInject constructor(
     private fun handleClearHomeServerHistory() {
         homeServerHistoryService.clearHistory()
         getKnownCustomHomeServersUrls()
-    }
-
-    private fun handleLoginWithToken(action: TchapLoginAction.LoginWithToken) {
-        val safeLoginWizard = loginWizard
-
-        if (safeLoginWizard == null) {
-            setState {
-                copy(
-                        asyncLoginAction = Fail(Throwable("Bad configuration"))
-                )
-            }
-        } else {
-            setState {
-                copy(
-                        asyncLoginAction = Loading()
-                )
-            }
-
-            currentTask = safeLoginWizard.loginWithToken(
-                    action.loginToken,
-                    object : MatrixCallback<Session> {
-                        override fun onSuccess(data: Session) {
-                            onSessionCreated(data)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            _viewEvents.post(TchapLoginViewEvents.Failure(failure))
-                            setState {
-                                copy(
-                                        asyncLoginAction = Fail(failure)
-                                )
-                            }
-                        }
-                    })
-        }
     }
 
     private fun handleSetupSsoForSessionRecovery(action: TchapLoginAction.SetupSsoForSessionRecovery) {
@@ -426,25 +389,6 @@ class TchapLoginViewModel @AssistedInject constructor(
             SignMode.SignInWithMatrixId -> _viewEvents.post(TchapLoginViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown            -> Unit
         }
-    }
-
-    private fun handleUpdateServerType(action: TchapLoginAction.UpdateServerType) {
-        setState {
-            copy(
-                    serverType = action.serverType
-            )
-        }
-
-        when (action.serverType) {
-            ServerType.Unknown   -> Unit /* Should not happen */
-            ServerType.MatrixOrg,
-            ServerType.EMS,
-            ServerType.Other ->
-                // Request login flow here
-                handle(TchapLoginAction.UpdateHomeServer(matrixOrgUrl))
-//            ServerType.EMS,
-//            ServerType.Other     -> _viewEvents.post(TchapLoginViewEvents.OnServerSelectionDone(action.serverType))
-        }.exhaustive
     }
 
     private fun handleInitWith(action: TchapLoginAction.InitWith) {

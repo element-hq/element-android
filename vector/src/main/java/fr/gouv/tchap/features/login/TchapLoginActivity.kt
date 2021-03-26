@@ -220,17 +220,6 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         }.exhaustive
     }
 
-    /**
-     * Handle the SSO redirection here
-     */
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-
-        intent?.data
-                ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
-                ?.let { tchapLoginViewModel.handle(TchapLoginAction.LoginWithToken(it)) }
-    }
-
     private fun onRegistrationStageNotSupported() {
         AlertDialog.Builder(this)
                 .setTitle(R.string.app_name)

@@ -26,10 +26,8 @@ import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
 sealed class TchapLoginAction : VectorViewModelAction {
-    data class UpdateServerType(val serverType: ServerType) : TchapLoginAction()
     data class UpdateHomeServer(val homeServerUrl: String) : TchapLoginAction()
     data class UpdateSignMode(val signMode: SignMode) : TchapLoginAction()
-    data class LoginWithToken(val loginToken: String) : TchapLoginAction()
     data class WebLoginSuccess(val credentials: Credentials) : TchapLoginAction()
     data class InitWith(val loginConfig: LoginConfig?) : TchapLoginAction()
     data class ResetPassword(val email: String, val newPassword: String) : TchapLoginAction()
