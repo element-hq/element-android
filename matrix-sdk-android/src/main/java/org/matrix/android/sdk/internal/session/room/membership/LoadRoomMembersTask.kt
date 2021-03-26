@@ -91,7 +91,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         val lastToken = syncTokenStore.getLastToken()
         val response = try {
             executeRequest<RoomMembersResponse>(globalErrorReceiver) {
-                apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
+                apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership)
             }
         } catch (throwable: Throwable) {
             // Revert status to NONE

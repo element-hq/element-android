@@ -27,10 +27,8 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
-import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
-import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
@@ -131,14 +129,14 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         if (joinRules != null) {
             sendStateEvent(
                     eventType = EventType.STATE_ROOM_JOIN_RULES,
-                    body = RoomJoinRulesContent(joinRules).toContent(),
+                    body = mapOf("join_rule" to joinRules),
                     stateKey = null
             )
         }
         if (guestAccess != null) {
             sendStateEvent(
                     eventType = EventType.STATE_ROOM_GUEST_ACCESS,
-                    body = RoomGuestAccessContent(guestAccess).toContent(),
+                    body = mapOf("guest_access" to guestAccess),
                     stateKey = null
             )
         }

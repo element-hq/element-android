@@ -11,6 +11,7 @@ Improvements 🙌:
  - Improve message with Emoji only detection (#3017)
  - Picture preview when replying. Also add the image preview in the message detail bottomsheet (#2916)
  - Api interceptor to allow app developers peek responses (#2986)
+ - Be more robust when parsing some enums
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity
