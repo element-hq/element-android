@@ -40,10 +40,7 @@ data class RoomGuestAccessContent(
 }
 
 @JsonClass(generateAdapter = false)
-enum class GuestAccess(val value: String) {
-    @Json(name = "can_join")
-    CanJoin("can_join"),
-
-    @Json(name = "forbidden")
-    Forbidden("forbidden")
+enum class GuestAccess {
+    @Json(name = "can_join") CanJoin,
+    @Json(name = "forbidden") Forbidden
 }

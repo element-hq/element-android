@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room
 
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
 import org.matrix.android.sdk.api.util.JsonDict
@@ -100,8 +101,8 @@ internal interface RoomAPI {
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/members")
     fun getMembers(@Path("roomId") roomId: String,
                    @Query("at") syncToken: String?,
-                   @Query("membership") membership: String?,
-                   @Query("not_membership") notMembership: String?
+                   @Query("membership") membership: Membership?,
+                   @Query("not_membership") notMembership: Membership?
     ): Call<RoomMembersResponse>
 
     /**
