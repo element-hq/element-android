@@ -138,7 +138,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         if (guestAccess != null) {
             sendStateEvent(
                     eventType = EventType.STATE_ROOM_GUEST_ACCESS,
-                    body = RoomGuestAccessContent(guestAccess).toContent(),
+                    body = mapOf("guest_access" to guestAccess),
                     stateKey = null
             )
         }
