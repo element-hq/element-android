@@ -1,9 +1,14 @@
+#!/usr/bin/env python3
 from collections import OrderedDict
 
 import requests
 import json
 import re
+import os
 from bs4 import BeautifulSoup
+
+# A list of words to not capitalize in emoji-names
+capitalization_exclude = {'with', 'a', 'at', 'of', 'for', 'and', 'over', 'the', 'off', 'on', 'out', 'in', 'but', 'or'}
 
 # Create skeleton of the final json file as a python dictionary:
 emoji_picker_datasource = {
@@ -17,6 +22,7 @@ emoji_picker_datasource_emojis = emoji_picker_datasource["emojis"]
 
 
 # Get official emoji list from unicode.org (Emoji List, v13.1 at time of writing)
+print("Fetching emoji list from Unicode.org...",)
 req = requests.get("https://unicode.org/emoji/charts/emoji-list.html")
 soup = BeautifulSoup(req.content, 'html.parser')
 
@@ -24,6 +30,7 @@ soup = BeautifulSoup(req.content, 'html.parser')
 table = soup.body.table
 
 # Go over all rows
+print("Extracting emojis...")
 for row in table.find_all('tr'):
     # Add "bigheads"  rows to categories
     if 'bighead' in next(row.children)['class']:
@@ -55,6 +62,11 @@ for row in table.find_all('tr'):
         emoji_id = emoji_id.strip()  # Remove leading/trailing whitespaces
         emoji_id = emoji_id.replace(' ', '-')
 
+        # Capitalize name according to the same rules as the previous emoji_picker_datasource.json
+        # - Words are separated by any non-word character (\W), e.g. space, comma, parentheses, dots, etc.
+        # - Words are capitalized if they are either at the beginning of the name OR not in capitalization_exclude (extracted from the previous datasource, too)
+        emoji_name_cap = "".join([w.capitalize() if i == 0 or w not in capitalization_exclude else w for i, w in enumerate(re.split('(\W)', emoji_name))])
+
         # Extract emoji unicode-codepoint
         emoji_code_raw = code_element.text
         emoji_code_list = emoji_code_raw.split(" ")
@@ -69,7 +81,7 @@ for row in table.find_all('tr'):
 
         # Add the emoji itself to the "emojis" dict
         emoji_picker_datasource_emojis[emoji_id] = {
-                "a": emoji_name,
+                "a": emoji_name_cap,
                 "b": emoji_code,
                 "j": emoji_keywords
         }
@@ -78,10 +90,12 @@ for row in table.find_all('tr'):
 # There is no official specification of keywords beyond that, but muan/emojilib maintains a well maintained and
 # established repository with additional keywords. We extend our list with the keywords from there.
 # At the time of writing it had additional keyword information for all emojis except a few from the newest unicode 13.1.
+print("Fetching additional keywords from Emojilib...")
 req = requests.get("https://raw.githubusercontent.com/muan/emojilib/main/dist/emoji-en-US.json")
 emojilib_data = json.loads(req.content)
 
 # We just go over all the official emojis from unicode, and add the keywords there
+print("Adding keywords to emojis...")
 for emoji in emoji_picker_datasource_emojis:
     emoji_name = emoji_picker_datasource_emojis[emoji]["a"]
     emoji_code = emoji_picker_datasource_emojis[emoji]["b"]
@@ -95,7 +109,7 @@ for emoji in emoji_picker_datasource_emojis:
     elif emoji_unicode+chr(0xfe0f)  in emojilib_data:
         emoji_additional_keywords = emojilib_data[emoji_unicode+chr(0xfe0f)]
     else:
-        print("No additional keywords for", emoji_unicode, emoji_picker_datasource_emojis[emoji])
+        print("* No additional keywords for", emoji_unicode, emoji_picker_datasource_emojis[emoji])
         continue
 
     # If additional keywords exist, add them to emoji_picker_datasource_emojis
@@ -110,5 +124,8 @@ for emoji in emoji_picker_datasource_emojis:
 emoji_picker_datasource['categories'] = [x for x in emoji_picker_datasource['categories'] if x['id'] != 'component']
 
 # Write result to file (overwrite previous), without escaping unicode characters
-with open("../vector/src/main/res/raw/emoji_picker_datasource.json", "w") as outfile:
-    json.dump(emoji_picker_datasource, outfile, ensure_ascii=False)
+print("Writing emoji_picker_datasource.json...")
+scripts_dir = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(scripts_dir, "../vector/src/main/res/raw/emoji_picker_datasource.json"), "w") as outfile:
+    json.dump(emoji_picker_datasource, outfile, ensure_ascii=False, separators=(',', ':'))
+print("Done.")
