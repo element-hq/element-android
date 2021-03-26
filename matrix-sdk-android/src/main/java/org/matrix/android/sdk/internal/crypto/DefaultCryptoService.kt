@@ -139,8 +139,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val deviceListManager: DeviceListManager,
         // The key backup service.
         private val keysBackupService: DefaultKeysBackupService,
-        //
-        private val roomDecryptorProvider: RoomDecryptorProvider,
         // The verification service.
         private val verificationService: DefaultVerificationService,
 
@@ -1018,11 +1016,12 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun addNewSessionListener(newSessionListener: NewSessionListener) {
-        roomDecryptorProvider.addNewSessionListener(newSessionListener)
+        // TODO we need to notify the listener when we receive a new inbound
+        // group session
     }
 
     override fun removeSessionListener(listener: NewSessionListener) {
-        roomDecryptorProvider.removeSessionListener(listener)
+        // TODO
     }
 /* ==========================================================================================
  * DEBUG INFO
