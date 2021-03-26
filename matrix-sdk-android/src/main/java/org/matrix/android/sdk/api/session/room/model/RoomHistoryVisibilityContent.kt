@@ -22,7 +22,7 @@ import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
 data class RoomHistoryVisibilityContent(
-        @Json(name = "history_visibility") private val _historyVisibility: String? = null
+        @Json(name = "history_visibility") val _historyVisibility: String? = null
 ) {
     val historyVisibility: RoomHistoryVisibility? = when (_historyVisibility) {
         "world_readable" -> RoomHistoryVisibility.WORLD_READABLE

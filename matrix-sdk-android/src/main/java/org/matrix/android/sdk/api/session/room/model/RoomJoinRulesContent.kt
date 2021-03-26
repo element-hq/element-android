@@ -25,8 +25,8 @@ import timber.log.Timber
  * Class representing the EventType.STATE_ROOM_JOIN_RULES state event content
  */
 @JsonClass(generateAdapter = true)
-data class RoomJoinRulesContent constructor(
-        @Json(name = "join_rule") private val _joinRules: String? = null
+data class RoomJoinRulesContent(
+        @Json(name = "join_rule") val _joinRules: String? = null
 ) {
     val joinRules: RoomJoinRules? = when (_joinRules) {
         "public"  -> RoomJoinRules.PUBLIC

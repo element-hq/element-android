@@ -27,7 +27,7 @@ import timber.log.Timber
 @JsonClass(generateAdapter = true)
 data class RoomGuestAccessContent(
         // Required. Whether guests can join the room. One of: ["can_join", "forbidden"]
-        @Json(name = "guest_access") private val _guestAccess: String? = null
+        @Json(name = "guest_access") val _guestAccess: String? = null
 ) {
     val guestAccess: GuestAccess? = when (_guestAccess) {
         "can_join"  -> GuestAccess.CanJoin
