@@ -136,7 +136,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .mapOptional { it.content.toModel<RoomHistoryVisibilityContent>() }
                 .unwrap()
                 .subscribe {
-                    it.historyVisibility?.let {
+                    it.safeHistoryVisibility()?.let {
                         setState { copy(currentHistoryVisibility = it) }
                     }
                 }
