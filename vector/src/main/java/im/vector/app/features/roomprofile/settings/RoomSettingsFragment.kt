@@ -154,6 +154,7 @@ class RoomSettingsFragment @Inject constructor(
         state.roomSummary()?.let {
             views.roomSettingsToolbarTitleView.text = it.displayName
             avatarRenderer.render(it.toMatrixItem(), views.roomSettingsToolbarAvatarImageView)
+            views.roomSettingsDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
         }
 
         invalidateOptionsMenu()

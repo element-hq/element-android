@@ -856,15 +856,8 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            val params = LoadRoomMembersTask.Params(roomId)
-            try {
-                loadRoomMembersTask.execute(params)
-            } catch (throwable: Throwable) {
-                Timber.e(throwable, "## CRYPTO | onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
-            } finally {
-                val userIds = getRoomUserIds(roomId)
-                setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
-            }
+            val userIds = getRoomUserIds(roomId)
+            setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
         }
     }
 

@@ -43,6 +43,7 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
+import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.Dispatchers
@@ -82,6 +83,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     }
 
     override fun getBinding() = ActivityMainBinding.inflate(layoutInflater)
+
+    override fun getOtherThemes() = ActivityOtherThemes.Launcher
 
     private lateinit var args: MainActivityArgs
 

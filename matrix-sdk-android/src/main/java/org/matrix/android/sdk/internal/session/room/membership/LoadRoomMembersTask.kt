@@ -22,6 +22,8 @@ import io.realm.kotlin.createObject
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
+import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
@@ -57,6 +59,8 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,
+        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+        private val deviceListManager: DeviceListManager,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : LoadRoomMembersTask {
 
@@ -123,6 +127,10 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
             }
             roomEntity.membersLoadStatus = RoomMembersLoadStatusType.LOADED
             roomSummaryUpdater.update(realm, roomId, updateMembers = true)
+        }
+
+        if (cryptoSessionInfoProvider.isRoomEncrypted(roomId)) {
+            deviceListManager.onRoomMembersLoadedFor(roomId)
         }
     }
 
