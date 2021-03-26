@@ -894,9 +894,9 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
+    private fun  onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
         val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
-        eventContent?.historyVisibility?.let {
+        eventContent?.safeHistoryVisibility()?.let {
             cryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
         }
     }
