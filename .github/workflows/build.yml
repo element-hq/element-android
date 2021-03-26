@@ -1,9 +1,9 @@
 name: Build
 
 on:
-  pull_request: {}
+  pull_request: { }
   push:
-    branches: [master, develop]
+    branches: [ master, develop ]
 
 jobs:
   debug:
@@ -24,15 +24,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Lint ${{ matrix.target }} release
-        run: ./gradlew clean lint${{ matrix.target }}Release --stacktrace
-      - name: Upload ${{ matrix.target }} linting report
-        uses: actions/upload-artifact@v2
-        if: always()
-        with:
-          name: release-debug-linting-report-${{ matrix.target }}
-          path: |
-            vector/build/reports/*.*
       - name: Assemble ${{ matrix.target }} debug apk
         run: ./gradlew assemble${{ matrix.target }}Debug --stacktrace
       - name: Upload ${{ matrix.target }} debug APKs
