@@ -9,18 +9,20 @@ jobs:
   integration-tests:
     name: Synapse Integration Tests
     runs-on: ubuntu-latest
-    services:
-      synapse:
-        image: docker.io/matrixdotorg/synapse:latest
-        options: >-
-          --entrypoint=tail
-          --no-healthcheck
-        ports: [ 8080, 8480, 8081, 8481, 8082, 8482 ]
     steps:
       - uses: actions/checkout@v2
-      - name: Start synapse server
-        run: |
-          docker exec ${{ job.services.synapse.id }} bash -c 'curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh | sed s/127.0.0.1/0.0.0.0/g | bash'
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
       - uses: actions/cache@v2
         with:
           path: |
@@ -29,5 +31,12 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - name: Start synapse server
+        run: |
+          python3 -m venv .synapse
+          source .synapse/bin/activate
+          pip install synapse matrix-synapse
+          curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh \
+            | sed s/127.0.0.1/0.0.0.0/g | bash
       - name: Run unit tests
         run: ./gradlew vector:connectedAndroidTest matrix-sdk-android:connectedAndroidTest
