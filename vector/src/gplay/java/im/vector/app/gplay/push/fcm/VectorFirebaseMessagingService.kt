@@ -190,7 +190,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
         coroutineScope.launch {
             Timber.d("Fast lane: start request")
-            val event = session.getEvent(roomId, eventId, onlyOnWifi = true)?: return@launch
+            val event = session.getEvent(roomId, eventId, onlyOnWifi = true) ?: return@launch
 
             val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event)
 
