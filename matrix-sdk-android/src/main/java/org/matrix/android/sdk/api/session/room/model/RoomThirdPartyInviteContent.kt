@@ -47,7 +47,7 @@ data class RoomThirdPartyInviteContent(
         /**
          * Keys with which the token may be signed.
          */
-        @Json(name = "public_keys") val publicKeys: List<PublicKeys>? = emptyList()
+        @Json(name = "public_keys") val publicKeys: List<PublicKeys>?
 )
 
 @JsonClass(generateAdapter = true)

@@ -28,7 +28,8 @@ typealias SpaceSummaryQueryParams = RoomSummaryQueryParams
 interface SpaceService {
 
     /**
-     * Create a room asynchronously
+     * Create a space asynchronously
+     * @return the spaceId of the created space
      */
     suspend fun createSpace(params: CreateSpaceParams): String
 
@@ -39,8 +40,8 @@ interface SpaceService {
 
     /**
      * Get a space from a roomId
-     * @param roomId the roomId to look for.
-     * @return a room with roomId or null if room type is not space
+     * @param spaceId the roomId to look for.
+     * @return a space with spaceId or null if room type is not space
      */
     fun getSpace(spaceId: String): Space?
 
@@ -54,8 +55,9 @@ interface SpaceService {
     /**
      * Get's information of a space by querying the server
      */
-    suspend fun querySpaceChildren(spaceId: String, suggestedOnly: Boolean? = null, autoJoinedOnly: Boolean? = null)
-            : Pair<RoomSummary, List<SpaceChildInfo>>
+    suspend fun querySpaceChildren(spaceId: String,
+                                   suggestedOnly: Boolean? = null,
+                                   autoJoinedOnly: Boolean? = null): Pair<RoomSummary, List<SpaceChildInfo>>
 
     /**
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.

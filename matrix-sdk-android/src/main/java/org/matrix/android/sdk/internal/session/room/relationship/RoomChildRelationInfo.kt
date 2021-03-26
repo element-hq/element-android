@@ -34,10 +34,11 @@ import timber.log.Timber
  *  The state_key is the ID of a child room or space, and the content should contain a via key which gives
  *  a list of candidate servers that can be used to join the room. present: true key is included to distinguish from a deleted state event.
  *
- *  - Separately, rooms can claim parents via the m.room.parent state event:
+ *  - Separately, rooms can claim parents via the m.room.parent state event.
  */
-internal class RoomChildRelationInfo(private val realm: Realm,
-                                     private val roomId: String
+internal class RoomChildRelationInfo(
+        private val realm: Realm,
+        private val roomId: String
 ) {
 
     data class SpaceChildInfo(

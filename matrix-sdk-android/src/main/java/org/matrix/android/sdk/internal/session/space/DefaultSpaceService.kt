@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.space
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -37,7 +36,6 @@ import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
 import org.matrix.android.sdk.api.session.space.model.SpaceParentContent
-import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomGetter
 import org.matrix.android.sdk.internal.session.room.SpaceGetter
@@ -49,7 +47,6 @@ import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
 import javax.inject.Inject
 
 internal class DefaultSpaceService @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
         @UserId private val userId: String,
         private val createSpaceTask: CreateSpaceTask,
         private val joinSpaceTask: JoinSpaceTask,
@@ -97,11 +94,14 @@ internal class DefaultSpaceService @Inject constructor(
     override fun getRootSpaceSummaries(): List<RoomSummary> {
         return roomSummaryDataSource.getRootSpaceSummaries()
     }
+
     override suspend fun peekSpace(spaceId: String): SpacePeekResult {
         return peekSpaceTask.execute(PeekSpaceTask.Params(spaceId))
     }
 
-    override suspend fun querySpaceChildren(spaceId: String, suggestedOnly: Boolean?, autoJoinedOnly: Boolean?): Pair<RoomSummary, List<SpaceChildInfo>> {
+    override suspend fun querySpaceChildren(spaceId: String,
+                                            suggestedOnly: Boolean?,
+                                            autoJoinedOnly: Boolean?): Pair<RoomSummary, List<SpaceChildInfo>> {
         return resolveSpaceInfoTask.execute(ResolveSpaceInfoTask.Params.withId(spaceId, suggestedOnly, autoJoinedOnly)).let { response ->
             val spaceDesc = response.rooms?.firstOrNull { it.roomId == spaceId }
             Pair(
@@ -136,7 +136,7 @@ internal class DefaultSpaceService @Inject constructor(
                                         activeMemberCount = childSummary.numJoinedMembers,
                                         parentRoomId = childStateEv?.roomId
                                 )
-                            } ?: emptyList()
+                            }.orEmpty()
             )
         }
     }
