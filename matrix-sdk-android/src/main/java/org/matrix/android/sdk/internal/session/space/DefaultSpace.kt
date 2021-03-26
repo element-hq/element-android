@@ -47,7 +47,8 @@ internal class DefaultSpace(
         return spaceSummaryDataSource.getSpaceSummary(room.roomId)
     }
 
-    override suspend fun addChildren(roomId: String, viaServers: List<String>,
+    override suspend fun addChildren(roomId: String,
+                                     viaServers: List<String>,
                                      order: String?,
                                      autoJoin: Boolean,
                                      suggested: Boolean?) {
@@ -63,7 +64,7 @@ internal class DefaultSpace(
         )
     }
 
-    override suspend fun removeRoom(roomId: String) {
+    override suspend fun removeChildren(roomId: String) {
         val existing = room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
                 .firstOrNull()
                 ?.content.toModel<SpaceChildContent>()

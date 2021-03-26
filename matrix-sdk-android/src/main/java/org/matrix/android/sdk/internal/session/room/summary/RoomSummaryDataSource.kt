@@ -251,14 +251,10 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         queryParams.includeType?.forEach {
             query.equalTo(RoomSummaryEntityFields.ROOM_TYPE, it)
         }
-        queryParams.roomCategoryFilter?.let {
-            when (it) {
-                RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-                RoomCategoryFilter.ALL -> {
-                    // nop
-                }
-            }
+        when (queryParams.roomCategoryFilter) {
+            RoomCategoryFilter.ONLY_DM    -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+            RoomCategoryFilter.ALL        -> Unit // nop
         }
         return query
     }
@@ -272,7 +268,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
 
     fun getAllRoomSummaryChildOfLive(spaceId: String, memberShips: List<Membership>): LiveData<List<RoomSummary>> {
         // we want to listen to all spaces in hierarchy and on change compute back all childs
-        // and switch map to listen thoose?
+        // and switch map to listen those?
         val mediatorLiveData = HierarchyLiveDataHelper(spaceId, memberShips, this).liveData()
 
         return Transformations.switchMap(mediatorLiveData) { allIds ->

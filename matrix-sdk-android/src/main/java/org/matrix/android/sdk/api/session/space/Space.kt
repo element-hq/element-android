@@ -35,12 +35,13 @@ interface Space {
      */
     fun spaceSummary(): RoomSummary?
 
-    suspend fun addChildren(roomId: String, viaServers: List<String>,
+    suspend fun addChildren(roomId: String,
+                            viaServers: List<String>,
                             order: String?,
                             autoJoin: Boolean = false,
                             suggested: Boolean? = false)
 
-    suspend fun removeRoom(roomId: String)
+    suspend fun removeChildren(roomId: String)
 
     @Throws
     suspend fun setChildrenOrder(roomId: String, order: String?)

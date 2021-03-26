@@ -69,6 +69,9 @@ open class CreateRoomParams {
      */
     val invite3pids = mutableListOf<ThreePid>()
 
+    /**
+     * Initial Guest Access
+     */
     var guestAccess: GuestAccess? = null
 
     /**

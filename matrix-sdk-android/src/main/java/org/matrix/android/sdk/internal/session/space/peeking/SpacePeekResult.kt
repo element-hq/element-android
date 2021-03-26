@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.space.peeking
 
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 
+// TODO Move to api package
 data class SpacePeekSummary(
         val idOrAlias: String,
         val roomPeekResult: PeekResult.Success,
