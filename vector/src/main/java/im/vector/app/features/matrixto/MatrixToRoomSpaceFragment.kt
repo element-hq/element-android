@@ -156,6 +156,29 @@ class MatrixToRoomSpaceFragment @Inject constructor(
             }
         }
 
+        when (state.peopleYouKnow) {
+            is Success -> {
+                views.matrixToCardPeopleYouKnowVisibility.isVisible = true
+                val images = listOf(views.knownMember1, views.knownMember2, views.knownMember3, views.knownMember4, views.knownMember5)
+                        .onEach { it.isVisible = false }
+
+                val someYouKnow = state.peopleYouKnow.invoke()
+                someYouKnow.forEachIndexed { index, item ->
+                    images[index].isVisible = true
+                    avatarRenderer.render(item, images[index])
+                }
+                views.peopleYouMayKnowText.setTextOrHide(
+                        resources.getQuantityString(R.plurals.space_people_you_know,
+                                someYouKnow.count(),
+                                someYouKnow.count()
+                        )
+                )
+            }
+            else       -> {
+                views.matrixToCardPeopleYouKnowVisibility.isVisible = false
+            }
+        }
+
         when (state.startChattingState) {
             Uninitialized -> {
                 views.matrixToCardButtonLoading.isVisible = false
