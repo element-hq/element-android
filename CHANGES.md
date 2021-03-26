@@ -11,6 +11,7 @@ Improvements 🙌:
  - Improve message with Emoji only detection (#3017)
  - Picture preview when replying. Also add the image preview in the message detail bottomsheet (#2916)
  - Api interceptor to allow app developers peek responses (#2986)
+ - Update reactions to Unicode 13.1 (#2998)
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity
@@ -68,7 +69,6 @@ Improvements 🙌:
  - Sending is now queuing by room and not uniquely to the session
  - Improve Snackbar duration (#2929)
  - Improve sending message state (#2937)
- - Update reactions to Unicode 13.1 (#2998)
 
 Bugfix 🐛:
  - Try to fix crash about UrlPreview (#2640)
