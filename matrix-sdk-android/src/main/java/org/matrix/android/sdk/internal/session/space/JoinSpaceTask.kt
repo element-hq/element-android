@@ -25,7 +25,6 @@ import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.task.Task
@@ -42,7 +41,6 @@ internal interface JoinSpaceTask : Task<JoinSpaceTask.Params, SpaceService.JoinS
 }
 
 internal class DefaultJoinSpaceTask @Inject constructor(
-        private val roomAPI: RoomAPI,
         private val joinRoomTask: JoinRoomTask,
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
@@ -81,7 +79,7 @@ internal class DefaultJoinSpaceTask @Inject constructor(
             return SpaceService.JoinSpaceResult.PartialSuccess(emptyMap())
         }
 
-        val errors = HashMap<String, Throwable>()
+        val errors = mutableMapOf<String, Throwable>()
         Timber.v("## Space: > Sync done ...")
         // after that i should have the children (? do I need to paginate to get state)
         val summary = roomSummaryDataSource.getSpaceSummary(params.roomIdOrAlias)
@@ -93,7 +91,7 @@ internal class DefaultJoinSpaceTask @Inject constructor(
                 // I should try to join as well
                 if (it.roomType == RoomType.SPACE) {
                     // recursively join auto-joined child of this space?
-                    when (val subspaceJoinResult = this.execute(JoinSpaceTask.Params(it.childRoomId, null, it.viaServers))) {
+                    when (val subspaceJoinResult = execute(JoinSpaceTask.Params(it.childRoomId, null, it.viaServers))) {
                         SpaceService.JoinSpaceResult.Success -> {
                             // nop
                         }

@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.space
 
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
@@ -31,13 +32,21 @@ internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, Spac
     ) {
         companion object {
             fun withId(spaceId: String, suggestedOnly: Boolean?, autoJoinOnly: Boolean?) =
-                    Params(spaceId, 10, 20, null, suggestedOnly, autoJoinOnly)
+                    Params(
+                            spaceId = spaceId,
+                            maxRoomPerSpace = 10,
+                            limit = 20,
+                            batchToken = null,
+                            suggestedOnly = suggestedOnly,
+                            autoJoinOnly = autoJoinOnly
+                    )
         }
     }
 }
 
 internal class DefaultResolveSpaceInfoTask @Inject constructor(
-        private val spaceApi: SpaceApi
+        private val spaceApi: SpaceApi,
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : ResolveSpaceInfoTask {
     override suspend fun execute(params: ResolveSpaceInfoTask.Params): SpacesResponse {
         val body = SpaceSummaryParams(
@@ -47,7 +56,7 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
                 autoJoinedOnly = params.autoJoinOnly,
                 suggestedOnly = params.suggestedOnly
         )
-        return executeRequest<SpacesResponse>(null) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = spaceApi.getSpaces(params.spaceId, body)
         }
     }

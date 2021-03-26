@@ -29,7 +29,7 @@ internal class HierarchyLiveDataHelper(
     private val sources = HashMap<String, LiveData<Optional<RoomSummary>>>()
     private val mediatorLiveData = MediatorLiveData<List<String>>()
 
-    fun liveData() = mediatorLiveData
+    fun liveData(): LiveData<List<String>> = mediatorLiveData
 
     init {
         onChange()
