@@ -38,6 +38,5 @@ internal interface SpaceApi {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2946/rooms/{roomId}/spaces")
     fun getSpaces(@Path("roomId") spaceId: String,
-                  @Body params: SpaceSummaryParams
-    ): Call<SpacesResponse>
+                  @Body params: SpaceSummaryParams): Call<SpacesResponse>
 }

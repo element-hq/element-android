@@ -199,14 +199,14 @@ internal class DefaultRoomService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun getFlattenRoomSummaryChildOf(spaceId: String?, memberships: List<Membership>): List<RoomSummary> {
+    override fun getFlattenRoomSummaryChildrenOf(spaceId: String?, memberships: List<Membership>): List<RoomSummary> {
         if (spaceId == null) {
             return roomSummaryDataSource.getFlattenOrphanRooms()
         }
         return roomSummaryDataSource.getAllRoomSummaryChildOf(spaceId, memberships)
     }
 
-    override fun getFlattenRoomSummaryChildOfLive(spaceId: String?, memberships: List<Membership>): LiveData<List<RoomSummary>> {
+    override fun getFlattenRoomSummaryChildrenOfLive(spaceId: String?, memberships: List<Membership>): LiveData<List<RoomSummary>> {
         if (spaceId == null) {
             return roomSummaryDataSource.getFlattenOrphanRoomsLive()
         }

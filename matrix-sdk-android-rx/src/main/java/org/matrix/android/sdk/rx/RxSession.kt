@@ -75,9 +75,9 @@ class RxSession(private val session: Session) {
     }
 
     fun liveFlattenRoomSummaryChildOf(spaceId: String?): Observable<List<RoomSummary>> {
-        return session.getFlattenRoomSummaryChildOfLive(spaceId).asObservable()
+        return session.getFlattenRoomSummaryChildrenOfLive(spaceId).asObservable()
                 .startWithCallable {
-                    session.getFlattenRoomSummaryChildOf(spaceId)
+                    session.getFlattenRoomSummaryChildrenOf(spaceId)
                 }
     }
 

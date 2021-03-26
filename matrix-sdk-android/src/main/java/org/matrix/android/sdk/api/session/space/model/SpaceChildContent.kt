@@ -60,11 +60,9 @@ data class SpaceChildContent(
      * or consist of more than 50 characters, are forbidden and should be ignored if received.)
      */
     fun validOrder(): String? {
-        order?.let {
-            if (order.length > 50) return null
-            if (!ORDER_VALID_CHAR_REGEX.matches(it)) return null
-        }
         return order
+                ?.takeIf { it.length <= 50 }
+                ?.takeIf { ORDER_VALID_CHAR_REGEX.matches(it) }
     }
 
     companion object {
