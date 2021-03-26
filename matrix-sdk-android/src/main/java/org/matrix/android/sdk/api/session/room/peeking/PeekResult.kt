@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.session.room.peeking
 
+import org.matrix.android.sdk.api.util.MatrixItem
+
 sealed class PeekResult {
     data class Success(
             val roomId: String,
@@ -25,7 +27,8 @@ sealed class PeekResult {
             val avatarUrl: String?,
             val numJoinedMembers: Int?,
             val roomType: String?,
-            val viaServers: List<String>
+            val viaServers: List<String>,
+            val someMembers: List<MatrixItem.UserItem>?
     ) : PeekResult()
 
     data class PeekingNotAllowed(

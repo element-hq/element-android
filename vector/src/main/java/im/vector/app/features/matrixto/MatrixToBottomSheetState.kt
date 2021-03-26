@@ -29,7 +29,8 @@ data class MatrixToBottomSheetState(
         val linkType: PermalinkData,
         val matrixItem: Async<MatrixItem> = Uninitialized,
         val startChattingState: Async<Unit> = Uninitialized,
-        val roomPeekResult: Async<RoomInfoResult> = Uninitialized
+        val roomPeekResult: Async<RoomInfoResult> = Uninitialized,
+        val peopleYouKnow: Async<List<MatrixItem.UserItem>> = Uninitialized
 ) : MvRxState {
 
     constructor(args: MatrixToBottomSheet.MatrixToArgs) : this(
