@@ -1,0 +1,31 @@
+name: Integeration Test
+
+on:
+  pull_request: { }
+  push:
+    branches: [ master, develop ]
+
+jobs:
+  integration-tests:
+    name: Synapse Integration Tests
+    runs-on: ubuntu-latest
+    services:
+      synapse:
+        image: docker.io/matrixdotorg/synapse:latest
+        options: "--entrypoint tail"
+        ports: [ 8080, 8480, 8081, 8481, 8082, 8482 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Start synapse server
+        run: |
+          docker exec ${{ job.services.synapse.id }} bash -c 'curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh | sed s/127.0.0.1/0.0.0.0/g | bash'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Run unit tests
+        run: ./gradlew vector:connectedAndroidTest matrix-sdk-android:connectedAndroidTest
