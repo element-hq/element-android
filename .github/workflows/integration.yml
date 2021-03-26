@@ -7,7 +7,7 @@ on:
 
 jobs:
   integration-tests:
-    name: Synapse Integration Tests
+    name: Integration Tests (Synapse)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -38,5 +38,5 @@ jobs:
           pip install synapse matrix-synapse
           curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh \
             | sed s/127.0.0.1/0.0.0.0/g | bash
-      - name: Run unit tests
+      - name: Run integration tests
         run: ./gradlew vector:connectedAndroidTest matrix-sdk-android:connectedAndroidTest
