@@ -25,13 +25,17 @@ import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
+import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
+import org.matrix.android.sdk.internal.session.sync.ReadReceiptHandler
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
+import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import org.matrix.android.sdk.internal.util.debug.measureTimeData
 import timber.log.Timber
@@ -42,6 +46,8 @@ import java.util.concurrent.atomic.AtomicReference
 
 class SimpleTimeline internal constructor(val roomId: String,
                                           private val realmConfiguration: RealmConfiguration,
+                                          private val loadRoomMembersTask: LoadRoomMembersTask,
+                                          private val readReceiptHandler: ReadReceiptHandler,
                                           paginationTask: PaginationTask,
                                           getEventTask: GetContextOfEventTask,
                                           fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
@@ -110,15 +116,22 @@ class SimpleTimeline internal constructor(val roomId: String,
         listeners.clear()
     }
 
-    fun start() = timelineScope.launch {
-        sequencer.post {
-            if (isStarted.compareAndSet(false, true)) {
-                val realm = Realm.getInstance(realmConfiguration)
-                updateState(Direction.FORWARDS) {
-                    it.copy(loading = false, hasMoreToLoad = false)
+    fun start() {
+        timelineScope.launch {
+            val loadRoomMembersParam = LoadRoomMembersTask.Params(roomId)
+            loadRoomMembersTask.execute(loadRoomMembersParam)
+        }
+        timelineScope.launch {
+            sequencer.post {
+                if (isStarted.compareAndSet(false, true)) {
+                    val realm = Realm.getInstance(realmConfiguration)
+                    updateState(Direction.FORWARDS) {
+                        it.copy(loading = false, hasMoreToLoad = false)
+                    }
+                    ensureReadReceiptAreLoaded(realm)
+                    backgroundRealm.set(realm)
+                    strategy.onStart()
                 }
-                backgroundRealm.set(realm)
-                strategy.onStart()
             }
         }
     }
@@ -237,5 +250,19 @@ class SimpleTimeline internal constructor(val roomId: String,
                 dependencies = strategyDependencies
         )
     }
+
+    private fun ensureReadReceiptAreLoaded(realm: Realm) {
+        readReceiptHandler.getContentFromInitSync(roomId)
+                ?.also {
+                    Timber.w("INIT_SYNC Insert when opening timeline RR for room $roomId")
+                }
+                ?.let { readReceiptContent ->
+                    realm.executeTransactionAsync {
+                        readReceiptHandler.handle(it, roomId, readReceiptContent, false, null)
+                        readReceiptHandler.onContentFromInitSyncHandled(roomId)
+                    }
+                }
+    }
+
 
 }
