@@ -131,7 +131,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         if (joinRules != null) {
             sendStateEvent(
                     eventType = EventType.STATE_ROOM_JOIN_RULES,
-                    body = RoomJoinRulesContent(joinRules).toContent(),
+                    body = mapOf("join_rule" to joinRules),
                     stateKey = null
             )
         }
