@@ -33,7 +33,6 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.terms.TermsService
-import org.matrix.android.sdk.internal.util.awaitCallback
 import java.net.UnknownHostException
 
 class SetIdentityServerViewModel @AssistedInject constructor(
@@ -97,9 +96,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 // First ping the identity server v2 API
-                awaitCallback<Unit> {
-                    mxSession.identityService().isValidIdentityServer(baseUrl, it)
-                }
+                mxSession.identityService().isValidIdentityServer(baseUrl)
                 // Ok, next step
                 checkTerms(baseUrl)
             } catch (failure: Throwable) {
