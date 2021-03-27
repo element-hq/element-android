@@ -20,6 +20,7 @@ import androidx.paging.PagedList
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.Function3
+import kotlinx.coroutines.rx2.rxSingle
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -144,8 +145,8 @@ class RxSession(private val session: Session) {
         session.getRoomIdByAlias(roomAlias, searchOnServer, it)
     }
 
-    fun getProfileInfo(userId: String): Single<JsonDict> = singleBuilder {
-        session.getProfile(userId, it)
+    fun getProfileInfo(userId: String): Single<JsonDict> = rxSingle {
+        session.getProfile(userId)
     }
 
     fun liveUserCryptoDevices(userId: String): Observable<List<CryptoDeviceInfo>> {

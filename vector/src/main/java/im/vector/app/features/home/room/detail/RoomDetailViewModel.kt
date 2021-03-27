@@ -965,8 +965,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeDisplayNameSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayName) {
-        launchSlashCommandFlow {
-            session.setDisplayName(session.myUserId, changeDisplayName.displayName, it)
+        launchSlashCommandFlowSuspendable {
+            session.setDisplayName(session.myUserId, changeDisplayName.displayName)
         }
     }
 
