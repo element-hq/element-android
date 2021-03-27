@@ -822,16 +822,20 @@ class RoomDetailViewModel @AssistedInject constructor(
                     if (inReplyTo != null) {
                         // TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {
-                            room.editReply(state.sendMode.timelineEvent, it, action.text.toString())
+                            viewModelScope.launch {
+                                room.editReply(state.sendMode.timelineEvent, it, action.text.toString())
+                            }
                         }
                     } else {
                         val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
-                            room.editTextMessage(state.sendMode.timelineEvent,
-                                    messageContent?.msgType ?: MessageType.MSGTYPE_TEXT,
-                                    action.text,
-                                    action.autoMarkdown)
+                            viewModelScope.launch {
+                                room.editTextMessage(state.sendMode.timelineEvent,
+                                        messageContent?.msgType ?: MessageType.MSGTYPE_TEXT,
+                                        action.text,
+                                        action.autoMarkdown)
+                            }
                         } else {
                             Timber.w("Same message content, do not send edition")
                         }
@@ -862,7 +866,9 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
                 is SendMode.REPLY   -> {
                     state.sendMode.timelineEvent.let {
-                        room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
+                        viewModelScope.launch {
+                            room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
+                        }
                         _viewEvents.post(RoomDetailViewEvents.MessageSent)
                         popDraft()
                     }
@@ -1016,7 +1022,9 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleSendReaction(action: RoomDetailAction.SendReaction) {
-        room.sendReaction(action.targetEventId, action.reaction)
+        viewModelScope.launch {
+            room.sendReaction(action.targetEventId, action.reaction)
+        }
     }
 
     private fun handleRedactEvent(action: RoomDetailAction.RedactAction) {
@@ -1025,14 +1033,20 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleUndoReact(action: RoomDetailAction.UndoReaction) {
-        room.undoReaction(action.targetEventId, action.reaction)
+        viewModelScope.launch {
+            room.undoReaction(action.targetEventId, action.reaction)
+        }
     }
 
     private fun handleUpdateQuickReaction(action: RoomDetailAction.UpdateQuickReactAction) {
         if (action.add) {
-            room.sendReaction(action.targetEventId, action.selectedReaction)
+            viewModelScope.launch {
+                room.sendReaction(action.targetEventId, action.selectedReaction)
+            }
         } else {
-            room.undoReaction(action.targetEventId, action.selectedReaction)
+            viewModelScope.launch {
+                room.undoReaction(action.targetEventId, action.selectedReaction)
+            }
         }
     }
 
