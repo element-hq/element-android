@@ -289,12 +289,13 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                     callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
             )
         } else {
-            session.widgetService().createRoomWidget(
-                    roomId = roomId,
-                    widgetId = widgetId,
-                    content = widgetEventContent,
-                    callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-            )
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                session.widgetService().createRoomWidget(
+                        roomId = roomId,
+                        widgetId = widgetId,
+                        content = widgetEventContent
+                )
+            }
         }
     }
 

@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerS
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.mapOptional
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
@@ -147,13 +146,13 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
 
     override fun handle(action: WidgetAction) {
         when (action) {
-            is WidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action)
+            is WidgetAction.OnWebViewLoadingError -> handleWebViewLoadingError(action)
             is WidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action)
-            is WidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading()
-            WidgetAction.LoadFormattedUrl           -> loadFormattedUrl(forceFetchToken = false)
-            WidgetAction.DeleteWidget               -> handleDeleteWidget()
-            WidgetAction.RevokeWidget               -> handleRevokeWidget()
-            WidgetAction.OnTermsReviewed            -> loadFormattedUrl(forceFetchToken = false)
+            is WidgetAction.OnWebViewStartedToLoad -> handleWebViewStartLoading()
+            WidgetAction.LoadFormattedUrl -> loadFormattedUrl(forceFetchToken = false)
+            WidgetAction.DeleteWidget -> handleDeleteWidget()
+            WidgetAction.RevokeWidget -> handleRevokeWidget()
+            WidgetAction.OnTermsReviewed -> loadFormattedUrl(forceFetchToken = false)
         }
     }
 
@@ -173,10 +172,8 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         viewModelScope.launch {
             val widgetId = initialState.widgetId ?: return@launch
             try {
-                awaitCallback<Unit> {
-                    widgetService.destroyRoomWidget(initialState.roomId, widgetId, it)
-                    _viewEvents.post(WidgetViewEvents.Close())
-                }
+                widgetService.destroyRoomWidget(initialState.roomId, widgetId)
+                _viewEvents.post(WidgetViewEvents.Close())
             } catch (failure: Throwable) {
                 _viewEvents.post(WidgetViewEvents.Failure(failure))
             }
