@@ -337,8 +337,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
                 requestID,
                 roomId,
                 bob.myUserId,
-                bob.sessionParams.credentials.deviceId!!,
-                null)
+                bob.sessionParams.credentials.deviceId!!)
 
         // we should reach SHOW SAS on both
         var alicePovTx: OutgoingSasVerificationTransaction? = null
