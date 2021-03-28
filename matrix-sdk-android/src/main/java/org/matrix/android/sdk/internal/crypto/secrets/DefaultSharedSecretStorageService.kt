@@ -45,7 +45,6 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.olm.OlmPkMessage
 import java.security.SecureRandom
 import javax.crypto.Cipher
@@ -85,9 +84,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 )
             } ?: storageKeyContent
 
-            awaitCallback<Unit> {
-                accountDataService.updateAccountData("$KEY_ID_BASE.$keyId", signedContent.toContent(), it)
-            }
+            accountDataService.updateAccountData("$KEY_ID_BASE.$keyId", signedContent.toContent())
             SsssKeyCreationInfo(
                     keyId = keyId,
                     content = storageKeyContent,
@@ -116,13 +113,10 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 )
             } ?: storageKeyContent
 
-            awaitCallback<Unit> {
-                accountDataService.updateAccountData(
-                        "$KEY_ID_BASE.$keyId",
-                        signedContent.toContent(),
-                        it
-                )
-            }
+            accountDataService.updateAccountData(
+                    "$KEY_ID_BASE.$keyId",
+                    signedContent.toContent()
+            )
             SsssKeyCreationInfo(
                     keyId = keyId,
                     content = storageKeyContent,
@@ -149,12 +143,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
     override suspend fun setDefaultKey(keyId: String) {
         val existingKey = getKey(keyId)
         if (existingKey is KeyInfoResult.Success) {
-            awaitCallback<Unit> {
-                accountDataService.updateAccountData(DEFAULT_KEY_ID,
-                        mapOf("key" to keyId),
-                        it
-                )
-            }
+            accountDataService.updateAccountData(DEFAULT_KEY_ID, mapOf("key" to keyId))
         } else {
             throw SharedSecretStorageError.UnknownKey(keyId)
         }
@@ -189,15 +178,10 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 }
             }
 
-            awaitCallback<Unit> {
-                accountDataService.updateAccountData(
-                        type = name,
-                        content = mapOf(
-                                "encrypted" to encryptedContents
-                        ),
-                        callback = it
-                )
-            }
+            accountDataService.updateAccountData(
+                    type = name,
+                    content = mapOf("encrypted" to encryptedContents)
+            )
         }
     }
 
