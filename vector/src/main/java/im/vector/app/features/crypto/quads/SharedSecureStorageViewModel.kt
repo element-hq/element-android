@@ -43,7 +43,6 @@ import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
@@ -130,13 +129,13 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
     override fun handle(action: SharedSecureStorageAction) = withState {
         when (action) {
             is SharedSecureStorageAction.TogglePasswordVisibility -> handleTogglePasswordVisibility()
-            is SharedSecureStorageAction.Cancel                   -> handleCancel()
-            is SharedSecureStorageAction.SubmitPassphrase         -> handleSubmitPassphrase(action)
-            SharedSecureStorageAction.UseKey                      -> handleUseKey()
-            is SharedSecureStorageAction.SubmitKey                -> handleSubmitKey(action)
-            SharedSecureStorageAction.Back                        -> handleBack()
-            SharedSecureStorageAction.ForgotResetAll              -> handleResetAll()
-            SharedSecureStorageAction.DoResetAll                  -> handleDoResetAll()
+            is SharedSecureStorageAction.Cancel -> handleCancel()
+            is SharedSecureStorageAction.SubmitPassphrase -> handleSubmitPassphrase(action)
+            SharedSecureStorageAction.UseKey -> handleUseKey()
+            is SharedSecureStorageAction.SubmitKey -> handleSubmitKey(action)
+            SharedSecureStorageAction.Back -> handleBack()
+            SharedSecureStorageAction.ForgotResetAll -> handleResetAll()
+            SharedSecureStorageAction.DoResetAll -> handleDoResetAll()
         }.exhaustive
     }
 
@@ -220,13 +219,10 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 withContext(Dispatchers.IO) {
                     args.requestedSecrets.forEach {
                         if (session.getAccountDataEvent(it) != null) {
-                            val res = awaitCallback<String> { callback ->
-                                session.sharedSecretStorageService.getSecret(
-                                        name = it,
-                                        keyId = keyInfo.id,
-                                        secretKey = keySpec,
-                                        callback = callback)
-                            }
+                            val res = session.sharedSecretStorageService.getSecret(
+                                    name = it,
+                                    keyId = keyInfo.id,
+                                    secretKey = keySpec)
                             decryptedSecretMap[it] = res
                         } else {
                             Timber.w("## Cannot find secret $it in SSSS, skip")
@@ -292,13 +288,10 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 withContext(Dispatchers.IO) {
                     args.requestedSecrets.forEach {
                         if (session.getAccountDataEvent(it) != null) {
-                            val res = awaitCallback<String> { callback ->
-                                session.sharedSecretStorageService.getSecret(
-                                        name = it,
-                                        keyId = keyInfo.id,
-                                        secretKey = keySpec,
-                                        callback = callback)
-                            }
+                            val res = session.sharedSecretStorageService.getSecret(
+                                    name = it,
+                                    keyId = keyInfo.id,
+                                    secretKey = keySpec)
                             decryptedSecretMap[it] = res
                         } else {
                             Timber.w("## Cannot find secret $it in SSSS, skip")
