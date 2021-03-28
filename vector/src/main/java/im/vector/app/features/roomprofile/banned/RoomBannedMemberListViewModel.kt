@@ -39,7 +39,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
@@ -124,9 +123,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                awaitCallback<Unit> {
-                    room.unban(roomMemberSummary.userId, null, it)
-                }
+                room.unban(roomMemberSummary.userId, null)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomBannedMemberListViewEvents.ToastError(stringProvider.getString(R.string.failed_to_unban)))
             } finally {

@@ -940,14 +940,14 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
-        launchSlashCommandFlow {
-            room.invite(invite.userId, invite.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.invite(invite.userId, invite.reason)
         }
     }
 
     private fun handleInvite3pidSlashCommand(invite: ParsedCommand.Invite3Pid) {
-        launchSlashCommandFlow {
-            room.invite3pid(invite.threePid, it)
+        launchSlashCommandFlowSuspendable {
+            room.invite3pid(invite.threePid)
         }
     }
 
@@ -971,20 +971,20 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleKickSlashCommand(kick: ParsedCommand.KickUser) {
-        launchSlashCommandFlow {
-            room.kick(kick.userId, kick.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.kick(kick.userId, kick.reason)
         }
     }
 
     private fun handleBanSlashCommand(ban: ParsedCommand.BanUser) {
-        launchSlashCommandFlow {
-            room.ban(ban.userId, ban.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.ban(ban.userId, ban.reason)
         }
     }
 
     private fun handleUnbanSlashCommand(unban: ParsedCommand.UnbanUser) {
-        launchSlashCommandFlow {
-            room.unban(unban.userId, unban.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.unban(unban.userId, unban.reason)
         }
     }
 
@@ -1088,11 +1088,21 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleRejectInvite() {
-        room.leave(null, NoOpMatrixCallback())
+        viewModelScope.launch {
+            try {
+                room.leave(null)
+            } catch (_: Exception) {
+            }
+        }
     }
 
     private fun handleAcceptInvite() {
-        room.join(callback = NoOpMatrixCallback())
+        viewModelScope.launch {
+            try {
+                room.join()
+            } catch (_: Exception) {
+            }
+        }
     }
 
     private fun handleEditAction(action: RoomDetailAction.EnterEditMode) {

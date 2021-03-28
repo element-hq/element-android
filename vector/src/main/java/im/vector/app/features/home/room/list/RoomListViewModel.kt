@@ -26,7 +26,6 @@ import im.vector.app.core.utils.DataSource
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
@@ -127,17 +126,17 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             return@withState
         }
 
-        session.getRoom(roomId)?.join(callback = object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        val room = session.getRoom(roomId) ?: return@withState
+        viewModelScope.launch {
+            try {
+                room.join()
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 // Notify the user
                 _viewEvents.post(RoomListViewEvents.Failure(failure))
             }
-        })
+        }
     }
 
     private fun handleRejectInvitation(action: RoomListAction.RejectInvitation) = withState { state ->
@@ -149,19 +148,19 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             return@withState
         }
 
-        session.getRoom(roomId)?.leave(null, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        val room = session.getRoom(roomId) ?: return@withState
+        viewModelScope.launch {
+            try {
+                room.leave(null)
                 // We do not update the rejectingRoomsIds here, because, the room is not rejected yet regarding the sync data.
                 // Instead, we wait for the room to be rejected
                 // Known bug: if the user is invited again (after rejecting the first invitation), the loading will be displayed instead of the buttons.
                 // If we update the state, the button will be displayed again, so it's not ideal...
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 // Notify the user
                 _viewEvents.post(RoomListViewEvents.Failure(failure))
             }
-        })
+        }
     }
 
     private fun handleMarkAllRoomsRead() = withState { state ->
@@ -220,15 +219,12 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
 
     private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {
         _viewEvents.post(RoomListViewEvents.Loading(null))
-        session.getRoom(action.roomId)?.leave(null, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomListViewEvents.Done)
-            }
-
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomListViewEvents.Failure(failure))
-            }
-        })
+        val room = session.getRoom(action.roomId) ?: return
+        viewModelScope.launch {
+            val value = runCatching { room.leave(null) }
+                    .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
+            _viewEvents.post(value)
+        }
     }
 
     private fun observeMembershipChanges() {
