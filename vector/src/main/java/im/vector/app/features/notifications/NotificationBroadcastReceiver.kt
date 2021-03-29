@@ -93,7 +93,10 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             val room = session.getRoom(roomId)
             if (room != null) {
                 GlobalScope.launch {
-                    room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
+                    try {
+                        room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
+                    } catch (_: Exception) {
+                    }
                 }
             }
         }
