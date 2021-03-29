@@ -16,10 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room
 
-import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.space.Space
-import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
-import org.matrix.android.sdk.internal.session.space.DefaultSpace
 import javax.inject.Inject
 
 internal interface SpaceGetter {
@@ -27,13 +24,10 @@ internal interface SpaceGetter {
 }
 
 internal class DefaultSpaceGetter @Inject constructor(
-        private val roomGetter: RoomGetter,
-        private val spaceSummaryDataSource: RoomSummaryDataSource
+        private val roomGetter: RoomGetter
 ) : SpaceGetter {
 
     override fun get(spaceId: String): Space? {
-        return roomGetter.getRoom(spaceId)
-                ?.takeIf { it.roomSummary()?.roomType == RoomType.SPACE }
-                ?.let { DefaultSpace(it, spaceSummaryDataSource) }
+        return roomGetter.getRoom(spaceId)?.asSpace()
     }
 }
