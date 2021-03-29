@@ -16,6 +16,7 @@ enum MachineCreationError {
 enum CryptoStoreError {
     "CryptoStore",
     "OlmError",
+    "Serialization",
 };
 
 [Error]
@@ -102,4 +103,7 @@ interface OlmMachine {
 
     [Throws=CryptoStoreError]
     Sas start_verification([ByRef] Device device);
+
+    [Throws=CryptoStoreError]
+    string export_keys([ByRef] string passphrase, i32 rounds);
 };

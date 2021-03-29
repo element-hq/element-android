@@ -38,6 +38,7 @@ import uniffi.olm.Logger
 import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.Request
 import uniffi.olm.RequestType
+import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.Sas as InnerSas
 import uniffi.olm.setLogger
 
@@ -177,6 +178,11 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
             null -> null
             else -> Device(device, inner)
         }
+    }
+
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun exportKeys(passphrase: String, rounds: Int): ByteArray = withContext(Dispatchers.IO) {
+        inner.exportKeys(passphrase, rounds).toByteArray()
     }
 
     @Throws(MXCryptoError::class)

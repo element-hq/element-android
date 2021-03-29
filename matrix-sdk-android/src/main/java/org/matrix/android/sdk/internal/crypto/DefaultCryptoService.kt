@@ -835,18 +835,12 @@ internal class DefaultCryptoService @Inject constructor(
      * Export the crypto keys
      *
      * @param password         the password
-     * @param anIterationCount the encryption iteration count (0 means no encryption)
+     * @param anIterationCount the encryption iteration count
      */
     private suspend fun exportRoomKeys(password: String, anIterationCount: Int): ByteArray {
         return withContext(coroutineDispatchers.crypto) {
-            val iterationCount = max(0, anIterationCount)
-
-            val exportedSessions = cryptoStore.getInboundGroupSessions().mapNotNull { it.exportKeys() }
-
-            val adapter = MoshiProvider.providesMoshi()
-                    .adapter(List::class.java)
-
-            MXMegolmExportEncryption.encryptMegolmKeyFile(adapter.toJson(exportedSessions), password, iterationCount)
+            val iterationCount = max(10000, anIterationCount)
+            olmMachine!!.exportKeys(password, iterationCount)
         }
     }
 

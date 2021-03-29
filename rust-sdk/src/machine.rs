@@ -10,8 +10,7 @@ use tokio::runtime::Runtime;
 use matrix_sdk_common::{
     api::r0::{
         keys::{
-            claim_keys::{Request as KeysClaimRequest, Response as KeysClaimResponse},
-            get_keys::Response as KeysQueryResponse,
+            claim_keys::Response as KeysClaimResponse, get_keys::Response as KeysQueryResponse,
             upload_keys::Response as KeysUploadResponse,
         },
         sync::sync_events::{DeviceLists as RumaDeviceLists, ToDevice},
@@ -26,8 +25,8 @@ use matrix_sdk_common::{
 };
 
 use matrix_sdk_crypto::{
-    EncryptionSettings, IncomingResponse, OlmMachine as InnerMachine, OutgoingRequest,
-    ToDeviceRequest,
+    encrypt_key_export, EncryptionSettings, IncomingResponse, OlmMachine as InnerMachine,
+    OutgoingRequest, ToDeviceRequest,
 };
 
 use crate::error::{CryptoStoreError, DecryptionError, MachineCreationError};
@@ -418,6 +417,15 @@ impl OlmMachine {
             .unwrap();
 
         serde_json::to_string(&encrypted_content).unwrap()
+    }
+
+    pub fn export_keys(&self, passphrase: &str, rounds: i32) -> Result<String, CryptoStoreError> {
+        let keys = self.runtime.block_on(self.inner.export_keys(|_| true))?;
+
+        let encrypted = encrypt_key_export(&keys, passphrase, rounds as u32)
+            .map_err(CryptoStoreError::Serialization)?;
+
+        Ok(encrypted)
     }
 
     pub fn decrypt_room_event(
