@@ -12,6 +12,7 @@ Improvements 🙌:
  - Picture preview when replying. Also add the image preview in the message detail bottomsheet (#2916)
  - Api interceptor to allow app developers peek responses (#2986)
  - Be more robust when parsing some enums
+ - registration availability endpoint added to matrix-sdk
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity
