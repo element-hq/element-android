@@ -23,10 +23,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
-import fr.gouv.tchap.core.utils.PlatformAction
-import fr.gouv.tchap.core.utils.PlatformViewEvents
-import fr.gouv.tchap.core.utils.PlatformViewModel
-import fr.gouv.tchap.core.utils.PlatformViewState
+import fr.gouv.tchap.features.platform.PlatformAction
+import fr.gouv.tchap.features.platform.PlatformViewEvents
+import fr.gouv.tchap.features.platform.PlatformViewModel
+import fr.gouv.tchap.features.platform.PlatformViewState
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.databinding.FragmentTchapFirstLoginBinding

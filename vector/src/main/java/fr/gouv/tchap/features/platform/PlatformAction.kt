@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.core.utils
+package fr.gouv.tchap.features.platform
 
-import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
-import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class PlatformViewEvents : VectorViewEvents {
-    data class Loading(val message: CharSequence? = null) : PlatformViewEvents()
-    data class Failure(val throwable: Throwable) : PlatformViewEvents()
-    data class Success(val platform: Platform) : PlatformViewEvents()
+sealed class PlatformAction : VectorViewModelAction {
+    data class DiscoverTchapPlatform(val email: String) : PlatformAction()
 }

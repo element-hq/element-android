@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.core.utils
+package fr.gouv.tchap.features.platform
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
+import im.vector.app.core.platform.VectorViewEvents
 
-data class  PlatformViewState (
-        val platformState: Async<Platform> = Uninitialized
-) : MvRxState
+sealed class PlatformViewEvents : VectorViewEvents {
+    data class Loading(val message: CharSequence? = null) : PlatformViewEvents()
+    data class Failure(val throwable: Throwable) : PlatformViewEvents()
+    data class Success(val platform: Platform) : PlatformViewEvents()
+}

@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.core.utils
+package fr.gouv.tchap.features.platform
 
-import im.vector.app.core.platform.VectorViewModelAction
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
+import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 
-sealed class PlatformAction : VectorViewModelAction {
-    data class DiscoverTchapPlatform(val email: String) : PlatformAction()
-}
+data class  PlatformViewState (
+        val platformState: Async<Platform> = Uninitialized
+) : MvRxState

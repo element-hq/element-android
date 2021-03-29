@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.core.utils
+package fr.gouv.tchap.features.platform
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope
@@ -146,7 +146,7 @@ class PlatformViewModel @AssistedInject constructor(
 
     override fun handle(action: PlatformAction) {
         when (action) {
-            is PlatformAction.DiscoverTchapPlatform           -> handleDiscoverTchapPlatform(action)
+            is PlatformAction.DiscoverTchapPlatform -> handleDiscoverTchapPlatform(action)
         }.exhaustive
     }
 }
