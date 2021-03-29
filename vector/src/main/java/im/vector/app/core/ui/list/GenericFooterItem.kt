@@ -40,7 +40,7 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
     var text: CharSequence? = null
 
     @EpoxyAttribute
-    var style: GenericItem.STYLE = GenericItem.STYLE.NORMAL_TEXT
+    var style: ItemStyle = ItemStyle.NORMAL_TEXT
 
     @EpoxyAttribute
     var itemClickAction: GenericItem.Action? = null
@@ -56,16 +56,8 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
         super.bind(holder)
 
         holder.text.setTextOrHide(text)
-        holder.text.typeface = Typeface.DEFAULT
-        when (style) {
-            GenericItem.STYLE.BIG_TEXT    -> holder.text.textSize = 18f
-            GenericItem.STYLE.NORMAL_TEXT -> holder.text.textSize = 14f
-            GenericItem.STYLE.SUBHEADER -> holder.text.textSize = 16f
-            GenericItem.STYLE.TITLE -> {
-                holder.text.textSize = 20f
-                holder.text.typeface = Typeface.DEFAULT_BOLD
-            }
-        }
+        holder.text.typeface = style.toTypeFace()
+        holder.text.textSize = style.toTextSize()
         holder.text.gravity = if (centered) Gravity.CENTER_HORIZONTAL else Gravity.START
 
         if (textColor != null) {

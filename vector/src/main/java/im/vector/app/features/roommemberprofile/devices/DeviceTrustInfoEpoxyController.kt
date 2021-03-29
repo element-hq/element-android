@@ -20,7 +20,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
+import im.vector.app.core.ui.list.ItemStyle
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericItemWithValue
@@ -48,7 +48,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
             val isVerified = it.trustLevel?.isVerified() == true
             genericItem {
                 id("title")
-                style(GenericItem.STYLE.BIG_TEXT)
+                style(ItemStyle.BIG_TEXT)
                 titleIconResourceId(if (isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                 title(
                         stringProvider.getString(
