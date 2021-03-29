@@ -37,7 +37,6 @@ import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -321,19 +320,18 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     private fun handleIgnoreAction() = withState { state ->
         val isIgnored = state.isIgnored() ?: return@withState
         _viewEvents.post(RoomMemberProfileViewEvents.Loading())
-        val ignoreActionCallback = object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomMemberProfileViewEvents.OnIgnoreActionSuccess)
+        viewModelScope.launch {
+            val event = try {
+                if (isIgnored) {
+                    session.unIgnoreUserIds(listOf(state.userId))
+                } else {
+                    session.ignoreUserIds(listOf(state.userId))
+                }
+                RoomMemberProfileViewEvents.OnIgnoreActionSuccess
+            } catch (failure: Throwable) {
+                RoomMemberProfileViewEvents.Failure(failure)
             }
-
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
-            }
-        }
-        if (isIgnored) {
-            session.unIgnoreUserIds(listOf(state.userId), ignoreActionCallback)
-        } else {
-            session.ignoreUserIds(listOf(state.userId), ignoreActionCallback)
+            _viewEvents.post(event)
         }
     }
 
