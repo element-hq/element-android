@@ -80,7 +80,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                             // set canonical
                             session.spaceService().setSpaceParent(
                                     roomId,
-                                    createdSpace.asRoom().roomId,
+                                    createdSpace.spaceId,
                                     true,
                                     via
                             )

@@ -60,7 +60,7 @@ class SpaceCreationTest : InstrumentedTest {
         val spaceId: String
         runBlocking {
             spaceId = session.spaceService().createSpace(roomName, topic, null, true)
-            // wait a bit to let the summry update it self :/
+            // wait a bit to let the summary update it self :/
             delay(400)
         }
 
@@ -100,14 +100,14 @@ class SpaceCreationTest : InstrumentedTest {
     @Test
     fun testJoinSimplePublicSpace() {
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
-        val bobSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
+        val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
 
         val roomName = "My Space"
         val topic = "A public space for test"
         val spaceId: String
         runBlocking {
             spaceId = aliceSession.spaceService().createSpace(roomName, topic, null, true)
-            // wait a bit to let the summry update it self :/
+            // wait a bit to let the summary update it self :/
             delay(400)
         }
 
@@ -131,7 +131,7 @@ class SpaceCreationTest : InstrumentedTest {
     @Test
     fun testSimplePublicSpaceWithChildren() {
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
-        val bobSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
+        val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
 
         val roomName = "My Space"
         val topic = "A public space for test"
