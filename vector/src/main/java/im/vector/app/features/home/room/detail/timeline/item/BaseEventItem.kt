@@ -56,7 +56,6 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     abstract class BaseHolder(@IdRes val stubId: Int) : VectorEpoxyHolder() {
         val leftGuideline by bind<View>(R.id.messageStartGuideline)
         val checkableBackground by bind<CheckableView>(R.id.messageSelectedBackground)
-        val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
 
         override fun bindView(itemView: View) {
             super.bindView(itemView)

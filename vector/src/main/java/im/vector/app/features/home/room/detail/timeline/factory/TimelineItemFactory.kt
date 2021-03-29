@@ -21,6 +21,7 @@ import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
@@ -35,7 +36,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val widgetItemFactory: WidgetItemFactory,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
                                               private val callItemFactory: CallItemFactory,
-                                              private val userPreferencesProvider: UserPreferencesProvider) {
+                                              private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper) {
 
     /**
      * Reminder: nextEvent is older and prevEvent is newer.
@@ -46,12 +47,14 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                eventIdToHighlight: String?,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
         val highlight = event.root.eventId == eventIdToHighlight
-
         val computedModel = try {
+            if (!timelineEventVisibilityHelper.shouldShowEvent(event, eventIdToHighlight)) {
+                return buildEmptyItem(event, prevEvent, eventIdToHighlight)
+            }
             when (event.root.getClearType()) {
+                // Message items
                 EventType.STICKER,
                 EventType.MESSAGE               -> messageItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
-                // State and call
                 EventType.STATE_ROOM_TOMBSTONE,
                 EventType.STATE_ROOM_NAME,
                 EventType.STATE_ROOM_TOPIC,
@@ -63,8 +66,19 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
-                EventType.STATE_ROOM_POWER_LEVELS,
-                EventType.REDACTION             -> noticeItemFactory.create(event, highlight, callback)
+                EventType.REDACTION            ,
+                EventType.STATE_ROOM_ALIASES,
+                EventType.KEY_VERIFICATION_ACCEPT,
+                EventType.KEY_VERIFICATION_START,
+                EventType.KEY_VERIFICATION_KEY,
+                EventType.KEY_VERIFICATION_READY,
+                EventType.KEY_VERIFICATION_MAC,
+                EventType.CALL_CANDIDATES,
+                EventType.CALL_REPLACES,
+                EventType.CALL_SELECT_ANSWER,
+                EventType.CALL_NEGOTIATE,
+                EventType.REACTION,
+                EventType.STATE_ROOM_POWER_LEVELS -> noticeItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(event, highlight, callback)
@@ -84,30 +98,10 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                         encryptedItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
                     }
                 }
-                EventType.STATE_ROOM_ALIASES,
-                EventType.KEY_VERIFICATION_ACCEPT,
-                EventType.KEY_VERIFICATION_START,
-                EventType.KEY_VERIFICATION_KEY,
-                EventType.KEY_VERIFICATION_READY,
-                EventType.KEY_VERIFICATION_MAC,
-                EventType.REACTION,
-                EventType.CALL_CANDIDATES,
-                EventType.CALL_REPLACES,
-                EventType.CALL_SELECT_ANSWER,
-                EventType.CALL_NEGOTIATE        -> {
-                    // TODO These are not filtered out by timeline when encrypted
-                    // For now manually ignore
-                    if (userPreferencesProvider.shouldShowHiddenEvents()) {
-                        noticeItemFactory.create(event, highlight, callback)
-                    } else {
-                        null
-                    }
-                }
                 EventType.KEY_VERIFICATION_CANCEL,
                 EventType.KEY_VERIFICATION_DONE -> {
                     verificationConclusionItemFactory.create(event, highlight, callback)
                 }
-
                 // Unhandled event types
                 else                            -> {
                     // Should only happen when shouldShowHiddenEvents() settings is ON
@@ -119,12 +113,14 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             Timber.e(throwable, "failed to create message item")
             defaultItemFactory.create(event, highlight, callback, throwable)
         }
-        return computedModel ?: buildEmptyItem(event)
+        return computedModel ?: buildEmptyItem(event, prevEvent, eventIdToHighlight)
     }
 
-    private fun buildEmptyItem(timelineEvent: TimelineEvent): TimelineEmptyItem {
+    private fun buildEmptyItem(timelineEvent: TimelineEvent, prevEvent: TimelineEvent?, eventIdToHighlight: String?): TimelineEmptyItem {
+        val makesEmptyItemVisible = prevEvent == null || timelineEventVisibilityHelper.shouldShowEvent(prevEvent, eventIdToHighlight)
         return TimelineEmptyItem_()
                 .id(timelineEvent.localId)
                 .eventId(timelineEvent.eventId)
+                .visible(makesEmptyItemVisible)
     }
 }

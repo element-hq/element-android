@@ -22,6 +22,9 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 object TimelineDisplayableEvents {
 
+    /**
+     * All types we have an item to build with. Every type not defined here will be shown as DefaultItem if forced to be shown, otherwise will be hidden.
+     */
     val DISPLAYABLE_TYPES = listOf(
             EventType.MESSAGE,
             EventType.STATE_ROOM_WIDGET_LEGACY,
@@ -50,6 +53,7 @@ object TimelineDisplayableEvents {
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL
     )
+
 }
 
 fun TimelineEvent.canBeMerged(): Boolean {
@@ -68,47 +72,11 @@ fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {
         EventType.STATE_ROOM_CANONICAL_ALIAS,
         EventType.STATE_ROOM_POWER_LEVELS,
         EventType.STATE_ROOM_ENCRYPTION -> true
-        EventType.STATE_ROOM_MEMBER     -> {
+        EventType.STATE_ROOM_MEMBER -> {
             // Keep only room member events regarding the room creator (when he joined the room),
             // but exclude events where the room creator invite others, or where others join
             roomCreatorUserId != null && root.stateKey == roomCreatorUserId
         }
         else                            -> false
     }
-}
-
-fun List<TimelineEvent>.nextSameTypeEvents(index: Int, minSize: Int): List<TimelineEvent> {
-    if (index >= size - 1) {
-        return emptyList()
-    }
-    val timelineEvent = this[index]
-    val nextSubList = subList(index + 1, size)
-    val indexOfNextDay = nextSubList.indexOfFirst {
-        val date = it.root.localDateTime()
-        val nextDate = timelineEvent.root.localDateTime()
-        date.toLocalDate() != nextDate.toLocalDate()
-    }
-    val nextSameDayEvents = if (indexOfNextDay == -1) {
-        nextSubList
-    } else {
-        nextSubList.subList(0, indexOfNextDay)
-    }
-    val indexOfFirstDifferentEventType = nextSameDayEvents.indexOfFirst { it.root.getClearType() != timelineEvent.root.getClearType() }
-    val sameTypeEvents = if (indexOfFirstDifferentEventType == -1) {
-        nextSameDayEvents
-    } else {
-        nextSameDayEvents.subList(0, indexOfFirstDifferentEventType)
-    }
-    if (sameTypeEvents.size < minSize) {
-        return emptyList()
-    }
-    return sameTypeEvents
-}
-
-fun List<TimelineEvent>.prevSameTypeEvents(index: Int, minSize: Int): List<TimelineEvent> {
-    val prevSub = subList(0, index + 1)
-    return prevSub
-            .reversed()
-            .nextSameTypeEvents(0, minSize)
-            .reversed()
 }

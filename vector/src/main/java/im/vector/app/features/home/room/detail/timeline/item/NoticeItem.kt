@@ -36,16 +36,11 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    private val _readReceiptsClickListener = DebouncedClickListener({
-        attributes.readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
-    })
-
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.noticeTextView.text = attributes.noticeText
         attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
         holder.view.setOnLongClickListener(attributes.itemLongClickListener)
-        holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
         holder.avatarImageView.onClick(attributes.avatarClickListener)
 
         when (attributes.informationData.e2eDecoration) {
@@ -62,7 +57,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
 
     override fun unbind(holder: Holder) {
         attributes.avatarRenderer.clear(holder.avatarImageView)
-        holder.readReceiptsView.unbind(attributes.avatarRenderer)
         super.unbind(holder)
     }
 

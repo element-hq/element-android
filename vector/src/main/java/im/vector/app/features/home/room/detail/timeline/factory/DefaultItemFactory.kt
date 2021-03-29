@@ -43,8 +43,7 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
                 text = text,
                 itemLongClickListener = { view ->
                     callback?.onEventLongClicked(informationData, null, view) ?: false
-                },
-                readReceiptsCallback = callback
+                }
         )
         return DefaultItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)
