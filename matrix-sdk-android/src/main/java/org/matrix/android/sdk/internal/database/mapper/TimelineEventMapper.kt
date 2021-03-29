@@ -25,9 +25,9 @@ import javax.inject.Inject
 
 internal class TimelineEventMapper @Inject constructor(private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper) {
 
-    fun map(timelineEventEntity: TimelineEventEntity, buildReadReceipts: Boolean = true, correctedReadReceipts: List<ReadReceipt>? = null): TimelineEvent {
+    fun map(timelineEventEntity: TimelineEventEntity, buildReadReceipts: Boolean = true): TimelineEvent {
         val readReceipts = if (buildReadReceipts) {
-            correctedReadReceipts ?: timelineEventEntity.readReceipts
+            timelineEventEntity.readReceipts
                     ?.let {
                         readReceiptsSummaryMapper.map(it)
                     }
