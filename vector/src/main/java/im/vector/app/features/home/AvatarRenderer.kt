@@ -79,7 +79,9 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     fun renderSpace(matrixItem: MatrixItem, imageView: ImageView) {
         renderSpace(
                 matrixItem,
-                imageView, GlideApp.with(imageView))
+                imageView,
+                GlideApp.with(imageView)
+        )
     }
 
     fun clear(imageView: ImageView) {

@@ -109,13 +109,13 @@ class HomeActivity :
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            val spaceId = activityResult.data?.extras?.getString(SpaceCreationActivity.RESULT_DATA_CREATED_SPACE_ID)
-            val defaultRoomsId = activityResult.data?.extras?.getString(SpaceCreationActivity.RESULT_DATA_DEFAULT_ROOM_ID)
+            val spaceId = SpaceCreationActivity.getCreatedSpaceId(activityResult.data)
+            val defaultRoomId = SpaceCreationActivity.getDefaultRoomId(activityResult.data)
             views.drawerLayout.closeDrawer(GravityCompat.START)
 
             // Here we want to change current space to the newly created one, and then immediately open the default room
             if (spaceId != null) {
-                navigator.switchToSpace(this, spaceId, defaultRoomsId, true)
+                navigator.switchToSpace(this, spaceId, defaultRoomId, true)
             }
         }
     }
