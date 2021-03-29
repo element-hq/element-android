@@ -75,7 +75,8 @@
             android:layout_marginEnd="4dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_room_profile_member_list"
-            app:tint="?riotx_text_primary" />
+            app:tint="?riotx_text_primary"
+            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/spaceChildMemberCountText"
@@ -219,6 +220,5 @@
         android:visibility="gone"
         app:constraint_referenced_ids="matrixToCardNameText,matrixToCardAvatar,matrixToCardNameText,matrixToCardDescText, matrixToCardMainButton, matrixToCardAliasText, matrixToCardSecondaryButton, matrixToMemberPills,matrixToCardPeopleYouKnowVisibility"
         tools:visibility="visible" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
