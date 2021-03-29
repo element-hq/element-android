@@ -16,17 +16,13 @@
 
 package im.vector.app.features.spaces.create
 
-import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -34,61 +30,13 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.session.Session
-
-data class CreateSpaceState(
-        val name: String? = null,
-        val avatarUri: Uri? = null,
-        val topic: String = "",
-        val step: Step = Step.ChooseType,
-        val spaceType: SpaceType? = null,
-        val nameInlineError: String? = null,
-        val defaultRooms: Map<Int, String?>? = null,
-        val creationResult: Async<String> = Uninitialized
-) : MvRxState {
-
-    enum class Step {
-        ChooseType,
-        SetDetails,
-        AddRooms
-    }
-}
-
-enum class SpaceType {
-    Public,
-    Private
-}
-
-sealed class CreateSpaceAction : VectorViewModelAction {
-    data class SetRoomType(val type: SpaceType) : CreateSpaceAction()
-    data class NameChanged(val name: String) : CreateSpaceAction()
-    data class TopicChanged(val topic: String) : CreateSpaceAction()
-    data class SetAvatar(val uri: Uri?) : CreateSpaceAction()
-    object OnBackPressed : CreateSpaceAction()
-    object NextFromDetails : CreateSpaceAction()
-    object NextFromDefaultRooms : CreateSpaceAction()
-    data class DefaultRoomNameChanged(val index: Int, val name: String) : CreateSpaceAction()
-}
-
-sealed class CreateSpaceEvents : VectorViewEvents {
-    object NavigateToDetails : CreateSpaceEvents()
-    object NavigateToChooseType : CreateSpaceEvents()
-    object NavigateToAddRooms : CreateSpaceEvents()
-    object Dismiss : CreateSpaceEvents()
-    data class FinishSuccess(val spaceId: String, val defaultRoomId: String?) : CreateSpaceEvents()
-    data class ShowModalError(val errorMessage: String) : CreateSpaceEvents()
-    object HideModalLoading : CreateSpaceEvents()
-}
 
 class CreateSpaceViewModel @AssistedInject constructor(
         @Assisted initialState: CreateSpaceState,
-        private val session: Session,
         private val stringProvider: StringProvider,
         private val createSpaceViewModelTask: CreateSpaceViewModelTask,
         private val errorFormatter: ErrorFormatter
