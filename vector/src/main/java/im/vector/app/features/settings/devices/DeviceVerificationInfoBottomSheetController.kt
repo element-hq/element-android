@@ -21,7 +21,7 @@ import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
+import im.vector.app.core.ui.list.ItemStyle
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.views.toDrawableRes
@@ -85,7 +85,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
             if (currentSessionIsTrusted) {
                 genericItem {
                     id("trust${cryptoDeviceInfo.deviceId}")
-                    style(GenericItem.STYLE.BIG_TEXT)
+                    style(ItemStyle.BIG_TEXT)
                     titleIconResourceId(shield)
                     title(stringProvider.getString(R.string.encryption_information_verified))
                     description(stringProvider.getString(R.string.settings_active_sessions_verified_device_desc))
@@ -94,7 +94,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                 // You need to complete security, only if there are other session(s) available, or if 4S contains secrets
                 genericItem {
                     id("trust${cryptoDeviceInfo.deviceId}")
-                    style(GenericItem.STYLE.BIG_TEXT)
+                    style(ItemStyle.BIG_TEXT)
                     titleIconResourceId(shield)
                     title(stringProvider.getString(R.string.crosssigning_verify_this_session))
                     if (data.hasOtherSessions) {
@@ -114,7 +114,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                 if (trust) {
                     genericItem {
                         id("trust${cryptoDeviceInfo.deviceId}")
-                        style(GenericItem.STYLE.BIG_TEXT)
+                        style(ItemStyle.BIG_TEXT)
                         titleIconResourceId(shield)
                         title(stringProvider.getString(R.string.encryption_information_verified))
                         description(stringProvider.getString(R.string.settings_active_sessions_verified_device_desc))
@@ -123,7 +123,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                     genericItem {
                         id("trust${cryptoDeviceInfo.deviceId}")
                         titleIconResourceId(shield)
-                        style(GenericItem.STYLE.BIG_TEXT)
+                        style(ItemStyle.BIG_TEXT)
                         title(stringProvider.getString(R.string.encryption_information_not_verified))
                         description(stringProvider.getString(R.string.settings_active_sessions_unverified_device_desc))
                     }
@@ -172,7 +172,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
         if (cryptoDeviceInfo.trustLevel?.isLocallyVerified() == true) {
             genericItem {
                 id("trust${cryptoDeviceInfo.deviceId}")
-                style(GenericItem.STYLE.BIG_TEXT)
+                style(ItemStyle.BIG_TEXT)
                 titleIconResourceId(shield)
                 title(stringProvider.getString(R.string.encryption_information_verified))
                 description(stringProvider.getString(R.string.settings_active_sessions_verified_device_desc))
@@ -181,7 +181,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
             genericItem {
                 id("trust${cryptoDeviceInfo.deviceId}")
                 titleIconResourceId(shield)
-                style(GenericItem.STYLE.BIG_TEXT)
+                style(ItemStyle.BIG_TEXT)
                 title(stringProvider.getString(R.string.encryption_information_not_verified))
                 description(stringProvider.getString(R.string.settings_active_sessions_unverified_device_desc))
             }

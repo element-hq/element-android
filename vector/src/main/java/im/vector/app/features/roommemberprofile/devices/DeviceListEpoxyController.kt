@@ -27,7 +27,7 @@ import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
+import im.vector.app.core.ui.list.ItemStyle
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericItemWithValue
@@ -74,7 +74,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
 
                 genericItem {
                     id("title")
-                    style(GenericItem.STYLE.BIG_TEXT)
+                    style(ItemStyle.BIG_TEXT)
                     titleIconResourceId(if (allGreen) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                     title(
                             stringProvider.getString(
@@ -91,7 +91,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
 
                 genericItem {
                     id("sessions")
-                    style(GenericItem.STYLE.BIG_TEXT)
+                    style(ItemStyle.BIG_TEXT)
                     title(stringProvider.getString(R.string.room_member_profile_sessions_section_title))
                 }
                 if (deviceList.isEmpty()) {

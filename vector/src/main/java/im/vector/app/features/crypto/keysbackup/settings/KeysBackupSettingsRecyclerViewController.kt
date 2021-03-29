@@ -26,7 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
+import im.vector.app.core.ui.list.ItemStyle
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
@@ -72,7 +72,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                 genericItem {
                     id("summary")
                     title(stringProvider.getString(R.string.keys_backup_settings_status_not_setup))
-                    style(GenericItem.STYLE.BIG_TEXT)
+                    style(ItemStyle.BIG_TEXT)
 
                     if (data.keysBackupVersionTrust()?.usable == false) {
                         description(stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
@@ -87,7 +87,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                 genericItem {
                     id("summary")
                     title(stringProvider.getString(R.string.keys_backup_settings_status_ko))
-                    style(GenericItem.STYLE.BIG_TEXT)
+                    style(ItemStyle.BIG_TEXT)
                     if (data.keysBackupVersionTrust()?.usable == false) {
                         description(stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
                     } else {
@@ -102,7 +102,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                 genericItem {
                     id("summary")
                     title(stringProvider.getString(R.string.keys_backup_settings_status_ok))
-                    style(GenericItem.STYLE.BIG_TEXT)
+                    style(ItemStyle.BIG_TEXT)
                     if (data.keysBackupVersionTrust()?.usable == false) {
                         description(stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
                     } else {
@@ -118,7 +118,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                 genericItem {
                     id("summary")
                     title(stringProvider.getString(R.string.keys_backup_settings_status_ok))
-                    style(GenericItem.STYLE.BIG_TEXT)
+                    style(ItemStyle.BIG_TEXT)
                     hasIndeterminateProcess(true)
 
                     val totalKeys = session.cryptoService().inboundGroupSessionsCount(false)
