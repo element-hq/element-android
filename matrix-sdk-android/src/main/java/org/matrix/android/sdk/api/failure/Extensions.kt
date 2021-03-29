@@ -75,3 +75,11 @@ fun Throwable.toRegistrationFlowResponse(): RegistrationFlowResponse? {
         null
     }
 }
+
+fun Throwable.isRegistrationAvailabilityError(): Boolean {
+    return this is Failure.ServerError
+            && (error.code == MatrixError.M_USER_IN_USE
+                    || error.code == MatrixError.M_INVALID_USERNAME
+                    || error.code == MatrixError.M_EXCLUSIVE)
+            && httpCode == 400
+}
