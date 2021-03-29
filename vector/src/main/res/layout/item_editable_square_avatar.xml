@@ -45,7 +45,7 @@
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="48dp"
         app:tint="@color/riotx_destructive_accent"
-        tools:ignore="MissingConstraints"
+        tools:ignore="MissingConstraints,MissingPrefix"
         tools:visibility="visible" />
 
 
@@ -55,14 +55,14 @@
         android:layout_gravity="center"
         android:background="@drawable/circle"
         android:backgroundTint="?riotx_background"
+        android:contentDescription="@string/a11y_change_avatar"
         android:padding="8dp"
         android:src="@drawable/ic_camera_plain"
-        android:contentDescription="@string/a11y_change_avatar"
-        app:tint="?riotx_text_secondary"
         app:layout_constraintCircle="@+id/itemEditableAvatarImageContainer"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="48dp"
-        tools:ignore="MissingConstraints" />
+        app:tint="?riotx_text_secondary"
+        tools:ignore="MissingConstraints,MissingPrefix" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -44,10 +44,9 @@ class AutocompleteCommandPresenter @Inject constructor(context: Context,
     override fun onQuery(query: CharSequence?) {
         val data = Command.values()
                 .filter {
-                    if (it.isDevCommand && !vectorPreferences.developerMode()) {
-                        return@filter false
-                    }
-
+                    !it.isDevCommand || vectorPreferences.developerMode()
+                }
+                .filter {
                     if (query.isNullOrEmpty()) {
                         true
                     } else {
