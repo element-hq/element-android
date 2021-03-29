@@ -18,8 +18,6 @@
 package im.vector.app.features.grouplist
 
 import android.content.res.ColorStateList
-import android.content.res.Resources
-import android.util.TypedValue
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -61,13 +59,5 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
         val groupNameView by bind<TextView>(R.id.groupNameView)
         val rootView by bind<CheckableConstraintLayout>(R.id.itemGroupLayout)
         val leaveView by bind<ImageView>(R.id.groupTmpLeave)
-    }
-
-    fun dpToPx(resources: Resources, dp: Int): Int {
-        return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp.toFloat(),
-                resources.displayMetrics
-        ).toInt()
     }
 }

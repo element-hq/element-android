@@ -252,26 +252,26 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
-        spaceSummary?.let {
-            // Use GlideApp with activity context to avoid the glideRequests to be paused
-            if (spaceSummary.roomId == ALL_COMMUNITIES_GROUP_ID) {
-                // Special case
-                views.groupToolbarAvatarImageView.background = ContextCompat.getDrawable(requireContext(), R.drawable.space_home_background)
-                views.groupToolbarAvatarImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
-                ThemeUtils.tintDrawableWithColor(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_space_home)!!,
-                        ThemeUtils.getColor(requireContext(), R.attr.riot_primary_text_color)
-                ).let {
-                    views.groupToolbarAvatarImageView.setImageDrawable(it)
-                }
+        spaceSummary ?: return
 
-                views.groupToolbarSpaceTitleView.isVisible = false
-            } else {
-                views.groupToolbarAvatarImageView.background = null
-                avatarRenderer.renderSpace(it.toMatrixItem(), views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
-                views.groupToolbarSpaceTitleView.isVisible = true
-                views.groupToolbarSpaceTitleView.text = spaceSummary.displayName
+        // Use GlideApp with activity context to avoid the glideRequests to be paused
+        if (spaceSummary.roomId == ALL_COMMUNITIES_GROUP_ID) {
+            // Special case
+            views.groupToolbarAvatarImageView.background = ContextCompat.getDrawable(requireContext(), R.drawable.space_home_background)
+            views.groupToolbarAvatarImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
+            ThemeUtils.tintDrawableWithColor(
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_space_home)!!,
+                    ThemeUtils.getColor(requireContext(), R.attr.riot_primary_text_color)
+            ).let {
+                views.groupToolbarAvatarImageView.setImageDrawable(it)
             }
+
+            views.groupToolbarSpaceTitleView.isVisible = false
+        } else {
+            views.groupToolbarAvatarImageView.background = null
+            avatarRenderer.renderSpace(spaceSummary.toMatrixItem(), views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
+            views.groupToolbarSpaceTitleView.isVisible = true
+            views.groupToolbarSpaceTitleView.text = spaceSummary.displayName
         }
     }
 
@@ -279,10 +279,10 @@ class HomeDetailFragment @Inject constructor(
         serverBackupStatusViewModel
                 .subscribe(this) {
                     when (val banState = it.bannerState.invoke()) {
-                        is BannerState.Setup -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                        is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
                         null,
-                        BannerState.Hidden -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                        BannerState.Hidden    -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
                     }
                 }
         views.homeKeysBackupBanner.delegate = this
@@ -323,7 +323,7 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
-                R.id.bottom_action_rooms -> RoomListDisplayMode.ROOMS
+                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
                 else                      -> RoomListDisplayMode.NOTIFICATIONS
             }
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
@@ -401,7 +401,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun RoomListDisplayMode.toMenuId() = when (this) {
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-        RoomListDisplayMode.ROOMS -> R.id.bottom_action_rooms
+        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
         else                       -> R.id.bottom_action_notification
     }
 

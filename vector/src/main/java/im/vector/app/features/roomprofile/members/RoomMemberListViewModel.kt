@@ -138,7 +138,8 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     setState {
                         copy(actionsPermissions = permissions)
                     }
-                }.disposeOnClear()
+                }
+                .disposeOnClear()
     }
 
     private fun observeRoomSummary() {

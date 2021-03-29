@@ -123,9 +123,11 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                 .unwrap()
                 .map {
                     PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, true, null)
-                }.subscribe {
+                }
+                .subscribe {
                     setState { copy(canManageWidgets = it) }
-                }.disposeOnClear()
+                }
+                .disposeOnClear()
     }
 
     private fun observeWidgetIfNeeded() {
