@@ -32,7 +32,7 @@ interface UiStateRepository {
 
     fun storeDisplayMode(displayMode: RoomListDisplayMode)
 
-    fun storeSelectedSpace(roomId: String?, sessionId: String)
+    fun storeSelectedSpace(spaceId: String?, sessionId: String)
 
     fun getSelectedSpace(sessionId: String): String?
 }
