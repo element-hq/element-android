@@ -25,6 +25,7 @@ import com.squareup.seismic.ShakeDetector
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.platform.livedata.SharedPreferenceLiveData
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
