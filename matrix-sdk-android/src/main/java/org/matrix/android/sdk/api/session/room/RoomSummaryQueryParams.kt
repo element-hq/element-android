@@ -31,10 +31,11 @@ fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = 
     return RoomSummaryQueryParams.Builder()
             .apply(init)
             .apply {
-                this.includeType = listOf(RoomType.SPACE)
-                this.excludeType = null
-                this.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            }.build()
+                includeType = listOf(RoomType.SPACE)
+                excludeType = null
+                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            }
+            .build()
 }
 
 enum class RoomCategoryFilter {
@@ -42,6 +43,7 @@ enum class RoomCategoryFilter {
     ONLY_ROOMS,
     ALL
 }
+
 /**
  * This class can be used to filter room summaries to use with:
  * [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService]

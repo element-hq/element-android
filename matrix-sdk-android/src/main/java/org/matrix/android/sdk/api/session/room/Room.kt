@@ -94,5 +94,8 @@ interface Room :
                afterLimit: Int,
                includeProfile: Boolean): SearchResult
 
+    /**
+     * Use this room as a Space, if the type is correct.
+     */
     fun asSpace(): Space?
 }
