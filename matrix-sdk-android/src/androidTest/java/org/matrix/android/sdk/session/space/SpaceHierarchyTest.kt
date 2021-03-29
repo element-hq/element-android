@@ -48,13 +48,13 @@ class SpaceHierarchyTest : InstrumentedTest {
 
     @Test
     fun createCanonicalChildRelation() {
-        val session = commonTestHelper.createAccount("Jhon", SessionTestParams(true))
+        val session = commonTestHelper.createAccount("John", SessionTestParams(true))
         val spaceName = "My Space"
         val topic = "A public space for test"
         val spaceId: String
         runBlocking {
             spaceId = session.spaceService().createSpace(spaceName, topic, null, true)
-            // wait a bit to let the summry update it self :/
+            // wait a bit to let the summary update it self :/
             delay(400)
         }
 

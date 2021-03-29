@@ -176,7 +176,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
         viewModelScope.launch {
             awaitCallback {
                 tryOrNull("Failed to leave space ${action.spaceSummary.roomId}") {
-                    session.spaceService().getSpace(action.spaceSummary.roomId)?.asRoom()?.leave(null, it)
+                    session.spaceService().getSpace(action.spaceSummary.roomId)?.leave(null, it)
                 }
             }
         }
