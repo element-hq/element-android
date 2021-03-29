@@ -21,22 +21,21 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.JsonDict
 
 @JsonClass(generateAdapter = true)
 internal data class SerializablePowerLevelsContent(
-        @Json(name = "ban") val ban: Int = Role.Moderator.value,
-        @Json(name = "kick") val kick: Int = Role.Moderator.value,
-        @Json(name = "invite") val invite: Int = Role.Moderator.value,
-        @Json(name = "redact") val redact: Int = Role.Moderator.value,
-        @Json(name = "events_default") val eventsDefault: Int = Role.Default.value,
-        @Json(name = "events") val events: Map<String, Int> = emptyMap(),
-        @Json(name = "users_default") val usersDefault: Int = Role.Default.value,
-        @Json(name = "users") val users: Map<String, Int> = emptyMap(),
-        @Json(name = "state_default") val stateDefault: Int = Role.Moderator.value,
+        @Json(name = "ban") val ban: Int?,
+        @Json(name = "kick") val kick: Int?,
+        @Json(name = "invite") val invite: Int?,
+        @Json(name = "redact") val redact: Int?,
+        @Json(name = "events_default") val eventsDefault: Int?,
+        @Json(name = "events") val events: Map<String, Int>?,
+        @Json(name = "users_default") val usersDefault: Int?,
+        @Json(name = "users") val users: Map<String, Int>?,
+        @Json(name = "state_default") val stateDefault: Int?,
         // `Int` is the diff here (instead of `Any`)
-        @Json(name = "notifications") val notifications: Map<String, Int> = emptyMap()
+        @Json(name = "notifications") val notifications: Map<String, Int>?
 )
 
 internal fun JsonDict.toSafePowerLevelsContentDict(): JsonDict {
@@ -52,7 +51,7 @@ internal fun JsonDict.toSafePowerLevelsContentDict(): JsonDict {
                         usersDefault = content.usersDefault,
                         users = content.users,
                         stateDefault = content.stateDefault,
-                        notifications = content.notifications.mapValues { content.notificationLevel(it.key)  }
+                        notifications = content.notifications?.mapValues { content.notificationLevel(it.key)  }
                 )
             }
             ?.toContent()
