@@ -12,9 +12,9 @@
         android:id="@+id/buttonImageView"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:minHeight="56dp"
         android:layout_margin="8dp"
         android:importantForAccessibility="no"
+        android:minHeight="56dp"
         android:src="@drawable/ic_public_room"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,13 +30,12 @@
         android:textColor="?riotx_text_primary"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/subTitle"
         app:layout_constraintEnd_toStartOf="@id/rightChevron"
         app:layout_constraintStart_toEndOf="@id/buttonImageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/subTitle"
         app:layout_goneMarginBottom="0dp"
         tools:text="Public" />
-
 
     <TextView
         android:id="@+id/subTitle"
@@ -64,6 +63,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_secondary" />
+        app:tint="?riotx_text_secondary"
+        tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

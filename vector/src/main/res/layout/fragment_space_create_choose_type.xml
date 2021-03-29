@@ -60,8 +60,8 @@
             android:id="@+id/privateButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_room_private"
             android:layout_marginBottom="16dp"
+            app:icon="@drawable/ic_room_private"
             app:layout_constraintBottom_toTopOf="@id/changeLaterText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +77,8 @@
             android:text="@string/create_spaces_you_can_change_later"
             android:textColor="?riotx_text_secondary"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

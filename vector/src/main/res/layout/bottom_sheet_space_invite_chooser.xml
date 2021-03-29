@@ -21,34 +21,24 @@
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <im.vector.app.features.spaces.create.WizardButtonView
         android:id="@+id/inviteToSpaceButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         app:icon="@drawable/ic_invite_people"
         app:iconTint="?riotx_text_secondary"
-        app:title="@string/invite_to_space_with_name"
         app:subTitle="@string/invite_to_space_with_name_desc"
-        />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="16dp" />
+        app:title="@string/invite_to_space_with_name" />
 
     <im.vector.app.features.spaces.create.WizardButtonView
         android:id="@+id/inviteToRoomOnly"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         app:icon="@drawable/ic_invite_people"
         app:iconTint="?riotx_text_secondary"
-        app:title="@string/invite_just_to_this_room"
-        app:subTitle="@string/invite_just_to_this_room_desc"/>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="16dp" />
-
-
+        app:subTitle="@string/invite_just_to_this_room_desc"
+        app:title="@string/invite_just_to_this_room" />
 
 </LinearLayout>
