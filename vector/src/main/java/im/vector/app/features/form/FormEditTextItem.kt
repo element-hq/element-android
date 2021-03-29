@@ -74,10 +74,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         holder.textInputLayout.isEnabled = enabled
         holder.textInputLayout.hint = hint
         holder.textInputLayout.error = errorMessage
-
-        endIconMode?.let { mode ->
-            holder.textInputLayout.endIconMode = mode
-        }
+        holder.textInputLayout.endIconMode = endIconMode ?: TextInputLayout.END_ICON_NONE
 
         // Update only if text is different and value is not null
         holder.textInputEditText.setTextSafe(value)
