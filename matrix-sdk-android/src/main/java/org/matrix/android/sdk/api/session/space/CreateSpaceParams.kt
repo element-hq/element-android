@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.space
 
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContentOverride
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 
@@ -28,7 +28,7 @@ class CreateSpaceParams : CreateRoomParams() {
 
         // Space-rooms should be created with a power level for events_default of 100,
         // to prevent the rooms accidentally/maliciously clogging up with messages from random members of the space.
-        powerLevelContentOverride = PowerLevelsContentOverride(
+        powerLevelContentOverride = PowerLevelsContent(
                 eventsDefault = 100
         )
     }

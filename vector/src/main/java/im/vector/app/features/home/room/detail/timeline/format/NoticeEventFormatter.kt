@@ -121,8 +121,8 @@ class NoticeEventFormatter @Inject constructor(
         val powerLevelsContent: PowerLevelsContent = event.getClearContent().toModel() ?: return null
         val previousPowerLevelsContent: PowerLevelsContent = event.resolvedPrevContent().toModel() ?: return null
         val userIds = HashSet<String>()
-        userIds.addAll(powerLevelsContent.users.keys)
-        userIds.addAll(previousPowerLevelsContent.users.keys)
+        userIds.addAll(powerLevelsContent.users.orEmpty().keys)
+        userIds.addAll(previousPowerLevelsContent.users.orEmpty().keys)
         val diffs = ArrayList<String>()
         userIds.forEach { userId ->
             val from = PowerLevelsHelper(previousPowerLevelsContent).getUserRole(userId)
