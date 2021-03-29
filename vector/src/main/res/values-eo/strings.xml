@@ -1596,7 +1596,7 @@
     <string name="room_settings_room_access_warning">Por ligi al ĉambro, ĝi devas havi adreson.</string>
     <string name="room_settings_read_history_entry_members_only_joined">Nur anoj (ekde aliĝo)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Nur anoj (ekde sia aliĝo)</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Nur anoj (ekde elekto de ĉi tiu elekteblo)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Nur anoj (ekde ĉi tiu elekto)</string>
     <string name="room_settings_read_history_entry_anyone">Ĉiu ajn</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Kio povas aliri ĉi tiun ĉambron\?</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Kiu povas legi historion\?</string>
@@ -2393,4 +2393,92 @@
     <string name="action_add">Aldoni</string>
     <string name="start_chatting">Ekbabili</string>
     <string name="system_theme">Implicita de sistemo</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Ĉu forlasi la nunan grupan vokon kaj iri al la alia\?</string>
+    <string name="room_settings_room_version_title">Versio de ĉambro</string>
+    <string name="room_alias_publish_to_directory_error">Ne povis akiri la nunan videblecon en la katalogo de ĉambroj (%1$s).</string>
+    <string name="room_alias_publish_to_directory">Ĉu publikigi ĉi tiun ĉambron per la katalogo de ĉambroj de %1$s\?</string>
+    <string name="room_alias_action_unpublish">Malpublikigi ĉi tiun adreson</string>
+    <string name="room_alias_action_publish">Publikigi ĉi tiun adreson</string>
+    <string name="room_alias_local_address_add">Aldoni lokan adreson</string>
+    <string name="room_alias_local_address_empty">Ĉi tiu ĉambro ne havas lokajn adresojn</string>
+    <string name="room_alias_local_address_subtitle">Agordu adresojn por ĉi tiu ĉambro, por ke uzantoj ĝin facile trovu per via hejmservilo (%1$s)</string>
+    <string name="room_permissions_change_topic">Ŝanĝi la temon</string>
+    <string name="room_permissions_upgrade_the_room">Gradaltigi la ĉambron</string>
+    <string name="room_permissions_send_m_room_server_acl_events">Sendi eventojn de la speco «m.room.server_acl»</string>
+    <string name="room_permissions_change_permissions">Ŝanĝi permesojn</string>
+    <string name="room_permissions_change_room_name">Ŝanĝi nomon de ĉambro</string>
+    <string name="room_permissions_change_history_visibility">Ŝanĝi videblecon de historio</string>
+    <string name="room_permissions_enable_room_encryption">Ŝalti tutvojan ĉifradon</string>
+    <string name="room_permissions_change_main_address_for_the_room">Ŝanĝi ĉefadreson de la ĉambro</string>
+    <string name="room_permissions_change_room_avatar">Ŝanĝi bildon de ĉambro</string>
+    <string name="room_permissions_modify_widgets">Ŝanĝi fenestraĵojn</string>
+    <string name="room_permissions_notify_everyone">Sciigi ĉiujn</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Forigi mesaĝojn senditajn de aliuloj</string>
+    <string name="room_permissions_ban_users">Forbari uzantojn</string>
+    <string name="room_permissions_kick_users">Forpeli uzantojn</string>
+    <string name="room_permissions_change_settings">Ŝanĝi agordojn</string>
+    <string name="room_permissions_invite_users">Inviti uzantojn</string>
+    <string name="room_permissions_send_messages">Sendi mesaĝon</string>
+    <string name="room_permissions_default_role">Ordinara rolo</string>
+    <string name="room_settings_permissions_title">Permesoj en ĉambro</string>
+    <string name="error_unauthorized">Nerajtigite, mankas validaj aŭtentikigiloj</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Montri ĉiujn ĉambrojn en la katalogo de ĉambro, inkluzive tiujn kun konsterna enhavo.</string>
+    <string name="settings_room_directory_show_all_rooms">Montri ĉambrojn kun konsterna enhavo</string>
+    <string name="settings_category_room_directory">Katalogo de ĉambroj</string>
+    <string name="dialog_edit_hint">Nova valoro</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Vi ŝanĝis la adresojn por ĉi tiu ĉambro.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s ŝanĝis la adresojn por ĉi tiu ĉambro.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Vi ŝanĝis la ĉefan kaj alternativajn adresojn por ĉi tiu ĉambro.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s ŝanĝis la ĉefan kaj alternativajn adresojn por ĉi tiu ĉambro.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Vi ŝanĝis la alternativajn adresojn por ĉi tiu ĉambro.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s ŝanĝis la alternativajn adresojn por ĉi tiu ĉambro.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Vi forigis la alternativan adreson %1$s por ĉi tiu ĉambro.</item>
+        <item quantity="other">Vi forigis la alternativajn adresojn %1$s por ĉi tiu ĉambro.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s forigis la alternativan adreson %2$s por ĉi tiu ĉambro.</item>
+        <item quantity="other">%1$s forigis la alternativajn adresojn %2$s por ĉi tiu ĉambro.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Vi aldonis la alternativan adreson %1$s por ĉi tiu ĉambro.</item>
+        <item quantity="other">Vi aldonis la alternativajn adresojn %1$s por ĉi tiu ĉambro.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s aldonis la alternativan adreson %2$s por ĉi tiu ĉambro.</item>
+        <item quantity="other">%1$s aldonis la alternativajn adresojn %2$s por ĉi tiu ĉambro.</item>
+    </plurals>
+    <string name="initial_sync_start_downloading">Komenca spegulado:
+\nElŝutante datumojn…</string>
+    <string name="initial_sync_start_server_computing">Komenca spegulado:
+\nAtendante respondon de servilo…</string>
+    <string name="room_displayname_empty_room_was">Malplena ĉambro (estis %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s, kaj %4$d alia</item>
+        <item quantity="other">%1$s, %2$s, %3$s, kaj %4$d aliaj</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s kaj %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s kaj %3$s</string>
+    <string name="notice_widget_jitsi_modified_by_you">Vi ŝanĝis grupan vidvokon</string>
+    <string name="notice_widget_jitsi_modified">Grupan vidvokon ŝanĝis %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">Vi finis grupan vidvokon</string>
+    <string name="notice_widget_jitsi_removed">Grupan vidvokon finis %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">Vi komencis grupan vidvokon</string>
+    <string name="notice_widget_jitsi_added">Grupan vidvokon komencis %1$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Partoprenado de ĉiuj serviloj estas malpermesita! Ĉi tiu ĉambro ne plu uzeblas.</string>
+    <string name="notice_room_server_acl_updated_no_change">Senŝanĝe.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Serviloj akordaj kun precizaj IP-adresoj nun estas forbaritaj.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Serviloj akordaj kun precizaj IP-adresoj nun estas permesitaj.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Serviloj akordaj kun %s foriĝis de la listo de forbaritaj.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Serviloj akordaj kun %s foriĝis de la listo de permesitaj.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Serviloj akordaj kun %s nun estas permesitaj.</string>
+    <string name="notice_room_server_acl_updated_banned">• Serviloj akordaj kun %s nun estas forbaritaj.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Vi ŝanĝis la alirpermesojn por serviloj por ĉi tiu ĉambro.</string>
+    <string name="notice_room_server_acl_updated_title">%s ŝanĝis la alirpermesojn por serviloj por ĉi tiu ĉambro.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Serviloj akordaj kun precizaj IP-adresoj estas forbaritaj.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Serviloj akordaj kun precizaj IP-adresoj estas permesitaj.</string>
+    <string name="notice_room_server_acl_set_allowed">• Serviloj akordaj kun %s estas permesitaj.</string>
+    <string name="notice_room_server_acl_set_banned">• Serviloj akordaj kun %s estas forbaritaj.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Vi agordis la alirpermesojn por serviloj por ĉi tiu ĉambro.</string>
+    <string name="notice_room_server_acl_set_title">%s agordis la alirpermesojn por serviloj por ĉi tiu ĉambro.</string>
 </resources>
