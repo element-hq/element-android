@@ -27,6 +27,13 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formAdvancedToggleItem
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.banOrDefault
+import org.matrix.android.sdk.api.session.room.model.eventsDefaultOrDefault
+import org.matrix.android.sdk.api.session.room.model.inviteOrDefault
+import org.matrix.android.sdk.api.session.room.model.kickOrDefault
+import org.matrix.android.sdk.api.session.room.model.redactOrDefault
+import org.matrix.android.sdk.api.session.room.model.stateDefaultOrDefault
+import org.matrix.android.sdk.api.session.room.model.usersDefaultOrDefault
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import javax.inject.Inject
 
@@ -139,21 +146,21 @@ class RoomPermissionsController @Inject constructor(
 
     private fun getCurrentRole(editablePermission: EditablePermission, content: PowerLevelsContent): Role {
         val value = when (editablePermission) {
-            is EditablePermission.EventTypeEditablePermission -> content.events[editablePermission.eventType] ?: content.stateDefault
-            is EditablePermission.DefaultRole                 -> content.usersDefault
-            is EditablePermission.SendMessages                -> content.eventsDefault
-            is EditablePermission.InviteUsers                 -> content.invite
-            is EditablePermission.ChangeSettings              -> content.stateDefault
-            is EditablePermission.KickUsers                   -> content.kick
-            is EditablePermission.BanUsers                    -> content.ban
-            is EditablePermission.RemoveMessagesSentByOthers  -> content.redact
+            is EditablePermission.EventTypeEditablePermission -> content.events?.get(editablePermission.eventType) ?: content.stateDefaultOrDefault()
+            is EditablePermission.DefaultRole                 -> content.usersDefaultOrDefault()
+            is EditablePermission.SendMessages                -> content.eventsDefaultOrDefault()
+            is EditablePermission.InviteUsers                 -> content.inviteOrDefault()
+            is EditablePermission.ChangeSettings              -> content.stateDefaultOrDefault()
+            is EditablePermission.KickUsers                   -> content.kickOrDefault()
+            is EditablePermission.BanUsers                    -> content.banOrDefault()
+            is EditablePermission.RemoveMessagesSentByOthers  -> content.redactOrDefault()
             is EditablePermission.NotifyEveryone              -> content.notificationLevel(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY)
         }
 
         return Role.fromValue(
                 value,
                 when (editablePermission) {
-                    is EditablePermission.EventTypeEditablePermission -> content.stateDefault
+                    is EditablePermission.EventTypeEditablePermission -> content.stateDefaultOrDefault()
                     is EditablePermission.DefaultRole                 -> Role.Default.value
                     is EditablePermission.SendMessages                -> Role.Default.value
                     is EditablePermission.InviteUsers                 -> Role.Moderator.value

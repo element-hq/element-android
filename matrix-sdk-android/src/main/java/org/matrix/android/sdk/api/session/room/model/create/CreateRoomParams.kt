@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.session.room.model.create
 import android.net.Uri
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContentOverride
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -128,7 +128,7 @@ open class CreateRoomParams {
     /**
      * The power level content to override in the default power level event
      */
-    var powerLevelContentOverride: PowerLevelsContentOverride? = null
+    var powerLevelContentOverride: PowerLevelsContent? = null
 
     /**
      * Mark as a direct message room.
