@@ -63,17 +63,17 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
 
     init {
         when (initialState.linkType) {
-            is PermalinkData.RoomLink -> {
+            is PermalinkData.RoomLink     -> {
                 setState {
                     copy(roomPeekResult = Loading())
                 }
             }
-            is PermalinkData.UserLink -> {
+            is PermalinkData.UserLink     -> {
                 setState {
                     copy(matrixItem = Loading())
                 }
             }
-            is PermalinkData.GroupLink -> {
+            is PermalinkData.GroupLink    -> {
                 // Not yet supported
             }
             is PermalinkData.FallbackLink -> {
@@ -98,7 +98,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         }
 
         when (permalinkData) {
-            is PermalinkData.UserLink -> {
+            is PermalinkData.UserLink     -> {
                 val user = resolveUser(permalinkData.userId)
                 setState {
                     copy(
@@ -107,7 +107,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is PermalinkData.RoomLink -> {
+            is PermalinkData.RoomLink     -> {
                 // could this room be already known
                 val knownRoom = if (permalinkData.isRoomAlias) {
                     tryOrNull {
@@ -183,7 +183,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     }
                 }
             }
-            is PermalinkData.GroupLink -> {
+            is PermalinkData.GroupLink    -> {
                 // not yet supported
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
@@ -261,18 +261,18 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     override fun handle(action: MatrixToAction) {
         when (action) {
             is MatrixToAction.StartChattingWithUser -> handleStartChatting(action)
-            MatrixToAction.FailedToResolveUser -> {
+            MatrixToAction.FailedToResolveUser      -> {
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
-            MatrixToAction.FailedToStartChatting -> {
+            MatrixToAction.FailedToStartChatting    -> {
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
-            is MatrixToAction.JoinSpace -> handleJoinSpace(action)
-            is MatrixToAction.JoinRoom -> handleJoinRoom(action)
-            is MatrixToAction.OpenSpace -> {
+            is MatrixToAction.JoinSpace             -> handleJoinSpace(action)
+            is MatrixToAction.JoinRoom              -> handleJoinRoom(action)
+            is MatrixToAction.OpenSpace             -> {
                 _viewEvents.post(MatrixToViewEvents.NavigateToSpace(action.spaceID))
             }
-            is MatrixToAction.OpenRoom -> {
+            is MatrixToAction.OpenRoom              -> {
                 _viewEvents.post(MatrixToViewEvents.NavigateToRoom(action.roomId))
             }
         }.exhaustive

@@ -5,8 +5,8 @@
     android:id="@+id/itemRoomLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?attr/selectableItemBackground"
-    android:background="?riotx_background">
+    android:background="?riotx_background"
+    android:foreground="?attr/selectableItemBackground">
 
     <FrameLayout
         android:id="@+id/roomAvatarContainer"
@@ -95,14 +95,14 @@
 
     <ProgressBar
         android:id="@+id/joinSuggestedLoading"
-        android:visibility="gone"
-        tools:visibility="visible"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/joinSuggestedRoomButton"
         app:layout_constraintEnd_toEndOf="@id/joinSuggestedRoomButton"
         app:layout_constraintStart_toStartOf="@id/joinSuggestedRoomButton"
-        app:layout_constraintTop_toTopOf="@id/joinSuggestedRoomButton" />
+        app:layout_constraintTop_toTopOf="@id/joinSuggestedRoomButton"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/roomBottomBarrier"

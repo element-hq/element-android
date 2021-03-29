@@ -139,14 +139,21 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
     }
 
     companion object {
-
-        const val RESULT_DATA_CREATED_SPACE_ID = "RESULT_DATA_CREATED_SPACE_ID"
-        const val RESULT_DATA_DEFAULT_ROOM_ID = "RESULT_DATA_DEFAULT_ROOM_ID"
+        private const val RESULT_DATA_CREATED_SPACE_ID = "RESULT_DATA_CREATED_SPACE_ID"
+        private const val RESULT_DATA_DEFAULT_ROOM_ID = "RESULT_DATA_DEFAULT_ROOM_ID"
 
         fun newIntent(context: Context): Intent {
             return Intent(context, SpaceCreationActivity::class.java).apply {
                 // putExtra(MvRx.KEY_ARG, SpaceDirectoryArgs(spaceId))
             }
+        }
+
+        fun getCreatedSpaceId(data: Intent?): String? {
+            return data?.extras?.getString(RESULT_DATA_CREATED_SPACE_ID)
+        }
+
+        fun getDefaultRoomId(data: Intent?): String? {
+            return data?.extras?.getString(RESULT_DATA_DEFAULT_ROOM_ID)
         }
     }
 
