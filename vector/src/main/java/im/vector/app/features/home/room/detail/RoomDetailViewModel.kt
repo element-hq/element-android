@@ -106,7 +106,6 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
-import java.io.File
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -1140,25 +1139,17 @@ class RoomDetailViewModel @AssistedInject constructor(
                 ))
             }
         } else {
-            session.fileService().downloadFile(
-                    messageContent = action.messageFileContent,
-                    callback = object : MatrixCallback<File> {
-                        override fun onSuccess(data: File) {
-                            _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                                    action.messageFileContent.mimeType,
-                                    data,
-                                    null
-                            ))
-                        }
+            viewModelScope.launch {
+                val result = runCatching {
+                    session.fileService().downloadFile(messageContent = action.messageFileContent)
+                }
 
-                        override fun onFailure(failure: Throwable) {
-                            _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                                    action.messageFileContent.mimeType,
-                                    null,
-                                    failure
-                            ))
-                        }
-                    })
+                _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
+                        action.messageFileContent.mimeType,
+                        result.getOrNull(),
+                        result.exceptionOrNull()
+                ))
+            }
         }
     }
 
