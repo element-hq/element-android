@@ -192,7 +192,7 @@ class BootstrapCrossSigningTask @Inject constructor(
             ssssService.storeSecret(
                     USER_SIGNING_KEY_SSSS_NAME,
                     uskPrivateKey,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec)),
+                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
             params.progressListener?.onProgress(
                     WaitingViewData(
