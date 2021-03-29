@@ -6,7 +6,7 @@ apply plugin: 'realm-android'
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "io.realm:realm-gradle-plugin:10.4.0"
