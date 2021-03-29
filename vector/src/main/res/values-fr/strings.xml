@@ -811,7 +811,7 @@
     <string name="option_take_photo">Prendre une photo</string>
     <string name="option_take_video">Prendre une vidéo</string>
     <string name="settings_analytics">Statistiques d’utilisation</string>
-    <string name="settings_labs_native_camera">Utiliser la caméra native</string>
+    <string name="settings_labs_native_camera">Utiliser la caméra de l’appareil</string>
     <!-- share keys -->
     <string name="title_activity_bug_report">Rapport d’anomalie</string>
     <string name="conference_call_warning_title">Attention !</string>
@@ -1481,7 +1481,7 @@
     <string name="room_filtering_footer_create_new_direct_message">Envoyer un nouveau message privé</string>
     <string name="room_filtering_footer_open_room_directory">Voir le répertoire des salons</string>
     <string name="room_directory_search_hint">Nom ou identifiant (#exemple:matrix.org)</string>
-    <string name="labs_swipe_to_reply_in_timeline">Activer le balayage pour répondre dans les l’historique</string>
+    <string name="labs_swipe_to_reply_in_timeline">Activer le balayage pour répondre dans l’historique</string>
     <string name="link_copied_to_clipboard">Lien copié dans le presse-papiers</string>
     <string name="settings_integration_manager">Gestionnaire d’intégrations</string>
     <string name="integration_manager_not_configured">Aucun gestionnaire d’intégrations n’est configuré.</string>
