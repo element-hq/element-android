@@ -21,7 +21,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
+import im.vector.app.core.ui.list.ItemStyle
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.form.formEditTextItem
 import javax.inject.Inject
@@ -38,7 +38,7 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
     override fun buildModels(data: CreateSpaceState?) {
         genericFooterItem {
             id("info_help_header")
-            style(GenericItem.STYLE.TITLE)
+            style(ItemStyle.TITLE)
             text(stringProvider.getString(R.string.create_spaces_room_public_header, data?.name))
             textColor(colorProvider.getColorFromAttribute(R.attr.riot_primary_text_color))
         }
