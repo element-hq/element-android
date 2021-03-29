@@ -10,21 +10,22 @@
         android:id="@+id/spaceSummaryMemberCountIcon"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:src="@drawable/ic_room_profile_member_list"
         android:importantForAccessibility="no"
+        android:src="@drawable/ic_room_profile_member_list"
         app:layout_constraintBottom_toBottomOf="@+id/spaceSummaryMemberCountText"
         app:layout_constraintStart_toEndOf="@+id/spaceSummaryMemberCountText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_secondary" />
+        app:tint="?riotx_text_secondary"
+        tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/spaceSummaryMemberCountText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:maxLines="1"
         android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="?riotx_text_secondary"
         app:layout_constraintBottom_toBottomOf="@+id/spaceSummaryMemberCountIcon"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,11 +38,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="?riotx_text_primary"
         android:autoLink="all"
+        android:textColor="?riotx_text_primary"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spaceSummaryMemberCountIcon"
         tools:text="@sample/matrix.json/data/roomTopic" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
