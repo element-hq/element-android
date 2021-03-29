@@ -114,7 +114,7 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
                 try {
                     val newPowerLevelsContent = when (action.editablePermission) {
                         is EditablePermission.EventTypeEditablePermission -> currentPowerLevel.copy(
-                                events = currentPowerLevel.events.toMutableMap().apply {
+                                events = currentPowerLevel.events.orEmpty().toMutableMap().apply {
                                     put(action.editablePermission.eventType, action.powerLevel)
                                 }
                         )
@@ -126,7 +126,7 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
                         is EditablePermission.BanUsers                    -> currentPowerLevel.copy(ban = action.powerLevel)
                         is EditablePermission.RemoveMessagesSentByOthers  -> currentPowerLevel.copy(redact = action.powerLevel)
                         is EditablePermission.NotifyEveryone              -> currentPowerLevel.copy(
-                                notifications = currentPowerLevel.notifications.toMutableMap().apply {
+                                notifications = currentPowerLevel.notifications.orEmpty().toMutableMap().apply {
                                     put(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY, action.powerLevel)
                                 }
                         )

@@ -26,7 +26,6 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContentOverride
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
@@ -74,7 +73,7 @@ internal class DefaultSpaceService @Inject constructor(
             this.preset = if (isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
             this.avatarUri = avatarUri
             if (isPublic) {
-                this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContentOverride()).copy(
+                this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
                         invite = 0
                 )
                 this.historyVisibility = RoomHistoryVisibility.WORLD_READABLE

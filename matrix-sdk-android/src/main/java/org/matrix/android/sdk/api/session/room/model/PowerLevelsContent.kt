@@ -28,43 +28,43 @@ data class PowerLevelsContent(
         /**
          * The level required to ban a user. Defaults to 50 if unspecified.
          */
-        @Json(name = "ban") val ban: Int = Role.Moderator.value,
+        @Json(name = "ban") val ban: Int? = null,
         /**
          * The level required to kick a user. Defaults to 50 if unspecified.
          */
-        @Json(name = "kick") val kick: Int = Role.Moderator.value,
+        @Json(name = "kick") val kick: Int? = null,
         /**
          * The level required to invite a user. Defaults to 50 if unspecified.
          */
-        @Json(name = "invite") val invite: Int = Role.Moderator.value,
+        @Json(name = "invite") val invite: Int? = null,
         /**
          * The level required to redact an event. Defaults to 50 if unspecified.
          */
-        @Json(name = "redact") val redact: Int = Role.Moderator.value,
+        @Json(name = "redact") val redact: Int? = null,
         /**
          * The default level required to send message events. Can be overridden by the events key. Defaults to 0 if unspecified.
          */
-        @Json(name = "events_default") val eventsDefault: Int = Role.Default.value,
+        @Json(name = "events_default") val eventsDefault: Int? = null,
         /**
          * The level required to send specific event types. This is a mapping from event type to power level required.
          */
-        @Json(name = "events") val events: Map<String, Int> = emptyMap(),
+        @Json(name = "events") val events: Map<String, Int>? = null,
         /**
          * The default power level for every user in the room, unless their user_id is mentioned in the users key. Defaults to 0 if unspecified.
          */
-        @Json(name = "users_default") val usersDefault: Int = Role.Default.value,
+        @Json(name = "users_default") val usersDefault: Int? = null,
         /**
          * The power levels for specific users. This is a mapping from user_id to power level for that user.
          */
-        @Json(name = "users") val users: Map<String, Int> = emptyMap(),
+        @Json(name = "users") val users: Map<String, Int>? = null,
         /**
          * The default level required to send state events. Can be overridden by the events key. Defaults to 50 if unspecified.
          */
-        @Json(name = "state_default") val stateDefault: Int = Role.Moderator.value,
+        @Json(name = "state_default") val stateDefault: Int? = null,
         /**
          * The power level requirements for specific notification types. This is a mapping from key to power level for that notifications key.
          */
-        @Json(name = "notifications") val notifications: Map<String, Any> = emptyMap()
+        @Json(name = "notifications") val notifications: Map<String, Any>? = null
 ) {
     /**
      * Return a copy of this content with a new power level for the specified user
@@ -74,7 +74,7 @@ data class PowerLevelsContent(
      */
     fun setUserPowerLevel(userId: String, powerLevel: Int?): PowerLevelsContent {
         return copy(
-                users = users.toMutableMap().apply {
+                users = users.orEmpty().toMutableMap().apply {
                     if (powerLevel == null || powerLevel == usersDefault) {
                         remove(userId)
                     } else {
@@ -91,7 +91,7 @@ data class PowerLevelsContent(
      * @return the level, default to Moderator if the key is not found
      */
     fun notificationLevel(key: String): Int {
-        return when (val value = notifications[key]) {
+        return when (val value = notifications.orEmpty()[key]) {
             // the first implementation was a string value
             is String -> value.toInt()
             is Double -> value.toInt()
@@ -107,3 +107,12 @@ data class PowerLevelsContent(
         const val NOTIFICATIONS_ROOM_KEY = "room"
     }
 }
+
+// Fallback to default value, defined in the Matrix specification
+fun PowerLevelsContent.banOrDefault() = ban ?: Role.Moderator.value
+fun PowerLevelsContent.kickOrDefault() = kick ?: Role.Moderator.value
+fun PowerLevelsContent.inviteOrDefault() = invite ?: Role.Moderator.value
+fun PowerLevelsContent.redactOrDefault() = redact ?: Role.Moderator.value
+fun PowerLevelsContent.eventsDefaultOrDefault() = eventsDefault ?: Role.Default.value
+fun PowerLevelsContent.usersDefaultOrDefault() = usersDefault ?: Role.Default.value
+fun PowerLevelsContent.stateDefaultOrDefault() = stateDefault ?: Role.Moderator.value
