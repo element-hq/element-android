@@ -18,12 +18,10 @@ package org.matrix.android.sdk.internal.auth.registration
 
 import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
-import org.matrix.android.sdk.api.auth.registration.RegistrationResult
-import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
-import org.matrix.android.sdk.api.auth.registration.toFlowResult
+import org.matrix.android.sdk.api.auth.registration.*
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.Failure.RegistrationFlowError
+import org.matrix.android.sdk.api.failure.isRegistrationAvailabilityError
 import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.auth.PendingSessionStore
 import org.matrix.android.sdk.internal.auth.SessionCreator
@@ -41,6 +39,7 @@ internal class DefaultRegistrationWizard(
     private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
 
     private val registerTask = DefaultRegisterTask(authAPI)
+    private val registerAvailableTask = RegisterAvailableTask(authAPI)
     private val registerAddThreePidTask = DefaultRegisterAddThreePidTask(authAPI)
     private val validateCodeTask = DefaultValidateCodeTask(authAPI)
 
@@ -202,5 +201,19 @@ internal class DefaultRegistrationWizard(
 
         val session = sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
         return RegistrationResult.Success(session)
+    }
+
+    override suspend fun registrationAvailable(userName: String): RegistrationAvailability {
+        val availability = try {
+            registerAvailableTask.execute(userName)
+        } catch (exception: Throwable) {
+            if(exception.isRegistrationAvailabilityError()) {
+                return RegistrationAvailability.NotAvailable(exception as Failure.ServerError)
+            } else {
+                throw exception
+            }
+        }
+
+        return RegistrationAvailability.Available(availability.available)
     }
 }
