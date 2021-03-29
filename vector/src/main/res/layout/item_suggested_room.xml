@@ -72,15 +72,6 @@
         app:layout_constraintTop_toBottomOf="@+id/roomNameView"
         tools:text="@sample/matrix.json/data/message" />
 
-    <!-- Margin bottom does not work, so I use space -->
-    <Space
-        android:id="@+id/roomLastEventBottomSpace"
-        android:layout_width="0dp"
-        android:layout_height="7dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomLastEventView"
-        tools:layout_marginStart="120dp" />
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/joinSuggestedRoomButton"
         style="@style/VectorButtonStyleOutlined"
@@ -109,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="roomAvatarBottomSpace,roomLastEventBottomSpace" />
+        app:constraint_referenced_ids="roomAvatarBottomSpace" />
 
     <View
         android:id="@+id/roomDividerView"
