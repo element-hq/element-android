@@ -18,19 +18,14 @@ package im.vector.app.features.spaces
 
 import androidx.lifecycle.viewModelScope
 import arrow.core.Option
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
-import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import im.vector.app.features.ui.UiStateRepository
@@ -47,29 +42,6 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 
 const val ALL_COMMUNITIES_GROUP_ID = "+ALL_COMMUNITIES_GROUP_ID"
-
-sealed class SpaceListAction : VectorViewModelAction {
-    data class SelectSpace(val spaceSummary: RoomSummary) : SpaceListAction()
-    data class LeaveSpace(val spaceSummary: RoomSummary) : SpaceListAction()
-    data class ToggleExpand(val spaceSummary: RoomSummary) : SpaceListAction()
-    object AddSpace : SpaceListAction()
-}
-
-/**
- * Transient events for group list screen
- */
-sealed class SpaceListViewEvents : VectorViewEvents {
-    object OpenSpace : SpaceListViewEvents()
-    data class OpenSpaceSummary(val id: String) : SpaceListViewEvents()
-    object AddSpace : SpaceListViewEvents()
-}
-
-data class SpaceListViewState(
-        val asyncSpaces: Async<List<RoomSummary>> = Uninitialized,
-        val selectedSpace: RoomSummary? = null,
-        val rootSpaces: List<RoomSummary>? = null,
-        val expandedStates: Map<String, Boolean> = emptyMap()
-) : MvRxState
 
 class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
                                                       private val selectedSpaceDataSource: SelectedSpaceDataSource,
