@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings
+package im.vector.app.core.platform.livedata
 
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
