@@ -18,64 +18,26 @@ package im.vector.app.features.spaces.explore
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.platform.VectorViewModelAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
-
-data class SpaceDirectoryState(
-        // The current filter
-        val spaceId: String,
-        val currentFilter: String = "",
-        val spaceSummary: Async<RoomSummary> = Uninitialized,
-        val spaceSummaryApiResult: Async<List<SpaceChildInfo>> = Uninitialized,
-        val childList: List<SpaceChildInfo> = emptyList(),
-        val hierarchyStack: List<String> = emptyList(),
-        // True if more result are available server side
-        val hasMore: Boolean = false,
-        // Set of joined roomId / spaces,
-        val joinedRoomsIds: Set<String> = emptySet(),
-        // keys are room alias or roomId
-        val changeMembershipStates: Map<String, ChangeMembershipState> = emptyMap()
-) : MvRxState {
-    constructor(args: SpaceDirectoryArgs) : this(
-            spaceId = args.spaceId
-    )
-}
-
-sealed class SpaceDirectoryViewAction : VectorViewModelAction {
-    data class ExploreSubSpace(val spaceChildInfo: SpaceChildInfo) : SpaceDirectoryViewAction()
-    data class JoinOrOpen(val spaceChildInfo: SpaceChildInfo) : SpaceDirectoryViewAction()
-    object HandleBack : SpaceDirectoryViewAction()
-}
-
-sealed class SpaceDirectoryViewEvents : VectorViewEvents {
-    object Dismiss : SpaceDirectoryViewEvents()
-    data class NavigateToRoom(val roomId: String) : SpaceDirectoryViewEvents()
-}
 
 class SpaceDirectoryViewModel @AssistedInject constructor(
         @Assisted initialState: SpaceDirectoryState,
