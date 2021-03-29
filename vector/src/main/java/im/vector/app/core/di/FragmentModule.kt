@@ -646,7 +646,7 @@ interface FragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(ChooseSpaceTypeFragment::class)
-    fun bindCreateSpaceFragment(fragment: ChooseSpaceTypeFragment): Fragment
+    fun bindChooseSpaceTypeFragment(fragment: ChooseSpaceTypeFragment): Fragment
 
     @Binds
     @IntoMap
