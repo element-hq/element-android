@@ -27,6 +27,7 @@ import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetSpaceSettingsBinding
 import im.vector.app.features.home.AvatarRenderer
@@ -62,7 +63,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         fun onShareSpaceSelected(spaceId: String)
     }
 
-    var interactionListener : InteractionListener?  = null
+    var interactionListener: InteractionListener? = null
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -78,10 +79,10 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         val roomSummary = session.getRoomSummary(spaceArgs.spaceId)
         roomSummary?.toMatrixItem()?.let {
-            avatarRenderer.renderSpace(it, views.roomAvatarImageView)
+            avatarRenderer.renderSpace(it, views.spaceAvatarImageView)
         }
-        views.roomNameView.text = roomSummary?.displayName
-        views.roomDescription.text = roomSummary?.topic
+        views.spaceNameView.text = roomSummary?.displayName
+        views.spaceDescription.setTextOrHide(roomSummary?.topic?.takeIf { it.isNotEmpty() })
 
         val room = session.getRoom(spaceArgs.spaceId) ?: return
 
