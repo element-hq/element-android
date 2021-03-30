@@ -180,7 +180,12 @@ class RoomDetailViewModel @AssistedInject constructor(
         observePowerLevel()
         updateShowDialerOptionState()
         room.getRoomSummaryLive()
-        room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
+        viewModelScope.launch {
+            try {
+                room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
+            } catch (_: Exception) {
+            }
+        }
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
         callManager.addPstnSupportListener(this)
@@ -545,7 +550,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun stopTrackingUnreadMessages() {
         if (trackUnreadMessages.getAndSet(false)) {
             mostRecentDisplayedEvent?.root?.eventId?.also {
-                room.setReadMarker(it, callback = NoOpMatrixCallback())
+                viewModelScope.launch {
+                    try {
+                        room.setReadMarker(it)
+                    } catch (_: Exception) {
+                    }
+                }
             }
             mostRecentDisplayedEvent = null
         }
@@ -1239,14 +1249,21 @@ class RoomDetailViewModel @AssistedInject constructor(
                         }
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
-                        room.setReadReceipt(eventId, callback = NoOpMatrixCallback())
+                        viewModelScope.launch {
+                            room.setReadReceipt(eventId)
+                        }
                     }
                 })
                 .disposeOnClear()
     }
 
     private fun handleMarkAllAsRead() {
-        room.markAsRead(ReadService.MarkAsReadParams.BOTH, NoOpMatrixCallback())
+        viewModelScope.launch {
+            try {
+                room.markAsRead(ReadService.MarkAsReadParams.BOTH)
+            } catch (_: Exception) {
+            }
+        }
     }
 
     private fun handleReportContent(action: RoomDetailAction.ReportContent) {

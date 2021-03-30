@@ -23,6 +23,8 @@ import androidx.core.app.RemoteInput
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.vectorComponent
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.Room
@@ -88,8 +90,15 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     private fun handleMarkAsRead(roomId: String) {
         activeSessionHolder.getActiveSession().let { session ->
-            session.getRoom(roomId)
-                    ?.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
+            val room = session.getRoom(roomId)
+            if (room != null) {
+                GlobalScope.launch {
+                    try {
+                        room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
+                    } catch (_: Exception) {
+                    }
+                }
+            }
         }
     }
 
