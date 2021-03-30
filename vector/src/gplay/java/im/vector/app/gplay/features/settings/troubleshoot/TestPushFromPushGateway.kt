@@ -53,7 +53,7 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
                             status = TestStatus.RUNNING
                         },
                         {
-                            description = if (failure is PushGatewayFailure.PusherRejected) {
+                            description = if (it is PushGatewayFailure.PusherRejected) {
                                 stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_failed)
                             } else {
                                 errorFormatter.toHumanReadable(it)
@@ -70,6 +70,6 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
     }
 
     override fun cancel() {
-        job?.cancel()
+        action?.cancel()
     }
 }
