@@ -808,21 +808,9 @@ internal class DefaultCryptoService @Inject constructor(
     override fun exportRoomKeys(password: String, callback: MatrixCallback<ByteArray>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             runCatching {
-                exportRoomKeys(password, MXMegolmExportEncryption.DEFAULT_ITERATION_COUNT)
+                val iterationCount = max(10000, MXMegolmExportEncryption.DEFAULT_ITERATION_COUNT)
+                olmMachine!!.exportKeys(password, iterationCount)
             }.foldToCallback(callback)
-        }
-    }
-
-    /**
-     * Export the crypto keys
-     *
-     * @param password         the password
-     * @param anIterationCount the encryption iteration count
-     */
-    private suspend fun exportRoomKeys(password: String, anIterationCount: Int): ByteArray {
-        return withContext(coroutineDispatchers.crypto) {
-            val iterationCount = max(10000, anIterationCount)
-            olmMachine!!.exportKeys(password, iterationCount)
         }
     }
 
