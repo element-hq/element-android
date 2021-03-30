@@ -6,6 +6,10 @@ callback interface Logger {
     void log(string log_line);
 };
 
+callback interface ProgressListener {
+    void on_progress(i32 progress, i32 total);
+};
+
 [Error]
 enum MachineCreationError {
     "Identifier",
@@ -29,6 +33,11 @@ enum DecryptionError {
 dictionary DeviceLists {
     sequence<string> changed;
     sequence<string> left;
+};
+
+dictionary KeysImportResult {
+    i32 total;
+    i32 imported;
 };
 
 dictionary DecryptedEvent {
@@ -106,4 +115,10 @@ interface OlmMachine {
 
     [Throws=CryptoStoreError]
     string export_keys([ByRef] string passphrase, i32 rounds);
+    [Throws=CryptoStoreError]
+    KeysImportResult import_keys(
+        [ByRef] string keys,
+        [ByRef] string passphrase,
+        ProgressListener progress_listener
+    );
 };

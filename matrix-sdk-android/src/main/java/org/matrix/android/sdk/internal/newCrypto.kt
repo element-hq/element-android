@@ -19,32 +19,45 @@ package org.matrix.android.sdk.internal
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
+import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
-import org.matrix.android.sdk.api.session.events.model.Content
 import timber.log.Timber
+import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.Device as InnerDevice
 import uniffi.olm.DeviceLists
 import uniffi.olm.Logger
 import uniffi.olm.OlmMachine as InnerMachine
+import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
-import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.Sas as InnerSas
 import uniffi.olm.setLogger
 
 class CryptoLogger() : Logger {
     override fun log(logLine: String) {
         Timber.d(logLine)
+    }
+}
+
+private class CryptoProgressListener(listener: ProgressListener?) : RustProgressListener {
+    private val inner: ProgressListener? = listener
+
+    override fun onProgress(progress: Int, total: Int) {
+        if (this.inner != null) {
+            this.inner.onProgress(progress, total)
+        }
     }
 }
 
@@ -121,7 +134,6 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
             false,
             null
         )
-
     }
 
     suspend fun outgoingRequests(): List<Request> = withContext(Dispatchers.IO) {
@@ -183,6 +195,17 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
     @Throws(CryptoStoreErrorException::class)
     suspend fun exportKeys(passphrase: String, rounds: Int): ByteArray = withContext(Dispatchers.IO) {
         inner.exportKeys(passphrase, rounds).toByteArray()
+    }
+
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun importKeys(keys: ByteArray, passphrase: String, listener: ProgressListener?): ImportRoomKeysResult = withContext(Dispatchers.IO) {
+        var decodedKeys = keys.toString()
+
+        var rustListener = CryptoProgressListener(listener)
+
+        var result = inner.importKeys(decodedKeys, passphrase, rustListener)
+
+        ImportRoomKeysResult(result.total, result.imported)
     }
 
     @Throws(MXCryptoError::class)

@@ -1,6 +1,7 @@
 use std::{
     collections::{BTreeMap, HashMap},
     convert::{TryFrom, TryInto},
+    io::Cursor,
 };
 
 use http::Response;
@@ -25,11 +26,12 @@ use matrix_sdk_common::{
 };
 
 use matrix_sdk_crypto::{
-    encrypt_key_export, EncryptionSettings, IncomingResponse, OlmMachine as InnerMachine,
-    OutgoingRequest, ToDeviceRequest,
+    decrypt_key_export, encrypt_key_export, EncryptionSettings, IncomingResponse,
+    OlmMachine as InnerMachine, OutgoingRequest, ToDeviceRequest,
 };
 
 use crate::error::{CryptoStoreError, DecryptionError, MachineCreationError};
+use crate::ProgressListener;
 
 pub struct OlmMachine {
     inner: InnerMachine,
@@ -63,6 +65,11 @@ impl Into<RumaDeviceLists> for DeviceLists {
                 .collect(),
         })
     }
+}
+
+pub struct KeysImportResult {
+    pub total: i32,
+    pub imported: i32,
 }
 
 enum OwnedResponse {
@@ -426,6 +433,24 @@ impl OlmMachine {
             .map_err(CryptoStoreError::Serialization)?;
 
         Ok(encrypted)
+    }
+
+    pub fn import_keys(
+        &self,
+        keys: &str,
+        passphrase: &str,
+        _: Box<dyn ProgressListener>,
+    ) -> Result<KeysImportResult, CryptoStoreError> {
+        let keys = Cursor::new(keys);
+        let keys = decrypt_key_export(keys, passphrase).unwrap();
+
+        // TODO use the progress listener
+        let result = self.runtime.block_on(self.inner.import_keys(keys))?;
+
+        Ok(KeysImportResult {
+            total: result.1 as i32,
+            imported: result.0 as i32,
+        })
     }
 
     pub fn decrypt_room_event(

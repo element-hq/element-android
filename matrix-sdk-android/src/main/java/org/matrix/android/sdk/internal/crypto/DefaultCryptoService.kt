@@ -859,31 +859,7 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             runCatching {
                 withContext(coroutineDispatchers.crypto) {
-                    Timber.v("## CRYPTO | importRoomKeys starts")
-
-                    val t0 = System.currentTimeMillis()
-                    val roomKeys = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
-                    val t1 = System.currentTimeMillis()
-
-                    Timber.v("## CRYPTO | importRoomKeys : decryptMegolmKeyFile done in ${t1 - t0} ms")
-
-                    val importedSessions = MoshiProvider.providesMoshi()
-                            .adapter<List<MegolmSessionData>>(Types.newParameterizedType(List::class.java, MegolmSessionData::class.java))
-                            .fromJson(roomKeys)
-
-                    val t2 = System.currentTimeMillis()
-
-                    Timber.v("## CRYPTO | importRoomKeys : JSON parsing ${t2 - t1} ms")
-
-                    if (importedSessions == null) {
-                        throw Exception("Error")
-                    }
-
-                    megolmSessionDataImporter.handle(
-                            megolmSessionsData = importedSessions,
-                            fromBackup = false,
-                            progressListener = progressListener
-                    )
+                    olmMachine!!.importKeys(roomKeysAsArray, password, progressListener)
                 }
             }.foldToCallback(callback)
         }
