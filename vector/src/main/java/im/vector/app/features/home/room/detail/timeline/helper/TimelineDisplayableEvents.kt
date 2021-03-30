@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
-import im.vector.app.core.extensions.localDateTime
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
@@ -53,7 +52,6 @@ object TimelineDisplayableEvents {
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL
     )
-
 }
 
 fun TimelineEvent.canBeMerged(): Boolean {

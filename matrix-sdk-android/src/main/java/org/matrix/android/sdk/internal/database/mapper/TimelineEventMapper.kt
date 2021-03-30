@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.database.mapper
 
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity

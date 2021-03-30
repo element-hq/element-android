@@ -22,9 +22,7 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
 abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
@@ -59,7 +57,7 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
             val avatarRenderer: AvatarRenderer,
             val informationData: MessageInformationData,
             val text: CharSequence,
-            val itemLongClickListener: View.OnLongClickListener? = null,
+            val itemLongClickListener: View.OnLongClickListener? = null
     )
 
     companion object {

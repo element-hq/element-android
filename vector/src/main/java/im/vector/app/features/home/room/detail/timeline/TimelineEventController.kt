@@ -428,7 +428,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     private fun getReadReceiptsByShownEvent(): Map<String, List<ReadReceipt>> {
         val receiptsByEvent = HashMap<String, MutableList<ReadReceipt>>()
-        if(!userPreferencesProvider.shouldShowReadReceipts()){
+        if (!userPreferencesProvider.shouldShowReadReceipts()) {
             return receiptsByEvent
         }
         var lastShownEventId: String? = null

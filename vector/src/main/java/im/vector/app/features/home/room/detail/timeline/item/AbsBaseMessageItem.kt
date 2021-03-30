@@ -24,7 +24,6 @@ import androidx.annotation.IdRes
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.ui.views.ShieldImageView
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController

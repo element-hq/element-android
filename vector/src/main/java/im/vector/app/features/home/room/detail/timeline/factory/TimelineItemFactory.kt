@@ -60,7 +60,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
-                EventType.REDACTION            ,
+                EventType.REDACTION,
                 EventType.STATE_ROOM_ALIASES,
                 EventType.KEY_VERIFICATION_ACCEPT,
                 EventType.KEY_VERIFICATION_START,

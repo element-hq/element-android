@@ -29,14 +29,13 @@ import javax.inject.Inject
 
 class TimelineEventVisibilityHelper @Inject constructor(private val userPreferencesProvider: UserPreferencesProvider) {
 
-
     /**
      * @param timelineEvents the events to search in
      * @param index the index to start computing (inclusive)
      * @param minSize the minimum number of same type events to have sequentially, otherwise will return an empty list
      * @param eventIdToHighlight used to compute visibility
      *
-     * @return a list of timeline events which have sequentially the same type following the next direction. 
+     * @return a list of timeline events which have sequentially the same type following the next direction.
      */
     fun nextSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?): List<TimelineEvent> {
         if (index >= timelineEvents.size - 1) {
@@ -60,7 +59,7 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         } else {
             nextSameDayEvents.subList(0, indexOfFirstDifferentEventType)
         }
-        val filteredSameTypeEvents = sameTypeEvents.filter { shouldShowEvent(it, eventIdToHighlight)}
+        val filteredSameTypeEvents = sameTypeEvents.filter { shouldShowEvent(it, eventIdToHighlight) }
         if (filteredSameTypeEvents.size < minSize) {
             return emptyList()
         }
@@ -128,12 +127,12 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         val content = root.getClearContent().toModel<RoomMemberContent>()
         val prevContent = root.resolvedPrevContent().toModel<RoomMemberContent>()
 
-        val isMembershipChanged = content?.membership != prevContent?.membership;
+        val isMembershipChanged = content?.membership != prevContent?.membership
         val isJoin = isMembershipChanged && content?.membership == Membership.JOIN
         val isPart = isMembershipChanged && content?.membership == Membership.LEAVE && root.stateKey == root.senderId
 
         val isProfileChanged = !isMembershipChanged && content?.membership == Membership.JOIN
-        val isDisplaynameChange = isProfileChanged && content?.displayName != prevContent?.displayName;
+        val isDisplaynameChange = isProfileChanged && content?.displayName != prevContent?.displayName
         val isAvatarChange = isProfileChanged && content?.avatarUrl !== prevContent?.avatarUrl
 
         return MembershipDiff(

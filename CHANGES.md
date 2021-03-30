@@ -13,6 +13,7 @@ Improvements 🙌:
  - Api interceptor to allow app developers peek responses (#2986)
  - Update reactions to Unicode 13.1 (#2998)
  - Be more robust when parsing some enums
+ - Improve timeline filtering (dissociate membership and profile events, display hidden events when highlighted, fix hidden item/read receipts behavior)
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity
@@ -23,7 +24,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - Removes filtering options on Timeline.
 
 Build 🧱:
  -

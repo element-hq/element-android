@@ -71,7 +71,6 @@ internal class UIEchoManager(
     }
 
     fun onLocalEchoCreated(timelineEvent: TimelineEvent)  {
-
         // Manage some ui echos (do it before filter because actual event could be filtered out)
         when (timelineEvent.root.getClearType()) {
             EventType.REDACTION -> {

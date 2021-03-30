@@ -26,5 +26,4 @@ interface ItemWithEvents {
     fun canAppendReadMarker(): Boolean = true
 
     fun isVisible(): Boolean = true
-
 }

@@ -31,7 +31,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
-import org.matrix.android.sdk.internal.database.mapper.ReadReceiptsSummaryMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
