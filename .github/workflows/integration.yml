@@ -39,4 +39,4 @@ jobs:
           curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh \
             | sed s/127.0.0.1/0.0.0.0/g | bash
       - name: Run integration tests
-        run: ./gradlew vector:connectedAndroidTest matrix-sdk-android:connectedAndroidTest
+        run: ./gradlew -PallWarningsAsErrors=false vector:connectedAndroidTest matrix-sdk-android:connectedAndroidTest
