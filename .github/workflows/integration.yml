@@ -40,4 +40,5 @@ jobs:
             | sed s/127.0.0.1/0.0.0.0/g | bash
       - name: Run integration tests
         uses: reactivecircus/android-emulator-runner@v2
-        run: ./gradlew -PallWarningsAsErrors=false vector:connectedAndroidTest matrix-sdk-android:connectedAndroidTest
+        with:
+          script: ./gradlew -PallWarningsAsErrors=false vector:connectedAndroidTest matrix-sdk-android:connectedAndroidTest
