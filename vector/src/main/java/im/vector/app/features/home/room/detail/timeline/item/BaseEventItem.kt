@@ -44,6 +44,7 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var dimensionConverter: DimensionConverter
 
+
     @CallSuper
     override fun bind(holder: H) {
         super.bind(holder)

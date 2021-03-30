@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 class TimelineEventVisibilityHelper @Inject constructor(private val userPreferencesProvider: UserPreferencesProvider) {
 
-    fun nextSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int): List<TimelineEvent> {
+    fun nextSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?): List<TimelineEvent> {
         if (index >= timelineEvents.size - 1) {
             return emptyList()
         }
@@ -51,30 +51,30 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         } else {
             nextSameDayEvents.subList(0, indexOfFirstDifferentEventType)
         }
-        val filteredSameTypeEvents = sameTypeEvents.filter { shouldShowEvent(it)}
+        val filteredSameTypeEvents = sameTypeEvents.filter { shouldShowEvent(it, eventIdToHighlight)}
         if (filteredSameTypeEvents.size < minSize) {
             return emptyList()
         }
         return  filteredSameTypeEvents
     }
 
-    fun prevSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int): List<TimelineEvent> {
+    fun prevSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?): List<TimelineEvent> {
         val prevSub = timelineEvents.subList(0, index + 1)
         return prevSub
                 .reversed()
                 .let {
-                    nextSameTypeEvents(it, 0, minSize)
+                    nextSameTypeEvents(it, 0, minSize, eventIdToHighlight)
                 }
                 .reversed()
     }
 
-    fun shouldShowEvent(timelineEvent: TimelineEvent, highlightEventId: String? = null): Boolean {
+    fun shouldShowEvent(timelineEvent: TimelineEvent, highlightedEventId: String?): Boolean {
         // If show hidden events is true we should always display something
         if (userPreferencesProvider.shouldShowHiddenEvents()) {
             return true
         }
         // We always show highlighted event
-        if (timelineEvent.eventId == highlightEventId) {
+        if (timelineEvent.eventId == highlightedEventId) {
             return true
         }
         if (!timelineEvent.isDisplayable()) {

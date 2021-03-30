@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
 import im.vector.app.core.epoxy.LoadingItem_
-import im.vector.app.core.epoxy.TimelineEmptyItem
 import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -29,7 +28,6 @@ import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineIte
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
-import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import kotlin.reflect.KMutableProperty0
 
@@ -67,30 +65,29 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
 
         // Then iterate on models so we have the exact positions in the adapter
         modelsIterator.forEach { epoxyModel ->
-            if(epoxyModel !is TimelineEmptyItem){
-                atLeastOneVisibleItemSinceLastDaySeparator = true
-                atLeastOneVisibleItemsBeforeReadMarker = true
-            }
             if (epoxyModel is ItemWithEvents) {
+                if (epoxyModel.isVisible()) {
+                    atLeastOneVisibleItemSinceLastDaySeparator = true
+                    atLeastOneVisibleItemsBeforeReadMarker = true
+                }
                 epoxyModel.getEventIds().forEach { eventId ->
                     adapterPositionMapping[eventId] = index
-                    if (eventId == firstUnreadEventId && atLeastOneVisibleItemsBeforeReadMarker) {
+                    if (eventId == firstUnreadEventId && atLeastOneVisibleItemsBeforeReadMarker && epoxyModel.canAppendReadMarker()) {
                         modelsIterator.addReadMarkerItem(callback)
                         index++
                         positionOfReadMarker.set(index)
                     }
                 }
             }
-            if(epoxyModel is DaySeparatorItem){
-                if(!atLeastOneVisibleItemSinceLastDaySeparator){
+            if (epoxyModel is DaySeparatorItem) {
+                if (!atLeastOneVisibleItemSinceLastDaySeparator) {
                     modelsIterator.remove()
                     return@forEach
                 }
                 atLeastOneVisibleItemSinceLastDaySeparator = false
-            }
-            else if (epoxyModel is CallTileTimelineItem) {
+            } else if (epoxyModel is CallTileTimelineItem) {
                 val hasBeenRemoved = modelsIterator.removeCallItemIfNeeded(epoxyModel, callIds, showHiddenEvents)
-                if(!hasBeenRemoved){
+                if (!hasBeenRemoved) {
                     atLeastOneVisibleItemSinceLastDaySeparator = true
                 }
             }
@@ -126,7 +123,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
             val emptyItem = TimelineEmptyItem_()
                     .id(epoxyModel.id())
                     .eventId(epoxyModel.attributes.informationData.eventId)
-                    .visible(false)
+                    .notBlank(false)
             add(emptyItem)
         }
         callIds.add(callId)

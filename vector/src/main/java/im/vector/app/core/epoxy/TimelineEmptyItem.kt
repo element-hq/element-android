@@ -26,12 +26,15 @@ import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 abstract class TimelineEmptyItem : VectorEpoxyModel<TimelineEmptyItem.Holder>(), ItemWithEvents {
 
     @EpoxyAttribute lateinit var eventId: String
-    @EpoxyAttribute var visible: Boolean = false
+    @EpoxyAttribute var notBlank: Boolean = false
+
+    override fun isVisible() = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.updateLayoutParams {
-            this.height = if (visible) 1 else 0
+            // Force height to 1px so scrolling works correctly
+            this.height = if (notBlank) 1 else 0
         }
     }
 

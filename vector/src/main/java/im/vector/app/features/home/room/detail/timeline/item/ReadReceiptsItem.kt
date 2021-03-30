@@ -33,6 +33,8 @@ abstract class ReadReceiptsItem : EpoxyModelWithHolder<ReadReceiptsItem.Holder>(
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var clickListener: View.OnClickListener
 
+    override fun canAppendReadMarker(): Boolean = false
+
     override fun getEventIds(): List<String> = listOf(eventId)
 
     override fun bind(holder: Holder) {

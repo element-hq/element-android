@@ -32,9 +32,7 @@ import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.extensions.nextOrNull
 import im.vector.app.core.extensions.prevOrNull
 import im.vector.app.core.resources.UserPreferencesProvider
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.call.webrtc.WebRtcCallManager
-import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.home.room.detail.UnreadState
@@ -47,6 +45,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.TimelineControlle
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
+import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
@@ -55,7 +54,6 @@ import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptsItem
-import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptsItem_
 import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.media.ImageContentRenderer
@@ -337,13 +335,22 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             return
         }
         val receiptsByEvents = getReadReceiptsByShownEvent()
+        val lastSentEventWithoutReadReceipts = searchLastSentEventWithoutReadReceipts(receiptsByEvents)
         (0 until modelCache.size).forEach { position ->
             val event = currentSnapshot[position]
             val nextEvent = currentSnapshot.nextOrNull(position)
             val prevEvent = currentSnapshot.prevOrNull(position)
+            val params = TimelineItemFactoryParams(
+                    event = event,
+                    prevEvent = prevEvent,
+                    nextEvent = nextEvent,
+                    highlightedEventId = eventIdToHighlight,
+                    lastSentEventIdWithoutReadReceipts = lastSentEventWithoutReadReceipts,
+                    callback = callback
+            )
             // Should be build if not cached or if model should be refreshed
             if (modelCache[position] == null || modelCache[position]?.shouldTriggerBuild == true) {
-                modelCache[position] = buildCacheItem(event, nextEvent, prevEvent)
+                modelCache[position] = buildCacheItem(params)
             }
             val itemCachedData = modelCache[position] ?: return@forEach
             // Then update with additional models if needed
@@ -351,15 +358,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
     }
 
-    private fun buildCacheItem(event: TimelineEvent,
-                               nextEvent: TimelineEvent?,
-                               prevEvent: TimelineEvent?
-    ): CacheItemData {
+    private fun buildCacheItem(params: TimelineItemFactoryParams): CacheItemData {
+        val event = params.event
         if (hasReachedInvite && hasUTD) {
             return CacheItemData(event.localId, event.root.eventId)
         }
-        updateUTDStates(event, nextEvent)
-        val eventModel = timelineItemFactory.create(event, prevEvent, nextEvent, eventIdToHighlight, callback).also {
+        updateUTDStates(event, params.nextEvent)
+        val eventModel = timelineItemFactory.create(params).also {
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }
@@ -399,13 +404,37 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         )
     }
 
+    private fun searchLastSentEventWithoutReadReceipts(receiptsByEvent: Map<String, List<ReadReceipt>>): String? {
+        if (timeline?.isLive == false) {
+            // If timeline is not live we don't want to show SentStatus
+            return null
+        }
+        for (event in currentSnapshot) {
+            // If there is any RR on the event, we stop searching for Sent event
+            if (receiptsByEvent[event.eventId]?.isNotEmpty() == true) {
+                return null
+            }
+            // If the event is not shown, we go to the next one
+            if (!timelineEventVisibilityHelper.shouldShowEvent(event, eventIdToHighlight)) {
+                continue
+            }
+            // If the event is sent by us, we update the holder with the eventId and stop the search
+            if (event.root.senderId == session.myUserId && event.root.sendState.isSent()) {
+                return event.eventId
+            }
+        }
+        return null
+    }
+
     private fun getReadReceiptsByShownEvent(): Map<String, List<ReadReceipt>> {
         val receiptsByEvent = HashMap<String, MutableList<ReadReceipt>>()
         var lastShownEventId: String? = null
         val itr = currentSnapshot.listIterator(currentSnapshot.size)
         while (itr.hasPrevious()) {
             val event = itr.previous()
-            val currentReadReceipts = ArrayList(event.readReceipts)
+            val currentReadReceipts = ArrayList(event.readReceipts).filter {
+                it.user.userId != session.myUserId
+            }
             if (timelineEventVisibilityHelper.shouldShowEvent(event, eventIdToHighlight)) {
                 lastShownEventId = event.eventId
             }
