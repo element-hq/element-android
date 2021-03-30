@@ -27,7 +27,6 @@ import im.vector.app.databinding.FragmentSpaceCreateChooseTypeBinding
 import javax.inject.Inject
 
 class ChooseSpaceTypeFragment @Inject constructor(
-       // private val viewModelFactory: CreateSpaceViewModel.Factory,
 ) : VectorBaseFragment<FragmentSpaceCreateChooseTypeBinding>() {
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
@@ -43,7 +42,9 @@ class ChooseSpaceTypeFragment @Inject constructor(
         }))
 
         views.privateButton.setOnClickListener(DebouncedClickListener({
+            vectorBaseActivity.notImplemented("Creating private space")
             // sharedViewModel.handle(CreateSpaceAction.SetRoomType(SpaceType.Private))
         }))
     }
 }
+

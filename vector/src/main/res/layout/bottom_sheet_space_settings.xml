@@ -2,12 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/callControlsWrapper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?riotx_bottom_sheet_background"
     android:orientation="vertical">
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,7 +16,7 @@
         android:paddingEnd="8dp">
 
         <ImageView
-            android:id="@+id/roomAvatarImageView"
+            android:id="@+id/spaceAvatarImageView"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/avatar"
@@ -28,8 +26,8 @@
             tools:src="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/roomNameView"
-            android:layout_width="wrap_content"
+            android:id="@+id/spaceNameView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:layout_marginEnd="8dp"
@@ -40,15 +38,15 @@
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@+id/spaceDescription"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@id/roomAvatarImageView"
+            app:layout_constraintStart_toEndOf="@id/spaceAvatarImageView"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="@sample/matrix.json/data/displayName" />
 
         <TextView
-            android:id="@+id/roomDescription"
+            android:id="@+id/spaceDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -58,10 +56,13 @@
             android:maxLines="1"
             android:textColor="?riotx_text_secondary"
             android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/roomAvatarImageView"
-            app:layout_constraintTop_toBottomOf="@+id/roomNameView"
-            tools:text="@sample/matrix.json/data/message" />
+            app:layout_constraintStart_toEndOf="@id/spaceAvatarImageView"
+            app:layout_constraintTop_toBottomOf="@+id/spaceNameView"
+            tools:text="@sample/matrix.json/data/message"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -88,15 +89,17 @@
         app:tint="?attr/riotx_text_primary"
         app:titleTextColor="?attr/riotx_text_primary" />
 
-
+    <!-- Only visible when in developer mode -->
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/spaceSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:actionTitle="@string/settings"
         app:leftIcon="@drawable/ic_settings_root_general"
         app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary" />
+        app:titleTextColor="?attr/riotx_text_primary"
+        tools:visibility="visible" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/exploreRooms"

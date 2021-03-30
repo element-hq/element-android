@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
+import im.vector.app.R
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.OnBackPressed
@@ -49,6 +50,7 @@ class CreateSpaceDefaultRoomsFragment @Inject constructor(
             epoxyController.setData(it)
         }
 
+        views.nextButton.setText(R.string.create_space)
         views.nextButton.debouncedClicks {
             view.hideKeyboard()
             sharedViewModel.handle(CreateSpaceAction.NextFromDefaultRooms)
