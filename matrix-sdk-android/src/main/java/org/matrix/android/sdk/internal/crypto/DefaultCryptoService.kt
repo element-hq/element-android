@@ -395,7 +395,15 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
         return if (userId.isNotEmpty() && !deviceId.isNullOrEmpty()) {
-            cryptoStore.getUserDevice(userId, deviceId)
+            val device = runBlocking {
+                olmMachine!!.getDevice(userId, deviceId)
+            }
+
+            if (device != null) {
+                device.toCryptoDeviceInfo()
+            } else {
+                null
+            }
         } else {
             null
         }
