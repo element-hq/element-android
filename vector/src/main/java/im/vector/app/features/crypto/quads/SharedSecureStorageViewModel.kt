@@ -129,13 +129,13 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
     override fun handle(action: SharedSecureStorageAction) = withState {
         when (action) {
             is SharedSecureStorageAction.TogglePasswordVisibility -> handleTogglePasswordVisibility()
-            is SharedSecureStorageAction.Cancel -> handleCancel()
-            is SharedSecureStorageAction.SubmitPassphrase -> handleSubmitPassphrase(action)
-            SharedSecureStorageAction.UseKey -> handleUseKey()
-            is SharedSecureStorageAction.SubmitKey -> handleSubmitKey(action)
-            SharedSecureStorageAction.Back -> handleBack()
-            SharedSecureStorageAction.ForgotResetAll -> handleResetAll()
-            SharedSecureStorageAction.DoResetAll -> handleDoResetAll()
+            is SharedSecureStorageAction.Cancel                   -> handleCancel()
+            is SharedSecureStorageAction.SubmitPassphrase         -> handleSubmitPassphrase(action)
+            SharedSecureStorageAction.UseKey                      -> handleUseKey()
+            is SharedSecureStorageAction.SubmitKey                -> handleSubmitKey(action)
+            SharedSecureStorageAction.Back                        -> handleBack()
+            SharedSecureStorageAction.ForgotResetAll              -> handleResetAll()
+            SharedSecureStorageAction.DoResetAll                  -> handleDoResetAll()
         }.exhaustive
     }
 
