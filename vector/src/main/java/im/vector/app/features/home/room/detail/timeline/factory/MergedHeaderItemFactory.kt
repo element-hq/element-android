@@ -86,12 +86,11 @@ private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper) {
                                                    eventIdToHighlight: String?,
                                                    requestModelBuild: () -> Unit,
                                                    callback: TimelineEventController.Callback?): MergedMembershipEventsItem_? {
-        val prevSameTypeEvents = timelineEventVisibilityHelper.prevSameTypeEvents(items, currentPosition, 2, eventIdToHighlight)
-        return if (prevSameTypeEvents.isEmpty()) {
+        val mergedEvents = timelineEventVisibilityHelper.prevSameTypeEvents(items, currentPosition, 2, eventIdToHighlight)
+        return if (mergedEvents.isEmpty()) {
             null
         } else {
             var highlighted = false
-            val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
             val mergedData = ArrayList<BasedMergedItem.Data>(mergedEvents.size)
             mergedEvents.forEach { mergedEvent ->
                 if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {

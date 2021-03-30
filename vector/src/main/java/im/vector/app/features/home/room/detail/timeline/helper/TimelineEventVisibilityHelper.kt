@@ -29,12 +29,21 @@ import javax.inject.Inject
 
 class TimelineEventVisibilityHelper @Inject constructor(private val userPreferencesProvider: UserPreferencesProvider) {
 
+
+    /**
+     * @param timelineEvents the events to search in
+     * @param index the index to start computing (inclusive)
+     * @param minSize the minimum number of same type events to have sequentially, otherwise will return an empty list
+     * @param eventIdToHighlight used to compute visibility
+     *
+     * @return a list of timeline events which have sequentially the same type following the next direction. 
+     */
     fun nextSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?): List<TimelineEvent> {
         if (index >= timelineEvents.size - 1) {
             return emptyList()
         }
         val timelineEvent = timelineEvents[index]
-        val nextSubList = timelineEvents.subList(index + 1, timelineEvents.size)
+        val nextSubList = timelineEvents.subList(index, timelineEvents.size)
         val indexOfNextDay = nextSubList.indexOfFirst {
             val date = it.root.localDateTime()
             val nextDate = timelineEvent.root.localDateTime()
@@ -58,6 +67,14 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         return  filteredSameTypeEvents
     }
 
+    /**
+     * @param timelineEvents the events to search in
+     * @param index the index to start computing (inclusive)
+     * @param minSize the minimum number of same type events to have sequentially, otherwise will return an empty list
+     * @param eventIdToHighlight used to compute visibility
+     *
+     * @return a list of timeline events which have sequentially the same type following the prev direction.
+     */
     fun prevSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?): List<TimelineEvent> {
         val prevSub = timelineEvents.subList(0, index + 1)
         return prevSub
@@ -65,9 +82,13 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
                 .let {
                     nextSameTypeEvents(it, 0, minSize, eventIdToHighlight)
                 }
-                .reversed()
     }
 
+    /**
+     * @param timelineEvent the event to check for visibility
+     * @param highlightedEventId can be checked to force visibility to true
+     * @return true if the event should be shown in the timeline.
+     */
     fun shouldShowEvent(timelineEvent: TimelineEvent, highlightedEventId: String?): Boolean {
         // If show hidden events is true we should always display something
         if (userPreferencesProvider.shouldShowHiddenEvents()) {
@@ -97,7 +118,8 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         }
         if (root.getClearType() == EventType.STATE_ROOM_MEMBER) {
             val diff = computeMembershipDiff()
-            if ((diff.isJoin || diff.isPart) && !userPreferencesProvider.shouldShowRoomMemberStateEvents()) return true
+            if ((diff.isJoin || diff.isPart) && !userPreferencesProvider.shouldShowJoinLeaves()) return true
+            if ((diff.isAvatarChange || diff.isDisplaynameChange) && !userPreferencesProvider.shouldShowAvatarDisplayNameChanges()) return true
         }
         return false
     }
@@ -110,9 +132,9 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         val isJoin = isMembershipChanged && content?.membership == Membership.JOIN
         val isPart = isMembershipChanged && content?.membership == Membership.LEAVE && root.stateKey == root.senderId
 
-        val isJoinToJoin = !isMembershipChanged && content?.membership == Membership.JOIN
-        val isDisplaynameChange = isJoinToJoin && content?.displayName != prevContent?.displayName;
-        val isAvatarChange = isJoinToJoin && content?.avatarUrl !== prevContent?.avatarUrl
+        val isProfileChanged = !isMembershipChanged && content?.membership == Membership.JOIN
+        val isDisplaynameChange = isProfileChanged && content?.displayName != prevContent?.displayName;
+        val isAvatarChange = isProfileChanged && content?.avatarUrl !== prevContent?.avatarUrl
 
         return MembershipDiff(
                 isJoin = isJoin,

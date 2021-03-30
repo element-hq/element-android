@@ -318,7 +318,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                         cacheItemData.eventModel
                     }
                     listOf(
-                            cacheItemData?.readReceiptsItem?.takeIf { cacheItemData.mergedHeaderModel == null },
+                            cacheItemData?.readReceiptsItem?.takeUnless { mergedHeaderItemFactory.isCollapsed(cacheItemData.localId) },
                             eventModel,
                             cacheItemData?.mergedHeaderModel,
                             cacheItemData?.formattedDayModel?.takeIf { eventModel != null || cacheItemData.mergedHeaderModel != null }
@@ -428,6 +428,9 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     private fun getReadReceiptsByShownEvent(): Map<String, List<ReadReceipt>> {
         val receiptsByEvent = HashMap<String, MutableList<ReadReceipt>>()
+        if(!userPreferencesProvider.shouldShowReadReceipts()){
+            return receiptsByEvent
+        }
         var lastShownEventId: String? = null
         val itr = currentSnapshot.listIterator(currentSnapshot.size)
         while (itr.hasPrevious()) {
