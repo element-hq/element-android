@@ -70,8 +70,6 @@ interface CryptoService {
 
     fun setDevicesKnown(devices: List<MXDeviceInfo>, callback: MatrixCallback<Unit>?)
 
-    fun deviceWithIdentityKey(senderKey: String, algorithm: String): CryptoDeviceInfo?
-
     fun getMyDevice(): CryptoDeviceInfo
 
     fun getGlobalBlacklistUnverifiedDevices(): Boolean
