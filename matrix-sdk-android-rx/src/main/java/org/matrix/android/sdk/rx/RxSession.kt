@@ -145,8 +145,8 @@ class RxSession(private val session: Session) {
         session.getRoomIdByAlias(roomAlias, searchOnServer, it)
     }
 
-    fun getProfileInfo(userId: String): Single<JsonDict> = singleBuilder {
-        session.getProfile(userId, it)
+    fun getProfileInfo(userId: String): Single<JsonDict> = rxSingle {
+        session.getProfile(userId)
     }
 
     fun liveUserCryptoDevices(userId: String): Observable<List<CryptoDeviceInfo>> {
