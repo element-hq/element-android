@@ -23,6 +23,7 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -125,7 +126,9 @@ class CreateSpaceViewModel @AssistedInject constructor(
             CreateSpaceState.Step.SetDetails -> {
                 setState {
                     copy(
-                            step = CreateSpaceState.Step.ChooseType
+                            step = CreateSpaceState.Step.ChooseType,
+                            nameInlineError = null,
+                            creationResult = Uninitialized
                     )
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToChooseType)
