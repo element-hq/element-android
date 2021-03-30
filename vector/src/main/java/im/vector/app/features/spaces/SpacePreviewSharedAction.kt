@@ -16,7 +16,11 @@
 
 package im.vector.app.features.spaces
 
-import im.vector.app.core.platform.VectorSharedActionViewModel
-import javax.inject.Inject
+import im.vector.app.core.platform.VectorSharedAction
 
-class SpacePreviewSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<SpacePreviewSharedAction>()
+sealed class SpacePreviewSharedAction : VectorSharedAction {
+    object DismissAction : SpacePreviewSharedAction()
+    object ShowModalLoading : SpacePreviewSharedAction()
+    object HideModalLoading : SpacePreviewSharedAction()
+    data class ShowErrorMessage(val error: String? = null) : SpacePreviewSharedAction()
+}

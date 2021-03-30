@@ -45,7 +45,8 @@ class SpacePreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
                         SpacePreviewSharedAction.HideModalLoading -> hideWaitingView()
                         is SpacePreviewSharedAction.ShowErrorMessage -> action.error?.let { showSnackbar(it) }
                     }
-                }.disposeOnDestroy()
+                }
+                .disposeOnDestroy()
 
         if (isFirstCreation()) {
             val simpleName = SpacePreviewFragment::class.java.simpleName

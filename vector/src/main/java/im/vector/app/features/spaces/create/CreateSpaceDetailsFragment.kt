@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 class CreateSpaceDetailsFragment @Inject constructor(
         private val epoxyController: SpaceDetailEpoxyController,
-        private val colorProvider: ColorProvider
+        colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(), SpaceDetailEpoxyController.Listener,
         GalleryOrCameraDialogHelper.Listener, OnBackPressed {
 
