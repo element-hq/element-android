@@ -52,7 +52,6 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
@@ -197,9 +196,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         viewModelScope.launch {
             try {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
-                awaitCallback<Unit> {
-                    room.invite(initialState.userId, callback = it)
-                }
+                room.invite(initialState.userId)
                 _viewEvents.post(RoomMemberProfileViewEvents.OnInviteActionSuccess)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
@@ -214,9 +211,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         viewModelScope.launch {
             try {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
-                awaitCallback<Unit> {
-                    room.kick(initialState.userId, action.reason, it)
-                }
+                room.kick(initialState.userId, action.reason)
                 _viewEvents.post(RoomMemberProfileViewEvents.OnKickActionSuccess)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
@@ -232,12 +227,10 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         viewModelScope.launch {
             try {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
-                awaitCallback<Unit> {
-                    if (membership == Membership.BAN) {
-                        room.unban(initialState.userId, action.reason, it)
-                    } else {
-                        room.ban(initialState.userId, action.reason, it)
-                    }
+                if (membership == Membership.BAN) {
+                    room.unban(initialState.userId, action.reason)
+                } else {
+                    room.ban(initialState.userId, action.reason)
                 }
                 _viewEvents.post(RoomMemberProfileViewEvents.OnBanActionSuccess)
             } catch (failure: Throwable) {

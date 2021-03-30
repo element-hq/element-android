@@ -76,15 +76,23 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     private fun handleJoinRoom(roomId: String) {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
-            session.getRoom(roomId)
-                    ?.join(callback = NoOpMatrixCallback())
+            val room = session.getRoom(roomId)
+            if (room != null) {
+                GlobalScope.launch {
+                    room.join()
+                }
+            }
         }
     }
 
     private fun handleRejectRoom(roomId: String) {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
-            session.getRoom(roomId)
-                    ?.leave(callback = NoOpMatrixCallback())
+            val room = session.getRoom(roomId)
+            if (room != null) {
+                GlobalScope.launch {
+                    room.leave()
+                }
+            }
         }
     }
 

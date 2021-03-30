@@ -387,7 +387,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         if (member != null && member.membership == Membership.JOIN) {
             widgetPostAPIMediator.sendSuccess(eventData)
         } else {
-            room.invite(userId = userId, callback = createWidgetAPICallback(widgetPostAPIMediator, eventData))
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                room.invite(userId = userId)
+            }
         }
     }
 

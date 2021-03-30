@@ -17,10 +17,8 @@
 package org.matrix.android.sdk.api.session.room.members
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import org.matrix.android.sdk.api.util.Cancelable
 
 /**
  * This interface defines methods to handling membership. It's implemented at the room level.
@@ -29,9 +27,8 @@ interface MembershipService {
 
     /**
      * This methods load all room members if it was done yet.
-     * @return a [Cancelable]
      */
-    fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Unit>): Cancelable
+    suspend fun loadRoomMembersIfNeeded()
 
     /**
      * Return the roomMember with userId or null.
@@ -60,47 +57,35 @@ interface MembershipService {
     /**
      * Invite a user in the room
      */
-    fun invite(userId: String,
-               reason: String? = null,
-               callback: MatrixCallback<Unit>): Cancelable
+    suspend fun invite(userId: String, reason: String? = null)
 
     /**
      * Invite a user with email or phone number in the room
      */
-    fun invite3pid(threePid: ThreePid,
-                   callback: MatrixCallback<Unit>): Cancelable
+    suspend fun invite3pid(threePid: ThreePid)
 
     /**
      * Ban a user from the room
      */
-    fun ban(userId: String,
-            reason: String? = null,
-            callback: MatrixCallback<Unit>): Cancelable
+    suspend fun ban(userId: String, reason: String? = null)
 
     /**
      * Unban a user from the room
      */
-    fun unban(userId: String,
-              reason: String? = null,
-              callback: MatrixCallback<Unit>): Cancelable
+    suspend fun unban(userId: String, reason: String? = null)
 
     /**
      * Kick a user from the room
      */
-    fun kick(userId: String,
-             reason: String? = null,
-             callback: MatrixCallback<Unit>): Cancelable
+    suspend fun kick(userId: String, reason: String? = null)
 
     /**
      * Join the room, or accept an invitation.
      */
-    fun join(reason: String? = null,
-             viaServers: List<String> = emptyList(),
-             callback: MatrixCallback<Unit>): Cancelable
+    suspend fun join(reason: String? = null, viaServers: List<String> = emptyList())
 
     /**
      * Leave the room, or reject an invitation.
      */
-    fun leave(reason: String? = null,
-              callback: MatrixCallback<Unit>): Cancelable
+    suspend fun leave(reason: String? = null)
 }

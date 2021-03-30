@@ -367,8 +367,8 @@ class KeyShareTests : InstrumentedTest {
         }
 
         // Let alice invite bob
-        mTestHelper.doSync<Unit> {
-            roomAlicePov.invite(bobSession.myUserId, null, it)
+        mTestHelper.runBlockingTest {
+            roomAlicePov.invite(bobSession.myUserId, null)
         }
 
         mTestHelper.doSync<Unit> {
