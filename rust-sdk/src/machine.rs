@@ -30,8 +30,10 @@ use matrix_sdk_crypto::{
     OlmMachine as InnerMachine, OutgoingRequest, ToDeviceRequest,
 };
 
-use crate::error::{CryptoStoreError, DecryptionError, MachineCreationError};
-use crate::ProgressListener;
+use crate::{
+    error::{CryptoStoreError, DecryptionError, MachineCreationError},
+    KeyImportError, ProgressListener,
+};
 
 pub struct OlmMachine {
     inner: InnerMachine,
@@ -440,9 +442,9 @@ impl OlmMachine {
         keys: &str,
         passphrase: &str,
         _: Box<dyn ProgressListener>,
-    ) -> Result<KeysImportResult, CryptoStoreError> {
+    ) -> Result<KeysImportResult, KeyImportError> {
         let keys = Cursor::new(keys);
-        let keys = decrypt_key_export(keys, passphrase).unwrap();
+        let keys = decrypt_key_export(keys, passphrase)?;
 
         // TODO use the progress listener
         let result = self.runtime.block_on(self.inner.import_keys(keys))?;

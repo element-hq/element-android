@@ -17,6 +17,12 @@ enum MachineCreationError {
 };
 
 [Error]
+enum KeyImportError {
+    "Export",
+    "CryptoStore",
+};
+
+[Error]
 enum CryptoStoreError {
     "CryptoStore",
     "OlmError",
@@ -115,7 +121,7 @@ interface OlmMachine {
 
     [Throws=CryptoStoreError]
     string export_keys([ByRef] string passphrase, i32 rounds);
-    [Throws=CryptoStoreError]
+    [Throws=KeyImportError]
     KeysImportResult import_keys(
         [ByRef] string keys,
         [ByRef] string passphrase,

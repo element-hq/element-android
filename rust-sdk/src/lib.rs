@@ -2,7 +2,7 @@ mod error;
 mod logger;
 mod machine;
 
-pub use error::{CryptoStoreError, DecryptionError, MachineCreationError};
+pub use error::{CryptoStoreError, DecryptionError, KeyImportError, MachineCreationError};
 pub use logger::{set_logger, Logger};
 pub use machine::{
     DecryptedEvent, Device, DeviceLists, KeysImportResult, OlmMachine, Request, RequestType, Sas,
