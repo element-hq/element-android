@@ -64,7 +64,7 @@ class SectionHeaderAdapter constructor(
         holder.bind(section)
     }
 
-    override fun getItemCount(): Int = 1.takeIf { section.isHidden.not() } ?: 0
+    override fun getItemCount(): Int = if (section.isHidden) 0 else 1
 
     class VH constructor(
             private val binding: ItemRoomCategoryBinding,

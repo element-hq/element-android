@@ -249,7 +249,7 @@ class RoomListFragment @Inject constructor(
             val contentAdapter = pagedControllerFactory.createRoomSummaryPagedController().also {
                 section.livePages.observe(viewLifecycleOwner) { pl ->
                     it.submitList(pl)
-                    sectionAdapter.updateSection(sectionAdapter.section.copy(isHidden = pl.isEmpty() || hasOnlyOneSection))
+                    sectionAdapter.updateSection(sectionAdapter.section.copy(isHidden = pl.isEmpty()))
                     checkEmptyState()
                 }
                 section.notificationCount.observe(viewLifecycleOwner) { counts ->
