@@ -115,7 +115,6 @@ class TchapLoginViewModel @AssistedInject constructor(
             is TchapLoginAction.InitWith                   -> handleInitWith(action)
             is TchapLoginAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
             is TchapLoginAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
-            is TchapLoginAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is TchapLoginAction.ResetPassword              -> handleResetPassword()
             is TchapLoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
             is TchapLoginAction.RegisterAction             -> handleRegisterAction(action)
@@ -516,25 +515,6 @@ class TchapLoginViewModel @AssistedInject constructor(
             copy(
                     asyncLoginAction = Success(Unit)
             )
-        }
-    }
-
-    private fun handleWebLoginSuccess(action: TchapLoginAction.WebLoginSuccess) = withState { state ->
-        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(state.homeServerUrl)
-
-        if (homeServerConnectionConfigFinal == null) {
-            // Should not happen
-            Timber.w("homeServerConnectionConfig is null")
-        } else {
-            authenticationService.createSessionFromSso(homeServerConnectionConfigFinal, action.credentials, object : MatrixCallback<Session> {
-                override fun onSuccess(data: Session) {
-                    onSessionCreated(data)
-                }
-
-                override fun onFailure(failure: Throwable) = setState {
-                    copy(asyncLoginAction = Fail(failure))
-                }
-            })
         }
     }
 
