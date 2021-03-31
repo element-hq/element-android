@@ -27,7 +27,9 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CryptoTestData
 import org.matrix.android.sdk.common.CryptoTestHelper
 import java.util.concurrent.CountDownLatch
 
@@ -44,107 +46,75 @@ class SearchMessagesTest : InstrumentedTest {
 
     @Test
     fun sendTextMessageAndSearchPartOfItUsingSession() {
-        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
-        val aliceSession = cryptoTestData.firstSession
-        val aliceRoomId = cryptoTestData.roomId
-        aliceSession.cryptoService().setWarnOnUnknownDevices(false)
-        val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
-        val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(10))
-        aliceTimeline.start()
-
-        commonTestHelper.sendTextMessage(
-                roomFromAlicePOV,
-                MESSAGE,
-                2)
-
-        run {
-            val lock = CountDownLatch(1)
-
-            val eventListener = commonTestHelper.createEventListener(lock) { snapshot ->
-                snapshot.count { it.root.content.toModel<MessageContent>()?.body?.startsWith(MESSAGE).orFalse() } == 2
-            }
-
-            aliceTimeline.addListener(eventListener)
-            commonTestHelper.await(lock)
-
-            val data = commonTestHelper.runBlockingTest {
-                aliceSession
-                        .searchService()
-                        .search(
-                                searchTerm = "lore",
-                                limit = 10,
-                                includeProfile = true,
-                                afterLimit = 0,
-                                beforeLimit = 10,
-                                orderByRecent = true,
-                                nextBatch = null,
-                                roomId = aliceRoomId
-                        )
-            }
-            assertTrue(data.results?.size == 2)
-            assertTrue(
-                    data.results
-                            ?.all {
-                                (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
-                            }.orFalse()
-            )
-
-            aliceTimeline.removeAllListeners()
-            cryptoTestData.cleanUp(commonTestHelper)
+        doTest { cryptoTestData ->
+            cryptoTestData.firstSession
+                    .searchService()
+                    .search(
+                            searchTerm = "lore",
+                            limit = 10,
+                            includeProfile = true,
+                            afterLimit = 0,
+                            beforeLimit = 10,
+                            orderByRecent = true,
+                            nextBatch = null,
+                            roomId = cryptoTestData.roomId
+                    )
         }
-
-        aliceSession.startSync(true)
     }
 
     @Test
     fun sendTextMessageAndSearchPartOfItUsingRoom() {
-        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
+        doTest { cryptoTestData ->
+            cryptoTestData.firstSession
+                    .getRoom(cryptoTestData.roomId)!!
+                    .search(
+                            searchTerm = "lore",
+                            limit = 10,
+                            includeProfile = true,
+                            afterLimit = 0,
+                            beforeLimit = 10,
+                            orderByRecent = true,
+                            nextBatch = null
+                    )
+        }
+    }
+
+    private fun doTest(block: suspend (CryptoTestData) -> SearchResult) {
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
-        aliceSession.cryptoService().setWarnOnUnknownDevices(false)
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
         val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(10))
         aliceTimeline.start()
+
+        val lock = CountDownLatch(1)
+
+        val eventListener = commonTestHelper.createEventListener(lock) { snapshot ->
+            snapshot.count { it.root.content.toModel<MessageContent>()?.body?.startsWith(MESSAGE).orFalse() } == 2
+        }
+
+        aliceTimeline.addListener(eventListener)
 
         commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 MESSAGE,
                 2)
 
-        run {
-            val lock = CountDownLatch(1)
+        commonTestHelper.await(lock)
 
-            val eventListener = commonTestHelper.createEventListener(lock) { snapshot ->
-                snapshot.count { it.root.content.toModel<MessageContent>()?.body?.startsWith(MESSAGE).orFalse() } == 2
-            }
-
-            aliceTimeline.addListener(eventListener)
-            commonTestHelper.await(lock)
-
-            val data = commonTestHelper.runBlockingTest {
-                roomFromAlicePOV.search(
-                        searchTerm = "lore",
-                        limit = 10,
-                        includeProfile = true,
-                        afterLimit = 0,
-                        beforeLimit = 10,
-                        orderByRecent = true,
-                        nextBatch = null
-                )
-            }
-
-            assertTrue(data.results?.size == 2)
-            assertTrue(
-                    data.results
-                            ?.all {
-                                (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
-                            }.orFalse()
-            )
-
-            aliceTimeline.removeAllListeners()
-            cryptoTestData.cleanUp(commonTestHelper)
+        val data = commonTestHelper.runBlockingTest {
+            block.invoke(cryptoTestData)
         }
 
-        aliceSession.startSync(true)
+        assertTrue(data.results?.size == 2)
+        assertTrue(
+                data.results
+                        ?.all {
+                            (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
+                        }.orFalse()
+        )
+
+        aliceTimeline.removeAllListeners()
+        cryptoTestData.cleanUp(commonTestHelper)
     }
 }
