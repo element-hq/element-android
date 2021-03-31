@@ -24,6 +24,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
+ - Several Services have been migrated to coroutines (#2449)
  - Removes filtering options on Timeline.
 
 Build 🧱:

@@ -464,10 +464,6 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         return false
     }
 
-    private fun createWidgetAPICallback(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict): WidgetAPICallback {
-        return WidgetAPICallback(widgetPostAPIMediator, eventData, stringProvider)
-    }
-
     private fun launchWidgetAPIAction(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict, block: suspend () -> Unit): Job {
         return GlobalScope.launch {
             kotlin.runCatching {
