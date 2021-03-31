@@ -27,6 +27,7 @@ fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {
 enum class RoomCategoryFilter {
     ONLY_DM,
     ONLY_ROOMS,
+    ONLY_WITH_NOTIFICATIONS,
     ALL
 }
 

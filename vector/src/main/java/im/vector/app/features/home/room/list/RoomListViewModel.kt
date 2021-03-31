@@ -129,7 +129,6 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         } else if (initialState.displayMode == RoomListDisplayMode.FILTERED) {
             withQueryParams({
                 it.memberships = Membership.activeMemberships()
-//                it.displayName = QueryStringValue.Contains("")
             }) { qpm ->
                 val name = stringProvider.getString(R.string.bottom_action_rooms)
                 session.getFilteredPagedRoomSummariesLive(qpm)
@@ -139,10 +138,21 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                         }
             }
         }
-        sections
-    }
+        else if (initialState.displayMode == RoomListDisplayMode.NOTIFICATIONS) {
+            withQueryParams({
+                it.memberships = Membership.activeMemberships()
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
+            }) { qpm ->
+                val name = stringProvider.getString(R.string.bottom_action_rooms)
+                session.getFilteredPagedRoomSummariesLive(qpm)
+                        .let { livePagedList ->
+                            updatableQuery = livePagedList
+                            sections.add(RoomsSection(name, livePagedList.livePagedList))
+                        }
+            }
+        }
 
-    init {
+        sections
     }
 
     override fun handle(action: RoomListAction) {

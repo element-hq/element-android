@@ -115,10 +115,11 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     private fun observeRoomSummaries() {
-        session.getPagedRoomSummariesLive(roomSummaryQueryParams {
-            memberships = Membership.activeMemberships()
-        })
-                .asObservable()
+        session.getPagedRoomSummariesLive(
+                roomSummaryQueryParams {
+                    memberships = Membership.activeMemberships()
+                }
+        ).asObservable()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe {
                     val dmInvites = session.getRoomSummaries(roomSummaryQueryParams {
