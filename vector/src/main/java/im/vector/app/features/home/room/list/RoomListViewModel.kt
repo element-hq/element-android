@@ -209,8 +209,8 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary))
     }
 
-    private fun handleToggleSection(section: RoomsSection) {
-        sections.find { it.sectionName == section.sectionName }
+    private fun handleToggleSection(roomSection: RoomsSection) {
+        sections.find { it.sectionName == roomSection.sectionName }
                 ?.let { section ->
                     section.isExpanded.postValue(!section.isExpanded.value.orFalse())
                 }
@@ -276,7 +276,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         }
     }
 
-    private fun handleMarkAllRoomsRead() = withState { state ->
+    private fun handleMarkAllRoomsRead() = withState { _ ->
 //        state.asyncFilteredRooms.invoke()
 //                ?.flatMap { it.value }
 //                ?.filter { it.membership == Membership.JOIN }
