@@ -40,7 +40,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
                selectedRoomIds: Set<String>,
-               listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+               listener: RoomListListener?): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
                 val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
@@ -52,7 +52,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
 
     private fun createInvitationItem(roomSummary: RoomSummary,
                                      changeMembershipState: ChangeMembershipState,
-                                     listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+                                     listener: RoomListListener?): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
             roomSummary.inviterId
         } else {

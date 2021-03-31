@@ -127,6 +127,11 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
         Timber.i("onResume Fragment ${javaClass.simpleName}")
     }
 
+    override fun onPause() {
+        super.onPause()
+        Timber.i("onPause Fragment ${javaClass.simpleName}")
+    }
+
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -150,6 +155,7 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     }
 
     override fun onDestroy() {
+        Timber.i("onDestroy Fragment ${javaClass.simpleName}")
         uiDisposables.dispose()
         super.onDestroy()
     }

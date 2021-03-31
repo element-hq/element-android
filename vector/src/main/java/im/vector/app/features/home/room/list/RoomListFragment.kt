@@ -27,12 +27,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.OnModelBuildFinishedListener
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -44,6 +42,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
@@ -53,8 +52,7 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
@@ -66,12 +64,13 @@ data class RoomListParams(
 ) : Parcelable
 
 class RoomListFragment @Inject constructor(
-        private val roomController: RoomSummaryController,
+        private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
         val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
-        private val sharedViewPool: RecyclerView.RecycledViewPool
+        private val footerController: RoomListFooterController,
+        private val userPreferencesProvider: UserPreferencesProvider
 ) : VectorBaseFragment<FragmentRoomListBinding>(),
-        RoomSummaryController.Listener,
+        RoomListListener,
         OnBackPressed,
         NotifsFabMenuView.Listener {
 
@@ -86,6 +85,20 @@ class RoomListFragment @Inject constructor(
     }
 
     private var hasUnreadRooms = false
+
+    data class SectionKey(
+            val name: String,
+            val isExpanded: Boolean
+    )
+
+    data class SectionAdapterInfo(
+            var section: SectionKey,
+            val headerHeaderAdapter: SectionHeaderAdapter,
+            val contentAdapter: RoomSummaryPagedController
+    )
+
+    private val adapterInfosList = mutableListOf<SectionAdapterInfo>()
+    private var concatAdapter: ConcatAdapter? = null
 
     override fun getMenuRes() = R.menu.room_list
 
@@ -112,10 +125,10 @@ class RoomListFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomListViewModel.observeViewEvents {
             when (it) {
-                is RoomListViewEvents.Loading    -> showLoading(it.message)
-                is RoomListViewEvents.Failure    -> showFailure(it.throwable)
+                is RoomListViewEvents.Loading -> showLoading(it.message)
+                is RoomListViewEvents.Failure -> showFailure(it.throwable)
                 is RoomListViewEvents.SelectRoom -> handleSelectRoom(it)
-                is RoomListViewEvents.Done       -> Unit
+                is RoomListViewEvents.Done -> Unit
             }.exhaustive
         }
 
@@ -127,15 +140,49 @@ class RoomListFragment @Inject constructor(
                 .disposeOnDestroyView()
     }
 
+    private fun refreshCollapseStates() {
+        var contentInsertIndex = 1
+        roomListViewModel.sections.forEachIndexed { index, roomsSection ->
+            val actualBlock = adapterInfosList[index]
+            val isRoomSectionExpanded = roomsSection.isExpanded.value.orTrue()
+            if (actualBlock.section.isExpanded && !isRoomSectionExpanded) {
+                // we have to remove the content adapter
+                concatAdapter?.removeAdapter(actualBlock.contentAdapter.adapter)
+            } else if (!actualBlock.section.isExpanded && isRoomSectionExpanded) {
+                // we must add it back!
+                concatAdapter?.addAdapter(contentInsertIndex, actualBlock.contentAdapter.adapter)
+            }
+            contentInsertIndex = if (isRoomSectionExpanded) {
+                contentInsertIndex + 2
+            } else {
+                contentInsertIndex + 1
+            }
+            actualBlock.section = actualBlock.section.copy(
+                    isExpanded = isRoomSectionExpanded
+            )
+            actualBlock.headerHeaderAdapter.updateSection(
+                    actualBlock.headerHeaderAdapter.section.copy(isExpanded = isRoomSectionExpanded)
+            )
+        }
+    }
+
     override fun showFailure(throwable: Throwable) {
         showErrorInSnackbar(throwable)
     }
 
     override fun onDestroyView() {
-        roomController.removeModelBuildListener(modelBuildListener)
+        adapterInfosList.onEach { it.contentAdapter.removeModelBuildListener(modelBuildListener) }
+        adapterInfosList.clear()
+//        roomController.removeModelBuildListener(modelBuildListener)
         modelBuildListener = null
         views.roomListView.cleanup()
-        roomController.listener = null
+//        controllers.onEach {
+//            it.listener = null
+// //            concatAdapter.removeAdapter(it.adapter)
+//        }
+//        controllers.clear()
+//        roomController.listener = null
+//        favRoomController.listener = null
         stateRestorer.clear()
         views.createChatFabMenu.listener = null
         super.onDestroyView()
@@ -148,8 +195,8 @@ class RoomListFragment @Inject constructor(
     private fun setupCreateRoomButton() {
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = true
-            RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.isVisible = true
-            RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.isVisible = true
+            RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = true
+            RoomListDisplayMode.ROOMS -> views.createGroupRoomButton.isVisible = true
             else                              -> Unit // No button in this mode
         }
 
@@ -204,21 +251,68 @@ class RoomListFragment @Inject constructor(
         stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         views.roomListView.layoutManager = layoutManager
         views.roomListView.itemAnimator = RoomListAnimator()
-        views.roomListView.setRecycledViewPool(sharedViewPool)
+//        views.roomListView.setRecycledViewPool(sharedViewPool)
         layoutManager.recycleChildrenOnDetach = true
-        roomController.listener = this
+
         modelBuildListener = OnModelBuildFinishedListener { it.dispatchTo(stateRestorer) }
-        roomController.addModelBuildListener(modelBuildListener)
-        views.roomListView.adapter = roomController.adapter
-        views.stateView.contentView = views.roomListView
+
+        val concatAdapter = ConcatAdapter()
+        val hasOnlyOneSection = roomListViewModel.sections.size == 1
+        roomListViewModel.sections.forEach { section ->
+
+            val sectionAdapter = SectionHeaderAdapter {
+                roomListViewModel.handle(RoomListAction.ToggleSection(section))
+            }.also {
+                it.updateSection(SectionHeaderAdapter.SectionViewModel(
+                        section.sectionName
+                ))
+            }
+
+            val contentAdapter = pagedControllerFactory.createRoomSummaryPagedController().also {
+                section.livePages.observe(viewLifecycleOwner) { pl ->
+                    it.submitList(pl)
+                    sectionAdapter.updateSection(sectionAdapter.section.copy(isHidden = pl.isEmpty() || hasOnlyOneSection))
+                    checkEmptyState()
+                }
+                section.notificationCount.observe(viewLifecycleOwner) { counts ->
+                    sectionAdapter.updateSection(sectionAdapter.section.copy(
+                            notificationCount = counts.totalCount(),
+                            isHighlighted = counts.isHighlight()
+                    ))
+                }
+                section.isExpanded.observe(viewLifecycleOwner) { _ ->
+                    refreshCollapseStates()
+                }
+                it.listener = this
+            }
+            adapterInfosList.add(
+                    SectionAdapterInfo(
+                            SectionKey(
+                                    name = section.sectionName,
+                                    isExpanded = section.isExpanded.value.orTrue()
+                            ),
+                            sectionAdapter,
+                            contentAdapter
+                    )
+            )
+            concatAdapter.addAdapter(sectionAdapter)
+            concatAdapter.addAdapter(contentAdapter.adapter)
+        }
+
+        // Add the footer controller
+        this.footerController.listener = this
+        concatAdapter.addAdapter(footerController.adapter)
+
+        this.concatAdapter = concatAdapter
+        views.roomListView.adapter = concatAdapter
     }
 
     private val showFabRunnable = Runnable {
         if (isAdded) {
             when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
-                RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.show()
-                RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.show()
+                RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.show()
+                RoomListDisplayMode.ROOMS -> views.createGroupRoomButton.show()
                 else                              -> Unit
             }
         }
@@ -226,28 +320,28 @@ class RoomListFragment @Inject constructor(
 
     private fun handleQuickActions(quickAction: RoomListQuickActionsSharedAction) {
         when (quickAction) {
-            is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> {
+            is RoomListQuickActionsSharedAction.NotificationsAllNoisy -> {
                 roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES_NOISY))
             }
-            is RoomListQuickActionsSharedAction.NotificationsAll          -> {
+            is RoomListQuickActionsSharedAction.NotificationsAll -> {
                 roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES))
             }
             is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> {
                 roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MENTIONS_ONLY))
             }
-            is RoomListQuickActionsSharedAction.NotificationsMute         -> {
+            is RoomListQuickActionsSharedAction.NotificationsMute -> {
                 roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MUTE))
             }
-            is RoomListQuickActionsSharedAction.Settings                  -> {
+            is RoomListQuickActionsSharedAction.Settings -> {
                 navigator.openRoomProfile(requireActivity(), quickAction.roomId)
             }
-            is RoomListQuickActionsSharedAction.Favorite                  -> {
+            is RoomListQuickActionsSharedAction.Favorite -> {
                 roomListViewModel.handle(RoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_FAVOURITE))
             }
-            is RoomListQuickActionsSharedAction.LowPriority               -> {
+            is RoomListQuickActionsSharedAction.LowPriority -> {
                 roomListViewModel.handle(RoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_LOW_PRIORITY))
             }
-            is RoomListQuickActionsSharedAction.Leave                     -> {
+            is RoomListQuickActionsSharedAction.Leave -> {
                 promptLeaveRoom(quickAction.roomId)
             }
         }.exhaustive
@@ -278,12 +372,7 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(roomListViewModel) { state ->
-        when (state.asyncFilteredRooms) {
-            is Incomplete -> renderLoading()
-            is Success    -> renderSuccess(state)
-            is Fail       -> renderFailure(state.asyncFilteredRooms.error)
-        }
-        roomController.update(state)
+        footerController.setData(state)
         // Mark all as read menu
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS,
@@ -299,68 +388,38 @@ class RoomListFragment @Inject constructor(
         }
     }
 
-    private fun renderSuccess(state: RoomListViewState) {
-        val allRooms = state.asyncRooms()
-        val filteredRooms = state.asyncFilteredRooms()
-        if (filteredRooms.isNullOrEmpty()) {
-            renderEmptyState(allRooms)
-        } else {
-            views.stateView.state = StateView.State.Content
-        }
-    }
-
-    private fun renderEmptyState(allRooms: List<RoomSummary>?) {
-        val hasNoRoom = allRooms
-                ?.filter {
-                    it.membership == Membership.JOIN || it.membership == Membership.INVITE
-                }
-                .isNullOrEmpty()
-        val emptyState = when (roomListParams.displayMode) {
-            RoomListDisplayMode.NOTIFICATIONS -> {
-                if (hasNoRoom) {
-                    StateView.State.Empty(
-                            title = getString(R.string.room_list_catchup_welcome_title),
-                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_catchup),
-                            message = getString(R.string.room_list_catchup_welcome_body)
-                    )
-                } else {
+    private fun checkEmptyState() {
+        val hasNoRoom = adapterInfosList.all { it.headerHeaderAdapter.section.isHidden }
+        if (hasNoRoom) {
+            val emptyState = when (roomListParams.displayMode) {
+                RoomListDisplayMode.NOTIFICATIONS -> {
                     StateView.State.Empty(
                             title = getString(R.string.room_list_catchup_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
                             message = getString(R.string.room_list_catchup_empty_body))
                 }
+                RoomListDisplayMode.PEOPLE ->
+                    StateView.State.Empty(
+                            title = getString(R.string.room_list_people_empty_title),
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_dm),
+                            isBigImage = true,
+                            message = getString(R.string.room_list_people_empty_body)
+                    )
+                RoomListDisplayMode.ROOMS ->
+                    StateView.State.Empty(
+                            title = getString(R.string.room_list_rooms_empty_title),
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_room),
+                            isBigImage = true,
+                            message = getString(R.string.room_list_rooms_empty_body)
+                    )
+                else                              ->
+                    // Always display the content in this mode, because if the footer
+                    StateView.State.Content
             }
-            RoomListDisplayMode.PEOPLE        ->
-                StateView.State.Empty(
-                        title = getString(R.string.room_list_people_empty_title),
-                        image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_dm),
-                        isBigImage = true,
-                        message = getString(R.string.room_list_people_empty_body)
-                )
-            RoomListDisplayMode.ROOMS         ->
-                StateView.State.Empty(
-                        title = getString(R.string.room_list_rooms_empty_title),
-                        image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_room),
-                        isBigImage = true,
-                        message = getString(R.string.room_list_rooms_empty_body)
-                )
-            else                              ->
-                // Always display the content in this mode, because if the footer
-                StateView.State.Content
+            views.stateView.state = emptyState
+        } else {
+            views.stateView.state = StateView.State.Content
         }
-        views.stateView.state = emptyState
-    }
-
-    private fun renderLoading() {
-        views.stateView.state = StateView.State.Loading
-    }
-
-    private fun renderFailure(error: Throwable) {
-        val message = when (error) {
-            is Failure.NetworkConnection -> getString(R.string.network_error_please_check_and_retry)
-            else                         -> getString(R.string.unknown_error)
-        }
-        views.stateView.state = StateView.State.Error(message)
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
@@ -377,7 +436,11 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onRoomLongClicked(room: RoomSummary): Boolean {
-        roomController.onRoomLongClicked()
+        userPreferencesProvider.neverShowLongClickOnRoomHelpAgain()
+        withState(roomListViewModel) {
+            // refresh footer
+            footerController.setData(it)
+        }
         RoomListQuickActionsBottomSheet
                 .newInstance(room.roomId, RoomListActionsArgs.Mode.FULL)
                 .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
@@ -392,10 +455,6 @@ class RoomListFragment @Inject constructor(
     override fun onRejectRoomInvitation(room: RoomSummary) {
         notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
         roomListViewModel.handle(RoomListAction.RejectInvitation(room))
-    }
-
-    override fun onToggleRoomCategory(roomCategory: RoomCategory) {
-        roomListViewModel.handle(RoomListAction.ToggleCategory(roomCategory))
     }
 
     override fun createRoom(initialName: String) {

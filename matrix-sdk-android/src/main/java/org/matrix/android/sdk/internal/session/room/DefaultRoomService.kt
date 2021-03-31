@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -45,6 +46,7 @@ import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomT
 import org.matrix.android.sdk.internal.session.room.peeking.PeekRoomTask
 import org.matrix.android.sdk.internal.session.room.peeking.ResolveRoomStateTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
+import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateBreadcrumbsTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
@@ -94,6 +96,18 @@ internal class DefaultRoomService @Inject constructor(
 
     override fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>> {
         return roomSummaryDataSource.getRoomSummariesLive(queryParams)
+    }
+
+    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams) : LiveData<PagedList<RoomSummary>> {
+        return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams)
+    }
+
+    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams) : UpdatableFilterLivePageResult {
+        return roomSummaryDataSource.getFilteredPagedRoomSummariesLive(queryParams)
+    }
+
+    override fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
+        return roomSummaryDataSource.getNotificationCountForRooms(queryParams)
     }
 
     override fun getBreadcrumbs(queryParams: RoomSummaryQueryParams): List<RoomSummary> {
@@ -177,4 +191,9 @@ internal class DefaultRoomService @Inject constructor(
                 }
                 .executeBy(taskExecutor)
     }
+}
+
+interface UpdatableFilterLivePageResult {
+    val livePagedList: LiveData<PagedList<RoomSummary>>
+    fun updateQuery(queryParams: RoomSummaryQueryParams)
 }

@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.room
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -26,7 +27,9 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.session.room.UpdatableFilterLivePageResult
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
+import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 
 /**
  * This interface defines methods to get rooms. It's implemented at the session level.
@@ -178,4 +181,9 @@ interface RoomService {
      * This call will try to gather some information on this room, but it could fail and get nothing more
      */
     fun peekRoom(roomIdOrAlias: String, callback: MatrixCallback<PeekResult>)
+
+    fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<PagedList<RoomSummary>>
+
+    fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount
+    fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams): UpdatableFilterLivePageResult
 }

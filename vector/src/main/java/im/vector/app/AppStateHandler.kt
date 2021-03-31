@@ -52,7 +52,7 @@ class AppStateHandler @Inject constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
-        observeRoomsAndGroup()
+//        observeRoomsAndGroup()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)

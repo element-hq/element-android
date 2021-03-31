@@ -16,36 +16,49 @@
 
 package im.vector.app.features.home.room.list
 
+import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagedList
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.utils.DataSource
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.home.RoomListDisplayMode
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.RoomCategoryFilter
+import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
+import org.matrix.android.sdk.internal.session.room.UpdatableFilterLivePageResult
+import org.matrix.android.sdk.rx.asObservable
 import timber.log.Timber
-import java.lang.Exception
 import javax.inject.Inject
 
 class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             private val session: Session,
-                                            private val roomSummariesSource: DataSource<List<RoomSummary>>)
+                                            private val stringProvider: StringProvider)
     : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
     interface Factory {
         fun create(initialState: RoomListViewState): RoomListViewModel
     }
+
+    private var updatableQuery: UpdatableFilterLivePageResult? = null
 
     companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
 
@@ -56,26 +69,119 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         }
     }
 
-    private val displayMode = initialState.displayMode
-    private val roomListDisplayModeFilter = RoomListDisplayModeFilter(displayMode)
+    data class RoomsSection(
+            val sectionName: String,
+            val livePages: LiveData<PagedList<RoomSummary>>,
+            val isExpanded: MutableLiveData<Boolean> = MutableLiveData(true),
+            val notificationCount: MutableLiveData<RoomAggregateNotificationCount> =
+                    MutableLiveData(RoomAggregateNotificationCount(0, 0))
+    )
+
+    val sections: List<RoomsSection> by lazy {
+        val sections = mutableListOf<RoomsSection>()
+        if (initialState.displayMode == RoomListDisplayMode.PEOPLE) {
+
+            addSection(sections, R.string.invitations_header) {
+                it.memberships = listOf(Membership.INVITE)
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+            }
+
+            addSection(sections, R.string.bottom_action_people_x) {
+                it.memberships = listOf(Membership.JOIN)
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+            }
+        } else if (initialState.displayMode == RoomListDisplayMode.ROOMS) {
+
+            addSection(sections, R.string.invitations_header) {
+                it.memberships = listOf(Membership.INVITE)
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            }
+
+            addSection(sections, R.string.bottom_action_favourites) {
+                it.memberships = listOf(Membership.JOIN)
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
+            }
+
+            addSection(sections, R.string.bottom_action_rooms) {
+                it.memberships = listOf(Membership.JOIN)
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
+            }
+
+            addSection(sections, R.string.low_priority_header) {
+                it.memberships = listOf(Membership.JOIN)
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
+            }
+
+            addSection(sections, R.string.system_alerts_header) {
+                it.memberships = listOf(Membership.JOIN)
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
+            }
+        } else if (initialState.displayMode == RoomListDisplayMode.FILTERED) {
+            withQueryParams({
+                it.memberships = Membership.activeMemberships()
+//                it.displayName = QueryStringValue.Contains("")
+            }) { qpm ->
+                val name = stringProvider.getString(R.string.bottom_action_rooms)
+                session.getFilteredPagedRoomSummariesLive(qpm)
+                        .let { livePagedList ->
+                            updatableQuery = livePagedList
+                            sections.add(RoomsSection(name, livePagedList.livePagedList))
+                        }
+            }
+        }
+        sections
+    }
 
     init {
-        observeRoomSummaries()
-        observeMembershipChanges()
     }
 
     override fun handle(action: RoomListAction) {
         when (action) {
-            is RoomListAction.SelectRoom                  -> handleSelectRoom(action)
-            is RoomListAction.ToggleCategory              -> handleToggleCategory(action)
-            is RoomListAction.AcceptInvitation            -> handleAcceptInvitation(action)
-            is RoomListAction.RejectInvitation            -> handleRejectInvitation(action)
-            is RoomListAction.FilterWith                  -> handleFilter(action)
-            is RoomListAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
-            is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
+            is RoomListAction.SelectRoom -> handleSelectRoom(action)
+            is RoomListAction.AcceptInvitation -> handleAcceptInvitation(action)
+            is RoomListAction.RejectInvitation -> handleRejectInvitation(action)
+            is RoomListAction.FilterWith -> handleFilter(action)
+            is RoomListAction.MarkAllRoomsRead -> handleMarkAllRoomsRead()
+            is RoomListAction.LeaveRoom -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-            is RoomListAction.ToggleTag                   -> handleToggleTag(action)
+            is RoomListAction.ToggleTag -> handleToggleTag(action)
+            is RoomListAction.ToggleSection -> handleToggleSection(action.section)
         }.exhaustive
+    }
+
+    private fun addSection(sections: MutableList<RoomsSection>, @StringRes nameRes: Int, query: (RoomSummaryQueryParams.Builder) -> Unit) {
+        withQueryParams({
+            query.invoke(it)
+        }) { roomQueryParams ->
+
+            val name = stringProvider.getString(nameRes)
+            session.getPagedRoomSummariesLive(roomQueryParams)
+                    .let { livePagedList ->
+
+                        // use it also as a source to update count
+                        livePagedList.asObservable()
+                                .observeOn(Schedulers.computation())
+                                .subscribe {
+                                    sections.find { it.sectionName == name }
+                                            ?.notificationCount
+                                            ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
+                                }.disposeOnClear()
+
+                        sections.add(RoomsSection(name, livePagedList))
+                    }
+        }
+    }
+
+    private fun withQueryParams(builder: (RoomSummaryQueryParams.Builder) -> Unit, block: (RoomSummaryQueryParams) -> Unit) {
+        RoomSummaryQueryParams.Builder().apply {
+            builder.invoke(this)
+        }.build().let {
+            block(it)
+        }
     }
 
     fun isPublicRoom(roomId: String): Boolean {
@@ -88,8 +194,11 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary))
     }
 
-    private fun handleToggleCategory(action: RoomListAction.ToggleCategory) = setState {
-        this.toggle(action.category)
+    private fun handleToggleSection(section: RoomsSection) {
+        sections.find { it.sectionName == section.sectionName }
+                ?.let { section ->
+                    section.isExpanded.postValue(!section.isExpanded.value.orFalse())
+                }
     }
 
     private fun handleFilter(action: RoomListAction.FilterWith) {
@@ -98,23 +207,12 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                     roomFilter = action.filter
             )
         }
-    }
-
-    private fun observeRoomSummaries() {
-        roomSummariesSource
-                .observe()
-                .observeOn(Schedulers.computation())
-                .execute { asyncRooms ->
-                    copy(asyncRooms = asyncRooms)
+        updatableQuery?.updateQuery(
+                roomSummaryQueryParams {
+                    this.memberships = Membership.activeMemberships()
+                    this.displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
                 }
-
-        roomSummariesSource
-                .observe()
-                .observeOn(Schedulers.computation())
-                .map { buildRoomSummaries(it) }
-                .execute { async ->
-                    copy(asyncFilteredRooms = async)
-                }
+        )
     }
 
     private fun handleAcceptInvitation(action: RoomListAction.AcceptInvitation) = withState { state ->
@@ -164,12 +262,12 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun handleMarkAllRoomsRead() = withState { state ->
-        state.asyncFilteredRooms.invoke()
-                ?.flatMap { it.value }
-                ?.filter { it.membership == Membership.JOIN }
-                ?.map { it.roomId }
-                ?.toList()
-                ?.let { session.markAllAsRead(it, NoOpMatrixCallback()) }
+//        state.asyncFilteredRooms.invoke()
+//                ?.flatMap { it.value }
+//                ?.filter { it.membership == Membership.JOIN }
+//                ?.map { it.roomId }
+//                ?.toList()
+//                ?.let { session.markAllAsRead(it, NoOpMatrixCallback()) }
     }
 
     private fun handleChangeNotificationMode(action: RoomListAction.ChangeRoomNotificationState) {
@@ -211,7 +309,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
 
     private fun String.otherTag(): String? {
         return when (this) {
-            RoomTag.ROOM_TAG_FAVOURITE    -> RoomTag.ROOM_TAG_LOW_PRIORITY
+            RoomTag.ROOM_TAG_FAVOURITE -> RoomTag.ROOM_TAG_LOW_PRIORITY
             RoomTag.ROOM_TAG_LOW_PRIORITY -> RoomTag.ROOM_TAG_FAVOURITE
             else                          -> null
         }
@@ -224,48 +322,6 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             val value = runCatching { room.leave(null) }
                     .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
             _viewEvents.post(value)
-        }
-    }
-
-    private fun observeMembershipChanges() {
-        session.rx()
-                .liveRoomChangeMembershipState()
-                .subscribe {
-                    Timber.v("ChangeMembership states: $it")
-                    setState { copy(roomMembershipChanges = it) }
-                }
-                .disposeOnClear()
-    }
-
-    private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
-        // Set up init size on directChats and groupRooms as they are the biggest ones
-        val invites = ArrayList<RoomSummary>()
-        val favourites = ArrayList<RoomSummary>()
-        val directChats = ArrayList<RoomSummary>(rooms.size)
-        val groupRooms = ArrayList<RoomSummary>(rooms.size)
-        val lowPriorities = ArrayList<RoomSummary>()
-        val serverNotices = ArrayList<RoomSummary>()
-
-        rooms
-                .filter { roomListDisplayModeFilter.test(it) }
-                .forEach { room ->
-                    val tags = room.tags.map { it.name }
-                    when {
-                        room.membership == Membership.INVITE          -> invites.add(room)
-                        tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
-                        tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
-                        tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
-                        room.isDirect                                 -> directChats.add(room)
-                        else                                          -> groupRooms.add(room)
-                    }
-                }
-        return RoomSummaries().apply {
-            put(RoomCategory.INVITE, invites)
-            put(RoomCategory.FAVOURITE, favourites)
-            put(RoomCategory.DIRECT, directChats)
-            put(RoomCategory.GROUP, groupRooms)
-            put(RoomCategory.LOW_PRIORITY, lowPriorities)
-            put(RoomCategory.SERVER_NOTICE, serverNotices)
         }
     }
 }
