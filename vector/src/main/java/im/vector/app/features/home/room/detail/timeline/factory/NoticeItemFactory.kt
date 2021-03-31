@@ -17,13 +17,11 @@
 package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.app.features.home.room.detail.timeline.item.NoticeItem_
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
 class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEventFormatter,
@@ -31,24 +29,23 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
                                             private val informationDataFactory: MessageInformationDataFactory,
                                             private val avatarSizeProvider: AvatarSizeProvider) {
 
-    fun create(event: TimelineEvent,
-               highlight: Boolean,
-               callback: TimelineEventController.Callback?): NoticeItem? {
+    fun create(params: TimelineItemFactoryParams): NoticeItem? {
+        val event = params.event
         val formattedText = eventFormatter.format(event) ?: return null
-        val informationData = informationDataFactory.create(event, null, null)
+        val informationData = informationDataFactory.create(params)
         val attributes = NoticeItem.Attributes(
                 avatarRenderer = avatarRenderer,
                 informationData = informationData,
                 noticeText = formattedText,
                 itemLongClickListener = { view ->
-                    callback?.onEventLongClicked(informationData, null, view) ?: false
+                    params.callback?.onEventLongClicked(informationData, null, view) ?: false
                 },
-                readReceiptsCallback = callback,
-                avatarClickListener = { callback?.onAvatarClicked(informationData) }
+                readReceiptsCallback = params.callback,
+                avatarClickListener = { params.callback?.onAvatarClicked(informationData) }
         )
         return NoticeItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .highlighted(highlight)
+                .highlighted(params.isHighlighted)
                 .attributes(attributes)
     }
 }

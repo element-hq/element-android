@@ -21,7 +21,6 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
@@ -33,7 +32,6 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import javax.inject.Inject
 
@@ -46,11 +44,8 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                                                private val attributesFactory: MessageItemAttributesFactory,
                                                private val vectorPreferences: VectorPreferences) {
 
-    fun create(event: TimelineEvent,
-               prevEvent: TimelineEvent?,
-               nextEvent: TimelineEvent?,
-               highlight: Boolean,
-               callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
+    fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
+        val event = params.event
         event.root.eventId ?: return null
 
         return when {
@@ -109,14 +104,14 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                     }
                 }
 
-                val informationData = messageInformationDataFactory.create(event, prevEvent, nextEvent)
-                val attributes = attributesFactory.create(event.root.content.toModel<EncryptedEventContent>(), informationData, callback)
+                val informationData = messageInformationDataFactory.create(params)
+                val attributes = attributesFactory.create(event.root.content.toModel<EncryptedEventContent>(), informationData, params.callback)
                 return MessageTextItem_()
                         .leftGuideline(avatarSizeProvider.leftGuideline)
-                        .highlighted(highlight)
+                        .highlighted(params.isHighlighted)
                         .attributes(attributes)
                         .message(spannableStr)
-                        .movementMethod(createLinkMovementMethod(callback))
+                        .movementMethod(createLinkMovementMethod(params.callback))
             }
             else                                             -> null
         }

@@ -358,15 +358,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Tells if all room member state events should be shown in the messages list.
-     *
-     * @return true all room member state events should be shown in the messages list.
-     */
-    fun showRoomMemberStateEvents(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY, true)
-    }
-
-    /**
      * Tells if the join and leave membership events should be shown in the messages list.
      *
      * @return true if the join and leave membership events should be shown in the messages list

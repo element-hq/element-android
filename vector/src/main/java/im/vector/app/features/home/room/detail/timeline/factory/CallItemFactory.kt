@@ -46,13 +46,11 @@ class CallItemFactory @Inject constructor(
         private val callManager: WebRtcCallManager
 ) {
 
-    fun create(event: TimelineEvent,
-               highlight: Boolean,
-               callback: TimelineEventController.Callback?
-    ): VectorEpoxyModel<*>? {
+    fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
+        val event = params.event
         if (event.root.eventId == null) return null
         val roomId = event.roomId
-        val informationData = messageInformationDataFactory.create(event, null, null)
+        val informationData = messageInformationDataFactory.create(params)
         val callSignalingContent = event.getCallSignallingContent() ?: return null
         val callId = callSignalingContent.callId ?: return null
         val call = callManager.getCallById(callId)
@@ -68,8 +66,8 @@ class CallItemFactory @Inject constructor(
                         callId = callId,
                         callStatus = CallTileTimelineItem.CallStatus.IN_CALL,
                         callKind = callKind,
-                        callback = callback,
-                        highlight = highlight,
+                        callback = params.callback,
+                        highlight = params.isHighlighted,
                         informationData = informationData,
                         isStillActive = call != null
                 )
@@ -80,8 +78,8 @@ class CallItemFactory @Inject constructor(
                         callId = callId,
                         callStatus = CallTileTimelineItem.CallStatus.INVITED,
                         callKind = callKind,
-                        callback = callback,
-                        highlight = highlight,
+                        callback = params.callback,
+                        highlight = params.isHighlighted,
                         informationData = informationData,
                         isStillActive = call != null
                 )
@@ -92,8 +90,8 @@ class CallItemFactory @Inject constructor(
                         callId = callId,
                         callStatus = CallTileTimelineItem.CallStatus.REJECTED,
                         callKind = callKind,
-                        callback = callback,
-                        highlight = highlight,
+                        callback = params.callback,
+                        highlight = params.isHighlighted,
                         informationData = informationData,
                         isStillActive = false
                 )
@@ -104,8 +102,8 @@ class CallItemFactory @Inject constructor(
                         callId = callId,
                         callStatus = CallTileTimelineItem.CallStatus.ENDED,
                         callKind = callKind,
-                        callback = callback,
-                        highlight = highlight,
+                        callback = params.callback,
+                        highlight = params.isHighlighted,
                         informationData = informationData,
                         isStillActive = false
                 )

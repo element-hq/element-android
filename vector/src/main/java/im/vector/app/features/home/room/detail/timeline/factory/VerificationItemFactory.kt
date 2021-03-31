@@ -20,7 +20,6 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
@@ -35,7 +34,6 @@ import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationCancelContent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
 /**
@@ -54,37 +52,35 @@ class VerificationItemFactory @Inject constructor(
         private val session: Session
 ) {
 
-    fun create(event: TimelineEvent,
-               highlight: Boolean,
-               callback: TimelineEventController.Callback?
-    ): VectorEpoxyModel<*>? {
+    fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
+        val event = params.event
         if (event.root.eventId == null) return null
 
         val relContent: MessageRelationContent = event.root.content.toModel()
                 ?: event.root.getClearContent().toModel()
-                ?: return ignoredConclusion(event, highlight, callback)
+                ?: return ignoredConclusion(params)
 
-        if (relContent.relatesTo?.type != RelationType.REFERENCE) return ignoredConclusion(event, highlight, callback)
+        if (relContent.relatesTo?.type != RelationType.REFERENCE) return ignoredConclusion(params)
         val refEventId = relContent.relatesTo?.eventId
-                ?: return ignoredConclusion(event, highlight, callback)
+                ?: return ignoredConclusion(params)
 
         // If we cannot find the referenced request we do not display the done event
         val refEvent = session.getRoom(event.root.roomId ?: "")?.getTimeLineEvent(refEventId)
-                ?: return ignoredConclusion(event, highlight, callback)
+                ?: return ignoredConclusion(params)
 
         // If it's not a request ignore this event
         // if (refEvent.root.getClearContent().toModel<MessageVerificationRequestContent>() == null) return ignoredConclusion(event, highlight, callback)
 
-        val referenceInformationData = messageInformationDataFactory.create(refEvent, null, null)
+        val referenceInformationData = messageInformationDataFactory.create(TimelineItemFactoryParams(refEvent))
 
-        val informationData = messageInformationDataFactory.create(event, null, null)
-        val attributes = messageItemAttributesFactory.create(null, informationData, callback)
+        val informationData = messageInformationDataFactory.create(params)
+        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback)
 
         when (event.root.getClearType()) {
             EventType.KEY_VERIFICATION_CANCEL -> {
                 // Is the request referenced is actually really cancelled?
                 val cancelContent = event.root.getClearContent().toModel<MessageVerificationCancelContent>()
-                        ?: return ignoredConclusion(event, highlight, callback)
+                        ?: return ignoredConclusion(params)
 
                 when (safeValueOf(cancelContent.code)) {
                     CancelCode.MismatchedCommitment,
@@ -107,22 +103,22 @@ class VerificationItemFactory @Inject constructor(
                                                 readReceiptsCallback = attributes.readReceiptsCallback
                                         )
                                 )
-                                .highlighted(highlight)
+                                .highlighted(params.isHighlighted)
                                 .leftGuideline(avatarSizeProvider.leftGuideline)
                     }
-                    else                     -> return ignoredConclusion(event, highlight, callback)
+                    else                     -> return ignoredConclusion(params)
                 }
             }
             EventType.KEY_VERIFICATION_DONE   -> {
                 // Is the request referenced is actually really completed?
                 if (referenceInformationData.referencesInfoData?.verificationStatus != VerificationState.DONE) {
-                    return ignoredConclusion(event, highlight, callback)
+                    return ignoredConclusion(params)
                 }
                 // We only tale the one sent by me
 
                 if (informationData.sentByMe) {
                     // We only display the done sent by the other user, the done send by me is ignored
-                    return ignoredConclusion(event, highlight, callback)
+                    return ignoredConclusion(params)
                 }
                 return StatusTileTimelineItem_()
                         .attributes(
@@ -140,18 +136,15 @@ class VerificationItemFactory @Inject constructor(
                                         readReceiptsCallback = attributes.readReceiptsCallback
                                 )
                         )
-                        .highlighted(highlight)
+                        .highlighted(params.isHighlighted)
                         .leftGuideline(avatarSizeProvider.leftGuideline)
             }
         }
         return null
     }
 
-    private fun ignoredConclusion(event: TimelineEvent,
-                                  highlight: Boolean,
-                                  callback: TimelineEventController.Callback?
-    ): VectorEpoxyModel<*>? {
-        if (userPreferencesProvider.shouldShowHiddenEvents()) return noticeItemFactory.create(event, highlight, callback)
+    private fun ignoredConclusion(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
+        if (userPreferencesProvider.shouldShowHiddenEvents()) return noticeItemFactory.create(params)
         return null
     }
 }

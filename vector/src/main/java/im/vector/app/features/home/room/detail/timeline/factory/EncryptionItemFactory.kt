@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.detail.timeline.factory
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
@@ -28,7 +27,6 @@ import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineI
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
 import javax.inject.Inject
@@ -41,15 +39,14 @@ class EncryptionItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val session: Session) {
 
-    fun create(event: TimelineEvent,
-               highlight: Boolean,
-               callback: TimelineEventController.Callback?): StatusTileTimelineItem? {
+    fun create(params: TimelineItemFactoryParams): StatusTileTimelineItem? {
+        val event = params.event
         if (!event.root.isStateEvent()) {
             return null
         }
         val algorithm = event.root.getClearContent().toModel<EncryptionEventContent>()?.algorithm
-        val informationData = informationDataFactory.create(event, null, null)
-        val attributes = messageItemAttributesFactory.create(null, informationData, callback)
+        val informationData = informationDataFactory.create(params)
+        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback)
 
         val isSafeAlgorithm = algorithm == MXCRYPTO_ALGORITHM_MEGOLM
         val title: String
@@ -86,7 +83,7 @@ class EncryptionItemFactory @Inject constructor(
                                 readReceiptsCallback = attributes.readReceiptsCallback
                         )
                 )
-                .highlighted(highlight)
+                .highlighted(params.isHighlighted)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
     }
 }

@@ -339,7 +339,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Debug
-    implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.20'
