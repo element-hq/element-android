@@ -33,4 +33,3 @@ sealed class QueryStringValue {
         INSENSITIVE
     }
 }
-
