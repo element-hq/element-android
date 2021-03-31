@@ -24,8 +24,10 @@ import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import im.vector.app.push.fcm.FcmHelper
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.pushers.PushGatewayFailure
-import kotlinx.coroutines.*
 import javax.inject.Inject
 
 /**
@@ -45,22 +47,22 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
             return
         }
         action = GlobalScope.launch {
-            runCatching { pushersManager.testPush(fcmToken) }
-                .fold(
-                        {
-                            // Wait for the push to be received
-                            description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_waiting_for_push)
-                            status = TestStatus.RUNNING
-                        },
-                        {
-                            description = if (it is PushGatewayFailure.PusherRejected) {
-                                stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_failed)
-                            } else {
-                                errorFormatter.toHumanReadable(it)
+            status = runCatching { pushersManager.testPush(fcmToken) }
+                    .fold(
+                            {
+                                // Wait for the push to be received
+                                description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_waiting_for_push)
+                                TestStatus.RUNNING
+                            },
+                            {
+                                description = if (it is PushGatewayFailure.PusherRejected) {
+                                    stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_failed)
+                                } else {
+                                    errorFormatter.toHumanReadable(it)
+                                }
+                                TestStatus.FAILED
                             }
-                            status = TestStatus.FAILED
-                        }
-                )
+                    )
         }
     }
 
