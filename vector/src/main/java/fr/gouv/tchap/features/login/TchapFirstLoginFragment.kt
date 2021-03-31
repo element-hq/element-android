@@ -76,7 +76,6 @@ class TchapFirstLoginFragment @Inject constructor(
                 TchapLoginViewEvents.OnLoginFlowRetrieved      -> loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
                 is TchapLoginViewEvents.OnSendEmailSuccess     -> TODO()
                 is TchapLoginViewEvents.OnSignModeSelected     -> TODO()
-                is TchapLoginViewEvents.OnWebLoginError        -> TODO()
                 TchapLoginViewEvents.OutdatedHomeserver        -> TODO()
                 is TchapLoginViewEvents.RegistrationFlowResult -> TODO()
             }.exhaustive

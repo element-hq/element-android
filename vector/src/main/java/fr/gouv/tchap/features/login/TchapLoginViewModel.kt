@@ -35,17 +35,14 @@ import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.login.HomeServerConnectionConfigFactory
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.LoginViewState
 import im.vector.app.features.login.ReAuthHelper
-import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.AuthenticationService
-import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
@@ -71,23 +68,12 @@ class TchapLoginViewModel @AssistedInject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
         private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider,
-        private val homeServerHistoryService: HomeServerHistoryService
+        private val stringProvider: StringProvider
 ) : VectorViewModel<LoginViewState, TchapLoginAction, TchapLoginViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
         fun create(initialState: LoginViewState): TchapLoginViewModel
-    }
-
-    init {
-        getKnownCustomHomeServersUrls()
-    }
-
-    private fun getKnownCustomHomeServersUrls() {
-        setState {
-            copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
-        }
     }
 
     companion object : MvRxViewModelFactory<TchapLoginViewModel, LoginViewState> {
@@ -105,8 +91,6 @@ class TchapLoginViewModel @AssistedInject constructor(
     // Store the last action, to redo it after user has trusted the untrusted certificate
     private var lastAction: TchapLoginAction? = null
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
-
-    private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
     private val currentThreePid: String?
         get() = registrationWizard?.currentThreePid
@@ -138,7 +122,6 @@ class TchapLoginViewModel @AssistedInject constructor(
             is TchapLoginAction.ResetAction                -> handleResetAction(action)
             is TchapLoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
             is TchapLoginAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
-            TchapLoginAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
             is TchapLoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
     }
@@ -162,16 +145,6 @@ class TchapLoginViewModel @AssistedInject constructor(
                                 .build()
                 )
         }
-    }
-
-    private fun rememberHomeServer(homeServerUrl: String) {
-        homeServerHistoryService.addHomeServerToHistory(homeServerUrl)
-        getKnownCustomHomeServersUrls()
-    }
-
-    private fun handleClearHomeServerHistory() {
-        homeServerHistoryService.clearHistory()
-        getKnownCustomHomeServersUrls()
     }
 
     private fun handleSetupSsoForSessionRecovery(action: TchapLoginAction.SetupSsoForSessionRecovery) {
@@ -324,26 +297,6 @@ class TchapLoginViewModel @AssistedInject constructor(
         currentTask = null
 
         when (action) {
-            TchapLoginAction.ResetHomeServerType -> {
-                setState {
-                    copy(
-                            serverType = ServerType.Unknown
-                    )
-                }
-            }
-            TchapLoginAction.ResetHomeServerUrl  -> {
-                authenticationService.reset()
-
-                setState {
-                    copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized,
-                            homeServerUrl = null,
-                            loginMode = LoginMode.Unknown,
-                            serverType = ServerType.Unknown,
-                            loginModeSupportedTypes = emptyList()
-                    )
-                }
-            }
             TchapLoginAction.ResetSignMode       -> {
                 setState {
                     copy(
@@ -626,10 +579,7 @@ class TchapLoginViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    asyncHomeServerLoginFlowRequest = Loading(),
-                    // If user has entered https://matrix.org, ensure that server type is ServerType.MatrixOrg
-                    // It is also useful to set the value again in the case of a certificate error on matrix.org
-                    serverType = if (homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl) ServerType.MatrixOrg else serverType
+                    asyncHomeServerLoginFlowRequest = Loading()
             )
         }
 
@@ -638,17 +588,12 @@ class TchapLoginViewModel @AssistedInject constructor(
                 _viewEvents.post(TchapLoginViewEvents.Failure(failure))
                 setState {
                     copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized,
-                            // If we were trying to retrieve matrix.org login flow, also reset the serverType
-                            serverType = if (serverType == ServerType.MatrixOrg) ServerType.Unknown else serverType
+                            asyncHomeServerLoginFlowRequest = Uninitialized
                     )
                 }
             }
 
             override fun onSuccess(data: LoginFlowResult) {
-                // Valid Homeserver, add it to the history.
-                // Note: we add what the user has input, data.homeServerUrl can be different
-                rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
 
                 when (data) {
                     is LoginFlowResult.Success -> {

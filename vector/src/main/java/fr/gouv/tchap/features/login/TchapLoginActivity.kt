@@ -158,7 +158,6 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
             is TchapLoginViewEvents.OnLoginFlowRetrieved                       -> {
                 // Handled by the Tchap login fragment
             }
-            is TchapLoginViewEvents.OnWebLoginError                            -> onWebLoginError(loginViewEvents)
             is TchapLoginViewEvents.OnForgetPasswordClicked                    ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginResetPasswordFragment::class.java,
@@ -191,18 +190,6 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         views.loginLoading.isVisible = loginViewState.isLoading()
     }
 
-    private fun onWebLoginError(onWebLoginError: TchapLoginViewEvents.OnWebLoginError) {
-        // Pop the backstack
-        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-
-        // And inform the user
-        AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(getString(R.string.login_sso_error_message, onWebLoginError.description, onWebLoginError.errorCode))
-                .setPositiveButton(R.string.ok, null)
-                .show()
-    }
-
     private fun onSignModeSelected(loginViewEvents: TchapLoginViewEvents.OnSignModeSelected) {
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (loginViewEvents.signMode) {
@@ -224,19 +211,6 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         AlertDialog.Builder(this)
                 .setTitle(R.string.app_name)
                 .setMessage(getString(R.string.login_registration_not_supported))
-                .setPositiveButton(R.string.yes) { _, _ ->
-                    addFragmentToBackstack(R.id.loginFragmentContainer,
-                            LoginWebFragment::class.java,
-                            option = commonOption)
-                }
-                .setNegativeButton(R.string.no, null)
-                .show()
-    }
-
-    private fun onLoginModeNotSupported(supportedTypes: List<String>) {
-        AlertDialog.Builder(this)
-                .setTitle(R.string.app_name)
-                .setMessage(getString(R.string.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
                 .setPositiveButton(R.string.yes) { _, _ ->
                     addFragmentToBackstack(R.id.loginFragmentContainer,
                             LoginWebFragment::class.java,
