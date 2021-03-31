@@ -86,6 +86,12 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
             }
 
+            addSection(sections, R.string.bottom_action_favourites) {
+                it.memberships = listOf(Membership.JOIN)
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
+            }
+
             addSection(sections, R.string.bottom_action_people_x) {
                 it.memberships = listOf(Membership.JOIN)
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
