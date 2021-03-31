@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.database.mapper
 
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
@@ -25,9 +24,9 @@ import javax.inject.Inject
 
 internal class TimelineEventMapper @Inject constructor(private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper) {
 
-    fun map(timelineEventEntity: TimelineEventEntity, buildReadReceipts: Boolean = true, correctedReadReceipts: List<ReadReceipt>? = null): TimelineEvent {
+    fun map(timelineEventEntity: TimelineEventEntity, buildReadReceipts: Boolean = true): TimelineEvent {
         val readReceipts = if (buildReadReceipts) {
-            correctedReadReceipts ?: timelineEventEntity.readReceipts
+            timelineEventEntity.readReceipts
                     ?.let {
                         readReceiptsSummaryMapper.map(it)
                     }

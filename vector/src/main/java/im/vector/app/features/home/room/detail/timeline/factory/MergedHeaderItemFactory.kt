@@ -23,9 +23,9 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MergedTimelineEventVisibilityStateChangedListener
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.home.room.detail.timeline.helper.canBeMerged
 import im.vector.app.features.home.room.detail.timeline.helper.isRoomConfiguration
-import im.vector.app.features.home.room.detail.timeline.helper.prevSameTypeEvents
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedMembershipEventsItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedMembershipEventsItem_
@@ -47,7 +47,8 @@ import javax.inject.Inject
 class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                   private val avatarRenderer: AvatarRenderer,
                                                   private val avatarSizeProvider: AvatarSizeProvider,
-                                                  private val roomSummariesHolder: RoomSummariesHolder) {
+                                                  private val roomSummariesHolder: RoomSummariesHolder,
+private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper) {
 
     private val collapsedEventIds = linkedSetOf<Long>()
     private val mergeItemCollapseStates = HashMap<Long, Boolean>()
@@ -85,12 +86,11 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                                                    eventIdToHighlight: String?,
                                                    requestModelBuild: () -> Unit,
                                                    callback: TimelineEventController.Callback?): MergedMembershipEventsItem_? {
-        val prevSameTypeEvents = items.prevSameTypeEvents(currentPosition, 2)
-        return if (prevSameTypeEvents.isEmpty()) {
+        val mergedEvents = timelineEventVisibilityHelper.prevSameTypeEvents(items, currentPosition, 2, eventIdToHighlight)
+        return if (mergedEvents.isEmpty()) {
             null
         } else {
             var highlighted = false
-            val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
             val mergedData = ArrayList<BasedMergedItem.Data>(mergedEvents.size)
             mergedEvents.forEach { mergedEvent ->
                 if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
@@ -126,8 +126,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                     onCollapsedStateChanged = {
                         mergeItemCollapseStates[event.localId] = it
                         requestModelBuild()
-                    },
-                    readReceiptsCallback = callback
+                    }
             )
             MergedMembershipEventsItem_()
                     .id(mergeId)
@@ -205,7 +204,6 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                     },
                     hasEncryptionEvent = hasEncryption,
                     isEncryptionAlgorithmSecure = encryptionAlgorithm == MXCRYPTO_ALGORITHM_MEGOLM,
-                    readReceiptsCallback = callback,
                     callback = callback,
                     currentUserId = currentUserId,
                     roomSummary = roomSummariesHolder.get(event.roomId),

@@ -10,7 +10,7 @@
         android:id="@+id/messageSelectedBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/readReceiptsView"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/highlighted_message_background" />
 
@@ -79,15 +79,5 @@
         android:layout_toStartOf="@id/viewStubContainer"
         android:visibility="gone"
         tools:visibility="visible" />
-
-
-    <im.vector.app.core.ui.views.ReadReceiptsView
-        android:id="@+id/readReceiptsView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/viewStubContainer"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp" />
 
 </RelativeLayout>

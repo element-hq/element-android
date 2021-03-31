@@ -19,11 +19,11 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.localDateTime
+import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
-import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
 import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.settings.VectorPreferences
@@ -51,9 +51,10 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val vectorPreferences: VectorPreferences) {
 
-    fun create(event: TimelineEvent, prevEvent: TimelineEvent?, nextEvent: TimelineEvent?): MessageInformationData {
-        // Non nullability has been tested before
-        val eventId = event.root.eventId!!
+    fun create(params: TimelineItemFactoryParams): MessageInformationData {
+        val event = params.event
+        val nextEvent = params.nextEvent
+        val eventId = event.eventId
 
         val date = event.root.localDateTime()
         val nextDate = nextEvent?.root?.localDateTime()
@@ -76,9 +77,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         val isSentByMe = event.root.senderId == session.myUserId
         val sendStateDecoration = if (isSentByMe) {
             getSendStateDecoration(
-                    eventSendState = event.root.sendState,
-                    prevEventSendState = prevEvent?.root?.sendState,
-                    anyReadReceipts = event.readReceipts.any { it.user.userId != session.myUserId },
+                    event = event,
+                    lastSentEventWithoutReadReceipts = params.lastSentEventIdWithoutReadReceipts,
                     isMedia = event.root.isAttachmentMessage()
             )
         } else {
@@ -111,15 +111,6 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 },
                 hasBeenEdited = event.hasBeenEdited(),
                 hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false,
-                readReceipts = event.readReceipts
-                        .asSequence()
-                        .filter {
-                            it.user.userId != session.myUserId
-                        }
-                        .map {
-                            ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
-                        }
-                        .toList(),
                 referencesInfoData = event.annotations?.referencesAggregatedSummary?.let { referencesAggregatedSummary ->
                     val verificationState = referencesAggregatedSummary.content.toModel<ReferencesAggregatedContent>()?.verificationState
                             ?: VerificationState.REQUEST
@@ -131,15 +122,15 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         )
     }
 
-    private fun getSendStateDecoration(eventSendState: SendState,
-                                       prevEventSendState: SendState?,
-                                       anyReadReceipts: Boolean,
+    private fun getSendStateDecoration(event: TimelineEvent,
+                                       lastSentEventWithoutReadReceipts: String?,
                                        isMedia: Boolean): SendStateDecoration {
+        val eventSendState = event.root.sendState
         return if (eventSendState.isSending()) {
             if (isMedia) SendStateDecoration.SENDING_MEDIA else SendStateDecoration.SENDING_NON_MEDIA
         } else if (eventSendState.hasFailed()) {
             SendStateDecoration.FAILED
-        } else if (eventSendState.isSent() && !prevEventSendState?.isSent().orFalse() && !anyReadReceipts) {
+        } else if (lastSentEventWithoutReadReceipts == event.eventId) {
             SendStateDecoration.SENT
         } else {
             SendStateDecoration.NONE
