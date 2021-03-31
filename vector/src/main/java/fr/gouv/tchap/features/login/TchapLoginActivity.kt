@@ -199,9 +199,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                     TchapFirstLoginFragment::class.java,
                     tag = FRAGMENT_LOGIN_TAG,
                     option = commonOption)
-            SignMode.SignInWithMatrixId -> {
-                // Do nothing on Tchap
-            }
+            SignMode.SignInWithMatrixId -> Unit // Unsupported on Tchap
         }.exhaustive
     }
 
