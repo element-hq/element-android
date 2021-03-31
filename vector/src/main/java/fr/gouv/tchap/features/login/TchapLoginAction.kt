@@ -65,6 +65,4 @@ sealed class TchapLoginAction : VectorViewModelAction {
                                           val ssoIdentityProviders: List<SsoIdentityProvider>?) : TchapLoginAction()
 
     data class PostViewEvent(val viewEvent: TchapLoginViewEvents) : TchapLoginAction()
-
-    data class UserAcceptCertificate(val fingerprint: Fingerprint) : TchapLoginAction()
 }

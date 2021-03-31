@@ -105,8 +105,7 @@ abstract class TchapAbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<
                 failure.url,
                 object : UnrecognizedCertificateDialog.Callback {
                     override fun onAccept() {
-                        // User accept the certificate
-                        loginViewModel.handle(TchapLoginAction.UserAcceptCertificate(failure.fingerprint))
+                        // Cannot happen in Tchap
                     }
 
                     override fun onIgnore() {

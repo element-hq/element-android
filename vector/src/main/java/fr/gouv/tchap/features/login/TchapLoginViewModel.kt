@@ -121,30 +121,8 @@ class TchapLoginViewModel @AssistedInject constructor(
             is TchapLoginAction.RegisterAction             -> handleRegisterAction(action)
             is TchapLoginAction.ResetAction                -> handleResetAction(action)
             is TchapLoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
-            is TchapLoginAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             is TchapLoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
-    }
-
-    private fun handleUserAcceptCertificate(action: TchapLoginAction.UserAcceptCertificate) {
-        // It happen when we get the login flow, or during direct authentication.
-        // So alter the homeserver config and retrieve again the login flow
-        when (val finalLastAction = lastAction) {
-            is TchapLoginAction.UpdateHomeServer -> {
-                currentHomeServerConnectionConfig
-                        ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
-                        ?.let { getLoginFlow(it) }
-            }
-            is TchapLoginAction.LoginOrRegister  ->
-                handleDirectLogin(
-                        finalLastAction,
-                        HomeServerConnectionConfig.Builder()
-                                // Will be replaced by the task
-                                .withHomeServerUri("https://dummy.org")
-                                .withAllowedFingerPrints(listOf(action.fingerprint))
-                                .build()
-                )
-        }
     }
 
     private fun handleSetupSsoForSessionRecovery(action: TchapLoginAction.SetupSsoForSessionRecovery) {
