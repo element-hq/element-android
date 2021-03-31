@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
+import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
@@ -46,7 +47,6 @@ import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomT
 import org.matrix.android.sdk.internal.session.room.peeking.PeekRoomTask
 import org.matrix.android.sdk.internal.session.room.peeking.ResolveRoomStateTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
-import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateBreadcrumbsTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
@@ -98,12 +98,14 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getRoomSummariesLive(queryParams)
     }
 
-    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams) : LiveData<PagedList<RoomSummary>> {
-        return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams)
+    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config)
+            : LiveData<PagedList<RoomSummary>> {
+        return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig)
     }
 
-    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams) : UpdatableFilterLivePageResult {
-        return roomSummaryDataSource.getFilteredPagedRoomSummariesLive(queryParams)
+    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config)
+            : UpdatableFilterLivePageResult {
+        return roomSummaryDataSource.getFilteredPagedRoomSummariesLive(queryParams, pagedListConfig)
     }
 
     override fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {

@@ -104,7 +104,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                 .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
     }
 
-    fun getSortedPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<PagedList<RoomSummary>> {
+    fun getSortedPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config): LiveData<PagedList<RoomSummary>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams)
                     .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
@@ -113,17 +113,11 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             roomSummaryMapper.map(it)
         }
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory,
-                        PagedList.Config.Builder()
-                                .setPageSize(10)
-                                .setInitialLoadSizeHint(20)
-                                .setEnablePlaceholders(false)
-                                .setPrefetchDistance(10)
-                                .build())
+                LivePagedListBuilder(dataSourceFactory, pagedListConfig)
         )
     }
 
-    fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams): UpdatableFilterLivePageResult {
+    fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config): UpdatableFilterLivePageResult {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams)
                     .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
@@ -133,13 +127,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         }
 
         val mapped = monarchy.findAllPagedWithChanges(realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory,
-                        PagedList.Config.Builder()
-                                .setPageSize(10)
-                                .setInitialLoadSizeHint(20)
-                                .setEnablePlaceholders(false)
-                                .setPrefetchDistance(10)
-                                .build())
+                LivePagedListBuilder(dataSourceFactory, pagedListConfig)
         )
 
         return object : UpdatableFilterLivePageResult {

@@ -137,8 +137,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                             sections.add(RoomsSection(name, livePagedList.livePagedList))
                         }
             }
-        }
-        else if (initialState.displayMode == RoomListDisplayMode.NOTIFICATIONS) {
+        } else if (initialState.displayMode == RoomListDisplayMode.NOTIFICATIONS) {
             withQueryParams({
                 it.memberships = Membership.activeMemberships()
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
