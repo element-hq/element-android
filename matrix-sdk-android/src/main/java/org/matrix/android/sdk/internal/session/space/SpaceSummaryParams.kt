@@ -21,15 +21,14 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class SpaceSummaryParams(
-        /**  The maximum number of rooms/subspaces to return for a given space, if negative unbounded. default: -1*/
+        /**  The maximum number of rooms/subspaces to return for a given space, if negative unbounded. default: -1 */
         @Json(name = "max_rooms_per_space") val maxRoomPerSpace: Int?,
         /** The maximum number of rooms/subspaces to return, server can override this, default: 100 */
         @Json(name = "limit") val limit: Int?,
-        /** A token to use if this is a subsequent HTTP hit, default: "".*/
+        /** A token to use if this is a subsequent HTTP hit, default: "". */
         @Json(name = "batch") val batch: String = "",
-        /** whether we should only return children with the "suggested" flag set.*/
+        /** whether we should only return children with the "suggested" flag set. */
         @Json(name = "suggested_only") val suggestedOnly: Boolean?,
-        /** whether we should only return children with the "suggested" flag set.*/
+        /** whether we should only return children with the "suggested" flag set. */
         @Json(name = "auto_join_only") val autoJoinedOnly: Boolean?
-
 )
