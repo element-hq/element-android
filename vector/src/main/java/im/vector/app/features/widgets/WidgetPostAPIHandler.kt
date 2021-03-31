@@ -283,11 +283,12 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                             "type" to "m.widget"
                     )
             )
-            session.updateAccountData(
-                    type = UserAccountDataTypes.TYPE_WIDGETS,
-                    content = addUserWidgetBody,
-                    callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-            )
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                session.updateAccountData(
+                        type = UserAccountDataTypes.TYPE_WIDGETS,
+                        content = addUserWidgetBody
+                )
+            }
         } else {
             launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
                 session.widgetService().createRoomWidget(
