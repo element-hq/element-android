@@ -122,25 +122,33 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         ).asObservable()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe {
-                    val dmInvites = session.getRoomSummaries(roomSummaryQueryParams {
-                        memberships = listOf(Membership.INVITE)
-                        roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                    }).size
+                    val dmInvites = session.getRoomSummaries(
+                            roomSummaryQueryParams {
+                                memberships = listOf(Membership.INVITE)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                            }
+                    ).size
 
-                    val roomsInvite = session.getRoomSummaries(roomSummaryQueryParams {
-                        memberships = listOf(Membership.INVITE)
-                        roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                    }).size
+                    val roomsInvite = session.getRoomSummaries(
+                            roomSummaryQueryParams {
+                                memberships = listOf(Membership.INVITE)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                            }
+                    ).size
 
-                    val dmRooms = session.getNotificationCountForRooms(roomSummaryQueryParams {
-                        memberships = listOf(Membership.JOIN)
-                        roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                    })
+                    val dmRooms = session.getNotificationCountForRooms(
+                            roomSummaryQueryParams {
+                                memberships = listOf(Membership.JOIN)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                            }
+                    )
 
-                    val otherRooms = session.getNotificationCountForRooms(roomSummaryQueryParams {
-                        memberships = listOf(Membership.JOIN)
-                        roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                    })
+                    val otherRooms = session.getNotificationCountForRooms(
+                            roomSummaryQueryParams {
+                                memberships = listOf(Membership.JOIN)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                            }
+                    )
 
                     setState {
                         copy(
