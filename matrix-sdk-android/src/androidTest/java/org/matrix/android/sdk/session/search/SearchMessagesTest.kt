@@ -17,30 +17,27 @@
 package org.matrix.android.sdk.session.search
 
 import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
-import org.matrix.android.sdk.common.TestConstants
 import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 class SearchMessagesTest : InstrumentedTest {
 
-    private val MESSAGE = "Lorem ipsum dolor sit amet"
+    companion object {
+        private const val MESSAGE = "Lorem ipsum dolor sit amet"
+    }
 
     private val commonTestHelper = CommonTestHelper(context())
     private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
@@ -115,7 +112,7 @@ class SearchMessagesTest : InstrumentedTest {
                 2)
 
         run {
-            var lock = CountDownLatch(1)
+            val lock = CountDownLatch(1)
 
             val eventListener = commonTestHelper.createEventListener(lock) { snapshot ->
                 snapshot.count { it.root.content.toModel<MessageContent>()?.body?.startsWith(MESSAGE).orFalse() } == 2
@@ -124,37 +121,25 @@ class SearchMessagesTest : InstrumentedTest {
             aliceTimeline.addListener(eventListener)
             commonTestHelper.await(lock)
 
-            lock = CountDownLatch(1)
-            roomFromAlicePOV
-                    .search(
-                            searchTerm = "lore",
-                            limit = 10,
-                            includeProfile = true,
-                            afterLimit = 0,
-                            beforeLimit = 10,
-                            orderByRecent = true,
-                            nextBatch = null,
-                            callback = object : MatrixCallback<SearchResult> {
-                                override fun onSuccess(data: SearchResult) {
-                                    super.onSuccess(data)
-                                    assertTrue(data.results?.size == 2)
-                                    assertTrue(
-                                            data.results
-                                                    ?.all {
-                                                        (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
-                                                    }.orFalse()
-                                    )
-                                    lock.countDown()
-                                }
+            val data = commonTestHelper.runBlockingTest {
+                roomFromAlicePOV.search(
+                        searchTerm = "lore",
+                        limit = 10,
+                        includeProfile = true,
+                        afterLimit = 0,
+                        beforeLimit = 10,
+                        orderByRecent = true,
+                        nextBatch = null
+                )
+            }
 
-                                override fun onFailure(failure: Throwable) {
-                                    super.onFailure(failure)
-                                    fail(failure.localizedMessage)
-                                    lock.countDown()
-                                }
-                            }
-                    )
-            lock.await(TestConstants.timeOutMillis, TimeUnit.MILLISECONDS)
+            assertTrue(data.results?.size == 2)
+            assertTrue(
+                    data.results
+                            ?.all {
+                                (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
+                            }.orFalse()
+            )
 
             aliceTimeline.removeAllListeners()
             cryptoTestData.cleanUp(commonTestHelper)
