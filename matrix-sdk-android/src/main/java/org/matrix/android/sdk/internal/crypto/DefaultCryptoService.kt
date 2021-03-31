@@ -694,6 +694,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private suspend fun preshareGroupSession(roomId: String, roomMembers: List<String>) {
+        // TODO this needs to be locked per room
         val request = olmMachine!!.getMissingSessions(roomMembers)
 
         if (request != null) {
@@ -772,6 +773,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private suspend fun claimKeys(request: Request.KeysClaim) {
+        // TODO this needs to be locked per call
         val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(request.oneTimeKeys)
         val response = oneTimeKeysForUsersDeviceTask.execute(claimParams)
         val adapter = MoshiProvider
@@ -783,6 +785,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private suspend fun sendOutgoingRequests() {
+        // TODO this needs to be locked per call
         // TODO these requests should be sent out in parallel
         for (outgoingRequest in olmMachine!!.outgoingRequests()) {
             when (outgoingRequest) {
