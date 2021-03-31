@@ -16,18 +16,18 @@
 
 package org.matrix.android.sdk.internal.session.room
 
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrNull
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
-import io.realm.Realm
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.query.where
 import javax.inject.Inject
 
 internal class RoomAvatarResolver @Inject constructor(@UserId private val userId: String) {
@@ -48,7 +48,7 @@ internal class RoomAvatarResolver @Inject constructor(@UserId private val userId
         val roomMembers = RoomMemberHelper(realm, roomId)
         val members = roomMembers.queryActiveRoomMembersEvent().findAll()
         // detect if it is a room with no more than 2 members (i.e. an alone or a 1:1 chat)
-        val isDirectRoom =  RoomSummaryEntity.where(realm, roomId).findFirst()?.isDirect ?: false
+        val isDirectRoom = RoomSummaryEntity.where(realm, roomId).findFirst()?.isDirect ?: false
         if (isDirectRoom) {
             if (members.size == 1) {
                 res = members.firstOrNull()?.avatarUrl
