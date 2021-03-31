@@ -20,7 +20,6 @@ import dagger.Lazy
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.internal.auth.data.LoginFlowResponse
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -49,8 +48,8 @@ internal class DefaultIsValidClientServerApiTask @Inject constructor(
                 .create(AuthAPI::class.java)
 
         return try {
-            executeRequest<LoginFlowResponse>(null) {
-                apiCall = authAPI.getLoginFlows()
+            executeRequest(null) {
+                authAPI.getLoginFlows()
             }
             // We get a response, so the API is valid
             true

@@ -35,6 +35,7 @@ Test:
 
 Other changes:
  - Add version details on the login screen, in debug or developer mode
+ - Migrate Retrofit interface to coroutine calls
 
 Changes in Element 1.1.3 (2021-03-18)
 ===================================================

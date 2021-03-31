@@ -37,7 +37,7 @@ internal class GetEventTask @Inject constructor(
 
     override suspend fun execute(params: Params): Event {
         return executeRequest(globalErrorReceiver) {
-            apiCall = roomAPI.getEvent(params.roomId, params.eventId)
+            roomAPI.getEvent(params.roomId, params.eventId)
         }
     }
 }

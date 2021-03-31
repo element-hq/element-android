@@ -25,7 +25,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionR
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -48,14 +47,14 @@ internal interface RoomKeysApi {
      * @param createKeysBackupVersionBody the body
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/version")
-    fun createKeysBackupVersion(@Body createKeysBackupVersionBody: CreateKeysBackupVersionBody): Call<KeysVersion>
+    suspend fun createKeysBackupVersion(@Body createKeysBackupVersionBody: CreateKeysBackupVersionBody): KeysVersion
 
     /**
      * Get the key backup last version
      * If not supported by the server, an error is returned: {"errcode":"M_NOT_FOUND","error":"No backup found"}
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/version")
-    fun getKeysBackupLastVersion(): Call<KeysVersionResult>
+    suspend fun getKeysBackupLastVersion(): KeysVersionResult
 
     /**
      * Get information about the given version.
@@ -64,7 +63,7 @@ internal interface RoomKeysApi {
      * @param version  version
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/version/{version}")
-    fun getKeysBackupVersion(@Path("version") version: String): Call<KeysVersionResult>
+    suspend fun getKeysBackupVersion(@Path("version") version: String): KeysVersionResult
 
     /**
      * Update information about the given version.
@@ -72,8 +71,8 @@ internal interface RoomKeysApi {
      * @param updateKeysBackupVersionBody the body
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/version/{version}")
-    fun updateKeysBackupVersion(@Path("version") version: String,
-                                @Body keysBackupVersionBody: UpdateKeysBackupVersionBody): Call<Unit>
+    suspend fun updateKeysBackupVersion(@Path("version") version: String,
+                                        @Body keysBackupVersionBody: UpdateKeysBackupVersionBody)
 
     /* ==========================================================================================
      * Storing keys
@@ -94,10 +93,10 @@ internal interface RoomKeysApi {
      * @param keyBackupData the data to send
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys/{roomId}/{sessionId}")
-    fun storeRoomSessionData(@Path("roomId") roomId: String,
-                             @Path("sessionId") sessionId: String,
-                             @Query("version") version: String,
-                             @Body keyBackupData: KeyBackupData): Call<BackupKeysResult>
+    suspend fun storeRoomSessionData(@Path("roomId") roomId: String,
+                                     @Path("sessionId") sessionId: String,
+                                     @Query("version") version: String,
+                                     @Body keyBackupData: KeyBackupData): BackupKeysResult
 
     /**
      * Store several keys for the given room, using the given backup version.
@@ -107,9 +106,9 @@ internal interface RoomKeysApi {
      * @param roomKeysBackupData the data to send
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys/{roomId}")
-    fun storeRoomSessionsData(@Path("roomId") roomId: String,
-                              @Query("version") version: String,
-                              @Body roomKeysBackupData: RoomKeysBackupData): Call<BackupKeysResult>
+    suspend fun storeRoomSessionsData(@Path("roomId") roomId: String,
+                                      @Query("version") version: String,
+                                      @Body roomKeysBackupData: RoomKeysBackupData): BackupKeysResult
 
     /**
      * Store several keys, using the given backup version.
@@ -118,8 +117,8 @@ internal interface RoomKeysApi {
      * @param keysBackupData the data to send
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys")
-    fun storeSessionsData(@Query("version") version: String,
-                          @Body keysBackupData: KeysBackupData): Call<BackupKeysResult>
+    suspend fun storeSessionsData(@Query("version") version: String,
+                                  @Body keysBackupData: KeysBackupData): BackupKeysResult
 
     /* ==========================================================================================
      * Retrieving keys
@@ -133,9 +132,9 @@ internal interface RoomKeysApi {
      * @param version   the version of the backup, or empty String to retrieve the last version
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys/{roomId}/{sessionId}")
-    fun getRoomSessionData(@Path("roomId") roomId: String,
-                           @Path("sessionId") sessionId: String,
-                           @Query("version") version: String): Call<KeyBackupData>
+    suspend fun getRoomSessionData(@Path("roomId") roomId: String,
+                                   @Path("sessionId") sessionId: String,
+                                   @Query("version") version: String): KeyBackupData
 
     /**
      * Retrieve all the keys for the given room from the backup.
@@ -144,8 +143,8 @@ internal interface RoomKeysApi {
      * @param version  the version of the backup, or empty String to retrieve the last version
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys/{roomId}")
-    fun getRoomSessionsData(@Path("roomId") roomId: String,
-                            @Query("version") version: String): Call<RoomKeysBackupData>
+    suspend fun getRoomSessionsData(@Path("roomId") roomId: String,
+                                    @Query("version") version: String): RoomKeysBackupData
 
     /**
      * Retrieve all the keys from the backup.
@@ -153,7 +152,7 @@ internal interface RoomKeysApi {
      * @param version  the version of the backup, or empty String to retrieve the last version
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys")
-    fun getSessionsData(@Query("version") version: String): Call<KeysBackupData>
+    suspend fun getSessionsData(@Query("version") version: String): KeysBackupData
 
     /* ==========================================================================================
      * Deleting keys
@@ -163,22 +162,22 @@ internal interface RoomKeysApi {
      * Deletes keys from the backup.
      */
     @DELETE(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys/{roomId}/{sessionId}")
-    fun deleteRoomSessionData(@Path("roomId") roomId: String,
-                              @Path("sessionId") sessionId: String,
-                              @Query("version") version: String): Call<Unit>
+    suspend fun deleteRoomSessionData(@Path("roomId") roomId: String,
+                                      @Path("sessionId") sessionId: String,
+                                      @Query("version") version: String)
 
     /**
      * Deletes keys from the backup.
      */
     @DELETE(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys/{roomId}")
-    fun deleteRoomSessionsData(@Path("roomId") roomId: String,
-                               @Query("version") version: String): Call<Unit>
+    suspend fun deleteRoomSessionsData(@Path("roomId") roomId: String,
+                                       @Query("version") version: String)
 
     /**
      * Deletes keys from the backup.
      */
     @DELETE(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/keys")
-    fun deleteSessionsData(@Query("version") version: String): Call<Unit>
+    suspend fun deleteSessionsData(@Query("version") version: String)
 
     /* ==========================================================================================
      * Deleting backup
@@ -188,5 +187,5 @@ internal interface RoomKeysApi {
      * Deletes a backup.
      */
     @DELETE(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "room_keys/version/{version}")
-    fun deleteBackup(@Path("version") version: String): Call<Unit>
+    suspend fun deleteBackup(@Path("version") version: String)
 }

@@ -62,8 +62,8 @@ internal class DefaultRemovePusherTask @Inject constructor(
                 data = JsonPusherData(existing.data.url, existing.data.format),
                 append = false
         )
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = pushersAPI.setPusher(deleteBody)
+        executeRequest(globalErrorReceiver) {
+            pushersAPI.setPusher(deleteBody)
         }
         monarchy.awaitTransaction {
             PusherEntity.where(it, params.pushKey).findFirst()?.deleteFromRealm()

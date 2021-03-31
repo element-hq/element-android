@@ -36,8 +36,8 @@ internal class DefaultGetPushersTask @Inject constructor(
 ) : GetPushersTask {
 
     override suspend fun execute(params: Unit) {
-        val response = executeRequest<GetPushersResponse>(globalErrorReceiver) {
-            apiCall = pushersAPI.getPushers()
+        val response = executeRequest(globalErrorReceiver) {
+            pushersAPI.getPushers()
         }
         monarchy.awaitTransaction { realm ->
             // clear existings?

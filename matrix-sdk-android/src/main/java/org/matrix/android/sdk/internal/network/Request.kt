@@ -21,15 +21,28 @@ import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.internal.network.ssl.CertUtil
-import retrofit2.Call
-import retrofit2.awaitResponse
+import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
 
+// To use when there is no init block to provide
 internal suspend inline fun <DATA : Any> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
-                                                        block: Request<DATA>.() -> Unit) = Request<DATA>(globalErrorReceiver).apply(block).execute()
+                                                        noinline requestBlock: suspend () -> DATA): DATA {
+    return executeRequest(globalErrorReceiver, requestBlock, {})
+}
 
-internal class Request<DATA : Any>(private val globalErrorReceiver: GlobalErrorReceiver?) {
+internal suspend inline fun <DATA : Any> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
+                                                        noinline requestBlock: suspend () -> DATA,
+                                                        initBlock: Request<DATA>.() -> Unit): DATA {
+    return Request(globalErrorReceiver, requestBlock)
+            .apply(initBlock)
+            .execute()
+}
+
+internal class Request<DATA : Any>(
+        private val globalErrorReceiver: GlobalErrorReceiver?,
+        private val requestBlock: suspend () -> DATA
+) {
 
     var isRetryable = false
     var initialDelay: Long = 100L
@@ -37,20 +50,22 @@ internal class Request<DATA : Any>(private val globalErrorReceiver: GlobalErrorR
     var maxRetryCount = Int.MAX_VALUE
     private var currentRetryCount = 0
     private var currentDelay = initialDelay
-    lateinit var apiCall: Call<DATA>
 
     suspend fun execute(): DATA {
         return try {
-            val response = apiCall.clone().awaitResponse()
-            if (response.isSuccessful) {
-                response.body()
-                        ?: throw IllegalStateException("The request returned a null body")
-            } else {
-                throw response.toFailure(globalErrorReceiver)
+            try {
+                requestBlock()
+            } catch (exception: Throwable) {
+                throw when (exception) {
+                    is KotlinNullPointerException -> IllegalStateException("The request returned a null body")
+                    is HttpException              -> exception.toFailure(globalErrorReceiver)
+                    else                          -> exception
+                }
             }
         } catch (exception: Throwable) {
-            // Log some details about the request which has failed
-            Timber.e("Exception when executing request ${apiCall.request().method} ${apiCall.request().url.toString().substringBefore("?")}")
+            // Log some details about the request which has failed. This is less useful than before...
+            // Timber.e("Exception when executing request ${apiCall.request().method} ${apiCall.request().url.toString().substringBefore("?")}")
+            Timber.e("Exception when executing request")
 
             // Check if this is a certificateException
             CertUtil.getCertificateException(exception)

@@ -31,7 +31,6 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.auth.data.LoginFlowResponse
 import org.matrix.android.sdk.internal.auth.data.RiotConfig
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
@@ -172,8 +171,8 @@ internal class DefaultAuthenticationService @Inject constructor(
 
         // First check the homeserver version
         return runCatching {
-            executeRequest<Versions>(null) {
-                apiCall = authAPI.versions()
+            executeRequest(null) {
+                authAPI.versions()
             }
         }
                 .map { versions ->
@@ -204,8 +203,8 @@ internal class DefaultAuthenticationService @Inject constructor(
 
         // Ok, try to get the config.domain.json file of a RiotWeb client
         return runCatching {
-            executeRequest<RiotConfig>(null) {
-                apiCall = authAPI.getRiotConfigDomain(domain)
+            executeRequest(null) {
+                authAPI.getRiotConfigDomain(domain)
             }
         }
                 .map { riotConfig ->
@@ -232,8 +231,8 @@ internal class DefaultAuthenticationService @Inject constructor(
 
         // Ok, try to get the config.json file of a RiotWeb client
         return runCatching {
-            executeRequest<RiotConfig>(null) {
-                apiCall = authAPI.getRiotConfig()
+            executeRequest(null) {
+                authAPI.getRiotConfig()
             }
         }
                 .map { riotConfig ->
@@ -265,8 +264,8 @@ internal class DefaultAuthenticationService @Inject constructor(
 
             val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
 
-            val versions = executeRequest<Versions>(null) {
-                apiCall = newAuthAPI.versions()
+            val versions = executeRequest(null) {
+                newAuthAPI.versions()
             }
 
             return getLoginFlowResult(newAuthAPI, versions, defaultHomeServerUrl)
@@ -293,8 +292,8 @@ internal class DefaultAuthenticationService @Inject constructor(
 
                 val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
 
-                val versions = executeRequest<Versions>(null) {
-                    apiCall = newAuthAPI.versions()
+                val versions = executeRequest(null) {
+                    newAuthAPI.versions()
                 }
 
                 getLoginFlowResult(newAuthAPI, versions, wellknownResult.homeServerUrl)
@@ -305,8 +304,8 @@ internal class DefaultAuthenticationService @Inject constructor(
 
     private suspend fun getLoginFlowResult(authAPI: AuthAPI, versions: Versions, homeServerUrl: String): LoginFlowResult {
         // Get the login flow
-        val loginFlowResponse = executeRequest<LoginFlowResponse>(null) {
-            apiCall = authAPI.getLoginFlows()
+        val loginFlowResponse = executeRequest(null) {
+            authAPI.getLoginFlows()
         }
         return LoginFlowResult.Success(
                 loginFlowResponse.flows.orEmpty().mapNotNull { it.type },

@@ -75,8 +75,8 @@ internal class DefaultCreateRoomTask @Inject constructor(
         val createRoomBody = createRoomBodyBuilder.build(params)
 
         val createRoomResponse = try {
-            executeRequest<CreateRoomResponse>(globalErrorReceiver) {
-                apiCall = roomAPI.createRoom(createRoomBody)
+            executeRequest(globalErrorReceiver) {
+                roomAPI.createRoom(createRoomBody)
             }
         } catch (throwable: Throwable) {
             if (throwable is Failure.ServerError) {

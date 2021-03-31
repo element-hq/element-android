@@ -37,8 +37,8 @@ internal class DefaultSetRoomDirectoryVisibilityTask @Inject constructor(
 ) : SetRoomDirectoryVisibilityTask {
 
     override suspend fun execute(params: SetRoomDirectoryVisibilityTask.Params) {
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = directoryAPI.setRoomDirectoryVisibility(
+        executeRequest(globalErrorReceiver) {
+            directoryAPI.setRoomDirectoryVisibility(
                     params.roomId,
                     RoomDirectoryVisibilityJson(visibility = params.roomDirectoryVisibility)
             )

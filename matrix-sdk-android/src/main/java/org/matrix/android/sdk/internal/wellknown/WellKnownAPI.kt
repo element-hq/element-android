@@ -16,11 +16,10 @@
 package org.matrix.android.sdk.internal.wellknown
 
 import org.matrix.android.sdk.api.auth.data.WellKnown
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 
 internal interface WellKnownAPI {
     @GET("https://{domain}/.well-known/matrix/client")
-    fun getWellKnown(@Path("domain") domain: String): Call<WellKnown>
+    suspend fun getWellKnown(@Path("domain") domain: String): WellKnown
 }

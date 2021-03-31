@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.network.RetrofitFactory
-import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.identity.IdentityAuthAPI
 import org.matrix.android.sdk.internal.session.identity.IdentityRegisterTask
 import org.matrix.android.sdk.internal.session.openid.GetOpenIdTokenTask
@@ -35,6 +34,7 @@ import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccoun
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.internal.network.executeRequest
 import javax.inject.Inject
 
 internal class DefaultTermsService @Inject constructor(
@@ -50,10 +50,10 @@ internal class DefaultTermsService @Inject constructor(
 ) : TermsService {
     override suspend fun getTerms(serviceType: TermsService.ServiceType,
                                  baseUrl: String): GetTermsResponse {
-        return withContext(coroutineDispatchers.main) {
+        return withContext(coroutineDispatchers.io) {
             val url = buildUrl(baseUrl, serviceType)
-            val termsResponse = executeRequest<TermsResponse>(null) {
-                apiCall = termsAPI.getTerms("${url}terms")
+            val termsResponse = executeRequest(null) {
+                termsAPI.getTerms("${url}terms")
             }
             GetTermsResponse(termsResponse, getAlreadyAcceptedTermUrlsFromAccountData())
         }
@@ -63,12 +63,12 @@ internal class DefaultTermsService @Inject constructor(
                                       baseUrl: String,
                                       agreedUrls: List<String>,
                                       token: String?) {
-        withContext(coroutineDispatchers.main) {
+        withContext(coroutineDispatchers.io) {
             val url = buildUrl(baseUrl, serviceType)
             val tokenToUse = token?.takeIf { it.isNotEmpty() } ?: getToken(baseUrl)
 
-            executeRequest<Unit>(null) {
-                apiCall = termsAPI.agreeToTerms("${url}terms", AcceptTermsBody(agreedUrls), "Bearer $tokenToUse")
+            executeRequest(null) {
+                termsAPI.agreeToTerms("${url}terms", AcceptTermsBody(agreedUrls), "Bearer $tokenToUse")
             }
 
             // client SHOULD update this account data section adding any the URLs

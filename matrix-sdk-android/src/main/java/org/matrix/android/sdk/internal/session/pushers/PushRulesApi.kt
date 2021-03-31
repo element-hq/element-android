@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.pushers
 import org.matrix.android.sdk.api.pushrules.rest.GetPushRulesResponse
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -30,7 +29,7 @@ internal interface PushRulesApi {
      * Get all push rules
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/")
-    fun getAllRules(): Call<GetPushRulesResponse>
+    suspend fun getAllRules(): GetPushRulesResponse
 
     /**
      * Update the ruleID enable status
@@ -40,10 +39,9 @@ internal interface PushRulesApi {
      * @param enable the new enable status
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}/enabled")
-    fun updateEnableRuleStatus(@Path("kind") kind: String,
-                               @Path("ruleId") ruleId: String,
-                               @Body enable: Boolean?)
-            : Call<Unit>
+    suspend fun updateEnableRuleStatus(@Path("kind") kind: String,
+                                       @Path("ruleId") ruleId: String,
+                                       @Body enable: Boolean?)
 
     /**
      * Update the ruleID action
@@ -54,10 +52,9 @@ internal interface PushRulesApi {
      * @param actions the actions
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}/actions")
-    fun updateRuleActions(@Path("kind") kind: String,
-                          @Path("ruleId") ruleId: String,
-                          @Body actions: Any)
-            : Call<Unit>
+    suspend fun updateRuleActions(@Path("kind") kind: String,
+                                  @Path("ruleId") ruleId: String,
+                                  @Body actions: Any)
 
     /**
      * Delete a rule
@@ -66,9 +63,8 @@ internal interface PushRulesApi {
      * @param ruleId the ruleId
      */
     @DELETE(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}")
-    fun deleteRule(@Path("kind") kind: String,
-                   @Path("ruleId") ruleId: String)
-            : Call<Unit>
+    suspend fun deleteRule(@Path("kind") kind: String,
+                           @Path("ruleId") ruleId: String)
 
     /**
      * Add the ruleID enable status
@@ -78,8 +74,7 @@ internal interface PushRulesApi {
      * @param rule   the rule to add.
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}")
-    fun addRule(@Path("kind") kind: String,
-                @Path("ruleId") ruleId: String,
-                @Body rule: PushRule)
-            : Call<Unit>
+    suspend fun addRule(@Path("kind") kind: String,
+                        @Path("ruleId") ruleId: String,
+                        @Body rule: PushRule)
 }
