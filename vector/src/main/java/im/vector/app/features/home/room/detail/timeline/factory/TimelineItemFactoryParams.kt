@@ -27,7 +27,5 @@ data class TimelineItemFactoryParams(
         val lastSentEventIdWithoutReadReceipts: String? = null,
         val callback: TimelineEventController.Callback? = null
 ) {
-
-    val isHighlighted: Boolean
-        get() = highlightedEventId == event.eventId
+    val isHighlighted = highlightedEventId == event.eventId
 }
