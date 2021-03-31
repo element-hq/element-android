@@ -29,5 +29,4 @@ sealed class RoomListAction : VectorViewModelAction {
     data class ChangeRoomNotificationState(val roomId: String, val notificationState: RoomNotificationState) : RoomListAction()
     data class ToggleTag(val roomId: String, val tag: String) : RoomListAction()
     data class LeaveRoom(val roomId: String) : RoomListAction()
-    object MarkAllRoomsRead : RoomListAction()
 }

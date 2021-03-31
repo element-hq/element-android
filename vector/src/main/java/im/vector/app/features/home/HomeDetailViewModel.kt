@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -28,12 +29,16 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.ui.UiStateRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 /**
@@ -77,6 +82,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     override fun handle(action: HomeDetailAction) {
         when (action) {
             is HomeDetailAction.SwitchDisplayMode -> handleSwitchDisplayMode(action)
+            HomeDetailAction.MarkAllRoomsRead -> handleMarkAllRoomsRead()
         }
     }
 
@@ -91,6 +97,27 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     // PRIVATE METHODS *****************************************************************************
+
+    private fun handleMarkAllRoomsRead() = withState { _ ->
+        // questionable to use viewmodelscope
+        viewModelScope.launch(Dispatchers.Default) {
+            val roomIds = session.getRoomSummaries(
+                    roomSummaryQueryParams {
+                        this.memberships = listOf(Membership.JOIN)
+                        this.roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
+                    }
+            ).map {
+                it.roomId
+            }
+            try {
+                awaitCallback<Unit> {
+                    session.markAllAsRead(roomIds, it)
+                }
+            } catch (failure: Throwable) {
+                Timber.d(failure, "Failed to mark all as read")
+            }
+        }
+    }
 
     private fun observeSyncState() {
         session.rx()
@@ -157,7 +184,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                 notificationCountPeople = dmRooms.totalCount() + dmInvites,
                                 notificationHighlightPeople = dmRooms.isHighlight() || dmInvites > 0,
                                 notificationCountRooms = otherRooms.totalCount() + roomsInvite,
-                                notificationHighlightRooms = otherRooms.isHighlight() || roomsInvite > 0
+                                notificationHighlightRooms = otherRooms.isHighlight() || roomsInvite > 0,
+                                hasUnreadMessages = dmRooms.totalCount() + otherRooms.totalCount() > 0
                         )
                     }
                 }

@@ -160,7 +160,6 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             is RoomListAction.AcceptInvitation -> handleAcceptInvitation(action)
             is RoomListAction.RejectInvitation -> handleRejectInvitation(action)
             is RoomListAction.FilterWith -> handleFilter(action)
-            is RoomListAction.MarkAllRoomsRead -> handleMarkAllRoomsRead()
             is RoomListAction.LeaveRoom -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
             is RoomListAction.ToggleTag -> handleToggleTag(action)
@@ -274,15 +273,6 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 _viewEvents.post(RoomListViewEvents.Failure(failure))
             }
         }
-    }
-
-    private fun handleMarkAllRoomsRead() = withState { _ ->
-//        state.asyncFilteredRooms.invoke()
-//                ?.flatMap { it.value }
-//                ?.filter { it.membership == Membership.JOIN }
-//                ?.map { it.roomId }
-//                ?.toList()
-//                ?.let { session.markAllAsRead(it, NoOpMatrixCallback()) }
     }
 
     private fun handleChangeNotificationMode(action: RoomListAction.ChangeRoomNotificationState) {

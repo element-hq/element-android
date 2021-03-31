@@ -20,8 +20,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
@@ -84,8 +82,6 @@ class RoomListFragment @Inject constructor(
         return FragmentRoomListBinding.inflate(inflater, container, false)
     }
 
-    private var hasUnreadRooms = false
-
     data class SectionKey(
             val name: String,
             val isExpanded: Boolean
@@ -99,24 +95,6 @@ class RoomListFragment @Inject constructor(
 
     private val adapterInfosList = mutableListOf<SectionAdapterInfo>()
     private var concatAdapter: ConcatAdapter? = null
-
-    override fun getMenuRes() = R.menu.room_list
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_home_mark_all_as_read -> {
-                roomListViewModel.handle(RoomListAction.MarkAllRoomsRead)
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = hasUnreadRooms
-        super.onPrepareOptionsMenu(menu)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -373,19 +351,6 @@ class RoomListFragment @Inject constructor(
 
     override fun invalidate() = withState(roomListViewModel) { state ->
         footerController.setData(state)
-        // Mark all as read menu
-        when (roomListParams.displayMode) {
-            RoomListDisplayMode.NOTIFICATIONS,
-            RoomListDisplayMode.PEOPLE,
-            RoomListDisplayMode.ROOMS -> {
-                val newValue = state.hasUnread
-                if (hasUnreadRooms != newValue) {
-                    hasUnreadRooms = newValue
-                    invalidateOptionsMenu()
-                }
-            }
-            else                      -> Unit
-        }
     }
 
     private fun checkEmptyState() {
