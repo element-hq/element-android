@@ -19,6 +19,7 @@ Bugfix 🐛:
  - Fix bad theme change for the MainActivity
  - Handle encrypted reactions (#2509)
  - Disable URL preview for some domains (#2995)
+ - Fix avatar rendering for DMs, after initial sync (#2693)
 
 Translations 🗣:
  -
