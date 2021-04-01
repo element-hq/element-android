@@ -886,7 +886,7 @@
     <string name="black_theme">Schwarzes Design</string>
     <string name="notification_sync_in_progress">Synchronisiere…</string>
     <string name="notification_listening_for_events">Auf Ereignisse lauschen</string>
-    <string name="settings_containing_my_display_name">Nachrichten, die meinen Anzeigenamen enthalten</string>
+    <string name="settings_containing_my_display_name">Nachrichten mit meinem Anzeigenamen</string>
     <string name="settings_containing_my_user_name">Nachrichten, die meinen Benutzernamen enthalten</string>
     <string name="you_added_a_new_device">Du hast die neue Sitzung \'%s\' hinzugefügt, die jetzt Verschlüsselungs-Schlüssel anfordert.</string>
     <string name="your_unverified_device_requesting">Deine bislang nicht verifiziertes Sitzung \'%s\' fordert Verschlüsselungs-Schlüssel an.</string>
@@ -2729,7 +2729,7 @@
     <string name="settings_room_directory_show_all_rooms">Zeige Räume mit anstößigen Inhalten</string>
     <string name="event_status_delete_all_failed_dialog_message">Bist du dir sicher, dass du alle nicht gesendete Nachrichten in diesem Raum löschen willst\?</string>
     <string name="event_status_delete_all_failed_dialog_title">Nicht gesendete Nachrichten löschen</string>
-    <string name="event_status_a11y_failed">Schlug fehl</string>
+    <string name="event_status_a11y_failed">Fehlgeschlagen</string>
     <string name="event_status_cancel_sending_dialog_message">Willst du zu sendende Nachrichten zurückziehen\?</string>
     <string name="event_status_a11y_delete_all">Alle fehgeschlagene Nachrichten löschen</string>
     <string name="event_status_failed_messages_warning">Senden der Nachricht gescheitert</string>
