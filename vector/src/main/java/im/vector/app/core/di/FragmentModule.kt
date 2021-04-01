@@ -22,8 +22,8 @@ import androidx.fragment.app.FragmentFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import fr.gouv.tchap.features.login.TchapFirstLoginFragment
-import fr.gouv.tchap.features.login.TchapFirstWelcomeFragment
+import fr.gouv.tchap.features.login.TchapLoginFragment
+import fr.gouv.tchap.features.login.TchapWelcomeFragment
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
@@ -623,11 +623,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(TchapFirstWelcomeFragment::class)
-    fun bindTchapFirstWelcomeFragment(fragment: TchapFirstWelcomeFragment): Fragment
+    @FragmentKey(TchapWelcomeFragment::class)
+    fun bindTchapWelcomeFragment(fragment: TchapWelcomeFragment): Fragment
 
     @Binds
     @IntoMap
-    @FragmentKey(TchapFirstLoginFragment::class)
-    fun bindTchapFirstLoginFragment(fragment: TchapFirstLoginFragment): Fragment
+    @FragmentKey(TchapLoginFragment::class)
+    fun bindTchapLoginFragment(fragment: TchapLoginFragment): Fragment
 }

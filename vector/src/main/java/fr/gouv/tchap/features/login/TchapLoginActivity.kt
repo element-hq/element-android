@@ -118,7 +118,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
     }
 
     protected open fun addFirstFragment() {
-        addFragment(R.id.loginFragmentContainer, TchapFirstWelcomeFragment::class.java)
+        addFragment(R.id.loginFragmentContainer, TchapWelcomeFragment::class.java)
     }
 
     private fun handleLoginViewEvents(loginViewEvents: TchapLoginViewEvents) {
@@ -153,9 +153,9 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                 Unit
             }
             is TchapLoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
-            is TchapLoginViewEvents.OnLoginFlowRetrieved                       -> {
+            is TchapLoginViewEvents.OnLoginFlowRetrieved                       ->
                 // Handled by the Tchap login fragment
-            }
+                Unit
             is TchapLoginViewEvents.OnForgetPasswordClicked                    ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginResetPasswordFragment::class.java,
@@ -196,7 +196,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                 // This is managed by the LoginViewEvents
             }
             SignMode.SignIn             -> addFragmentToBackstack(R.id.loginFragmentContainer,
-                    TchapFirstLoginFragment::class.java,
+                    TchapLoginFragment::class.java,
                     tag = FRAGMENT_LOGIN_TAG,
                     option = commonOption)
             SignMode.SignInWithMatrixId -> Unit // Unsupported on Tchap

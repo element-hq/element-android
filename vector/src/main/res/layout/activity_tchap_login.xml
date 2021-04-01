@@ -21,11 +21,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/fragment_tchap_first_register" />
+            <include layout="@layout/fragment_tchap_register" />
 
-            <include layout="@layout/fragment_tchap_first_login" />
+            <include layout="@layout/fragment_tchap_login" />
 
-            <include layout="@layout/fragment_tchap_first_forgotten_password" />
+            <include layout="@layout/fragment_tchap_forgotten_password" />
 
             <include layout="@layout/fragment_tchap_message_button" />
 
@@ -53,10 +53,10 @@
 
     </ScrollView>
 
-    <include layout="@layout/fragment_tchap_first_welcome" />
+    <include layout="@layout/fragment_tchap_welcome" />
 
     <include
-        layout="@layout/fragment_tchap_first_register_wait_for_email"
+        layout="@layout/fragment_tchap_register_wait_for_email"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar" />

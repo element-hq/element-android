@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_tchap_first_login"
+    android:id="@+id/fragment_tchap_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tchap_first_login_email_layout"
+        android:id="@+id/tchap_login_email_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tchap_first_login_email"
+            android:id="@+id/tchap_login_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/tchap_connection_email"
@@ -42,7 +42,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tchap_first_login_password_layout"
+        android:id="@+id/tchap_login_password_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -52,10 +52,10 @@
         app:hintTextAppearance="@style/TchapTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tchap_first_login_email_layout">
+        app:layout_constraintTop_toBottomOf="@+id/tchap_login_email_layout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tchap_first_login_password"
+            android:id="@+id/tchap_login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/tchap_connection_password"
@@ -68,7 +68,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/tchap_first_login_password_forgotten"
+        android:id="@+id/tchap_login_password_forgotten"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -80,6 +80,6 @@
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tchap_first_login_password_layout" />
+        app:layout_constraintTop_toBottomOf="@id/tchap_login_password_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

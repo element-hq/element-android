@@ -29,7 +29,7 @@ import fr.gouv.tchap.features.platform.PlatformViewModel
 import fr.gouv.tchap.features.platform.PlatformViewState
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.databinding.FragmentTchapFirstLoginBinding
+import im.vector.app.databinding.FragmentTchapLoginBinding
 import javax.inject.Inject
 
 /**
@@ -40,17 +40,17 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class TchapFirstLoginFragment @Inject constructor(
+class TchapLoginFragment @Inject constructor(
         private val platformViewModelFactory: PlatformViewModel.Factory
-) : TchapAbstractLoginFragment<FragmentTchapFirstLoginBinding>(), PlatformViewModel.Factory {
+) : TchapAbstractLoginFragment<FragmentTchapLoginBinding>(), PlatformViewModel.Factory {
 
     private val viewModel: PlatformViewModel by fragmentViewModel()
     private var isSignupMode = false
     private lateinit var login: String
     private lateinit var password: String
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapFirstLoginBinding {
-        return FragmentTchapFirstLoginBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapLoginBinding {
+        return FragmentTchapLoginBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,14 +70,10 @@ class TchapFirstLoginFragment @Inject constructor(
 
         loginViewModel.observeViewEvents {
             when (it) {
-                is TchapLoginViewEvents.Failure                -> TODO()
-                is TchapLoginViewEvents.Loading                -> TODO()
-                TchapLoginViewEvents.OnForgetPasswordClicked   -> TODO()
-                TchapLoginViewEvents.OnLoginFlowRetrieved      -> loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
-                is TchapLoginViewEvents.OnSendEmailSuccess     -> TODO()
-                is TchapLoginViewEvents.OnSignModeSelected     -> TODO()
-                TchapLoginViewEvents.OutdatedHomeserver        -> TODO()
-                is TchapLoginViewEvents.RegistrationFlowResult -> TODO()
+                TchapLoginViewEvents.OnLoginFlowRetrieved -> loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                else                                      ->
+                    // This is handled by the Activity
+                    Unit
             }.exhaustive
         }
     }
@@ -98,13 +94,13 @@ class TchapFirstLoginFragment @Inject constructor(
     private fun submit() {
         cleanupUi()
 
-        login = views.tchapFirstLoginEmail.text.toString()
-        password = views.tchapFirstLoginPassword.text.toString()
+        login = views.tchapLoginEmail.text.toString()
+        password = views.tchapLoginPassword.text.toString()
 
         // This can be called by the IME action, so deal with empty cases
         var error = 0
         if (login.isEmpty()) {
-            views.tchapFirstLoginEmail.error = getString(if (isSignupMode) {
+            views.tchapLoginEmail.error = getString(if (isSignupMode) {
                 R.string.error_empty_field_choose_user_name
             } else {
                 R.string.error_empty_field_enter_user_name
@@ -112,7 +108,7 @@ class TchapFirstLoginFragment @Inject constructor(
             error++
         }
         if (password.isEmpty()) {
-            views.tchapFirstLoginPassword.error = getString(if (isSignupMode) {
+            views.tchapLoginPassword.error = getString(if (isSignupMode) {
                 R.string.error_empty_field_choose_password
             } else {
                 R.string.error_empty_field_your_password
@@ -127,8 +123,8 @@ class TchapFirstLoginFragment @Inject constructor(
 
     private fun cleanupUi() {
 //        views.loginSubmit.hideKeyboard()
-        views.tchapFirstLoginEmail.error = null
-        views.tchapFirstLoginPassword.error = null
+        views.tchapLoginEmail.error = null
+        views.tchapLoginPassword.error = null
     }
 
     private fun updateHomeServer(platform: Platform) {

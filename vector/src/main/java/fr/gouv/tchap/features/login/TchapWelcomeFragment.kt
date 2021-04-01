@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import im.vector.app.databinding.FragmentTchapFirstWelcomeBinding
+import im.vector.app.databinding.FragmentTchapWelcomeBinding
 import im.vector.app.features.login.SignMode
 
 import javax.inject.Inject
@@ -28,10 +28,10 @@ import javax.inject.Inject
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver
  */
-class TchapFirstWelcomeFragment @Inject constructor() : TchapAbstractLoginFragment<FragmentTchapFirstWelcomeBinding>() {
+class TchapWelcomeFragment @Inject constructor() : TchapAbstractLoginFragment<FragmentTchapWelcomeBinding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapFirstWelcomeBinding {
-        return FragmentTchapFirstWelcomeBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapWelcomeBinding {
+        return FragmentTchapWelcomeBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,8 +41,8 @@ class TchapFirstWelcomeFragment @Inject constructor() : TchapAbstractLoginFragme
     }
 
     private fun setupViews() {
-        views.fragmentTchapFirstWelcomeRegisterButton.setOnClickListener { signUp() }
-        views.fragmentTchapFirstWelcomeLoginButton.setOnClickListener { signIn() }
+        views.fragmentTchapWelcomeRegisterButton.setOnClickListener { signUp() }
+        views.fragmentTchapWelcomeLoginButton.setOnClickListener { signIn() }
     }
 
     private fun signUp() {
