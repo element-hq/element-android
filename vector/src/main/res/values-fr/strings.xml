@@ -1455,9 +1455,7 @@
 \n
 \nVoulez-vous vous connecter en utilisant un client web \?</string>
     <string name="login_registration_disabled">Désolé, ce serveur n’accepte pas de nouveau compte.</string>
-    <string name="login_registration_not_supported">L’application ne peut pas créer de compte sur ce serveur d’accueil.
-\n
-\nVoulez-vous vous inscrire en utilisant un client web \?</string>
+    <string name="login_registration_not_supported">L’application ne peut pas créer de compte sur ce serveur d’accueil.</string>
     <string name="login_login_with_email_error">Cet e\u2011mail n’est associé à aucun compte.</string>
     <string name="login_reset_password_on">Réinitialiser le mot de passe sur %1$s</string>
     <string name="login_reset_password_notice">Un e\u2011mail de vérification sera envoyé à votre adresse pour confirmer la configuration de votre nouveau mot de passe.</string>

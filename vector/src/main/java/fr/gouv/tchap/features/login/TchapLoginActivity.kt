@@ -48,7 +48,6 @@ import im.vector.app.features.login.LoginResetPasswordFragment
 import im.vector.app.features.login.LoginViewState
 import im.vector.app.features.login.LoginWaitForEmailFragment
 import im.vector.app.features.login.LoginWaitForEmailFragmentArgument
-import im.vector.app.features.login.LoginWebFragment
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.TextInputFormFragmentMode
 import im.vector.app.features.login.isSupported
@@ -58,7 +57,6 @@ import im.vector.app.features.login.terms.toLocalizedLoginTerms
 import im.vector.app.features.pin.UnlockedActivity
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
 /**
@@ -201,9 +199,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                     TchapFirstLoginFragment::class.java,
                     tag = FRAGMENT_LOGIN_TAG,
                     option = commonOption)
-            SignMode.SignInWithMatrixId -> {
-                // Do nothing on Tchap
-            }
+            SignMode.SignInWithMatrixId -> Unit // Unsupported on Tchap
         }.exhaustive
     }
 
@@ -211,12 +207,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         AlertDialog.Builder(this)
                 .setTitle(R.string.app_name)
                 .setMessage(getString(R.string.login_registration_not_supported))
-                .setPositiveButton(R.string.yes) { _, _ ->
-                    addFragmentToBackstack(R.id.loginFragmentContainer,
-                            LoginWebFragment::class.java,
-                            option = commonOption)
-                }
-                .setNegativeButton(R.string.no, null)
+                .setPositiveButton(R.string.ok, null)
                 .show()
     }
 

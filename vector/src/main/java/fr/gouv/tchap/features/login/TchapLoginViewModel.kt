@@ -115,36 +115,13 @@ class TchapLoginViewModel @AssistedInject constructor(
             is TchapLoginAction.InitWith                   -> handleInitWith(action)
             is TchapLoginAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
             is TchapLoginAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
-            is TchapLoginAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is TchapLoginAction.ResetPassword              -> handleResetPassword()
             is TchapLoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
             is TchapLoginAction.RegisterAction             -> handleRegisterAction(action)
             is TchapLoginAction.ResetAction                -> handleResetAction(action)
             is TchapLoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
-            is TchapLoginAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             is TchapLoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
-    }
-
-    private fun handleUserAcceptCertificate(action: TchapLoginAction.UserAcceptCertificate) {
-        // It happen when we get the login flow, or during direct authentication.
-        // So alter the homeserver config and retrieve again the login flow
-        when (val finalLastAction = lastAction) {
-            is TchapLoginAction.UpdateHomeServer -> {
-                currentHomeServerConnectionConfig
-                        ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
-                        ?.let { getLoginFlow(it) }
-            }
-            is TchapLoginAction.LoginOrRegister  ->
-                handleDirectLogin(
-                        finalLastAction,
-                        HomeServerConnectionConfig.Builder()
-                                // Will be replaced by the task
-                                .withHomeServerUri("https://dummy.org")
-                                .withAllowedFingerPrints(listOf(action.fingerprint))
-                                .build()
-                )
-        }
     }
 
     private fun handleSetupSsoForSessionRecovery(action: TchapLoginAction.SetupSsoForSessionRecovery) {
@@ -339,7 +316,7 @@ class TchapLoginViewModel @AssistedInject constructor(
         when (action.signMode) {
             SignMode.SignUp             -> startRegistrationFlow()
             SignMode.SignIn             -> _viewEvents.post(TchapLoginViewEvents.OnSignModeSelected(SignMode.SignIn))
-            SignMode.SignInWithMatrixId -> _viewEvents.post(TchapLoginViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
+            SignMode.SignInWithMatrixId -> Unit // Unsupported on Tchap
             SignMode.Unknown            -> Unit
         }
     }
@@ -373,103 +350,8 @@ class TchapLoginViewModel @AssistedInject constructor(
             SignMode.Unknown            -> error("Developer error, invalid sign mode")
             SignMode.SignIn             -> handleLogin(action)
             SignMode.SignUp             -> handleRegisterWith(action)
-            SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
+            SignMode.SignInWithMatrixId -> Unit // Unsupported on Tchap
         }.exhaustive
-    }
-
-    private fun handleDirectLogin(action: TchapLoginAction.LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?) {
-        setState {
-            copy(
-                    asyncLoginAction = Loading()
-            )
-        }
-
-        authenticationService.getWellKnownData(action.username, homeServerConnectionConfig, object : MatrixCallback<WellknownResult> {
-            override fun onSuccess(data: WellknownResult) {
-                when (data) {
-                    is WellknownResult.Prompt          ->
-                        onWellknownSuccess(action, data, homeServerConnectionConfig)
-                    is WellknownResult.FailPrompt      ->
-                        // Relax on IS discovery if home server is valid
-                        if (data.homeServerUrl != null && data.wellKnown != null) {
-                            onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
-                        } else {
-                            onWellKnownError()
-                        }
-                    is WellknownResult.InvalidMatrixId -> {
-                        setState {
-                            copy(
-                                    asyncLoginAction = Uninitialized
-                            )
-                        }
-                        _viewEvents.post(TchapLoginViewEvents.Failure(Exception(stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id))))
-                    }
-                    else                               -> {
-                        onWellKnownError()
-                    }
-                }.exhaustive
-            }
-
-            override fun onFailure(failure: Throwable) {
-                onDirectLoginError(failure)
-            }
-        })
-    }
-
-    private fun onWellKnownError() {
-        setState {
-            copy(
-                    asyncLoginAction = Uninitialized
-            )
-        }
-        _viewEvents.post(TchapLoginViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
-    }
-
-    private fun onWellknownSuccess(action: TchapLoginAction.LoginOrRegister,
-                                   wellKnownPrompt: WellknownResult.Prompt,
-                                   homeServerConnectionConfig: HomeServerConnectionConfig?) {
-        val alteredHomeServerConnectionConfig = homeServerConnectionConfig
-                ?.copy(
-                        homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
-                        identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
-                )
-                ?: HomeServerConnectionConfig(
-                        homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
-                        identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
-                )
-
-        authenticationService.directAuthentication(
-                alteredHomeServerConnectionConfig,
-                action.username,
-                action.password,
-                action.initialDeviceName,
-                object : MatrixCallback<Session> {
-                    override fun onSuccess(data: Session) {
-                        onSessionCreated(data)
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        onDirectLoginError(failure)
-                    }
-                })
-    }
-
-    private fun onDirectLoginError(failure: Throwable) {
-        if (failure is Failure.UnrecognizedCertificateFailure) {
-            // Display this error in a dialog
-            _viewEvents.post(TchapLoginViewEvents.Failure(failure))
-            setState {
-                copy(
-                        asyncLoginAction = Uninitialized
-                )
-            }
-        } else {
-            setState {
-                copy(
-                        asyncLoginAction = Fail(failure)
-                )
-            }
-        }
     }
 
     private fun handleLogin(action: TchapLoginAction.LoginOrRegister) {
@@ -538,25 +420,6 @@ class TchapLoginViewModel @AssistedInject constructor(
             copy(
                     asyncLoginAction = Success(Unit)
             )
-        }
-    }
-
-    private fun handleWebLoginSuccess(action: TchapLoginAction.WebLoginSuccess) = withState { state ->
-        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(state.homeServerUrl)
-
-        if (homeServerConnectionConfigFinal == null) {
-            // Should not happen
-            Timber.w("homeServerConnectionConfig is null")
-        } else {
-            authenticationService.createSessionFromSso(homeServerConnectionConfigFinal, action.credentials, object : MatrixCallback<Session> {
-                override fun onSuccess(data: Session) {
-                    onSessionCreated(data)
-                }
-
-                override fun onFailure(failure: Throwable) = setState {
-                    copy(asyncLoginAction = Fail(failure))
-                }
-            })
         }
     }
 

@@ -28,7 +28,6 @@ import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 sealed class TchapLoginAction : VectorViewModelAction {
     data class UpdateHomeServer(val homeServerUrl: String) : TchapLoginAction()
     data class UpdateSignMode(val signMode: SignMode) : TchapLoginAction()
-    data class WebLoginSuccess(val credentials: Credentials) : TchapLoginAction()
     data class InitWith(val loginConfig: LoginConfig?) : TchapLoginAction()
     data class ResetPassword(val email: String, val newPassword: String) : TchapLoginAction()
     object ResetPasswordMailConfirmed : TchapLoginAction()
@@ -65,6 +64,4 @@ sealed class TchapLoginAction : VectorViewModelAction {
                                           val ssoIdentityProviders: List<SsoIdentityProvider>?) : TchapLoginAction()
 
     data class PostViewEvent(val viewEvent: TchapLoginViewEvents) : TchapLoginAction()
-
-    data class UserAcceptCertificate(val fingerprint: Fingerprint) : TchapLoginAction()
 }
