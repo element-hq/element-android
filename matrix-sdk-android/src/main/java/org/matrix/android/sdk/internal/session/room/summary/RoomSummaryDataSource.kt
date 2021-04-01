@@ -26,6 +26,7 @@ import io.realm.RealmQuery
 import io.realm.Sort
 import org.matrix.android.sdk.api.session.room.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.UpdatableFilterLivePageResult
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
@@ -38,7 +39,6 @@ import org.matrix.android.sdk.internal.database.query.findByAlias
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.query.process
-import org.matrix.android.sdk.internal.session.room.UpdatableFilterLivePageResult
 import org.matrix.android.sdk.internal.util.fetchCopyMap
 import javax.inject.Inject
 

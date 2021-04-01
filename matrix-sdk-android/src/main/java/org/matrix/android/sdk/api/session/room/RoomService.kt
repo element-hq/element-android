@@ -28,7 +28,6 @@ import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.session.room.UpdatableFilterLivePageResult
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 
 /**

@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.UpdatableFilterLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -45,7 +46,6 @@ import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
-import org.matrix.android.sdk.internal.session.room.UpdatableFilterLivePageResult
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber

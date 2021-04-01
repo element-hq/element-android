@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.UpdatableFilterLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -195,7 +196,3 @@ internal class DefaultRoomService @Inject constructor(
     }
 }
 
-interface UpdatableFilterLivePageResult {
-    val livePagedList: LiveData<PagedList<RoomSummary>>
-    fun updateQuery(queryParams: RoomSummaryQueryParams)
-}
