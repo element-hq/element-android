@@ -84,7 +84,8 @@ class RoomListFragment @Inject constructor(
 
     data class SectionKey(
             val name: String,
-            val isExpanded: Boolean
+            val isExpanded: Boolean,
+            val notifyOfLocalEcho: Boolean
     )
 
     data class SectionAdapterInfo(
@@ -116,6 +117,14 @@ class RoomListFragment @Inject constructor(
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
+
+        roomListViewModel.selectSubscribe(viewLifecycleOwner, RoomListViewState::roomMembershipChanges) { ms ->
+            // it's for invites local echo
+            adapterInfosList.filter { it.section.notifyOfLocalEcho }
+                    .onEach {
+                        it.contentAdapter.roomChangeMembershipStates = ms
+                    }
+        }
     }
 
     private fun refreshCollapseStates() {
@@ -267,7 +276,8 @@ class RoomListFragment @Inject constructor(
                     SectionAdapterInfo(
                             SectionKey(
                                     name = section.sectionName,
-                                    isExpanded = section.isExpanded.value.orTrue()
+                                    isExpanded = section.isExpanded.value.orTrue(),
+                                    notifyOfLocalEcho = section.notifyOfLocalEcho
                             ),
                             sectionAdapter,
                             contentAdapter

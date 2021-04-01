@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
@@ -46,6 +47,7 @@ import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.internal.session.room.UpdatableFilterLivePageResult
 import org.matrix.android.sdk.rx.asObservable
+import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -59,6 +61,19 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private var updatableQuery: UpdatableFilterLivePageResult? = null
+
+    init {
+        observeMembershipChanges()
+    }
+
+    private fun observeMembershipChanges() {
+        session.rx()
+                .liveRoomChangeMembershipState()
+                .subscribe {
+                    setState { copy(roomMembershipChanges = it) }
+                }
+                .disposeOnClear()
+    }
 
     companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
 
@@ -74,14 +89,15 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             val livePages: LiveData<PagedList<RoomSummary>>,
             val isExpanded: MutableLiveData<Boolean> = MutableLiveData(true),
             val notificationCount: MutableLiveData<RoomAggregateNotificationCount> =
-                    MutableLiveData(RoomAggregateNotificationCount(0, 0))
+                    MutableLiveData(RoomAggregateNotificationCount(0, 0)),
+            val notifyOfLocalEcho: Boolean = false
     )
 
     val sections: List<RoomsSection> by lazy {
         val sections = mutableListOf<RoomsSection>()
         if (initialState.displayMode == RoomListDisplayMode.PEOPLE) {
 
-            addSection(sections, R.string.invitations_header) {
+            addSection(sections, R.string.invitations_header, true) {
                 it.memberships = listOf(Membership.INVITE)
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
             }
@@ -98,7 +114,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             }
         } else if (initialState.displayMode == RoomListDisplayMode.ROOMS) {
 
-            addSection(sections, R.string.invitations_header) {
+            addSection(sections, R.string.invitations_header, true) {
                 it.memberships = listOf(Membership.INVITE)
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
             }
@@ -138,16 +154,15 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                         }
             }
         } else if (initialState.displayMode == RoomListDisplayMode.NOTIFICATIONS) {
-            withQueryParams({
-                it.memberships = Membership.activeMemberships()
+
+            addSection(sections, R.string.invitations_header, true) {
+                it.memberships = listOf(Membership.INVITE)
+                it.roomCategoryFilter = RoomCategoryFilter.ALL
+            }
+
+            addSection(sections, R.string.bottom_action_rooms, true) {
+                it.memberships = listOf(Membership.JOIN)
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
-            }) { qpm ->
-                val name = stringProvider.getString(R.string.bottom_action_rooms)
-                session.getFilteredPagedRoomSummariesLive(qpm)
-                        .let { livePagedList ->
-                            updatableQuery = livePagedList
-                            sections.add(RoomsSection(name, livePagedList.livePagedList))
-                        }
             }
         }
 
@@ -167,7 +182,10 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         }.exhaustive
     }
 
-    private fun addSection(sections: MutableList<RoomsSection>, @StringRes nameRes: Int, query: (RoomSummaryQueryParams.Builder) -> Unit) {
+    private fun addSection(sections: MutableList<RoomsSection>,
+                           @StringRes nameRes: Int,
+                           notifyOfLocalEcho: Boolean = false,
+                           query: (RoomSummaryQueryParams.Builder) -> Unit) {
         withQueryParams({
             query.invoke(it)
         }) { roomQueryParams ->
@@ -185,7 +203,13 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
                                 }.disposeOnClear()
 
-                        sections.add(RoomsSection(name, livePagedList))
+                        sections.add(
+                                RoomsSection(
+                                        sectionName = name,
+                                        livePages = livePagedList,
+                                        notifyOfLocalEcho = notifyOfLocalEcho
+                                )
+                        )
                     }
         }
     }
@@ -236,6 +260,19 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             // Request already sent, should not happen
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
+        }
+
+        // quick echo
+        setState {
+            copy(
+                    roomMembershipChanges = roomMembershipChanges.mapValues {
+                        if (it.key == roomId) {
+                            ChangeMembershipState.Joining
+                        } else {
+                            it.value
+                        }
+                    }
+            )
         }
 
         val room = session.getRoom(roomId) ?: return@withState

@@ -18,24 +18,19 @@ package im.vector.app.features.home.room.list
 
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
-import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.utils.createUIHandler
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
-class RoomSummaryPagedControllerFactory @Inject constructor(private val stringProvider: StringProvider,
-                                                            private val userPreferencesProvider: UserPreferencesProvider,
-                                                            private val roomSummaryItemFactory: RoomSummaryItemFactory) {
+class RoomSummaryPagedControllerFactory @Inject constructor(private val roomSummaryItemFactory: RoomSummaryItemFactory) {
 
     fun createRoomSummaryPagedController(): RoomSummaryPagedController {
-        return RoomSummaryPagedController(stringProvider, userPreferencesProvider, roomSummaryItemFactory)
+        return RoomSummaryPagedController(roomSummaryItemFactory)
     }
 }
 
-class RoomSummaryPagedController constructor(private val stringProvider: StringProvider,
-                                             private val userPreferencesProvider: UserPreferencesProvider,
-                                             private val roomSummaryItemFactory: RoomSummaryItemFactory)
+class RoomSummaryPagedController constructor(private val roomSummaryItemFactory: RoomSummaryItemFactory)
     : PagedListEpoxyController<RoomSummary>(
 // Important it must match the PageList builder notify Looper
         modelBuildingHandler = createUIHandler()
@@ -43,9 +38,16 @@ class RoomSummaryPagedController constructor(private val stringProvider: StringP
 
     var listener: RoomListListener? = null
 
+    var roomChangeMembershipStates: Map<String, ChangeMembershipState>? = null
+        set(value) {
+            field = value
+            // ideally we could search for visible models and update only those
+            requestForcedModelBuild()
+        }
+
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
         val unwrappedItem = item
-                // for place holder if enabled
+        // for place holder if enabled
                 ?: return roomSummaryItemFactory.createRoomItem(
                         RoomSummary(
                                 roomId = "null_item_pos_$currentPosition",
@@ -57,7 +59,7 @@ class RoomSummaryPagedController constructor(private val stringProvider: StringP
 
 //        GenericItem_().apply { id("null_item_pos_$currentPosition") }
 
-        return roomSummaryItemFactory.create(unwrappedItem, emptyMap(), emptySet(), listener)
+        return roomSummaryItemFactory.create(unwrappedItem, roomChangeMembershipStates ?: emptyMap(), emptySet(), listener)
     }
 
 //    override fun onModelBound(holder: EpoxyViewHolder, boundModel: EpoxyModel<*>, position: Int, previouslyBoundModel: EpoxyModel<*>?) {
