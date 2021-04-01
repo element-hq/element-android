@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.network
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.getRetryDelay
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.internal.network.ssl.CertUtil
 import retrofit2.HttpException
@@ -68,8 +69,9 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
                     ?.also { unrecognizedCertificateException -> throw unrecognizedCertificateException }
 
             if (canRetry && currentRetryCount++ < maxRetriesCount && exception.shouldBeRetried()) {
-                delay(currentDelay)
-                currentDelay = (currentDelay * 2L).coerceAtMost(maxDelayBeforeRetry)
+                // In case of 429, ensure we wait enough
+                delay(currentDelay.coerceAtLeast(exception.getRetryDelay(0)))
+                currentDelay = currentDelay.times(2L).coerceAtMost(maxDelayBeforeRetry)
                 // Try again (loop)
             } else {
                 throw when (exception) {
