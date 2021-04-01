@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TchapLoginButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/tchap_text_color_light</item>
+    </style>
+
+    <style name="TchapTextInputLayout" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">13.5sp</item>
+        <item name="android:textColor">@color/tchap_text_color_light</item>
+        <item name="android:textColorHint">@color/tchap_text_color_light</item>
+        <item name="colorAccent">@color/tchap_text_color_light</item>
+    </style>
+
+    <!-- actionbar icons color -->
+    <style name="Vector.ActionBarTheme.TchapLogin" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/tchap_text_color_light</item>
+        <item name="actionMenuTextColor">@color/tchap_text_color_light_selector</item>
+        <item name="android:actionMenuTextColor">@color/tchap_text_color_light_selector</item>
+        <item name="android:textSize">13.5sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="AppTheme.Widget.ActionButton" parent="@style/Widget.AppCompat.ActionButton">
+        <item name="android:textAllCaps">false</item>
+    </style>
+</resources>

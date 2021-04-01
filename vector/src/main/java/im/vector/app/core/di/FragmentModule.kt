@@ -22,6 +22,8 @@ import androidx.fragment.app.FragmentFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import fr.gouv.tchap.features.login.TchapLoginFragment
+import fr.gouv.tchap.features.login.TchapWelcomeFragment
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
@@ -618,4 +620,14 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomDevToolSendFormFragment::class)
     fun bindRoomDevToolSendFormFragment(fragment: RoomDevToolSendFormFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(TchapWelcomeFragment::class)
+    fun bindTchapWelcomeFragment(fragment: TchapWelcomeFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(TchapLoginFragment::class)
+    fun bindTchapLoginFragment(fragment: TchapLoginFragment): Fragment
 }

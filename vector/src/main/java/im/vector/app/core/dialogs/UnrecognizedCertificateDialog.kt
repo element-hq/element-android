@@ -118,28 +118,33 @@ class UnrecognizedCertificateDialog @Inject constructor(
         }
         builder.setView(layout)
         builder.setTitle(R.string.ssl_could_not_verify)
-        builder.setPositiveButton(R.string.ssl_trust) { _, _ ->
-            callback.onAccept()
-        }
-        if (existing) {
-            builder.setNegativeButton(R.string.ssl_remain_offline) { _, _ ->
-                if (userId != null) {
-                    var f = ignoredFingerprints[userId]
-                    if (f == null) {
-                        f = HashSet()
-                        ignoredFingerprints[userId] = f
-                    }
-                    f.add(unrecognizedFingerprint)
-                }
-                callback.onIgnore()
-            }
-            builder.setNeutralButton(R.string.ssl_logout_account) { _, _ -> callback.onReject() }
-        } else {
-            builder.setNegativeButton(R.string.cancel) { _, _ -> callback.onReject() }
+//        builder.setPositiveButton(R.string.ssl_trust) { _, _ ->
+//            callback.onAccept()
+//        }
+//        if (existing) {
+//            builder.setNegativeButton(R.string.ssl_remain_offline) { _, _ ->
+//                if (userId != null) {
+//                    var f = ignoredFingerprints[userId]
+//                    if (f == null) {
+//                        f = HashSet()
+//                        ignoredFingerprints[userId] = f
+//                    }
+//                    f.add(unrecognizedFingerprint)
+//                }
+//                callback.onIgnore()
+//            }
+//            builder.setNeutralButton(R.string.ssl_logout_account) { _, _ -> callback.onReject() }
+//        } else {
+//            builder.setNegativeButton(R.string.cancel) { _, _ -> callback.onReject() }
+//        }
+        // Tchap: user can only ignore unknown certificate
+        builder.setPositiveButton(R.string.ok) { _, _ ->
+            callback.onIgnore()
         }
 
         builder.setOnDismissListener {
             Timber.d("Dismissed!")
+            callback.onIgnore()
             openDialogIds.remove(dialogId)
         }
 

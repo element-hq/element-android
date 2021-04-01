@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- main app colors -->
+    <color name="vector_tchap_primary_color">#162d58</color>
+    <color name="vector_tchap_secondary_color">#162d58</color>
+    <color name="vector_tchap_primary_color_light">#162d58</color>
+    <color name="vector_tchap_secondary_color_light">#162d58</color>
+    <color name="tchap_text_color_light">#124a9d</color>
+    <color name="tchap_text_color_light_with_alpha">#99124a9d</color>
+    <color name="vector_tchap_text_color_dark">#162d58</color>
+    <color name="vector_tchap_text_color_dark_grey">#858585</color>
+    <color name="vector_tchap_text_color_light_grey">#949494</color>
+    <color name="vector_tchap_hexagon_color_dark_grey">#979797</color>
+    <color name="vector_tchap_hexagon_background_color_dark_grey">#ECECEC</color>
+    <color name="vector_tchap_search_background_color">#90dee5f1</color>
+    <color name="tchap_search_bar">#90dee5f1</color>
+    <color name="tchap_search_bar_text">#7d7d7d</color>
+    <color name="tchap_general_search_bar">#12ffffff</color>
+    <color name="tchap_general_search_bar_border">#3bffffff</color>
+    <color name="tchap_action_bar_text_color">#ffffff</color>
+    <color name="tchap_action_bar_text_color_with_alpha">#9fffffff</color>
+    <color name="tchap_primary_text_color">#000000</color>
+    <color name="tchap_secondary_text_color">#aeaeae</color>
+    <color name="tchap_third_text_color">#848484</color>
+    <color name="tchap_gray_86">#FF868686</color>
+    <color name="tchap_navigation_menu_text_color">#9b9b9b</color>
+    <color name="tchap_presence_status_color">#60ad0d</color>
+    <color name="tchap_incoming_msg_phylact_background_color">#FFFFFF</color>
+    <color name="tchap_outgoing_msg_phylact_background_color">#374c72</color>
+    <color name="tchap_incoming_msg_markdown_block_background_color">#FFEEEEEE</color>
+    <color name="tchap_outgoing_msg_markdown_block_background_color">#FF4D4D4D</color>
+    <color name="tchap_unsent_msg_color">#FFF56679</color>
+    <color name="tchap_dark_red">#FF7f0d15</color>
+    <color name="tchap_light_background">#FFecf0f7</color>
+    <color name="tchap_coral_color">@color/vector_fuchsia_color</color>
+    <color name="tchap_pumpkin_orange_color">#fff07a12</color>
+    <color name="tchap_jade_green_color">#ff27ae60</color>
+    <color name="tchap_coral_border_color">#b2eb5757</color>
+    <color name="tchap_pumpkin_orange_border_color">#b2f07a12</color>
+    <color name="tchap_jade_green_border_color">#b227ae60</color>
+    <color name="tchap_greyish_brown_color">#ff4f4f4f</color>
+    <color name="tchap_pale_grey_color">#fff2f5f8</color>
+
+    <!-- home activity tab bar color -->
+    <color name="tab_favourites">#BD79CC</color>
+    <color name="tab_favourites_secondary">#744C7F</color>
+    <color name="tab_people">@color/vector_tchap_primary_color</color>
+    <color name="tab_people_secondary">@color/vector_tchap_secondary_color</color>
+    <color name="tab_rooms">@color/vector_tchap_primary_color</color>
+    <color name="tab_rooms_secondary">@color/vector_tchap_secondary_color</color>
+    <color name="tab_groups">#a6d0e5</color>
+    <color name="tab_groups_secondary">#81bddb</color>
+
+    <!-- color of the tchap room avatar border -->
+    <color name="restricted_room_avatar_border_color">@color/vector_tchap_primary_color</color>
+    <color name="unrestricted_room_avatar_border_color">#cccccc</color>
+
+    <!-- color of the direct chat avatar ring -->
+    <color name="direct_chat_ring_color">@color/vector_tchap_secondary_color</color>
+</resources>

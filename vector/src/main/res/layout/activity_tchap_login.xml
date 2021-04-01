@@ -1,0 +1,82 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+<!--    android:theme="@style/Vector.ActionBarTheme.TchapLogin"-->
+
+    <!-- the main body is defined in a scroll view to avoid split items -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/fragment_tchap_register" />
+
+            <include layout="@layout/fragment_tchap_login" />
+
+            <include layout="@layout/fragment_tchap_forgotten_password" />
+
+            <include layout="@layout/fragment_tchap_message_button" />
+
+            <LinearLayout
+                android:id="@+id/main_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="19dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/flow_progress_message_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textSize="16sp"
+                android:visibility="gone"
+                tools:text="A text here" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <include layout="@layout/fragment_tchap_welcome" />
+
+    <include
+        layout="@layout/fragment_tchap_register_wait_for_email"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar" />
+
+    <!-- flow mask view: to be displayed above the entire screen -->
+    <RelativeLayout
+        android:id="@+id/flow_ui_mask_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/search_progress"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
+</RelativeLayout>
+

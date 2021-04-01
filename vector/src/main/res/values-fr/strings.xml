@@ -1455,9 +1455,7 @@
 \n
 \nVoulez-vous vous connecter en utilisant un client web \?</string>
     <string name="login_registration_disabled">Désolé, ce serveur n’accepte pas de nouveau compte.</string>
-    <string name="login_registration_not_supported">L’application ne peut pas créer de compte sur ce serveur d’accueil.
-\n
-\nVoulez-vous vous inscrire en utilisant un client web \?</string>
+    <string name="login_registration_not_supported">L’application ne peut pas créer de compte sur ce serveur d’accueil.</string>
     <string name="login_login_with_email_error">Cet e\u2011mail n’est associé à aucun compte.</string>
     <string name="login_reset_password_on">Réinitialiser le mot de passe sur %1$s</string>
     <string name="login_reset_password_notice">Un e\u2011mail de vérification sera envoyé à votre adresse pour confirmer la configuration de votre nouveau mot de passe.</string>
@@ -1734,7 +1732,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Évènement supprimé par l’utilisateur, motif : %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Évènement modéré par l’administrateur du salon, motif : %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Les clés sont déjà à jour !</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">Tchap Android</string>
     <string name="settings_key_requests">Demandes de clé</string>
     <string name="e2e_use_keybackup">Déverrouiller l’historique des messages chiffrés</string>
     <string name="refresh">Actualiser</string>
