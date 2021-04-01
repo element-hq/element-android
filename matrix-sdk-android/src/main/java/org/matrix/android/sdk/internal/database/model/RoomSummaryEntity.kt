@@ -106,7 +106,7 @@ internal open class RoomSummaryEntity(
 
     private var tags: RealmList<RoomTagEntity> = RealmList()
 
-    fun tags(): RealmList<RoomTagEntity> = tags
+    fun tags(): List<RoomTagEntity> = tags
 
     fun updateTags(newTags: List<Pair<String, Double?>>) {
         val toDelete = mutableListOf<RoomTagEntity>()
@@ -118,9 +118,9 @@ internal open class RoomSummaryEntity(
                 existingTag.tagOrder = updatedTag.second
             }
         }
-        toDelete.onEach { it.deleteFromRealm() }
+        toDelete.forEach { it.deleteFromRealm() }
         newTags.forEach { newTag ->
-            if (tags.indexOfFirst { it.tagName == newTag.first } == -1) {
+            if (tags.all { it.tagName != newTag.first }) {
                 // we must add it
                 tags.add(
                         RoomTagEntity(newTag.first, newTag.second)
@@ -128,9 +128,9 @@ internal open class RoomSummaryEntity(
             }
         }
 
-        isFavourite = newTags.indexOfFirst { it.first == RoomTag.ROOM_TAG_FAVOURITE } != -1
-        isLowPriority = newTags.indexOfFirst { it.first == RoomTag.ROOM_TAG_LOW_PRIORITY } != -1
-        isServerNotice = newTags.indexOfFirst { it.first == RoomTag.ROOM_TAG_SERVER_NOTICE } != -1
+        isFavourite = newTags.any { it.first == RoomTag.ROOM_TAG_FAVOURITE }
+        isLowPriority = newTags.any { it.first == RoomTag.ROOM_TAG_LOW_PRIORITY }
+        isServerNotice = newTags.any { it.first == RoomTag.ROOM_TAG_SERVER_NOTICE }
     }
 
     @Index
@@ -170,18 +170,15 @@ internal open class RoomSummaryEntity(
 
     fun updateAliases(newAliases: List<String>) {
         // only update underlying field if there is a diff
-        if (newAliases.toSet() != aliases.toSet()) {
-            Timber.w("VAL: aliases updated")
+        if (newAliases.distinct().sorted() != aliases.distinct().sorted()) {
             aliases.clear()
             aliases.addAll(newAliases)
+            flatAliases = newAliases.joinToString(separator = "|", prefix = "|")
         }
     }
 
     // this is required for querying
     var flatAliases: String = ""
-        set(value) {
-            if (value != field) field = value
-        }
 
     var isEncrypted: Boolean = false
         set(value) {

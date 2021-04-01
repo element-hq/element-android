@@ -31,8 +31,8 @@ import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.room.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.internal.util.awaitCallback
@@ -82,7 +82,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     override fun handle(action: HomeDetailAction) {
         when (action) {
             is HomeDetailAction.SwitchDisplayMode -> handleSwitchDisplayMode(action)
-            HomeDetailAction.MarkAllRoomsRead -> handleMarkAllRoomsRead()
+            HomeDetailAction.MarkAllRoomsRead     -> handleMarkAllRoomsRead()
         }
     }
 
@@ -103,12 +103,11 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         viewModelScope.launch(Dispatchers.Default) {
             val roomIds = session.getRoomSummaries(
                     roomSummaryQueryParams {
-                        this.memberships = listOf(Membership.JOIN)
-                        this.roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
+                        memberships = listOf(Membership.JOIN)
+                        roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
                     }
-            ).map {
-                it.roomId
-            }
+            )
+                    .map { it.roomId }
             try {
                 awaitCallback<Unit> {
                     session.markAllAsRead(roomIds, it)
@@ -146,7 +145,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 roomSummaryQueryParams {
                     memberships = Membership.activeMemberships()
                 }
-        ).asObservable()
+        )
+                .asObservable()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe {
                     val dmInvites = session.getRoomSummaries(
@@ -179,13 +179,13 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
                     setState {
                         copy(
-                                notificationCountCatchup = dmRooms.totalCount() + otherRooms.totalCount() + roomsInvite + dmInvites,
-                                notificationHighlightCatchup = dmRooms.isHighlight() || otherRooms.isHighlight(),
-                                notificationCountPeople = dmRooms.totalCount() + dmInvites,
-                                notificationHighlightPeople = dmRooms.isHighlight() || dmInvites > 0,
-                                notificationCountRooms = otherRooms.totalCount() + roomsInvite,
-                                notificationHighlightRooms = otherRooms.isHighlight() || roomsInvite > 0,
-                                hasUnreadMessages = dmRooms.totalCount() + otherRooms.totalCount() > 0
+                                notificationCountCatchup = dmRooms.totalCount + otherRooms.totalCount + roomsInvite + dmInvites,
+                                notificationHighlightCatchup = dmRooms.isHighlight || otherRooms.isHighlight,
+                                notificationCountPeople = dmRooms.totalCount + dmInvites,
+                                notificationHighlightPeople = dmRooms.isHighlight || dmInvites > 0,
+                                notificationCountRooms = otherRooms.totalCount + roomsInvite,
+                                notificationHighlightRooms = otherRooms.isHighlight || roomsInvite > 0,
+                                hasUnreadMessages = dmRooms.totalCount + otherRooms.totalCount > 0
                         )
                     }
                 }

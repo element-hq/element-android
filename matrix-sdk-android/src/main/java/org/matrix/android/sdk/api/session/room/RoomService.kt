@@ -181,25 +181,28 @@ interface RoomService {
      */
     fun peekRoom(roomIdOrAlias: String, callback: MatrixCallback<PeekResult>)
 
-    fun getPagedRoomSummariesLive(
-            queryParams: RoomSummaryQueryParams,
-            pagedListConfig: PagedList.Config = PagedList.Config.Builder()
-                    .setPageSize(10)
-                    .setInitialLoadSizeHint(20)
-                    .setEnablePlaceholders(false)
-                    .setPrefetchDistance(10)
-                    .build()
-    ): LiveData<PagedList<RoomSummary>>
+    /**
+     * TODO Doc
+     */
+    fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                  pagedListConfig: PagedList.Config = defaultPagedListConfig): LiveData<PagedList<RoomSummary>>
 
+    /**
+     * TODO Doc
+     */
+    fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                          pagedListConfig: PagedList.Config = defaultPagedListConfig): UpdatableFilterLivePageResult
+
+    /**
+     * TODO Doc
+     */
     fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount
 
-    fun getFilteredPagedRoomSummariesLive(
-            queryParams: RoomSummaryQueryParams,
-            pagedListConfig: PagedList.Config = PagedList.Config.Builder()
-                    .setPageSize(10)
-                    .setInitialLoadSizeHint(20)
-                    .setEnablePlaceholders(false)
-                    .setPrefetchDistance(10)
-                    .build()
-    ): UpdatableFilterLivePageResult
+    private val defaultPagedListConfig
+        get() = PagedList.Config.Builder()
+                .setPageSize(10)
+                .setInitialLoadSizeHint(20)
+                .setEnablePlaceholders(false)
+                .setPrefetchDistance(10)
+                .build()
 }

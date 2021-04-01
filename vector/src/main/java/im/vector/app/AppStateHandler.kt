@@ -19,8 +19,6 @@ package im.vector.app
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import im.vector.app.features.grouplist.SelectedGroupDataSource
-import im.vector.app.features.home.room.list.ChronologicalRoomComparator
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,11 +27,10 @@ import javax.inject.Singleton
  * This class handles the global app state.
  * It requires to be added to ProcessLifecycleOwner.get().lifecycle
  */
+// TODO Keep this class for now, will maybe be used fro Space
 @Singleton
 class AppStateHandler @Inject constructor(
-        private val sessionDataSource: ActiveSessionDataSource,
-        private val selectedGroupDataSource: SelectedGroupDataSource,
-        private val chronologicalRoomComparator: ChronologicalRoomComparator) : LifecycleObserver {
+) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
 

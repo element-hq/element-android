@@ -40,13 +40,17 @@ class ShortcutsHandler @Inject constructor(
     fun observeRoomsAndBuildShortcuts(): Disposable {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
             // No op
-            return Observable.empty<Unit>().subscribe()
+            return Disposables.empty()
         }
 
-        return activeSessionHolder.getSafeActiveSession()?.getPagedRoomSummariesLive(roomSummaryQueryParams {
-            this.memberships = listOf(Membership.JOIN)
-            this.roomTagQueryFilter = RoomTagQueryFilter(isFavorite = true, null, null)
-        })?.asObservable()
+        return activeSessionHolder.getSafeActiveSession()
+                ?.getPagedRoomSummariesLive(
+                        roomSummaryQueryParams {
+                            memberships = listOf(Membership.JOIN)
+                            roomTagQueryFilter = RoomTagQueryFilter(isFavorite = true, null, null)
+                        }
+                )
+                ?.asObservable()
                 ?.subscribe { rooms ->
                     val shortcuts = rooms
                             .take(n = 4) // Android only allows us to create 4 shortcuts
@@ -55,7 +59,6 @@ class ShortcutsHandler @Inject constructor(
                     ShortcutManagerCompat.removeAllDynamicShortcuts(context)
                     ShortcutManagerCompat.addDynamicShortcuts(context, shortcuts)
                 }
-
                 ?: Disposables.empty()
     }
 

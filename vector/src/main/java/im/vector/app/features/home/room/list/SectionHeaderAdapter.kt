@@ -30,7 +30,7 @@ class SectionHeaderAdapter constructor(
         private val onClickAction: (() -> Unit)
 ) : RecyclerView.Adapter<SectionHeaderAdapter.VH>() {
 
-    data class SectionViewModel(
+    data class RoomsSectionData(
             val name: String,
             val isExpanded: Boolean = true,
             val notificationCount: Int = 0,
@@ -38,12 +38,12 @@ class SectionHeaderAdapter constructor(
             val isHidden: Boolean = true
     )
 
-    lateinit var section: SectionViewModel
+    lateinit var roomsSectionData: RoomsSectionData
         private set
 
-    fun updateSection(newSection: SectionViewModel) {
-        if (!::section.isInitialized || newSection != section) {
-            section = newSection
+    fun updateSection(newRoomsSectionData: RoomsSectionData) {
+        if (!::roomsSectionData.isInitialized || newRoomsSectionData != roomsSectionData) {
+            roomsSectionData = newRoomsSectionData
             notifyDataSetChanged()
         }
     }
@@ -52,7 +52,7 @@ class SectionHeaderAdapter constructor(
         setHasStableIds(true)
     }
 
-    override fun getItemId(position: Int) = section.hashCode().toLong()
+    override fun getItemId(position: Int) = roomsSectionData.hashCode().toLong()
 
     override fun getItemViewType(position: Int) = R.layout.item_room_category
 
@@ -61,10 +61,10 @@ class SectionHeaderAdapter constructor(
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bind(section)
+        holder.bind(roomsSectionData)
     }
 
-    override fun getItemCount(): Int = if (section.isHidden) 0 else 1
+    override fun getItemCount(): Int = if (roomsSectionData.isHidden) 0 else 1
 
     class VH constructor(
             private val binding: ItemRoomCategoryBinding,
@@ -77,14 +77,14 @@ class SectionHeaderAdapter constructor(
             }))
         }
 
-        fun bind(section: SectionViewModel) {
-            binding.roomCategoryTitleView.text = section.name
+        fun bind(roomsSectionData: RoomsSectionData) {
+            binding.roomCategoryTitleView.text = roomsSectionData.name
             val tintColor = ThemeUtils.getColor(binding.root.context, R.attr.riotx_text_secondary)
-            val expandedArrowDrawableRes = if (section.isExpanded) R.drawable.ic_expand_more_white else R.drawable.ic_expand_less_white
+            val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more_white else R.drawable.ic_expand_less_white
             val expandedArrowDrawable = ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
                 DrawableCompat.setTint(it, tintColor)
             }
-            binding.roomCategoryUnreadCounterBadgeView.render(UnreadCounterBadgeView.State(section.notificationCount, section.isHighlighted))
+            binding.roomCategoryUnreadCounterBadgeView.render(UnreadCounterBadgeView.State(roomsSectionData.notificationCount, roomsSectionData.isHighlighted))
             binding.roomCategoryTitleView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
         }
 

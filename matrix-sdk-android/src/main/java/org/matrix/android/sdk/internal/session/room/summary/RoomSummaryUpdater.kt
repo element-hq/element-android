@@ -117,10 +117,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases
                 .orEmpty()
-//        roomSummaryEntity.aliases.clear()
-//        roomSummaryEntity.aliases.addAll(roomAliases)
         roomSummaryEntity.updateAliases(roomAliases)
-        roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")
         roomSummaryEntity.isEncrypted = encryptionEvent != null
         roomSummaryEntity.encryptionEventTs = encryptionEvent?.originServerTs
 

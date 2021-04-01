@@ -17,18 +17,12 @@
 package org.matrix.android.sdk.api.session.room
 
 import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.session.room.model.Membership
 
 fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): RoomSummaryQueryParams {
     return RoomSummaryQueryParams.Builder().apply(init).build()
-}
-
-enum class RoomCategoryFilter {
-    ONLY_DM,
-    ONLY_ROOMS,
-    ONLY_WITH_NOTIFICATIONS,
-    ALL
 }
 
 /**

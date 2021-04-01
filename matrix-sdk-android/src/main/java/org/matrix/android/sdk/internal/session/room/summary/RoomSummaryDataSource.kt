@@ -24,7 +24,7 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.Sort
-import org.matrix.android.sdk.api.session.room.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableFilterLivePageResult
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -104,7 +104,8 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                 .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
     }
 
-    fun getSortedPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config): LiveData<PagedList<RoomSummary>> {
+    fun getSortedPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                        pagedListConfig: PagedList.Config): LiveData<PagedList<RoomSummary>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams)
                     .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
@@ -112,12 +113,14 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
         }
-        return monarchy.findAllPagedWithChanges(realmDataSourceFactory,
+        return monarchy.findAllPagedWithChanges(
+                realmDataSourceFactory,
                 LivePagedListBuilder(dataSourceFactory, pagedListConfig)
         )
     }
 
-    fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config): UpdatableFilterLivePageResult {
+    fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                          pagedListConfig: PagedList.Config): UpdatableFilterLivePageResult {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams)
                     .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
@@ -126,13 +129,13 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             roomSummaryMapper.map(it)
         }
 
-        val mapped = monarchy.findAllPagedWithChanges(realmDataSourceFactory,
+        val mapped = monarchy.findAllPagedWithChanges(
+                realmDataSourceFactory,
                 LivePagedListBuilder(dataSourceFactory, pagedListConfig)
         )
 
         return object : UpdatableFilterLivePageResult {
-            override val livePagedList: LiveData<PagedList<RoomSummary>>
-                get() = mapped
+            override val livePagedList: LiveData<PagedList<RoomSummary>> = mapped
 
             override fun updateQuery(queryParams: RoomSummaryQueryParams) {
                 realmDataSourceFactory.updateQuery {
@@ -167,10 +170,10 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
 
         queryParams.roomCategoryFilter?.let {
             when (it) {
-                RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                 RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-                RoomCategoryFilter.ALL -> {
+                RoomCategoryFilter.ALL                     -> {
                     // nop
                 }
             }
@@ -182,8 +185,8 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             it.isLowPriority?.let { lp ->
                 query.equalTo(RoomSummaryEntityFields.IS_LOW_PRIORITY, lp)
             }
-            it.isServerNotice?.let { lp ->
-                query.equalTo(RoomSummaryEntityFields.IS_SERVER_NOTICE, lp)
+            it.isServerNotice?.let { sn ->
+                query.equalTo(RoomSummaryEntityFields.IS_SERVER_NOTICE, sn)
             }
         }
         return query
