@@ -16,12 +16,9 @@
 
 package im.vector.app.features.home.room.list
 
-import androidx.annotation.StringRes
 import com.airbnb.mvrx.MvRxState
-import im.vector.app.R
 import im.vector.app.features.home.RoomListDisplayMode
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 data class RoomListViewState(
         val displayMode: RoomListDisplayMode,
@@ -30,26 +27,4 @@ data class RoomListViewState(
 ) : MvRxState {
 
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)
-
-    val hasUnread: Boolean = false
-//        get() = asyncFilteredRooms.invoke()
-//                ?.flatMap { it.value }
-//                ?.filter { it.membership == Membership.JOIN }
-//                ?.any { it.hasUnreadMessages }
-//                ?: false
-}
-
-typealias RoomSummaries = LinkedHashMap<RoomCategory, List<RoomSummary>>
-
-enum class RoomCategory(@StringRes val titleRes: Int) {
-    INVITE(R.string.invitations_header),
-    FAVOURITE(R.string.bottom_action_favourites),
-    DIRECT(R.string.bottom_action_people_x),
-    GROUP(R.string.bottom_action_rooms),
-    LOW_PRIORITY(R.string.low_priority_header),
-    SERVER_NOTICE(R.string.system_alerts_header)
-}
-
-fun RoomSummaries?.isNullOrEmpty(): Boolean {
-    return this == null || this.values.flatten().isEmpty()
 }
