@@ -48,17 +48,14 @@ internal class DefaultSendToDeviceTask @Inject constructor(
 
         return executeRequest(
                 globalErrorReceiver,
-                {
-                    cryptoApi.sendToDevice(
-                            params.eventType,
-                            params.transactionId ?: Random.nextInt(Integer.MAX_VALUE).toString(),
-                            sendToDeviceBody
-                    )
-                },
-                {
-                    isRetryable = true
-                    maxRetryCount = 3
-                }
-        )
+                isRetryable = true,
+                maxRetryCount = 3
+        ) {
+            cryptoApi.sendToDevice(
+                    params.eventType,
+                    params.transactionId ?: Random.nextInt(Integer.MAX_VALUE).toString(),
+                    sendToDeviceBody
+            )
+        }
     }
 }

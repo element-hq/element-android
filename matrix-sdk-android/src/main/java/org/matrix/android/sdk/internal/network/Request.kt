@@ -25,44 +25,35 @@ import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
 
-// To use when there is no init block to provide
-internal suspend inline fun <DATA : Any> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
-                                                        noinline requestBlock: suspend () -> DATA): DATA {
-    return executeRequest(globalErrorReceiver, requestBlock, {})
-}
+/**
+ * Execute a request from the requestBlock and handle some of the Exception it could generate
+ *
+ * @param globalErrorReceiver will be use to notify error such as invalid token error. See [GlobalError]
+ * @param isRetryable if set to true, the request will be executed again in case of error, after a delay
+ * @param initialDelay the first delay to wait before a request is retried. Will be doubled after each retry
+ * @param maxDelay the max delay to wait before a retry
+ * @param maxRetryCount the max number of retries
+ * @param requestBlock a suspend lambda to perform the network request
+ */
+internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
+                                                  isRetryable: Boolean = false,
+                                                  initialDelay: Long = 100L,
+                                                  maxDelay: Long = 10_000L,
+                                                  maxRetryCount: Int = Int.MAX_VALUE,
+                                                  noinline requestBlock: suspend () -> DATA): DATA {
+    var currentRetryCount = 0
+    var currentDelay = initialDelay
 
-internal suspend inline fun <DATA : Any> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
-                                                        noinline requestBlock: suspend () -> DATA,
-                                                        initBlock: Request<DATA>.() -> Unit): DATA {
-    return Request(globalErrorReceiver, requestBlock)
-            .apply(initBlock)
-            .execute()
-}
-
-internal class Request<DATA : Any>(
-        private val globalErrorReceiver: GlobalErrorReceiver?,
-        private val requestBlock: suspend () -> DATA
-) {
-
-    var isRetryable = false
-    var initialDelay: Long = 100L
-    var maxDelay: Long = 10_000L
-    var maxRetryCount = Int.MAX_VALUE
-    private var currentRetryCount = 0
-    private var currentDelay = initialDelay
-
-    suspend fun execute(): DATA {
-        return try {
-            try {
-                requestBlock()
-            } catch (exception: Throwable) {
-                throw when (exception) {
-                    is KotlinNullPointerException -> IllegalStateException("The request returned a null body")
-                    is HttpException              -> exception.toFailure(globalErrorReceiver)
-                    else                          -> exception
-                }
+    while (true) {
+        try {
+            return requestBlock()
+        } catch (throwable: Throwable) {
+            val exception = when (throwable) {
+                is KotlinNullPointerException -> IllegalStateException("The request returned a null body")
+                is HttpException              -> throwable.toFailure(globalErrorReceiver)
+                else                          -> throwable
             }
-        } catch (exception: Throwable) {
+
             // Log some details about the request which has failed. This is less useful than before...
             // Timber.e("Exception when executing request ${apiCall.request().method} ${apiCall.request().url.toString().substringBefore("?")}")
             Timber.e("Exception when executing request")
@@ -79,7 +70,7 @@ internal class Request<DATA : Any>(
             if (isRetryable && currentRetryCount++ < maxRetryCount && exception.shouldBeRetried()) {
                 delay(currentDelay)
                 currentDelay = (currentDelay * 2L).coerceAtMost(maxDelay)
-                return execute()
+                // Try again (loop)
             } else {
                 throw when (exception) {
                     is IOException              -> Failure.NetworkConnection(exception)

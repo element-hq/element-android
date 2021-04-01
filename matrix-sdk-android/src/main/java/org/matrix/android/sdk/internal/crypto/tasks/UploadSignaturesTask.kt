@@ -37,12 +37,11 @@ internal class DefaultUploadSignaturesTask @Inject constructor(
         try {
             val response = executeRequest(
                     globalErrorReceiver,
-                    { cryptoApi.uploadSignatures(params.signatures) },
-                    {
-                        isRetryable = true
-                        maxRetryCount = 10
-                    }
-            )
+                    isRetryable = true,
+                    maxRetryCount = 10
+            ) {
+                cryptoApi.uploadSignatures(params.signatures)
+            }
             if (response.failures?.isNotEmpty() == true) {
                 throw Throwable(response.failures.toString())
             }
