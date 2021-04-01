@@ -410,15 +410,19 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
-        return cryptoStore.getUserDeviceList(userId).orEmpty()
+        return runBlocking {
+            olmMachine!!.getUserDevices(userId)
+        }
     }
 
     override fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>> {
-        return cryptoStore.getLiveDeviceList(userId)
+        return getLiveCryptoDeviceInfo(listOf(userId))
     }
 
     override fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
-        return cryptoStore.getLiveDeviceList(userIds)
+        return runBlocking {
+            olmMachine!!.getLiveDevices(userIds)
+        }
     }
 
     /**

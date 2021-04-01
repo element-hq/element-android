@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -58,6 +60,26 @@ private class CryptoProgressListener(listener: ProgressListener?) : RustProgress
         if (this.inner != null) {
             this.inner.onProgress(progress, total)
         }
+    }
+}
+
+internal class LiveDevice(
+    userIds: List<String>,
+    machine: OlmMachine
+) : MutableLiveData<List<CryptoDeviceInfo>>() {
+    var userIds: List<String> = userIds
+    private var machine: OlmMachine = machine
+
+    private val listener = { devices: List<CryptoDeviceInfo> ->
+        value = devices
+    }
+
+    override fun onActive() {
+        machine.addDeviceUpdateListener(this)
+    }
+
+    override fun onInactive() {
+        machine.removeDeviceUpdateListener(this)
     }
 }
 
@@ -108,6 +130,7 @@ class Device(inner: InnerDevice, machine: InnerMachine) {
 
 internal class OlmMachine(user_id: String, device_id: String, path: File) {
     private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
+    private val deviceUpdateListeners = HashMap<LiveDevice, List<String>>()
 
     fun userId(): String {
         return this.inner.userId()
@@ -134,6 +157,21 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
             false,
             null
         )
+    }
+
+    fun addDeviceUpdateListener(device: LiveDevice) {
+        deviceUpdateListeners.set(device, device.userIds)
+    }
+
+    fun removeDeviceUpdateListener(device: LiveDevice) {
+        deviceUpdateListeners.remove(device)
+    }
+
+    suspend fun updateLiveDevices() {
+        for ((liveDevice, users) in deviceUpdateListeners) {
+            val devices = getUserDevices(users)
+            liveDevice.postValue(devices)
+        }
     }
 
     suspend fun outgoingRequests(): List<Request> = withContext(Dispatchers.IO) {
@@ -183,6 +221,10 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
         response_body: String
     ) = withContext(Dispatchers.IO) {
         inner.markRequestAsSent(request_id, request_type, response_body)
+
+        if (request_type == RequestType.KEYS_QUERY) {
+            updateLiveDevices()
+        }
     }
 
     suspend fun getDevice(user_id: String, device_id: String): Device? = withContext(Dispatchers.IO) {
@@ -190,6 +232,29 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
             null -> null
             else -> Device(device, inner)
         }
+    }
+
+    suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo> {
+        return inner.getUserDevices(userId).map { Device(it, inner).toCryptoDeviceInfo() }
+    }
+
+    suspend fun getUserDevices(userIds: List<String>): List<CryptoDeviceInfo> {
+        val plainDevices:  ArrayList<CryptoDeviceInfo> = arrayListOf()
+
+        for (user in userIds) {
+            val devices = getUserDevices(user)
+            plainDevices.addAll(devices)
+        }
+
+        return plainDevices
+    }
+
+    suspend fun getLiveDevices(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
+        val plainDevices = getUserDevices(userIds)
+        val devices = LiveDevice(userIds, this)
+        devices.setValue(plainDevices)
+
+        return devices
     }
 
     @Throws(CryptoStoreErrorException::class)
