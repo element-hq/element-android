@@ -413,53 +413,12 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getUserDeviceList(userId).orEmpty()
     }
 
-    override fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>> {
-        return cryptoStore.getLiveDeviceList()
-    }
-
     override fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>> {
         return cryptoStore.getLiveDeviceList(userId)
     }
 
     override fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
         return cryptoStore.getLiveDeviceList(userIds)
-    }
-
-    /**
-     * Set the devices as known
-     *
-     * @param devices  the devices. Note that the verified member of the devices in this list will not be updated by this method.
-     * @param callback the asynchronous callback
-     */
-    override fun setDevicesKnown(devices: List<MXDeviceInfo>, callback: MatrixCallback<Unit>?) {
-        // build a devices map
-        val devicesIdListByUserId = devices.groupBy({ it.userId }, { it.deviceId })
-
-        for ((userId, deviceIds) in devicesIdListByUserId) {
-            val storedDeviceIDs = cryptoStore.getUserDevices(userId)
-
-            // sanity checks
-            if (null != storedDeviceIDs) {
-                var isUpdated = false
-
-                deviceIds.forEach { deviceId ->
-                    val device = storedDeviceIDs[deviceId]
-
-                    // assume if the device is either verified or blocked
-                    // it means that the device is known
-                    if (device?.isUnknown == true) {
-                        device.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
-                        isUpdated = true
-                    }
-                }
-
-                if (isUpdated) {
-                    cryptoStore.storeUserDevices(userId, storedDeviceIDs)
-                }
-            }
-        }
-
-        callback?.onSuccess(Unit)
     }
 
     /**
