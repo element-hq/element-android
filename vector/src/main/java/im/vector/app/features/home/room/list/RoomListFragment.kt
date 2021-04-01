@@ -235,7 +235,7 @@ class RoomListFragment @Inject constructor(
         modelBuildListener = OnModelBuildFinishedListener { it.dispatchTo(stateRestorer) }
 
         val concatAdapter = ConcatAdapter()
-        val hasOnlyOneSection = roomListViewModel.sections.size == 1
+//        val hasOnlyOneSection = roomListViewModel.sections.size == 1
         roomListViewModel.sections.forEach { section ->
 
             val sectionAdapter = SectionHeaderAdapter {
