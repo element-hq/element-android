@@ -39,8 +39,8 @@ internal class DefaultInviteTask @Inject constructor(
         val body = InviteBody(params.userId, params.reason)
         return executeRequest(
                 globalErrorReceiver,
-                isRetryable = true,
-                maxRetryCount = 3
+                canRetry = true,
+                maxRetriesCount = 3
         ) {
             roomAPI.invite(params.roomId, body)
         }

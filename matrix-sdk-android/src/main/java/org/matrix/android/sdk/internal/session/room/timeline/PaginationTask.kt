@@ -44,7 +44,7 @@ internal class DefaultPaginationTask @Inject constructor(
         val filter = filterRepository.getRoomFilter()
         val chunk = executeRequest(
                 globalErrorReceiver,
-                isRetryable = true
+                canRetry = true
         ) {
             roomAPI.getRoomMessagesFrom(params.roomId, params.from, params.direction.value, params.limit, filter)
         }

@@ -29,20 +29,20 @@ import java.io.IOException
  * Execute a request from the requestBlock and handle some of the Exception it could generate
  *
  * @param globalErrorReceiver will be use to notify error such as invalid token error. See [GlobalError]
- * @param isRetryable if set to true, the request will be executed again in case of error, after a delay
- * @param initialDelay the first delay to wait before a request is retried. Will be doubled after each retry
- * @param maxDelay the max delay to wait before a retry
- * @param maxRetryCount the max number of retries
+ * @param canRetry if set to true, the request will be executed again in case of error, after a delay
+ * @param initialDelayBeforeRetry the first delay to wait before a request is retried. Will be doubled after each retry
+ * @param maxDelayBeforeRetry the max delay to wait before a retry
+ * @param maxRetriesCount the max number of retries
  * @param requestBlock a suspend lambda to perform the network request
  */
 internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
-                                                  isRetryable: Boolean = false,
-                                                  initialDelay: Long = 100L,
-                                                  maxDelay: Long = 10_000L,
-                                                  maxRetryCount: Int = Int.MAX_VALUE,
+                                                  canRetry: Boolean = false,
+                                                  initialDelayBeforeRetry: Long = 100L,
+                                                  maxDelayBeforeRetry: Long = 10_000L,
+                                                  maxRetriesCount: Int = Int.MAX_VALUE,
                                                   noinline requestBlock: suspend () -> DATA): DATA {
     var currentRetryCount = 0
-    var currentDelay = initialDelay
+    var currentDelay = initialDelayBeforeRetry
 
     while (true) {
         try {
@@ -67,9 +67,9 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
                     // }
                     ?.also { unrecognizedCertificateException -> throw unrecognizedCertificateException }
 
-            if (isRetryable && currentRetryCount++ < maxRetryCount && exception.shouldBeRetried()) {
+            if (canRetry && currentRetryCount++ < maxRetriesCount && exception.shouldBeRetried()) {
                 delay(currentDelay)
-                currentDelay = (currentDelay * 2L).coerceAtMost(maxDelay)
+                currentDelay = (currentDelay * 2L).coerceAtMost(maxDelayBeforeRetry)
                 // Try again (loop)
             } else {
                 throw when (exception) {

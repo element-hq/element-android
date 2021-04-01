@@ -98,7 +98,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         if (markers.isNotEmpty()) {
             executeRequest(
                     globalErrorReceiver,
-                    isRetryable = true
+                    canRetry = true
             ) {
                 roomAPI.sendReadMarker(params.roomId, markers)
             }
