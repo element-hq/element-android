@@ -184,7 +184,12 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
         }
         // Inform the SDK that the room is displayed
-        session.onRoomDisplayed(initialState.roomId)
+        viewModelScope.launch {
+            try {
+                session.onRoomDisplayed(initialState.roomId)
+            } catch (_: Exception) {
+            }
+        }
         callManager.addPstnSupportListener(this)
         callManager.checkForPSTNSupportIfNeeded()
         chatEffectManager.delegate = this
@@ -902,19 +907,19 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
-        session.joinRoom(command.roomAlias, command.reason, emptyList(), object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                session.getRoomSummary(command.roomAlias)
-                        ?.roomId
-                        ?.let {
-                            _viewEvents.post(RoomDetailViewEvents.JoinRoomCommandSuccess(it))
-                        }
-            }
-
-            override fun onFailure(failure: Throwable) {
+        viewModelScope.launch {
+            try {
+                session.joinRoom(command.roomAlias, command.reason, emptyList())
+            } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+                return@launch
             }
-        })
+            session.getRoomSummary(command.roomAlias)
+                    ?.roomId
+                    ?.let {
+                        _viewEvents.post(RoomDetailViewEvents.JoinRoomCommandSuccess(it))
+                    }
+        }
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {

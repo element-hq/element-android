@@ -124,8 +124,8 @@ class RxSession(private val session: Session) {
                 .startWithCallable { session.getPendingThreePids() }
     }
 
-    fun createRoom(roomParams: CreateRoomParams): Single<String> = singleBuilder {
-        session.createRoom(roomParams, it)
+    fun createRoom(roomParams: CreateRoomParams): Single<String> = rxSingle {
+        session.createRoom(roomParams)
     }
 
     fun searchUsersDirectory(search: String,
@@ -136,8 +136,8 @@ class RxSession(private val session: Session) {
 
     fun joinRoom(roomIdOrAlias: String,
                  reason: String? = null,
-                 viaServers: List<String> = emptyList()): Single<Unit> = singleBuilder {
-        session.joinRoom(roomIdOrAlias, reason, viaServers, it)
+                 viaServers: List<String> = emptyList()): Single<Unit> = rxSingle {
+        session.joinRoom(roomIdOrAlias, reason, viaServers)
     }
 
     fun getRoomIdByAlias(roomAlias: String,

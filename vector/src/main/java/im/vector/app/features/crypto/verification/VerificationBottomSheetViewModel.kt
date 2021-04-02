@@ -249,32 +249,34 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                                 pendingRequest = Loading()
                         )
                     }
-                    session.createDirectRoom(otherUserId, object : MatrixCallback<String> {
-                        override fun onSuccess(data: String) {
-                            setState {
-                                copy(
-                                        roomId = data,
-                                        pendingRequest = Success(
-                                                session
-                                                        .cryptoService()
-                                                        .verificationService()
-                                                        .requestKeyVerificationInDMs(
-                                                                supportedVerificationMethodsProvider.provide(),
-                                                                otherUserId,
-                                                                data,
-                                                                pendingLocalId
-                                                        )
+                    viewModelScope.launch {
+                        val result = runCatching { session.createDirectRoom(otherUserId) }
+                        result.fold(
+                                { data ->
+                                    setState {
+                                        copy(
+                                                roomId = data,
+                                                pendingRequest = Success(
+                                                        session
+                                                                .cryptoService()
+                                                                .verificationService()
+                                                                .requestKeyVerificationInDMs(
+                                                                        supportedVerificationMethodsProvider.provide(),
+                                                                        otherUserId,
+                                                                        data,
+                                                                        pendingLocalId
+                                                                )
+                                                )
                                         )
-                                )
-                            }
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            setState {
-                                copy(pendingRequest = Fail(failure))
-                            }
-                        }
-                    })
+                                    }
+                                },
+                                { failure ->
+                                    setState {
+                                        copy(pendingRequest = Fail(failure))
+                                    }
+                                }
+                        )
+                    }
                 } else {
                     setState {
                         copy(

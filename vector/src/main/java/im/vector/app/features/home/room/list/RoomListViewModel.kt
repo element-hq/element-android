@@ -26,7 +26,6 @@ import im.vector.app.core.utils.DataSource
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -169,7 +168,14 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 ?.filter { it.membership == Membership.JOIN }
                 ?.map { it.roomId }
                 ?.toList()
-                ?.let { session.markAllAsRead(it, NoOpMatrixCallback()) }
+                ?.let {
+                    viewModelScope.launch {
+                        try {
+                            session.markAllAsRead(it)
+                        } catch (_: Exception) {
+                        }
+                    }
+                }
     }
 
     private fun handleChangeNotificationMode(action: RoomListAction.ChangeRoomNotificationState) {
