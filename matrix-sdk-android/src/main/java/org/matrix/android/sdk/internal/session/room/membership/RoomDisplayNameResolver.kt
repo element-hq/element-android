@@ -77,14 +77,14 @@ internal class RoomDisplayNameResolver @Inject constructor(
         if (roomEntity?.membership == Membership.INVITE) {
             val inviteMeEvent = roomMembers.getLastStateEvent(userId)
             val inviterId = inviteMeEvent?.sender
-            name = if (inviterId != null) {
-                activeMembers.where()
-                        .equalTo(RoomMemberSummaryEntityFields.USER_ID, inviterId)
-                        .findFirst()
-                        ?.displayName
-            } else {
-                roomDisplayNameFallbackProvider.getNameForRoomInvite()
-            }
+            name = inviterId
+                    ?.let {
+                        activeMembers.where()
+                                .equalTo(RoomMemberSummaryEntityFields.USER_ID, it)
+                                .findFirst()
+                                ?.getBestName()
+                    }
+                    ?: roomDisplayNameFallbackProvider.getNameForRoomInvite()
         } else if (roomEntity?.membership == Membership.JOIN) {
             val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
             val invitedCount = roomSummary?.invitedMembersCount ?: 0
@@ -150,7 +150,7 @@ internal class RoomDisplayNameResolver @Inject constructor(
         if (roomMemberSummary == null) return null
         val isUnique = roomMemberHelper.isUniqueDisplayName(roomMemberSummary.displayName)
         return if (isUnique) {
-            roomMemberSummary.displayName
+            roomMemberSummary.getBestName()
         } else {
             "${roomMemberSummary.displayName} (${roomMemberSummary.userId})"
         }
