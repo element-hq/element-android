@@ -327,8 +327,8 @@ class SpaceHierarchyTest : InstrumentedTest {
             }
 
             // part from b room
-            commonTestHelper.doSync<Unit> {
-                bRoom!!.leave(null, it)
+            runBlocking {
+                bRoom!!.leave(null)
             }
             // The room should have disapear from flat children
             GlobalScope.launch(Dispatchers.Main) { flatAChildren.observeForever(childObserver) }
@@ -399,6 +399,7 @@ class SpaceHierarchyTest : InstrumentedTest {
             spaceB!!.addChildren(spaceCInfo.spaceId, viaServers, null, true)
         }
 
+        Thread.sleep(2000)
         // + A
         //   a1, a2
         // + B

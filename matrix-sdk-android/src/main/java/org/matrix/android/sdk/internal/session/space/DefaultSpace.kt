@@ -39,8 +39,8 @@ internal class DefaultSpace(
 
     override val spaceId = room.roomId
 
-    override fun leave(reason: String?, callback: MatrixCallback<Unit>): Cancelable {
-        return room.leave(reason, callback)
+    override suspend fun leave(reason: String?) {
+        return room.leave(reason)
     }
 
     override fun spaceSummary(): RoomSummary? {
