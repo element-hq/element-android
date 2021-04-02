@@ -430,4 +430,88 @@
     <string name="notice_room_invite_no_invitee_by_you">നിങ്ങളുടെ ക്ഷണം</string>
     <string name="notice_room_invite_no_invitee">%s-ന്റെ ക്ഷണം</string>
     <string name="summary_you_sent_sticker">നിങ്ങൾ ഒരു സ്റ്റിക്കർ അയച്ചു.</string>
+    <string name="notice_event_redacted_by_with_reason">%1$s സന്ദേശം നീക്കം ചെയ്തു [കാരണം: %2$s]</string>
+    <string name="notice_event_redacted_with_reason">സന്ദേശം നീക്കം ചെയ്തു [കാരണം: %1$s]</string>
+    <string name="notice_event_redacted_by">സന്ദേശം %1$s നീക്കംചെയ്തു</string>
+    <string name="notice_event_redacted">സന്ദേശം നീക്കംചെയ്‌തു</string>
+    <string name="notice_room_avatar_removed_by_you">നിങ്ങൾ മുറിയുടെ അവതാർ നീക്കംചെയ്‌തു</string>
+    <string name="notice_room_avatar_removed">%1$s മുറിയുടെ അവതാർ നീക്കം ചെയ്‌തു</string>
+    <string name="notice_room_topic_removed_by_you">നിങ്ങൾ മുറിയുടെ വിഷയം നീക്കംചെയ്‌തു</string>
+    <string name="notice_room_topic_removed">%1$s മുറിയുടെ വിഷയം നീക്കം ചെയ്‌തു</string>
+    <string name="notice_room_name_removed_by_you">നിങ്ങൾ മുറിയുടെ പേര് നീക്കംചെയ്‌തു</string>
+    <string name="notice_room_name_removed">%1$s മുറിയുടെ പേര് നീക്കംചെയ്‌തു</string>
+    <string name="notice_avatar_changed_too">(അവതാറും മാറ്റി)</string>
+    <string name="notice_voip_finished">VoIP കോൺഫറൻസ് പൂർത്തിയായി</string>
+    <string name="notice_voip_started">VoIP കോൺഫറൻസ് ആരംഭിച്ചു</string>
+    <string name="notice_requested_voip_conference_by_you">നിങ്ങൾ ഒരു VoIP കൊൺഫറൻസ് അഭ്യർത്ഥിച്ചു</string>
+    <string name="notice_requested_voip_conference">%1$s ഒരു VoIP കോൺഫറൻസ് അഭ്യർത്ഥിച്ചു</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 എല്ലാ സെർവറുകളും പങ്കെടുക്കുന്നതിൽ നിന്ന് വിലക്കി! ഈ മുറി ഇനി ഉപയോഗിക്കാനാവില്ല.</string>
+    <string name="notice_room_server_acl_updated_no_change">മാറ്റമൊന്നുമില്ല.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• ഐപി ലിറ്ററലുകളുമായി പൊരുത്തപ്പെടുന്ന സെർവർ ഇപ്പോൾ നിരോധിച്ചു.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• ഐപി ലിറ്ററലുകളുമായി പൊരുത്തപ്പെടുന്ന സെർവർ ഇപ്പോൾ അനുവദനീയമാണ്.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• അനുവദനീയ പട്ടികയിൽ നിന്നും %sമായി പൊരുത്തപ്പെടുന്ന സെർവർ നീക്കം ചെയ്തു.</string>
+    <string name="notice_room_server_acl_updated_allowed">• %sമായി പൊരുത്തപ്പെടുന്ന സെർവർ ഇപ്പോൾ അനുവദനീയമാണ്.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• %sമായി പൊരുത്തപ്പെടുന്ന സെർവർ നിരോധന പട്ടികയിൽ നിന്ന് നീക്കംചെയ്‌തു.</string>
+    <string name="notice_room_server_acl_updated_banned">• %s മായി പൊരുത്തപ്പെടുന്ന സെർവർ ഇപ്പോൾ നിരോധിച്ചിരിക്കുന്നു.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">ഈ റൂമിനായി നിങ്ങൾ സെർവർ ACL-കൾ മാറ്റി.</string>
+    <string name="notice_room_server_acl_updated_title">%s ഈ മുറിക്കായി സെർവർ ACL-കൾ മാറ്റി.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• ഐപി ലിറ്ററലുകളുമായി പൊരുത്തപ്പെടുന്ന സെർവർ അനുവദനീയമാണ്.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• ഐപി ലിറ്ററലുകളുമായി പൊരുത്തപ്പെടുന്ന സെർവർ നിരോധിച്ചിരിക്കുന്നു.</string>
+    <string name="notice_room_server_acl_set_banned">• %s മായി പൊരുത്തപ്പെടുന്ന സെർവർ നിരോധിച്ചിരിക്കുന്നു.</string>
+    <string name="notice_room_server_acl_set_allowed">• %s മായി പൊരുത്തപ്പെടുന്ന സെർവർ അനുവദനീയമാണ്.</string>
+    <string name="notice_room_server_acl_set_title_by_you">ഈ മുറിക്കായി നിങ്ങൾ സെർവർ ACL-കൾ സജ്ജമാക്കി.</string>
+    <string name="notice_room_server_acl_set_title">%s ഈ മുറിക്കായി സെർവർ ACL-കൾ സജ്ജമാക്കി.</string>
+    <string name="notice_direct_room_update_by_you">നിങ്ങൾ ഇവിടെ നവീകരിച്ചു.</string>
+    <string name="notice_direct_room_update">%s ഇവിടെ നവീകരിച്ചു.</string>
+    <string name="notice_room_update_by_you">നിങ്ങൾ ഈ മുറി നവീകരിച്ചു.</string>
+    <string name="notice_room_update">%s ഈ മുറി നവീകരിച്ചു.</string>
+    <string name="notice_end_to_end_by_you">നിങ്ങൾ എൻഡ്-ടു-എൻഡ് എൻ‌ക്രിപ്ഷൻ ഓണാക്കി (%1$s)</string>
+    <string name="notice_end_to_end">%1$s എൻഡ്-ടു-എൻഡ് എൻ‌ക്രിപ്ഷൻ ഓണാക്കി (%2$s)</string>
+    <string name="notice_room_visibility_unknown">അജ്ഞാതം (%s).</string>
+    <string name="notice_room_visibility_world_readable">ആർക്കും.</string>
+    <string name="notice_room_visibility_shared">എല്ലാ മുറി അംഗങ്ങളും.</string>
+    <string name="notice_room_visibility_joined">എല്ലാ മുറി അംഗങ്ങളും, അവർ ചേർന്ന സമയം മുതൽ.</string>
+    <string name="notice_room_visibility_invited">എല്ലാ മുറി അംഗങ്ങളും, അവരെ ക്ഷണിച്ച സമയം മുതൽ.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">ഭാവിയിലെ സന്ദേശങ്ങൾ %1$s ന് നിങ്ങൾ ദൃശ്യമാക്കി</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s ഭാവി സന്ദേശങ്ങൾ %2$s ന് ദൃശ്യമാക്കി</string>
+    <string name="notice_made_future_room_visibility_by_you">നിങ്ങൾ ഭാവിയിലെ മുറിയുടെ ചരിത്രം %1$s ന് ദൃശ്യമാക്കി</string>
+    <string name="notice_made_future_room_visibility">%1$s ഭാവിയിലെ മുറിയുടെ ചരിത്രം %2$s ന് ദൃശ്യമാക്കി</string>
+    <string name="notice_ended_call_by_you">നിങ്ങൾ കോൾ അവസാനിപ്പിച്ചു.</string>
+    <string name="notice_ended_call">%s കോൾ അവസാനിപ്പിച്ചു.</string>
+    <string name="notice_answered_call_by_you">നിങ്ങൾ കോളിന് മറുപടി നൽകി.</string>
+    <string name="notice_answered_call">%s കോളിന് മറുപടി നൽകി.</string>
+    <string name="notice_call_candidates_by_you">കോൾ സജ്ജീകരിക്കുന്നതിന് നിങ്ങൾ ഡാറ്റ അയച്ചു.</string>
+    <string name="notice_call_candidates">കോൾ സജ്ജീകരിക്കുന്നതിന് %s ഡാറ്റ അയച്ചു.</string>
+    <string name="notice_placed_voice_call_by_you">നിങ്ങൾ ഒരു വോയ്സ് കോൾ നടത്തി.</string>
+    <string name="notice_placed_voice_call">%s ഒരു വോയ്സ് കോൾ നടത്തി.</string>
+    <string name="notice_placed_video_call_by_you">നിങ്ങൾ ഒരു വീഡിയോ കോൾ നടത്തി.</string>
+    <string name="notice_placed_video_call">%s ഒരു വീഡിയോ കോൾ നടത്തി.</string>
+    <string name="notice_room_name_changed_by_you">നിങ്ങൾ മുറിയുടെ പേര് ഇതിലേക്ക് മാറ്റി: %1$s</string>
+    <string name="notice_room_name_changed">%1$s മുറിയുടെ പേര് ഇതിലേക്ക് മാറ്റി: %2$s</string>
+    <string name="notice_room_avatar_changed_by_you">നിങ്ങൾ മുറിയുടെ അവതാർ മാറ്റി</string>
+    <string name="notice_room_avatar_changed">%1$s മുറിയുടെ അവതാർ മാറ്റി</string>
+    <string name="notice_room_topic_changed_by_you">നിങ്ങൾ വിഷയം ഇതിലേക്ക് മാറ്റി: %1$s</string>
+    <string name="notice_room_topic_changed">%1$s വിഷയം ഇതിലേക്ക് മാറ്റി: %2$s</string>
+    <string name="notice_display_name_removed_by_you">നിങ്ങൾ നിങ്ങളുടെ പ്രദർശന നാമം നീക്കം ചെയ്തു (ഇത് %1$s ആയിരുന്നു)</string>
+    <string name="notice_display_name_removed">%1$s അവരുടെ പ്രദർശന നാമം നീക്കം ചെയ്തു (ഇത് %2$s ആയിരുന്നു)</string>
+    <string name="notice_display_name_changed_from_by_you">നിങ്ങൾ നിങ്ങളുടെ പ്രദർശന നാമം %1$sൽ നിന്നും %2$s ലേക്ക് മാറ്റി</string>
+    <string name="notice_display_name_changed_from">%1$s അവരുടെ പ്രദർശന നാമം %2$s ൽ നിന്നും %3$s ആക്കി മാറ്റി</string>
+    <string name="notice_display_name_set_by_you">നിങ്ങൾ നിങ്ങളുടെ പ്രദർശന നാമം %1$s ആയി സജ്ജമാക്കി</string>
+    <string name="notice_display_name_set">%1$s അവരുടെ പ്രദർശന നാമം %2$s ആയി സജ്ജമാക്കി</string>
+    <string name="notice_avatar_url_changed_by_you">നിങ്ങൾ നിങ്ങളുടെ അവതാർ മാറ്റി</string>
+    <string name="notice_avatar_url_changed">%1$s അവരുടെ അവതാർ മാറ്റി</string>
+    <string name="notice_room_withdraw_by_you">നിങ്ങൾ %1$s ന്റെ ക്ഷണം പിൻവലിച്ചു</string>
+    <string name="notice_room_withdraw">%1$s %2$s ന്റെ ക്ഷണം പിൻവലിച്ചു</string>
+    <string name="notice_room_ban_by_you">നിങ്ങൾ %1$s നെ നിരോധിച്ചു</string>
+    <string name="notice_room_ban">%1$s %2$s നെ നിരോധിച്ചു</string>
+    <string name="notice_room_unban_by_you">നിങ്ങൾ %1$s ന്റെ നിരോധനം മാറ്റി</string>
+    <string name="notice_room_unban">%1$s %2$s ന്റെ നിരോധനം മാറ്റി</string>
+    <string name="notice_room_reject_by_you">നിങ്ങൾ ക്ഷണം നിരസിച്ചു</string>
+    <string name="notice_room_reject">%1$s ക്ഷണം നിരസിച്ചു</string>
+    <string name="notice_direct_room_leave_by_you">നിങ്ങൾ മുറി വിട്ടു</string>
+    <string name="notice_direct_room_leave">%1$s മുറി വിട്ടു</string>
+    <string name="notice_room_leave_by_you">നിങ്ങൾ മുറി വിട്ടു</string>
+    <string name="notice_room_leave">%1$s മുറി വിട്ടു</string>
+    <string name="notice_direct_room_created_by_you">നിങ്ങൾ ചർച്ച സൃഷ്ടിച്ചു</string>
+    <string name="notice_direct_room_created">%1$s ചർച്ച സൃഷ്ടിച്ചു</string>
 </resources>
