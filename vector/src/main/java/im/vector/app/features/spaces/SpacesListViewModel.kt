@@ -38,7 +38,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 
 const val ALL_COMMUNITIES_GROUP_ID = "+ALL_COMMUNITIES_GROUP_ID"
@@ -146,10 +145,8 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
 
     private fun handleLeaveSpace(action: SpaceListAction.LeaveSpace) {
         viewModelScope.launch {
-            awaitCallback {
-                tryOrNull("Failed to leave space ${action.spaceSummary.roomId}") {
-                    session.spaceService().getSpace(action.spaceSummary.roomId)?.leave(null, it)
-                }
+            tryOrNull("Failed to leave space ${action.spaceSummary.roomId}") {
+                session.spaceService().getSpace(action.spaceSummary.roomId)?.leave(null)
             }
         }
     }

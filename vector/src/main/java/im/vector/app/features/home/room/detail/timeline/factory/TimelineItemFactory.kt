@@ -60,21 +60,21 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
+                EventType.REDACTION,
                 EventType.STATE_ROOM_ALIASES,
-                EventType.KEY_VERIFICATION_START,
                 EventType.KEY_VERIFICATION_ACCEPT,
+                EventType.KEY_VERIFICATION_START,
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_READY,
-                EventType.CALL_CANDIDATES,
                 EventType.KEY_VERIFICATION_MAC,
+                EventType.CALL_CANDIDATES,
                 EventType.CALL_REPLACES,
                 EventType.CALL_SELECT_ANSWER,
                 EventType.CALL_NEGOTIATE,
                 EventType.REACTION,
-                EventType.STATE_ROOM_POWER_LEVELS,
                 EventType.STATE_SPACE_CHILD,
                 EventType.STATE_SPACE_PARENT,
-                EventType.REDACTION             -> noticeItemFactory.create(event, highlight, callback)
+                EventType.STATE_ROOM_POWER_LEVELS -> noticeItemFactory.create(params)
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(params)
                 EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(params)
