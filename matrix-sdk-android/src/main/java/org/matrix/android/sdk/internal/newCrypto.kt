@@ -65,21 +65,21 @@ private class CryptoProgressListener(listener: ProgressListener?) : RustProgress
 
 internal class LiveDevice(
     userIds: List<String>,
-    machine: OlmMachine
+    observer: DeviceUpdateObserver
 ) : MutableLiveData<List<CryptoDeviceInfo>>() {
     var userIds: List<String> = userIds
-    private var machine: OlmMachine = machine
+    private var observer: DeviceUpdateObserver = observer
 
     private val listener = { devices: List<CryptoDeviceInfo> ->
         value = devices
     }
 
     override fun onActive() {
-        machine.addDeviceUpdateListener(this)
+        observer.addDeviceUpdateListener(this)
     }
 
     override fun onInactive() {
-        machine.removeDeviceUpdateListener(this)
+        observer.removeDeviceUpdateListener(this)
     }
 }
 
@@ -128,9 +128,21 @@ class Device(inner: InnerDevice, machine: InnerMachine) {
     }
 }
 
+internal class DeviceUpdateObserver() {
+    internal val listeners = HashMap<LiveDevice, List<String>>()
+
+    fun addDeviceUpdateListener(device: LiveDevice) {
+        listeners.set(device, device.userIds)
+    }
+
+    fun removeDeviceUpdateListener(device: LiveDevice) {
+        listeners.remove(device)
+    }
+}
+
 internal class OlmMachine(user_id: String, device_id: String, path: File) {
     private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
-    private val deviceUpdateListeners = HashMap<LiveDevice, List<String>>()
+    private val deviceUpdateObserver = DeviceUpdateObserver()
 
     fun userId(): String {
         return this.inner.userId()
@@ -159,16 +171,8 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
         )
     }
 
-    fun addDeviceUpdateListener(device: LiveDevice) {
-        deviceUpdateListeners.set(device, device.userIds)
-    }
-
-    fun removeDeviceUpdateListener(device: LiveDevice) {
-        deviceUpdateListeners.remove(device)
-    }
-
     suspend fun updateLiveDevices() {
-        for ((liveDevice, users) in deviceUpdateListeners) {
+        for ((liveDevice, users) in deviceUpdateObserver.listeners) {
             val devices = getUserDevices(users)
             liveDevice.postValue(devices)
         }
@@ -251,7 +255,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
 
     suspend fun getLiveDevices(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
         val plainDevices = getUserDevices(userIds)
-        val devices = LiveDevice(userIds, this)
+        val devices = LiveDevice(userIds, deviceUpdateObserver)
         devices.setValue(plainDevices)
 
         return devices
