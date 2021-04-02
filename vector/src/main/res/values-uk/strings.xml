@@ -1769,4 +1769,5 @@
     <string name="room_participants_leave_private_warning">Це не загальнодоступна кімната. Ви не зможете знову приєднатися без запрошення.</string>
     <string name="room_settings_enable_encryption_no_permission">У вас немає дозволу на ввімкнення шифрування в цій кімнаті.</string>
     <string name="room_settings_permissions_title">Дозволи кімнати</string>
+    <string name="room_list_catchup_welcome_body">Ознайомтеся з непрочитаними повідомленнями тут</string>
 </resources>
