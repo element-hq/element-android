@@ -101,6 +101,7 @@ class RoomListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         views.stateView.contentView = views.roomListView
         views.stateView.state = StateView.State.Loading
+        setupCreateRoomButton()
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomListViewModel.observeViewEvents {
