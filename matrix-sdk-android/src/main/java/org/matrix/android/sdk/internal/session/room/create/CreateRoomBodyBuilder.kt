@@ -129,7 +129,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                     Event(
                             type = EventType.STATE_ROOM_GUEST_ACCESS,
                             stateKey = "",
-                            content = RoomGuestAccessContent(it).toContent()
+                            content = RoomGuestAccessContent(it.name).toContent()
                     )
                 }
     }

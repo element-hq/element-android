@@ -135,15 +135,12 @@ class SpaceCreationTest : InstrumentedTest {
 
         val roomName = "My Space"
         val topic = "A public space for test"
-        val spaceId: String
-        val firstChild: String
-        val secondChild: String
 
-        spaceId = runBlocking { aliceSession.spaceService().createSpace(roomName, topic, null, true) }
+        val spaceId: String = runBlocking { aliceSession.spaceService().createSpace(roomName, topic, null, true) }
         val syncedSpace = aliceSession.spaceService().getSpace(spaceId)
 
         // create a room
-        firstChild = runBlocking {
+        val firstChild: String = runBlocking {
             awaitCallback<String> {
                 aliceSession.createRoom(CreateRoomParams().apply {
                     this.name = "FirstRoom"
@@ -157,7 +154,7 @@ class SpaceCreationTest : InstrumentedTest {
             syncedSpace?.addChildren(firstChild, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "a", true)
         }
 
-        secondChild = runBlocking {
+        val secondChild: String = runBlocking {
             awaitCallback {
                 aliceSession.createRoom(CreateRoomParams().apply {
                     this.name = "SecondRoom"

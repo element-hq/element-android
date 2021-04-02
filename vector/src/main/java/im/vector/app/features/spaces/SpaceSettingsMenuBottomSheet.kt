@@ -41,7 +41,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -119,9 +118,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     .setPositiveButton(R.string.leave) { _, _ ->
                         GlobalScope.launch {
                             try {
-                                awaitCallback {
-                                    session.getRoom(spaceArgs.spaceId)?.leave(null, it)
-                                }
+                                session.getRoom(spaceArgs.spaceId)?.leave(null)
                             } catch (failure: Throwable) {
                                 Timber.e(failure, "Failed to leave space")
                             }

@@ -27,8 +27,7 @@ interface Space {
 
     val spaceId: String
 
-    fun leave(reason: String? = null,
-              callback: MatrixCallback<Unit>): Cancelable
+    suspend fun leave(reason: String? = null)
 
     /**
      * A current snapshot of [RoomSummary] associated with the space
