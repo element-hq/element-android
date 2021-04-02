@@ -56,7 +56,13 @@ internal class RoomAvatarResolver @Inject constructor(@UserId private val userId
 
         if (isDirectRoom) {
             if (members.size == 1) {
-                return members.firstOrNull()?.avatarUrl
+                // Use avatar of a left user
+                val firstLeftAvatarUrl = roomMembers.queryLeftRoomMembersEvent()
+                        .findAll()
+                        .firstOrNull { !it.avatarUrl.isNullOrEmpty() }
+                        ?.avatarUrl
+
+                return firstLeftAvatarUrl ?: members.firstOrNull()?.avatarUrl
             } else if (members.size == 2) {
                 val firstOtherMember = members.where().notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId).findFirst()
                 return firstOtherMember?.avatarUrl

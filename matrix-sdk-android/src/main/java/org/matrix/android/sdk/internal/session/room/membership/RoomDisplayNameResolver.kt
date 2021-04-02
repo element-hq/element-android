@@ -107,9 +107,8 @@ internal class RoomDisplayNameResolver @Inject constructor(
             name = when (otherMembersCount) {
                 0    -> {
                     // Get left members if any
-                    val leftMembersNames = roomMembers.queryRoomMembersEvent()
+                    val leftMembersNames = roomMembers.queryLeftRoomMembersEvent()
                             .findAll()
-                            .filter { it.membership == Membership.LEAVE }
                             .map { it.getBestName() }
                     roomDisplayNameFallbackProvider.getNameForEmptyRoom(roomSummary?.isDirect.orFalse(), leftMembersNames)
                 }
