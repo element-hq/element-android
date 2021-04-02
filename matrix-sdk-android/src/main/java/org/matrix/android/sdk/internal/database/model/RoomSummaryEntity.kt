@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
-import timber.log.Timber
 
 internal open class RoomSummaryEntity(
         @PrimaryKey var roomId: String = ""

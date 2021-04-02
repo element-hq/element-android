@@ -22,7 +22,6 @@ import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutManagerCompat
 import im.vector.app.core.di.ActiveSessionHolder
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter

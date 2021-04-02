@@ -29,8 +29,7 @@ import javax.inject.Singleton
  */
 // TODO Keep this class for now, will maybe be used fro Space
 @Singleton
-class AppStateHandler @Inject constructor(
-) : LifecycleObserver {
+class AppStateHandler @Inject constructor() : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
 

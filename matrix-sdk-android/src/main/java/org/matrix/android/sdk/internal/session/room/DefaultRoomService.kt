@@ -195,4 +195,3 @@ internal class DefaultRoomService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 }
-
