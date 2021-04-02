@@ -35,14 +35,3 @@ data class RoomHistoryVisibilityContent(
         }
     }
 }
-
-    fun safeHistoryVisibility(): RoomHistoryVisibility? {
-        return when (historyVisibility) {
-            "world_readable" -> RoomHistoryVisibility.WORLD_READABLE
-            "shared" -> RoomHistoryVisibility.SHARED
-            "invited" -> RoomHistoryVisibility.INVITED
-            "joined" -> RoomHistoryVisibility.JOINED
-            else             -> null
-        }
-    }
-}
