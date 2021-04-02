@@ -95,11 +95,12 @@ class RoomListFragment @Inject constructor(
     )
 
     private val adapterInfosList = mutableListOf<SectionAdapterInfo>()
-    private val concatAdapter = ConcatAdapter()
+    private var concatAdapter : ConcatAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupCreateRoomButton()
+        views.stateView.contentView = views.roomListView
+        views.stateView.state = StateView.State.Loading
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomListViewModel.observeViewEvents {
@@ -134,10 +135,10 @@ class RoomListFragment @Inject constructor(
             val isRoomSectionExpanded = roomsSection.isExpanded.value.orTrue()
             if (actualBlock.section.isExpanded && !isRoomSectionExpanded) {
                 // we have to remove the content adapter
-                concatAdapter.removeAdapter(actualBlock.contentAdapter.adapter)
+                concatAdapter?.removeAdapter(actualBlock.contentAdapter.adapter)
             } else if (!actualBlock.section.isExpanded && isRoomSectionExpanded) {
                 // we must add it back!
-                concatAdapter.addAdapter(contentInsertIndex, actualBlock.contentAdapter.adapter)
+                concatAdapter?.addAdapter(contentInsertIndex, actualBlock.contentAdapter.adapter)
             }
             contentInsertIndex = if (isRoomSectionExpanded) {
                 contentInsertIndex + 2
@@ -166,6 +167,7 @@ class RoomListFragment @Inject constructor(
         // TODO Cleanup listener on the ConcatAdapter's adapters?
         stateRestorer.clear()
         views.createChatFabMenu.listener = null
+        concatAdapter = null
         super.onDestroyView()
     }
 
@@ -236,6 +238,8 @@ class RoomListFragment @Inject constructor(
 
         modelBuildListener = OnModelBuildFinishedListener { it.dispatchTo(stateRestorer) }
 
+        val concatAdapter = ConcatAdapter()
+
         roomListViewModel.sections.forEach { section ->
             val sectionAdapter = SectionHeaderAdapter {
                 roomListViewModel.handle(RoomListAction.ToggleSection(section))
@@ -280,6 +284,7 @@ class RoomListFragment @Inject constructor(
         footerController.listener = this
         concatAdapter.addAdapter(footerController.adapter)
 
+        this.concatAdapter = concatAdapter
         views.roomListView.adapter = concatAdapter
     }
 
