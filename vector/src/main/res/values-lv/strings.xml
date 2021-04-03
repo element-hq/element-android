@@ -567,7 +567,7 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="room_event_action_report_prompt_reason">Iemesls ziņojumam par šo saturu</string>
     <string name="room_event_action_report_prompt_ignore_user">Vai vēlaties paslēpt visas ziņas no šī lietotāja\?
 \n
-\nŅemiet vērā, ka ar šo darbību tiks restartēta lietotne, un tas var aizņemt kādu laiku.</string>
+\nŅemiet vērā, ka ar šo darbību tiks pārstartēta lietotne, un tas var aizņemt kādu laiku.</string>
     <string name="room_event_action_cancel_upload">Atcelt augšupielādi</string>
     <string name="room_event_action_cancel_download">Atcelt lejupielādi</string>
     <string name="search_hint">Meklēšana</string>
@@ -691,7 +691,7 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="settings_password_updated">Parole nomainīta</string>
     <string name="settings_unignore_user">Rādīt visas ziņas no %s\?
 \n
-\nŅemiet vērā, ka ar šo darbību tiks restartēta lietotne, un tas var aizņemt kādu laiku.</string>
+\nŅemiet vērā, ka ar šo darbību tiks pārstartēta lietotne, un tas var aizņemt kādu laiku.</string>
     <string name="settings_delete_notification_targets_confirmation">Vai tiešām vēlies turpmāk paziņojumus uz šo ierīci nesūtīt?</string>
     <string name="settings_delete_threepid_confirmation">Vai tiešām vēlies dzēst %1$s %2$s?</string>
     <string name="settings_select_country">Izvēlies valsti</string>
