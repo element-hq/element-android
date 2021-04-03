@@ -514,4 +514,130 @@
     <string name="notice_room_leave">%1$s മുറി വിട്ടു</string>
     <string name="notice_direct_room_created_by_you">നിങ്ങൾ ചർച്ച സൃഷ്ടിച്ചു</string>
     <string name="notice_direct_room_created">%1$s ചർച്ച സൃഷ്ടിച്ചു</string>
+    <string name="notice_room_canonical_alias_set">%1$s ഈ മുറിയുടെ പ്രധാന വിലാസമായി %2$s സജ്ജമാക്കി.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">നിങ്ങൾ %1$s ചേർത്ത് ഈ മുറിയുടെ വിലാസങ്ങളായിരുന്ന %2$s നീക്കം ചെയ്‌തു.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s %2$s ചേർത്ത് ഈ മുറിയുടെ വിലാസങ്ങളായിരുന്ന %3$s നീക്കം ചെയ്‌തു.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">നിങ്ങൾ ഈ മുറിയുടെ വിലാസമായിരുന്ന %1$s നീക്കംചെയ്‌തു.</item>
+        <item quantity="other">നിങ്ങൾ ഈ മുറിയുടെ വിലാസങ്ങളായിരുന്ന %1$s നീക്കംചെയ്‌തു.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s ഈ മുറിയുടെ വിലാസമായിരുന്ന %2$s നീക്കംചെയ്‌തു.</item>
+        <item quantity="other">%1$s ഈ മുറിയുടെ വിലാസങ്ങളായിരുന്ന %2$s നീക്കംചെയ്‌തു.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">ഈ മുറിയുടെ വിലാസമായി നിങ്ങൾ %1$s ചേർത്തു.</item>
+        <item quantity="other">ഈ മുറിയുടെ വിലാസങ്ങളായി നിങ്ങൾ %1$s ചേർത്തു.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">ഈ മുറിയുടെ വിലാസമായി %1$s %2$s ചേർത്തു.</item>
+        <item quantity="other">ഈ മുറിയുടെ വിലാസങ്ങളായി %1$s %2$s ചേർത്തു.</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">%1$sന്റെ ക്ഷണം നിങ്ങൾ പിൻവലിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s %2$sന്റെ ക്ഷണം പിൻവലിച്ചു. കാരണം: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">%1$sനുള്ള ക്ഷണം നിങ്ങൾ സ്വീകരിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s %2$sനുള്ള ക്ഷണം സ്വീകരിച്ചു. കാരണം: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">%1$sന് മുറിയിൽ ചേരുന്നതിനുള്ള ക്ഷണം നിങ്ങൾ റദ്ദാക്കി. കാരണം: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%2$sന് മുറിയിൽ ചേരുന്നതിനുള്ള ക്ഷണം %1$s റദ്ദാക്കി. കാരണം: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">മുറിയിൽ ചേരാൻ നിങ്ങൾ %1$sന് ഒരു ക്ഷണം അയച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s മുറിയിൽ ചേരാൻ %2$sന്ക്ഷണം അയച്ചു. കാരണം:%3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">നിങ്ങൾ %1$sനെ വിലക്കി. കാരണം: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s %2$s ന്റെ വിലക്ക് നീക്കി. കാരണം: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">നിങ്ങൾ %1$sന്റെ വിലക്ക് നീക്കി. കാരണം: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s %2$sന്റെ വിലക്ക് നീക്കി. കാരണം: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">നിങ്ങൾ %1$sനെ പുറത്താക്കി. കാരണം:%2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s %2$sനെ പുറത്താക്കി. കാരണം: %3$s</string>
+    <string name="notice_room_reject_with_reason_by_you">നിങ്ങൾ ക്ഷണം നിരസിച്ചു. കാരണം: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s ക്ഷണം നിരസിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">നിങ്ങൾ ഉപേക്ഷിച്ചു. കാരണം: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s ഉപേക്ഷിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">നിങ്ങൾ മുറി വിട്ടു. കാരണം: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s മുറി വിട്ടു. കാരണം: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">നിങ്ങൾ ചേർന്നു. കാരണം: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s ചേർന്നു. കാരണം: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">നിങ്ങൾ മുറിയിൽ ചേർന്നു. കാരണം: %1$s</string>
+    <string name="notice_room_join_with_reason">%1$s മുറിയിൽ ചേർന്നു. കാരണം: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s നിങ്ങളെ ക്ഷണിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">നിങ്ങൾ %1$sനെ ക്ഷണിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s %2$sനെ ക്ഷണിച്ചു. കാരണം: %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">നിങ്ങളുടെ ക്ഷണം. കാരണം: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s ന്റെ ക്ഷണം. കാരണം: %2$s</string>
+    <string name="clear_timeline_send_queue">അയയ്‌ക്കാനുള്ള ശ്രേണി മായ്‌ക്കുക</string>
+    <string name="event_status_sending_message">സന്ദേശം അയയ്ക്കുന്നു…</string>
+    <string name="initial_sync_start_importing_account_data">പ്രാരംഭ സമന്വയം:
+\nഅക്കൗണ്ട് ഡാറ്റ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_groups">പ്രാരംഭ സമന്വയം:
+\nജനസമൂഹങ്ങൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_left_rooms">പ്രാരംഭ സമന്വയം:
+\nഉപേക്ഷിച്ച മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">പ്രാരംഭ സമന്വയം:
+\nക്ഷണിക്കപ്പെട്ട മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">പ്രാരംഭ സമന്വയം:
+\nചേർന്ന മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_rooms">പ്രാരംഭ സമന്വയം:
+\nമുറികൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_crypto">പ്രാരംഭ സമന്വയം:
+\nക്രിപ്‌റ്റോ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account">പ്രാരംഭ സമന്വയം:
+\nഅക്കൗണ്ട് ഇറക്കുമതി ചെയ്യുന്നു…</string>
+    <string name="initial_sync_start_downloading">പ്രാരംഭ സമന്വയം:
+\nഡാറ്റ ഡൗൺലോഡുചെയ്യുന്നു…</string>
+    <string name="initial_sync_start_server_computing">പ്രാരംഭ സമന്വയം:
+\nസെർവർ പ്രതികരണത്തിനായി കാത്തിരിക്കുന്നു…</string>
+    <string name="room_displayname_empty_room_was">ശൂന്യമായ മുറി ( %s ആയിരുന്നു)</string>
+    <string name="room_displayname_empty_room">ശൂന്യമായ മുറി</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s ഉം വേറെ 1 ആളും</item>
+        <item quantity="other">%1$s ഉം വേറെ %2$d പേരും</item>
+    </plurals>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s കൂടാതെ %4$d പേർ</item>
+        <item quantity="other">%1$s, %2$s, %3$s കൂടാതെ %4$d പേരും</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s പിന്നെ %4$sഉം</string>
+    <string name="room_displayname_3_members">%1$s, %2$s പിന്നെ %3$sഉം</string>
+    <string name="room_displayname_two_members">%1$s ഉം %2$s ഉം</string>
+    <string name="room_displayname_room_invite">മുറി ക്ഷണം</string>
+    <string name="room_displayname_invite_from">%sൽ നിന്നുമുള്ള ക്ഷണം</string>
+    <string name="medium_phone_number">ഫോൺ നമ്പർ</string>
+    <string name="medium_email">ഈ - മെയിൽ വിലാസം</string>
+    <string name="room_error_join_failed_empty_room">ഒരു ശൂന്യമായ മുറിയിൽ വീണ്ടും ചേരാൻ നിലവിൽ സാധ്യമല്ല.</string>
+    <string name="matrix_error">മേട്രിക്സ് പിശക്</string>
+    <string name="network_error">നെറ്റ്‌വർക്ക് പിശക്</string>
+    <string name="message_failed_to_upload">ചിത്രം അപ്‌ലോഡുചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു</string>
+    <string name="unable_to_send_message">സന്ദേശം അയയ്‌ക്കാനായില്ല</string>
+    <string name="could_not_redact">പുനഃക്രമീകരിക്കാൻ കഴിഞ്ഞില്ല</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">അയച്ചയാളുടെ ഉപകരണം ഈ സന്ദേശത്തിനുള്ള കീകൾ ഞങ്ങൾക്ക് അയച്ചിട്ടില്ല.</string>
+    <string name="notice_crypto_unable_to_decrypt">** ഡീക്രിപ്റ്റ് ചെയ്യാൻ കഴിഞ്ഞില്ല: %s **</string>
+    <string name="notice_power_level_changed">%1$s %2$s ന്റെ അധികാര നില മാറ്റി.</string>
+    <string name="notice_power_level_changed_by_you">നിങ്ങൾ %1$s ന്റെ അധികാര നില മാറ്റി.</string>
+    <string name="power_level_custom_no_value">ഇച്ഛാനുസൃതം</string>
+    <string name="power_level_custom">ഇച്ഛാനുസൃതം (%1$d)</string>
+    <string name="power_level_default">തനത്</string>
+    <string name="power_level_moderator">മോഡറേറ്റർ</string>
+    <string name="power_level_admin">അഡ്മിൻ</string>
+    <string name="notice_widget_jitsi_modified_by_you">നിങ്ങൾ വീഡിയോ കോൺഫറൻസ് പരിഷ്ക്കരിച്ചു</string>
+    <string name="notice_widget_jitsi_modified">%1$s വീഡിയോ കോൺഫറൻസ് പരിഷ്ക്കരിച്ചു</string>
+    <string name="notice_widget_jitsi_removed_by_you">നിങ്ങൾ വീഡിയോ കോൺഫറൻസ് അവസാനിപ്പിച്ചു</string>
+    <string name="notice_widget_jitsi_removed">%1$s വീഡിയോ കോൺഫറൻസ് അവസാനിച്ചു</string>
+    <string name="notice_widget_jitsi_added_by_you">നിങ്ങൾ വീഡിയോ കോൺഫറൻസ് ആരംഭിച്ചു</string>
+    <string name="notice_widget_jitsi_added">%1$s വീഡിയോ കോൺഫറൻസ് ആരംഭിച്ചു</string>
+    <string name="notice_widget_modified_by_you">നിങ്ങൾ %1$s വിജറ്റ് പരിഷ്ക്കരിച്ചു</string>
+    <string name="notice_widget_modified">%1$s %2$s വിജറ്റ് പരിഷ്ക്കരിച്ചു</string>
+    <string name="notice_widget_removed_by_you">നിങ്ങൾ %1$s വിജറ്റ് നീക്കം ചെയ്തു</string>
+    <string name="notice_widget_removed">%1$s %2$s വിജറ്റ് നീക്കം ചെയ്തു</string>
+    <string name="notice_widget_added_by_you">നിങ്ങൾ %1$s വിജറ്റ് ചേർത്തു</string>
+    <string name="notice_widget_added">%1$s %2$s വിജറ്റ് ചേർത്തു</string>
+    <string name="notice_room_third_party_registered_invite_by_you">%1$s നുള്ള ക്ഷണം നിങ്ങൾ സ്വീകരിച്ചു</string>
+    <string name="notice_room_third_party_registered_invite">%1$s %2$sനുള്ള ക്ഷണം സ്വീകരിച്ചു</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">%1$sനുള്ള ക്ഷണം നിങ്ങൾ റദ്ദാക്കി</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s %2$sനുള്ള ക്ഷണം റദ്ദാക്കി</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">%1$sന് മുറിയിൽ ചേരുന്നതിനുള്ള ക്ഷണം നിങ്ങൾ റദ്ദാക്കി</string>
+    <string name="notice_room_third_party_revoked_invite">%2$sന് മുറിയിൽ ചേരുന്നതിനുള്ള ക്ഷണം %1$s റദ്ദാക്കി</string>
+    <string name="notice_direct_room_third_party_invite_by_you">നിങ്ങൾ %1$s നെ ക്ഷണിച്ചു</string>
+    <string name="notice_direct_room_third_party_invite">%1$s %2$sനെ ക്ഷണിച്ചു</string>
+    <string name="notice_room_third_party_invite_by_you">മുറിയിൽ ചേരാൻ നിങ്ങൾ %1$s ന് ഒരു ക്ഷണം അയച്ചു</string>
+    <string name="notice_room_third_party_invite">%1$s മുറിയിൽ ചേരാൻ %2$s ന് ക്ഷണം അയച്ചു</string>
+    <string name="notice_profile_change_redacted_by_you">നിങ്ങളുടെ പ്രൊഫൈൽ %1$s നവീകരിച്ചു</string>
+    <string name="notice_profile_change_redacted">%1$s അവരുടെ പ്രൊഫൈൽ %2$s നവീകരിച്ചു</string>
 </resources>
