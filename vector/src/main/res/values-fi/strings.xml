@@ -102,7 +102,7 @@
     </plurals>
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s poisti tältä huoneelta osoitteen %2$s.</item>
-        <item quantity="other">%1$s poisti tältä huoneelta osoitteet %3$s.</item>
+        <item quantity="other">%1$s poisti tältä huoneelta osoitteet %2$s.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s lisäsi tälle huoneelle osoitteen %2$s ja poisti osoitteen %3$s.</string>
     <string name="notice_room_canonical_alias_set">%1$s asetti tämän huoneen pääosoitteeksi %2$s.</string>
@@ -2096,7 +2096,7 @@
     <string name="settings_show_emoji_keyboard">Näytä emoji-näppäimistö</string>
     <string name="settings_emails_empty">Tiliisi ei ole lisätty sähköpostiosoitetta</string>
     <string name="settings_phone_number_empty">Tiliisi ei ole lisätty puhelinnumeroa</string>
-    <string name="room_permissions_notify_everyone">Ilmoittaa kaikille</string>
+    <string name="room_permissions_notify_everyone">Ilmoita kaikille</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Haluatko peruuttaa tämän käyttäjän kutsun\?</string>
     <string name="room_participants_leave_private_warning">Tämä huone ei ole julkinen. Jos poistut, et voi liittyä takaisin ilman kutsua.</string>
     <string name="settings_security_prevent_screenshots_summary">Tämän asetuksen käyttöön ottaminen lisää FLAG_SECURE kaikkiin toimintoihin. Käynnistä sovellus uudestaan, jotta muutos tulee voimaan.</string>
@@ -2122,7 +2122,7 @@
     <string name="settings_emails_and_phone_numbers_summary">Hallitse Matrix-tiliisi linkitettyjä sähköpostiosoitteita ja puhelinnumeroita</string>
     <string name="change_password_summary">Aseta tilille uusi salasana…</string>
     <string name="settings_troubleshoot_test_push_notification_content">Katselet ilmoitusta! Napsauta minua!</string>
-    <string name="settings_troubleshoot_test_notification_notice">Napsauta ilmoitusta. Jos ilmoitusta ei näy, tarkista järjestelmäasetukset.</string>
+    <string name="settings_troubleshoot_test_notification_notice">Napsauta ilmoitusta. Jos ilmoitusta ei näy, tarkasta järjestelmäasetukset.</string>
     <string name="settings_troubleshoot_test_notification_title">Ilmoitusnäyttö</string>
     <string name="settings_troubleshoot_title">Vianmääritys</string>
     <string name="settings_notification_configuration">Ilmoitustapa</string>
