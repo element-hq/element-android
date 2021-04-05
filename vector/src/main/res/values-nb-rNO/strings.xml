@@ -967,7 +967,7 @@
     <string name="warning_unsaved_change_discard">Forkaste endringer</string>
     <string name="read_receipts_list">Les kvitteringsliste</string>
     <string name="e2e_re_request_encryption_key">Be om krypteringsnøkler fra andre økter.</string>
-    <string name="login_error_must_start_http">URL må starte med http[s]://</string>
+    <string name="login_error_must_start_http">URLen må starte med http[s]://</string>
     <string name="settings_troubleshoot_test_push_notification_content">Du ser på varselet! Klikk på meg!</string>
     <string name="settings_troubleshoot_test_push_loop_failed">Kunne ikke motta push. Løsningen kan være å installere applikasjonen på nytt.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Legg til konto</string>
@@ -1154,11 +1154,11 @@
     <string name="template_e2e_re_request_encryption_key_dialog_content">Start ${app_name} på en annen enhet som kan dekryptere meldingen, slik at den kan sende nøklene til denne økten.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Forespørsel sendt</string>
     <string name="e2e_re_request_encryption_key_sent">Nøkkelforespørsel sendt.</string>
-    <string name="login_error_ssl_peer_unverified">SSL-feil: identiteten til jevnaldrende er ikke bekreftet.</string>
-    <string name="login_error_homeserver_not_found">Kan ikke nå en hjemmeserver på denne URL-en, sjekk den</string>
+    <string name="login_error_ssl_peer_unverified">SSL Feil: Denne partnerns identitet har ikke blitt verifisert.</string>
+    <string name="login_error_homeserver_not_found">Kan ikke nå hjemmetjeneren på denne URLen, vennligst sjekk den</string>
     <string name="login_error_no_homeserver_found">Dette er ikke en gyldig adresse for en Matrix tjener</string>
-    <string name="login_error_unknown_host">Denne URL-en er ikke tilgjengelig, sjekk den</string>
-    <string name="login_error_unable_register_mail_ownership">Kan ikke registrere: e-post eierskap feil</string>
+    <string name="login_error_unknown_host">Denne URLen kunne ikke nås, vennligst sjekk den</string>
+    <string name="login_error_unable_register_mail_ownership">Klarte ikke registrere: e-posteierskapsfeil</string>
     <string name="action_unpublish">Fjern publiseringen</string>
     <string name="action_add">Legg til</string>
     <string name="start_chatting">Begynn å chatte</string>
