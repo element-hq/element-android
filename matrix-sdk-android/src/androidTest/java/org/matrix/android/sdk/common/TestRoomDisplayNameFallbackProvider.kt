@@ -18,12 +18,12 @@ package org.matrix.android.sdk.common
 
 import org.matrix.android.sdk.api.RoomDisplayNameFallbackProvider
 
-class TestRoomDisplayNameFallbackProvider() : RoomDisplayNameFallbackProvider {
+class TestRoomDisplayNameFallbackProvider : RoomDisplayNameFallbackProvider {
 
     override fun getNameForRoomInvite() =
             "Room invite"
 
-    override fun getNameForEmptyRoom() =
+    override fun getNameForEmptyRoom(isDirect: Boolean, leftMemberNames: List<String>) =
             "Empty room"
 
     override fun getNameFor2members(name1: String?, name2: String?) =
