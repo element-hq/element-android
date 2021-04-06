@@ -46,8 +46,8 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
         val deactivateAccountParams = DeactivateAccountParams.create(params.userAuthParam, params.eraseAllData)
 
         val canCleanup = try {
-            executeRequest<Unit>(globalErrorReceiver) {
-                apiCall = accountAPI.deactivate(deactivateAccountParams)
+            executeRequest(globalErrorReceiver) {
+                accountAPI.deactivate(deactivateAccountParams)
             }
             true
         } catch (throwable: Throwable) {

@@ -61,13 +61,13 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
                     ?: throw IllegalArgumentException("unknown threepid")
 
             try {
-                executeRequest<Unit>(globalErrorReceiver) {
+                executeRequest(globalErrorReceiver) {
                     val body = FinalizeAddThreePidBody(
                             clientSecret = pendingThreePids.clientSecret,
                             sid = pendingThreePids.sid,
                             auth = params.userAuthParam?.asMap()
                     )
-                    apiCall = profileAPI.finalizeAddThreePid(body)
+                    profileAPI.finalizeAddThreePid(body)
                 }
                 true
             } catch (throwable: Throwable) {

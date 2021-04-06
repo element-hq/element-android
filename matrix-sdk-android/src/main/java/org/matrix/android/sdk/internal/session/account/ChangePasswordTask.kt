@@ -39,8 +39,8 @@ internal class DefaultChangePasswordTask @Inject constructor(
     override suspend fun execute(params: ChangePasswordTask.Params) {
         val changePasswordParams = ChangePasswordParams.create(userId, params.password, params.newPassword)
         try {
-            executeRequest<Unit>(globalErrorReceiver) {
-                apiCall = accountAPI.changePassword(changePasswordParams)
+            executeRequest(globalErrorReceiver) {
+                accountAPI.changePassword(changePasswordParams)
             }
         } catch (throwable: Throwable) {
             val registrationFlowResponse = throwable.toRegistrationFlowResponse()
@@ -49,8 +49,8 @@ internal class DefaultChangePasswordTask @Inject constructor(
                     /* Avoid infinite loop */
                     && changePasswordParams.auth?.session == null) {
                 // Retry with authentication
-                executeRequest<Unit>(globalErrorReceiver) {
-                    apiCall = accountAPI.changePassword(
+                executeRequest(globalErrorReceiver) {
+                    accountAPI.changePassword(
                             changePasswordParams.copy(auth = changePasswordParams.auth?.copy(session = registrationFlowResponse.session))
                     )
                 }

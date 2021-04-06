@@ -36,7 +36,7 @@ internal class DefaultRemovePushRuleTask @Inject constructor(
 
     override suspend fun execute(params: RemovePushRuleTask.Params) {
         return executeRequest(globalErrorReceiver) {
-            apiCall = pushRulesApi.deleteRule(params.kind.value, params.pushRule.ruleId)
+            pushRulesApi.deleteRule(params.kind.value, params.pushRule.ruleId)
         }
     }
 }

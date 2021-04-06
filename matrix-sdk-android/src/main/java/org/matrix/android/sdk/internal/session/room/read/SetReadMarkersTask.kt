@@ -96,9 +96,11 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
             updateDatabase(params.roomId, markers, shouldUpdateRoomSummary)
         }
         if (markers.isNotEmpty()) {
-            executeRequest<Unit>(globalErrorReceiver) {
-                isRetryable = true
-                apiCall = roomAPI.sendReadMarker(params.roomId, markers)
+            executeRequest(
+                    globalErrorReceiver,
+                    canRetry = true
+            ) {
+                roomAPI.sendReadMarker(params.roomId, markers)
             }
         }
     }

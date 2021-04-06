@@ -36,7 +36,7 @@ internal class DefaultAddPushRuleTask @Inject constructor(
 
     override suspend fun execute(params: AddPushRuleTask.Params) {
         return executeRequest(globalErrorReceiver) {
-            apiCall = pushRulesApi.addRule(params.kind.value, params.pushRule.ruleId, params.pushRule)
+            pushRulesApi.addRule(params.kind.value, params.pushRule.ruleId, params.pushRule)
         }
     }
 }

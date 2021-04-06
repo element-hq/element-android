@@ -17,7 +17,8 @@
 package org.matrix.android.sdk.internal.session.terms
 
 import dagger.Lazy
-import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.terms.GetTermsResponse
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -29,12 +30,9 @@ import org.matrix.android.sdk.internal.session.identity.IdentityAuthAPI
 import org.matrix.android.sdk.internal.session.identity.IdentityRegisterTask
 import org.matrix.android.sdk.internal.session.openid.GetOpenIdTokenTask
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.AcceptedTermsContent
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
-import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 internal class DefaultTermsService @Inject constructor(
@@ -45,43 +43,39 @@ internal class DefaultTermsService @Inject constructor(
         private val retrofitFactory: RetrofitFactory,
         private val getOpenIdTokenTask: GetOpenIdTokenTask,
         private val identityRegisterTask: IdentityRegisterTask,
-        private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+        private val updateUserAccountDataTask: UpdateUserAccountDataTask
 ) : TermsService {
+
     override suspend fun getTerms(serviceType: TermsService.ServiceType,
-                                 baseUrl: String): GetTermsResponse {
-        return withContext(coroutineDispatchers.main) {
-            val url = buildUrl(baseUrl, serviceType)
-            val termsResponse = executeRequest<TermsResponse>(null) {
-                apiCall = termsAPI.getTerms("${url}terms")
-            }
-            GetTermsResponse(termsResponse, getAlreadyAcceptedTermUrlsFromAccountData())
+                                  baseUrl: String): GetTermsResponse {
+        val url = buildUrl(baseUrl, serviceType)
+        val termsResponse = executeRequest(null) {
+            termsAPI.getTerms("${url}terms")
         }
+        return GetTermsResponse(termsResponse, getAlreadyAcceptedTermUrlsFromAccountData())
     }
 
     override suspend fun agreeToTerms(serviceType: TermsService.ServiceType,
                                       baseUrl: String,
                                       agreedUrls: List<String>,
                                       token: String?) {
-        withContext(coroutineDispatchers.main) {
-            val url = buildUrl(baseUrl, serviceType)
-            val tokenToUse = token?.takeIf { it.isNotEmpty() } ?: getToken(baseUrl)
+        val url = buildUrl(baseUrl, serviceType)
+        val tokenToUse = token?.takeIf { it.isNotEmpty() } ?: getToken(baseUrl)
 
-            executeRequest<Unit>(null) {
-                apiCall = termsAPI.agreeToTerms("${url}terms", AcceptTermsBody(agreedUrls), "Bearer $tokenToUse")
-            }
-
-            // client SHOULD update this account data section adding any the URLs
-            // of any additional documents that the user agreed to this list.
-            // Get current m.accepted_terms append new ones and update account data
-            val listOfAcceptedTerms = getAlreadyAcceptedTermUrlsFromAccountData()
-
-            val newList = listOfAcceptedTerms.toMutableSet().apply { addAll(agreedUrls) }.toList()
-
-            updateUserAccountDataTask.execute(UpdateUserAccountDataTask.AcceptedTermsParams(
-                    acceptedTermsContent = AcceptedTermsContent(newList)
-            ))
+        executeRequest(null) {
+            termsAPI.agreeToTerms("${url}terms", AcceptTermsBody(agreedUrls), "Bearer $tokenToUse")
         }
+
+        // client SHOULD update this account data section adding any the URLs
+        // of any additional documents that the user agreed to this list.
+        // Get current m.accepted_terms append new ones and update account data
+        val listOfAcceptedTerms = getAlreadyAcceptedTermUrlsFromAccountData()
+
+        val newList = listOfAcceptedTerms.toMutableSet().apply { addAll(agreedUrls) }.toList()
+
+        updateUserAccountDataTask.execute(UpdateUserAccountDataTask.AcceptedTermsParams(
+                acceptedTermsContent = AcceptedTermsContent(newList)
+        ))
     }
 
     private suspend fun getToken(url: String): String {
@@ -97,7 +91,7 @@ internal class DefaultTermsService @Inject constructor(
     private fun buildUrl(baseUrl: String, serviceType: TermsService.ServiceType): String {
         val servicePath = when (serviceType) {
             TermsService.ServiceType.IntegrationManager -> NetworkConstants.URI_INTEGRATION_MANAGER_PATH
-            TermsService.ServiceType.IdentityService    -> NetworkConstants.URI_IDENTITY_PATH_V2
+            TermsService.ServiceType.IdentityService -> NetworkConstants.URI_IDENTITY_PATH_V2
         }
         return "${baseUrl.ensureTrailingSlash()}$servicePath"
     }
