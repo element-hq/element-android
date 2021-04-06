@@ -31,7 +31,7 @@ SDK API changes ⚠️:
  - Removes filtering options on Timeline.
 
 Build 🧱:
- -
+ - Properly exclude gms dependencies in fdroid build flavour which were pulled in through the jitsi SDK (#3125)
 
 Test:
  -
