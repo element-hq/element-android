@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package org.matrix.android.sdk.api.session.room
 
-import im.vector.app.core.platform.VectorViewModelAction
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
-sealed class HomeDetailAction : VectorViewModelAction {
-    data class SwitchDisplayMode(val displayMode: RoomListDisplayMode) : HomeDetailAction()
-    object MarkAllRoomsRead : HomeDetailAction()
+interface UpdatableFilterLivePageResult {
+    val livePagedList: LiveData<PagedList<RoomSummary>>
+
+    fun updateQuery(queryParams: RoomSummaryQueryParams)
 }

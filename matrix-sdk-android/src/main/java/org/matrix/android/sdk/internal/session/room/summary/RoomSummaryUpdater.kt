@@ -98,6 +98,11 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
 
+        val lastActivityFromEvent = latestPreviewableEvent?.root?.originServerTs
+        if (lastActivityFromEvent != null) {
+            roomSummaryEntity.lastActivityTime = lastActivityFromEvent
+        }
+
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
                 // avoid this call if we are sure there are unread events
                 || !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
@@ -112,9 +117,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases
                 .orEmpty()
-        roomSummaryEntity.aliases.clear()
-        roomSummaryEntity.aliases.addAll(roomAliases)
-        roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")
+        roomSummaryEntity.updateAliases(roomAliases)
         roomSummaryEntity.isEncrypted = encryptionEvent != null
         roomSummaryEntity.encryptionEventTs = encryptionEvent?.originServerTs
 

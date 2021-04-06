@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,15 +16,12 @@
 
 package im.vector.app.features.home.room.list
 
-import com.airbnb.mvrx.MvRxState
-import im.vector.app.features.home.RoomListDisplayMode
-import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
-data class RoomListViewState(
-        val displayMode: RoomListDisplayMode,
-        val roomFilter: String = "",
-        val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap()
-) : MvRxState {
-
-    constructor(args: RoomListParams) : this(displayMode = args.displayMode)
+interface RoomListListener : FilteredRoomFooterItem.FilteredRoomFooterItemListener {
+    fun onRoomClicked(room: RoomSummary)
+    fun onRoomLongClicked(room: RoomSummary): Boolean
+    fun onRejectRoomInvitation(room: RoomSummary)
+    fun onAcceptRoomInvitation(room: RoomSummary)
 }

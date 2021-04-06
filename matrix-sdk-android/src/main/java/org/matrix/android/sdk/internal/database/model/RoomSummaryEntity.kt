@@ -16,61 +16,217 @@
 
 package org.matrix.android.sdk.internal.database.model
 
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.Index
+import io.realm.annotations.PrimaryKey
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.VersioningState
-import io.realm.RealmList
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 
 internal open class RoomSummaryEntity(
-        @PrimaryKey var roomId: String = "",
-        var displayName: String? = "",
-        var avatarUrl: String? = "",
-        var name: String? = "",
-        var topic: String? = "",
-        var latestPreviewableEvent: TimelineEventEntity? = null,
-        var heroes: RealmList<String> = RealmList(),
-        var joinedMembersCount: Int? = 0,
-        var invitedMembersCount: Int? = 0,
-        var isDirect: Boolean = false,
-        var directUserId: String? = null,
-        var otherMemberIds: RealmList<String> = RealmList(),
-        var notificationCount: Int = 0,
-        var highlightCount: Int = 0,
-        var readMarkerId: String? = null,
-        var hasUnreadMessages: Boolean = false,
-        var tags: RealmList<RoomTagEntity> = RealmList(),
-        var userDrafts: UserDraftsEntity? = null,
-        var breadcrumbsIndex: Int = RoomSummary.NOT_IN_BREADCRUMBS,
-        var canonicalAlias: String? = null,
-        var aliases: RealmList<String> = RealmList(),
-        // this is required for querying
-        var flatAliases: String = "",
-        var isEncrypted: Boolean = false,
-        var encryptionEventTs: Long? = 0,
-        var roomEncryptionTrustLevelStr: String? = null,
-        var inviterId: String? = null,
-        var hasFailedSending: Boolean = false
+        @PrimaryKey var roomId: String = ""
 ) : RealmObject() {
 
+    var displayName: String? = ""
+        set(value) {
+            if (value != field) field = value
+        }
+    var avatarUrl: String? = ""
+        set(value) {
+            if (value != field) field = value
+        }
+    var name: String? = ""
+        set(value) {
+            if (value != field) field = value
+        }
+    var topic: String? = ""
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var latestPreviewableEvent: TimelineEventEntity? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    @Index
+    var lastActivityTime: Long? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var heroes: RealmList<String> = RealmList()
+
+    var joinedMembersCount: Int? = 0
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var invitedMembersCount: Int? = 0
+        set(value) {
+            if (value != field) field = value
+        }
+
+    @Index
+    var isDirect: Boolean = false
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var directUserId: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var otherMemberIds: RealmList<String> = RealmList()
+
+    var notificationCount: Int = 0
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var highlightCount: Int = 0
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var readMarkerId: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var hasUnreadMessages: Boolean = false
+        set(value) {
+            if (value != field) field = value
+        }
+
+    private var tags: RealmList<RoomTagEntity> = RealmList()
+
+    fun tags(): List<RoomTagEntity> = tags
+
+    fun updateTags(newTags: List<Pair<String, Double?>>) {
+        val toDelete = mutableListOf<RoomTagEntity>()
+        tags.forEach { existingTag ->
+            val updatedTag = newTags.firstOrNull { it.first == existingTag.tagName }
+            if (updatedTag == null) {
+                toDelete.add(existingTag)
+            } else {
+                existingTag.tagOrder = updatedTag.second
+            }
+        }
+        toDelete.forEach { it.deleteFromRealm() }
+        newTags.forEach { newTag ->
+            if (tags.all { it.tagName != newTag.first }) {
+                // we must add it
+                tags.add(
+                        RoomTagEntity(newTag.first, newTag.second)
+                )
+            }
+        }
+
+        isFavourite = newTags.any { it.first == RoomTag.ROOM_TAG_FAVOURITE }
+        isLowPriority = newTags.any { it.first == RoomTag.ROOM_TAG_LOW_PRIORITY }
+        isServerNotice = newTags.any { it.first == RoomTag.ROOM_TAG_SERVER_NOTICE }
+    }
+
+    @Index
+    var isFavourite: Boolean = false
+        set(value) {
+            if (value != field) field = value
+        }
+
+    @Index
+    var isLowPriority: Boolean = false
+        set(value) {
+            if (value != field) field = value
+        }
+
+    @Index
+    var isServerNotice: Boolean = false
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var userDrafts: UserDraftsEntity? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var breadcrumbsIndex: Int = RoomSummary.NOT_IN_BREADCRUMBS
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var canonicalAlias: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var aliases: RealmList<String> = RealmList()
+
+    fun updateAliases(newAliases: List<String>) {
+        // only update underlying field if there is a diff
+        if (newAliases.distinct().sorted() != aliases.distinct().sorted()) {
+            aliases.clear()
+            aliases.addAll(newAliases)
+            flatAliases = newAliases.joinToString(separator = "|", prefix = "|")
+        }
+    }
+
+    // this is required for querying
+    var flatAliases: String = ""
+
+    var isEncrypted: Boolean = false
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var encryptionEventTs: Long? = 0
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var roomEncryptionTrustLevelStr: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var inviterId: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var hasFailedSending: Boolean = false
+        set(value) {
+            if (value != field) field = value
+        }
+
+    @Index
     private var membershipStr: String = Membership.NONE.name
+
     var membership: Membership
         get() {
             return Membership.valueOf(membershipStr)
         }
         set(value) {
-            membershipStr = value.name
+            if (value.name != membershipStr) {
+                membershipStr = value.name
+            }
         }
 
+    @Index
     private var versioningStateStr: String = VersioningState.NONE.name
     var versioningState: VersioningState
         get() {
             return VersioningState.valueOf(versioningStateStr)
         }
         set(value) {
-            versioningStateStr = value.name
+            if (value.name != versioningStateStr) {
+                versioningStateStr = value.name
+            }
         }
 
     var roomEncryptionTrustLevel: RoomEncryptionTrustLevel?
@@ -84,7 +240,9 @@ internal open class RoomSummaryEntity(
             }
         }
         set(value) {
-            roomEncryptionTrustLevelStr = value?.name
+            if (value?.name != roomEncryptionTrustLevelStr) {
+                roomEncryptionTrustLevelStr = value?.name
+            }
         }
 
     companion object

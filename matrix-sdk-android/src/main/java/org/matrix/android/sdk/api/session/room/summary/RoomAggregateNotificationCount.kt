@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package org.matrix.android.sdk.api.session.room.summary
 
-import im.vector.app.core.utils.BehaviorDataSource
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import javax.inject.Inject
-import javax.inject.Singleton
-
-@Singleton
-class HomeRoomListDataSource @Inject constructor() : BehaviorDataSource<List<RoomSummary>>()
+data class RoomAggregateNotificationCount(
+        val notificationCount: Int,
+        val highlightCount: Int
+) {
+    val totalCount = notificationCount + highlightCount
+    val isHighlight = highlightCount > 0
+}
