@@ -28,6 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.SimpleFragmentActivity
+import im.vector.app.features.spaces.create.ChoosePrivateSpaceTypeFragment
 import im.vector.app.features.spaces.create.ChooseSpaceTypeFragment
 import im.vector.app.features.spaces.create.CreateSpaceAction
 import im.vector.app.features.spaces.create.CreateSpaceDefaultRoomsFragment
@@ -35,6 +36,7 @@ import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
 import im.vector.app.features.spaces.create.CreateSpaceEvents
 import im.vector.app.features.spaces.create.CreateSpaceState
 import im.vector.app.features.spaces.create.CreateSpaceViewModel
+import im.vector.app.features.spaces.create.SpaceType
 import javax.inject.Inject
 
 class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Factory {
@@ -85,6 +87,9 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                 CreateSpaceEvents.NavigateToAddRooms -> {
                     navigateToFragment(CreateSpaceDefaultRoomsFragment::class.java)
                 }
+                CreateSpaceEvents.NavigateToChoosePrivateType -> {
+                    navigateToFragment(ChoosePrivateSpaceTypeFragment::class.java)
+                }
                 is CreateSpaceEvents.ShowModalError -> {
                     hideWaitingView()
                     AlertDialog.Builder(this)
@@ -124,8 +129,12 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
     private fun renderState(state: CreateSpaceState) {
         val titleRes = when (state.step) {
             CreateSpaceState.Step.ChooseType -> R.string.activity_create_space_title
-            CreateSpaceState.Step.SetDetails -> R.string.your_public_space
-            CreateSpaceState.Step.AddRooms -> R.string.your_public_space
+            CreateSpaceState.Step.SetDetails,
+            CreateSpaceState.Step.AddRooms -> {
+                if (state.spaceType == SpaceType.Public) R.string.your_public_space
+                else R.string.your_private_space
+            }
+            CreateSpaceState.Step.ChoosePrivateType -> R.string.your_private_space
         }
         supportActionBar?.let {
             it.title = getString(titleRes)

@@ -120,6 +120,7 @@ import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
 import im.vector.app.features.share.IncomingShareFragment
 import im.vector.app.features.signout.soft.SoftLogoutFragment
 import im.vector.app.features.spaces.SpaceListFragment
+import im.vector.app.features.spaces.create.ChoosePrivateSpaceTypeFragment
 import im.vector.app.features.spaces.create.ChooseSpaceTypeFragment
 import im.vector.app.features.spaces.create.CreateSpaceDefaultRoomsFragment
 import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
@@ -672,4 +673,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SpaceDirectoryFragment::class)
     fun bindSpaceDirectoryFragment(fragment: SpaceDirectoryFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ChoosePrivateSpaceTypeFragment::class)
+    fun bindChoosePrivateSpaceTypeFragment(fragment: ChoosePrivateSpaceTypeFragment): Fragment
 }
