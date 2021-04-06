@@ -1451,6 +1451,9 @@
     <string name="room_settings_room_access_entry_only_invited">Only people who have been invited</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room’s link, apart from guests</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room’s link, including guests</string>
+    <string name="room_settings_room_access_entry_restricted">Restricted to members of a parent space</string>
+    <string name="room_settings_room_access_entry_knock">Anyone can knock on the room, members can then accept or reject</string>
+    <string name="room_settings_room_access_entry_unknown">Unknown access setting (%s)</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Banned users</string>
@@ -3264,10 +3267,17 @@
 
     <string name="add_space">Add Space</string>
     <string name="your_public_space">Your public space</string>
+    <string name="your_private_space">Your private space</string>
     <string name="create_spaces_type_header">Spaces are a new way to group rooms and people</string>
     <string name="create_spaces_choose_type_label">What type of space do you want to create?</string>
     <string name="create_spaces_you_can_change_later">You can change this later</string>
     <string name="create_spaces_join_info_help">To join an existing space, you need an invite.</string>
+    <string name="create_spaces_who_are_you_working_with">Who are you working with?</string>
+    <string name="create_spaces_make_sure_access">Make sure the right people have access to %s. You can change this later.</string>
+    <string name="create_spaces_just_me">Just me</string>
+    <string name="create_spaces_organise_rooms">A private space to organise your rooms</string>
+    <string name="create_spaces_me_and_teammates">Me and teammates</string>
+    <string name="create_spaces_private_teammates">A private space for you &amp; your teammates</string>
     <string name="space_type_public">Public</string>
     <string name="space_type_public_desc">Open to anyone, best for communities</string>
     <string name="space_type_private">Private</string>
@@ -3278,6 +3288,8 @@
     <string name="create_space_error_empty_field_space_name">Give it a name to continue.</string>
     <string name="create_spaces_room_public_header">What are some discussions you want to have in %s?</string>
     <string name="create_spaces_room_public_header_desc">We’ll create rooms for them. You can add more later too.</string>
+    <string name="create_spaces_room_private_header">What things are you working on?</string>
+    <string name="create_spaces_room_private_header_desc">Let’s create a room for each of them. You can add more later too, including already existing ones.</string>
     <string name="create_spaces_default_public_room_name">General</string>
     <string name="create_spaces_default_public_random_room_name">Random</string>
     <string name="create_spaces_loading_message">Creating Space…</string>

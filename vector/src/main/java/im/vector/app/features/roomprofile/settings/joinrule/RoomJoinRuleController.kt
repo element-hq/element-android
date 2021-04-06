@@ -51,6 +51,13 @@ class RoomJoinRuleController @Inject constructor(
                         title = stringProvider.getString(R.string.room_settings_room_access_entry_anyone_with_link_including_guest),
                         iconResId = 0,
                         isSelected = state.currentRoomJoinRule == RoomJoinRules.PUBLIC && state.currentGuestAccess == GuestAccess.CanJoin
+                ),
+                RoomJoinRuleAction(
+                        roomJoinRule = RoomJoinRules.RESTRICTED,
+                        roomGuestAccess = null,
+                        title = stringProvider.getString(R.string.room_settings_room_access_entry_restricted),
+                        iconResId = 0,
+                        isSelected = state.currentRoomJoinRule == RoomJoinRules.RESTRICTED
                 )
         )
     }

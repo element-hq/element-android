@@ -20,6 +20,7 @@ import android.net.Uri
 import im.vector.app.core.platform.ViewModelTask
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.internal.util.awaitCallback
@@ -59,38 +60,51 @@ class CreateSpaceViewModelTask @Inject constructor(
 
         val childErrors = mutableMapOf<String, Throwable>()
         val childIds = mutableListOf<String>()
-        if (params.isPublic) {
-            params.defaultRooms
-                    .filter { it.isNotBlank() }
-                    .forEach { roomName ->
-                        try {
-                            val roomId = try {
-                                awaitCallback<String> {
+        params.defaultRooms
+                .filter { it.isNotBlank() }
+                .forEach { roomName ->
+                    try {
+
+                        val roomId = try {
+                            if (params.isPublic) {
+                                awaitCallback {
                                     session.createRoom(CreateRoomParams().apply {
                                         this.name = roomName
                                         this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                                     }, it)
                                 }
-                            } catch (timeout: CreateRoomFailure.CreatedWithTimeout) {
-                                // we ignore that?
-                                timeout.roomID
+                            } else {
+                                awaitCallback { callback ->
+                                    session.createRoom(CreateRoomParams().apply {
+                                        this.name = roomName
+                                        this.joinRuleRestricted = listOf(
+                                                RoomJoinRulesAllowEntry(
+                                                        spaceID = spaceID,
+                                                        via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
+                                                )
+                                        )
+                                    }, callback)
+                                }
                             }
-                            val via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
-                            createdSpace!!.addChildren(roomId, via, null, autoJoin = false, suggested = true)
-                            // set canonical
-                            session.spaceService().setSpaceParent(
-                                    roomId,
-                                    createdSpace.spaceId,
-                                    true,
-                                    via
-                            )
-                            childIds.add(roomId)
-                        } catch (failure: Throwable) {
-                            Timber.d("Space: Failed to create child room in $spaceID")
-                            childErrors[roomName] = failure
+                        } catch (timeout: CreateRoomFailure.CreatedWithTimeout) {
+                            // we ignore that?
+                            timeout.roomID
                         }
+                        val via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
+                        createdSpace!!.addChildren(roomId, via, null, autoJoin = false, suggested = true)
+                        // set canonical
+                        session.spaceService().setSpaceParent(
+                                roomId,
+                                createdSpace.spaceId,
+                                true,
+                                via
+                        )
+                        childIds.add(roomId)
+                    } catch (failure: Throwable) {
+                        Timber.d("Space: Failed to create child room in $spaceID")
+                        childErrors[roomName] = failure
                     }
-        }
+                }
 
         return if (childErrors.isEmpty()) {
             CreateSpaceTaskResult.Success(spaceID, childIds)
