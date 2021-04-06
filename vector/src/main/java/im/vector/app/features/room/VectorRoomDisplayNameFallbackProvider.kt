@@ -28,8 +28,12 @@ class VectorRoomDisplayNameFallbackProvider(
         return context.getString(R.string.room_displayname_room_invite)
     }
 
-    override fun getNameForEmptyRoom(): String {
-        return context.getString(R.string.room_displayname_empty_room)
+    override fun getNameForEmptyRoom(isDirect: Boolean, leftMemberNames: List<String>): String {
+        return if (leftMemberNames.isEmpty()) {
+            context.getString(R.string.room_displayname_empty_room)
+        } else {
+            context.getString(R.string.room_displayname_empty_room_was, leftMemberNames.joinToString())
+        }
     }
 
     override fun getNameFor2members(name1: String?, name2: String?): String {
