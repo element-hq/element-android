@@ -35,7 +35,6 @@ import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.HomeRoomListDataSource
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
@@ -112,8 +111,6 @@ interface VectorComponent {
     fun navigator(): Navigator
 
     fun errorFormatter(): ErrorFormatter
-
-    fun homeRoomListObservableStore(): HomeRoomListDataSource
 
     fun selectedGroupStore(): SelectedGroupDataSource
 

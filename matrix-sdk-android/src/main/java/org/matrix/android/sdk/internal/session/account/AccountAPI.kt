@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.account
 
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -28,7 +27,7 @@ internal interface AccountAPI {
      * @param params parameters to change password.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/password")
-    fun changePassword(@Body params: ChangePasswordParams): Call<Unit>
+    suspend fun changePassword(@Body params: ChangePasswordParams)
 
     /**
      * Deactivate the user account
@@ -36,5 +35,5 @@ internal interface AccountAPI {
      * @param params the deactivate account params
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/deactivate")
-    fun deactivate(@Body params: DeactivateAccountParams): Call<Unit>
+    suspend fun deactivate(@Body params: DeactivateAccountParams)
 }

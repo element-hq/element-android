@@ -37,6 +37,18 @@ fun Throwable.shouldBeRetried(): Boolean {
             || (this is Failure.ServerError && error.code == MatrixError.M_LIMIT_EXCEEDED)
 }
 
+/**
+ * Get the retry delay in case of rate limit exceeded error, adding 100 ms, of defaultValue otherwise
+ */
+fun Throwable.getRetryDelay(defaultValue: Long): Long {
+    return (this as? Failure.ServerError)
+            ?.error
+            ?.takeIf { it.code == MatrixError.M_LIMIT_EXCEEDED }
+            ?.retryAfterMillis
+            ?.plus(100L)
+            ?: defaultValue
+}
+
 fun Throwable.isInvalidPassword(): Boolean {
     return this is Failure.ServerError
             && error.code == MatrixError.M_FORBIDDEN

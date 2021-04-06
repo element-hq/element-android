@@ -15,7 +15,6 @@
  */
 package org.matrix.android.sdk.internal.session.pushers
 
-import org.matrix.android.sdk.api.pushrules.rest.GetPushRulesResponse
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
@@ -35,8 +34,8 @@ internal class DefaultGetPushRulesTask @Inject constructor(
 ) : GetPushRulesTask {
 
     override suspend fun execute(params: GetPushRulesTask.Params) {
-        val response = executeRequest<GetPushRulesResponse>(globalErrorReceiver) {
-            apiCall = pushRulesApi.getAllRules()
+        val response = executeRequest(globalErrorReceiver) {
+            pushRulesApi.getAllRules()
         }
 
         savePushRulesTask.execute(SavePushRulesTask.Params(response))

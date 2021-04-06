@@ -44,8 +44,8 @@ internal class DefaultSendTypingTask @Inject constructor(
     override suspend fun execute(params: SendTypingTask.Params) {
         delay(params.delay ?: -1)
 
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = roomAPI.sendTypingState(
+        executeRequest(globalErrorReceiver) {
+            roomAPI.sendTypingState(
                     params.roomId,
                     userId,
                     TypingBody(params.isTyping, params.typingTimeoutMillis?.takeIf { params.isTyping })

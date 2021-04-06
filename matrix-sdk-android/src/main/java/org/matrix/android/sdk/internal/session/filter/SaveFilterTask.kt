@@ -59,9 +59,9 @@ internal class DefaultSaveFilterTask @Inject constructor(
         }
         val updated = filterRepository.storeFilter(filterBody, roomFilter)
         if (updated) {
-            val filterResponse = executeRequest<FilterResponse>(globalErrorReceiver) {
+            val filterResponse = executeRequest(globalErrorReceiver) {
                 // TODO auto retry
-                apiCall = filterAPI.uploadFilter(userId, filterBody)
+                filterAPI.uploadFilter(userId, filterBody)
             }
             filterRepository.storeFilterId(filterBody, filterResponse.filterId)
         }
