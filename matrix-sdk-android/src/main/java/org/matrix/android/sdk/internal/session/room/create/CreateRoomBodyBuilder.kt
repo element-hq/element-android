@@ -23,7 +23,11 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.toMedium
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
@@ -70,11 +74,17 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                     }
                 }
 
+        if (params.joinRuleRestricted != null) {
+            params.roomVersion = "org.matrix.msc3083"
+            params.historyVisibility = params.historyVisibility ?: RoomHistoryVisibility.SHARED
+            params.guestAccess = params.guestAccess ?: GuestAccess.Forbidden
+        }
         val initialStates = listOfNotNull(
                 buildEncryptionWithAlgorithmEvent(params),
                 buildHistoryVisibilityEvent(params),
                 buildAvatarEvent(params),
-                buildGuestAccess(params)
+                buildGuestAccess(params),
+                buildJoinRulesRestricted(params)
         )
                 .takeIf { it.isNotEmpty() }
 
@@ -89,7 +99,9 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 initialStates = initialStates,
                 preset = params.preset,
                 isDirect = params.isDirect,
-                powerLevelContentOverride = params.powerLevelContentOverride
+                powerLevelContentOverride = params.powerLevelContentOverride,
+                roomVersion = params.roomVersion
+
         )
     }
 
@@ -129,7 +141,21 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                     Event(
                             type = EventType.STATE_ROOM_GUEST_ACCESS,
                             stateKey = "",
-                            content = RoomGuestAccessContent(it.name).toContent()
+                            content = RoomGuestAccessContent(it.value).toContent()
+                    )
+                }
+    }
+
+    private fun buildJoinRulesRestricted(params: CreateRoomParams): Event? {
+        return params.joinRuleRestricted
+                ?.let { allowList ->
+                    Event(
+                            type = EventType.STATE_ROOM_JOIN_RULES,
+                            stateKey = "",
+                            content = RoomJoinRulesContent(
+                                    _joinRules = RoomJoinRules.RESTRICTED.value,
+                                    allowList = allowList
+                            ).toContent()
                     )
                 }
     }

@@ -39,13 +39,27 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
         genericFooterItem {
             id("info_help_header")
             style(ItemStyle.TITLE)
-            text(stringProvider.getString(R.string.create_spaces_room_public_header, data?.name))
+            text(
+                    if (data?.spaceType == SpaceType.Public) {
+                        stringProvider.getString(R.string.create_spaces_room_public_header, data.name)
+                    } else {
+                        stringProvider.getString(R.string.create_spaces_room_private_header)
+                    }
+            )
             textColor(colorProvider.getColorFromAttribute(R.attr.riot_primary_text_color))
         }
 
         genericFooterItem {
             id("info_help")
-            text(stringProvider.getString(R.string.create_spaces_room_public_header_desc))
+            text(
+                    stringProvider.getString(
+                            if (data?.spaceType == SpaceType.Public) {
+                                R.string.create_spaces_room_public_header_desc
+                            } else {
+                                R.string.create_spaces_room_private_header_desc
+                            }
+                    )
+            )
             textColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary))
         }
 

@@ -28,4 +28,6 @@ sealed class CreateSpaceAction : VectorViewModelAction {
     object NextFromDetails : CreateSpaceAction()
     object NextFromDefaultRooms : CreateSpaceAction()
     data class DefaultRoomNameChanged(val index: Int, val name: String) : CreateSpaceAction()
+    data class SetSpaceTopology(val topology: SpaceTopology) : CreateSpaceAction()
+
 }

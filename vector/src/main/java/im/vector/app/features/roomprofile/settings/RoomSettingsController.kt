@@ -63,13 +63,13 @@ class RoomSettingsController @Inject constructor(
             id("avatar")
             enabled(data.actionPermissions.canChangeAvatar)
             when (val avatarAction = data.avatarAction) {
-                RoomSettingsViewState.AvatarAction.None            -> {
+                RoomSettingsViewState.AvatarAction.None -> {
                     // Use the current value
                     avatarRenderer(avatarRenderer)
                     // We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
                     matrixItem(roomSummary.toMatrixItem().copy(avatarUrl = data.currentRoomAvatarUrl))
                 }
-                RoomSettingsViewState.AvatarAction.DeleteAvatar    ->
+                RoomSettingsViewState.AvatarAction.DeleteAvatar ->
                     imageUri(null)
                 is RoomSettingsViewState.AvatarAction.UpdateAvatar ->
                     imageUri(avatarAction.newAvatarUri)
@@ -128,14 +128,36 @@ class RoomSettingsController @Inject constructor(
     private fun RoomSettingsViewState.getJoinRuleWording(): String {
         val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules
         val guestAccess = newRoomJoinRules.newGuestAccess ?: currentGuestAccess
-        return stringProvider.getString(if (joinRule == RoomJoinRules.INVITE) {
-            R.string.room_settings_room_access_entry_only_invited
-        } else {
-            if (guestAccess == GuestAccess.CanJoin) {
-                R.string.room_settings_room_access_entry_anyone_with_link_including_guest
-            } else {
-                R.string.room_settings_room_access_entry_anyone_with_link_apart_guest
+        val resId = when (joinRule) {
+            RoomJoinRules.INVITE     -> {
+                R.string.room_settings_room_access_entry_only_invited to null
             }
-        })
+            RoomJoinRules.PRIVATE    -> {
+                R.string.room_settings_room_access_entry_unknown to joinRule.value
+            }
+            RoomJoinRules.PUBLIC     -> {
+                if (guestAccess == GuestAccess.CanJoin) {
+                    R.string.room_settings_room_access_entry_anyone_with_link_including_guest to null
+                } else {
+                    R.string.room_settings_room_access_entry_anyone_with_link_apart_guest to null
+                }
+            }
+            RoomJoinRules.KNOCK      -> {
+                R.string.room_settings_room_access_entry_knock to null
+            }
+            RoomJoinRules.RESTRICTED -> {
+                R.string.room_settings_room_access_entry_restricted to null
+            }
+        }
+        return if (resId.second == null) stringProvider.getString(resId.first) else stringProvider.getString(resId.first, resId.second)
+//        return stringProvider.getString(if (joinRule == RoomJoinRules.INVITE) {
+//            R.string.room_settings_room_access_entry_only_invited
+//        } else {
+//            if (guestAccess == GuestAccess.CanJoin) {
+//                R.string.room_settings_room_access_entry_anyone_with_link_including_guest
+//            } else {
+//                R.string.room_settings_room_access_entry_anyone_with_link_apart_guest
+//            }
+//        })
     }
 }

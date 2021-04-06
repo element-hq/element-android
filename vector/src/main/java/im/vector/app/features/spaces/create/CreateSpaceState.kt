@@ -27,6 +27,7 @@ data class CreateSpaceState(
         val topic: String = "",
         val step: Step = Step.ChooseType,
         val spaceType: SpaceType? = null,
+        val spaceTopology: SpaceTopology? = null,
         val nameInlineError: String? = null,
         val defaultRooms: Map<Int, String?>? = null,
         val creationResult: Async<String> = Uninitialized
@@ -35,6 +36,8 @@ data class CreateSpaceState(
     enum class Step {
         ChooseType,
         SetDetails,
-        AddRooms
+        AddRooms,
+        ChoosePrivateType
     }
+
 }
