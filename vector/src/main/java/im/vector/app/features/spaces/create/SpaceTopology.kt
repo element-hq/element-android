@@ -16,15 +16,7 @@
 
 package im.vector.app.features.spaces.create
 
-import im.vector.app.core.platform.VectorViewEvents
-
-sealed class CreateSpaceEvents : VectorViewEvents {
-    object NavigateToDetails : CreateSpaceEvents()
-    object NavigateToChooseType : CreateSpaceEvents()
-    object NavigateToAddRooms : CreateSpaceEvents()
-    object NavigateToChoosePrivateType : CreateSpaceEvents()
-    object Dismiss : CreateSpaceEvents()
-    data class FinishSuccess(val spaceId: String, val defaultRoomId: String?) : CreateSpaceEvents()
-    data class ShowModalError(val errorMessage: String) : CreateSpaceEvents()
-    object HideModalLoading : CreateSpaceEvents()
+enum class SpaceTopology {
+    JustMe,
+    MeAndTeammates
 }

@@ -41,8 +41,7 @@ class ChooseSpaceTypeFragment @Inject constructor() : VectorBaseFragment<Fragmen
         }))
 
         views.privateButton.setOnClickListener(DebouncedClickListener({
-            vectorBaseActivity.notImplemented("Creating private space")
-            // sharedViewModel.handle(CreateSpaceAction.SetRoomType(SpaceType.Private))
+             sharedViewModel.handle(CreateSpaceAction.SetRoomType(SpaceType.Private))
         }))
     }
 }
