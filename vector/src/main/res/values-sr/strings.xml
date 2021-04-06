@@ -711,4 +711,51 @@
     <string name="join">Придружи се</string>
     <string name="remove">Избриши</string>
     <string name="_continue">Настави</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Послати одговор (НЕшифрован)…</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Послати шифрован дговор…</string>
+    <string name="room_message_placeholder_not_encrypted">Послати поруку (НЕшифровану)…</string>
+    <string name="room_message_placeholder_encrypted">Послати шифровану поруку…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; други пишу…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s пишу…</string>
+    <string name="room_one_user_is_typing">%s пише…</string>
+    <string name="room_menu_search">Тражи</string>
+    <string name="people_search_invite_by_id_dialog_hint">Е-пошта или Matrix ИД</string>
+    <string name="people_search_filter_text">Само Matrix кориснике</string>
+    <string name="people_search_user_directory">КОРИСНИЧКИ ДИРЕКТОРИЈУМ (%s)</string>
+    <string name="people_search_local_contacts">ЛОКАЛНИ КОНТАКТИ (%d)</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+    <string name="room_participants_invite_join_names_and">%1$s и %2$s</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="reason_hint">Разлог</string>
+    <string name="room_participants_unban_prompt_msg">Склањање забране корисника ће му омогућити да се поново придружи соби.</string>
+    <string name="room_participants_ban_prompt_msg">Забрањен корисник ће бити избачен из ове собе и спречити ига да се поново придружи.</string>
+    <string name="room_participants_unban_title">Склони забрану корисника</string>
+    <string name="room_participants_ban_reason">Разлог забране</string>
+    <string name="room_participants_ban_title">Забрани корисника</string>
+    <string name="room_participants_kick_reason">Разлог одбацивања</string>
+    <string name="room_participants_kick_title">Одбацити корисник</string>
+    <string name="no">НЕ</string>
+    <string name="yes">ДА</string>
+    <string name="media_slider_saved_message">Сачувати у преузимања\?</string>
+    <string name="media_slider_saved">Сачувано</string>
+    <string name="permissions_denied_add_contact">Дозволите приступ вашим контактима.</string>
+    <string name="permissions_denied_qr_code">Да бисте скенирали QR кôд, морате дозволити приступ камеру.</string>
+    <string name="permissions_action_not_performed_missing_permissions">Извињавам се. Акција није извршена, због недостајућих дозвола</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nМолимо вас да дозволите приступ у следећем прозору да бисте могли да урадите позив."</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nМолимо вас да дозволите приступ у следећем прозору да бисте могли да урадите позив."</string>
+    <string name="permissions_rationale_popup_title">Информација</string>
+    <string name="media_picker_cannot_record_video">Не може да се сними видео</string>
+    <string name="media_picker_both_capture_title">Узми слику или видео</string>
+    <string name="call_error_answered_elsewhere">Позив одговорен на друго место</string>
+    <string name="compression_options">Пошаљи као</string>
+    <string name="groups_list">Листа група</string>
+    <string name="read_receipts_list">Листа потврђивања за читање</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">Послат је захтев</string>
+    <string name="e2e_re_request_encryption_key_sent">Послат је захтев за кључ.</string>
+    <string name="login_error_login_email_not_yet">Нисте још кликнули у везу из послате е-поште</string>
+    <string name="login_error_user_in_use">Ово корисничко име је већ коришћено</string>
 </resources>
