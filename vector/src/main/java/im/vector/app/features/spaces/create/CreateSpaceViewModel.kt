@@ -115,7 +115,32 @@ class CreateSpaceViewModel @AssistedInject constructor(
             is CreateSpaceAction.SetAvatar -> {
                 setState { copy(avatarUri = action.uri) }
             }
+            is CreateSpaceAction.SetSpaceTopology -> {
+                handleSetTopology(action)
+            }
         }.exhaustive
+    }
+
+    private fun handleSetTopology(action: CreateSpaceAction.SetSpaceTopology) {
+        when (action.topology) {
+            SpaceTopology.JustMe -> {
+                setState {
+                    copy(
+                            spaceTopology = SpaceTopology.JustMe
+                    )
+                }
+                // XXX finish and open the add rooms directly
+            }
+            SpaceTopology.MeAndTeammates -> {
+                setState {
+                    copy(
+                            spaceTopology = SpaceTopology.MeAndTeammates,
+                            step = CreateSpaceState.Step.AddRooms
+                    )
+                }
+                _viewEvents.post(CreateSpaceEvents.NavigateToAddRooms)
+            }
+        }
     }
 
     private fun handleBackNavigation() = withState { state ->
@@ -134,6 +159,24 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 _viewEvents.post(CreateSpaceEvents.NavigateToChooseType)
             }
             CreateSpaceState.Step.AddRooms -> {
+                if (state.spaceType == SpaceType.Private && state.spaceTopology == SpaceTopology.MeAndTeammates) {
+                    setState {
+                        copy(
+                                spaceTopology = null,
+                                step = CreateSpaceState.Step.ChoosePrivateType
+                        )
+                    }
+                    _viewEvents.post(CreateSpaceEvents.NavigateToChoosePrivateType)
+                } else {
+                    setState {
+                        copy(
+                                step = CreateSpaceState.Step.SetDetails
+                        )
+                    }
+                    _viewEvents.post(CreateSpaceEvents.NavigateToDetails)
+                }
+            }
+            CreateSpaceState.Step.ChoosePrivateType -> {
                 setState {
                     copy(
                             step = CreateSpaceState.Step.SetDetails
@@ -152,12 +195,21 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 )
             }
         } else {
-            setState {
-                copy(
-                        step = CreateSpaceState.Step.AddRooms
-                )
+            if (state.spaceType == SpaceType.Private) {
+                setState {
+                    copy(
+                            step = CreateSpaceState.Step.ChoosePrivateType
+                    )
+                }
+                _viewEvents.post(CreateSpaceEvents.NavigateToChoosePrivateType)
+            } else {
+                setState {
+                    copy(
+                            step = CreateSpaceState.Step.AddRooms
+                    )
+                }
+                _viewEvents.post(CreateSpaceEvents.NavigateToAddRooms)
             }
-            _viewEvents.post(CreateSpaceEvents.NavigateToAddRooms)
         }
     }
 
@@ -187,7 +239,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                         }
                         _viewEvents.post(CreateSpaceEvents.FinishSuccess(result.spaceId, result.childIds.firstOrNull()))
                     }
-                    is CreateSpaceTaskResult.PartialSuccess      -> {
+                    is CreateSpaceTaskResult.PartialSuccess -> {
                         // XXX what can we do here?
                         setState {
                             copy(creationResult = Success(result.spaceId))
