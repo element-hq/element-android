@@ -108,7 +108,7 @@ static def gitRevisionDate() {
 dependencies {
 
     def arrow_version = "0.8.2"
-    def moshi_version = '1.11.0'
+    def moshi_version = '1.12.0'
     def lifecycle_version = '2.2.0'
     def arch_version = '2.1.0'
     def markwon_version = '3.1.0'
