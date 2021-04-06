@@ -154,6 +154,14 @@ internal interface RoomAPI {
                                @Body markers: Map<String, String>)
 
     /**
+     * Send receipt to a room
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/receipt/{receiptType}/{eventId}")
+    suspend fun sendReceipt(@Path("roomId") roomId: String,
+                            @Path("receiptType") receiptType: String,
+                            @Path("eventId") eventId: String)
+
+    /**
      * Invite a user to the given room.
      * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-rooms-roomid-invite
      *
