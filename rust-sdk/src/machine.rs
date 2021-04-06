@@ -4,7 +4,6 @@ use std::{
     io::Cursor,
 };
 
-use http::Response;
 use serde_json::{json, value::RawValue};
 use tokio::runtime::Runtime;
 
@@ -17,7 +16,6 @@ use matrix_sdk_common::{
         sync::sync_events::{DeviceLists as RumaDeviceLists, ToDevice},
         to_device::send_event_to_device::Response as ToDeviceResponse,
     },
-    assign,
     deserialized_responses::events::{AlgorithmInfo, SyncMessageEvent},
     events::{room::encrypted::EncryptedEventContent, AnyMessageEventContent, EventContent},
     identifiers::{DeviceKeyAlgorithm, RoomId, UserId},
@@ -26,101 +24,21 @@ use matrix_sdk_common::{
 };
 
 use matrix_sdk_crypto::{
-    decrypt_key_export, encrypt_key_export, EncryptionSettings, IncomingResponse,
-    OlmMachine as InnerMachine, OutgoingRequest, ToDeviceRequest,
+    decrypt_key_export, encrypt_key_export, Device as InnerDevice, EncryptionSettings,
+    OlmMachine as InnerMachine,
 };
 
 use crate::{
     error::{CryptoStoreError, DecryptionError, MachineCreationError},
-    KeyImportError, ProgressListener,
+    responses::{response_from_string, OwnedResponse},
+    DecryptedEvent, DeviceLists, KeyImportError, KeysImportResult, ProgressListener, Request,
+    RequestType,
 };
 
+/// A high level state machine that handles E2EE for Matrix.
 pub struct OlmMachine {
     inner: InnerMachine,
     runtime: Runtime,
-}
-
-pub struct DecryptedEvent {
-    pub clear_event: String,
-    pub sender_curve25519_key: String,
-    pub claimed_ed25519_key: Option<String>,
-    pub forwarding_curve25519_chain: Vec<String>,
-}
-
-pub struct DeviceLists {
-    pub changed: Vec<String>,
-    pub left: Vec<String>,
-}
-
-impl Into<RumaDeviceLists> for DeviceLists {
-    fn into(self) -> RumaDeviceLists {
-        assign!(RumaDeviceLists::new(), {
-            changed: self
-                .changed
-                .into_iter()
-                .filter_map(|u| UserId::try_from(u).ok())
-                .collect(),
-            left: self
-                .left
-                .into_iter()
-                .filter_map(|u| UserId::try_from(u).ok())
-                .collect(),
-        })
-    }
-}
-
-pub struct KeysImportResult {
-    pub total: i32,
-    pub imported: i32,
-}
-
-enum OwnedResponse {
-    KeysClaim(KeysClaimResponse),
-    KeysUpload(KeysUploadResponse),
-    KeysQuery(KeysQueryResponse),
-    ToDevice(ToDeviceResponse),
-}
-
-impl From<KeysClaimResponse> for OwnedResponse {
-    fn from(response: KeysClaimResponse) -> Self {
-        OwnedResponse::KeysClaim(response)
-    }
-}
-
-impl From<KeysQueryResponse> for OwnedResponse {
-    fn from(response: KeysQueryResponse) -> Self {
-        OwnedResponse::KeysQuery(response)
-    }
-}
-
-impl From<KeysUploadResponse> for OwnedResponse {
-    fn from(response: KeysUploadResponse) -> Self {
-        OwnedResponse::KeysUpload(response)
-    }
-}
-
-impl From<ToDeviceResponse> for OwnedResponse {
-    fn from(response: ToDeviceResponse) -> Self {
-        OwnedResponse::ToDevice(response)
-    }
-}
-
-impl<'a> Into<IncomingResponse<'a>> for &'a OwnedResponse {
-    fn into(self) -> IncomingResponse<'a> {
-        match self {
-            OwnedResponse::KeysClaim(r) => IncomingResponse::KeysClaim(r),
-            OwnedResponse::KeysQuery(r) => IncomingResponse::KeysQuery(r),
-            OwnedResponse::KeysUpload(r) => IncomingResponse::KeysUpload(r),
-            OwnedResponse::ToDevice(r) => IncomingResponse::ToDevice(r),
-        }
-    }
-}
-
-pub enum RequestType {
-    KeysQuery,
-    KeysClaim,
-    KeysUpload,
-    ToDevice,
 }
 
 pub struct Device {
@@ -129,89 +47,25 @@ pub struct Device {
     pub keys: HashMap<String, String>,
 }
 
+impl From<InnerDevice> for Device {
+    fn from(d: InnerDevice) -> Self {
+        Device {
+            user_id: d.user_id().to_string(),
+            device_id: d.device_id().to_string(),
+            keys: d
+                .keys()
+                .iter()
+                .map(|(k, v)| (k.to_string(), v.to_string()))
+                .collect(),
+        }
+    }
+}
+
 pub struct Sas {
     pub other_user_id: String,
     pub other_device_id: String,
     pub flow_id: String,
     pub request: Request,
-}
-
-pub enum Request {
-    ToDevice {
-        request_id: String,
-        event_type: String,
-        body: String,
-    },
-    KeysUpload {
-        request_id: String,
-        body: String,
-    },
-    KeysQuery {
-        request_id: String,
-        users: Vec<String>,
-    },
-    KeysClaim {
-        request_id: String,
-        one_time_keys: HashMap<String, HashMap<String, String>>,
-    },
-}
-
-impl From<OutgoingRequest> for Request {
-    fn from(r: OutgoingRequest) -> Self {
-        use matrix_sdk_crypto::OutgoingRequests::*;
-
-        match r.request() {
-            KeysUpload(u) => {
-                let body = json!({
-                    "device_keys": u.device_keys,
-                    "one_time_keys": u.one_time_keys,
-                });
-
-                Request::KeysUpload {
-                    request_id: r.request_id().to_string(),
-                    body: serde_json::to_string(&body)
-                        .expect("Can't serialize keys upload request"),
-                }
-            }
-            KeysQuery(k) => {
-                let users: Vec<String> = k.device_keys.keys().map(|u| u.to_string()).collect();
-                Request::KeysQuery {
-                    request_id: r.request_id().to_string(),
-                    users,
-                }
-            }
-            ToDeviceRequest(t) => Request::from(t),
-            SignatureUpload(_) => todo!(),
-            RoomMessage(_) => todo!(),
-        }
-    }
-}
-
-impl From<ToDeviceRequest> for Request {
-    fn from(r: ToDeviceRequest) -> Self {
-        Request::ToDevice {
-            request_id: r.txn_id_string(),
-            event_type: r.event_type.to_string(),
-            body: serde_json::to_string(&r.messages).unwrap(),
-        }
-    }
-}
-
-impl From<&ToDeviceRequest> for Request {
-    fn from(r: &ToDeviceRequest) -> Self {
-        Request::ToDevice {
-            request_id: r.txn_id_string(),
-            event_type: r.event_type.to_string(),
-            body: serde_json::to_string(&r.messages).unwrap(),
-        }
-    }
-}
-
-fn response_from_string(body: &str) -> Response<Vec<u8>> {
-    Response::builder()
-        .status(200)
-        .body(body.as_bytes().to_vec())
-        .expect("Can't create HTTP response")
 }
 
 impl OlmMachine {
@@ -242,15 +96,7 @@ impl OlmMachine {
         self.runtime
             .block_on(self.inner.get_device(&user_id, device_id.into()))
             .unwrap()
-            .map(|d| Device {
-                user_id: d.user_id().to_string(),
-                device_id: d.device_id().to_string(),
-                keys: d
-                    .keys()
-                    .iter()
-                    .map(|(k, v)| (k.to_string(), v.to_string()))
-                    .collect(),
-            })
+            .map(|d| d.into())
     }
 
     pub fn get_user_devices(&self, user_id: &str) -> Vec<Device> {
@@ -259,15 +105,7 @@ impl OlmMachine {
             .block_on(self.inner.get_user_devices(&user_id))
             .unwrap()
             .devices()
-            .map(|d| Device {
-                user_id: d.user_id().to_string(),
-                device_id: d.device_id().to_string(),
-                keys: d
-                    .keys()
-                    .iter()
-                    .map(|(k, v)| (k.to_string(), v.to_string()))
-                    .collect(),
-            })
+            .map(|d| d.into())
             .collect()
     }
 
