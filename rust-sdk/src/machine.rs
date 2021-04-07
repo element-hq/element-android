@@ -24,41 +24,20 @@ use matrix_sdk_common::{
 };
 
 use matrix_sdk_crypto::{
-    decrypt_key_export, encrypt_key_export, Device as InnerDevice, EncryptionSettings,
-    OlmMachine as InnerMachine,
+    decrypt_key_export, encrypt_key_export, EncryptionSettings, OlmMachine as InnerMachine,
 };
 
 use crate::{
     error::{CryptoStoreError, DecryptionError, MachineCreationError},
     responses::{response_from_string, OwnedResponse},
-    DecryptedEvent, DeviceLists, KeyImportError, KeysImportResult, ProgressListener, Request,
-    RequestType,
+    DecryptedEvent, Device, DeviceLists, KeyImportError, KeysImportResult, ProgressListener,
+    Request, RequestType,
 };
 
 /// A high level state machine that handles E2EE for Matrix.
 pub struct OlmMachine {
     inner: InnerMachine,
     runtime: Runtime,
-}
-
-pub struct Device {
-    pub user_id: String,
-    pub device_id: String,
-    pub keys: HashMap<String, String>,
-}
-
-impl From<InnerDevice> for Device {
-    fn from(d: InnerDevice) -> Self {
-        Device {
-            user_id: d.user_id().to_string(),
-            device_id: d.device_id().to_string(),
-            keys: d
-                .keys()
-                .iter()
-                .map(|(k, v)| (k.to_string(), v.to_string()))
-                .collect(),
-        }
-    }
 }
 
 pub struct Sas {
@@ -69,6 +48,15 @@ pub struct Sas {
 }
 
 impl OlmMachine {
+    /// Create a new `OlmMachine`
+    ///
+    /// # Arguments
+    ///
+    /// * `user_id` - The unique ID of the user that owns this machine.
+    ///
+    /// * `device_id` - The unique ID of the device that owns this machine.
+    ///
+    /// * `path` - The path where the state of the machine should be persisted.
     pub fn new(user_id: &str, device_id: &str, path: &str) -> Result<Self, MachineCreationError> {
         let user_id = UserId::try_from(user_id)?;
         let device_id = device_id.into();
@@ -82,14 +70,23 @@ impl OlmMachine {
         })
     }
 
+    /// Get the user ID of the owner of this `OlmMachine`.
     pub fn user_id(&self) -> String {
         self.inner.user_id().to_string()
     }
 
+    /// Get the device ID of the device of this `OlmMachine`.
     pub fn device_id(&self) -> String {
         self.inner.device_id().to_string()
     }
 
+    /// Get a `Device` from the store.
+    ///
+    /// # Arguments
+    ///
+    /// * `user_id` - The id of the device owner.
+    ///
+    /// * `device_id` - The id of the device itsefl.
     pub fn get_device(&self, user_id: &str, device_id: &str) -> Option<Device> {
         let user_id = UserId::try_from(user_id).unwrap();
 
@@ -99,6 +96,11 @@ impl OlmMachine {
             .map(|d| d.into())
     }
 
+    /// Get all devices of an user.
+    ///
+    /// # Arguments
+    ///
+    /// * `user_id` - The id of the device owner.
     pub fn get_user_devices(&self, user_id: &str) -> Vec<Device> {
         let user_id = UserId::try_from(user_id).unwrap();
         self.runtime
@@ -109,6 +111,7 @@ impl OlmMachine {
             .collect()
     }
 
+    /// Get our own identity keys.
     pub fn identity_keys(&self) -> HashMap<String, String> {
         self.inner
             .identity_keys()
@@ -117,6 +120,32 @@ impl OlmMachine {
             .collect()
     }
 
+    /// Get the list of outgoing requests that need to be sent to the
+    /// homeserver.
+    ///
+    /// After the request was sent out and a successful response was received
+    /// the response body should be passed back to the state machine using the
+    /// [mark_request_as_sent()](#method.mark_request_as_sent) method.
+    ///
+    /// **Note**: This method call should be locked per call.
+    pub fn outgoing_requests(&self) -> Vec<Request> {
+        self.runtime
+            .block_on(self.inner.outgoing_requests())
+            .into_iter()
+            .map(|r| r.into())
+            .collect()
+    }
+
+    /// Mark a request that was sent to the server as sent.
+    ///
+    /// # Arguments
+    ///
+    /// * `request_id` - The unique ID of the request that was sent out. This
+    ///     needs to be an UUID.
+    ///
+    /// * `request_type` - The type of the request that was sent out.
+    ///
+    /// * `response_body` - The body of the response that was received.
     pub fn mark_request_as_sent(
         &self,
         request_id: &str,
@@ -141,32 +170,21 @@ impl OlmMachine {
         Ok(())
     }
 
-    pub fn start_verification(&self, device: &Device) -> Result<Sas, CryptoStoreError> {
-        let user_id = UserId::try_from(device.user_id.clone()).unwrap();
-        let device_id = device.device_id.as_str().into();
-        let device = self
-            .runtime
-            .block_on(self.inner.get_device(&user_id, device_id))?
-            .unwrap();
-
-        let (sas, request) = self.runtime.block_on(device.start_verification())?;
-
-        Ok(Sas {
-            other_user_id: sas.other_user_id().to_string(),
-            other_device_id: sas.other_device_id().to_string(),
-            flow_id: sas.flow_id().as_str().to_owned(),
-            request: request.into(),
-        })
-    }
-
-    pub fn outgoing_requests(&self) -> Vec<Request> {
-        self.runtime
-            .block_on(self.inner.outgoing_requests())
-            .into_iter()
-            .map(|r| r.into())
-            .collect()
-    }
-
+    /// Let the state machine know about E2EE related sync changes that we
+    /// received from the server.
+    ///
+    /// This needs to be called after every sync, ideally before processing
+    /// any other sync changes.
+    ///
+    /// # Arguments
+    ///
+    /// * `events` - A serialized array of to-device events we received in the
+    ///     current sync resposne.
+    ///
+    /// * `device_changes` - The list of devices that have changed in some way
+    /// since the previous sync.
+    ///
+    /// * `key_counts` - The map of uploaded one-time key types and counts.
     pub fn receive_sync_changes(
         &self,
         events: &str,
@@ -195,6 +213,16 @@ impl OlmMachine {
             .unwrap();
     }
 
+    /// Add the given list of users to be tracked, triggering a key query request
+    /// for them.
+    ///
+    /// *Note*: Only users that aren't already tracked will be considered for an
+    /// update. It's safe to call this with already tracked users, it won't
+    /// result in excessive keys query requests.
+    ///
+    /// # Arguments
+    ///
+    /// `users` - The users that should be queued up for a key query.
     pub fn update_tracked_users(&self, users: Vec<String>) {
         let users: Vec<UserId> = users
             .into_iter()
@@ -205,25 +233,20 @@ impl OlmMachine {
             .block_on(self.inner.update_tracked_users(users.iter()));
     }
 
-    pub fn share_group_session(&self, room_id: &str, users: Vec<String>) -> Vec<Request> {
-        let users: Vec<UserId> = users
-            .into_iter()
-            .filter_map(|u| UserId::try_from(u).ok())
-            .collect();
-
-        let room_id = RoomId::try_from(room_id).unwrap();
-        let requests = self
-            .runtime
-            .block_on(self.inner.share_group_session(
-                &room_id,
-                users.iter(),
-                EncryptionSettings::default(),
-            ))
-            .unwrap();
-
-        requests.into_iter().map(|r| (&*r).into()).collect()
-    }
-
+    /// Generate one-time key claiming requests for all the users we are missing
+    /// sessions for.
+    ///
+    /// After the request was sent out and a successful response was received
+    /// the response body should be passed back to the state machine using the
+    /// [mark_request_as_sent()](#method.mark_request_as_sent) method.
+    ///
+    /// This method should be called every time before a call to
+    /// [`share_group_session()`](#method.share_group_session) is made.
+    ///
+    /// # Arguments
+    ///
+    /// * `users` - The list of users for which we would like to establish 1:1
+    /// Olm sessions for.
     pub fn get_missing_sessions(
         &self,
         users: Vec<String>,
@@ -253,6 +276,76 @@ impl OlmMachine {
             }))
     }
 
+    /// Generate one-time key claiming requests for all the users we are missing
+    /// sessions for.
+    ///
+    /// After the request was sent out and a successful response was received
+    /// the response body should be passed back to the state machine using the
+    /// [mark_request_as_sent()](#method.mark_request_as_sent) method.
+    ///
+    /// This method should be called every time before a call to
+    /// [`encrypt()`](#method.encrypt) with the given `room_id` is made.
+    ///
+    /// # Arguments
+    ///
+    /// * `room_id` - The unique id of the room, note that this doesn't strictly
+    /// need to be a Matrix room, it just needs to be an unique identifier for
+    /// the group that will participate in the conversation.
+    ///
+    /// * `users` - The list of users which are considered to be members of the
+    /// room and should receive the room key.
+    pub fn share_group_session(&self, room_id: &str, users: Vec<String>) -> Vec<Request> {
+        let users: Vec<UserId> = users
+            .into_iter()
+            .filter_map(|u| UserId::try_from(u).ok())
+            .collect();
+
+        let room_id = RoomId::try_from(room_id).unwrap();
+        let requests = self
+            .runtime
+            .block_on(self.inner.share_group_session(
+                &room_id,
+                users.iter(),
+                EncryptionSettings::default(),
+            ))
+            .unwrap();
+
+        requests.into_iter().map(|r| (&*r).into()).collect()
+    }
+
+    /// Encrypt the given event with the given type and content for the given
+    /// room.
+    ///
+    /// **Note**: A room key needs to be shared with the group of users that are
+    /// members in the given room. If this is not done this method will panic.
+    ///
+    /// The usual flow to encrypt an evnet using this state machine is as
+    /// follows:
+    ///
+    /// 1. Get the one-time key claim request to establish 1:1 Olm sessions for
+    ///    the room members of the room we wish to participate in. This is done
+    ///    using the [`get_missing_sessions()`](#method.get_missing_sessions)
+    ///    method. This method call should be locked per call.
+    ///
+    /// 2. Share a room key with all the room members using the
+    ///    [`share_group_session()`](#method.share_group_session). This method
+    ///    call should be locked per room.
+    ///
+    /// 3. Encrypt the event using this method.
+    ///
+    /// 4. Send the encrypted event to the server.
+    ///
+    /// After the room key is shared steps 1 and 2 will become noops, unless
+    /// there's some changes in the room membership or in the list of devices a
+    /// member has.
+    ///
+    /// # Arguments
+    ///
+    /// * `room_id` - The unique id of the room where the event will be sent to.
+    ///
+    /// * `even_type` - The type of the event.
+    ///
+    /// * `content` - The serialized content of the event.
     pub fn encrypt(&self, room_id: &str, event_type: &str, content: &str) -> String {
         let room_id = RoomId::try_from(room_id).unwrap();
         let content: Box<RawValue> = serde_json::from_str(content).unwrap();
@@ -266,33 +359,13 @@ impl OlmMachine {
         serde_json::to_string(&encrypted_content).unwrap()
     }
 
-    pub fn export_keys(&self, passphrase: &str, rounds: i32) -> Result<String, CryptoStoreError> {
-        let keys = self.runtime.block_on(self.inner.export_keys(|_| true))?;
-
-        let encrypted = encrypt_key_export(&keys, passphrase, rounds as u32)
-            .map_err(CryptoStoreError::Serialization)?;
-
-        Ok(encrypted)
-    }
-
-    pub fn import_keys(
-        &self,
-        keys: &str,
-        passphrase: &str,
-        _: Box<dyn ProgressListener>,
-    ) -> Result<KeysImportResult, KeyImportError> {
-        let keys = Cursor::new(keys);
-        let keys = decrypt_key_export(keys, passphrase)?;
-
-        // TODO use the progress listener
-        let result = self.runtime.block_on(self.inner.import_keys(keys))?;
-
-        Ok(KeysImportResult {
-            total: result.1 as i32,
-            imported: result.0 as i32,
-        })
-    }
-
+    /// Decrypt the given event that was sent in the given room.
+    ///
+    /// # Arguments
+    ///
+    /// * `event` - The serialized encrypted version of the event.
+    ///
+    /// * `room_id` - The unique id of the room where the event was sent to.
     pub fn decrypt_room_event(
         &self,
         event: &str,
@@ -329,6 +402,70 @@ impl OlmMachine {
                     .cloned(),
                 forwarding_curve25519_chain: forwarding_curve25519_key_chain.to_owned(),
             },
+        })
+    }
+
+    /// Export all of our room keys.
+    ///
+    /// # Arguments
+    ///
+    /// * `passphrase` - The passphrase that should be used to encrypt the key
+    /// export.
+    ///
+    /// * `rounds` - The number of rounds that should be used when expanding the
+    /// passphrase into an key.
+    pub fn export_keys(&self, passphrase: &str, rounds: i32) -> Result<String, CryptoStoreError> {
+        let keys = self.runtime.block_on(self.inner.export_keys(|_| true))?;
+
+        let encrypted = encrypt_key_export(&keys, passphrase, rounds as u32)
+            .map_err(CryptoStoreError::Serialization)?;
+
+        Ok(encrypted)
+    }
+
+    /// Import room keys from the given serialized key export.
+    ///
+    /// # Arguments
+    ///
+    /// * `keys` - The serialized version of the key export.
+    ///
+    /// * `passphrase` - The passphrase that was used to encrypt the key export.
+    ///
+    /// * `progress_listener` - A callback that can be used to introspect the
+    /// progress of the key import.
+    pub fn import_keys(
+        &self,
+        keys: &str,
+        passphrase: &str,
+        _progress_listener: Box<dyn ProgressListener>,
+    ) -> Result<KeysImportResult, KeyImportError> {
+        let keys = Cursor::new(keys);
+        let keys = decrypt_key_export(keys, passphrase)?;
+
+        // TODO use the progress listener
+        let result = self.runtime.block_on(self.inner.import_keys(keys))?;
+
+        Ok(KeysImportResult {
+            total: result.1 as i32,
+            imported: result.0 as i32,
+        })
+    }
+
+    pub fn start_verification(&self, device: &Device) -> Result<Sas, CryptoStoreError> {
+        let user_id = UserId::try_from(device.user_id.clone()).unwrap();
+        let device_id = device.device_id.as_str().into();
+        let device = self
+            .runtime
+            .block_on(self.inner.get_device(&user_id, device_id))?
+            .unwrap();
+
+        let (sas, request) = self.runtime.block_on(device.start_verification())?;
+
+        Ok(Sas {
+            other_user_id: sas.other_user_id().to_string(),
+            other_device_id: sas.other_device_id().to_string(),
+            flow_id: sas.flow_id().as_str().to_owned(),
+            request: request.into(),
         })
     }
 }

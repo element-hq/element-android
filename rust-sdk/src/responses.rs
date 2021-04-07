@@ -1,7 +1,4 @@
-use std::{
-    collections::HashMap,
-    convert::TryFrom,
-};
+use std::{collections::HashMap, convert::TryFrom};
 
 use http::Response;
 use serde_json::json;
@@ -19,9 +16,7 @@ use matrix_sdk_common::{
     identifiers::UserId,
 };
 
-use matrix_sdk_crypto::{
-    IncomingResponse, OutgoingRequest, ToDeviceRequest,
-};
+use matrix_sdk_crypto::{IncomingResponse, OutgoingRequest, ToDeviceRequest};
 
 pub enum Request {
     ToDevice {
@@ -100,7 +95,6 @@ pub(crate) fn response_from_string(body: &str) -> Response<Vec<u8>> {
         .body(body.as_bytes().to_vec())
         .expect("Can't create HTTP response")
 }
-
 
 pub enum RequestType {
     KeysQuery,
