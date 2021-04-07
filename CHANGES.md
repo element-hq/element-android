@@ -16,6 +16,7 @@ Improvements 🙌:
  - Improve timeline filtering (dissociate membership and profile events, display hidden events when highlighted, fix hidden item/read receipts behavior)
  - Add better support for empty room name fallback (#3106)
  - Room list improvements (paging)
+ - Fix quick click action (#3127)
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity

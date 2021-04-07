@@ -15,6 +15,8 @@
  */
 package im.vector.app.core.utils
 
+import android.os.SystemClock
+
 /**
  * Simple ThrottleFirst
  * See https://raw.githubusercontent.com/wiki/ReactiveX/RxJava/images/rx-operators/throttleFirst.png
@@ -23,7 +25,7 @@ class FirstThrottler(private val minimumInterval: Long = 800) {
     private var lastDate = 0L
 
     fun canHandle(): Boolean {
-        val now = System.currentTimeMillis()
+        val now = SystemClock.elapsedRealtime()
         if (now > lastDate + minimumInterval) {
             lastDate = now
             return true
