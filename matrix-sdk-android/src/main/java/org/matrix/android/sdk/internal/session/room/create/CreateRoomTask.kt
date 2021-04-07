@@ -17,18 +17,19 @@
 package org.matrix.android.sdk.internal.session.room.create
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
-import org.matrix.android.sdk.internal.database.model.RoomEntity
-import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -75,8 +76,8 @@ internal class DefaultCreateRoomTask @Inject constructor(
         val createRoomBody = createRoomBodyBuilder.build(params)
 
         val createRoomResponse = try {
-            executeRequest<CreateRoomResponse>(globalErrorReceiver) {
-                apiCall = roomAPI.createRoom(createRoomBody)
+            executeRequest(globalErrorReceiver) {
+                roomAPI.createRoom(createRoomBody)
             }
         } catch (throwable: Throwable) {
             if (throwable is Failure.ServerError) {
@@ -96,12 +97,18 @@ internal class DefaultCreateRoomTask @Inject constructor(
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
         try {
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
-                realm.where(RoomEntity::class.java)
-                        .equalTo(RoomEntityFields.ROOM_ID, roomId)
+                realm.where(RoomSummaryEntity::class.java)
+                        .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
+                        .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
             }
         } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout
         }
+
+        Realm.getInstance(realmConfiguration).executeTransactionAsync {
+            RoomSummaryEntity.where(it, roomId).findFirst()?.lastActivityTime = System.currentTimeMillis()
+        }
+
         if (otherUserId != null) {
             handleDirectChatCreation(roomId, otherUserId)
         }

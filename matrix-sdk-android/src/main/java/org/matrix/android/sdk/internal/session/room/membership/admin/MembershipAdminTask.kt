@@ -41,8 +41,8 @@ internal class DefaultMembershipAdminTask @Inject constructor(private val roomAP
 
     override suspend fun execute(params: MembershipAdminTask.Params) {
         val userIdAndReason = UserIdAndReason(params.userId, params.reason)
-        executeRequest<Unit>(null) {
-            apiCall = when (params.type) {
+        executeRequest(null) {
+            when (params.type) {
                 MembershipAdminTask.Type.BAN   -> roomAPI.ban(params.roomId, userIdAndReason)
                 MembershipAdminTask.Type.UNBAN -> roomAPI.unban(params.roomId, userIdAndReason)
                 MembershipAdminTask.Type.KICK  -> roomAPI.kick(params.roomId, userIdAndReason)

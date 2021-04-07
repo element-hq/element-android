@@ -2661,4 +2661,15 @@
     <string name="notice_room_server_acl_set_allowed">تطبیق سرور %s اجازه داده شده‌است.</string>
     <string name="notice_room_server_acl_set_banned">تطبیق سرور %s ممنوع شده‌است.</string>
     <string name="notice_room_server_acl_set_title_by_you">شما ACL های سرور را برای این اتاق تنظیم کردید.</string>
+    <string name="event_status_delete_all_failed_dialog_message">آیا مطمئن هستید که می خواهید همه پیام های ارسال نشده در این اتاق را حذف کنید؟</string>
+    <string name="event_status_delete_all_failed_dialog_title">حذف پیام‌های ارسال نشده</string>
+    <string name="event_status_failed_messages_warning">پیام ارسال نشد</string>
+    <string name="event_status_cancel_sending_dialog_message">آیا می خواهید ارسال پیام را لغو کنید؟</string>
+    <string name="event_status_a11y_delete_all">حذف تمامی پیام‌های ناموفق</string>
+    <string name="event_status_a11y_failed">ناموفق</string>
+    <string name="event_status_a11y_sent">ارسال شد</string>
+    <string name="event_status_a11y_sending">در حال ارسال</string>
+    <string name="settings_room_directory_show_all_rooms_summary">نمایش همه‌ی اتاق‌های داخل فهرست.</string>
+    <string name="settings_room_directory_show_all_rooms">نمایش‌ها همه‌ی اتاق‌ها</string>
+    <string name="settings_category_room_directory">فهرست اتاق‌ها</string>
 </resources>

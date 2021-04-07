@@ -25,7 +25,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageInformatio
 import im.vector.app.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.app.features.home.room.detail.timeline.item.DefaultItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
 class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: AvatarSizeProvider,
@@ -43,8 +42,7 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
                 text = text,
                 itemLongClickListener = { view ->
                     callback?.onEventLongClicked(informationData, null, view) ?: false
-                },
-                readReceiptsCallback = callback
+                }
         )
         return DefaultItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)
@@ -52,16 +50,14 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
                 .attributes(attributes)
     }
 
-    fun create(event: TimelineEvent,
-               highlight: Boolean,
-               callback: TimelineEventController.Callback?,
-               throwable: Throwable? = null): DefaultItem {
+    fun create(params: TimelineItemFactoryParams, throwable: Throwable? = null): DefaultItem {
+        val event = params.event
         val text = if (throwable == null) {
             stringProvider.getString(R.string.rendering_event_error_type_of_event_not_handled, event.root.getClearType())
         } else {
             stringProvider.getString(R.string.rendering_event_error_exception, event.root.eventId)
         }
-        val informationData = informationDataFactory.create(event, null, null)
-        return create(text, informationData, highlight, callback)
+        val informationData = informationDataFactory.create(params)
+        return create(text, informationData, params.isHighlighted, params.callback)
     }
 }

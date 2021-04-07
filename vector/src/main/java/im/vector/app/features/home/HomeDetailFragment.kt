@@ -18,6 +18,8 @@ package im.vector.app.features.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -33,8 +35,8 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.ui.views.CurrentCallsView
-import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.core.ui.views.KeysBackupBanner
+import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.databinding.FragmentHomeDetailBinding
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
@@ -49,7 +51,6 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
-
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
@@ -78,6 +79,32 @@ class HomeDetailFragment @Inject constructor(
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
+
+    private var hasUnreadRooms = false
+        set(value) {
+            if (value != field) {
+                field = value
+                invalidateOptionsMenu()
+            }
+        }
+
+    override fun getMenuRes() = R.menu.room_list
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_home_mark_all_as_read -> {
+                viewModel.handle(HomeDetailAction.MarkAllRoomsRead)
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = hasUnreadRooms
+        super.onPrepareOptionsMenu(menu)
+    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
@@ -314,6 +341,8 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
         views.syncStateView.render(it.syncState)
+
+        hasUnreadRooms = it.hasUnreadMessages
     }
 
     private fun BadgeDrawable.render(count: Int, highlight: Boolean) {

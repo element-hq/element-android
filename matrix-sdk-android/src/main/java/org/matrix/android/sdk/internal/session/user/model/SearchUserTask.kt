@@ -38,8 +38,8 @@ internal class DefaultSearchUserTask @Inject constructor(
 ) : SearchUserTask {
 
     override suspend fun execute(params: SearchUserTask.Params): List<User> {
-        val response = executeRequest<SearchUsersResponse>(globalErrorReceiver) {
-            apiCall = searchUserAPI.searchUsers(SearchUsersParams(params.search, params.limit))
+        val response = executeRequest(globalErrorReceiver) {
+            searchUserAPI.searchUsers(SearchUsersParams(params.search, params.limit))
         }
         return response.users.map {
             User(it.userId, it.displayName, it.avatarUrl)

@@ -65,7 +65,6 @@ import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
@@ -97,16 +96,13 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
-import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
-import java.io.File
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -181,7 +177,12 @@ class RoomDetailViewModel @AssistedInject constructor(
         observePowerLevel()
         updateShowDialerOptionState()
         room.getRoomSummaryLive()
-        room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
+        viewModelScope.launch {
+            try {
+                room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
+            } catch (_: Exception) {
+            }
+        }
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
         callManager.addPstnSupportListener(this)
@@ -483,9 +484,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             )
 
             try {
-                val widget = awaitCallback<Widget> {
-                    session.widgetService().createRoomWidget(roomId, widgetId, widgetEventContent, it)
-                }
+                val widget = session.widgetService().createRoomWidget(roomId, widgetId, widgetEventContent)
                 _viewEvents.post(RoomDetailViewEvents.JoinJitsiConference(widget, action.withVideo))
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.failed_to_add_widget)))
@@ -499,7 +498,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                awaitCallback<Unit> { session.widgetService().destroyRoomWidget(room.roomId, widgetId, it) }
+                session.widgetService().destroyRoomWidget(room.roomId, widgetId)
                 // local echo
                 setState {
                     copy(
@@ -546,7 +545,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun stopTrackingUnreadMessages() {
         if (trackUnreadMessages.getAndSet(false)) {
             mostRecentDisplayedEvent?.root?.eventId?.also {
-                room.setReadMarker(it, callback = NoOpMatrixCallback())
+                viewModelScope.launch {
+                    try {
+                        room.setReadMarker(it)
+                    } catch (_: Exception) {
+                    }
+                }
             }
             mostRecentDisplayedEvent = null
         }
@@ -816,7 +820,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                         }
                     }.exhaustive
                 }
-                is SendMode.EDIT    -> {
+                is SendMode.EDIT -> {
                     // is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.getRelationContent()?.inReplyTo?.eventId
                     if (inReplyTo != null) {
@@ -839,7 +843,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     _viewEvents.post(RoomDetailViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.QUOTE   -> {
+                is SendMode.QUOTE -> {
                     val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
                     val textMsg = messageContent?.body
 
@@ -860,7 +864,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     _viewEvents.post(RoomDetailViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.REPLY   -> {
+                is SendMode.REPLY -> {
                     state.sendMode.timelineEvent.let {
                         room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
                         _viewEvents.post(RoomDetailViewEvents.MessageSent)
@@ -940,14 +944,14 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
-        launchSlashCommandFlow {
-            room.invite(invite.userId, invite.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.invite(invite.userId, invite.reason)
         }
     }
 
     private fun handleInvite3pidSlashCommand(invite: ParsedCommand.Invite3Pid) {
-        launchSlashCommandFlow {
-            room.invite3pid(invite.threePid, it)
+        launchSlashCommandFlowSuspendable {
+            room.invite3pid(invite.threePid)
         }
     }
 
@@ -965,26 +969,26 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeDisplayNameSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayName) {
-        launchSlashCommandFlow {
-            session.setDisplayName(session.myUserId, changeDisplayName.displayName, it)
+        launchSlashCommandFlowSuspendable {
+            session.setDisplayName(session.myUserId, changeDisplayName.displayName)
         }
     }
 
     private fun handleKickSlashCommand(kick: ParsedCommand.KickUser) {
-        launchSlashCommandFlow {
-            room.kick(kick.userId, kick.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.kick(kick.userId, kick.reason)
         }
     }
 
     private fun handleBanSlashCommand(ban: ParsedCommand.BanUser) {
-        launchSlashCommandFlow {
-            room.ban(ban.userId, ban.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.ban(ban.userId, ban.reason)
         }
     }
 
     private fun handleUnbanSlashCommand(unban: ParsedCommand.UnbanUser) {
-        launchSlashCommandFlow {
-            room.unban(unban.userId, unban.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.unban(unban.userId, unban.reason)
         }
     }
 
@@ -1088,11 +1092,21 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleRejectInvite() {
-        room.leave(null, NoOpMatrixCallback())
+        viewModelScope.launch {
+            try {
+                room.leave(null)
+            } catch (_: Exception) {
+            }
+        }
     }
 
     private fun handleAcceptInvite() {
-        room.join(callback = NoOpMatrixCallback())
+        viewModelScope.launch {
+            try {
+                room.join()
+            } catch (_: Exception) {
+            }
+        }
     }
 
     private fun handleEditAction(action: RoomDetailAction.EnterEditMode) {
@@ -1140,41 +1154,32 @@ class RoomDetailViewModel @AssistedInject constructor(
                 ))
             }
         } else {
-            session.fileService().downloadFile(
-                    messageContent = action.messageFileContent,
-                    callback = object : MatrixCallback<File> {
-                        override fun onSuccess(data: File) {
-                            _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                                    action.messageFileContent.mimeType,
-                                    data,
-                                    null
-                            ))
-                        }
+            viewModelScope.launch {
+                val result = runCatching {
+                    session.fileService().downloadFile(messageContent = action.messageFileContent)
+                }
 
-                        override fun onFailure(failure: Throwable) {
-                            _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                                    action.messageFileContent.mimeType,
-                                    null,
-                                    failure
-                            ))
-                        }
-                    })
+                _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
+                        action.messageFileContent.mimeType,
+                        result.getOrNull(),
+                        result.exceptionOrNull()
+                ))
+            }
         }
     }
 
     private fun handleNavigateToEvent(action: RoomDetailAction.NavigateToEvent) {
         stopTrackingUnreadMessages()
         val targetEventId: String = action.eventId
-        val correctedEventId = timeline.getFirstDisplayableEventId(targetEventId) ?: targetEventId
-        val indexOfEvent = timeline.getIndexOfEvent(correctedEventId)
+        val indexOfEvent = timeline.getIndexOfEvent(targetEventId)
         if (indexOfEvent == null) {
             // Event is not already in RAM
             timeline.restartWithEventId(targetEventId)
         }
         if (action.highlight) {
-            setState { copy(highlightedEventId = correctedEventId) }
+            setState { copy(highlightedEventId = targetEventId) }
         }
-        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(correctedEventId))
+        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(targetEventId))
     }
 
     private fun handleResendEvent(action: RoomDetailAction.ResendMessage) {
@@ -1248,14 +1253,21 @@ class RoomDetailViewModel @AssistedInject constructor(
                         }
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
-                        room.setReadReceipt(eventId, callback = NoOpMatrixCallback())
+                        viewModelScope.launch {
+                            room.setReadReceipt(eventId)
+                        }
                     }
                 })
                 .disposeOnClear()
     }
 
     private fun handleMarkAllAsRead() {
-        room.markAsRead(ReadService.MarkAsReadParams.BOTH, NoOpMatrixCallback())
+        viewModelScope.launch {
+            try {
+                room.markAsRead(ReadService.MarkAsReadParams.BOTH)
+            } catch (_: Exception) {
+            }
+        }
     }
 
     private fun handleReportContent(action: RoomDetailAction.ReportContent) {
@@ -1275,15 +1287,15 @@ class RoomDetailViewModel @AssistedInject constructor(
             return
         }
 
-        session.ignoreUserIds(listOf(action.userId), object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
+        viewModelScope.launch {
+            val event = try {
+                session.ignoreUserIds(listOf(action.userId))
+                RoomDetailViewEvents.ActionSuccess(action)
+            } catch (failure: Throwable) {
+                RoomDetailViewEvents.ActionFailure(action, failure)
             }
-
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
-            }
-        })
+            _viewEvents.post(event)
+        }
     }
 
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
@@ -1398,15 +1410,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun computeUnreadState(events: List<TimelineEvent>, roomSummary: RoomSummary): UnreadState {
         if (events.isEmpty()) return UnreadState.Unknown
         val readMarkerIdSnapshot = roomSummary.readMarkerId ?: return UnreadState.Unknown
-        val firstDisplayableEventId = timeline.getFirstDisplayableEventId(readMarkerIdSnapshot)
-        val firstDisplayableEventIndex = timeline.getIndexOfEvent(firstDisplayableEventId)
-        if (firstDisplayableEventId == null || firstDisplayableEventIndex == null) {
-            return if (timeline.isLive) {
-                UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
-            } else {
-                UnreadState.Unknown
-            }
-        }
+        val firstDisplayableEventIndex = timeline.getIndexOfEvent(readMarkerIdSnapshot)
+                ?: return if (timeline.isLive) {
+                    UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
+                } else {
+                    UnreadState.Unknown
+                }
         for (i in (firstDisplayableEventIndex - 1) downTo 0) {
             val timelineEvent = events.getOrNull(i) ?: return UnreadState.Unknown
             val eventId = timelineEvent.root.eventId ?: return UnreadState.Unknown

@@ -36,10 +36,8 @@ data class MessageInformationData(
         /*List of reactions (emoji,count,isSelected)*/
         val orderedReactionList: List<ReactionInfoData>? = null,
         val pollResponseAggregatedSummary: PollResponseData? = null,
-
         val hasBeenEdited: Boolean = false,
         val hasPendingEdits: Boolean = false,
-        val readReceipts: List<ReadReceiptData> = emptyList(),
         val referencesInfoData: ReferencesInfoData? = null,
         val sentByMe: Boolean,
         val e2eDecoration: E2EDecoration = E2EDecoration.NONE,

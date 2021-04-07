@@ -37,7 +37,6 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.util.awaitCallback
 
 class UserCodeSharedViewModel @AssistedInject constructor(
         @Assisted val initialState: UserCodeState,
@@ -126,11 +125,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
                     _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
                 }
                 is PermalinkData.UserLink -> {
-                    val user = tryOrNull {
-                        awaitCallback<User> {
-                            session.resolveUser(linkedId.userId, it)
-                        }
-                    }
+                    val user = tryOrNull { session.resolveUser(linkedId.userId) }
                     // Create raw Uxid in case the user is not searchable
                             ?: User(linkedId.userId, null, null)
 

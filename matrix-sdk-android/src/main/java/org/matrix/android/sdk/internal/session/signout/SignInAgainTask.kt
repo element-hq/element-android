@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.signout
 
-import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.auth.data.PasswordLoginParams
@@ -39,8 +38,8 @@ internal class DefaultSignInAgainTask @Inject constructor(
 ) : SignInAgainTask {
 
     override suspend fun execute(params: SignInAgainTask.Params) {
-        val newCredentials = executeRequest<Credentials>(globalErrorReceiver) {
-            apiCall = signOutAPI.loginAgain(
+        val newCredentials = executeRequest(globalErrorReceiver) {
+            signOutAPI.loginAgain(
                     PasswordLoginParams.userIdentifier(
                             // Reuse the same userId
                             sessionParams.userId,

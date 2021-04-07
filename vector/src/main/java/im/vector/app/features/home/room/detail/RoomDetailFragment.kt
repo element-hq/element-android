@@ -170,12 +170,12 @@ import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -201,7 +201,6 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import timber.log.Timber
-import java.io.File
 import java.net.URL
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -1206,7 +1205,6 @@ class RoomDetailFragment @Inject constructor(
         if (summary?.membership == Membership.JOIN) {
             views.jumpToBottomView.count = summary.notificationCount
             views.jumpToBottomView.drawBadge = summary.hasUnreadMessages
-            scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             views.inviteView.visibility = View.GONE
             if (state.tombstoneEvent == null) {
@@ -1676,16 +1674,14 @@ class RoomDetailFragment @Inject constructor(
         if (action.messageContent is MessageTextContent) {
             shareText(requireContext(), action.messageContent.body)
         } else if (action.messageContent is MessageWithAttachmentContent) {
-            session.fileService().downloadFile(
-                    messageContent = action.messageContent,
-                    callback = object : MatrixCallback<File> {
-                        override fun onSuccess(data: File) {
-                            if (isAdded) {
-                                shareMedia(requireContext(), data, getMimeTypeFromUri(requireContext(), data.toUri()))
-                            }
-                        }
-                    }
-            )
+            lifecycleScope.launch {
+                val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
+                if (!isAdded) return@launch
+                result.fold(
+                        { shareMedia(requireContext(), it, getMimeTypeFromUri(requireContext(), it.toUri())) },
+                        { showErrorInSnackbar(it) }
+                )
+            }
         }
     }
 
@@ -1706,22 +1702,24 @@ class RoomDetailFragment @Inject constructor(
             sharedActionViewModel.pendingAction = action
             return
         }
-        session.fileService().downloadFile(
-                messageContent = action.messageContent,
-                callback = object : MatrixCallback<File> {
-                    override fun onSuccess(data: File) {
-                        if (isAdded) {
-                            saveMedia(
-                                    context = requireContext(),
-                                    file = data,
-                                    title = action.messageContent.body,
-                                    mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), data.toUri()),
-                                    notificationUtils = notificationUtils
-                            )
-                        }
+        lifecycleScope.launch {
+            val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
+            if (!isAdded) return@launch
+            result.fold(
+                    {
+                        saveMedia(
+                                context = requireContext(),
+                                file = it,
+                                title = action.messageContent.body,
+                                mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), it.toUri()),
+                                notificationUtils = notificationUtils
+                        )
+                    },
+                    {
+                        showErrorInSnackbar(it)
                     }
-                }
-        )
+            )
+        }
     }
 
     private fun handleActions(action: EventSharedAction) {

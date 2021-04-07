@@ -32,7 +32,6 @@ import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -169,15 +168,14 @@ class RoomProfileViewModel @AssistedInject constructor(
 
     private fun handleLeaveRoom() {
         _viewEvents.post(RoomProfileViewEvents.Loading(stringProvider.getString(R.string.room_profile_leaving_room)))
-        room.leave(null, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                room.leave(null)
                 // Do nothing, we will be closing the room automatically when it will get back from sync
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))
             }
-        })
+        }
     }
 
     private fun handleShareRoomProfile() {

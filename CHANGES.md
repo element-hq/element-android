@@ -11,28 +11,39 @@ Improvements 🙌:
  - Improve message with Emoji only detection (#3017)
  - Picture preview when replying. Also add the image preview in the message detail bottomsheet (#2916)
  - Api interceptor to allow app developers peek responses (#2986)
+ - Update reactions to Unicode 13.1 (#2998)
  - Be more robust when parsing some enums
+ - Improve timeline filtering (dissociate membership and profile events, display hidden events when highlighted, fix hidden item/read receipts behavior)
+ - Add better support for empty room name fallback (#3106)
+ - Room list improvements (paging)
+ - Fix quick click action (#3127)
+ - Get Event after a Push for a faster notification display in some conditions
  - registration availability endpoint added to matrix-sdk
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity
  - Handle encrypted reactions (#2509)
  - Disable URL preview for some domains (#2995)
+ - Fix avatar rendering for DMs, after initial sync (#2693)
+ - Fix mandatory parameter in API (#3065)
+ - If signout request fails, do not start LoginActivity, but restart the app (#3099)
 
 Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - Several Services have been migrated to coroutines (#2449)
+ - Removes filtering options on Timeline.
 
 Build 🧱:
- -
+ - Properly exclude gms dependencies in fdroid build flavour which were pulled in through the jitsi SDK (#3125)
 
 Test:
  -
 
 Other changes:
  - Add version details on the login screen, in debug or developer mode
+ - Migrate Retrofit interface to coroutine calls
 
 Changes in Element 1.1.3 (2021-03-18)
 ===================================================

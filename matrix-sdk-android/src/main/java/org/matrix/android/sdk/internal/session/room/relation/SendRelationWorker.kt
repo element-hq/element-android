@@ -28,7 +28,6 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
-import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import javax.inject.Inject
@@ -84,8 +83,8 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters)
     }
 
     private suspend fun sendRelation(roomId: String, relationType: String, relatedEventId: String, localEvent: Event) {
-        executeRequest<SendResponse>(globalErrorReceiver) {
-            apiCall = roomAPI.sendRelation(
+        executeRequest(globalErrorReceiver) {
+            roomAPI.sendRelation(
                     roomId = roomId,
                     parentId = relatedEventId,
                     relationType = relationType,

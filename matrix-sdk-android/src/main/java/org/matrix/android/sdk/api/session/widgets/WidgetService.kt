@@ -17,10 +17,8 @@
 package org.matrix.android.sdk.api.session.widgets
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 
 /**
@@ -107,20 +105,16 @@ interface WidgetService {
      * @param roomId the room where you want to create the widget.
      * @param widgetId the widget to create.
      * @param content the content of the widget
-     * @param callback the matrix callback to listen for result.
-     * @return Cancelable
      */
-    fun createRoomWidget(roomId: String, widgetId: String, content: Content, callback: MatrixCallback<Widget>): Cancelable
+    suspend fun createRoomWidget(roomId: String, widgetId: String, content: Content): Widget
 
     /**
      * Deactivate a widget in a room. It makes sure you have the rights to handle this.
      *
      * @param roomId: the room where you want to deactivate the widget.
      * @param widgetId: the widget to deactivate.
-     * @param callback the matrix callback to listen for result.
-     * @return Cancelable
      */
-    fun destroyRoomWidget(roomId: String, widgetId: String, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun destroyRoomWidget(roomId: String, widgetId: String)
 
     /**
      * Returns true if you can add/remove widgets. It goes through

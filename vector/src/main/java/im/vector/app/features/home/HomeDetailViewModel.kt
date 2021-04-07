@@ -16,22 +16,30 @@
 
 package im.vector.app.features.home
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.ui.UiStateRepository
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.internal.util.awaitCallback
+import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * View model used to update the home bottom bar notification counts, observe the sync state and
@@ -41,7 +49,6 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val session: Session,
                                                       private val uiStateRepository: UiStateRepository,
                                                       private val selectedGroupStore: SelectedGroupDataSource,
-                                                      private val homeRoomListStore: HomeRoomListDataSource,
                                                       private val stringProvider: StringProvider)
     : VectorViewModel<HomeDetailViewState, HomeDetailAction, EmptyViewEvents>(initialState) {
 
@@ -75,6 +82,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     override fun handle(action: HomeDetailAction) {
         when (action) {
             is HomeDetailAction.SwitchDisplayMode -> handleSwitchDisplayMode(action)
+            HomeDetailAction.MarkAllRoomsRead     -> handleMarkAllRoomsRead()
         }
     }
 
@@ -89,6 +97,26 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     // PRIVATE METHODS *****************************************************************************
+
+    private fun handleMarkAllRoomsRead() = withState { _ ->
+        // questionable to use viewmodelscope
+        viewModelScope.launch(Dispatchers.Default) {
+            val roomIds = session.getRoomSummaries(
+                    roomSummaryQueryParams {
+                        memberships = listOf(Membership.JOIN)
+                        roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
+                    }
+            )
+                    .map { it.roomId }
+            try {
+                awaitCallback<Unit> {
+                    session.markAllAsRead(roomIds, it)
+                }
+            } catch (failure: Throwable) {
+                Timber.d(failure, "Failed to mark all as read")
+            }
+        }
+    }
 
     private fun observeSyncState() {
         session.rx()
@@ -113,43 +141,51 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     private fun observeRoomSummaries() {
-        homeRoomListStore
-                .observe()
-                .observeOn(Schedulers.computation())
-                .map { it.asSequence() }
-                .subscribe { summaries ->
-                    val invitesDm = summaries
-                            .filter { it.membership == Membership.INVITE && it.isDirect }
-                            .count()
+        session.getPagedRoomSummariesLive(
+                roomSummaryQueryParams {
+                    memberships = Membership.activeMemberships()
+                }
+        )
+                .asObservable()
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    val dmInvites = session.getRoomSummaries(
+                            roomSummaryQueryParams {
+                                memberships = listOf(Membership.INVITE)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                            }
+                    ).size
 
-                    val invitesRoom = summaries
-                            .filter { it.membership == Membership.INVITE && it.isDirect.not() }
-                            .count()
+                    val roomsInvite = session.getRoomSummaries(
+                            roomSummaryQueryParams {
+                                memberships = listOf(Membership.INVITE)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                            }
+                    ).size
 
-                    val peopleNotifications = summaries
-                            .filter { it.isDirect }
-                            .map { it.notificationCount }
-                            .sum()
-                    val peopleHasHighlight = summaries
-                            .filter { it.isDirect }
-                            .any { it.highlightCount > 0 }
+                    val dmRooms = session.getNotificationCountForRooms(
+                            roomSummaryQueryParams {
+                                memberships = listOf(Membership.JOIN)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                            }
+                    )
 
-                    val roomsNotifications = summaries
-                            .filter { !it.isDirect }
-                            .map { it.notificationCount }
-                            .sum()
-                    val roomsHasHighlight = summaries
-                            .filter { !it.isDirect }
-                            .any { it.highlightCount > 0 }
+                    val otherRooms = session.getNotificationCountForRooms(
+                            roomSummaryQueryParams {
+                                memberships = listOf(Membership.JOIN)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                            }
+                    )
 
                     setState {
                         copy(
-                                notificationCountCatchup = peopleNotifications + roomsNotifications + invitesDm + invitesRoom,
-                                notificationHighlightCatchup = peopleHasHighlight || roomsHasHighlight,
-                                notificationCountPeople = peopleNotifications + invitesDm,
-                                notificationHighlightPeople = peopleHasHighlight || invitesDm > 0,
-                                notificationCountRooms = roomsNotifications + invitesRoom,
-                                notificationHighlightRooms = roomsHasHighlight || invitesRoom > 0
+                                notificationCountCatchup = dmRooms.totalCount + otherRooms.totalCount + roomsInvite + dmInvites,
+                                notificationHighlightCatchup = dmRooms.isHighlight || otherRooms.isHighlight,
+                                notificationCountPeople = dmRooms.totalCount + dmInvites,
+                                notificationHighlightPeople = dmRooms.isHighlight || dmInvites > 0,
+                                notificationCountRooms = otherRooms.totalCount + roomsInvite,
+                                notificationHighlightRooms = otherRooms.isHighlight || roomsInvite > 0,
+                                hasUnreadMessages = dmRooms.totalCount + otherRooms.totalCount > 0
                         )
                     }
                 }

@@ -38,8 +38,8 @@ internal class DefaultDeleteTagFromRoomTask @Inject constructor(
 ) : DeleteTagFromRoomTask {
 
     override suspend fun execute(params: DeleteTagFromRoomTask.Params) {
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = roomAPI.deleteTag(
+        executeRequest(globalErrorReceiver) {
+            roomAPI.deleteTag(
                     userId = userId,
                     roomId = params.roomId,
                     tag = params.tag

@@ -880,7 +880,7 @@
 \n
 \nSessions desconegudes:</string>
     <!-- directory activity  -->
-    <string name="select_room_directory">Escolliu un directori de sale</string>
+    <string name="select_room_directory">Tria un directori de sales</string>
     <string name="directory_server_fail_to_retrieve_server">És possible que el servidor no estigui disponible o que estigui sobrecarregat</string>
     <string name="directory_server_type_homeserver">Introdueix un servidor base per veure les seves sales públiques</string>
     <string name="directory_server_placeholder">URL del servidor base</string>
@@ -1513,7 +1513,7 @@
     <string name="create_new_room">Crea sala nova</string>
     <string name="error_no_network">No hi ha xarxa. Si us plau comproveu la vostra connexió a internet.</string>
     <string name="action_change">Canviar</string>
-    <string name="change_room_directory_network">Canviar de xarxa</string>
+    <string name="change_room_directory_network">Canvia de xarxa</string>
     <string name="please_wait">Espereu, si us plau…</string>
     <string name="group_all_communities">Totes les comunitats</string>
     <string name="room_preview_no_preview">Aquesta sala no es pot pre-visualitzar</string>
@@ -1702,7 +1702,7 @@
     <string name="labs_swipe_to_reply_in_timeline">Activa lliscar per respondre a la cronologia</string>
     <string name="user_directory_search_hint">Cerca a partir del nom o l\'ID</string>
     <string name="room_directory_search_hint">Nom o ID (#exemple:matrix.org)</string>
-    <string name="room_filtering_footer_open_room_directory">Veu el directori de la sala</string>
+    <string name="room_filtering_footer_open_room_directory">Mostra el directori de la sales</string>
     <string name="room_filtering_footer_create_new_room">Crea una nova sala</string>
     <string name="room_filtering_footer_title">No trobes el què busques\?</string>
     <string name="no_message_edits_found">No s\'han trobat edicions</string>
@@ -2145,7 +2145,7 @@
         <item quantity="one">%d usuari vetat</item>
         <item quantity="other">%d usuaris vetats</item>
     </plurals>
-    <string name="room_alias_publish_to_directory_error">No s\'ha pogut obtenir la visibilitat actual del directori de sala (%1$s).</string>
+    <string name="room_alias_publish_to_directory_error">No s\'ha pogut obtenir la visibilitat actual del directori de sales (%1$s).</string>
     <string name="room_alias_publish_to_directory">Publicar aquesta sala al directori públic de sales %1$s\?</string>
     <string name="room_alias_action_publish">Publica l\'adreça</string>
     <string name="room_alias_action_unpublish">Anul·la la publicació de l\'adreça</string>
@@ -2729,4 +2729,15 @@
     <string name="a11y_delete_avatar">Elimina la icona</string>
     <string name="a11y_change_avatar">Canvia la icona</string>
     <string name="settings_server_upload_size_content">El servidor local accepta fitxers adjunts (fotos, fitxers, etc) de fins a una mida de %s.</string>
+    <string name="settings_category_room_directory">Directori de sales</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Mostra totes les sales al directori de sales, incloses aquelles amb contingut explícit.</string>
+    <string name="settings_room_directory_show_all_rooms">Mostra sales amb contingut explícit</string>
+    <string name="event_status_delete_all_failed_dialog_message">Estàs segur que vols eliminar tots els missatges no enviats d\'aquesta sala\?</string>
+    <string name="event_status_delete_all_failed_dialog_title">Elimina missatges no enviats</string>
+    <string name="event_status_failed_messages_warning">Missatges amb enviament fallit</string>
+    <string name="event_status_cancel_sending_dialog_message">Vols aturar l\'enviament del missatge\?</string>
+    <string name="event_status_a11y_delete_all">Elimina tots els missatges fallits</string>
+    <string name="event_status_a11y_failed">Ha fallat</string>
+    <string name="event_status_a11y_sent">Enviat</string>
+    <string name="event_status_a11y_sending">Enviant</string>
 </resources>

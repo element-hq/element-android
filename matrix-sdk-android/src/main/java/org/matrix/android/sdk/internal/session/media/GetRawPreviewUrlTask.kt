@@ -36,7 +36,7 @@ internal class DefaultGetRawPreviewUrlTask @Inject constructor(
 
     override suspend fun execute(params: GetRawPreviewUrlTask.Params): JsonDict {
         return executeRequest(globalErrorReceiver) {
-            apiCall = mediaAPI.getPreviewUrlData(params.url, params.timestamp)
+            mediaAPI.getPreviewUrlData(params.url, params.timestamp)
         }
     }
 }

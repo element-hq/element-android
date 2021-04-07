@@ -100,7 +100,7 @@
     </plurals>
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s a supprimé %2$s comme adresse pour ce salon.</item>
-        <item quantity="other">%1$s a supprimé %3$s comme adresses pour ce salon.</item>
+        <item quantity="other">%1$s a supprimé %2$s comme adresses pour ce salon.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s a ajouté %2$s et supprimé %3$s comme adresses pour ce salon.</string>
     <string name="notice_room_canonical_alias_set">%1$s a défini %2$s comme adresse principale pour ce salon.</string>
@@ -811,7 +811,7 @@
     <string name="option_take_photo">Prendre une photo</string>
     <string name="option_take_video">Prendre une vidéo</string>
     <string name="settings_analytics">Statistiques d’utilisation</string>
-    <string name="settings_labs_native_camera">Utiliser la caméra native</string>
+    <string name="settings_labs_native_camera">Utiliser la caméra de l’appareil</string>
     <!-- share keys -->
     <string name="title_activity_bug_report">Rapport d’anomalie</string>
     <string name="conference_call_warning_title">Attention !</string>
@@ -1481,7 +1481,7 @@
     <string name="room_filtering_footer_create_new_direct_message">Envoyer un nouveau message privé</string>
     <string name="room_filtering_footer_open_room_directory">Voir le répertoire des salons</string>
     <string name="room_directory_search_hint">Nom ou identifiant (#exemple:matrix.org)</string>
-    <string name="labs_swipe_to_reply_in_timeline">Activer le balayage pour répondre dans les l’historique</string>
+    <string name="labs_swipe_to_reply_in_timeline">Activer le balayage pour répondre dans l’historique</string>
     <string name="link_copied_to_clipboard">Lien copié dans le presse-papiers</string>
     <string name="settings_integration_manager">Gestionnaire d’intégrations</string>
     <string name="integration_manager_not_configured">Aucun gestionnaire d’intégrations n’est configuré.</string>
@@ -2182,7 +2182,7 @@
     <string name="return_to_call">Retour à l’appel</string>
     <string name="room_participants_action_cancel_invite">Annuler l’invitation</string>
     <string name="room_participants_action_ignore_title">Ignorer l’utilisateur</string>
-    <string name="room_participants_action_ignore_prompt_msg">Ignorer cet utilisateur aura pour effet de supprimer ses messages des espaces que vous partagez.
+    <string name="room_participants_action_ignore_prompt_msg">Ignorer cet utilisateur aura pour effet de supprimer ses messages des salons que vous partagez.
 \n
 \nVous pouvez annuler cette action à tout moment dans les paramètres généraux.</string>
     <string name="room_participants_action_cancel_invite_title">Annuler l’invitation</string>
@@ -2372,10 +2372,10 @@
     <string name="settings_emails_empty">Aucune adresse e-mail n’a été ajoutée à votre compte</string>
     <string name="settings_emails">Adresses e-mail</string>
     <string name="settings_phone_number_empty">Aucun numéro de téléphone n’a été ajouté à votre compte</string>
-    <string name="search_is_not_supported_in_e2e_room">La recherche dans les espaces chiffrés n\'est pas encore prise en charge.</string>
+    <string name="search_is_not_supported_in_e2e_room">La recherche dans les salons chiffrés n\'est pas encore prise en charge.</string>
     <string name="search_banned_user_hint">Filtrer les utilisateurs exclus</string>
     <string name="room_participants_action_unignore_prompt_msg">Ne plus ignorer cet utilisateur aura pour effet de ré-afficher ses messages.</string>
-    <string name="room_participants_kick_prompt_msg">expulser un utilisateur le supprimera de cet espace.
+    <string name="room_participants_kick_prompt_msg">expulser un utilisateur le supprimera de ce salon.
 \n
 \nPour l’empêcher de revenir, vous devez plutôt le bannir.</string>
     <string name="room_participants_kick_reason">Motif d’expulsion</string>
@@ -2526,8 +2526,8 @@
     <string name="call_transfer_connect_action">Rejoindre</string>
     <string name="call_transfer_consult_first">Consulter d’abord</string>
     <plurals name="call_one_active_and_other_paused">
-        <item quantity="one">1 appel en cours (%1$d) ⋅ 1 appel en attente</item>
-        <item quantity="other">1 appel en cours (%1$d) ⋅ %2$d appels en attente</item>
+        <item quantity="one">1 appel en cours (%1$s) ⋅ 1 appel en attente</item>
+        <item quantity="other">1 appel en cours (%1$s) ⋅ %2$d appels en attente</item>
     </plurals>
     <plurals name="call_only_paused">
         <item quantity="one">Appel en attente</item>
@@ -2643,16 +2643,16 @@
     <string name="notice_room_canonical_alias_alternative_changed_by_you">Vous avez modifié les adresses alternatives de ce salon.</string>
     <string name="notice_room_canonical_alias_alternative_changed">%1$s a modifié les adresses alternatives de ce salon.</string>
     <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
-        <item quantity="one">Vous avez supprimé l’adresse alternative %2$s de ce salon.</item>
-        <item quantity="other">Vous avez supprimé les adresses alternatives %2$s de ce salon.</item>
+        <item quantity="one">Vous avez supprimé l’adresse alternative %1$s de ce salon.</item>
+        <item quantity="other">Vous avez supprimé les adresses alternatives %1$s de ce salon.</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_removed">
         <item quantity="one">%1$s a supprimé l’adresse alternative %2$s de ce salon.</item>
         <item quantity="other">%1$s a supprimé les adresses alternatives %2$s de ce salon.</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_added_by_you">
-        <item quantity="one">Vous avez ajouté %2$s comme adresse alternative pour ce salon.</item>
-        <item quantity="other">Vous avez ajouté %2$s comme adresses alternatives pour ce salon.</item>
+        <item quantity="one">Vous avez ajouté %1$s comme adresse alternative pour ce salon.</item>
+        <item quantity="other">Vous avez ajouté %1$s comme adresses alternatives pour ce salon.</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_added">
         <item quantity="one">%1$s a ajouté %2$s comme adresse alternative pour ce salon.</item>
@@ -2668,4 +2668,15 @@
     <string name="notice_widget_jitsi_removed">%1$s a mis fin à la téléconférence</string>
     <string name="notice_widget_jitsi_added_by_you">Vous avez démarré la téléconférence</string>
     <string name="notice_widget_jitsi_added">Téléconférence démarrée par %1$s</string>
+    <string name="event_status_delete_all_failed_dialog_message">Êtes-vous sûr de vouloir supprimer tous les messages non envoyés dans ce salon \?</string>
+    <string name="event_status_delete_all_failed_dialog_title">Supprimer les messages non envoyés</string>
+    <string name="event_status_failed_messages_warning">Messages non envoyés</string>
+    <string name="event_status_cancel_sending_dialog_message">Voulez-vous annuler l’envoi du message \?</string>
+    <string name="event_status_a11y_delete_all">Supprimer tous les messages en échec</string>
+    <string name="event_status_a11y_failed">Échec</string>
+    <string name="event_status_a11y_sent">Envoyé</string>
+    <string name="event_status_a11y_sending">Envoi</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Afficher tous les salons dans le répertoire, y compris ceux au contenu choquant.</string>
+    <string name="settings_room_directory_show_all_rooms">Afficher les salons au contenu choquant</string>
+    <string name="settings_category_room_directory">Répertoire des salons</string>
 </resources>

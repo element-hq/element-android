@@ -32,10 +32,8 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
-import java.io.File
 
 class RoomUploadsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomUploadsViewState,
@@ -129,32 +127,27 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
     private fun handleShare(action: RoomUploadsAction.Share) {
         viewModelScope.launch {
-            try {
-                val file = awaitCallback<File> {
-                    session.fileService().downloadFile(
-                            messageContent = action.uploadEvent.contentWithAttachmentContent,
-                            callback = it
-                    )
-                }
-                _viewEvents.post(RoomUploadsViewEvents.FileReadyForSharing(file))
+            val event = try {
+                val file = session.fileService().downloadFile(
+                        messageContent = action.uploadEvent.contentWithAttachmentContent)
+                RoomUploadsViewEvents.FileReadyForSharing(file)
             } catch (failure: Throwable) {
-                _viewEvents.post(RoomUploadsViewEvents.Failure(failure))
+                RoomUploadsViewEvents.Failure(failure)
             }
+            _viewEvents.post(event)
         }
     }
 
     private fun handleDownload(action: RoomUploadsAction.Download) {
         viewModelScope.launch {
-            try {
-                val file = awaitCallback<File> {
-                    session.fileService().downloadFile(
-                            messageContent = action.uploadEvent.contentWithAttachmentContent,
-                            callback = it)
-                }
-                _viewEvents.post(RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body))
+            val event = try {
+                val file = session.fileService().downloadFile(
+                        messageContent = action.uploadEvent.contentWithAttachmentContent)
+                RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body)
             } catch (failure: Throwable) {
-                _viewEvents.post(RoomUploadsViewEvents.Failure(failure))
+                RoomUploadsViewEvents.Failure(failure)
             }
+            _viewEvents.post(event)
         }
     }
 }

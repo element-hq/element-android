@@ -37,7 +37,7 @@ internal class DefaultGetThirdPartyUserTask @Inject constructor(
 
     override suspend fun execute(params: GetThirdPartyUserTask.Params): List<ThirdPartyUser> {
         return executeRequest(globalErrorReceiver) {
-            apiCall = thirdPartyAPI.getThirdPartyUser(params.protocol, params.fields)
+            thirdPartyAPI.getThirdPartyUser(params.protocol, params.fields)
         }
     }
 }

@@ -33,9 +33,7 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.identity.FoundThreePid
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
@@ -101,56 +99,56 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private fun performLookup(data: List<MappedContact>) {
+    private fun performLookup(contacts: List<MappedContact>) {
         if (!session.identityService().getUserConsent()) {
             return
         }
         viewModelScope.launch {
-            val threePids = data.flatMap { contact ->
+            val threePids = contacts.flatMap { contact ->
                 contact.emails.map { ThreePid.Email(it.email) } +
                         contact.msisdns.map { ThreePid.Msisdn(it.phoneNumber) }
             }
-            session.identityService().lookUp(threePids, object : MatrixCallback<List<FoundThreePid>> {
-                override fun onFailure(failure: Throwable) {
-                    Timber.w(failure, "Unable to perform the lookup")
 
-                    // Should not happen, but just to be sure
-                    if (failure is IdentityServiceError.UserConsentNotProvided) {
-                        setState {
-                            copy(userConsent = false)
-                        }
-                    }
-                }
+            val data = try {
+                session.identityService().lookUp(threePids)
+            } catch (failure: Throwable) {
+                Timber.w(failure, "Unable to perform the lookup")
 
-                override fun onSuccess(data: List<FoundThreePid>) {
-                    mappedContacts = allContacts.map { contactModel ->
-                        contactModel.copy(
-                                emails = contactModel.emails.map { email ->
-                                    email.copy(
-                                            matrixId = data
-                                                    .firstOrNull { foundThreePid -> foundThreePid.threePid.value == email.email }
-                                                    ?.matrixId
-                                    )
-                                },
-                                msisdns = contactModel.msisdns.map { msisdn ->
-                                    msisdn.copy(
-                                            matrixId = data
-                                                    .firstOrNull { foundThreePid -> foundThreePid.threePid.value == msisdn.phoneNumber }
-                                                    ?.matrixId
-                                    )
-                                }
-                        )
-                    }
-
+                // Should not happen, but just to be sure
+                if (failure is IdentityServiceError.UserConsentNotProvided) {
                     setState {
-                        copy(
-                                isBoundRetrieved = true
-                        )
+                        copy(userConsent = false)
                     }
-
-                    updateFilteredMappedContacts()
                 }
-            })
+                return@launch
+            }
+
+            mappedContacts = allContacts.map { contactModel ->
+                contactModel.copy(
+                        emails = contactModel.emails.map { email ->
+                            email.copy(
+                                    matrixId = data
+                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value == email.email }
+                                            ?.matrixId
+                            )
+                        },
+                        msisdns = contactModel.msisdns.map { msisdn ->
+                            msisdn.copy(
+                                    matrixId = data
+                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value == msisdn.phoneNumber }
+                                            ?.matrixId
+                            )
+                        }
+                )
+            }
+
+            setState {
+                copy(
+                        isBoundRetrieved = true
+                )
+            }
+
+            updateFilteredMappedContacts()
         }
     }
 

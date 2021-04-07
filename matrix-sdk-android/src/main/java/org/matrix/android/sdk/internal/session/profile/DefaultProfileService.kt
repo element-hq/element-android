@@ -21,11 +21,10 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.profile.ProfileService
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
@@ -36,7 +35,6 @@ import org.matrix.android.sdk.internal.session.content.FileUploader
 import org.matrix.android.sdk.internal.session.user.UserStore
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
-import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import javax.inject.Inject
 
@@ -55,64 +53,38 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
                                                          private val userStore: UserStore,
                                                          private val fileUploader: FileUploader) : ProfileService {
 
-    override fun getDisplayName(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable {
+    override suspend fun getDisplayName(userId: String): Optional<String> {
         val params = GetProfileInfoTask.Params(userId)
-        return getProfileInfoTask
-                .configureWith(params) {
-                    this.callback = object : MatrixCallback<JsonDict> {
-                        override fun onSuccess(data: JsonDict) {
-                            val displayName = data[ProfileService.DISPLAY_NAME_KEY] as? String
-                            matrixCallback.onSuccess(Optional.from(displayName))
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            matrixCallback.onFailure(failure)
-                        }
-                    }
-                }
-                .executeBy(taskExecutor)
+        val data = getProfileInfoTask.execute(params)
+        val displayName = data[ProfileService.DISPLAY_NAME_KEY] as? String
+        return Optional.from(displayName)
     }
 
-    override fun setDisplayName(userId: String, newDisplayName: String, matrixCallback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.io, matrixCallback) {
+    override suspend fun setDisplayName(userId: String, newDisplayName: String) {
+        withContext(coroutineDispatchers.io) {
             setDisplayNameTask.execute(SetDisplayNameTask.Params(userId = userId, newDisplayName = newDisplayName))
             userStore.updateDisplayName(userId, newDisplayName)
         }
     }
 
-    override fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String, matrixCallback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, matrixCallback) {
+    override suspend fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String) {
+        withContext(coroutineDispatchers.main) {
             val response = fileUploader.uploadFromUri(newAvatarUri, fileName, MimeTypes.Jpeg)
             setAvatarUrlTask.execute(SetAvatarUrlTask.Params(userId = userId, newAvatarUrl = response.contentUri))
             userStore.updateAvatar(userId, response.contentUri)
         }
     }
 
-    override fun getAvatarUrl(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable {
+    override suspend fun getAvatarUrl(userId: String): Optional<String> {
         val params = GetProfileInfoTask.Params(userId)
-        return getProfileInfoTask
-                .configureWith(params) {
-                    this.callback = object : MatrixCallback<JsonDict> {
-                        override fun onSuccess(data: JsonDict) {
-                            val avatarUrl = data[ProfileService.AVATAR_URL_KEY] as? String
-                            matrixCallback.onSuccess(Optional.from(avatarUrl))
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            matrixCallback.onFailure(failure)
-                        }
-                    }
-                }
-                .executeBy(taskExecutor)
+        val data = getProfileInfoTask.execute(params)
+        val avatarUrl = data[ProfileService.AVATAR_URL_KEY] as? String
+        return Optional.from(avatarUrl)
     }
 
-    override fun getProfile(userId: String, matrixCallback: MatrixCallback<JsonDict>): Cancelable {
+    override suspend fun getProfile(userId: String): JsonDict {
         val params = GetProfileInfoTask.Params(userId)
-        return getProfileInfoTask
-                .configureWith(params) {
-                    this.callback = matrixCallback
-                }
-                .executeBy(taskExecutor)
+        return getProfileInfoTask.execute(params)
     }
 
     override fun getThreePids(): List<ThreePid> {
@@ -154,70 +126,38 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
         )
     }
 
-    override fun addThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable {
-        return addThreePidTask
-                .configureWith(AddThreePidTask.Params(threePid)) {
-                    callback = matrixCallback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun addThreePid(threePid: ThreePid) {
+        addThreePidTask.execute(AddThreePidTask.Params(threePid))
     }
 
-    override fun submitSmsCode(threePid: ThreePid.Msisdn, code: String, matrixCallback: MatrixCallback<Unit>): Cancelable {
-        return validateSmsCodeTask
-                .configureWith(ValidateSmsCodeTask.Params(threePid, code)) {
-                    callback = matrixCallback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun submitSmsCode(threePid: ThreePid.Msisdn, code: String) {
+        validateSmsCodeTask.execute(ValidateSmsCodeTask.Params(threePid, code))
     }
 
-    override fun finalizeAddingThreePid(threePid: ThreePid,
-                                        userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor,
-                                        matrixCallback: MatrixCallback<Unit>): Cancelable {
-        return finalizeAddingThreePidTask
-                .configureWith(FinalizeAddingThreePidTask.Params(
+    override suspend fun finalizeAddingThreePid(threePid: ThreePid,
+                                                userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) {
+        finalizeAddingThreePidTask
+                .execute(FinalizeAddingThreePidTask.Params(
                         threePid = threePid,
                         userInteractiveAuthInterceptor = userInteractiveAuthInterceptor,
                         userWantsToCancel = false
-                )) {
-                    callback = alsoRefresh(matrixCallback)
-                }
-                .executeBy(taskExecutor)
+                ))
+        refreshThreePids()
     }
 
-    override fun cancelAddingThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable {
-        return finalizeAddingThreePidTask
-                .configureWith(FinalizeAddingThreePidTask.Params(
+    override suspend fun cancelAddingThreePid(threePid: ThreePid) {
+        finalizeAddingThreePidTask
+                .execute(FinalizeAddingThreePidTask.Params(
                         threePid = threePid,
                         userInteractiveAuthInterceptor = null,
                         userWantsToCancel = true
-                )) {
-                    callback = alsoRefresh(matrixCallback)
-                }
-                .executeBy(taskExecutor)
+                ))
+        refreshThreePids()
     }
 
-    /**
-     * Wrap the callback to fetch 3Pids from the server in case of success
-     */
-    private fun alsoRefresh(callback: MatrixCallback<Unit>): MatrixCallback<Unit> {
-        return object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                callback.onFailure(failure)
-            }
-
-            override fun onSuccess(data: Unit) {
-                refreshThreePids()
-                callback.onSuccess(data)
-            }
-        }
-    }
-
-    override fun deleteThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable {
-        return deleteThreePidTask
-                .configureWith(DeleteThreePidTask.Params(threePid)) {
-                    callback = alsoRefresh(matrixCallback)
-                }
-                .executeBy(taskExecutor)
+    override suspend fun deleteThreePid(threePid: ThreePid) {
+        deleteThreePidTask.execute(DeleteThreePidTask.Params(threePid))
+        refreshThreePids()
     }
 }
 

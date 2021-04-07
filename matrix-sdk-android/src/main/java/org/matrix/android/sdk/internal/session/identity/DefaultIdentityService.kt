@@ -20,7 +20,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import dagger.Lazy
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
@@ -33,8 +32,6 @@ import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.extensions.observeNotNull
@@ -49,8 +46,6 @@ import org.matrix.android.sdk.internal.session.sync.model.accountdata.IdentitySe
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.ensureProtocol
 import kotlinx.coroutines.withContext
@@ -83,8 +78,7 @@ internal class DefaultIdentityService @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
         private val accountDataDataSource: AccountDataDataSource,
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
-        private val sessionParams: SessionParams,
-        private val taskExecutor: TaskExecutor
+        private val sessionParams: SessionParams
 ) : IdentityService, SessionLifecycleObserver {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
@@ -136,101 +130,81 @@ internal class DefaultIdentityService @Inject constructor(
         return identityStore.getIdentityData()?.identityServerUrl
     }
 
-    override fun startBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun startBindThreePid(threePid: ThreePid) {
         if (homeServerCapabilitiesService.getHomeServerCapabilities().lastVersionIdentityServerSupported.not()) {
-            callback.onFailure(IdentityServiceError.OutdatedHomeServer)
-            return NoOpCancellable
+            throw IdentityServiceError.OutdatedHomeServer
         }
 
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            identityRequestTokenForBindingTask.execute(IdentityRequestTokenForBindingTask.Params(threePid, false))
-        }
+        identityRequestTokenForBindingTask.execute(IdentityRequestTokenForBindingTask.Params(threePid, false))
     }
 
-    override fun cancelBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            identityStore.deletePendingBinding(threePid)
-        }
+    override suspend fun cancelBindThreePid(threePid: ThreePid) {
+        identityStore.deletePendingBinding(threePid)
     }
 
-    override fun sendAgainValidationCode(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            identityRequestTokenForBindingTask.execute(IdentityRequestTokenForBindingTask.Params(threePid, true))
-        }
+    override suspend fun sendAgainValidationCode(threePid: ThreePid) {
+        identityRequestTokenForBindingTask.execute(IdentityRequestTokenForBindingTask.Params(threePid, true))
     }
 
-    override fun finalizeBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun finalizeBindThreePid(threePid: ThreePid) {
         if (homeServerCapabilitiesService.getHomeServerCapabilities().lastVersionIdentityServerSupported.not()) {
-            callback.onFailure(IdentityServiceError.OutdatedHomeServer)
-            return NoOpCancellable
+            throw IdentityServiceError.OutdatedHomeServer
         }
 
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            bindThreePidsTask.execute(BindThreePidsTask.Params(threePid))
-        }
+        bindThreePidsTask.execute(BindThreePidsTask.Params(threePid))
     }
 
-    override fun submitValidationToken(threePid: ThreePid, code: String, callback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            submitTokenForBindingTask.execute(IdentitySubmitTokenForBindingTask.Params(threePid, code))
-        }
+    override suspend fun submitValidationToken(threePid: ThreePid, code: String) {
+        submitTokenForBindingTask.execute(IdentitySubmitTokenForBindingTask.Params(threePid, code))
     }
 
-    override fun unbindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun unbindThreePid(threePid: ThreePid) {
         if (homeServerCapabilitiesService.getHomeServerCapabilities().lastVersionIdentityServerSupported.not()) {
-            callback.onFailure(IdentityServiceError.OutdatedHomeServer)
-            return NoOpCancellable
+            throw IdentityServiceError.OutdatedHomeServer
         }
 
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            unbindThreePidsTask.execute(UnbindThreePidsTask.Params(threePid))
-        }
+        unbindThreePidsTask.execute(UnbindThreePidsTask.Params(threePid))
     }
 
-    override fun isValidIdentityServer(url: String, callback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            val api = retrofitFactory.create(unauthenticatedOkHttpClient, url).create(IdentityAuthAPI::class.java)
+    override suspend fun isValidIdentityServer(url: String) {
+        val api = retrofitFactory.create(unauthenticatedOkHttpClient, url).create(IdentityAuthAPI::class.java)
 
-            identityPingTask.execute(IdentityPingTask.Params(api))
-        }
+        identityPingTask.execute(IdentityPingTask.Params(api))
     }
 
-    override fun disconnect(callback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            identityDisconnectTask.execute(Unit)
+    override suspend fun disconnect() {
+        identityDisconnectTask.execute(Unit)
 
-            identityStore.setUrl(null)
-            updateIdentityAPI(null)
-            updateAccountData(null)
-        }
+        identityStore.setUrl(null)
+        updateIdentityAPI(null)
+        updateAccountData(null)
     }
 
-    override fun setNewIdentityServer(url: String, callback: MatrixCallback<String>): Cancelable {
+    override suspend fun setNewIdentityServer(url: String): String {
         val urlCandidate = url.ensureProtocol()
 
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            val current = getCurrentIdentityServerUrl()
-            if (urlCandidate == current) {
-                // Nothing to do
-                Timber.d("Same URL, nothing to do")
-            } else {
-                // Disconnect previous one if any, first, because the token will change.
-                // In case of error when configuring the new identity server, this is not a big deal,
-                // we will ask for a new token on the previous Identity server
-                runCatching { identityDisconnectTask.execute(Unit) }
-                        .onFailure { Timber.w(it, "Unable to disconnect identity server") }
+        val current = getCurrentIdentityServerUrl()
+        if (urlCandidate == current) {
+            // Nothing to do
+            Timber.d("Same URL, nothing to do")
+        } else {
+            // Disconnect previous one if any, first, because the token will change.
+            // In case of error when configuring the new identity server, this is not a big deal,
+            // we will ask for a new token on the previous Identity server
+            runCatching { identityDisconnectTask.execute(Unit) }
+                    .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
-                // Try to get a token
-                val token = getNewIdentityServerToken(urlCandidate)
+            // Try to get a token
+            val token = getNewIdentityServerToken(urlCandidate)
 
-                identityStore.setUrl(urlCandidate)
-                identityStore.setToken(token)
-                updateIdentityAPI(urlCandidate)
+            identityStore.setUrl(urlCandidate)
+            identityStore.setToken(token)
+            updateIdentityAPI(urlCandidate)
 
-                updateAccountData(urlCandidate)
-            }
-            urlCandidate
+            updateAccountData(urlCandidate)
         }
+
+        return urlCandidate
     }
 
     private suspend fun updateAccountData(url: String?) {
@@ -252,45 +226,38 @@ internal class DefaultIdentityService @Inject constructor(
         identityStore.setUserConsent(newValue)
     }
 
-    override fun lookUp(threePids: List<ThreePid>, callback: MatrixCallback<List<FoundThreePid>>): Cancelable {
+    override suspend fun lookUp(threePids: List<ThreePid>): List<FoundThreePid> {
         if (!getUserConsent()) {
-            callback.onFailure(IdentityServiceError.UserConsentNotProvided)
-            return NoOpCancellable
+            throw IdentityServiceError.UserConsentNotProvided
         }
 
         if (threePids.isEmpty()) {
-            callback.onSuccess(emptyList())
-            return NoOpCancellable
+            return emptyList()
         }
 
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            lookUpInternal(true, threePids)
-        }
+        return lookUpInternal(true, threePids)
     }
 
-    override fun getShareStatus(threePids: List<ThreePid>, callback: MatrixCallback<Map<ThreePid, SharedState>>): Cancelable {
+    override suspend fun getShareStatus(threePids: List<ThreePid>): Map<ThreePid, SharedState> {
         // Note: we do not require user consent here, because it is used for emails and phone numbers that the user has already sent
         // to the home server, and not emails and phone numbers from the contact book of the user
 
         if (threePids.isEmpty()) {
-            callback.onSuccess(emptyMap())
-            return NoOpCancellable
+            return emptyMap()
         }
 
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            val lookupResult = lookUpInternal(true, threePids)
+        val lookupResult = lookUpInternal(true, threePids)
 
-            threePids.associateWith { threePid ->
-                // If not in lookup result, check if there is a pending binding
-                if (lookupResult.firstOrNull { it.threePid == threePid } == null) {
-                    if (identityStore.getPendingBinding(threePid) == null) {
-                        SharedState.NOT_SHARED
-                    } else {
-                        SharedState.BINDING_IN_PROGRESS
-                    }
+        return threePids.associateWith { threePid ->
+            // If not in lookup result, check if there is a pending binding
+            if (lookupResult.firstOrNull { it.threePid == threePid } == null) {
+                if (identityStore.getPendingBinding(threePid) == null) {
+                    SharedState.NOT_SHARED
                 } else {
-                    SharedState.SHARED
+                    SharedState.BINDING_IN_PROGRESS
                 }
+            } else {
+                SharedState.SHARED
             }
         }
     }

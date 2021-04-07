@@ -26,7 +26,6 @@ import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestOwn
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenForEmailBody
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenForMsisdnBody
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenResponse
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -43,20 +42,20 @@ internal interface IdentityAPI {
      * Ref: https://matrix.org/docs/spec/identity_service/latest#get-matrix-identity-v2-account
      */
     @GET(NetworkConstants.URI_IDENTITY_PATH_V2 + "account")
-    fun getAccount(): Call<IdentityAccountResponse>
+    suspend fun getAccount(): IdentityAccountResponse
 
     /**
      * Logs out the access token, preventing it from being used to authenticate future requests to the server.
      */
     @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "account/logout")
-    fun logout(): Call<Unit>
+    suspend fun logout()
 
     /**
      * Request the hash detail to request a bunch of 3PIDs
      * Ref: https://matrix.org/docs/spec/identity_service/latest#get-matrix-identity-v2-hash-details
      */
     @GET(NetworkConstants.URI_IDENTITY_PATH_V2 + "hash_details")
-    fun hashDetails(): Call<IdentityHashDetailResponse>
+    suspend fun hashDetails(): IdentityHashDetailResponse
 
     /**
      * Request a bunch of 3PIDs
@@ -65,7 +64,7 @@ internal interface IdentityAPI {
      * @param body the body request
      */
     @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "lookup")
-    fun lookup(@Body body: IdentityLookUpParams): Call<IdentityLookUpResponse>
+    suspend fun lookup(@Body body: IdentityLookUpParams): IdentityLookUpResponse
 
     /**
      * Create a session to change the bind status of an email to an identity server
@@ -75,7 +74,7 @@ internal interface IdentityAPI {
      * @return the sid
      */
     @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "validate/email/requestToken")
-    fun requestTokenToBindEmail(@Body body: IdentityRequestTokenForEmailBody): Call<IdentityRequestTokenResponse>
+    suspend fun requestTokenToBindEmail(@Body body: IdentityRequestTokenForEmailBody): IdentityRequestTokenResponse
 
     /**
      * Create a session to change the bind status of an phone number to an identity server
@@ -85,7 +84,7 @@ internal interface IdentityAPI {
      * @return the sid
      */
     @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "validate/msisdn/requestToken")
-    fun requestTokenToBindMsisdn(@Body body: IdentityRequestTokenForMsisdnBody): Call<IdentityRequestTokenResponse>
+    suspend fun requestTokenToBindMsisdn(@Body body: IdentityRequestTokenForMsisdnBody): IdentityRequestTokenResponse
 
     /**
      * Validate ownership of an email address, or a phone number.
@@ -94,6 +93,6 @@ internal interface IdentityAPI {
      * - https://matrix.org/docs/spec/identity_service/latest#post-matrix-identity-v2-validate-email-submittoken
      */
     @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "validate/{medium}/submitToken")
-    fun submitToken(@Path("medium") medium: String,
-                    @Body body: IdentityRequestOwnershipParams): Call<SuccessResult>
+    suspend fun submitToken(@Path("medium") medium: String,
+                            @Body body: IdentityRequestOwnershipParams): SuccessResult
 }

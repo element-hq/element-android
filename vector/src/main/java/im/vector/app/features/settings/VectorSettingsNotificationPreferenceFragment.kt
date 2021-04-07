@@ -39,7 +39,6 @@ import im.vector.app.core.utils.requestDisablingBatteryOptimization
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleKind
@@ -295,20 +294,20 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             }
         } else {
             FcmHelper.getFcmToken(requireContext())?.let {
-                pushManager.unregisterPusher(it, object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        session.refreshPushers()
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        if (!isAdded) {
-                            return
-                        }
-                        // revert the check box
-                        switchPref.isChecked = !switchPref.isChecked
-                        Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
-                    }
-                })
+                lifecycleScope.launch {
+                    runCatching { pushManager.unregisterPusher(it) }
+                            .fold(
+                                    { session.refreshPushers() },
+                                    {
+                                        if (!isAdded) {
+                                            return@fold
+                                        }
+                                        // revert the check box
+                                        switchPref.isChecked = !switchPref.isChecked
+                                        Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+                                    }
+                            )
+                }
             }
         }
     }
