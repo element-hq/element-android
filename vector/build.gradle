@@ -442,7 +442,11 @@ dependencies {
     implementation('com.facebook.react:react-native-webrtc:1.87.3-jitsi-6624067@aar')
 
     // Jitsi
-    implementation('org.jitsi.react:jitsi-meet-sdk:3.1.0')
+    implementation('org.jitsi.react:jitsi-meet-sdk:3.1.0') {
+       exclude group: 'com.google.firebase'
+       exclude group: 'com.google.android.gms'
+       exclude group: 'com.android.installreferrer'
+    }
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
