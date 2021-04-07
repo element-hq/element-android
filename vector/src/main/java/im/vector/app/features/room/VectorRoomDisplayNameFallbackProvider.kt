@@ -36,6 +36,8 @@ class VectorRoomDisplayNameFallbackProvider(
         }
     }
 
+    override fun getNameFor1member(name: String) = name
+
     override fun getNameFor2members(name1: String, name2: String): String {
         return context.getString(R.string.room_displayname_two_members, name1, name2)
     }

@@ -26,6 +26,9 @@ class TestRoomDisplayNameFallbackProvider : RoomDisplayNameFallbackProvider {
     override fun getNameForEmptyRoom(isDirect: Boolean, leftMemberNames: List<String>) =
             "Empty room"
 
+    override fun getNameFor1member(name: String) =
+            name
+
     override fun getNameFor2members(name1: String, name2: String) =
             "$name1 and $name2"
 

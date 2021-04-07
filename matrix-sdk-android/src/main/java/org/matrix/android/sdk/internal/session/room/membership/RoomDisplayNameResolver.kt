@@ -112,7 +112,11 @@ internal class RoomDisplayNameResolver @Inject constructor(
                             .map { it.getBestName() }
                     roomDisplayNameFallbackProvider.getNameForEmptyRoom(roomSummary?.isDirect.orFalse(), leftMembersNames)
                 }
-                1    -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
+                1    -> {
+                    roomDisplayNameFallbackProvider.getNameFor1member(
+                            resolveRoomMemberName(otherMembersSubset[0], roomMembers)
+                    )
+                }
                 2    -> {
                     roomDisplayNameFallbackProvider.getNameFor2members(
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
