@@ -101,7 +101,7 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         // third party notice
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            if (firstThrottler.canHandle()) {
+            if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
                 activity?.displayInWebView(VectorSettingsUrls.THIRD_PARTY_LICENSES)
             }
             false

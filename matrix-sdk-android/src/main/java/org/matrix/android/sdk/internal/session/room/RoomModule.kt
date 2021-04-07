@@ -79,9 +79,11 @@ import org.matrix.android.sdk.internal.session.room.tags.DefaultDeleteTagFromRoo
 import org.matrix.android.sdk.internal.session.room.tags.DeleteTagFromRoomTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultFetchTokenAndPaginateTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultGetContextOfEventTask
+import org.matrix.android.sdk.internal.session.room.timeline.DefaultGetEventTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultPaginationTask
 import org.matrix.android.sdk.internal.session.room.timeline.FetchTokenAndPaginateTask
 import org.matrix.android.sdk.internal.session.room.timeline.GetContextOfEventTask
+import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationTask
 import org.matrix.android.sdk.internal.session.room.typing.DefaultSendTypingTask
 import org.matrix.android.sdk.internal.session.room.typing.SendTypingTask
@@ -228,4 +230,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindPeekRoomTask(task: DefaultPeekRoomTask): PeekRoomTask
+
+    @Binds
+    abstract fun bindGetEventTask(task: DefaultGetEventTask): GetEventTask
 }

@@ -21,9 +21,11 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
+import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
 
+@SessionScope
 internal class CallEventProcessor @Inject constructor(private val callSignalingHandler: CallSignalingHandler)
     : EventInsertLiveProcessor {
 
@@ -51,6 +53,15 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
         eventsToPostProcess.add(event)
     }
 
+    fun shouldProcessFastLane(eventType: String): Boolean {
+        return eventType == EventType.CALL_INVITE
+    }
+
+    suspend fun processFastLane(event: Event) {
+        eventsToPostProcess.add(event)
+        onPostProcess()
+    }
+
     override suspend fun onPostProcess() {
         eventsToPostProcess.forEach {
             dispatchToCallSignalingHandlerIfNeeded(it)
@@ -60,7 +71,7 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
 
     private fun dispatchToCallSignalingHandlerIfNeeded(event: Event) {
         val now = System.currentTimeMillis()
-        // TODO might check if an invite is not closed (hangup/answsered) in the same event batch?
+        // TODO might check if an invite is not closed (hangup/answered) in the same event batch?
         event.roomId ?: return Unit.also {
             Timber.w("Event with no room id ${event.eventId}")
         }

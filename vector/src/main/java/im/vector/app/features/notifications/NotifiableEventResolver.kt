@@ -26,9 +26,11 @@ import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isEdition
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getEditedEventId
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
@@ -42,9 +44,10 @@ import javax.inject.Inject
  * The NotifiableEventResolver is the only aware of session/store, the NotificationDrawerManager has no knowledge of that,
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
-class NotifiableEventResolver @Inject constructor(private val stringProvider: StringProvider,
-                                                  private val noticeEventFormatter: NoticeEventFormatter,
-                                                  private val displayableEventFormatter: DisplayableEventFormatter) {
+class NotifiableEventResolver @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val noticeEventFormatter: NoticeEventFormatter,
+        private val displayableEventFormatter: DisplayableEventFormatter) {
 
     // private val eventDisplay = RiotEventDisplay(context)
 
@@ -81,6 +84,47 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                         soundName = null,
                         type = event.type)
             }
+        }
+    }
+
+    fun resolveInMemoryEvent(session: Session, event: Event): NotifiableEvent? {
+        if (event.getClearType() != EventType.MESSAGE) return null
+
+        // Ignore message edition
+        if (event.isEdition()) return null
+
+        val actions = session.getActions(event)
+        val notificationAction = actions.toNotificationAction()
+
+        return if (notificationAction.shouldNotify) {
+            val user = session.getUser(event.senderId!!) ?: return null
+
+            val timelineEvent = TimelineEvent(
+                    root = event,
+                    localId = -1,
+                    eventId = event.eventId!!,
+                    displayIndex = 0,
+                    senderInfo = SenderInfo(
+                            userId = user.userId,
+                            displayName = user.getBestName(),
+                            isUniqueDisplayName = true,
+                            avatarUrl = user.avatarUrl
+                    )
+            )
+
+            val notifiableEvent = resolveMessageEvent(timelineEvent, session)
+
+            if (notifiableEvent == null) {
+                Timber.d("## Failed to resolve event")
+                // TODO
+                null
+            } else {
+                notifiableEvent.noisy = !notificationAction.soundName.isNullOrBlank()
+                notifiableEvent
+            }
+        } else {
+            Timber.d("Matched push rule is set to not notify")
+            null
         }
     }
 

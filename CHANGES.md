@@ -17,6 +17,7 @@ Improvements 🙌:
  - Add better support for empty room name fallback (#3106)
  - Room list improvements (paging)
  - Fix quick click action (#3127)
+ - Get Event after a Push for a faster notification display in some conditions
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity

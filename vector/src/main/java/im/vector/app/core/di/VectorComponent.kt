@@ -26,6 +26,7 @@ import im.vector.app.EmojiCompatWrapper
 import im.vector.app.VectorApplication
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.core.utils.DimensionConverter
@@ -139,6 +140,8 @@ interface VectorComponent {
     fun notifiableEventResolver(): NotifiableEventResolver
 
     fun vectorPreferences(): VectorPreferences
+
+    fun wifiDetector(): WifiDetector
 
     fun vectorFileLogger(): VectorFileLogger
 
