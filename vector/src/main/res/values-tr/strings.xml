@@ -1761,8 +1761,6 @@
     <string name="notice_ended_call">%s aramayı sonlandırdı.</string>
     <string name="notice_answered_call_by_you">Aramayı cevapladınız.</string>
     <string name="notice_answered_call">%s aramayı cevapladı.</string>
-    <string name="notice_call_candidates">"
-\n"</string>
     <string name="notice_placed_voice_call_by_you">Bir sesli arama başlattınız.</string>
     <string name="notice_placed_voice_call">%s bir sesli arama başlattı.</string>
     <string name="notice_placed_video_call_by_you">Görüntülü arama başlattınız.</string>
@@ -1784,15 +1782,11 @@
     <string name="room_settings_room_version_title">Oda sürümü</string>
     <string name="event_status_sending_message">Mesaj gönderiliyor…</string>
     <string name="room_displayname_empty_room">Boş oda</string>
-    <plurals name="room_displayname_four_and_more_members">
-        <item quantity="one"></item>
-        <item quantity="other"></item>
-    </plurals>
-    <string name="room_displayname_3_members">%1$s, %2$s ve</string>
+    <string name="room_displayname_3_members">%1$s, %2$s ve %3$s</string>
     <string name="power_level_custom_no_value">Özel</string>
     <string name="notice_widget_removed_by_you">%1$s widgetını kaldırdınız</string>
     <string name="notice_widget_added_by_you">%1$s widgetını eklediniz</string>
-    <string name="notice_profile_change_redacted_by_you">Profilinizi güncellediniz</string>
+    <string name="notice_profile_change_redacted_by_you">Profilinizi güncellediniz %1$s</string>
     <string name="room_displayname_room_invite">Oda daveti</string>
     <string name="medium_phone_number">Telefon numarası</string>
     <string name="medium_email">E-posta adresi</string>
@@ -1801,7 +1795,6 @@
     <string name="message_failed_to_upload">Görüntü yüklenemedi</string>
     <string name="unable_to_send_message">Mesaj gönderilemedi</string>
     <string name="power_level_default">Varsayılan</string>
-    <string name="power_level_admin"></string>
     <string name="notice_widget_jitsi_modified_by_you">Video konferansı düzenlediniz</string>
     <string name="notice_widget_jitsi_modified">Video konferans %1$s tarafından düzenlendi</string>
     <string name="notice_widget_jitsi_removed_by_you">Video konferansı sonlandırdınız</string>
