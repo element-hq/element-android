@@ -22,7 +22,7 @@ emoji_picker_datasource_emojis = emoji_picker_datasource["emojis"]
 
 
 # Get official emoji list from unicode.org (Emoji List, v13.1 at time of writing)
-print("Fetching emoji list from Unicode.org...",)
+print("Fetching emoji list from Unicode.org...")
 req = requests.get("https://unicode.org/emoji/charts/emoji-list.html")
 soup = BeautifulSoup(req.content, 'html.parser')
 
