@@ -161,25 +161,22 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 lifecycleScope.launch {
                     try {
                         session.signOut(!args.isUserLoggedOut)
-                        Timber.w("SIGN_OUT: success, start app")
-                        sessionHolder.clearActiveSession()
-                        doLocalCleanup(clearPreferences = true)
-                        startNextActivityAndFinish()
                     } catch (failure: Throwable) {
                         displayError(failure)
+                        return@launch
                     }
+                    Timber.w("SIGN_OUT: success, start app")
+                    sessionHolder.clearActiveSession()
+                    doLocalCleanup(clearPreferences = true)
+                    startNextActivityAndFinish()
                 }
             }
             args.clearCache           -> {
                 lifecycleScope.launch {
-                    try {
-                        session.clearCache()
-                        doLocalCleanup(clearPreferences = false)
-                        session.startSyncing(applicationContext)
-                        startNextActivityAndFinish()
-                    } catch (failure: Throwable) {
-                        displayError(failure)
-                    }
+                    session.clearCache()
+                    doLocalCleanup(clearPreferences = false)
+                    session.startSyncing(applicationContext)
+                    startNextActivityAndFinish()
                 }
             }
         }
