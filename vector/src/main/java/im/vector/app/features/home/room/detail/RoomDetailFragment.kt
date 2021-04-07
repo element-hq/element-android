@@ -1675,10 +1675,12 @@ class RoomDetailFragment @Inject constructor(
             shareText(requireContext(), action.messageContent.body)
         } else if (action.messageContent is MessageWithAttachmentContent) {
             lifecycleScope.launch {
-                val data = session.fileService().downloadFile(messageContent = action.messageContent)
-                if (isAdded) {
-                    shareMedia(requireContext(), data, getMimeTypeFromUri(requireContext(), data.toUri()))
-                }
+                val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
+                if (!isAdded) return@launch
+                result.fold(
+                        { shareMedia(requireContext(), it, getMimeTypeFromUri(requireContext(), it.toUri())) },
+                        { showErrorInSnackbar(it) }
+                )
             }
         }
     }
@@ -1701,16 +1703,22 @@ class RoomDetailFragment @Inject constructor(
             return
         }
         lifecycleScope.launch {
-            val data = session.fileService().downloadFile(messageContent = action.messageContent)
-            if (isAdded) {
-                saveMedia(
-                        context = requireContext(),
-                        file = data,
-                        title = action.messageContent.body,
-                        mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), data.toUri()),
-                        notificationUtils = notificationUtils
-                )
-            }
+            val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
+            if (!isAdded) return@launch
+            result.fold(
+                    {
+                        saveMedia(
+                                context = requireContext(),
+                                file = it,
+                                title = action.messageContent.body,
+                                mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), it.toUri()),
+                                notificationUtils = notificationUtils
+                        )
+                    },
+                    {
+                        showErrorInSnackbar(it)
+                    }
+            )
         }
     }
 
