@@ -24,6 +24,7 @@ Bugfix 🐛:
  - Disable URL preview for some domains (#2995)
  - Fix avatar rendering for DMs, after initial sync (#2693)
  - Fix mandatory parameter in API (#3065)
+ - If signout request fails, do not start LoginActivity, but restart the app (#3099)
 
 Translations 🗣:
  -

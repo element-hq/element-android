@@ -212,15 +212,16 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(errorFormatter.toHumanReadable(failure))
                     .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
-                    .setNegativeButton(R.string.cancel) { _, _ -> startNextActivityAndFinish() }
+                    .setNegativeButton(R.string.cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
                     .setCancelable(false)
                     .show()
         }
     }
 
-    private fun startNextActivityAndFinish() {
+    private fun startNextActivityAndFinish(ignoreClearCredentials: Boolean = false) {
         val intent = when {
             args.clearCredentials
+                    && !ignoreClearCredentials
                     && (!args.isUserLoggedOut || args.isAccountDeactivated) ->
                 // User has explicitly asked to log out or deactivated his account
                 LoginActivity.newIntent(this, null)
