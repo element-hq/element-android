@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal
+package org.matrix.android.sdk.internal.crypto
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -26,7 +26,6 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
@@ -243,7 +242,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
     }
 
     suspend fun getUserDevices(userIds: List<String>): List<CryptoDeviceInfo> {
-        val plainDevices:  ArrayList<CryptoDeviceInfo> = arrayListOf()
+        val plainDevices: ArrayList<CryptoDeviceInfo> = arrayListOf()
 
         for (user in userIds) {
             val devices = getUserDevices(user)
