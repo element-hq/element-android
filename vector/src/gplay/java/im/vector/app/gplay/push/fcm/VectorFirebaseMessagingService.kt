@@ -31,6 +31,7 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
@@ -43,6 +44,7 @@ import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -58,6 +60,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     private lateinit var pusherManager: PushersManager
     private lateinit var activeSessionHolder: ActiveSessionHolder
     private lateinit var vectorPreferences: VectorPreferences
+    private lateinit var wifiDetector: WifiDetector
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -74,6 +77,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             pusherManager = pusherManager()
             activeSessionHolder = activeSessionHolder()
             vectorPreferences = vectorPreferences()
+            wifiDetector = wifiDetector()
         }
     }
 
@@ -188,9 +192,14 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             return
         }
 
+        if (wifiDetector.isConnectedToWifi().not()) {
+            Timber.d("No WiFi network, do not get Event")
+            return
+        }
+
         coroutineScope.launch {
             Timber.d("Fast lane: start request")
-            val event = session.getEvent(roomId, eventId, onlyOnWifi = true) ?: return@launch
+            val event = tryOrNull { session.getEvent(roomId, eventId) } ?: return@launch
 
             val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event)
 
