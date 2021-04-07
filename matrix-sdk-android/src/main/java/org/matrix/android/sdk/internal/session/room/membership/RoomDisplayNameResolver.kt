@@ -112,7 +112,11 @@ internal class RoomDisplayNameResolver @Inject constructor(
                             .map { it.getBestName() }
                     roomDisplayNameFallbackProvider.getNameForEmptyRoom(roomSummary?.isDirect.orFalse(), leftMembersNames)
                 }
-                1    -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
+                1    -> {
+                    roomDisplayNameFallbackProvider.getNameFor1member(
+                            resolveRoomMemberName(otherMembersSubset[0], roomMembers)
+                    )
+                }
                 2    -> {
                     roomDisplayNameFallbackProvider.getNameFor2members(
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
@@ -149,9 +153,8 @@ internal class RoomDisplayNameResolver @Inject constructor(
     }
 
     /** See [org.matrix.android.sdk.api.session.room.sender.SenderInfo.disambiguatedDisplayName] */
-    private fun resolveRoomMemberName(roomMemberSummary: RoomMemberSummaryEntity?,
-                                      roomMemberHelper: RoomMemberHelper): String? {
-        if (roomMemberSummary == null) return null
+    private fun resolveRoomMemberName(roomMemberSummary: RoomMemberSummaryEntity,
+                                      roomMemberHelper: RoomMemberHelper): String {
         val isUnique = roomMemberHelper.isUniqueDisplayName(roomMemberSummary.displayName)
         return if (isUnique) {
             roomMemberSummary.getBestName()
