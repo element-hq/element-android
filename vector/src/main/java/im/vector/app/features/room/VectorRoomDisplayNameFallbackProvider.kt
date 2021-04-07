@@ -36,19 +36,19 @@ class VectorRoomDisplayNameFallbackProvider(
         }
     }
 
-    override fun getNameFor2members(name1: String?, name2: String?): String {
+    override fun getNameFor2members(name1: String, name2: String): String {
         return context.getString(R.string.room_displayname_two_members, name1, name2)
     }
 
-    override fun getNameFor3members(name1: String?, name2: String?, name3: String?): String {
+    override fun getNameFor3members(name1: String, name2: String, name3: String): String {
         return context.getString(R.string.room_displayname_3_members, name1, name2, name3)
     }
 
-    override fun getNameFor4members(name1: String?, name2: String?, name3: String?, name4: String?): String {
+    override fun getNameFor4members(name1: String, name2: String, name3: String, name4: String): String {
         return context.getString(R.string.room_displayname_4_members, name1, name2, name3, name4)
     }
 
-    override fun getNameFor4membersAndMore(name1: String?, name2: String?, name3: String?, remainingCount: Int): String {
+    override fun getNameFor4membersAndMore(name1: String, name2: String, name3: String, remainingCount: Int): String {
         return context.resources.getQuantityString(
                 R.plurals.room_displayname_four_and_more_members,
                 remainingCount,
