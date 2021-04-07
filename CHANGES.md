@@ -16,6 +16,7 @@ Improvements 🙌:
  - Improve timeline filtering (dissociate membership and profile events, display hidden events when highlighted, fix hidden item/read receipts behavior)
  - Add better support for empty room name fallback (#3106)
  - Room list improvements (paging)
+ - Fix quick click action (#3127)
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity
@@ -23,6 +24,7 @@ Bugfix 🐛:
  - Disable URL preview for some domains (#2995)
  - Fix avatar rendering for DMs, after initial sync (#2693)
  - Fix mandatory parameter in API (#3065)
+ - If signout request fails, do not start LoginActivity, but restart the app (#3099)
 
 Translations 🗣:
  -
