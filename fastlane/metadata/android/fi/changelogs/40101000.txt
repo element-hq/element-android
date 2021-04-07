@@ -1,0 +1,2 @@
+Suurimmat muutokset tässä versiossa: VoIP-parannuksia ja korjauksia (ääni- ja videopuhelut yksityiskeskusteluissa)
+Täysi muutosloki: https://github.com/vector-im/element-android/releases/tag/v1.1.0
