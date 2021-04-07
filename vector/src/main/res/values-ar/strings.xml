@@ -11,7 +11,6 @@
     <string name="notice_room_unban">رفعَ ⁨%1$s⁩ المنع عن ⁨%2$s⁩</string>
     <string name="notice_room_ban">منعَ ⁨%1$s⁩ ⁨%2$s⁩</string>
     <string name="notice_avatar_url_changed">غيّر ⁨%1$s⁩ صورته الشخصية</string>
-    <string name="notice_display_name_set">ضبطَ ⁨%1$s⁩ اسم العرض على</string>
     <string name="notice_display_name_changed_from">إنَّ %1$s قد غيَّرَ اسمه الظاهر من %2$s إلى %3$s</string>
     <string name="notice_display_name_removed">إنَّ %1$s قد أزالَ اسمه الظاهر (لقد كان %2$s)</string>
     <string name="notice_room_topic_changed">إنَّ %1$s قد غيَّرَ الموضوع إلى: %2$s</string>
