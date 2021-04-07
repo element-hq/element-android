@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
-    <string name="summary_user_sent_image">Uživatel %1$s poslal obrázek.</string>
-    <string name="summary_user_sent_sticker">Uživatel %1$s poslal nálepku.</string>
+    <string name="summary_user_sent_image">%1$s poslal(a) obrázek.</string>
+    <string name="summary_user_sent_sticker">%1$s poslal(a) nálepku.</string>
     <string name="notice_room_invite_no_invitee">Pozvání od uživatele %s</string>
-    <string name="notice_room_invite">Uživatel %1$s pozval uživatele %2$s</string>
-    <string name="notice_room_invite_you">Uživatel %1$s vás pozval</string>
-    <string name="notice_room_join">%1$s vstoupil do místnosti</string>
-    <string name="notice_room_leave">Uživatel %1$s odešel</string>
+    <string name="notice_room_invite">%1$s pozval(a) %2$s</string>
+    <string name="notice_room_invite_you">%1$s vás pozval(a)</string>
+    <string name="notice_room_join">%1$s vstoupil(a) do místnosti</string>
+    <string name="notice_room_leave">Uživatel %1$s odešel z místnosti</string>
     <string name="notice_room_reject">%1$s odmítli pozvání</string>
     <string name="notice_room_kick">%1$s vykopli %2$s</string>
     <string name="notice_room_unban">%1$s zrušil vykázání %2$s</string>
     <string name="notice_room_ban">%1$s vykázali %2$s</string>
     <string name="notice_room_withdraw">%1$s zrušili pozvání pro %2$s</string>
-    <string name="notice_avatar_url_changed">%1$s změnili svůj profilový obrázek</string>
+    <string name="notice_avatar_url_changed">%1$s změnil(a) svůj profilový obrázek</string>
     <string name="notice_display_name_set">%1$s nastavili své veřejné jméno na %2$s</string>
-    <string name="notice_display_name_changed_from">%1$s změnili své veřejné jméno z %2$s na %3$s</string>
+    <string name="notice_display_name_changed_from">%1$s změnil(a) své veřejné jméno z %2$s na %3$s</string>
     <string name="notice_display_name_removed">%1$s odstranili své veřejné jméno (%2$s)</string>
     <string name="notice_room_topic_changed">%1$s změnili téma na: %2$s</string>
-    <string name="notice_room_name_changed">%1$s změnili název místnosti na: %2$s</string>
+    <string name="notice_room_name_changed">%1$s změnil(a) název místnosti na: %2$s</string>
     <string name="notice_placed_video_call">%s uskutečnili videohovor.</string>
     <string name="notice_placed_voice_call">%s uskutečnili hlasový hovor.</string>
     <string name="notice_answered_call">%s přijali hovor.</string>
@@ -103,7 +103,7 @@
     <string name="notice_display_name_changed_from_by_you">Změnili jste své veřejné jméno z %1$s na %2$s</string>
     <string name="notice_display_name_removed_by_you">Odstranili jste své veřejné jméno (%1$s)</string>
     <string name="notice_room_topic_changed_by_you">Změnili jste téma na: %1$s</string>
-    <string name="notice_room_avatar_changed">%1$s změnili obrázek místnosti</string>
+    <string name="notice_room_avatar_changed">%1$s změnil(a) obrázek místnosti</string>
     <string name="notice_room_avatar_changed_by_you">Změnili jste obrázek místnosti</string>
     <string name="notice_room_name_changed_by_you">Změnili jste jméno místnosti na: %1$s</string>
     <string name="notice_placed_video_call_by_you">Zahájili jste video hovor.</string>
@@ -136,7 +136,7 @@
     <string name="power_level_custom">Vlastní (%1$d)</string>
     <string name="power_level_custom_no_value">Vlastní</string>
     <string name="notice_power_level_changed_by_you">Změnili jste %1$s stupeň oprávnění.</string>
-    <string name="notice_power_level_changed">%1$s změnili %2$s stupeň oprávnění.</string>
+    <string name="notice_power_level_changed">%1$s změnil(a) %2$s stupeň oprávnění.</string>
     <string name="notice_power_level_diff">%1$s z %2$s na %3$s</string>
     <string name="notice_room_invite_no_invitee_with_reason">Pozvání od %1$s. Důvod: %2$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Vaše pozvání. Důvod: %1$s</string>
@@ -211,7 +211,7 @@
     <string name="notice_made_future_direct_room_visibility_by_you">Učinili jste budoucí zprávy viditelné pro %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s učinili budoucí zprávy viditelné pro %2$s</string>
     <string name="notice_direct_room_leave_by_you">Odešli jste z místnosti</string>
-    <string name="notice_direct_room_leave">%1$s odešli z místnosti</string>
+    <string name="notice_direct_room_leave">Uživatel %1$s odešel z místnosti</string>
     <string name="notice_direct_room_join_by_you">Vstoupili jste</string>
     <string name="notice_direct_room_join">%1$s vstoupili</string>
     <string name="notice_direct_room_created_by_you">Založili jste diskusi</string>
@@ -233,7 +233,7 @@
     <string name="notice_room_server_acl_updated_was_banned">• Servery shodující se s %s byly odstraněny ze seznamu zakázaných.</string>
     <string name="notice_room_server_acl_updated_banned">• Servery shodující se s %s jsou nyní zakázány.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Změnili jste ACL serveru pro tuto místnost.</string>
-    <string name="notice_room_server_acl_updated_title">%s změnili ACL serveru pro tuto místnost.</string>
+    <string name="notice_room_server_acl_updated_title">%s změnil(a) ACL serveru pro tuto místnost.</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">• Server shodující se doslovně s IP je povolen.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Server shodující se doslovně s IP je zakázán.</string>
     <string name="notice_room_server_acl_set_allowed">• Server shodující se s %s je povolen.</string>
@@ -241,11 +241,11 @@
     <string name="notice_room_server_acl_set_title_by_you">Nastavili jste ACL serveru pro tuto místnost.</string>
     <string name="notice_room_server_acl_set_title">%s nastavili ACL serveru pro tuto místnost.</string>
     <string name="notice_room_canonical_alias_no_change_by_you">Změnili jste adresy pro tuto místnost.</string>
-    <string name="notice_room_canonical_alias_no_change">%1$s změnili adresy pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s změnil(a) adresy pro tuto místnost.</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Změnili jste hlavní a alternativní adresu pro tuto místnost.</string>
-    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s změnili hlavní a alternativní adresu pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s změnil(a) hlavní a alternativní adresu pro tuto místnost.</string>
     <string name="notice_room_canonical_alias_alternative_changed_by_you">Změnili jste alternativní adresu pro tuto místnost.</string>
-    <string name="notice_room_canonical_alias_alternative_changed">%1$s změnili alternativní adresu pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s změnil(a) alternativní adresu pro tuto místnost.</string>
     <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
         <item quantity="one">Odstranili jste alternativní adresu %1$s pro tuto místnost.</item>
         <item quantity="few">Odstranili jste alternativní adresy %1$s pro tuto místnost.</item>
@@ -1984,7 +1984,7 @@
     <string name="trusted">Důvěryhodné</string>
     <string name="not_trusted">Nedůvěryhodné</string>
     <string name="verification_profile_device_verified_because">Tato relace je důvěryhodná pro bezpečnou komunikaci, protože %1$s (%2$s) ji ověřil:</string>
-    <string name="verification_profile_device_new_signing">%1$s (%2$s) se přihlásil skrze novou relaci:</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) se přihlásil novou relací:</string>
     <string name="verification_profile_device_untrust_info">Dokud tento uživatel nezačne důvěřovat této relaci, zprávy z ní odeslané a v ní přijaté budou označeny varováním. Volitelně ji můžete manuálně ověřit.</string>
     <string name="initialize_cross_signing">Spustit křížové podepsání</string>
     <string name="reset_cross_signing">Resetovat klíče</string>
@@ -2417,7 +2417,7 @@
     <string name="settings_show_room_member_state_events_summary">Zahrnuje události pozvat/vstoupit/opustit/vykopnout/vykázat a změny avatara/veřejného jména.</string>
     <string name="sent_a_poll">Průzkum</string>
     <string name="sent_a_bot_buttons">Tlačítka botů</string>
-    <string name="sent_a_reaction">Reagovali skrze: %s</string>
+    <string name="sent_a_reaction">Reagoval(a): %s</string>
     <string name="sent_verification_conclusion">Výsledek ověření</string>
     <string name="universal_link_malformed">Odkaz byl chybně zformován</string>
     <string name="no_permissions_to_start_webrtc_call">K zahájení hovoru v této místnosti nemáte oprávnění</string>
@@ -2712,4 +2712,15 @@
     <string name="action_switch">Přepnout</string>
     <string name="initial_sync_start_downloading">Úvodní synchronizace:
 \nStahuji data…</string>
+    <string name="event_status_delete_all_failed_dialog_message">Opravdu chcete smazat všechny neodeslané zprávy v této místnosti\?</string>
+    <string name="event_status_delete_all_failed_dialog_title">Smazat neodeslané zprávy</string>
+    <string name="event_status_failed_messages_warning">Zprávy se nepodařilo odeslat</string>
+    <string name="event_status_cancel_sending_dialog_message">Chcete zrušit odesílání zprávy\?</string>
+    <string name="event_status_a11y_delete_all">Smazat všechny zprávy, které se nepodařilo odeslat</string>
+    <string name="event_status_a11y_failed">Selhalo</string>
+    <string name="event_status_a11y_sent">Odesláno</string>
+    <string name="event_status_a11y_sending">Odesílá se</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Zobrazit všechny místnosti v adresáři místností, včetně místností s explicitním obsahem.</string>
+    <string name="settings_room_directory_show_all_rooms">Zobrazit místnosti s explicitním obsahem</string>
+    <string name="settings_category_room_directory">Adresář místností</string>
 </resources>

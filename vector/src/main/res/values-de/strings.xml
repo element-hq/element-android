@@ -161,7 +161,7 @@
     <string name="notice_widget_modified">%1$s hat das %2$s Widget modifiziert</string>
     <string name="notice_widget_modified_by_you">Du hast das %1$s Widget modifiziert</string>
     <string name="power_level_admin">Administrator</string>
-    <string name="power_level_moderator">Moderator:in</string>
+    <string name="power_level_moderator">Moderator</string>
     <string name="power_level_default">Standard</string>
     <string name="power_level_custom">Benutzerdefiniert (%1$d)</string>
     <string name="power_level_custom_no_value">Benutzerdefiniert</string>
@@ -348,12 +348,12 @@
     <string name="no_result_placeholder">Keine Ergebnisse</string>
     <!-- Rooms fragment -->
     <string name="rooms_header">Räume</string>
-    <string name="rooms_directory_header">Raum-Verzeichnis</string>
+    <string name="rooms_directory_header">Raumverzeichnis</string>
     <string name="no_room_placeholder">Keine Räume</string>
     <string name="no_public_room_placeholder">Keine öffentl. Räume verfügbar</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">%d Benutzer/in</item>
-        <item quantity="other">%d Benutzer/innen</item>
+        <item quantity="one">%d Benutzer</item>
+        <item quantity="other">%d Benutzer</item>
     </plurals>
     <string name="send_bug_report_include_logs">Logdateien übermitteln</string>
     <string name="send_bug_report_include_crash_logs">Absturzberichte übermitteln</string>
@@ -494,8 +494,8 @@
     <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} benötigt die Berechtigung, auf Kamera und Mikrofon zu zugreifen, um Video-Anrufe durchzuführen.
 \n
 \nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer:innen anhand ihrer Email-Adresse und Telefonnummer zu finden. Wenn du der Nutzung deines Adressbuchs zu diesem Zweck zustimmst, erlaube den Zugriff im nächsten Popup-Fenster.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer:innen anhand ihrer E-Mail-Adresse und Telefonnummer zu finden.
+    <string name="template_permissions_rationale_msg_contacts">${app_name} kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden. Wenn du der Nutzung deines Adressbuchs zu diesem Zweck zustimmst, erlaube den Zugriff im nächsten Popup-Fenster.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer E-Mail-Adresse und Telefonnummer zu finden.
 \n
 \nStimmst du der Nutzung deines Adressbuchs zu diesem Zweck zu\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Entschuldige. Die Aktion wurde aufgrund fehlender Berechtigungen nicht ausgeführt</string>
@@ -540,22 +540,22 @@
     <string name="room_participants_action_remove">Aus diesem Raum entfernen</string>
     <string name="room_participants_action_ban">Verbannen</string>
     <string name="room_participants_action_unban">Verbannung aufheben</string>
-    <string name="room_participants_action_set_default_power_level">Zum/r normalen Benutzer/in herabstufen</string>
-    <string name="room_participants_action_set_moderator">Zum/r Moderator:in machen</string>
+    <string name="room_participants_action_set_default_power_level">Zum normalen Benutzer herabstufen</string>
+    <string name="room_participants_action_set_moderator">Zum Moderator machen</string>
     <string name="room_participants_action_set_admin">Zum Admin machen</string>
-    <string name="room_participants_action_ignore">Alle Nachrichten dieses/r Nutzers/in verbergen</string>
-    <string name="room_participants_action_unignore">Alle Nachrichten dieses/r Nutzers/in anzeigen</string>
+    <string name="room_participants_action_ignore">Alle Nachrichten dieses Nutzers verbergen</string>
+    <string name="room_participants_action_unignore">Alle Nachrichten dieses Nutzers anzeigen</string>
     <string name="room_participants_invite_search_another_user">Nutzer-ID, Name oder E-Mail-Adresse</string>
     <string name="room_participants_action_mention">Erwähnen</string>
     <string name="room_participants_action_devices_list">Sitzungsliste anzeigen</string>
-    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der/die Benutzer!n dasselbe Berechtigungslevel wie du erhalten wirst.
+    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der Benutzer dieselbe Berechtigungsstufe wie du erhalten wirst.
 \nBist du sicher\?</string>
     <string name="room_participants_invite_prompt_msg">"Bist du sicher, dass du %s in diesen Chat einladen willst?"</string>
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Mit ID einladen</u></string>
     <string name="people_search_local_contacts">LOKALE KONTAKTE (%d)</string>
     <string name="people_search_filter_text">Nur Matrix-Benutzer</string>
-    <string name="people_search_invite_by_id_dialog_title">Benutzer:in per ID einladen</string>
+    <string name="people_search_invite_by_id_dialog_title">Benutzer per ID einladen</string>
     <string name="people_search_invite_by_id_dialog_description">Bitte gib eine oder mehrere E-Mail-Adressen oder eine Matrix-ID ein</string>
     <string name="people_search_invite_by_id_dialog_hint">E-Mail or Matrix-ID</string>
     <!--  Chat -->
@@ -582,10 +582,10 @@
     <string name="ssl_fingerprint_hash">Fingerabdruck (%s):</string>
     <string name="ssl_could_not_verify">Konnte Identität des Remote-Servers nicht verifizieren.</string>
     <string name="ssl_cert_not_trust">Dies kann bedeuten, dass jemand böswillig deinen Internetverkehr abfängt oder dass dein Telefon dem Zertifikat, dass der Remote-Server anbietet, nicht vertraut.</string>
-    <string name="ssl_cert_new_account_expl">Wenn der/die Server-Administrator:in dir mitgeteilt hat, dass dies zu erwarten sei, stelle sicher, dass der Fingerabdruck unten mit dem von deinem/r Administrator:in bereitgestellten übereinstimmt.</string>
+    <string name="ssl_cert_new_account_expl">Wenn der Server-Administrator dir mitgeteilt hat, dass dies zu erwarten sei, stelle sicher, dass der Fingerabdruck unten mit dem von deinem Administrator bereitgestellten übereinstimmt.</string>
     <string name="ssl_unexpected_existing_expl">Das Zertifikat unterscheidet sich von dem Zertifikat, dem dein Gerät ursprünglich vertraut hat. Dies ist SEHR UNGEWÖHNLICH. Es wird empfohlen, dass du dieses neue Zertifikat NICHT AKZEPTIERST.</string>
     <string name="ssl_expected_existing_expl">Das Zertifikat hat sich von einem ursprünglich vertrauenswürdigem Zertifikat in ein nicht vertrauenswürdiges Zertifikat geändert. Eventuell wurde das Zertifikat des Servers erneuert. Bitte erkundige dich beim Server-Administrator, welcher Fingerprint als vertrauenswürdig gilt.</string>
-    <string name="ssl_only_accept">Akzeptiere das Zertifikat nur dann, wenn der/die Server-Administrator:in einen Fingerprint veröffentlicht hat, der mit dem obigen übereinstimmt.</string>
+    <string name="ssl_only_accept">Akzeptiere das Zertifikat nur dann, wenn der Server-Administrator einen Fingerprint veröffentlicht hat, der mit dem obigen übereinstimmt.</string>
     <!-- Room Details -->
     <string name="room_details_title">Raum-Details</string>
     <string name="room_details_people">Personen</string>
@@ -596,7 +596,7 @@
     <string name="room_details_people_present_group_name">TEILNEHMER</string>
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Grund für das Melden dieses Inhalts</string>
-    <string name="room_event_action_report_prompt_ignore_user">Möchtest du alle Nachrichten dieses/r Nutzers/in verbergen\?
+    <string name="room_event_action_report_prompt_ignore_user">Möchtest du alle Nachrichten dieses Nutzers verbergen\?
 \n
 \nBeachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string>
     <string name="room_event_action_cancel_upload">Upload abbrechen</string>
@@ -822,7 +822,7 @@
     <string name="encryption_information_block">Sperren</string>
     <string name="encryption_information_unblock">Zulassen</string>
     <string name="encryption_information_verify_device">Sitzung verifizieren</string>
-    <string name="encryption_information_verify_device_warning">Vergleiche die folgenden Zeichen mit den Einstellungen in der Sitzung des/der anderen Nutzer!n und bestätige:</string>
+    <string name="encryption_information_verify_device_warning">Vergleiche die folgenden Zeichen mit den Einstellungen in der Sitzung des anderen Nutzers und bestätige:</string>
     <string name="encryption_information_verify_device_warning2">Falls sie nicht übereinstimmen, wurde die Kommunikation vielleicht kompromittiert.</string>
     <string name="encryption_information_verify_key_match">Ich bestätige, dass die Schlüssel übereinstimmen</string>
     <!-- unknown devices management -->
@@ -886,7 +886,7 @@
     <string name="black_theme">Schwarzes Design</string>
     <string name="notification_sync_in_progress">Synchronisiere…</string>
     <string name="notification_listening_for_events">Auf Ereignisse lauschen</string>
-    <string name="settings_containing_my_display_name">Nachrichten, die meinen Anzeigenamen enthalten</string>
+    <string name="settings_containing_my_display_name">Nachrichten mit meinem Anzeigenamen</string>
     <string name="settings_containing_my_user_name">Nachrichten, die meinen Benutzernamen enthalten</string>
     <string name="you_added_a_new_device">Du hast die neue Sitzung \'%s\' hinzugefügt, die jetzt Verschlüsselungs-Schlüssel anfordert.</string>
     <string name="your_unverified_device_requesting">Deine bislang nicht verifiziertes Sitzung \'%s\' fordert Verschlüsselungs-Schlüssel an.</string>
@@ -923,13 +923,13 @@
     <string name="start_voice_call_prompt_msg">Sicher, dass du einen Sprachanruf starten möchtest\?</string>
     <string name="start_video_call_prompt_msg">Sicher, dass du einen Videoanruf starten möchtest\?</string>
     <string name="groups_list">Gruppenliste</string>
-    <string name="room_participants_ban_prompt_msg">Ein Bann führt zu einem Ausschluss eines/r Nutzers/in von diesem Raum und verhindert einen erneuten Beitritt.</string>
+    <string name="room_participants_ban_prompt_msg">Ein Bann führt zu einem Ausschluss eines Nutzers von diesem Raum und verhindert einen erneuten Beitritt.</string>
     <string name="room_settings_all_messages_noisy">Alle Nachrichten (laut)</string>
     <string name="room_settings_all_messages">Alle Nachrichten</string>
     <string name="room_settings_mention_only">Nur Erwähnungen</string>
     <string name="room_settings_mute">Stumm</string>
     <string name="settings_inline_url_preview">URL-Vorschau im Chat</string>
-    <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen eines/r Nutzers/in</string>
+    <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen eines Nutzers</string>
     <string name="room_settings_room_notifications_title">Benachrichtigungen</string>
     <string name="room_settings_no_flair">Dieser Raum zeigt für keine Community Avatare an</string>
     <string name="room_settings_add_new_group">Neue Community-ID (z.B. +foo:matrix.org)</string>
@@ -951,14 +951,14 @@
     <string name="invited">Eingeladen</string>
     <string name="filter_group_members">Filter Gruppen-Mitglieder</string>
     <string name="filter_group_rooms">Filter Gruppen-Räume</string>
-    <string name="group_no_long_description">Die Community-Administration hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
+    <string name="group_no_long_description">Der Community-Administrator hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
     <string name="has_been_kicked">Du wurdest von %2$s aus %1$s gekickt</string>
     <string name="has_been_banned">Du wurdest von %2$s aus %1$s verbannt</string>
     <string name="reason_colon">Grund: %1$s</string>
     <string name="rejoin">Erneut beitreten</string>
     <string name="forget_room">Raum vergessen</string>
     <string name="room_settings_add_homescreen_shortcut">Zum Startbildschirm hinzufügen</string>
-    <string name="settings_flair">Community Avatare</string>
+    <string name="settings_flair">Community-Avatare</string>
     <string name="send_bug_report_rage_shake">Schütteln, um einen Fehler zu melden</string>
     <string name="actions">Aktionen</string>
     <string name="list_members">Mitglieder auflisten</string>
@@ -1042,8 +1042,8 @@
 \n
 \nDie Deaktivierung deines Konto wird standardmäßig <b>keine deiner gesendeten Nachrichten löschen</b>. Wenn du möchtest, dass auch deine Nachrichten gelöscht werden, wähle zusätzlich die Option unten.
 \n
-\nDie Sichtbarkeit deiner Nachrichten ist ähnlich wie bei E-Mails: Wenn deine Nachrichten gelöscht werden, bedeutet dies, dass von dir verschickte Nachrichten nicht mit neuen oder unregistrierten Nutzer:innen geteilt werden. Aber registrierte Nutzer:innen, die bereits Zugang zu diesen Nachrichten haben, behalten weiterhin Zugriff auf ihre Kopie.</string>
-    <string name="deactivate_account_delete_checkbox">Bitte alle Nachrichten, die ich gesendet habe, löschen, wenn mein Account deaktiviert wird (Warnung: Unterhaltungen werden für zukünftige Nutzer:innen unvollständig erscheinen)</string>
+\nDie Sichtbarkeit deiner Nachrichten ist ähnlich wie bei E-Mails: Wenn deine Nachrichten gelöscht werden, bedeutet dies, dass von dir verschickte Nachrichten nicht mit neuen oder unregistrierten Nutzer geteilt werden. Aber registrierte Nutzer, die bereits Zugang zu diesen Nachrichten haben, behalten weiterhin Zugriff auf ihre Kopie.</string>
+    <string name="deactivate_account_delete_checkbox">Bitte alle Nachrichten, die ich gesendet habe, löschen, wenn mein Konto deaktiviert wird (Warnung: Unterhaltungen werden für zukünftige Nutzer unvollständig erscheinen)</string>
     <string name="deactivate_account_prompt_password">Um fortzufahren, bitte Passwort eingeben:</string>
     <string name="deactivate_account_submit">Account deaktivieren</string>
     <string name="dialog_title_third_party_licences">Drittanbieter-Lizenzen</string>
@@ -1067,15 +1067,15 @@
     <string name="settings_without_flair">Du bist aktuell kein Mitglied einer Community.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Benutze die Enter-Taste der Tastatur zum Senden</string>
     <string name="command_description_emote">Zeigt Aktionen</string>
-    <string name="command_description_ban_user">Bannt Benutzer:in mit angegebener ID</string>
+    <string name="command_description_ban_user">Bannt Benutzer mit angegebener ID</string>
     <string name="command_description_unban_user">Hebt die Verbannung des Benutzers mit angegebener ID auf</string>
     <string name="command_description_op_user">Bestimmt das Berechtigungslevel des Benutzers</string>
     <string name="command_description_deop_user">Setzt Berechtigungen des Benutzers zurück</string>
-    <string name="command_description_invite_user">Lädt Benutzer:in mit angegebener Kennung in den aktuellen Raum ein</string>
+    <string name="command_description_invite_user">Lädt Benutzer mit angegebener Kennung in den aktuellen Raum ein</string>
     <string name="command_description_join_room">Tritt dem Raum mit angegebenen Alias bei</string>
     <string name="command_description_part_room">Verlasse Raum</string>
     <string name="command_description_topic">Setzt das Raum-Thema</string>
-    <string name="command_description_kick_user">Kickt Benutzer:in mit angegebener ID</string>
+    <string name="command_description_kick_user">Kickt Benutzer mit angegebener ID</string>
     <string name="command_description_nick">Ändert deinen Anzeigenamen</string>
     <string name="command_description_markdown">(De-)Aktiviert Markdown</string>
     <string name="command_description_clear_scalar_token">Um das Matrix-App-Management zu reparieren</string>
@@ -1121,10 +1121,10 @@
     <string name="resource_limit_exceeded_title">Ressourcen-Limit</string>
     <string name="resource_limit_contact_action">Kontaktiere Administrator</string>
     <string name="resource_limit_contact_admin">kontaktiere deinen Service-Administrator</string>
-    <string name="resource_limit_soft_default">Dieser Home-Server hat eine seiner Ressourcen-Grenzen erreicht, sodass <b>einige Nutzer:innen sich nicht anmelden können</b>.</string>
+    <string name="resource_limit_soft_default">Dieser Home-Server hat eine seiner Ressourcen-Grenzen erreicht, sodass <b>einige Nutzer sich nicht anmelden können</b>.</string>
     <string name="resource_limit_hard_default">Dieser Home-Server hat einen seiner Ressourcen-Limits überschritten.</string>
-    <string name="resource_limit_soft_mau"> Dieser Home-Server hat seine Obergrenze an monatlich aktiven Nutzer:innen erreicht, sodass <b>einige Nutzer:innen sich nicht anmelden können</b>.</string>
-    <string name="resource_limit_hard_mau">Dieser Home-Server hat seine Obergrenze an monatlich aktiven Nutzer:innen erreicht.</string>
+    <string name="resource_limit_soft_mau"> Dieser Home-Server hat seine Obergrenze an monatlich aktiven Nutzer erreicht, sodass <b>einige Nutzer sich nicht anmelden können</b>.</string>
+    <string name="resource_limit_hard_mau">Dieser Home-Server hat seine Obergrenze an monatlich aktiven Nutzer erreicht.</string>
     <string name="resource_limit_soft_contact">Bitte %s um dieses Limit anheben zu lassen.</string>
     <string name="resource_limit_hard_contact">Bitte %s um diesen Dienst weiter zu nutzen.</string>
     <string name="dialog_title_error">Fehler</string>
@@ -1151,7 +1151,7 @@
     <string name="reason_hint">Grund</string>
     <string name="settings_inline_url_preview_summary">Linkvorschau im Chat aktivieren, falls dein Home-Server diese Funktion unterstützt.</string>
     <string name="settings_send_typing_notifs">Sende Schreibbenachrichtigungen</string>
-    <string name="settings_send_typing_notifs_summary">Lasse andere Benutzer:innen wissen, dass du tippst.</string>
+    <string name="settings_send_typing_notifs_summary">Lasse andere Benutzer wissen, dass du tippst.</string>
     <string name="settings_send_markdown">Markdown-Formatierung</string>
     <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax, bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen, etwa Sternchen (*) um kursiven Text anzuzeigen.</string>
     <string name="settings_show_read_receipts">Zeige Lesebestätigungen</string>
@@ -1229,7 +1229,7 @@
     <string name="settings_troubleshoot_test_play_services_title">Prüfung der Play-Dienste</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play-Dienste-APK ist verfügbar und aktuell.</string>
     <string name="settings_troubleshoot_test_token_registration_title">Token-Registrierung</string>
-    <string name="settings_troubleshoot_test_battery_failed">Wenn ein:e Benutzer:in ein abgestecktes Gerät mit ausgeschaltetem Bildschirm eine Weile nicht bewegt, wechselt es in den Bereitschaftsmodus. Dies hindert Apps daran, auf das Netzwerk zuzugreifen und verzögert die Ausführung von Aufgaben, Synchronisierungen und Standard-Alarmen.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Wenn ein Benutzer ein abgestecktes Gerät mit ausgeschaltetem Bildschirm eine Weile nicht bewegt, wechselt es in den Bereitschaftsmodus. Dies hindert Apps daran, auf das Netzwerk zuzugreifen und verzögert die Ausführung von Aufgaben, Synchronisierungen und Standard-Alarmen.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignoriere Optimierungen</string>
     <string name="startup_notification_fdroid_battery_optim_title">Hintergrundverbindung</string>
     <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} muss eine Hintergrundverbindung (nur geringe Belastung) aufrechterhalten, um verlässliche Benachrichtigungen zu erhalten.
@@ -1283,14 +1283,14 @@
     <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
     <string name="settings_notification_by_event">Präferenz der Benachrichtigungen nach Ereignis</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nDieser Fehler ist außerhalb von ${app_name} passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den/die Durchschnittsnutzer:in nicht betreffen.</string>
+\nDieser Fehler ist außerhalb von ${app_name} passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nDieser Fehler liegt nicht unter der Kontrolle von ${app_name}. Er kann aus verschiedenen Gründen auftreten. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Außerdem kannst Du prüfen, ob die Datennutzung der Google Play-Dienste unbeschränkt ist und die Geräteuhr richtig eingestellt ist. Der Fehler kann aber auch unter Custom-ROMs auftreten.</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nDieser Fehler ist außerhalb von ${app_name} passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
     <string name="settings_cryptography_manage_keys">Verwaltung der Krypto-Schlüssel</string>
     <string name="encryption_settings_manage_message_recovery_summary">Schlüssel-Sicherung verwalten</string>
-    <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger!nnen haben die Schlüssel um diese Nachrichten zu lesen. 
+    <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der Empfänger haben die Schlüssel um diese Nachrichten zu lesen.
 \n
 \nSichere deine Schlüssel, um sie nicht zu verlieren.</string>
     <string name="recovery_key_export_saved_as_warning">Der Wiederherstellungsschlüssel wurde nach \'%s\' gespeichert. 
@@ -1367,7 +1367,7 @@
     <string name="new_recovery_method_popup_title">Neue Schlüsselsicherung</string>
     <string name="new_recovery_method_popup_description">Eine neue Schlüsselsicherung wurde entdeckt.
 \n
-\nWenn du die neue Wiederherstellungsmethode nicht festgelegt hast, kann ein/e Angreifer!n versuchen auf dein Konto zuzugreifen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein.</string>
+\nWenn du die neue Wiederherstellungsmethode nicht festgelegt hast, kann ein Angreifer versuchen auf dein Konto zuzugreifen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein.</string>
     <string name="new_recovery_method_popup_was_me">Ich war es</string>
     <string name="keys_backup_banner_setup_line1">Verliere nie mehr verschlüsselte Nachrichten</string>
     <string name="keys_backup_banner_setup_line2">Richte die Schlüsselsicherung ein</string>
@@ -1448,10 +1448,10 @@
     <string name="sas_incoming_request_title">Eingehende Verifizierungsanfrage</string>
     <string name="sas_incoming_verification_request_dialog">Du hast eine eingehende Verifizierungsanfrage erhalten.</string>
     <string name="sas_view_request_action">Anfrage ansehen</string>
-    <string name="sas_waiting_for_partner">Warte auf Bestätigung des/r anderen Nutzer*in…</string>
+    <string name="sas_waiting_for_partner">Warte auf Bestätigung des Partners…</string>
     <string name="sas_verified">Verifiziert!</string>
     <string name="sas_verified_successful">Du hast diese Sitzung erfolgreich verifiziert.</string>
-    <string name="sas_verified_successful_description">Sichere Nachrichten mit diesem/r Benutzer:in sind Ende-zu-Ende verschlüsselt und können nicht von Dritten mitgelesen werden.</string>
+    <string name="sas_verified_successful_description">Sichere Nachrichten mit diesem Benutzer sind Ende-zu-Ende verschlüsselt und können nicht von Dritten mitgelesen werden.</string>
     <string name="sas_got_it">Verstanden</string>
     <string name="sas_verification_request_notification_channel_title">Schlüssel-Verifizierung</string>
     <string name="sas_cancelled_dialog_title">Anfrage abgebrochen</string>
@@ -1460,7 +1460,7 @@
     <string name="sas_verification_request_notification_channel">Interaktive Sitzungs-Verifizierung</string>
     <string name="sas_incoming_request_notif_title">Verifizierungsanfrage</string>
     <string name="sas_incoming_request_notif_content">%s möchte deine Sitzung verifizieren</string>
-    <string name="sas_error_m_user">Der/die Benutzer:in hat die Verifizierung abgebrochen</string>
+    <string name="sas_error_m_user">Der Benutzer hat die Verifizierung abgebrochen</string>
     <string name="sas_error_m_timeout">Der Verifizierungsprozess ist abgelaufen</string>
     <string name="sas_error_m_unexpected_message">Die Sitzung hat eine unerwartete Nachricht erhalten</string>
     <string name="sas_error_m_invalid_message">Eine ungültige Nachricht wurde empfangen</string>
@@ -1483,7 +1483,7 @@
     <string name="message_add_reaction">Reaktion hinzufügen</string>
     <string name="message_view_reaction">Reaktionen ansehen</string>
     <string name="reactions">Reaktionen</string>
-    <string name="event_redacted_by_user_reason">Ereignis von Benutzer:in gelöscht</string>
+    <string name="event_redacted_by_user_reason">Ereignis von Benutzer gelöscht</string>
     <string name="event_redacted_by_admin_reason">Ereignis moderiert durch Raum-Administrator</string>
     <string name="last_edited_info_message">Zuletzt bearbeitet von %1$s am %2$s</string>
     <string name="create_new_room">Neuen Raum erstellen</string>
@@ -1508,7 +1508,7 @@
     <string name="key_share_request">Schlüsselaustausch anfragen</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Es sieht so aus, als hättest du bereits ein Setup-Schlüssel-Backup von einer anderen Sitzung. Möchtest du es durch das, was du gerade erstellt hast, ersetzen\?</string>
     <string name="sas_security_advise">Für maximale Sicherheit empfehlen wir, dies persönlich zu tun, oder ein anderes vertrautes Kommunikationsmedium zu nutzen.</string>
-    <string name="sas_incoming_request_description">Überprüfe diese Sitzung, um sie als vertrauenswürdig zu markieren. Sitzungen von anderen Nutzer:innen zu vertrauen gibt dir zusätzliche Sicherheit bei der Verwendung von Ende-zu-Ende verschlüsselten Nachrichten.</string>
+    <string name="sas_incoming_request_description">Überprüfe diese Sitzung, um sie als vertrauenswürdig zu markieren. Sitzungen von anderen Nutzern zu vertrauen gibt dir zusätzliche Sicherheit bei der Verwendung von Ende-zu-Ende verschlüsselten Nachrichten.</string>
     <string name="sas_incoming_request_description_2">Durch Verifizieren dieser Sitzung wird sie bei dir und deinem Gegenüber als vertrauenswürdig markiert.</string>
     <string name="sas_emoji_description">Verifiziere diese Sitzung, indem du bestätigst, dass das folgende Emoji auf dem Bildschirm deines Gegenübers angezeigt wird</string>
     <string name="sas_decimal_description">Verifiziere diese Sitzung, indem du bestätigst, dass die folgenden Zahlen auf dem Bildschirm deines Gegenübers angezeigt werden</string>
@@ -1618,8 +1618,8 @@
     <string name="settings_discovery_mail_pending">ausstehend</string>
     <string name="settings_discovery_enter_identity_server">Gib einen neuen Identitätsserver ein</string>
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Home-Server herstellen</string>
-    <string name="call_failed_no_ice_description">Bitte frage den/die Administrator/in deines Home-Servers (%1$s) nach der Einrichtung eines TURN-Servers, damit Anrufe zuverlässig funktionieren.
-\n 
+    <string name="call_failed_no_ice_description">Bitte frage den Administrator deines Home-Servers (%1$s) nach der Einrichtung eines TURN-Servers, damit Anrufe zuverlässig funktionieren.
+\n
 \nAlternativ kann ein öffentlicher Server auf %2$s genutzt werden. Dies wird jedoch weniger zuverlässig sein und deine IP-Adresse wird gegenüber diesem Server preisgegeben. Du kannst den Server auch in den Einstellungen anpassen.</string>
     <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
     <string name="login_error_homeserver_not_found">Kann Home-Server nicht bei dieser URL erreichen. Bitte überprüfen</string>
@@ -1668,7 +1668,7 @@
     <string name="settings_discovery_msisdn_title">Auffindbare Telefonnummern</string>
     <string name="settings_discovery_please_enter_server">Bitte gib die Adresse des Identitätsservers ein</string>
     <string name="settings_discovery_no_terms_title">Identitätsserver hat keine Nutzungsbedingungen</string>
-    <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem/r Besitzer!n des Dienstes vertraust</string>
+    <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem Besitzer des Dienstes vertraust</string>
     <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gib den Verifizierungscode ein, den sie enthält.</string>
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
     <string name="labs_allow_extended_logging_summary">Ausführliche Logs werden der Entwicklung der App dadurch helfen, dass mehr Informationen übertragen werden, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
@@ -1692,8 +1692,8 @@
     <string name="two_users_read">gelesen von %1$s und %2$s</string>
     <string name="one_user_read">gelesen von %s</string>
     <plurals name="fallback_users_read">
-        <item quantity="one">gelesen von einem Nutzer:in</item>
-        <item quantity="other">gelesen von %d Nutzer:innen</item>
+        <item quantity="one">gelesen von einem Nutzer</item>
+        <item quantity="other">gelesen von %d Nutzern</item>
     </plurals>
     <string name="error_file_too_big">Die Datei \'%1$s\' (%2$s) ist zu groß, um sie hochzuladen. Das Limit ist %3$s.</string>
     <string name="error_attachment">Beim Abrufen des Anhangs ist ein Fehler aufgetreten.</string>
@@ -1709,24 +1709,24 @@
     <string name="report_content_custom_title">Diesen Inhalt melden</string>
     <string name="report_content_custom_hint">Meldegrund</string>
     <string name="report_content_custom_submit">MELDEN</string>
-    <string name="block_user">NUTZER:IN IGNORIEREN</string>
+    <string name="block_user">NUTZER IGNORIEREN</string>
     <string name="content_reported_title">Inhalt gemeldet</string>
-    <string name="content_reported_content">Dieser Inhalt wurde gemeldet. 
-\n 
-\nWenn du keine weiteren Inhalte dieses/r Nutzers/in sehen möchtest, kannst sie/ihn ignorieren, um jene Nachrichten auszublenden.</string>
+    <string name="content_reported_content">Dieser Inhalt wurde gemeldet.
+\n
+\nWenn du keine weiteren Inhalte dieses Nutzers sehen möchtest, kannst ihn ignorieren, um jene Nachrichten auszublenden.</string>
     <string name="content_reported_as_spam_title">Als Spam gemeldet</string>
     <string name="content_reported_as_spam_content">Dieser Inhalt wurde als Spam gemeldet.
-\n 
-\nWenn du keine weiteren Inhalte dieses/r Nutzers/in sehen möchtest, kannst sie/ihn ignorieren, um jene Nachrichten auszublenden.</string>
+\n
+\nWenn du keine weiteren Inhalte dieses Nutzers sehen möchtest, kannst ihn ignorieren, um jene Nachrichten auszublenden.</string>
     <string name="content_reported_as_inappropriate_title">Als unangebracht gemeldet</string>
     <string name="content_reported_as_inappropriate_content">Dieser Inhalt wurde als unangebracht gemeldet.
-\n 
-\nWenn du keine weiteren Inhalte dieses/r Nutzers/in sehen möchtest, kannst sie/ihn ignorieren, um jene Nachrichten auszublenden.</string>
+\n
+\nWenn du keine weiteren Inhalte dieses Nutzers sehen möchtest, kannst ihn ignorieren, um jene Nachrichten auszublenden.</string>
     <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} benötigt Berechtigungen, um deine E2E Schlüssel zu speichern.
 \n
 \nBitte erlaube den Zugriff im nächsten Pop-Up sodass du deine Schlüssel manuell exportieren kannst.</string>
     <string name="no_network_indicator">Aktuell besteht keine Netzwerkverbindung</string>
-    <string name="message_ignore_user">Nutzer:in ignorieren</string>
+    <string name="message_ignore_user">Nutzer ignorieren</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Alle Nachrichten (laut)</string>
     <string name="room_list_quick_actions_notifications_all">Alle Nachrichten</string>
     <string name="room_list_quick_actions_notifications_mentions">Nur Erwähnungen</string>
@@ -1735,7 +1735,7 @@
     <string name="room_list_quick_actions_leave">Raum verlassen</string>
     <string name="notice_member_no_changes">%1$s hat keine Änderungen gemacht</string>
     <string name="command_description_spoiler">Sendet die Nachricht als Spoiler</string>
-    <string name="no_ignored_users">Du ignorierst keine Nutzer:innen</string>
+    <string name="no_ignored_users">Du ignorierst keine Nutzer</string>
     <string name="help_long_click_on_room_for_more_options">Halte auf einem Raum um mehr Optionen anzuzeigen</string>
     <string name="room_join_rules_public">%1$s hat den Raum für jeden, der den Link hat, öffentlich gemacht.</string>
     <string name="timeline_unread_messages">Ungelesene Nachrichten</string>
@@ -1750,7 +1750,7 @@
     <string name="login_server_other_title">Andere</string>
     <string name="login_server_other_text">Benutzerdefinierte &amp; erweiterte Einstellungen</string>
     <string name="login_continue">Fortfahren</string>
-    <string name="settings_discovery_disconnect_identity_server_info">Eine Trennung von deinem Identitätsserver würde bedeuten, dass du weder von anderen Nutzer:innen gefunden werden, noch diese per E-Mail oder Telefonnummer einladen kannst.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Eine Trennung von deinem Identitätsserver würde bedeuten, dass du weder von anderen Nutzern gefunden werden, noch diese per E-Mail oder Telefonnummer einladen kannst.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Du teilst deine Email Adressen oder Telefonnummern momentan auf dem Identitätsserver %1$s. Du wirst dich erneut mit %2$s verbinden müssen, um mit dem Teilen aufzuhören.</string>
     <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitätsservers (%s) zu, um zu erlauben per E-Mail oder Telefonnummer gefunden zu werden.</string>
     <string name="error_handling_incoming_share">Zu teilende Daten nicht verarbeitbar</string>
@@ -1837,7 +1837,7 @@
     <string name="login_signup_cancel_confirmation_title">Warnung</string>
     <string name="login_a11y_captcha_container">Bitte löse das Captcha</string>
     <string name="login_error_outdated_homeserver_title">Veralteter Home-Server</string>
-    <string name="login_error_outdated_homeserver_content">Auf diesem Home-Server läuft eine zu alte Version, um eine Verbindung herzustellen. Bitten deine Home-Server-Administration um ein Upgrade.</string>
+    <string name="login_error_outdated_homeserver_content">Auf diesem Home-Server läuft eine zu alte Version, um eine Verbindung herzustellen. Bitte deinen Home-Server-Administrator um ein Upgrade.</string>
     <plurals name="login_error_limit_exceeded_retry_after">
         <item quantity="one">Es wurden zu viele Anfragen gesendet. Versuche es erneut in %1$d Sekunde…</item>
         <item quantity="other">Es wurden zu viele Anfragen gesendet. Versuche es erneut in %1$d Sekunden…</item>
@@ -1850,11 +1850,11 @@
 \n
 \n• Du hast diese Sitzung aus einer anderen Sitzung heraus gelöscht.
 \n
-\n• Die Administration deines Servers hat deinen Zugriff aus Sicherheitsgründen ungültig gemacht.</string>
+\n• Der Administrator deines Servers hat deinen Zugriff aus Sicherheitsgründen ungültig gemacht.</string>
     <string name="signed_out_submit">Melde dich erneut an</string>
     <string name="soft_logout_title">Du bist abgemeldet</string>
     <string name="soft_logout_signin_title">Anmelden</string>
-    <string name="soft_logout_signin_notice">Deine Home-Server-Administration (%1$s) hat dich von deinem Konto %2$s (%3$s) abgemeldet.</string>
+    <string name="soft_logout_signin_notice">Dein Home-Server-Administrator (%1$s) hat dich von deinem Konto %2$s (%3$s) abgemeldet.</string>
     <string name="soft_logout_signin_e2e_warning_notice">Melden dich an, um ausschließlich auf diesem Gerät gespeicherte Verschlüsselungsschlüssel wiederherzustellen. Du benötigst sie, um deine verschlüsselten Nachrichten auf jedem Gerät zu lesen.</string>
     <string name="soft_logout_signin_submit">Anmelden</string>
     <string name="soft_logout_signin_password_hint">Passwort</string>
@@ -1868,7 +1868,7 @@
 \nMelde dich erneut an, um auf deine Kontodaten und Nachrichten zuzugreifen.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Du verlierst den Zugriff auf verschlüsselte Nachrichten, außer, du meldest dich an, um den Verschlüsselungsschlüssel wiederherzustellen.</string>
     <string name="soft_logout_clear_data_dialog_submit">Daten löschen</string>
-    <string name="template_soft_logout_sso_not_same_user_error">Die aktuelle Sitzung gehört dem/der Benutzer!n%1$s. Die angegebenen Anmeldeinformationen sind von Benutzer!n %2$s. Dies wird nicht von ${app_name} unterstützt.
+    <string name="template_soft_logout_sso_not_same_user_error">Die aktuelle Sitzung gehört dem Benutzer %1$s. Die angegebenen Anmeldeinformationen sind vom Benutzer %2$s. Dies wird nicht von ${app_name} unterstützt.
 \nBitte zuerst die Daten löschen und dann erneut anmelden.</string>
     <string name="permalink_malformed">matrix.to-Link fehlerhaft</string>
     <string name="bug_report_error_too_short">Die Beschreibung ist zu kurz</string>
@@ -1876,7 +1876,7 @@
     <string name="settings_show_devices_list">Alle meine Sitzungen anzeigen</string>
     <string name="settings_advanced_settings">Erweiterte Einstellungen</string>
     <string name="settings_developer_mode">Entwicklungsmodus</string>
-    <string name="settings_developer_mode_summary">Der Entwicklungsmodus aktiviert versteckte Funktionen und kann die Anwendung weniger stabil machen. Nur für Entwickler!nnen!</string>
+    <string name="settings_developer_mode_summary">Der Entwicklungsmodus aktiviert versteckte Funktionen und kann die Anwendung weniger stabil machen. Nur für Entwickler!</string>
     <string name="settings_rageshake">Wutschütteln</string>
     <string name="settings_rageshake_detection_threshold">Erkennungsschwelle</string>
     <string name="settings_rageshake_detection_threshold_summary">Schüttel dein Telefon, um die Erkennungsschwelle zu testen</string>
@@ -1894,9 +1894,9 @@
     <string name="verification_conclusion_warning">Nicht vertrauenswürdige Anmeldung</string>
     <string name="verification_sas_match">Sie stimmen überein</string>
     <string name="verification_sas_do_not_match">Sie stimmen nicht überein</string>
-    <string name="verify_user_sas_emoji_help_text">Verifiziere diese/n Benutzer!n, indem du bestätigst, dass diese einzigartigen Emoji in derselben Reihenfolge auf dem Bildschirm deines Gegenübers angezeigt werden.</string>
+    <string name="verify_user_sas_emoji_help_text">Verifiziere diesen Benutzer, indem du bestätigst, dass diese einzigartigen Emoji in derselben Reihenfolge auf dem Bildschirm deines Gegenübers angezeigt werden.</string>
     <string name="verify_user_sas_emoji_security_tip">Für ultimative Sicherheit verwende ein anderes vertrauenswürdiges Kommunikationsmittel oder mache es persönlich.</string>
-    <string name="verification_green_shield">Suche nach dem grünen Schild, um sicherzustellen, dass ein/e Benutzer!n vertrauenswürdig ist. Vertraue allen Benutzer!nnen in einem Raum, um sicherzustellen, dass der Raum sicher ist.</string>
+    <string name="verification_green_shield">Suche nach dem grünen Schild, um sicherzustellen, dass ein Benutzer vertrauenswürdig ist. Vertraue alle Benutzer in einem Raum, um sicherzustellen, dass der Raum sicher ist.</string>
     <string name="verification_conclusion_not_secure">Nicht sicher</string>
     <string name="verification_conclusion_compromised">Eine der folgenden Möglichkeiten kann beeinträchtigt sein: 
 \n 
@@ -1919,7 +1919,7 @@
     <string name="verification_verify_device_manually">Manuelle Verifizierung</string>
     <string name="you">Ich</string>
     <string name="verification_scan_notice">Scanne den Code mit dem Gerät des Gegenüber für eine gegenseitige Überprüfung</string>
-    <string name="verification_scan_their_code">Scanne ihren/seinen Code</string>
+    <string name="verification_scan_their_code">Scanne Code des Anderen</string>
     <string name="verification_scan_emoji_title">Kann nicht scannen</string>
     <string name="verification_scan_emoji_subtitle">Wenn ihr nicht am selben Ort seid, vergleicht Emoji stattdessen</string>
     <string name="verification_no_scan_emoji_title">Verifizieren via Emoji-Vergleich</string>
@@ -1952,7 +1952,7 @@
     <string name="room_member_power_level_moderators">Moderierende</string>
     <string name="room_member_power_level_custom">benutzerdefiniert</string>
     <string name="room_member_power_level_invites">Eingeladen</string>
-    <string name="room_member_power_level_users">Nutzer:innen</string>
+    <string name="room_member_power_level_users">Nutzer</string>
     <string name="room_member_power_level_admin_in">Admin in %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderation in %1$s</string>
     <string name="room_member_jump_to_read_receipt">Springen &amp; als gelesen markieren</string>
@@ -1978,7 +1978,7 @@
     <string name="verification_emoji_notice">Vergleiche die einzigartigen Emoji und stell sicher, dass sie in derselben Reihenfolge angezeigt werden.</string>
     <string name="verification_code_notice">Vergleiche den Code mit dem Code auf dem Bildschirm deines Gegenübers.</string>
     <string name="verification_conclusion_ok_notice">Nachrichten mit diesem Gegenüber sind Ende-zu-Ende verschlüsselt und können nicht von Dritten gelesen werden.</string>
-    <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzer!nnen sehen sie als vertrauenswürdig an.</string>
+    <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzer sehen sie als vertrauenswürdig an.</string>
     <string name="encryption_information_cross_signing_state">Cross-Signing</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing ist aktiviert
 \nPrivate Schlüssel auf dem Gerät.</string>
@@ -2000,7 +2000,7 @@
         <item quantity="other">%d aktive Sitzungen</item>
     </plurals>
     <string name="crosssigning_verify_this_session">Verifiziere diese Sitzung</string>
-    <string name="crosssigning_other_user_not_trust">Andere Benutzer!nnen vertrauen ihr möglicherweise nicht</string>
+    <string name="crosssigning_other_user_not_trust">Andere Benutzer vertrauen ihr möglicherweise nicht</string>
     <string name="complete_security">Vollständige Sicherheit</string>
     <string name="verification_open_other_to_verify">Nutze eine vorhandene Sitzung um diese Sitzung zu verifizieren und ihr Zugriff auf verschlüsselte Nachrichten zu gewähren.</string>
     <string name="verification_profile_verify">Verifizieren</string>
@@ -2012,7 +2012,7 @@
     <string name="not_trusted">Nicht vertraut</string>
     <string name="verification_profile_device_verified_because">Diese Sitzung ist für sichere Nachrichtenübertragung vertrauenswürdig, weil %1$s (%2$s) sie verifiziert hat:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) hat sich in einer neuen Sitzung angemeldet:</string>
-    <string name="verification_profile_device_untrust_info">Bis diese/r Benutzer!n dieser Sitzung vertraut, werden an und von ihr/ihm gesendete Nachrichten mit Warnungen gekennzeichnet. Alternativ kannst du dies manuell überprüfen.</string>
+    <string name="verification_profile_device_untrust_info">Bis dieser Benutzer dieser Sitzung vertraut, werden an und von ihm gesendete Nachrichten mit Warnungen gekennzeichnet. Alternativ kannst du dies manuell überprüfen.</string>
     <string name="initialize_cross_signing">Initialisiere Cross-Signing</string>
     <string name="reset_cross_signing">Schlüssel zurücksetzen</string>
     <string name="a11y_qr_code_for_verification">QR-Code</string>
@@ -2049,8 +2049,8 @@
     <string name="delete_event_dialog_content">Möchtest du dieses Ereignis wirklich entfernen (löschen)\? Beachte, dass beim Löschen eines Raumnamens oder einer Themenänderung die Änderung rückgängig gemacht werden kann.</string>
     <string name="delete_event_dialog_reason_checkbox">Grund hinzufügen</string>
     <string name="delete_event_dialog_reason_hint">Grund für das Editieren</string>
-    <string name="event_redacted_by_user_reason_with_reason">Ereignis gelöscht von Benutzer!n, Grund: %1$s</string>
-    <string name="event_redacted_by_admin_reason_with_reason">Ereignis vom Raumadministration moderiert, Grund: %1$s</string>
+    <string name="event_redacted_by_user_reason_with_reason">Ereignis durch den Benutzer gelöscht, Grund: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Ereignis vom Raumadministrator moderiert, Grund: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Schlüssel sind bereits aktuell!</string>
     <string name="spoiler">Spoiler</string>
     <string name="room_member_power_level_custom_in">Benutzerdefiniert (%1$d) in %2$s</string>
@@ -2063,8 +2063,8 @@
     <string name="verify_new_session_notice">Benutze diese Sitzung um deine neue zu verfizieren, damit sie auf verschlüsselte Nachrichten zugreifen kann.</string>
     <string name="verify_new_session_was_not_me">Das war ich nicht</string>
     <string name="verify_new_session_compromized">Dein Account ist möglicherweise komprimittiert</string>
-    <string name="verify_cancel_self_verification_from_untrusted">Wenn du abbrichst, wirst du auf diesem Gerät keine verschlüsselten Nachrichten lesen können, und andere Benutzer:innen werden ihm nicht vertrauen</string>
-    <string name="verify_cancel_self_verification_from_trusted">Wenn du abbrichst, wirst du auf deinem neuen Gerät keine verschlüsselten Nachrichten lesen können, und andere Benutzer:innen werden ihm nicht vertrauen</string>
+    <string name="verify_cancel_self_verification_from_untrusted">Wenn du abbrichst, wirst du auf diesem Gerät keine verschlüsselten Nachrichten lesen können, und andere Benutzer werden ihm nicht vertrauen</string>
+    <string name="verify_cancel_self_verification_from_trusted">Wenn du abbrichst, wirst du auf deinem neuen Gerät keine verschlüsselten Nachrichten lesen können, und andere Benutzer werden ihm nicht vertrauen</string>
     <string name="verify_cancel_other">Du wirst %1$s (%2$s) nicht verifizieren, wenn du jetzt abbrichst. Beginne in deren Nutzerprofil erneut.</string>
     <string name="verify_not_me_self_verification">Eines der folgenden könnte kom­pro­mit­tie­rt sein:
 \n
@@ -2115,7 +2115,7 @@
     <string name="auth_flow_not_supported">Dies kann nicht von einem mobilen Gerät erfolgen</string>
     <string name="settings_when_rooms_are_upgraded">Wenn Räume verbessert werden</string>
     <string name="encryption_enabled">Verschlüsselung aktiviert</string>
-    <string name="encryption_enabled_tile_description">Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt. Erfahre mehr &amp; verifiziere Benutzer:innen in deren Profil.</string>
+    <string name="encryption_enabled_tile_description">Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt. Erfahre mehr &amp; verifiziere Benutzer in deren Profil.</string>
     <string name="encryption_unknown_algorithm_tile_description">Die Verschlüsselung in diesem Raum wird nicht unterstützt</string>
     <string name="qr_code_scanned_verif_waiting">Warte auf %s…</string>
     <string name="set_recovery_passphrase">%s setzen</string>
@@ -2185,20 +2185,20 @@
     <string name="external_link_confirmation_message">Dieser Link %1$s bringt dich zu einer anderen Seite: %2$s.
 \n
 \nWillst du wirklich fortfahren\?</string>
-    <string name="create_room_dm_failure">Konnte Direktnachricht nicht erzeugen. Prüfe die Nutzer:in, die du einladen willst und versuche es erneut.</string>
+    <string name="create_room_dm_failure">Konnte Direktnachricht nicht erzeugen. Prüfe die Nutzer, die du einladen willst und versuche es erneut.</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
-    <string name="add_members_to_room">Nutzer!n hinzufügen</string>
+    <string name="add_members_to_room">Mitglieder hinzufügen</string>
     <string name="invite_users_to_room_action_invite">EINLADEN</string>
-    <string name="inviting_users_to_room">Benutzer:innen werden eingeladen…</string>
-    <string name="invite_users_to_room_title">Benutzer:innen einladen</string>
+    <string name="inviting_users_to_room">Benutzer werden eingeladen…</string>
+    <string name="invite_users_to_room_title">Benutzer einladen</string>
     <string name="invitation_sent_to_one_user">Einladung gesendet an %1$s</string>
     <string name="invitations_sent_to_two_users">Einladungen gesendet an %1$s und %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="one">Einladungen gesendet an %1$s und einen weiteren Benutzer</item>
         <item quantity="other">Einladungen gesendet an %1$s und %2$d weitere Benutzer</item>
     </plurals>
-    <string name="invite_users_to_room_failure">Wir konnten die Benutzer:innen nicht einladen. Bitte überprüfe die Benutzer:innen, welchen du einladen möchtest, und versuche es erneut.</string>
+    <string name="invite_users_to_room_failure">Wir konnten den Benutzer nicht einladen. Bitte überprüfe den Benutzernamen, welchen du einladen möchtest und versuche es erneut.</string>
     <string name="pause_video">Pause</string>
     <string name="action_copy">Kopieren</string>
     <string name="bottom_action_notification">Benachrichtigungen</string>
@@ -2207,7 +2207,7 @@
     <string name="dismiss">Ablehnen</string>
     <string name="dialog_title_success">Erfolg</string>
     <string name="call_failed_no_connection_description">Echtzeitverbindung konnte nicht hergestellt werden.
-\nBitte den/die Administrator/in deines Home-Servers, einen TURN-Server so zu konfigurieren, dass Anrufe zuverlässig funktionieren.</string>
+\nBitte den Administrator deines Home-Servers, einen TURN-Server so zu konfigurieren, dass Anrufe zuverlässig funktionieren.</string>
     <string name="call_select_sound_device">Wähle Audiogerät aus</string>
     <string name="sound_device_phone">Telefonie</string>
     <string name="sound_device_speaker">Lautsprecher</string>
@@ -2224,25 +2224,25 @@
     <string name="return_to_call">Zum Anruf zurückkehren</string>
     <string name="room_participants_action_cancel_invite">Einladung zurückziehen</string>
     <string name="room_participants_power_level_demote_warning_title">Möchtest du dich zurückstufen\?</string>
-    <string name="room_participants_power_level_demote_warning_prompt">Du kannst die Zurückstufung nicht rückgängig machen und du wirst die Rechte nur mit einem/r anderen berechtigten Benutzer:in im Raum zurückerlangen können.</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Du kannst die Zurückstufung nicht rückgängig machen und du wirst die Rechte nur mit einem anderen berechtigten Benutzer im Raum zurückerlangen können.</string>
     <string name="room_participants_power_level_demote">Zurückstufen</string>
-    <string name="room_participants_action_ignore_title">Benutzer:in ignorieren</string>
-    <string name="room_participants_action_ignore_prompt_msg">Durch das Ignorieren werden für dich alle Nachrichten des/r Nutzers/in ausgeblendet.
+    <string name="room_participants_action_ignore_title">Benutzer ignorieren</string>
+    <string name="room_participants_action_ignore_prompt_msg">Durch das Ignorieren werden für dich alle Nachrichten des Nutzers ausgeblendet.
 \n
 \nDu kannst die Aktion jederzeit in den allgemeinen Einstellungen rückgängig machen.</string>
     <string name="room_participants_action_unignore_title">Ignorieren des Benutzers rückgängig machen</string>
     <string name="room_participants_action_unignore_prompt_msg">Das Aufheben der Ignorierung wird alle Nachrichten des Benutzers wieder einblenden.</string>
     <string name="room_participants_action_cancel_invite_title">Einladung zurückziehen</string>
-    <string name="room_participants_action_cancel_invite_prompt_msg">Bist du dir sicher, dass du die Einladung für diese:n Benutzer:in zurückziehen möchtest\?</string>
-    <string name="room_participants_kick_title">Benutzer:in entfernen</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Bist du dir sicher, dass du die Einladung für diesen Benutzer zurückziehen möchtest\?</string>
+    <string name="room_participants_kick_title">Benutzer entfernen</string>
     <string name="room_participants_kick_reason">Grund für das Entfernen</string>
-    <string name="room_participants_kick_prompt_msg">Das Entfernen wird den/die Benutzer!n von diesem Raum ausschließen.
+    <string name="room_participants_kick_prompt_msg">Das Entfernen wird den Benutzer von diesem Raum ausschließen.
 \n
-\nUm einen erneuten Beitritt zu verhindern, solltest du ihn/sie stattdessen bannen.</string>
-    <string name="room_participants_ban_title">Benutzer:in bannen</string>
+\nUm einen erneuten Beitritt zu verhindern, solltest du ihn stattdessen bannen.</string>
+    <string name="room_participants_ban_title">Benutzer bannen</string>
     <string name="room_participants_ban_reason">Grund für den Bann</string>
     <string name="room_participants_unban_title">Bann des Benutzers aufheben</string>
-    <string name="room_participants_unban_prompt_msg">Das Aufheben des Bannes wird dem/r Benutzer:in erlauben dem Raum wieder beizutreten.</string>
+    <string name="room_participants_unban_prompt_msg">Das Aufheben des Bannes wird dem Benutzer erlauben dem Raum wieder beizutreten.</string>
     <string name="settings_secure_backup_section_title">Sicheres Backup</string>
     <string name="settings_secure_backup_manage">Verwalten</string>
     <string name="settings_secure_backup_setup">Backup einrichten</string>
@@ -2292,7 +2292,7 @@
     <string name="send_a_sticker">Sticker</string>
     <string name="room_profile_section_admin">Administrative Aktionen</string>
     <string name="room_member_power_level_default_in">Standard in %1$s</string>
-    <string name="settings_hs_admin_e2e_disabled">Dein:e Serveradministrator:in hat in privaten Räumen &amp; Direktnachrichten Ende-zu-Ende Verschlüsselung standardmäßig deaktiviert.</string>
+    <string name="settings_hs_admin_e2e_disabled">Dein Serveradministrator hat in privaten Räumen und Direktnachrichten Ende-zu-Ende Verschlüsselung standardmäßig deaktiviert.</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Flugzeugmodus ist aktiv</string>
     <string name="bootstrap_info_text_2">Gib eine Sicherheitsphrase ein, die nur du kennst. Diese wird benutzt um deine Daten auf dem Server geheim zu halten.</string>
     <string name="bootstrap_cancel_text">Wenn du jetzt abbrichst und den Zugriff zu deinen Sitzungen verlierst, kannst du verschlüsselte Nachrichten &amp; Daten verlieren.
@@ -2447,7 +2447,7 @@
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Die Applikation wartet auf den PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">Push testen</string>
     <string name="search_is_not_supported_in_e2e_room">Die Suche in verschlüsselten Räumen wird noch nicht unterstützt.</string>
-    <string name="search_banned_user_hint">Gebannte Nutzer:innen filtern</string>
+    <string name="search_banned_user_hint">Gebannte Nutzer filtern</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du bist nicht berechtigt einen Anruf zu starten</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Du hast keine Berechtigung ein Konferenzgespräch zu starten</string>
     <string name="settings_security_pin_code_notifications_summary_on">Zeige Details wie Raumnamen und Nachrichteninhalt.</string>
@@ -2462,7 +2462,7 @@
         <item quantity="one">Zeigen das Gerät, mit dem du jetzt überprüfen kannst</item>
         <item quantity="other">Zeigen %d Geräte, mit denen du jetzt überprüfen kannst</item>
     </plurals>
-    <string name="secure_backup_reset_no_history">Du wirst ohne Nachrichtenverlauf, Nachrichten, vertraute Geräten und vertraute Nutzer!nnen neu starten</string>
+    <string name="secure_backup_reset_no_history">Du wirst ohne Nachrichtenverlauf, Nachrichten, vertraute Geräten und vertraute Nutzern neu starten</string>
     <string name="secure_backup_reset_if_you_reset_all">Wenn du alles zurücksetzt</string>
     <string name="secure_backup_reset_all_no_other_devices">Mache dies nur, wenn du kein anderes Gerät hast, mit dem du dieses verifizieren kannst.</string>
     <string name="secure_backup_reset_all">Alles zurücksetzen</string>
@@ -2474,9 +2474,9 @@
     <string name="direct_room_profile_section_more_settings">Einstellungen</string>
     <string name="direct_room_profile_encrypted_subtitle">Nachrichten hier sind Ende-zu-Ende verschlüsselt.
 \n
-\nDeine Nachrichten sind mit digitalen Schlüsseln gesichert. Nur du und der/die Empfänger!n haben die einzigen Schlüssel, um jene zu entsperren.</string>
+\nDeine Nachrichten sind mit digitalen Schlüsseln gesichert. Nur du und der Empfänger haben die einzigen Schlüssel, um jene zu entsperren.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Nachrichten hier sind nicht Ende-zu-Ende verschlüsselt.</string>
-    <string name="login_error_outdated_homeserver_warning_content">Dieser Homeserver läuft mit einer alten Version. Bitte deine Homeserver-Administration um ein Upgrade. Du kannst fortfahren, aber einige Funktionen funktionieren möglicherweise nicht richtig.</string>
+    <string name="login_error_outdated_homeserver_warning_content">Dieser Homeserver läuft mit einer alten Version. Bitte deinen Homeserver-Administrator um eine Aktualisierung. Du kannst fortfahren, aber einige Funktionen funktionieren möglicherweise nicht richtig.</string>
     <string name="direct_room_join_rules_invite_by_you">Du hast dies auf Einladungen beschränkt.</string>
     <string name="direct_room_join_rules_invite">%1$s hat dies auf Einladungen beschränkt.</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">Zeige vollständigen Verlauf in verschlüsselten Räumen an</string>
@@ -2519,7 +2519,7 @@
     <string name="settings_discovery_consent_title">E-Mails und Telefonnummern senden</string>
     <string name="direct_room_user_list_suggestions_title">Vorschläge</string>
     <string name="direct_room_user_list_contacts_title">Kontakte</string>
-    <string name="direct_room_user_list_known_title">Bekannte Nutzer:innen</string>
+    <string name="direct_room_user_list_known_title">Bekannte Nutzer</string>
     <string name="direct_room_user_list_recent_title">Kürzlich</string>
     <string name="qr_code">QR-Code</string>
     <string name="add_by_qr_code">Hinzufügen via QR-Code</string>
@@ -2586,7 +2586,7 @@
     <string name="room_alias_action_publish">Diese Adresse veröffentlichen</string>
     <string name="room_alias_local_address_add">Lokale Adresse hinzufügen</string>
     <string name="room_alias_local_address_empty">Dieser Raum hat keine lokalen Adressen</string>
-    <string name="room_alias_local_address_subtitle">Füge Adressen für diesen Raum hinzu, damit andere Nutzer:innen ihn auf %1$s finden können</string>
+    <string name="room_alias_local_address_subtitle">Füge Adressen für diesen Raum hinzu, damit andere Nutzer ihn auf %1$s finden können</string>
     <string name="room_alias_local_address_title">Lokale Adresse</string>
     <string name="room_alias_address_hint">Neue öffentliche Adresse (z.B. #alias:server)</string>
     <string name="room_alias_address_empty">Noch keine weiteren öffentlichen Adressen vorhanden.</string>
@@ -2603,12 +2603,12 @@
     <string name="room_permissions_change_main_address_for_the_room">Haupt-Adresse des Raums ändern</string>
     <string name="room_permissions_change_room_avatar">Raum-Bild ändern</string>
     <string name="room_permissions_modify_widgets">Widgets verändern</string>
-    <string name="room_permissions_notify_everyone">Jede/n benachrichtigen</string>
+    <string name="room_permissions_notify_everyone">Jeden benachrichtigen</string>
     <string name="room_permissions_remove_messages_sent_by_others">Von anderen gesendete Nachrichten entfernen</string>
-    <string name="room_permissions_ban_users">Nutzer:in verbannen</string>
-    <string name="room_permissions_kick_users">Nutzer:in entfernen</string>
+    <string name="room_permissions_ban_users">Nutzer verbannen</string>
+    <string name="room_permissions_kick_users">Nutzer entfernen</string>
     <string name="room_permissions_change_settings">Einstellungen ändern</string>
-    <string name="room_permissions_invite_users">Nutzer:in einladen</string>
+    <string name="room_permissions_invite_users">Nutzer einladen</string>
     <string name="room_permissions_send_messages">Nachrichten senden</string>
     <string name="room_permissions_default_role">Standard Rolle</string>
     <string name="room_permissions_title">Berechtigungen</string>
@@ -2641,7 +2641,7 @@
     <string name="re_authentication_activity_title">Erneute Authentifizierung erforderlich</string>
     <string name="failed_to_initialize_cross_signing">Cross Signing konnte nicht eingerichtet werden</string>
     <string name="error_unauthorized">Nicht autorisierte, fehlende gültige Authentifizierungsdaten</string>
-    <string name="call_transfer_users_tab_title">Nutzer:innen</string>
+    <string name="call_transfer_users_tab_title">Nutzer</string>
     <string name="call_transfer_failure">Beim Übertragen des Anrufs ist ein Fehler aufgetreten</string>
     <string name="call_transfer_title">Übertragen</string>
     <string name="call_transfer_connect_action">Verbinden</string>
@@ -2722,4 +2722,16 @@
 \nLade Daten herunter…</string>
     <string name="initial_sync_start_server_computing">Erste Synchronisation:
 \nWarte auf Serverantwort…</string>
+    <string name="event_status_a11y_sent">Gesendet</string>
+    <string name="settings_category_room_directory">Raumverzeichnis</string>
+    <string name="action_switch">Wechseln</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Zeige alle Räume im Raumverzeichnis, inklusive der Räume mit anstößigen Inhalten.</string>
+    <string name="settings_room_directory_show_all_rooms">Zeige Räume mit anstößigen Inhalten</string>
+    <string name="event_status_delete_all_failed_dialog_message">Bist du dir sicher, dass du alle nicht gesendete Nachrichten in diesem Raum löschen willst\?</string>
+    <string name="event_status_delete_all_failed_dialog_title">Nicht gesendete Nachrichten löschen</string>
+    <string name="event_status_a11y_failed">Fehlgeschlagen</string>
+    <string name="event_status_cancel_sending_dialog_message">Willst du zu sendende Nachrichten zurückziehen\?</string>
+    <string name="event_status_a11y_delete_all">Alle fehgeschlagene Nachrichten löschen</string>
+    <string name="event_status_failed_messages_warning">Senden der Nachricht gescheitert</string>
+    <string name="event_status_a11y_sending">Wird gesendet</string>
 </resources>

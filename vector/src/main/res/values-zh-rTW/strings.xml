@@ -2610,4 +2610,15 @@
 \n正在下載資料……</string>
     <string name="initial_sync_start_server_computing">初始同步：
 \n正在等待伺服器回應……</string>
+    <string name="event_status_delete_all_failed_dialog_message">您確定您想要刪除此聊天室中所有未傳送的訊息嗎？</string>
+    <string name="event_status_delete_all_failed_dialog_title">刪除未傳送的訊息</string>
+    <string name="event_status_failed_messages_warning">訊息傳送失敗</string>
+    <string name="event_status_cancel_sending_dialog_message">您想要取消傳送訊息嗎？</string>
+    <string name="event_status_a11y_delete_all">刪除所有失敗的訊息</string>
+    <string name="event_status_a11y_failed">失敗</string>
+    <string name="event_status_a11y_sent">已傳送</string>
+    <string name="event_status_a11y_sending">正在傳送</string>
+    <string name="settings_room_directory_show_all_rooms_summary">顯示聊天室目錄中的所有聊天室，包含有明確內容的聊天室。</string>
+    <string name="settings_room_directory_show_all_rooms">顯示帶有明確內容的聊天室</string>
+    <string name="settings_category_room_directory">聊天室目錄</string>
 </resources>
