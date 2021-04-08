@@ -16,15 +16,27 @@
 
 package org.matrix.android.sdk.internal.auth.registration
 
-import org.matrix.android.sdk.api.auth.data.Availability
+import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.isRegistrationAvailabilityError
 import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 
-internal class RegisterAvailableTask(private val authAPI: AuthAPI) : Task<String, Availability> {
-    override suspend fun execute(params: String): Availability {
-        return executeRequest(null) {
-            apiCall = authAPI.registerAvailable(params)
+internal class RegisterAvailableTask(private val authAPI: AuthAPI) : Task<String, RegistrationAvailability> {
+    override suspend fun execute(params: String): RegistrationAvailability {
+        try {
+            executeRequest(null) {
+                authAPI.registerAvailable(params)
+            }
+        } catch (exception: Throwable) {
+            if(exception.isRegistrationAvailabilityError()) {
+                return RegistrationAvailability.NotAvailable(exception as Failure.ServerError)
+            } else {
+                throw exception
+            }
         }
+
+        return RegistrationAvailability.Available
     }
 }
