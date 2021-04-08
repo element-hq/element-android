@@ -19,6 +19,7 @@ Improvements 🙌:
  - Fix quick click action (#3127)
  - Get Event after a Push for a faster notification display in some conditions
  - Always try to retry Http requests in case of 429 (#1300)
+ - registration availability endpoint added to matrix-sdk
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity

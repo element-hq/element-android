@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.auth
 
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.internal.auth.data.Availability
 import org.matrix.android.sdk.internal.auth.data.LoginFlowResponse
 import org.matrix.android.sdk.internal.auth.data.PasswordLoginParams
 import org.matrix.android.sdk.internal.auth.data.RiotConfig
@@ -34,6 +35,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.Url
 
 /**
@@ -64,6 +66,12 @@ internal interface AuthAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register")
     suspend fun register(@Body registrationParams: RegistrationParams): Credentials
+
+    /**
+     * Checks to see if a username is available, and valid, for the server.
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register/available")
+    suspend fun registerAvailable(@Query("username") username: String): Availability
 
     /**
      * Add 3Pid during registration
