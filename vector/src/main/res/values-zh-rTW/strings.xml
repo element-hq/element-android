@@ -2621,4 +2621,5 @@
     <string name="settings_room_directory_show_all_rooms_summary">顯示聊天室目錄中的所有聊天室，包含有明確內容的聊天室。</string>
     <string name="settings_room_directory_show_all_rooms">顯示帶有明確內容的聊天室</string>
     <string name="settings_category_room_directory">聊天室目錄</string>
+    <string name="event_status_sent_message">訊息已傳送</string>
 </resources>
