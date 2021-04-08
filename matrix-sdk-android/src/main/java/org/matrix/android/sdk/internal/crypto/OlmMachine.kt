@@ -143,14 +143,23 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
     private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
     private val deviceUpdateObserver = DeviceUpdateObserver()
 
+    /**
+     * Get our own user ID.
+     */
     fun userId(): String {
         return this.inner.userId()
     }
 
+    /**
+     * Get our own device ID.
+     */
     fun deviceId(): String {
         return this.inner.deviceId()
     }
 
+    /**
+     * Get our own public identity keys ID.
+     */
     fun identityKeys(): Map<String, String> {
         return this.inner.identityKeys()
     }
@@ -170,36 +179,56 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
         )
     }
 
-    suspend fun updateLiveDevices() {
-        for ((liveDevice, users) in deviceUpdateObserver.listeners) {
-            val devices = getUserDevices(users)
-            liveDevice.postValue(devices)
-        }
-    }
-
+    /**
+     * Get the list of outgoing requests that need to be sent to the homeserver.
+     *
+     * After the request was sent out and a successful response was received
+     * the response body should be passed back to the state machine using the
+     * mark_request_as_sent method.
+     *
+     * @return the list of requests that needs to be sent to the homeserver
+     */
     suspend fun outgoingRequests(): List<Request> = withContext(Dispatchers.IO) {
         inner.outgoingRequests()
     }
 
-    suspend fun encrypt(roomId: String, eventType: String, content: Content): Content = withContext(Dispatchers.IO) {
-        val adapter = MoshiProvider.providesMoshi().adapter<Content>(Map::class.java)
-        val contentString = adapter.toJson(content)
-        val encrypted = inner.encrypt(roomId, eventType, contentString)
-        adapter.fromJson(encrypted)!!
+    /**
+     * Mark a request that was sent to the server as sent.
+     *
+     * @param requestId The unique ID of the request that was sent out. This needs to be an UUID.
+     *
+     * @param requestType The type of the request that was sent out.
+     *
+     * @param responseBody The body of the response that was received.
+     */
+    suspend fun markRequestAsSent(
+        requestId: String,
+        requestType: RequestType,
+        responseBody: String
+    ) = withContext(Dispatchers.IO) {
+        inner.markRequestAsSent(requestId, requestType, responseBody)
+
+        if (requestType == RequestType.KEYS_QUERY) {
+            updateLiveDevices()
+        }
     }
 
-    suspend fun shareGroupSession(roomId: String, users: List<String>): List<Request> = withContext(Dispatchers.IO) {
-        inner.shareGroupSession(roomId, users)
-    }
 
-    suspend fun getMissingSessions(users: List<String>): Request? = withContext(Dispatchers.IO) {
-        inner.getMissingSessions(users)
-    }
-
-    suspend fun updateTrackedUsers(users: List<String>) = withContext(Dispatchers.IO) {
-        inner.updateTrackedUsers(users)
-    }
-
+    /**
+     * Let the state machine know about E2EE related sync changes that we
+     * received from the server.
+     *
+     * This needs to be called after every sync, ideally before processing
+     * any other sync changes.
+     *
+     * @param toDevice A serialized array of to-device events we received in the
+     * current sync resposne.
+     *
+     * @param deviceChanges The list of devices that have changed in some way
+     * since the previous sync.
+     *
+     * @param keyCounts The map of uploaded one-time key types and counts.
+     */
     suspend fun receiveSyncChanges(
         toDevice: ToDeviceSyncResponse?,
         deviceChanges: DeviceListResponse?,
@@ -218,64 +247,114 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
             inner.receiveSyncChanges(events, devices, counts)
     }
 
-    suspend fun markRequestAsSent(
-        request_id: String,
-        request_type: RequestType,
-        response_body: String
-    ) = withContext(Dispatchers.IO) {
-        inner.markRequestAsSent(request_id, request_type, response_body)
-
-        if (request_type == RequestType.KEYS_QUERY) {
-            updateLiveDevices()
-        }
+    /**
+     * Mark the given list of users to be tracked, triggering a key query request
+     * for them.
+     *
+     * *Note*: Only users that aren't already tracked will be considered for an
+     * update. It's safe to call this with already tracked users, it won't
+     * result in excessive keys query requests.
+     *
+     * @param users The users that should be queued up for a key query.
+     */
+    suspend fun updateTrackedUsers(users: List<String>) = withContext(Dispatchers.IO) {
+        inner.updateTrackedUsers(users)
     }
 
-    suspend fun getDevice(user_id: String, device_id: String): Device? = withContext(Dispatchers.IO) {
-        when (val device: InnerDevice? = inner.getDevice(user_id, device_id)) {
-            null -> null
-            else -> Device(device, inner)
-        }
+
+    /**
+     * Generate one-time key claiming requests for all the users we are missing
+     * sessions for.
+     *
+     * After the request was sent out and a successful response was received
+     * the response body should be passed back to the state machine using the
+     * mark_request_as_sent() method.
+     *
+     * This method should be called every time before a call to
+     * share_group_session() is made.
+     *
+     * @param users The list of users for which we would like to establish 1:1
+     * Olm sessions for.
+     *
+     * @return A keys claim request that needs to be sent out to the server.
+     */
+    suspend fun getMissingSessions(users: List<String>): Request? = withContext(Dispatchers.IO) {
+        inner.getMissingSessions(users)
     }
 
-    suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo> {
-        return inner.getUserDevices(userId).map { Device(it, inner).toCryptoDeviceInfo() }
+    /**
+     * Share a room key with the given list of users for the given room.
+     *
+     * After the request was sent out and a successful response was received
+     * the response body should be passed back to the state machine using the
+     * mark_request_as_sent() method.
+     *
+     * This method should be called every time before a call to
+     * `encrypt()` with the given `room_id` is made.
+     *
+     * @param roomId The unique id of the room, note that this doesn't strictly
+     * need to be a Matrix room, it just needs to be an unique identifier for
+     * the group that will participate in the conversation.
+     *
+     * @param users The list of users which are considered to be members of the
+     * room and should receive the room key.
+     *
+     * @return The list of requests that need to be sent out.
+     */
+    suspend fun shareGroupSession(roomId: String, users: List<String>): List<Request> = withContext(Dispatchers.IO) {
+        inner.shareGroupSession(roomId, users)
     }
 
-    suspend fun getUserDevices(userIds: List<String>): List<CryptoDeviceInfo> {
-        val plainDevices: ArrayList<CryptoDeviceInfo> = arrayListOf()
-
-        for (user in userIds) {
-            val devices = getUserDevices(user)
-            plainDevices.addAll(devices)
-        }
-
-        return plainDevices
+    /**
+     * Encrypt the given event with the given type and content for the given
+     * room.
+     *
+     * **Note**: A room key needs to be shared with the group of users that are
+     * members in the given room. If this is not done this method will panic.
+     *
+     * The usual flow to encrypt an evnet using this state machine is as
+     * follows:
+     *
+     * 1. Get the one-time key claim request to establish 1:1 Olm sessions for
+     *    the room members of the room we wish to participate in. This is done
+     *    using the [`get_missing_sessions()`](#method.get_missing_sessions)
+     *    method. This method call should be locked per call.
+     *
+     * 2. Share a room key with all the room members using the share_group_session().
+     *    This method call should be locked per room.
+     *
+     * 3. Encrypt the event using this method.
+     *
+     * 4. Send the encrypted event to the server.
+     *
+     * After the room key is shared steps 1 and 2 will become noops, unless
+     * there's some changes in the room membership or in the list of devices a
+     * member has.
+     *
+     * @param roomId the ID of the room where the encrypted event will be sent to
+     *
+     * @param eventType the type of the event
+     *
+     * @param content the JSON content of the event
+     *
+     * @return The encrypted version of the content
+     */
+    suspend fun encrypt(roomId: String, eventType: String, content: Content): Content = withContext(Dispatchers.IO) {
+        val adapter = MoshiProvider.providesMoshi().adapter<Content>(Map::class.java)
+        val contentString = adapter.toJson(content)
+        val encrypted = inner.encrypt(roomId, eventType, contentString)
+        adapter.fromJson(encrypted)!!
     }
 
-    suspend fun getLiveDevices(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
-        val plainDevices = getUserDevices(userIds)
-        val devices = LiveDevice(userIds, deviceUpdateObserver)
-        devices.setValue(plainDevices)
-
-        return devices
-    }
-
-    @Throws(CryptoStoreErrorException::class)
-    suspend fun exportKeys(passphrase: String, rounds: Int): ByteArray = withContext(Dispatchers.IO) {
-        inner.exportKeys(passphrase, rounds).toByteArray()
-    }
-
-    @Throws(CryptoStoreErrorException::class)
-    suspend fun importKeys(keys: ByteArray, passphrase: String, listener: ProgressListener?): ImportRoomKeysResult = withContext(Dispatchers.IO) {
-        var decodedKeys = keys.toString()
-
-        var rustListener = CryptoProgressListener(listener)
-
-        var result = inner.importKeys(decodedKeys, passphrase, rustListener)
-
-        ImportRoomKeysResult(result.total, result.imported)
-    }
-
+    /**
+     * Decrypt the given event that was sent in the given room.
+     *
+     * # Arguments
+     *
+     * @param event The serialized encrypted version of the event.
+     *
+     * @return the decrypted version of the event.
+     */
     @Throws(MXCryptoError::class)
     suspend fun decryptRoomEvent(event: Event): MXEventDecryptionResult = withContext(Dispatchers.IO) {
         val adapter = MoshiProvider.providesMoshi().adapter<Event>(Event::class.java)
@@ -297,5 +376,117 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
             val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, throwable.message, "m.megolm.v1.aes-sha2")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
         }
+    }
+
+    /**
+     * Export all of our room keys.
+     *
+     * @param passphrase The passphrase that should be used to encrypt the key
+     * export.
+     *
+     * @param rounds The number of rounds that should be used when expanding the
+     * passphrase into an key.
+     *
+     * @return the encrypted key export as a bytearray.
+     */
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun exportKeys(passphrase: String, rounds: Int): ByteArray = withContext(Dispatchers.IO) {
+        inner.exportKeys(passphrase, rounds).toByteArray()
+    }
+
+
+    /**
+     * Import room keys from the given serialized key export.
+     *
+     * @param keys The serialized version of the key export.
+     *
+     * @param passphrase The passphrase that was used to encrypt the key export.
+     *
+     * @param listener A callback that can be used to introspect the
+     * progress of the key import.
+     */
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun importKeys(keys: ByteArray, passphrase: String, listener: ProgressListener?): ImportRoomKeysResult = withContext(Dispatchers.IO) {
+        var decodedKeys = keys.toString()
+
+        var rustListener = CryptoProgressListener(listener)
+
+        var result = inner.importKeys(decodedKeys, passphrase, rustListener)
+
+        ImportRoomKeysResult(result.total, result.imported)
+    }
+
+
+    /**
+     * Get a `Device` from the store.
+     *
+     * @param userId The id of the device owner.
+     *
+     * @param deviceId The id of the device itself.
+     *
+     * @return The Device if it found one.
+     */
+    suspend fun getDevice(userId: String, deviceId: String): Device? = withContext(Dispatchers.IO) {
+        when (val device: InnerDevice? = inner.getDevice(userId, deviceId)) {
+            null -> null
+            else -> Device(device, inner)
+        }
+    }
+
+    /**
+     * Get all devices of an user.
+     *
+     * @param userId The id of the device owner.
+     *
+     * @return The list of Devices or an empty list if there aren't any.
+     */
+    suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo> {
+        return inner.getUserDevices(userId).map { Device(it, inner).toCryptoDeviceInfo() }
+    }
+
+    /**
+     * Get all the devices of multiple users.
+     *
+     * @param userId The ids of the device owners.
+     *
+     * @return The list of Devices or an empty list if there aren't any.
+     */
+    suspend fun getUserDevices(userIds: List<String>): List<CryptoDeviceInfo> {
+        val plainDevices: ArrayList<CryptoDeviceInfo> = arrayListOf()
+
+        for (user in userIds) {
+            val devices = getUserDevices(user)
+            plainDevices.addAll(devices)
+        }
+
+        return plainDevices
+    }
+
+    /**
+     * Update all of our live device listeners.
+     */
+    private suspend fun updateLiveDevices() {
+        for ((liveDevice, users) in deviceUpdateObserver.listeners) {
+            val devices = getUserDevices(users)
+            liveDevice.postValue(devices)
+        }
+    }
+
+    /**
+     * Get all the devices of multiple users as a live version.
+     *
+     * The live version will update the list of devices if some of the data
+     * changes, or if new devices arrive for a certain user.
+     *
+     * @param userId The ids of the device owners.
+     *
+     * @return The list of Devices or an empty list if there aren't any.
+     */
+    suspend fun getLiveDevices(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
+        val plainDevices = getUserDevices(userIds)
+        val devices = LiveDevice(userIds, deviceUpdateObserver)
+        devices.setValue(plainDevices)
+
+        return devices
     }
 }

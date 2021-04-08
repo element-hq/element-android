@@ -86,7 +86,7 @@ impl OlmMachine {
     ///
     /// * `user_id` - The id of the device owner.
     ///
-    /// * `device_id` - The id of the device itsefl.
+    /// * `device_id` - The id of the device itself.
     pub fn get_device(&self, user_id: &str, device_id: &str) -> Option<Device> {
         let user_id = UserId::try_from(user_id).unwrap();
 
@@ -276,8 +276,7 @@ impl OlmMachine {
             }))
     }
 
-    /// Generate one-time key claiming requests for all the users we are missing
-    /// sessions for.
+    /// Share a room key with the given list of users for the given room.
     ///
     /// After the request was sent out and a successful response was received
     /// the response body should be passed back to the state machine using the
