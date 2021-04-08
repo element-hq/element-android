@@ -150,6 +150,7 @@ internal class DefaultCryptoService @Inject constructor(
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
     private var olmMachine: OlmMachine? = null
+    private val deviceObserver: DeviceUpdateObserver = DeviceUpdateObserver()
 
     suspend fun onStateEvent(roomId: String, event: Event) {
         when (event.getClearType()) {
@@ -320,7 +321,7 @@ internal class DefaultCryptoService @Inject constructor(
 
         try {
             setRustLogger()
-            olmMachine = OlmMachine(userId, deviceId!!, dataDir)
+            olmMachine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver)
 
             Timber.v("HELLLO WORLD STARTING $dataDir CRYPTO ${olmMachine?.identityKeys()}")
         } catch (throwable: Throwable) {
@@ -393,14 +394,8 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
         return if (userId.isNotEmpty() && !deviceId.isNullOrEmpty()) {
-            val device = runBlocking {
-                olmMachine!!.getDevice(userId, deviceId)
-            }
-
-            if (device != null) {
-                device.toCryptoDeviceInfo()
-            } else {
-                null
+            runBlocking {
+                olmMachine?.getDevice(userId, deviceId)?.toCryptoDeviceInfo()
             }
         } else {
             null
@@ -409,7 +404,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
         return runBlocking {
-            olmMachine!!.getUserDevices(userId)
+            olmMachine?.getUserDevices(userId) ?: listOf()
         }
     }
 
@@ -419,7 +414,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
         return runBlocking {
-            olmMachine!!.getLiveDevices(userIds)
+            olmMachine?.getLiveDevices(userIds) ?: LiveDevice(userIds, deviceObserver)
         }
     }
 

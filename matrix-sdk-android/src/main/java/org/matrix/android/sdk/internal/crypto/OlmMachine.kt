@@ -70,10 +70,6 @@ internal class LiveDevice(
     var userIds: List<String> = userIds
     private var observer: DeviceUpdateObserver = observer
 
-    private val listener = { devices: List<CryptoDeviceInfo> ->
-        value = devices
-    }
-
     override fun onActive() {
         observer.addDeviceUpdateListener(this)
     }
@@ -140,9 +136,9 @@ internal class DeviceUpdateObserver() {
     }
 }
 
-internal class OlmMachine(user_id: String, device_id: String, path: File) {
+internal class OlmMachine(user_id: String, device_id: String, path: File, deviceObserver: DeviceUpdateObserver) {
     private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
-    private val deviceUpdateObserver = DeviceUpdateObserver()
+    private val deviceUpdateObserver = deviceObserver
 
     /**
      * Get our own user ID.
