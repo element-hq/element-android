@@ -21,7 +21,6 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.*
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.Failure.RegistrationFlowError
-import org.matrix.android.sdk.api.failure.isRegistrationAvailabilityError
 import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.auth.PendingSessionStore
 import org.matrix.android.sdk.internal.auth.SessionCreator
@@ -203,17 +202,5 @@ internal class DefaultRegistrationWizard(
         return RegistrationResult.Success(session)
     }
 
-    override suspend fun registrationAvailable(userName: String): RegistrationAvailability {
-        val availability = try {
-            registerAvailableTask.execute(userName)
-        } catch (exception: Throwable) {
-            if(exception.isRegistrationAvailabilityError()) {
-                return RegistrationAvailability.NotAvailable(exception as Failure.ServerError)
-            } else {
-                throw exception
-            }
-        }
-
-        return RegistrationAvailability.Available(availability.available)
-    }
+    override suspend fun registrationAvailable(userName: String): RegistrationAvailability = registerAvailableTask.execute(userName)
 }

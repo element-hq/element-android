@@ -71,7 +71,7 @@ internal interface AuthAPI {
      * Checks to see if a username is available, and valid, for the server.
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register/available")
-    fun registerAvailable(@Query("username") username: String): Call<Availability>
+    suspend fun registerAvailable(@Query("username") username: String): Availability
 
     /**
      * Add 3Pid during registration
