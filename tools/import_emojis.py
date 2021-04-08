@@ -114,11 +114,13 @@ for emoji in emoji_picker_datasource_emojis:
 
     # If additional keywords exist, add them to emoji_picker_datasource_emojis
     # Avoid duplicates and keep order. Put official unicode.com keywords first and extend up with emojilib ones.
-    new_keywords = OrderedDict.fromkeys(emoji_picker_datasource_emojis[emoji]["j"] + emoji_additional_keywords).keys()
+    new_keywords = OrderedDict.fromkeys(emoji_picker_datasource_emojis[emoji]["j"] + emoji_additional_keywords)
     # Remove the ones derived from the unicode name
-    new_keywords = new_keywords - {emoji.replace("-", "_")} - {emoji.replace("-", " ")} - {emoji_name}
+    for keyword in [emoji.replace("-", "_")] + [emoji.replace("-", " ")] + [emoji_name]:
+        if keyword in new_keywords:
+            new_keywords.pop(keyword)
     # Write new keywords back
-    emoji_picker_datasource_emojis[emoji]["j"] = list(new_keywords)
+    emoji_picker_datasource_emojis[emoji]["j"] = list(new_keywords.keys())
 
 # Filter out components from unicode 13.1 (as they are not suitable for single-emoji reactions)
 emoji_picker_datasource['categories'] = [x for x in emoji_picker_datasource['categories'] if x['id'] != 'component']
