@@ -30,7 +30,7 @@ internal class RegisterAvailableTask(private val authAPI: AuthAPI) : Task<String
                 authAPI.registerAvailable(params)
             }
         } catch (exception: Throwable) {
-            if(exception.isRegistrationAvailabilityError()) {
+            if (exception.isRegistrationAvailabilityError()) {
                 return RegistrationAvailability.NotAvailable(exception as Failure.ServerError)
             } else {
                 throw exception

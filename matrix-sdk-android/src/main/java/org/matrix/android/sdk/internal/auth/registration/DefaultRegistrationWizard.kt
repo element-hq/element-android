@@ -18,7 +18,11 @@ package org.matrix.android.sdk.internal.auth.registration
 
 import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-import org.matrix.android.sdk.api.auth.registration.*
+import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
+import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
+import org.matrix.android.sdk.api.auth.registration.RegistrationResult
+import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
+import org.matrix.android.sdk.api.auth.registration.toFlowResult
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.Failure.RegistrationFlowError
 import org.matrix.android.sdk.internal.auth.AuthAPI
