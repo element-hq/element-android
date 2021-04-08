@@ -60,7 +60,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
         // TODO maybe check also if
         val uid = "kvr_${tx.transactionId}"
         when (tx.state) {
-            is VerificationTxState.OnStarted       -> {
+            is VerificationTxState.OnStarted -> {
                 // Add a notification for every incoming request
                 val user = session?.getUser(tx.otherUserId)
                 val name = user?.getBestName() ?: tx.otherUserId
@@ -119,6 +119,14 @@ class IncomingVerificationRequestHandler @Inject constructor(
         Timber.v("## SAS verificationRequestCreated ${pr.transactionId}")
         // For incoming request we should prompt (if not in activity where this request apply)
         if (pr.isIncoming) {
+
+            // if it's a self verification for my devices, we can discard the review login alert
+            // if not this request will be underneath and not visible by the user...
+            // it will re-appear later
+            if (pr.otherUserId == session?.myUserId) {
+                // XXX this is a bit hard coded :/
+                popupAlertManager.cancelAlert("review_login")
+            }
             val user = session?.getUser(pr.otherUserId)?.toMatrixItem()
             val name = user?.getBestName() ?: pr.otherUserId
             val description = if (name == pr.otherUserId) {
