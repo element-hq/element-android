@@ -28,6 +28,7 @@ Bugfix 🐛:
  - Fix avatar rendering for DMs, after initial sync (#2693)
  - Fix mandatory parameter in API (#3065)
  - If signout request fails, do not start LoginActivity, but restart the app (#3099)
+ - Retain keyword order in emoji import script (#3147)
 
 Translations 🗣:
  -
