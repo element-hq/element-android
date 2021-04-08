@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,5 +20,5 @@ import org.matrix.android.sdk.api.failure.Failure
 
 sealed class RegistrationAvailability {
     object Available : RegistrationAvailability()
-    data class NotAvailable(val failure: Failure.ServerError): RegistrationAvailability()
+    data class NotAvailable(val failure: Failure.ServerError) : RegistrationAvailability()
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,20 +23,25 @@ import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 
-internal class RegisterAvailableTask(private val authAPI: AuthAPI) : Task<String, RegistrationAvailability> {
-    override suspend fun execute(params: String): RegistrationAvailability {
-        try {
+internal interface RegisterAvailableTask : Task<RegisterAvailableTask.Params, RegistrationAvailability> {
+    data class Params(
+            val userName: String
+    )
+}
+
+internal class DefaultRegisterAvailableTask(private val authAPI: AuthAPI) : RegisterAvailableTask {
+    override suspend fun execute(params: RegisterAvailableTask.Params): RegistrationAvailability {
+        return try {
             executeRequest(null) {
-                authAPI.registerAvailable(params)
+                authAPI.registerAvailable(params.userName)
             }
+            RegistrationAvailability.Available
         } catch (exception: Throwable) {
             if (exception.isRegistrationAvailabilityError()) {
-                return RegistrationAvailability.NotAvailable(exception as Failure.ServerError)
+                RegistrationAvailability.NotAvailable(exception as Failure.ServerError)
             } else {
                 throw exception
             }
         }
-
-        return RegistrationAvailability.Available
     }
 }

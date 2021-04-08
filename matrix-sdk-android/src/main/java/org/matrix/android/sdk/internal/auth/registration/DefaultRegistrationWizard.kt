@@ -41,10 +41,10 @@ internal class DefaultRegistrationWizard(
 
     private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
 
-    private val registerTask = DefaultRegisterTask(authAPI)
-    private val registerAvailableTask = RegisterAvailableTask(authAPI)
-    private val registerAddThreePidTask = DefaultRegisterAddThreePidTask(authAPI)
-    private val validateCodeTask = DefaultValidateCodeTask(authAPI)
+    private val registerTask: RegisterTask = DefaultRegisterTask(authAPI)
+    private val registerAvailableTask: RegisterAvailableTask = DefaultRegisterAvailableTask(authAPI)
+    private val registerAddThreePidTask: RegisterAddThreePidTask = DefaultRegisterAddThreePidTask(authAPI)
+    private val validateCodeTask: ValidateCodeTask = DefaultValidateCodeTask(authAPI)
 
     override val currentThreePid: String?
         get() {
@@ -206,5 +206,7 @@ internal class DefaultRegistrationWizard(
         return RegistrationResult.Success(session)
     }
 
-    override suspend fun registrationAvailable(userName: String): RegistrationAvailability = registerAvailableTask.execute(userName)
+    override suspend fun registrationAvailable(userName: String): RegistrationAvailability {
+        return registerAvailableTask.execute(RegisterAvailableTask.Params(userName))
+    }
 }
