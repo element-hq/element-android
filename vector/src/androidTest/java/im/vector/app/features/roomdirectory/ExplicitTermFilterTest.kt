@@ -115,4 +115,14 @@ class ExplicitTermFilterTest : InstrumentedTest {
     fun isValidLastFalse() {
         explicitTermFilter.isValid("zoo") shouldBe false
     }
+
+    @Test
+    fun canSearchForFalse() {
+        explicitTermFilter.canSearchFor("zoo") shouldBe false
+    }
+
+    @Test
+    fun canSearchForTrue() {
+        explicitTermFilter.canSearchFor("android") shouldBe true
+    }
 }

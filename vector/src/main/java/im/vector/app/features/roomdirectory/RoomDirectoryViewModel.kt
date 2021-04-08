@@ -161,6 +161,17 @@ class RoomDirectoryViewModel @AssistedInject constructor(
     }
 
     private fun load(filter: String, roomDirectoryData: RoomDirectoryData) {
+        if (!showAllRooms && !explicitTermFilter.canSearchFor(filter)) {
+            setState {
+                copy(
+                        asyncPublicRoomsRequest = Success(Unit),
+                        publicRooms = emptyList(),
+                        hasMore = false
+                )
+            }
+            return
+        }
+
         currentJob = viewModelScope.launch {
             val data = try {
                 session.getPublicRooms(roomDirectoryData.homeServer,
