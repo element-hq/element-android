@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.network
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.getRetryDelay
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.internal.network.ssl.CertUtil
@@ -28,22 +29,21 @@ import java.io.IOException
 
 /**
  * Execute a request from the requestBlock and handle some of the Exception it could generate
+ * Ref: https://github.com/matrix-org/matrix-js-sdk/blob/develop/src/scheduler.js#L138-L175
  *
  * @param globalErrorReceiver will be use to notify error such as invalid token error. See [GlobalError]
  * @param canRetry if set to true, the request will be executed again in case of error, after a delay
- * @param initialDelayBeforeRetry the first delay to wait before a request is retried. Will be doubled after each retry
  * @param maxDelayBeforeRetry the max delay to wait before a retry
  * @param maxRetriesCount the max number of retries
  * @param requestBlock a suspend lambda to perform the network request
  */
 internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
                                                   canRetry: Boolean = false,
-                                                  initialDelayBeforeRetry: Long = 100L,
-                                                  maxDelayBeforeRetry: Long = 10_000L,
-                                                  maxRetriesCount: Int = Int.MAX_VALUE,
+                                                  maxDelayBeforeRetry: Long = 32_000L,
+                                                  maxRetriesCount: Int = 4,
                                                   noinline requestBlock: suspend () -> DATA): DATA {
     var currentRetryCount = 0
-    var currentDelay = initialDelayBeforeRetry
+    var currentDelay = 1_000L
 
     while (true) {
         try {
@@ -72,9 +72,16 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
                     // }
                     ?.also { unrecognizedCertificateException -> throw unrecognizedCertificateException }
 
-            if (canRetry && currentRetryCount++ < maxRetriesCount && exception.shouldBeRetried()) {
-                // In case of 429, ensure we wait enough
-                delay(currentDelay.coerceAtLeast(exception.getRetryDelay(0)))
+            currentRetryCount++
+
+            if (exception is Failure.ServerError
+                    && exception.httpCode == 429
+                    && exception.error.code == MatrixError.M_LIMIT_EXCEEDED
+                    && currentRetryCount < maxRetriesCount) {
+                // 429, we can retry
+                delay(exception.getRetryDelay(1_000))
+            } else if (canRetry && currentRetryCount < maxRetriesCount && exception.shouldBeRetried()) {
+                delay(currentDelay)
                 currentDelay = currentDelay.times(2L).coerceAtMost(maxDelayBeforeRetry)
                 // Try again (loop)
             } else {
