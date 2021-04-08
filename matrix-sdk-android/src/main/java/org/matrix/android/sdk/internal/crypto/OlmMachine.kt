@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
@@ -213,7 +214,6 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
         }
     }
 
-
     /**
      * Let the state machine know about E2EE related sync changes that we
      * received from the server.
@@ -260,7 +260,6 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
     suspend fun updateTrackedUsers(users: List<String>) = withContext(Dispatchers.IO) {
         inner.updateTrackedUsers(users)
     }
-
 
     /**
      * Generate one-time key claiming requests for all the users we are missing
@@ -394,7 +393,6 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
         inner.exportKeys(passphrase, rounds).toByteArray()
     }
 
-
     /**
      * Import room keys from the given serialized key export.
      *
@@ -415,7 +413,6 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
 
         ImportRoomKeysResult(result.total, result.imported)
     }
-
 
     /**
      * Get a `Device` from the store.
@@ -442,6 +439,20 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
      */
     suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo> {
         return inner.getUserDevices(userId).map { Device(it, inner).toCryptoDeviceInfo() }
+    }
+
+    suspend fun getUserDevicesMap(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
+        val userMap = MXUsersDevicesMap<CryptoDeviceInfo>()
+
+        for (user in userIds) {
+            val devices = getUserDevices(user)
+
+            for (device in devices) {
+                userMap.setObject(user, device.deviceId, device)
+            }
+        }
+
+        return userMap
     }
 
     /**

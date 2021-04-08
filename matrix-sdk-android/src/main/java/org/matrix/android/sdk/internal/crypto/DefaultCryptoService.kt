@@ -122,8 +122,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         // Set of parameters used to configure/customize the end-to-end crypto.
         private val mxCryptoConfig: MXCryptoConfig,
-        // Device list manager
-        private val deviceListManager: DeviceListManager,
         // The key backup service.
         private val keysBackupService: DefaultKeysBackupService,
         // The verification service.
@@ -915,7 +913,13 @@ internal class DefaultCryptoService @Inject constructor(
     override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
-                deviceListManager.downloadKeys(userIds, forceDownload)
+                if (forceDownload) {
+                    // TODO replicate the logic from the device list manager
+                    // where we would download the fresh info from the server.
+                    olmMachine?.getUserDevicesMap(userIds) ?: MXUsersDevicesMap()
+                } else {
+                    olmMachine?.getUserDevicesMap(userIds) ?: MXUsersDevicesMap()
+                }
             }.foldToCallback(callback)
         }
     }
