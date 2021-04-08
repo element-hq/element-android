@@ -27,6 +27,7 @@ class ExplicitTermFilter @Inject constructor(
             .orEmpty()
             .split("\n")
             .map { it.trim() }
+            .distinct()
             .filter { it.isNotEmpty() }
 
     private val explicitContentRegex = explicitTerms
