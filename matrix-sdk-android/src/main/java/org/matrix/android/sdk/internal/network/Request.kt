@@ -28,22 +28,21 @@ import java.io.IOException
 
 /**
  * Execute a request from the requestBlock and handle some of the Exception it could generate
+ * Ref: https://github.com/matrix-org/matrix-js-sdk/blob/develop/src/scheduler.js#L138-L175
  *
  * @param globalErrorReceiver will be use to notify error such as invalid token error. See [GlobalError]
  * @param canRetry if set to true, the request will be executed again in case of error, after a delay
- * @param initialDelayBeforeRetry the first delay to wait before a request is retried. Will be doubled after each retry
  * @param maxDelayBeforeRetry the max delay to wait before a retry
  * @param maxRetriesCount the max number of retries
  * @param requestBlock a suspend lambda to perform the network request
  */
 internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
                                                   canRetry: Boolean = false,
-                                                  initialDelayBeforeRetry: Long = 100L,
-                                                  maxDelayBeforeRetry: Long = 10_000L,
-                                                  maxRetriesCount: Int = Int.MAX_VALUE,
+                                                  maxDelayBeforeRetry: Long = 32_000L,
+                                                  maxRetriesCount: Int = 4,
                                                   noinline requestBlock: suspend () -> DATA): DATA {
     var currentRetryCount = 0
-    var currentDelay = initialDelayBeforeRetry
+    var currentDelay = 1_000L
 
     while (true) {
         try {
