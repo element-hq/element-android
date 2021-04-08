@@ -2734,4 +2734,5 @@
 \nScaricamento dati…</string>
     <string name="initial_sync_start_server_computing">Sinc. iniziale:
 \nIn attesa di risposta dal server…</string>
+    <string name="event_status_sent_message">Messaggio inviato</string>
 </resources>
