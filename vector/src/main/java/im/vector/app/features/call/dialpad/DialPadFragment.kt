@@ -146,7 +146,7 @@ class DialPadFragment : Fragment() {
     }
 
     private fun poll() {
-        if (!input.isEmpty()) {
+        if (input.isNotEmpty()) {
             input = input.substring(0, input.length - 1)
             formatter = PhoneNumberUtil.getInstance().getAsYouTypeFormatter(regionCode)
             if (formatAsYouType) {
