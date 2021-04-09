@@ -359,7 +359,7 @@
     <string name="start_video_call_prompt_msg">നിങ്ങൾക്ക് ഒരു വിഡിയോ കോൾ ആരംഭിക്കണമെന്ന് ഉറപ്പാണോ\?</string>
     <string name="identity_url">തിരിച്ചറിയൽ സെർവറിന്റെ URL</string>
     <string name="send_bug_report_description_in_english">കഴിയുമെങ്കിൽ, വിവരണം ഇംഗ്ലീഷിൽ എഴുതുക.</string>
-    <string name="home_filter_placeholder_people">ആളുകളെ ഫിൽറ്റർ</string>
+    <string name="home_filter_placeholder_people">ആളുകളെ അരിക്കുക</string>
     <string name="keys_backup_activate">കീ ബാക്കപ്പ് ഉപയൊഗിക്കുക</string>
     <string name="keys_backup_is_not_finished_please_wait">കീ ബാക്കപ്പ് പൂർത്തിയായിട്ടില്ല, കാത്തിരിക്കൂ…</string>
     <string name="settings_phone_numbers">ഫോൺ നമ്പറുകൾ</string>
@@ -640,4 +640,57 @@
     <string name="notice_room_third_party_invite">%1$s മുറിയിൽ ചേരാൻ %2$s ന് ക്ഷണം അയച്ചു</string>
     <string name="notice_profile_change_redacted_by_you">നിങ്ങളുടെ പ്രൊഫൈൽ %1$s നവീകരിച്ചു</string>
     <string name="notice_profile_change_redacted">%1$s അവരുടെ പ്രൊഫൈൽ %2$s നവീകരിച്ചു</string>
+    <string name="room_participants_idle">നിഷ്‌ക്രിയം</string>
+    <plurals name="format_time_d">
+        <item quantity="one">%dദി</item>
+        <item quantity="other">%dദി</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">%dമ</item>
+        <item quantity="other">%dമ</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">%dമി</item>
+        <item quantity="other">%dമി</item>
+    </plurals>
+    <plurals name="format_time_s">
+        <item quantity="one">%dസെ</item>
+        <item quantity="other">%dസെ</item>
+    </plurals>
+    <string name="preview">പ്രിവ്യൂ</string>
+    <string name="call_hold_action">ഹോൾഡ്</string>
+    <string name="call_resume_action">പുനരാരംഭിക്കുക</string>
+    <string name="compression_opt_list_small">ചെറുത്</string>
+    <string name="compression_opt_list_medium">ഇടത്തരം</string>
+    <string name="compression_opt_list_large">വലുത്</string>
+    <string name="compression_opt_list_original">യഥാർത്ഥം</string>
+    <string name="call_camera_front">മുന്നിലുള്ള</string>
+    <string name="call_camera_back">പിന്നിലുള്ള</string>
+    <string name="sound_device_headset">ഹെഡ്‌സെറ്റ്</string>
+    <string name="read_receipt">വായിക്കുക</string>
+    <string name="groups_header">കമ്മ്യൂണിറ്റികൾ</string>
+    <string name="bottom_action_groups">കമ്മ്യൂണിറ്റികൾ</string>
+    <string name="dialog_title_error">പിശക്</string>
+    <string name="disable">അപ്രാപ്തമാക്കുക</string>
+    <string name="review">അവലോകനം</string>
+    <string name="abort">ഉപേക്ഷിക്കുക</string>
+    <string name="pause_video">താൽക്കാലികമായി നിർത്തുക</string>
+    <string name="disconnect">വിച്ഛേദിക്കുക</string>
+    <string name="revoke">അസാധുവാക്കുക</string>
+    <string name="forward">ഫോർവേഡ്</string>
+    <string name="quote">ഉദ്ധരണി</string>
+    <string name="stay">തുടരുക</string>
+    <string name="leave">വിടുക</string>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">ഈ മുറിക്കായി %1$s എന്ന ഇതര വിലാസം നിങ്ങൾ ചേർത്തു.</item>
+        <item quantity="other">ഈ മുറിക്കായി %1$s എന്ന ഇതര വിലാസങ്ങൾ നിങ്ങൾ ചേർത്തു.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s ഈ മുറിക്കായി %2$s എന്ന ഇതര വിലാസം ചേർത്തു.</item>
+        <item quantity="other">%1$s ഈ മുറിക്കായി %2$s എന്നീ ഇതര വിലാസങ്ങൾ ചേർത്തു.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset_by_you">ഈ മുറിയുടെ പ്രധാന വിലാസം നിങ്ങൾ നീക്കംചെയ്തു.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s ഈ മുറിയുടെ പ്രധാന വിലാസം നീക്കംചെയ്‌തു.</string>
+    <string name="notice_room_canonical_alias_set_by_you">ഈ മുറിയുടെ പ്രധാന വിലാസം %1$s ആയി നിങ്ങൾ സജ്ജമാക്കി.</string>
+    <string name="event_status_sent_message">സന്ദേശം അയച്ചു</string>
 </resources>
