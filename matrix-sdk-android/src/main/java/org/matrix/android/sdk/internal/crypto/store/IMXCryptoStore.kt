@@ -259,7 +259,7 @@ internal interface IMXCryptoStore {
      * @param deviceKey the public key of the other device.
      * @return A set of sessionId, or null if device is not known
      */
-    fun getDeviceSessionIds(deviceKey: String): Set<String>?
+    fun getDeviceSessionIds(deviceKey: String): List<String>?
 
     /**
      * Retrieve an end-to-end session between the logged-in user and another

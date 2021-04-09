@@ -117,7 +117,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
             }
             if (readReceiptId != null) {
                 val readReceiptContent = ReadReceiptHandler.createContent(userId, readReceiptId)
-                readReceiptHandler.handle(realm, roomId, readReceiptContent, false)
+                readReceiptHandler.handle(realm, roomId, readReceiptContent, false, null)
             }
             if (shouldUpdateRoomSummary) {
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()

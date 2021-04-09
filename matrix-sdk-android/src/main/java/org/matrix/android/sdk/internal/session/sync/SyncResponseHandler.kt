@@ -41,17 +41,19 @@ import kotlin.system.measureTimeMillis
 
 private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
-internal class SyncResponseHandler @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                       @SessionId private val sessionId: String,
-                                                       private val workManagerProvider: WorkManagerProvider,
-                                                       private val roomSyncHandler: RoomSyncHandler,
-                                                       private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
-                                                       private val groupSyncHandler: GroupSyncHandler,
-                                                       private val cryptoSyncHandler: CryptoSyncHandler,
-                                                       private val cryptoService: DefaultCryptoService,
-                                                       private val tokenStore: SyncTokenStore,
-                                                       private val processEventForPushTask: ProcessEventForPushTask,
-                                                       private val pushRuleService: PushRuleService) {
+internal class SyncResponseHandler @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        @SessionId private val sessionId: String,
+        private val workManagerProvider: WorkManagerProvider,
+        private val roomSyncHandler: RoomSyncHandler,
+        private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
+        private val groupSyncHandler: GroupSyncHandler,
+        private val cryptoSyncHandler: CryptoSyncHandler,
+        private val aggregatorHandler: SyncResponsePostTreatmentAggregatorHandler,
+        private val cryptoService: DefaultCryptoService,
+        private val tokenStore: SyncTokenStore,
+        private val processEventForPushTask: ProcessEventForPushTask,
+        private val pushRuleService: PushRuleService) {
 
     suspend fun handleResponse(syncResponse: SyncResponse,
                                fromToken: String?,
@@ -81,13 +83,14 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
         }.also {
             Timber.v("Finish handling toDevice in $it ms")
         }
+        val aggregator = SyncResponsePostTreatmentAggregator()
         // Start one big transaction
         monarchy.awaitTransaction { realm ->
             measureTimeMillis {
                 Timber.v("Handle rooms")
                 reportSubtask(reporter, InitSyncStep.ImportingAccountRoom, 1, 0.7f) {
                     if (syncResponse.rooms != null) {
-                        roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, reporter)
+                        roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, aggregator, reporter)
                     }
                 }
             }.also {
@@ -115,7 +118,10 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
             }
             tokenStore.saveToken(realm, syncResponse.nextBatch)
         }
+
         // Everything else we need to do outside the transaction
+        aggregatorHandler.handle(aggregator)
+
         syncResponse.rooms?.let {
             checkPushRules(it, isInitialSync)
             userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
@@ -126,15 +132,6 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
 
         Timber.v("On sync completed")
         cryptoSyncHandler.onSyncCompleted(syncResponse)
-    }
-
-    suspend fun handleInitSyncSecondTransaction(syncResponse: SyncResponse) {
-        // Start another transaction to handle the ephemeral events
-        monarchy.awaitTransaction { realm ->
-            if (syncResponse.rooms != null) {
-                roomSyncHandler.handleInitSyncEphemeral(realm, syncResponse.rooms)
-            }
-        }
     }
 
     /**
