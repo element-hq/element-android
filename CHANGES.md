@@ -1,8 +1,5 @@
-Changes in Element 1.1.4 (2021-XX-XX)
+Changes in Element 1.1.4 (2021-04-09)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Split network request `/keys/query` into smaller requests (250 users max) (#2925)
@@ -30,18 +27,12 @@ Bugfix 🐛:
  - If signout request fails, do not start LoginActivity, but restart the app (#3099)
  - Retain keyword order in emoji import script, and update the generated file (#3147)
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
  - Several Services have been migrated to coroutines (#2449)
  - Removes filtering options on Timeline.
 
 Build 🧱:
  - Properly exclude gms dependencies in fdroid build flavour which were pulled in through the jitsi SDK (#3125)
-
-Test:
- -
 
 Other changes:
  - Add version details on the login screen, in debug or developer mode
