@@ -183,5 +183,6 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         } // else: will be handled in onStateUpdated
         holder.previewUrlView.footerWidth = height
         holder.previewUrlView.footerHeight = height
+        holder.previewUrlView.updateFooterSpace()
     }
 }

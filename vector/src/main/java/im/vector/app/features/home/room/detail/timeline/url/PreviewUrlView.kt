@@ -148,16 +148,7 @@ class PreviewUrlView @JvmOverloads constructor(
     private fun renderData(previewUrlData: PreviewUrlData, imageContentRenderer: ImageContentRenderer) {
         // Set footer sizes before setText() calls so they are available onMeasure
         val siteText = previewUrlData.siteName.takeIf { it != previewUrlData.title }
-        val siteViewHidden = siteText == null || siteText.isBlank() // identical to setTextOrHide
-        if (siteViewHidden) {
-            views.urlPreviewDescription.footerWidth = footerWidth
-            views.urlPreviewDescription.footerHeight = footerHeight
-        } else {
-            views.urlPreviewSite.footerWidth = footerWidth
-            views.urlPreviewSite.footerHeight = footerHeight
-            views.urlPreviewDescription.footerWidth = 0
-            views.urlPreviewDescription.footerHeight = 0
-        }
+        updateFooterSpaceInternal(siteText)
 
         isVisible = true
         views.urlPreviewTitle.setTextOrHide(previewUrlData.title)
@@ -174,5 +165,24 @@ class PreviewUrlView @JvmOverloads constructor(
         views.urlPreviewImage.isVisible = false
         views.urlPreviewDescription.isVisible = false
         views.urlPreviewSite.isVisible = false
+    }
+
+    public fun updateFooterSpace() {
+        val siteText = views.urlPreviewSite.text as String?
+        updateFooterSpaceInternal(siteText)
+        requestLayout()
+    }
+
+    private fun updateFooterSpaceInternal(siteText: String?) {
+        val siteViewHidden = siteText == null || siteText.isBlank() // identical to setTextOrHide
+        if (siteViewHidden) {
+            views.urlPreviewDescription.footerWidth = footerWidth
+            views.urlPreviewDescription.footerHeight = footerHeight
+        } else {
+            views.urlPreviewSite.footerWidth = footerWidth
+            views.urlPreviewSite.footerHeight = footerHeight
+            views.urlPreviewDescription.footerWidth = 0
+            views.urlPreviewDescription.footerHeight = 0
+        }
     }
 }
