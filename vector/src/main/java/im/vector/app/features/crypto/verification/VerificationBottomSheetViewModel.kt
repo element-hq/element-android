@@ -305,8 +305,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                             transactionId = action.pendingRequestTransactionId,
                             roomId = roomId,
                             otherUserId = request.otherUserId,
-                            otherDeviceId = otherDevice ?: "",
-                            callback = null
+                            otherDeviceId = otherDevice ?: ""
                     )
                 }
                 Unit

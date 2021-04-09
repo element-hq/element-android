@@ -35,7 +35,6 @@ import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 
 class DiscoverySettingsViewModel @AssistedInject constructor(
@@ -123,7 +122,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                awaitCallback<Unit> { session.identityService().disconnect(it) }
+                session.identityService().disconnect()
                 setState {
                     copy(
                             identityServer = Success(null),
@@ -141,9 +140,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                val data = awaitCallback<String?> {
-                    session.identityService().setNewIdentityServer(action.url, it)
-                }
+                val data = session.identityService().setNewIdentityServer(action.url)
                 setState {
                     copy(
                             identityServer = Success(data),
@@ -163,7 +160,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                awaitCallback<Unit> { identityService.startBindThreePid(action.threePid, it) }
+                identityService.startBindThreePid(action.threePid)
                 changeThreePidState(action.threePid, Success(SharedState.BINDING_IN_PROGRESS))
             } catch (failure: Throwable) {
                 _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
@@ -240,7 +237,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                awaitCallback<Unit> { identityService.unbindThreePid(threePid, it) }
+                identityService.unbindThreePid(threePid)
                 changeThreePidState(threePid, Success(SharedState.NOT_SHARED))
             } catch (failure: Throwable) {
                 _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
@@ -256,7 +253,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                awaitCallback<Unit> { identityService.unbindThreePid(threePid, it) }
+                identityService.unbindThreePid(threePid)
                 changeThreePidState(threePid, Success(SharedState.NOT_SHARED))
             } catch (failure: Throwable) {
                 _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
@@ -268,7 +265,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     private fun cancelBinding(action: DiscoverySettingsAction.CancelBinding) {
         viewModelScope.launch {
             try {
-                awaitCallback<Unit> { identityService.cancelBindThreePid(action.threePid, it) }
+                identityService.cancelBindThreePid(action.threePid)
                 changeThreePidState(action.threePid, Success(SharedState.NOT_SHARED))
                 changeThreePidSubmitState(action.threePid, Uninitialized)
             } catch (failure: Throwable) {
@@ -304,9 +301,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                val data = awaitCallback<Map<ThreePid, SharedState>> {
-                    identityService.getShareStatus(threePids, it)
-                }
+                val data = identityService.getShareStatus(threePids)
                 setState {
                     copy(
                             emailList = Success(data.filter { it.key is ThreePid.Email }.toPidInfoList()),
@@ -346,9 +341,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                awaitCallback<Unit> {
-                    identityService.submitValidationToken(action.threePid, action.code, it)
-                }
+                identityService.submitValidationToken(action.threePid, action.code)
                 changeThreePidSubmitState(action.threePid, Uninitialized)
                 finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(action.threePid), true)
             } catch (failure: Throwable) {
@@ -371,7 +364,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                awaitCallback<Unit> { identityService.finalizeBindThreePid(threePid, it) }
+                identityService.finalizeBindThreePid(threePid)
                 changeThreePidSubmitState(action.threePid, Uninitialized)
                 changeThreePidState(action.threePid, Success(SharedState.SHARED))
             } catch (failure: Throwable) {

@@ -20,7 +20,6 @@ import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
@@ -29,7 +28,6 @@ import im.vector.app.features.home.room.detail.timeline.item.WidgetTileTimelineI
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import javax.inject.Inject
@@ -47,25 +45,24 @@ class WidgetItemFactory @Inject constructor(
 
     private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
-    fun create(event: TimelineEvent,
-               highlight: Boolean,
-               callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
+    fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
+        val event = params.event
         val widgetContent: WidgetContent = event.root.getClearContent().toModel() ?: return null
         val previousWidgetContent: WidgetContent? = event.root.resolvedPrevContent().toModel()
 
         return when (WidgetType.fromString(widgetContent.type ?: previousWidgetContent?.type ?: "")) {
-            WidgetType.Jitsi -> createJitsiItem(event, callback, widgetContent, previousWidgetContent)
+            WidgetType.Jitsi -> createJitsiItem(params, widgetContent, previousWidgetContent)
             // There is lot of other widget types we could improve here
-            else             -> noticeItemFactory.create(event, highlight, callback)
+            else             -> noticeItemFactory.create(params)
         }
     }
 
-    private fun createJitsiItem(timelineEvent: TimelineEvent,
-                                callback: TimelineEventController.Callback?,
+    private fun createJitsiItem(params: TimelineItemFactoryParams,
                                 widgetContent: WidgetContent,
                                 previousWidgetContent: WidgetContent?): VectorEpoxyModel<*> {
-        val informationData = informationDataFactory.create(timelineEvent, null, null)
-        val attributes = messageItemAttributesFactory.create(null, informationData, callback)
+        val timelineEvent = params.event
+        val informationData = informationDataFactory.create(params)
+        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback)
 
         val disambiguatedDisplayName = timelineEvent.senderInfo.disambiguatedDisplayName
         val message = if (widgetContent.isActive()) {

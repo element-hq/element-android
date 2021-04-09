@@ -98,6 +98,7 @@ import im.vector.app.core.ui.views.FailedMessagesWarningView
 import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.KeyboardStateUtils
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.app.core.utils.TextUtils
@@ -137,6 +138,7 @@ import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBot
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
@@ -168,12 +170,12 @@ import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -199,7 +201,6 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import timber.log.Timber
-import java.io.File
 import java.net.URL
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -223,6 +224,7 @@ class RoomDetailFragment @Inject constructor(
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
+        private val dimensionConverter: DimensionConverter,
         private val notificationUtils: NotificationUtils,
         private val matrixItemColorProvider: MatrixItemColorProvider,
         private val imageContentRenderer: ImageContentRenderer,
@@ -873,6 +875,15 @@ class RoomDetailFragment @Inject constructor(
         }
         views.composerLayout.views.composerRelatedMessageContent.text = (formattedBody ?: nonFormattedBody)
 
+        // Image Event
+        val data = event.buildImageContentRendererData(dimensionConverter.dpToPx(66))
+        val isImageVisible = if (data != null) {
+            imageContentRenderer.render(data, ImageContentRenderer.Mode.THUMBNAIL, views.composerLayout.views.composerRelatedMessageImage)
+            true
+        } else {
+            false
+        }
+
         updateComposerText(defaultContent)
 
         views.composerLayout.views.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
@@ -884,6 +895,7 @@ class RoomDetailFragment @Inject constructor(
             if (isAdded) {
                 // need to do it here also when not using quick reply
                 focusComposerAndShowKeyboard()
+                views.composerLayout.views.composerRelatedMessageImage.isVisible = isImageVisible
             }
         }
         focusComposerAndShowKeyboard()
@@ -1193,7 +1205,6 @@ class RoomDetailFragment @Inject constructor(
         if (summary?.membership == Membership.JOIN) {
             views.jumpToBottomView.count = summary.notificationCount
             views.jumpToBottomView.drawBadge = summary.hasUnreadMessages
-            scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             views.inviteView.visibility = View.GONE
             if (state.tombstoneEvent == null) {
@@ -1663,16 +1674,14 @@ class RoomDetailFragment @Inject constructor(
         if (action.messageContent is MessageTextContent) {
             shareText(requireContext(), action.messageContent.body)
         } else if (action.messageContent is MessageWithAttachmentContent) {
-            session.fileService().downloadFile(
-                    messageContent = action.messageContent,
-                    callback = object : MatrixCallback<File> {
-                        override fun onSuccess(data: File) {
-                            if (isAdded) {
-                                shareMedia(requireContext(), data, getMimeTypeFromUri(requireContext(), data.toUri()))
-                            }
-                        }
-                    }
-            )
+            lifecycleScope.launch {
+                val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
+                if (!isAdded) return@launch
+                result.fold(
+                        { shareMedia(requireContext(), it, getMimeTypeFromUri(requireContext(), it.toUri())) },
+                        { showErrorInSnackbar(it) }
+                )
+            }
         }
     }
 
@@ -1693,22 +1702,24 @@ class RoomDetailFragment @Inject constructor(
             sharedActionViewModel.pendingAction = action
             return
         }
-        session.fileService().downloadFile(
-                messageContent = action.messageContent,
-                callback = object : MatrixCallback<File> {
-                    override fun onSuccess(data: File) {
-                        if (isAdded) {
-                            saveMedia(
-                                    context = requireContext(),
-                                    file = data,
-                                    title = action.messageContent.body,
-                                    mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), data.toUri()),
-                                    notificationUtils = notificationUtils
-                            )
-                        }
+        lifecycleScope.launch {
+            val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
+            if (!isAdded) return@launch
+            result.fold(
+                    {
+                        saveMedia(
+                                context = requireContext(),
+                                file = it,
+                                title = action.messageContent.body,
+                                mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), it.toUri()),
+                                notificationUtils = notificationUtils
+                        )
+                    },
+                    {
+                        showErrorInSnackbar(it)
                     }
-                }
-        )
+            )
+        }
     }
 
     private fun handleActions(action: EventSharedAction) {

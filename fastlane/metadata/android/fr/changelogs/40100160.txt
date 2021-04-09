@@ -1,0 +1,2 @@
+Principaux changements pour cette version : prise en charge de l’authentification avec les réseaux sociaux !
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.0.15 et https://github.com/vector-im/element-android/releases/tag/v1.0.16

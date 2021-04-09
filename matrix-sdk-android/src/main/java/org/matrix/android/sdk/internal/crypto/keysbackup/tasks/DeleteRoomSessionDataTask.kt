@@ -37,7 +37,7 @@ internal class DefaultDeleteRoomSessionDataTask @Inject constructor(
 
     override suspend fun execute(params: DeleteRoomSessionDataTask.Params) {
         return executeRequest(globalErrorReceiver) {
-            apiCall = roomKeysApi.deleteRoomSessionData(
+            roomKeysApi.deleteRoomSessionData(
                     params.roomId,
                     params.sessionId,
                     params.version)

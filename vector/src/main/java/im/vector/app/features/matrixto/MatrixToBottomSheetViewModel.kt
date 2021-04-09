@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.util.awaitCallback
 
 class MatrixToBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: MatrixToBottomSheetState,
@@ -101,11 +100,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     }
 
     private suspend fun resolveUser(userId: String): User {
-        return tryOrNull {
-            awaitCallback<User> {
-                session.resolveUser(userId, it)
-            }
-        }
+        return tryOrNull { session.resolveUser(userId) }
         // Create raw user in case the user is not searchable
                 ?: User(userId, null, null)
     }

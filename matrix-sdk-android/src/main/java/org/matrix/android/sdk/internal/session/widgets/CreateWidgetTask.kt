@@ -46,8 +46,8 @@ internal class DefaultCreateWidgetTask @Inject constructor(@SessionDatabase priv
                                                            private val globalErrorReceiver: GlobalErrorReceiver) : CreateWidgetTask {
 
     override suspend fun execute(params: CreateWidgetTask.Params) {
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = roomAPI.sendStateEvent(
+        executeRequest(globalErrorReceiver) {
+            roomAPI.sendStateEvent(
                     roomId = params.roomId,
                     stateEventType = EventType.STATE_ROOM_WIDGET_LEGACY,
                     stateKey = params.widgetId,

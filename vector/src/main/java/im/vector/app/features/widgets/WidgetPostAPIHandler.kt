@@ -283,18 +283,20 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                             "type" to "m.widget"
                     )
             )
-            session.updateAccountData(
-                    type = UserAccountDataTypes.TYPE_WIDGETS,
-                    content = addUserWidgetBody,
-                    callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-            )
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                session.updateAccountData(
+                        type = UserAccountDataTypes.TYPE_WIDGETS,
+                        content = addUserWidgetBody
+                )
+            }
         } else {
-            session.widgetService().createRoomWidget(
-                    roomId = roomId,
-                    widgetId = widgetId,
-                    content = widgetEventContent,
-                    callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-            )
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                session.widgetService().createRoomWidget(
+                        roomId = roomId,
+                        widgetId = widgetId,
+                        content = widgetEventContent
+                )
+            }
         }
     }
 
@@ -386,7 +388,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         if (member != null && member.membership == Membership.JOIN) {
             widgetPostAPIMediator.sendSuccess(eventData)
         } else {
-            room.invite(userId = userId, callback = createWidgetAPICallback(widgetPostAPIMediator, eventData))
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                room.invite(userId = userId)
+            }
         }
     }
 
@@ -458,10 +462,6 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         }
         // OK
         return false
-    }
-
-    private fun createWidgetAPICallback(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict): WidgetAPICallback {
-        return WidgetAPICallback(widgetPostAPIMediator, eventData, stringProvider)
     }
 
     private fun launchWidgetAPIAction(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict, block: suspend () -> Unit): Job {

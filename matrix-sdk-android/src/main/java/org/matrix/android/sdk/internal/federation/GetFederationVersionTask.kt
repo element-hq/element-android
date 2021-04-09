@@ -28,8 +28,8 @@ internal class DefaultGetFederationVersionTask @Inject constructor(
 ) : GetFederationVersionTask {
 
     override suspend fun execute(params: Unit): FederationVersion {
-        val result = executeRequest<FederationGetVersionResult>(null) {
-            apiCall = federationAPI.getVersion()
+        val result = executeRequest(null) {
+            federationAPI.getVersion()
         }
 
         return FederationVersion(

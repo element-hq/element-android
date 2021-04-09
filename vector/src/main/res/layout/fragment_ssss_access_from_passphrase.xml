@@ -8,7 +8,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="32dp"
+        android:paddingBottom="32dp">
 
         <ImageView
             android:id="@+id/ssss_shield"
@@ -28,7 +30,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="36dp"
             android:layout_marginEnd="16dp"
             android:text="@string/recovery_passphrase"
             android:textColor="?riotx_text_primary"
@@ -37,7 +38,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ssss_shield"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <TextView
             android:id="@+id/ssss_restore_with_passphrase_warning_text"
@@ -50,7 +50,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ssss_restore_with_passphrase"
             tools:text="@string/enter_secret_storage_passphrase_or_key" />
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ssss_passphrase_enter_til"
@@ -82,61 +81,62 @@
             android:layout_width="@dimen/layout_touch_size"
             android:layout_height="@dimen/layout_touch_size"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:background="?attr/selectableItemBackground"
             android:scaleType="center"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ssss_passphrase_enter_til"
             app:layout_constraintTop_toTopOf="@+id/ssss_passphrase_enter_til"
             app:tint="?colorAccent" />
-
-        <!--        -->
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/ssss_passphrase_use_key"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/use_recovery_key"
-            app:icon="@drawable/ic_security_key_24dp"
-            tools:ignore="MissingConstraints" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/ssss_passphrase_submit"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/_continue"
-            tools:ignore="MissingConstraints" />
-
-        <androidx.constraintlayout.helper.widget.Flow
-            android:id="@+id/ssss_passphrase_flow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            app:constraint_referenced_ids="ssss_passphrase_use_key,ssss_passphrase_submit"
-            app:flow_horizontalStyle="spread_inside"
-            app:flow_wrapMode="chain"
+            android:text="@string/_continue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ssss_passphrase_enter_til" />
+
+        <TextView
+            android:id="@+id/ssss_passphrase_or"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/or"
+            android:textColor="?riotx_text_primary"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ssss_passphrase_submit" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ssss_passphrase_use_key"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/use_recovery_key"
+            app:icon="@drawable/ic_security_key_24dp"
             app:layout_constraintBottom_toTopOf="@+id/ssss_passphrase_reset"
-            app:layout_constraintTop_toBottomOf="@+id/ssss_passphrase_enter_til"
-            app:layout_goneMarginBottom="32dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ssss_passphrase_or" />
 
         <im.vector.app.core.ui.views.BottomSheetActionButton
             android:id="@+id/ssss_passphrase_reset"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="32dp"
             android:clickable="true"
             android:focusable="true"
             app:actionTitle="@string/bad_passphrase_key_reset_all_action"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ssss_passphrase_flow"
+            app:layout_constraintTop_toBottomOf="@id/ssss_passphrase_use_key"
             app:leftIcon="@drawable/ic_alert_triangle"
             app:tint="@color/vector_error_color"
             app:titleTextColor="?riotx_text_secondary" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

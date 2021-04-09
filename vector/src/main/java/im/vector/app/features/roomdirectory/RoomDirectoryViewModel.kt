@@ -42,12 +42,12 @@ import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryDat
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
-import java.util.Locale
 
 class RoomDirectoryViewModel @AssistedInject constructor(
         @Assisted initialState: PublicRoomsViewState,
         vectorPreferences: VectorPreferences,
-        private val session: Session
+        private val session: Session,
+        private val explicitTermFilter: ExplicitTermFilter
 ) : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, RoomDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
@@ -57,11 +57,6 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
     companion object : MvRxViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
         private const val PUBLIC_ROOMS_LIMIT = 20
-
-        // List of forbidden terms, in lower case
-        private val explicitContentTerms = listOf(
-                "nsfw"
-        )
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: PublicRoomsViewState): RoomDirectoryViewModel? {
@@ -166,6 +161,17 @@ class RoomDirectoryViewModel @AssistedInject constructor(
     }
 
     private fun load(filter: String, roomDirectoryData: RoomDirectoryData) {
+        if (!showAllRooms && !explicitTermFilter.canSearchFor(filter)) {
+            setState {
+                copy(
+                        asyncPublicRoomsRequest = Success(Unit),
+                        publicRooms = emptyList(),
+                        hasMore = false
+                )
+            }
+            return
+        }
+
         currentJob = viewModelScope.launch {
             val data = try {
                 session.getPublicRooms(roomDirectoryData.homeServer,
@@ -202,11 +208,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
             // Filter
             val newPublicRooms = data.chunk.orEmpty()
                     .filter {
-                        showAllRooms
-                                || "${it.name.orEmpty()} ${it.topic.orEmpty()} ${it.canonicalAlias.orEmpty()}".toLowerCase(Locale.ROOT)
-                                .let { str ->
-                                    explicitContentTerms.all { term -> term !in str }
-                                }
+                        showAllRooms || explicitTermFilter.isValid("${it.name.orEmpty()} ${it.topic.orEmpty()}")
                     }
 
             setState {

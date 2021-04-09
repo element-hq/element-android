@@ -1,0 +1,2 @@
+此版本的主要变化：改进 VoIP（私聊中的音频与视频通话）以及修复错误！
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.1.0

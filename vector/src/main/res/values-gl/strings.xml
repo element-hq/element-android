@@ -830,4 +830,28 @@
     <string name="title_activity_keys_backup_setup">Copia de apoio da chave</string>
     <string name="notification_sync_init">Iniciando o servizo</string>
     <string name="system_theme">Por defecto no sistema</string>
+    <string name="missing_permissions_error">Debido á falta de permisos, esta acción non é posible.</string>
+    <string name="start_chatting">Iniciar Chat</string>
+    <string name="reset">Restablecer</string>
+    <string name="dismiss">Desbotar</string>
+    <string name="pause_video">Deter</string>
+    <string name="play_video">Reproducir</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="revoke">Revogar</string>
+    <string name="none">Nada</string>
+    <string name="stay">Permanecer</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Vas perder o acceso ás túas mensaxes cifradas a non ser que fagas unha copia de apoio das chaves antes de desconectar.</string>
+    <string name="backup">Copiar</string>
+    <string name="are_you_sure">Tes a certeza\?</string>
+    <string name="keys_backup_activate">Usa a Copia de apoio das Chaves</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Copiando as chaves…</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Non quero as miñas mensaxes cifradas</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">A Copia Segura das Chaves está activa para tódalas túas sesións para evitar perder o acceso ás mensaxes cifradas.</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Estase realizando a copia de apoio. Se desconectas agora perderás o acceso ás mensaxes cifradas.</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Vas perdelas mensaxes cifradas se desconectas agora</string>
+    <string name="keys_backup_is_not_finished_please_wait">Non rematou a copia das chaves, agarda…</string>
+    <string name="initial_sync_start_downloading">Sincr. inicial:
+\nDescargando datos…</string>
+    <string name="initial_sync_start_server_computing">Sincr. inicial:
+\nAgardando resposta do servidor…</string>
 </resources>

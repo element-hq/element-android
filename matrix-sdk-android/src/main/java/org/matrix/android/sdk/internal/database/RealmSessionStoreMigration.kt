@@ -17,22 +17,27 @@
 package org.matrix.android.sdk.internal.database
 
 import io.realm.DynamicRealm
+import io.realm.FieldAttribute
 import io.realm.RealmMigration
+import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
+import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomTagEntityFields
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import timber.log.Timber
 import javax.inject.Inject
 
 class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 8L
+        const val SESSION_STORE_SCHEMA_VERSION = 9L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -46,6 +51,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 5) migrateTo6(realm)
         if (oldVersion <= 6) migrateTo7(realm)
         if (oldVersion <= 7) migrateTo8(realm)
+        if (oldVersion <= 8) migrateTo9(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -148,5 +154,44 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 ?.removeField("lastEditTs")
                 ?.removeField("sourceLocalEchoEvents")
                 ?.addRealmListField(EditAggregatedSummaryEntityFields.EDITIONS.`$`, editionOfEventSchema)
+    }
+
+    fun migrateTo9(realm: DynamicRealm) {
+        Timber.d("Step 8 -> 9")
+
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Long::class.java, FieldAttribute.INDEXED)
+                ?.setNullable(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, true)
+                ?.addIndex(RoomSummaryEntityFields.MEMBERSHIP_STR)
+                ?.addIndex(RoomSummaryEntityFields.IS_DIRECT)
+                ?.addIndex(RoomSummaryEntityFields.VERSIONING_STATE_STR)
+
+                ?.addField(RoomSummaryEntityFields.IS_FAVOURITE, Boolean::class.java)
+                ?.addIndex(RoomSummaryEntityFields.IS_FAVOURITE)
+                ?.addField(RoomSummaryEntityFields.IS_LOW_PRIORITY, Boolean::class.java)
+                ?.addIndex(RoomSummaryEntityFields.IS_LOW_PRIORITY)
+                ?.addField(RoomSummaryEntityFields.IS_SERVER_NOTICE, Boolean::class.java)
+                ?.addIndex(RoomSummaryEntityFields.IS_SERVER_NOTICE)
+
+                ?.transform { obj ->
+
+                    val isFavorite = obj.getList(RoomSummaryEntityFields.TAGS.`$`).any {
+                        it.getString(RoomTagEntityFields.TAG_NAME) == RoomTag.ROOM_TAG_FAVOURITE
+                    }
+                    obj.setBoolean(RoomSummaryEntityFields.IS_FAVOURITE, isFavorite)
+
+                    val isLowPriority = obj.getList(RoomSummaryEntityFields.TAGS.`$`).any {
+                        it.getString(RoomTagEntityFields.TAG_NAME) == RoomTag.ROOM_TAG_LOW_PRIORITY
+                    }
+
+                    obj.setBoolean(RoomSummaryEntityFields.IS_LOW_PRIORITY, isLowPriority)
+
+//                    XXX migrate last message origin server ts
+                    obj.getObject(RoomSummaryEntityFields.LATEST_PREVIEWABLE_EVENT.`$`)
+                            ?.getObject(TimelineEventEntityFields.ROOT.`$`)
+                            ?.getLong(EventEntityFields.ORIGIN_SERVER_TS)?.let {
+                                obj.setLong(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, it)
+                            }
+                }
     }
 }

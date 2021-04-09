@@ -42,8 +42,8 @@ internal class DefaultDeleteDeviceTask @Inject constructor(
 
     override suspend fun execute(params: DeleteDeviceTask.Params) {
         try {
-            executeRequest<Unit>(globalErrorReceiver) {
-                apiCall = cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams(params.userAuthParam?.asMap()))
+            executeRequest(globalErrorReceiver) {
+                cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams(params.userAuthParam?.asMap()))
             }
         } catch (throwable: Throwable) {
             if (params.userInteractiveAuthInterceptor == null

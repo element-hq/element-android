@@ -48,8 +48,8 @@ internal class DefaultFetchTokenAndPaginateTask @Inject constructor(
 
     override suspend fun execute(params: FetchTokenAndPaginateTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
-        val response = executeRequest<EventContextResponse>(globalErrorReceiver) {
-            apiCall = roomAPI.getContextOfEvent(params.roomId, params.lastKnownEventId, 0, filter)
+        val response = executeRequest(globalErrorReceiver) {
+            roomAPI.getContextOfEvent(params.roomId, params.lastKnownEventId, 0, filter)
         }
         val fromToken = if (params.direction == PaginationDirection.FORWARDS) {
             response.end

@@ -55,7 +55,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
@@ -305,17 +304,13 @@ class VectorSettingsGeneralFragment @Inject constructor(
     private fun uploadAvatar(uri: Uri) {
         displayLoadingView()
 
-        session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString(), object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                if (!isAdded) return
-                onCommonDone(null)
+        lifecycleScope.launch {
+            val result = runCatching {
+                session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString())
             }
-
-            override fun onFailure(failure: Throwable) {
-                if (!isAdded) return
-                onCommonDone(failure.localizedMessage)
-            }
-        })
+            if (!isAdded) return@launch
+            onCommonDone(result.fold({ null }, { it.localizedMessage }))
+        }
     }
 
     // ==============================================================================================================
@@ -477,20 +472,21 @@ class VectorSettingsGeneralFragment @Inject constructor(
         if (currentDisplayName != value) {
             displayLoadingView()
 
-            session.setDisplayName(session.myUserId, value, object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    if (!isAdded) return
-                    // refresh the settings value
-                    mDisplayNamePreference.summary = value
-                    mDisplayNamePreference.text = value
-                    onCommonDone(null)
-                }
-
-                override fun onFailure(failure: Throwable) {
-                    if (!isAdded) return
-                    onCommonDone(failure.localizedMessage)
-                }
-            })
+            lifecycleScope.launch {
+                val result = runCatching { session.setDisplayName(session.myUserId, value) }
+                if (!isAdded) return@launch
+                result.fold(
+                        {
+                            // refresh the settings value
+                            mDisplayNamePreference.summary = value
+                            mDisplayNamePreference.text = value
+                            onCommonDone(null)
+                        },
+                        {
+                            onCommonDone(it.localizedMessage)
+                        }
+                )
+            }
         }
     }
 }

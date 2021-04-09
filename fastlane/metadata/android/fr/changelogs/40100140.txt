@@ -1,0 +1,2 @@
+Principaux changements pour cette version : modification des permissions dans les salons, thème lumineux/sombre automatique, et plein de corrections de bugs.
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.0.14

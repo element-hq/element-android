@@ -20,7 +20,6 @@ import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.MXKey
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimBody
-import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
@@ -42,8 +41,8 @@ internal class DefaultClaimOneTimeKeysForUsersDevice @Inject constructor(
     override suspend fun execute(params: ClaimOneTimeKeysForUsersDeviceTask.Params): MXUsersDevicesMap<MXKey> {
         val body = KeysClaimBody(oneTimeKeys = params.usersDevicesKeyTypesMap.map)
 
-        val keysClaimResponse = executeRequest<KeysClaimResponse>(globalErrorReceiver) {
-            apiCall = cryptoApi.claimOneTimeKeysForUsersDevices(body)
+        val keysClaimResponse = executeRequest(globalErrorReceiver) {
+            cryptoApi.claimOneTimeKeysForUsersDevices(body)
         }
         val map = MXUsersDevicesMap<MXKey>()
         keysClaimResponse.oneTimeKeys?.let { oneTimeKeys ->

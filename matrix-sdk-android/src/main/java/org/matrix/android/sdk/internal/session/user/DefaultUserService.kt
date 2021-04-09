@@ -18,54 +18,35 @@ package org.matrix.android.sdk.internal.session.user
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.profile.GetProfileInfoTask
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateIgnoredUserIdsTask
 import org.matrix.android.sdk.internal.session.user.model.SearchUserTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import javax.inject.Inject
 
 internal class DefaultUserService @Inject constructor(private val userDataSource: UserDataSource,
                                                       private val searchUserTask: SearchUserTask,
                                                       private val updateIgnoredUserIdsTask: UpdateIgnoredUserIdsTask,
-                                                      private val getProfileInfoTask: GetProfileInfoTask,
-                                                      private val taskExecutor: TaskExecutor) : UserService {
+                                                      private val getProfileInfoTask: GetProfileInfoTask) : UserService {
 
     override fun getUser(userId: String): User? {
         return userDataSource.getUser(userId)
     }
 
-    override fun resolveUser(userId: String, callback: MatrixCallback<User>) {
+    override suspend fun resolveUser(userId: String): User {
         val known = getUser(userId)
         if (known != null) {
-            callback.onSuccess(known)
+            return known
         } else {
             val params = GetProfileInfoTask.Params(userId)
-            getProfileInfoTask
-                    .configureWith(params) {
-                        this.callback = object : MatrixCallback<JsonDict> {
-                            override fun onSuccess(data: JsonDict) {
-                                callback.onSuccess(
-                                        User(
-                                                userId,
-                                                data[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                                data[ProfileService.AVATAR_URL_KEY] as? String)
-                                )
-                            }
-
-                            override fun onFailure(failure: Throwable) {
-                                callback.onFailure(failure)
-                            }
-                        }
-                    }
-                    .executeBy(taskExecutor)
+            val data = getProfileInfoTask.execute(params)
+            return User(
+                    userId,
+                    data[ProfileService.DISPLAY_NAME_KEY] as? String,
+                    data[ProfileService.AVATAR_URL_KEY] as? String)
         }
     }
 
@@ -85,33 +66,20 @@ internal class DefaultUserService @Inject constructor(private val userDataSource
         return userDataSource.getIgnoredUsersLive()
     }
 
-    override fun searchUsersDirectory(search: String,
-                                      limit: Int,
-                                      excludedUserIds: Set<String>,
-                                      callback: MatrixCallback<List<User>>): Cancelable {
+    override suspend fun searchUsersDirectory(search: String,
+                                              limit: Int,
+                                              excludedUserIds: Set<String>): List<User> {
         val params = SearchUserTask.Params(limit, search, excludedUserIds)
-        return searchUserTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        return searchUserTask.execute(params)
     }
 
-    override fun ignoreUserIds(userIds: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun ignoreUserIds(userIds: List<String>) {
         val params = UpdateIgnoredUserIdsTask.Params(userIdsToIgnore = userIds.toList())
-        return updateIgnoredUserIdsTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        updateIgnoredUserIdsTask.execute(params)
     }
 
-    override fun unIgnoreUserIds(userIds: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun unIgnoreUserIds(userIds: List<String>) {
         val params = UpdateIgnoredUserIdsTask.Params(userIdsToUnIgnore = userIds.toList())
-        return updateIgnoredUserIdsTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        updateIgnoredUserIdsTask.execute(params)
     }
 }

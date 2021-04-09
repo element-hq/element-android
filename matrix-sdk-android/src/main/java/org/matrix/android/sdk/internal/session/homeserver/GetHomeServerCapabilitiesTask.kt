@@ -71,20 +71,20 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         }
 
         val capabilities = runCatching {
-            executeRequest<GetCapabilitiesResult>(globalErrorReceiver) {
-                apiCall = capabilitiesAPI.getCapabilities()
+            executeRequest(globalErrorReceiver) {
+                capabilitiesAPI.getCapabilities()
             }
         }.getOrNull()
 
         val mediaConfig = runCatching {
-            executeRequest<GetMediaConfigResult>(globalErrorReceiver) {
-                apiCall = mediaAPI.getMediaConfig()
+            executeRequest(globalErrorReceiver) {
+                mediaAPI.getMediaConfig()
             }
         }.getOrNull()
 
         val versions = runCatching {
-            executeRequest<Versions>(null) {
-                apiCall = capabilitiesAPI.getVersions()
+            executeRequest(null) {
+                capabilitiesAPI.getVersions()
             }
         }.getOrNull()
 
