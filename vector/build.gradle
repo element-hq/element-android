@@ -423,7 +423,7 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:21.0.1') {
+    gplayImplementation('com.google.firebase:firebase-messaging:21.1.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
