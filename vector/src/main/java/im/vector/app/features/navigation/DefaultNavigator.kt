@@ -19,9 +19,11 @@ package im.vector.app.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.View
 import android.view.Window
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
@@ -34,6 +36,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
+import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
@@ -42,6 +45,7 @@ import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
+import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
@@ -297,8 +301,17 @@ class DefaultNavigator @Inject constructor(
 
     override fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>?) {
         if (widget.type is WidgetType.Jitsi) {
-            val enableVideo = options?.get(JitsiCallViewModel.ENABLE_VIDEO_OPTION) == true
-            context.startActivity(VectorJitsiActivity.newIntent(context, roomId = roomId, widgetId = widget.widgetId, enableVideo = enableVideo))
+            // Jitsi SDK is now for API 23+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                AlertDialog.Builder(context)
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(R.string.error_jitsi_not_supported_on_old_device)
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
+            } else {
+                val enableVideo = options?.get(JitsiCallViewModel.ENABLE_VIDEO_OPTION) == true
+                context.startActivity(VectorJitsiActivity.newIntent(context, roomId = roomId, widgetId = widget.widgetId, enableVideo = enableVideo))
+            }
         } else {
             val widgetArgs = widgetArgsBuilder.buildRoomWidgetArgs(roomId, widget)
             context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
@@ -342,6 +355,15 @@ class DefaultNavigator @Inject constructor(
 
     override fun openSearch(context: Context, roomId: String) {
         val intent = SearchActivity.newIntent(context, SearchArgs(roomId))
+        context.startActivity(intent)
+    }
+
+    override fun openDevTools(context: Context, roomId: String) {
+        context.startActivity(RoomDevToolActivity.intent(context, roomId))
+    }
+
+    override fun openCallTransfer(context: Context, callId: String) {
+        val intent = CallTransferActivity.newIntent(context, callId)
         context.startActivity(intent)
     }
 

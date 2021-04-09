@@ -16,11 +16,10 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.core.epoxy.EmptyItem_
+import im.vector.app.core.epoxy.TimelineEmptyItem
+import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.resources.UserPreferencesProvider
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
@@ -33,21 +32,23 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val encryptionItemFactory: EncryptionItemFactory,
                                               private val roomCreateItemFactory: RoomCreateItemFactory,
                                               private val widgetItemFactory: WidgetItemFactory,
-                                              private val roomSummaryHolder: RoomSummaryHolder,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
-                                              private val userPreferencesProvider: UserPreferencesProvider) {
+                                              private val callItemFactory: CallItemFactory,
+                                              private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper) {
 
-    fun create(event: TimelineEvent,
-               nextEvent: TimelineEvent?,
-               eventIdToHighlight: String?,
-               callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
-        val highlight = event.root.eventId == eventIdToHighlight
-
+    /**
+     * Reminder: nextEvent is older and prevEvent is newer.
+     */
+    fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*> {
+        val event = params.event
         val computedModel = try {
+            if (!timelineEventVisibilityHelper.shouldShowEvent(event, params.highlightedEventId)) {
+                return buildEmptyItem(event, params.prevEvent, params.highlightedEventId)
+            }
             when (event.root.getClearType()) {
+                // Message itemsX
                 EventType.STICKER,
-                EventType.MESSAGE               -> messageItemFactory.create(event, nextEvent, highlight, callback)
-                // State and call
+                EventType.MESSAGE               -> messageItemFactory.create(params)
                 EventType.STATE_ROOM_TOMBSTONE,
                 EventType.STATE_ROOM_NAME,
                 EventType.STATE_ROOM_TOPIC,
@@ -59,57 +60,61 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
-                EventType.CALL_INVITE,
-                EventType.CALL_HANGUP,
-                EventType.CALL_ANSWER,
-                EventType.STATE_ROOM_POWER_LEVELS,
-                EventType.REACTION,
-                EventType.REDACTION             -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
-                EventType.STATE_ROOM_WIDGET_LEGACY,
-                EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(event, highlight, callback)
-                EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(event, highlight, callback)
-                // State room create
-                EventType.STATE_ROOM_CREATE     -> roomCreateItemFactory.create(event, callback)
-                // Crypto
-                EventType.ENCRYPTED             -> {
-                    if (event.root.isRedacted()) {
-                        // Redacted event, let the MessageItemFactory handle it
-                        messageItemFactory.create(event, nextEvent, highlight, callback)
-                    } else {
-                        encryptedItemFactory.create(event, nextEvent, highlight, callback)
-                    }
-                }
+                EventType.REDACTION,
                 EventType.STATE_ROOM_ALIASES,
                 EventType.KEY_VERIFICATION_ACCEPT,
                 EventType.KEY_VERIFICATION_START,
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_MAC,
-                EventType.CALL_CANDIDATES       -> {
-                    // TODO These are not filtered out by timeline when encrypted
-                    // For now manually ignore
-                    if (userPreferencesProvider.shouldShowHiddenEvents()) {
-                        noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+                EventType.CALL_CANDIDATES,
+                EventType.CALL_REPLACES,
+                EventType.CALL_SELECT_ANSWER,
+                EventType.CALL_NEGOTIATE,
+                EventType.REACTION,
+                EventType.STATE_ROOM_POWER_LEVELS -> noticeItemFactory.create(params)
+                EventType.STATE_ROOM_WIDGET_LEGACY,
+                EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(params)
+                EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(params)
+                // State room create
+                EventType.STATE_ROOM_CREATE     -> roomCreateItemFactory.create(params)
+                // Calls
+                EventType.CALL_INVITE,
+                EventType.CALL_HANGUP,
+                EventType.CALL_REJECT,
+                EventType.CALL_ANSWER           -> callItemFactory.create(params)
+                // Crypto
+                EventType.ENCRYPTED             -> {
+                    if (event.root.isRedacted()) {
+                        // Redacted event, let the MessageItemFactory handle it
+                        messageItemFactory.create(params)
                     } else {
-                        null
+                        encryptedItemFactory.create(params)
                     }
                 }
                 EventType.KEY_VERIFICATION_CANCEL,
                 EventType.KEY_VERIFICATION_DONE -> {
-                    verificationConclusionItemFactory.create(event, highlight, callback)
+                    verificationConclusionItemFactory.create(params)
                 }
-
                 // Unhandled event types
                 else                            -> {
                     // Should only happen when shouldShowHiddenEvents() settings is ON
                     Timber.v("Type ${event.root.getClearType()} not handled")
-                    defaultItemFactory.create(event, highlight, callback)
+                    defaultItemFactory.create(params)
                 }
             }
         } catch (throwable: Throwable) {
             Timber.e(throwable, "failed to create message item")
-            defaultItemFactory.create(event, highlight, callback, throwable)
+            defaultItemFactory.create(params, throwable)
         }
-        return (computedModel ?: EmptyItem_())
+        return computedModel ?: buildEmptyItem(event, params.prevEvent, params.highlightedEventId)
+    }
+
+    private fun buildEmptyItem(timelineEvent: TimelineEvent, prevEvent: TimelineEvent?, highlightedEventId: String?): TimelineEmptyItem {
+        val isNotBlank = prevEvent == null || timelineEventVisibilityHelper.shouldShowEvent(prevEvent, highlightedEventId)
+        return TimelineEmptyItem_()
+                .id(timelineEvent.localId)
+                .eventId(timelineEvent.eventId)
+                .notBlank(isNotBlank)
     }
 }

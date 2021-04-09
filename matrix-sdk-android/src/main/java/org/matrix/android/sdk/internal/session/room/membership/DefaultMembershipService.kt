@@ -21,13 +21,11 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
@@ -39,8 +37,6 @@ import org.matrix.android.sdk.internal.session.room.membership.joining.InviteTas
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.fetchCopied
 import io.realm.Realm
 import io.realm.RealmQuery
@@ -48,7 +44,6 @@ import io.realm.RealmQuery
 internal class DefaultMembershipService @AssistedInject constructor(
         @Assisted private val roomId: String,
         @SessionDatabase private val monarchy: Monarchy,
-        private val taskExecutor: TaskExecutor,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val inviteTask: InviteTask,
         private val inviteThreePidTask: InviteThreePidTask,
@@ -64,13 +59,9 @@ internal class DefaultMembershipService @AssistedInject constructor(
         fun create(roomId: String): DefaultMembershipService
     }
 
-    override fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun loadRoomMembersIfNeeded() {
         val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)
-        return loadRoomMembersTask
-                .configureWith(params) {
-                    this.callback = matrixCallback
-                }
-                .executeBy(taskExecutor)
+        loadRoomMembersTask.execute(params)
     }
 
     override fun getRoomMember(userId: String): RoomMemberSummary? {
@@ -120,66 +111,38 @@ internal class DefaultMembershipService @AssistedInject constructor(
         }
     }
 
-    override fun ban(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun ban(userId: String, reason: String?) {
         val params = MembershipAdminTask.Params(MembershipAdminTask.Type.BAN, roomId, userId, reason)
-        return membershipAdminTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        membershipAdminTask.execute(params)
     }
 
-    override fun unban(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun unban(userId: String, reason: String?) {
         val params = MembershipAdminTask.Params(MembershipAdminTask.Type.UNBAN, roomId, userId, reason)
-        return membershipAdminTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        membershipAdminTask.execute(params)
     }
 
-    override fun kick(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun kick(userId: String, reason: String?) {
         val params = MembershipAdminTask.Params(MembershipAdminTask.Type.KICK, roomId, userId, reason)
-        return membershipAdminTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        membershipAdminTask.execute(params)
     }
 
-    override fun invite(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun invite(userId: String, reason: String?) {
         val params = InviteTask.Params(roomId, userId, reason)
-        return inviteTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        inviteTask.execute(params)
     }
 
-    override fun invite3pid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun invite3pid(threePid: ThreePid) {
         val params = InviteThreePidTask.Params(roomId, threePid)
-        return inviteThreePidTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        return inviteThreePidTask.execute(params)
     }
 
-    override fun join(reason: String?, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun join(reason: String?, viaServers: List<String>) {
         val params = JoinRoomTask.Params(roomId, reason, viaServers)
-        return joinTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        joinTask.execute(params)
     }
 
-    override fun leave(reason: String?, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun leave(reason: String?) {
         val params = LeaveRoomTask.Params(roomId, reason)
-        return leaveRoomTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        leaveRoomTask.execute(params)
     }
 }

@@ -7,6 +7,7 @@
         android:id="@+id/list_preference_warning_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/dialog_title_warning"
         android:src="@drawable/vector_warning_red" />
 
 </FrameLayout>

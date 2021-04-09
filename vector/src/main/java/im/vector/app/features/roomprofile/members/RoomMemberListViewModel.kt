@@ -29,7 +29,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -90,7 +89,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                                 .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
                                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                                 .unwrap(),
-                        BiFunction { roomMembers, powerLevelsContent ->
+                        { roomMembers, powerLevelsContent ->
                             buildRoomMemberSummaries(powerLevelsContent, roomMembers)
                         }
                 )

@@ -61,7 +61,7 @@ class ExportKeysDialog {
             passwordVisible = !passwordVisible
             views.exportDialogEt.showPassword(passwordVisible)
             views.exportDialogEtConfirm.showPassword(passwordVisible)
-            views.exportDialogShowPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+            views.exportDialogShowPassword.render(passwordVisible)
         }
 
         val exportDialog = builder.show()

@@ -458,7 +458,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             views.importDialogShowPassword.setOnClickListener {
                 passwordVisible = !passwordVisible
                 views.dialogE2eKeysPassphraseEditText.showPassword(passwordVisible)
-                views.importDialogShowPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+                views.importDialogShowPassword.render(passwordVisible)
             }
 
             views.dialogE2eKeysPassphraseEditText.addTextChangedListener(object : SimpleTextWatcher() {

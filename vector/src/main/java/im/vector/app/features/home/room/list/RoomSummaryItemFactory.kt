@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.list
 
-import android.view.View
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
@@ -41,7 +40,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
                selectedRoomIds: Set<String>,
-               listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+               listener: RoomListListener?): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
                 val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
@@ -53,7 +52,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
 
     private fun createInvitationItem(roomSummary: RoomSummary,
                                      changeMembershipState: ChangeMembershipState,
-                                     listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+                                     listener: RoomListListener?): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
             roomSummary.inviterId
         } else {
@@ -86,14 +85,15 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         var latestEventTime: CharSequence = ""
         val latestEvent = roomSummary.latestPreviewableEvent
         if (latestEvent != null) {
-            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect.not(), roomSummary)
+            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+                // We do not display shield in the room list anymore
+                // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
                 .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)
@@ -109,7 +109,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                     onLongClick?.invoke(roomSummary) ?: false
                 }
                 .itemClickListener(
-                        DebouncedClickListener(View.OnClickListener { _ ->
+                        DebouncedClickListener({
                             onClick?.invoke(roomSummary)
                         })
                 )

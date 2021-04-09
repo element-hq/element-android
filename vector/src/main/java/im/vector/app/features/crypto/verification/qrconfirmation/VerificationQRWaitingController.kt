@@ -23,6 +23,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class VerificationQRWaitingController @Inject constructor(
@@ -49,7 +50,7 @@ class VerificationQRWaitingController @Inject constructor(
 
         bottomSheetVerificationBigImageItem {
             id("image")
-            imageRes(R.drawable.ic_shield_trusted)
+            roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
         }
 
         bottomSheetVerificationWaitingItem {

@@ -33,11 +33,11 @@ internal class DefaultSetAvatarUrlTask @Inject constructor(
         private val globalErrorReceiver: GlobalErrorReceiver) : SetAvatarUrlTask() {
 
     override suspend fun execute(params: Params) {
+        val body = SetAvatarUrlBody(
+                avatarUrl = params.newAvatarUrl
+        )
         return executeRequest(globalErrorReceiver) {
-            val body = SetAvatarUrlBody(
-                    avatarUrl = params.newAvatarUrl
-            )
-            apiCall = profileAPI.setAvatarUrl(params.userId, body)
+            profileAPI.setAvatarUrl(params.userId, body)
         }
     }
 }

@@ -1,5 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s enviou uma imagem.</string>
+
+    <string name="notice_room_invite_no_invitee">convite de %s</string>
+    <string name="notice_room_invite">%1$s convidou %2$s</string>
+    <string name="notice_room_invite_you">%1$s convidou-o</string>
+    <string name="notice_room_join">%1$s entrou</string>
+    <string name="notice_room_leave">%1$s saiu</string>
+    <string name="notice_room_reject">%1$s recusou o convite</string>
+    <string name="notice_room_kick">%1$s expulsou %2$s</string>
+    <string name="notice_room_unban">%1$s des-baniu %2$s</string>
+    <string name="notice_room_ban">%1$s baniu %2$s</string>
+    <string name="notice_room_withdraw">%1$s cancelou o convite de %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s mudou o seu avatar</string>
+    <string name="notice_display_name_set">%1$s definiu seu nome público como %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s alterou seu nome público de %2$s para %3$s</string>
+    <string name="notice_display_name_removed">%1$s apagou o seu nome público (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s alterou o tópico desta sala para: %2$s</string>
+    <string name="notice_room_name_changed">%1$s alterou o nome desta sala para: %2$s</string>
+    <string name="notice_placed_video_call">%s iniciou uma chamada de vídeo.</string>
+    <string name="notice_placed_voice_call">%s iniciou uma chamada de voz.</string>
+    <string name="notice_answered_call">%s respondeu à chamada.</string>
+    <string name="notice_ended_call">%s terminou a chamada.</string>
+    <string name="notice_made_future_room_visibility">%1$s tornou o histórico futuro desta sala visível para %2$s</string>
+    <string name="notice_room_visibility_invited">todas os membros que integram esta sala, a partir do momento em que foram convidados.</string>
+    <string name="notice_room_visibility_joined">todas os membros da sala, a partir do momento em que entraram.</string>
+    <string name="notice_room_visibility_shared">todas os membros da sala.</string>
+    <string name="notice_room_visibility_world_readable">todos.</string>
+    <string name="notice_room_visibility_unknown">desconhecida (%s).</string>
+    <string name="notice_end_to_end">%1$s ativou a criptografia ponta-a-ponta (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s solicitou uma conferência VoIP</string>
+    <string name="notice_voip_started">A conferência VoIP começou</string>
+    <string name="notice_voip_finished">A conferência VoIP terminou</string>
+
+    <string name="notice_avatar_changed_too">(o avatar também foi alterado)</string>
+    <string name="notice_room_name_removed">%1$s removeu o nome da sala</string>
+    <string name="notice_room_topic_removed">%1$s removeu o tópico da sala</string>
+    <string name="notice_profile_change_redacted">%1$s atualizou o seu perfil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s enviou um convite para que %2$s se junte à sala</string>
+    <string name="notice_room_third_party_registered_invite">%1$s aceitou o convite para %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Impossível decifrar: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">O dispositivo de quem enviou a mensagem não nos enviou as chaves para esta mensagem.</string>
+
+    <!-- Room Screen -->
+    <string name="could_not_redact">Não foi possível apagar</string>
+    <string name="unable_to_send_message">Não foi possível enviar a mensagem</string>
+
+    <string name="message_failed_to_upload">O envio da imagem falhou</string>
+
+    <!-- general errors -->
+    <string name="network_error">Erro de conexão à Internet</string>
+    <string name="matrix_error">Erro do Matrix</string>
+
+    <!-- Home Screen -->
+
+    <!-- Last seen time -->
+
+    <!-- call events -->
+
+    <!-- room error messages -->
+    <string name="room_error_join_failed_empty_room">Ainda não é possível voltar a entrar numa sala vazia.</string>
+
+    <!-- medium friendly name -->
+    <string name="medium_email">Endereço de e-mail</string>
+    <string name="medium_phone_number">Número de telefone</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Convite de %s</string>
+    <string name="room_displayname_room_invite">Convite para sala</string>
+    <string name="room_displayname_two_members">%1$s e %2$s</string>
+    <string name="room_displayname_empty_room">Sala vazia</string>
+
+
+    <string name="summary_user_sent_sticker">%1$s enviou um sticker.</string>
+
+    <string name="notice_room_update">%s fez o upgrade da sala.</string>
+
+    <string name="notice_event_redacted">Mensagem removida</string>
+    <string name="notice_event_redacted_by">Mensagem removida por %1$s</string>
     <!-- titles -->
     <string name="title_activity_home">Mensagens</string>
     <string name="title_activity_room">Sala</string>
@@ -70,7 +151,7 @@
     <string name="local_address_book_header">Lista de endereços local</string>
     <string name="matrix_only_filter">Apenas contactos do Matrix</string>
     <string name="no_conversation_placeholder">Não há conversas</string>
-    <string name="no_contact_access_placeholder">Não permitiu ao Element aceder aos seus contactos locais</string>
+    <string name="template_no_contact_access_placeholder">Não permitiu ao ${app_name} aceder aos seus contactos locais</string>
     <string name="no_result_placeholder">Sem resultados</string>
     <!-- Rooms fragment -->
     <string name="rooms_header">Salas</string>
@@ -210,26 +291,26 @@ A sessão foi terminada em todos os dispositivos e não receberá mais notifica�
     <string name="media_picker_cannot_record_video">Não foi possível gravar vídeo</string>
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informação</string>
-    <string name="permissions_rationale_msg_storage">O Element necessita de permissão para aceder ao seu armazenamento de fotos e vídeos para poder enviar e guardar anexos.
+    <string name="template_permissions_rationale_msg_storage">O ${app_name} necessita de permissão para aceder ao seu armazenamento de fotos e vídeos para poder enviar e guardar anexos.
 
 Permita o acesso na próxima janela para poder enviar ficheiros a partir do seu telefone.</string>
-    <string name="permissions_rationale_msg_camera">O Element necessita de permissão para aceder à sua câmara para poder tirar fotos e fazer chamadas de vídeo.</string>
+    <string name="template_permissions_rationale_msg_camera">O ${app_name} necessita de permissão para aceder à sua câmara para poder tirar fotos e fazer chamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Por favor, permita o acesso na próxima janela para poder realizar a chamada.</string>
-    <string name="permissions_rationale_msg_record_audio">Element necessita de permissão para aceder ao seu microfone para realizar chamadas de áudio.</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} necessita de permissão para aceder ao seu microfone para realizar chamadas de áudio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Por favor, permita acesso na próxima janela para poder efetuar a chamada.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element necessita de permissão para aceder à sua câmara e ao seu microfone para realizar chamadas de vídeo.
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} necessita de permissão para aceder à sua câmara e ao seu microfone para realizar chamadas de vídeo.
 
 Por favor, permita o acesso na próxima janela para poder efetuar a chamada.</string>
-    <string name="permissions_rationale_msg_contacts">O Element necessita de permissão para aceder à sua lista de contactos para encontrar outros utilizadores Matrix a partir dos seus e-mails e números de telefone.
+    <string name="template_permissions_rationale_msg_contacts">O ${app_name} necessita de permissão para aceder à sua lista de contactos para encontrar outros utilizadores Matrix a partir dos seus e-mails e números de telefone.
 
-Por favor, permita o acesso na próxima janela para poder encontrar utilizadores na sua lista de contactos que podem ser contactados pelo Element.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">O Element necessita de permissão para aceder à sua lista de contactos para encontrar outros utilizadores Matrix a partir dos seus endereços de email e números de telefone.
+Por favor, permita o acesso na próxima janela para poder encontrar utilizadores na sua lista de contactos que podem ser contactados pelo ${app_name}.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">O ${app_name} necessita de permissão para aceder à sua lista de contactos para encontrar outros utilizadores Matrix a partir dos seus endereços de email e números de telefone.
 
-Permitir ao Element aceder aos seus contactos?</string>
+Permitir ao ${app_name} aceder aos seus contactos?</string>
     <string name="permissions_action_not_performed_missing_permissions">Desculpe… A ação não foi realizada, por falta de permissões</string>
     <!-- medias slider string -->
     <string name="media_slider_saved">Guardado</string>
@@ -600,7 +681,7 @@ Dispositivos desconhecidos:</string>
     <string name="settings_clear_media_cache">Limpar cache de multimédia</string>
     <string name="light_theme">Tema Claro</string>
     <string name="dark_theme">Tema Escuro</string>
-    <string name="black_them">Tema Preto</string>
+    <string name="black_theme">Tema Preto</string>
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_12_24_timestamps">Utilizar formato de 12 horas (ex. 2:30pm)</string>
     <string name="widget_no_power_to_manage">Precisa de permissão para gerir os widgets nesta sala</string>
@@ -619,7 +700,6 @@ Dispositivos desconhecidos:</string>
     <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
     <string name="notification_sync_in_progress">A sincronizar…</string>
     <string name="notification_listening_for_events">À escuta de eventos</string>
-    <string name="status_theme">Tema Status.im</string>
     <string name="notification_noisy_notifications">Notificações ruidosas</string>
     <string name="notification_silent_notifications">Notificações silenciosas</string>
     <string name="title_activity_bug_report">Relatório de bug</string>
@@ -657,7 +737,7 @@ Adicionar alguns agora?</string>
     <string name="e2e_re_request_encryption_key"><u>Pedir de novo as chaves criptográficas</u> aos seus outros dispositivos.</string>
     <string name="e2e_re_request_encryption_key_sent">Pedido de chaves enviado.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Pedido enviado</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Por favor abra o Element num dispositivo que consiga decifrar a mensagem, para que esse dispositivo possa enviar as chaves para este dispositivo.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Por favor abra o ${app_name} num dispositivo que consiga decifrar a mensagem, para que esse dispositivo possa enviar as chaves para este dispositivo.</string>
     <string name="groups_list">Lista de Grupos</string>
     <plurals name="membership_changes">
         <item quantity="one">%d mudança de adesão</item>
@@ -738,13 +818,13 @@ Adicionar alguns agora?</string>
     <string name="settings_deactivate_account_section">Desactivar a conta</string>
     <string name="settings_deactivate_my_account">Desactivar a minha conta</string>
     <string name="startup_notification_privacy_title">Privacidade das Notificações</string>
-    <string name="startup_notification_privacy_message">O Element pode executar em segundo plano para gerir as notificações de forma segura e confidencial (isso poderá afectar a utilização da bateria).</string>
+    <string name="template_startup_notification_privacy_message">O ${app_name} pode executar em segundo plano para gerir as notificações de forma segura e confidencial (isso poderá afectar a utilização da bateria).</string>
     <string name="startup_notification_privacy_button_grant">Conceder permissão</string>
     <string name="startup_notification_privacy_button_other">Escolha outra opção</string>
     <string name="settings_analytics">Estatísticas de uso</string>
     <string name="settings_opt_in_of_analytics">Enviar dados de análise de estatísticas</string>
-    <string name="settings_opt_in_of_analytics_summary">O Element recolhe dados anónimos de análise de estatísticas para ajudar a melhorar a aplicação.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Por favor, permita o envio de dados de análise para ajudar-nos a melhorar o Element.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">O ${app_name} recolhe dados anónimos de análise de estatísticas para ajudar a melhorar a aplicação.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Por favor, permita o envio de dados de análise para ajudar-nos a melhorar o ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Sim, quero ajudar!</string>
     <string name="settings_flair">Insígnias</string>
     <string name="settings_without_flair">Você não faz, actualmente, parte de qualquer comunidade.</string>
@@ -913,7 +993,7 @@ A visibilidade das mensagens no Matrix é parecida com a dos emails. O nosso esq
     <string name="keys_backup_settings_delete_confirm_title">Apagar Backup</string>
     <string name="auth_accept_policies">Por favor veja e aceite, apolice para este servidor</string>
     <string name="settings_call_category">Chamadas</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Usar toque padrão para chamadas recebidas</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Usar toque padrão para chamadas recebidas</string>
     <string name="settings_call_ringtone_title">Toque para chamadas recebidas</string>
     <string name="settings_call_ringtone_dialog_title">Selecione toque para chamadas:</string>
     <string name="video_call_in_progress">Chamada de Vídeo em Progresso…</string>
@@ -936,7 +1016,7 @@ Se faz favor verifique configurações de conta</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Activar</string>
     <string name="settings_troubleshoot_test_device_settings_title">Configurações de aparelho</string>
     <string name="settings_troubleshoot_test_device_settings_success">Notificações estão activadas para este aparelho</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Notificações estão desactivadas para este aparelho
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Notificações estão desactivadas para este aparelho
 Por favor, verifique configurações de aplicação</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Activar</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Configurações personalizadas</string>
@@ -956,7 +1036,7 @@ Por favor, verifique configurações de aplicação</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Verificar restriçoes de histórico</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desactivar restricções</string>
     <string name="settings_troubleshoot_test_battery_title">Optimização de bateria</string>
-    <string name="settings_troubleshoot_test_battery_success">Element não é afectado por Optimização de bateria</string>
+    <string name="template_settings_troubleshoot_test_battery_success">${app_name} não é afectado por Optimização de bateria</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorar Optimização</string>
     <string name="settings_noisy_notifications_preferences">Configurar Notificações de ruido</string>
     <string name="settings_call_notifications_preferences">Configurar Notificações de chamadas</string>

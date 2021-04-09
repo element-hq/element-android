@@ -27,6 +27,7 @@ import org.matrix.android.sdk.internal.crypto.SendGossipWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessageWorker
 import org.matrix.android.sdk.internal.di.MatrixComponent
+import org.matrix.android.sdk.internal.federation.FederationModule
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.account.AccountModule
 import org.matrix.android.sdk.internal.session.cache.CacheModule
@@ -56,6 +57,7 @@ import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.session.terms.TermsModule
+import org.matrix.android.sdk.internal.session.thirdparty.ThirdPartyModule
 import org.matrix.android.sdk.internal.session.user.UserModule
 import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataModule
 import org.matrix.android.sdk.internal.session.widgets.WidgetModule
@@ -86,8 +88,10 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
             AccountDataModule::class,
             ProfileModule::class,
             AccountModule::class,
+            FederationModule::class,
             CallModule::class,
-            SearchModule::class
+            SearchModule::class,
+            ThirdPartyModule::class
         ]
 )
 @SessionScope

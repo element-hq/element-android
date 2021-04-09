@@ -27,6 +27,7 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
@@ -52,11 +53,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
                 .filter { it.isNotEmpty() }
                 .map {
                     val widget = it.first()
-                    val domain = try {
-                        URL(widget.computedUrl).host
-                    } catch (e: Throwable) {
-                        null
-                    }
+                    val domain = tryOrNull { URL(widget.widgetContent.url) }?.host
                     // TODO check from widget urls the perms that should be shown?
                     // For now put all
                     if (widget.type == WidgetType.Jitsi) {

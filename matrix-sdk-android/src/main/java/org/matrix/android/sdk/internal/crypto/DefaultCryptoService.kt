@@ -971,6 +971,41 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.logDbUsageInfo()
     }
 
+    override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            Timber.d("## CRYPTO | prepareToEncrypt() : Check room members up to date")
+            // Ensure to load all room members
+            try {
+                loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+            } catch (failure: Throwable) {
+                Timber.e("## CRYPTO | prepareToEncrypt() : Failed to load room members")
+                callback.onFailure(failure)
+                return@launch
+            }
+
+            val userIds = getRoomUserIds(roomId)
+
+            val algorithm = getEncryptionAlgorithm(roomId)
+
+            if (algorithm == null) {
+                val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                Timber.e("## CRYPTO | prepareToEncrypt() : $reason")
+                callback.onFailure(IllegalArgumentException("Missing algorithm"))
+                return@launch
+            }
+
+            runCatching {
+                preshareGroupSession(roomId, userIds)
+            }.fold(
+                    { callback.onSuccess(Unit) },
+                    {
+                        Timber.e("## CRYPTO | prepareToEncrypt() failed.")
+                        callback.onFailure(it)
+                    }
+            )
+        }
+    }
+
     /* ==========================================================================================
      * For test only
      * ========================================================================================== */

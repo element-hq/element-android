@@ -38,7 +38,7 @@ internal class DefaultReportContentTask @Inject constructor(
 
     override suspend fun execute(params: ReportContentTask.Params) {
         return executeRequest(globalErrorReceiver) {
-            apiCall = roomAPI.reportContent(params.roomId, params.eventId, ReportContentBody(params.score, params.reason))
+            roomAPI.reportContent(params.roomId, params.eventId, ReportContentBody(params.score, params.reason))
         }
     }
 }

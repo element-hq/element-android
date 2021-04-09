@@ -17,6 +17,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginStart="8dp"
+        android:contentDescription="@string/avatar"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -70,12 +71,12 @@
         android:minWidth="56dp"
         android:textColor="?riotx_text_secondary"
         android:textSize="15sp"
+        app:drawableStartCompat="@drawable/ic_user"
+        app:drawableTint="?riotx_text_secondary"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
         app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomTopic"
-        tools:text="148"
-        app:drawableTint="?riotx_text_secondary"
-        app:drawableStartCompat="@drawable/ic_user" />
+        tools:text="148" />
 
     <TextView
         android:id="@+id/itemPublicRoomAlias"

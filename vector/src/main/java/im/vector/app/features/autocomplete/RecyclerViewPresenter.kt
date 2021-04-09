@@ -102,7 +102,7 @@ abstract class RecyclerViewPresenter<T>(context: Context?) : AutocompletePresent
         return LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
-    private class Observer internal constructor(private val root: DataSetObserver) : RecyclerView.AdapterDataObserver() {
+    private class Observer constructor(private val root: DataSetObserver) : RecyclerView.AdapterDataObserver() {
         override fun onChanged() {
             root.onChanged()
         }

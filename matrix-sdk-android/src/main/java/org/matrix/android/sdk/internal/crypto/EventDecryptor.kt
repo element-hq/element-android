@@ -105,7 +105,7 @@ internal class EventDecryptor @Inject constructor(
                 try {
                     return alg.decryptEvent(event, timeline)
                 } catch (mxCryptoError: MXCryptoError) {
-                    Timber.d("## CRYPTO | internalDecryptEvent : Failed to decrypt ${event.eventId} reason: $mxCryptoError")
+                    Timber.v("## CRYPTO | internalDecryptEvent : Failed to decrypt ${event.eventId} reason: $mxCryptoError")
                     if (algorithm == MXCRYPTO_ALGORITHM_OLM) {
                         if (mxCryptoError is MXCryptoError.Base
                                 && mxCryptoError.errorType == MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE) {

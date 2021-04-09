@@ -39,6 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:contentDescription="@string/done"
         tools:layout_gravity="center_horizontal"
         tools:layout_marginTop="120dp"
         tools:src="@drawable/ic_tick" />

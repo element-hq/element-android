@@ -35,7 +35,7 @@ internal class DefaultDeleteBackupTask @Inject constructor(
 
     override suspend fun execute(params: DeleteBackupTask.Params) {
         return executeRequest(globalErrorReceiver) {
-            apiCall = roomKeysApi.deleteBackup(params.version)
+            roomKeysApi.deleteBackup(params.version)
         }
     }
 }

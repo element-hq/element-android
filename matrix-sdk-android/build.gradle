@@ -6,10 +6,10 @@ apply plugin: 'realm-android'
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:10.1.2"
+        classpath "io.realm:realm-gradle-plugin:10.4.0"
     }
 }
 
@@ -122,13 +122,13 @@ static def gitRevisionDate() {
 dependencies {
 
     def arrow_version = "0.8.2"
-    def moshi_version = '1.11.0'
+    def moshi_version = '1.12.0'
     def lifecycle_version = '2.2.0'
     def arch_version = '2.1.0'
     def markwon_version = '3.1.0'
-    def daggerVersion = '2.31'
-    def work_version = '2.4.0'
-    def retrofit_version = '2.6.2'
+    def daggerVersion = '2.33'
+    def work_version = '2.5.0'
+    def retrofit_version = '2.9.0'
 
     implementation 'net.java.dev.jna:jna:5.6.0@aar'
 
@@ -146,7 +146,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
 
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.8.1"))
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.1"))
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection'
@@ -157,11 +157,11 @@ dependencies {
     implementation "ru.noties.markwon:core:$markwon_version"
 
     // Image
-    implementation 'androidx.exifinterface:exifinterface:1.3.1'
+    implementation 'androidx.exifinterface:exifinterface:1.3.2'
 
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
-    kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
+    kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
 
     // Work
     implementation "androidx.work:work-runtime-ktx:$work_version"
@@ -171,7 +171,7 @@ dependencies {
     implementation "io.arrow-kt:arrow-instances-core:$arrow_version"
 
     // olm lib is now hosted by jitpack: https://jitpack.io/#org.matrix.gitlab.matrix-org/olm
-    implementation 'org.matrix.gitlab.matrix-org:olm:3.1.2'
+    implementation 'org.matrix.gitlab.matrix-org:olm:3.2.2'
 
     // DI
     implementation "com.google.dagger:dagger:$daggerVersion"
@@ -179,23 +179,17 @@ dependencies {
 
     // Logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.21'
 
-    // Web RTC
-    // org.webrtc:google-webrtc is for development purposes only. See http://webrtc.github.io/webrtc-org/native-code/android/
-    // implementation 'org.webrtc:google-webrtc:1.0.+'
-    // Use the same WebRTC library than the one used by Jitsi library
-    implementation('com.facebook.react:react-native-webrtc:1.84.0-jitsi-5112273@aar')
-
-    testImplementation 'junit:junit:4.13'
-    testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.5.1'
     //testImplementation 'org.robolectric:shadows-support-v4:3.0'
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
-    testImplementation 'io.mockk:mockk:1.9.2.kotlin12'
-    testImplementation 'org.amshove.kluent:kluent-android:1.61'
+    testImplementation 'io.mockk:mockk:1.11.0'
+    testImplementation 'org.amshove.kluent:kluent-android:1.65'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
@@ -207,8 +201,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'org.amshove.kluent:kluent-android:1.61'
-    // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
-    androidTestImplementation 'io.mockk:mockk-android:1.9.2.kotlin12'
+    androidTestImplementation 'io.mockk:mockk-android:1.11.0'
     androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
     // Plant Timber tree for test

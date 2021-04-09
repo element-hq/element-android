@@ -165,6 +165,7 @@ class BugReporter @Inject constructor(
                       withKeyRequestHistory: Boolean,
                       withScreenshot: Boolean,
                       theBugDescription: String,
+                      serverVersion: String,
                       listener: IMXBugReportListener?) {
         // enumerate files to delete
         val mBugReportFiles: MutableList<File> = ArrayList()
@@ -273,6 +274,7 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
                             .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
+                            .addFormDataPart("server_version", serverVersion)
 
                     val buildNumber = context.getString(R.string.build_number)
                     if (buildNumber.isNotEmpty() && buildNumber != "0") {
@@ -379,7 +381,7 @@ class BugReporter @Inject constructor(
                     if (responseCode != HttpURLConnection.HTTP_OK) {
                         if (null != errorMessage) {
                             serverError = "Failed with error $errorMessage"
-                        } else if (null == response || null == response.body) {
+                        } else if (response?.body == null) {
                             serverError = "Failed with error $responseCode"
                         } else {
                             try {

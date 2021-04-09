@@ -27,22 +27,35 @@ data class CallInviteContent(
         /**
          * Required. A unique identifier for the call.
          */
-        @Json(name = "call_id") val callId: String?,
+        @Json(name = "call_id") override val callId: String?,
+        /**
+         * Required. ID to let user identify remote echo of their own events
+         */
+        @Json(name = "party_id") override val partyId: String? = null,
         /**
          * Required. The session description object
          */
         @Json(name = "offer") val offer: Offer?,
         /**
-         * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
+         * Required. The version of the VoIP specification this message adheres to.
          */
-        @Json(name = "version") val version: Int? = 0,
+        @Json(name = "version") override val version: String?,
         /**
          * Required. The time in milliseconds that the invite is valid for.
          * Once the invite age exceeds this value, clients should discard it.
          * They should also no longer show the call as awaiting an answer in the UI.
          */
-        @Json(name = "lifetime") val lifetime: Int?
-) {
+        @Json(name = "lifetime") val lifetime: Int?,
+        /**
+         * The field should be added for all invites where the target is a specific user
+         */
+        @Json(name = "invitee") val invitee: String? = null,
+        /**
+         * Capability advertisement.
+         */
+        @Json(name = "capabilities") val capabilities: CallCapabilities? = null
+
+): CallSignallingContent  {
     @JsonClass(generateAdapter = true)
     data class Offer(
             /**

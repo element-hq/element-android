@@ -42,7 +42,7 @@ internal class DefaultUploadKeysTask @Inject constructor(
         Timber.i("## Uploading device keys -> $params.body")
 
         return executeRequest(globalErrorReceiver) {
-            apiCall = cryptoApi.UploadKeys(params.body)
+            cryptoApi.uploadKeys(params.body)
         }
     }
 }

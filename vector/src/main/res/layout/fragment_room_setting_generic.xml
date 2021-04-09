@@ -28,10 +28,20 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:contentDescription="@string/avatar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/avatars" />
+
+            <im.vector.app.core.ui.views.ShieldImageView
+                android:id="@+id/roomSettingsDecorationToolbarAvatarImageView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:layout_constraintCircle="@+id/roomSettingsToolbarAvatarImageView"
+                app:layout_constraintCircleAngle="135"
+                app:layout_constraintCircleRadius="20dp"
+                tools:ignore="MissingConstraints" />
 
             <TextView
                 android:id="@+id/roomSettingsToolbarTitleView"
@@ -54,9 +64,9 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/coordinatorLayout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -65,13 +65,30 @@ interface StateService {
      */
     suspend fun deleteAvatar()
 
+    /**
+     * Send a state event to the room
+     */
     suspend fun sendStateEvent(eventType: String, stateKey: String?, body: JsonDict)
 
+    /**
+     * Get a state event of the room
+     */
     fun getStateEvent(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): Event?
 
+    /**
+     * Get a live state event of the room
+     */
     fun getStateEventLive(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): LiveData<Optional<Event>>
 
+    /**
+     * Get state events of the room
+     * @param eventTypes Set of eventType. If empty, all state events will be returned
+     */
     fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStringValue = QueryStringValue.NoCondition): List<Event>
 
+    /**
+     * Get live state events of the room
+     * @param eventTypes Set of eventType to observe. If empty, all state events will be observed
+     */
     fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStringValue = QueryStringValue.NoCondition): LiveData<List<Event>>
 }

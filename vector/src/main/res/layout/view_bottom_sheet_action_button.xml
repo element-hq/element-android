@@ -7,7 +7,7 @@
     tools:parentTag="android.widget.FrameLayout">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/itemVerificationClickableZone"
+        android:id="@+id/bottomSheetActionClickableZone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?riotx_bottom_sheet_background"
@@ -21,9 +21,10 @@
         android:paddingBottom="8dp">
 
         <ImageView
-            android:id="@+id/itemVerificationLeftIcon"
+            android:id="@+id/bottomSheetActionLeftIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:importantForAccessibility="no"
             android:scaleType="center"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -36,23 +37,23 @@
 
 
         <TextView
-            android:id="@+id/itemVerificationActionTitle"
+            android:id="@+id/bottomSheetActionTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textColor="@color/riotx_accent"
             android:textSize="16sp"
             app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toTopOf="@+id/itemVerificationActionSubTitle"
-            app:layout_constraintEnd_toStartOf="@+id/itemVerificationActionIcon"
-            app:layout_constraintStart_toEndOf="@+id/itemVerificationLeftIcon"
+            app:layout_constraintBottom_toTopOf="@+id/bottomSheetActionSubTitle"
+            app:layout_constraintEnd_toStartOf="@+id/bottomSheetActionIcon"
+            app:layout_constraintStart_toEndOf="@+id/bottomSheetActionLeftIcon"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_goneMarginStart="0dp"
             tools:text="@string/start_verification" />
 
         <TextView
-            android:id="@+id/itemVerificationActionSubTitle"
+            android:id="@+id/bottomSheetActionSubTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -61,16 +62,17 @@
             android:visibility="gone"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/itemVerificationActionIcon"
-            app:layout_constraintStart_toStartOf="@+id/itemVerificationActionTitle"
-            app:layout_constraintTop_toBottomOf="@+id/itemVerificationActionTitle"
+            app:layout_constraintEnd_toStartOf="@+id/bottomSheetActionIcon"
+            app:layout_constraintStart_toStartOf="@+id/bottomSheetActionTitle"
+            app:layout_constraintTop_toBottomOf="@+id/bottomSheetActionTitle"
             tools:text="For maximum security, do this in person"
             tools:visibility="visible" />
 
         <ImageView
-            android:id="@+id/itemVerificationActionIcon"
+            android:id="@+id/bottomSheetActionIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:importantForAccessibility="no"
             android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -5,6 +5,7 @@
     android:id="@+id/item_generic_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
     android:minHeight="50dp">
 
     <ImageView
@@ -12,6 +13,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="16dp"
+        android:importantForAccessibility="no"
         android:scaleType="centerInside"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/item_generic_title_text"
@@ -72,6 +74,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_margin="16dp"
+        android:importantForAccessibility="no"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/item_generic_description_text"
         app:layout_constraintEnd_toEndOf="parent"

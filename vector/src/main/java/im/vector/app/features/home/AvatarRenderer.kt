@@ -20,9 +20,13 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.annotation.AnyThread
+import androidx.annotation.ColorInt
 import androidx.annotation.UiThread
 import androidx.core.graphics.drawable.toBitmap
 import com.amulyakhare.textdrawable.TextDrawable
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.Transformation
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
@@ -32,6 +36,8 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import jp.wasabeef.glide.transformations.BlurTransformation
+import jp.wasabeef.glide.transformations.ColorFilterTransformation
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -90,6 +96,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                target: Target<Drawable>) {
         val placeholder = getPlaceholderDrawable(matrixItem)
         buildGlideRequest(glideRequests, matrixItem.avatarUrl)
+                .apply(RequestOptions.circleCropTransform())
                 .placeholder(placeholder)
                 .into(target)
     }
@@ -117,10 +124,27 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 .get()
     }
 
+    @UiThread
+    fun renderBlur(matrixItem: MatrixItem, imageView: ImageView, sampling: Int, rounded: Boolean, @ColorInt colorFilter: Int? = null) {
+        val transformations = mutableListOf<Transformation<Bitmap>>(
+                BlurTransformation(20, sampling)
+        )
+        if (colorFilter != null) {
+            transformations.add(ColorFilterTransformation(colorFilter))
+        }
+        if (rounded) {
+            transformations.add(CircleCrop())
+        }
+        buildGlideRequest(GlideApp.with(imageView), matrixItem.avatarUrl)
+                .apply(RequestOptions.bitmapTransform(MultiTransformation(transformations)))
+                .into(imageView)
+    }
+
     @AnyThread
     fun getCachedDrawable(glideRequests: GlideRequests, matrixItem: MatrixItem): Drawable {
         return buildGlideRequest(glideRequests, matrixItem.avatarUrl)
                 .onlyRetrieveFromCache(true)
+                .apply(RequestOptions.circleCropTransform())
                 .submit()
                 .get()
     }
@@ -139,9 +163,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     private fun buildGlideRequest(glideRequests: GlideRequests, avatarUrl: String?): GlideRequest<Drawable> {
         val resolvedUrl = resolvedUrl(avatarUrl)
-        return glideRequests
-                .load(resolvedUrl)
-                .apply(RequestOptions.circleCropTransform())
+        return glideRequests.load(resolvedUrl)
     }
 
     private fun resolvedUrl(avatarUrl: String?): String? {

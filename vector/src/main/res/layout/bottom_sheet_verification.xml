@@ -28,12 +28,10 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
 
-        <ImageView
+        <im.vector.app.core.ui.views.ShieldImageView
             android:id="@+id/otherUserShield"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_shield_trusted"
             app:layout_constraintCircle="@+id/otherUserAvatarImageView"
             app:layout_constraintCircleAngle="135"
             app:layout_constraintCircleRadius="16dp"

@@ -1,5 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s envió una imagen.</string>
+
+    <string name="notice_room_invite_no_invitee">la invitación de %s</string>
+    <string name="notice_room_invite">%1$s invitó a %2$s</string>
+    <string name="notice_room_invite_you">%1$s te invitó</string>
+    <string name="notice_room_join">%1$s se unió</string>
+    <string name="notice_room_leave">%1$s salió</string>
+    <string name="notice_room_reject">%1$s rechazó la invitación</string>
+    <string name="notice_room_kick">%1$s quitó a %2$s</string>
+    <string name="notice_room_unban">%1$s desprohibió a %2$s</string>
+    <string name="notice_room_ban">%1$s prohibió %2$s</string>
+    <string name="notice_room_withdraw">%1$s retiró la invitación de %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s cambió su foto de perfil</string>
+    <string name="notice_display_name_set">%1$s estableció %2$s como su nombre visible</string>
+    <string name="notice_display_name_changed_from">%1$s cambió su nombre visible de %2$s a %3$s</string>
+    <string name="notice_display_name_removed">%1$s eliminó su nombre visible (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s cambió el tema a: %2$s</string>
+    <string name="notice_room_name_changed">%1$s cambió el nombre de la sala a: %2$s</string>
+    <string name="notice_placed_video_call">%s comenzó una llamada de video.</string>
+    <string name="notice_placed_voice_call">%s comenzó una llamada de voz.</string>
+    <string name="notice_answered_call">%s recibió la llamada.</string>
+    <string name="notice_ended_call">%s terminó la llamada.</string>
+    <string name="notice_made_future_room_visibility">%1$s dejó que %2$s vea el historial del futuro</string>
+    <string name="notice_room_visibility_invited">todos los miembros de la sala, desde su invitación.</string>
+    <string name="notice_room_visibility_joined">todos los miembros de la sala, desde cuando entraron.</string>
+    <string name="notice_room_visibility_shared">todos los miembros de la sala.</string>
+    <string name="notice_room_visibility_world_readable">todos.</string>
+    <string name="notice_room_visibility_unknown">desconocido (%s).</string>
+    <string name="notice_end_to_end">%1$s encendió el cifrado de extremo a extremo (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s solicitó una conferencia VoIP</string>
+    <string name="notice_voip_started">conferencia VoIP comenzó</string>
+    <string name="notice_voip_finished">conferencia VoIP finalizó</string>
+
+    <string name="notice_avatar_changed_too">(foto de perfil también se cambió)</string>
+    <string name="notice_room_name_removed">%1$s eliminó el nombre de la sala</string>
+    <string name="notice_room_topic_removed">%1$s retiró el tema de la sala</string>
+    <string name="notice_profile_change_redacted">%1$s actualizó su perfil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s envió una invitación a %2$s para entrar a la sala</string>
+    <string name="notice_room_third_party_registered_invite">%1$s aceptó la invitación de %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** No se puede descifrar: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">El dispositivo del remitente no nos ha enviado las claves de este mensaje.</string>
+
+    <!-- Room Screen -->
+    <string name="could_not_redact">No se pudo redactar</string>
+    <string name="unable_to_send_message">No se puede enviar el mensaje</string>
+
+    <string name="message_failed_to_upload">La subida de la imagen falló</string>
+
+    <!-- general errors -->
+    <string name="network_error">Error de la red</string>
+    <string name="matrix_error">Error de Matrix</string>
+
+    <!-- Home Screen -->
+
+    <!-- Last seen time -->
+
+    <!-- call events -->
+
+    <!-- room error messages -->
+    <string name="room_error_join_failed_empty_room">No es posible volver a unirse a una sala vacía.</string>
+
+    <!-- medium friendly name -->
+    <string name="medium_email">Correo electrónico</string>
+    <string name="medium_phone_number">Número telefónico</string>
+
+    <string name="summary_user_sent_sticker">%1$s envió una calcomanía.</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Invitación de %s</string>
+    <string name="room_displayname_room_invite">Invitación de Sala</string>
+    <string name="room_displayname_two_members">%1$s y %2$s</string>
+    <string name="room_displayname_empty_room">Sala vacía</string>
+
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s y otro</item>
+        <item quantity="other">%1$s y %2$d otros</item>
+    </plurals>
+
+    <string name="notice_event_redacted">Mensaje eliminado</string>
+    <string name="notice_event_redacted_by">Mensaje eliminado por %1$s</string>
+    <string name="notice_event_redacted_with_reason">Mensaje eliminado [motivo: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Mensaje eliminado por %1$s [motivo: %2$s]</string>
     <!-- titles -->
     <string name="title_activity_home">Mensajes</string>
     <string name="title_activity_room">Sala</string>
@@ -70,7 +156,7 @@
     <string name="local_address_book_header">Libreta local de direcciones</string>
     <string name="matrix_only_filter">Solamente contactos Matrix</string>
     <string name="no_conversation_placeholder">Sin conversaciones</string>
-    <string name="no_contact_access_placeholder">No ha permitido a Element acceder a sus contactos locales</string>
+    <string name="template_no_contact_access_placeholder">No ha permitido a ${app_name} acceder a sus contactos locales</string>
     <string name="no_result_placeholder">Sin resultados</string>
     <!-- Rooms fragment -->
     <string name="rooms_header">Salas</string>
@@ -206,16 +292,16 @@
     <string name="media_picker_cannot_record_video">No pudo grabar video"</string>
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Información</string>
-    <string name="permissions_rationale_msg_storage">Element necesita tu permiso para entrar en tu almacenaje de fotos y videos para enviar y guardar archivos.\n\nPor favor permite el acceso en el siguiente mensaje para poder enviar archivos desde su dispostivo.</string>
-    <string name="permissions_rationale_msg_camera">Element necesita tu permiso para usar tu cámara para tomar fotos y hacer llamadas de video.</string>
+    <string name="template_permissions_rationale_msg_storage">${app_name} necesita tu permiso para entrar en tu almacenaje de fotos y videos para enviar y guardar archivos.\n\nPor favor permite el acceso en el siguiente mensaje para poder enviar archivos desde su dispostivo.</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} necesita tu permiso para usar tu cámara para tomar fotos y hacer llamadas de video.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
-    <string name="permissions_rationale_msg_record_audio">Element necesita tu permiso para usar tu micrófono para hacer llamadas de voz.</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} necesita tu permiso para usar tu micrófono para hacer llamadas de voz.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element necesita tu permiso para usar su cámara y micrófono para hacer llamadas de video.\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
-    <string name="permissions_rationale_msg_contacts">Element necesita tu permiso para leer tus contactos y directorio para encontrar a otros usuarios por sus correos electrónicos y números telefónicos.\n\nPor favor permite el acceso en el siguiente mensaje para encontrar usuarios de Element en su directorio.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} necesita tu permiso para usar su cámara y micrófono para hacer llamadas de video.\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
+    <string name="template_permissions_rationale_msg_contacts">${app_name} necesita tu permiso para leer tus contactos y directorio para encontrar a otros usuarios por sus correos electrónicos y números telefónicos.\n\nPor favor permite el acceso en el siguiente mensaje para encontrar usuarios de ${app_name} en su directorio.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
 
-¿Permitir el acceso a Element para leer tus contactos ?</string>
+¿Permitir el acceso a ${app_name} para leer tus contactos ?</string>
     <string name="permissions_action_not_performed_missing_permissions">Perdón. Operación no realizada debido a permisos faltantes</string>
     <!-- medias slider string -->
     <string name="media_slider_saved">Guardado</string>
@@ -615,14 +701,13 @@ Dispositivos desconocidos:</string>
     <string name="command_description_markdown">Activar/desactivar Markdown</string>
     <string name="light_theme">Tema Claro</string>
     <string name="dark_theme">Tema Oscuro</string>
-    <string name="black_them">Tema Negro</string>
+    <string name="black_theme">Tema Negro</string>
     <string name="notification_listening_for_events">Detectar eventos</string>
     <string name="notification_noisy_notifications">Notificaciones ruidosas</string>
     <string name="notification_silent_notifications">Notificaciones silenciosas</string>
     <string name="clear">Borrar</string>
     <string name="missing_permissions_error">Debido a que faltan permisos, esta acción no es posible.</string>
     <string name="title_activity_bug_report">Informe de error</string>
-    <string name="status_theme">Tema de Status.im</string>
     <string name="title_activity_group_details">Detalles sobre la comunidad</string>
     <string name="title_activity_choose_sticker">Enviar una calcomanía</string>
     <string name="dialog_title_third_party_licences">Licencias de terceros</string>
@@ -640,7 +725,7 @@ Dispositivos desconocidos:</string>
     <string name="call_anyway">Llamar de todos modos</string>
     <string name="title_activity_verify_device">Verificar dispositivo</string>
     <string name="settings_call_category">Llamadas</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Usar el tono de llamada normal de Element para llamadas entrantes</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Usar el tono de llamada normal de ${app_name} para llamadas entrantes</string>
     <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
     <string name="settings_call_ringtone_dialog_title">Elegir sonido de llamadas:</string>
     <string name="reason_hint">Razón</string>

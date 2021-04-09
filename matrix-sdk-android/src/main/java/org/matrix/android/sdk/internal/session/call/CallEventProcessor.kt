@@ -16,27 +16,31 @@
 
 package org.matrix.android.sdk.internal.session.call
 
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.model.EventInsertType
-import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
-import io.realm.Realm
+import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class CallEventProcessor @Inject constructor(
-        @UserId private val userId: String,
-        private val callService: DefaultCallSignalingService
-) : EventInsertLiveProcessor {
+@SessionScope
+internal class CallEventProcessor @Inject constructor(private val callSignalingHandler: CallSignalingHandler)
+    : EventInsertLiveProcessor {
 
     private val allowedTypes = listOf(
             EventType.CALL_ANSWER,
+            EventType.CALL_SELECT_ANSWER,
+            EventType.CALL_REJECT,
+            EventType.CALL_NEGOTIATE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.ENCRYPTED
     )
+
+    private val eventsToPostProcess = mutableListOf<Event>()
 
     override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
         if (insertType != EventInsertType.INCREMENTAL_SYNC) {
@@ -46,12 +50,28 @@ internal class CallEventProcessor @Inject constructor(
     }
 
     override suspend fun process(realm: Realm, event: Event) {
-        update(realm, event)
+        eventsToPostProcess.add(event)
     }
 
-    private fun update(realm: Realm, event: Event) {
+    fun shouldProcessFastLane(eventType: String): Boolean {
+        return eventType == EventType.CALL_INVITE
+    }
+
+    suspend fun processFastLane(event: Event) {
+        eventsToPostProcess.add(event)
+        onPostProcess()
+    }
+
+    override suspend fun onPostProcess() {
+        eventsToPostProcess.forEach {
+            dispatchToCallSignalingHandlerIfNeeded(it)
+        }
+        eventsToPostProcess.clear()
+    }
+
+    private fun dispatchToCallSignalingHandlerIfNeeded(event: Event) {
         val now = System.currentTimeMillis()
-        // TODO might check if an invite is not closed (hangup/answsered) in the same event batch?
+        // TODO might check if an invite is not closed (hangup/answered) in the same event batch?
         event.roomId ?: return Unit.also {
             Timber.w("Event with no room id ${event.eventId}")
         }
@@ -60,10 +80,6 @@ internal class CallEventProcessor @Inject constructor(
             // To old to ring?
             return
         }
-        event.ageLocalTs
-        if (EventType.isCallEvent(event.getClearType())) {
-            callService.onCallEvent(event)
-        }
-        Timber.v("$realm : $userId")
+        callSignalingHandler.onCallEvent(event)
     }
 }

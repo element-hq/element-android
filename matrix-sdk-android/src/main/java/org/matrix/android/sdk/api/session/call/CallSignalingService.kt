@@ -16,21 +16,20 @@
 
 package org.matrix.android.sdk.api.session.call
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
-
 interface CallSignalingService {
 
-    fun getTurnServer(callback: MatrixCallback<TurnServerResponse>): Cancelable
+    suspend fun getTurnServer(): TurnServerResponse
+
+    fun getPSTNProtocolChecker(): PSTNProtocolChecker
 
     /**
      * Create an outgoing call
      */
     fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall
 
-    fun addCallListener(listener: CallsListener)
+    fun addCallListener(listener: CallListener)
 
-    fun removeCallListener(listener: CallsListener)
+    fun removeCallListener(listener: CallListener)
 
     fun getCallWithId(callId: String): MxCall?
 

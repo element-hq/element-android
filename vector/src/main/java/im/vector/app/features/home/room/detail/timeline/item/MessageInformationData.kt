@@ -18,9 +18,9 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.internal.session.room.VerificationState
 
 @Parcelize
 data class MessageInformationData(
@@ -36,13 +36,12 @@ data class MessageInformationData(
         /*List of reactions (emoji,count,isSelected)*/
         val orderedReactionList: List<ReactionInfoData>? = null,
         val pollResponseAggregatedSummary: PollResponseData? = null,
-
         val hasBeenEdited: Boolean = false,
         val hasPendingEdits: Boolean = false,
-        val readReceipts: List<ReadReceiptData> = emptyList(),
         val referencesInfoData: ReferencesInfoData? = null,
         val sentByMe: Boolean,
-        val e2eDecoration: E2EDecoration = E2EDecoration.NONE
+        val e2eDecoration: E2EDecoration = E2EDecoration.NONE,
+        val sendStateDecoration: SendStateDecoration = SendStateDecoration.NONE
 ) : Parcelable {
 
     val matrixItem: MatrixItem
@@ -82,6 +81,14 @@ enum class E2EDecoration {
     WARN_IN_CLEAR,
     WARN_SENT_BY_UNVERIFIED,
     WARN_SENT_BY_UNKNOWN
+}
+
+enum class SendStateDecoration {
+    NONE,
+    SENDING_NON_MEDIA,
+    SENDING_MEDIA,
+    SENT,
+    FAILED
 }
 
 fun ReadReceiptData.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)

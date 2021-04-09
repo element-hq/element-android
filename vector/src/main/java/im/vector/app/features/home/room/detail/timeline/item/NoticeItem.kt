@@ -19,15 +19,15 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
-import im.vector.app.core.utils.DebouncedClickListener
+import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
 abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
@@ -35,34 +35,27 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
-        attributes.readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
-    })
-
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.noticeTextView.text = attributes.noticeText
         attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
         holder.view.setOnLongClickListener(attributes.itemLongClickListener)
-        holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
         holder.avatarImageView.onClick(attributes.avatarClickListener)
 
         when (attributes.informationData.e2eDecoration) {
             E2EDecoration.NONE                 -> {
-                holder.e2EDecorationView.isVisible = false
+                holder.e2EDecorationView.render(null)
             }
             E2EDecoration.WARN_IN_CLEAR,
             E2EDecoration.WARN_SENT_BY_UNVERIFIED,
             E2EDecoration.WARN_SENT_BY_UNKNOWN -> {
-                holder.e2EDecorationView.setImageResource(R.drawable.ic_shield_warning)
-                holder.e2EDecorationView.isVisible = true
+                holder.e2EDecorationView.render(RoomEncryptionTrustLevel.Warning)
             }
         }
     }
 
     override fun unbind(holder: Holder) {
         attributes.avatarRenderer.clear(holder.avatarImageView)
-        holder.readReceiptsView.unbind(attributes.avatarRenderer)
         super.unbind(holder)
     }
 
@@ -75,7 +68,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     class Holder : BaseHolder(STUB_ID) {
         val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)
         val noticeTextView by bind<TextView>(R.id.itemNoticeTextView)
-        val e2EDecorationView by bind<ImageView>(R.id.messageE2EDecoration)
+        val e2EDecorationView by bind<ShieldImageView>(R.id.messageE2EDecoration)
     }
 
     data class Attributes(

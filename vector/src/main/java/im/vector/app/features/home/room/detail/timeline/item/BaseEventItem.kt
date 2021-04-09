@@ -26,13 +26,12 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableView
-import im.vector.app.core.ui.views.ReadReceiptsView
 import im.vector.app.core.utils.DimensionConverter
 
 /**
  * Children must override getViewType()
  */
-abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>() {
+abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>(), ItemWithEvents {
 
     // To use for instance when opening a permalink with an eventId
     @EpoxyAttribute
@@ -53,16 +52,9 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         holder.checkableBackground.isChecked = highlighted
     }
 
-    /**
-     * Returns the eventIds associated with the EventItem.
-     * Will generally get only one, but it handles the merging items.
-     */
-    abstract fun getEventIds(): List<String>
-
     abstract class BaseHolder(@IdRes val stubId: Int) : VectorEpoxyHolder() {
         val leftGuideline by bind<View>(R.id.messageStartGuideline)
         val checkableBackground by bind<CheckableView>(R.id.messageSelectedBackground)
-        val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
 
         override fun bindView(itemView: View) {
             super.bindView(itemView)

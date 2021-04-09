@@ -1,0 +1,2 @@
+此版本中的主要變更：URL 預覽、新的表情符號鍵盤、新的聊天室設定功能以及聖誕節降雪！
+完整變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.0.13

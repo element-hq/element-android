@@ -22,9 +22,9 @@ interface FilterService {
         NoFilter,
 
         /**
-         * Filter for Riot, will include only known event type
+         * Filter for Element, will include only known event type
          */
-        RiotFilter
+        ElementFilter
     }
 
     /**

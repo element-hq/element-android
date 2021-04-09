@@ -38,6 +38,9 @@ import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
  */
 data class TimelineEvent(
         val root: Event,
+        /**
+         * Uniquely identify an event, computed locally by the sdk
+         */
         val localId: Long,
         val eventId: String,
         val displayIndex: Int,
@@ -51,6 +54,8 @@ data class TimelineEvent(
             assert(eventId == root.eventId)
         }
     }
+
+    val roomId = root.roomId ?: ""
 
     val metadata = HashMap<String, Any>()
 
@@ -121,8 +126,7 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? {
     return if (root.getClearType() == EventType.STICKER) {
         root.getClearContent().toModel<MessageStickerContent>()
     } else {
-        annotations?.editSummary?.aggregatedContent?.toModel()
-                ?: root.getClearContent().toModel()
+        (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
     }
 }
 

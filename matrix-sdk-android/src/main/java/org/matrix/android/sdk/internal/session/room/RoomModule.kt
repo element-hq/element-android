@@ -39,11 +39,9 @@ import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.session.room.create.DefaultCreateRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.DefaultGetPublicRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.DefaultGetRoomDirectoryVisibilityTask
-import org.matrix.android.sdk.internal.session.room.directory.DefaultGetThirdPartyProtocolsTask
 import org.matrix.android.sdk.internal.session.room.directory.DefaultSetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.directory.GetPublicRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.GetRoomDirectoryVisibilityTask
-import org.matrix.android.sdk.internal.session.room.directory.GetThirdPartyProtocolsTask
 import org.matrix.android.sdk.internal.session.room.directory.SetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.membership.DefaultLoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
@@ -81,9 +79,11 @@ import org.matrix.android.sdk.internal.session.room.tags.DefaultDeleteTagFromRoo
 import org.matrix.android.sdk.internal.session.room.tags.DeleteTagFromRoomTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultFetchTokenAndPaginateTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultGetContextOfEventTask
+import org.matrix.android.sdk.internal.session.room.timeline.DefaultGetEventTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultPaginationTask
 import org.matrix.android.sdk.internal.session.room.timeline.FetchTokenAndPaginateTask
 import org.matrix.android.sdk.internal.session.room.timeline.GetContextOfEventTask
+import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationTask
 import org.matrix.android.sdk.internal.session.room.typing.DefaultSendTypingTask
 import org.matrix.android.sdk.internal.session.room.typing.SendTypingTask
@@ -152,9 +152,6 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindSetRoomDirectoryVisibilityTask(task: DefaultSetRoomDirectoryVisibilityTask): SetRoomDirectoryVisibilityTask
-
-    @Binds
-    abstract fun bindGetThirdPartyProtocolsTask(task: DefaultGetThirdPartyProtocolsTask): GetThirdPartyProtocolsTask
 
     @Binds
     abstract fun bindInviteTask(task: DefaultInviteTask): InviteTask
@@ -233,4 +230,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindPeekRoomTask(task: DefaultPeekRoomTask): PeekRoomTask
+
+    @Binds
+    abstract fun bindGetEventTask(task: DefaultGetEventTask): GetEventTask
 }

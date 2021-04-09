@@ -21,6 +21,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import kotlinx.coroutines.rx2.rxCompletable
+import kotlinx.coroutines.rx2.rxSingle
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -90,13 +91,13 @@ class RxRoom(private val room: Room) {
         return room.getMyReadReceiptLive().asObservable()
     }
 
-    fun loadRoomMembersIfNeeded(): Single<Unit> = singleBuilder {
-        room.loadRoomMembersIfNeeded(it)
+    fun loadRoomMembersIfNeeded(): Single<Unit> = rxSingle {
+        room.loadRoomMembersIfNeeded()
     }
 
     fun joinRoom(reason: String? = null,
-                 viaServers: List<String> = emptyList()): Single<Unit> = singleBuilder {
-        room.join(reason, viaServers, it)
+                 viaServers: List<String> = emptyList()): Single<Unit> = rxSingle {
+        room.join(reason, viaServers)
     }
 
     fun liveEventReadReceipts(eventId: String): Observable<List<ReadReceipt>> {
@@ -114,12 +115,12 @@ class RxRoom(private val room: Room) {
         return room.getLiveRoomNotificationState().asObservable()
     }
 
-    fun invite(userId: String, reason: String? = null): Completable = completableBuilder<Unit> {
-        room.invite(userId, reason, it)
+    fun invite(userId: String, reason: String? = null): Completable = rxCompletable {
+        room.invite(userId, reason)
     }
 
-    fun invite3pid(threePid: ThreePid): Completable = completableBuilder<Unit> {
-        room.invite3pid(threePid, it)
+    fun invite3pid(threePid: ThreePid): Completable = rxCompletable {
+        room.invite3pid(threePid)
     }
 
     fun updateTopic(topic: String): Completable = rxCompletable {

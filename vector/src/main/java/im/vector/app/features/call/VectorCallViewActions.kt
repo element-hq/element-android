@@ -17,6 +17,7 @@
 package im.vector.app.features.call
 
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.call.audio.CallAudioManager
 
 sealed class VectorCallViewActions : VectorViewModelAction {
     object EndCall : VectorCallViewActions()
@@ -24,9 +25,13 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object DeclineCall : VectorCallViewActions()
     object ToggleMute : VectorCallViewActions()
     object ToggleVideo : VectorCallViewActions()
-    data class ChangeAudioDevice(val device: CallAudioManager.SoundDevice) : VectorCallViewActions()
+    object ToggleHoldResume: VectorCallViewActions()
+    data class ChangeAudioDevice(val device: CallAudioManager.Device) : VectorCallViewActions()
+    object OpenDialPad: VectorCallViewActions()
+    data class SendDtmfDigit(val digit: String) : VectorCallViewActions()
     object SwitchSoundDevice : VectorCallViewActions()
     object HeadSetButtonPressed : VectorCallViewActions()
     object ToggleCamera : VectorCallViewActions()
     object ToggleHDSD : VectorCallViewActions()
+    object InitiateCallTransfer : VectorCallViewActions()
 }

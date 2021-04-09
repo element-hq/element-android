@@ -21,7 +21,6 @@ import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import im.vector.app.R
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.observeEvent
@@ -49,20 +48,20 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         viewModel.showManualExport.value = intent.getBooleanExtra(EXTRA_SHOW_MANUAL_EXPORT, false)
         viewModel.initSession(session)
 
-        viewModel.isCreatingBackupVersion.observe(this, Observer {
+        viewModel.isCreatingBackupVersion.observe(this) {
             val isCreating = it ?: false
             if (isCreating) {
                 showWaitingView()
             } else {
                 hideWaitingView()
             }
-        })
+        }
 
-        viewModel.loadingStatus.observe(this, Observer {
+        viewModel.loadingStatus.observe(this) {
             it?.let {
                 updateWaitingView(it)
             }
-        })
+        }
 
         viewModel.navigateEvent.observeEvent(this) { uxStateEvent ->
             when (uxStateEvent) {
@@ -99,7 +98,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
             }
         }
 
-        viewModel.prepareRecoverFailError.observe(this, Observer { error ->
+        viewModel.prepareRecoverFailError.observe(this) { error ->
             if (error != null) {
                 AlertDialog.Builder(this)
                         .setTitle(R.string.unknown_error)
@@ -110,9 +109,9 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                         }
                         .show()
             }
-        })
+        }
 
-        viewModel.creatingBackupError.observe(this, Observer { error ->
+        viewModel.creatingBackupError.observe(this) { error ->
             if (error != null) {
                 AlertDialog.Builder(this)
                         .setTitle(R.string.unexpected_error)
@@ -123,7 +122,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                         }
                         .show()
             }
-        })
+        }
     }
 
     private val saveStartForActivityResult = registerStartForActivityResult { activityResult ->

@@ -20,19 +20,17 @@
         android:textSize="16sp"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.RevealPasswordImageView
         android:id="@+id/exportDialogShowPassword"
         android:layout_width="@dimen/layout_touch_size"
         android:layout_height="@dimen/layout_touch_size"
         android:layout_marginTop="8dp"
         android:background="?attr/selectableItemBackground"
         android:scaleType="center"
-        android:src="@drawable/ic_eye"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/exportDialogTil"
         app:layout_constraintTop_toTopOf="@id/exportDialogTil"
-        app:tint="?attr/colorAccent"
-        tools:ignore="MissingPrefix" />
+        app:tint="?attr/colorAccent" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -41,7 +39,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColorHint="?attr/vctr_default_text_hint_color"
         app:layout_constraintEnd_toStartOf="@+id/exportDialogShowPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/exportDialogText">
@@ -63,7 +60,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColorHint="?attr/vctr_default_text_hint_color"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="@+id/exportDialogTil"
         app:layout_constraintStart_toStartOf="parent"

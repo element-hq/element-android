@@ -3,29 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center"
     android:foreground="?attr/selectableItemBackground"
+    android:gravity="center"
+    android:minHeight="40dp"
+    android:orientation="horizontal"
     android:paddingStart="@dimen/layout_horizontal_margin"
-    android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:minHeight="40dp">
+    android:paddingEnd="@dimen/layout_horizontal_margin">
 
     <ImageView
         android:id="@+id/itemGenericWithValueTitleIcon"
         android:layout_width="20sp"
         android:layout_height="20sp"
-        android:src="@drawable/ic_shield_trusted"
-        />
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_shield_trusted" />
 
     <TextView
         android:id="@+id/itemGenericWithValueLabelText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="?riotx_text_primary"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="0dp"
         android:layout_weight="1"
+        android:textColor="?riotx_text_primary"
+        android:textSize="16sp"
         tools:text="Label" />
 
 
@@ -33,12 +33,12 @@
         android:id="@+id/itemGenericWithValueValueText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:textColor="?riotx_text_primary"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="0dp"
-        tools:textColor="@color/riotx_positive_accent"
-        tools:text="Value" />
+        android:textColor="?riotx_text_primary"
+        android:textSize="15sp"
+        tools:text="Value"
+        tools:textColor="@color/riotx_positive_accent" />
 
 
 </LinearLayout>

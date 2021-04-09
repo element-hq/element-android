@@ -88,9 +88,15 @@
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
-            android:key="SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY"
-            android:summary="@string/settings_show_room_member_state_events_summary"
-            android:title="@string/settings_show_room_member_state_events" />
+            android:key="SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
+            android:summary="@string/settings_show_join_leave_messages_summary"
+            android:title="@string/settings_show_join_leave_messages" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
+            android:summary="@string/settings_show_avatar_display_name_changes_messages_summary"
+            android:title="@string/settings_show_avatar_display_name_changes_messages" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
@@ -115,15 +121,6 @@
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
             android:title="@string/settings_vibrate_on_mention"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
-
-        <im.vector.app.core.preference.VectorListPreference
-            android:defaultValue="always"
-            android:entries="@array/show_info_area_entries"
-            android:entryValues="@array/show_info_area_values"
-            android:key="SETTINGS_SHOW_INFO_AREA_KEY"
-            android:summary="%s"
-            android:title="@string/settings_info_area_show"
             app:isPreferenceVisible="@bool/false_not_implemented" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
@@ -186,4 +183,12 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
+    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_room_directory">
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:key="SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS"
+        android:summary="@string/settings_room_directory_show_all_rooms_summary"
+        android:title="@string/settings_room_directory_show_all_rooms" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
 </androidx.preference.PreferenceScreen>

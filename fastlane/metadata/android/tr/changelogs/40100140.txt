@@ -1,0 +1,2 @@
+Bu sürümdeki başlıca değişiklikler: Oda izinlerini düzenleme, otomatik koyu/açık tema ve bir avuç hata düzeltmeleri.
+Değişim günlüğünün tamamı: https://github.com/vector-im/element-android/releases/tag/v1.0.14
