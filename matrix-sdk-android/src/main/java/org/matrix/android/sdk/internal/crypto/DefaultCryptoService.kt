@@ -57,7 +57,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.setRustLogger
-import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
@@ -132,7 +131,6 @@ internal class DefaultCryptoService @Inject constructor(
 
         private val crossSigningService: DefaultCrossSigningService,
         // Actions
-        private val megolmSessionDataImporter: MegolmSessionDataImporter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
         // Tasks
         private val deleteDeviceTask: DeleteDeviceTask,
@@ -403,7 +401,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
         return if (userId.isNotEmpty() && !deviceId.isNullOrEmpty()) {
             runBlocking {
-                olmMachine?.getDevice(userId, deviceId)?.toCryptoDeviceInfo()
+                olmMachine?.getDevice(userId, deviceId)
             }
         } else {
             null

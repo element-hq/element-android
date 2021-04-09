@@ -38,7 +38,7 @@ import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCount
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
 import uniffi.olm.CryptoStoreErrorException
-import uniffi.olm.Device as InnerDevice
+import uniffi.olm.Device
 import uniffi.olm.DeviceLists
 import uniffi.olm.Logger
 import uniffi.olm.OlmMachine as InnerMachine
@@ -68,7 +68,7 @@ internal class LiveDevice(
     userIds: List<String>,
     observer: DeviceUpdateObserver
 ) : MutableLiveData<List<CryptoDeviceInfo>>() {
-    var userIds: List<String> = userIds
+    internal var userIds: List<String> = userIds
     private var observer: DeviceUpdateObserver = observer
 
     override fun onActive() {
@@ -84,42 +84,25 @@ fun setRustLogger() {
     setLogger(CryptoLogger() as Logger)
 }
 
-class Device(inner: InnerDevice, machine: InnerMachine) {
-    private val machine: InnerMachine = machine
-    private val inner: InnerDevice = inner
-
-    fun userId(): String {
-        return this.inner.userId
-    }
-
-    fun deviceId(): String {
-        return this.inner.deviceId
-    }
-
-    fun keys(): Map<String, String> {
-        return this.inner.keys
-    }
-
-    fun startVerification(): InnerSas {
-        return this.machine.startVerification(this.inner)
-    }
-
-    fun toCryptoDeviceInfo(): CryptoDeviceInfo {
-        return CryptoDeviceInfo(
-            this.deviceId(),
-            this.userId(),
-            this.inner.algorithms,
-            this.keys(),
-            // TODO pass the signatures here, do we need this?
+/**
+ * Convert a Rust Device into a Kotlin CryptoDeviceInfo
+ */
+private fun toCryptoDeviceInfo(device: Device): CryptoDeviceInfo {
+    return CryptoDeviceInfo(
+            device.deviceId,
+            device.userId,
+            device.algorithms,
+            device.keys,
+            // TODO pass the signatures here, do we need this, why should the
+            // Kotlin side care about signatures?
             mapOf(),
-            UnsignedDeviceInfo(this.inner.displayName),
+            UnsignedDeviceInfo(device.displayName),
             // TODO pass trust levels here
             DeviceTrustLevel(false, false),
-            this.inner.isBlocked,
+            device.isBlocked,
             // TODO
             null
         )
-    }
 }
 
 internal class DeviceUpdateObserver() {
@@ -417,10 +400,10 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * @return The Device if it found one.
      */
-    suspend fun getDevice(userId: String, deviceId: String): Device? = withContext(Dispatchers.IO) {
-        when (val device: InnerDevice? = inner.getDevice(userId, deviceId)) {
+    suspend fun getDevice(userId: String, deviceId: String): CryptoDeviceInfo? = withContext(Dispatchers.IO) {
+        when (val device: Device? = inner.getDevice(userId, deviceId)) {
             null -> null
-            else -> Device(device, inner)
+            else -> toCryptoDeviceInfo(device)
         }
     }
 
@@ -432,7 +415,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      * @return The list of Devices or an empty list if there aren't any.
      */
     suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo> {
-        return inner.getUserDevices(userId).map { Device(it, inner).toCryptoDeviceInfo() }
+        return inner.getUserDevices(userId).map { toCryptoDeviceInfo(it) }
     }
 
     suspend fun getUserDevicesMap(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
