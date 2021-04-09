@@ -2740,4 +2740,5 @@
     <string name="event_status_a11y_failed">Ha fallat</string>
     <string name="event_status_a11y_sent">Enviat</string>
     <string name="event_status_a11y_sending">Enviant</string>
+    <string name="event_status_sent_message">Missatge enviat</string>
 </resources>
