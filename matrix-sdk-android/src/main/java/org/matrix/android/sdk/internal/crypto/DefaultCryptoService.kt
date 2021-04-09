@@ -543,7 +543,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun discardOutboundSession(roomId: String) {
-        // TODO
+        olmMachine?.discardRoomKey(roomId)
     }
 
     /**

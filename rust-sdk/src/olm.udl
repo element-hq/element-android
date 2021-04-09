@@ -127,4 +127,5 @@ interface OlmMachine {
         [ByRef] string passphrase,
         ProgressListener progress_listener
     );
+    void discard_room_key([ByRef] string room_id);
 };

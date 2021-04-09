@@ -496,4 +496,11 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
 
         return devices
     }
+
+    /**
+     * Discard the currently active room key for the given room if there is one.
+     */
+    fun discardRoomKey(roomId: String) {
+        this.inner.discardRoomKey(roomId)
+    }
 }

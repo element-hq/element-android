@@ -450,6 +450,14 @@ impl OlmMachine {
         })
     }
 
+    /// Discard the currently active room key for the given room if there is
+    /// one.
+    pub fn discard_room_key(&self, room_id: &str) {
+        let room_id = RoomId::try_from(room_id).unwrap();
+
+        self.inner.invalidate_group_session(&room_id);
+    }
+
     pub fn start_verification(&self, device: &Device) -> Result<Sas, CryptoStoreError> {
         let user_id = UserId::try_from(device.user_id.clone()).unwrap();
         let device_id = device.device_id.as_str().into();
