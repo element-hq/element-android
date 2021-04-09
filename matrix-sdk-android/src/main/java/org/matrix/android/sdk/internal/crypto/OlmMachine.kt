@@ -108,17 +108,14 @@ class Device(inner: InnerDevice, machine: InnerMachine) {
         return CryptoDeviceInfo(
             this.deviceId(),
             this.userId(),
-            // TODO pass the algorithms here.
-            listOf(),
+            this.inner.algorithms,
             this.keys(),
-            // TODO pass the signatures here.
+            // TODO pass the signatures here, do we need this?
             mapOf(),
-            // TODO pass the display name here.
-            UnsignedDeviceInfo(),
+            UnsignedDeviceInfo(this.inner.displayName),
             // TODO pass trust levels here
             DeviceTrustLevel(false, false),
-            // TODO is the device blacklisted
-            false,
+            this.inner.isBlocked,
             // TODO
             null
         )

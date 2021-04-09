@@ -57,6 +57,9 @@ dictionary Device {
     string user_id;
     string device_id;
     record<DOMString, string> keys;
+    sequence<string> algorithms;
+    string? display_name;
+    boolean is_blocked;
 };
 
 dictionary Sas {
