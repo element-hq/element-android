@@ -308,7 +308,7 @@
     <string name="send_bug_report">Nahlásiť chybu</string>
     <string name="send_bug_report_description">Prosím, Napíšte text hlásenia. Čo ste práve robili? Čo ste očakávali? Čo sa v skutočnosti udialo?</string>
     <string name="send_bug_report_placeholder">Tu popíšte váš problém</string>
-    <string name="send_bug_report_logs_description">S cieľom lepšej diagnostiky problému sa spolu s vašim hlásením odošlú záznami o činnosti programu Element. Toto hlásenie vrátane priložených záznamov a snímky obrazovky nebude verejne dostupné. Ak si želáte odoslať len text hlásenia, odškrtnite niektoré z nasledujúcich polí:</string>
+    <string name="send_bug_report_logs_description">S cieľom lepšej diagnostiky problému sa spolu s vašim hlásením odošlú záznami o činnosti programu SchildiChat. Toto hlásenie vrátane priložených záznamov a snímky obrazovky nebude verejne dostupné. Ak si želáte odoslať len text hlásenia, odškrtnite niektoré z nasledujúcich polí:</string>
     <string name="send_bug_report_alert_message">Zdá sa, že v zlosti trasiete zariadením. Chceli by ste odoslať hlásenie o chybe?</string>
     <string name="send_bug_report_app_crashed">Posledné spustenie aplikácie skončilo pádom. Chceli by ste odoslať hlásenie o chybe?</string>
 
@@ -808,7 +808,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="passphrase_confirm_passphrase">Potvrďte heslo</string>
     <string name="encryption_export_saved_as">Šifrovacie kľúče miestností boli uložené do %s
 
-Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikácii Element.</string>
+Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikácii SchildiChat.</string>
 
     <string name="encryption_import_e2e_room_keys">Importovať E2E kľúče miestností</string>
     <string name="encryption_import_room_keys">Importovať kľúče miestností</string>
@@ -1661,7 +1661,7 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="keys_backup_setup_step3_save_button_title">Uložiť ako súbor</string>
     <string name="recovery_key_export_saved_as_warning">Kľúč obnovenia bol uložený do súboru \'%s\'.
 \n
-\nPozor: Keď odinštalujete aplikáciu Element, môže dôjsť k zmazaniu tohoto súboru.</string>
+\nPozor: Keď odinštalujete aplikáciu SchildiChat, môže dôjsť k zmazaniu tohoto súboru.</string>
     <string name="recovery_key_export_saved">Kľúč obnovenia bol uložený.</string>
 
     <string name="keys_backup_setup_override_backup_prompt_tile">Záloha už existuje na domovskom servery</string>
