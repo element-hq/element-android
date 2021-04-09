@@ -203,7 +203,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                     _viewEvents.post(
                             HomeActivityViewEvents.OnNewSession(
                                     session.getUser(session.myUserId)?.toMatrixItem(),
-                                    //Always send request instead of waiting for an incoming as per recent EW changes
+                                    // Always send request instead of waiting for an incoming as per recent EW changes
                                     false
                             )
                     )

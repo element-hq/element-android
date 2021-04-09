@@ -119,7 +119,6 @@ class IncomingVerificationRequestHandler @Inject constructor(
         Timber.v("## SAS verificationRequestCreated ${pr.transactionId}")
         // For incoming request we should prompt (if not in activity where this request apply)
         if (pr.isIncoming) {
-
             // if it's a self verification for my devices, we can discard the review login alert
             // if not this request will be underneath and not visible by the user...
             // it will re-appear later
