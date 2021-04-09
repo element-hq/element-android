@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
@@ -125,7 +126,7 @@ class Device(inner: InnerDevice, machine: InnerMachine) {
 }
 
 internal class DeviceUpdateObserver() {
-    internal val listeners = HashMap<LiveDevice, List<String>>()
+    internal val listeners = ConcurrentHashMap<LiveDevice, List<String>>()
 
     fun addDeviceUpdateListener(device: LiveDevice) {
         listeners.set(device, device.userIds)
