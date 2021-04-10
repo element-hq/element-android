@@ -599,8 +599,8 @@
     <string name="room_event_action_report_prompt_ignore_user">Desideri nascondere tutti i messaggi di questo utente\? 
 \n
 \nTieni presente che questa azione riavvierà l\'app e ciò potrebbe richiedere molto tempo.</string>
-    <string name="room_event_action_cancel_upload">Annulla l\'upload</string>
-    <string name="room_event_action_cancel_download">Annulla il download</string>
+    <string name="room_event_action_cancel_upload">Annulla il caricamento</string>
+    <string name="room_event_action_cancel_download">Annulla lo scaricamento</string>
     <!-- Search -->
     <string name="search_hint">Cerca</string>
     <string name="search_members_hint">Cerca tra i membri della stanza</string>
@@ -1084,20 +1084,20 @@
     <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi precedenti</string>
     <string name="missing_permissions_error">Non hai permessi sufficienti per effettuare questa azione.</string>
     <plurals name="format_time_s">
-        <item quantity="one">%ds</item>
-        <item quantity="other">%ds</item>
+        <item quantity="one">%d s</item>
+        <item quantity="other">%d s</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">%dm</item>
-        <item quantity="other">%dm</item>
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d min</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%dh</item>
-        <item quantity="other">%dh</item>
+        <item quantity="one">%d h</item>
+        <item quantity="other">%d h</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">%dd</item>
-        <item quantity="other">%dd</item>
+        <item quantity="one">%d g.</item>
+        <item quantity="other">%d g.</item>
     </plurals>
     <string name="room_participants_now">%1$s ora</string>
     <string name="room_participants_ago">%1$s %2$s fa</string>
