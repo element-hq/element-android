@@ -2629,13 +2629,13 @@
     <string name="call_held_by_user">%s a mis l’appel en attente</string>
     <string name="call_hold_action">Mettre en attente</string>
     <string name="call_resume_action">Reprendre</string>
-    <string name="error_unauthorized">Non autorisé, informations d’authentification manquantes</string>
+    <string name="error_unauthorized">Non autorisé, identifiants d\'authentification valides manquants</string>
     <string name="dialog_edit_hint">Nouvelle valeur</string>
     <string name="action_return">Revenir</string>
     <string name="action_unpublish">Dé-publier</string>
     <string name="action_switch">Changer</string>
     <string name="action_add">Ajouter</string>
-    <string name="system_theme">Comme le système</string>
+    <string name="system_theme">Par défaut du système</string>
     <string name="notice_room_canonical_alias_no_change_by_you">Vous avez modifié les adresses de ce salon.</string>
     <string name="notice_room_canonical_alias_no_change">%1$s a modifié les adresses de ce salon.</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Vous avez modifié les adresses principale et alternative de ce salon.</string>
