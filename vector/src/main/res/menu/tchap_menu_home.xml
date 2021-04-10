@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_home_filter"
+        android:icon="@drawable/ic_search"
+        android:title="@string/home_filter_placeholder_home"
+        app:iconTint="?riotx_text_secondary"
+        app:showAsAction="always" />
+
+</menu>

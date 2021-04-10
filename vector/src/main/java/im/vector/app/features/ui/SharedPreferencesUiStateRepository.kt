@@ -43,7 +43,7 @@ class SharedPreferencesUiStateRepository @Inject constructor(
             else                      -> if (vectorPreferences.labAddNotificationTab()) {
                 RoomListDisplayMode.NOTIFICATIONS
             } else {
-                RoomListDisplayMode.PEOPLE
+                RoomListDisplayMode.ROOMS
             }
         }
     }

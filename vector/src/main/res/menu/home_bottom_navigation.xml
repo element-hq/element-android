@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/bottom_action_people"
-        android:enabled="true"
-        android:icon="@drawable/ic_home_bottom_chat"
-        android:title="@string/bottom_action_people_x" />
-
-    <item
         android:id="@+id/bottom_action_rooms"
         android:enabled="true"
         android:icon="@drawable/ic_home_bottom_group"
         android:title="@string/bottom_action_rooms" />
+
+    <item
+        android:id="@+id/bottom_action_people"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_bottom_chat"
+        android:title="@string/bottom_action_people_x" />
 
     <item
         android:id="@+id/bottom_action_notification"

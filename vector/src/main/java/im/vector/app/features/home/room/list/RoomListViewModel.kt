@@ -242,13 +242,10 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
-        // Set up init size on directChats and groupRooms as they are the biggest ones
+        // Set up init size on conversations as it is the biggest one
         val invites = ArrayList<RoomSummary>()
         val favourites = ArrayList<RoomSummary>()
-        val directChats = ArrayList<RoomSummary>(rooms.size)
-        val groupRooms = ArrayList<RoomSummary>(rooms.size)
-        val lowPriorities = ArrayList<RoomSummary>()
-        val serverNotices = ArrayList<RoomSummary>()
+        val conversations = ArrayList<RoomSummary>(rooms.size)
 
         rooms
                 .filter { roomListDisplayModeFilter.test(it) }
@@ -256,20 +253,14 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                     val tags = room.tags.map { it.name }
                     when {
                         room.membership == Membership.INVITE          -> invites.add(room)
-                        tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
                         tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
-                        tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
-                        room.isDirect                                 -> directChats.add(room)
-                        else                                          -> groupRooms.add(room)
+                        else                                          -> conversations.add(room)
                     }
                 }
         return RoomSummaries().apply {
             put(RoomCategory.INVITE, invites)
             put(RoomCategory.FAVOURITE, favourites)
-            put(RoomCategory.DIRECT, directChats)
-            put(RoomCategory.GROUP, groupRooms)
-            put(RoomCategory.LOW_PRIORITY, lowPriorities)
-            put(RoomCategory.SERVER_NOTICE, serverNotices)
+            put(RoomCategory.GROUP, conversations)
         }
     }
 }

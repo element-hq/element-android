@@ -52,6 +52,8 @@ import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.userdirectory.UserListViewModel
+import im.vector.app.features.userdirectory.UserListViewState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
@@ -74,6 +76,7 @@ class HomeActivity :
         ToolbarConfigurable,
         UnknownDeviceDetectorSharedViewModel.Factory,
         ServerBackupStatusViewModel.Factory,
+        UserListViewModel.Factory,
         NavigationInterceptor {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -94,6 +97,7 @@ class HomeActivity :
     @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -114,6 +118,8 @@ class HomeActivity :
     override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
         return serverBackupviewModelFactory.create(initialState)
     }
+
+    override fun create(initialState: UserListViewState) = userListViewModelFactory.create(initialState)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -356,24 +362,12 @@ class HomeActivity :
         configureToolbar(toolbar, false)
     }
 
-    override fun getMenuRes() = R.menu.home
+    override fun getMenuRes() = R.menu.tchap_menu_home
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_home_suggestion -> {
-                bugReporter.openBugReportScreen(this, true)
-                return true
-            }
-            R.id.menu_home_report_bug -> {
-                bugReporter.openBugReportScreen(this, false)
-                return true
-            }
             R.id.menu_home_filter -> {
                 navigator.openRoomsFiltering(this)
-                return true
-            }
-            R.id.menu_home_setting -> {
-                navigator.openSettings(this)
                 return true
             }
         }

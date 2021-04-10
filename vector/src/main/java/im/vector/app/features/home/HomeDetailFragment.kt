@@ -46,6 +46,8 @@ import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.userdirectory.UserListFragment
+import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
@@ -288,8 +290,21 @@ class HomeDetailFragment @Inject constructor(
                         detach(it)
                     }
             if (fragmentToShow == null) {
-                val params = RoomListParams(displayMode)
-                add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                when (displayMode) {
+                    RoomListDisplayMode.PEOPLE -> {
+                        val params = UserListFragmentArgs(
+                                title = getString(R.string.invite_users_to_room_title),
+                                menuResId = R.menu.vector_invite_users_to_room,
+                                showInviteActions = false,
+                                showToolbar = false
+                        )
+                        add(R.id.roomListContainer, UserListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                    }
+                    else                       -> {
+                        val params = RoomListParams(displayMode)
+                        add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                    }
+                }
             } else {
                 attach(fragmentToShow)
             }
