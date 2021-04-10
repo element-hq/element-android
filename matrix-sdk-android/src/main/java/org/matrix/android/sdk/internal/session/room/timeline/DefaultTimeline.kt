@@ -386,14 +386,14 @@ internal class DefaultTimeline(
 
     private fun getState(direction: Timeline.Direction): TimelineState {
         return when (direction) {
-            Timeline.Direction.FORWARDS -> forwardsState.get()
+            Timeline.Direction.FORWARDS  -> forwardsState.get()
             Timeline.Direction.BACKWARDS -> backwardsState.get()
         }
     }
 
     private fun updateState(direction: Timeline.Direction, update: (TimelineState) -> TimelineState) {
         val stateReference = when (direction) {
-            Timeline.Direction.FORWARDS -> forwardsState
+            Timeline.Direction.FORWARDS  -> forwardsState
             Timeline.Direction.BACKWARDS -> backwardsState
         }
         val currentValue = stateReference.get()
@@ -604,12 +604,14 @@ internal class DefaultTimeline(
         return offsetResults.size
     }
 
-    private fun buildTimelineEvent(eventEntity: TimelineEventEntity) = timelineEventMapper.map(
-            timelineEventEntity = eventEntity,
-            buildReadReceipts = settings.buildReadReceipts
-    ).let {
-        // eventually enhance with ui echo?
-        (uiEchoManager.decorateEventWithReactionUiEcho(it) ?: it)
+    private fun buildTimelineEvent(eventEntity: TimelineEventEntity): TimelineEvent {
+        return timelineEventMapper.map(
+                timelineEventEntity = eventEntity,
+                buildReadReceipts = settings.buildReadReceipts
+        ).let { timelineEvent ->
+            // eventually enhance with ui echo?
+            uiEchoManager.decorateEventWithReactionUiEcho(timelineEvent) ?: timelineEvent
+        }
     }
 
     /**
@@ -702,10 +704,10 @@ internal class DefaultTimeline(
         return object : MatrixCallback<TokenChunkEventPersistor.Result> {
             override fun onSuccess(data: TokenChunkEventPersistor.Result) {
                 when (data) {
-                    TokenChunkEventPersistor.Result.SUCCESS -> {
+                    TokenChunkEventPersistor.Result.SUCCESS           -> {
                         Timber.v("Success fetching $limit items $direction from pagination request")
                     }
-                    TokenChunkEventPersistor.Result.REACHED_END -> {
+                    TokenChunkEventPersistor.Result.REACHED_END       -> {
                         postSnapshot()
                     }
                     TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->

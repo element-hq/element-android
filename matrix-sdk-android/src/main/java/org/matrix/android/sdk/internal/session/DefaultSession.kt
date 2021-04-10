@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
@@ -114,6 +115,7 @@ internal class DefaultSession @Inject constructor(
         private val accountDataService: Lazy<AccountDataService>,
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
+        private val eventService: Lazy<EventService>,
         private val defaultIdentityService: DefaultIdentityService,
         private val integrationManagerService: IntegrationManagerService,
         private val thirdPartyService: Lazy<ThirdPartyService>,
@@ -129,6 +131,7 @@ internal class DefaultSession @Inject constructor(
         FilterService by filterService.get(),
         PushRuleService by pushRuleService.get(),
         PushersService by pushersService.get(),
+        EventService by eventService.get(),
         TermsService by termsService.get(),
         InitialSyncProgressService by initialSyncProgressService.get(),
         SecureStorageService by secureStorageService.get(),

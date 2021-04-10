@@ -967,7 +967,7 @@
     <string name="warning_unsaved_change_discard">Forkaste endringer</string>
     <string name="read_receipts_list">Les kvitteringsliste</string>
     <string name="e2e_re_request_encryption_key">Be om krypteringsnøkler fra andre økter.</string>
-    <string name="login_error_must_start_http">URL må starte med http[s]://</string>
+    <string name="login_error_must_start_http">URLen må starte med http[s]://</string>
     <string name="settings_troubleshoot_test_push_notification_content">Du ser på varselet! Klikk på meg!</string>
     <string name="settings_troubleshoot_test_push_loop_failed">Kunne ikke motta push. Løsningen kan være å installere applikasjonen på nytt.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Legg til konto</string>
@@ -1027,7 +1027,7 @@
     <string name="room_recents_start_chat">Start chat</string>
     <string name="room_recents_low_priority">LAV PRIORITET</string>
     <string name="room_recents_favourites">FAVORITTER</string>
-    <string name="room_recents_directory">DIREKTIV</string>
+    <string name="room_recents_directory">KATALOG</string>
     <string name="room_recents_join">BLI MED</string>
     <string name="search_is_not_supported_in_e2e_room">Søking i krypterte rom støttes ikke ennå.</string>
     <string name="tab_title_search_people">FOLK</string>
@@ -1154,11 +1154,11 @@
     <string name="template_e2e_re_request_encryption_key_dialog_content">Start ${app_name} på en annen enhet som kan dekryptere meldingen, slik at den kan sende nøklene til denne økten.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Forespørsel sendt</string>
     <string name="e2e_re_request_encryption_key_sent">Nøkkelforespørsel sendt.</string>
-    <string name="login_error_ssl_peer_unverified">SSL-feil: identiteten til jevnaldrende er ikke bekreftet.</string>
-    <string name="login_error_homeserver_not_found">Kan ikke nå en hjemmeserver på denne URL-en, sjekk den</string>
+    <string name="login_error_ssl_peer_unverified">SSL Feil: Denne partnerns identitet har ikke blitt verifisert.</string>
+    <string name="login_error_homeserver_not_found">Kan ikke nå hjemmetjeneren på denne URLen, vennligst sjekk den</string>
     <string name="login_error_no_homeserver_found">Dette er ikke en gyldig adresse for en Matrix tjener</string>
-    <string name="login_error_unknown_host">Denne URL-en er ikke tilgjengelig, sjekk den</string>
-    <string name="login_error_unable_register_mail_ownership">Kan ikke registrere: e-post eierskap feil</string>
+    <string name="login_error_unknown_host">Denne URLen kunne ikke nås, vennligst sjekk den</string>
+    <string name="login_error_unable_register_mail_ownership">Klarte ikke registrere: e-posteierskapsfeil</string>
     <string name="action_unpublish">Fjern publiseringen</string>
     <string name="action_add">Legg til</string>
     <string name="start_chatting">Begynn å chatte</string>
@@ -1296,8 +1296,8 @@
 \nKlikk på lenken den inneholder for å fortsette opprettelsen av kontoen.</string>
     <string name="login_validation_code_is_not_correct">Den angitte koden er ikke riktig. Vennligst sjekk.</string>
     <plurals name="login_error_limit_exceeded_retry_after">
-        <item quantity="one">Det er sendt for mange forespørsler. Du kan prøve på nytt %1$d sekund…</item>
-        <item quantity="other">Det er sendt for mange forespørsler. Du kan prøve på nytt %1$d sekunder…</item>
+        <item quantity="one">Det er sendt for mange forespørsler. Du kan prøve på nytt om %1$d sekund…</item>
+        <item quantity="other">Det er sendt for mange forespørsler. Du kan prøve på nytt om %1$d sekunder…</item>
     </plurals>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Dette er ikke en gyldig brukeridentifikator. Forventet format: \'@bruker:homeserver.org\'</string>
     <string name="soft_logout_signin_e2e_warning_notice">Logg på for å gjenopprette krypteringsnøkler som er lagret eksklusivt på denne enheten. Du trenger dem for å lese alle dine sikre meldinger på hvilken som helst enhet.</string>
@@ -1564,15 +1564,15 @@
     <string name="search_banned_user_hint">Filtrer utestengte brukere</string>
     <string name="room_permissions_modify_widgets">Endre widgets</string>
     <string name="template_settings_opt_in_of_analytics_prompt">Aktiver analyse for å hjelpe med å forbedre ${app_name}.</string>
-    <string name="startup_notification_privacy_title">Varsel Personvern</string>
-    <string name="settings_show_avatar_display_name_changes_messages_summary">Inkluderer avatar og visningsnavnendringer.</string>
+    <string name="startup_notification_privacy_title">Varselpersonvern</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Inkluderer avatar- og visningsnavnendringer.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Vis kontohendelser</string>
     <string name="settings_show_join_leave_messages_summary">Invitasjoner, spark og utestengelser er ikke påvirket.</string>
     <string name="settings_show_join_leave_messages">Vis delta og forlate arrangementer</string>
     <string name="settings_show_room_member_state_events_summary">Inkluderer invitasjoner/delta/forlot/spark/utesteng hendelser og avatar/visningsnavnendringer.</string>
     <string name="settings_chat_effects_title">Vis chateffekter</string>
-    <string name="settings_show_room_member_state_events">Vis statens medlemsarrangementer</string>
-    <string name="settings_12_24_timestamps">Vis tidsstempler i 12-timers format</string>
+    <string name="settings_show_room_member_state_events">Vis statushendelser angående rommedlemmer</string>
+    <string name="settings_12_24_timestamps">Vis tidsstempler i 12-timersformat</string>
     <string name="settings_send_markdown">Markdown formatering</string>
     <string name="settings_inline_url_preview_summary">Forhåndsvis lenker i chatten når hjemmeserveren din støtter denne funksjonen.</string>
     <string name="settings_inline_url_preview">Forhåndsvisning av innebygd URL</string>
@@ -1581,14 +1581,14 @@
     <string name="settings_home_display">Hjemmeskjerm</string>
     <string name="settings_notifications_targets">Varslingsmål</string>
     <string name="settings_cryptography_manage_keys">Administrer kryptografinøkler</string>
-    <string name="settings_integrations_summary">Bruk en Integration Manager til å administrere roboter, broer, widgets og klistremerkepakker.
-\nIntegration Managers mottar konfigurasjonsdata, og kan endre moduler, sende rominvitasjoner og angi strømnivåer på dine vegne.</string>
+    <string name="settings_integrations_summary">Bruk en integrasjonshåndterer til å administrere botter, broer, widgets og klistremerkepakker.
+\nIntegrasjonshåndterere mottar konfigurasjonsdata, og kan endre moduler, sende rominvitasjoner og angi maktnivåer på dine vegne.</string>
     <string name="settings_set_sync_delay">Forsinkelse mellom hver synkronisering</string>
     <string name="settings_set_workmanager_delay_summary">%s
 \nSynkroniseringen kan bli utsatt avhengig av ressursene (batteriet) eller enhetens tilstand (hvilemodus).</string>
     <string name="settings_set_workmanager_delay">Foretrukket synkroniseringsintervall</string>
-    <string name="settings_set_sync_timeout">Tidsavbrudd for synkronisering forespørsel</string>
-    <string name="settings_enable_background_sync">Aktiver synkronisering i bakgrunnen</string>
+    <string name="settings_set_sync_timeout">Tidsavbrudd for synkroniseringsforespørsel</string>
+    <string name="settings_enable_background_sync">Aktiver bakgrunnssynkronisering</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Du vil ikke bli varslet om innkommende meldinger når appen er i bakgrunnen.</string>
     <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} vil synkroniseres i bakgrunnen med jevne mellomrom på presis tid (konfigurerbar).
 \nDette vil påvirke radio og batteribruk, det vises en permanent melding om at ${app_name} lytter etter hendelser.</string>
@@ -1599,15 +1599,15 @@
     <string name="settings_containing_my_display_name">Msgs som inneholder visningsnavnet mitt</string>
     <string name="settings_silent_notifications_preferences">Konfigurer stille varsler</string>
     <string name="settings_call_notifications_preferences">Konfigurer anropsvarsler</string>
-    <string name="settings_noisy_notifications_preferences">Konfigurer lyd varsler</string>
-    <string name="settings_notification_privacy_message_content_not_shown">• Varsler vil &lt;b&gt;ikke vise meldingsinnhold&lt;b&gt;</string>
+    <string name="settings_noisy_notifications_preferences">Konfigurer høylytte varsler</string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Varsler vil <b>ikke vise meldingsinnhold</b></string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorer optimalisering</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Aktiver Start ved oppstart</string>
     <string name="settings_troubleshoot_test_service_boot_success">Tjenesten starter når enheten startes på nytt.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Tjenesten kunne ikke startes på nytt</string>
-    <string name="settings_troubleshoot_test_service_restart_success">Tjenesten stoppet og startet på nytt automatisk.</string>
-    <string name="settings_troubleshoot_test_service_restart_title">Varslingstjeneste automatisk omstart</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Start Tjeneste</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Tjenesten ble stoppet og startet på nytt automatisk.</string>
+    <string name="settings_troubleshoot_test_service_restart_title">Automatisk omstart av varslingstjenesten</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Start tjeneste</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Varslingstjenesten kjører ikke.
 \nPrøv å starte programmet på nytt.</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Varslingstjenesten kjører.</string>

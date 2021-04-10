@@ -49,6 +49,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
+import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
 import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
@@ -407,6 +408,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
     private fun decryptIfNeeded(event: Event, roomId: String) {
         try {
+            // Event from sync does not have roomId, so add it to the event first
             val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")
             event.mxDecryptionResult = OlmDecryptionResult(
                     payload = result.clearEvent,
@@ -462,20 +464,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 val content = event.getClearContent().toModel<FullyReadContent>()
                 roomFullyReadHandler.handle(realm, roomId, content)
             }
-        }
-    }
-
-    private fun Event.getFixedRoomMemberContent(): RoomMemberContent? {
-        val content = content.toModel<RoomMemberContent>()
-        // if user is leaving, we should grab his last name and avatar from prevContent
-        return if (content?.membership?.isLeft() == true) {
-            val prevContent = resolvedPrevContent().toModel<RoomMemberContent>()
-            content.copy(
-                    displayName = prevContent?.displayName,
-                    avatarUrl = prevContent?.avatarUrl
-            )
-        } else {
-            content
         }
     }
 }

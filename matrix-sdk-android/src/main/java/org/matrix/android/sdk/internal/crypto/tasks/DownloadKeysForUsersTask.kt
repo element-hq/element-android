@@ -72,8 +72,8 @@ internal class DefaultDownloadKeysForUsers @Inject constructor(
                         }
                         .map { body ->
                             async {
-                                val result = executeRequest<KeysQueryResponse>(globalErrorReceiver) {
-                                    apiCall = cryptoApi.downloadKeysForUsers(body)
+                                val result = executeRequest(globalErrorReceiver) {
+                                    cryptoApi.downloadKeysForUsers(body)
                                 }
 
                                 mutex.withLock {
@@ -98,7 +98,7 @@ internal class DefaultDownloadKeysForUsers @Inject constructor(
         } else {
             // No need to chunk, direct request
             executeRequest(globalErrorReceiver) {
-                apiCall = cryptoApi.downloadKeysForUsers(
+                cryptoApi.downloadKeysForUsers(
                         KeysQueryBody(
                                 deviceKeys = params.userIds.associateWith { emptyList() },
                                 token = token

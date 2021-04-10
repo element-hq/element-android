@@ -31,7 +31,7 @@ internal class DefaultGetOpenIdTokenTask @Inject constructor(
 
     override suspend fun execute(params: Unit): RequestOpenIdTokenResponse {
         return executeRequest(globalErrorReceiver) {
-            apiCall = openIdAPI.openIdToken(userId)
+            openIdAPI.openIdToken(userId)
         }
     }
 }

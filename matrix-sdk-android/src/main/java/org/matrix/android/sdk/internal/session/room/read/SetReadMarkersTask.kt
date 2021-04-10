@@ -62,7 +62,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
 ) : SetReadMarkersTask {
 
     override suspend fun execute(params: SetReadMarkersTask.Params) {
-        val markers = HashMap<String, String>()
+        val markers = mutableMapOf<String, String>()
         Timber.v("Execute set read marker with params: $params")
         val latestSyncedEventId = latestSyncedEventId(params.roomId)
         val fullyReadEventId = if (params.forceReadMarker) {
@@ -96,9 +96,18 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
             updateDatabase(params.roomId, markers, shouldUpdateRoomSummary)
         }
         if (markers.isNotEmpty()) {
-            executeRequest<Unit>(globalErrorReceiver) {
-                isRetryable = true
-                apiCall = roomAPI.sendReadMarker(params.roomId, markers)
+            executeRequest(
+                    globalErrorReceiver,
+                    canRetry = true
+            ) {
+                if (markers[READ_MARKER] == null) {
+                    if (readReceiptEventId != null) {
+                        roomAPI.sendReceipt(params.roomId, READ_RECEIPT, readReceiptEventId)
+                    }
+                } else {
+                    // "m.fully_read" value is mandatory to make this call
+                    roomAPI.sendReadMarker(params.roomId, markers)
+                }
             }
         }
     }
@@ -108,7 +117,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 TimelineEventEntity.latestEvent(realm, roomId = roomId, includesSending = false)?.eventId
             }
 
-    private suspend fun updateDatabase(roomId: String, markers: HashMap<String, String>, shouldUpdateRoomSummary: Boolean) {
+    private suspend fun updateDatabase(roomId: String, markers: Map<String, String>, shouldUpdateRoomSummary: Boolean) {
         monarchy.awaitTransaction { realm ->
             val readMarkerId = markers[READ_MARKER]
             val readReceiptId = markers[READ_RECEIPT]

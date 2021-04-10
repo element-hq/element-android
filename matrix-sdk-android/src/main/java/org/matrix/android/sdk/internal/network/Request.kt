@@ -19,38 +19,49 @@ package org.matrix.android.sdk.internal.network
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.getRetryDelay
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.internal.network.ssl.CertUtil
-import retrofit2.Call
-import retrofit2.awaitResponse
+import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
 
-internal suspend inline fun <DATA : Any> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
-                                                        block: Request<DATA>.() -> Unit) = Request<DATA>(globalErrorReceiver).apply(block).execute()
+/**
+ * Execute a request from the requestBlock and handle some of the Exception it could generate
+ * Ref: https://github.com/matrix-org/matrix-js-sdk/blob/develop/src/scheduler.js#L138-L175
+ *
+ * @param globalErrorReceiver will be use to notify error such as invalid token error. See [GlobalError]
+ * @param canRetry if set to true, the request will be executed again in case of error, after a delay
+ * @param maxDelayBeforeRetry the max delay to wait before a retry
+ * @param maxRetriesCount the max number of retries
+ * @param requestBlock a suspend lambda to perform the network request
+ */
+internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
+                                                  canRetry: Boolean = false,
+                                                  maxDelayBeforeRetry: Long = 32_000L,
+                                                  maxRetriesCount: Int = 4,
+                                                  noinline requestBlock: suspend () -> DATA): DATA {
+    var currentRetryCount = 0
+    var currentDelay = 1_000L
 
-internal class Request<DATA : Any>(private val globalErrorReceiver: GlobalErrorReceiver?) {
-
-    var isRetryable = false
-    var initialDelay: Long = 100L
-    var maxDelay: Long = 10_000L
-    var maxRetryCount = Int.MAX_VALUE
-    private var currentRetryCount = 0
-    private var currentDelay = initialDelay
-    lateinit var apiCall: Call<DATA>
-
-    suspend fun execute(): DATA {
-        return try {
-            val response = apiCall.clone().awaitResponse()
-            if (response.isSuccessful) {
-                response.body()
-                        ?: throw IllegalStateException("The request returned a null body")
-            } else {
-                throw response.toFailure(globalErrorReceiver)
+    while (true) {
+        try {
+            return requestBlock()
+        } catch (throwable: Throwable) {
+            val exception = when (throwable) {
+                is KotlinNullPointerException -> IllegalStateException("The request returned a null body")
+                is HttpException              -> throwable.toFailure(globalErrorReceiver)
+                else                          -> throwable
             }
-        } catch (exception: Throwable) {
-            // Log some details about the request which has failed
-            Timber.e("Exception when executing request ${apiCall.request().method} ${apiCall.request().url.toString().substringBefore("?")}")
+
+            // Log some details about the request which has failed.
+            val request = (throwable as? HttpException)?.response()?.raw()?.request
+            if (request == null) {
+                Timber.e("Exception when executing request")
+            } else {
+                Timber.e("Exception when executing request ${request.method} ${request.url.toString().substringBefore("?")}")
+            }
 
             // Check if this is a certificateException
             CertUtil.getCertificateException(exception)
@@ -61,10 +72,18 @@ internal class Request<DATA : Any>(private val globalErrorReceiver: GlobalErrorR
                     // }
                     ?.also { unrecognizedCertificateException -> throw unrecognizedCertificateException }
 
-            if (isRetryable && currentRetryCount++ < maxRetryCount && exception.shouldBeRetried()) {
+            currentRetryCount++
+
+            if (exception is Failure.ServerError
+                    && exception.httpCode == 429
+                    && exception.error.code == MatrixError.M_LIMIT_EXCEEDED
+                    && currentRetryCount < maxRetriesCount) {
+                // 429, we can retry
+                delay(exception.getRetryDelay(1_000))
+            } else if (canRetry && currentRetryCount < maxRetriesCount && exception.shouldBeRetried()) {
                 delay(currentDelay)
-                currentDelay = (currentDelay * 2L).coerceAtMost(maxDelay)
-                return execute()
+                currentDelay = currentDelay.times(2L).coerceAtMost(maxDelayBeforeRetry)
+                // Try again (loop)
             } else {
                 throw when (exception) {
                     is IOException              -> Failure.NetworkConnection(exception)

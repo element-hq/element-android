@@ -24,6 +24,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.getRetryDelay
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Cancelable
@@ -148,8 +149,7 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
                     task.markAsFailedOrRetry(exception, 0)
                 }
                 (exception is Failure.ServerError && exception.error.code == MatrixError.M_LIMIT_EXCEEDED) -> {
-                    val delay = exception.error.retryAfterMillis?.plus(100) ?: 3_000
-                    task.markAsFailedOrRetry(exception, delay)
+                    task.markAsFailedOrRetry(exception, exception.getRetryDelay(3_000))
                 }
                 exception is CancellationException                                                         -> {
                     Timber.v("## $task has been cancelled, try next task")

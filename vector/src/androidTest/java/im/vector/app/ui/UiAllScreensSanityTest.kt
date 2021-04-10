@@ -78,6 +78,7 @@ class UiAllScreensSanityTest {
     // Last passing:
     // 2020-11-09
     // 2020-12-16 After ViewBinding huge change
+    // 2021-04-08 Testing 429 change
     @Test
     fun allScreensTest() {
         // Create an account

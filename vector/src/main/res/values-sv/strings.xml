@@ -2661,4 +2661,15 @@
     <string name="dev_tools_send_custom_event">Skicka anpassad rumshändelse</string>
     <string name="dev_tools_explore_room_state">Utforska rumsläge</string>
     <string name="dev_tools_menu_name">Utvecklingsverktyg</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Visa alla rum i rumskatalogen, inklusive rum med stötande innehåll.</string>
+    <string name="settings_room_directory_show_all_rooms">Visa rum med stötande innehåll</string>
+    <string name="event_status_delete_all_failed_dialog_message">Är du säker på att du vill radera alla oskickade meddelanden i det här rummet\?</string>
+    <string name="event_status_delete_all_failed_dialog_title">Radera oskickade meddelanden</string>
+    <string name="event_status_failed_messages_warning">Meddelanden misslyckades att skickas</string>
+    <string name="event_status_cancel_sending_dialog_message">Vill du avbryta sändning av meddelanden\?</string>
+    <string name="event_status_a11y_delete_all">Radera alla misslyckade meddelanden</string>
+    <string name="event_status_a11y_failed">Misslyckad</string>
+    <string name="event_status_a11y_sent">Skickad</string>
+    <string name="event_status_a11y_sending">Skickar</string>
+    <string name="settings_category_room_directory">Rumskatalog</string>
 </resources>

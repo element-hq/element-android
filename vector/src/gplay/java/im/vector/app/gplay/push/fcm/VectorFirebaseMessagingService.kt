@@ -31,6 +31,7 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
@@ -40,6 +41,10 @@ import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.notifications.SimpleNotifiableEvent
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -55,6 +60,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     private lateinit var pusherManager: PushersManager
     private lateinit var activeSessionHolder: ActiveSessionHolder
     private lateinit var vectorPreferences: VectorPreferences
+    private lateinit var wifiDetector: WifiDetector
+
+    private val coroutineScope = CoroutineScope(SupervisorJob())
 
     // UI handler
     private val mUIHandler by lazy {
@@ -69,6 +77,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             pusherManager = pusherManager()
             activeSessionHolder = activeSessionHolder()
             vectorPreferences = vectorPreferences()
+            wifiDetector = wifiDetector()
         }
     }
 
@@ -78,6 +87,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * @param message the message
      */
     override fun onMessageReceived(message: RemoteMessage) {
+        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            Timber.d("## onMessageReceived() %s", message.data.toString())
+        }
+        Timber.d("## onMessageReceived() from FCM with priority %s", message.priority)
+
         // Diagnostic Push
         if (message.data["event_id"] == PushersManager.TEST_EVENT_ID) {
             val intent = Intent(NotificationUtils.PUSH_ACTION)
@@ -90,14 +104,10 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             return
         }
 
-        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.i("## onMessageReceived() %s", message.data.toString())
-            Timber.i("## onMessageReceived() from FCM with priority %s", message.priority)
-        }
         mUIHandler.post {
             if (ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 // we are in foreground, let the sync do the things?
-                Timber.v("PUSH received in a foreground state, ignore")
+                Timber.d("PUSH received in a foreground state, ignore")
             } else {
                 onMessageReceivedInternal(message.data)
             }
@@ -140,7 +150,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     private fun onMessageReceivedInternal(data: Map<String, String>) {
         try {
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                Timber.i("## onMessageReceivedInternal() : $data")
+                Timber.d("## onMessageReceivedInternal() : $data")
+            } else {
+                Timber.d("## onMessageReceivedInternal() : $data")
             }
 
             // update the badge counter
@@ -156,14 +168,48 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 val roomId = data["room_id"]
 
                 if (isEventAlreadyKnown(eventId, roomId)) {
-                    Timber.i("Ignoring push, event already known")
+                    Timber.d("Ignoring push, event already known")
                 } else {
-                    Timber.v("Requesting background sync")
+                    // Try to get the Event content faster
+                    Timber.d("Requesting event in fast lane")
+                    getEventFastLane(session, roomId, eventId)
+
+                    Timber.d("Requesting background sync")
                     session.requireBackgroundSync()
                 }
             }
         } catch (e: Exception) {
             Timber.e(e, "## onMessageReceivedInternal() failed")
+        }
+    }
+
+    private fun getEventFastLane(session: Session, roomId: String?, eventId: String?) {
+        roomId?.takeIf { it.isNotEmpty() } ?: return
+        eventId?.takeIf { it.isNotEmpty() } ?: return
+
+        // If the room is currently displayed, we will not show a notification, so no need to get the Event faster
+        if (notificationDrawerManager.shouldIgnoreMessageEventInRoom(roomId)) {
+            return
+        }
+
+        if (wifiDetector.isConnectedToWifi().not()) {
+            Timber.d("No WiFi network, do not get Event")
+            return
+        }
+
+        coroutineScope.launch {
+            Timber.d("Fast lane: start request")
+            val event = tryOrNull { session.getEvent(roomId, eventId) } ?: return@launch
+
+            val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event)
+
+            resolvedEvent
+                    ?.also { Timber.d("Fast lane: notify drawer") }
+                    ?.let {
+                        it.isPushGatewayEvent = true
+                        notificationDrawerManager.onNotifiableEventReceived(it)
+                        notificationDrawerManager.refreshNotificationDrawer()
+                    }
         }
     }
 

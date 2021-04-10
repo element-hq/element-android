@@ -36,11 +36,13 @@ internal class DefaultInviteTask @Inject constructor(
 ) : InviteTask {
 
     override suspend fun execute(params: InviteTask.Params) {
-        return executeRequest(globalErrorReceiver) {
-            val body = InviteBody(params.userId, params.reason)
-            apiCall = roomAPI.invite(params.roomId, body)
-            isRetryable = true
-            maxRetryCount = 3
+        val body = InviteBody(params.userId, params.reason)
+        return executeRequest(
+                globalErrorReceiver,
+                canRetry = true,
+                maxRetriesCount = 3
+        ) {
+            roomAPI.invite(params.roomId, body)
         }
     }
 }

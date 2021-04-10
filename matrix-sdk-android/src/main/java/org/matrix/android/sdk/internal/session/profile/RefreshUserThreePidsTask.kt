@@ -33,8 +33,8 @@ internal class DefaultRefreshUserThreePidsTask @Inject constructor(private val p
                                                                    private val globalErrorReceiver: GlobalErrorReceiver) : RefreshUserThreePidsTask() {
 
     override suspend fun execute(params: Unit) {
-        val accountThreePidsResponse = executeRequest<AccountThreePidsResponse>(globalErrorReceiver) {
-            apiCall = profileAPI.getThreePIDs()
+        val accountThreePidsResponse = executeRequest(globalErrorReceiver) {
+            profileAPI.getThreePIDs()
         }
 
         Timber.d("Get ${accountThreePidsResponse.threePids?.size} threePids")

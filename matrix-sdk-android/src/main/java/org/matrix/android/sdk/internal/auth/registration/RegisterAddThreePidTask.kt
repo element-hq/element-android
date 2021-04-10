@@ -35,7 +35,7 @@ internal class DefaultRegisterAddThreePidTask(
 
     override suspend fun execute(params: RegisterAddThreePidTask.Params): AddThreePidRegistrationResponse {
         return executeRequest(null) {
-            apiCall = authAPI.add3Pid(params.threePid.toPath(), AddThreePidRegistrationParams.from(params))
+            authAPI.add3Pid(params.threePid.toPath(), AddThreePidRegistrationParams.from(params))
         }
     }
 

@@ -127,25 +127,27 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
     private fun handleShare(action: RoomUploadsAction.Share) {
         viewModelScope.launch {
-            try {
+            val event = try {
                 val file = session.fileService().downloadFile(
                         messageContent = action.uploadEvent.contentWithAttachmentContent)
-                _viewEvents.post(RoomUploadsViewEvents.FileReadyForSharing(file))
+                RoomUploadsViewEvents.FileReadyForSharing(file)
             } catch (failure: Throwable) {
-                _viewEvents.post(RoomUploadsViewEvents.Failure(failure))
+                RoomUploadsViewEvents.Failure(failure)
             }
+            _viewEvents.post(event)
         }
     }
 
     private fun handleDownload(action: RoomUploadsAction.Download) {
         viewModelScope.launch {
-            try {
+            val event = try {
                 val file = session.fileService().downloadFile(
                         messageContent = action.uploadEvent.contentWithAttachmentContent)
-                _viewEvents.post(RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body))
+                RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body)
             } catch (failure: Throwable) {
-                _viewEvents.post(RoomUploadsViewEvents.Failure(failure))
+                RoomUploadsViewEvents.Failure(failure)
             }
+            _viewEvents.post(event)
         }
     }
 }

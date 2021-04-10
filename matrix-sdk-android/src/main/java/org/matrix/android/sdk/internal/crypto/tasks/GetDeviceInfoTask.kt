@@ -34,7 +34,7 @@ internal class DefaultGetDeviceInfoTask @Inject constructor(
 
     override suspend fun execute(params: GetDeviceInfoTask.Params): DeviceInfo {
         return executeRequest(globalErrorReceiver) {
-            apiCall = cryptoApi.getDeviceInfo(params.deviceId)
+            cryptoApi.getDeviceInfo(params.deviceId)
         }
     }
 }
