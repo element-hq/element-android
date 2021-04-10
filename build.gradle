@@ -51,7 +51,7 @@ allprojects {
             }
         }
         maven {
-            url "http://dl.bintray.com/piasy/maven"
+            url "https://dl.bintray.com/piasy/maven"
             content {
                 includeGroupByRegex "com\\.github\\.piasy"
             }
