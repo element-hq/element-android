@@ -141,8 +141,8 @@ class RxSession(private val session: Session) {
     }
 
     fun getRoomIdByAlias(roomAlias: String,
-                         searchOnServer: Boolean): Single<Optional<RoomAliasDescription>> = singleBuilder {
-        session.getRoomIdByAlias(roomAlias, searchOnServer, it)
+                         searchOnServer: Boolean): Single<Optional<RoomAliasDescription>> = rxSingle {
+        session.getRoomIdByAlias(roomAlias, searchOnServer)
     }
 
     fun getProfileInfo(userId: String): Single<JsonDict> = rxSingle {
