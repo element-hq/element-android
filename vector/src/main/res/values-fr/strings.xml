@@ -427,7 +427,7 @@
     <string name="ssl_do_not_trust">Ne pas faire confiance</string>
     <string name="ssl_logout_account">Se déconnecter</string>
     <string name="ssl_remain_offline">Ignorer</string>
-    <string name="room_details_title">Information sur le salon</string>
+    <string name="room_details_title">Informations sur le salon</string>
     <string name="room_details_people">Participants</string>
     <string name="room_details_files">Fichiers</string>
     <string name="room_details_settings">Paramètres</string>
@@ -606,8 +606,8 @@
     <string name="send_bug_report_sent">Le rapport d’anomalie a bien été envoyé</string>
     <string name="send_bug_report_failed">L’envoi du rapport d’anomalie a échoué (%s)</string>
     <string name="auth_invalid_user_name">Les noms d’utilisateurs ne peuvent contenir que des lettres, des nombres, des points, des traits d’union et des tirets bas</string>
-    <string name="auth_invalid_email">Cela ne ressemble pas à une adresse e-mail valide</string>
-    <string name="auth_invalid_phone">Cela ne ressemble pas à un numéro de téléphone valide</string>
+    <string name="auth_invalid_email">Ceci ne ressemble pas à une adresse e-mail valide</string>
+    <string name="auth_invalid_phone">Ceci ne ressemble pas à un numéro de téléphone valide</string>
     <string name="auth_email_already_defined">Cette adresse e-mail est déjà utilisée.</string>
     <string name="auth_email_validation_message">Veuillez vérifier votre e-mail pour continuer votre inscription</string>
     <string name="auth_threepid_warning_message">L’inscription avec e-mail et numéro de téléphone à la fois n’est pas prise en charge tant que l’API n’existe pas. Seul le numéro de téléphone sera pris en compte.
@@ -2629,7 +2629,7 @@
     <string name="call_held_by_user">%s a mis l’appel en attente</string>
     <string name="call_hold_action">Mettre en attente</string>
     <string name="call_resume_action">Reprendre</string>
-    <string name="error_unauthorized">Non autorisé, identifiants d\'authentification valides manquants</string>
+    <string name="error_unauthorized">Non autorisé, identifiants d’authentification valides manquants</string>
     <string name="dialog_edit_hint">Nouvelle valeur</string>
     <string name="action_return">Revenir</string>
     <string name="action_unpublish">Dé-publier</string>
