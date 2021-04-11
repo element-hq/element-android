@@ -109,9 +109,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             )
                     .map { it.roomId }
             try {
-                awaitCallback<Unit> {
-                    session.markAllAsRead(roomIds, it)
-                }
+                session.markAllAsRead(roomIds)
             } catch (failure: Throwable) {
                 Timber.d(failure, "Failed to mark all as read")
             }
