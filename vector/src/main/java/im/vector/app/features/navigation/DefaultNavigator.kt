@@ -30,6 +30,7 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import arrow.core.Option
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
@@ -47,7 +48,6 @@ import im.vector.app.features.crypto.verification.SupportedVerificationMethodsPr
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
-import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
@@ -92,7 +92,7 @@ class DefaultNavigator @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences,
         private val widgetArgsBuilder: WidgetArgsBuilder,
-        private val selectedSpaceDataSource: SelectedSpaceDataSource,
+        private val appStateHandler: AppStateHandler,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
 ) : Navigator {
 
@@ -114,7 +114,7 @@ class DefaultNavigator @Inject constructor(
 
         sessionHolder.getSafeActiveSession()?.spaceService()?.getSpace(spaceId)?.spaceSummary()?.let {
             Timber.d("## Nav: Switching to space $spaceId / ${it.name}")
-            selectedSpaceDataSource.post(Option.just(it))
+            appStateHandler.selectedSpaceDataSource.post(Option.just(it))
         } ?: kotlin.run {
             Timber.d("## Nav: Failed to switch to space $spaceId")
         }
@@ -252,7 +252,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomDirectory(context: Context, initialFilter: String) {
-        val selectedSpace = selectedSpaceDataSource.currentValue?.orNull()?.let {
+        val selectedSpace = appStateHandler.selectedSpaceDataSource.currentValue?.orNull()?.let {
             sessionHolder.getSafeActiveSession()?.getRoomSummary(it.roomId)
         }
         if (selectedSpace == null) {
@@ -276,7 +276,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openInviteUsersToRoom(context: Context, roomId: String) {
-        val selectedSpace = selectedSpaceDataSource.currentValue?.orNull()?.let {
+        val selectedSpace = appStateHandler.selectedSpaceDataSource.currentValue?.orNull()?.let {
             sessionHolder.getSafeActiveSession()?.getRoomSummary(it.roomId)
         }
         if (vectorPreferences.labSpaces() && selectedSpace != null) {

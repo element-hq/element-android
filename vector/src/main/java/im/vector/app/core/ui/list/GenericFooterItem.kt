@@ -15,7 +15,6 @@
  */
 package im.vector.app.core.ui.list
 
-import android.graphics.Typeface
 import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.ColorInt

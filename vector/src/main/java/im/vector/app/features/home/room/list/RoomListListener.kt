@@ -18,10 +18,12 @@ package im.vector.app.features.home.room.list
 
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 
 interface RoomListListener : FilteredRoomFooterItem.FilteredRoomFooterItemListener {
     fun onRoomClicked(room: RoomSummary)
     fun onRoomLongClicked(room: RoomSummary): Boolean
     fun onRejectRoomInvitation(room: RoomSummary)
     fun onAcceptRoomInvitation(room: RoomSummary)
+    fun onJoinSuggestedRoom(room: SpaceChildInfo)
 }

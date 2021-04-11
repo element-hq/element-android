@@ -20,8 +20,8 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
-interface UpdatableFilterLivePageResult {
+interface UpdatableLivePageResult {
     val livePagedList: LiveData<PagedList<RoomSummary>>
 
-    fun updateQuery(queryParams: RoomSummaryQueryParams)
+    fun updateQuery(builder: (RoomSummaryQueryParams) -> RoomSummaryQueryParams)
 }
