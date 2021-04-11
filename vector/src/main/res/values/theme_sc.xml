@@ -86,7 +86,7 @@
         <!--Header/Panel Background-->
         <item name="vctr_list_header_background_color">@color/background_dark_sc</item>
 
-        <item name="riotx_list_bottom_sheet_divider_color">#80ffffff</item>
+        <item name="riotx_list_bottom_sheet_divider_color">#1fffffff</item>
         <item name="vctr_list_divider_color">@color/background_dark_sc</item>
 
         <!-- room notification text color (typing, unsent...) -->
