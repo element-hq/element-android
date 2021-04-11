@@ -19,7 +19,12 @@ package im.vector.app
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import arrow.core.Option
+import im.vector.app.core.utils.BehaviorDataSource
+import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.disposables.CompositeDisposable
+import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,9 +34,14 @@ import javax.inject.Singleton
  */
 // TODO Keep this class for now, will maybe be used fro Space
 @Singleton
-class AppStateHandler @Inject constructor() : LifecycleObserver {
+class AppStateHandler @Inject constructor(
+        private val sessionDataSource: ActiveSessionDataSource,
+        private val uiStateRepository: UiStateRepository
+) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
+
+    val selectedSpaceDataSource = BehaviorDataSource<Option<RoomSummary>>(Option.empty())
 
     init {
         // restore current space from ui state
@@ -41,6 +51,12 @@ class AppStateHandler @Inject constructor() : LifecycleObserver {
                     selectedSpaceDataSource.post(Option.just(it))
                 }
             }
+        }
+    }
+
+    fun safeActiveSpaceId() : String? {
+        return selectedSpaceDataSource.currentValue?.orNull()?.roomId?.takeIf {
+            MatrixPatterns.isRoomId(it)
         }
     }
 

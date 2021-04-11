@@ -16,16 +16,22 @@
 
 package im.vector.app.features.home.room.list
 
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.home.RoomListDisplayMode
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 
 data class RoomListViewState(
         val displayMode: RoomListDisplayMode,
         val roomFilter: String = "",
-        val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap()
+        val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap(),
         val asyncSuggestedRooms: Async<List<SpaceChildInfo>> = Uninitialized,
-        val suggestedRoomJoiningState: Map<String, Async<Unit>> = emptyMap()
+        val suggestedRoomJoiningState: Map<String, Async<Unit>> = emptyMap(),
+        val currentUserName: String? = null,
+        val currentSpace: Async<RoomSummary?> = Uninitialized
 ) : MvRxState {
 
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)

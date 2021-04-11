@@ -158,7 +158,13 @@ class HomeActivity :
                         is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.OpenGroup -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
-                            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+                            // Temporary
+                            // we might want to delay that to avoid having the drawer animation lagging
+                            // would be probably better to let the drawer do that? in the on closed callback?
+                            views.coordinatorLayout.postDelayed({
+                                replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+                            }, 200)
+                            Unit
                         }
                         is HomeActivitySharedAction.OpenSpacePreview -> {
                             startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))

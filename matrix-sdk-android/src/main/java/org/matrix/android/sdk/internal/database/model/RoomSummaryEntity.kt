@@ -27,7 +27,7 @@ import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 
 internal open class RoomSummaryEntity(
-        @PrimaryKey var roomId: String = ""
+        @PrimaryKey var roomId: String = "",
         var roomType: String? = null,
         var parents: RealmList<SpaceParentSummaryEntity> = RealmList(),
         var children: RealmList<SpaceChildSummaryEntity> = RealmList()
@@ -203,6 +203,11 @@ internal open class RoomSummaryEntity(
         }
 
     var hasFailedSending: Boolean = false
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var flattenParentIds: String? = null
         set(value) {
             if (value != field) field = value
         }

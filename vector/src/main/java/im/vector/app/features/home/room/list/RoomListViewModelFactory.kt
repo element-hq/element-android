@@ -16,12 +16,14 @@
 
 package im.vector.app.features.home.room.list
 
+import im.vector.app.AppStateHandler
 import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 import javax.inject.Provider
 
 class RoomListViewModelFactory @Inject constructor(private val session: Provider<Session>,
+                                                   private val appStateHandler: AppStateHandler,
                                                    private val stringProvider: StringProvider)
     : RoomListViewModel.Factory {
 
@@ -29,7 +31,8 @@ class RoomListViewModelFactory @Inject constructor(private val session: Provider
         return RoomListViewModel(
                 initialState,
                 session.get(),
-                stringProvider
+                stringProvider,
+                appStateHandler
         )
     }
 }

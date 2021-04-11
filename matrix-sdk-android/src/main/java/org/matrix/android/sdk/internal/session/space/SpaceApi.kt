@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.space
 
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -39,6 +38,6 @@ internal interface SpaceApi {
      * - https://hackmd.io/fNYh4tjUT5mQfR1uuRzWDA
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2946/rooms/{roomId}/spaces")
-    fun getSpaces(@Path("roomId") spaceId: String,
-                  @Body params: SpaceSummaryParams): Call<SpacesResponse>
+    suspend fun getSpaces(@Path("roomId") spaceId: String,
+                  @Body params: SpaceSummaryParams): SpacesResponse
 }

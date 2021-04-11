@@ -57,7 +57,7 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
                 suggestedOnly = params.suggestedOnly
         )
         return executeRequest(globalErrorReceiver) {
-            apiCall = spaceApi.getSpaces(params.spaceId, body)
+            spaceApi.getSpaces(params.spaceId, body)
         }
     }
 }
