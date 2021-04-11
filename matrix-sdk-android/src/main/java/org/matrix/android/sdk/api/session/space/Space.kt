@@ -16,10 +16,8 @@
 
 package org.matrix.android.sdk.api.session.space
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.util.Cancelable
 
 interface Space {
 

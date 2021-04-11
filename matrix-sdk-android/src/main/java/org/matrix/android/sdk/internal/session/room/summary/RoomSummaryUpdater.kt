@@ -39,6 +39,7 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntity
 import org.matrix.android.sdk.internal.database.model.SpaceParentSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
@@ -50,6 +51,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereType
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
+import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.session.room.RoomAvatarResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
@@ -59,6 +61,7 @@ import org.matrix.android.sdk.internal.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncUnreadNotifications
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.system.measureTimeMillis
 
 internal class RoomSummaryUpdater @Inject constructor(
         @UserId private val userId: String,
@@ -183,46 +186,144 @@ internal class RoomSummaryUpdater @Inject constructor(
      * Should be called at the end of the room sync, to check and validate all parent/child relations
      */
     fun validateSpaceRelationship(realm: Realm) {
-        // Do level 0 stuffs
+        measureTimeMillis {
+            val lookupMap = realm.where(RoomSummaryEntity::class.java)
+                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                    // we order by roomID to be consistent when breaking parent/child cycles
+                    .sort(RoomSummaryEntityFields.ROOM_ID)
+                    .findAll().map {
+                        it.flattenParentIds = null
+                        it to emptyList<RoomSummaryEntity>().toMutableSet()
+                    }
+                    .toMap()
 
-        realm.where(RoomSummaryEntity::class.java).findAll().forEach { roomSummary ->
-            if (roomSummary.roomType == RoomType.SPACE) {
-                roomSummary.children.clearWith { it.deleteFromRealm() }
-                roomSummary.children.addAll(
-                        RoomChildRelationInfo(realm, roomSummary.roomId).getDirectChildrenDescriptions()
-                                .map {
-                                    Timber.v("## Space: Updating summary for room ${roomSummary.roomId} with info $it")
-                                    realm.createObject<SpaceChildSummaryEntity>().apply {
-                                        this.childRoomId = it.roomId
-                                        this.childSummaryEntity = RoomSummaryEntity.where(realm, it.roomId).findFirst()
-                                        this.order = it.order
-                                        this.autoJoin = it.autoJoin
-                                        this.viaServers.addAll(it.viaServers)
-//                                        this.level = 0
-                                    }.also {
-                                        Timber.v("## Space: Updating summary for room ${roomSummary.roomId} with children $it")
+            lookupMap.keys.forEach { lookedUp ->
+                if (lookedUp.roomType == RoomType.SPACE) {
+                    // get childrens
+
+                    lookedUp.children.clearWith { it.deleteFromRealm() }
+
+                    RoomChildRelationInfo(realm, lookedUp.roomId).getDirectChildrenDescriptions().forEach { child ->
+
+                        lookedUp.children.add(
+                                realm.createObject<SpaceChildSummaryEntity>().apply {
+                                    this.childRoomId = child.roomId
+                                    this.childSummaryEntity = RoomSummaryEntity.where(realm, child.roomId).findFirst()
+                                    this.order = child.order
+                                    this.autoJoin = child.autoJoin
+                                    this.viaServers.addAll(child.viaServers)
+                                }
+                        )
+
+                        RoomSummaryEntity.where(realm, child.roomId)
+                                .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                                .findFirst()
+                                ?.let { childSum ->
+                                    lookupMap.entries.firstOrNull { it.key.roomId == lookedUp.roomId }?.let { entry ->
+                                        if (entry.value.indexOfFirst { it.roomId == childSum.roomId } == -1) {
+                                            // add looked up as a parent
+                                            entry.value.add(childSum)
+                                        }
                                     }
                                 }
-                )
+                    }
+                } else {
+                    lookedUp.parents.clearWith { it.deleteFromRealm() }
+                    // can we check parent relations here??
+                    RoomChildRelationInfo(realm, lookedUp.roomId).getParentDescriptions()
+                            .map { parentInfo ->
+
+                                lookedUp.parents.add(
+                                        realm.createObject<SpaceParentSummaryEntity>().apply {
+                                            this.parentRoomId = parentInfo.roomId
+                                            this.parentSummaryEntity = RoomSummaryEntity.where(realm, parentInfo.roomId).findFirst()
+                                            this.canonical = parentInfo.canonical
+                                            this.viaServers.addAll(parentInfo.viaServers)
+                                        }
+                                )
+
+                                RoomSummaryEntity.where(realm, parentInfo.roomId)
+                                        .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                                        .findFirst()
+                                        ?.let { parentSum ->
+                                            if (lookupMap[parentSum]?.indexOfFirst { it.roomId == lookedUp.roomId } == -1) {
+                                                // add lookedup as a parent
+                                                lookupMap[parentSum]?.add(lookedUp)
+                                            }
+                                        }
+                            }
+                }
             }
 
-            // check parents
-            roomSummary.parents.clearWith { it.deleteFromRealm() }
-            roomSummary.parents.addAll(
-                    RoomChildRelationInfo(realm, roomSummary.roomId).getParentDescriptions()
-                            .map { parentInfo ->
-                                Timber.v("## Space: Updating summary for room ${roomSummary.roomId} with parent info $parentInfo")
-                                realm.createObject<SpaceParentSummaryEntity>().apply {
-                                    this.parentRoomId = parentInfo.roomId
-                                    this.parentSummaryEntity = RoomSummaryEntity.where(realm, parentInfo.roomId).findFirst()
-                                    this.canonical = parentInfo.canonical
-                                    this.viaServers.addAll(parentInfo.viaServers)
-//                            this.level = 0
-                                }.also {
-                                    Timber.v("## Space: Updating summary for room ${roomSummary.roomId} with parent $it")
+            // Simple algorithm to break cycles
+            // Need more work to decide how to break, probably need to be as consistent as possible
+            // and also find best way to root the tree
+
+            val graph = Graph()
+            lookupMap
+                    // focus only on spaces, as room are just leaf
+                    .filter { it.key.roomType == RoomType.SPACE }
+                    .forEach { (sum, children) ->
+                        graph.getOrCreateNode(sum.roomId)
+                        children.forEach {
+                            graph.addEdge(it.roomId, sum.roomId)
+                        }
+                    }
+
+            val backEdges = graph.findBackwardEdges()
+            Timber.v("## SPACES: Cycle detected = ${backEdges.isNotEmpty()}")
+
+            // break cycles
+            backEdges.forEach { edge ->
+                lookupMap.entries.find { it.key.roomId == edge.source.name }?.let {
+                    it.value.removeAll { it.roomId == edge.destination.name }
+                }
+            }
+
+            val acyclicGraph = graph.withoutEdges(backEdges)
+//            Timber.v("## SPACES: acyclicGraph $acyclicGraph")
+            val flattenSpaceParents = acyclicGraph.flattenDestination().map {
+                it.key.name to it.value.map { it.name }
+            }.toMap()
+//            Timber.v("## SPACES: flattenSpaceParents ${flattenSpaceParents.map { it.key.name to it.value.map { it.name } }.joinToString("\n") {
+//                it.first + ": [" + it.second.joinToString(",") + "]"
+//            }}")
+
+//            Timber.v("## SPACES: lookup map ${lookupMap.map { it.key.name to it.value.map { it.name } }.toMap()}")
+
+            lookupMap.entries
+                    .filter { it.key.roomType == RoomType.SPACE }
+                    .forEach { entry ->
+                        val parent = RoomSummaryEntity.where(realm, entry.key.roomId).findFirst()
+                        if (parent != null) {
+//                            Timber.v("## SPACES: check hierarchy of ${parent.name} id ${parent.roomId}")
+//                            Timber.v("## SPACES: flat known parents of ${parent.name} are ${flattenSpaceParents[parent.roomId]}")
+                            val flattenParentsIds = (flattenSpaceParents[parent.roomId] ?: emptyList()) + listOf(parent.roomId)
+//                            Timber.v("## SPACES: flatten known parents of children of ${parent.name} are ${flattenParentsIds}")
+                            entry.value.forEach { child ->
+                                RoomSummaryEntity.where(realm, child.roomId).findFirst()?.let { childSum ->
+
+                                    Timber.w("## SPACES: ${childSum.name} is ${childSum.roomId} fc: ${childSum.flattenParentIds}")
+//                                    var allParents = childSum.flattenParentIds ?: ""
+                                    if (childSum.flattenParentIds == null) childSum.flattenParentIds = ""
+                                    flattenParentsIds.forEach {
+                                        if (childSum.flattenParentIds?.contains(it) != true) {
+                                            childSum.flattenParentIds += "|$it"
+                                        }
+                                    }
+//                                    childSum.flattenParentIds = "$allParents|"
+
+//                                    Timber.v("## SPACES: flatten of ${childSum.name} is ${childSum.flattenParentIds}")
                                 }
                             }
-            )
+                        }
+                    }
+
+            // we need also to filter DMs...
+            // it's more annoying as based on if the other members belong the space or not
+        }.also {
+            Timber.v("## SPACES: Finish checking room hierarchy in $it ms")
         }
     }
 
