@@ -192,7 +192,7 @@ interface RoomService {
      * TODO Doc
      */
     fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                          pagedListConfig: PagedList.Config = defaultPagedListConfig): UpdatableFilterLivePageResult
+                                          pagedListConfig: PagedList.Config = defaultPagedListConfig): UpdatableLivePageResult
 
     /**
      * TODO Doc
@@ -207,7 +207,7 @@ interface RoomService {
                 .setPrefetchDistance(10)
                 .build()
 
-    fun getFlattenRoomSummaryChildOf(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()) : List<RoomSummary>
+    fun getFlattenRoomSummaryChildrenOf(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()) : List<RoomSummary>
 
     /**
      * Returns all the children of this space, as LiveData

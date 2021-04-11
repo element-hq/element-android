@@ -23,12 +23,12 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.AppStateHandler
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.SelectedGroupDataSource
-import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,6 +50,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val session: Session,
                                                       private val uiStateRepository: UiStateRepository,
                                                       private val selectedGroupStore: SelectedGroupDataSource,
+                                                      private val appStateHandler: AppStateHandler,
                                                       private val stringProvider: StringProvider)
     : VectorViewModel<HomeDetailViewState, HomeDetailAction, EmptyViewEvents>(initialState) {
 
@@ -84,7 +85,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     override fun handle(action: HomeDetailAction) {
         when (action) {
             is HomeDetailAction.SwitchDisplayMode -> handleSwitchDisplayMode(action)
-            HomeDetailAction.MarkAllRoomsRead     -> handleMarkAllRoomsRead()
+            HomeDetailAction.MarkAllRoomsRead -> handleMarkAllRoomsRead()
         }
     }
 
@@ -143,7 +144,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     private fun observeSelectedSpaceStore() {
-        selectedSpaceStore
+        appStateHandler.selectedSpaceDataSource
                 .observe()
                 .subscribe {
                     setState {

@@ -25,19 +25,18 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.Sort
+import io.realm.kotlin.where
+import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
-import org.matrix.android.sdk.api.session.room.UpdatableFilterLivePageResult
-import io.realm.kotlin.where
-import org.matrix.android.sdk.api.session.room.RoomCategoryFilter
-import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.VersioningState
-import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
@@ -174,8 +173,8 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         )
     }
 
-    fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                          pagedListConfig: PagedList.Config): UpdatableFilterLivePageResult {
+    fun getUpdatablePagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                           pagedListConfig: PagedList.Config): UpdatableLivePageResult {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams)
                     .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
@@ -189,13 +188,12 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                 LivePagedListBuilder(dataSourceFactory, pagedListConfig)
         )
 
-        return object : UpdatableFilterLivePageResult {
+        return object : UpdatableLivePageResult {
             override val livePagedList: LiveData<PagedList<RoomSummary>> = mapped
 
-            override fun updateQuery(queryParams: RoomSummaryQueryParams) {
+            override fun updateQuery(builder: (RoomSummaryQueryParams) -> RoomSummaryQueryParams) {
                 realmDataSourceFactory.updateQuery {
-                    roomSummariesQuery(it, queryParams)
-                            .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
+                    roomSummariesQuery(it, builder.invoke(queryParams))
                 }
             }
         }
@@ -225,10 +223,10 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
 
         queryParams.roomCategoryFilter?.let {
             when (it) {
-                RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                 RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-                RoomCategoryFilter.ALL                     -> {
+                RoomCategoryFilter.ALL -> {
                     // nop
                 }
             }
@@ -252,9 +250,27 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             query.equalTo(RoomSummaryEntityFields.ROOM_TYPE, it)
         }
         when (queryParams.roomCategoryFilter) {
-            RoomCategoryFilter.ONLY_DM    -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
             RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-            RoomCategoryFilter.ALL        -> Unit // nop
+            RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
+            RoomCategoryFilter.ALL -> Unit // nop
+        }
+
+        // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")
+        when (queryParams.activeSpaceId) {
+            is ActiveSpaceFilter.ActiveSpace -> {
+                // It's annoying but for now realm java does not support querying in primitive list :/
+                // https://github.com/realm/realm-java/issues/5361
+                if (queryParams.activeSpaceId.currentSpaceId == null) {
+                    // orphan rooms
+                    query.isNull(RoomSummaryEntityFields.FLATTEN_PARENT_IDS)
+                } else {
+                    query.contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.activeSpaceId.currentSpaceId)
+                }
+            }
+            else                             -> {
+                // nop
+            }
         }
         return query
     }

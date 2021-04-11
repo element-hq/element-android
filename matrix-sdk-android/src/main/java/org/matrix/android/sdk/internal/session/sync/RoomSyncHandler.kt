@@ -97,9 +97,12 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, aggregator, reporter)
 
         // post room sync validation
-        roomSummaryUpdater.validateSpaceRelationship(realm)
+//        roomSummaryUpdater.validateSpaceRelationship(realm)
     }
 
+    fun postSyncSpaceHierarchyHandle(realm: Realm) {
+        roomSummaryUpdater.validateSpaceRelationship(realm)
+    }
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleRoomSync(realm: Realm,
