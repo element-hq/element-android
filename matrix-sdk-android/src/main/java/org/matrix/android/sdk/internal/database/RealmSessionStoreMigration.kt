@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.database
 
 import io.realm.DynamicRealm
+import io.realm.FieldAttribute
 import io.realm.RealmMigration
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
@@ -216,6 +217,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
         realm.schema.get("RoomSummaryEntity")
                 ?.addField(RoomSummaryEntityFields.ROOM_TYPE, String::class.java)
+                ?.addField(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, String::class.java)
                 ?.transform { obj ->
                     // Should I put messaging type here?
                     obj.setString(RoomSummaryEntityFields.ROOM_TYPE, null)

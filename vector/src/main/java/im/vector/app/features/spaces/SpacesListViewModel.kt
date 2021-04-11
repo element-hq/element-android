@@ -24,10 +24,10 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -43,7 +43,7 @@ import org.matrix.android.sdk.rx.rx
 const val ALL_COMMUNITIES_GROUP_ID = "+ALL_COMMUNITIES_GROUP_ID"
 
 class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
-                                                      private val selectedSpaceDataSource: SelectedSpaceDataSource,
+                                                      private val appStateHandler: AppStateHandler,
                                                       private val session: Session,
                                                       private val stringProvider: StringProvider,
                                                       private val uiStateRepository: UiStateRepository
@@ -68,7 +68,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     init {
         observeSpaceSummaries()
         observeSelectionState()
-        selectedSpaceDataSource
+        appStateHandler.selectedSpaceDataSource
                 .observe()
                 .subscribe {
                     if (currentGroupId != it.orNull()?.roomId) {
@@ -91,7 +91,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                     _viewEvents.post(SpaceListViewEvents.OpenSpace)
                 }
                 val optionGroup = Option.just(spaceSummary)
-                selectedSpaceDataSource.post(optionGroup)
+                appStateHandler.selectedSpaceDataSource.post(optionGroup)
             } else {
                 // If selected group is null we force to default. It can happens when leaving the selected group.
                 setState {

@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.space
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -25,7 +24,6 @@ import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 
 internal class DefaultSpace(

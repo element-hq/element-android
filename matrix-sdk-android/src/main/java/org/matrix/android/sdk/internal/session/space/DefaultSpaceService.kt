@@ -169,7 +169,7 @@ internal class DefaultSpaceService @Inject constructor(
                     stateKey = QueryStringValue.NoCondition
             )
             val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>()
-                    ?: throw UnsupportedOperationException("Cannot add canonical child, not enough power level")
+                    ?: throw UnsupportedOperationException("Cannot add canonical child, missing powerlevel")
             val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
             if (!powerLevelsHelper.isUserAllowedToSend(userId, true, EventType.STATE_SPACE_CHILD)) {
                 throw UnsupportedOperationException("Cannot add canonical child, not enough power level")

@@ -26,8 +26,7 @@ import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.databinding.FragmentSpaceCreateChooseTypeBinding
 import javax.inject.Inject
 
-class ChooseSpaceTypeFragment @Inject constructor(
-) : VectorBaseFragment<FragmentSpaceCreateChooseTypeBinding>() {
+class ChooseSpaceTypeFragment @Inject constructor() : VectorBaseFragment<FragmentSpaceCreateChooseTypeBinding>() {
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 
@@ -47,4 +46,3 @@ class ChooseSpaceTypeFragment @Inject constructor(
         }))
     }
 }
-
