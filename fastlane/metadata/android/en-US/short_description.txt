@@ -1,1 +1,1 @@
-Secure messenger for Matrix with a traditional instant messaging experience
+Secure decentralised chat & VoIP. Keep your data safe from third parties.
