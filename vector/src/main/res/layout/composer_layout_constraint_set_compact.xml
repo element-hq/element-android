@@ -83,6 +83,15 @@
         tools:ignore="MissingConstraints,MissingPrefix"
         tools:src="@drawable/ic_edit" />
 
+    <ImageView
+        android:id="@+id/composerRelatedMessageImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        tools:ignore="MissingPrefix"
+        tools:src="@tools:sample/backgrounds/scenic" />
 
     <ImageButton
         android:id="@+id/composerRelatedMessageCloseButton"

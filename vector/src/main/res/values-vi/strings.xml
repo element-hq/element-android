@@ -22,7 +22,7 @@
     <string name="ignore">Bỏ qua</string>
     <string name="conference_call_in_progress">Đã có một cuộc hội thoại đang diễn ra!</string>
     <string name="no_result_placeholder">Không có kết quả nào</string>
-    <string name="no_contact_access_placeholder">Bạn chưa cho phép Element truy cập danh bạ của bạn</string>
+    <string name="template_no_contact_access_placeholder">Bạn chưa cho phép ${app_name} truy cập danh bạ của bạn</string>
     <string name="no_conversation_placeholder">Không có cuộc trò chuyện nào</string>
     <string name="matrix_only_filter">Chỉ những liên hệ Matrix</string>
     <string name="user_directory_header">Thư mục người dùng</string>
@@ -151,7 +151,7 @@
     <string name="notification_listening_for_events">Theo dõi sự kiện</string>
     <string name="notification_sync_in_progress">Đang đồng bộ hóa…</string>
     <string name="notification_sync_init">Đang khởi tạo dịch vụ</string>
-    <string name="black_them">Nền đen</string>
+    <string name="black_theme">Nền đen</string>
     <string name="dark_theme">Nền tối</string>
     <string name="light_theme">Nền sáng</string>
     <string name="auth_email_validation_message">Vui lòng kiểm tra email của bạn để tiếp tục quá trình đăng ký</string>
@@ -206,7 +206,7 @@
     <string name="sound_device_speaker">Loa</string>
     <string name="sound_device_phone">Điện thoại</string>
     <string name="call_select_sound_device">Chọn thiết bị âm thanh</string>
-    <string name="call_failed_no_connection">Cuộc gọi Element thất bại</string>
+    <string name="template_call_failed_no_connection">Cuộc gọi ${app_name} thất bại</string>
     <string name="call_failed_dont_ask_again">Đừng hỏi lại tôi</string>
     <string name="call_failed_no_ice_use_alt">Hãy thử dùng %s</string>
     <string name="call_failed_no_ice_description">Vui lòng yêu cầu quản trị viên của máy chủ nhà của bạn (%1$s) thiết lập một máy chủ TURN để các cuộc gọi có thể hoạt động […].
@@ -254,7 +254,7 @@
     <string name="call">Gọi</string>
     <string name="settings_call_ringtone_dialog_title">Chọn nhạc chuông:</string>
     <string name="settings_call_ringtone_title">Nhạc chuông cho cuộc gọi đến</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Dùng nhạc chuông mặc định cho cuộc gọi đến</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Dùng nhạc chuông mặc định cho cuộc gọi đến</string>
     <string name="settings_call_show_confirmation_dialog_summary">Yêu cầu xác nhận trước khi gọi</string>
     <string name="settings_call_show_confirmation_dialog_title">Tránh gọi nhầm</string>
     <string name="room_info_room_topic">Chủ đề của phòng</string>

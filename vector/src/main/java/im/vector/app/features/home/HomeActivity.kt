@@ -21,6 +21,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
@@ -40,6 +41,8 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.databinding.ActivityHomeBinding
+import im.vector.app.features.MainActivity
+import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -57,9 +60,11 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -94,6 +99,7 @@ class HomeActivity :
     @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -203,11 +209,12 @@ class HomeActivity :
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.initialSyncProgressServiceStatus) {
-            is InitialSyncProgressService.Status.Idle -> {
+            is InitialSyncProgressService.Status.Idle        -> {
                 views.waitingView.root.isVisible = false
             }
             is InitialSyncProgressService.Status.Progressing -> {
-                Timber.v("${getString(status.statusText)} ${status.percentProgress}")
+                val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
+                Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
                     // block interactions
                 }
@@ -218,7 +225,7 @@ class HomeActivity :
                     isVisible = true
                 }
                 views.waitingView.waitingStatusText.apply {
-                    text = getString(status.statusText)
+                    text = initSyncStepStr
                     isVisible = true
                 }
                 views.waitingView.root.isVisible = true
@@ -358,6 +365,12 @@ class HomeActivity :
 
     override fun getMenuRes() = R.menu.home
 
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.menu_home_init_sync_legacy)?.isVisible = vectorPreferences.developerMode()
+        menu.findItem(R.id.menu_home_init_sync_optimized)?.isVisible = vectorPreferences.developerMode()
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_home_suggestion -> {
@@ -366,6 +379,20 @@ class HomeActivity :
             }
             R.id.menu_home_report_bug -> {
                 bugReporter.openBugReportScreen(this, false)
+                return true
+            }
+            R.id.menu_home_init_sync_legacy -> {
+                // Configure the SDK
+                initialSyncStrategy = InitialSyncStrategy.Legacy
+                // And clear cache
+                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+                return true
+            }
+            R.id.menu_home_init_sync_optimized -> {
+                // Configure the SDK
+                initialSyncStrategy = InitialSyncStrategy.Optimized()
+                // And clear cache
+                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
                 return true
             }
             R.id.menu_home_filter -> {

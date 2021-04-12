@@ -77,7 +77,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
         currentConfigs.add(defaultConfig)
     }
 
-    override fun onStart() {
+    override fun onSessionStarted() {
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         observeWellknownConfig()
         accountDataDataSource
@@ -105,7 +105,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
                 }
     }
 
-    override fun onStop() {
+    override fun onSessionStopped() {
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }
 

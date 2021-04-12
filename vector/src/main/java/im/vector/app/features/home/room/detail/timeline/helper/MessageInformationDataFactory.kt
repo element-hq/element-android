@@ -19,16 +19,19 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.localDateTime
+import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
-import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
+import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
@@ -37,7 +40,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.session.room.VerificationState
 import javax.inject.Inject
 
 /**
@@ -49,9 +51,10 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val vectorPreferences: VectorPreferences) {
 
-    fun create(event: TimelineEvent, nextEvent: TimelineEvent?): MessageInformationData {
-        // Non nullability has been tested before
-        val eventId = event.root.eventId!!
+    fun create(params: TimelineItemFactoryParams): MessageInformationData {
+        val event = params.event
+        val nextEvent = params.nextEvent
+        val eventId = event.eventId
 
         val date = event.root.localDateTime()
         val nextDate = nextEvent?.root?.localDateTime()
@@ -69,6 +72,18 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val e2eDecoration = getE2EDecoration(event)
+
+        // SendState Decoration
+        val isSentByMe = event.root.senderId == session.myUserId
+        val sendStateDecoration = if (isSentByMe) {
+            getSendStateDecoration(
+                    event = event,
+                    lastSentEventWithoutReadReceipts = params.lastSentEventIdWithoutReadReceipts,
+                    isMedia = event.root.isAttachmentMessage()
+            )
+        } else {
+            SendStateDecoration.NONE
+        }
 
         return MessageInformationData(
                 eventId = eventId,
@@ -96,23 +111,30 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 },
                 hasBeenEdited = event.hasBeenEdited(),
                 hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false,
-                readReceipts = event.readReceipts
-                        .asSequence()
-                        .filter {
-                            it.user.userId != session.myUserId
-                        }
-                        .map {
-                            ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
-                        }
-                        .toList(),
                 referencesInfoData = event.annotations?.referencesAggregatedSummary?.let { referencesAggregatedSummary ->
                     val verificationState = referencesAggregatedSummary.content.toModel<ReferencesAggregatedContent>()?.verificationState
                             ?: VerificationState.REQUEST
                     ReferencesInfoData(verificationState)
                 },
-                sentByMe = event.root.senderId == session.myUserId,
-                e2eDecoration = e2eDecoration
+                sentByMe = isSentByMe,
+                e2eDecoration = e2eDecoration,
+                sendStateDecoration = sendStateDecoration
         )
+    }
+
+    private fun getSendStateDecoration(event: TimelineEvent,
+                                       lastSentEventWithoutReadReceipts: String?,
+                                       isMedia: Boolean): SendStateDecoration {
+        val eventSendState = event.root.sendState
+        return if (eventSendState.isSending()) {
+            if (isMedia) SendStateDecoration.SENDING_MEDIA else SendStateDecoration.SENDING_NON_MEDIA
+        } else if (eventSendState.hasFailed()) {
+            SendStateDecoration.FAILED
+        } else if (lastSentEventWithoutReadReceipts == event.eventId) {
+            SendStateDecoration.SENT
+        } else {
+            SendStateDecoration.NONE
+        }
     }
 
     private fun getE2EDecoration(event: TimelineEvent): E2EDecoration {

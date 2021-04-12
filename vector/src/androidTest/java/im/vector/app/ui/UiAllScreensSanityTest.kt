@@ -23,7 +23,6 @@ import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -79,6 +78,7 @@ class UiAllScreensSanityTest {
     // Last passing:
     // 2020-11-09
     // 2020-12-16 After ViewBinding huge change
+    // 2021-04-08 Testing 429 change
     @Test
     fun allScreensTest() {
         // Create an account
@@ -145,7 +145,7 @@ class UiAllScreensSanityTest {
     }
 
     private fun ignoreVerification() {
-        Thread.sleep(6000)
+        sleep(6000)
         val activity = EspressoHelper.getCurrentActivity()!!
 
         val popup = activity.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)
@@ -155,7 +155,7 @@ class UiAllScreensSanityTest {
 
         assertDisplayed(R.id.bottomSheetFragmentContainer)
 
-        onView(ViewMatchers.isRoot()).perform(SleepViewAction.sleep(2000))
+        onView(isRoot()).perform(SleepViewAction.sleep(2000))
 
         clickOn(R.string.skip)
         assertDisplayed(R.string.are_you_sure)
@@ -206,12 +206,12 @@ class UiAllScreensSanityTest {
         // Test quick reaction
         longClickOnMessage()
         // Add quick reaction
-        clickOn("👍")
+        clickOn("\uD83D\uDC4D️") // 👍
 
         sleep(1000)
 
         // Open reactions
-        longClickOn("👍")
+        longClickOn("\uD83D\uDC4D️") // 👍
         pressBack()
 
         // Test add reaction
@@ -226,6 +226,8 @@ class UiAllScreensSanityTest {
         clickOn(R.string.edit)
         // TODO Cancel action
         writeTo(R.id.composerEditText, "Hello universe!")
+        // Wait a bit for the keyboard layout to update
+        sleep(30)
         clickOn(R.id.sendButton)
         // Open edit history
         longClickOnMessage("Hello universe! (edited)")
@@ -277,13 +279,18 @@ class UiAllScreensSanityTest {
 
         assertDisplayed(R.id.roomProfileAvatarView)
 
-        // Room addresses
+        // Leave
         clickListItem(R.id.matrixProfileRecyclerView, 13)
+        clickDialogNegativeButton()
+
+        // Advanced
+        // Room addresses
+        clickListItem(R.id.matrixProfileRecyclerView, 15)
         onView(isRoot()).perform(waitForView(withText(R.string.room_alias_published_alias_title)))
         pressBack()
 
         // Room permissions
-        clickListItem(R.id.matrixProfileRecyclerView, 15)
+        clickListItem(R.id.matrixProfileRecyclerView, 17)
         onView(isRoot()).perform(waitForView(withText(R.string.room_permissions_title)))
         clickOn(R.string.room_permissions_change_room_avatar)
         clickDialogNegativeButton()
@@ -291,10 +298,6 @@ class UiAllScreensSanityTest {
         clickOn(R.string.show_advanced)
         clickOn(R.string.hide_advanced)
         pressBack()
-
-        // Leave
-        clickListItem(R.id.matrixProfileRecyclerView, 17)
-        clickDialogNegativeButton()
 
         // Menu share
         // clickMenu(R.id.roomProfileShareAction)
@@ -482,6 +485,9 @@ class UiAllScreensSanityTest {
         clickOn(R.string.settings_discovery_manage)
         clickOn(R.string.add_identity_server)
         pressBack()
+        pressBack()
+        // Home server
+        clickOnPreference(R.string.settings_home_server)
         pressBack()
         // Identity server
         clickOnPreference(R.string.settings_identity_server)

@@ -1,8 +1,78 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s sendi mynd.</string>
+    <string name="summary_user_sent_sticker">%1$s sendi límmerki.</string>
+
+    <string name="notice_room_invite_no_invitee">%s sendi boð um þátttöku</string>
+    <string name="notice_room_invite">%1$s bauð %2$s</string>
+    <string name="notice_room_invite_you">%1$s bauð þér</string>
+    <string name="notice_room_join">%1$s gekk í hópinn</string>
+    <string name="notice_room_leave">%1$s hætti</string>
+    <string name="notice_room_reject">%1$s hafnaði boðinu</string>
+    <string name="notice_room_kick">%1$s sparkaði %2$s</string>
+    <string name="notice_room_unban">%1$s afbannaði %2$s</string>
+    <string name="notice_room_ban">%1$s bannaði %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s breyttu auðkennismynd sinni</string>
+    <string name="notice_room_visibility_invited">allir meðlimir spjallrásar, síðan þeim var boðið.</string>
+    <string name="notice_room_visibility_joined">allir meðlimir spjallrásar, síðan þeir skráðu sig.</string>
+    <string name="notice_room_visibility_shared">allir meðlimir spjallrásar.</string>
+    <string name="notice_room_visibility_world_readable">hver sem er.</string>
+    <string name="notice_room_visibility_unknown">óþekktur (%s).</string>
+    <string name="notice_voip_started">VoIP-símafundur hafinn</string>
+    <string name="notice_voip_finished">VoIP-símafundi lokið</string>
+
+    <string name="notice_avatar_changed_too">(einnig var skipt um auðkennismynd)</string>
+    <string name="notice_crypto_unable_to_decrypt">** Mistókst að afkóða: %s **</string>
+
+    <string name="unable_to_send_message">Gat ekki sent skilaboð</string>
+
+    <string name="message_failed_to_upload">Gat ekki sent inn mynd</string>
+
+    <string name="network_error">Villa í netkerfi</string>
+    <string name="matrix_error">Villa í Matrix</string>
+
+    <string name="medium_email">Tölvupóstfang</string>
+    <string name="medium_phone_number">Símanúmer</string>
+
+    <string name="notice_room_withdraw">%1$s tók til baka boð frá %2$s</string>
+    <string name="notice_display_name_set">%1$s setti birtingarnafn sitt sem %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s breytti birtingarnafni sínu úr %2$s í %3$s</string>
+    <string name="notice_display_name_removed">%1$s fjarlægði birtingarnafn sitt (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s breytti umræðuefninu í: %2$s</string>
+    <string name="notice_room_name_changed">%1$s breytti heiti spjallrásarinnar í: %2$s</string>
+    <string name="notice_placed_video_call">%s hringdi myndsamtal.</string>
+    <string name="notice_placed_voice_call">%s hringdi raddsamtal.</string>
+    <string name="notice_answered_call">%s svaraði símtalinu.</string>
+    <string name="notice_ended_call">%s lauk símtalinu.</string>
+    <string name="notice_end_to_end">%1$s kveikti á enda-í-enda dulritun (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s bað um VoIP-símafund</string>
+    <string name="notice_room_name_removed">%1$s fjarlægði heiti spjallrásar</string>
+    <string name="notice_room_topic_removed">%1$s fjarlægði umfjöllunarefni spjallrásar</string>
+    <string name="notice_made_future_room_visibility">%1$s gerði ferilskrá spjallrásar héðan í frá sýnilega fyrir %2$s</string>
+    <string name="notice_profile_change_redacted">%1$s uppfærði notandasniðið sitt %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s sendi boð til %2$s um þátttöku í spjallrásinni</string>
+    <string name="notice_room_third_party_registered_invite">%1$s samþykkti boð um að taka þátt í %2$s</string>
+
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Tæki sendandans hefur ekki sent okkur dulritunarlyklana fyrir þessi skilaboð.</string>
+
+    <string name="could_not_redact">Gat ekki ritstýrt</string>
+    <string name="room_error_join_failed_empty_room">Ekki er í augnablikinu hægt að taka aftur þátt í spjallrás sem er tóm.</string>
+
+    <string name="room_displayname_room_invite">Boð á spjallrás</string>
+    <string name="room_displayname_two_members">%1$s og %2$s</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s og 1 annar</item>
+        <item quantity="other">%1$s og %2$d aðrir</item>
+    </plurals>
+
+    <string name="room_displayname_empty_room">Tóm spjallrás</string>
+    <string name="room_displayname_invite_from">Boð frá %s</string>
     <string name="light_theme">Ljóst þema</string>
     <string name="dark_theme">Dökkt þema</string>
-    <string name="black_them">Svart þema</string>
+    <string name="black_theme">Svart þema</string>
 
     <string name="notification_sync_in_progress">Samstilli</string>
     <string name="notification_listening_for_events">Hlusta eftir atburðum</string>
@@ -686,7 +756,7 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">Ógilt snið samnefnis</string>
     <string name="directory_server_fail_to_retrieve_server">Netþjónninn gæti verið undir miklu álagi eða ekki til taks</string>
     <string name="missing_permissions_warning">Þar sem ýmsar heimildir vantar, eru sumir eiginleikar ekki tiltækir…</string>
-    <string name="no_contact_access_placeholder">Þú heimilaðir Element ekki aðgang að tengiliðum á tækinu</string>
+    <string name="template_no_contact_access_placeholder">Þú heimilaðir ${app_name} ekki aðgang að tengiliðum á tækinu</string>
     <string name="send_bug_report_rage_shake">Hristu ákveðið til að senda villutilkynningu</string>
 
     <string name="send_bug_report_sent">Það tókst að senda villuskýrsluna</string>
@@ -708,7 +778,7 @@ Ertu alveg viss?</string>
     <string name="settings_set_sync_delay">Hlé milli tveggja samstillingarbeiðna</string>
     <string name="settings_keep_media">Halda gögnum</string>
 
-    <string name="startup_notification_privacy_message">Element getur keyrt í bakgrunni og stýrt tilkynningum á öruggan hátt (getur haft áhrif á rafhlöðunotkun).</string>
+    <string name="template_startup_notification_privacy_message">${app_name} getur keyrt í bakgrunni og stýrt tilkynningum á öruggan hátt (getur haft áhrif á rafhlöðunotkun).</string>
 
     <string name="account_email_validation_message">Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram.</string>
     <string name="account_email_validation_error">Tókst ekki að sannreyna tölvupóstfang. Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram</string>
@@ -740,26 +810,26 @@ Ertu alveg viss?</string>
 
     <string name="login_error_unknown_token">Tiltekið aðgangsteikn þekktist ekki</string>
     <string name="call_error_user_not_responding">Ekki var svarað á fjartengda endanum.</string>
-    <string name="permissions_rationale_msg_storage">Element þarf heimild til að nota mynda- og myndskeiðasafn svo hægt sé að senda og vista viðhengi.
+    <string name="template_permissions_rationale_msg_storage">${app_name} þarf heimild til að nota mynda- og myndskeiðasafn svo hægt sé að senda og vista viðhengi.
 
 Leyfðu aðgang í næsta sprettglugga til þess að geta sent skrár úr símanum.</string>
-    <string name="permissions_rationale_msg_camera">Element þarf heimild til að nota myndavélina svo hægt sé að taka myndir og hringja myndsímtöl.</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} þarf heimild til að nota myndavélina svo hægt sé að taka myndir og hringja myndsímtöl.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Leyfðu aðgang í næsta sprettglugga til þess að geta hringt.</string>
-    <string name="permissions_rationale_msg_record_audio">Element þarf heimild til að nota hljóðnemann svo hægt sé að hringja hljóðsímtöl.</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} þarf heimild til að nota hljóðnemann svo hægt sé að hringja hljóðsímtöl.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Leyfðu aðgang í næsta sprettglugga til þess að geta hringt.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element þarf heimild til að nota myndavélina og hljóðnemann svo hægt sé að hringja myndsímtöl.
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} þarf heimild til að nota myndavélina og hljóðnemann svo hægt sé að hringja myndsímtöl.
 
 Leyfðu aðgang í næstu sprettgluggum til þess að geta hringt.</string>
-    <string name="permissions_rationale_msg_contacts">Element þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
+    <string name="template_permissions_rationale_msg_contacts">${app_name} þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
 
-Leyfðu aðgang í næsta sprettglugga til þess að finna þá notendur í nafnaskránni sem hægt er að hafa samband við úr Element.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
+Leyfðu aðgang í næsta sprettglugga til þess að finna þá notendur í nafnaskránni sem hægt er að hafa samband við úr ${app_name}.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
 
-Leyfa Element nota tengiliðina ?</string>
+Leyfa ${app_name} nota tengiliðina ?</string>
 
     <string name="settings_deactivate_account_section">Gera notandaaðgang óvirkann</string>
     <string name="settings_deactivate_my_account">Gera notandaaðganginn minn óvirkann</string>
@@ -786,8 +856,8 @@ Leyfa Element nota tengiliðina ?</string>
     <string name="login_error_login_email_not_yet">Tölvupósttengill sem ekki er enn búið að smella á</string>
 
     <string name="malformed_id">Rangt formað auðkenni. Ætti að vera tölvupóstfang eða Matrix-auðkenni á borð við\'@sérheiti:lén\'</string>
-    <string name="settings_opt_in_of_analytics_summary">Element safnar nafnlausum greiningargögnum til að gera okkur kleift að bæta forritið.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Endilega virkjaðu greiningargögn til að hjálpa okkur að bæta Element.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} safnar nafnlausum greiningargögnum til að gera okkur kleift að bæta forritið.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Endilega virkjaðu greiningargögn til að hjálpa okkur að bæta ${app_name}.</string>
     <string name="room_settings_room_access_warning">Til að tengja við spjallrás verður hún að vera með vistfang.</string>
     <string name="room_preview_try_join_an_unknown_room">Þú ert að reyna að tengjast %s. Myndirðu vilja gerast meðlimur til að geta tekið þátt í samræðunni?</string>
     <string name="room_preview_room_interactions_disabled">Þetta er forskoðun á spjallrásinni. Samskipti spjallrásarinnar hafa verið gerð óvirk.</string>

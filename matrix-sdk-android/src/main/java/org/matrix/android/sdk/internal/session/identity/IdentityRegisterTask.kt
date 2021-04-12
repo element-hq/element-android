@@ -33,7 +33,7 @@ internal class DefaultIdentityRegisterTask @Inject constructor() : IdentityRegis
 
     override suspend fun execute(params: IdentityRegisterTask.Params): IdentityRegisterResponse {
         return executeRequest(null) {
-            apiCall = params.identityAuthAPI.register(params.openIdTokenResponse)
+            params.identityAuthAPI.register(params.openIdTokenResponse)
         }
     }
 }

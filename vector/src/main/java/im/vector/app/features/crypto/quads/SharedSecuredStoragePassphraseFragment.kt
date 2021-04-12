@@ -30,10 +30,8 @@ import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentSsssAccessFromPassphraseBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -59,8 +57,9 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
                 key
         )
                 .toSpannable()
-                .colorizeMatchingText(pass, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
-                .colorizeMatchingText(key, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+        // TODO Restore coloration when we will have a FAQ to open with those terms
+        // .colorizeMatchingText(pass, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+        // .colorizeMatchingText(key, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
         views.ssssPassphraseEnterEdittext.editorActionEvents()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)

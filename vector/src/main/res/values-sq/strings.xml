@@ -1,9 +1,266 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s dërgoi një figurë.</string>
+    <string name="notice_room_invite">%1$s ftoi %2$s</string>
+    <string name="notice_room_invite_you">%1$s ju ftoi</string>
+    <string name="notice_room_join">%1$s hyri në dhomë</string>
+    <string name="notice_room_leave">%1$s doli nga dhoma</string>
+    <string name="notice_room_reject">%1$s hodhi tej ftesën</string>
+    <string name="notice_room_kick">%1$s përzuri %2$s</string>
+    <string name="notice_room_ban">%1$s dëboi %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s ndryshoi avatarin e vet</string>
+    <string name="notice_room_topic_changed">%1$s ndryshoi temën në: %2$s</string>
+    <string name="notice_room_name_changed">%1$s ndryshoi emrin e dhomës në: %2$s</string>
+    <string name="notice_placed_video_call">%s bëri një thirrje video.</string>
+    <string name="notice_placed_voice_call">%s bëri një thirrje zanore.</string>
+    <string name="notice_answered_call">%s iu përgjigj thirrjes.</string>
+    <string name="notice_ended_call">%s e përfundoi thirrjen.</string>
+    <string name="notice_made_future_room_visibility">%1$s e bëri historikun e ardhshëm të dhomës të dukshëm për %2$s</string>
+    <string name="notice_room_visibility_invited">për krejt anëtarët e dhomës, prej çastit kur janë ftuar.</string>
+    <string name="notice_room_visibility_joined">për krejt anëtarët e dhomës, prej çastit kur morën pjesë.</string>
+    <string name="notice_room_visibility_shared">krejt anëtarët e dhomës.</string>
+    <string name="notice_room_visibility_world_readable">cilido.</string>
+    <string name="notice_room_visibility_unknown">e panjohur (%s).</string>
+    <string name="notice_requested_voip_conference">%1$s kërkoi një konferencë VoIP</string>
+    <string name="notice_voip_started">Konferenca VoIP filloi</string>
+    <string name="notice_voip_finished">Konferenca VoIP përfundoi</string>
+    <string name="notice_avatar_changed_too">(u ndryshua edhe avatari)</string>
+    <string name="notice_room_name_removed">%1$s hoqi emrin e dhomës</string>
+    <string name="notice_profile_change_redacted">%1$s përditësoi profilin e tij %2$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s pranoi ftesën tuaj për %2$s</string>
+    <string name="notice_crypto_unable_to_decrypt">** S’arrihet të shfshehtëzohet: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Pajisja e dërguesit nuk na ka dërguar kyçet për këtë mesazh.</string>
+    <string name="could_not_redact">S’u redaktua dot</string>
+    <string name="unable_to_send_message">S’arrihet të dërgohet mesazh</string>
+    <string name="message_failed_to_upload">Ngarkimi i figurës dështoi</string>
+    <string name="network_error">Gabim rrjeti</string>
+    <string name="matrix_error">Gabim Matrix</string>
+    <string name="room_error_join_failed_empty_room">Hëpërhë s’është e mundur të rihyhet në një dhomë të zbrazët.</string>
+    <string name="medium_email">Adresë email</string>
+    <string name="medium_phone_number">Numër telefoni</string>
+    <string name="room_displayname_invite_from">Ftesë nga %s</string>
+    <string name="room_displayname_room_invite">Ftesë Dhome</string>
+    <string name="room_displayname_two_members">%1$s dhe %2$s</string>
+    <string name="room_displayname_empty_room">Dhomë e zbrazët</string>
+    <string name="summary_user_sent_sticker">%1$s dërgoi një ngjitës.</string>
+    <string name="notice_room_invite_no_invitee">Ftesë e %s</string>
+    <string name="notice_room_unban">%1$s hoqi dëbimin për %2$s</string>
+    <string name="notice_room_withdraw">%1$s tërhoqi mbrapsht ftesën për %2$s</string>
+    <string name="notice_display_name_set">%1$s caktoi për veten emër ekrani %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s ndryshoi emrin e tyre në ekran nga %2$s në %3$s</string>
+    <string name="notice_display_name_removed">%1$s hoqi emrin e tij në ekran (%2$s)</string>
+    <string name="notice_end_to_end">%1$s aktivizoi fshehtëzim skaj-më-skaj (%2$s)</string>
+    <string name="notice_room_topic_removed">%1$s hoqi temën e dhomës</string>
+    <string name="notice_room_third_party_invite">%1$s dërgoi një ftesë për %2$s që të marrë pjesë në dhomë</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s dhe 1 tjetër</item>
+        <item quantity="other">%1$s dhe %2$d të tjerë</item>
+    </plurals>
+    <string name="notice_event_redacted">Mesazhi u hoq</string>
+    <string name="notice_event_redacted_by">Mesazhi u hoq nga %1$s</string>
+    <string name="notice_event_redacted_with_reason">Mesazh i hequr [arsye: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Mesazh i hequr nga %1$s [arsye: %2$s]</string>
+    <string name="notice_room_update">%s e përmirësoi këtë dhomë.</string>
+    <string name="initial_sync_start_importing_account">Njëkohësimi Fillestar:
+\nPo importohet llogaria…</string>
+    <string name="initial_sync_start_importing_account_crypto">Njëkohësimi Fillestar:
+\nPo importohet kriptografi</string>
+    <string name="initial_sync_start_importing_account_rooms">Njëkohësimi Fillestar:
+\nPo importohen Dhoma</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Njëkohësimi Fillestar:
+\nPo importohen Dhoma Ku Është Bërë Hyrje</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Njëkohësimi Fillestar:
+\nPo importohen Dhoma Me Ftesë</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Njëkohësimi Fillestar:
+\nPo importohen Dhoma të Braktisura</string>
+    <string name="initial_sync_start_importing_account_groups">Njëkohësimi Fillestar:
+\nPo importohen Bashkësi</string>
+    <string name="initial_sync_start_importing_account_data">Njëkohësimi Fillestar:
+\nPo importohet të Dhëna Llogarie</string>
+    <string name="event_status_sending_message">Po dërgohet mesazh…</string>
+    <string name="clear_timeline_send_queue">Spastro radhë pritjeje</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s shfuqizoi ftesën për %2$s për pjesëmarrje te dhoma</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Ftesë e %1$s. Arsye: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s ftoi %2$s. Arsye: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s ju ftoi. Arsye: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s erdhi në dhomë. Arsye: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s doli nga dhoma. Arsye: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s hodhi poshtë ftesën. Arsye: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s përzuri %2$s. Arsye: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s hoqi dëbimin për %2$s. Arsye: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s dëboi %2$s. Arsye: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s dërgoi një ftesë për %2$s për të ardhur në dhomë. Arsye: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s shfuqizoi ftesën për %2$s për të ardhur në dhomë. Arsye: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s pranoi ftesën për %2$s. Arsye: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s tërhoqi mbrapsht ftesën për %2$s. Arsye: %3$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s shtoi %2$s si një adresë për këtë dhomë.</item>
+        <item quantity="other">%1$s shtoi %2$s si adresa për këtë dhomë.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s hoqi %2$s si adresë për këtë dhomë.</item>
+        <item quantity="other">%1$s hoqi %2$s si adresa për këtë dhomë.</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed">%1$s shtoi %2$s dhe hoqi %3$s si adresa për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_set">%1$s caktoi %2$s si adresë kryesore për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s hoqi adresën kryesore për këtë dhomë.</string>
+    <string name="notice_room_guest_access_can_join">%1$s ka lejuar vizitorë të marrin pjesë në dhomë.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s ka penguar vizitorë të marrin pjesë në dhomë.</string>
+    <string name="notice_end_to_end_ok">%1$s aktivizoi fshehtëzim skaj-më-skaj.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s aktivizoi fshehtëzim skaj-më-skaj (algoritëm i papranuar %2$s).</string>
+    <string name="notice_room_created">%1$s krijo dhomën</string>
+    <string name="summary_you_sent_image">Dërguat një figurë.</string>
+    <string name="summary_you_sent_sticker">Dërguat një ngjitës.</string>
+    <string name="notice_room_invite_no_invitee_by_you">Ftesa juaj</string>
+    <string name="notice_room_created_by_you">Krijuat dhomën</string>
+    <string name="notice_room_invite_by_you">Ftuat %1$s</string>
+    <string name="notice_room_join_by_you">Hytë në dhomë</string>
+    <string name="notice_room_leave_by_you">Dolët nga dhoma</string>
+    <string name="notice_room_reject_by_you">Hodhët poshtë ftesën</string>
+    <string name="notice_room_kick_by_you">Përzutë %1$s</string>
+    <string name="notice_room_unban_by_you">Hoqët dëbimin për %1$s</string>
+    <string name="notice_room_ban_by_you">Dëbuat %1$s</string>
+    <string name="notice_room_withdraw_by_you">Tërhoqët mbrapsht ftesën për %1$s</string>
+    <string name="notice_avatar_url_changed_by_you">Ndryshuat avatarin tuaj</string>
+    <string name="notice_display_name_set_by_you">Caktuat si emrin tuaj në ekran %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">E ndryshuat emrin tuaj në ekran nga %1$s në %2$s</string>
+    <string name="notice_display_name_removed_by_you">Hoqët emrin tuaj në ekran (qe %1$s)</string>
+    <string name="notice_room_topic_changed_by_you">E ndryshuat temën në: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s ndryshoi avatarin e dhomës</string>
+    <string name="notice_room_avatar_changed_by_you">Ndryshuat avatarin e dhomës</string>
+    <string name="notice_room_name_changed_by_you">Ndryshuat emrin e dhomës në: %1$s</string>
+    <string name="notice_placed_video_call_by_you">Filluat një thirrje video.</string>
+    <string name="notice_placed_voice_call_by_you">Filluat një thirrje zanore.</string>
+    <string name="notice_call_candidates">%s dërgoi të dhëna për ujdisjen e thirrjes.</string>
+    <string name="notice_call_candidates_by_you">Dërguat të dhëna për ujdisjen e thirrjes.</string>
+    <string name="notice_answered_call_by_you">Iu përgjigjët thirrjes.</string>
+    <string name="notice_ended_call_by_you">E përfunduat thirrjen.</string>
+    <string name="notice_made_future_room_visibility_by_you">E bëtë historikun e ardhshëm të dhomë të dukshëm për %1$s</string>
+    <string name="notice_end_to_end_by_you">Aktivizuat fshehtëzim skaj-më-skaj (%1$s)</string>
+    <string name="notice_room_update_by_you">Përmirësuat këtë dhomë.</string>
+    <string name="notice_requested_voip_conference_by_you">Kërkuat një konferencë VoIP</string>
+    <string name="notice_room_name_removed_by_you">Hoqët emrin e dhomës</string>
+    <string name="notice_room_topic_removed_by_you">Hoqët temën e dhomës</string>
+    <string name="notice_room_avatar_removed">%1$s hoqi avatarin e dhomës</string>
+    <string name="notice_room_avatar_removed_by_you">Hoqët avatarin e dhomës</string>
+    <string name="notice_profile_change_redacted_by_you">Përditësuat profilin tuaj %1$s</string>
+    <string name="notice_room_third_party_invite_by_you">Dërguat një ftesë te %1$s për të ardhur te dhoma</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Shfuqizuat ftesën për ardhjen në dhomë të %1$s</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Pranuat ftesën për %1$s</string>
+    <string name="notice_widget_added">%1$s shtoi widget-in %2$s</string>
+    <string name="notice_widget_added_by_you">Shtuat widget-in %1$s</string>
+    <string name="notice_widget_removed">%1$s hoqi widget-in %2$s</string>
+    <string name="notice_widget_removed_by_you">Hoqët widget-in %1$s</string>
+    <string name="notice_widget_modified">%1$s ndryshoi widget-in %2$s</string>
+    <string name="notice_widget_modified_by_you">Ndryshuat widget-in %1$s</string>
+    <string name="power_level_admin">Përgjegjës</string>
+    <string name="power_level_moderator">Moderator</string>
+    <string name="power_level_default">Parazgjedhje</string>
+    <string name="power_level_custom">Vetjake (%1$d)</string>
+    <string name="power_level_custom_no_value">Vetjake</string>
+    <string name="notice_power_level_changed_by_you">Ndryshuat shkallën e pushtetit për %1$s.</string>
+    <string name="notice_power_level_changed">%1$s ndryshoi shkallën e pushtetit për %2$s.</string>
+    <string name="notice_power_level_diff">%1$s nga %2$s në %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Ftesa juaj. Arsye: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Ftuat %1$s. Arsye: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Erdhët në dhomë, Arsye: %1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Ikët nga dhoma. Arsye: %1$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Hodhët poshtë ftesën. Arsye: %1$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Përzutë %1$s. Arsye: %2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Hoqët dëbimin për %1$s. Arsye: %2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Dëbuat %1$s. Arsye: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Dërguat një ftesë për %1$s të vijë në dhomë. Arsye: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Shfuqizuat ftesën për ardhjen në dhomë të %1$s. Arsye: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Pranuat ftesën për %1$s. Arsye: %2$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Tërhoqët mbrapsht ftesën për %1$s. Arsye: %2$s</string>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Shtuat %1$s si një adresë për këtë dhomë.</item>
+        <item quantity="other">Shtuat %1$s si adresa për këtë dhomë.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Hoqët %1$s si një adresë për këtë dhomë.</item>
+        <item quantity="other">Hoqët %1$s si adresa për këtë dhomë.</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed_by_you">Shtuat %1$s dhe hoqët %2$s si adresa për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Caktuat si adresë kryesore për këtë dhomë %1$s.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Hoqët adresën kryesore për këtë dhomë.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Keni lejuar të vijnë mysafirë në dhomë.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">U keni penguar mysafirëve të vijnë në dhomë.</string>
+    <string name="notice_end_to_end_ok_by_you">Aktivizuat fshehtëzimin skaj-më-skaj.</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Aktivizuat fshehtëzimin skaj-më-skaj (algoritëm %1$s i panjohur).</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Keni penguar të vijnë në dhomë mysafirë.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s ka penguar të vijnë në dhomë mysafirë.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Keni lejuar të vijnë mysafirë këtu.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s ka lejuar të vijnë këtu mysafirë.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Dolët. Arsye: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s doli. Arsye: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Erdhët. Arsye: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s erdhi. Arsye: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Shfuqizuat ftesën për %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s shfuqizoi ftesën për %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Ftuat %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s ftoi %2$s</string>
+    <string name="notice_direct_room_update_by_you">U përmirësuat këtu.</string>
+    <string name="notice_direct_room_update">%s këtu u përmirësua.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">I bëtë mesazhet e ardhshëm të dukshëm për %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s i bëri mesazhet e ardhshëm të dukshëm për %2$s</string>
+    <string name="notice_direct_room_leave_by_you">Dolët nga dhoma</string>
+    <string name="notice_direct_room_leave">%1$s doli nga dhoma</string>
+    <string name="notice_direct_room_join_by_you">Erdhët</string>
+    <string name="notice_direct_room_join">%1$s erdhi</string>
+    <string name="notice_direct_room_created_by_you">Krijuat diskutimin</string>
+    <string name="notice_direct_room_created">%1$s krijoi diskutimin</string>
+    <string name="room_displayname_empty_room_was">Dhomë e zbrazët (was %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s dhe %4$d tjetër</item>
+        <item quantity="other">%1$s, %2$s, %3$s dhe %4$d të tjerë</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s dhe %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s dhe %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 U është penguar pjesëmarrja krejt shërbyesve! Kjo dhomë s’mund të përdoret më.</string>
+    <string name="notice_room_server_acl_updated_no_change">Pa ndryshim.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Ndryshuat ACL-ra shërbyesi për këtë dhomë.</string>
+    <string name="notice_room_server_acl_updated_title">%s ndryshoi ACL-ra shërbyesi për këtë dhomë.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Ujdisët ACL-ra shërbyesi për këtë dhomë.</string>
+    <string name="notice_room_server_acl_set_title">%s ujdisi ACL-ra shërbyesi për këtë dhomë.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Shërbyes që kanë përputhje me %s u hoqën nga lista e të lejuarve.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Shërbyesit që kanë përputhje me %s tani janë të lejuar.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Shërbyesit që kanë përputhje me %s u hoqën nga lista e ndalimeve.</string>
+    <string name="notice_room_server_acl_updated_banned">• Shërbyesit që kanë përputhje me %s tani janë të ndaluar.</string>
+    <string name="notice_room_server_acl_set_allowed">• Shërbyesit që kanë përputhje me %s janë të ndaluar.</string>
+    <string name="notice_room_server_acl_set_banned">• Shërbyesit që kanë përputhje me %s janë të ndaluar.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Ndryshuat adresat për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s ndryshoi adresat për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Ndryshuat adresat kryesore dhe alternative për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s ndryshoi adresat kryesore dhe alternative për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Ndryshuat adresat alternative për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s ndryshoi adresat alternative për këtë dhomë.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Hoqët adresën alternative %1$s për këtë dhomë.</item>
+        <item quantity="other">Hoqët adresat alternative %1$s për këtë dhomë.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s hoqët adresën alternative %2$s për këtë dhomë.</item>
+        <item quantity="other">%1$s hoqët adresat alternative %2$s për këtë dhomë.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Shtuat adresën alternative %1$s për këtë dhomë.</item>
+        <item quantity="other">Shtuat adresat alternative %1$s për këtë dhomë.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s shtoi adresën alternative %2$s për këtë dhomë.</item>
+        <item quantity="other">%1$s shtoi adresat alternative %2$s për këtë dhomë.</item>
+    </plurals>
+    <string name="notice_widget_jitsi_modified_by_you">Ndryshuat konferencën video</string>
+    <string name="notice_widget_jitsi_modified">Konferenca video u ndryshua nga %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">Përfunduat konferencën video</string>
+    <string name="notice_widget_jitsi_removed">Konferenca video u përfundua nga %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">Nisët një konferencë video</string>
+    <string name="notice_widget_jitsi_added">Konferencë video nisur nga %1$s</string>
     <string name="light_theme">Temë e Çelët</string>
     <string name="dark_theme">Temë e Errët</string>
-    <string name="black_them">Temë e Zezë</string>
-    <string name="status_theme">Temë Status.im</string>
+    <string name="black_theme">Temë e Zezë</string>
     <string name="notification_noisy_notifications">Njoftime të zhurmshme</string>
     <string name="notification_silent_notifications">Njoftime të heshtura</string>
     <string name="title_activity_home">Mesazhe</string>
@@ -617,7 +874,7 @@
     <string name="ongoing_conference_call_video">Video</string>
     <string name="missing_permissions_to_start_conf_call">Ju duhen leje për ftesa, që të nisni një konferencë në këtë dhomë</string>
     <string name="bottom_action_favourites">Të parapëlqyer</string>
-    <string name="no_contact_access_placeholder">S’e lejuat Element-in të hyjë në kontaktet tuaja vendore</string>
+    <string name="template_no_contact_access_placeholder">S’e lejuat ${app_name}-in të hyjë në kontaktet tuaja vendore</string>
     <string name="send_bug_report_description">Ju lutemi, përshkruajeni të metën. Ç’po bënit? Ç’prisnit të ndodhte? Ç’ndodhi në fakt?</string>
     <string name="send_bug_report_alert_message">Duket se po përplasni telefonin nga inati. Do të donit të hapej skena për njoftim të metash?</string>
     <string name="send_bug_report_app_crashed">Herën e fundit aplikacioni u vithis. Do të donit të hapej skena e raportimit të vithisjeve?</string>
@@ -632,7 +889,7 @@
     <string name="auth_reset_password_success_message">Fjalëkalimi juaj u ricaktua.
 \n
 \nËshtë bërë dalja juaj nga llogaria në krejt sesionet dhe s’do të merrni më njoftime push. Për riaktivizim të njoftimeve, ribëni hyrjen në çdo pajisje.</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Ju lutemi, niseni Element-in në një tjetër pajisje që mund të shfshehtëzojë mesazhin, që kështu të mund të dërgojë kyçet te ky sesion.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Ju lutemi, niseni ${app_name}-in në një tjetër pajisje që mund të shfshehtëzojë mesazhin, që kështu të mund të dërgojë kyçet te ky sesion.</string>
     <string name="call_error_ice_failed">Lidhja e Medias Dështoi</string>
     <string name="media_picker_cannot_record_video">S’regjistrohet dot video</string>
     <string name="room_preview_unlinked_email_warning">Kjo ftesë i qe dërguar %s, që s’është i përshoqëruar me këtë llogari.
@@ -700,22 +957,22 @@
     <string name="call_connected">U bë lidhja e thirrjes</string>
     <string name="call_connecting">Po bëhet lidhja e thirrjes…</string>
     <string name="call_error_user_not_responding">Ana e largët dështoi të përgjigjet.</string>
-    <string name="permissions_rationale_msg_storage">Për të dërguar dhe ruajtur bashkëngjitje, Element-i lyp leje të përdorë mediatekën tuaj.
+    <string name="template_permissions_rationale_msg_storage">Për të dërguar dhe ruajtur bashkëngjitje, ${app_name}-i lyp leje të përdorë mediatekën tuaj.
 \n
 \nJu lutemi, lejoni përdorimin, që nga flluska pasuese, që të jetë në gjendje të dërgojë kartela që nga telefoni juaj.</string>
-    <string name="permissions_rationale_msg_camera">Për të bërë foto dhe thirrje video, Element-i lyp leje të përdorë kamerën tuaj.</string>
+    <string name="template_permissions_rationale_msg_camera">Për të bërë foto dhe thirrje video, ${app_name}-i lyp leje të përdorë kamerën tuaj.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nJu lutemi, lejoni përdorimin, që nga flluska pasuese, që të jetë në gjendje të bëjë thirrjen."</string>
-    <string name="permissions_rationale_msg_record_audio">Për të kryer thirrje audio, Element-i lyp leje të përdorë mikrofonin tuaj.</string>
+    <string name="template_permissions_rationale_msg_record_audio">Për të kryer thirrje audio, ${app_name}-i lyp leje të përdorë mikrofonin tuaj.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nJu lutemi, lejoni përdorimin, që nga flluska pasuese, që të jetë në gjendje të bëjë thirrjen."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Për të kryer thirrje video, Element-i lyp leje të përdorë kamerën dhe mikrofonin tuaj.
+    <string name="template_permissions_rationale_msg_camera_and_audio">Për të kryer thirrje video, ${app_name}-i lyp leje të përdorë kamerën dhe mikrofonin tuaj.
 \n
 \nJu lutemi, lejoni përdorimin, që nga flluskat pasuese, që të jetë në gjendje të bëjë thirrjen.</string>
-    <string name="permissions_rationale_msg_contacts">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, Element-i mund të kërkojë në librin tuaj të adresave. Nëse jeni dakord të lejohet hyrja në librin tuaj të adresave për këtë qëllim, ju lutemi, lejojeni hyrjen gjatë flluskës pasuese.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, Element-i mund të kërkojë në librin tuaj të adresave.
+    <string name="template_permissions_rationale_msg_contacts">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, ${app_name}-i mund të kërkojë në librin tuaj të adresave. Nëse jeni dakord të lejohet hyrja në librin tuaj të adresave për këtë qëllim, ju lutemi, lejojeni hyrjen gjatë flluskës pasuese.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, ${app_name}-i mund të kërkojë në librin tuaj të adresave.
 \n 
 \nJeni dakord të lejohet hyrja në librin tuaj të adresave për këtë qëllim\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Na ndjeni. Veprimi nuk u krye, për shkak lejesh që mungojnë</string>
@@ -804,9 +1061,9 @@
     <string name="settings_send_typing_notifs_summary">Lejojuni përdoruesve të tjerë të dinë se po shtypni.</string>
     <string name="settings_send_markdown_summary">Formatojini mesazhet duke përdorur sintaksën Markdown përpara se të dërgohen. Kjo lejon formatim të thelluar, f.v., përdorimi i yllthit për ta shfaqur tekstin me të pjerrëta.</string>
     <string name="settings_show_join_leave_messages_summary">Nuk prek ftesat, përzëniet dhe dëbimet.</string>
-    <string name="startup_notification_privacy_message">Element-i mund të xhirojë në prapaskenë që të administrojë njoftimet tuaja në rrugë të sigurt dhe privatisht. Kjo mund të ndikojë në harxhimin e baterisë.</string>
-    <string name="settings_opt_in_of_analytics_summary">Element-i grumbullon të dhëna analitike anonime që të na lejojë ta përmirësojmë aplikacionin.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Ju lutemi, aktivizoni analizat që të na ndihmoni të përmirësojmë Element-in.</string>
+    <string name="template_startup_notification_privacy_message">${app_name}-i mund të xhirojë në prapaskenë që të administrojë njoftimet tuaja në rrugë të sigurt dhe privatisht. Kjo mund të ndikojë në harxhimin e baterisë.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name}-i grumbullon të dhëna analitike anonime që të na lejojë ta përmirësojmë aplikacionin.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Ju lutemi, aktivizoni analizat që të na ndihmoni të përmirësojmë ${app_name}-in.</string>
     <string name="settings_unignore_user">Të shfaqen krejt mesazhet prej %s\?
 \n
 \nKini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të hajë ca kohë.</string>
@@ -833,7 +1090,7 @@
     <string name="option_send_sticker">Dërgoni një ngjitës</string>
     <string name="go_on_with">vazhdoni me…</string>
     <string name="settings_call_category">Thirrje</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Për thirrje ardhëse përdor zilen parazgjedhje të Element-it</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Për thirrje ardhëse përdor zilen parazgjedhje të ${app_name}-it</string>
     <string name="settings_call_ringtone_title">Zile thirrjesh ardhëse</string>
     <string name="settings_call_ringtone_dialog_title">Përzgjidhni zile për thirrjet:</string>
     <string name="room_settings_no_flair">Kjo dhomë nuk shfaq simbole për ndonjë bashkësi</string>
@@ -861,12 +1118,12 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Aktivizoje</string>
     <string name="settings_troubleshoot_test_device_settings_title">Rregullime Sesioni.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Njoftimet janë të aktivizuara për këtë sesion.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Nuk janë aktivizuar njoftimet për këtë sesion. 
-\nJu lutemi, kontrolloni rregullimet e Element-it.</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Nuk janë aktivizuar njoftimet për këtë sesion.
+\nJu lutemi, kontrolloni rregullimet e ${app_name}-it.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Aktivizoje</string>
     <string name="settings_troubleshoot_test_play_services_title">Kontroll pë Play Services</string>
     <string name="settings_troubleshoot_test_play_services_success">APK-ja për Google Play Services është e pranishme dhe e përditësuar.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element-i përdor Google Play Services për të dorëzuar mesazhe push, por s’duket të jetë formësuar saktë:
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name}-i përdor Google Play Services për të dorëzuar mesazhe push, por s’duket të jetë formësuar saktë:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Ndreqni Play Services</string>
     <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
@@ -888,22 +1145,22 @@
     <string name="settings_troubleshoot_test_service_restart_failed">S’u arrit të rinisej shërbimi</string>
     <string name="settings_troubleshoot_test_service_boot_title">Nise gjatë nisjes së sistemit</string>
     <string name="settings_troubleshoot_test_service_boot_success">Shërbimi do të niset kur të riniset pajisja.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Shërbimi s’do të niset kur të riniset pajisja, s’do të merrni njoftime derisa Element-i të jetë hapur një herë.</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">Shërbimi s’do të niset kur të riniset pajisja, s’do të merrni njoftime derisa ${app_name}-i të jetë hapur një herë.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Aktivizo Nisje gjatë nisjes së sistemit</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Kontrollo kufizime prapaskene</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Kufizimet për në prapaskenë janë të çaktivizuar për Element-in. Ky test duhet të xhirojë duke përdorur të dhëna rrjeti celular (jo WIFI).
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Kufizimet për në prapaskenë janë të çaktivizuar për ${app_name}-in. Ky test duhet të xhirojë duke përdorur të dhëna rrjeti celular (jo WIFI).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Kufizimet për në prapaskenë janë të aktivizuara për Element-in.
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Kufizimet për në prapaskenë janë të aktivizuara për ${app_name}-in.
 \nPuna që aplikacioni rreket të bëjë do të kufizohet në mënyrë agresive, teksa gjendet në prapaskenë, dhe kjo mund të prekë njoftimet.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Çaktivizoji kufizimet</string>
     <string name="settings_troubleshoot_test_battery_title">Optimizim Baterie</string>
-    <string name="settings_troubleshoot_test_battery_success">Element-i nuk preket nga Optimizime Baterie.</string>
+    <string name="template_settings_troubleshoot_test_battery_success">${app_name}-i nuk preket nga Optimizime Baterie.</string>
     <string name="settings_troubleshoot_test_battery_failed">Nëse një përdorues e lë një pajisje jo në prizë dhe të palëvizshme për një periudhë, me ekranin të fikur, pajisja kalon nën mënyrën Dremitje. Kjo u parandalon aplikimeve të hyjnë në rrjet dhe shtyn për më vonë punët e tyre, njëkohësimet dhe alarmet standarde.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Shpërfille Optimizimin</string>
     <string name="startup_notification_fdroid_battery_optim_title">Lidhje Në Prapaskenë</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Për t’ju dhënë njoftime të qëndrueshme, Element-i lyp të mbajë në prapaskenë një lidhje me pak ndikim.
-\nNë skenën pasuese do t’ju kërkohet të lejoni Element-in të xhirojë në prapaskenë, ju lutemi, pranojeni.</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">Për t’ju dhënë njoftime të qëndrueshme, ${app_name}-i lyp të mbajë në prapaskenë një lidhje me pak ndikim.
+\nNë skenën pasuese do t’ju kërkohet të lejoni ${app_name}-in të xhirojë në prapaskenë, ju lutemi, pranojeni.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Akordojini leje</string>
     <string name="account_email_error">Ndodhi një gabim teksa verifikohej adresa juaj email.</string>
     <string name="account_phone_number_error">Ndodhi një gabim teksa verifikohej numri juaj i telefonit.</string>
@@ -922,12 +1179,12 @@
     <string name="settings_troubleshoot_test_bing_settings_failed">Disa njoftime janë të çaktivizuara te rregullimet tuaja vetjake.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">S’u arrit të ngarkohen rregulla vetjakë, ju lutemi, riprovoni.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Kontrolloni Rregullimet</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nKy gabim është jashtë kontrollit të Element-it dhe, sipas Google-it, ky gabim është shenjë se pajisja ka shumë aplikacione të regjistruar me FCM. Gabimi ndodh vetëm në raste kur ka një numër të skajshëm aplikacionesh, ndaj nuk duhet të prekë përdoruesin mesatar.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nKy gabim është jashtë kontrollit të Element-it. Mund të ndodhë për disa arsye. Ndoshta do të funksionojë, nëse riprovoni më vonë, mund të kontrolloni edhe nëse për Google Play Service s’ka kufizime lidhur me përdorimin e të dhënave, te rregullimet e sistemit, ose se ora e pajisjes suaj është e saktë, ose mund të ndodhë në ROM të përshtatur.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nKy gabim është jashtë kontrollit të Element-it. S’ka llogari Google te telefoni. Ju lutemi, hapni përgjegjësin e llogarive dhe shtoni një llogari Google.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nKy gabim është jashtë kontrollit të ${app_name}-it dhe, sipas Google-it, ky gabim është shenjë se pajisja ka shumë aplikacione të regjistruar me FCM. Gabimi ndodh vetëm në raste kur ka një numër të skajshëm aplikacionesh, ndaj nuk duhet të prekë përdoruesin mesatar.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nKy gabim është jashtë kontrollit të ${app_name}-it. Mund të ndodhë për disa arsye. Ndoshta do të funksionojë, nëse riprovoni më vonë, mund të kontrolloni edhe nëse për Google Play Service s’ka kufizime lidhur me përdorimin e të dhënave, te rregullimet e sistemit, ose se ora e pajisjes suaj është e saktë, ose mund të ndodhë në ROM të përshtatur.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nKy gabim është jashtë kontrollit të ${app_name}-it. S’ka llogari Google te telefoni. Ju lutemi, hapni përgjegjësin e llogarive dhe shtoni një llogari Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Shtoni Llogari</string>
     <string name="settings_noisy_notifications_preferences">Formësoni Njoftime të Zhurmshme</string>
     <string name="settings_call_notifications_preferences">Formësoni Njoftime Thirrjesh</string>
@@ -938,7 +1195,7 @@
     <string name="notification_silent">Të heshtur</string>
     <string name="passphrase_empty_error_message">Ju lutemi, jepni një frazëkalim</string>
     <string name="passphrase_passphrase_too_weak">Frazëkalimi është shumë i dobët</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Ju lutemi, fshini frazëkalimin, nëse doni që Element-i të prodhojë një kyç rimarrjesh.</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">Ju lutemi, fshini frazëkalimin, nëse doni që ${app_name}-i të prodhojë një kyç rimarrjesh.</string>
     <string name="keys_backup_no_session_error">S’ka sesione Matrix të gatshëm</string>
     <string name="keys_backup_setup_step1_title">Mos humbni kurrë mesazhe të fshehtëzuar</string>
     <string name="keys_backup_setup_step1_description">Mesazhet në dhoma të fshehtëzuara sigurohen me fshehtëzim skaj-më-skaj. Vetëm ju dhe marrësi(t) keni kyçet për leximin e këtyre mesazheve.
@@ -1068,7 +1325,7 @@
     <string name="new_recovery_method_popup_was_me">Unë qeshë</string>
     <string name="autodiscover_invalid_response">Përgjigje e pavlefshme zbulimi shërbyesi Home</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Mundësi Vetëplotësimi Shërbyesi</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element-i pikasi një formësim shërbyesi të përshtatur për përkatësinë tuaj userId \"%1$s\":
+    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name}-i pikasi një formësim shërbyesi të përshtatur për përkatësinë tuaj userId \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Përdor Formësim</string>
     <string name="notification_sync_init">Po gatitet shërbimi</string>
@@ -1182,7 +1439,7 @@
     <string name="please_wait">Ju lutemi, pritni…</string>
     <string name="group_all_communities">Krejt Bashkësitë</string>
     <string name="room_preview_no_preview">Kjo dhomë s’mund të parashihet</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Paraparja e dhomave të lexueshme nga bota nuk mbulohet ende në Element</string>
+    <string name="template_room_preview_world_readable_room_not_supported_yet">Paraparja e dhomave të lexueshme nga bota nuk mbulohet ende në ${app_name}</string>
     <string name="fab_menu_create_room">Dhoma</string>
     <string name="fab_menu_create_chat">Mesazhe të Drejtpërdrejtë</string>
     <string name="create_room_title">Dhomë e Re</string>
@@ -1274,11 +1531,11 @@
     <string name="invite_no_identity_server_error">Që të kryhet ky veprim, shtoni një shërbyes identitetesh, që nga rregullimet tuaja.</string>
     <string name="settings_background_fdroid_sync_mode">Mënyrë Njëkohësimi Në Prapaskenë</string>
     <string name="settings_background_fdroid_sync_mode_battery">E optimizuar për baterinë</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element-i do të bëjë njëkohësim në prapaskenë, në një mënyrë që kursen burimet e kufizuara të pajisjes (baterinë).
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name}-i do të bëjë njëkohësim në prapaskenë, në një mënyrë që kursen burimet e kufizuara të pajisjes (baterinë).
 \nNë varësi të gjendjes së burimeve tuaja, njëkohësimi mund të shtyhet për më vonë nga sistemi operativ.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">I optimizuar për kohë të njëmendtë</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element0-i do të bëjë njëkohësim në prapaskenë periodikisht në një kohë të caktuar (e formësueshme).
-\nKjo do të ketë ndikim mbi përdorimin e baterisë dhe të transmetimit, do të shfaqet një njoftim i pandërprerë që pohon se Element-i po përgjon për akte.</string>
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name}0-i do të bëjë njëkohësim në prapaskenë periodikisht në një kohë të caktuar (e formësueshme).
+\nKjo do të ketë ndikim mbi përdorimin e baterisë dhe të transmetimit, do të shfaqet një njoftim i pandërprerë që pohon se ${app_name}-i po përgjon për akte.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Pa njëkohësim në prapraskenë</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">S’do të njoftoheni për mesazhe ardhës, kur aplikacioni gjendet në prapaskenë.</string>
     <string name="settings_background_sync_update_error">S’u arrit të përditësohen rregullime.</string>
@@ -1361,12 +1618,12 @@
     <string name="content_reported_as_inappropriate_content">Kjo lëndë është raportuar si e papërshtatshme. 
 \n 
 \nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që të fshihen mesazhet e tij.</string>
-    <string name="permissions_rationale_msg_keys_backup_export">Element-i lyp leje për të ruajtur kyçet tuaj E2E në disk.
+    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name}-i lyp leje për të ruajtur kyçet tuaj E2E në disk.
 \n
 \nJu lutemi, lejoni, te flluska pasuese, hyrje për të qenë e mundur të eksportohen kyçet tuaj dorazi.</string>
     <string name="no_network_indicator">Tani për tani s’la lidhje rrjeti</string>
     <string name="settings_add_3pid_confirm_password_title">Ripohoni fjalëkalimin tuaj</string>
-    <string name="settings_add_3pid_flow_not_supported">Këtë s’e bëni dot që nga Element-i për celular</string>
+    <string name="template_settings_add_3pid_flow_not_supported">Këtë s’e bëni dot që nga ${app_name}-i për celular</string>
     <string name="settings_add_3pid_authentication_needed">Lypset mirëfilltësim</string>
     <string name="settings_integrations">Integrime</string>
     <string name="settings_integrations_summary">Përdorni një Përgjegjës Integrimesh që të administroni robotë, ura, widget-e dhe paketa ngjitësish.
@@ -1436,7 +1693,6 @@
     <string name="login_server_url_form_other_hint">Adresë</string>
     <string name="login_server_url_form_modular_text">Strehim me pagesë për ente</string>
     <string name="login_server_url_form_modular_notice">Jepni adresën e Modular Element-it ose Shërbyesit që doni të përdoret</string>
-    <string name="login_server_url_form_other_notice">Jepni adresën e një shërbyesi ose një instance Element me të cilën doni të lidheni</string>
     <string name="login_sso_error_message">Ndodhi një gabim kur ngarkohej faqja: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Aplikacioni s’është në gjendje të bëjë hyrje në llogari në këtë shërbyes Home. Shërbyesi Home mbulon llojet vijuese të hyrjes(ve): %1$s.
 \n
@@ -1535,7 +1791,7 @@
 \nQë të mund të hyni te të dhëna të llogarisë tuaj dhe te mesazhe, bëni sërish hyrjen.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Do të humbni hyrje te mesazhe të sigurt, veç në hyfshi për të rimarrë kyçet tuaj të fshehtëzimit.</string>
     <string name="soft_logout_clear_data_dialog_submit">Spastro të dhënat</string>
-    <string name="soft_logout_sso_not_same_user_error">Sesioni i tanishëm është për përdoruesin %1$s dhe ju jepni kredenciale për përdoruesin %2$s. Kjo nuk mbulohet nga Element.
+    <string name="template_soft_logout_sso_not_same_user_error">Sesioni i tanishëm është për përdoruesin %1$s dhe ju jepni kredenciale për përdoruesin %2$s. Kjo nuk mbulohet nga ${app_name}.
 \nJu lutemi, së pari spastroni të dhëna, mandej hyni sërish në një tjetër llogari.</string>
     <string name="permalink_malformed">Lidhja juaj matrix.to është e keqformuar</string>
     <string name="bug_report_error_too_short">Përshkrimi është shumë i shkurtër</string>
@@ -1554,7 +1810,7 @@
     <string name="devices_current_device">Sesioni i tanishëm</string>
     <string name="devices_other_devices">Shfaq sesione të tjera</string>
     <string name="autocomplete_limited_results">Po shfaqen vetëm përfundimet e para, shtypni më shumë shkronja…</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element mund të vithiset më shpesh, kur ndodh një gabim i papritur</string>
+    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} mund të vithiset më shpesh, kur ndodh një gabim i papritur</string>
     <string name="settings_call_ringtone_use_default_stun">Lejoni shërbyes rrugëzgjidhje asistimi thirrjesh</string>
     <string name="command_description_shrug">Parashtoji ¯\\_(ツ)_/¯ një mesazhi tekst të thjeshtë</string>
     <string name="create_room_encryption_title">Aktivizoni fshehtëzim</string>
@@ -1668,9 +1924,9 @@
     <string name="verification_request_alert_description">Për siguri ekstra, verifikojeni %s duke parë kontrolluar në të dy pajisjet tuaja një kod njëpërdorimsh.
 \n
 \nPër sigurinë maksimale, bëjeni këtë ju vetë.</string>
-    <string name="rendering_event_error_type_of_event_not_handled">Element nuk trajton akte të llojit \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element nuk trajton mesazhe të llojit \'%1$s\'</string>
-    <string name="rendering_event_error_exception">Element ndeshi një problem kur vizatohej lëndë e aktit me ID \'%1$s\'</string>
+    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} nuk trajton akte të llojit \'%1$s\'</string>
+    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} nuk trajton mesazhe të llojit \'%1$s\'</string>
+    <string name="template_rendering_event_error_exception">${app_name} ndeshi një problem kur vizatohej lëndë e aktit me ID \'%1$s\'</string>
     <string name="verify_cannot_cross_sign">Ky sesion s’është në gjendje të ndajë këtë verifikim me sesionet tuaj të tjerë.
 \nVerifikimi do të ruhet lokalisht dhe do të ndahet nën një version të ardhshëm të aplikacionit.</string>
     <string name="verification_request_notice">Për të qenë i sigurt, verifikoni %s duke kontrolluar një kod njëpërdorimsh.</string>
@@ -1723,7 +1979,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Veprimtari e fshirë nga përdorues, arsye: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Veprimtari e moderuar nga përgjegjësi i dhomës, arsye: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Kyçet janë tashmë të përditësuar!</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="template_login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">Kërkesa Kyçi</string>
     <string name="e2e_use_keybackup">Shkyçni historik mesazhesh të fshehtëzuar</string>
     <string name="refresh">Rifreskoje</string>
@@ -1824,13 +2080,13 @@
     <string name="media_file_added_to_gallery">Te Galeria u shtua kartelë media</string>
     <string name="error_adding_media_file_to_gallery">S’u shtua dot kartelë media te Galeria</string>
     <string name="change_password_summary">Caktoni një fjalëkalim të ri llogarie…</string>
-    <string name="use_other_session_content_description">Përdorni Element-in më të ri në pajisjet tuaja të tjera, Element Web, Element Desktop, Element iOS, Element për Android, ose një tjetër klient Matrix të aftë për &lt;em&gt;cross-signing&lt;/em</string>
-    <string name="app_desktop_web">Element Web
-\nElement Desktop</string>
-    <string name="app_ios_android">Element iOS
-\nElement Android</string>
+    <string name="template_use_other_session_content_description">Përdorni ${app_name}-in më të ri në pajisjet tuaja të tjera, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} për Android, ose një tjetër klient Matrix të aftë për &lt;em&gt;cross-signing&lt;/em</string>
+    <string name="template_app_desktop_web">${app_name} Web
+\n${app_name} Desktop</string>
+    <string name="template_app_ios_android">${app_name} iOS
+\n${app_name} Android</string>
     <string name="or_other_mx_capabale_client">ose një tjetër klient Matrix i aftë për &lt;em&gt;cross-signing&lt;/em</string>
-    <string name="use_latest_app">Përdorni Element-in më të ri në pajisjet tuaja të tjera:</string>
+    <string name="template_use_latest_app">Përdorni ${app_name}-in më të ri në pajisjet tuaja të tjera:</string>
     <string name="command_description_discard_session_not_handled">Mbulohet vetëm për dhoma të fshehtëzuara</string>
     <string name="enter_secret_storage_passphrase_or_key">Përdorni %1$s tuaj ose përdorni %2$s tuaj që të vazhdohet.</string>
     <string name="use_recovery_key">Përdorni Kyçin Rimarrjesh</string>
@@ -1890,7 +2146,7 @@
     <string name="choose_locale_other_locales_title">Gjuhë të tjera të gatshme</string>
     <string name="choose_locale_loading_locales">Po ngarkohen gjuhë të gatshme…</string>
     <string name="disconnect_identity_server_dialog_content">Të bëhet shkëputja prej shërbyesit tuaj të identitetit %s\?</string>
-    <string name="identity_server_error_outdated_identity_server">Ky shërbyes identitetesh është i vjetruar. Element mbulon vetëm API V2.</string>
+    <string name="template_identity_server_error_outdated_identity_server">Ky shërbyes identitetesh është i vjetruar. ${app_name} mbulon vetëm API V2.</string>
     <string name="identity_server_error_outdated_home_server">Ky veprim s’është i mundshëm. Shërbyesi Home është i vjetruar.</string>
     <string name="identity_server_error_no_identity_server_configured">Ju lutemi, së pari formësoni një shërbyes identitetesh.</string>
     <string name="identity_server_error_terms_not_signed">Ju lutemi, së pari pranoni te rregullimet termat e shërbyesit të identiteteve.</string>
@@ -1921,7 +2177,7 @@
     <string name="action_copy">Kopjoje</string>
     <string name="dialog_title_success">Sukses</string>
     <string name="bottom_action_notification">Njoftime</string>
-    <string name="call_failed_no_connection">Thirrja Element Dështoi</string>
+    <string name="template_call_failed_no_connection">Thirrja ${app_name} Dështoi</string>
     <string name="call_failed_no_connection_description">S’u arrit të vendosej lidhje e atypëratyshme.
 \nQë thirrjet të punojnë mirë, ju lutemi, kërkojini përgjegjësit të shërbyesit tuaj Home të formësojë një shërbyes TURN.</string>
     <string name="call_select_sound_device">Përzgjidhni Pajisje Zëri</string>
@@ -2037,8 +2293,7 @@
     <string name="auth_invalid_login_deactivated_account">Kjo llogari është çaktivizuar.</string>
     <string name="error_saving_media_file">S’u ruajt dot kartelë media</string>
     <string name="confirm_your_identity_quad_s">Ripohoni identitetin tuaj duke verifikuar këto kredenciale hyrjeje, duke i akorduar hyrje te mesazhe të fshehtëzuar.</string>
-    <string name="error_sso_flow_not_supported_yet">Na ndjeni, ky veprim s’është ende i mundshëm për llogari të lidhura duke përdorur Hyrje Njëshe.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Për privatësinë tuaj, Element-i mbulon vetëm dërgim email-esh dhe numrash telefoni përdoruesi të koduar.</string>
+    <string name="template_identity_server_error_bulk_sha256_not_supported">Për privatësinë tuaj, ${app_name}-i mbulon vetëm dërgim email-esh dhe numrash telefoni përdoruesi të koduar.</string>
     <string name="power_level_edit_title">Caktoni rol</string>
     <string name="power_level_title">Rol</string>
     <string name="a11y_open_chat">Hapni fjalosje</string>
@@ -2073,11 +2328,10 @@
     <string name="crypto_error_withheld_unverified">S’mund të hapni këtë mesazh, ngaqë sesionit tuaj nuk i zihet besë nga dërguesi</string>
     <string name="crypto_error_withheld_generic">S’mund ta hapni këtë mesazh, ngaqë dërguesi qëllimisht nuk ju dërgoi kyçet</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Po pritet për historik fshehtëzimesh</string>
-    <string name="element_disclaimer_title">Riot-i tanimë quhet Element!</string>
-    <string name="element_disclaimer_content">Jemi të ngazëllyer t’ju njoftojmë se kemi ndërruar emër! Aplikacioni juaj është i përditësuar dhe jeni i futur në llogarinë tuaj.</string>
-    <string name="element_disclaimer_negative_button">E MORA VESH</string>
-    <string name="element_disclaimer_positive_button">MËSONI MË TEPËR</string>
-    <string name="element_login_splash_brand">element</string>
+    <string name="disclaimer_title">Riot-i tanimë quhet Element!</string>
+    <string name="disclaimer_content">Jemi të ngazëllyer t’ju njoftojmë se kemi ndërruar emër! Aplikacioni juaj është i përditësuar dhe jeni i futur në llogarinë tuaj.</string>
+    <string name="disclaimer_negative_button">E MORA VESH</string>
+    <string name="disclaimer_positive_button">MËSONI MË TEPËR</string>
     <string name="save_recovery_key_chooser_hint">Ruaje kyçin e rimarrjeve te</string>
     <string name="add_from_phone_book">Shto prej numëratorit tim telefonik</string>
     <string name="empty_phone_book">Numëratori juaj telefonik është i zbrazët</string>
@@ -2112,13 +2366,13 @@
     <string name="error_opening_banned_room">S’mund të hapet një dhomë prej të cilës jeni dëbuar.</string>
     <string name="room_error_not_found">S’gjendet dot kjo dhomë. Sigurohuni që ekziston.</string>
     <string name="universal_link_malformed">Lidhja qe e keqformësuar</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">Kodi PIN kërkohet doemos sa herë që hapni Element-in.</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">Kodi PIN kërkohet doemos pas 2 minutash mospërdorimi të Element-it.</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_off">Kodi PIN kërkohet doemos sa herë që hapni ${app_name}-in.</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_on">Kodi PIN kërkohet doemos pas 2 minutash mospërdorimi të ${app_name}-it.</string>
     <string name="settings_security_pin_code_grace_period_title">Kërkoje doemos PIN-in pas 2 minutash</string>
     <string name="settings_security_pin_code_notifications_summary_off">Shfaq vetëm numrin e mesazheve të palexuar, në një njoftim të thjeshtë.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Shfaq hollësi, të tilla si emra dhomash dhe lëndë mesazhesh.</string>
     <string name="settings_security_pin_code_notifications_title">Shfaq lëndë në njoftime</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">Kodi PIN është rruga e vetme për të shkyçur Element-in.</string>
+    <string name="template_settings_security_pin_code_use_biometrics_summary_off">Kodi PIN është rruga e vetme për të shkyçur ${app_name}-in.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Aktivizoni të dhëna biometrike specifike për pajisjen, bie fjala, shenja gishtash dhe njohje fytyre.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Aktivizo të dhëna biometrike</string>
     <string name="settings_security_application_protection_screen_title">Formësoni mbrojtjen</string>
@@ -2192,8 +2446,8 @@
     <string name="user_code_share">Ndaje kodin tim me të tjerët</string>
     <string name="user_code_scan">Skanoni një kod QR</string>
     <string name="not_a_valid_qr_code">S’është kod QR Matrix i vlefshëm</string>
-    <string name="invite_friends_rich_title">Takohuni me mua në Element</string>
-    <string name="invite_friends_text">Hej, bisedoni me mua në Element: %s</string>
+    <string name="template_invite_friends_rich_title">Takohuni me mua në ${app_name}</string>
+    <string name="template_invite_friends_text">Hej, bisedoni me mua në ${app_name}: %s</string>
     <string name="invite_friends">Ftoni shokë</string>
     <string name="add_people">Shtoni persona</string>
     <string name="topic_prefix">"Temë: "</string>
@@ -2269,4 +2523,76 @@
     <string name="room_settings_room_read_history_dialog_subtitle">Ndryshimet se cili mund të lexojë historikun do të aplikohen vetëm për mesazhe të ardhshëm në këtë dhomë. Dukshmëria e historikut ekzistues do të mbesë e pandryshuar.</string>
     <string name="action_unpublish">Hiqi botimin</string>
     <string name="action_add">Shto</string>
+    <string name="authentication_error">S’u arrit të bëhej mirëfilltësimi</string>
+    <string name="template_re_authentication_default_confirm_text">Që të kryejë këtë veprim, ${app_name}-i lyp dhënien prej jush të kredencialeve tuaja.</string>
+    <string name="re_authentication_activity_title">Lypset Rimirëfilltësim</string>
+    <string name="call_transfer_users_tab_title">Përdorues</string>
+    <string name="call_transfer_failure">Ndodhi një gabim teksa shpërngulej thirrja</string>
+    <string name="call_transfer_title">Shpërngule</string>
+    <string name="call_transfer_connect_action">Lidhe</string>
+    <string name="call_transfer_consult_first">Konsultohu së pari</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">1 thirrje aktive (%1$s) · 1 thirrje e ndalur</item>
+        <item quantity="other">1 thirrje aktive (%1$s) · %2$d thirrje të ndalura</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="one">Thirrja u ndal</item>
+        <item quantity="other">U ndalën %1$d thirrje</item>
+    </plurals>
+    <string name="call_only_active">Thirrje aktive (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">Pati një gabim gjatë kërkimit të numrit të telefonit</string>
+    <string name="call_dial_pad_title">Pjesa e numrave</string>
+    <string name="call_tile_call_back">Ktheji thirrjen</string>
+    <string name="call_tile_ended">Kjo thirrje ka përfunduar</string>
+    <string name="call_tile_other_declined">%1$s hodhi poshtë këtë thirrje</string>
+    <string name="call_tile_you_declined">Hodhët poshtë këtë thirrje %1$s</string>
+    <string name="call_tile_in_call">Gjendeni në këtë thirrje</string>
+    <string name="call_tile_other_started_call">%1$s nisi një thirrje</string>
+    <string name="call_tile_you_started_call">Filluat një thirrje</string>
+    <string name="failed_to_initialize_cross_signing">S’u arrit të ujdisej “Cross Signing”</string>
+    <string name="default_message_emote_snow">dërgon dëborë ❄️</string>
+    <string name="default_message_emote_confetti">dërgon bonbone 🎉</string>
+    <string name="command_snow">E dërgon mesazhin e dhënë me dëborë</string>
+    <string name="command_confetti">E dërgon mesazhin e dhënë me bonbone</string>
+    <string name="setup_cross_signing">Aktivizoni <em>Cross Signing</em></string>
+    <string name="login_clear_homeserver_history">Spastroje historikun</string>
+    <string name="login_social_sso">hyrje njëshe</string>
+    <string name="login_social_signin_with">Hyni me %s</string>
+    <string name="login_social_signup_with">Regjistrohuni me %s</string>
+    <string name="login_social_continue_with">Vazhdo me %s</string>
+    <string name="login_social_continue">Ose</string>
+    <string name="settings_show_emoji_keyboard_summary">Shtoni një buton te hartuesi i mesazheve për të hapur tastierën e emoji-ve</string>
+    <string name="settings_show_emoji_keyboard">Shfaq tastierë emoji-sh</string>
+    <string name="settings_chat_effects_description">Përdorni urdhrin /confetti ose dërgoni një mesazh që përmban ❄️ ose 🎉</string>
+    <string name="settings_chat_effects_title">Shfaq efekte fjalosjeje</string>
+    <string name="room_permissions_change_topic">Të ndryshojë temë</string>
+    <string name="room_permissions_upgrade_the_room">Të përmirësojë dhomën</string>
+    <string name="room_permissions_send_m_room_server_acl_events">Të dërgojë akte m.room.server_acl</string>
+    <string name="room_permissions_change_permissions">Të ndryshojë leje</string>
+    <string name="room_permissions_change_room_name">Të ndryshojë emër dhome</string>
+    <string name="room_permissions_change_history_visibility">Të ndryshojë dukshmëri historiku</string>
+    <string name="room_permissions_enable_room_encryption">Të aktivizojë fshehtëzim dhome</string>
+    <string name="room_permissions_change_main_address_for_the_room">Të ndryshojë adresë kryesore për dhomën</string>
+    <string name="room_permissions_change_room_avatar">Të ndryshojë avatar dhome</string>
+    <string name="room_permissions_modify_widgets">Të ndryshojë widget-e</string>
+    <string name="room_permissions_notify_everyone">Të njoftojë gjithkënd</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Të heqë mesazhe dërguar nga të tjerët</string>
+    <string name="room_permissions_ban_users">Të dëbojë përdorues</string>
+    <string name="room_permissions_kick_users">Të përzërë përdorues</string>
+    <string name="room_permissions_change_settings">Të ndryshojë rregullime</string>
+    <string name="room_permissions_invite_users">Të ftojë përdorues</string>
+    <string name="room_permissions_send_messages">Të dërgojë mesazhe</string>
+    <string name="room_permissions_default_role">Rol parazgjedhje</string>
+    <string name="room_permissions_notice_read_only">S’keni leje të përditësoni rolet e domosdoshëm për të ndryshuar anë të ndryshme të dhomës</string>
+    <string name="room_permissions_notice">Të përzgjedhë rolet e domosdoshme për të ndryshuar anë të ndryshme të dhomës</string>
+    <string name="room_permissions_title">Leje</string>
+    <string name="room_settings_permissions_subtitle">Të shohë dhe përditësojë role të domosdoshëm për të ndryshuar anë të ndryshme të dhomës.</string>
+    <string name="room_settings_permissions_title">Leje dhome</string>
+    <string name="room_participants_leave_private_warning">Kjo dhomë s’është publike. S’do të jeni në gjendje të rihyni në të pa një ftesë.</string>
+    <string name="call_held_by_you">E mbajtët thirrjen</string>
+    <string name="call_held_by_user">%s e mbajti thirrjen</string>
+    <string name="call_hold_action">Mbaje</string>
+    <string name="call_resume_action">Rimerre</string>
+    <string name="error_unauthorized">E paautorizuar, i mungojnë kredenciale të vlefshme mirëfilltësimi</string>
+    <string name="system_theme">Parazgjedhje Sistemi</string>
 </resources>

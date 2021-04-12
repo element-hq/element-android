@@ -15,6 +15,8 @@
  */
 package im.vector.app.core.utils
 
+import android.os.SystemClock
+
 /**
  * Simple ThrottleFirst
  * See https://raw.githubusercontent.com/wiki/ReactiveX/RxJava/images/rx-operators/throttleFirst.png
@@ -22,14 +24,27 @@ package im.vector.app.core.utils
 class FirstThrottler(private val minimumInterval: Long = 800) {
     private var lastDate = 0L
 
-    fun canHandle(): Boolean {
-        val now = System.currentTimeMillis()
-        if (now > lastDate + minimumInterval) {
+    sealed class CanHandlerResult {
+        object Yes : CanHandlerResult()
+        data class No(val shouldWaitMillis: Long) : CanHandlerResult()
+
+        fun waitMillis(): Long {
+            return when (this) {
+                Yes   -> 0
+                is No -> shouldWaitMillis
+            }
+        }
+    }
+
+    fun canHandle(): CanHandlerResult {
+        val now = SystemClock.elapsedRealtime()
+        val delaySinceLast = now - lastDate
+        if (delaySinceLast > minimumInterval) {
             lastDate = now
-            return true
+            return CanHandlerResult.Yes
         }
 
         // Too soon
-        return false
+        return CanHandlerResult.No(minimumInterval - delaySinceLast)
     }
 }

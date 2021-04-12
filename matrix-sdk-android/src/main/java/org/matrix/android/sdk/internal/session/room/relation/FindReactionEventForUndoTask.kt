@@ -45,16 +45,16 @@ internal class DefaultFindReactionEventForUndoTask @Inject constructor(
 
     override suspend fun execute(params: FindReactionEventForUndoTask.Params): FindReactionEventForUndoTask.Result {
         val eventId = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            getReactionToRedact(realm, params.reaction, params.eventId)?.eventId
+            getReactionToRedact(realm, params)?.eventId
         }
         return FindReactionEventForUndoTask.Result(eventId)
     }
 
-    private fun getReactionToRedact(realm: Realm, reaction: String, eventId: String): EventEntity? {
-        val summary = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst() ?: return null
+    private fun getReactionToRedact(realm: Realm, params: FindReactionEventForUndoTask.Params): EventEntity? {
+        val summary = EventAnnotationsSummaryEntity.where(realm, params.roomId, params.eventId).findFirst() ?: return null
 
         val rase = summary.reactionsSummary.where()
-                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reaction)
+                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.reaction)
                 .findFirst() ?: return null
 
         // want to find the event originated by me!

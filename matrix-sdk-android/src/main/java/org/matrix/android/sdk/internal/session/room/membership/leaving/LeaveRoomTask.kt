@@ -68,8 +68,8 @@ internal class DefaultLeaveRoomTask @Inject constructor(
             leaveRoom(predecessorRoomId, reason)
         }
         try {
-            executeRequest<Unit>(globalErrorReceiver) {
-                apiCall = roomAPI.leave(roomId, mapOf("reason" to reason))
+            executeRequest(globalErrorReceiver) {
+                roomAPI.leave(roomId, mapOf("reason" to reason))
             }
         } catch (failure: Throwable) {
             roomChangeMembershipStateDataSource.updateState(roomId, ChangeMembershipState.FailedLeaving(failure))

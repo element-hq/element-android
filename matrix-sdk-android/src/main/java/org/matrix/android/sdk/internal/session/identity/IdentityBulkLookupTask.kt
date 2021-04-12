@@ -83,7 +83,7 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         return try {
             LookUpData(hashedAddresses,
                     executeRequest(null) {
-                        apiCall = identityAPI.lookup(IdentityLookUpParams(
+                        identityAPI.lookup(IdentityLookUpParams(
                                 hashedAddresses,
                                 IdentityHashDetailResponse.ALGORITHM_SHA256,
                                 hashDetailResponse.pepper
@@ -126,7 +126,7 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
 
     private suspend fun fetchHashDetails(identityAPI: IdentityAPI): IdentityHashDetailResponse {
         return executeRequest(null) {
-            apiCall = identityAPI.hashDetails()
+            identityAPI.hashDetails()
         }
     }
 

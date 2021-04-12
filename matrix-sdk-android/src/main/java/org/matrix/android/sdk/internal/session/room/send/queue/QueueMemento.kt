@@ -32,6 +32,9 @@ import javax.inject.Inject
  * It is just used to remember what events/localEchos was managed by the event sender in order to
  * reschedule them (and only them) on next restart
  */
+
+private const val PERSISTENCE_KEY = "ManagedBySender"
+
 internal class QueueMemento @Inject constructor(context: Context,
                                                 @SessionId sessionId: String,
                                                 private val queuedTaskFactory: QueuedTaskFactory,
@@ -39,28 +42,27 @@ internal class QueueMemento @Inject constructor(context: Context,
                                                 private val cryptoService: CryptoService) {
 
     private val storage = context.getSharedPreferences("QueueMemento_$sessionId", Context.MODE_PRIVATE)
-    private val managedTaskInfos = mutableListOf<QueuedTask>()
+    private val trackedTasks = mutableListOf<QueuedTask>()
 
-    fun track(task: QueuedTask) {
-        synchronized(managedTaskInfos) {
-            managedTaskInfos.add(task)
-            persist()
-        }
+    fun track(task: QueuedTask) = synchronized(trackedTasks) {
+        trackedTasks.add(task)
+        persist()
     }
 
-    fun unTrack(task: QueuedTask) {
-        synchronized(managedTaskInfos) {
-            managedTaskInfos.remove(task)
-            persist()
-        }
+    fun unTrack(task: QueuedTask) = synchronized(trackedTasks) {
+        trackedTasks.remove(task)
+        persist()
+    }
+
+    fun trackedTasks() = synchronized(trackedTasks) {
     }
 
     private fun persist() {
-        managedTaskInfos.mapIndexedNotNull { index, queuedTask ->
+        trackedTasks.mapIndexedNotNull { index, queuedTask ->
             toTaskInfo(queuedTask, index)?.let { TaskInfo.map(it) }
         }.toSet().let { set ->
             storage.edit()
-                    .putStringSet("ManagedBySender", set)
+                    .putStringSet(PERSISTENCE_KEY, set)
                     .apply()
         }
     }
@@ -82,7 +84,7 @@ internal class QueueMemento @Inject constructor(context: Context,
 
     suspend fun restoreTasks(eventProcessor: EventSenderProcessor) {
         // events should be restarted in correct order
-        storage.getStringSet("ManagedBySender", null)?.let { pending ->
+        storage.getStringSet(PERSISTENCE_KEY, null)?.let { pending ->
             Timber.d("## Send - Recovering unsent events $pending")
             pending.mapNotNull { tryOrNull { TaskInfo.map(it) } }
         }

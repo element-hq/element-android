@@ -36,6 +36,8 @@ interface RegistrationWizard {
 
     suspend fun checkIfEmailHasBeenValidated(delayMillis: Long): RegistrationResult
 
+    suspend fun registrationAvailable(userName: String): RegistrationAvailability
+
     val currentThreePid: String?
 
     // True when login and password has been sent with success to the homeserver

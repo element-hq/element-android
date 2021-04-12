@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
@@ -54,6 +55,7 @@ import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
@@ -350,10 +352,11 @@ class RoomMemberProfileFragment @Inject constructor(
                         } else {
                             newOverrideColorSpecs.remove(userId)
                         }
-                        session.updateAccountData(
-                                type = UserAccountDataTypes.TYPE_OVERRIDE_COLORS,
-                                content = newOverrideColorSpecs
-                        )
+                        viewModel.viewModelScope.launch {
+                            session.updateAccountData(
+                                    type = UserAccountDataTypes.TYPE_OVERRIDE_COLORS,
+                                    content = newOverrideColorSpecs)
+                        }
                         invalidate()
                     }
                 }

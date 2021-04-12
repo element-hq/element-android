@@ -22,4 +22,8 @@ interface ItemWithEvents {
      * Will generally get only one, but it handles the merged items.
      */
     fun getEventIds(): List<String>
+
+    fun canAppendReadMarker(): Boolean = true
+
+    fun isVisible(): Boolean = true
 }

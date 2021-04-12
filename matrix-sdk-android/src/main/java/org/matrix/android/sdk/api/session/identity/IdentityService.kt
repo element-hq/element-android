@@ -16,9 +16,6 @@
 
 package org.matrix.android.sdk.api.session.identity
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
-
 /**
  * Provides access to the identity server configuration and services identity server can provide
  */
@@ -40,55 +37,55 @@ interface IdentityService {
      * See https://matrix.org/docs/spec/identity_service/latest#status-check
      * RiotX SDK only supports identity server API v2
      */
-    fun isValidIdentityServer(url: String, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun isValidIdentityServer(url: String)
 
     /**
      * Update the identity server url.
      * If successful, any previous identity server will be disconnected.
      * In case of error, any previous identity server will remain configured.
      * @param url the new url.
-     * @param callback will notify the user if change is successful. The String will be the final url of the identity server.
+     * @return The String will be the final url of the identity server.
      * The SDK can prepend "https://" for instance.
      */
-    fun setNewIdentityServer(url: String, callback: MatrixCallback<String>): Cancelable
+    suspend fun setNewIdentityServer(url: String): String
 
     /**
      * Disconnect (logout) from the current identity server
      */
-    fun disconnect(callback: MatrixCallback<Unit>): Cancelable
+    suspend fun disconnect()
 
     /**
      * This will ask the identity server to send an email or an SMS to let the user confirm he owns the ThreePid
      */
-    fun startBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun startBindThreePid(threePid: ThreePid)
 
     /**
      * This will cancel a pending binding of threePid.
      */
-    fun cancelBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun cancelBindThreePid(threePid: ThreePid)
 
     /**
      * This will ask the identity server to send an new email or a new SMS to let the user confirm he owns the ThreePid
      */
-    fun sendAgainValidationCode(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun sendAgainValidationCode(threePid: ThreePid)
 
     /**
      * Submit the code that the identity server has sent to the user (in email or SMS)
      * Once successful, you will have to call [finalizeBindThreePid]
      * @param code the code sent to the user
      */
-    fun submitValidationToken(threePid: ThreePid, code: String, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun submitValidationToken(threePid: ThreePid, code: String)
 
     /**
      * This will perform the actual association of ThreePid and Matrix account
      */
-    fun finalizeBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun finalizeBindThreePid(threePid: ThreePid)
 
     /**
      * Unbind a threePid
      * The request will actually be done on the homeserver
      */
-    fun unbindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun unbindThreePid(threePid: ThreePid)
 
     /**
      * Search MatrixId of users providing email and phone numbers
@@ -96,7 +93,7 @@ interface IdentityService {
      * Application has to explicitly ask for the user consent, and the answer can be stored using [setUserConsent]
      * Please see https://support.google.com/googleplay/android-developer/answer/9888076?hl=en for more details.
      */
-    fun lookUp(threePids: List<ThreePid>, callback: MatrixCallback<List<FoundThreePid>>): Cancelable
+    suspend fun lookUp(threePids: List<ThreePid>): List<FoundThreePid>
 
     /**
      * Return the current user consent for the current identity server, which has been stored using [setUserConsent].
@@ -120,9 +117,9 @@ interface IdentityService {
      * A lookup will be performed, but also pending binding state will be restored
      *
      * @param threePids the list of threePid the user owns (retrieved form the homeserver)
-     * @param callback onSuccess will be called with a map of ThreePid -> SharedState
+     * @return a map of ThreePid -> SharedState
      */
-    fun getShareStatus(threePids: List<ThreePid>, callback: MatrixCallback<Map<ThreePid, SharedState>>): Cancelable
+    suspend fun getShareStatus(threePids: List<ThreePid>): Map<ThreePid, SharedState>
 
     fun addListener(listener: IdentityServiceListener)
     fun removeListener(listener: IdentityServiceListener)

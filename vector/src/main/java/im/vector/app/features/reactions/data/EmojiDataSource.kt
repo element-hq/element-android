@@ -16,6 +16,8 @@
 package im.vector.app.features.reactions.data
 
 import android.content.res.Resources
+import android.graphics.Paint
+import androidx.core.graphics.PaintCompat
 import com.squareup.moshi.Moshi
 import im.vector.app.R
 import javax.inject.Inject
@@ -25,6 +27,7 @@ import javax.inject.Singleton
 class EmojiDataSource @Inject constructor(
         resources: Resources
 ) {
+    private val paint = Paint()
     val rawData = resources.openRawResource(R.raw.emoji_picker_datasource)
             .use { input ->
                 Moshi.Builder()
@@ -34,17 +37,31 @@ class EmojiDataSource @Inject constructor(
             }
             ?.let { parsedRawData ->
                 // Add key as a keyword, it will solve the issue that ":tada" is not available in completion
+                // Only add emojis to emojis/categories that can be rendered by the system
                 parsedRawData.copy(
                         emojis = mutableMapOf<String, EmojiItem>().apply {
                             parsedRawData.emojis.keys.forEach { key ->
                                 val origin = parsedRawData.emojis[key] ?: return@forEach
 
                                 // Do not add keys containing '_'
-                                if (origin.keywords.contains(key) || key.contains("_")) {
-                                    put(key, origin)
-                                } else {
-                                    put(key, origin.copy(keywords = origin.keywords + key))
+                                if (isEmojiRenderable(origin.emoji)) {
+                                    if (origin.keywords.contains(key) || key.contains("_")) {
+                                        put(key, origin)
+                                    } else {
+                                        put(key, origin.copy(keywords = origin.keywords + key))
+                                    }
                                 }
+                            }
+                        },
+                        categories = mutableListOf<EmojiCategory>().apply {
+                            parsedRawData.categories.forEach { entry ->
+                                add(EmojiCategory(entry.id, entry.name, mutableListOf<String>().apply {
+                                    entry.emojis.forEach { e ->
+                                        if (isEmojiRenderable(parsedRawData.emojis[e]!!.emoji)) {
+                                            add(e)
+                                        }
+                                    }
+                                }))
                             }
                         }
                 )
@@ -52,6 +69,10 @@ class EmojiDataSource @Inject constructor(
             ?: EmojiData(emptyList(), emptyMap(), emptyMap())
 
     private val quickReactions = mutableListOf<EmojiItem>()
+
+    private fun isEmojiRenderable(emoji: String): Boolean {
+        return PaintCompat.hasGlyph(paint, emoji)
+    }
 
     fun filterWith(query: String): List<EmojiItem> {
         val words = query.split("\\s".toRegex())
@@ -79,12 +100,12 @@ class EmojiDataSource @Inject constructor(
     fun getQuickReactions(): List<EmojiItem> {
         if (quickReactions.isEmpty()) {
             listOf(
-                    "+1", // 👍
-                    "-1", // 👎
-                    "grinning", // 😄
-                    "tada", // 🎉
-                    "confused", // 😕
-                    "heart", // ❤️
+                    "thumbs-up", // 👍
+                    "thumbs-down", // 👎
+                    "grinning-face-with-smiling-eyes", // 😄
+                    "party-popper", // 🎉
+                    "confused-face", // 😕
+                    "red-heart", // ❤️
                     "rocket", // 🚀
                     "eyes" // 👀
             )

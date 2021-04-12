@@ -58,7 +58,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     data class ResendMessage(val eventId: String) : RoomDetailAction()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
-    data class CancelSend(val eventId: String) : RoomDetailAction()
+    data class CancelSend(val eventId: String, val force: Boolean) : RoomDetailAction()
 
     data class ReplyToOptions(val eventId: String, val optionIndex: Int, val optionValue: String) : RoomDetailAction()
 
@@ -104,4 +104,9 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     // Preview URL
     data class DoNotShowPreviewUrlFor(val eventId: String, val url: String) : RoomDetailAction()
+
+    data class ComposerFocusChange(val focused: Boolean) : RoomDetailAction()
+
+    // Failed messages
+    object RemoveAllFailedMessages : RoomDetailAction()
 }

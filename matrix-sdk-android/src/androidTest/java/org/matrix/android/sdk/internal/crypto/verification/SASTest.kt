@@ -593,16 +593,14 @@ class SASTest : InstrumentedTest {
                 requestID!!,
                 cryptoTestData.roomId,
                 bobSession.myUserId,
-                bobSession.sessionParams.deviceId!!,
-                null)
+                bobSession.sessionParams.deviceId!!)
 
         bobVerificationService.beginKeyVerificationInDMs(
                 VerificationMethod.SAS,
                 requestID!!,
                 cryptoTestData.roomId,
                 aliceSession.myUserId,
-                aliceSession.sessionParams.deviceId!!,
-                null)
+                aliceSession.sessionParams.deviceId!!)
 
         // we should reach SHOW SAS on both
         var alicePovTx: SasVerificationTransaction?

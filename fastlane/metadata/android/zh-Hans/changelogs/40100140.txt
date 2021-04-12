@@ -1,0 +1,2 @@
+此版本的主要变化：支持编辑聊天室权限，自动切换浅色/深色主题，修复大量错误。
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.0.14

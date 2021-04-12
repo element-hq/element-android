@@ -16,8 +16,10 @@
 package org.matrix.android.sdk.internal.session.notification
 
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleKind
+import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
 import org.matrix.android.sdk.api.pushrules.getActions
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
@@ -45,6 +47,7 @@ internal class DefaultPushRuleService @Inject constructor(
         private val addPushRuleTask: AddPushRuleTask,
         private val updatePushRuleActionsTask: UpdatePushRuleActionsTask,
         private val removePushRuleTask: RemovePushRuleTask,
+        private val pushRuleFinder: PushRuleFinder,
         private val taskExecutor: TaskExecutor,
         @SessionDatabase private val monarchy: Monarchy
 ) : PushRuleService {
@@ -128,6 +131,12 @@ internal class DefaultPushRuleService @Inject constructor(
         synchronized(listeners) {
             listeners.add(listener)
         }
+    }
+
+    override fun getActions(event: Event): List<Action> {
+        val rules = getPushRules(RuleScope.GLOBAL).getAllRules()
+
+        return pushRuleFinder.fulfilledBingRule(event, rules)?.getActions().orEmpty()
     }
 
 //    fun processEvents(events: List<Event>) {

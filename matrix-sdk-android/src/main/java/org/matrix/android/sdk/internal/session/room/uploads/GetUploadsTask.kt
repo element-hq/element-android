@@ -37,7 +37,6 @@ import org.matrix.android.sdk.internal.session.filter.FilterFactory
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
-import org.matrix.android.sdk.internal.session.room.timeline.PaginationResponse
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
@@ -86,8 +85,8 @@ internal class DefaultGetUploadsTask @Inject constructor(
             val since = params.since ?: tokenStore.getLastToken() ?: throw IllegalStateException("No token available")
 
             val filter = FilterFactory.createUploadsFilter(params.numberOfEvents).toJSONString()
-            val chunk = executeRequest<PaginationResponse>(globalErrorReceiver) {
-                apiCall = roomAPI.getRoomMessagesFrom(params.roomId, since, PaginationDirection.BACKWARDS.value, params.numberOfEvents, filter)
+            val chunk = executeRequest(globalErrorReceiver) {
+                roomAPI.getRoomMessagesFrom(params.roomId, since, PaginationDirection.BACKWARDS.value, params.numberOfEvents, filter)
             }
 
             result = GetUploadsResult(

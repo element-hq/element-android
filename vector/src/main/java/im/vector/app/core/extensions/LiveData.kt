@@ -39,7 +39,7 @@ inline fun <T> LiveData<LiveEvent<T>>.observeEventFirstThrottle(owner: Lifecycle
     val firstThrottler = FirstThrottler(minimumInterval)
 
     this.observe(owner, EventObserver {
-        if (firstThrottler.canHandle()) {
+        if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
             it.run(observer)
         }
     })

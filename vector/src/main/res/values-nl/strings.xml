@@ -1,5 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s heeft een afbeelding gestuurd.</string>
+
+    <string name="notice_room_invite_no_invitee">Uitnodiging van %s</string>
+    <string name="notice_room_invite">%1$s heeft %2$s uitgenodigd</string>
+    <string name="notice_room_invite_you">%1$s heeft u uitgenodigd</string>
+    <string name="notice_room_join">%1$s neemt nu deel aan het gesprek</string>
+    <string name="notice_room_leave">%1$s heeft het gesprek verlaten</string>
+    <string name="notice_room_reject">%1$s heeft de uitnodiging geweigerd</string>
+    <string name="notice_room_kick">%1$s heeft %2$s uit het gesprek verwijderd</string>
+    <string name="notice_room_unban">%1$s heeft %2$s ontbannen</string>
+    <string name="notice_room_ban">%1$s heeft %2$s verbannen</string>
+    <string name="notice_room_withdraw">%1$s heeft de uitnodiging van %2$s ingetrokken</string>
+    <string name="notice_avatar_url_changed">%1$s heeft zijn/haar avatar aangepast</string>
+    <string name="notice_display_name_set">%1$s heeft zijn/haar naam aangepast naar %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s heeft zijn/haar naam aangepast van %2$s naar %3$s</string>
+    <string name="notice_display_name_removed">%1$s heeft zijn/haar naam verwijderd (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s heeft het onderwerp veranderd naar: %2$s</string>
+    <string name="notice_room_name_changed">%1$s heeft de gespreksnaam veranderd naar: %2$s</string>
+    <string name="notice_placed_video_call">%s heeft een video-oproep gemaakt.</string>
+    <string name="notice_placed_voice_call">%s heeft een spraakoproep gemaakt.</string>
+    <string name="notice_answered_call">%s heeft de oproep beantwoord.</string>
+    <string name="notice_ended_call">%s heeft opgehangen.</string>
+    <string name="notice_made_future_room_visibility">%1$s heeft de toekomstige gespreksgeschiedenis zichtbaar gemaakt voor %2$s</string>
+    <string name="notice_room_visibility_invited">alle deelnemers aan het gesprek, vanaf het punt dat ze zijn uitgenodigd.</string>
+    <string name="notice_room_visibility_joined">alle deelnemers aan het gesprek, vanaf het punt dat ze zijn toegetreden.</string>
+    <string name="notice_room_visibility_shared">alle deelnemers aan het gesprek.</string>
+    <string name="notice_room_visibility_world_readable">iedereen.</string>
+    <string name="notice_room_visibility_unknown">onbekend (%s).</string>
+    <string name="notice_end_to_end">%1$s heeft eind-tot-eind-versleuteling aangezet (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s heeft een VoIP-vergadering aangevraagd</string>
+    <string name="notice_voip_started">VoIP-vergadering gestart</string>
+    <string name="notice_voip_finished">VoIP-vergadering gestopt</string>
+
+    <string name="notice_avatar_changed_too">(avatar is ook veranderd)</string>
+    <string name="notice_room_name_removed">%1$s heeft de gespreksnaam verwijderd</string>
+    <string name="notice_room_topic_removed">%1$s heeft het gespreksonderwerp verwijderd</string>
+    <string name="notice_profile_change_redacted">%1$s heeft zijn/haar profiel %2$s bijgewerkt</string>
+    <string name="notice_room_third_party_invite">%1$s heeft een uitnodiging naar %2$s gestuurd om het gesprek toe te treden</string>
+    <string name="notice_room_third_party_registered_invite">%1$s heeft de uitnodiging voor %2$s aanvaard</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Kan niet ontsleutelen: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Het apparaat van de afzender heeft geen sleutels voor dit bericht gestuurd.</string>
+
+    <!-- Room Screen -->
+    <string name="could_not_redact">Kon niet verwijderd worden</string>
+    <string name="unable_to_send_message">Kan bericht niet verzenden</string>
+
+    <string name="message_failed_to_upload">Uploaden van de afbeelding mislukt</string>
+
+    <!-- general errors -->
+    <string name="network_error">Netwerkfout</string>
+    <string name="matrix_error">Matrix-fout</string>
+
+    <!-- Home Screen -->
+
+    <!-- Last seen time -->
+
+    <!-- room error messages -->
+    <string name="room_error_join_failed_empty_room">Het is momenteel niet mogelijk om een leeg gesprek opnieuw toe te treden.</string>
+
+    <!-- medium friendly name -->
+    <string name="medium_email">E-mailadres</string>
+    <string name="medium_phone_number">Telefoonnummer</string>
+
+    <string name="summary_user_sent_sticker">%1$s heeft een sticker gestuurd.</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Uitnodiging van %s</string>
+    <string name="room_displayname_room_invite">Gespreksuitnodiging</string>
+    <string name="room_displayname_two_members">%1$s en %2$s</string>
+    <string name="room_displayname_empty_room">Leeg gesprek</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s en 1 andere</item>
+        <item quantity="other">%1$s en %2$d anderen</item>
+    </plurals>
+
+
+    <string name="notice_event_redacted">Bericht verwijderd</string>
+    <string name="notice_event_redacted_by">Bericht verwijderd door %1$s</string>
+    <string name="notice_event_redacted_with_reason">Bericht verwijderd [reden: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Bericht verwijderd door %1$s [reden: %2$s]</string>
+
+    <string name="initial_sync_start_importing_account">Initiële synchronisatie:
+\nAccount wordt geïmporteerd…</string>
+    <string name="initial_sync_start_importing_account_crypto">Initiële synchronisatie:
+\nCrypto wordt geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_rooms">Initiële synchronisatie:
+\nGesprekken worden geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Initiële synchronisatie:
+\nDeelgenomen gesprekken worden geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Initiële synchronisatie:
+\nUitgenodigde gesprekken worden geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Initiële synchronisatie:
+\nVerlaten gesprekken worden geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_groups">Initiële synchronisatie:
+\nGemeenschappen worden geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_data">Initiële synchronisatie:
+\nAccountgegevens worden geïmporteerd</string>
+
+    <string name="notice_room_update">%s heeft dit gesprek opgewaardeerd.</string>
+
+    <string name="event_status_sending_message">Bericht wordt verstuurd…</string>
+    <string name="clear_timeline_send_queue">Uitgaande wachtrij legen</string>
+
+    <string name="notice_room_third_party_revoked_invite">%1$s heeft de uitnodiging voor %2$s om het gesprek toe te treden ingetrokken</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Uitnodiging van %1$s. Reden: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s heeft %2$s uitgenodigd. Reden: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s heeft u uitgenodigd. Reden: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s neemt nu deel. Reden: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s is weggegaan. Reden: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s heeft de uitnodiging geweigerd. Reden: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s heeft %2$s verwijderd. Reden: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s heeft %2$s ontbannen. Reden: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s heeft %2$s verbannen. Reden: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s heeft %2$s een uitnodiging voor het gesprek gestuurd. Reden: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s heeft de uitnodiging voor %2$s ingetrokken. Reden: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s heeft de uitnodiging voor %2$s aanvaard. Reden: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s heeft de uitnodiging van %2$s ingetrokken. Reden: %3$s</string>
+
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s heeft %2$s als gespreksadres toegevoegd.</item>
+        <item quantity="other">%1$s heeft %2$s als gespreksadressen toegevoegd.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s heeft %2$s als gespreksadres verwijderd.</item>
+        <item quantity="other">%1$s heeft %3$s als gespreksadressen verwijderd.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s heeft %2$s als gespreksadres toegevoegd en %3$s verwijderd.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s heeft het hoofdadres voor dit gesprek ingesteld op %2$s.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s heeft het hoofdadres voor dit gesprek verwijderd.</string>
+
+    <string name="notice_room_guest_access_can_join">%1$s heeft gasten de toegang tot het gesprek verleend.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s heeft gasten de toegang tot het gesprek verhinderd.</string>
+
+    <string name="notice_end_to_end_ok">%1$s heeft eind-tot-eind-versleuteling ingeschakeld.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s heeft eind-tot-eind-versleuteling ingeschakeld (onbekend algoritme %2$s).</string>
     <!-- titles -->
     <string name="title_activity_home">Berichten</string>
     <string name="title_activity_room">Gesprek</string>
@@ -71,7 +213,7 @@
     <string name="local_address_book_header">Lokale contactenlijst</string>
     <string name="matrix_only_filter">Alleen Matrix-contacten</string>
     <string name="no_conversation_placeholder">Geen gesprekken</string>
-    <string name="no_contact_access_placeholder">U heeft Element geen toegang tot uw lokale contacten gegeven</string>
+    <string name="template_no_contact_access_placeholder">U heeft ${app_name} geen toegang tot uw lokale contacten gegeven</string>
     <string name="no_result_placeholder">Geen resultaten</string>
     <!-- Rooms fragment -->
     <string name="rooms_header">Gesprekken</string>
@@ -79,7 +221,7 @@
     <string name="no_room_placeholder">Geen gesprekken</string>
     <string name="no_public_room_placeholder">Geen publieke gesprekken beschikbaar</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 gebruiker</item>
+        <item quantity="one">%d gebruiker</item>
         <item quantity="other">%d gebruikers</item>
     </plurals>
     <string name="send_bug_report_include_logs">Logboek versturen</string>
@@ -211,23 +353,22 @@
     <string name="media_picker_cannot_record_video">Kan geen video opnemen"</string>
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informatie</string>
-    <string name="permissions_rationale_msg_storage">Element heeft toegang nodig tot uw mediabestanden om bijlagen te verzenden en op te slaan.
+    <string name="template_permissions_rationale_msg_storage">${app_name} heeft toegang nodig tot uw mediabestanden om bijlagen te verzenden en op te slaan.
 \n
 \nVerleen toegang op de volgende pop-up om bestanden vanaf uw telefoon te sturen.</string>
-    <string name="permissions_rationale_msg_camera">Element heeft toegang nodig tot uw camera om foto’s en video-oproepen te maken.</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} heeft toegang nodig tot uw camera om foto’s en video-oproepen te maken.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nVerleen toegang op de volgende pop-up om de oproep te maken."</string>
-    <string name="permissions_rationale_msg_record_audio">Element heeft toegang nodig tot uw microfoon om spraakoproepen te maken.</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} heeft toegang nodig tot uw microfoon om spraakoproepen te maken.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nVerleen toegang op de volgende pop-up om de oproep te maken."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element heeft toegang nodig tot uw camera en microfoon om video-oproepen te maken.
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} heeft toegang nodig tot uw camera en microfoon om video-oproepen te maken.
 \n
 \nVerleen toegang op de volgende pop-ups om de oproep te maken.</string>
-    <string name="permissions_rationale_msg_contacts">Element kan uw adresboek benaderen om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
-\nAls u het goed vindt om uw adresboek hiervoor te delen, verleen dan toegang op de volgende pop-up.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element kan uw adresboek gebruiken om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
+    <string name="template_permissions_rationale_msg_contacts">${app_name} kan uw adresboek benaderen om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers. Als u het goed vindt om uw adresboek hiervoor te delen, verleen dan toegang op de volgende pop-up.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} kan uw adresboek gebruiken om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
 \n 
 \nWilt u uw adresboek hiervoor delen\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Sorry. De actie is niet toegepast vanwege ontbrekende rechten</string>
@@ -526,7 +667,7 @@
     <string name="encryption_information_sender_device_information">Informatie over sessie van afzender</string>
     <string name="encryption_information_device_name">Publieke naam</string>
     <string name="encryption_information_name">Publieke naam</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">Sessie ID</string>
     <string name="encryption_information_device_key">Sessiesleutel</string>
     <string name="encryption_information_verification">Verificatie</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-vingerafdruk</string>
@@ -600,7 +741,7 @@
     <string name="huge">Gigantisch</string>
     <string name="light_theme">Licht thema</string>
     <string name="dark_theme">Donker thema</string>
-    <string name="black_them">Zwart thema</string>
+    <string name="black_theme">Zwart thema</string>
     <string name="notification_sync_in_progress">Bezig met synchroniseren…</string>
     <string name="notification_listening_for_events">Luisteren voor evenementen</string>
     <string name="settings_notification_ringtone">Meldingsgeluid</string>
@@ -660,27 +801,27 @@
     <string name="start_video_call_prompt_msg">Weet u zeker dat u een video-oproep wilt beginnen\?</string>
     <string name="groups_list">Groepenlijst</string>
     <plurals name="membership_changes">
-        <item quantity="one">1 verandering in lidmaatschap</item>
+        <item quantity="one">%d verandering in lidmaatschap</item>
         <item quantity="other">%d veranderingen in lidmaatschap</item>
     </plurals>
     <string name="list_members">Ledenlijst</string>
     <string name="open_chat_header">Opschrift openen</string>
     <string name="room_sync_in_progress">Synchroniseren…</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 actieve deelnemer</item>
+        <item quantity="one">%d actieve deelnemer</item>
         <item quantity="other">%d actieve deelnemers</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">1 deelnemer</item>
+        <item quantity="one">%d deelnemer</item>
         <item quantity="other">%d deelnemers</item>
     </plurals>
     <string name="room_participants_ban_prompt_msg">Weet u zeker dat u deze gebruiker uit dit gesprek wilt verbannen\?</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">1 nieuw bericht</item>
+        <item quantity="one">%d nieuw bericht</item>
         <item quantity="other">%d nieuwe berichten</item>
     </plurals>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 gesprek</item>
+        <item quantity="one">%d gesprek</item>
         <item quantity="other">%d gesprekken</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
@@ -701,16 +842,16 @@
     <string name="room_settings_invalid_group_format_dialog_title">Ongeldige gemeenschaps-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">‘%s’ is geen geldige gemeenschaps-ID</string>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="one">1 ongelezen bericht waarin u vermeld staat</item>
+        <item quantity="one">%d ongelezen bericht waarin u vermeld staat</item>
         <item quantity="other">%d ongelezen berichten waarin u vermeld staat</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="one">1 gesprek</item>
+        <item quantity="one">%d gesprek</item>
         <item quantity="other">%d gesprekken</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
     <plurals name="active_widgets">
-        <item quantity="one">1 actieve widget</item>
+        <item quantity="one">%d actieve widget</item>
         <item quantity="other">%d actieve widgets</item>
     </plurals>
     <!-- Widget Integration Manager -->
@@ -739,7 +880,7 @@
     <string name="receipt_avatar">Ontvangst-avatar</string>
     <string name="avatar">Avatar</string>
     <plurals name="notification_unread_notified_messages">
-        <item quantity="one">1 ongelezen bericht waarin u vermeld bent</item>
+        <item quantity="one">%d ongelezen bericht waarin u vermeld bent</item>
         <item quantity="other">%d ongelezen berichten waarin u vermeld bent</item>
     </plurals>
     <string name="notice_avatar">Vermeldingsavatar</string>
@@ -760,12 +901,12 @@
     <string name="settings_deactivate_account_section">Account deactiveren</string>
     <string name="settings_deactivate_my_account">Mijn account deactiveren</string>
     <string name="startup_notification_privacy_title">Meldingsprivacy</string>
-    <string name="startup_notification_privacy_message">Element kan op de achtergrond werken om uw meldingen veilig en privé te beheren. Dit beïnvloedt mogelijk het accuverbruik.</string>
+    <string name="template_startup_notification_privacy_message">${app_name} kan op de achtergrond werken om uw meldingen veilig en privé te beheren. Dit beïnvloedt mogelijk het accuverbruik.</string>
     <string name="startup_notification_privacy_button_grant">Toestemming verlenen</string>
     <string name="startup_notification_privacy_button_other">Kies een andere optie</string>
     <string name="settings_opt_in_of_analytics">Statistische gegevens (analytics) versturen</string>
-    <string name="settings_opt_in_of_analytics_summary">Element verzamelt anonieme statistische gegevens (analytics) om het voor ons mogelijk te maken om de app te verbeteren.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Schakel statistische gegevens in om ons te helpen bij het verbeteren van Element.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} verzamelt anonieme statistische gegevens (analytics) om het voor ons mogelijk te maken om de app te verbeteren.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Schakel statistische gegevens in om ons te helpen bij het verbeteren van ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, ik wil helpen!</string>
     <string name="widget_integration_missing_parameter">Er ontbreekt een vereiste parameter.</string>
     <string name="widget_integration_invalid_parameter">Er is een parameter ongeldig.</string>
@@ -786,7 +927,7 @@
     <string name="e2e_re_request_encryption_key">Beveiligingssleutels van uw sessies <u>opnieuw aanvragen</u>.</string>
     <string name="e2e_re_request_encryption_key_sent">Sleutelaanvraag verstuurd.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Aanvraag verstuurd</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Start Element op een ander apparaat dat het bericht kan ontsleutelen, zodat het de sleutels naar deze sessie kan sturen.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Start ${app_name} op een ander apparaat dat het bericht kan ontsleutelen, zodat het de sleutels naar deze sessie kan sturen.</string>
     <string name="lock_screen_hint">Typ hier…</string>
     <string name="clear">Wissen</string>
     <string name="option_send_voice">Spraakbericht versturen</string>
@@ -819,19 +960,19 @@
     <string name="missing_permissions_error">Deze actie is niet mogelijk wegens ontbrekende rechten.</string>
     <string name="system_alerts_header">Systeemmeldingen</string>
     <plurals name="format_time_s">
-        <item quantity="one">1s</item>
+        <item quantity="one">%ds</item>
         <item quantity="other">%ds</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1m</item>
+        <item quantity="one">%dm</item>
         <item quantity="other">%dm</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1u</item>
+        <item quantity="one">%du</item>
         <item quantity="other">%du</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1d</item>
+        <item quantity="one">%dd</item>
         <item quantity="other">%dd</item>
     </plurals>
     <string name="room_participants_now">nu %1$s</string>
@@ -840,16 +981,16 @@
     <string name="room_participants_invite_join_names_and">%1$s en %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
     <plurals name="room_details_selected">
-        <item quantity="one">1 geselecteerd</item>
+        <item quantity="one">%d geselecteerd</item>
         <item quantity="other">%d geselecteerd</item>
     </plurals>
     <string name="command_description_clear_scalar_token">Om Matrix-appbeheer te herstellen</string>
     <plurals name="group_members">
-        <item quantity="one">1 deelnemer</item>
+        <item quantity="one">%d deelnemer</item>
         <item quantity="other">%d deelnemers</item>
     </plurals>
     <plurals name="group_rooms">
-        <item quantity="one">1 gesprek</item>
+        <item quantity="one">%d gesprek</item>
         <item quantity="other">%d gesprekken</item>
     </plurals>
     <string name="resource_limit_exceeded_title">Bronlimiet overschreden</string>
@@ -862,12 +1003,11 @@
     <string name="resource_limit_soft_contact">Gelieve %s om deze limiet te verhogen.</string>
     <string name="resource_limit_hard_contact">Gelieve %s om deze dienst te blijven gebruiken.</string>
     <string name="dialog_title_error">Foutmelding</string>
-    <string name="status_theme">Status.im-thema</string>
     <string name="call_anyway">Toch bellen</string>
     <string name="accept">Aanvaarden</string>
     <string name="auth_accept_policies">Gelieve het beleid van deze thuisserver te lezen en aanvaarden:</string>
     <string name="settings_call_category">Oproepen</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Gebruik de standaardbeltoon van Element voor inkomende oproepen</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Gebruik de standaardbeltoon van ${app_name} voor inkomende oproepen</string>
     <string name="settings_call_ringtone_title">Beltoon voor inkomende oproepen</string>
     <string name="settings_call_ringtone_dialog_title">Selecteer beltoon voor oproepen:</string>
     <string name="room_participants_action_kick">Eruit sturen</string>
@@ -929,8 +1069,8 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Inschakelen</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sessie-instellingen.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Meldingen zijn ingeschakeld voor deze sessie.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Meldingen zijn niet ingeschakeld voor deze sessie. 
-\nGelieve de Element-instellingen te controleren.</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Meldingen zijn niet ingeschakeld voor deze sessie.
+\nGelieve de ${app_name}-instellingen te controleren.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Inschakelen</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Aangepaste instellingen.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Sommige soorten berichten zijn stil (ze geven een geluidsloze melding).</string>
@@ -939,7 +1079,7 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Instellingen controleren</string>
     <string name="settings_troubleshoot_test_play_services_title">Play-diensten controleren</string>
     <string name="settings_troubleshoot_test_play_services_success">De APK van Google Play Services is beschikbaar en up-to-date.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element maakt gebruikt van Google Play Services om pushberichten af te leveren, maar dit lijkt niet juist geconfigureerd te zijn:
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} maakt gebruikt van Google Play Services om pushberichten af te leveren, maar dit lijkt niet juist geconfigureerd te zijn:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Play-diensten herstellen</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase-bewijs</string>
@@ -947,12 +1087,12 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Het FCM-bewijs is niet opgehaald:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nDeze fout is onafhankelijk van Element. Volgens Google betekent deze fout dat het apparaat te veel apps heeft geregistreerd met FCM. De fout treedt enkel op ingeval er een enorm aantal apps is, dus zou dit de gemiddelde gebruiker niet mogen hinderen.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nDeze fout is onafhankelijk van Element. Ze kan verschillende oorzaken hebben. Misschien werkt het als u het later opnieuw probeert. U kunt ook controleren of het gegevensverbruik van Google Play Services niet wordt beperkt in de systeeminstellingen, of dat de klok van uw apparaat wel juist staat, of dat het misschien aan een aangepaste ROM ligt.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nDeze fout is onafhankelijk van Element. Er is geen Google-account verbonden met de telefoon. Open het accountbeheer en voeg er een Google-account toe.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nDeze fout is onafhankelijk van ${app_name}. Volgens Google betekent deze fout dat het apparaat te veel apps heeft geregistreerd met FCM. De fout treedt enkel op ingeval er een enorm aantal apps is, dus zou dit de gemiddelde gebruiker niet mogen hinderen.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nDeze fout is onafhankelijk van ${app_name}. Ze kan verschillende oorzaken hebben. Misschien werkt het als u het later opnieuw probeert. U kunt ook controleren of het gegevensverbruik van Google Play Services niet wordt beperkt in de systeeminstellingen, of dat de klok van uw apparaat wel juist staat, of dat het misschien aan een aangepaste ROM ligt.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nDeze fout is onafhankelijk van ${app_name}. Er is geen Google-account verbonden met de telefoon. Open het accountbeheer en voeg er een Google-account toe.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Account toevoegen</string>
     <string name="settings_troubleshoot_test_token_registration_title">Bewijsregistratie</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM-bewijs geregistreerd bij thuisserver.</string>
@@ -968,17 +1108,17 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Dienst is niet herstart</string>
     <string name="settings_troubleshoot_test_service_boot_title">Starten bij opstarten van apparaat</string>
     <string name="settings_troubleshoot_test_service_boot_success">De dienst zal starten wanneer het apparaat wordt herstart.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">De dienst zal niet starten wanneer het apparaat wordt herstart en u zult geen meldingen ontvangen tot u Element hebt geopend.</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">De dienst zal niet starten wanneer het apparaat wordt herstart en u zult geen meldingen ontvangen tot u ${app_name} hebt geopend.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Starten bij opstarten inschakelen</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Achtergrondbeperkingen controleren</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Achtergrondbeperkingen zijn uitgeschakeld voor Element. Deze test dient uitgevoerd te worden met een mobiele verbinding (geen wifi).
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Achtergrondbeperkingen zijn uitgeschakeld voor ${app_name}. Deze test dient uitgevoerd te worden met een mobiele verbinding (geen wifi).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Achtergrondbeperkingen zijn ingeschakeld voor Element.
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Achtergrondbeperkingen zijn ingeschakeld voor ${app_name}.
 \nAl wat de app probeert te doen zal in de achtergrond hevig beperkt worden; dit kan het correct functioneren van meldingen beïnvloeden.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Beperkingen uitschakelen</string>
     <string name="settings_troubleshoot_test_battery_title">Accuoptimalisatie</string>
-    <string name="settings_troubleshoot_test_battery_success">Element wordt niet beperkt door accuoptimalisatie.</string>
+    <string name="template_settings_troubleshoot_test_battery_success">${app_name} wordt niet beperkt door accuoptimalisatie.</string>
     <string name="settings_troubleshoot_test_battery_failed">Als een gebruiker een apparaat los van de oplader een tijd laat stilliggen, met het scherm uitgeschakeld, gaat het apparaat in slaapmodus. Dit verhindert apps de toegang tot het netwerk, en stelt hun taken, synchronisaties en standaardalarmen uit.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Optimalisatie negeren</string>
     <string name="settings_notification_privacy_no_background_sync">De app heeft <b>geen</b> verbinding met de homeserver nodig in de achtergrond, dit zou het gebruik van de batterij moeten verlagen</string>
@@ -990,8 +1130,8 @@
     <string name="settings_send_message_with_enter">Berichten versturen met Enter</string>
     <string name="settings_send_message_with_enter_summary">De Enter-knop van het toetsenbord zal berichten versturen in plaats van een regeleinde in te voegen</string>
     <string name="startup_notification_fdroid_battery_optim_title">Achtergrondverbinding</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element heeft een achtergrondverbinding met lage impact nodig om betrouwbare meldingen te kunnen hebben.
-\nOp het volgende scherm zult u gevraagd worden om Element toestemming te verlenen om altijd in de achtergrond te kunnen draaien, gelieve deze toestemming te verlenen.</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} heeft een achtergrondverbinding met lage impact nodig om betrouwbare meldingen te kunnen hebben.
+\nOp het volgende scherm zult u gevraagd worden om ${app_name} toestemming te verlenen om altijd in de achtergrond te kunnen draaien, gelieve deze toestemming te verlenen.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Toestemming verlenen</string>
     <string name="settings_data_save_mode_summary">Databesparingsmodus past een specifieke filter toe zodat aanwezigheidsupdates en typmeldingen weggefilterd worden.</string>
     <string name="account_email_error">Er is een fout opgetreden bij het verifiëren van uw e-mailadres.</string>
@@ -1011,7 +1151,7 @@
     <string name="encryption_message_recovery">Herstel van versleutelde berichten</string>
     <string name="encryption_settings_manage_message_recovery_summary">Sleutelback-up beheren</string>
     <plurals name="notification_compat_summary_line_for_room">
-        <item quantity="one">%1$s: 1 bericht</item>
+        <item quantity="one">%1$s: %2$d bericht</item>
         <item quantity="other">%1$s: %2$d berichten</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
@@ -1050,7 +1190,7 @@
     <string name="passphrase_passphrase_does_not_match">Wachtwoorden komen niet overeen</string>
     <string name="passphrase_empty_error_message">Voer een wachtwoord in</string>
     <string name="passphrase_passphrase_too_weak">Wachtwoord is te zwak</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Verwijder het wachtwoord als u wilt dat Element een herstelsleutel genereert.</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">Verwijder het wachtwoord als u wilt dat ${app_name} een herstelsleutel genereert.</string>
     <string name="keys_backup_no_session_error">Geen Matrix-sessie beschikbaar</string>
     <string name="keys_backup_setup_step1_title">Verlies nooit uw versleutelde berichten</string>
     <string name="keys_backup_setup_step1_description">Berichten in versleutelde gesprekken worden beveiligd met eind-tot-eind-versleuteling. Enkel de ontvanger(s) en u hebben de sleutels om deze berichten te lezen. 
@@ -1137,7 +1277,7 @@
     <string name="new_recovery_method_popup_title">Nieuwe sleutelback-up</string>
     <string name="new_recovery_method_popup_description">Er is een nieuwe sleutelback-up voor versleutelde berichten gedetecteerd.
 \n
-\nAls u deze nieuwe herstelmethode niet heeft ingesteld, is het mogelijk dat er een aanvaller toegang tot uw account probeert te verkrijgen. Wijzig onmiddellijk uw accountwachtwoord en stel een nieuwe herstelmethode in in de instellingen.</string>
+\nAls u deze nieuwe herstelmethode niet heeft ingesteld, is het mogelijk dat er een aanvaller toegang tot uw account probeert te verkrijgen. Wijzig onmiddellijk uw accountwachtwoord en stel in de instellingen een nieuwe herstelmethode in.</string>
     <string name="new_recovery_method_popup_was_me">Ik was het</string>
     <string name="keys_backup_banner_setup_line1">Verlies nooit uw versleutelde berichten</string>
     <string name="keys_backup_banner_setup_line2">Begin sleutelback-up te gebruiken</string>
@@ -1156,7 +1296,7 @@
     <string name="keys_backup_info_title_signature">Ondertekening</string>
     <string name="autodiscover_invalid_response">Ongeldig thuisserverontdekkingsantwoord</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveropties automatisch aanvullen</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element heeft een aangepaste serverconfiguratie gedetecteerd voor uw gebruikers-ID-domein ‘%1$s’:
+    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} heeft een aangepaste serverconfiguratie gedetecteerd voor uw gebruikers-ID-domein ‘%1$s’:
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Configuratie gebruiken</string>
     <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 6.0)</string>
@@ -1232,13 +1372,13 @@
     <string name="settings_call_ringtone_use_default_stun_sum">Zal %s gebruiken om te assisteren in het geval dat uw thuisserver er niet over beschikt (uw IP-adres zal tijdens een oproep gedeeld worden)</string>
     <string name="invite_no_identity_server_error">Voeg een identiteitsserver toe in de instellingen om dit te doen.</string>
     <string name="settings_add_3pid_confirm_password_title">Bevestig uw wachtwoord</string>
-    <string name="settings_add_3pid_flow_not_supported">U kunt dit niet doen vanaf de mobiele Element</string>
-    <string name="settings_background_fdroid_sync_mode">Synchroniseren op de achtergrond (experimenteel)</string>
+    <string name="template_settings_add_3pid_flow_not_supported">U kunt dit niet doen vanaf de mobiele ${app_name}</string>
+    <string name="settings_background_fdroid_sync_mode">Synchroniseren op de achtergrond</string>
     <string name="settings_background_fdroid_sync_mode_battery">Geoptimaliseerd voor batterij</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element zal op een batterijzuinige manier synchroniseren op de achtergrond.
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} zal op een batterijzuinige manier synchroniseren op de achtergrond.
 \nAfhankelijk van de staat van uw apparaat kan het besturingssysteem de synchronisatie uitstellen.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Geoptimaliseerd voor snelheid</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element zal periodiek op de achtergrond synchroniseren (configureerbaar).
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} zal periodiek op de achtergrond synchroniseren (configureerbaar).
 \nDit heeft een negatieve impact op uw batterij- en datagebruik. Er zal een melding getoond worden ter informatie.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Geen achtergrondssynchronisatie</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">U zal geen melding van berichten ontvangen als de app zich in de achtergrond bevindt.</string>
@@ -1301,9 +1441,9 @@
     <string name="room_list_catchup_welcome_title">Welkom thuis!</string>
     <string name="room_list_catchup_welcome_body">Ongelezen berichten inhalen</string>
     <string name="room_list_people_empty_title">Gesprekken</string>
-    <string name="room_list_people_empty_body">Je directe gesprekken zullen hier worden weergegeven</string>
+    <string name="room_list_people_empty_body">Je directe gesprekken zullen hier worden weergegeven. Gebruik de + knop om een gesprek te starten.</string>
     <string name="room_list_rooms_empty_title">Kamers</string>
-    <string name="room_list_rooms_empty_body">Je kamers zullen hier worden weergegeven</string>
+    <string name="room_list_rooms_empty_body">Je kamers zullen hier worden weergegeven. Gebruik de + knop rechtsonder om een bestaande kamer te openen of een nieuwe aan te maken.</string>
     <string name="title_activity_emoji_reaction_picker">Reacties</string>
     <string name="reactions_agree">Bevestigen</string>
     <string name="reactions_like">Leuk vinden</string>
@@ -1321,7 +1461,7 @@
     <string name="please_wait">Even wachten…</string>
     <string name="group_all_communities">Alle Gemeenschappen</string>
     <string name="room_preview_no_preview">Dit gesprek kan niet worden voorvertoond</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">De voorvertoning van wereld-leesbare gesprekken zijn nog niet ondersteund in Element</string>
+    <string name="template_room_preview_world_readable_room_not_supported_yet">De voorvertoning van wereld-leesbare gesprekken zijn nog niet ondersteund in ${app_name}</string>
     <string name="fab_menu_create_room">Gesprekken</string>
     <string name="fab_menu_create_chat">Directe Berichten</string>
     <string name="create_room_title">Nieuw Gesprek</string>

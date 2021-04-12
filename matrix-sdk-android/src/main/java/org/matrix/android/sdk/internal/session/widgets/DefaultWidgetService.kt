@@ -17,14 +17,12 @@
 package org.matrix.android.sdk.internal.session.widgets
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.session.widgets.WidgetService
 import org.matrix.android.sdk.api.session.widgets.WidgetURLFormatter
 import org.matrix.android.sdk.api.session.widgets.model.Widget
-import org.matrix.android.sdk.api.util.Cancelable
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -77,21 +75,19 @@ internal class DefaultWidgetService @Inject constructor(private val widgetManage
         return widgetManager.getUserWidgets(widgetTypes, excludedTypes)
     }
 
-    override fun createRoomWidget(
+    override suspend fun createRoomWidget(
             roomId: String,
             widgetId: String,
-            content: Content,
-            callback: MatrixCallback<Widget>
-    ): Cancelable {
-        return widgetManager.createRoomWidget(roomId, widgetId, content, callback)
+            content: Content
+    ): Widget {
+        return widgetManager.createRoomWidget(roomId, widgetId, content)
     }
 
-    override fun destroyRoomWidget(
+    override suspend fun destroyRoomWidget(
             roomId: String,
-            widgetId: String,
-            callback: MatrixCallback<Unit>
-    ): Cancelable {
-        return widgetManager.destroyRoomWidget(roomId, widgetId, callback)
+            widgetId: String
+    ) {
+        return widgetManager.destroyRoomWidget(roomId, widgetId)
     }
 
     override fun hasPermissionsToHandleWidgets(roomId: String): Boolean {

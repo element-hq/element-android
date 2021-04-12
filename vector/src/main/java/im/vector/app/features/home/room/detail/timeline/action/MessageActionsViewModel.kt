@@ -18,11 +18,13 @@ package im.vector.app.features.home.room.detail.timeline.action
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import dagger.assisted.AssistedFactory
+import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.Lazy
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.canReact
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -64,17 +66,19 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           private val htmlCompressor: VectorHtmlCompressor,
                                                           private val session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter,
+                                                          private val errorFormatter: ErrorFormatter,
                                                           private val stringProvider: StringProvider,
                                                           private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
                                                           private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
-    private val eventId = initialState.eventId
     private val informationData = initialState.informationData
     private val room = session.getRoom(initialState.roomId)
     private val pillsPostProcessor by lazy {
         pillsPostProcessorFactory.create(initialState.roomId)
     }
+
+    private val eventIdObservable = BehaviorRelay.createDefault(initialState.eventId)
 
     @AssistedFactory
     interface Factory {
@@ -130,7 +134,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun observeEvent() {
         if (room == null) return
         room.rx()
-                .liveTimelineEvent(eventId)
+                .liveTimelineEvent(initialState.eventId)
                 .unwrap()
                 .execute {
                     copy(timelineEvent = it)
@@ -139,12 +143,15 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeReactions() {
         if (room == null) return
-        room.rx()
-                .liveAnnotationSummary(eventId)
-                .map { annotations ->
-                    EmojiDataSource.quickEmojis.map { emoji ->
-                        ToggleState(emoji, annotations.getOrNull()?.reactionsSummary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
-                    }
+        eventIdObservable
+                .switchMap { eventId ->
+                    room.rx()
+                            .liveAnnotationSummary(eventId)
+                            .map { annotations ->
+                                EmojiDataSource.quickEmojis.map { emoji ->
+                                    ToggleState(emoji, annotations.getOrNull()?.reactionsSummary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
+                                }
+                            }
                 }
                 .execute {
                     copy(quickStates = it)
@@ -154,8 +161,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun observeTimelineEventState() {
         selectSubscribe(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
             val nonNullTimelineEvent = timelineEvent() ?: return@selectSubscribe
+            eventIdObservable.accept(nonNullTimelineEvent.eventId)
             setState {
                 copy(
+                        eventId = nonNullTimelineEvent.eventId,
                         messageBody = computeMessageBody(nonNullTimelineEvent),
                         actions = actionsForEvent(nonNullTimelineEvent, permissions)
                 )
@@ -164,42 +173,46 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence {
-        if (timelineEvent.root.isRedacted()) {
-            return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
-        }
+        return try {
+            if (timelineEvent.root.isRedacted()) {
+                noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
+            } else {
+                when (timelineEvent.root.getClearType()) {
+                    EventType.MESSAGE,
+                    EventType.STICKER     -> {
+                        val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
+                        if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
+                            val html = messageContent.formattedBody
+                                    ?.takeIf { it.isNotBlank() }
+                                    ?.let { htmlCompressor.compress(it) }
+                                    ?: messageContent.body
 
-        return when (timelineEvent.root.getClearType()) {
-            EventType.MESSAGE,
-            EventType.STICKER -> {
-                val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
-                if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
-                    val html = messageContent.formattedBody
-                            ?.takeIf { it.isNotBlank() }
-                            ?.let { htmlCompressor.compress(it) }
-                            ?: messageContent.body
-
-                    eventHtmlRenderer.get().render(html, pillsPostProcessor)
-                } else if (messageContent is MessageVerificationRequestContent) {
-                    stringProvider.getString(R.string.verification_request)
-                } else {
-                    messageContent?.body
+                            eventHtmlRenderer.get().render(html, pillsPostProcessor)
+                        } else if (messageContent is MessageVerificationRequestContent) {
+                            stringProvider.getString(R.string.verification_request)
+                        } else {
+                            messageContent?.body
+                        }
+                    }
+                    EventType.STATE_ROOM_NAME,
+                    EventType.STATE_ROOM_TOPIC,
+                    EventType.STATE_ROOM_AVATAR,
+                    EventType.STATE_ROOM_MEMBER,
+                    EventType.STATE_ROOM_ALIASES,
+                    EventType.STATE_ROOM_CANONICAL_ALIAS,
+                    EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                    EventType.STATE_ROOM_SERVER_ACL,
+                    EventType.CALL_INVITE,
+                    EventType.CALL_CANDIDATES,
+                    EventType.CALL_HANGUP,
+                    EventType.CALL_ANSWER -> {
+                        noticeEventFormatter.format(timelineEvent)
+                    }
+                    else                  -> null
                 }
             }
-            EventType.STATE_ROOM_NAME,
-            EventType.STATE_ROOM_TOPIC,
-            EventType.STATE_ROOM_AVATAR,
-            EventType.STATE_ROOM_MEMBER,
-            EventType.STATE_ROOM_ALIASES,
-            EventType.STATE_ROOM_CANONICAL_ALIAS,
-            EventType.STATE_ROOM_HISTORY_VISIBILITY,
-            EventType.STATE_ROOM_SERVER_ACL,
-            EventType.CALL_INVITE,
-            EventType.CALL_CANDIDATES,
-            EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER -> {
-                noticeEventFormatter.format(timelineEvent)
-            }
-            else                  -> null
+        } catch (failure: Throwable) {
+            errorFormatter.toHumanReadable(failure)
         } ?: ""
     }
 
@@ -229,99 +242,22 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun actionsForEvent(timelineEvent: TimelineEvent, actionPermissions: ActionPermissions): List<EventSharedAction> {
-        val messageContent: MessageContent? = timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                ?: timelineEvent.root.getClearContent().toModel()
+        val messageContent = timelineEvent.getLastMessageContent()
         val msgType = messageContent?.msgType
 
         return arrayListOf<EventSharedAction>().apply {
-            if (timelineEvent.root.sendState.hasFailed()) {
-                if (canRetry(timelineEvent, actionPermissions)) {
-                    add(EventSharedAction.Resend(eventId))
+            when {
+                timelineEvent.root.sendState.hasFailed()         -> {
+                    addActionsForFailedState(timelineEvent, actionPermissions, messageContent, msgType)
                 }
-                add(EventSharedAction.Remove(eventId))
-                if (vectorPreferences.developerMode()) {
-                    addViewSourceItems(timelineEvent)
+                timelineEvent.root.sendState.isSending()         -> {
+                    addActionsForSendingState(timelineEvent)
                 }
-            } else if (timelineEvent.root.sendState.isSending()) {
-                // TODO is uploading attachment?
-                if (canCancel(timelineEvent)) {
-                    add(EventSharedAction.Cancel(eventId))
+                timelineEvent.root.sendState == SendState.SYNCED -> {
+                    addActionsForSyncedState(timelineEvent, actionPermissions, messageContent, msgType)
                 }
-            } else if (timelineEvent.root.sendState == SendState.SYNCED) {
-                if (!timelineEvent.root.isRedacted()) {
-                    if (canReply(timelineEvent, messageContent, actionPermissions)) {
-                        add(EventSharedAction.Reply(eventId))
-                    }
-
-                    if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
-                        add(EventSharedAction.Edit(eventId))
-                    }
-
-                    if (canRedact(timelineEvent, actionPermissions)) {
-                        add(EventSharedAction.Redact(eventId, askForReason = informationData.senderId != session.myUserId))
-                    }
-
-                    if (canCopy(msgType)) {
-                        // TODO copy images? html? see ClipBoard
-                        add(EventSharedAction.Copy(messageContent!!.body))
-                    }
-
-                    if (timelineEvent.canReact() && actionPermissions.canReact) {
-                        add(EventSharedAction.AddReaction(eventId))
-                    }
-
-                    if (canQuote(timelineEvent, messageContent, actionPermissions)) {
-                        add(EventSharedAction.Quote(eventId))
-                    }
-
-                    if (canViewReactions(timelineEvent)) {
-                        add(EventSharedAction.ViewReactions(informationData))
-                    }
-
-                    if (timelineEvent.hasBeenEdited()) {
-                        add(EventSharedAction.ViewEditHistory(informationData))
-                    }
-
-                    if (canShare(msgType)) {
-                        add(EventSharedAction.Share(timelineEvent.eventId, messageContent!!))
-                    }
-
-                    if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
-                        add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
-                    }
-
-                    if (timelineEvent.root.sendState == SendState.SENT) {
-                        // TODO Can be redacted
-
-                        // TODO sent by me or sufficient power level
-                    }
-                }
-
-                if (vectorPreferences.developerMode()) {
-                    if (timelineEvent.isEncrypted() && timelineEvent.root.mCryptoError != null) {
-                        val keysBackupService = session.cryptoService().keysBackupService()
-                        if (keysBackupService.state == KeysBackupState.NotTrusted
-                                || (keysBackupService.state == KeysBackupState.ReadyToBackUp
-                                        && keysBackupService.canRestoreKeys())
-                        ) {
-                            add(EventSharedAction.UseKeyBackup)
-                        }
-                        if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1
-                                || timelineEvent.senderInfo.userId != session.myUserId) {
-                            add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
-                        }
-                    }
-                    addViewSourceItems(timelineEvent)
-                }
-                add(EventSharedAction.CopyPermalink(eventId))
-                if (session.myUserId != timelineEvent.root.senderId) {
-                    // not sent by me
-                    if (timelineEvent.root.getClearType() == EventType.MESSAGE) {
-                        add(EventSharedAction.ReportContent(eventId, timelineEvent.root.senderId))
-                    }
-
-                    add(EventSharedAction.Separator)
-                    add(EventSharedAction.IgnoreUser(timelineEvent.root.senderId))
+                timelineEvent.root.sendState == SendState.SENT   -> {
+                    addActionsForSentNotSyncedState(timelineEvent)
                 }
             }
         }
@@ -333,6 +269,122 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
                     ?: stringProvider.getString(R.string.encryption_information_decryption_error)
             add(EventSharedAction.ViewDecryptedSource(decryptedContent))
+        }
+    }
+
+    private fun ArrayList<EventSharedAction>.addActionsForFailedState(timelineEvent: TimelineEvent,
+                                                                      actionPermissions: ActionPermissions,
+                                                                      messageContent: MessageContent?,
+                                                                      msgType: String?) {
+        val eventId = timelineEvent.eventId
+        if (canRetry(timelineEvent, actionPermissions)) {
+            add(EventSharedAction.Resend(eventId))
+        }
+        add(EventSharedAction.Remove(eventId))
+        if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+            add(EventSharedAction.Edit(eventId))
+        }
+        if (canCopy(msgType)) {
+            // TODO copy images? html? see ClipBoard
+            add(EventSharedAction.Copy(messageContent!!.body))
+        }
+        if (vectorPreferences.developerMode()) {
+            addViewSourceItems(timelineEvent)
+        }
+    }
+
+    private fun ArrayList<EventSharedAction>.addActionsForSendingState(timelineEvent: TimelineEvent) {
+        // TODO is uploading attachment?
+        if (canCancel(timelineEvent)) {
+            add(EventSharedAction.Cancel(timelineEvent.eventId, false))
+        }
+    }
+
+    private fun ArrayList<EventSharedAction>.addActionsForSentNotSyncedState(timelineEvent: TimelineEvent) {
+        // If sent but not synced (synapse stuck at bottom bug)
+        // Still offer action to cancel (will only remove local echo)
+        timelineEvent.root.eventId?.let {
+            add(EventSharedAction.Cancel(it, true))
+        }
+
+        // TODO Can be redacted
+
+        // TODO sent by me or sufficient power level
+    }
+
+    private fun ArrayList<EventSharedAction>.addActionsForSyncedState(timelineEvent: TimelineEvent,
+                                                                      actionPermissions: ActionPermissions,
+                                                                      messageContent: MessageContent?,
+                                                                      msgType: String?) {
+        val eventId = timelineEvent.eventId
+        if (!timelineEvent.root.isRedacted()) {
+            if (canReply(timelineEvent, messageContent, actionPermissions)) {
+                add(EventSharedAction.Reply(eventId))
+            }
+
+            if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+                add(EventSharedAction.Edit(eventId))
+            }
+
+            if (canRedact(timelineEvent, actionPermissions)) {
+                add(EventSharedAction.Redact(eventId, askForReason = informationData.senderId != session.myUserId))
+            }
+
+            if (canCopy(msgType)) {
+                // TODO copy images? html? see ClipBoard
+                add(EventSharedAction.Copy(messageContent!!.body))
+            }
+
+            if (timelineEvent.canReact() && actionPermissions.canReact) {
+                add(EventSharedAction.AddReaction(eventId))
+            }
+
+            if (canQuote(timelineEvent, messageContent, actionPermissions)) {
+                add(EventSharedAction.Quote(eventId))
+            }
+
+            if (canViewReactions(timelineEvent)) {
+                add(EventSharedAction.ViewReactions(informationData))
+            }
+
+            if (timelineEvent.hasBeenEdited()) {
+                add(EventSharedAction.ViewEditHistory(informationData))
+            }
+
+            if (canShare(msgType)) {
+                add(EventSharedAction.Share(timelineEvent.eventId, messageContent!!))
+            }
+
+            if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
+                add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
+            }
+        }
+
+        if (vectorPreferences.developerMode()) {
+            if (timelineEvent.isEncrypted() && timelineEvent.root.mCryptoError != null) {
+                val keysBackupService = session.cryptoService().keysBackupService()
+                if (keysBackupService.state == KeysBackupState.NotTrusted
+                        || (keysBackupService.state == KeysBackupState.ReadyToBackUp
+                                && keysBackupService.canRestoreKeys())
+                ) {
+                    add(EventSharedAction.UseKeyBackup)
+                }
+                if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1
+                        || timelineEvent.senderInfo.userId != session.myUserId) {
+                    add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
+                }
+            }
+            addViewSourceItems(timelineEvent)
+        }
+        add(EventSharedAction.CopyPermalink(eventId))
+        if (session.myUserId != timelineEvent.root.senderId) {
+            // not sent by me
+            if (timelineEvent.root.getClearType() == EventType.MESSAGE) {
+                add(EventSharedAction.ReportContent(eventId, timelineEvent.root.senderId))
+            }
+
+            add(EventSharedAction.Separator)
+            add(EventSharedAction.IgnoreUser(timelineEvent.root.senderId))
         }
     }
 

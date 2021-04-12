@@ -1,5 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s wysłał(a) zdjęcie.</string>
+
+    <string name="notice_room_invite_no_invitee">Zaproszenie od %s</string>
+    <string name="notice_room_invite">%1$s zaprosił(a) %2$s</string>
+    <string name="notice_room_invite_you">%1$s zaprosił(a) Cię</string>
+    <string name="notice_room_join">%1$s dołączył(a)</string>
+    <string name="notice_room_leave">%1$s opuścił(a)</string>
+    <string name="notice_room_reject">%1$s odrzucił(a) zaproszenie</string>
+    <string name="notice_room_kick">%1$s wyrzucił(a) %2$s</string>
+    <string name="notice_room_unban">%1$s odblokował(a) %2$s</string>
+    <string name="notice_room_ban">%1$s zablokował(a) %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s zmienił(a) awatar</string>
+    <string name="notice_display_name_set">%1$s zmienił(a) wyświetlaną nazwę na %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s zmienił(a) wyświetlaną nazwę z %2$s na %3$s</string>
+    <string name="notice_display_name_removed">%1$s usunął(-ęła) swoją wyświetlaną nazwę (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s zmienił(a) temat na: %2$s</string>
+    <string name="unable_to_send_message">Nie można wysłać wiadomości</string>
+
+    <string name="message_failed_to_upload">Przesyłanie zdjęcia nie powiodło się</string>
+
+    <string name="network_error">Błąd sieci</string>
+    <string name="matrix_error">Błąd Matrixa</string>
+
+    <string name="medium_email">Adres e-mail</string>
+    <string name="medium_phone_number">Numer telefonu</string>
+
+    <string name="notice_room_visibility_shared">wszyscy członkowie pokoju.</string>
+    <string name="notice_room_visibility_world_readable">wszyscy.</string>
+    <string name="notice_room_name_changed">%1$s zmienił(a) nazwę pokoju na: %2$s</string>
+    <string name="notice_ended_call">%s zakończył(a) rozmowę.</string>
+    <string name="notice_room_name_removed">%1$s usunął(-ęła) nazwę pokoju</string>
+    <string name="notice_room_topic_removed">%1$s usunął(-ęła) temat pokoju</string>
+    <string name="summary_user_sent_sticker">%1$s wysłał(a) naklejkę.</string>
+
+    <string name="notice_end_to_end">%1$s włączył(a) szyfrowanie end-to-end (%2$s)</string>
+
+    <string name="notice_room_withdraw">%1$s wycofał(a) zaproszenie %2$s</string>
+    <string name="notice_answered_call">%s odebrał(a) połączenie.</string>
+    <string name="notice_avatar_changed_too">(awatar też został zmieniony)</string>
+
+    <string name="room_displayname_invite_from">Zaproszenie od %s</string>
+    <string name="room_displayname_room_invite">Zaproszenie do pokoju</string>
+    <string name="room_displayname_two_members">%1$s i %2$s</string>
+    <string name="room_displayname_empty_room">Pusty pokój</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s i jeden inny</item>
+        <item quantity="few">%1$s i kilku innych</item>
+        <item quantity="many">%1$s i %2$d innych</item>
+        <item quantity="other" />
+    </plurals>
+
+    <string name="notice_crypto_unable_to_decrypt">** Nie można odszyfrować: %s **</string>
+    <string name="notice_placed_video_call">%s wykonał(a) rozmowę wideo.</string>
+    <string name="notice_placed_voice_call">%s wykonał(a) połączenie głosowe.</string>
+    <string name="notice_made_future_room_visibility">%1$s uczynił(a) przyszłą historię pokoju widoczną dla %2$s</string>
+    <string name="notice_room_visibility_invited">wszyscy członkowie pokoju, od momentu w którym zostali zaproszeni.</string>
+    <string name="notice_room_visibility_joined">wszyscy członkowie pokoju, od momentu w którym dołączyli.</string>
+    <string name="notice_room_visibility_unknown">nieznane (%s).</string>
+    <string name="notice_requested_voip_conference">%1$s zażądał(a) grupowego połączenia VoIP</string>
+    <string name="notice_voip_started">Rozpoczęto grupowe połączenie głosowe VoIP</string>
+    <string name="notice_voip_finished">Zakończono grupowe połączenie głosowe VoIP</string>
+
+    <string name="notice_profile_change_redacted">%1$s zaktualizował swój profil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s wysłał(a) zaproszenie do %2$s aby dołączył(a) do tego pokoju</string>
+    <string name="notice_room_third_party_registered_invite">%1$s zaakceptował(a) zaproszenie dla %2$s</string>
+
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Urządzenie nadawcy nie wysłało nam kluczy do tej wiadomości.</string>
+
+    <string name="could_not_redact">Nie można zredagować</string>
+    <string name="room_error_join_failed_empty_room">Obecnie nie jest możliwe ponowne dołączenie do pustego pokoju.</string>
+
+    <string name="notice_event_redacted">Wiadomość usunięta</string>
+    <string name="notice_event_redacted_by">Wiadomość usunięta przez %1$s</string>
+    <string name="notice_event_redacted_with_reason">Wiadomość usunięta [powód: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Wiadomość usunięta przez %1$s [powód: %2$s]</string>
+    <string name="notice_room_update">%s zakutalizował(a) ten pokój.</string>
+
+    <string name="initial_sync_start_importing_account">Synchronizacja początkowa:
+\nImportowanie konta…</string>
+    <string name="initial_sync_start_importing_account_crypto">Synchronizacja początkowa:
+\nImportowanie kryptografii</string>
+    <string name="initial_sync_start_importing_account_rooms">Synchronizacja początkowa:
+\nImportowanie Pokoi</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Synchronizacja początkowa:
+\nImportowanie dołączonych Pokoi</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Synchronizacja początkowa:
+\nImportowanie zaproszonych Pokoi</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Synchronizacja początkowa:
+\nImportowanie opuszczonych Pokoi</string>
+    <string name="initial_sync_start_importing_account_groups">Synchronizacja początkowa:
+\nImportowanie Społeczności</string>
+    <string name="initial_sync_start_importing_account_data">Synchronizacja początkowa:
+\nImportowanie danych Konta</string>
+
+    <string name="event_status_sending_message">Wysyłanie wiadomości…</string>
+    <string name="clear_timeline_send_queue">Wyczyść kolejkę wysyłania</string>
     <string name="title_activity_home">Wiadomości</string>
     <string name="title_activity_room">Pokój</string>
     <string name="title_activity_settings">Ustawienia</string>
@@ -65,7 +163,7 @@
     <string name="user_directory_header">Katalog użytkowników</string>
     <string name="matrix_only_filter">Tylko kontakty Matrixa</string>
     <string name="no_conversation_placeholder">Brak rozmów</string>
-    <string name="no_contact_access_placeholder">Nie udzieliłeś(-aś) uprawnienia na dostęp do listy kontaktów</string>
+    <string name="template_no_contact_access_placeholder">Nie udzieliłeś(-aś) uprawnienia na dostęp do listy kontaktów</string>
     <string name="no_result_placeholder">Brak wyników</string>
     <string name="rooms_header">Pokoje</string>
     <string name="rooms_directory_header">Katalog pokojów</string>
@@ -181,11 +279,11 @@
     <string name="media_picker_both_capture_title">Zrób zdjęcie lub nagraj film</string>
     <string name="media_picker_cannot_record_video">Nie można nagrać filmu</string>
     <string name="permissions_rationale_popup_title">Informacja</string>
-    <string name="permissions_rationale_msg_storage">Element wymaga uprawnienia, aby wysyłać i zapisywać pliki multimedialne.
+    <string name="template_permissions_rationale_msg_storage">${app_name} wymaga uprawnienia, aby wysyłać i zapisywać pliki multimedialne.
 
 Przyznaj dostęp w następnym oknie.</string>
-    <string name="permissions_rationale_msg_camera">Element wymaga uprawnienia, aby wykonywać zdjęcia i nawiązywać połączenia wideo.</string>
-    <string name="permissions_rationale_msg_record_audio">Element wymaga uprawnienia, aby przeprowadzić połączenie audio.</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} wymaga uprawnienia, aby wykonywać zdjęcia i nawiązywać połączenia wideo.</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} wymaga uprawnienia, aby przeprowadzić połączenie audio.</string>
     <string name="permissions_action_not_performed_missing_permissions">Nie można wykonać operacji, ze względu na brak wymaganych uprawnień</string>
     <string name="media_slider_saved">Zapisano</string>
     <string name="media_slider_saved_message">Zapisać do pobranych?</string>
@@ -444,7 +542,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="huge">P O T Ę Ż N Y</string>
     <string name="light_theme">Jasny motyw</string>
     <string name="dark_theme">Ciemny motyw</string>
-    <string name="black_them">Czarny motyw</string>
+    <string name="black_theme">Czarny motyw</string>
     <string name="call">Zadzwoń</string>
     <string name="avatar">Awatar</string>
     <string name="reason_colon">Powód: %1$s</string>
@@ -503,13 +601,13 @@ Możesz dodać adres e-mail do swojego profilu w ustawieniach.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nZezwól na dostęp w następnym oknie aby móc wykonać połączenie."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element wymaga dostępu do kamery i mikrofonu, aby przeprowadzać rozmowy wideo.
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} wymaga dostępu do kamery i mikrofonu, aby przeprowadzać rozmowy wideo.
 
 Przyznaj dostęp w następnym oknie.</string>
-    <string name="permissions_rationale_msg_contacts">Element może sprawdzić Twoją książkę adresową, aby znajdywać innych użytkowników Matrixa bazując na ich adresie e-mail i numerze telefonu. Jeśli zgadzasz się na udostępnienie Twojej książki adresowej w tym celu, zezwól na dostęp w następnym okienku.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element wymaga dostępu do kontaktów, aby znajdywać innych użytkowników Matrixa bazując na adresie e-mail i numerze telefonu.
+    <string name="template_permissions_rationale_msg_contacts">${app_name} może sprawdzić Twoją książkę adresową, aby znajdywać innych użytkowników Matrixa bazując na ich adresie e-mail i numerze telefonu. Jeśli zgadzasz się na udostępnienie Twojej książki adresowej w tym celu, zezwól na dostęp w następnym okienku.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} wymaga dostępu do kontaktów, aby znajdywać innych użytkowników Matrixa bazując na adresie e-mail i numerze telefonu.
 \n
-\nZezwolić Element na dostęp do kontaktów\?</string>
+\nZezwolić ${app_name} na dostęp do kontaktów\?</string>
     <string name="list_members">Lista uczestników</string>
     <string name="open_chat_header">Otwarty nagłówek</string>
     <string name="room_sync_in_progress">Synchronizacja…</string>
@@ -618,7 +716,7 @@ Jesteś pewien?</string>
     <string name="e2e_re_request_encryption_key"><u>Poproś ponownie o klucze szyfrujące</u> z innych Twoich sesji.</string>
     <string name="e2e_re_request_encryption_key_sent">Prośba o klucz wysłana.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Prośba wysłana</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Uruchom proszę Element na innym urządzeniu, które może odszyfrować wiadomość, aby wysłać klucze do tej sesji.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Uruchom proszę ${app_name} na innym urządzeniu, które może odszyfrować wiadomość, aby wysłać klucze do tej sesji.</string>
     <string name="settings_notification_privacy">Prywatność powiadomień</string>
     <string name="settings_notification_privacy_normal">Standardowa</string>
     <string name="settings_notification_privacy_reduced">Zmniejszona prywatność</string>
@@ -632,12 +730,12 @@ Jesteś pewien?</string>
     <string name="settings_deactivate_account_section">Dezaktywuj konto</string>
     <string name="settings_deactivate_my_account">Dezaktywuj moje konto</string>
     <string name="startup_notification_privacy_title">Prywatność powiadomień</string>
-    <string name="startup_notification_privacy_message">Element może działać w tle aby bezpiecznie i prywatnie zarządzać Twoimi powiadomieniami. To może mieć wpływ na zużycie baterii.</string>
+    <string name="template_startup_notification_privacy_message">${app_name} może działać w tle aby bezpiecznie i prywatnie zarządzać Twoimi powiadomieniami. To może mieć wpływ na zużycie baterii.</string>
     <string name="startup_notification_privacy_button_grant">Nadaj uprawnienie</string>
     <string name="startup_notification_privacy_button_other">Wybierz inną opcję</string>
     <string name="settings_opt_in_of_analytics">Wysyłaj dane analityczne</string>
-    <string name="settings_opt_in_of_analytics_summary">Element zbiera anonimowe informacje które pozwolą ulepszyć aplikację.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Włącz proszę dane analityczne, aby pomóc nam ulepszyć Element.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} zbiera anonimowe informacje które pozwolą ulepszyć aplikację.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Włącz proszę dane analityczne, aby pomóc nam ulepszyć ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Tak, chcę pomóc!</string>
     <string name="settings_delete_notification_targets_confirmation">Czy na pewno chcesz usunąć ten cel powiadomień?</string>
     <string name="room_settings_room_access_warning">Aby móc stworzyć link do pokoju musi on mieć swój adres.</string>
@@ -774,7 +872,6 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     </plurals>
     <string name="room_tombstone_predecessor_link">Kliknij tutaj, aby zobaczyć starsze wiadomości</string>
     <string name="unknown_error">Przepraszamy, wystąpił błąd</string>
-    <string name="status_theme">Motyw Status.im</string>
     <string name="missing_permissions_error">Z powodu braku uprawnień to działanie nie jest możliwe.</string>
     <string name="system_alerts_header">Alerty systemowe</string>
     <string name="send_bug_report_description_in_english">Jeżeli to możliwe, proszę napisz opis w języku angielskim.</string>
@@ -855,7 +952,7 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Użyj domyślnego dzwonka Element dla przychodzących połączeń</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Użyj domyślnego dzwonka ${app_name} dla przychodzących połączeń</string>
     <string name="call_anyway">Zadzwoń mimo to</string>
     <string name="settings_call_category">Połączenia</string>
     <string name="room_participants_action_kick">Wyrzuć</string>
@@ -892,7 +989,7 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
 Sprawdź ustawienia systemowe.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Powiadomienia są wyłączone dla twojego konta.
 Sprawdź ustawienia konta.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Powiadomienia nie są włączone dla tej sesji. Proszę sprawdź ustawienia Element.</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Powiadomienia nie są włączone dla tej sesji. Proszę sprawdź ustawienia ${app_name}.</string>
     <string name="account_additional_info">Dodatkowe informacje: %s</string>
     <string name="account_phone_number_error">Wystąpił błąd podczas weryfikowania numeru telefonu.</string>
     <string name="account_email_error">Wystąpił błąd podczas weryfikowania adresu e-mail.</string>
@@ -1143,21 +1240,21 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Niektóre rodzaje wiadomości będą ciche (wygenerują powiadomienie bez dźwięku).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Nie udało się wczytać niestandardowych reguł, spróbuj ponowić.</string>
     <string name="settings_troubleshoot_test_play_services_title">Weryfikacja Usług Google</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element używa Usług Google Play do dostarczania wiadomości push. Konfiguracja usług nie wydaje się być prawidłowa:
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} używa Usług Google Play do dostarczania wiadomości push. Konfiguracja usług nie wydaje się być prawidłowa:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_success">Otrzymano token FCM:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Niepowodzenie przy pobieraniu tokena FCM:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nElement nie ma wpływu na wystąpienie tego problemu. Na tym urządzeniu nie ma konta Google. Otwórz menadżer kont i dodaj konto Google.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\n${app_name} nie ma wpływu na wystąpienie tego problemu. Na tym urządzeniu nie ma konta Google. Otwórz menadżer kont i dodaj konto Google.</string>
     <string name="settings_troubleshoot_test_token_registration_success">Token FCM z powodzeniem zarejestrowany na serwerze domowym.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Niepowodzenie przy rejestracji tokena FCM na serwerze domowym:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_service_restart_success">Usługa została zatrzymana i automatycznie uruchomiona ponownie.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Usługa nie uruchomiła się ponownie</string>
     <string name="settings_troubleshoot_test_service_boot_success">Usługa zostanie uruchomiona przy starcie urządzenia.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Usługa nie zostanie uruchomiona przy starcie urządzenia, nie otrzymasz żadnych powiadomień, dopóki Element nie zostanie uruchomiony.</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">Usługa nie zostanie uruchomiona przy starcie urządzenia, nie otrzymasz żadnych powiadomień, dopóki ${app_name} nie zostanie uruchomiony.</string>
     <string name="sas_security_advise">Dla zwiększenia bezpieczeństwa, zalecamy aby wykonać ten krok osobiście lub przez inne zaufane środki komunikacji.</string>
     <string name="content_reported_content">Treść została zgłoszona.
 \n
@@ -1174,24 +1271,24 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="auth_add_email_and_phone_message_2">Wprowadź adres e-mail, aby możliwe było odzyskiwanie konta. Opcjonalnie użyj adresu e-mail lub numeru telefonu aby móc zostać odkrytym przez znajomych.</string>
     <string name="settings_call_ringtone_use_default_stun">Pozwól na awaryjny serwer wspomagania połączeń</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Użyje %s aby wspomagać gdy Twój serwer domowy takiego nie ofertuje (Twój adres IP będzie udostępniony podczas połączenia)</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nBłąd jest poza kontrolą Element i nawiązując do Google sygnalizuje on, iż urządzenie posiada zbyt wiele aplikacji zarejestrowanych z FCM. Błąd występuje jedynie w przypadku posiadania skrajnie wielu aplikacji, w związku z czym nie powinno dotknąć to normalnego użytkownika.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nBłąd jest poza kontrolą Element. Może on występować z wielu powodów. Przypuszczalnie aplikacja powróci do normalnego stanu po spróbowaniu ponownie, chociaż można sprawdzić także w ustawieniach systemu uprawnienia Usług Google Play dotyczące dostępu do sieci, sprawdzić prawidłowość zegaru urządzenia lub też, może być to błąd niestandardowego oprogramowania systemowego.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nBłąd jest poza kontrolą ${app_name} i nawiązując do Google sygnalizuje on, iż urządzenie posiada zbyt wiele aplikacji zarejestrowanych z FCM. Błąd występuje jedynie w przypadku posiadania skrajnie wielu aplikacji, w związku z czym nie powinno dotknąć to normalnego użytkownika.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nBłąd jest poza kontrolą ${app_name}. Może on występować z wielu powodów. Przypuszczalnie aplikacja powróci do normalnego stanu po spróbowaniu ponownie, chociaż można sprawdzić także w ustawieniach systemu uprawnienia Usług Google Play dotyczące dostępu do sieci, sprawdzić prawidłowość zegaru urządzenia lub też, może być to błąd niestandardowego oprogramowania systemowego.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Aktywuj uruchamianie przy starcie systemu</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Restrykcje dotyczące działania aplikacji w tle są wyłączone dla Element. Test powinen zostać uruchomiony używając danych komórkowych (bez WIFI).
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Restrykcje dotyczące działania aplikacji w tle są wyłączone dla ${app_name}. Test powinen zostać uruchomiony używając danych komórkowych (bez WIFI).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Restrykcje dotyczące działania aplikacji w tle są włączone dla Element.
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Restrykcje dotyczące działania aplikacji w tle są włączone dla ${app_name}.
 \nPraca którą aplikacja próbuje wykonać będzie agresywnie ograniczona podczas działania w tle i może wpłynąć na wyświetlanie powiadomień.
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_battery_success">Na Element nie ma wpływu Optymalizacja Baterii.</string>
+    <string name="template_settings_troubleshoot_test_battery_success">Na ${app_name} nie ma wpływu Optymalizacja Baterii.</string>
     <string name="settings_troubleshoot_test_battery_failed">Jeżeli użytkownik pozostawi urządzenie odłączone od zasilania oraz nieużywane przez określony okres, z wyłączonym ekranem, urządzenie przejdzie w tryb Doze. Uniemożliwia to aplikacjom dostęp do sieci i opóźnia ich zadania, synchonizację oraz standardowe alarmy.</string>
     <string name="settings_background_fdroid_sync_mode">Tryb synchronizacji w tle</string>
     <string name="settings_background_fdroid_sync_mode_battery">Zoptymalizowano dla baterii</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element będzie synchronizował się w tle w sposób który oszczędza limitowane zasoby urządzenia (baterię).
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} będzie synchronizował się w tle w sposób który oszczędza limitowane zasoby urządzenia (baterię).
 \nW zależności od stanu zasobów urządzenia, synchronizacja może być opóźniania przez system operacyjny.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Zopytmalizowano dla działania w czasie rzeczywistym</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element będzie synchornizował się okresowo o ściśle określonym czasie (konfigurowalne).
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} będzie synchornizował się okresowo o ściśle określonym czasie (konfigurowalne).
 \nWpłynie to na użycie baterii i sieci, na panelu powiadomień pozostanie wyświetlone stałe powiadomiene o nasłuchiwaniu zdarzeń.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Brak synchronizacji w tle</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Nie będziesz otrzymywać powiadomień o przychodzących wiadomościach gdy aplikacja będzie działać w tle.</string>
@@ -1208,8 +1305,8 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_send_message_with_enter_summary">Przycisk enter na klawiaturze programowej wyśle wiadomość zamiast wprowadzania łamanania linii</string>
     <string name="settings_discovery_category">Znajdź</string>
     <string name="settings_discovery_manage">Zarządzaj ustawieniami wyszukiwania.</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element potrzebuje utrzymać mało wpływowe połączenie w tle, w celu otrzymywania wiarygodnych powiadomień.
-\nNa następnym ekranie zostanie się poproszonym o pozwolenie działania w tle dla Element, proszę zaakceptować.</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} potrzebuje utrzymać mało wpływowe połączenie w tle, w celu otrzymywania wiarygodnych powiadomień.
+\nNa następnym ekranie zostanie się poproszonym o pozwolenie działania w tle dla ${app_name}, proszę zaakceptować.</string>
     <string name="settings_data_save_mode_summary">Tryb oszczędzania danych użyje filtra szczegółowego, w związku z czym aktualizacje o obecności i powiadomienia o pisaniu zostaną przefiltrowane.</string>
     <string name="settings_media">Media</string>
     <string name="settings_default_media_source">Domyślne źródło mediów</string>
@@ -1252,7 +1349,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="widget_integration_review_terms">Aby kontynuować, musisz zaakceptować Warunki użytkowania dla tej usługi.</string>
     <string name="no_valid_google_play_services_apk">Nie znaleziono prawidłowej aplikacji Usługi Google Play. Powiadomienia mogą nie działać prawidłowo.</string>
     <string name="passphrase_passphrase_too_weak">Hasło jest zbyt słabe</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Proszę usunąć hasło, jeżeli chcesz aby Element wygenerował klucz odzyskiwania.</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">Proszę usunąć hasło, jeżeli chcesz aby ${app_name} wygenerował klucz odzyskiwania.</string>
     <string name="keys_backup_no_session_error">Brak dostępnych sesji Matrix</string>
     <string name="keys_backup_setup_step1_title">Nie utrać zaszyfrowanych wiadomości</string>
     <string name="keys_backup_setup_step1_description">Wiadomości w pokojach zaszyfrowanych są bezpieczne dzięki szyfrowaniu end-to-end. Jedynie Ty i Twój odbiorca posiadają klucze dla tych wiadomości.
@@ -1315,7 +1412,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     </plurals>
     <string name="autodiscover_invalid_response">Nieprawidłowa odpowiedź funkcji autoodkrywania serwera domowego</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Opcje automatycznego uzupełniania serwerów</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element wykryło niestandardową konfigurację serwera dla Twojej domeny userID \"%1$s\":
+    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} wykryło niestandardową konfigurację serwera dla Twojej domeny userID \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Użyj Konfiguracji</string>
     <string name="invalid_or_expired_credentials">Zostałeś(-łaś) wylogowana ze względu na nieprawidłowe lub wygasłe dane logowania.</string>
@@ -1327,7 +1424,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="sas_view_request_action">Wyświetl żądanie</string>
     <string name="sas_verified_successful_description">Bezpieczne wiadomości od tego użytkownika są zabezpeiczone za pomocą szyfrowania end-to-end i są nie do odczytania przez osoby trzecie.</string>
     <string name="call_failed_no_ice_title">Połączenie nie powiodło się z powodu niewłaściwie skonfigurowanego serwera</string>
-    <string name="settings_add_3pid_flow_not_supported">Nie możesz tego zrobić z mobilnej aplikacji Element</string>
+    <string name="template_settings_add_3pid_flow_not_supported">Nie możesz tego zrobić z mobilnej aplikacji ${app_name}</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Niektóre powiadomienia są wyłączone w osobistej konfiguracji.</string>
     <string name="settings_troubleshoot_test_play_services_success">Usługi Google Play są aktualne.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatycznie uruchom ponownie usługę powiadomień</string>
@@ -1352,7 +1449,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="room_list_people_empty_body">Twoje rozmowy bezpośrednie będą wyświetlane tutaj. Naciśnij przycisk + żeby rozpocząć nową.</string>
     <string name="room_list_rooms_empty_body">Twoje pokoje będą wyświetlane tutaj. Naciśnij przycisk +żeby znaleźć istniejące bądź utworzyć nowy.</string>
     <string name="malformed_message">Nieprawidłowe zdarzenie, nie można wyświetlić</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Podgląd globalnego, publicznego pokoju nie jest wciąż wspierany w Element</string>
+    <string name="template_room_preview_world_readable_room_not_supported_yet">Podgląd globalnego, publicznego pokoju nie jest wciąż wspierany w ${app_name}</string>
     <string name="keys_backup_unable_to_get_trust_info">Wystąpił błąd podczas otrzymywania zaufanych informacji</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Wystąpił błąd podczas uzyskiwania danych kluczy kopii zapasowej</string>
     <string name="import_e2e_keys_from_file">Importowanie kluczy E2E z pliku \"%1$s\".</string>
@@ -1422,7 +1519,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="content_reported_as_inappropriate_content">Zawartość została zgłoszona jako niewłaściwa.
 \n
 \nJeżeli nie chcesz widzieć treści od tego użytkownika, możesz go zablokować aby ukryć jego wiadomości.</string>
-    <string name="permissions_rationale_msg_keys_backup_export">Element potrzebuje uprawnień aby zapisywać klucze E2E na dysku.
+    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} potrzebuje uprawnień aby zapisywać klucze E2E na dysku.
 \n
 \nPozwól na dostęp w następnym oknie aby móc eksportować klucze ręcznie.</string>
     <string name="room_list_quick_actions_leave">Opuść pokój</string>
@@ -1458,7 +1555,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="login_server_url_form_other_hint">Adres</string>
     <string name="login_server_url_form_modular_text">Hosting premium dla organizacji</string>
     <string name="login_server_url_form_modular_notice">Wprowadź adres Element Modular lub serwera którego chcesz użyć</string>
-    <string name="login_server_url_form_other_notice">Wprowadź adres serwera lub Element z którym chcesz się połączyć</string>
     <string name="login_sso_error_message">Wystąpił błąd podczas ładowania strony: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Aplikacja nie jest w stanie zalogować się do tego serwera domowego. Serwer domowy obsluguje następujące metody logowania: %1$s.
 \n
@@ -1558,7 +1654,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
 \nZaloguj się ponownie aby uzyskać dostęp do danych konta i wiadomości.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Utracisz dostęp do zaszyfrowanych wiadomości do czasu, aż zalogujesz się aby odzyskać Twoje klucze szyfrujące.</string>
     <string name="soft_logout_clear_data_dialog_submit">Wyczyść dane</string>
-    <string name="soft_logout_sso_not_same_user_error">Aktualna sesja jest dla użytkownika %1$s, podajesz natomiast dane dla użytkownika %2$s. Nie jest to wspierane przez Element.
+    <string name="template_soft_logout_sso_not_same_user_error">Aktualna sesja jest dla użytkownika %1$s, podajesz natomiast dane dla użytkownika %2$s. Nie jest to wspierane przez ${app_name}.
 \nNa początku usuń dane, następnie zaloguj ponownie na innym koncie.</string>
     <string name="permalink_malformed">Link matrix.to został zdeformowany</string>
     <string name="bug_report_error_too_short">Opis zbyt krótki</string>
@@ -1572,7 +1668,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="devices_other_devices">Inne sesje</string>
     <string name="autocomplete_limited_results">Wyświetlanie jedynie początkowych wyników, wprowadź więcej znaków…</string>
     <string name="settings_developer_mode_fail_fast_title">Bezproblemowy</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element może zawieszać się częściej gdy napotka na niespodziewany błąd</string>
+    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} może zawieszać się częściej gdy napotka na niespodziewany błąd</string>
     <string name="command_description_shrug">Preparuje ¯\\_(ツ)_/¯ dla zwykłej wiadomości tekstowej</string>
     <string name="create_room_encryption_title">Aktywuj szyfrowanie</string>
     <string name="create_room_encryption_description">Odkąd zostanie włączone, szyfrowanie nie może zostać wyłączone.</string>
@@ -1637,9 +1733,9 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="room_member_power_level_moderator_in">Moderator w %1$s</string>
     <string name="room_member_power_level_custom_in">Niestandardowy (%1$d) w %2$s</string>
     <string name="room_member_jump_to_read_receipt">Przeskocz do znacznika odczytania</string>
-    <string name="rendering_event_error_type_of_event_not_handled">Element nie obsługuje wydarzeń typu \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element nie obsługuje wiadomości typu \'%1$s\'</string>
-    <string name="rendering_event_error_exception">Element napotkał problem przy wyświetlaniu zawartości wydarzenia z ID \'%1$s\'</string>
+    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} nie obsługuje wydarzeń typu \'%1$s\'</string>
+    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} nie obsługuje wiadomości typu \'%1$s\'</string>
+    <string name="template_rendering_event_error_exception">${app_name} napotkał problem przy wyświetlaniu zawartości wydarzenia z ID \'%1$s\'</string>
     <string name="unignore">Nie ignoruj</string>
     <string name="verify_cannot_cross_sign">Sesja nie jest w stanie podzielić się weryfikacją z innymi sesjami.
 \nWeryfikacja zostanie zapisana lokalnie i udostępniona w przyszłych wersjach aplikacji.</string>
@@ -1775,7 +1871,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="room_profile_section_more_uploads">Przesłane pliki</string>
     <string name="settings_key_requests">Prośby o klucze</string>
     <string name="e2e_use_keybackup">Odblokuj historię zaszyfrowanych wiadomości</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="template_login_default_session_public_name">${app_name} Android</string>
     <string name="refresh">Odśwież</string>
     <string name="verify_new_session_notice">Użyj tej sesji do weryfikacji nowej, nadając jej dostęp do zaszyfrowanych wiadomości.</string>
     <string name="verify_new_session_was_not_me">To nie ja</string>
@@ -1809,10 +1905,9 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="empty_phone_book">Twoja książka telefoniczna jest pusta</string>
     <string name="add_from_phone_book">Dodaj z mojej książki telefonicznej</string>
     <string name="save_recovery_key_chooser_hint">Zapisz klucz odzyskiwania w</string>
-    <string name="element_login_splash_brand">element</string>
-    <string name="element_disclaimer_positive_button">DOWIEDZ SIĘ WIĘCEJ</string>
-    <string name="element_disclaimer_content">Jesteśmy podekscytowani mogąc oznajmić, że zmieniliśmy nazwę! Twoja aplikacja jest aktualna i jesteś zalogowany(-a) do swojego konta.</string>
-    <string name="element_disclaimer_title">Riot nazywa się teraz Element!</string>
+    <string name="disclaimer_positive_button">DOWIEDZ SIĘ WIĘCEJ</string>
+    <string name="disclaimer_content">Jesteśmy podekscytowani mogąc oznajmić, że zmieniliśmy nazwę! Twoja aplikacja jest aktualna i jesteś zalogowany(-a) do swojego konta.</string>
+    <string name="disclaimer_title">Riot nazywa się teraz Element!</string>
     <string name="crypto_error_withheld_generic">Nie masz dostępu do tej wiadomości ponieważ nadawca celowo nie wysłał jej kluczy</string>
     <string name="crypto_error_withheld_unverified">Nie masz dostępu do tej wiadomości ponieważ nadawca nie ufa Twojej sesji</string>
     <string name="crypto_error_withheld_blacklisted">Nie masz dostępu do tej wiadomości ponieważ zostałeś zablokowany przez jej nadawcę</string>
@@ -1845,11 +1940,11 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="identity_server_set_default_submit">Użyj %1$s</string>
     <string name="enter_secret_storage_passphrase_or_key">Użyj %1$s albo %2$s aby kontynuować.</string>
     <string name="command_description_discard_session_not_handled">Dostępne tylko w pokojach szyfrowanych</string>
-    <string name="use_latest_app">Skorzystaj z najnowszych aplikacji Element na innych urządzeniach:</string>
-    <string name="app_ios_android">Element iOS
-\nElement Android</string>
-    <string name="app_desktop_web">Element Web
-\nElement Desktop</string>
+    <string name="template_use_latest_app">Skorzystaj z najnowszych aplikacji ${app_name} na innych urządzeniach:</string>
+    <string name="template_app_ios_android">${app_name} iOS
+\n${app_name} Android</string>
+    <string name="template_app_desktop_web">${app_name} Web
+\n${app_name} Desktop</string>
     <string name="change_password_summary">Ustaw nowe hasło do konta…</string>
     <string name="error_saving_media_file">Nie można zapisać pliku multimediów</string>
     <string name="error_adding_media_file_to_gallery">Nie można dodać pliku multimediów do galerii</string>
@@ -2173,12 +2268,11 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="bootstrap_save_key_description">Wykorzystaj ten %1$s jako zabezpieczenie na wypadek utraty %2$s.</string>
     <string name="bootstrap_loading_title">Konfigurowanie odzyskiwania.</string>
     <string name="verify_cancel_other">Nie zweryfikujesz %1$s (%2$s) jeżeli przerwiesz w tym momencie. Zacznij ponownie w ich profilu użytkownika.</string>
-    <string name="element_disclaimer_negative_button">ROZUMIEM</string>
+    <string name="disclaimer_negative_button">ROZUMIEM</string>
     <string name="save_your_security_key_title">Zapisz swój Klucz Bezpieczeństwa</string>
     <string name="set_a_security_phrase_hint">Fraza Bezpieczeństwa</string>
     <string name="set_a_security_phrase_title">Ustaw Frazę Bezpieczeństwa</string>
     <string name="error_empty_field_choose_user_name">Wybierz nazwę użytkownika.</string>
-    <string name="error_sso_flow_not_supported_yet">Przepraszamy, ta operacja nie jest jeszcze dostępna dla kont wykorzystujących Single Sign-On.</string>
     <string name="mark_as_verified">Oznacz jako Zaufane</string>
     <string name="confirm_your_identity_quad_s">Potwierdź swoją tożsamość poprzez zweryfikowanie tego logowania aby uzyskać dostęp do zaszyfrowanych wiadomości.</string>
     <string name="confirm_your_identity">Potwierdź swoją tożsamość poprzez zweryfikowanie tego logowania przy pomocy którejś z pozostałych sesji w celu przyznania dostępu do zaszyfrowanych wiadomości.</string>
@@ -2219,7 +2313,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="room_participants_power_level_demote_warning_title">Czy chcesz się zdegradować\?</string>
     <string name="permissions_denied_add_contact">Zezwól na dostęp do Twoich kontaktów.</string>
     <string name="call_select_sound_device">Wybierz urządzenie dźwiękowe</string>
-    <string name="call_failed_no_connection">Połączenie Element nieudane</string>
+    <string name="template_call_failed_no_connection">Połączenie ${app_name} nieudane</string>
     <string name="call_notification_reject">Zrezygnuj</string>
     <string name="start_chatting">Rozpocznij konwersację</string>
     <string name="matrix_to_card_title">Łącze Matrix</string>
@@ -2235,13 +2329,13 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="auth_pin_confirm_to_disable_title">Potwierdź PIN aby zablokować kod PIN</string>
     <string name="settings_security_pin_code_change_pin_summary">Zmień swój bieżący kod PIN</string>
     <string name="settings_security_pin_code_change_pin_title">Zmień kod PIN</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">Kod PIN jest wymagany za każdym razem kiedy otwierasz Element.</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">Kod PIN jest wymagany po dwóch minutach nieużywania Element.</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_off">Kod PIN jest wymagany za każdym razem kiedy otwierasz ${app_name}.</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_on">Kod PIN jest wymagany po dwóch minutach nieużywania ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Wymagaj kodu PIN po upływie dwóch minut</string>
     <string name="settings_security_pin_code_notifications_summary_off">Wyświetlaj tylko liczbę nieprzeczytanych wiadomości w prostym powiadomieniu.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Pokazuj szczegóły takie jak nazwa pokoju lub treść wiadomości.</string>
     <string name="settings_security_pin_code_notifications_title">Pokazuj treść w powiadomieniach</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">Kod PIN jest jedynym sposobem na odblokowanie Element.</string>
+    <string name="template_settings_security_pin_code_use_biometrics_summary_off">Kod PIN jest jedynym sposobem na odblokowanie ${app_name}.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Włącz specyficzne dla urządzenia funkcje biometryczne takie jak czytnik odcisków palców bądź rozpoznawanie twarzy.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Włącz biometrię</string>
     <string name="settings_security_pin_code_summary">Jeżeli chcesz zresetować kod PIN, naciśnij Zapomnij kod PIN aby wylogować i zresetować.</string>
@@ -2271,11 +2365,11 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="identity_server_user_consent_not_provided">Użytkownik nie udzielił zgody.</string>
     <string name="identity_server_error_no_current_binding_error">Obecnie brak powiązania z tym identyfikatorem.</string>
     <string name="identity_server_error_binding_error">Powiązanie nieudane.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">W trosce o Twoją prywatność, Element obsługuje jedynie wysłanie skrótów (hash) adresów e-mail oraz numerów telefonu.</string>
+    <string name="template_identity_server_error_bulk_sha256_not_supported">W trosce o Twoją prywatność, ${app_name} obsługuje jedynie wysłanie skrótów (hash) adresów e-mail oraz numerów telefonu.</string>
     <string name="identity_server_error_terms_not_signed">Zaakceptuj najpierw reguły serwera tożsamości w ustawieniach.</string>
     <string name="identity_server_error_no_identity_server_configured">Najpierw skonfiguruj serwer tożsamości.</string>
     <string name="identity_server_error_outdated_home_server">Ta operacja nie jest możliwa. Ten serwer domowy jest przestarzały.</string>
-    <string name="identity_server_error_outdated_identity_server">Ten serwer tożsamości jest przestarzały. Element obsługuje jedynie API V2.</string>
+    <string name="template_identity_server_error_outdated_identity_server">Ten serwer tożsamości jest przestarzały. ${app_name} obsługuje jedynie API V2.</string>
     <string name="disconnect_identity_server_dialog_content">Rozłączyć z serwerem tożsamości %s\?</string>
     <string name="open_terms_of">Otwórz warunki %s</string>
     <string name="choose_locale_loading_locales">Ładowanie dostępnych języków…</string>
@@ -2295,8 +2389,8 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="not_a_valid_qr_code">To nie jest prawidłowy kod QR Matrix</string>
     <string name="invitations_sent_to_two_users">Zaproszenia wysłane do %1$s i %2$s</string>
     <string name="invitation_sent_to_one_user">Zaproszenie wysłane do %1$s</string>
-    <string name="invite_friends_rich_title">🔐️ Dołącz do mnie na Element</string>
-    <string name="invite_friends_text">Cześć, pogadaj ze mną na Element: %s</string>
+    <string name="template_invite_friends_rich_title">🔐️ Dołącz do mnie na ${app_name}</string>
+    <string name="template_invite_friends_text">Cześć, pogadaj ze mną na ${app_name}: %s</string>
     <string name="invite_friends">Zaproś przyjaciół</string>
     <string name="invite_users_to_room_title">Zaproś użytkowników</string>
     <string name="inviting_users_to_room">Zapraszanie użytkowników…</string>
