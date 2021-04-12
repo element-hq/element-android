@@ -28,7 +28,7 @@ upstream_latest_tag() {
 upstream_previous_tag() {
     #git describe --abbrev=0 `upstream_latest_tag`~1 --tags
     #downstream_latest_tag | sed 's|sc_\(v.*\).sc.*|\1|'
-    git log | grep "Merge tag 'v.*' into sc" | head -n 1 |sed "s|Merge tag '\\(v.*\\)' into sc|\1|"
+    git log | grep "Merge tag 'v.*' into sc" | head -n 1 |sed "s|.*Merge tag '\\(v.*\\)' into sc|\1|"
 }
 downstream_latest_tag() {
     local commit="HEAD"
