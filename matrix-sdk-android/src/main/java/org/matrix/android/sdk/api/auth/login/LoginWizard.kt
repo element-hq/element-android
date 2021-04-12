@@ -25,7 +25,6 @@ interface LoginWizard {
      * @param login the login field
      * @param password the password field
      * @param deviceName the initial device name
-     * @param callback  the matrix callback on which you'll receive the result of authentication.
      * @return a [Cancelable]
      */
     suspend fun login(login: String,
