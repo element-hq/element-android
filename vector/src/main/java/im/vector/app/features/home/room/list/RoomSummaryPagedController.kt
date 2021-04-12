@@ -30,6 +30,14 @@ class RoomSummaryPagedControllerFactory @Inject constructor(
     fun createRoomSummaryPagedController(): RoomSummaryPagedController {
         return RoomSummaryPagedController(roomSummaryItemFactory)
     }
+
+    fun createRoomSummaryListController(): RoomSummaryListController {
+        return RoomSummaryListController(roomSummaryItemFactory)
+    }
+
+    fun createSuggestedRoomListController(): SuggestedRoomListController {
+        return SuggestedRoomListController(roomSummaryItemFactory)
+    }
 }
 
 class RoomSummaryPagedController(
