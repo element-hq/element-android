@@ -304,7 +304,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                             entry.value.forEach { child ->
                                 RoomSummaryEntity.where(realm, child.roomId).findFirst()?.let { childSum ->
 
-                                    Timber.w("## SPACES: ${childSum.name} is ${childSum.roomId} fc: ${childSum.flattenParentIds}")
+//                                    Timber.w("## SPACES: ${childSum.name} is ${childSum.roomId} fc: ${childSum.flattenParentIds}")
 //                                    var allParents = childSum.flattenParentIds ?: ""
                                     if (childSum.flattenParentIds == null) childSum.flattenParentIds = ""
                                     flattenParentsIds.forEach {
