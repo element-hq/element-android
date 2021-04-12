@@ -22,6 +22,11 @@ import org.matrix.android.sdk.api.util.Cancelable
 interface LoginWizard {
 
     /**
+     * Get some information about a matrixId: displayName and avatar url
+     */
+    suspend fun getProfileInfo(matrixId: String): LoginProfileInfo
+
+    /**
      * @param login the login field
      * @param password the password field
      * @param deviceName the initial device name
