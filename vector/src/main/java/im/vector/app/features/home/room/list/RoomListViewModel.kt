@@ -17,8 +17,10 @@
 package im.vector.app.features.home.room.list
 
 import androidx.annotation.StringRes
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
@@ -32,6 +34,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,6 +73,8 @@ class RoomListViewModel @Inject constructor(
 
     private var activeSpaceAwareQueries: List<ActiveSpaceQueryUpdater>? = null
 
+    val suggestedRoomJoiningState: MutableLiveData<Map<String, Async<Unit>>> = MutableLiveData(emptyMap())
+
     interface ActiveSpaceQueryUpdater {
         fun updateForSpaceId(roomId: String?)
     }
@@ -86,31 +91,12 @@ class RoomListViewModel @Inject constructor(
         appStateHandler.selectedSpaceDataSource.observe()
 //                .observeOn(Schedulers.computation())
                 .distinctUntilChanged()
-                .switchMap { activeSpaceOption ->
+                .subscribe { activeSpaceOption ->
                     val selectedSpace = activeSpaceOption.orNull()
                     activeSpaceAwareQueries?.onEach { updater ->
                         updater.updateForSpaceId(selectedSpace?.roomId?.takeIf { MatrixPatterns.isRoomId(it) })
                     }
-//                    activeSpaceAwareQueries?.forEach {
-//                        it.updateQuery {
-//                            it.copy(
-//                                    activeSpaceId = ActiveSpaceFilter.ActiveSpace(selectedSpace?.roomId?.takeIf { MatrixPatterns.isRoomId(it) })
-//                            )
-//                        }
-//                    }
-                    if (selectedSpace == null) {
-                        Observable.just(emptyList())
-                    } else {
-                        liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
-                            val spaceSum = tryOrNull { session.spaceService().querySpaceChildren(selectedSpace.roomId, suggestedOnly = true) }
-                            val value = spaceSum?.second ?: emptyList()
-                            emit(value)
-                        }.asObservable()
-                    }
-                }
-                .execute { info ->
-                    copy(asyncSuggestedRooms = info)
-                }
+                }.disposeOnClear()
 
         appStateHandler.selectedSpaceDataSource.observe()
 //                .observeOn(Schedulers.computation())
@@ -244,6 +230,51 @@ class RoomListViewModel @Inject constructor(
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                 it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
             }
+
+            // add suggested rooms
+            val suggestedRoomsObservable = // MutableLiveData<List<SpaceChildInfo>>()
+                    appStateHandler.selectedSpaceDataSource.observe()
+                    .distinctUntilChanged()
+                    .switchMap { activeSpaceOption ->
+                        val selectedSpace = activeSpaceOption.orNull()
+                        if (selectedSpace == null) {
+                            Observable.just(emptyList())
+                        } else {
+                            liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+                                val spaceSum = tryOrNull { session.spaceService().querySpaceChildren(selectedSpace.roomId, suggestedOnly = true) }
+                                val value = spaceSum?.second ?: emptyList()
+                                // i need to check if it's already joined.
+                                val filtered = value.filter {
+                                    session.getRoomSummary(it.childRoomId)?.membership?.isActive() != true
+                                }
+                                emit(filtered)
+                            }.asObservable()
+                        }
+                    }
+//                            .subscribe {
+//                                Timber.w("VAL: Suggested rooms is ${it}")
+//                        liveSuggestedRooms.postValue(it)
+//                    }.disposeOnClear()
+
+            val liveSuggestedRooms = MutableLiveData<SuggestedRoomInfo>()
+            Observables.combineLatest(
+                    suggestedRoomsObservable,
+                    suggestedRoomJoiningState.asObservable()
+            ) { rooms, joinStates ->
+                SuggestedRoomInfo(
+                        rooms,
+                        joinStates
+                )
+            }.subscribe {
+                liveSuggestedRooms.postValue(it)
+            }.disposeOnClear()
+            sections.add(
+                    RoomsSection(
+                            sectionName = stringProvider.getString(R.string.suggested_header),
+                            liveSuggested = liveSuggestedRooms,
+                            notifyOfLocalEcho = false
+                    )
+            )
         } else if (initialState.displayMode == RoomListDisplayMode.FILTERED) {
             withQueryParams(
                     {
@@ -499,33 +530,22 @@ class RoomListViewModel @Inject constructor(
     }
 
     private fun handleJoinSuggestedRoom(action: RoomListAction.JoinSuggestedRoom) {
-        setState {
-            copy(
-                    suggestedRoomJoiningState = this.suggestedRoomJoiningState.toMutableMap().apply {
-                        this[action.roomId] = Loading()
-                    }.toMap()
-            )
-        }
+        suggestedRoomJoiningState.postValue(suggestedRoomJoiningState.value.orEmpty().toMutableMap().apply {
+            this[action.roomId] = Loading()
+        }.toMap())
+
         viewModelScope.launch {
             try {
                 awaitCallback<Unit> {
                     session.joinRoom(action.roomId, null, action.viaServers ?: emptyList(), it)
                 }
-                setState {
-                    copy(
-                            suggestedRoomJoiningState = this.suggestedRoomJoiningState.toMutableMap().apply {
-                                this[action.roomId] = Success(Unit)
-                            }.toMap()
-                    )
-                }
+                suggestedRoomJoiningState.postValue(suggestedRoomJoiningState.value.orEmpty().toMutableMap().apply {
+                    this[action.roomId] = Success(Unit)
+                }.toMap())
             } catch (failure: Throwable) {
-                setState {
-                    copy(
-                            suggestedRoomJoiningState = this.suggestedRoomJoiningState.toMutableMap().apply {
-                                this[action.roomId] = Fail(failure)
-                            }.toMap()
-                    )
-                }
+                suggestedRoomJoiningState.postValue(suggestedRoomJoiningState.value.orEmpty().toMutableMap().apply {
+                    this[action.roomId] = Fail(failure)
+                }.toMap())
             }
         }
     }
