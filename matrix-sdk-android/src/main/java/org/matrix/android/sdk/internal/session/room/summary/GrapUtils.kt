@@ -92,7 +92,7 @@ class Graph {
 
         while (stack.isNotEmpty()) {
 //            Timber.w("VAL: current stack: ${stack.reversed().joinToString { it.name }}")
-            val vertex = stack.peek()
+            val vertex = stack.peek() ?: break
             // peek a path to follow
             var destination: GraphNode? = null
             edgesOf(vertex).forEach {
