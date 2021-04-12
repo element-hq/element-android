@@ -61,7 +61,12 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                 CreateSpaceState.Step.SetDetails -> {
                     navigateToFragment(ChooseSpaceTypeFragment::class.java)
                 }
-                CreateSpaceState.Step.AddRooms -> TODO()
+                CreateSpaceState.Step.AddRooms ->  {
+                    navigateToFragment(CreateSpaceDefaultRoomsFragment::class.java)
+                }
+                CreateSpaceState.Step.ChoosePrivateType -> {
+                    navigateToFragment(ChoosePrivateSpaceTypeFragment::class.java)
+                }
             }
         }
     }
