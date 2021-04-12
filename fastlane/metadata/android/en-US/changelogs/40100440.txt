@@ -1,0 +1,5 @@
+- Update codebase to Element v1.1.3
+- Remove time location setting, always use bottom location when possible
+- Jump to recent messages button: accent color background
+- Fix sometimes overlapping message timestamp with URL preview text
+- SC dark themes: less bright list separators in some places
