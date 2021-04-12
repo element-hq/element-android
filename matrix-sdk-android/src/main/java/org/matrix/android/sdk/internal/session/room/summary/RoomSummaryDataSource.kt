@@ -87,7 +87,10 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
 
     fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
-                { roomSummariesQuery(it, queryParams) },
+                {
+                    roomSummariesQuery(it, queryParams)
+                            .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
+                },
                 { roomSummaryMapper.map(it) }
         )
     }
