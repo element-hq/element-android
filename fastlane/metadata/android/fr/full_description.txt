@@ -17,6 +17,8 @@ Element vous donne le contrôle en vous laissant choisir qui héberge vos conver
 2. Héberger vous-même votre compte en installant un serveur sur votre propre machine
 3. Créer un compte sur un serveur personnalisé en souscrivant sur la plateforme d'hébergement « Element Matrix Services » (EMS)
 
+<b>Pourquoi choisir Element ?</b>
+
 <b>VOS DONNÉES VOUS APPARTIENNENT</b> : vous décidez où stocker vos données et messages. Ils vous appartiennent et vous les maîtrisez. Aucune multinationale ne viendra extraire vos données pour les envoyer au plus offrant.
 
 <b>MESSAGERIE ET COLLABORATION OUVERTES</b> : vous pouvez discuter avec tout le réseau Matrix, qu’ils utilisent Element ou une autre application Matrix, même s’ils utilisent une autre plateforme de messagerie telle que Slack, IRC ou XMPP.
