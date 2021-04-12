@@ -34,7 +34,6 @@ import im.vector.app.core.utils.deleteAllFiles
 import im.vector.app.databinding.ActivityMainBinding
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
-import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
@@ -222,9 +221,11 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         val intent = when {
             args.clearCredentials
                     && !ignoreClearCredentials
-                    && (!args.isUserLoggedOut || args.isAccountDeactivated) ->
+                    && (!args.isUserLoggedOut || args.isAccountDeactivated) -> {
                 // User has explicitly asked to log out or deactivated his account
-                LoginActivity.newIntent(this, null)
+                navigator.openLogin(this, null)
+                null
+            }
             args.isSoftLogout                                               ->
                 // The homeserver has invalidated the token, with a soft logout
                 SoftLogoutActivity.newIntent(this)
@@ -240,11 +241,13 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     // The token is still invalid
                     SoftLogoutActivity.newIntent(this)
                 }
-            else                                                            ->
+            else                                                            -> {
                 // First start, or no active session
-                LoginActivity.newIntent(this, null)
+                navigator.openLogin(this, null)
+                null
+            }
         }
-        startActivity(intent)
+        intent?.let { startActivity(it) }
         finish()
     }
 }

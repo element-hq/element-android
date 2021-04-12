@@ -54,6 +54,8 @@ import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.search.SearchArgs
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
+import im.vector.app.features.login.LoginActivity
+import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
@@ -95,6 +97,12 @@ class DefaultNavigator @Inject constructor(
         private val appStateHandler: AppStateHandler,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
 ) : Navigator {
+
+    override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
+        val intent = LoginActivity.newIntent(context, loginConfig)
+        intent.addFlags(flags)
+        context.startActivity(intent)
+    }
 
     override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
         if (sessionHolder.getSafeActiveSession()?.getRoom(roomId) == null) {
