@@ -103,7 +103,7 @@ data class MXDeviceInfo(
      */
     fun fingerprint(): String? {
         return keys
-                ?.takeIf { !deviceId.isBlank() }
+                ?.takeIf { deviceId.isNotBlank() }
                 ?.get("ed25519:$deviceId")
     }
 
@@ -112,7 +112,7 @@ data class MXDeviceInfo(
      */
     fun identityKey(): String? {
         return keys
-                ?.takeIf { !deviceId.isBlank() }
+                ?.takeIf { deviceId.isNotBlank() }
                 ?.get("curve25519:$deviceId")
     }
 

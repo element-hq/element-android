@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textSize="16sp"
-            tools:text="@string/verification_emoji_wrench" />
+            tools:text="@string/verification_emoji_spanner" />
 
         <TextView
             android:id="@+id/sas_emoji_text_id"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textSize="12sp"
-            tools:text="verification_emoji_wrench" />
+            tools:text="verification_emoji_spanner" />
 
     </LinearLayout>
 

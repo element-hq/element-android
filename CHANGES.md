@@ -23,7 +23,7 @@ Test:
  -
 
 Other changes:
- -
+ - New store descriptions
 
 Changes in Element 1.1.4 (2021-04-09)
 ===================================================

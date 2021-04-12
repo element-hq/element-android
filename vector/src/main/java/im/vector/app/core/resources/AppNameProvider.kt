@@ -23,7 +23,7 @@ import javax.inject.Inject
 class AppNameProvider @Inject constructor(private val context: Context) {
 
     fun getAppName(): String {
-        try {
+        return try {
             val appPackageName = context.applicationContext.packageName
             val pm = context.packageManager
             val appInfo = pm.getApplicationInfo(appPackageName, 0)
@@ -33,10 +33,10 @@ class AppNameProvider @Inject constructor(private val context: Context) {
             if (!appName.matches("\\A\\p{ASCII}*\\z".toRegex())) {
                 appName = appPackageName
             }
-            return appName
+            appName
         } catch (e: Exception) {
             Timber.e(e, "## AppNameProvider() : failed")
-            return "ElementAndroid"
+            "ElementAndroid"
         }
     }
 }
