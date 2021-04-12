@@ -32,6 +32,7 @@ import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -155,14 +156,18 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     private fun observeRoomSummaries() {
-        session.getPagedRoomSummariesLive(
-                roomSummaryQueryParams {
-                    memberships = Membership.activeMemberships()
-                }
-        )
-                .asObservable()
+        appStateHandler.selectedSpaceDataSource.observe().distinctUntilChanged().switchMap {
+            session.getPagedRoomSummariesLive(
+                    roomSummaryQueryParams {
+                        memberships = Membership.activeMemberships()
+                    }
+            ).asObservable()
+        }
+
+//                .asObservable()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe {
+                    val activeSpace = appStateHandler.safeActiveSpaceId()
                     val dmInvites = session.getRoomSummaries(
                             roomSummaryQueryParams {
                                 memberships = listOf(Membership.INVITE)
@@ -188,6 +193,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                             roomSummaryQueryParams {
                                 memberships = listOf(Membership.JOIN)
                                 roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                                activeSpaceId = ActiveSpaceFilter.ActiveSpace(activeSpace)
                             }
                     )
 
