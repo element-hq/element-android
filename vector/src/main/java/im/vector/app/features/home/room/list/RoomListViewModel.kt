@@ -50,7 +50,9 @@ import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.asObservable
@@ -162,16 +164,44 @@ class RoomListViewModel @Inject constructor(
                 it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
             }
 
-            addSection(
-                    sections,
-                    activeSpaceAwareQueries,
-                    R.string.bottom_action_people_x,
-                    false,
-                    SpaceFilterStrategy.NORMAL
-            ) {
-                it.memberships = listOf(Membership.JOIN)
-                it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-            }
+            // For DMs we still need some post query filter :/
+            // It's probably less important as home is not filtering at all
+            val dmList = MutableLiveData<List<RoomSummary>>()
+            Observables.combineLatest(
+                    session.getRoomSummariesLive(
+                            roomSummaryQueryParams {
+                                memberships = listOf(Membership.JOIN)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                            }
+                    ).asObservable(),
+                    appStateHandler.selectedSpaceDataSource.observe()
+
+            ) { rooms, currentSpaceOption ->
+                val currentSpace = currentSpaceOption.orNull()
+                        .takeIf {
+                            // the +ALL trick is annoying, should find a way to fix that at the source!
+                            MatrixPatterns.isRoomId(it?.roomId)
+                        }
+                if (currentSpace == null) {
+                    rooms
+                } else {
+                    rooms.filter {
+                        it.otherMemberIds
+                                .intersect(currentSpace.otherMemberIds)
+                                .isNotEmpty()
+                    }
+                }
+            }.subscribe {
+                dmList.postValue(it)
+            }.disposeOnClear()
+
+            sections.add(
+                    RoomsSection(
+                            sectionName = stringProvider.getString(R.string.bottom_action_people_x),
+                            liveList = dmList,
+                            notifyOfLocalEcho = false
+                    )
+            )
         } else if (initialState.displayMode == RoomListDisplayMode.ROOMS) {
             addSection(
                     sections, activeSpaceAwareQueries,
