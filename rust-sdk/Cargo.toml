@@ -9,12 +9,13 @@ crate-type = ["cdylib", "lib"]
 name = "matrix_crypto"
 
 [dependencies]
-serde_json = "1.0.62"
-http = "0.2.3"
+serde_json = "1.0.64"
+http = "0.2.4"
 
-thiserror = "1.0.23"
-tracing = "0.1.23"
-tracing-subscriber = "0.2.15"
+thiserror = "1.0.24"
+tracing = "0.1.25"
+tracing-subscriber = "0.2.17"
+uniffi = "0.8.0"
 
 [dependencies.js_int]
 version = "0.2.0"
@@ -30,14 +31,9 @@ branch = "encryption-info"
 features = ["sled_cryptostore"]
 
 [dependencies.tokio]
-version = "1.2.0"
+version = "1.4.0"
 default_features = false
 features = ["rt-multi-thread"]
 
-[dependencies.uniffi]
-version = "0.7.0"
-git = "https://github.com/mozilla/uniffi-rs"
-rev = "f7c8ccda783494ee507ea0f8a61f35b39527394f"
-
 [build-dependencies]
-uniffi_build = "0.7.0"
+uniffi_build = "0.8.0"
