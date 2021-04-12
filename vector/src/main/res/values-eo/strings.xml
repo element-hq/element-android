@@ -1991,7 +1991,7 @@
     <string name="bootstrap_info_confirm_text">Replenigu per via %s por konfirmi ĝin.</string>
     <string name="initialize_cross_signing">Pretigi delegajn subskribojn</string>
     <string name="settings_rageshake">Kolera skuado</string>
-    <string name="login_server_url_form_modular_notice">Enigu la adreson de tiu servilo aŭ «Modular SchildiChat», kiun vi volas uzi</string>
+    <string name="login_server_url_form_modular_notice">Enigu la adreson de tiu servilo aŭ «Modular Element», kiun vi volas uzi</string>
     <string name="login_server_url_form_modular_text">Pagenda gastigado por organizaĵoj</string>
     <string name="login_server_other_title">Alia</string>
     <string name="login_server_modular_text">Pagenda gastigado por organizaĵoj</string>
@@ -2057,7 +2057,7 @@
     <string name="disclaimer_positive_button">EKSCIU PLION</string>
     <string name="disclaimer_negative_button">KOMPRENITE</string>
     <string name="disclaimer_content">Ni ĝojas anonci, ke ni ŝanĝis nian nomon! Via aplikaĵo estas ĝisdata kaj vi estas salutinta vian konton.</string>
-    <string name="disclaimer_title">Riot nun estas SchildiChat!</string>
+    <string name="disclaimer_title">Riot nun estas Element!</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Atendante historion de ĉifrado</string>
     <string name="crypto_error_withheld_generic">Vi ne povas aliri ĉi tiun mesaĝon, ĉar la sendinto intence ne sendis la ŝlosilojn</string>
     <string name="crypto_error_withheld_unverified">Vi ne povas aliri ĉi tiun mesaĝon ĉar la sendinto ne fidas vian salutaĵon</string>
