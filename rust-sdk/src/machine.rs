@@ -87,13 +87,17 @@ impl OlmMachine {
     /// * `user_id` - The id of the device owner.
     ///
     /// * `device_id` - The id of the device itself.
-    pub fn get_device(&self, user_id: &str, device_id: &str) -> Option<Device> {
-        let user_id = UserId::try_from(user_id).unwrap();
+    pub fn get_device(
+        &self,
+        user_id: &str,
+        device_id: &str,
+    ) -> Result<Option<Device>, CryptoStoreError> {
+        let user_id = UserId::try_from(user_id)?;
 
-        self.runtime
-            .block_on(self.inner.get_device(&user_id, device_id.into()))
-            .unwrap()
-            .map(|d| d.into())
+        Ok(self
+            .runtime
+            .block_on(self.inner.get_device(&user_id, device_id.into()))?
+            .map(|d| d.into()))
     }
 
     /// Get all devices of an user.
@@ -101,14 +105,15 @@ impl OlmMachine {
     /// # Arguments
     ///
     /// * `user_id` - The id of the device owner.
-    pub fn get_user_devices(&self, user_id: &str) -> Vec<Device> {
-        let user_id = UserId::try_from(user_id).unwrap();
-        self.runtime
-            .block_on(self.inner.get_user_devices(&user_id))
-            .unwrap()
+    pub fn get_user_devices(&self, user_id: &str) -> Result<Vec<Device>, CryptoStoreError> {
+        let user_id = UserId::try_from(user_id)?;
+
+        Ok(self
+            .runtime
+            .block_on(self.inner.get_user_devices(&user_id))?
             .devices()
             .map(|d| d.into())
-            .collect()
+            .collect())
     }
 
     /// Get our own identity keys.
@@ -190,8 +195,8 @@ impl OlmMachine {
         events: &str,
         device_changes: DeviceLists,
         key_counts: HashMap<String, i32>,
-    ) {
-        let events: ToDevice = serde_json::from_str(events).unwrap();
+    ) -> Result<String, CryptoStoreError> {
+        let events: ToDevice = serde_json::from_str(events)?;
         let device_changes: RumaDeviceLists = device_changes.into();
         let key_counts: BTreeMap<DeviceKeyAlgorithm, UInt> = key_counts
             .into_iter()
@@ -205,12 +210,15 @@ impl OlmMachine {
             })
             .collect();
 
-        self.runtime
+        let events = self
+            .runtime
             .block_on(
                 self.inner
                     .receive_sync_changes(&events, &device_changes, &key_counts),
             )
             .unwrap();
+
+        Ok(serde_json::to_string(&events)?)
     }
 
     /// Add the given list of users to be tracked, triggering a key query request
@@ -293,23 +301,24 @@ impl OlmMachine {
     ///
     /// * `users` - The list of users which are considered to be members of the
     /// room and should receive the room key.
-    pub fn share_group_session(&self, room_id: &str, users: Vec<String>) -> Vec<Request> {
+    pub fn share_group_session(
+        &self,
+        room_id: &str,
+        users: Vec<String>,
+    ) -> Result<Vec<Request>, CryptoStoreError> {
         let users: Vec<UserId> = users
             .into_iter()
             .filter_map(|u| UserId::try_from(u).ok())
             .collect();
 
-        let room_id = RoomId::try_from(room_id).unwrap();
-        let requests = self
-            .runtime
-            .block_on(self.inner.share_group_session(
-                &room_id,
-                users.iter(),
-                EncryptionSettings::default(),
-            ))
-            .unwrap();
+        let room_id = RoomId::try_from(room_id)?;
+        let requests = self.runtime.block_on(self.inner.share_group_session(
+            &room_id,
+            users.iter(),
+            EncryptionSettings::default(),
+        ))?;
 
-        requests.into_iter().map(|r| (&*r).into()).collect()
+        Ok(requests.into_iter().map(|r| (&*r).into()).collect())
     }
 
     /// Encrypt the given event with the given type and content for the given
@@ -345,17 +354,22 @@ impl OlmMachine {
     /// * `even_type` - The type of the event.
     ///
     /// * `content` - The serialized content of the event.
-    pub fn encrypt(&self, room_id: &str, event_type: &str, content: &str) -> String {
-        let room_id = RoomId::try_from(room_id).unwrap();
-        let content: Box<RawValue> = serde_json::from_str(content).unwrap();
+    pub fn encrypt(
+        &self,
+        room_id: &str,
+        event_type: &str,
+        content: &str,
+    ) -> Result<String, CryptoStoreError> {
+        let room_id = RoomId::try_from(room_id)?;
+        let content: Box<RawValue> = serde_json::from_str(content)?;
 
-        let content = AnyMessageEventContent::from_parts(event_type, content).unwrap();
+        let content = AnyMessageEventContent::from_parts(event_type, content)?;
         let encrypted_content = self
             .runtime
             .block_on(self.inner.encrypt(&room_id, content))
             .unwrap();
 
-        serde_json::to_string(&encrypted_content).unwrap()
+        Ok(serde_json::to_string(&encrypted_content)?)
     }
 
     /// Decrypt the given event that was sent in the given room.
@@ -452,14 +466,17 @@ impl OlmMachine {
 
     /// Discard the currently active room key for the given room if there is
     /// one.
-    pub fn discard_room_key(&self, room_id: &str) {
-        let room_id = RoomId::try_from(room_id).unwrap();
+    pub fn discard_room_key(&self, room_id: &str) -> Result<(), CryptoStoreError> {
+        let room_id = RoomId::try_from(room_id)?;
 
-        self.inner.invalidate_group_session(&room_id);
+        self.runtime
+            .block_on(self.inner.invalidate_group_session(&room_id))?;
+
+        Ok(())
     }
 
     pub fn start_verification(&self, device: &Device) -> Result<Sas, CryptoStoreError> {
-        let user_id = UserId::try_from(device.user_id.clone()).unwrap();
+        let user_id = UserId::try_from(device.user_id.clone())?;
         let device_id = device.device_id.as_str().into();
         let device = self
             .runtime

@@ -27,6 +27,8 @@ pub enum CryptoStoreError {
     OlmError(#[from] OlmError),
     #[error(transparent)]
     Serialization(#[from] serde_json::Error),
+    #[error(transparent)]
+    Identifier(#[from] RumaIdentifierError),
 }
 
 #[derive(Debug, thiserror::Error)]

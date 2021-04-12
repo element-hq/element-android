@@ -27,6 +27,7 @@ enum CryptoStoreError {
     "CryptoStore",
     "OlmError",
     "Serialization",
+    "Identifier",
 };
 
 [Error]
@@ -89,35 +90,37 @@ interface OlmMachine {
     [Throws=MachineCreationError]
     constructor([ByRef] string user_id, [ByRef] string device_id, [ByRef] string path);
 
-    void receive_sync_changes([ByRef] string events,
-                              DeviceLists device_changes,
-                              record<DOMString, i32> key_counts);
-
-    [Throws=DecryptionError]
-    DecryptedEvent decrypt_room_event([ByRef] string event, [ByRef] string room_id);
-    string encrypt([ByRef] string room_id, [ByRef] string event_type, [ByRef] string content);
-
     record<DOMString, string> identity_keys();
-
     string user_id();
     string device_id();
 
-    Device? get_device([ByRef] string user_id, [ByRef] string device_id);
-    sequence<Device> get_user_devices([ByRef] string user_id);
-
-    sequence<Request> outgoing_requests();
-
-    void update_tracked_users(sequence<string> users);
     [Throws=CryptoStoreError]
-    Request? get_missing_sessions(sequence<string> users);
-    sequence<Request> share_group_session([ByRef] string room_id, sequence<string> users);
-
+    string receive_sync_changes([ByRef] string events,
+                              DeviceLists device_changes,
+                              record<DOMString, i32> key_counts);
+    sequence<Request> outgoing_requests();
     [Throws=CryptoStoreError]
     void mark_request_as_sent(
         [ByRef] string request_id,
         RequestType request_type,
         [ByRef] string response
     );
+
+    [Throws=DecryptionError]
+    DecryptedEvent decrypt_room_event([ByRef] string event, [ByRef] string room_id);
+    [Throws=CryptoStoreError]
+    string encrypt([ByRef] string room_id, [ByRef] string event_type, [ByRef] string content);
+
+    [Throws=CryptoStoreError]
+    Device? get_device([ByRef] string user_id, [ByRef] string device_id);
+    [Throws=CryptoStoreError]
+    sequence<Device> get_user_devices([ByRef] string user_id);
+
+    void update_tracked_users(sequence<string> users);
+    [Throws=CryptoStoreError]
+    Request? get_missing_sessions(sequence<string> users);
+    [Throws=CryptoStoreError]
+    sequence<Request> share_group_session([ByRef] string room_id, sequence<string> users);
 
     [Throws=CryptoStoreError]
     Sas start_verification([ByRef] Device device);
@@ -130,5 +133,6 @@ interface OlmMachine {
         [ByRef] string passphrase,
         ProgressListener progress_listener
     );
+    [Throws=CryptoStoreError]
     void discard_room_key([ByRef] string room_id);
 };

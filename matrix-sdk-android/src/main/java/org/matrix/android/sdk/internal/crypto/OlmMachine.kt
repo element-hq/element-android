@@ -22,6 +22,7 @@ import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -179,6 +180,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * @param responseBody The body of the response that was received.
      */
+    @Throws(CryptoStoreErrorException::class)
     suspend fun markRequestAsSent(
         requestId: String,
         requestType: RequestType,
@@ -206,11 +208,12 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * @param keyCounts The map of uploaded one-time key types and counts.
      */
+    @Throws(CryptoStoreErrorException::class)
     suspend fun receiveSyncChanges(
         toDevice: ToDeviceSyncResponse?,
         deviceChanges: DeviceListResponse?,
         keyCounts: DeviceOneTimeKeysCountSyncResponse?
-    ) = withContext(Dispatchers.IO) {
+    ): ToDeviceSyncResponse = withContext(Dispatchers.IO) {
             var counts: MutableMap<String, Int> = mutableMapOf()
 
             if (keyCounts?.signedCurve25519 != null) {
@@ -221,7 +224,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
             val adapter = MoshiProvider.providesMoshi().adapter<ToDeviceSyncResponse>(ToDeviceSyncResponse::class.java)
             val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
 
-            inner.receiveSyncChanges(events, devices, counts)
+            adapter.fromJson(inner.receiveSyncChanges(events, devices, counts))!!
     }
 
     /**
@@ -254,6 +257,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * @return A keys claim request that needs to be sent out to the server.
      */
+    @Throws(CryptoStoreErrorException::class)
     suspend fun getMissingSessions(users: List<String>): Request? = withContext(Dispatchers.IO) {
         inner.getMissingSessions(users)
     }
@@ -277,6 +281,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * @return The list of requests that need to be sent out.
      */
+    @Throws(CryptoStoreErrorException::class)
     suspend fun shareGroupSession(roomId: String, users: List<String>): List<Request> = withContext(Dispatchers.IO) {
         inner.shareGroupSession(roomId, users)
     }
@@ -315,6 +320,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * @return The encrypted version of the content
      */
+    @Throws(CryptoStoreErrorException::class)
     suspend fun encrypt(roomId: String, eventType: String, content: Content): Content = withContext(Dispatchers.IO) {
         val adapter = MoshiProvider.providesMoshi().adapter<Content>(Map::class.java)
         val contentString = adapter.toJson(content)
@@ -400,6 +406,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * @return The Device if it found one.
      */
+    @Throws(CryptoStoreErrorException::class)
     suspend fun getDevice(userId: String, deviceId: String): CryptoDeviceInfo? = withContext(Dispatchers.IO) {
         when (val device: Device? = inner.getDevice(userId, deviceId)) {
             null -> null
@@ -414,6 +421,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * @return The list of Devices or an empty list if there aren't any.
      */
+    @Throws(CryptoStoreErrorException::class)
     suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo> {
         return inner.getUserDevices(userId).map { toCryptoDeviceInfo(it) }
     }
@@ -481,7 +489,10 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
     /**
      * Discard the currently active room key for the given room if there is one.
      */
+    @Throws(CryptoStoreErrorException::class)
     fun discardRoomKey(roomId: String) {
-        this.inner.discardRoomKey(roomId)
+        runBlocking {
+            inner.discardRoomKey(roomId)
+        }
     }
 }
