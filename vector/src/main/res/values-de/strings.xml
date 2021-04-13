@@ -2735,4 +2735,5 @@
     <string name="event_status_failed_messages_warning">Senden der Nachricht gescheitert</string>
     <string name="event_status_a11y_sending">Wird gesendet</string>
     <string name="event_status_sent_message">Nachricht gesendet</string>
+    <string name="call_transfer_consult_first">Zuerst nachfragen</string>
 </resources>
