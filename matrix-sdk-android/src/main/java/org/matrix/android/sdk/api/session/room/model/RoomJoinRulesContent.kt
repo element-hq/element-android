@@ -45,4 +45,3 @@ data class RoomJoinRulesContent(
         }
     }
 }
-

@@ -39,5 +39,4 @@ data class CreateSpaceState(
         AddRooms,
         ChoosePrivateType
     }
-
 }

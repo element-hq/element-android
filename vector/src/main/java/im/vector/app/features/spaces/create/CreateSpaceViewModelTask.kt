@@ -64,7 +64,6 @@ class CreateSpaceViewModelTask @Inject constructor(
                 .filter { it.isNotBlank() }
                 .forEach { roomName ->
                     try {
-
                         val roomId = try {
                             if (params.isPublic) {
                                 awaitCallback {
