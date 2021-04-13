@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
-import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
@@ -155,7 +154,6 @@ open class CreateRoomParams {
         algorithm = MXCRYPTO_ALGORITHM_MEGOLM
     }
 
-
     var roomVersion: String? = null
 
     var joinRuleRestricted: List<RoomJoinRulesAllowEntry>? = null
@@ -165,4 +163,3 @@ open class CreateRoomParams {
         private const val CREATION_CONTENT_KEY_ROOM_TYPE = "org.matrix.msc1772.type"
     }
 }
-

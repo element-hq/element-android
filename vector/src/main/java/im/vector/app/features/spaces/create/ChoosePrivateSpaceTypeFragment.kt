@@ -60,4 +60,3 @@ class ChoosePrivateSpaceTypeFragment @Inject constructor(
         return true
     }
 }
-
