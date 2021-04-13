@@ -98,6 +98,7 @@ class RoomListViewModel @Inject constructor(
                 it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
             }
 
+            // TODO-SC why no low priority?
             addSection(sections, R.string.bottom_action_people_x) {
                 it.memberships = listOf(Membership.JOIN)
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
@@ -155,17 +156,29 @@ class RoomListViewModel @Inject constructor(
                 it.memberships = listOf(Membership.JOIN)
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
             }
+        } else if (initialState.displayMode == RoomListDisplayMode.ALL) {
+            addSection(sections, R.string.invitations_header, true) {
+                it.memberships = listOf(Membership.INVITE)
+            }
+            addSection(sections, R.string.bottom_action_favourites) {
+                it.memberships = listOf(Membership.JOIN)
+                it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
+            }
+            addSection(sections, R.string.normal_priority_header) {
+                it.memberships = listOf(Membership.JOIN)
+                it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
+            }
+            addSection(sections, R.string.low_priority_header) {
+                it.memberships = listOf(Membership.JOIN)
+                it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
+            }
+            addSection(sections, R.string.system_alerts_header) {
+                it.memberships = listOf(Membership.JOIN)
+                it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
+            }
         }
 
         sections
-    }
-
-    fun initWithContext(context: Context, displayMode: RoomListDisplayMode) {
-        vectorPreferences = VectorPreferences(context)
-        setState {
-            // RoomListViewState.initWithContext
-            this.initWithContext(context, displayMode)
-        }
     }
 
     override fun handle(action: RoomListAction) {
@@ -362,15 +375,16 @@ class RoomListViewModel @Inject constructor(
     }
 
     private fun handleSetMarkedUnread(action: RoomListAction.SetMarkedUnread) {
-        session.getRoom(action.roomId)?.setMarkedUnread(action.markedUnread, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomListViewEvents.Done)
+        val room = session.getRoom(action.roomId)
+        if (room != null) {
+            viewModelScope.launch {
+                try {
+                    room.setMarkedUnread(action.markedUnread)
+                } catch (failure: Exception) {
+                    _viewEvents.post(RoomListViewEvents.Failure(failure))
+                }
             }
-
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomListViewEvents.Failure(failure))
-            }
-        })
+        }
     }
 
     private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {

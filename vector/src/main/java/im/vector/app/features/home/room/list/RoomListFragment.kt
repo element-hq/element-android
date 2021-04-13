@@ -99,12 +99,6 @@ class RoomListFragment @Inject constructor(
     private val adapterInfosList = mutableListOf<SectionAdapterInfo>()
     private var concatAdapter : ConcatAdapter? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        context?.let { roomListViewModel.initWithContext(it, roomListParams.displayMode) }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.stateView.contentView = views.roomListView
@@ -166,9 +160,11 @@ class RoomListFragment @Inject constructor(
     override fun onPause() {
         super.onPause()
 
+        /* TODO-SC-merge: remember expand state for priority headers
         withState(roomListViewModel) {
             state -> context?.let { state.persistWithContext(it, roomListParams.displayMode) }
         }
+         */
     }
 
     override fun showFailure(throwable: Throwable) {
@@ -281,7 +277,9 @@ class RoomListFragment @Inject constructor(
                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                     notificationCount = counts.totalCount,
-                                    isHighlighted = counts.isHighlight
+                                    isHighlighted = counts.isHighlight,
+                                    unread = counts.unreadCount,
+                                    markedUnread = counts.markedUnread
                             ))
                         }
                         section.isExpanded.observe(viewLifecycleOwner) { _ ->

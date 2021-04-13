@@ -26,6 +26,6 @@ data class RoomsSection(
         val sectionName: String,
         val livePages: LiveData<PagedList<RoomSummary>>,
         val isExpanded: MutableLiveData<Boolean> = MutableLiveData(true),
-        val notificationCount: MutableLiveData<RoomAggregateNotificationCount> = MutableLiveData(RoomAggregateNotificationCount(0, 0)),
+        val notificationCount: MutableLiveData<RoomAggregateNotificationCount> = MutableLiveData(RoomAggregateNotificationCount(0, 0, 0, 0)),
         val notifyOfLocalEcho: Boolean = false
 )

@@ -128,6 +128,7 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
 
     @CallSuper
     open fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
+        /* TODO-SC-merge: read receipt layout alignment
         val defaultDirection = holder.readReceiptsView.resources.configuration.layoutDirection;
         val defaultRtl = defaultDirection == View.LAYOUT_DIRECTION_RTL
         val reverseDirection = if (defaultRtl) View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
@@ -156,6 +157,7 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
 
         // Also set rtl to have members fill from the natural side
         setFlatRtl(holder.readReceiptsView, if (dualBubbles) reverseDirection else defaultDirection, defaultDirection)
+        */
     }
 
 }

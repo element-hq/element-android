@@ -54,9 +54,8 @@ internal class DefaultSetMarkedUnreadTask @Inject constructor(
 
         if (isMarkedUnread(monarchy.realmConfiguration, params.roomId) != params.markedUnread) {
             updateDatabase(params.roomId, params.markedUnread)
-            executeRequest<Unit>(globalErrorReceiver) {
-                isRetryable = true
-                apiCall = accountDataApi.setRoomAccountData(userId, params.roomId, EventType.MARKED_UNREAD, params.markedUnreadContent)
+            executeRequest(globalErrorReceiver, canRetry = true) {
+                accountDataApi.setRoomAccountData(userId, params.roomId, EventType.MARKED_UNREAD, params.markedUnreadContent)
             }
         }
     }

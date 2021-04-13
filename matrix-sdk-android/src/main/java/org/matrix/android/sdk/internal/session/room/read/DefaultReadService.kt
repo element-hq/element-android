@@ -59,7 +59,7 @@ internal class DefaultReadService @AssistedInject constructor(
         )
         setReadMarkersTask.execute(taskParams)
         // Automatically unset unread marker
-        setMarkedUnreadFlag(false, callback)
+        setMarkedUnreadFlag(false)
     }
 
     override suspend fun setReadReceipt(eventId: String) {
@@ -72,23 +72,19 @@ internal class DefaultReadService @AssistedInject constructor(
         setReadMarkersTask.execute(params)
     }
 
-    override fun setMarkedUnread(markedUnread: Boolean, callback: MatrixCallback<Unit>) {
+    override suspend fun setMarkedUnread(markedUnread: Boolean) {
         if (markedUnread) {
-            setMarkedUnreadFlag(true, callback)
+            setMarkedUnreadFlag(true)
         } else {
             // We want to both remove unread marker and update read receipt position,
             // i.e., we want what markAsRead does
-            markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, callback)
+            markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
         }
     }
 
-    private fun setMarkedUnreadFlag(markedUnread: Boolean, callback: MatrixCallback<Unit>) {
+    private suspend fun setMarkedUnreadFlag(markedUnread: Boolean) {
         val params = SetMarkedUnreadTask.Params(roomId, markedUnread = markedUnread)
-        setMarkedUnreadTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        setMarkedUnreadTask.execute(params)
     }
 
     override fun isEventRead(eventId: String): Boolean {

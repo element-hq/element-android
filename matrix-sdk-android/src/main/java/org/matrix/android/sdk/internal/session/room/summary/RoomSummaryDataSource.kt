@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotification
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.mapper.RoomSummaryMapper
+import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.findByAlias
@@ -152,9 +153,14 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             val roomSummariesQuery = roomSummariesQuery(realm, queryParams)
             val notifCount = roomSummariesQuery.sum(RoomSummaryEntityFields.NOTIFICATION_COUNT).toInt()
             val highlightCount = roomSummariesQuery.sum(RoomSummaryEntityFields.HIGHLIGHT_COUNT).toInt()
+            // TODO-SC-merge: respect setting for selecting right field here (HAS_UNREAD_CONTENT_MESSAGES, HAS_UNREAD_MESSAGES, HAS_UNREAD_ORIGINAL_CONTENT_MESSAGES)
+            val unreadCount = roomSummariesQuery(realm, queryParams).equalTo(RoomSummaryEntityFields.HAS_UNREAD_ORIGINAL_CONTENT_MESSAGES, true).count().toInt()
+            val markedUnreadCount = roomSummariesQuery(realm, queryParams).equalTo(RoomSummaryEntityFields.MARKED_UNREAD, true).count().toInt()
             notificationCount = RoomAggregateNotificationCount(
                     notifCount,
-                    highlightCount
+                    highlightCount,
+                    unreadCount,
+                    markedUnreadCount
             )
         }
         return notificationCount!!

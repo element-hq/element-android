@@ -45,7 +45,13 @@ sealed class ActivityOtherThemes(@StyleRes val light: Int,
 
     object Launcher : ActivityOtherThemes(
             R.style.AppTheme_Launcher,
-            R.style.AppTheme_Launcher
+            R.style.AppTheme_Launcher,
+            R.style.AppTheme_Launcher,
+            R.style.AppTheme_Launcher_SC,
+            R.style.AppTheme_Launcher_SC,
+            R.style.AppTheme_Launcher_SC,
+            R.style.AppTheme_Launcher_SC,
+            R.style.AppTheme_Launcher_SC,
     )
 
     object AttachmentsPreview : ActivityOtherThemes(
