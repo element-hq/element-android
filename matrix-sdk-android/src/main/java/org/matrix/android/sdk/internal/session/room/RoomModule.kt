@@ -237,11 +237,5 @@ internal abstract class RoomModule {
     abstract fun bindPeekRoomTask(task: DefaultPeekRoomTask): PeekRoomTask
 
     @Binds
-    abstract fun bindPeekSpaceTask(task: DefaultPeekSpaceTask): PeekSpaceTask
-
-    @Binds
-    abstract fun bindJoinSpaceTask(task: DefaultJoinSpaceTask): JoinSpaceTask
-
-    @Binds
     abstract fun bindGetEventTask(task: DefaultGetEventTask): GetEventTask
 }
