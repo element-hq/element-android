@@ -54,7 +54,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
@@ -566,9 +565,8 @@ class RoomListViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                awaitCallback<Unit> {
-                    session.joinRoom(action.roomId, null, action.viaServers ?: emptyList(), it)
-                }
+                session.joinRoom(action.roomId, null, action.viaServers ?: emptyList())
+
                 suggestedRoomJoiningState.postValue(suggestedRoomJoiningState.value.orEmpty().toMutableMap().apply {
                     this[action.roomId] = Success(Unit)
                 }.toMap())

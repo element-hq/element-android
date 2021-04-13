@@ -35,7 +35,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
@@ -159,12 +158,10 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                     if (isSpace) {
                         session.spaceService().joinSpace(spaceChildInfo.childRoomId, null, spaceChildInfo.viaServers)
                     } else {
-                        awaitCallback<Unit> {
-                            session.joinRoom(spaceChildInfo.childRoomId, null, spaceChildInfo.viaServers, it)
-                        }
+                        session.joinRoom(spaceChildInfo.childRoomId, null, spaceChildInfo.viaServers)
                     }
                 } catch (failure: Throwable) {
-                    Timber.e(failure, "## Space: Failed to join room or subsapce")
+                    Timber.e(failure, "## Space: Failed to join room or subspace")
                 }
             }
         }
