@@ -198,8 +198,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     private fun handleSetRoomJoinRule(action: RoomSettingsAction.SetRoomJoinRule) = withState { state ->
         setState {
             copy(newRoomJoinRules = RoomSettingsViewState.NewJoinRule(
-                    action.roomJoinRule.takeIf { it != state.currentRoomJoinRules },
-                    action.roomGuestAccess.takeIf { it != state.currentGuestAccess }
+                    action.roomJoinRule.takeIf { it != state.currentRoomJoinRules }
             ))
         }
     }

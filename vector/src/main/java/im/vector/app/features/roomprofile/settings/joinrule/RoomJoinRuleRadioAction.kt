@@ -16,20 +16,16 @@
 
 package im.vector.app.features.roomprofile.settings.joinrule
 
-import androidx.annotation.DrawableRes
-import im.vector.app.core.ui.bottomsheet.BottomSheetGenericAction
-import org.matrix.android.sdk.api.session.room.model.GuestAccess
+import im.vector.app.core.ui.bottomsheet.BottomSheetGenericRadioAction
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 
-class RoomJoinRuleAction(
+class RoomJoinRuleRadioAction(
         val roomJoinRule: RoomJoinRules,
-        val roomGuestAccess: GuestAccess?,
-        title: String,
-        @DrawableRes iconResId: Int,
+        title: CharSequence,
+        description: String,
         isSelected: Boolean
-) : BottomSheetGenericAction(
+) : BottomSheetGenericRadioAction(
         title = title,
-        iconResId = iconResId,
         isSelected = isSelected,
-        destructive = false
+        description = description
 )

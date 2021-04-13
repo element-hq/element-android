@@ -26,7 +26,6 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
-import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -127,37 +126,23 @@ class RoomSettingsController @Inject constructor(
 
     private fun RoomSettingsViewState.getJoinRuleWording(): String {
         val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules
-        val guestAccess = newRoomJoinRules.newGuestAccess ?: currentGuestAccess
         val resId = when (joinRule) {
-            RoomJoinRules.INVITE     -> {
-                R.string.room_settings_room_access_entry_only_invited to null
+            RoomJoinRules.INVITE -> {
+                R.string.room_settings_room_access_private_title to null
             }
-            RoomJoinRules.PRIVATE    -> {
-                R.string.room_settings_room_access_entry_unknown to joinRule.value
+            RoomJoinRules.PUBLIC -> {
+                R.string.room_settings_room_access_public_title to null
             }
-            RoomJoinRules.PUBLIC     -> {
-                if (guestAccess == GuestAccess.CanJoin) {
-                    R.string.room_settings_room_access_entry_anyone_with_link_including_guest to null
-                } else {
-                    R.string.room_settings_room_access_entry_anyone_with_link_apart_guest to null
-                }
-            }
-            RoomJoinRules.KNOCK      -> {
+            RoomJoinRules.KNOCK -> {
                 R.string.room_settings_room_access_entry_knock to null
             }
             RoomJoinRules.RESTRICTED -> {
-                R.string.room_settings_room_access_entry_restricted to null
+                R.string.room_settings_room_access_restricted_title to null
+            }
+            else                     -> {
+                R.string.room_settings_room_access_entry_unknown to joinRule.value
             }
         }
         return if (resId.second == null) stringProvider.getString(resId.first) else stringProvider.getString(resId.first, resId.second)
-//        return stringProvider.getString(if (joinRule == RoomJoinRules.INVITE) {
-//            R.string.room_settings_room_access_entry_only_invited
-//        } else {
-//            if (guestAccess == GuestAccess.CanJoin) {
-//                R.string.room_settings_room_access_entry_anyone_with_link_including_guest
-//            } else {
-//                R.string.room_settings_room_access_entry_anyone_with_link_apart_guest
-//            }
-//        })
     }
 }

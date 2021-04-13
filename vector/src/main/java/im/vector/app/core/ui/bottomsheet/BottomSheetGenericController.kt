@@ -17,12 +17,11 @@ package im.vector.app.core.ui.bottomsheet
 
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.core.epoxy.dividerItem
 
 /**
  * Epoxy controller for generic bottom sheet actions
  */
-abstract class BottomSheetGenericController<State : BottomSheetGenericState, Action : BottomSheetGenericAction>
+abstract class BottomSheetGenericController<State : BottomSheetGenericState, Action : BottomSheetGenericRadioAction>
     : TypedEpoxyController<State>() {
 
     var listener: Listener<Action>? = null
@@ -43,16 +42,14 @@ abstract class BottomSheetGenericController<State : BottomSheetGenericState, Act
                 subTitle(getSubTitle())
             }
 
-            dividerItem {
-                id("title_separator")
-            }
+//            dividerItem {
+//                id("title_separator")
+//            }
         }
         // Actions
         val actions = getActions(state)
-        val showIcons = actions.any { it.iconResId > 0 }
         actions.forEach { action ->
-            action.toBottomSheetItem()
-                    .showIcon(showIcons)
+            action.toRadioBottomSheetItem()
                     .listener(View.OnClickListener { listener?.didSelectAction(action) })
                     .addTo(this)
         }

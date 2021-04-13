@@ -20,4 +20,4 @@ import im.vector.app.core.platform.VectorSharedActionViewModel
 import javax.inject.Inject
 
 class RoomJoinRuleSharedActionViewModel @Inject constructor()
-    : VectorSharedActionViewModel<RoomJoinRuleAction>()
+    : VectorSharedActionViewModel<RoomJoinRuleRadioAction>()
