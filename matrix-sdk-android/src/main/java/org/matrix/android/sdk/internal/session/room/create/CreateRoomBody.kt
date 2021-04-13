@@ -120,4 +120,3 @@ internal data class CreateRoomBody(
         @Json(name = "room_version")
         val roomVersion: String?
 )
-
