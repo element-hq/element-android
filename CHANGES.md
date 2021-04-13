@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Message states cosmetic changes (#3007)
 
 Translations 🗣:
  -
