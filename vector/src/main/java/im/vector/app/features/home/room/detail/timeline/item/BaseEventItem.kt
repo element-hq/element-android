@@ -31,7 +31,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableView
-import im.vector.app.core.ui.views.ReadReceiptsView
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.themes.BubbleThemeUtils
 
@@ -68,7 +67,6 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     abstract class BaseHolder(@IdRes val stubId: Int) : VectorEpoxyHolder() {
         val leftGuideline by bind<View>(R.id.messageStartGuideline)
         val checkableBackground by bind<CheckableView>(R.id.messageSelectedBackground)
-        val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
 
         override fun bindView(itemView: View) {
             super.bindView(itemView)

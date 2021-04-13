@@ -22,7 +22,6 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
-import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
@@ -45,8 +44,8 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
 
         try {
             localEchoRepository.updateSendState(localId, event.roomId, SendState.SENDING)
-            val executeRequest = executeRequest<SendResponse>(globalErrorReceiver) {
-                apiCall = roomAPI.send(
+            val response = executeRequest(globalErrorReceiver) {
+                roomAPI.send(
                         localId,
                         roomId = event.roomId ?: "",
                         content = event.content,
@@ -54,7 +53,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
                 )
             }
             localEchoRepository.updateSendState(localId, event.roomId, SendState.SENT)
-            return executeRequest.eventId
+            return response.eventId
         } catch (e: Throwable) {
             localEchoRepository.updateSendState(localId, event.roomId, SendState.UNDELIVERED)
             throw e

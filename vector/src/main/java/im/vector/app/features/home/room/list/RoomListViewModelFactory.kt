@@ -16,20 +16,20 @@
 
 package im.vector.app.features.home.room.list
 
-import im.vector.app.features.home.HomeRoomListDataSource
+import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 import javax.inject.Provider
 
 class RoomListViewModelFactory @Inject constructor(private val session: Provider<Session>,
-                                                   private val homeRoomListDataSource: Provider<HomeRoomListDataSource>)
+                                                   private val stringProvider: StringProvider)
     : RoomListViewModel.Factory {
 
     override fun create(initialState: RoomListViewState): RoomListViewModel {
         return RoomListViewModel(
                 initialState,
                 session.get(),
-                homeRoomListDataSource.get()
+                stringProvider
         )
     }
 }

@@ -16,9 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.notification
 
-import org.matrix.android.sdk.api.pushrules.ConditionResolver
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
@@ -35,7 +33,7 @@ internal interface ProcessEventForPushTask : Task<ProcessEventForPushTask.Params
 
 internal class DefaultProcessEventForPushTask @Inject constructor(
         private val defaultPushRuleService: DefaultPushRuleService,
-        private val conditionResolver: ConditionResolver,
+        private val pushRuleFinder: PushRuleFinder,
         @UserId private val userId: String
 ) : ProcessEventForPushTask {
 
@@ -72,7 +70,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
                 " to check for push rules with ${params.rules.size} rules")
         allEvents.forEach { event ->
-            fulfilledBingRule(event, params.rules)?.let {
+            pushRuleFinder.fulfilledBingRule(event, params.rules)?.let {
                 Timber.v("[PushRules] Rule $it match for event ${event.eventId}")
                 defaultPushRuleService.dispatchBing(event, it)
             }
@@ -93,14 +91,5 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         }
 
         defaultPushRuleService.dispatchFinish()
-    }
-
-    private fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule? {
-        return rules.firstOrNull { rule ->
-            // All conditions must hold true for an event in order to apply the action for the event.
-            rule.enabled && rule.conditions?.all {
-                it.asExecutableCondition(rule)?.isSatisfied(event, conditionResolver) ?: false
-            } ?: false
-        }
     }
 }

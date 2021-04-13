@@ -43,6 +43,7 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
+import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.Dispatchers
@@ -82,6 +83,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     }
 
     override fun getBinding() = ActivityMainBinding.inflate(layoutInflater)
+
+    override fun getOtherThemes() = ActivityOtherThemes.Launcher
 
     private lateinit var args: MainActivityArgs
 
@@ -158,25 +161,22 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 lifecycleScope.launch {
                     try {
                         session.signOut(!args.isUserLoggedOut)
-                        Timber.w("SIGN_OUT: success, start app")
-                        sessionHolder.clearActiveSession()
-                        doLocalCleanup(clearPreferences = true)
-                        startNextActivityAndFinish()
                     } catch (failure: Throwable) {
                         displayError(failure)
+                        return@launch
                     }
+                    Timber.w("SIGN_OUT: success, start app")
+                    sessionHolder.clearActiveSession()
+                    doLocalCleanup(clearPreferences = true)
+                    startNextActivityAndFinish()
                 }
             }
             args.clearCache           -> {
                 lifecycleScope.launch {
-                    try {
-                        session.clearCache()
-                        doLocalCleanup(clearPreferences = false)
-                        session.startSyncing(applicationContext)
-                        startNextActivityAndFinish()
-                    } catch (failure: Throwable) {
-                        displayError(failure)
-                    }
+                    session.clearCache()
+                    doLocalCleanup(clearPreferences = false)
+                    session.startSyncing(applicationContext)
+                    startNextActivityAndFinish()
                 }
             }
         }
@@ -212,15 +212,16 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(errorFormatter.toHumanReadable(failure))
                     .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
-                    .setNegativeButton(R.string.cancel) { _, _ -> startNextActivityAndFinish() }
+                    .setNegativeButton(R.string.cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
                     .setCancelable(false)
                     .show()
         }
     }
 
-    private fun startNextActivityAndFinish() {
+    private fun startNextActivityAndFinish(ignoreClearCredentials: Boolean = false) {
         val intent = when {
             args.clearCredentials
+                    && !ignoreClearCredentials
                     && (!args.isUserLoggedOut || args.isAccountDeactivated) ->
                 // User has explicitly asked to log out or deactivated his account
                 LoginActivity.newIntent(this, null)

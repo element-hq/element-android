@@ -92,8 +92,6 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             holder.summaryView.visibility = View.GONE
             holder.encryptionTile.isGone = true
         }
-        // No read receipt for this item
-        holder.readReceiptsView.isVisible = false
     }
 
     private fun bindEncryptionTile(holder: Holder, data: Data?) {
@@ -223,7 +221,6 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             override val isCollapsed: Boolean,
             override val mergeData: List<Data>,
             override val avatarRenderer: AvatarRenderer,
-            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             override val onCollapsedStateChanged: (Boolean) -> Unit,
             val callback: TimelineEventController.Callback? = null,
             val currentUserId: String,

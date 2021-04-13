@@ -37,7 +37,7 @@ internal class DefaultGetRoomSessionsDataTask @Inject constructor(
 
     override suspend fun execute(params: GetRoomSessionsDataTask.Params): RoomKeysBackupData {
         return executeRequest(globalErrorReceiver) {
-            apiCall = roomKeysApi.getRoomSessionsData(
+            roomKeysApi.getRoomSessionsData(
                     params.roomId,
                     params.version)
         }

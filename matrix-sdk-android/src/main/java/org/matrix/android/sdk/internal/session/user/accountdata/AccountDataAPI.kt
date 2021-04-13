@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.user.accountdata
 
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -32,9 +31,9 @@ interface AccountDataAPI {
      * @param params the put params
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/account_data/{type}")
-    fun setAccountData(@Path("userId") userId: String,
-                       @Path("type") type: String,
-                       @Body params: Any): Call<Unit>
+    suspend fun setAccountData(@Path("userId") userId: String,
+                               @Path("type") type: String,
+                               @Body params: Any)
 
     /**
      * Set some room account_data for the client.
@@ -45,8 +44,8 @@ interface AccountDataAPI {
      * @param params the put params
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/rooms/{roomId}/account_data/{type}")
-    fun setRoomAccountData(@Path("userId") userId: String,
-                       @Path("roomId") roomId: String,
-                       @Path("type") type: String,
-                       @Body params: Any): Call<Unit>
+    suspend fun setRoomAccountData(@Path("userId") userId: String,
+                                   @Path("roomId") roomId: String,
+                                   @Path("type") type: String,
+                                   @Body params: Any)
 }

@@ -1,0 +1,2 @@
+此版本的主要变化：修复错误！
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.0.17

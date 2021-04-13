@@ -100,6 +100,11 @@ internal class RoomSummaryUpdater @Inject constructor(
         val latestPreviewableContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
         val latestPreviewableOriginalContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEventScOriginalContent(realm, roomId)
 
+        val lastActivityFromEvent = latestPreviewableEvent?.root?.originServerTs
+        if (lastActivityFromEvent != null) {
+            roomSummaryEntity.lastActivityTime = lastActivityFromEvent
+        }
+
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
                 // avoid this call if we are sure there are unread events
                 || !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
@@ -112,7 +117,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                 || (latestPreviewableOriginalContentEvent != null
                     && !isEventRead(realm.configuration, userId, roomId, latestPreviewableOriginalContentEvent.eventId))
 
-        roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(realm, roomId).toString()
+        roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(realm, roomId)
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
         roomSummaryEntity.name = ContentMapper.map(lastNameEvent?.content).toModel<RoomNameContent>()?.name
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
@@ -124,9 +129,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases
                 .orEmpty()
-        roomSummaryEntity.aliases.clear()
-        roomSummaryEntity.aliases.addAll(roomAliases)
-        roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")
+        roomSummaryEntity.updateAliases(roomAliases)
         roomSummaryEntity.isEncrypted = encryptionEvent != null
         roomSummaryEntity.encryptionEventTs = encryptionEvent?.originServerTs
 

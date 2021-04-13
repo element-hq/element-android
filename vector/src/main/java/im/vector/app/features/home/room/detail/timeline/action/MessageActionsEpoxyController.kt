@@ -29,11 +29,14 @@ import im.vector.app.core.epoxy.bottomsheet.bottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetSendStateItem
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
+import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
@@ -45,6 +48,8 @@ class MessageActionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
         private val fontProvider: EmojiCompatFontProvider,
+        private val imageContentRenderer: ImageContentRenderer,
+        private val dimensionConverter: DimensionConverter,
         private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<MessageActionState>() {
 
@@ -59,6 +64,8 @@ class MessageActionsEpoxyController @Inject constructor(
             avatarRenderer(avatarRenderer)
             matrixItem(state.informationData.matrixItem)
             movementMethod(createLinkMovementMethod(listener))
+            imageContentRenderer(imageContentRenderer)
+            data(state.timelineEvent()?.buildImageContentRendererData(dimensionConverter.dpToPx(66)))
             userClicked { listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
             body(state.messageBody.linkify(listener))
             time(formattedDate)

@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.auth.login
 
 import android.util.Patterns
-import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.session.Session
@@ -29,7 +28,6 @@ import org.matrix.android.sdk.internal.auth.data.ThreePidMedium
 import org.matrix.android.sdk.internal.auth.data.TokenLoginParams
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationParams
-import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationResponse
 import org.matrix.android.sdk.internal.auth.registration.RegisterAddThreePidTask
 import org.matrix.android.sdk.internal.network.executeRequest
 
@@ -49,8 +47,8 @@ internal class DefaultLoginWizard(
         } else {
             PasswordLoginParams.userIdentifier(login, password, deviceName)
         }
-        val credentials = executeRequest<Credentials>(null) {
-            apiCall = authAPI.login(loginParams)
+        val credentials = executeRequest(null) {
+            authAPI.login(loginParams)
         }
 
         return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
@@ -63,8 +61,8 @@ internal class DefaultLoginWizard(
         val loginParams = TokenLoginParams(
                 token = loginToken
         )
-        val credentials = executeRequest<Credentials>(null) {
-            apiCall = authAPI.login(loginParams)
+        val credentials = executeRequest(null) {
+            authAPI.login(loginParams)
         }
 
         return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
@@ -80,8 +78,8 @@ internal class DefaultLoginWizard(
         pendingSessionData = pendingSessionData.copy(sendAttempt = pendingSessionData.sendAttempt + 1)
                 .also { pendingSessionStore.savePendingSessionData(it) }
 
-        val result = executeRequest<AddThreePidRegistrationResponse>(null) {
-            apiCall = authAPI.resetPassword(AddThreePidRegistrationParams.from(param))
+        val result = executeRequest(null) {
+            authAPI.resetPassword(AddThreePidRegistrationParams.from(param))
         }
 
         pendingSessionData = pendingSessionData.copy(resetPasswordData = ResetPasswordData(newPassword, result))
@@ -98,8 +96,8 @@ internal class DefaultLoginWizard(
                 safeResetPasswordData.newPassword
         )
 
-        executeRequest<Unit>(null) {
-            apiCall = authAPI.resetPasswordMailConfirmed(param)
+        executeRequest(null) {
+            authAPI.resetPasswordMailConfirmed(param)
         }
 
         // Set to null?

@@ -95,12 +95,6 @@ interface Timeline {
      */
     fun getTimelineEventWithId(eventId: String?): TimelineEvent?
 
-    /**
-     * Returns the first displayable events starting from eventId.
-     * It does depend on the provided [TimelineSettings].
-     */
-    fun getFirstDisplayableEventId(eventId: String): String?
-
     interface Listener {
         /**
          * Call when the timeline has been updated through pagination or sync.

@@ -21,8 +21,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.abs
@@ -35,15 +33,14 @@ class PushersManager @Inject constructor(
         private val stringProvider: StringProvider,
         private val appNameProvider: AppNameProvider
 ) {
-    fun testPush(pushKey: String, callback: MatrixCallback<Unit>): Cancelable {
+    suspend fun testPush(pushKey: String) {
         val currentSession = activeSessionHolder.getActiveSession()
 
-        return currentSession.testPush(
+        currentSession.testPush(
                 stringProvider.getString(R.string.pusher_http_url),
                 stringProvider.getString(R.string.pusher_app_id),
                 pushKey,
-                TEST_EVENT_ID,
-                callback
+                TEST_EVENT_ID
         )
     }
 
@@ -64,9 +61,9 @@ class PushersManager @Inject constructor(
         )
     }
 
-    fun unregisterPusher(pushKey: String, callback: MatrixCallback<Unit>) {
+    suspend fun unregisterPusher(pushKey: String) {
         val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
-        currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id), callback)
+        currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id))
     }
 
     companion object {

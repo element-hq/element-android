@@ -45,7 +45,11 @@ class UserPreferencesProvider @Inject constructor(private val vectorPreferences:
         return vectorPreferences.shouldShowUnimportantCounterBadge()
     }
 
-    fun shouldShowRoomMemberStateEvents(): Boolean {
-        return vectorPreferences.showRoomMemberStateEvents()
+    fun shouldShowJoinLeaves(): Boolean {
+        return vectorPreferences.showJoinLeaveMessages()
+    }
+
+    fun shouldShowAvatarDisplayNameChanges(): Boolean {
+        return vectorPreferences.showAvatarDisplayNameChangeMessages()
     }
 }

@@ -60,7 +60,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
         // TODO maybe check also if
         val uid = "kvr_${tx.transactionId}"
         when (tx.state) {
-            is VerificationTxState.OnStarted       -> {
+            is VerificationTxState.OnStarted -> {
                 // Add a notification for every incoming request
                 val user = session?.getUser(tx.otherUserId)
                 val name = user?.getBestName() ?: tx.otherUserId
@@ -119,13 +119,25 @@ class IncomingVerificationRequestHandler @Inject constructor(
         Timber.v("## SAS verificationRequestCreated ${pr.transactionId}")
         // For incoming request we should prompt (if not in activity where this request apply)
         if (pr.isIncoming) {
-            val user = session?.getUser(pr.otherUserId)
+            // if it's a self verification for my devices, we can discard the review login alert
+            // if not this request will be underneath and not visible by the user...
+            // it will re-appear later
+            if (pr.otherUserId == session?.myUserId) {
+                // XXX this is a bit hard coded :/
+                popupAlertManager.cancelAlert("review_login")
+            }
+            val user = session?.getUser(pr.otherUserId)?.toMatrixItem()
             val name = user?.getBestName() ?: pr.otherUserId
+            val description = if (name == pr.otherUserId) {
+                name
+            } else {
+                "$name (${pr.otherUserId})"
+            }
 
             val alert = VerificationVectorAlert(
                     uniqueIdForVerificationRequest(pr),
                     context.getString(R.string.sas_incoming_request_notif_title),
-                    "$name(${pr.otherUserId})",
+                    description,
                     R.drawable.ic_shield_black,
                     shouldBeDisplayedIn = { activity ->
                         if (activity is RoomDetailActivity) {
@@ -136,7 +148,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                     }
             )
                     .apply {
-                        viewBinder = VerificationVectorAlert.ViewBinder(user?.toMatrixItem(), avatarRenderer.get())
+                        viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer.get())
                         contentAction = Runnable {
                             (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                 val roomId = pr.roomId

@@ -43,6 +43,11 @@ sealed class ActivityOtherThemes(@StyleRes val light: Int,
             R.style.AppTheme_SC_Dark_Colored
     )
 
+    object Launcher : ActivityOtherThemes(
+            R.style.AppTheme_Launcher,
+            R.style.AppTheme_Launcher
+    )
+
     object AttachmentsPreview : ActivityOtherThemes(
             R.style.AppTheme_AttachmentsPreview,
             R.style.AppTheme_AttachmentsPreview,

@@ -52,7 +52,7 @@ class PreviewUrlRetriever(session: Session,
                 // The event is not known or it has been edited
                 // Keep only the first URL for the moment
                 val url = mediaService.extractUrls(event)
-                        .firstOrNull()
+                        .firstOrNull { canShowUrlPreview(it) }
                         ?.takeIf { it !in blockedUrl }
                 if (url == null) {
                     updateState(eventId, latestEventId, PreviewUrlUiState.NoUrl)
@@ -100,6 +100,10 @@ class PreviewUrlRetriever(session: Session,
         }
     }
 
+    private fun canShowUrlPreview(url: String): Boolean {
+        return blockedDomains.all { !url.startsWith(it) }
+    }
+
     fun doNotShowPreviewUrlFor(eventId: String, url: String) {
         blockedUrl.add(url)
 
@@ -145,5 +149,12 @@ class PreviewUrlRetriever(session: Session,
     companion object {
         // One week in millis
         private const val CACHE_VALIDITY: Long = 7 * 24 * 3_600 * 1_000
+
+        private val blockedDomains = listOf(
+                "https://matrix.to",
+                "https://app.element.io",
+                "https://staging.element.io",
+                "https://develop.element.io"
+        )
     }
 }

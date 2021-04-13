@@ -34,7 +34,7 @@ internal class DefaultGetProfileInfoTask @Inject constructor(private val profile
 
     override suspend fun execute(params: Params): JsonDict {
         return executeRequest(globalErrorReceiver) {
-            apiCall = profileAPI.getProfile(params.userId)
+            profileAPI.getProfile(params.userId)
         }
     }
 }

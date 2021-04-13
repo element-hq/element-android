@@ -28,7 +28,6 @@ import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -70,14 +69,12 @@ internal class DefaultTimeline(
         private val paginationTask: PaginationTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val settings: TimelineSettings,
-        private val hiddenReadReceipts: TimelineHiddenReadReceipts,
         private val timelineInput: TimelineInput,
         private val eventDecryptor: TimelineEventDecryptor,
         private val realmSessionProvider: RealmSessionProvider,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val readReceiptHandler: ReadReceiptHandler
 ) : Timeline,
-        TimelineHiddenReadReceipts.Delegate,
         TimelineInput.Listener,
         UIEchoManager.Listener {
 
@@ -93,8 +90,7 @@ internal class DefaultTimeline(
     private val cancelableBag = CancelableBag()
     private val debouncer = Debouncer(mainHandler)
 
-    private lateinit var nonFilteredEvents: RealmResults<TimelineEventEntity>
-    private lateinit var filteredEvents: RealmResults<TimelineEventEntity>
+    private lateinit var timelineEvents: RealmResults<TimelineEventEntity>
     private lateinit var sendingEvents: RealmResults<TimelineEventEntity>
 
     private var prevDisplayIndex: Int? = null
@@ -168,16 +164,9 @@ internal class DefaultTimeline(
                     postSnapshot()
                 }
 
-                nonFilteredEvents = buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
-                filteredEvents = nonFilteredEvents.where()
-                        .filterEventsWithSettings(settings)
-                        .findAll()
-                nonFilteredEvents.addChangeListener(eventsChangeListener)
+                timelineEvents = buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
+                timelineEvents.addChangeListener(eventsChangeListener)
                 handleInitialLoad()
-                if (settings.shouldHandleHiddenReadReceipts()) {
-                    hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)
-                }
-
                 loadRoomMembersTask
                         .configureWith(LoadRoomMembersTask.Params(roomId)) {
                             this.callback = NoOpMatrixCallback()
@@ -205,10 +194,6 @@ internal class DefaultTimeline(
                 }
     }
 
-    private fun TimelineSettings.shouldHandleHiddenReadReceipts(): Boolean {
-        return buildReadReceipts && (filters.filterEdits || filters.filterTypes)
-    }
-
     override fun dispose() {
         if (isStarted.compareAndSet(true, false)) {
             isReady.set(false)
@@ -220,11 +205,8 @@ internal class DefaultTimeline(
                 if (this::sendingEvents.isInitialized) {
                     sendingEvents.removeAllChangeListeners()
                 }
-                if (this::nonFilteredEvents.isInitialized) {
-                    nonFilteredEvents.removeAllChangeListeners()
-                }
-                if (settings.shouldHandleHiddenReadReceipts()) {
-                    hiddenReadReceipts.dispose()
+                if (this::timelineEvents.isInitialized) {
+                    timelineEvents.removeAllChangeListeners()
                 }
                 clearAllValues()
                 backgroundRealm.getAndSet(null).also {
@@ -256,48 +238,6 @@ internal class DefaultTimeline(
         }
     }
 
-    override fun getFirstDisplayableEventId(eventId: String): String? {
-        // If the item is built, the id is obviously displayable
-        val builtIndex = builtEventsIdMap[eventId]
-        if (builtIndex != null) {
-            return eventId
-        }
-        // Otherwise, we should check if the event is in the db, but is hidden because of filters
-        return realmSessionProvider.withRealm { localRealm ->
-            val nonFilteredEvents = buildEventQuery(localRealm)
-                    .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-                    .findAll()
-
-            val nonFilteredEvent = nonFilteredEvents.where()
-                    .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
-                    .findFirst()
-
-            val filteredEvents = nonFilteredEvents.where()
-                    .filterEventsWithSettings(settings)
-                    .findAll()
-            val isEventInDb = nonFilteredEvent != null
-
-            val isHidden = isEventInDb && filteredEvents.where()
-                    .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
-                    .findFirst() == null
-
-            if (isHidden) {
-                val displayIndex = nonFilteredEvent?.displayIndex
-                if (displayIndex != null) {
-                    // Then we are looking for the first displayable event after the hidden one
-                    val firstDisplayedEvent = filteredEvents.where()
-                            .lessThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, displayIndex)
-                            .findFirst()
-                    firstDisplayedEvent?.eventId
-                } else {
-                    null
-                }
-            } else {
-                null
-            }
-        }
-    }
-
     override fun hasMoreToLoad(direction: Timeline.Direction): Boolean {
         return hasMoreInCache(direction) || !hasReachedEnd(direction)
     }
@@ -319,18 +259,6 @@ internal class DefaultTimeline(
         listeners.clear()
     }
 
-// TimelineHiddenReadReceipts.Delegate
-
-    override fun rebuildEvent(eventId: String, readReceipts: List<ReadReceipt>): Boolean {
-        return rebuildEvent(eventId) { te ->
-            te.copy(readReceipts = readReceipts)
-        }
-    }
-
-    override fun onReadReceiptsUpdated() {
-        postSnapshot()
-    }
-
     override fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
         if (isLive && this.roomId == roomId) {
             listeners.forEach {
@@ -341,18 +269,13 @@ internal class DefaultTimeline(
 
     override fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {
         if (roomId != this.roomId || !isLive) return
-
-        val postSnapShot = uiEchoManager.onLocalEchoCreated(timelineEvent)
-
-        if (listOf(timelineEvent).filterEventsWithSettings(settings).isNotEmpty()) {
-            listeners.forEach {
+        uiEchoManager.onLocalEchoCreated(timelineEvent)
+        listeners.forEach {
+            tryOrNull {
                 it.onNewTimelineEvents(listOf(timelineEvent.eventId))
             }
         }
-
-        if (postSnapShot) {
-            postSnapshot()
-        }
+        postSnapshot()
     }
 
     override fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState) {
@@ -439,23 +362,21 @@ internal class DefaultTimeline(
         val builtSendingEvents = mutableListOf<TimelineEvent>()
         if (hasReachedEnd(Timeline.Direction.FORWARDS) && !hasMoreInCache(Timeline.Direction.FORWARDS)) {
             uiEchoManager.getInMemorySendingEvents()
-                    .filterSendingEventsTo(builtSendingEvents)
+                    .updateWithUiEchoInto(builtSendingEvents)
             sendingEvents
                     .filter { timelineEvent ->
                         builtSendingEvents.none { it.eventId == timelineEvent.eventId }
                     }
                     .map { timelineEventMapper.map(it) }
-                    .filterSendingEventsTo(builtSendingEvents)
+                    .updateWithUiEchoInto(builtSendingEvents)
         }
         return builtSendingEvents
     }
 
-    private fun List<TimelineEvent>.filterSendingEventsTo(target: MutableList<TimelineEvent>) {
+    private fun List<TimelineEvent>.updateWithUiEchoInto(target: MutableList<TimelineEvent>) {
         target.addAll(
-                // Filter out sending event that are not displayable!
-                filterEventsWithSettings(settings)
-                        // Get most up to date send state (in memory)
-                        .map { uiEchoManager.updateSentStateWithUiEcho(it) }
+                // Get most up to date send state (in memory)
+                map { uiEchoManager.updateSentStateWithUiEcho(it) }
         )
     }
 
@@ -487,9 +408,9 @@ internal class DefaultTimeline(
         var shouldFetchInitialEvent = false
         val currentInitialEventId = initialEventId
         val initialDisplayIndex = if (currentInitialEventId == null) {
-            nonFilteredEvents.firstOrNull()?.displayIndex
+            timelineEvents.firstOrNull()?.displayIndex
         } else {
-            val initialEvent = nonFilteredEvents.where()
+            val initialEvent = timelineEvents.where()
                     .equalTo(TimelineEventEntityFields.EVENT_ID, initialEventId)
                     .findFirst()
 
@@ -501,7 +422,7 @@ internal class DefaultTimeline(
         if (currentInitialEventId != null && shouldFetchInitialEvent) {
             fetchEvent(currentInitialEventId)
         } else {
-            val count = filteredEvents.size.coerceAtMost(settings.initialSize)
+            val count = timelineEvents.size.coerceAtMost(settings.initialSize)
             if (initialEventId == null) {
                 paginateInternal(initialDisplayIndex, Timeline.Direction.BACKWARDS, count)
             } else {
@@ -541,8 +462,7 @@ internal class DefaultTimeline(
             val eventEntity = results[index]
             eventEntity?.eventId?.let { eventId ->
                 postSnapshot = rebuildEvent(eventId) {
-                    val builtEvent = buildTimelineEvent(eventEntity)
-                    listOf(builtEvent).filterEventsWithSettings(settings).firstOrNull()
+                    buildTimelineEvent(eventEntity)
                 } || postSnapshot
             }
         }
@@ -563,9 +483,9 @@ internal class DefaultTimeline(
                 // We are in the case where event exists, but we do not know the token.
                 // Fetch (again) the last event to get a token
                 val lastKnownEventId = if (direction == Timeline.Direction.FORWARDS) {
-                    nonFilteredEvents.firstOrNull()?.eventId
+                    timelineEvents.firstOrNull()?.eventId
                 } else {
-                    nonFilteredEvents.lastOrNull()?.eventId
+                    timelineEvents.lastOrNull()?.eventId
                 }
                 if (lastKnownEventId == null) {
                     updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
@@ -636,7 +556,7 @@ internal class DefaultTimeline(
      * Return the current Chunk
      */
     private fun getLiveChunk(): ChunkEntity? {
-        return nonFilteredEvents.firstOrNull()?.chunk?.firstOrNull()
+        return timelineEvents.firstOrNull()?.chunk?.firstOrNull()
     }
 
     /**
@@ -680,17 +600,18 @@ internal class DefaultTimeline(
         val time = System.currentTimeMillis() - start
         Timber.v("Built ${offsetResults.size} items from db in $time ms")
         // For the case where wo reach the lastForward chunk
-        updateLoadingStates(filteredEvents)
+        updateLoadingStates(timelineEvents)
         return offsetResults.size
     }
 
-    private fun buildTimelineEvent(eventEntity: TimelineEventEntity) = timelineEventMapper.map(
-            timelineEventEntity = eventEntity,
-            buildReadReceipts = settings.buildReadReceipts,
-            correctedReadReceipts = hiddenReadReceipts.correctedReadReceipts(eventEntity.eventId)
-    ).let {
-        // eventually enhance with ui echo?
-        (uiEchoManager.decorateEventWithReactionUiEcho(it) ?: it)
+    private fun buildTimelineEvent(eventEntity: TimelineEventEntity): TimelineEvent {
+        return timelineEventMapper.map(
+                timelineEventEntity = eventEntity,
+                buildReadReceipts = settings.buildReadReceipts
+        ).let { timelineEvent ->
+            // eventually enhance with ui echo?
+            uiEchoManager.decorateEventWithReactionUiEcho(timelineEvent) ?: timelineEvent
+        }
     }
 
     /**
@@ -699,7 +620,7 @@ internal class DefaultTimeline(
     private fun getOffsetResults(startDisplayIndex: Int,
                                  direction: Timeline.Direction,
                                  count: Long): RealmResults<TimelineEventEntity> {
-        val offsetQuery = filteredEvents.where()
+        val offsetQuery = timelineEvents.where()
         if (direction == Timeline.Direction.BACKWARDS) {
             offsetQuery
                     .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
@@ -747,7 +668,7 @@ internal class DefaultTimeline(
             if (isReady.get().not()) {
                 return@post
             }
-            updateLoadingStates(filteredEvents)
+            updateLoadingStates(timelineEvents)
             val snapshot = createSnapshot()
             val runnable = Runnable {
                 listeners.forEach {

@@ -24,6 +24,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.canReact
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -65,6 +66,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           private val htmlCompressor: VectorHtmlCompressor,
                                                           private val session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter,
+                                                          private val errorFormatter: ErrorFormatter,
                                                           private val stringProvider: StringProvider,
                                                           private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
                                                           private val vectorPreferences: VectorPreferences
@@ -171,42 +173,46 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence {
-        if (timelineEvent.root.isRedacted()) {
-            return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
-        }
+        return try {
+            if (timelineEvent.root.isRedacted()) {
+                noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
+            } else {
+                when (timelineEvent.root.getClearType()) {
+                    EventType.MESSAGE,
+                    EventType.STICKER     -> {
+                        val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
+                        if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
+                            val html = messageContent.formattedBody
+                                    ?.takeIf { it.isNotBlank() }
+                                    ?.let { htmlCompressor.compress(it) }
+                                    ?: messageContent.body
 
-        return when (timelineEvent.root.getClearType()) {
-            EventType.MESSAGE,
-            EventType.STICKER -> {
-                val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
-                if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
-                    val html = messageContent.formattedBody
-                            ?.takeIf { it.isNotBlank() }
-                            ?.let { htmlCompressor.compress(it) }
-                            ?: messageContent.body
-
-                    eventHtmlRenderer.get().render(html, pillsPostProcessor)
-                } else if (messageContent is MessageVerificationRequestContent) {
-                    stringProvider.getString(R.string.verification_request)
-                } else {
-                    messageContent?.body
+                            eventHtmlRenderer.get().render(html, pillsPostProcessor)
+                        } else if (messageContent is MessageVerificationRequestContent) {
+                            stringProvider.getString(R.string.verification_request)
+                        } else {
+                            messageContent?.body
+                        }
+                    }
+                    EventType.STATE_ROOM_NAME,
+                    EventType.STATE_ROOM_TOPIC,
+                    EventType.STATE_ROOM_AVATAR,
+                    EventType.STATE_ROOM_MEMBER,
+                    EventType.STATE_ROOM_ALIASES,
+                    EventType.STATE_ROOM_CANONICAL_ALIAS,
+                    EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                    EventType.STATE_ROOM_SERVER_ACL,
+                    EventType.CALL_INVITE,
+                    EventType.CALL_CANDIDATES,
+                    EventType.CALL_HANGUP,
+                    EventType.CALL_ANSWER -> {
+                        noticeEventFormatter.format(timelineEvent)
+                    }
+                    else                  -> null
                 }
             }
-            EventType.STATE_ROOM_NAME,
-            EventType.STATE_ROOM_TOPIC,
-            EventType.STATE_ROOM_AVATAR,
-            EventType.STATE_ROOM_MEMBER,
-            EventType.STATE_ROOM_ALIASES,
-            EventType.STATE_ROOM_CANONICAL_ALIAS,
-            EventType.STATE_ROOM_HISTORY_VISIBILITY,
-            EventType.STATE_ROOM_SERVER_ACL,
-            EventType.CALL_INVITE,
-            EventType.CALL_CANDIDATES,
-            EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER -> {
-                noticeEventFormatter.format(timelineEvent)
-            }
-            else                  -> null
+        } catch (failure: Throwable) {
+            errorFormatter.toHumanReadable(failure)
         } ?: ""
     }
 

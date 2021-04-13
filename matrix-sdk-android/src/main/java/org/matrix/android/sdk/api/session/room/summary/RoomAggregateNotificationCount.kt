@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.util
+package org.matrix.android.sdk.api.session.room.summary
 
-import org.matrix.android.sdk.api.MatrixCallback
-
-/**
- * Simple MatrixCallback implementation which delegate its calls to another callback
- */
-open class MatrixCallbackDelegate<T>(private val callback: MatrixCallback<T>) : MatrixCallback<T> by callback
+data class RoomAggregateNotificationCount(
+        val notificationCount: Int,
+        val highlightCount: Int
+) {
+    val totalCount = notificationCount + highlightCount
+    val isHighlight = highlightCount > 0
+}

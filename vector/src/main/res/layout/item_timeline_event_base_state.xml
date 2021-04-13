@@ -122,22 +122,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/informationBottom2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/informationBottom"
-        android:layout_toEndOf="@id/messageStartGuideline"
-        android:orientation="vertical">
-
-        <im.vector.app.core.ui.views.ReadReceiptsView
-            android:id="@+id/readReceiptsView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp" />
-
-    </LinearLayout>
-
 </RelativeLayout>

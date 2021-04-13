@@ -97,37 +97,31 @@ class BackupToQuadSMigrationTask @Inject constructor(
                     when {
                         params.passphrase?.isNotEmpty() == true -> {
                             reportProgress(params, R.string.bootstrap_progress_generating_ssss)
-                            awaitCallback {
-                                quadS.generateKeyWithPassphrase(
-                                        UUID.randomUUID().toString(),
-                                        "ssss_key",
-                                        params.passphrase,
-                                        EmptyKeySigner(),
-                                        object : ProgressListener {
-                                            override fun onProgress(progress: Int, total: Int) {
-                                                params.progressListener?.onProgress(
-                                                        WaitingViewData(
-                                                                stringProvider.getString(
-                                                                        R.string.bootstrap_progress_generating_ssss_with_info,
-                                                                        "$progress/$total")
-                                                        ))
-                                            }
-                                        },
-                                        it
-                                )
-                            }
+                            quadS.generateKeyWithPassphrase(
+                                    UUID.randomUUID().toString(),
+                                    "ssss_key",
+                                    params.passphrase,
+                                    EmptyKeySigner(),
+                                    object : ProgressListener {
+                                        override fun onProgress(progress: Int, total: Int) {
+                                            params.progressListener?.onProgress(
+                                                    WaitingViewData(
+                                                            stringProvider.getString(
+                                                                    R.string.bootstrap_progress_generating_ssss_with_info,
+                                                                    "$progress/$total")
+                                                    ))
+                                        }
+                                    }
+                            )
                         }
                         params.recoveryKey != null              -> {
                             reportProgress(params, R.string.bootstrap_progress_generating_ssss_recovery)
-                            awaitCallback {
-                                quadS.generateKey(
-                                        UUID.randomUUID().toString(),
-                                        extractCurveKeyFromRecoveryKey(params.recoveryKey)?.let { RawBytesKeySpec(it) },
-                                        "ssss_key",
-                                        EmptyKeySigner(),
-                                        it
-                                )
-                            }
+                            quadS.generateKey(
+                                    UUID.randomUUID().toString(),
+                                    extractCurveKeyFromRecoveryKey(params.recoveryKey)?.let { RawBytesKeySpec(it) },
+                                    "ssss_key",
+                                    EmptyKeySigner()
+                            )
                         }
                         else                                    -> {
                             return Result.IllegalParams
@@ -137,14 +131,11 @@ class BackupToQuadSMigrationTask @Inject constructor(
             // Ok, so now we have migrated the old keybackup secret as the quadS key
             // Now we need to store the keybackup key in SSSS in a compatible way
             reportProgress(params, R.string.bootstrap_progress_storing_in_sss)
-            awaitCallback<Unit> {
-                quadS.storeSecret(
-                        KEYBACKUP_SECRET_SSSS_NAME,
-                        curveKey.toBase64NoPadding(),
-                        listOf(SharedSecretStorageService.KeyRef(info.keyId, info.keySpec)),
-                        it
-                )
-            }
+            quadS.storeSecret(
+                    KEYBACKUP_SECRET_SSSS_NAME,
+                    curveKey.toBase64NoPadding(),
+                    listOf(SharedSecretStorageService.KeyRef(info.keyId, info.keySpec))
+            )
 
             // save for gossiping
             keysBackupService.saveBackupRecoveryKey(recoveryKey, version.version)

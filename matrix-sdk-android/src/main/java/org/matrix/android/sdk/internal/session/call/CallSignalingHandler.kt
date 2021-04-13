@@ -56,25 +56,25 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
 
     fun onCallEvent(event: Event) {
         when (event.getClearType()) {
-            EventType.CALL_ANSWER -> {
+            EventType.CALL_ANSWER        -> {
                 handleCallAnswerEvent(event)
             }
-            EventType.CALL_INVITE -> {
+            EventType.CALL_INVITE        -> {
                 handleCallInviteEvent(event)
             }
-            EventType.CALL_HANGUP -> {
+            EventType.CALL_HANGUP        -> {
                 handleCallHangupEvent(event)
             }
-            EventType.CALL_REJECT -> {
+            EventType.CALL_REJECT        -> {
                 handleCallRejectEvent(event)
             }
-            EventType.CALL_CANDIDATES -> {
+            EventType.CALL_CANDIDATES    -> {
                 handleCallCandidatesEvent(event)
             }
             EventType.CALL_SELECT_ANSWER -> {
                 handleCallSelectAnswerEvent(event)
             }
-            EventType.CALL_NEGOTIATE -> {
+            EventType.CALL_NEGOTIATE     -> {
                 handleCallNegotiateEvent(event)
             }
         }
@@ -168,6 +168,14 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
             return
         }
         val content = event.getClearContent().toModel<CallInviteContent>() ?: return
+
+        content.callId ?: return
+        if (activeCallHandler.getCallWithId(content.callId) != null) {
+            // Call is already known, maybe due to fast lane. Ignore
+            Timber.d("Ignoring already known call invite")
+            return
+        }
+
         val incomingCall = mxCallFactory.createIncomingCall(
                 roomId = event.roomId,
                 opponentUserId = event.senderId,
