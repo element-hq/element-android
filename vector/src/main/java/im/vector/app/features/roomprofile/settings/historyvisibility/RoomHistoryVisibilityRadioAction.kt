@@ -16,18 +16,14 @@
 
 package im.vector.app.features.roomprofile.settings.historyvisibility
 
-import androidx.annotation.DrawableRes
-import im.vector.app.core.ui.bottomsheet.BottomSheetGenericAction
+import im.vector.app.core.ui.bottomsheet.BottomSheetGenericRadioAction
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 
-class RoomHistoryVisibilityAction(
+class RoomHistoryVisibilityRadioAction(
         val roomHistoryVisibility: RoomHistoryVisibility,
-        title: String,
-        @DrawableRes iconResId: Int,
+        title: String?,
         isSelected: Boolean
-) : BottomSheetGenericAction(
+) : BottomSheetGenericRadioAction(
         title = title,
-        iconResId = iconResId,
-        isSelected = isSelected,
-        destructive = false
+        isSelected = isSelected
 )

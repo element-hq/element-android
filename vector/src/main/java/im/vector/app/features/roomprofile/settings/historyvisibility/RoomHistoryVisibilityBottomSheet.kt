@@ -33,7 +33,7 @@ data class RoomHistoryVisibilityBottomSheetArgs(
         val currentRoomHistoryVisibility: RoomHistoryVisibility
 ) : Parcelable
 
-class RoomHistoryVisibilityBottomSheet : BottomSheetGeneric<RoomHistoryVisibilityState, RoomHistoryVisibilityAction>() {
+class RoomHistoryVisibilityBottomSheet : BottomSheetGeneric<RoomHistoryVisibilityState, RoomHistoryVisibilityRadioAction>() {
 
     private lateinit var roomHistoryVisibilitySharedActionViewModel: RoomHistoryVisibilitySharedActionViewModel
     @Inject lateinit var controller: RoomHistoryVisibilityController
@@ -43,14 +43,14 @@ class RoomHistoryVisibilityBottomSheet : BottomSheetGeneric<RoomHistoryVisibilit
         injector.inject(this)
     }
 
-    override fun getController(): BottomSheetGenericController<RoomHistoryVisibilityState, RoomHistoryVisibilityAction> = controller
+    override fun getController(): BottomSheetGenericController<RoomHistoryVisibilityState, RoomHistoryVisibilityRadioAction> = controller
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomHistoryVisibilitySharedActionViewModel = activityViewModelProvider.get(RoomHistoryVisibilitySharedActionViewModel::class.java)
     }
 
-    override fun didSelectAction(action: RoomHistoryVisibilityAction) {
+    override fun didSelectAction(action: RoomHistoryVisibilityRadioAction) {
         roomHistoryVisibilitySharedActionViewModel.post(action)
         dismiss()
     }

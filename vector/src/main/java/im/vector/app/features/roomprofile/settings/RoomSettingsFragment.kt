@@ -104,7 +104,7 @@ class RoomSettingsFragment @Inject constructor(
         roomJoinRuleSharedActionViewModel
                 .observe()
                 .subscribe { action ->
-                    viewModel.handle(RoomSettingsAction.SetRoomJoinRule(action.roomJoinRule, action.roomGuestAccess))
+                    viewModel.handle(RoomSettingsAction.SetRoomJoinRule(action.roomJoinRule))
                 }
                 .disposeOnDestroyView()
     }
@@ -176,8 +176,7 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun onJoinRuleClicked()  = withState(viewModel) { state ->
         val currentJoinRule = state.newRoomJoinRules.newJoinRules ?: state.currentRoomJoinRules
-        val currentGuestAccess = state.newRoomJoinRules.newGuestAccess ?: state.currentGuestAccess
-        RoomJoinRuleBottomSheet.newInstance(currentJoinRule, currentGuestAccess)
+        RoomJoinRuleBottomSheet.newInstance(currentJoinRule)
                 .show(childFragmentManager, "RoomJoinRuleBottomSheet")
     }
 

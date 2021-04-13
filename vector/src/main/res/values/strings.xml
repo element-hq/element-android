@@ -1451,9 +1451,14 @@
     <string name="room_settings_room_access_entry_only_invited">Only people who have been invited</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room’s link, apart from guests</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room’s link, including guests</string>
-    <string name="room_settings_room_access_entry_restricted">Restricted to members of a parent space</string>
     <string name="room_settings_room_access_entry_knock">Anyone can knock on the room, members can then accept or reject</string>
     <string name="room_settings_room_access_entry_unknown">Unknown access setting (%s)</string>
+    <string name="room_settings_room_access_private_title">Private</string>
+    <string name="room_settings_room_access_private_description">Only people invited can find and join</string>
+    <string name="room_settings_room_access_public_title">Public</string>
+    <string name="room_settings_room_access_public_description">Anyone can find the room and join</string>
+    <string name="room_settings_room_access_restricted_title">Spaces</string>
+    <string name="room_settings_room_access_restricted_description">Anyone in a space with this room can find and join it. Only admins of this room can add it to a space.</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Banned users</string>
@@ -3229,6 +3234,7 @@
     <string name="a11y_open_emoji_picker">Open Emoji picker</string>
     <string name="a11y_close_emoji_picker">Close Emoji picker</string>
     <string name="a11y_checked">Checked</string>
+    <string name="a11y_unchecked">Unchecked</string>
     <string name="a11y_error_message_not_sent">Message not sent due to error</string>
     <string name="a11y_rule_notify_noisy">Notify with sound</string>
     <string name="a11y_rule_notify_silent">Notify without sound</string>
