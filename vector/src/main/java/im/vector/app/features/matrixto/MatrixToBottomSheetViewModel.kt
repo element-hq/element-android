@@ -43,10 +43,7 @@ import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
-import org.matrix.android.sdk.internal.util.awaitCallback
 
 class MatrixToBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: MatrixToBottomSheetState,
@@ -111,9 +108,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 // could this room be already known
                 val knownRoom = if (permalinkData.isRoomAlias) {
                     tryOrNull {
-                        awaitCallback<Optional<RoomAliasDescription>> {
-                            session.getRoomIdByAlias(permalinkData.roomIdOrAlias, false, it)
-                        }
+                        session.getRoomIdByAlias(permalinkData.roomIdOrAlias, false)
                     }
                             ?.getOrNull()
                             ?.roomId?.let {
@@ -245,9 +240,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
      * main thing is trying to see if it's a space or a room
      */
     private suspend fun resolveRoom(roomIdOrAlias: String): PeekResult {
-        return awaitCallback {
-            session.peekRoom(roomIdOrAlias, it)
-        }
+        return session.peekRoom(roomIdOrAlias)
     }
 
     companion object : MvRxViewModelFactory<MatrixToBottomSheetViewModel, MatrixToBottomSheetState> {
@@ -308,9 +301,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         }
         viewModelScope.launch {
             try {
-                awaitCallback<Unit> {
-                    session.joinRoom(action.roomId, null, action.viaServers?.take(3) ?: emptyList(), it)
-                }
+                session.joinRoom(action.roomId, null, action.viaServers?.take(3) ?: emptyList())
                 _viewEvents.post(MatrixToViewEvents.NavigateToRoom(action.roomId))
             } catch (failure: Throwable) {
                 _viewEvents.post(MatrixToViewEvents.ShowModalError(errorFormatter.toHumanReadable(failure)))

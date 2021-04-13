@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -66,14 +65,10 @@ class CreateSpaceViewModelTask @Inject constructor(
                     try {
                         val roomId = try {
                             if (params.isPublic) {
-                                awaitCallback {
                                     session.createRoom(CreateRoomParams().apply {
                                         this.name = roomName
-                                        this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                                    }, it)
-                                }
+                                        this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT })
                             } else {
-                                awaitCallback { callback ->
                                     session.createRoom(CreateRoomParams().apply {
                                         this.name = roomName
                                         this.joinRuleRestricted = listOf(
@@ -82,8 +77,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                                                         via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
                                                 )
                                         )
-                                    }, callback)
-                                }
+                                    })
                             }
                         } catch (timeout: CreateRoomFailure.CreatedWithTimeout) {
                             // we ignore that?

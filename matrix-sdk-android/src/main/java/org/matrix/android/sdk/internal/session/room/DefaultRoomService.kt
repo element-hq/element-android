@@ -34,7 +34,6 @@ import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.database.mapper.RoomSummaryMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -65,18 +64,11 @@ internal class DefaultRoomService @Inject constructor(
         private val peekRoomTask: PeekRoomTask,
         private val roomGetter: RoomGetter,
         private val roomSummaryDataSource: RoomSummaryDataSource,
-        private val roomSummaryMapper: RoomSummaryMapper,
-        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
-        private val taskExecutor: TaskExecutor
+        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource
 ) : RoomService {
 
-    override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
-        return createRoomTask
-                .configureWith(createRoomParams) {
-                    this.callback = callback
-                    this.retryCount = 3
-                }
-                .executeBy(taskExecutor)
+    override suspend fun createRoom(createRoomParams: CreateRoomParams): String {
+        return createRoomTask.executeRetry(createRoomParams, 3)
     }
 
     override fun getRoom(roomId: String): Room? {
