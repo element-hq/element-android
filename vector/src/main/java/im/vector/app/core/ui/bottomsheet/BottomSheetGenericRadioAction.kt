@@ -16,27 +16,24 @@
 
 package im.vector.app.core.ui.bottomsheet
 
-import androidx.annotation.DrawableRes
-import im.vector.app.core.epoxy.bottomsheet.BottomSheetActionItem_
+import im.vector.app.core.epoxy.bottomsheet.BottomSheetRadioActionItem_
 import im.vector.app.core.platform.VectorSharedAction
 
 /**
  * Parent class for a bottom sheet action
  */
-open class BottomSheetGenericAction(
-        open val title: String,
-        @DrawableRes open val iconResId: Int,
-        open val isSelected: Boolean,
-        open val destructive: Boolean
+open class BottomSheetGenericRadioAction(
+        open val title: CharSequence?,
+        open val description: String? = null,
+        open val isSelected: Boolean
 ) : VectorSharedAction {
 
-    fun toBottomSheetItem(): BottomSheetActionItem_ {
-        return BottomSheetActionItem_().apply {
-            id("action_$title")
-            iconRes(iconResId)
-            text(title)
-            selected(isSelected)
-            destructive(destructive)
+    fun toRadioBottomSheetItem(): BottomSheetRadioActionItem_ {
+        return BottomSheetRadioActionItem_().apply {
+            id("action_${this@BottomSheetGenericRadioAction.title}")
+            title(this@BottomSheetGenericRadioAction.title)
+            selected(this@BottomSheetGenericRadioAction.isSelected)
+            description(this@BottomSheetGenericRadioAction.description)
         }
     }
 }
