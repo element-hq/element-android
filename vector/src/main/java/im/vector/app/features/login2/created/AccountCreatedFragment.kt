@@ -26,6 +26,8 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.date.DateFormatKind
+import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.resources.ColorProvider
@@ -48,6 +50,7 @@ import javax.inject.Inject
 class AccountCreatedFragment @Inject constructor(
         val accountCreatedViewModelFactory: AccountCreatedViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
+        private val dateFormatter: VectorDateFormatter,
         private val matrixItemColorProvider: MatrixItemColorProvider,
         colorProvider: ColorProvider
 ) : AbstractLoginFragment2<FragmentLoginAccountCreatedBinding>(),
@@ -69,6 +72,8 @@ class AccountCreatedFragment @Inject constructor(
         observeViewEvents()
 
         viewModel.subscribe { invalidateState(it) }
+
+        views.loginAccountCreatedTime.text = dateFormatter.format(System.currentTimeMillis(), DateFormatKind.MESSAGE_SIMPLE)
     }
 
     private fun observeViewEvents() {
