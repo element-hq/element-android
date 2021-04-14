@@ -12,16 +12,13 @@
 
             <ImageView
                 style="@style/LoginLogo"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/loginServerTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Title"
                 tools:ignore="UnknownId"
                 tools:text="Please choose a server" />

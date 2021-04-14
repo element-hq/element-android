@@ -84,7 +84,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp">
+                android:layout_marginTop="@dimen/layout_vertical_margin">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/forgetPasswordButton"

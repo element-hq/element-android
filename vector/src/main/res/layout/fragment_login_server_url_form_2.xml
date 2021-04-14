@@ -19,7 +19,7 @@
                 android:id="@+id/loginServerUrlFormTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="27dp"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_server_url_form_common_notice"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Title" />
 
@@ -48,6 +48,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:paddingStart="16dp"
+                android:paddingEnd="0dp"
+                android:paddingBottom="16dp"
                 android:text="@string/login_clear_homeserver_history"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
                 android:textColor="@color/riotx_accent"
@@ -60,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="4dp"
                 android:text="@string/login_continue" />
 
         </LinearLayout>

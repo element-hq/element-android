@@ -22,18 +22,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import im.vector.app.R
-import im.vector.app.databinding.FragmentLoginResetPasswordMailConfirmationBinding
-
+import im.vector.app.databinding.FragmentLoginResetPasswordMailConfirmation2Binding
 import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked to check his email and to click on a button once it's done
  */
-class LoginResetPasswordMailConfirmationFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginResetPasswordMailConfirmationBinding>() {
+class LoginResetPasswordMailConfirmationFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginResetPasswordMailConfirmation2Binding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginResetPasswordMailConfirmationBinding {
-        return FragmentLoginResetPasswordMailConfirmationBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginResetPasswordMailConfirmation2Binding {
+        return FragmentLoginResetPasswordMailConfirmation2Binding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
