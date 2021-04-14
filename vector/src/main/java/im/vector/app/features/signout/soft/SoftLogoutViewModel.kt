@@ -100,21 +100,21 @@ class SoftLogoutViewModel @AssistedInject constructor(
                 null
             }
 
-            if (data is LoginFlowResult.Success) {
-                val loginMode = when {
-                    // SSO login is taken first
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                    else                                                                  -> LoginMode.Unsupported
-                }
+            data ?: return@launch
 
-                setState {
-                    copy(
-                            asyncHomeServerLoginFlowRequest = Success(loginMode)
-                    )
-                }
+            val loginMode = when {
+                // SSO login is taken first
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                        && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+                else                                                                  -> LoginMode.Unsupported
+            }
+
+            setState {
+                copy(
+                        asyncHomeServerLoginFlowRequest = Success(loginMode)
+                )
             }
         }
     }
