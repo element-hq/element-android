@@ -29,7 +29,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
-import arrow.core.Option
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -114,7 +113,7 @@ class DefaultNavigator @Inject constructor(
 
         sessionHolder.getSafeActiveSession()?.spaceService()?.getSpace(spaceId)?.spaceSummary()?.let {
             Timber.d("## Nav: Switching to space $spaceId / ${it.name}")
-            appStateHandler.selectedSpaceDataSource.post(Option.just(it))
+            appStateHandler.setCurrentSpace(it)
         } ?: kotlin.run {
             Timber.d("## Nav: Failed to switch to space $spaceId")
         }
@@ -252,7 +251,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomDirectory(context: Context, initialFilter: String) {
-        val selectedSpace = appStateHandler.selectedSpaceDataSource.currentValue?.orNull()?.let {
+        val selectedSpace = appStateHandler.safeActiveSpace()?.let {
             sessionHolder.getSafeActiveSession()?.getRoomSummary(it.roomId)
         }
         if (selectedSpace == null) {
@@ -276,9 +275,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openInviteUsersToRoom(context: Context, roomId: String) {
-        val selectedSpace = appStateHandler.selectedSpaceDataSource.currentValue?.orNull()?.let {
-            sessionHolder.getSafeActiveSession()?.getRoomSummary(it.roomId)
-        }
+        val selectedSpace = appStateHandler.safeActiveSpace()
         if (vectorPreferences.labSpaces() && selectedSpace != null) {
             // let user decides if he does it from space or room
             (context as? AppCompatActivity)?.supportFragmentManager?.let { fm ->
