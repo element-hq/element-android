@@ -31,13 +31,14 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableView
+import im.vector.app.core.ui.views.BubbleDependentView
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.themes.BubbleThemeUtils
 
 /**
  * Children must override getViewType()
  */
-abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>(), ItemWithEvents {
+abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>(), ItemWithEvents, BubbleDependentView<H> {
 
     // To use for instance when opening a permalink with an eventId
     @EpoxyAttribute
@@ -61,7 +62,7 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         }
         holder.checkableBackground.isChecked = highlighted
 
-        updateMessageBubble(holder)
+        updateMessageBubble(holder.checkableBackground.context, holder)
     }
 
     abstract class BaseHolder(@IdRes val stubId: Int) : VectorEpoxyHolder() {
@@ -82,52 +83,20 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         return false
     }
 
-    protected fun setFlatRtl(layout: ViewGroup, direction: Int, childDirection: Int, depth: Int = 1) {
-        layout.layoutDirection = direction
-        for (child in layout.children) {
-            if (depth > 1 && child is ViewGroup) {
-                setFlatRtl(child, direction, childDirection, depth-1)
-            } else {
-                child.layoutDirection = childDirection
-            }
-        }
-    }
-
-    fun updateMessageBubble(holder: H) {
-        val bubbleStyleSetting = BubbleThemeUtils.getBubbleStyle(holder.checkableBackground.context)
-        val bubbleStyle = when {
-            messageBubbleAllowed(holder.checkableBackground.context)                           -> {
-                bubbleStyleSetting
-            }
-            bubbleStyleSetting == BubbleThemeUtils.BUBBLE_STYLE_BOTH && pseudoBubbleAllowed()  -> {
-                BubbleThemeUtils.BUBBLE_STYLE_BOTH_HIDDEN
-            }
-            bubbleStyleSetting == BubbleThemeUtils.BUBBLE_STYLE_START && pseudoBubbleAllowed() -> {
-                BubbleThemeUtils.BUBBLE_STYLE_START_HIDDEN
-            }
-            else                                                                               -> {
-                BubbleThemeUtils.BUBBLE_STYLE_NONE
-            }
-        }
-        val reverseBubble = shouldReverseBubble() && BubbleThemeUtils.drawsDualSide(bubbleStyle)
-
-        setBubbleLayout(holder, bubbleStyle, bubbleStyleSetting, reverseBubble)
-    }
-
-    open fun messageBubbleAllowed(context: Context): Boolean {
+    override fun messageBubbleAllowed(context: Context): Boolean {
         return false
     }
 
-    open fun shouldReverseBubble(): Boolean {
+    override fun shouldReverseBubble(): Boolean {
         return false
     }
 
-    open fun pseudoBubbleAllowed(): Boolean {
+    override fun pseudoBubbleAllowed(): Boolean {
         return false
     }
 
     @CallSuper
-    open fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
+    override fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
         /* TODO-SC-merge: read receipt layout alignment
         val defaultDirection = holder.readReceiptsView.resources.configuration.layoutDirection;
         val defaultRtl = defaultDirection == View.LAYOUT_DIRECTION_RTL
