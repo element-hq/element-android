@@ -189,6 +189,7 @@ class RoomListViewModel @Inject constructor(
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
             is RoomListAction.ToggleTag                   -> handleToggleTag(action)
             is RoomListAction.SetMarkedUnread             -> handleSetMarkedUnread(action)
+            is RoomListAction.SetSectionExpanded          -> handleSetSectionExpanded(action.section, action.expanded)
             is RoomListAction.ToggleSection               -> handleToggleSection(action.section)
         }.exhaustive
     }
@@ -252,6 +253,10 @@ class RoomListViewModel @Inject constructor(
                     section.isExpanded.postValue(!section.isExpanded.value.orFalse())
                 }
          */
+    }
+
+    private fun handleSetSectionExpanded(roomSection: RoomsSection, expanded: Boolean) {
+        roomSection.isExpanded.postValue(expanded)
     }
 
     private fun handleFilter(action: RoomListAction.FilterWith) {

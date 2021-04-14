@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.list
 
 import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -25,6 +26,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -131,6 +133,12 @@ class RoomListFragment @Inject constructor(
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        persistExpandStatus()
+    }
+
     private fun refreshCollapseStates() {
         var contentInsertIndex = 1
         roomListViewModel.sections.forEachIndexed { index, roomsSection ->
@@ -155,16 +163,6 @@ class RoomListFragment @Inject constructor(
                     actualBlock.headerHeaderAdapter.roomsSectionData.copy(isExpanded = isRoomSectionExpanded)
             )
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        /* TODO-SC-merge: remember expand state for priority headers
-        withState(roomListViewModel) {
-            state -> context?.let { state.persistWithContext(it, roomListParams.displayMode) }
-        }
-         */
     }
 
     override fun showFailure(throwable: Throwable) {
@@ -308,6 +306,11 @@ class RoomListFragment @Inject constructor(
 
         this.concatAdapter = concatAdapter
         views.roomListView.adapter = concatAdapter
+
+        // Load initial expand statuses from settings
+        roomListViewModel.sections.forEach { section ->
+            roomListViewModel.handle(RoomListAction.SetSectionExpanded(section, shouldInitiallyExpand(section)))
+        }
     }
 
     private val showFabRunnable = Runnable {
@@ -462,5 +465,36 @@ class RoomListFragment @Inject constructor(
 
     override fun createRoom(initialName: String) {
         navigator.openCreateRoom(requireActivity(), initialName)
+    }
+
+
+    // SC addition: remember expanded sections across restarts
+    companion object {
+        const val ROOM_LIST_ROOM_EXPANDED_ANY_PREFIX = "ROOM_LIST_ROOM_EXPANDED_"
+    }
+
+    fun persistExpandStatus() {
+        val spEdit = getSharedPreferences().edit()
+        roomListViewModel.sections.forEach{section ->
+            val isExpanded = section.isExpanded.value
+            if (isExpanded != null) {
+                val pref = getRoomListExpandedPref(section)
+                spEdit.putBoolean(pref, isExpanded)
+            }
+        }
+        spEdit.apply()
+    }
+
+    private fun shouldInitiallyExpand(section: RoomsSection): Boolean {
+        val sp = getSharedPreferences()
+        val pref = getRoomListExpandedPref(section)
+        return sp.getBoolean(pref, true)
+    }
+
+    private fun getSharedPreferences(): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+    }
+    private fun getRoomListExpandedPref(section: RoomsSection): String {
+        return ROOM_LIST_ROOM_EXPANDED_ANY_PREFIX + section.sectionName + roomListParams.displayMode.toString()
     }
 }
