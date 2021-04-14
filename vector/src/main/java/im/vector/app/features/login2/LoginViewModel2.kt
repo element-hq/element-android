@@ -21,6 +21,7 @@ import android.net.Uri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -30,6 +31,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.tryAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
@@ -665,17 +667,11 @@ class LoginViewModel2 @AssistedInject constructor(
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard != null) {
-            try {
-                val info = safeLoginWizard.getProfileInfo(username)
-                setState {
-                    copy(
-                            loginProfileInfo = info
-                    )
-                }
-            } catch (failure: Throwable) {
-                // Ignore error
-                // TODO 404 may indicates that the user does not exist, so there is a mistake in the id
+            setState { copy(loginProfileInfo = Loading()) }
+            val result = tryAsync {
+               safeLoginWizard.getProfileInfo(username)
             }
+            setState { copy(loginProfileInfo = result) }
         }
     }
 

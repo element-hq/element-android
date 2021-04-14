@@ -23,6 +23,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
+import androidx.core.view.isVisible
+import com.airbnb.mvrx.Fail
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
@@ -31,8 +33,10 @@ import im.vector.app.databinding.FragmentLogin2SigninPasswordBinding
 import im.vector.app.features.home.AvatarRenderer
 import io.reactivex.rxkotlin.subscribeBy
 import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import javax.inject.Inject
+import javax.net.ssl.HttpsURLConnection
 
 /**
  * In this screen:
@@ -103,13 +107,17 @@ class LoginFragment2SigninPassword @Inject constructor(
         // Name and avatar
         views.loginWelcomeBack.text = getString(
                 R.string.login_welcome_back,
-                state.loginProfileInfo?.displayName?.takeIf { it.isNotBlank() } ?: state.userIdentifier()
+                state.loginProfileInfo()?.displayName?.takeIf { it.isNotBlank() } ?: state.userIdentifier()
         )
 
         avatarRenderer.render(
-                profileInfo = state.loginProfileInfo ?: LoginProfileInfo(state.userIdentifier(), null, null),
+                profileInfo = state.loginProfileInfo() ?: LoginProfileInfo(state.userIdentifier(), null, null),
                 imageView = views.loginUserIcon
         )
+
+        views.loginWelcomeBackWarning.isVisible = ((state.loginProfileInfo as? Fail)
+                ?.error as? Failure.ServerError)
+                ?.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */
     }
 
     private fun setupSubmitButton() {

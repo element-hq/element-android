@@ -25,6 +25,8 @@
     <string name="login_create_a_new_account">Create a new account</string>
     <string name="login_i_already_have_an_account">I already have an account</string>
 
+    <string name="login_unknown_user_warning">Warning: no profile information can be retrieved with this Matrix identifier. Please check that there is no mistake.</string>
+
     <string name="login_wait_for_email_notice_2">We just sent an email to %1$s.</string>
     <string name="login_wait_for_email_help">Click on the link it contains to continue the account creation.</string>
     <string name="login_account_created_title">Congratulations!</string>
