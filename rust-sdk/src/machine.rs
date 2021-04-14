@@ -450,13 +450,18 @@ impl OlmMachine {
         &self,
         keys: &str,
         passphrase: &str,
-        _progress_listener: Box<dyn ProgressListener>,
+        progress_listener: Box<dyn ProgressListener>,
     ) -> Result<KeysImportResult, KeyImportError> {
         let keys = Cursor::new(keys);
         let keys = decrypt_key_export(keys, passphrase)?;
 
-        // TODO use the progress listener
-        let result = self.runtime.block_on(self.inner.import_keys(keys))?;
+        let listener = |progress: usize, total: usize| {
+            progress_listener.on_progress(progress as i32, total as i32)
+        };
+
+        let result = self
+            .runtime
+            .block_on(self.inner.import_keys(keys, listener))?;
 
         Ok(KeysImportResult {
             total: result.1 as i32,
