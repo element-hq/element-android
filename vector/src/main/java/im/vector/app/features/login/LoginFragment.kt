@@ -91,16 +91,27 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 SignMode.SignUp             -> {
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
                     views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
-                    views.loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_UP
                 }
                 SignMode.SignIn,
                 SignMode.SignInWithMatrixId -> {
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
                     views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
-                    views.loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_IN
                 }
             }.exhaustive
         }
+    }
+
+    private fun setupSocialLoginButtons(state: LoginViewState) {
+        when (state.signMode) {
+            SignMode.Unknown            -> error("developer error")
+            SignMode.SignUp             -> {
+                views.loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_UP
+            }
+            SignMode.SignIn,
+            SignMode.SignInWithMatrixId -> {
+                views.loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_IN
+            }
+        }.exhaustive
     }
 
     private fun submit() {
@@ -277,6 +288,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
         setupUi(state)
         setupAutoFill(state)
+        setupSocialLoginButtons(state)
         setupButtons(state)
 
         when (state.asyncLoginAction) {
