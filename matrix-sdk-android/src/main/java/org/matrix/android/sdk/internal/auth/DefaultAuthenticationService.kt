@@ -144,16 +144,14 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
         return result.fold(
                 {
-                    if (it is LoginFlowResult.Success) {
-                        // The homeserver exists and up to date, keep the config
-                        // Homeserver url may have been changed, if it was a Riot url
-                        val alteredHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                                homeServerUri = Uri.parse(it.homeServerUrl)
-                        )
+                    // The homeserver exists and up to date, keep the config
+                    // Homeserver url may have been changed, if it was a Riot url
+                    val alteredHomeServerConnectionConfig = homeServerConnectionConfig.copy(
+                            homeServerUri = Uri.parse(it.homeServerUrl)
+                    )
 
-                        pendingSessionData = PendingSessionData(alteredHomeServerConnectionConfig)
-                                .also { data -> pendingSessionStore.savePendingSessionData(data) }
-                    }
+                    pendingSessionData = PendingSessionData(alteredHomeServerConnectionConfig)
+                            .also { data -> pendingSessionStore.savePendingSessionData(data) }
                     it
                 },
                 {
@@ -307,12 +305,12 @@ internal class DefaultAuthenticationService @Inject constructor(
         val loginFlowResponse = executeRequest(null) {
             authAPI.getLoginFlows()
         }
-        return LoginFlowResult.Success(
-                loginFlowResponse.flows.orEmpty().mapNotNull { it.type },
-                loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
-                versions.isLoginAndRegistrationSupportedBySdk(),
-                homeServerUrl,
-                !versions.isSupportedBySdk()
+        return LoginFlowResult(
+                supportedLoginTypes = loginFlowResponse.flows.orEmpty().mapNotNull { it.type },
+                ssoIdentityProviders = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
+                isLoginAndRegistrationSupported = versions.isLoginAndRegistrationSupportedBySdk(),
+                homeServerUrl = homeServerUrl,
+                isOutdatedHomeserver = !versions.isSupportedBySdk()
         )
     }
 
