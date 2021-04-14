@@ -17,7 +17,6 @@
 package im.vector.app.features.spaces
 
 import androidx.lifecycle.viewModelScope
-import arrow.core.Option
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -68,8 +67,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     init {
         observeSpaceSummaries()
         observeSelectionState()
-        appStateHandler.selectedSpaceDataSource
-                .observe()
+        appStateHandler.selectedSpaceObservable
                 .subscribe {
                     if (currentGroupId != it.orNull()?.roomId) {
                         setState {
@@ -90,8 +88,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                     currentGroupId = spaceSummary.roomId
                     _viewEvents.post(SpaceListViewEvents.OpenSpace)
                 }
-                val optionGroup = Option.just(spaceSummary)
-                appStateHandler.selectedSpaceDataSource.post(optionGroup)
+                appStateHandler.setCurrentSpace(spaceSummary)
             } else {
                 // If selected group is null we force to default. It can happens when leaving the selected group.
                 setState {

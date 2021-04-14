@@ -40,8 +40,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.rx.asObservable
 
 class SpaceRoomListSectionBuilder(
@@ -104,7 +102,7 @@ class SpaceRoomListSectionBuilder(
             }
         }
 
-        appStateHandler.selectedSpaceDataSource.observe()
+        appStateHandler.selectedSpaceObservable
                 .distinctUntilChanged()
                 .subscribe { activeSpaceOption ->
                     val selectedSpace = activeSpaceOption.orNull()
@@ -179,7 +177,7 @@ class SpaceRoomListSectionBuilder(
 
         // add suggested rooms
         val suggestedRoomsObservable = // MutableLiveData<List<SpaceChildInfo>>()
-                appStateHandler.selectedSpaceDataSource.observe()
+                appStateHandler.selectedSpaceObservable
                         .distinctUntilChanged()
                         .switchMap { activeSpaceOption ->
                             val selectedSpace = activeSpaceOption.orNull()
@@ -243,46 +241,57 @@ class SpaceRoomListSectionBuilder(
             it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
         }
 
-        // For DMs we still need some post query filter :/
-        // It's probably less important as home is not filtering at all
-        val dmList = MutableLiveData<List<RoomSummary>>()
-        Observables.combineLatest(
-                session.getRoomSummariesLive(
-                        roomSummaryQueryParams {
-                            memberships = listOf(Membership.JOIN)
-                            roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                        }
-                ).asObservable(),
-                appStateHandler.selectedSpaceDataSource.observe()
-
-        ) { rooms, currentSpaceOption ->
-            val currentSpace = currentSpaceOption.orNull()
-                    .takeIf {
-                        // the +ALL trick is annoying, should find a way to fix that at the source!
-                        MatrixPatterns.isRoomId(it?.roomId)
-                    }
-            if (currentSpace == null) {
-                rooms
-            } else {
-                rooms.filter {
-                    it.otherMemberIds
-                            .intersect(currentSpace.otherMemberIds)
-                            .isNotEmpty()
-                }
-            }
-        }.subscribe {
-            dmList.postValue(it)
-        }.also {
-            onDisposable.invoke(it)
+        addSection(sections,
+                activeSpaceAwareQueries,
+                R.string.bottom_action_people_x,
+                false,
+                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
         }
 
-        sections.add(
-                RoomsSection(
-                        sectionName = stringProvider.getString(R.string.bottom_action_people_x),
-                        liveList = dmList,
-                        notifyOfLocalEcho = false
-                )
-        )
+//        // For DMs we still need some post query filter :/
+//        // It's probably less important as home is not filtering at all
+//        val dmList = MutableLiveData<List<RoomSummary>>()
+//        Observables.combineLatest(
+//                session.getRoomSummariesLive(
+//                        roomSummaryQueryParams {
+//                            memberships = listOf(Membership.JOIN)
+//                            roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+//                        }
+//                ).asObservable(),
+//                appStateHandler.selectedSpaceDataSource.observe()
+//
+//        ) { rooms, currentSpaceOption ->
+//            val currentSpace = currentSpaceOption.orNull()
+//                    .takeIf {
+//                        // the +ALL trick is annoying, should find a way to fix that at the source!
+//                        MatrixPatterns.isRoomId(it?.roomId)
+//                    }
+//            if (currentSpace == null) {
+//                rooms
+//            } else {
+//                rooms.filter {
+//                    it.otherMemberIds
+//                            .intersect(currentSpace.otherMemberIds)
+//                            .isNotEmpty()
+//                }
+//            }
+//        }.subscribe {
+//            dmList.postValue(it)
+//        }.also {
+//            onDisposable.invoke(it)
+//        }
+//
+//        sections.add(
+//                RoomsSection(
+//                        sectionName = stringProvider.getString(R.string.bottom_action_people_x),
+//                        liveList = dmList,
+//                        notifyOfLocalEcho = false
+//                )
+//        )
     }
 
     private fun addSection(sections: MutableList<RoomsSection>,

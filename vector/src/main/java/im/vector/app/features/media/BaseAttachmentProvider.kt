@@ -31,6 +31,7 @@ import im.vector.lib.attachmentviewer.AttachmentInfo
 import im.vector.lib.attachmentviewer.AttachmentSourceProvider
 import im.vector.lib.attachmentviewer.ImageLoaderTarget
 import im.vector.lib.attachmentviewer.VideoLoaderTarget
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
@@ -153,7 +154,7 @@ abstract class BaseAttachmentProvider<Type>(
             target.onVideoURLReady(info.uid, data.url)
         } else {
             target.onVideoFileLoading(info.uid)
-            GlobalScope.launch {
+            GlobalScope.launch(Dispatchers.Main) {
                 val result = runCatching {
                     fileService.downloadFile(
                             fileName = data.filename,
