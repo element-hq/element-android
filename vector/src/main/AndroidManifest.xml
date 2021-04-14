@@ -106,6 +106,7 @@
         <activity
             android:name=".features.login.LoginActivity"
             android:launchMode="singleTask"
+            android:enabled="@bool/useLoginV1"
             android:windowSoftInputMode="adjustResize">
             <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
             <intent-filter>
@@ -122,6 +123,7 @@
         <activity
             android:name=".features.login2.LoginActivity2"
             android:launchMode="singleTask"
+            android:enabled="@bool/useLoginV2"
             android:windowSoftInputMode="adjustResize">
             <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
             <intent-filter>

@@ -24,9 +24,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import im.vector.app.BuildConfig
 import im.vector.app.databinding.FragmentLoginSplashBinding
-import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.settings.VectorPreferences
-
 import javax.inject.Inject
 
 /**
@@ -56,13 +54,6 @@ class LoginSplashFragment @Inject constructor(
                     "Branch: ${BuildConfig.GIT_BRANCH_NAME}\n" +
                     "Build: ${BuildConfig.BUILD_NUMBER}"
         }
-
-        views.loginSplashNewFlow.setOnClickListener { startNewFlow() }
-    }
-
-    private fun startNewFlow() {
-        startActivity(LoginActivity2.newIntent(requireContext(), null))
-        requireActivity().finish()
     }
 
     private fun getStarted() {

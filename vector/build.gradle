@@ -137,6 +137,10 @@ android {
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
         resValue "string", "build_number", "\"${buildNumber}\""
 
+        // The two booleans must not have the same value. We need two values for the manifest
+        resValue "bool", "useLoginV1", "false"
+        resValue "bool", "useLoginV2", "true"
+
         buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

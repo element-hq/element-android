@@ -56,6 +56,7 @@ import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
+import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
@@ -99,7 +100,11 @@ class DefaultNavigator @Inject constructor(
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
-        val intent = LoginActivity.newIntent(context, loginConfig)
+        val intent = if (context.resources.getBoolean(R.bool.useLoginV2)) {
+            LoginActivity2.newIntent(context, loginConfig)
+        } else {
+            LoginActivity.newIntent(context, loginConfig)
+        }
         intent.addFlags(flags)
         context.startActivity(intent)
     }
