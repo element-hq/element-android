@@ -218,6 +218,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         realm.schema.get("RoomSummaryEntity")
                 ?.addField(RoomSummaryEntityFields.ROOM_TYPE, String::class.java)
                 ?.addField(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, String::class.java)
+                ?.addField(RoomSummaryEntityFields.GROUP_IDS, String::class.java)
                 ?.transform { obj ->
                     // Should I put messaging type here?
                     obj.setString(RoomSummaryEntityFields.ROOM_TYPE, null)

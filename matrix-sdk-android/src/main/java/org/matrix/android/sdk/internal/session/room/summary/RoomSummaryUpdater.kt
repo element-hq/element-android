@@ -37,6 +37,7 @@ import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
+import org.matrix.android.sdk.internal.database.model.GroupSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
@@ -322,6 +323,38 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             // we need also to filter DMs...
             // it's more annoying as based on if the other members belong the space or not
+
+            // LEGACY GROUPS
+            // lets mark rooms that belongs to groups
+            val existingGroups = GroupSummaryEntity.where(realm).findAll()
+
+            // For rooms
+            realm.where(RoomSummaryEntity::class.java)
+                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                    .findAll().forEach { room ->
+                        val belongsTo = existingGroups.filter { it.roomIds.contains(room.roomId) }
+                        room.groupIds = if (belongsTo.isEmpty()) {
+                            null
+                        } else {
+                            "|${belongsTo.joinToString("|")}|"
+                        }
+                    }
+
+            // For DMS
+            realm.where(RoomSummaryEntity::class.java)
+                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                    .findAll().forEach { room ->
+                        val belongsTo = existingGroups.filter {
+                            it.userIds.intersect(room.otherMemberIds).isNotEmpty()
+                        }
+                        room.groupIds = if (belongsTo.isEmpty()) {
+                            null
+                        } else {
+                            "|${belongsTo.joinToString("|")}|"
+                        }
+                    }
         }.also {
             Timber.v("## SPACES: Finish checking room hierarchy in $it ms")
         }

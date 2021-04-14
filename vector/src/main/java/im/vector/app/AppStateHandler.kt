@@ -35,7 +35,7 @@ import javax.inject.Singleton
 // TODO Keep this class for now, will maybe be used fro Space
 @Singleton
 class AppStateHandler @Inject constructor(
-        private val sessionDataSource: ActiveSessionDataSource,
+        sessionDataSource: ActiveSessionDataSource,
         private val uiStateRepository: UiStateRepository
 ) : LifecycleObserver {
 

@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
@@ -80,6 +81,12 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         observeSelectedGroupStore()
         observeSelectedSpaceStore()
         observeRoomSummaries()
+
+        session.rx().liveUser(session.myUserId).execute {
+            copy(
+                    myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
+            )
+        }
     }
 
     override fun handle(action: HomeDetailAction) {
