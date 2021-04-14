@@ -149,8 +149,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     private fun observeSelectedSpaceStore() {
-        appStateHandler.selectedSpaceDataSource
-                .observe()
+        appStateHandler.selectedSpaceObservable
                 .subscribe {
                     setState {
                         copy(spaceSummary = it)
@@ -160,7 +159,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     private fun observeRoomSummaries() {
-        appStateHandler.selectedSpaceDataSource.observe().distinctUntilChanged().switchMap {
+        appStateHandler.selectedSpaceObservable.distinctUntilChanged().switchMap {
             session.getPagedRoomSummariesLive(
                     roomSummaryQueryParams {
                         memberships = Membership.activeMemberships()

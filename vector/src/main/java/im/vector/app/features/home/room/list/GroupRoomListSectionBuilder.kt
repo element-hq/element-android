@@ -113,7 +113,9 @@ class GroupRoomListSectionBuilder(
         return sections
     }
 
-    private fun buildRoomsSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>, actualGroupId: String?) {
+    private fun buildRoomsSections(sections: MutableList<RoomsSection>,
+                                   activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
+                                   actualGroupId: String?) {
         addSection(
                 sections,
                 activeSpaceAwareQueries,

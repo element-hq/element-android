@@ -22,7 +22,6 @@ import com.squareup.moshi.JsonClass
 /**
  *  "content": {
  *      "via": ["example.com"],
- *      "present": true,
  *      "order": "abcd",
  *      "default": true
  *  }
