@@ -153,7 +153,7 @@
     <string name="video_meeting">เริ่มการประชุมวิดีโอ</string>
     <string name="start_chatting">เริ่มแชท</string>
     <string name="reset">รีเซ็ต</string>
-    <string name="dismiss">ปิดทิ้ง</string>
+    <string name="dismiss">ปิด</string>
     <string name="disconnect">เลิกเชื่อมต่อ</string>
     <string name="view_decrypted_source">ดูต้นฉบับที่ถอดรหัสแล้ว</string>
     <string name="view_source">ดูต้นฉบับ</string>
@@ -310,4 +310,14 @@
     <string name="room_sync_in_progress">กำลังซิงค์…</string>
     <string name="remove">เอาออก</string>
     <string name="room_recents_favourites">รายการโปรด</string>
+    <string name="settings_password">รหัสผ่าน</string>
+    <string name="settings_change_password">เปลี่ยนรหัสผ่าน</string>
+    <string name="settings_category_timeline">เส้นเวลา</string>
+    <string name="notice_direct_room_leave_by_you">คุณได้ออกจากห้อง</string>
+    <string name="notice_direct_room_leave">%1$s ได้ออกจากห้อง</string>
+    <string name="ssl_remain_offline">เพิกเฉย</string>
+    <string name="room_permissions_change_room_name">เปลี่ยนชื่อห้อง</string>
+    <string name="room_permissions_ban_users">ห้ามผู้ใช้</string>
+    <string name="ssl_fingerprint_hash">ลายนิ้วมือ (%s):</string>
+    <string name="room_participants_action_ignore_title">เพิกเฉยผู้ใช้</string>
 </resources>
