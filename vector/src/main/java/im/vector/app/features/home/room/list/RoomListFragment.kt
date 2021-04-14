@@ -297,7 +297,9 @@ class RoomListFragment @Inject constructor(
                     )
             )
             concatAdapter.addAdapter(sectionAdapter)
-            concatAdapter.addAdapter(contentAdapter.adapter)
+            if (section.isExpanded.value.orTrue()) {
+                concatAdapter.addAdapter(contentAdapter.adapter)
+            }
         }
 
         // Add the footer controller
