@@ -60,8 +60,8 @@ class SpaceHierarchyTest : InstrumentedTest {
 
         val syncedSpace = session.spaceService().getSpace(spaceId)
 
-        val roomId = commonTestHelper.doSync<String> {
-            session.createRoom(CreateRoomParams().apply { name = "General" }, it)
+        val roomId = runBlocking {
+            session.createRoom(CreateRoomParams().apply { name = "General" })
         }
 
         val viaServers = listOf(session.sessionParams.homeServerHost ?: "")
@@ -108,8 +108,8 @@ class SpaceHierarchyTest : InstrumentedTest {
         val children = listOf("General" to true /*canonical*/, "Random" to false)
 
         val roomIdList = children.map {
-            commonTestHelper.doSync<String> { cb ->
-                session.createRoom(CreateRoomParams().apply { name = it.first }, cb)
+            runBlocking {
+                session.createRoom(CreateRoomParams().apply { name = it.first })
             } to it.second
         }
 
@@ -169,11 +169,11 @@ class SpaceHierarchyTest : InstrumentedTest {
 
         // Create orphan rooms
 
-        val orphan1 = commonTestHelper.doSync<String> { cb ->
-            session.createRoom(CreateRoomParams().apply { name = "O1" }, cb)
+        val orphan1 = runBlocking {
+            session.createRoom(CreateRoomParams().apply { name = "O1" })
         }
-        val orphan2 = commonTestHelper.doSync<String> { cb ->
-            session.createRoom(CreateRoomParams().apply { name = "O2" }, cb)
+        val orphan2 = runBlocking {
+            session.createRoom(CreateRoomParams().apply { name = "O2" })
         }
 
         val allRooms = session.getRoomSummaries(roomSummaryQueryParams { excludeType = listOf(RoomType.SPACE) })
@@ -195,8 +195,8 @@ class SpaceHierarchyTest : InstrumentedTest {
         assertTrue(aChildren.indexOfFirst { it.name == "C2" } != -1, "A1 should be a grand child of A")
 
         // Add a non canonical child and check that it does not appear as orphan
-        val a3 = commonTestHelper.doSync<String> { cb ->
-            session.createRoom(CreateRoomParams().apply { name = "A3" }, cb)
+        val a3 = runBlocking {
+            session.createRoom(CreateRoomParams().apply { name = "A3" })
         }
         runBlocking {
             spaceA!!.addChildren(a3, viaServers, null, false)
@@ -354,8 +354,8 @@ class SpaceHierarchyTest : InstrumentedTest {
 
         val roomIds =
                 childInfo.map { entry ->
-                    commonTestHelper.doSync<String> { cb ->
-                        session.createRoom(CreateRoomParams().apply { name = entry.first }, cb)
+                    runBlocking {
+                        session.createRoom(CreateRoomParams().apply { name = entry.first })
                     }
                 }
 

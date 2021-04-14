@@ -42,7 +42,6 @@ import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
-import org.matrix.android.sdk.internal.util.awaitCallback
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -84,12 +83,12 @@ class SpaceCreationTest : InstrumentedTest {
         }
         assertEquals(100, powerLevelsContent?.eventsDefault, "Space-rooms should be created with a power level for events_default of 100")
 
-        val guestAccess =  syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_GUEST_ACCESS)?.content
+        val guestAccess = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_GUEST_ACCESS)?.content
                 ?.toModel<RoomGuestAccessContent>()?.guestAccess
 
         assertEquals(GuestAccess.CanJoin, guestAccess, "Public space room should be peekable by guest")
 
-        val historyVisibility =  syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY)?.content
+        val historyVisibility = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY)?.content
                 ?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility
 
         assertEquals(RoomHistoryVisibility.WORLD_READABLE, historyVisibility, "Public space room should be world readable")
@@ -141,13 +140,11 @@ class SpaceCreationTest : InstrumentedTest {
 
         // create a room
         val firstChild: String = runBlocking {
-            awaitCallback<String> {
-                aliceSession.createRoom(CreateRoomParams().apply {
-                    this.name = "FirstRoom"
-                    this.topic = "Description of first room"
-                    this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                }, it)
-            }
+            aliceSession.createRoom(CreateRoomParams().apply {
+                this.name = "FirstRoom"
+                this.topic = "Description of first room"
+                this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+            })
         }
 
         runBlocking {
@@ -155,13 +152,11 @@ class SpaceCreationTest : InstrumentedTest {
         }
 
         val secondChild: String = runBlocking {
-            awaitCallback {
-                aliceSession.createRoom(CreateRoomParams().apply {
-                    this.name = "SecondRoom"
-                    this.topic = "Description of second room"
-                    this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                }, it)
-            }
+            aliceSession.createRoom(CreateRoomParams().apply {
+                this.name = "SecondRoom"
+                this.topic = "Description of second room"
+                this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+            })
         }
 
         runBlocking {
