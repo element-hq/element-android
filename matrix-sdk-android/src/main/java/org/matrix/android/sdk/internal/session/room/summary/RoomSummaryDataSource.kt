@@ -278,7 +278,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         }
 
         if (queryParams.activeGroupId != null) {
-            query.contains(RoomSummaryEntityFields.GROUP_IDS, queryParams.activeGroupId)
+            query.contains(RoomSummaryEntityFields.GROUP_IDS, queryParams.activeGroupId!!)
         }
         return query
     }
