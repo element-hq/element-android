@@ -76,6 +76,7 @@ import im.vector.app.features.login2.LoginFragment2SigninPassword
 import im.vector.app.features.login2.LoginFragment2SigninUsername
 import im.vector.app.features.login2.LoginFragment2SignupPassword
 import im.vector.app.features.login2.LoginFragment2SignupUsername
+import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.LoginFragmentToAny2
 import im.vector.app.features.login2.LoginGenericTextInputFormFragment2
 import im.vector.app.features.login2.LoginResetPasswordFragment2
@@ -285,6 +286,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LoginFragment2SigninUsername::class)
     fun bindLoginFragment2SigninUsername(fragment: LoginFragment2SigninUsername): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(AccountCreatedFragment::class)
+    fun bindAccountCreatedFragment(fragment: AccountCreatedFragment): Fragment
 
     @Binds
     @IntoMap

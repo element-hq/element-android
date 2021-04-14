@@ -23,16 +23,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
-import androidx.core.view.isVisible
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.databinding.FragmentLogin2SigninPasswordBinding
+import im.vector.app.features.home.AvatarRenderer
 import io.reactivex.rxkotlin.subscribeBy
+import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import javax.inject.Inject
 
@@ -42,7 +40,9 @@ import javax.inject.Inject
  * - the user is asked for password to sign in to a homeserver.
  * - He also can reset his password
  */
-class LoginFragment2SigninPassword @Inject constructor() : AbstractSSOLoginFragment2<FragmentLogin2SigninPasswordBinding>() {
+class LoginFragment2SigninPassword @Inject constructor(
+        private val avatarRenderer: AvatarRenderer
+) : AbstractSSOLoginFragment2<FragmentLogin2SigninPasswordBinding>() {
 
     private var passwordShown = false
 
@@ -106,15 +106,10 @@ class LoginFragment2SigninPassword @Inject constructor() : AbstractSSOLoginFragm
                 state.loginProfileInfo?.displayName?.takeIf { it.isNotBlank() } ?: state.userIdentifier()
         )
 
-        if (state.loginProfileInfo != null) {
-            views.loginUserIcon.isVisible = true
-            Glide.with(requireContext())
-                    .load(state.loginProfileInfo.fullAvatarUrl)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(views.loginUserIcon)
-        } else {
-            views.loginUserIcon.isVisible = false
-        }
+        avatarRenderer.render(
+                profileInfo = state.loginProfileInfo ?: LoginProfileInfo(state.userIdentifier(), null, null),
+                imageView = views.loginUserIcon
+        )
     }
 
     private fun setupSubmitButton() {

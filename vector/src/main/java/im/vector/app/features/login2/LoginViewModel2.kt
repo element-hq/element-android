@@ -145,7 +145,13 @@ class LoginViewModel2 @AssistedInject constructor(
             is LoginAction2.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             LoginAction2.ClearHomeServerHistory        -> handleClearHomeServerHistory()
             is LoginAction2.PostViewEvent              -> _viewEvents.post(action.viewEvent)
+            is LoginAction2.Finish                     -> handleFinish()
         }.exhaustive
+    }
+
+    private fun handleFinish() {
+        // Just post a view Event
+        _viewEvents.post(LoginViewEvents2.Finish)
     }
 
     private fun handleChooseAServerForSignin() {

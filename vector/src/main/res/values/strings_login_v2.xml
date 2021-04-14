@@ -27,5 +27,11 @@
 
     <string name="login_wait_for_email_notice_2">We just sent an email to %1$s.</string>
     <string name="login_wait_for_email_help">Click on the link it contains to continue the account creation.</string>
+    <string name="login_account_created_title">Congratulations!</string>
+    <string name="login_account_created_subtitle">You account %s has been successfully created.</string>
+    <string name="login_account_created_notice">To complete your profile, you can set a profile image and/or a display name. This can also be done later from the settings.</string>
+    <string name="login_account_created_notice_2">This is how your messages will appear:</string>
+    <string name="login_account_created_message">Hello Matrix world!</string>
+    <string name="login_account_created_instruction">Click on the image and on your name to configure them.</string>
 
 </resources>

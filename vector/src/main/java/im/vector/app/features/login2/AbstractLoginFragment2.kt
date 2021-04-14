@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.failure.Failure
 /**
  * Parent Fragment for all the login/registration screens
  */
-abstract class AbstractLoginFragment2<VB: ViewBinding> : VectorBaseFragment<VB>(), OnBackPressed {
+abstract class AbstractLoginFragment2<VB : ViewBinding> : VectorBaseFragment<VB>(), OnBackPressed {
 
     protected val loginViewModel: LoginViewModel2 by activityViewModel()
 
@@ -147,11 +147,19 @@ abstract class AbstractLoginFragment2<VB: ViewBinding> : VectorBaseFragment<VB>(
         }
     }
 
-    final override fun invalidate() = withState(loginViewModel) { state ->
-        // True when email is sent with success to the homeserver
-        isResetPasswordStarted = state.resetPasswordEmail.isNullOrBlank().not()
+    final override fun invalidate() {
+        withState(loginViewModel) { state ->
+            // True when email is sent with success to the homeserver
+            isResetPasswordStarted = state.resetPasswordEmail.isNullOrBlank().not()
 
-        updateWithState(state)
+            updateWithState(state)
+        }
+
+        invalidateMore()
+    }
+
+    protected open fun invalidateMore() {
+        // No op by default
     }
 
     open fun updateWithState(state: LoginViewState2) {

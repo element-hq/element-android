@@ -41,6 +41,7 @@ sealed class LoginAction2 : VectorViewModelAction {
 
     // Username to Login or Register, depending on the signMode
     data class SetUserName(val username: String) : LoginAction2()
+
     // Password to Login or Register, depending on the signMode
     data class SetUserPassword(val password: String) : LoginAction2()
 
@@ -82,4 +83,7 @@ sealed class LoginAction2 : VectorViewModelAction {
     data class PostViewEvent(val viewEvent: LoginViewEvents2) : LoginAction2()
 
     data class UserAcceptCertificate(val fingerprint: Fingerprint) : LoginAction2()
+
+    // Account customization is over
+    object Finish : LoginAction2()
 }

@@ -56,4 +56,6 @@ sealed class LoginViewEvents2 : VectorViewEvents {
     data class OnWebLoginError(val errorCode: Int, val description: String, val failingUrl: String) : LoginViewEvents2()
 
     data class OnSessionCreated(val newAccount: Boolean): LoginViewEvents2()
+
+    object Finish : LoginViewEvents2()
 }

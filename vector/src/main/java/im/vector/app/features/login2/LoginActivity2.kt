@@ -46,6 +46,7 @@ import im.vector.app.features.login.LoginWaitForEmailFragmentArgument
 import im.vector.app.features.login.isSupported
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.login.terms.toLocalizedLoginTerms
+import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.terms.LoginTermsFragment2
 import im.vector.app.features.pin.UnlockedActivity
 
@@ -245,14 +246,26 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
             is LoginViewEvents2.OnLoginModeNotSupported                    ->
                 onLoginModeNotSupported(event.supportedTypes)
             is LoginViewEvents2.OnSessionCreated                           -> handleOnSessionCreated(event)
+            is LoginViewEvents2.Finish                                     -> terminate(true)
         }.exhaustive
     }
 
     private fun handleOnSessionCreated(event: LoginViewEvents2.OnSessionCreated) {
-        // TODO Propose to set avatar and display name
+        if (event.newAccount) {
+            // Propose to set avatar and display name
+            // Back on this Fragment will finish the Activity
+            addFragmentToBackstack(R.id.loginFragmentContainer,
+                    AccountCreatedFragment::class.java,
+                    option = commonOption)
+        } else {
+            terminate(false)
+        }
+    }
+
+    private fun terminate(newAccount: Boolean) {
         val intent = HomeActivity.newIntent(
                 this,
-                accountCreation = event.newAccount
+                accountCreation = newAccount
         )
         startActivity(intent)
         finish()
@@ -260,7 +273,12 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
 
     private fun updateWithState(LoginViewState2: LoginViewState2) {
         // Loading
-        views.loginLoading.isVisible = LoginViewState2.isLoading
+        setIsLoading(LoginViewState2.isLoading)
+    }
+
+    // Hack for AccountCreatedFragment
+    fun setIsLoading(isLoading: Boolean) {
+        views.loginLoading.isVisible = isLoading
     }
 
     private fun onWebLoginError(onWebLoginError: LoginViewEvents2.OnWebLoginError) {
