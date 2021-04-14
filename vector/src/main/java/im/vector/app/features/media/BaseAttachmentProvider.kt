@@ -155,7 +155,7 @@ abstract class BaseAttachmentProvider<Type>(
             target.onVideoURLReady(info.uid, data.url)
         } else {
             target.onVideoFileLoading(info.uid)
-            GlobalScope.launch {
+            GlobalScope.launch(Dispatchers.Main) {
                 val result = runCatching {
                     fileService.downloadFile(
                             fileName = data.filename,

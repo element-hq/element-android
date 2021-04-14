@@ -74,7 +74,7 @@ class RoomListViewModel @Inject constructor(
     init {
         observeMembershipChanges()
 
-        appStateHandler.selectedSpaceDataSource.observe()
+        appStateHandler.selectedSpaceObservable
                 .distinctUntilChanged()
                 .map { it.orNull() }
                 .distinctUntilChanged()

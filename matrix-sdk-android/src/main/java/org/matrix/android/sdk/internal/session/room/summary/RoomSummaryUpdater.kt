@@ -323,6 +323,31 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             // we need also to filter DMs...
             // it's more annoying as based on if the other members belong the space or not
+            RoomSummaryEntity.where(realm)
+                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                    .findAll()
+                    .forEach { dmRoom ->
+                        val relatedSpaces = lookupMap.keys
+                                .filter { it.roomType == RoomType.SPACE }
+                                .filter {
+                                    dmRoom.otherMemberIds.toList().intersect(it.otherMemberIds.toList()).isNotEmpty()
+                                }
+                                .map { it.roomId }
+                                .distinct()
+                        val flattenRelated = mutableListOf<String>().apply {
+                            addAll(relatedSpaces)
+                            relatedSpaces.map { flattenSpaceParents[it] }.forEach {
+                                if (it != null) addAll(it)
+                            }
+                        }.distinct()
+                        if (flattenRelated.isEmpty()) {
+                            dmRoom.flattenParentIds = null
+                        } else {
+                            dmRoom.flattenParentIds = "|${flattenRelated.joinToString("|")}|"
+                        }
+//                        Timber.v("## SPACES: flatten of ${dmRoom.otherMemberIds.joinToString(",")} is ${dmRoom.flattenParentIds}")
+                    }
 
             // LEGACY GROUPS
             // lets mark rooms that belongs to groups
