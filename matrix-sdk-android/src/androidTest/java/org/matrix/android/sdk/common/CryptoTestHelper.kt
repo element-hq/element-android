@@ -112,8 +112,8 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             bobRoomSummariesLive.observeForever(newRoomObserver)
         }
 
-        mTestHelper.doSync<Unit> {
-            aliceRoom.invite(bobSession.myUserId, callback = it)
+        mTestHelper.runBlockingTest {
+            aliceRoom.invite(bobSession.myUserId)
         }
 
         mTestHelper.await(lock1)
@@ -172,8 +172,8 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     fun createSamAccountAndInviteToTheRoom(room: Room): Session {
         val samSession = mTestHelper.createAccount(TestConstants.USER_SAM, defaultSessionParams)
 
-        mTestHelper.doSync<Unit> {
-            room.invite(samSession.myUserId, null, it)
+        mTestHelper.runBlockingTest {
+            room.invite(samSession.myUserId, null)
         }
 
         mTestHelper.doSync<Unit> {
@@ -337,8 +337,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
                 requestID,
                 roomId,
                 bob.myUserId,
-                bob.sessionParams.credentials.deviceId!!,
-                null)
+                bob.sessionParams.credentials.deviceId!!)
 
         // we should reach SHOW SAS on both
         var alicePovTx: OutgoingSasVerificationTransaction? = null
@@ -411,7 +410,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         val sessions = mutableListOf(aliceSession)
         for (index in 1 until numberOfMembers) {
             val session = mTestHelper.createAccount("User_$index", defaultSessionParams)
-            mTestHelper.doSync<Unit>(timeout = 600_000) { room.invite(session.myUserId, null, it) }
+            mTestHelper.runBlockingTest(timeout = 600_000) { room.invite(session.myUserId, null) }
             println("TEST -> " + session.myUserId + " invited")
             mTestHelper.doSync<Unit> { session.joinRoom(room.roomId, null, emptyList(), it) }
             println("TEST -> " + session.myUserId + " joined")

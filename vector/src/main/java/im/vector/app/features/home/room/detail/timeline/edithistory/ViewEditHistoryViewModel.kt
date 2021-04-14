@@ -15,41 +15,27 @@
  */
 package im.vector.app.features.home.room.detail.timeline.edithistory
 
-import com.airbnb.mvrx.Async
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.isReply
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import timber.log.Timber
 import java.util.UUID
-
-data class ViewEditHistoryViewState(
-        val eventId: String,
-        val roomId: String,
-        val isOriginalAReply: Boolean = false,
-        val editList: Async<List<Event>> = Uninitialized)
-    : MvRxState {
-
-    constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)
-}
 
 class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
                                                            initialState: ViewEditHistoryViewState,
@@ -82,48 +68,48 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
 
     private fun loadHistory() {
         setState { copy(editList = Loading()) }
-        room.fetchEditHistory(eventId, object : MatrixCallback<List<Event>> {
-            override fun onFailure(failure: Throwable) {
+
+        viewModelScope.launch {
+            val data = try {
+                room.fetchEditHistory(eventId)
+            } catch (failure: Throwable) {
                 setState {
                     copy(editList = Fail(failure))
                 }
+                return@launch
             }
 
-            override fun onSuccess(data: List<Event>) {
-                var originalIsReply = false
+            var originalIsReply = false
 
-                val events = data.map { event ->
-                    val timelineID = event.roomId + UUID.randomUUID().toString()
-                    event.also {
-                        // We need to check encryption
-                        if (it.isEncrypted() && it.mxDecryptionResult == null) {
-                            // for now decrypt sync
-                            try {
-                                val result = session.cryptoService().decryptEvent(it, timelineID)
-                                it.mxDecryptionResult = OlmDecryptionResult(
-                                        payload = result.clearEvent,
-                                        senderKey = result.senderCurve25519Key,
-                                        keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                                )
-                            } catch (e: MXCryptoError) {
-                                Timber.w("Failed to decrypt event in history")
-                            }
-                        }
-
-                        if (event.eventId == it.eventId) {
-                            originalIsReply = it.isReply()
-                        }
+            data.forEach { event ->
+                val timelineID = event.roomId + UUID.randomUUID().toString()
+                // We need to check encryption
+                if (event.isEncrypted() && event.mxDecryptionResult == null) {
+                    // for now decrypt sync
+                    try {
+                        val result = session.cryptoService().decryptEvent(event, timelineID)
+                        event.mxDecryptionResult = OlmDecryptionResult(
+                                payload = result.clearEvent,
+                                senderKey = result.senderCurve25519Key,
+                                keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                        )
+                    } catch (e: MXCryptoError) {
+                        Timber.w("Failed to decrypt event in history")
                     }
                 }
-                setState {
-                    copy(
-                            editList = Success(events),
-                            isOriginalAReply = originalIsReply
-                    )
+
+                if (event.eventId == eventId) {
+                    originalIsReply = event.isReply()
                 }
             }
-        })
+            setState {
+                copy(
+                        editList = Success(data),
+                        isOriginalAReply = originalIsReply
+                )
+            }
+        }
     }
 
     override fun handle(action: EmptyAction) {

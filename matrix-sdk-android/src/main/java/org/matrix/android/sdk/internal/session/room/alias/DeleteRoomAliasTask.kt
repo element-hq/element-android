@@ -34,8 +34,8 @@ internal class DefaultDeleteRoomAliasTask @Inject constructor(
 ) : DeleteRoomAliasTask {
 
     override suspend fun execute(params: DeleteRoomAliasTask.Params) {
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = directoryAPI.deleteRoomAlias(
+        executeRequest(globalErrorReceiver) {
+            directoryAPI.deleteRoomAlias(
                     roomAlias = params.roomAlias
             )
         }

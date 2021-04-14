@@ -31,7 +31,8 @@ import im.vector.lib.attachmentviewer.AttachmentInfo
 import im.vector.lib.attachmentviewer.AttachmentSourceProvider
 import im.vector.lib.attachmentviewer.ImageLoaderTarget
 import im.vector.lib.attachmentviewer.VideoLoaderTarget
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -152,21 +153,20 @@ abstract class BaseAttachmentProvider<Type>(
             target.onVideoURLReady(info.uid, data.url)
         } else {
             target.onVideoFileLoading(info.uid)
-            fileService.downloadFile(
-                    fileName = data.filename,
-                    mimeType = data.mimeType,
-                    url = data.url,
-                    elementToDecrypt = data.elementToDecrypt,
-                    callback = object : MatrixCallback<File> {
-                        override fun onSuccess(data: File) {
-                            target.onVideoFileReady(info.uid, data)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            target.onVideoFileLoadFailed(info.uid)
-                        }
-                    }
-            )
+            GlobalScope.launch {
+                val result = runCatching {
+                    fileService.downloadFile(
+                            fileName = data.filename,
+                            mimeType = data.mimeType,
+                            url = data.url,
+                            elementToDecrypt = data.elementToDecrypt
+                    )
+                }
+                result.fold(
+                        { target.onVideoFileReady(info.uid, it) },
+                        { target.onVideoFileLoadFailed(info.uid) }
+                )
+            }
         }
     }
 

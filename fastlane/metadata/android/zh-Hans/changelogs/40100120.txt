@@ -1,0 +1,2 @@
+此版本的主要变化：链接预览，全新 Emoji 键盘，全新聊天室设置功能，以及圣诞节雪花！
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.0.12

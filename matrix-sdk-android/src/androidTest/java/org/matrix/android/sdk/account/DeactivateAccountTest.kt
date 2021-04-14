@@ -26,15 +26,12 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
-import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.common.TestMatrixCallback
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
@@ -46,12 +43,13 @@ class DeactivateAccountTest : InstrumentedTest {
 
     @Test
     fun deactivateAccountTest() {
-        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
+        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         // Deactivate the account
         commonTestHelper.runBlockingTest {
             session.deactivateAccount(
-                    object : UserInteractiveAuthInterceptor {
+                    eraseAllData = false,
+                    userInteractiveAuthInterceptor = object : UserInteractiveAuthInterceptor {
                         override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                             promise.resume(
                                     UserPasswordAuth(
@@ -61,7 +59,8 @@ class DeactivateAccountTest : InstrumentedTest {
                                     )
                             )
                         }
-                    }, false)
+                    }
+            )
         }
 
         // Try to login on the previous account, it will fail (M_USER_DEACTIVATED)
@@ -75,23 +74,23 @@ class DeactivateAccountTest : InstrumentedTest {
         // Try to create an account with the deactivate account user id, it will fail (M_USER_IN_USE)
         val hs = commonTestHelper.createHomeServerConfig()
 
-        commonTestHelper.doSync<LoginFlowResult> {
-            commonTestHelper.matrix.authenticationService.getLoginFlow(hs, it)
+        commonTestHelper.runBlockingTest {
+            commonTestHelper.matrix.authenticationService.getLoginFlow(hs)
         }
 
         var accountCreationError: Throwable? = null
-        commonTestHelper.waitWithLatch {
-            commonTestHelper.matrix.authenticationService
-                    .getRegistrationWizard()
-                    .createAccount(session.myUserId.substringAfter("@").substringBefore(":"),
-                            TestConstants.PASSWORD,
-                            null,
-                            object : TestMatrixCallback<RegistrationResult>(it, false) {
-                                override fun onFailure(failure: Throwable) {
-                                    accountCreationError = failure
-                                    super.onFailure(failure)
-                                }
-                            })
+        commonTestHelper.runBlockingTest {
+            try {
+                commonTestHelper.matrix.authenticationService
+                        .getRegistrationWizard()
+                        .createAccount(
+                                session.myUserId.substringAfter("@").substringBefore(":"),
+                                TestConstants.PASSWORD,
+                                null
+                        )
+            } catch (failure: Throwable) {
+                accountCreationError = failure
+            }
         }
 
         // Test the error

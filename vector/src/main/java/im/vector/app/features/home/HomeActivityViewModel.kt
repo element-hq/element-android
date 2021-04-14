@@ -40,7 +40,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.session.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -52,6 +52,7 @@ import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class HomeActivityViewModel @AssistedInject constructor(
         @Assisted initialState: HomeActivityViewState,
@@ -129,7 +130,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                             // Schedule a check of the bootstrap when the init sync will be finished
                             checkBootstrap = true
                         }
-                        is InitialSyncProgressService.Status.Idle -> {
+                        is InitialSyncProgressService.Status.Idle        -> {
                             if (checkBootstrap) {
                                 checkBootstrap = false
                                 maybeBootstrapCrossSigningAfterInitialSync()
@@ -202,9 +203,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                     _viewEvents.post(
                             HomeActivityViewEvents.OnNewSession(
                                     session.getUser(session.myUserId)?.toMatrixItem(),
-                                    // If it's an old unverified, we should send requests
-                                    // instead of waiting for an incoming one
-                                    reAuthHelper.data != null
+                                    // Always send request instead of waiting for an incoming as per recent EW changes
+                                    false
                             )
                     )
                 }
@@ -228,7 +228,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                                                     )
                                             )
                                         } else {
-                                            promise.resumeWith(Result.failure(Exception("Cannot silently initialize cross signing, UIA missing")))
+                                            promise.resumeWithException(Exception("Cannot silently initialize cross signing, UIA missing"))
                                         }
                                     }
                                 },

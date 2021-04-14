@@ -63,8 +63,8 @@ internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(
         val list = ignoredUserIds.toList()
         val body = IgnoredUsersContent.createWithUserIds(list)
 
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = accountDataApi.setAccountData(userId, UserAccountDataTypes.TYPE_IGNORED_USER_LIST, body)
+        executeRequest(globalErrorReceiver) {
+            accountDataApi.setAccountData(userId, UserAccountDataTypes.TYPE_IGNORED_USER_LIST, body)
         }
 
         // Update the DB right now (do not wait for the sync to come back with updated data, for a faster UI update)

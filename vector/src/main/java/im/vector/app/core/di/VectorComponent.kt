@@ -26,6 +26,7 @@ import im.vector.app.EmojiCompatWrapper
 import im.vector.app.VectorApplication
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.core.utils.DimensionConverter
@@ -35,7 +36,6 @@ import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.HomeRoomListDataSource
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
@@ -113,8 +113,6 @@ interface VectorComponent {
 
     fun errorFormatter(): ErrorFormatter
 
-    fun homeRoomListObservableStore(): HomeRoomListDataSource
-
     fun selectedGroupStore(): SelectedGroupDataSource
 
     fun roomDetailPendingActionStore(): RoomDetailPendingActionStore
@@ -142,6 +140,8 @@ interface VectorComponent {
     fun notifiableEventResolver(): NotifiableEventResolver
 
     fun vectorPreferences(): VectorPreferences
+
+    fun wifiDetector(): WifiDetector
 
     fun vectorFileLogger(): VectorFileLogger
 

@@ -25,11 +25,11 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.files.LocalFilesHelper
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import timber.log.Timber
-import java.io.File
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -74,28 +74,31 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
-                activeSessionHolder.getActiveSession().fileService()
-                        .downloadFile(
-                                fileName = data.filename,
-                                mimeType = data.mimeType,
-                                url = data.url,
-                                elementToDecrypt = data.elementToDecrypt,
-                                callback = object : MatrixCallback<File> {
-                                    override fun onSuccess(data: File) {
-                                        thumbnailView.isVisible = false
-                                        loadingView.isVisible = false
-                                        videoView.isVisible = true
+                GlobalScope.launch {
+                    val result = runCatching {
+                        activeSessionHolder.getActiveSession().fileService()
+                                .downloadFile(
+                                        fileName = data.filename,
+                                        mimeType = data.mimeType,
+                                        url = data.url,
+                                        elementToDecrypt = data.elementToDecrypt)
+                    }
+                    result.fold(
+                            { data ->
+                                thumbnailView.isVisible = false
+                                loadingView.isVisible = false
+                                videoView.isVisible = true
 
-                                        videoView.setVideoPath(data.path)
-                                        videoView.start()
-                                    }
-
-                                    override fun onFailure(failure: Throwable) {
-                                        loadingView.isVisible = false
-                                        errorView.isVisible = true
-                                        errorView.text = errorFormatter.toHumanReadable(failure)
-                                    }
-                                })
+                                videoView.setVideoPath(data.path)
+                                videoView.start()
+                            },
+                            {
+                                loadingView.isVisible = false
+                                errorView.isVisible = true
+                                errorView.text = errorFormatter.toHumanReadable(it)
+                            }
+                    )
+                }
             }
         } else {
             val resolvedUrl = contentUrlResolver.resolveFullSize(data.url)
@@ -112,28 +115,31 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
-                activeSessionHolder.getActiveSession().fileService()
-                        .downloadFile(
-                                fileName = data.filename,
-                                mimeType = data.mimeType,
-                                url = data.url,
-                                elementToDecrypt = null,
-                                callback = object : MatrixCallback<File> {
-                                    override fun onSuccess(data: File) {
-                                        thumbnailView.isVisible = false
-                                        loadingView.isVisible = false
-                                        videoView.isVisible = true
+                GlobalScope.launch {
+                    val result = runCatching {
+                        activeSessionHolder.getActiveSession().fileService()
+                                .downloadFile(
+                                        fileName = data.filename,
+                                        mimeType = data.mimeType,
+                                        url = data.url,
+                                        elementToDecrypt = null)
+                    }
+                    result.fold(
+                            { data ->
+                                thumbnailView.isVisible = false
+                                loadingView.isVisible = false
+                                videoView.isVisible = true
 
-                                        videoView.setVideoPath(data.path)
-                                        videoView.start()
-                                    }
-
-                                    override fun onFailure(failure: Throwable) {
-                                        loadingView.isVisible = false
-                                        errorView.isVisible = true
-                                        errorView.text = errorFormatter.toHumanReadable(failure)
-                                    }
-                                })
+                                videoView.setVideoPath(data.path)
+                                videoView.start()
+                            },
+                            {
+                                loadingView.isVisible = false
+                                errorView.isVisible = true
+                                errorView.text = errorFormatter.toHumanReadable(it)
+                            }
+                    )
+                }
             }
         }
     }

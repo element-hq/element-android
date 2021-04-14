@@ -45,8 +45,8 @@ internal class DefaultAddRoomAliasTask @Inject constructor(
     override suspend fun execute(params: AddRoomAliasTask.Params) {
         aliasAvailabilityChecker.check(params.aliasLocalPart)
 
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = directoryAPI.addRoomAlias(
+        executeRequest(globalErrorReceiver) {
+            directoryAPI.addRoomAlias(
                     roomAlias = params.aliasLocalPart.toFullLocalAlias(userId),
                     body = AddRoomAliasBody(
                             roomId = params.roomId

@@ -16,21 +16,23 @@
 
 package org.matrix.android.sdk.internal.session.room.membership.joining
 
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
-import org.matrix.android.sdk.internal.database.model.RoomEntity
-import org.matrix.android.sdk.internal.database.model.RoomEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
-import org.matrix.android.sdk.internal.session.room.create.JoinRoomResponse
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.read.SetReadMarkersTask
 import org.matrix.android.sdk.internal.task.Task
-import io.realm.RealmConfiguration
-import kotlinx.coroutines.TimeoutCancellationException
-import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -54,8 +56,8 @@ internal class DefaultJoinRoomTask @Inject constructor(
     override suspend fun execute(params: JoinRoomTask.Params) {
         roomChangeMembershipStateDataSource.updateState(params.roomIdOrAlias, ChangeMembershipState.Joining)
         val joinRoomResponse = try {
-            executeRequest<JoinRoomResponse>(globalErrorReceiver) {
-                apiCall = roomAPI.join(
+            executeRequest(globalErrorReceiver) {
+                roomAPI.join(
                         roomIdOrAlias = params.roomIdOrAlias,
                         viaServers = params.viaServers.take(3),
                         params = mapOf("reason" to params.reason)
@@ -69,12 +71,18 @@ internal class DefaultJoinRoomTask @Inject constructor(
         val roomId = joinRoomResponse.roomId
         try {
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
-                realm.where(RoomEntity::class.java)
-                        .equalTo(RoomEntityFields.ROOM_ID, roomId)
+                realm.where(RoomSummaryEntity::class.java)
+                        .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
+                        .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
             }
         } catch (exception: TimeoutCancellationException) {
             throw JoinRoomFailure.JoinedWithTimeout
         }
+
+        Realm.getInstance(realmConfiguration).executeTransactionAsync {
+            RoomSummaryEntity.where(it, roomId).findFirst()?.lastActivityTime = System.currentTimeMillis()
+        }
+
         setReadMarkers(roomId)
     }
 

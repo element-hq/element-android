@@ -53,6 +53,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
+import org.matrix.android.sdk.internal.crypto.algorithms.IMXGroupEncryption
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXWithHeldExtension
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
@@ -75,7 +76,6 @@ import org.matrix.android.sdk.internal.crypto.model.toRest
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
-import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
@@ -98,7 +98,6 @@ import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
-import kotlin.jvm.Throws
 import kotlin.math.max
 
 /**
@@ -153,9 +152,8 @@ internal class DefaultCryptoService @Inject constructor(
         // Repository
         private val megolmEncryptionFactory: MXMegolmEncryptionFactory,
         private val olmEncryptionFactory: MXOlmEncryptionFactory,
-        private val deleteDeviceTask: DeleteDeviceTask,
-        private val deleteDeviceWithUserPasswordTask: DeleteDeviceWithUserPasswordTask,
         // Tasks
+        private val deleteDeviceTask: DeleteDeviceTask,
         private val getDevicesTask: GetDevicesTask,
         private val getDeviceInfoTask: GetDeviceInfoTask,
         private val setDeviceNameTask: SetDeviceNameTask,
@@ -211,15 +209,6 @@ internal class DefaultCryptoService @Inject constructor(
     override fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>) {
         deleteDeviceTask
                 .configureWith(DeleteDeviceTask.Params(deviceId, userInteractiveAuthInterceptor, null)) {
-                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
-    }
-
-    override fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>) {
-        deleteDeviceWithUserPasswordTask
-                .configureWith(DeleteDeviceWithUserPasswordTask.Params(deviceId, authSession, password)) {
                     this.executionThread = TaskThread.CRYPTO
                     this.callback = callback
                 }
@@ -678,7 +667,12 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun discardOutboundSession(roomId: String) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            roomEncryptorsStore.get(roomId)?.discardSessionKey()
+            val roomEncryptor = roomEncryptorsStore.get(roomId)
+            if (roomEncryptor is IMXGroupEncryption) {
+                roomEncryptor.discardSessionKey()
+            } else {
+                Timber.e("## CRYPTO | discardOutboundSession() for:$roomId: Unable to handle IMXGroupEncryption")
+            }
         }
     }
 
@@ -714,7 +708,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     @Throws(MXCryptoError::class)
     private fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-       return eventDecryptor.decryptEvent(event, timeline)
+        return eventDecryptor.decryptEvent(event, timeline)
     }
 
     /**
@@ -862,15 +856,8 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            val params = LoadRoomMembersTask.Params(roomId)
-            try {
-                loadRoomMembersTask.execute(params)
-            } catch (throwable: Throwable) {
-                Timber.e(throwable, "## CRYPTO | onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
-            } finally {
-                val userIds = getRoomUserIds(roomId)
-                setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
-            }
+            val userIds = getRoomUserIds(roomId)
+            setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
         }
     }
 
@@ -1299,6 +1286,43 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun logDbUsageInfo() {
         cryptoStore.logDbUsageInfo()
+    }
+
+    override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            Timber.d("## CRYPTO | prepareToEncrypt() : Check room members up to date")
+            // Ensure to load all room members
+            try {
+                loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+            } catch (failure: Throwable) {
+                Timber.e("## CRYPTO | prepareToEncrypt() : Failed to load room members")
+                callback.onFailure(failure)
+                return@launch
+            }
+
+            val userIds = getRoomUserIds(roomId)
+            val alg = roomEncryptorsStore.get(roomId)
+                    ?: getEncryptionAlgorithm(roomId)
+                            ?.let { setEncryptionInRoom(roomId, it, false, userIds) }
+                            ?.let { roomEncryptorsStore.get(roomId) }
+
+            if (alg == null) {
+                val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                Timber.e("## CRYPTO | prepareToEncrypt() : $reason")
+                callback.onFailure(IllegalArgumentException("Missing algorithm"))
+                return@launch
+            }
+
+            runCatching {
+                (alg as? IMXGroupEncryption)?.preshareKey(userIds)
+            }.fold(
+                    { callback.onSuccess(Unit) },
+                    {
+                        Timber.e("## CRYPTO | prepareToEncrypt() failed.")
+                        callback.onFailure(it)
+                    }
+            )
+        }
     }
 
     /* ==========================================================================================

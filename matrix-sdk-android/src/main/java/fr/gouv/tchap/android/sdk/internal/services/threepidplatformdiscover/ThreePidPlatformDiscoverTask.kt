@@ -33,7 +33,7 @@ internal class TchapThreePidPlatformDiscoverTask @Inject constructor() : ThreePi
 
     override suspend fun execute(params: ThreePidPlatformDiscoverTask.Params): Platform {
         return executeRequest(null) {
-                apiCall = params.threePidPlatformDiscoverAPI.info(params.address, params.medium)
+            params.threePidPlatformDiscoverAPI.info(params.address, params.medium)
         }
     }
 }

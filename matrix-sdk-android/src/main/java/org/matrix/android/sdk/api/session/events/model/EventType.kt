@@ -20,6 +20,8 @@ package org.matrix.android.sdk.api.session.events.model
  * Constants defining known event types from Matrix specifications.
  */
 object EventType {
+    // Used when the type is missing, which should not happen
+    const val MISSING_TYPE = "org.matrix.android.sdk.missing_type"
 
     const val PRESENCE = "m.presence"
     const val MESSAGE = "m.room.message"

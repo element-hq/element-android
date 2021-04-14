@@ -19,19 +19,21 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.graphics.Typeface
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.R
+import im.vector.app.core.ui.views.SendStateImageView
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 
 /**
- * Base timeline item that adds an optional information bar with the sender avatar, name and time
+ * Base timeline item that adds an optional information bar with the sender avatar, name, time, send state
  * Adds associated click listeners (on avatar, displayname)
  */
 abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>() {
@@ -82,6 +84,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.avatarImageView.setOnLongClickListener(null)
             holder.memberNameView.setOnLongClickListener(null)
         }
+
+        // Render send state indicator
+        holder.sendStateImageView.render(attributes.informationData.sendStateDecoration)
+        holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
     }
 
     override fun unbind(holder: H) {
@@ -99,6 +105,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
+        val sendStateImageView by bind<SendStateImageView>(R.id.messageSendStateImageView)
+        val eventSendingIndicator by bind<ProgressBar>(R.id.eventSendingIndicator)
     }
 
     /**

@@ -1,12 +1,322 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s sent an image.</string>
+    <string name="summary_you_sent_image">You sent an image.</string>
+    <string name="summary_user_sent_sticker">%1$s sent a sticker.</string>
+    <string name="summary_you_sent_sticker">You sent a sticker.</string>
+
+    <string name="notice_room_invite_no_invitee">%s\'s invitation</string>
+    <string name="notice_room_invite_no_invitee_by_you">Your invitation</string>
+    <string name="notice_room_created">%1$s created the room</string>
+    <string name="notice_room_created_by_you">You created the room</string>
+    <string name="notice_direct_room_created">%1$s created the discussion</string>
+    <string name="notice_direct_room_created_by_you">You created the discussion</string>
+    <string name="notice_room_invite">%1$s invited %2$s</string>
+    <string name="notice_room_invite_by_you">You invited %1$s</string>
+    <string name="notice_room_invite_you">%1$s invited you</string>
+    <string name="notice_room_join">%1$s joined the room</string>
+    <string name="notice_room_join_by_you">You joined the room</string>
+    <string name="notice_direct_room_join">%1$s joined</string>
+    <string name="notice_direct_room_join_by_you">You joined</string>
+    <string name="notice_room_leave">%1$s left the room</string>
+    <string name="notice_room_leave_by_you">You left the room</string>
+    <string name="notice_direct_room_leave">%1$s left the room</string>
+    <string name="notice_direct_room_leave_by_you">You left the room</string>
+    <string name="notice_room_reject">%1$s rejected the invitation</string>
+    <string name="notice_room_reject_by_you">You rejected the invitation</string>
+    <string name="notice_room_kick">%1$s kicked %2$s</string>
+    <string name="notice_room_kick_by_you">You kicked %1$s</string>
+    <string name="notice_room_unban">%1$s unbanned %2$s</string>
+    <string name="notice_room_unban_by_you">You unbanned %1$s</string>
+    <string name="notice_room_ban">%1$s banned %2$s</string>
+    <string name="notice_room_ban_by_you">You banned %1$s</string>
+    <string name="notice_room_withdraw">%1$s withdrew %2$s\'s invitation</string>
+    <string name="notice_room_withdraw_by_you">You withdrew %1$s\'s invitation</string>
+    <string name="notice_avatar_url_changed">%1$s changed their avatar</string>
+    <string name="notice_avatar_url_changed_by_you">You changed your avatar</string>
+    <string name="notice_display_name_set">%1$s set their display name to %2$s</string>
+    <string name="notice_display_name_set_by_you">You set your display name to %1$s</string>
+    <string name="notice_display_name_changed_from">%1$s changed their display name from %2$s to %3$s</string>
+    <string name="notice_display_name_changed_from_by_you">You changed your display name from %1$s to %2$s</string>
+    <string name="notice_display_name_removed">%1$s removed their display name (it was %2$s)</string>
+    <string name="notice_display_name_removed_by_you">You removed your display name (it was %1$s)</string>
+    <string name="notice_room_topic_changed">%1$s changed the topic to: %2$s</string>
+    <string name="notice_room_topic_changed_by_you">You changed the topic to: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s changed the room avatar</string>
+    <string name="notice_room_avatar_changed_by_you">You changed the room avatar</string>
+    <string name="notice_room_name_changed">%1$s changed the room name to: %2$s</string>
+    <string name="notice_room_name_changed_by_you">You changed the room name to: %1$s</string>
+    <string name="notice_placed_video_call">%s placed a video call.</string>
+    <string name="notice_placed_video_call_by_you">You placed a video call.</string>
+    <string name="notice_placed_voice_call">%s placed a voice call.</string>
+    <string name="notice_placed_voice_call_by_you">You placed a voice call.</string>
+    <string name="notice_call_candidates">%s sent data to setup the call.</string>
+    <string name="notice_call_candidates_by_you">You sent data to setup the call.</string>
+    <string name="notice_answered_call">%s answered the call.</string>
+    <string name="notice_answered_call_by_you">You answered the call.</string>
+    <string name="notice_ended_call">%s ended the call.</string>
+    <string name="notice_ended_call_by_you">You ended the call.</string>
+    <string name="notice_made_future_room_visibility">%1$s made future room history visible to %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">You made future room history visible to %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s made future messages visible to %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">You made future messages visible to %1$s</string>
+    <string name="notice_room_visibility_invited">all room members, from the point they are invited.</string>
+    <string name="notice_room_visibility_joined">all room members, from the point they joined.</string>
+    <string name="notice_room_visibility_shared">all room members.</string>
+    <string name="notice_room_visibility_world_readable">anyone.</string>
+    <string name="notice_room_visibility_unknown">unknown (%s).</string>
+    <string name="notice_end_to_end">%1$s turned on end-to-end encryption (%2$s)</string>
+    <string name="notice_end_to_end_by_you">You turned on end-to-end encryption (%1$s)</string>
+    <string name="notice_room_update">%s upgraded this room.</string>
+    <string name="notice_room_update_by_you">You upgraded this room.</string>
+    <string name="notice_direct_room_update">%s upgraded here.</string>
+    <string name="notice_direct_room_update_by_you">You upgraded here.</string>
+    <string name="notice_room_server_acl_set_title">%s set the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_set_title_by_you">You set the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_set_banned">• Server matching %s are banned.</string>
+    <string name="notice_room_server_acl_set_allowed">• Server matching %s are allowed.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Server matching IP literals are allowed.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Server matching IP literals are banned.</string>
+
+    <string name="notice_room_server_acl_updated_title">%s changed the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">You changed the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_updated_banned">• Server matching %s are now banned.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Server matching %s were removed from the ban list.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Server matching %s are now allowed.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Server matching %s were removed from the allowed list.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Server matching IP literals are now allowed.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Server matching IP literals are now banned.</string>
+    <string name="notice_room_server_acl_updated_no_change">No change.</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 All servers are banned from participating! This room can no longer be used.</string>
+
+    <string name="notice_requested_voip_conference">%1$s requested a VoIP conference</string>
+    <string name="notice_requested_voip_conference_by_you">You requested a VoIP conference</string>
+    <string name="notice_voip_started">VoIP conference started</string>
+    <string name="notice_voip_finished">VoIP conference finished</string>
+
+    <string name="notice_avatar_changed_too">(avatar was changed too)</string>
+    <string name="notice_room_name_removed">%1$s removed the room name</string>
+    <string name="notice_room_name_removed_by_you">You removed the room name</string>
+    <string name="notice_room_topic_removed">%1$s removed the room topic</string>
+    <string name="notice_room_topic_removed_by_you">You removed the room topic</string>
+    <string name="notice_room_avatar_removed">%1$s removed the room avatar</string>
+    <string name="notice_room_avatar_removed_by_you">You removed the room avatar</string>
+    <string name="notice_event_redacted">Message removed</string>
+    <string name="notice_event_redacted_by">Message removed by %1$s</string>
+    <string name="notice_event_redacted_with_reason">Message removed [reason: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Message removed by %1$s [reason: %2$s]</string>
+    <string name="notice_profile_change_redacted">%1$s updated their profile %2$s</string>
+    <string name="notice_profile_change_redacted_by_you">You updated your profile %1$s</string>
+    <string name="notice_room_third_party_invite">%1$s sent an invitation to %2$s to join the room</string>
+    <string name="notice_room_third_party_invite_by_you">You sent an invitation to %1$s to join the room</string>
+    <string name="notice_direct_room_third_party_invite">%1$s invited %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">You invited %1$s</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s revoked the invitation for %2$s to join the room</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">You revoked the invitation for %1$s to join the room</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s revoked the invitation for %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">You revoked the invitation for %1$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s accepted the invitation for %2$s</string>
+    <string name="notice_room_third_party_registered_invite_by_you">You accepted the invitation for %1$s</string>
+
+    <string name="notice_widget_added">%1$s added %2$s widget</string>
+    <string name="notice_widget_added_by_you">You added %1$s widget</string>
+    <string name="notice_widget_removed">%1$s removed %2$s widget</string>
+    <string name="notice_widget_removed_by_you">You removed %1$s widget</string>
+    <string name="notice_widget_modified">%1$s modified %2$s widget</string>
+    <string name="notice_widget_modified_by_you">You modified %1$s widget</string>
+
+    <string name="notice_widget_jitsi_added">Video conference started by %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">You started video conference</string>
+    <string name="notice_widget_jitsi_removed">Video conference ended by %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">You ended video conference</string>
+    <string name="notice_widget_jitsi_modified">Video conference modified by %1$s</string>
+    <string name="notice_widget_jitsi_modified_by_you">You modified video conference</string>
+
+    <string name="power_level_admin">Admin</string>
+    <string name="power_level_moderator">Moderator</string>
+    <string name="power_level_default">Default</string>
+    <string name="power_level_custom">Custom (%1$d)</string>
+    <string name="power_level_custom_no_value">Custom</string>
+
+    <!-- parameter will be a comma separated list of values of notice_power_level_diff -->
+    <string name="notice_power_level_changed_by_you">You changed the power level of %1$s.</string>
+    <!-- First parameter will be a userId or display name, second one will be a comma separated list of values of notice_power_level_diff -->
+    <string name="notice_power_level_changed">%1$s changed the power level of %2$s.</string>
+    <!-- First parameter will be a userId or display name, the two last ones will be value of power_level_* -->
+    <string name="notice_power_level_diff">%1$s from %2$s to %3$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
+
+    <!-- Messages -->
+
+    <!-- Room Screen -->
+    <string name="could_not_redact">Could not redact</string>
+    <string name="unable_to_send_message">Unable to send message</string>
+
+    <string name="message_failed_to_upload">Failed to upload image</string>
+
+    <!-- general errors -->
+    <string name="network_error">Network error</string>
+    <string name="matrix_error">Matrix error</string>
+
+    <!-- Home Screen -->
+
+    <!-- Last seen time -->
+
+    <!-- call events -->
+
+    <!-- room error messages -->
+    <string name="room_error_join_failed_empty_room">It is not currently possible to re-join an empty room.</string>
+
+    <!-- medium friendly name -->
+    <string name="medium_email">Email address</string>
+    <string name="medium_phone_number">Phone number</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Invite from %s</string>
+    <string name="room_displayname_room_invite">Room Invite</string>
+
+    <!-- The 2 parameters will be members' name -->
+    <string name="room_displayname_two_members">%1$s and %2$s</string>
+    <!-- The 3 parameters will be members' name -->
+    <string name="room_displayname_3_members">%1$s, %2$s and %3$s</string>
+    <!-- The 4 parameters will be members' name -->
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s and %4$s</string>
+    <!-- The 3 first parameters will be members' name -->
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s and %4$d other</item>
+        <item quantity="other">%1$s, %2$s, %3$s and %4$d others</item>
+    </plurals>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s and 1 other</item>
+        <item quantity="other">%1$s and %2$d others</item>
+    </plurals>
+
+    <string name="room_displayname_empty_room">Empty room</string>
+    <string name="room_displayname_empty_room_was">Empty room (was %s)</string>
+
+    <string name="initial_sync_start_server_computing">Initial Sync:\nWaiting for server response…</string>
+    <string name="initial_sync_start_downloading">Initial Sync:\nDownloading data…</string>
+    <string name="initial_sync_start_importing_account">Initial Sync:\nImporting account…</string>
+    <string name="initial_sync_start_importing_account_crypto">Initial Sync:\nImporting crypto</string>
+    <string name="initial_sync_start_importing_account_rooms">Initial Sync:\nImporting Rooms</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Initial Sync:\nImporting Joined Rooms</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Initial Sync:\nImporting Invited Rooms</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Initial Sync:\nImporting Left Rooms</string>
+    <string name="initial_sync_start_importing_account_groups">Initial Sync:\nImporting Communities</string>
+    <string name="initial_sync_start_importing_account_data">Initial Sync:\nImporting Account Data</string>
+
+
+    <string name="event_status_sent_message">Message sent</string>
+    <string name="event_status_sending_message">Sending message…</string>
+    <string name="clear_timeline_send_queue">Clear sending queue</string>
+
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s\'s invitation. Reason: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Your invitation. Reason: %1$s</string>
+    <string name="notice_room_invite_with_reason">%1$s invited %2$s. Reason: %3$s</string>
+    <string name="notice_room_invite_with_reason_by_you">You invited %1$s. Reason: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s invited you. Reason: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s joined the room. Reason: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">You joined the room. Reason: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s joined. Reason: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">You joined. Reason: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s left the room. Reason: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">You left the room. Reason: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s left. Reason: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">You left. Reason: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s rejected the invitation. Reason: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">You rejected the invitation. Reason: %1$s</string>
+    <string name="notice_room_kick_with_reason">%1$s kicked %2$s. Reason: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">You kicked %1$s. Reason: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s unbanned %2$s. Reason: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">You unbanned %1$s. Reason: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s banned %2$s. Reason: %3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">You banned %1$s. Reason: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s sent an invitation to %2$s to join the room. Reason: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">You sent an invitation to %1$s to join the room. Reason: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s revoked the invitation for %2$s to join the room. Reason: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">You revoked the invitation for %1$s to join the room. Reason: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s accepted the invitation for %2$s. Reason: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">You accepted the invitation for %1$s. Reason: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s withdrew %2$s\'s invitation. Reason: %3$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">You withdrew %1$s\'s invitation. Reason: %2$s</string>
+
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s added %2$s as an address for this room.</item>
+        <item quantity="other">%1$s added %2$s as addresses for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">You added %1$s as an address for this room.</item>
+        <item quantity="other">You added %1$s as addresses for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s removed %2$s as an address for this room.</item>
+        <item quantity="other">%1$s removed %2$s as addresses for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">You removed %1$s as an address for this room.</item>
+        <item quantity="other">You removed %1$s as addresses for this room.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s added %2$s and removed %3$s as addresses for this room.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">You added %1$s and removed %2$s as addresses for this room.</string>
+
+    <string name="notice_room_canonical_alias_set">"%1$s set the main address for this room to %2$s."</string>
+    <string name="notice_room_canonical_alias_set_by_you">"You set the main address for this room to %1$s."</string>
+    <string name="notice_room_canonical_alias_unset">"%1$s removed the main address for this room."</string>
+    <string name="notice_room_canonical_alias_unset_by_you">"You removed the main address for this room."</string>
+
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s added the alternative address %2$s for this room.</item>
+        <item quantity="other">%1$s added the alternative addresses %2$s for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">You added the alternative address %1$s for this room.</item>
+        <item quantity="other">You added the alternative addresses %1$s for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s removed the alternative address %2$s for this room.</item>
+        <item quantity="other">%1$s removed the alternative addresses %2$s for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">You removed the alternative address %1$s for this room.</item>
+        <item quantity="other">You removed the alternative addresses %1$s for this room.</item>
+    </plurals>
+
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s changed the alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">You changed the alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s changed the main and alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">You changed the main and alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s changed the addresses for this room.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">You changed the addresses for this room.</string>
+
+    <string name="notice_room_guest_access_can_join">"%1$s has allowed guests to join the room."</string>
+    <string name="notice_room_guest_access_can_join_by_you">"You have allowed guests to join the room."</string>
+    <string name="notice_direct_room_guest_access_can_join">"%1$s has allowed guests to join here."</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">"You have allowed guests to join here."</string>
+    <string name="notice_room_guest_access_forbidden">"%1$s has prevented guests from joining the room."</string>
+    <string name="notice_room_guest_access_forbidden_by_you">"You have prevented guests from joining the room."</string>
+    <string name="notice_direct_room_guest_access_forbidden">"%1$s has prevented guests from joining the room."</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">"You have prevented guests from joining the room."</string>
+
+    <string name="notice_end_to_end_ok">%1$s turned on end-to-end encryption.</string>
+    <string name="notice_end_to_end_ok_by_you">You turned on end-to-end encryption.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s turned on end-to-end encryption (unrecognised algorithm %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">You turned on end-to-end encryption (unrecognised algorithm %1$s).</string>
 
     <!-- theme -->
     <string name="system_theme">System Default</string>
     <string name="light_theme">Light Theme</string>
     <string name="dark_theme">Dark Theme</string>
-    <string name="black_them">Black Theme</string>
-    <string name="status_theme">Status.im Theme</string>
+    <string name="black_theme">Black Theme</string>
 
     <!-- permanent notification subtitle -->
     <string name="notification_sync_init">Initializing service</string>
@@ -133,6 +443,7 @@
     <string name="action_close">Close</string>
     <string name="action_copy">Copy</string>
     <string name="action_add">Add</string>
+    <string name="action_switch">Switch</string>
     <string name="action_unpublish">Unpublish</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
@@ -168,11 +479,12 @@
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
-    <string name="local_address_book_header">Local address book</string>
+    <string name="template_local_address_book_header">Local address book</string>
     <string name="user_directory_header">User directory</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
-    <string name="no_contact_access_placeholder">You didn’t allow Tchap to access your local contacts</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_no_contact_access_placeholder">You didn’t allow ${app_name} to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
     <string name="no_more_results">No more results</string>
     <string name="people_no_identity_server">No identity server configured.</string>
@@ -187,6 +499,10 @@
         <item quantity="other">%d users</item>
     </plurals>
 
+    <string name="settings_category_room_directory">Room directory</string>
+    <string name="settings_room_directory_show_all_rooms">Show rooms with explicit content</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Show all rooms in the room directory, including rooms with explicit content.</string>
+
     <!-- Groups fragment -->
     <string name="groups_invite_header">Invite</string>
     <string name="groups_header">Communities</string>
@@ -197,7 +513,7 @@
     <string name="send_bug_report_include_key_share_history">Send key share requests history</string>
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Report bug</string>
-    <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
+    <string name="template_send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
     <string name="send_bug_report_description_in_english">If possible, please write the description in English.</string>
     <string name="send_bug_report_placeholder">Describe your problem here</string>
     <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. This bug report, including the logs and the screenshot, will not be publicly visible. If you would prefer to only send the text above, please untick:</string>
@@ -235,7 +551,8 @@
     <string name="call_failed_no_ice_use_alt">Try using %s</string>
     <string name="call_failed_dont_ask_again">Do not ask me again</string>
 
-    <string name="call_failed_no_connection">Element Call Failed</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_call_failed_no_connection">${app_name} Call Failed</string>
     <string name="call_failed_no_connection_description">Failed to establish real time connection.\nPlease ask the administrator of your homeserver to configure a TURN server in order for calls to work reliably.</string>
 
     <string name="call_select_sound_device">Select Sound Device</string>
@@ -309,7 +626,7 @@
     <string name="auth_reset_password_message">To reset your password, enter the email address linked to your account:</string>
     <string name="auth_reset_password_missing_email">The email address linked to your account must be entered.</string>
     <string name="auth_reset_password_missing_password">A new password must be entered.</string>
-    <string name="auth_reset_password_email_validation_message">An email has been sent to %s. Once you’ve followed the link it contains, click below.</string>
+    <string name="template_auth_reset_password_email_validation_message">An email has been sent to %s. Once you’ve followed the link it contains, click below.</string>
     <string name="auth_reset_password_error_unauthorized">Failed to verify email address: make sure you clicked the link in the email</string>
     <string name="auth_reset_password_success_message">Your password has been reset.\n\nYou have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, re-log in on each device.</string>
     <string name="auth_accept_policies">"Please review and accept the policies of this homeserver:"</string>
@@ -344,7 +661,8 @@
     <string name="e2e_re_request_encryption_key_sent">Key request sent.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Request sent</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Please launch Tchap on another device that can decrypt the message so it can send the keys to this session.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Please launch ${app_name} on another device that can decrypt the message so it can send the keys to this session.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
@@ -385,7 +703,8 @@
     <string name="settings_call_category">Calls</string>
     <string name="settings_call_show_confirmation_dialog_title">Prevent accidental call</string>
     <string name="settings_call_show_confirmation_dialog_summary">Ask for confirmation before starting a call</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Use default Tchap ringtone for incoming calls</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_call_ringtone_use_app_ringtone">Use default ${app_name} ringtone for incoming calls</string>
     <string name="settings_call_ringtone_use_default_stun">Allow fallback call assist server</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Will use "%s" as assist when your home server does not offer one (your IP address will be shared during a call)</string>
     <string name="settings_call_ringtone_title">Incoming call ringtone</string>
@@ -420,14 +739,20 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Information</string>
-    <string name="permissions_rationale_msg_storage">Tchap needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
-    <string name="permissions_rationale_msg_camera">Tchap needs permission to access your camera to take pictures and video calls.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_permissions_rationale_msg_storage">${app_name} needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_permissions_rationale_msg_camera">${app_name} needs permission to access your camera to take pictures and video calls.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_record_audio">Tchap needs permission to access your microphone to perform audio calls.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} needs permission to access your microphone to perform audio calls.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Tchap needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
-    <string name="permissions_rationale_msg_contacts">Tchap needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Tchap.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Tchap needs permission to access your address book contact to find other Matrix users based on their email and phone numbers.\n\nAllow Tchap to access your contacts ?</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_permissions_rationale_msg_contacts">${app_name} needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from ${app_name}.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} needs permission to access your address book contact to find other Matrix users based on their email and phone numbers.\n\nAllow ${app_name} to access your contacts ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
     <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
@@ -728,7 +1053,8 @@
     <string name="settings_app_info_link_title">Application info</string>
     <string name="settings_app_info_link_summary">Show the application info in the system settings.</string>
     <string name="settings_add_3pid_confirm_password_title">Confirm your password</string>
-    <string name="settings_add_3pid_flow_not_supported">You can\'t do this from Element mobile</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_add_3pid_flow_not_supported">You can\'t do this from ${app_name} mobile</string>
     <string name="settings_add_3pid_authentication_needed">Authentication is required</string>
 
     <string name="settings_emails">Email addresses</string>
@@ -760,8 +1086,9 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Enable</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">Device Settings.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Notifications are enabled for this device.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Notifications are not allowed for this device.\nPlease check the Tchap settings.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Notifications are enabled for this Device.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Notifications are not enabled for this device.\nPlease check the ${app_name} settings.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Enable</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Custom Settings.</string>
@@ -772,15 +1099,19 @@
 
     <string name="settings_troubleshoot_test_play_services_title">Play Services Check</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK is available and up-to-date.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element uses Google Play Services to deliver push messages but it doesn’t seem to be configured correctly:\n%1$s</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} uses Google Play Services to deliver push messages but it doesn’t seem to be configured correctly:\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Fix Play Services</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
     <string name="settings_troubleshoot_test_fcm_success">FCM token successfully retrieved:\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Failed to retrieved FCM token:\n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nThis error is out of control of Element and according to Google, this error indicates that the device has too many apps registered with FCM. The error only occurs in cases where there are extreme numbers of apps, so it should not affect the average user.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nThis error is out of control of Element. It can occur for several reasons. Maybe it will work if you retry later, you can also check that Google Play Service is not restricted in data usage in the system settings, or that your device clock is correct, or it can happen on custom ROM.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nThis error is out of control of Element. There is no Google account on the phone. Please open the account manager and add a Google account.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nThis error is out of control of ${app_name} and according to Google, this error indicates that the device has too many apps registered with FCM. The error only occurs in cases where there are extreme numbers of apps, so it should not affect the average user.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nThis error is out of control of ${app_name}. It can occur for several reasons. Maybe it will work if you retry later, you can also check that Google Play Service is not restricted in data usage in the system settings, or that your device clock is correct, or it can happen on custom ROM.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nThis error is out of control of ${app_name}. There is no Google account on the phone. Please open the account manager and add a Google account.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Add Account</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Token Registration</string>
@@ -807,16 +1138,20 @@
 
     <string name="settings_troubleshoot_test_service_boot_title">Start on boot</string>
     <string name="settings_troubleshoot_test_service_boot_success">Service will start when the device is restarted.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">The service will not start when the device is restarted, you will not receive notifications until Element has been opened once.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_troubleshoot_test_service_boot_failed">The service will not start when the device is restarted, you will not receive notifications until ${app_name} has been opened once.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Enable Start on boot</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Check background restrictions</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Background restrictions are disabled for Element. This test should be run using mobile data (no WIFI).\n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Background restrictions are enabled for Element.\nWork that the app tries to do will be aggressively restricted while it is in the background, and this could affect notifications.\n%1$s</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Background restrictions are disabled for ${app_name}. This test should be run using mobile data (no WIFI).\n%1$s</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Background restrictions are enabled for ${app_name}.\nWork that the app tries to do will be aggressively restricted while it is in the background, and this could affect notifications.\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Disable restrictions</string>
 
     <string name="settings_troubleshoot_test_battery_title">Battery Optimization</string>
-    <string name="settings_troubleshoot_test_battery_success">Element is not affected by Battery Optimization.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_troubleshoot_test_battery_success">${app_name} is not affected by Battery Optimization.</string>
     <string name="settings_troubleshoot_test_battery_failed">If a user leaves a device unplugged and stationary for a period of time, with the screen off, the device enters Doze mode. This prevents apps from accessing the network and defers their jobs, syncs, and standard alarms. </string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignore Optimization</string>
 
@@ -826,7 +1161,7 @@
     <string name="settings_notification_privacy_no_background_sync">The apps does <b>not</b> need to connect to the HomeServer in the background, it should reduce battery usage</string>
     <string name="settings_notification_privacy_fcm">• Notifications are sent via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Notifications only contain meta data</string>
-    <string name="settings_notification_privacy_secure_message_content">• Message content of the notification is <b>located securely direct from the Matrix homeserver</b></string>
+    <string name="template_settings_notification_privacy_secure_message_content">• Message content of the notification is <b>located securely direct from the Matrix homeserver</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Notifications contain <b>meta and message data</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Notifications will <b>not show message content</b></string>
 
@@ -851,9 +1186,11 @@
     <string name="settings_background_sync">Background synchronization</string>
     <string name="settings_background_fdroid_sync_mode">Background Sync Mode</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimized for battery</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element will sync in background in way that preserves the device’s limited resources (battery).\nDepending on your device resource state, the sync may be deferred by the operating system.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} will sync in background in way that preserves the device’s limited resources (battery).\nDepending on your device resource state, the sync may be deferred by the operating system.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimized for real time</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element will sync in background periodically at precise time (configurable).\nThis will impact radio and battery usage, there will be a permanent notification displayed stating that Element is listening for events.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} will sync in background periodically at precise time (configurable).\nThis will impact radio and battery usage, there will be a permanent notification displayed stating that ${app_name} is listening for events.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">No background sync</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">You will not be notified of incoming messages when the app is in background.</string>
     <string name="settings_background_sync_update_error">Failed to update settings.</string>
@@ -936,19 +1273,23 @@
     <string name="settings_discovery_category">Discovery</string>
     <string name="settings_discovery_manage">Manage your discovery settings.</string>
     <string name="startup_notification_privacy_title">Notification Privacy</string>
-    <string name="startup_notification_privacy_message">Tchap can run in the background to manage your notifications securely and privately. This might affect battery usage.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_startup_notification_privacy_message">${app_name} can run in the background to manage your notifications securely and privately. This might affect battery usage.</string>
     <string name="startup_notification_privacy_button_grant">Grant permission</string>
     <string name="startup_notification_privacy_button_other">Choose another option</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Background Connection</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element needs to keep a low impact background connection in order to have reliable notifications.\nOn the next screen you will be prompted to allow Element to always run in background, please accept.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} needs to keep a low impact background connection in order to have reliable notifications.\nOn the next screen you will be prompted to allow ${app_name} to always run in background, please accept.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Grant permission</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_in_of_analytics">Send analytics data</string>
-    <string name="settings_opt_in_of_analytics_summary">Tchap collects anonymous analytics to allow us to improve the application.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve Tchap.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} collects anonymous analytics to allow us to improve the application.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
     <string name="settings_data_save_mode">Data save mode</string>
@@ -1117,6 +1458,7 @@
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Advanced</string>
     <string name="room_settings_room_internal_id">This room’s internal ID</string>
+    <string name="room_settings_room_version_title">Room version</string>
     <string name="room_settings_addresses_pref_title">Addresses</string>
     <string name="room_settings_labs_pref_title">Labs</string>
     <string name="room_settings_labs_warning_message">These are experimental features that may break in unexpected ways. Use with caution.</string>
@@ -1317,6 +1659,8 @@
 
 
     <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 6.0)</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Leave the current conference and switch to the other one?</string>
+
     <string name="room_widget_resource_permission_title">This widget wants to use the following resources:</string>
     <string name="room_widget_resource_grant_permission">Allow</string>
     <string name="room_widget_resource_decline_permission">Block All</string>
@@ -1507,7 +1851,8 @@
 
     <!-- Key Backup -->
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want Element to generate a recovery key.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want ${app_name} to generate a recovery key.</string>
     <string name="keys_backup_no_session_error">No Matrix session available</string>
 
     <string name="keys_backup_setup_step1_title">Never lose encrypted messages</string>
@@ -1649,7 +1994,8 @@
 
     <string name="autodiscover_invalid_response">Invalid homeserver discovery response</string>
     <string name="autodiscover_well_known_autofill_dialog_title">"Autocomplete Server Options</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element detected a custom server configuration for your userId domain \"%1$s\":\n%2$s</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} detected a custom server configuration for your userId domain \"%1$s\":\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
 
     <string name="invalid_or_expired_credentials">You have been logged out due to invalid or expired credentials.</string>
@@ -1707,7 +2053,7 @@
     <string name="edit">Edit</string>
     <string name="reply">Reply</string>
 
-    <string name="global_retry">"Retry"</string>
+    <string name="global_retry">Retry</string>
     <string name="room_list_empty">"Join a room to start using the app."</string>
     <string name="send_you_invite">"Sent you an invitation"</string>
     <string name="invited_by">Invited by %s</string>
@@ -1745,7 +2091,8 @@
     <string name="group_all_communities">"All Communities"</string>
 
     <string name="room_preview_no_preview">"This room can't be previewed"</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">"The preview of world-readable room is not supported yet in Element"</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_room_preview_world_readable_room_not_supported_yet">The preview of world-readable room is not supported yet in ${app_name}</string>
     <string name="room_preview_not_found">This room is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
     <string name="room_preview_no_preview_join">"This room can't be previewed. Do you want to join it?"</string>
     <string name="fab_menu_create_room">"Rooms"</string>
@@ -1970,7 +2317,8 @@
     <string name="content_reported_as_inappropriate_title">"Reported as inappropriate"</string>
     <string name="content_reported_as_inappropriate_content">"This content was reported as inappropriate.\n\nIf you don't want to see any more content from this user, you can ignore them to hide their messages."</string>
 
-    <string name="permissions_rationale_msg_keys_backup_export">Element needs permission to save your E2E keys on disk.\n\nPlease allow access on the next pop-up to be able to export your keys manually.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} needs permission to save your E2E keys on disk.\n\nPlease allow access on the next pop-up to be able to export your keys manually.</string>
 
     <string name="no_network_indicator">There is no network connection right now</string>
 
@@ -1986,6 +2334,8 @@
     <string name="room_list_quick_actions_low_priority_add">"Add to low priority"</string>
     <string name="room_list_quick_actions_low_priority_remove">"Remove from low priority"</string>
     <string name="room_list_quick_actions_leave">"Leave the room"</string>
+    <string name="room_list_quick_actions_room_settings">"Room settings"</string>
+
     <string name="notice_member_no_changes">"%1$s made no changes"</string>
     <string name="notice_member_no_changes_by_you">"You made no changes"</string>
     <string name="command_description_spoiler">Sends the given message as a spoiler</string>
@@ -2042,7 +2392,6 @@
     <string name="login_server_url_form_other_hint">Address</string>
     <string name="login_server_url_form_modular_text">Premium hosting for organisations</string>
     <string name="login_server_url_form_modular_notice">Enter the address of the Modular Element or Server you want to use</string>
-    <string name="login_server_url_form_other_notice">Enter the address of a server or a Element you want to connect to</string>
     <string name="login_server_url_form_common_notice">Enter the address of the server you want to use</string>
 
     <string name="login_sso_error_message">An error occurred when loading the page: %1$s (%2$d)</string>
@@ -2161,7 +2510,8 @@
     <string name="soft_logout_clear_data_dialog_content">Clear all data currently stored on this device?\nSign in again to access your account data and messages.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">You’ll lose access to secure messages unless you sign in to recover your encryption keys.</string>
     <string name="soft_logout_clear_data_dialog_submit">Clear data</string>
-    <string name="soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by Element.\nPlease first clear data, then sign in again on another account.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by ${app_name}.\nPlease first clear data, then sign in again on another account.</string>
 
     <string name="permalink_malformed">Your matrix.to link was malformed</string>
     <string name="bug_report_error_too_short">The description is too short</string>
@@ -2183,7 +2533,8 @@
     <string name="autocomplete_limited_results">Showing only the first results, type more letters…</string>
 
     <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element may crash more often when an unexpected error occurs</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} may crash more often when an unexpected error occurs</string>
 
     <string name="command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
 
@@ -2288,9 +2639,12 @@
     <string name="room_member_open_or_create_dm">Direct message</string>
     <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
 
-    <string name="rendering_event_error_type_of_event_not_handled">"Element does not handle events of type '%1$s'"</string>
-    <string name="rendering_event_error_type_of_message_not_handled">"Element does not handle message of type '%1$s'"</string>
-    <string name="rendering_event_error_exception">"Element encountered an issue when rendering content of event with id '%1$s'"</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} does not handle events of type \'%1$s\'</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} does not handle message of type \'%1$s\'</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_rendering_event_error_exception">${app_name} encountered an issue when rendering content of event with id \'%1$s\'</string>
 
     <string name="unignore">Unignore</string>
 
@@ -2335,6 +2689,12 @@
     <string name="settings_active_sessions_show_all">Show All Sessions</string>
     <string name="settings_active_sessions_manage">Manage Sessions</string>
     <string name="settings_active_sessions_signout_device">Sign out of this session</string>
+
+    <string name="settings_server_name">Server name</string>
+    <string name="settings_server_version">Server version</string>
+    <string name="settings_server_upload_size_title">Server file upload limit</string>
+    <string name="settings_server_upload_size_content">Your homeserver accepts attachments (files, media, etc.) with a size up to %s.</string>
+    <string name="settings_server_upload_size_unknown">The limit is unknown.</string>
 
     <string name="settings_failed_to_get_crypto_device_info">No cryptographic information available</string>
 
@@ -2421,7 +2781,8 @@
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Keys are already up to date!</string>
 
-    <string name="login_default_session_public_name">Tchap Android</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_login_default_session_public_name">${app_name} Android</string>
 
     <string name="settings_key_requests">Key Requests</string>
     <string name="settings_export_trail">Export Audit</string>
@@ -2580,11 +2941,15 @@
     <string name="error_saving_media_file">Could not save media file</string>
     <string name="change_password_summary">Set a new account password…</string>
 
-    <string name="use_other_session_content_description">Use the latest Element on your other devices, Element Web, Element Desktop, Element iOS, Element for Android, or another cross-signing capable Matrix client</string>
-    <string name="app_desktop_web">Element Web\nElement Desktop</string>
-    <string name="app_ios_android">Element iOS\nElement Android</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_use_other_session_content_description">Use the latest ${app_name} on your other devices, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} for Android, or another cross-signing capable Matrix client</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_app_desktop_web">${app_name} Web\n${app_name} Desktop</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_app_ios_android">${app_name} iOS\n${app_name} Android</string>
     <string name="or_other_mx_capabale_client">or another cross-signing capable Matrix client</string>
-    <string name="use_latest_app">Use the latest Element on your other devices:</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_use_latest_app">Use the latest ${app_name} on your other devices:</string>
     <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
     <string name="command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
     <!-- first will be replaced by recovery_passphrase, second will be replaced by recovery_key-->
@@ -2605,9 +2970,9 @@
 
     <string name="command_confetti">Sends the given message with confetti</string>
     <string name="command_snow">Sends the given message with snow</string>
-    <!-- Note to translator: please use the same emoji 🎉 in your translation -->
+    <!-- Note to translators: please use the same emoji 🎉 in your translation -->
     <string name="default_message_emote_confetti">sends confetti 🎉</string>
-    <!-- Note to translator: please use the same emoji ❄️ in your translation -->
+    <!-- Note to translators: please use the same emoji ❄️ in your translation -->
     <string name="default_message_emote_snow">sends snow ❄️</string>
 
     <string name="unencrypted">Unencrypted</string>
@@ -2624,7 +2989,6 @@
     <string name="confirm_your_identity_quad_s">Confirm your identity by verifying this login, granting it access to encrypted messages.</string>
     <string name="mark_as_verified">Mark as Trusted</string>
 
-    <string name="error_sso_flow_not_supported_yet">Sorry, this operation is not possible yet for accounts connected using Single Sign-On.</string>
     <string name="failed_to_initialize_cross_signing">Failed to set up Cross Signing</string>
 
     <string name="error_empty_field_choose_user_name">Please choose a username.</string>
@@ -2640,8 +3004,10 @@
     <string name="inviting_users_to_room">Inviting users…</string>
     <string name="invite_users_to_room_title">Invite Users</string>
     <string name="invite_friends">Invite friends</string>
-    <string name="invite_friends_text">Hey, talk to me on Element: %s</string>
-    <string name="invite_friends_rich_title">🔐️ Join me on element</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_invite_friends_text">Hey, talk to me on ${app_name}: %s</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_invite_friends_rich_title">🔐️ Join me on ${app_name}</string>
     <string name="invitation_sent_to_one_user">Invitation sent to %1$s</string>
     <string name="invitations_sent_to_two_users">Invitations sent to %1$s and %2$s</string>
     <string name="not_a_valid_qr_code">"It's not a valid matrix QR code"</string>
@@ -2662,11 +3028,13 @@
 
     <string name="open_terms_of">Open terms of %s</string>
     <string name="disconnect_identity_server_dialog_content">Disconnect from the identity server %s?</string>
-    <string name="identity_server_error_outdated_identity_server">This identity server is outdated. Element support only API V2.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_identity_server_error_outdated_identity_server">This identity server is outdated. ${app_name} support only API V2.</string>
     <string name="identity_server_error_outdated_home_server">This operation is not possible. The homeserver is outdated.</string>
     <string name="identity_server_error_no_identity_server_configured">Please first configure an identity server.</string>
     <string name="identity_server_error_terms_not_signed">Please first accepts the terms of the identity server in the settings.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">For your privacy, Element only supports sending hashed user emails and phone number.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_identity_server_error_bulk_sha256_not_supported">For your privacy, ${app_name} only supports sending hashed user emails and phone number.</string>
     <string name="identity_server_error_binding_error">The association has failed.</string>
     <string name="identity_server_error_no_current_binding_error">The is no current association with this identifier.</string>
     <string name="identity_server_user_consent_not_provided">The user consent has not been provided.</string>
@@ -2721,13 +3089,10 @@
     <string name="crypto_error_withheld_generic">You cannot access this message because the sender purposely did not send the keys</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Waiting for encryption history</string>
 
-    <string name="element_disclaimer_title">Riot is now Element!</string>
-    <string name="element_disclaimer_content">We’re excited to announce we’ve changed name! Your app is up to date and you’re signed in to your account.</string>
-    <string name="element_disclaimer_negative_button">GOT IT</string>
-    <string name="element_disclaimer_positive_button">LEARN MORE</string>
-
-    <string name="element_login_splash_brand">element</string>
-
+    <string name="disclaimer_title">Riot is now Element!</string>
+    <string name="disclaimer_content">We’re excited to announce we’ve changed name! Your app is up to date and you’re signed in to your account.</string>
+    <string name="disclaimer_negative_button">GOT IT</string>
+    <string name="disclaimer_positive_button">LEARN MORE</string>
 
     <string name="save_recovery_key_chooser_hint">Save recovery key in</string>
 
@@ -2773,13 +3138,16 @@
     <string name="settings_security_pin_code_summary">If you want to reset your PIN, tap Forgot PIN to logout and reset.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Enable biometrics</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Enable device specific biometrics, like fingerprints and face recognition.</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN code is the only way to unlock Element.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN code is the only way to unlock ${app_name}.</string>
     <string name="settings_security_pin_code_notifications_title">Show content in notifications</string>
     <string name="settings_security_pin_code_notifications_summary_on">Show details like room names and message content.</string>
     <string name="settings_security_pin_code_notifications_summary_off">Only display number of unread messages in a simple notification.</string>
     <string name="settings_security_pin_code_grace_period_title">Require PIN after 2 minutes</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">PIN code is required after 2 minutes of not using Element.</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">PIN code is required every time you open Element.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_security_pin_code_grace_period_summary_on">PIN code is required after 2 minutes of not using ${app_name}.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_settings_security_pin_code_grace_period_summary_off">PIN code is required every time you open ${app_name}.</string>
     <string name="settings_security_pin_code_change_pin_title">Change PIN</string>
     <string name="settings_security_pin_code_change_pin_summary">Change your current PIN</string>
     <string name="auth_pin_confirm_to_disable_title">Confirm PIN to disable PIN</string>
@@ -2831,7 +3199,8 @@
 
 
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
-    <string name="re_authentication_default_confirm_text">Element requires you to enter your credentials to perform this action.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_re_authentication_default_confirm_text">${app_name} requires you to enter your credentials to perform this action.</string>
     <string name="authentication_error">Failed to authenticate</string>
 
     <string name="a11y_screenshot">Screenshot</string>
@@ -2872,4 +3241,13 @@
     <string name="dev_tools_success_event">Event sent!</string>
     <string name="dev_tools_success_state_event">State event sent!</string>
     <string name="dev_tools_event_content_hint">Event content</string>
+
+    <string name="event_status_a11y_sending">Sending</string>
+    <string name="event_status_a11y_sent">Sent</string>
+    <string name="event_status_a11y_failed">Failed</string>
+    <string name="event_status_a11y_delete_all">Delete all failed messages</string>
+    <string name="event_status_cancel_sending_dialog_message">Do you want to cancel sending message?</string>
+    <string name="event_status_failed_messages_warning">Messages failed to send</string>
+    <string name="event_status_delete_all_failed_dialog_title">Delete unsent messages</string>
+    <string name="event_status_delete_all_failed_dialog_message">Are you sure you want to delete all unsent messages in this room?</string>
 </resources>

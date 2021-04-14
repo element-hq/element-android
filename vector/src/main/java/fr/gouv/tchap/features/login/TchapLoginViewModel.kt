@@ -17,8 +17,8 @@
 package fr.gouv.tchap.features.login
 
 import android.content.Context
-import android.net.Uri
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -29,7 +29,6 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.exhaustive
@@ -41,7 +40,8 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.LoginViewState
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.SignMode
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
@@ -51,11 +51,7 @@ import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.Stage
-import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.util.Cancelable
-import timber.log.Timber
 import java.util.concurrent.CancellationException
 
 /**
@@ -107,7 +103,12 @@ class TchapLoginViewModel @AssistedInject constructor(
 
     private var loginConfig: LoginConfig? = null
 
-    private var currentTask: Cancelable? = null
+    private var currentJob: Job? = null
+        set(value) {
+            // Cancel any previous Job
+            field?.cancel()
+            field = value
+        }
 
     override fun handle(action: TchapLoginAction) {
         when (action) {
@@ -150,46 +151,49 @@ class TchapLoginViewModel @AssistedInject constructor(
 
     private fun handleCheckIfEmailHasBeenValidated(action: TchapLoginAction.CheckIfEmailHasBeenValidated) {
         // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
-        currentTask?.cancel()
-        currentTask = registrationWizard?.checkIfEmailHasBeenValidated(action.delayMillis, registrationCallback)
+        currentJob = executeRegistrationStep(withLoading = false) {
+            it.checkIfEmailHasBeenValidated(action.delayMillis)
+        }
     }
 
     private fun handleStopEmailValidationCheck() {
-        currentTask?.cancel()
-        currentTask = null
+        currentJob = null
     }
 
     private fun handleValidateThreePid(action: TchapLoginAction.ValidateThreePid) {
-        setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.handleValidateThreePid(action.code, registrationCallback)
+        currentJob = executeRegistrationStep {
+            it.handleValidateThreePid(action.code)
+        }
     }
 
-    private val registrationCallback = object : MatrixCallback<RegistrationResult> {
-        override fun onSuccess(data: RegistrationResult) {
-            /*
-              // Simulate registration disabled
-              onFailure(Failure.ServerError(MatrixError(
-                      code = MatrixError.FORBIDDEN,
-                      message = "Registration is disabled"
-              ), 403))
-            */
-
-            setState {
-                copy(
-                        asyncRegistration = Uninitialized
-                )
-            }
-
-            when (data) {
-                is RegistrationResult.Success      -> onSessionCreated(data.session)
-                is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
-            }
+    private fun executeRegistrationStep(withLoading: Boolean = true,
+                                        block: suspend (RegistrationWizard) -> RegistrationResult): Job {
+        if (withLoading) {
+            setState { copy(asyncRegistration = Loading()) }
         }
-
-        override fun onFailure(failure: Throwable) {
-            if (failure !is CancellationException) {
-                _viewEvents.post(TchapLoginViewEvents.Failure(failure))
+        return viewModelScope.launch {
+            try {
+                registrationWizard?.let { block(it) }
+                /*
+                   // Simulate registration disabled
+                   throw Failure.ServerError(MatrixError(
+                           code = MatrixError.FORBIDDEN,
+                           message = "Registration is disabled"
+                   ), 403))
+                */
+            } catch (failure: Throwable) {
+                if (failure !is CancellationException) {
+                    _viewEvents.post(TchapLoginViewEvents.Failure(failure))
+                }
+                null
             }
+                    ?.let { data ->
+                        when (data) {
+                            is RegistrationResult.Success      -> onSessionCreated(data.session)
+                            is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
+                        }
+                    }
+
             setState {
                 copy(
                         asyncRegistration = Uninitialized
@@ -200,78 +204,68 @@ class TchapLoginViewModel @AssistedInject constructor(
 
     private fun handleAddThreePid(action: TchapLoginAction.AddThreePid) {
         setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.addThreePid(action.threePid, object : MatrixCallback<RegistrationResult> {
-            override fun onSuccess(data: RegistrationResult) {
-                setState {
-                    copy(
-                            asyncRegistration = Uninitialized
-                    )
-                }
-            }
-
-            override fun onFailure(failure: Throwable) {
+        currentJob = viewModelScope.launch {
+            try {
+                registrationWizard?.addThreePid(action.threePid)
+            } catch (failure: Throwable) {
                 _viewEvents.post(TchapLoginViewEvents.Failure(failure))
-                setState {
-                    copy(
-                            asyncRegistration = Uninitialized
-                    )
-                }
             }
-        })
+            setState {
+                copy(
+                        asyncRegistration = Uninitialized
+                )
+            }
+        }
     }
 
     private fun handleSendAgainThreePid() {
         setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.sendAgainThreePid(object : MatrixCallback<RegistrationResult> {
-            override fun onSuccess(data: RegistrationResult) {
-                setState {
-                    copy(
-                            asyncRegistration = Uninitialized
-                    )
-                }
-            }
-
-            override fun onFailure(failure: Throwable) {
+        currentJob = viewModelScope.launch {
+            try {
+                registrationWizard?.sendAgainThreePid()
+            } catch (failure: Throwable) {
                 _viewEvents.post(TchapLoginViewEvents.Failure(failure))
-                setState {
-                    copy(
-                            asyncRegistration = Uninitialized
-                    )
-                }
             }
-        })
+            setState {
+                copy(
+                        asyncRegistration = Uninitialized
+                )
+            }
+        }
     }
 
     private fun handleAcceptTerms() {
-        setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.acceptTerms(registrationCallback)
+        currentJob = executeRegistrationStep {
+            it.acceptTerms()
+        }
     }
 
     private fun handleRegisterDummy() {
-        setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.dummy(registrationCallback)
+        currentJob = executeRegistrationStep {
+            it.dummy()
+        }
     }
 
     private fun handleRegisterWith(action: TchapLoginAction.LoginOrRegister) {
-        setState { copy(asyncRegistration = Loading()) }
         reAuthHelper.data = action.password
-        currentTask = registrationWizard?.createAccount(
-                action.username,
-                action.password,
-                action.initialDeviceName,
-                registrationCallback
-        )
+        currentJob = executeRegistrationStep {
+            it.createAccount(
+                    action.username,
+                    action.password,
+                    action.initialDeviceName
+            )
+        }
     }
 
     private fun handleCaptchaDone(action: TchapLoginAction.CaptchaDone) {
-        setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.performReCaptcha(action.captchaResponse, registrationCallback)
+        currentJob = executeRegistrationStep {
+            it.performReCaptcha(action.captchaResponse)
+        }
     }
 
     private fun handleResetAction(action: TchapLoginAction.ResetAction) {
         // Cancel any request
-        currentTask?.cancel()
-        currentTask = null
+        currentJob = null
 
         when (action) {
             TchapLoginAction.ResetSignMode       -> {
@@ -285,13 +279,14 @@ class TchapLoginViewModel @AssistedInject constructor(
                 }
             }
             TchapLoginAction.ResetLogin          -> {
-                authenticationService.cancelPendingLoginOrRegistration()
-
-                setState {
-                    copy(
-                            asyncLoginAction = Uninitialized,
-                            asyncRegistration = Uninitialized
-                    )
+                viewModelScope.launch {
+                    authenticationService.cancelPendingLoginOrRegistration()
+                    setState {
+                        copy(
+                                asyncLoginAction = Uninitialized,
+                                asyncRegistration = Uninitialized
+                        )
+                    }
                 }
             }
             TchapLoginAction.ResetResetPassword  -> {
@@ -370,35 +365,33 @@ class TchapLoginViewModel @AssistedInject constructor(
                 )
             }
 
-            currentTask = safeLoginWizard.login(
-                    action.username,
-                    action.password,
-                    action.initialDeviceName,
-                    object : MatrixCallback<Session> {
-                        override fun onSuccess(data: Session) {
+            currentJob = viewModelScope.launch {
+                try {
+                    safeLoginWizard.login(
+                            action.username,
+                            action.password,
+                            action.initialDeviceName
+                    )
+                } catch (failure: Throwable) {
+                    setState {
+                        copy(
+                                asyncLoginAction = Fail(failure)
+                        )
+                    }
+                    null
+                }
+                        ?.let {
                             reAuthHelper.data = action.password
-                            onSessionCreated(data)
+                            onSessionCreated(it)
                         }
-
-                        override fun onFailure(failure: Throwable) {
-                            setState {
-                                copy(
-                                        asyncLoginAction = Fail(failure)
-                                )
-                            }
-                        }
-                    })
+            }
         }
     }
 
     private fun startRegistrationFlow() {
-        setState {
-            copy(
-                    asyncRegistration = Loading()
-            )
+        currentJob = executeRegistrationStep {
+            it.getRegistrationFlow()
         }
-
-        currentTask = registrationWizard?.getRegistrationFlow(registrationCallback)
     }
 
     private fun onFlowResponse(flowResult: FlowResult) {
@@ -412,8 +405,9 @@ class TchapLoginViewModel @AssistedInject constructor(
         }
     }
 
-    private fun onSessionCreated(session: Session) {
+    private suspend fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
+
         authenticationService.reset()
         session.configureAndStart(applicationContext)
         setState {
@@ -436,18 +430,18 @@ class TchapLoginViewModel @AssistedInject constructor(
     private fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig) {
         currentHomeServerConnectionConfig = homeServerConnectionConfig
 
-        currentTask?.cancel()
-        currentTask = null
-        authenticationService.cancelPendingLoginOrRegistration()
+        currentJob = viewModelScope.launch {
+            authenticationService.cancelPendingLoginOrRegistration()
 
-        setState {
-            copy(
-                    asyncHomeServerLoginFlowRequest = Loading()
-            )
-        }
+            setState {
+                copy(
+                        asyncHomeServerLoginFlowRequest = Loading()
+                )
+            }
 
-        currentTask = authenticationService.getLoginFlow(homeServerConnectionConfig, object : MatrixCallback<LoginFlowResult> {
-            override fun onFailure(failure: Throwable) {
+            val data = try {
+                authenticationService.getLoginFlow(homeServerConnectionConfig)
+            } catch (failure: Throwable) {
                 _viewEvents.post(TchapLoginViewEvents.Failure(failure))
                 setState {
                     copy(
@@ -456,56 +450,34 @@ class TchapLoginViewModel @AssistedInject constructor(
                 }
             }
 
-            override fun onSuccess(data: LoginFlowResult) {
+            if (data is LoginFlowResult.Success) {
 
-                when (data) {
-                    is LoginFlowResult.Success -> {
-                        val loginMode = when {
-                            // SSO login is taken first
-                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                                    && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                            else                                                                  -> LoginMode.Unsupported
-                        }
+                val loginMode = when {
+                    // SSO login is taken first
+                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+                    else                                                                  -> LoginMode.Unsupported
+                }
 
-                        // FIXME We should post a view event here normally?
-                        setState {
-                            copy(
-                                    asyncHomeServerLoginFlowRequest = Uninitialized,
-                                    homeServerUrl = data.homeServerUrl,
-                                    loginMode = loginMode,
-                                    loginModeSupportedTypes = data.supportedLoginTypes.toList()
-                            )
-                        }
-                        if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                                || data.isOutdatedHomeserver) {
-                            // Notify the UI
-                            _viewEvents.post(TchapLoginViewEvents.OutdatedHomeserver)
-                        } else {
-                            _viewEvents.post(TchapLoginViewEvents.OnLoginFlowRetrieved)
-                        }
-                    }
+                // FIXME We should post a view event here normally?
+                setState {
+                    copy(
+                            asyncHomeServerLoginFlowRequest = Uninitialized,
+                            homeServerUrl = data.homeServerUrl,
+                            loginMode = loginMode,
+                            loginModeSupportedTypes = data.supportedLoginTypes.toList()
+                    )
+                }
+                if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
+                        || data.isOutdatedHomeserver) {
+                    // Notify the UI
+                    _viewEvents.post(TchapLoginViewEvents.OutdatedHomeserver)
+                } else {
+                    _viewEvents.post(TchapLoginViewEvents.OnLoginFlowRetrieved)
                 }
             }
-        })
-    }
-
-    override fun onCleared() {
-        currentTask?.cancel()
-        super.onCleared()
-    }
-
-    //TODO remove unused function
-    fun getInitialHomeServerUrl(): String? {
-        return loginConfig?.homeServerUrl
-    }
-
-    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String? {
-        return authenticationService.getSsoUrl(redirectUrl, deviceId, providerId)
-    }
-
-    fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {
-        return authenticationService.getFallbackUrl(forSignIn, deviceId)
+        }
     }
 }

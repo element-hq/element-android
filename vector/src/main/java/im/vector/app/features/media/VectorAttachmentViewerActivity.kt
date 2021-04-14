@@ -29,7 +29,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.transition.Transition
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -132,7 +131,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         if (savedInstanceState == null) {
             pager2.setCurrentItem(initialIndex, false)
             // The page change listener is not notified of the change...
-            lifecycleScope.launchWhenResumed {
+            pager2.post {
                 onSelectedPositionChanged(initialIndex)
             }
         }

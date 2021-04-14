@@ -51,25 +51,25 @@ internal class DefaultSearchTask @Inject constructor(
 ) : SearchTask {
 
     override suspend fun execute(params: SearchTask.Params): SearchResult {
-        return executeRequest<SearchResponse>(globalErrorReceiver) {
-            val searchRequestBody = SearchRequestBody(
-                    searchCategories = SearchRequestCategories(
-                            roomEvents = SearchRequestRoomEvents(
-                                    searchTerm = params.searchTerm,
-                                    orderBy = if (params.orderByRecent) SearchRequestOrder.RECENT else SearchRequestOrder.RANK,
-                                    filter = SearchRequestFilter(
-                                            limit = params.limit,
-                                            rooms = listOf(params.roomId)
-                                    ),
-                                    eventContext = SearchRequestEventContext(
-                                            beforeLimit = params.beforeLimit,
-                                            afterLimit = params.afterLimit,
-                                            includeProfile = params.includeProfile
-                                    )
-                            )
-                    )
-            )
-            apiCall = searchAPI.search(params.nextBatch, searchRequestBody)
+        val searchRequestBody = SearchRequestBody(
+                searchCategories = SearchRequestCategories(
+                        roomEvents = SearchRequestRoomEvents(
+                                searchTerm = params.searchTerm,
+                                orderBy = if (params.orderByRecent) SearchRequestOrder.RECENT else SearchRequestOrder.RANK,
+                                filter = SearchRequestFilter(
+                                        limit = params.limit,
+                                        rooms = listOf(params.roomId)
+                                ),
+                                eventContext = SearchRequestEventContext(
+                                        beforeLimit = params.beforeLimit,
+                                        afterLimit = params.afterLimit,
+                                        includeProfile = params.includeProfile
+                                )
+                        )
+                )
+        )
+        return executeRequest(globalErrorReceiver) {
+            searchAPI.search(params.nextBatch, searchRequestBody)
         }.toDomain()
     }
 

@@ -1,0 +1,2 @@
+Principaux changements pour cette version : améliorations de la VoIP (appels audio et vidéo dans les conversations primées) et corrections de bugs !
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.1.0

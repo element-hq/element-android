@@ -37,7 +37,7 @@
         tools:node="remove" />
 
     <!-- Jitsi SDK is now API23+ -->
-    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg"/>
+    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg" />
 
     <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
     <!-- Tell that the Camera is not mandatory to install the application -->
@@ -83,8 +83,7 @@
                 android:resource="@xml/shortcuts" />
         </activity-alias>
 
-        <activity
-            android:name=".features.home.HomeActivity" />
+        <activity android:name=".features.home.HomeActivity" />
         <activity
             android:name="fr.gouv.tchap.features.login.TchapLoginActivity"
             android:launchMode="singleTask"
@@ -233,11 +232,15 @@
         <activity
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/AppTheme.AttachmentsPreview" />
-        <activity android:name=".features.call.VectorCallActivity"
-            android:excludeFromRecents="true"/>
+        <activity
+            android:name=".features.call.VectorCallActivity"
+            android:excludeFromRecents="true" />
+        <!-- PIP Support https://developer.android.com/guide/topics/ui/picture-in-picture -->
         <activity
             android:name=".features.call.conference.VectorJitsiActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|smallestScreenSize|screenLayout|screenSize"
+            android:launchMode="singleTask"
+            android:supportsPictureInPicture="true" />
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
         <activity android:name=".features.widgets.WidgetActivity" />
@@ -247,27 +250,28 @@
         <activity android:name=".features.call.transfer.CallTransferActivity" />
 
         <!-- Single instance is very important for the custom scheme callback-->
-        <activity android:name=".features.auth.ReAuthActivity"
-            android:launchMode="singleInstance"
-            android:exported="false">
+        <activity
+            android:name=".features.auth.ReAuthActivity"
+            android:exported="false"
+            android:launchMode="singleInstance">
 
             <!-- XXX: UIA SSO has only web fallback, i.e no url redirect, so for now we comment this out
             hopefully, we would use it when finally available
             -->
             <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.VIEW" />-->
 
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+            <!--                <category android:name="android.intent.category.DEFAULT" />-->
+            <!--                <category android:name="android.intent.category.BROWSABLE" />-->
 
-<!--                <data-->
-<!--                    android:host="reauth"-->
-<!--                    android:scheme="element" />-->
-<!--            </intent-filter>-->
+            <!--                <data-->
+            <!--                    android:host="reauth"-->
+            <!--                    android:scheme="element" />-->
+            <!--            </intent-filter>-->
         </activity>
 
-        <activity android:name=".features.devtools.RoomDevToolActivity"/>
+        <activity android:name=".features.devtools.RoomDevToolActivity" />
         <!-- Services -->
 
         <service

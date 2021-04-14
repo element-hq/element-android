@@ -42,26 +42,26 @@ internal class DefaultSaveFilterTask @Inject constructor(
 
     override suspend fun execute(params: SaveFilterTask.Params) {
         val filterBody = when (params.filterPreset) {
-            FilterService.FilterPreset.RiotFilter -> {
-                FilterFactory.createRiotFilter()
+            FilterService.FilterPreset.ElementFilter -> {
+                FilterFactory.createElementFilter()
             }
-            FilterService.FilterPreset.NoFilter   -> {
+            FilterService.FilterPreset.NoFilter      -> {
                 FilterFactory.createDefaultFilter()
             }
         }
         val roomFilter = when (params.filterPreset) {
-            FilterService.FilterPreset.RiotFilter -> {
-                FilterFactory.createRiotRoomFilter()
+            FilterService.FilterPreset.ElementFilter -> {
+                FilterFactory.createElementRoomFilter()
             }
-            FilterService.FilterPreset.NoFilter   -> {
+            FilterService.FilterPreset.NoFilter      -> {
                 FilterFactory.createDefaultRoomFilter()
             }
         }
         val updated = filterRepository.storeFilter(filterBody, roomFilter)
         if (updated) {
-            val filterResponse = executeRequest<FilterResponse>(globalErrorReceiver) {
+            val filterResponse = executeRequest(globalErrorReceiver) {
                 // TODO auto retry
-                apiCall = filterAPI.uploadFilter(userId, filterBody)
+                filterAPI.uploadFilter(userId, filterBody)
             }
             filterRepository.storeFilterId(filterBody, filterResponse.filterId)
         }

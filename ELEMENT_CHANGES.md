@@ -1,4 +1,97 @@
-Changes in Element 1.0.18 (2021-XX-XX)
+Changes in Element 1.1.4 (2021-04-09)
+===================================================
+
+Improvements 🙌:
+ - Split network request `/keys/query` into smaller requests (250 users max) (#2925)
+ - Crypto improvement | Bulk send NO_OLM withheld code
+ - Display the room shield in all room setting screens
+ - Improve message with Emoji only detection (#3017)
+ - Picture preview when replying. Also add the image preview in the message detail bottomsheet (#2916)
+ - Api interceptor to allow app developers peek responses (#2986)
+ - Update reactions to Unicode 13.1 (#2998)
+ - Be more robust when parsing some enums
+ - Improve timeline filtering (dissociate membership and profile events, display hidden events when highlighted, fix hidden item/read receipts behavior)
+ - Add better support for empty room name fallback (#3106)
+ - Room list improvements (paging)
+ - Fix quick click action (#3127)
+ - Get Event after a Push for a faster notification display in some conditions
+ - Always try to retry Http requests in case of 429 (#1300)
+ - registration availability endpoint added to matrix-sdk
+
+Bugfix 🐛:
+ - Fix bad theme change for the MainActivity
+ - Handle encrypted reactions (#2509)
+ - Disable URL preview for some domains (#2995)
+ - Fix avatar rendering for DMs, after initial sync (#2693)
+ - Fix mandatory parameter in API (#3065)
+ - If signout request fails, do not start LoginActivity, but restart the app (#3099)
+ - Retain keyword order in emoji import script, and update the generated file (#3147)
+
+SDK API changes ⚠️:
+ - Several Services have been migrated to coroutines (#2449)
+ - Removes filtering options on Timeline.
+
+Build 🧱:
+ - Properly exclude gms dependencies in fdroid build flavour which were pulled in through the jitsi SDK (#3125)
+
+Other changes:
+ - Add version details on the login screen, in debug or developer mode
+ - Migrate Retrofit interface to coroutine calls
+
+Changes in Element 1.1.3 (2021-03-18)
+===================================================
+
+Bugfix 🐛:
+ - Fix regression in UpdateTrustWorker (introduced in 1.1.2)
+ - Timeline : Fix ripple effect on text item and fix background color of separators.
+
+Changes in Element 1.1.2 (2021-03-16) (was not published tp GPlay prod)
+===================================================
+
+Improvements 🙌:
+ - Lazy storage of ReadReceipts
+ - Do not load room members in e2e after init sync
+
+Bugfix 🐛:
+ - Add option to cancel stuck messages at bottom of timeline see #516
+ - Ensure message are decrypted in the room list after a clear cache
+ - Regression: Video will not play upon tap, but only after swipe #2928
+ - Cross signing now works with servers with an explicit port in the servername
+
+Other changes:
+ - Change formatting on issue templates to proper headings.
+
+Changes in Element 1.1.1 (2021-03-10) (was not published tp GPlay prod)
+===================================================
+
+Improvements 🙌:
+ - Allow non-HTTPS connections to homeservers on Tor (#2941)
+ - Fetch homeserver type and version and display in a new setting screen and add info in rageshakes (#2831)
+ - Improve initial sync performance - split into 2 transactions (#983)
+ - PIP support for Jitsi call (#2418)
+ - Add tooltip for room quick actions
+ - Pre-share session keys when opening a room or start typing (#2771)
+ - Sending is now queuing by room and not uniquely to the session
+ - Improve Snackbar duration (#2929)
+ - Improve sending message state (#2937)
+
+Bugfix 🐛:
+ - Try to fix crash about UrlPreview (#2640)
+ - Be robust if Event.type is missing (#2946)
+ - Snappier message send status
+ - Fix MainActivity display (#2927)
+
+Translations 🗣:
+ - All string resources and translations have been moved to the application module. Weblate project for the SDK will be removed.
+
+Build 🧱:
+ - Update a lot of dependencies, with the help of dependabot.
+ - Add a script to download and install APK from the CI
+
+Other changes:
+ - Rework edition of event management
+
+Changes in Element 1.1.0 (2021-02-19)
 ===================================================
 
 Features ✨:
@@ -14,18 +107,11 @@ Bugfix 🐛:
  - VoIP : fix audio devices output
  - Fix crash after initial sync on Dendrite
  - Fix crash reported by PlayStore (#2707)
-
-Translations 🗣:
- -
+ - Ignore url override from credential if it is not valid (#2822)
+ - Fix crash when deactivating an account
 
 SDK API changes ⚠️:
- - 
-
-Build 🧱:
- -
-
-Test:
- -
+ - Migrate AuthenticationService API to coroutines (#2449)
 
 Other changes:
  - New Dev Tools panel for developers
@@ -1203,7 +1289,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in Element 1.X.X (2021-XX-XX)
+Changes in Element 1.1.X (2021-XX-XX)
 ===================================================
 
 Features ✨:

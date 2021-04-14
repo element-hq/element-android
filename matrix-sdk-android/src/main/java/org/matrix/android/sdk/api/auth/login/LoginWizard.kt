@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.auth.login
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.Cancelable
 
@@ -29,26 +28,23 @@ interface LoginWizard {
      * @param callback  the matrix callback on which you'll receive the result of authentication.
      * @return a [Cancelable]
      */
-    fun login(login: String,
-              password: String,
-              deviceName: String,
-              callback: MatrixCallback<Session>): Cancelable
+    suspend fun login(login: String,
+                      password: String,
+                      deviceName: String): Session
 
     /**
      * Exchange a login token to an access token
      */
-    fun loginWithToken(loginToken: String,
-                       callback: MatrixCallback<Session>): Cancelable
+    suspend fun loginWithToken(loginToken: String): Session
 
     /**
      * Reset user password
      */
-    fun resetPassword(email: String,
-                      newPassword: String,
-                      callback: MatrixCallback<Unit>): Cancelable
+    suspend fun resetPassword(email: String,
+                              newPassword: String)
 
     /**
-     * Confirm the new password, once the user has checked his email
+     * Confirm the new password, once the user has checked their email
      */
-    fun resetPasswordMailConfirmed(callback: MatrixCallback<Unit>): Cancelable
+    suspend fun resetPasswordMailConfirmed()
 }

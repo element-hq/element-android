@@ -295,6 +295,10 @@ class RoomProfileFragment @Inject constructor(
         copyToClipboard(requireContext(), roomProfileArgs.roomId)
     }
 
+    override fun onRoomDevToolsClicked() {
+        navigator.openDevTools(requireContext(), roomProfileArgs.roomId)
+    }
+
     override fun onUrlInTopicLongClicked(url: String) {
         copyToClipboard(requireContext(), url, true)
     }

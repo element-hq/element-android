@@ -29,11 +29,16 @@ import im.vector.app.core.epoxy.bottomsheet.bottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetSendStateItem
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
+import im.vector.app.features.media.ImageContentRenderer
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
 
 /**
@@ -43,6 +48,8 @@ class MessageActionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
         private val fontProvider: EmojiCompatFontProvider,
+        private val imageContentRenderer: ImageContentRenderer,
+        private val dimensionConverter: DimensionConverter,
         private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<MessageActionState>() {
 
@@ -57,29 +64,39 @@ class MessageActionsEpoxyController @Inject constructor(
             avatarRenderer(avatarRenderer)
             matrixItem(state.informationData.matrixItem)
             movementMethod(createLinkMovementMethod(listener))
+            imageContentRenderer(imageContentRenderer)
+            data(state.timelineEvent()?.buildImageContentRendererData(dimensionConverter.dpToPx(66)))
             userClicked { listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
             body(state.messageBody.linkify(listener))
             time(formattedDate)
         }
 
         // Send state
-        if (state.informationData.sendState.isSending()) {
-            bottomSheetSendStateItem {
-                id("send_state")
-                showProgress(true)
-                text(stringProvider.getString(R.string.event_status_sending_message))
-            }
-        } else if (state.informationData.sendState.hasFailed()) {
+        val sendState = state.sendState()
+        if (sendState?.hasFailed().orFalse()) {
             bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(false)
                 text(stringProvider.getString(R.string.unable_to_send_message))
                 drawableStart(R.drawable.ic_warning_badge)
             }
+        } else if (sendState?.isSending().orFalse()) {
+            bottomSheetSendStateItem {
+                id("send_state")
+                showProgress(true)
+                text(stringProvider.getString(R.string.event_status_sending_message))
+            }
+        } else if (sendState == SendState.SENT) {
+            bottomSheetSendStateItem {
+                id("send_state")
+                showProgress(false)
+                drawableStart(R.drawable.ic_message_sent)
+                text(stringProvider.getString(R.string.event_status_sent_message))
+            }
         }
 
         when (state.informationData.e2eDecoration) {
-            E2EDecoration.WARN_IN_CLEAR        -> {
+            E2EDecoration.WARN_IN_CLEAR -> {
                 bottomSheetSendStateItem {
                     id("e2e_clear")
                     showProgress(false)
@@ -121,9 +138,11 @@ class MessageActionsEpoxyController @Inject constructor(
             }
         }
 
-        // Separator
-        dividerItem {
-            id("actions_separator")
+        if (state.actions.isNotEmpty()) {
+            // Separator
+            dividerItem {
+                id("actions_separator")
+            }
         }
 
         // Action

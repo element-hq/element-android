@@ -30,5 +30,5 @@ internal interface ThreePidPlatformDiscoverAPI {
      * @param medium   the medium.
      */
     @GET("_matrix/identity/api/v1/info")
-    fun info(@Query("address") address: String, @Query("medium") medium: String): Call<Platform>
+    suspend fun info(@Query("address") address: String, @Query("medium") medium: String): Platform
 }

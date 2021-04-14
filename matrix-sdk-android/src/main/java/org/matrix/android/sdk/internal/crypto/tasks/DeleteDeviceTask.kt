@@ -42,17 +42,21 @@ internal class DefaultDeleteDeviceTask @Inject constructor(
 
     override suspend fun execute(params: DeleteDeviceTask.Params) {
         try {
-            executeRequest<Unit>(globalErrorReceiver) {
-                apiCall = cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams(params.userAuthParam?.asMap()))
+            executeRequest(globalErrorReceiver) {
+                cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams(params.userAuthParam?.asMap()))
             }
         } catch (throwable: Throwable) {
             if (params.userInteractiveAuthInterceptor == null
-                    || !handleUIA(throwable, params.userInteractiveAuthInterceptor) { auth ->
-                        execute(params.copy(userAuthParam = auth))
-                    }
+                    || !handleUIA(
+                            failure = throwable,
+                            interceptor = params.userInteractiveAuthInterceptor,
+                            retryBlock = { authUpdate ->
+                                execute(params.copy(userAuthParam = authUpdate))
+                            }
+                    )
             ) {
                 Timber.d("## UIA: propagate failure")
-                throw  throwable
+                throw throwable
             }
         }
     }

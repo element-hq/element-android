@@ -2,7 +2,7 @@ This document aims to describe how Element android displays notifications to the
 
 # Table of Contents
 1. [Prerequisites Knowledge](#prerequisites-knowledge)
-    * [How does a matrix client gets a message from a Home Server?](#how-does-a-matrix-client-gets-a-message-from-a-home-server)
+    * [How does a matrix client get a message from a Home Server?](#how-does-a-matrix-client-get-a-message-from-a-home-server)
     * [How does a mobile app receives push notification?](#how-does-a-mobile-app-receives-push-notification)
     * [Push VS Notification](#push-vs-notification)
     * [Push in the matrix federated world](#push-in-the-matrix-federated-world)
@@ -22,7 +22,7 @@ First let's start with some prerequisite knowledge
 
 # Prerequisites Knowledge
 
-## How does a matrix client gets a message from a Home Server?
+## How does a matrix client get a message from a Home Server?
 
 In order to get messages from a home server, a matrix client need to perform a ``sync`` operation.
 

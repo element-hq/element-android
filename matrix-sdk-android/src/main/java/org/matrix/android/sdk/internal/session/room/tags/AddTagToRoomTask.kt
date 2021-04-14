@@ -39,8 +39,8 @@ internal class DefaultAddTagToRoomTask @Inject constructor(
 ) : AddTagToRoomTask {
 
     override suspend fun execute(params: AddTagToRoomTask.Params) {
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = roomAPI.putTag(
+        executeRequest(globalErrorReceiver) {
+            roomAPI.putTag(
                     userId = userId,
                     roomId = params.roomId,
                     tag = params.tag,

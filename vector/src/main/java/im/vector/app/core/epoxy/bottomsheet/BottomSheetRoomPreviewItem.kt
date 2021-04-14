@@ -20,6 +20,7 @@ import android.content.res.ColorStateList
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
@@ -78,33 +79,46 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
             // And do the action
             favoriteClickListener?.invoke()
         }
-        holder.roomSettings.onClick(settingsClickListener)
+        holder.roomSettings.apply {
+            onClick(settingsClickListener)
+            TooltipCompat.setTooltipText(this, stringProvider.getString(R.string.room_list_quick_actions_room_settings))
+        }
     }
 
     private fun setLowPriorityState(holder: Holder, isLowPriority: Boolean) {
+        val description: String
         val tintColor: Int
         if (isLowPriority) {
-            holder.roomLowPriority.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_low_priority_remove)
+            description = stringProvider.getString(R.string.room_list_quick_actions_low_priority_remove)
             tintColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
         } else {
-            holder.roomLowPriority.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_low_priority_add)
+            description = stringProvider.getString(R.string.room_list_quick_actions_low_priority_add)
             tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
         }
-        ImageViewCompat.setImageTintList(holder.roomLowPriority, ColorStateList.valueOf(tintColor))
+        holder.roomLowPriority.apply {
+            contentDescription = description
+            ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(tintColor))
+            TooltipCompat.setTooltipText(this, description)
+        }
     }
 
     private fun setFavoriteState(holder: Holder, isFavorite: Boolean) {
+        val description: String
         val tintColor: Int
         if (isFavorite) {
-            holder.roomFavorite.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_favorite_remove)
+            description = stringProvider.getString(R.string.room_list_quick_actions_favorite_remove)
             holder.roomFavorite.setImageResource(R.drawable.ic_star_green_24dp)
             tintColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
         } else {
-            holder.roomFavorite.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_favorite_add)
+            description = stringProvider.getString(R.string.room_list_quick_actions_favorite_add)
             holder.roomFavorite.setImageResource(R.drawable.ic_star_24dp)
             tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
         }
-        ImageViewCompat.setImageTintList(holder.roomFavorite, ColorStateList.valueOf(tintColor))
+        holder.roomFavorite.apply {
+            contentDescription = description
+            ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(tintColor))
+            TooltipCompat.setTooltipText(this, description)
+        }
     }
 
     class Holder : VectorEpoxyHolder() {

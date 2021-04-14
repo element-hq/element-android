@@ -37,7 +37,6 @@ import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -53,7 +52,6 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
@@ -198,9 +196,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         viewModelScope.launch {
             try {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
-                awaitCallback<Unit> {
-                    room.invite(initialState.userId, callback = it)
-                }
+                room.invite(initialState.userId)
                 _viewEvents.post(RoomMemberProfileViewEvents.OnInviteActionSuccess)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
@@ -215,9 +211,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         viewModelScope.launch {
             try {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
-                awaitCallback<Unit> {
-                    room.kick(initialState.userId, action.reason, it)
-                }
+                room.kick(initialState.userId, action.reason)
                 _viewEvents.post(RoomMemberProfileViewEvents.OnKickActionSuccess)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
@@ -233,12 +227,10 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         viewModelScope.launch {
             try {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
-                awaitCallback<Unit> {
-                    if (membership == Membership.BAN) {
-                        room.unban(initialState.userId, action.reason, it)
-                    } else {
-                        room.ban(initialState.userId, action.reason, it)
-                    }
+                if (membership == Membership.BAN) {
+                    room.unban(initialState.userId, action.reason)
+                } else {
+                    room.ban(initialState.userId, action.reason)
                 }
                 _viewEvents.post(RoomMemberProfileViewEvents.OnBanActionSuccess)
             } catch (failure: Throwable) {
@@ -321,19 +313,18 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     private fun handleIgnoreAction() = withState { state ->
         val isIgnored = state.isIgnored() ?: return@withState
         _viewEvents.post(RoomMemberProfileViewEvents.Loading())
-        val ignoreActionCallback = object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomMemberProfileViewEvents.OnIgnoreActionSuccess)
+        viewModelScope.launch {
+            val event = try {
+                if (isIgnored) {
+                    session.unIgnoreUserIds(listOf(state.userId))
+                } else {
+                    session.ignoreUserIds(listOf(state.userId))
+                }
+                RoomMemberProfileViewEvents.OnIgnoreActionSuccess
+            } catch (failure: Throwable) {
+                RoomMemberProfileViewEvents.Failure(failure)
             }
-
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
-            }
-        }
-        if (isIgnored) {
-            session.unIgnoreUserIds(listOf(state.userId), ignoreActionCallback)
-        } else {
-            session.ignoreUserIds(listOf(state.userId), ignoreActionCallback)
+            _viewEvents.post(event)
         }
     }
 

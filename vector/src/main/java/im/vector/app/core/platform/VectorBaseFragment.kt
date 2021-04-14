@@ -35,7 +35,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.bumptech.glide.util.Util.assertMainThread
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
 import im.vector.app.R
 import im.vector.app.core.di.DaggerScreenComponent
@@ -129,6 +128,12 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     }
 
     @CallSuper
+    override fun onPause() {
+        super.onPause()
+        Timber.i("onPause Fragment ${javaClass.simpleName}")
+    }
+
+    @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Timber.i("onViewCreated Fragment ${javaClass.simpleName}")
@@ -150,7 +155,9 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
         super.onDestroyView()
     }
 
+    @CallSuper
     override fun onDestroy() {
+        Timber.i("onDestroy Fragment ${javaClass.simpleName}")
         uiDisposables.dispose()
         super.onDestroy()
     }
@@ -193,10 +200,7 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     }
 
     protected fun showErrorInSnackbar(throwable: Throwable) {
-        vectorBaseActivity.getCoordinatorLayout()?.let {
-            Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
-                    .show()
-        }
+        vectorBaseActivity.getCoordinatorLayout()?.showOptimizedSnackbar(errorFormatter.toHumanReadable(throwable))
     }
 
     protected fun showLoadingDialog(message: CharSequence? = null, cancelable: Boolean = false) {

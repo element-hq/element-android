@@ -312,7 +312,7 @@ internal class MXOlmDevice @Inject constructor(
      * @param theirDeviceIdentityKey the Curve25519 identity key for the remote device.
      * @return a list of known session ids for the device.
      */
-    fun getSessionIds(theirDeviceIdentityKey: String): Set<String>? {
+    fun getSessionIds(theirDeviceIdentityKey: String): List<String>? {
         return store.getDeviceSessionIds(theirDeviceIdentityKey)
     }
 

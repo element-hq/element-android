@@ -49,6 +49,7 @@ import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class CrossSigningSettingsViewModel @AssistedInject constructor(
         @Assisted private val initialState: CrossSigningSettingsViewState,
@@ -130,7 +131,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                 if (pendingAuth != null) {
                     uiaContinuation?.resume(pendingAuth!!)
                 } else {
-                    uiaContinuation?.resumeWith(Result.failure((IllegalArgumentException())))
+                    uiaContinuation?.resumeWithException(IllegalArgumentException())
                 }
             }
             is CrossSigningSettingsAction.PasswordAuthDone -> {
@@ -146,7 +147,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
             CrossSigningSettingsAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
                 _viewEvents.post(CrossSigningSettingsViewEvents.HideModalWaitingView)
-                uiaContinuation?.resumeWith(Result.failure((Exception())))
+                uiaContinuation?.resumeWithException(Exception())
                 uiaContinuation = null
                 pendingAuth = null
             }

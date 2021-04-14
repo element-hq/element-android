@@ -17,11 +17,9 @@
 package org.matrix.android.sdk.api.session.file
 
 import android.net.Uri
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import java.io.File
@@ -41,20 +39,17 @@ interface FileService {
      * Download a file.
      * Result will be a decrypted file, stored in the cache folder. url parameter will be used to create unique filename to avoid name collision.
      */
-    fun downloadFile(fileName: String,
+    suspend fun downloadFile(fileName: String,
                      mimeType: String?,
                      url: String?,
-                     elementToDecrypt: ElementToDecrypt?,
-                     callback: MatrixCallback<File>): Cancelable
+                     elementToDecrypt: ElementToDecrypt?): File
 
-    fun downloadFile(messageContent: MessageWithAttachmentContent,
-                     callback: MatrixCallback<File>): Cancelable =
+    suspend fun downloadFile(messageContent: MessageWithAttachmentContent): File =
             downloadFile(
                     fileName = messageContent.getFileName(),
                     mimeType = messageContent.mimeType,
                     url = messageContent.getFileUrl(),
-                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                    callback = callback
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
             )
 
     fun isFileInCache(mxcUrl: String?,

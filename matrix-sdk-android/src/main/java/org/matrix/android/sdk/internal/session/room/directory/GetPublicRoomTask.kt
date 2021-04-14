@@ -38,7 +38,7 @@ internal class DefaultGetPublicRoomTask @Inject constructor(
 
     override suspend fun execute(params: GetPublicRoomTask.Params): PublicRoomsResponse {
         return executeRequest(globalErrorReceiver) {
-            apiCall = roomAPI.publicRooms(params.server, params.publicRoomsParams)
+            roomAPI.publicRooms(params.server, params.publicRoomsParams)
         }
     }
 }

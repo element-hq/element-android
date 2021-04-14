@@ -85,7 +85,6 @@ import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_POLL
 import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
@@ -118,14 +117,13 @@ class MessageItemFactory @Inject constructor(
         pillsPostProcessorFactory.create(roomId)
     }
 
-    fun create(event: TimelineEvent,
-               nextEvent: TimelineEvent?,
-               highlight: Boolean,
-               callback: TimelineEventController.Callback?
-    ): VectorEpoxyModel<*>? {
+    fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
+        val event = params.event
+        val highlight = params.isHighlighted
+        val callback = params.callback
         event.root.eventId ?: return null
         roomId = event.roomId
-        val informationData = messageInformationDataFactory.create(event, nextEvent)
+        val informationData = messageInformationDataFactory.create(params)
         if (event.root.isRedacted()) {
             // message is redacted
             val attributes = messageItemAttributesFactory.create(null, informationData, callback)
@@ -141,7 +139,7 @@ class MessageItemFactory @Inject constructor(
                 || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should display it when debugging as a notice event
-            return noticeItemFactory.create(event, highlight, callback)
+            return noticeItemFactory.create(params)
         }
         val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
 
@@ -157,7 +155,7 @@ class MessageItemFactory @Inject constructor(
             is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageOptionsContent             -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, callback)
+            is MessagePollResponseContent        -> noticeItemFactory.create(params)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }
@@ -468,7 +466,7 @@ class MessageItemFactory @Inject constructor(
         spannable.append(linkifiedBody)
         val editedSuffix = stringProvider.getString(R.string.edited_suffix)
         spannable.append(" ").append(editedSuffix)
-        val color = colorProvider.getColorFromAttribute(R.attr.vctr_list_header_secondary_text_color)
+        val color = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
         val editStart = spannable.lastIndexOf(editedSuffix)
         val editEnd = editStart + editedSuffix.length
         spannable.setSpan(
