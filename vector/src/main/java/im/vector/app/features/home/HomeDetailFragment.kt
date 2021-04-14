@@ -131,11 +131,15 @@ class HomeDetailFragment @Inject constructor(
         }
 
         viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
-            onGroupChange(groupSummary.orNull())
+            if (!vectorPreferences.labSpaces()) {
+                onGroupChange(groupSummary.orNull())
+            }
         }
 
         viewModel.selectSubscribe(this, HomeDetailViewState::spaceSummary) { spaceSummary ->
-            onSpaceChange(spaceSummary.orNull())
+            if (vectorPreferences.labSpaces()) {
+                onSpaceChange(spaceSummary.orNull())
+            }
         }
 
         viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
@@ -245,9 +249,23 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun onGroupChange(groupSummary: GroupSummary?) {
-        groupSummary?.let {
+        groupSummary ?: return
+        if (groupSummary.groupId == ALL_COMMUNITIES_GROUP_ID) {
+            // Special case
+            avatarRenderer.clear(views.groupToolbarAvatarImageView)
+            views.groupToolbarAvatarImageView.background = null
+
+            val myMxItem = withState(viewModel) { it.myMatrixItem }
+            if (myMxItem != null) {
+                avatarRenderer.render(myMxItem, views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
+            }
+            views.groupToolbarSpaceTitleView.isVisible = false
+        } else {
+            views.groupToolbarAvatarImageView.background = null
             // Use GlideApp with activity context to avoid the glideRequests to be paused
-            avatarRenderer.render(it.toMatrixItem(), views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
+            avatarRenderer.render(groupSummary.toMatrixItem(), views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
+            views.groupToolbarSpaceTitleView.isVisible = true
+            views.groupToolbarSpaceTitleView.text = groupSummary.displayName
         }
     }
 
@@ -268,6 +286,7 @@ class HomeDetailFragment @Inject constructor(
 
             views.groupToolbarSpaceTitleView.isVisible = false
         } else {
+            avatarRenderer.clear(views.groupToolbarAvatarImageView)
             views.groupToolbarAvatarImageView.background = null
             avatarRenderer.renderSpace(spaceSummary.toMatrixItem(), views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
             views.groupToolbarSpaceTitleView.isVisible = true
@@ -279,10 +298,10 @@ class HomeDetailFragment @Inject constructor(
         serverBackupStatusViewModel
                 .subscribe(this) {
                     when (val banState = it.bannerState.invoke()) {
-                        is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                        is BannerState.Setup -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
                         null,
-                        BannerState.Hidden    -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                        BannerState.Hidden -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
                     }
                 }
         views.homeKeysBackupBanner.delegate = this
@@ -309,10 +328,12 @@ class HomeDetailFragment @Inject constructor(
 
         views.homeToolbarContent.debouncedClicks {
             withState(viewModel) {
-                val currentSpace = it.spaceSummary.orNull()
-                        ?.takeIf { it.roomId != ALL_COMMUNITIES_GROUP_ID }
-                if (vectorPreferences.labSpaces() && currentSpace != null) {
-                    sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(currentSpace.roomId))
+                if (vectorPreferences.labSpaces()) {
+                    val currentSpace = it.spaceSummary.orNull()
+                            ?.takeIf { it.roomId != ALL_COMMUNITIES_GROUP_ID }
+                    if (vectorPreferences.labSpaces() && currentSpace != null) {
+                        sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(currentSpace.roomId))
+                    }
                 }
             }
         }
@@ -323,7 +344,7 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
-                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
+                R.id.bottom_action_rooms -> RoomListDisplayMode.ROOMS
                 else                      -> RoomListDisplayMode.NOTIFICATIONS
             }
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
@@ -401,7 +422,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun RoomListDisplayMode.toMenuId() = when (this) {
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
+        RoomListDisplayMode.ROOMS -> R.id.bottom_action_rooms
         else                       -> R.id.bottom_action_notification
     }
 
