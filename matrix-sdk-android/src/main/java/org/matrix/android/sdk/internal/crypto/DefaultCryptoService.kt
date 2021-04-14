@@ -323,15 +323,13 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
         isStarting.set(true)
-        Timber.v("HELLLO WORLD STARTING CRYPTO")
 
         try {
             setRustLogger()
             olmMachine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver)
-
-            Timber.v("HELLLO WORLD STARTING $dataDir CRYPTO ${olmMachine?.identityKeys()}")
+            Timber.v("Successfully started up an Olm machine, identity keys: ${olmMachine?.identityKeys()}")
         } catch (throwable: Throwable) {
-            Timber.v("HELLLO WORLD FAILED CRYPTO $throwable")
+            Timber.v("Failed create an Olm machine: $throwable")
         }
 
         // Open the store
