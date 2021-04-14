@@ -618,48 +618,46 @@ class LoginViewModel2 @AssistedInject constructor(
         } catch (failure: Throwable) {
             _viewEvents.post(LoginViewEvents2.Failure(failure))
             null
+        } ?: return
+
+        val loginMode = when {
+            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                    && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+            else                                                                  -> LoginMode.Unsupported
         }
 
-        if (data is LoginFlowResult.Success) {
-            val loginMode = when {
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                        && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                else                                                                  -> LoginMode.Unsupported
+        val viewEvent = when (loginMode) {
+            LoginMode.Password,
+            is LoginMode.SsoAndPassword -> {
+                retrieveProfileInfo(action.username)
+                // We can navigate to the password screen
+                LoginViewEvents2.OpenPasswordScreen
             }
+            is LoginMode.Sso            -> {
+                LoginViewEvents2.OpenSsoOnlyScreen
+            }
+            LoginMode.Unsupported       -> LoginViewEvents2.OnLoginModeNotSupported(data.supportedLoginTypes.toList())
+            LoginMode.Unknown           -> null
+        }
+        viewEvent?.let { _viewEvents.post(it) }
 
-            val viewEvent = when (loginMode) {
-                LoginMode.Password,
-                is LoginMode.SsoAndPassword -> {
-                    retrieveProfileInfo(action.username)
-                    // We can navigate to the password screen
-                    LoginViewEvents2.OpenPasswordScreen
-                }
-                is LoginMode.Sso            -> {
-                    LoginViewEvents2.OpenSsoOnlyScreen
-                }
-                LoginMode.Unsupported       -> LoginViewEvents2.OnLoginModeNotSupported(data.supportedLoginTypes.toList())
-                LoginMode.Unknown           -> null
-            }
-            viewEvent?.let { _viewEvents.post(it) }
+        val urlFromUser = action.username.substringAfter(":")
+        setState {
+            copy(
+                    isLoading = false,
+                    homeServerUrlFromUser = urlFromUser,
+                    homeServerUrl = data.homeServerUrl,
+                    isNumericOnlyUserIdForbidden = urlFromUser == matrixOrgUrl,
+                    loginMode = loginMode
+            )
+        }
 
-            val urlFromUser = action.username.substringAfter(":")
-            setState {
-                copy(
-                        isLoading = false,
-                        homeServerUrlFromUser = urlFromUser,
-                        homeServerUrl = data.homeServerUrl,
-                        isNumericOnlyUserIdForbidden = urlFromUser == matrixOrgUrl,
-                        loginMode = loginMode
-                )
-            }
-
-            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                    || data.isOutdatedHomeserver) {
-                // Notify the UI
-                _viewEvents.post(LoginViewEvents2.OutdatedHomeserver)
-            }
+        if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
+                || data.isOutdatedHomeserver) {
+            // Notify the UI
+            _viewEvents.post(LoginViewEvents2.OutdatedHomeserver)
         }
     }
 
@@ -744,32 +742,31 @@ class LoginViewModel2 @AssistedInject constructor(
                 _viewEvents.post(LoginViewEvents2.Failure(failure))
                 setState { copy(isLoading = false) }
                 null
+            } ?: return@launch
+
+            // Valid Homeserver, add it to the history.
+            // Note: we add what the user has input, data.homeServerUrl can be different
+            rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
+
+            val loginMode = when {
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                        && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+                else                                                                  -> LoginMode.Unsupported
             }
 
-            if (data is LoginFlowResult.Success) {
-                // Valid Homeserver, add it to the history.
-                // Note: we add what the user has input, data.homeServerUrl can be different
-                rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
+            val viewEvent = when (loginMode) {
+                LoginMode.Password,
+                is LoginMode.SsoAndPassword -> {
+                    when (state.signMode) {
+                        SignMode2.Unknown -> null
+                        SignMode2.SignUp  -> {
+                            // Check that registration is possible on this server
+                            try {
+                                registrationWizard?.getRegistrationFlow()
 
-                val loginMode = when {
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                    else                                                                  -> LoginMode.Unsupported
-                }
-
-                val viewEvent = when (loginMode) {
-                    LoginMode.Password,
-                    is LoginMode.SsoAndPassword -> {
-                        when (state.signMode) {
-                            SignMode2.Unknown -> null
-                            SignMode2.SignUp  -> {
-                                // Check that registration is possible on this server
-                                try {
-                                    registrationWizard?.getRegistrationFlow()
-
-                                    /*
+                                /*
                                     // Simulate registration disabled
                                     throw Failure.ServerError(
                                             error = MatrixError(
@@ -780,38 +777,37 @@ class LoginViewModel2 @AssistedInject constructor(
                                     )
                                      */
 
-                                    LoginViewEvents2.OpenSignUpChooseUsernameScreen
-                                } catch (throwable: Throwable) {
-                                    // Registration disabled?
-                                    LoginViewEvents2.Failure(throwable)
-                                }
+                                LoginViewEvents2.OpenSignUpChooseUsernameScreen
+                            } catch (throwable: Throwable) {
+                                // Registration disabled?
+                                LoginViewEvents2.Failure(throwable)
                             }
-                            SignMode2.SignIn  -> LoginViewEvents2.OpenSignInWithAnythingScreen
                         }
+                        SignMode2.SignIn  -> LoginViewEvents2.OpenSignInWithAnythingScreen
                     }
-                    is LoginMode.Sso            -> {
-                        LoginViewEvents2.OpenSsoOnlyScreen
-                    }
-                    LoginMode.Unsupported       -> LoginViewEvents2.OnLoginModeNotSupported(data.supportedLoginTypes.toList())
-                    LoginMode.Unknown           -> null
                 }
-                viewEvent?.let { _viewEvents.post(it) }
+                is LoginMode.Sso            -> {
+                    LoginViewEvents2.OpenSsoOnlyScreen
+                }
+                LoginMode.Unsupported       -> LoginViewEvents2.OnLoginModeNotSupported(data.supportedLoginTypes.toList())
+                LoginMode.Unknown           -> null
+            }
+            viewEvent?.let { _viewEvents.post(it) }
 
-                if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                        || data.isOutdatedHomeserver) {
-                    // Notify the UI
-                    _viewEvents.post(LoginViewEvents2.OutdatedHomeserver)
-                }
+            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
+                    || data.isOutdatedHomeserver) {
+                // Notify the UI
+                _viewEvents.post(LoginViewEvents2.OutdatedHomeserver)
+            }
 
-                setState {
-                    copy(
-                            isLoading = false,
-                            homeServerUrlFromUser = homeServerConnectionConfig.homeServerUri.toString(),
-                            homeServerUrl = data.homeServerUrl,
-                            isNumericOnlyUserIdForbidden = homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl,
-                            loginMode = loginMode
-                    )
-                }
+            setState {
+                copy(
+                        isLoading = false,
+                        homeServerUrlFromUser = homeServerConnectionConfig.homeServerUri.toString(),
+                        homeServerUrl = data.homeServerUrl,
+                        isNumericOnlyUserIdForbidden = homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl,
+                        loginMode = loginMode
+                )
             }
         }
     }
