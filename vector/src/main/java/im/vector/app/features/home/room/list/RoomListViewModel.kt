@@ -96,10 +96,16 @@ class RoomListViewModel @Inject constructor(
                 it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
             }
 
-            // TODO-SC why no low priority?
             addSection(sections, R.string.bottom_action_people_x) {
                 it.memberships = listOf(Membership.JOIN)
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                it.roomTagQueryFilter = RoomTagQueryFilter(false, false, null)
+            }
+
+            addSection(sections, R.string.low_priority_header) {
+                it.memberships = listOf(Membership.JOIN)
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
             }
         } else if (initialState.displayMode == RoomListDisplayMode.ROOMS) {
             addSection(sections, R.string.invitations_header, true) {
