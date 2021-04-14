@@ -12,4 +12,8 @@ class ScSdkPreferences @Inject constructor(private val vectorPreferences: Vector
     override fun getUnreadKind(isDirect: Boolean): Int {
         return vectorPreferences?.roomUnreadKind(isDirect) ?: RoomSummary.UNREAD_KIND_FULL
     }
+
+    override fun shouldShowUnimportantCounterBadge(): Boolean {
+        return vectorPreferences?.shouldShowUnimportantCounterBadge() ?: false
+    }
 }

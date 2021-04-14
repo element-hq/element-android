@@ -28,6 +28,7 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.SelectedGroupDataSource
+import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,6 +50,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val session: Session,
                                                       private val uiStateRepository: UiStateRepository,
                                                       private val selectedGroupStore: SelectedGroupDataSource,
+                                                      private val scSdkPreferences: ScSdkPreferences,
                                                       private val stringProvider: StringProvider)
     : VectorViewModel<HomeDetailViewState, HomeDetailAction, EmptyViewEvents>(initialState) {
 
@@ -167,14 +169,16 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                             roomSummaryQueryParams {
                                 memberships = listOf(Membership.JOIN)
                                 roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                            }
+                            },
+                            scSdkPreferences
                     )
 
                     val otherRooms = session.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 memberships = listOf(Membership.JOIN)
                                 roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                            }
+                            },
+                            scSdkPreferences
                     )
 
                     setState {

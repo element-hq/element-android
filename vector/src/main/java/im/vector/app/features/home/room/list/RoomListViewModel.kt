@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.list
 
-import android.content.Context
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -27,7 +26,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
-import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.home.room.ScSdkPreferences
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,10 +50,9 @@ import javax.inject.Inject
 class RoomListViewModel @Inject constructor(
         initialState: RoomListViewState,
         private val session: Session,
+        private val scSdkPreferences: ScSdkPreferences,
         private val stringProvider: StringProvider
 ) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
-
-    private var vectorPreferences: VectorPreferences? = null
 
     interface Factory {
         fun create(initialState: RoomListViewState): RoomListViewModel
@@ -213,7 +211,7 @@ class RoomListViewModel @Inject constructor(
                                         .subscribe {
                                             sections.find { it.sectionName == name }
                                                     ?.notificationCount
-                                                    ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
+                                                    ?.postValue(session.getNotificationCountForRooms(roomQueryParams, scSdkPreferences))
                                         }
                                         .disposeOnClear()
 

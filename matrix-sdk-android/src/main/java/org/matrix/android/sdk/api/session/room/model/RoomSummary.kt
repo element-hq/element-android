@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 
 /**
  * This class holds some data of a room.
@@ -134,5 +135,13 @@ data class RoomSummary constructor(
     // SC addition
     interface RoomSummaryPreferenceProvider {
         fun getUnreadKind(isDirect: Boolean): Int
+        fun shouldShowUnimportantCounterBadge(): Boolean
+        fun getUnreadRoomSummaryField(isDirect: Boolean): String {
+            return when(getUnreadKind(isDirect)) {
+                UNREAD_KIND_ORIGINAL_CONTENT -> RoomSummaryEntityFields.HAS_UNREAD_ORIGINAL_CONTENT_MESSAGES
+                UNREAD_KIND_CONTENT -> RoomSummaryEntityFields.HAS_UNREAD_CONTENT_MESSAGES
+                /*UNREAD_KIND_FULL*/ else -> RoomSummaryEntityFields.HAS_UNREAD_MESSAGES
+            }
+        }
     }
 }

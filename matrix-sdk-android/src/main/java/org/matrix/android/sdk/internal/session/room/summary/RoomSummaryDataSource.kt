@@ -147,14 +147,14 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         }
     }
 
-    fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
+    fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams, preferenceProvider: RoomSummary.RoomSummaryPreferenceProvider): RoomAggregateNotificationCount {
         var notificationCount: RoomAggregateNotificationCount? = null
         monarchy.doWithRealm { realm ->
             val roomSummariesQuery = roomSummariesQuery(realm, queryParams)
             val notifCount = roomSummariesQuery.sum(RoomSummaryEntityFields.NOTIFICATION_COUNT).toInt()
             val highlightCount = roomSummariesQuery.sum(RoomSummaryEntityFields.HIGHLIGHT_COUNT).toInt()
             // TODO-SC-merge: respect setting for selecting right field here (HAS_UNREAD_CONTENT_MESSAGES, HAS_UNREAD_MESSAGES, HAS_UNREAD_ORIGINAL_CONTENT_MESSAGES)
-            val unreadCount = roomSummariesQuery(realm, queryParams).equalTo(RoomSummaryEntityFields.HAS_UNREAD_ORIGINAL_CONTENT_MESSAGES, true).count().toInt()
+            val unreadCount = if (preferenceProvider.shouldShowUnimportantCounterBadge()) roomSummariesQuery(realm, queryParams).equalTo(preferenceProvider.getUnreadRoomSummaryField(false), true).count().toInt() else 0
             val markedUnreadCount = roomSummariesQuery(realm, queryParams).equalTo(RoomSummaryEntityFields.MARKED_UNREAD, true).count().toInt()
             notificationCount = RoomAggregateNotificationCount(
                     notifCount,
