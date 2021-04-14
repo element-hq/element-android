@@ -102,15 +102,11 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     }
 
     private fun setupSocialLoginButtons(state: LoginViewState) {
-        when (state.signMode) {
+        views.loginSocialLoginButtons.mode = when (state.signMode) {
             SignMode.Unknown            -> error("developer error")
-            SignMode.SignUp             -> {
-                views.loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_UP
-            }
+            SignMode.SignUp             -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
             SignMode.SignIn,
-            SignMode.SignInWithMatrixId -> {
-                views.loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_IN
-            }
+            SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
         }.exhaustive
     }
 
