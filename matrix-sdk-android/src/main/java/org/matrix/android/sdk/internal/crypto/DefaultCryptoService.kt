@@ -68,9 +68,11 @@ import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
+import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
@@ -160,6 +162,9 @@ internal class DefaultCryptoService @Inject constructor(
     private val keyClaimLock: Mutex = Mutex()
     private val outgointRequestsLock: Mutex = Mutex()
     private val roomKeyShareLocks: ConcurrentHashMap<String, Mutex> = ConcurrentHashMap()
+
+    // TODO does this need to be concurrent?
+    private val newSessionListeners = ArrayList<NewSessionListener>()
 
     suspend fun onStateEvent(roomId: String, event: Event) {
         when (event.getClearType()) {
@@ -643,11 +648,50 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
+    private fun notifyRoomKeyReceival(
+        roomId: String,
+        sessionId: String,
+    ) {
+        // The sender key is actually unused since it's unimportant for megolm
+        // Our events don't contain the info so pass an empty string until we
+        // change the listener definition
+        val senderKey = ""
+
+        newSessionListeners.forEach {
+            try {
+                it.onNewSession(roomId, senderKey, sessionId)
+            } catch (e: Throwable) {
+            }
+        }
+    }
+
     suspend fun receiveSyncChanges(
         toDevice: ToDeviceSyncResponse?,
         deviceChanges: DeviceListResponse?,
         keyCounts: DeviceOneTimeKeysCountSyncResponse?) {
-            olmMachine!!.receiveSyncChanges(toDevice, deviceChanges, keyCounts)
+            // Decrypt and handle our to-device events
+            val toDeviceEvents = olmMachine!!.receiveSyncChanges(toDevice, deviceChanges, keyCounts)
+
+            // Notify the our listeners about room keys so decryption is retried.
+            if (toDeviceEvents.events != null) {
+                for (event in toDeviceEvents.events) {
+                    if (event.type == "m.room_key") {
+                        val content = event.getClearContent().toModel<RoomKeyContent>() ?: continue
+
+                        val roomId = content.sessionId ?: continue
+                        val sessionId = content.sessionId
+
+                        notifyRoomKeyReceival(roomId, sessionId)
+                    } else if (event.type == "m.forwarded_room_key") {
+                        val content = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: continue
+
+                        val roomId = content.sessionId ?: continue
+                        val sessionId = content.sessionId
+
+                        notifyRoomKeyReceival(roomId, sessionId)
+                    }
+                }
+            }
     }
 
     private suspend fun preshareGroupSession(roomId: String, roomMembers: List<String>) {
@@ -946,12 +990,11 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun addNewSessionListener(newSessionListener: NewSessionListener) {
-        // TODO we need to notify the listener when we receive a new inbound
-        // group session
+        if (!newSessionListeners.contains(newSessionListener)) newSessionListeners.add(newSessionListener)
     }
 
     override fun removeSessionListener(listener: NewSessionListener) {
-        // TODO
+        newSessionListeners.remove(listener)
     }
 /* ==========================================================================================
  * DEBUG INFO
