@@ -313,14 +313,6 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    fun onSyncWillProcess(isInitialSync: Boolean) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            if (isInitialSync) {
-                // TODO
-            }
-        }
-    }
-
     private suspend fun internalStart() {
         if (isStarted.get() || isStarting.get()) {
             return
