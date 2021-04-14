@@ -58,7 +58,8 @@ data class RoomSummaryQueryParams(
         val roomTagQueryFilter: RoomTagQueryFilter?,
         val excludeType: List<String?>?,
         val includeType: List<String?>?,
-        val activeSpaceId: ActiveSpaceFilter?
+        val activeSpaceId: ActiveSpaceFilter?,
+        var activeGroupId: String? = null
 ) {
 
     class Builder {
@@ -72,6 +73,7 @@ data class RoomSummaryQueryParams(
         var excludeType: List<String?>? = listOf(RoomType.SPACE)
         var includeType: List<String?>? = null
         var activeSpaceId: ActiveSpaceFilter = ActiveSpaceFilter.None
+        var activeGroupId: String? = null
 
         fun build() = RoomSummaryQueryParams(
                 roomId = roomId,
@@ -82,7 +84,8 @@ data class RoomSummaryQueryParams(
                 roomTagQueryFilter = roomTagQueryFilter,
                 excludeType = excludeType,
                 includeType = includeType,
-                activeSpaceId = activeSpaceId
+                activeSpaceId = activeSpaceId,
+                activeGroupId = activeGroupId
         )
     }
 }

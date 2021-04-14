@@ -212,6 +212,11 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
+    var groupIds: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
     @Index
     private var membershipStr: String = Membership.NONE.name
 

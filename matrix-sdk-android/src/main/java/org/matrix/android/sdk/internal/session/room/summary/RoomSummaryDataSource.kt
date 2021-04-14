@@ -197,6 +197,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             override fun updateQuery(builder: (RoomSummaryQueryParams) -> RoomSummaryQueryParams) {
                 realmDataSourceFactory.updateQuery {
                     roomSummariesQuery(it, builder.invoke(queryParams))
+                            .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
                 }
             }
         }
@@ -274,6 +275,10 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             else                             -> {
                 // nop
             }
+        }
+
+        if (queryParams.activeGroupId != null) {
+            query.contains(RoomSummaryEntityFields.GROUP_IDS, queryParams.activeGroupId)
         }
         return query
     }
