@@ -147,19 +147,11 @@ abstract class AbstractLoginFragment2<VB : ViewBinding> : VectorBaseFragment<VB>
         }
     }
 
-    final override fun invalidate() {
-        withState(loginViewModel) { state ->
-            // True when email is sent with success to the homeserver
-            isResetPasswordStarted = state.resetPasswordEmail.isNullOrBlank().not()
+    final override fun invalidate() = withState(loginViewModel) { state ->
+        // True when email is sent with success to the homeserver
+        isResetPasswordStarted = state.resetPasswordEmail.isNullOrBlank().not()
 
-            updateWithState(state)
-        }
-
-        invalidateMore()
-    }
-
-    protected open fun invalidateMore() {
-        // No op by default
+        updateWithState(state)
     }
 
     open fun updateWithState(state: LoginViewState2) {

@@ -67,6 +67,8 @@ class AccountCreatedFragment @Inject constructor(
         setupClickListener()
         setupSubmitButton()
         observeViewEvents()
+
+        viewModel.subscribe { invalidateState(it) }
     }
 
     private fun observeViewEvents() {
@@ -121,7 +123,7 @@ class AccountCreatedFragment @Inject constructor(
         loginViewModel.handle(LoginAction2.Finish)
     }
 
-    override fun invalidateMore() = withState(viewModel) { state ->
+    private fun invalidateState(state: AccountCreatedViewState) {
         // Ugly hack...
         (activity as? LoginActivity2)?.setIsLoading(state.isLoading)
 
