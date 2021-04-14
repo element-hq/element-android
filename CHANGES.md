@@ -1,3 +1,9 @@
+Changes in Element 1.1.5 (2021-XX-XX)
+===================================================
+
+Bugfix 🐛:
+ - Fix crash during Realm migration
+
 Changes in Element 1.1.4 (2021-04-09)
 ===================================================
 
