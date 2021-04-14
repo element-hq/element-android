@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.login
+package im.vector.app.features.login2
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -23,21 +23,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import im.vector.app.BuildConfig
-import im.vector.app.databinding.FragmentLoginSplashBinding
-import im.vector.app.features.login2.LoginActivity2
+import im.vector.app.databinding.FragmentLoginSplash2Binding
 import im.vector.app.features.settings.VectorPreferences
-
 import javax.inject.Inject
 
 /**
- * In this screen, the user is viewing an introduction to what he can do with this application
+ * In this screen, the user is asked to sign up or to sign in to the homeserver
+ * This is the new splash screen
  */
-class LoginSplashFragment @Inject constructor(
+class LoginSignUpSignInSelectionFragment2 @Inject constructor(
         private val vectorPreferences: VectorPreferences
-) : AbstractLoginFragment<FragmentLoginSplashBinding>() {
+) : AbstractLoginFragment2<FragmentLoginSplash2Binding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSplashBinding {
-        return FragmentLoginSplashBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSplash2Binding {
+        return FragmentLoginSplash2Binding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +46,8 @@ class LoginSplashFragment @Inject constructor(
     }
 
     private fun setupViews() {
-        views.loginSplashSubmit.setOnClickListener { getStarted() }
+        views.loginSignupSigninSignUp.setOnClickListener { signUp() }
+        views.loginSignupSigninSignIn.setOnClickListener { signIn() }
 
         if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
@@ -56,20 +56,17 @@ class LoginSplashFragment @Inject constructor(
                     "Branch: ${BuildConfig.GIT_BRANCH_NAME}\n" +
                     "Build: ${BuildConfig.BUILD_NUMBER}"
         }
-
-        views.loginSplashNewFlow.setOnClickListener { startNewFlow() }
     }
 
-    private fun startNewFlow() {
-        startActivity(LoginActivity2.newIntent(requireContext(), null))
-        requireActivity().finish()
+    private fun signUp() {
+        loginViewModel.handle(LoginAction2.UpdateSignMode(SignMode2.SignUp))
     }
 
-    private fun getStarted() {
-        loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OpenServerSelection))
+    private fun signIn() {
+        loginViewModel.handle(LoginAction2.UpdateSignMode(SignMode2.SignIn))
     }
 
     override fun resetViewModel() {
-        // Nothing to do
+        loginViewModel.handle(LoginAction2.ResetSignMode)
     }
 }

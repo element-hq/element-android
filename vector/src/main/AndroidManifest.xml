@@ -119,6 +119,22 @@
                     android:scheme="element" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".features.login2.LoginActivity2"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize">
+            <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="connect"
+                    android:scheme="element" />
+            </intent-filter>
+        </activity>
 
         <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
         <activity
