@@ -125,7 +125,7 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
 
         if (state.loginMode is LoginMode.SsoAndPassword) {
             views.loginSocialLoginContainer.isVisible = true
-            views.loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders
+            views.loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders?.sorted()
             views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                 override fun onProviderSelected(id: String?) {
                     loginViewModel.getSsoUrl(
