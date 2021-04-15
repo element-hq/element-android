@@ -2005,7 +2005,7 @@
     <string name="reply">Відповісти</string>
     <string name="edit">Редагувати</string>
     <string name="disclaimer_negative_button">Зрозуміло</string>
-    <string name="disclaimer_title">Riot тепер називається SchildiChat!</string>
+    <string name="disclaimer_title">Riot тепер називається Element!</string>
     <string name="downloaded_file">Файл %1$s було звантажено!</string>
     <string name="downloading_file">Звантаження файлу %1$s…</string>
     <string name="send_file_step_sending_file">Надсилання файлу (%1$s / %2$s)</string>
