@@ -12,7 +12,7 @@ buildscript {
     }
     dependencies {
         // Stick to this version until https://github.com/realm/realm-java/issues/7402 is fixed
-        classpath "io.realm:realm-gradle-plugin:10.3.1"
+        classpath "io.realm:realm-gradle-plugin:10.4.0"
     }
 }
 
