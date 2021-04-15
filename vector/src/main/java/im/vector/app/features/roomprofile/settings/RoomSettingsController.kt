@@ -24,8 +24,11 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
+import im.vector.app.features.form.formSwitchItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
+import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -34,6 +37,7 @@ class RoomSettingsController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
+        private val vectorPreferences: VectorPreferences,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
@@ -45,6 +49,7 @@ class RoomSettingsController @Inject constructor(
         fun onTopicChanged(topic: String)
         fun onHistoryVisibilityClicked()
         fun onJoinRuleClicked()
+        fun onToggleGuestAccess()
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -122,6 +127,20 @@ class RoomSettingsController @Inject constructor(
                 editable = data.actionPermissions.canChangeJoinRule,
                 action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
         )
+
+        val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
+        if (vectorPreferences.developerMode() && isPublic) {
+            val guestAccess = data.newRoomJoinRules.newGuestAccess ?: data.currentGuestAccess
+            // add guest access option?
+            formSwitchItem {
+                id("guest_access")
+                title(stringProvider.getString(R.string.room_settings_guest_access_title))
+                switchChecked(guestAccess == GuestAccess.CanJoin)
+                listener {
+                    callback?.onToggleGuestAccess()
+                }
+            }
+        }
     }
 
     private fun RoomSettingsViewState.getJoinRuleWording(): String {
