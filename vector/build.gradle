@@ -14,7 +14,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 1
-ext.versionPatch = 4
+ext.versionPatch = 5
 
 ext.scVersion = 30
 
