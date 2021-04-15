@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
@@ -595,9 +596,9 @@ class RoomDetailFragment @Inject constructor(
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
             }
 
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+            try {
                 requireActivity().startActivity(intent)
-            } else {
+            } catch (activityNotFoundException: ActivityNotFoundException) {
                 requireActivity().toast(R.string.error_no_external_application_found)
             }
         }
