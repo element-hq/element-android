@@ -114,6 +114,6 @@ class LoginTermsFragment2 @Inject constructor(
     }
 
     override fun resetViewModel() {
-        loginViewModel.handle(LoginAction2.ResetLogin)
+        loginViewModel.handle(LoginAction2.ResetSignup)
     }
 }

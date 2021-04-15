@@ -33,7 +33,8 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.databinding.FragmentLoginGenericTextInputFormBinding
+import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.databinding.FragmentLoginGenericTextInputForm2Binding
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.failure.Failure
@@ -56,12 +57,12 @@ data class LoginGenericTextInputFormFragmentArgument(
 /**
  * In this screen, the user is asked for a text input
  */
-class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginGenericTextInputFormBinding>() {
+class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginGenericTextInputForm2Binding>() {
 
     private val params: LoginGenericTextInputFormFragmentArgument by args()
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginGenericTextInputFormBinding {
-        return FragmentLoginGenericTextInputFormBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginGenericTextInputForm2Binding {
+        return FragmentLoginGenericTextInputForm2Binding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,6 +78,7 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
     private fun setupViews() {
         views.loginGenericTextInputFormOtherButton.setOnClickListener { onOtherButtonClicked() }
         views.loginGenericTextInputFormSubmit.setOnClickListener { submit() }
+        views.loginGenericTextInputFormLater.setOnClickListener { submit() }
     }
 
     private fun setupAutoFill() {
@@ -102,9 +104,11 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
     private fun setupUi() {
         when (params.mode) {
             TextInputFormFragmentMode.SetEmail      -> {
-                views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_email_title)
-                views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_email_notice)
-                views.loginGenericTextInputFormNotice2.setTextOrHide(null)
+                views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_email_title_2)
+                views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_email_notice_2)
+                // Text will be updated with the state
+                views.loginGenericTextInputFormMandatoryNotice.isVisible = params.mandatory
+                views.loginGenericTextInputFormNotice2.isVisible = false
                 views.loginGenericTextInputFormTil.hint =
                         getString(if (params.mandatory) R.string.login_set_email_mandatory_hint else R.string.login_set_email_optional_hint)
                 views.loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
@@ -112,8 +116,10 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
                 views.loginGenericTextInputFormSubmit.text = getString(R.string.login_set_email_submit)
             }
             TextInputFormFragmentMode.SetMsisdn     -> {
-                views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_msisdn_title)
-                views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_msisdn_notice)
+                views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_msisdn_title_2)
+                views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_msisdn_notice_2)
+                // Text will be updated with the state
+                views.loginGenericTextInputFormMandatoryNotice.isVisible = params.mandatory
                 views.loginGenericTextInputFormNotice2.setTextOrHide(getString(R.string.login_set_msisdn_notice2))
                 views.loginGenericTextInputFormTil.hint =
                         getString(if (params.mandatory) R.string.login_set_msisdn_mandatory_hint else R.string.login_set_msisdn_optional_hint)
@@ -124,7 +130,8 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
             TextInputFormFragmentMode.ConfirmMsisdn -> {
                 views.loginGenericTextInputFormTitle.text = getString(R.string.login_msisdn_confirm_title)
                 views.loginGenericTextInputFormNotice.text = getString(R.string.login_msisdn_confirm_notice, params.extra)
-                views.loginGenericTextInputFormNotice2.setTextOrHide(null)
+                views.loginGenericTextInputFormMandatoryNotice.isVisible = false
+                views.loginGenericTextInputFormNotice2.isVisible = false
                 views.loginGenericTextInputFormTil.hint =
                         getString(R.string.login_msisdn_confirm_hint)
                 views.loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_NUMBER
@@ -195,10 +202,21 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
     private fun setupSubmitButton() {
         views.loginGenericTextInputFormSubmit.isEnabled = false
         views.loginGenericTextInputFormTextInput.textChanges()
-                .subscribe {
-                    views.loginGenericTextInputFormSubmit.isEnabled = isInputValid(it)
+                .subscribe { text ->
+                    views.loginGenericTextInputFormSubmit.isEnabled = isInputValid(text)
+                    text?.let { updateSubmitButtons(it) }
                 }
                 .disposeOnDestroyView()
+    }
+
+    private fun updateSubmitButtons(text: CharSequence) {
+        if (params.mandatory) {
+            views.loginGenericTextInputFormSubmit.isVisible = true
+            views.loginGenericTextInputFormLater.isVisible = false
+        } else {
+            views.loginGenericTextInputFormSubmit.isVisible = text.isNotEmpty()
+            views.loginGenericTextInputFormLater.isVisible = text.isEmpty()
+        }
     }
 
     private fun isInputValid(input: CharSequence): Boolean {
@@ -206,15 +224,9 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
             true
         } else {
             when (params.mode) {
-                TextInputFormFragmentMode.SetEmail      -> {
-                    input.isEmail()
-                }
-                TextInputFormFragmentMode.SetMsisdn     -> {
-                    input.isNotBlank()
-                }
-                TextInputFormFragmentMode.ConfirmMsisdn -> {
-                    input.isNotBlank()
-                }
+                TextInputFormFragmentMode.SetEmail      -> input.isEmail()
+                TextInputFormFragmentMode.SetMsisdn     -> input.isNotBlank()
+                TextInputFormFragmentMode.ConfirmMsisdn -> input.isNotBlank()
             }
         }
     }
@@ -253,6 +265,14 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
     }
 
     override fun resetViewModel() {
-        loginViewModel.handle(LoginAction2.ResetLogin)
+        loginViewModel.handle(LoginAction2.ResetSignup)
+    }
+
+    override fun updateWithState(state: LoginViewState2) {
+        views.loginGenericTextInputFormMandatoryNotice.text = when (params.mode) {
+            TextInputFormFragmentMode.SetEmail      -> getString(R.string.login_set_email_mandatory_notice_2, state.homeServerUrlFromUser.toReducedUrl())
+            TextInputFormFragmentMode.SetMsisdn     -> getString(R.string.login_set_msisdn_mandatory_notice_2, state.homeServerUrlFromUser.toReducedUrl())
+            TextInputFormFragmentMode.ConfirmMsisdn -> null
+        }
     }
 }

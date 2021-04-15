@@ -36,6 +36,7 @@ import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.resetBackstack
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
@@ -227,6 +228,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
             is LoginViewEvents2.OpenSignUpChooseUsernameScreen             -> {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginFragment2SignupUsername::class.java,
+                        tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             }
             is LoginViewEvents2.OpenSignInWithAnythingScreen               -> {
@@ -247,7 +249,13 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                 onLoginModeNotSupported(event.supportedTypes)
             is LoginViewEvents2.OnSessionCreated                           -> handleOnSessionCreated(event)
             is LoginViewEvents2.Finish                                     -> terminate(true)
+            is LoginViewEvents2.CancelRegistration                         -> handleCancelRegistration()
         }.exhaustive
+    }
+
+    private fun handleCancelRegistration() {
+        // Cleanup the back stack
+        resetBackstack()
     }
 
     private fun handleOnSessionCreated(event: LoginViewEvents2.OnSessionCreated) {

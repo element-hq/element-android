@@ -182,7 +182,7 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
     }
 
     override fun resetViewModel() {
-        loginViewModel.handle(LoginAction2.ResetLogin)
+        // loginViewModel.handle(LoginAction2.ResetSignin)
     }
 
     override fun onError(throwable: Throwable) {

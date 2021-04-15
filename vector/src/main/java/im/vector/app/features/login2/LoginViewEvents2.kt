@@ -48,6 +48,8 @@ sealed class LoginViewEvents2 : VectorViewEvents {
     object OnResetPasswordMailConfirmationSuccess : LoginViewEvents2()
     object OnResetPasswordMailConfirmationSuccessDone : LoginViewEvents2()
 
+    object CancelRegistration: LoginViewEvents2()
+
     data class OnLoginModeNotSupported(val supportedTypes: List<String>) : LoginViewEvents2()
 
     data class OnSendEmailSuccess(val email: String) : LoginViewEvents2()

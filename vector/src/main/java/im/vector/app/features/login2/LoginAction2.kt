@@ -69,7 +69,8 @@ sealed class LoginAction2 : VectorViewModelAction {
 
     object ResetHomeServerUrl : ResetAction()
     object ResetSignMode : ResetAction()
-    object ResetLogin : ResetAction()
+    object ResetSignin : ResetAction()
+    object ResetSignup : ResetAction()
     object ResetResetPassword : ResetAction()
 
     // Homeserver history

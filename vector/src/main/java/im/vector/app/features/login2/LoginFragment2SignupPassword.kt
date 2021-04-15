@@ -129,7 +129,7 @@ class LoginFragment2SignupPassword @Inject constructor() : AbstractSSOLoginFragm
     }
 
     override fun resetViewModel() {
-        loginViewModel.handle(LoginAction2.ResetLogin)
+        // loginViewModel.handle(LoginAction2.ResetSignup)
     }
 
     override fun onError(throwable: Throwable) {

@@ -154,7 +154,7 @@ class LoginFragment2SigninPassword @Inject constructor(
     }
 
     override fun resetViewModel() {
-        loginViewModel.handle(LoginAction2.ResetLogin)
+        loginViewModel.handle(LoginAction2.ResetSignin)
     }
 
     override fun onError(throwable: Throwable) {

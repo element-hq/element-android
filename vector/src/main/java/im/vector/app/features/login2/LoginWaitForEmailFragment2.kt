@@ -70,6 +70,6 @@ class LoginWaitForEmailFragment2 @Inject constructor() : AbstractLoginFragment2<
     }
 
     override fun resetViewModel() {
-        loginViewModel.handle(LoginAction2.ResetLogin)
+        loginViewModel.handle(LoginAction2.ResetSignup)
     }
 }

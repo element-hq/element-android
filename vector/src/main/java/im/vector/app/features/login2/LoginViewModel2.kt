@@ -44,7 +44,6 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
-import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.FlowResult
@@ -379,11 +378,26 @@ class LoginViewModel2 @AssistedInject constructor(
                     )
                 }
             }
-            LoginAction2.ResetLogin         -> {
+            LoginAction2.ResetSignin        -> {
                 viewModelScope.launch {
                     authenticationService.cancelPendingLoginOrRegistration()
-                    setState { copy(isLoading = false) }
+                    setState {
+                        copy(isLoading = false)
+                    }
                 }
+                _viewEvents.post(LoginViewEvents2.CancelRegistration)
+            }
+            LoginAction2.ResetSignup        -> {
+                viewModelScope.launch {
+                    authenticationService.cancelPendingLoginOrRegistration()
+                    setState {
+                        // Always create a new state, to ensure the state is correctly reset
+                        LoginViewState2(
+                                knownCustomHomeServersUrls = knownCustomHomeServersUrls
+                        )
+                    }
+                }
+                _viewEvents.post(LoginViewEvents2.CancelRegistration)
             }
             LoginAction2.ResetResetPassword -> {
                 setState {
@@ -397,8 +411,7 @@ class LoginViewModel2 @AssistedInject constructor(
 
     private fun handleUpdateSignMode(action: LoginAction2.UpdateSignMode) {
         setState {
-            // Always create a new state, to ensure the state is correctly reset
-            LoginViewState2(
+            copy(
                     signMode = action.signMode
             )
         }
@@ -667,7 +680,7 @@ class LoginViewModel2 @AssistedInject constructor(
         if (safeLoginWizard != null) {
             setState { copy(loginProfileInfo = Loading()) }
             val result = tryAsync {
-               safeLoginWizard.getProfileInfo(username)
+                safeLoginWizard.getProfileInfo(username)
             }
             setState { copy(loginProfileInfo = result) }
         }

@@ -35,4 +35,12 @@
     <string name="login_account_created_message">Hello Matrix world!</string>
     <string name="login_account_created_instruction">Click on the image and on your name to configure them.</string>
 
+    <string name="login_set_email_title_2">Associate an email</string>
+    <string name="login_set_email_notice_2">Associate an email to be able to later recover your account, in case you forget your password.</string>
+    <string name="login_set_email_mandatory_notice_2">The server %s requires you to associate an email to create an account.</string>
+
+    <string name="login_set_msisdn_title_2">Associate a phone number</string>
+    <string name="login_set_msisdn_notice_2">Associate a phone number to optionally allow people you know to discover you.</string>
+    <string name="login_set_msisdn_mandatory_notice_2">The server %s requires you to associate a phone number to create an account.</string>
+
 </resources>
