@@ -1,4 +1,4 @@
-Changes in Element 1.1.5 (2021-XX-XX)
+Changes in Element 1.1.6 (2021-XX-XX)
 ===================================================
 
 Features ✨:
@@ -24,6 +24,13 @@ Test:
 
 Other changes:
  - New store descriptions
+
+Changes in Element 1.1.5 (2021-04-15)
+===================================================
+
+Bugfix 🐛:
+ - Fix crash during Realm migration
+ - Fix crash when playing video (#3179)
 
 Changes in Element 1.1.4 (2021-04-09)
 ===================================================

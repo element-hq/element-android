@@ -6,10 +6,13 @@ apply plugin: 'realm-android'
 
 buildscript {
     repositories {
-        mavenCentral()
+        // mavenCentral()
+        //noinspection GrDeprecatedAPIUsage
+        jcenter()
     }
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:10.4.0"
+        // Stick to this version until https://github.com/realm/realm-java/issues/7402 is fixed
+        classpath "io.realm:realm-gradle-plugin:10.3.1"
     }
 }
 
