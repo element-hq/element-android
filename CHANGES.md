@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)
+ - Fix file opening behaviour in Android 11 (#3067)
 
 Translations 🗣:
  -
