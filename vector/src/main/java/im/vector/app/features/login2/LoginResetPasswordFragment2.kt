@@ -105,12 +105,12 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
         }
 
         if (showWarning) {
-            showWarning = false
             // Display a warning as Riot-Web does first
             AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.login_reset_password_warning_title)
                     .setMessage(R.string.login_reset_password_warning_content)
                     .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
+                        showWarning = false
                         doSubmit()
                     }
                     .setNegativeButton(R.string.cancel, null)

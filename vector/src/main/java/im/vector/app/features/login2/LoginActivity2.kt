@@ -217,6 +217,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
             is LoginViewEvents2.OpenPasswordScreen                         -> {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginFragment2SigninPassword::class.java,
+                        tag = FRAGMENT_LOGIN_TAG,
                         option = commonOption)
             }
             is LoginViewEvents2.OpenSignupPasswordScreen                   -> {
@@ -234,6 +235,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
             is LoginViewEvents2.OpenSignInWithAnythingScreen               -> {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginFragmentToAny2::class.java,
+                        tag = FRAGMENT_LOGIN_TAG,
                         option = commonOption)
             }
             is LoginViewEvents2.OnSendMsisdnSuccess                        ->
