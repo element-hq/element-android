@@ -208,19 +208,19 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                 // Go back to the login fragment
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
-            is LoginViewEvents2.OnSendEmailSuccess                         ->
+            is LoginViewEvents2.OnSendEmailSuccess       ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginWaitForEmailFragment2::class.java,
                         LoginWaitForEmailFragmentArgument(event.email),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
-            is LoginViewEvents2.OpenPasswordScreen                         -> {
+            is LoginViewEvents2.OpenSigninPasswordScreen -> {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginFragment2SigninPassword::class.java,
                         tag = FRAGMENT_LOGIN_TAG,
                         option = commonOption)
             }
-            is LoginViewEvents2.OpenSignupPasswordScreen                   -> {
+            is LoginViewEvents2.OpenSignupPasswordScreen -> {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginFragment2SignupPassword::class.java,
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,

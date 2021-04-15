@@ -30,7 +30,7 @@ sealed class LoginViewEvents2 : VectorViewEvents {
     object OutdatedHomeserver : LoginViewEvents2()
 
     // Navigation event
-    object OpenPasswordScreen : LoginViewEvents2()
+    object OpenSigninPasswordScreen : LoginViewEvents2()
     object OpenSignupPasswordScreen : LoginViewEvents2()
 
     object OpenSignInEnterIdentifierScreen : LoginViewEvents2()

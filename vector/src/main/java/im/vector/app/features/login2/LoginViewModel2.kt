@@ -646,7 +646,7 @@ class LoginViewModel2 @AssistedInject constructor(
             is LoginMode.SsoAndPassword -> {
                 retrieveProfileInfo(action.username)
                 // We can navigate to the password screen
-                LoginViewEvents2.OpenPasswordScreen
+                LoginViewEvents2.OpenSigninPasswordScreen
             }
             is LoginMode.Sso            -> {
                 LoginViewEvents2.OpenSsoOnlyScreen
