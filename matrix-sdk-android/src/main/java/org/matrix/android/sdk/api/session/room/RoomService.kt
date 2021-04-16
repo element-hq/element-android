@@ -178,13 +178,15 @@ interface RoomService {
      * TODO Doc
      */
     fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                  pagedListConfig: PagedList.Config = defaultPagedListConfig): LiveData<PagedList<RoomSummary>>
+                                  pagedListConfig: PagedList.Config = defaultPagedListConfig,
+                                  sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): LiveData<PagedList<RoomSummary>>
 
     /**
      * TODO Doc
      */
     fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                          pagedListConfig: PagedList.Config = defaultPagedListConfig): UpdatableLivePageResult
+                                          pagedListConfig: PagedList.Config = defaultPagedListConfig,
+                                          sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): UpdatableLivePageResult
 
     /**
      * TODO Doc

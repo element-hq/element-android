@@ -35,10 +35,12 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.spaces.manage.SpaceManageActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
@@ -91,7 +93,9 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                 .subscribe { powerLevelContent ->
                     val powerLevelsHelper = PowerLevelsHelper(powerLevelContent)
                     val canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
+                    val canAddChild = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_SPACE_CHILD)
                     views.invitePeople.isVisible = canInvite
+                    views.addRooms.isVisible = canAddChild
                 }.disposeOnDestroyView()
 
         views.invitePeople.views.bottomSheetActionClickableZone.debouncedClicks {
@@ -110,6 +114,10 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
 
         views.exploreRooms.views.bottomSheetActionClickableZone.debouncedClicks {
             startActivity(SpaceExploreActivity.newIntent(requireContext(), spaceArgs.spaceId))
+        }
+
+        views.addRooms.views.bottomSheetActionClickableZone.debouncedClicks {
+            startActivity(SpaceManageActivity.newIntent(requireContext(), spaceArgs.spaceId))
         }
 
         views.leaveSpace.views.bottomSheetActionClickableZone.debouncedClicks {
