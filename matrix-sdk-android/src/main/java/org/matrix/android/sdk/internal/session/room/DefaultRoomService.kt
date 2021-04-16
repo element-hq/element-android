@@ -23,6 +23,7 @@ import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.RoomService
+import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -91,14 +92,14 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getRoomSummariesLive(queryParams)
     }
 
-    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config)
+    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config, sortOrder: RoomSortOrder)
             : LiveData<PagedList<RoomSummary>> {
-        return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig)
+        return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
-    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config)
+    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config, sortOrder: RoomSortOrder)
             : UpdatableLivePageResult {
-        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig)
+        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
     override fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
