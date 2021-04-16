@@ -2193,6 +2193,8 @@
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
     <string name="user_directory_search_hint">Search by name or ID</string>
 
+    <string name="search_hint_room_name">Search Name</string>
+
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
     <string name="labs_show_unread_notifications_as_tab">Add a dedicated tab for unread notifications on main screen.</string>
 
@@ -3329,6 +3331,10 @@
     </plurals>
 
     <string name="space_explore_activity_title">Explore rooms</string>
+    <string name="space_add_child_title">Add rooms</string>
     <string name="leave_space">Leave Space</string>
     <string name="space_leave_prompt_msg">Are you sure you want to leave the space?</string>
+
+
+    <string name="space_add_existing_rooms">Add existing rooms and space</string>
 </resources>

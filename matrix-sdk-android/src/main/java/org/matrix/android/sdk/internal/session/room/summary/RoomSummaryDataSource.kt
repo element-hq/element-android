@@ -28,6 +28,7 @@ import io.realm.Sort
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -162,10 +163,22 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
     }
 
     fun getSortedPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                        pagedListConfig: PagedList.Config): LiveData<PagedList<RoomSummary>> {
+                                        pagedListConfig: PagedList.Config,
+                                        sortOrder: RoomSortOrder): LiveData<PagedList<RoomSummary>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams)
-                    .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
+                    .apply {
+                        when (sortOrder) {
+                            RoomSortOrder.NAME     -> {
+                                sort(RoomSummaryEntityFields.DISPLAY_NAME, Sort.ASCENDING)
+                            }
+                            RoomSortOrder.ACTIVITY -> {
+                                sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
+                            }
+                            RoomSortOrder.NONE     -> {
+                            }
+                        }
+                    }
         }
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
@@ -177,10 +190,22 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
     }
 
     fun getUpdatablePagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                           pagedListConfig: PagedList.Config): UpdatableLivePageResult {
+                                           pagedListConfig: PagedList.Config,
+                                           sortOrder: RoomSortOrder): UpdatableLivePageResult {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams)
-                    .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
+                    .apply {
+                        when (sortOrder) {
+                            RoomSortOrder.NAME     -> {
+                                sort(RoomSummaryEntityFields.DISPLAY_NAME, Sort.ASCENDING)
+                            }
+                            RoomSortOrder.ACTIVITY -> {
+                                sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
+                            }
+                            RoomSortOrder.NONE     -> {
+                            }
+                        }
+                    }
         }
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
@@ -197,7 +222,18 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             override fun updateQuery(builder: (RoomSummaryQueryParams) -> RoomSummaryQueryParams) {
                 realmDataSourceFactory.updateQuery {
                     roomSummariesQuery(it, builder.invoke(queryParams))
-                            .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
+                            .apply {
+                                when (sortOrder) {
+                                    RoomSortOrder.NAME     -> {
+                                        sort(RoomSummaryEntityFields.DISPLAY_NAME, Sort.ASCENDING)
+                                    }
+                                    RoomSortOrder.ACTIVITY -> {
+                                        sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
+                                    }
+                                    RoomSortOrder.NONE     -> {
+                                    }
+                                }
+                            }
                 }
             }
         }
@@ -272,7 +308,10 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                     query.contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.activeSpaceId.currentSpaceId)
                 }
             }
-            else                             -> {
+            is ActiveSpaceFilter.ExcludeSpace -> {
+                query.not().contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.activeSpaceId.spaceId)
+            }
+            else                              -> {
                 // nop
             }
         }

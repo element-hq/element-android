@@ -120,7 +120,8 @@ internal class DefaultSpaceService @Inject constructor(
                             avatarUrl = spaceDesc?.avatarUrl ?: "",
                             encryptionEventTs = null,
                             typingUsers = emptyList(),
-                            isEncrypted = false
+                            isEncrypted = false,
+                            flattenParentIds = emptyList()
                     ),
                     second = response.rooms
                             ?.filter { it.roomId != spaceId }
