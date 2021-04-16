@@ -29,7 +29,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
-import im.vector.app.databinding.FragmentLogin2SigninPasswordBinding
+import im.vector.app.databinding.FragmentLoginSigninPassword2Binding
 import im.vector.app.features.home.AvatarRenderer
 import io.reactivex.rxkotlin.subscribeBy
 import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
@@ -40,18 +40,17 @@ import javax.net.ssl.HttpsURLConnection
 
 /**
  * In this screen:
- * In signin mode:
  * - the user is asked for password to sign in to a homeserver.
  * - He also can reset his password
  */
-class LoginFragment2SigninPassword @Inject constructor(
+class LoginFragmentSigninPassword2 @Inject constructor(
         private val avatarRenderer: AvatarRenderer
-) : AbstractSSOLoginFragment2<FragmentLogin2SigninPasswordBinding>() {
+) : AbstractSSOLoginFragment2<FragmentLoginSigninPassword2Binding>() {
 
     private var passwordShown = false
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLogin2SigninPasswordBinding {
-        return FragmentLogin2SigninPasswordBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSigninPassword2Binding {
+        return FragmentLoginSigninPassword2Binding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

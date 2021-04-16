@@ -72,10 +72,10 @@ import im.vector.app.features.login.LoginWaitForEmailFragment
 import im.vector.app.features.login.LoginWebFragment
 import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login2.LoginCaptchaFragment2
-import im.vector.app.features.login2.LoginFragment2SigninPassword
-import im.vector.app.features.login2.LoginFragment2SigninUsername
-import im.vector.app.features.login2.LoginFragment2SignupPassword
-import im.vector.app.features.login2.LoginFragment2SignupUsername
+import im.vector.app.features.login2.LoginFragmentSigninPassword2
+import im.vector.app.features.login2.LoginFragmentSigninUsername2
+import im.vector.app.features.login2.LoginFragmentSignupPassword2
+import im.vector.app.features.login2.LoginFragmentSignupUsername2
 import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.LoginFragmentToAny2
 import im.vector.app.features.login2.LoginGenericTextInputFormFragment2
@@ -84,7 +84,7 @@ import im.vector.app.features.login2.LoginResetPasswordMailConfirmationFragment2
 import im.vector.app.features.login2.LoginResetPasswordSuccessFragment2
 import im.vector.app.features.login2.LoginServerSelectionFragment2
 import im.vector.app.features.login2.LoginServerUrlFormFragment2
-import im.vector.app.features.login2.LoginSignUpSignInSelectionFragment2
+import im.vector.app.features.login2.LoginSplashSignUpSignInSelectionFragment2
 import im.vector.app.features.login2.LoginSsoOnlyFragment2
 import im.vector.app.features.login2.LoginWaitForEmailFragment2
 import im.vector.app.features.login2.LoginWebFragment2
@@ -284,8 +284,8 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(LoginFragment2SigninUsername::class)
-    fun bindLoginFragment2SigninUsername(fragment: LoginFragment2SigninUsername): Fragment
+    @FragmentKey(LoginFragmentSigninUsername2::class)
+    fun bindLoginFragmentSigninUsername2(fragment: LoginFragmentSigninUsername2): Fragment
 
     @Binds
     @IntoMap
@@ -294,18 +294,18 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(LoginFragment2SignupUsername::class)
-    fun bindLoginFragment2SignupUsername(fragment: LoginFragment2SignupUsername): Fragment
+    @FragmentKey(LoginFragmentSignupUsername2::class)
+    fun bindLoginFragmentSignupUsername2(fragment: LoginFragmentSignupUsername2): Fragment
 
     @Binds
     @IntoMap
-    @FragmentKey(LoginFragment2SigninPassword::class)
-    fun bindLoginFragment2SigninPassword(fragment: LoginFragment2SigninPassword): Fragment
+    @FragmentKey(LoginFragmentSigninPassword2::class)
+    fun bindLoginFragmentSigninPassword2(fragment: LoginFragmentSigninPassword2): Fragment
 
     @Binds
     @IntoMap
-    @FragmentKey(LoginFragment2SignupPassword::class)
-    fun bindLoginFragment2SignupPassword(fragment: LoginFragment2SignupPassword): Fragment
+    @FragmentKey(LoginFragmentSignupPassword2::class)
+    fun bindLoginFragmentSignupPassword2(fragment: LoginFragmentSignupPassword2): Fragment
 
     @Binds
     @IntoMap
@@ -354,8 +354,8 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(LoginSignUpSignInSelectionFragment2::class)
-    fun bindLoginSignUpSignInSelectionFragment2(fragment: LoginSignUpSignInSelectionFragment2): Fragment
+    @FragmentKey(LoginSplashSignUpSignInSelectionFragment2::class)
+    fun bindLoginSplashSignUpSignInSelectionFragment2(fragment: LoginSplashSignUpSignInSelectionFragment2): Fragment
 
     @Binds
     @IntoMap

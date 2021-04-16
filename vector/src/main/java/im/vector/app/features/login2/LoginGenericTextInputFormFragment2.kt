@@ -18,7 +18,6 @@ package im.vector.app.features.login2
 
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
@@ -35,24 +34,12 @@ import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginGenericTextInputForm2Binding
-import kotlinx.parcelize.Parcelize
+import im.vector.app.features.login.LoginGenericTextInputFormFragmentArgument
+import im.vector.app.features.login.TextInputFormFragmentMode
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
-
-enum class TextInputFormFragmentMode {
-    SetEmail,
-    SetMsisdn,
-    ConfirmMsisdn
-}
-
-@Parcelize
-data class LoginGenericTextInputFormFragmentArgument(
-        val mode: TextInputFormFragmentMode,
-        val mandatory: Boolean,
-        val extra: String = ""
-) : Parcelable
 
 /**
  * In this screen, the user is asked for a text input
@@ -85,8 +72,8 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             views.loginGenericTextInputFormTextInput.setAutofillHints(
                     when (params.mode) {
-                        TextInputFormFragmentMode.SetEmail      -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
-                        TextInputFormFragmentMode.SetMsisdn     -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
+                        TextInputFormFragmentMode.SetEmail  -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
+                        TextInputFormFragmentMode.SetMsisdn -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
                         TextInputFormFragmentMode.ConfirmMsisdn -> HintConstants.AUTOFILL_HINT_SMS_OTP
                     }
             )

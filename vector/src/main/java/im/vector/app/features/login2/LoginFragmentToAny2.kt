@@ -30,7 +30,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.extensions.toReducedUrl
-import im.vector.app.databinding.FragmentLogin2SigninToBinding
+import im.vector.app.databinding.FragmentLoginSigninToAny2Binding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SocialLoginButtonsView
 import io.reactivex.Observable
@@ -47,7 +47,7 @@ import javax.inject.Inject
  * - He also can reset his password
  * - It also possible to use SSO if server support it in this screen
  */
-class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<FragmentLogin2SigninToBinding>() {
+class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<FragmentLoginSigninToAny2Binding>() {
 
     private var passwordShown = false
 
@@ -55,8 +55,8 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
     // waiting for https://github.com/matrix-org/synapse/issues/7576
     private var isNumericOnlyUserIdForbidden = false
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLogin2SigninToBinding {
-        return FragmentLogin2SigninToBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSigninToAny2Binding {
+        return FragmentLoginSigninToAny2Binding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

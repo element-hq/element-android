@@ -25,7 +25,7 @@ import androidx.autofill.HintConstants
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.databinding.FragmentLogin2SigninUsernameBinding
+import im.vector.app.databinding.FragmentLoginSigninUsername2Binding
 import io.reactivex.rxkotlin.subscribeBy
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
@@ -35,10 +35,10 @@ import javax.inject.Inject
  * In this screen:
  * - the user is asked for its matrix ID, and have the possibility to open the screen to select a server
  */
-class LoginFragment2SigninUsername @Inject constructor() : AbstractLoginFragment2<FragmentLogin2SigninUsernameBinding>() {
+class LoginFragmentSigninUsername2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginSigninUsername2Binding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLogin2SigninUsernameBinding {
-        return FragmentLogin2SigninUsernameBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSigninUsername2Binding {
+        return FragmentLoginSigninUsername2Binding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

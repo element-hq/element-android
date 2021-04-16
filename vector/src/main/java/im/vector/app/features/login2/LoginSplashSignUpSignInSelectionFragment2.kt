@@ -31,7 +31,7 @@ import javax.inject.Inject
  * In this screen, the user is asked to sign up or to sign in to the homeserver
  * This is the new splash screen
  */
-class LoginSignUpSignInSelectionFragment2 @Inject constructor(
+class LoginSplashSignUpSignInSelectionFragment2 @Inject constructor(
         private val vectorPreferences: VectorPreferences
 ) : AbstractLoginFragment2<FragmentLoginSplash2Binding>() {
 

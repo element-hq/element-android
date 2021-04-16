@@ -43,7 +43,9 @@ import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.LoginCaptchaFragmentArgument
 import im.vector.app.features.login.LoginConfig
+import im.vector.app.features.login.LoginGenericTextInputFormFragmentArgument
 import im.vector.app.features.login.LoginWaitForEmailFragmentArgument
+import im.vector.app.features.login.TextInputFormFragmentMode
 import im.vector.app.features.login.isSupported
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.login.terms.toLocalizedLoginTerms
@@ -115,7 +117,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
     }
 
     protected open fun addFirstFragment() {
-        addFragment(R.id.loginFragmentContainer, LoginSignUpSignInSelectionFragment2::class.java)
+        addFragment(R.id.loginFragmentContainer, LoginSplashSignUpSignInSelectionFragment2::class.java)
     }
 
     private fun handleLoginViewEvents(event: LoginViewEvents2) {
@@ -171,7 +173,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
             }
             is LoginViewEvents2.OpenSignInEnterIdentifierScreen            -> {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
-                        LoginFragment2SigninUsername::class.java,
+                        LoginFragmentSigninUsername2::class.java,
                         option = { ft ->
                             findViewById<View?>(R.id.loginSplashLogo)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             // Disable transition of text
@@ -216,19 +218,19 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                         option = commonOption)
             is LoginViewEvents2.OpenSigninPasswordScreen -> {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
-                        LoginFragment2SigninPassword::class.java,
+                        LoginFragmentSigninPassword2::class.java,
                         tag = FRAGMENT_LOGIN_TAG,
                         option = commonOption)
             }
             is LoginViewEvents2.OpenSignupPasswordScreen -> {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
-                        LoginFragment2SignupPassword::class.java,
+                        LoginFragmentSignupPassword2::class.java,
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             }
             is LoginViewEvents2.OpenSignUpChooseUsernameScreen             -> {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
-                        LoginFragment2SignupUsername::class.java,
+                        LoginFragmentSignupUsername2::class.java,
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             }

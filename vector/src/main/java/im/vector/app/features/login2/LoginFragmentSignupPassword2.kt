@@ -27,21 +27,21 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
-import im.vector.app.databinding.FragmentLogin2SignupPasswordBinding
+import im.vector.app.databinding.FragmentLoginSignupPassword2Binding
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
 
 /**
  * In this screen:
- * - the user is asked for password to sign up to a homeserver.
+ * - the user is asked to choose a password to sign up to a homeserver.
  */
-class LoginFragment2SignupPassword @Inject constructor() : AbstractSSOLoginFragment2<FragmentLogin2SignupPasswordBinding>() {
+class LoginFragmentSignupPassword2 @Inject constructor() : AbstractSSOLoginFragment2<FragmentLoginSignupPassword2Binding>() {
 
     private var passwordsShown = false
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLogin2SignupPasswordBinding {
-        return FragmentLogin2SignupPasswordBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSignupPassword2Binding {
+        return FragmentLoginSignupPassword2Binding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

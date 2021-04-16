@@ -29,7 +29,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.toReducedUrl
-import im.vector.app.databinding.FragmentLogin2SignupUsernameBinding
+import im.vector.app.databinding.FragmentLoginSignupUsername2Binding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SocialLoginButtonsView
 import io.reactivex.rxkotlin.subscribeBy
@@ -37,17 +37,17 @@ import javax.inject.Inject
 
 /**
  * In this screen:
- * - the user is asked for login to sign up to a homeserver.
+ * - the user is asked for an identifier to sign up to a homeserver.
  * - SSO option are displayed if available
  */
-class LoginFragment2SignupUsername @Inject constructor() : AbstractSSOLoginFragment2<FragmentLogin2SignupUsernameBinding>() {
+class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragment2<FragmentLoginSignupUsername2Binding>() {
 
     // Temporary patch for https://github.com/vector-im/riotX-android/issues/1410,
     // waiting for https://github.com/matrix-org/synapse/issues/7576
     private var isNumericOnlyUserIdForbidden = false
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLogin2SignupUsernameBinding {
-        return FragmentLogin2SignupUsernameBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSignupUsername2Binding {
+        return FragmentLoginSignupUsername2Binding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
