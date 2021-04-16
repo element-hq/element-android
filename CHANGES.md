@@ -1,4 +1,4 @@
-Changes in Element 1.1.6 (2021-XX-XX)
+Changes in Element 1.1.7 (2021-XX-XX)
 ===================================================
 
 Features ✨:
@@ -24,6 +24,13 @@ Test:
 
 Other changes:
  - New store descriptions
+
+Changes in Element 1.1.6 (2021-04-16)
+===================================================
+
+Bugfix 🐛:
+ - Fix crash on the timeline
+ - App crashes on "troubleshoot notifications" button (#3187)
 
 Changes in Element 1.1.5 (2021-04-15)
 ===================================================

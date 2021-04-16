@@ -178,10 +178,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         updateShowDialerOptionState()
         room.getRoomSummaryLive()
         viewModelScope.launch {
-            try {
-                room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
-            } catch (_: Exception) {
-            }
+            tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
         }
         // Inform the SDK that the room is displayed
         viewModelScope.launch {
@@ -551,10 +548,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (trackUnreadMessages.getAndSet(false)) {
             mostRecentDisplayedEvent?.root?.eventId?.also {
                 viewModelScope.launch {
-                    try {
-                        room.setReadMarker(it)
-                    } catch (_: Exception) {
-                    }
+                    tryOrNull { room.setReadMarker(it) }
                 }
             }
             mostRecentDisplayedEvent = null
@@ -1259,7 +1253,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
                         viewModelScope.launch {
-                            room.setReadReceipt(eventId)
+                            tryOrNull { room.setReadReceipt(eventId) }
                         }
                     }
                 })
@@ -1268,10 +1262,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleMarkAllAsRead() {
         viewModelScope.launch {
-            try {
-                room.markAsRead(ReadService.MarkAsReadParams.BOTH)
-            } catch (_: Exception) {
-            }
+            tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.BOTH) }
         }
     }
 
