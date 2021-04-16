@@ -10,7 +10,10 @@
     <string name="login_please_enter_your_matrix_identifier_help">Matrix identifiers start with @, for instance @alice:server.org</string>
     <string name="login_enter_identifier_help">If you do not know your Matrix identifier, or if your account has been created using Single Sign On (for instance using a Google account), or if you want to connect using your simple name, or an email associated to your account, you have to select your server first.</string>
     <string name="login_choose_a_server">Choose a server</string>
+    <string name="login_please_choose_a_server">Please choose a server</string>
+    <string name="login_please_select_your_server">Please select your server</string>
     <string name="login_please_choose_a_password">Please choose a password</string>
+    <string name="login_please_choose_a_new_password">Please choose a new password</string>
     <string name="login_your_matrix_identifier">Your Matrix identifier</string>
     <string name="login_press_back_to_change">Press back to change</string>
     <string name="login_choose_a_password">Choose a password</string>

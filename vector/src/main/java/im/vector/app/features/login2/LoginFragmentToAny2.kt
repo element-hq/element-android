@@ -66,6 +66,7 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
         setupForgottenPasswordButton()
         setupPasswordReveal()
         setupAutoFill()
+        setupSocialLoginButtons()
 
         views.passwordField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -85,6 +86,9 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
             views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
             views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
         }
+    }
+
+    private fun setupSocialLoginButtons() {
         views.loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_IN
     }
 

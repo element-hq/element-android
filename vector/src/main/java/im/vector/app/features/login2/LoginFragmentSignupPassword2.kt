@@ -36,7 +36,7 @@ import javax.inject.Inject
  * In this screen:
  * - the user is asked to choose a password to sign up to a homeserver.
  */
-class LoginFragmentSignupPassword2 @Inject constructor() : AbstractSSOLoginFragment2<FragmentLoginSignupPassword2Binding>() {
+class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginSignupPassword2Binding>() {
 
     private var passwordsShown = false
 

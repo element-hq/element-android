@@ -16,11 +16,11 @@
 
 package im.vector.app.features.login2
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginServerSelection2Binding
 import javax.inject.Inject
 
@@ -44,25 +44,32 @@ class LoginServerSelectionFragment2 @Inject constructor() : AbstractLoginFragmen
         views.loginServerChoiceOther.setOnClickListener { selectOther() }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun updateUi(state: LoginViewState2) {
         when (state.signMode) {
-            SignMode2.Unknown            -> Unit
-            SignMode2.SignUp             -> {
-                views.loginServerTitle.text = "Please choose a server"
+            SignMode2.Unknown -> Unit
+            SignMode2.SignUp  -> {
+                views.loginServerTitle.setText(R.string.login_please_choose_a_server)
             }
-            SignMode2.SignIn             -> {
-                views.loginServerTitle.text = "Please choose your server"
+            SignMode2.SignIn  -> {
+                views.loginServerTitle.setText(R.string.login_please_select_your_server)
             }
         }
     }
 
     private fun selectMatrixOrg() {
+        views.loginServerChoiceMatrixOrg.isChecked = true
         loginViewModel.handle(LoginAction2.ChooseDefaultHomeServer)
     }
 
     private fun selectOther() {
+        views.loginServerChoiceOther.isChecked = true
         loginViewModel.handle(LoginAction2.EnterServerUrl)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        views.loginServerChoiceMatrixOrg.isChecked = false
+        views.loginServerChoiceOther.isChecked = false
     }
 
     override fun resetViewModel() {

@@ -25,7 +25,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.utils.openUrlInChromeCustomTab
-import im.vector.app.databinding.FragmentLoginTermsBinding
+import im.vector.app.databinding.FragmentLoginTerms2Binding
 import im.vector.app.features.login.terms.LocalizedFlowDataLoginTermsChecked
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.login.terms.LoginTermsViewState
@@ -41,13 +41,13 @@ import javax.inject.Inject
  */
 class LoginTermsFragment2 @Inject constructor(
         private val policyController: PolicyController
-) : AbstractLoginFragment2<FragmentLoginTermsBinding>(),
+) : AbstractLoginFragment2<FragmentLoginTerms2Binding>(),
         PolicyController.PolicyControllerListener {
 
     private val params: LoginTermsFragmentArgument by args()
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginTermsBinding {
-        return FragmentLoginTermsBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginTerms2Binding {
+        return FragmentLoginTerms2Binding.inflate(inflater, container, false)
     }
 
     private var loginTermsViewState: LoginTermsViewState = LoginTermsViewState(emptyList())

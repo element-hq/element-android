@@ -55,12 +55,17 @@ class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragm
 
         setupSubmitButton()
         setupAutoFill()
+        setupSocialLoginButtons()
     }
 
     private fun setupAutoFill() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
         }
+    }
+
+    private fun setupSocialLoginButtons() {
+        views.loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_UP
     }
 
     private fun submit() {
@@ -111,7 +116,6 @@ class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragm
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setupSubmitButton() {
         views.loginSubmit.setOnClickListener { submit() }
         views.loginField.textChanges()

@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
 import androidx.autofill.HintConstants
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -29,6 +30,7 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.core.utils.autoResetTextInputLayoutErrors
 import im.vector.app.databinding.FragmentLoginResetPassword2Binding
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
@@ -55,6 +57,16 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
         setupSubmitButton()
         setupPasswordReveal()
         setupAutoFill()
+
+        autoResetTextInputLayoutErrors(listOf(views.resetPasswordEmailTil, views.passwordFieldTil, views.passwordFieldTilRepeat))
+
+        views.passwordFieldRepeat.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                submit()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
     }
 
     private fun setupAutoFill() {
@@ -81,8 +93,6 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
                         }
                 )
                 .subscribeBy {
-                    views.resetPasswordEmailTil.error = null
-                    views.passwordFieldTil.error = null
                     views.resetPasswordSubmit.isEnabled = it
                 }
                 .disposeOnDestroyView()
@@ -92,10 +102,20 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
         cleanupUi()
 
         var error = 0
+
+        val email = views.resetPasswordEmail.text.toString()
         val password = views.passwordField.text.toString()
         val passwordRepeat = views.passwordFieldRepeat.text.toString()
 
-        if (password != passwordRepeat) {
+        if (email.isEmpty()) {
+            views.resetPasswordEmailTil.error = getString(R.string.auth_reset_password_missing_email)
+            error++
+        }
+
+        if (password.isEmpty()) {
+            views.passwordFieldTil.error = getString(R.string.login_please_choose_a_new_password)
+            error++
+        } else if (password != passwordRepeat) {
             views.passwordFieldTilRepeat.error = getString(R.string.auth_password_dont_match)
             error++
         }
