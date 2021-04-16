@@ -223,7 +223,7 @@
     <string name="notification_listening_for_events">در حال گوش دادن به رویدادها</string>
     <string name="title_activity_home">پیام‌ها</string>
     <string name="title_activity_room">اتاق</string>
-    <string name="title_activity_settings">تنظیمات</string>
+    <string name="title_activity_settings">ساماندهی</string>
     <string name="title_activity_member_details">جزئیات اعضا</string>
     <string name="title_activity_bug_report">گزارش اشکال</string>
     <string name="loading">در حال بارگذاری…</string>
@@ -394,11 +394,11 @@
     <string name="settings_call_category">تماس‌ها</string>
     <string name="call">تماس</string>
     <string name="media_slider_saved">ذخیره شد</string>
-    <string name="yes">بله</string>
-    <string name="no">نه</string>
+    <string name="yes">بَلِہ</string>
+    <string name="no">نَه</string>
     <string name="media_slider_saved_message">در دانلودها ذخیره شود؟</string>
     <string name="_continue">ادامه</string>
-    <string name="remove">حذف</string>
+    <string name="remove">زُدودَن</string>
     <string name="join">پیوستن</string>
     <string name="preview">پیش‌نمایش</string>
     <string name="reject">رد کردن</string>
@@ -449,7 +449,7 @@
     <string name="room_participants_header_admin_tools">ابزارهای مدیر</string>
     <string name="room_participants_header_call">تماس</string>
     <string name="room_participants_header_direct_chats">گپ‌های مستقیم</string>
-    <string name="room_participants_header_devices">نشست‌ها</string>
+    <string name="room_participants_header_devices">نِشَست‌ھا</string>
     <string name="room_participants_action_invite">دعوت</string>
     <string name="room_participants_action_leave">ترک این اتاق</string>
     <string name="room_participants_action_remove">حذف از این اتاق</string>
@@ -545,7 +545,7 @@
     <string name="settings_add_3pid_confirm_password_title">تأیید گذرواژه‌تان</string>
     <string name="template_settings_add_3pid_flow_not_supported">نمی‌توانید با المنت همراه، این کار را بکنید</string>
     <string name="settings_add_3pid_authentication_needed">نیاز به تأیید هویت است</string>
-    <string name="settings_notification_advanced">تنظمیات پیش‌رفتهٔ آگاهی</string>
+    <string name="settings_notification_advanced">ساماندھیِ پیشرَفتِہ‌یِ آگَہداد</string>
     <string name="settings_notification_troubleshoot">آگاهی‌های رفع‌اشکال</string>
     <string name="settings_troubleshoot_test_system_settings_success">آگاهی‌ها در تنظیمات سامانه به کار افتاده‌اند.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">آگاهی‌ّا در تنظیمات سامانه از کار افتاده‌اند.
@@ -805,7 +805,7 @@
     <string name="room_jump_to_first_unread">پریدن به نخستین پیام خوانده نشده.</string>
     <string name="room_preview_invitation_format">شما برای پیوستن به این اتاق توسط %s دعوت شدید</string>
     <string name="room_preview_try_join_an_unknown_room_default">یک اتاق</string>
-    <string name="room_creation_title">گپ جدید</string>
+    <string name="room_creation_title">گَپِ نو</string>
     <string name="room_creation_add_member">افزودن عضو</string>
     <plurals name="room_header_active_members_count">
         <item quantity="one">%d عضو فعّال</item>
@@ -852,7 +852,7 @@
     <string name="pause_video">توقف</string>
     <string name="action_copy">رونوشت</string>
     <string name="dialog_title_success">موفقیت</string>
-    <string name="bottom_action_notification">اعلان‌ها</string>
+    <string name="bottom_action_notification">آگَہداد</string>
     <string name="dismiss">خاتمه</string>
     <string name="no_permissions_to_start_conf_call">اجازهٔ شروع تماس کنفرانسی در این اتاق را ندارید</string>
     <string name="no_permissions_to_start_webrtc_call">اجازهٔ شروع تماس در این اتاق را ندارید</string>
@@ -913,10 +913,10 @@
     <string name="people_search_invite_by_id_dialog_title">دعوت کاربر با شناسه</string>
     <string name="people_search_invite_by_id_dialog_description">لطفاً یک یا چند نشانی رایانامه یا شناسهٔ ماتریکس را وارد کنید</string>
     <string name="people_search_invite_by_id_dialog_hint">رایانامه یا شناسهٔ ماتریکس</string>
-    <string name="room_menu_search">جست‌وجو</string>
-    <string name="room_one_user_is_typing">%s دارد می‌نویسد…</string>
-    <string name="room_two_users_are_typing">%1$s و %2$s دارند می‌نویسند…</string>
-    <string name="room_many_users_are_typing">%1$s و %2$s و دیگران دارند می‌نویسند…</string>
+    <string name="room_menu_search">جُستُجو</string>
+    <string name="room_one_user_is_typing">%s دارد می‌نِویسَد…</string>
+    <string name="room_two_users_are_typing">%1$s و %2$s دارَند می‌نِویسَند…</string>
+    <string name="room_many_users_are_typing">%1$s و %2$s و دیگَران دارَند می‌نِویسَند…</string>
     <string name="room_message_placeholder_encrypted">فرستادن پیام رمزشده…</string>
     <string name="room_message_placeholder_not_encrypted">فرستادن پیام (رمز نشده)…</string>
     <string name="room_offline_notification">اتّصال به کارساز از دست رفت.</string>
@@ -2672,4 +2672,5 @@
     <string name="settings_room_directory_show_all_rooms_summary">نمایش همه‌ی اتاق‌های داخل فهرست.</string>
     <string name="settings_room_directory_show_all_rooms">نمایش‌ها همه‌ی اتاق‌ها</string>
     <string name="settings_category_room_directory">فهرست اتاق‌ها</string>
+    <string name="event_status_sent_message">پَیام فِرِستاده شُد</string>
 </resources>
