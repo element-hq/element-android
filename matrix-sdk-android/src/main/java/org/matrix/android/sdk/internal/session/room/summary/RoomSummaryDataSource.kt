@@ -166,19 +166,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                                         pagedListConfig: PagedList.Config,
                                         sortOrder: RoomSortOrder): LiveData<PagedList<RoomSummary>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
-            roomSummariesQuery(realm, queryParams)
-                    .apply {
-                        when (sortOrder) {
-                            RoomSortOrder.NAME     -> {
-                                sort(RoomSummaryEntityFields.DISPLAY_NAME, Sort.ASCENDING)
-                            }
-                            RoomSortOrder.ACTIVITY -> {
-                                sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
-                            }
-                            RoomSortOrder.NONE     -> {
-                            }
-                        }
-                    }
+            roomSummariesQuery(realm, queryParams).process(sortOrder)
         }
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
@@ -193,19 +181,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                                            pagedListConfig: PagedList.Config,
                                            sortOrder: RoomSortOrder): UpdatableLivePageResult {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
-            roomSummariesQuery(realm, queryParams)
-                    .apply {
-                        when (sortOrder) {
-                            RoomSortOrder.NAME     -> {
-                                sort(RoomSummaryEntityFields.DISPLAY_NAME, Sort.ASCENDING)
-                            }
-                            RoomSortOrder.ACTIVITY -> {
-                                sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
-                            }
-                            RoomSortOrder.NONE     -> {
-                            }
-                        }
-                    }
+            roomSummariesQuery(realm, queryParams).process(sortOrder)
         }
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
@@ -221,19 +197,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
 
             override fun updateQuery(builder: (RoomSummaryQueryParams) -> RoomSummaryQueryParams) {
                 realmDataSourceFactory.updateQuery {
-                    roomSummariesQuery(it, builder.invoke(queryParams))
-                            .apply {
-                                when (sortOrder) {
-                                    RoomSortOrder.NAME     -> {
-                                        sort(RoomSummaryEntityFields.DISPLAY_NAME, Sort.ASCENDING)
-                                    }
-                                    RoomSortOrder.ACTIVITY -> {
-                                        sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
-                                    }
-                                    RoomSortOrder.NONE     -> {
-                                    }
-                                }
-                            }
+                    roomSummariesQuery(it, builder.invoke(queryParams)).process(sortOrder)
                 }
             }
         }

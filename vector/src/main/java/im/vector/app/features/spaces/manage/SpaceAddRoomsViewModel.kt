@@ -42,7 +42,11 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 
-class AddRoomError(val errorList: Map<String, Throwable>) : Throwable()
+class AddRoomError(val errorList: Map<String, Throwable>) : Throwable() {
+    override fun getLocalizedMessage(): String? {
+        return errorList.map { it.value.localizedMessage }.joinToString(",")
+    }
+}
 
 class SpaceAddRoomsViewModel @AssistedInject constructor(
         @Assisted val initialState: SpaceAddRoomsState,
@@ -186,7 +190,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                                 isSaving = Fail(AddRoomError(errors))
                         )
                     }
-                    _viewEvents.post(SpaceAddRoomsViewEvents.SaveFailed)
+                    _viewEvents.post(SpaceAddRoomsViewEvents.SaveFailed(AddRoomError(errors)))
                 }
             }
         }

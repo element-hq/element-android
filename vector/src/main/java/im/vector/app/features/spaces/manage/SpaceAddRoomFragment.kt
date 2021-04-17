@@ -26,7 +26,6 @@ import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
@@ -117,7 +116,8 @@ class SpaceAddRoomFragment @Inject constructor(
                             .setNegativeButton(R.string.cancel, null)
                             .show()
                 }
-                SpaceAddRoomsViewEvents.SaveFailed -> {
+                is SpaceAddRoomsViewEvents.SaveFailed -> {
+                    showErrorInSnackbar(it.reason)
                     invalidateOptionsMenu()
                 }
                 SpaceAddRoomsViewEvents.SavedDone -> {
@@ -125,10 +125,6 @@ class SpaceAddRoomFragment @Inject constructor(
                 }
             }
         }
-    }
-
-    override fun invalidate() = withState(viewModel) {
-        super.invalidate()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
