@@ -21,5 +21,5 @@ import im.vector.app.core.platform.VectorViewEvents
 sealed class SpaceAddRoomsViewEvents : VectorViewEvents {
     object WarnUnsavedChanged : SpaceAddRoomsViewEvents()
     object SavedDone : SpaceAddRoomsViewEvents()
-    object SaveFailed : SpaceAddRoomsViewEvents()
+    data class SaveFailed(val reason: Throwable): SpaceAddRoomsViewEvents()
 }
