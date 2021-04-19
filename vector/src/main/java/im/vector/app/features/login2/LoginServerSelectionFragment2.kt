@@ -21,7 +21,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import im.vector.app.R
+import im.vector.app.core.extensions.setTextWithColoredPart
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentLoginServerSelection2Binding
+import im.vector.app.features.login.EMS_LINK
 import javax.inject.Inject
 
 /**
@@ -42,6 +45,15 @@ class LoginServerSelectionFragment2 @Inject constructor() : AbstractLoginFragmen
     private fun initViews() {
         views.loginServerChoiceMatrixOrg.setOnClickListener { selectMatrixOrg() }
         views.loginServerChoiceOther.setOnClickListener { selectOther() }
+
+        views.loginServerChoiceEmsLearnMore.setTextWithColoredPart(
+                fullTextRes = R.string.login_server_modular_learn_more_about_ems,
+                coloredTextRes = R.string.login_server_modular_learn_more,
+                underline = true
+        )
+        views.loginServerChoiceEmsLearnMore.setOnClickListener {
+            openUrlInChromeCustomTab(requireActivity(), null, EMS_LINK)
+        }
     }
 
     private fun updateUi(state: LoginViewState2) {

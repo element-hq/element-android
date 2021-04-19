@@ -44,5 +44,7 @@
     <string name="login_set_msisdn_title_2">Associate a phone number</string>
     <string name="login_set_msisdn_notice_2">Associate a phone number to optionally allow people you know to discover you.</string>
     <string name="login_set_msisdn_mandatory_notice_2">The server %s requires you to associate a phone number to create an account.</string>
+    <!-- %S will be replaced by the value of login_server_modular_learn_more ("Learn more" in English)-->
+    <string name="login_server_modular_learn_more_about_ems">%s about Element Matrix Service.</string>
 
 </resources>

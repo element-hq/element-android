@@ -86,7 +86,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:layout_marginBottom="32dp"
                 android:background="@drawable/bg_login_server_selector"
                 android:contentDescription="@string/login_a11y_choose_other"
                 android:minHeight="80dp"
@@ -121,6 +120,19 @@
                     app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOtherTitle" />
 
             </im.vector.app.core.platform.CheckableConstraintLayout>
+
+            <TextView
+                android:id="@+id/loginServerChoiceEmsLearnMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:text="@string/login_server_modular_learn_more_about_ems"
+                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                app:layout_constraintBottom_toBottomOf="@+id/loginServerChoiceEmsText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/loginServerChoiceEmsText" />
 
         </LinearLayout>
 
