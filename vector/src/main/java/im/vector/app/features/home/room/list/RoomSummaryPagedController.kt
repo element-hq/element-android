@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class RoomSummaryPagedController(
         private val roomSummaryItemFactory: RoomSummaryItemFactory
-) : PagedListEpoxyController<RoomSummary> (
+) : PagedListEpoxyController<RoomSummary>(
         // Important it must match the PageList builder notify Looper
         modelBuildingHandler = createUIHandler()
 ), CollapsableControllerExtension {
@@ -39,12 +39,12 @@ class RoomSummaryPagedController(
         }
 
     override var collapsed = false
-    set(value) {
-        if (field != value) {
-            field = value
-            requestForcedModelBuild()
+        set(value) {
+            if (field != value) {
+                field = value
+                requestForcedModelBuild()
+            }
         }
-    }
 
     override fun addModels(models: List<EpoxyModel<*>>) {
         if (collapsed) {
@@ -56,19 +56,7 @@ class RoomSummaryPagedController(
 
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
         // for place holder if enabled
-        item ?: return roomSummaryItemFactory.createRoomItem(
-                roomSummary = RoomSummary(
-                        roomId = "null_item_pos_$currentPosition",
-                        name = "",
-                        encryptionEventTs = null,
-                        isEncrypted = false,
-                        typingUsers = emptyList()
-                ),
-                selectedRoomIds = emptySet(),
-                onClick = null,
-                onLongClick = null
-        )
-
+        item ?: return RoomSummaryItemPlaceHolder_().apply { id(currentPosition) }
         return roomSummaryItemFactory.create(item, roomChangeMembershipStates.orEmpty(), emptySet(), listener)
     }
 }
