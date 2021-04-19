@@ -90,3 +90,6 @@ sed -i 's|Wenn der/die Server-Administratorschlumpfwesen dir mitgeteilt hat|Wenn
 sed -i 's|dass der Fingerabdruck unten mit dem von deinem/r Administratorschlumpfwesen bereitgestellten übereinstimmt|dass der Fingerabdruck unten mit dem von deinem Administrator bereitgestellten übereinstimmt|g' "$strings_de"
 sed -i 's|wenn der/die Server-Administratorschlumpfwesen einen Fingerprint veröffentlicht hat|wenn der Server-Administrator einen Fingerprint veröffentlicht hat|g' "$strings_de"
 sed -i 's|Dein:e Serveradministratorschlumpfwesen hat|Dein Serveradministrator hat|g' "$strings_de"
+sed -i 's|%1$s, %2$s, %3$s und %4$d andererschlumpfwesen|%1$s, %2$s, %3$s und %4$d anderer|g' "$strings_de"
+sed -i 's|Jederschlumpfwesen|Jeder|g' "$strings_de"
+sed -i 's|jederschlumpfwesen|jeder|g' "$strings_de"
