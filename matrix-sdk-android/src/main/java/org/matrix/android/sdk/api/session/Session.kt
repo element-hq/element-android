@@ -56,6 +56,8 @@ import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * This interface defines interactions with a session.
@@ -276,5 +278,6 @@ interface Session :
     /**
      * Launch a coroutine using the session scope
      */
-    fun launch(block: suspend () -> Unit )
+    fun launch(context: CoroutineContext = EmptyCoroutineContext,
+               block: suspend () -> Unit )
 }

@@ -79,6 +79,7 @@ import org.matrix.android.sdk.internal.util.createUIHandler
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.coroutines.CoroutineContext
 
 @SessionScope
 internal class DefaultSession @Inject constructor(
@@ -312,8 +313,9 @@ internal class DefaultSession @Inject constructor(
         RealmDebugTools(realmConfiguration).logInfo("Session")
     }
 
-    override fun launch(block: suspend () -> Unit) {
-        sessionScope?.launch {
+    override fun launch(context: CoroutineContext,
+                        block: suspend () -> Unit) {
+        sessionScope?.launch(context) {
             block()
         }
     }
