@@ -243,7 +243,7 @@
     </plurals>
     <string name="room_displayname_empty_room_was">Leerer Raum (war %s)</string>
     <plurals name="room_displayname_four_and_more_members">
-        <item quantity="one">%1$s, %2$s, %3$s und %4$d andere/r</item>
+        <item quantity="one">%1$s, %2$s, %3$s und %4$d anderer</item>
         <item quantity="other">%1$s, %2$s, %3$s und %4$d andere</item>
     </plurals>
     <string name="room_displayname_4_members">%1$s, %2$s, %3$s und %4$s</string>
@@ -741,7 +741,7 @@
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Wer kann den Chatverlauf lesen?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Wer kann auf diesen Raum zugreifen?</string>
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
-    <string name="room_settings_read_history_entry_anyone">Jede*r</string>
+    <string name="room_settings_read_history_entry_anyone">Jeder</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Nur Mitglieder (ab dem Zeitpunkt, an dem diese Option ausgewählt wurde)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Nur Mitglieder (ab dem Zeitpunkt, an dem sie eingeladen wurden)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Nur Mitglieder (ab dem Zeitpunkt, an dem sie beigetreten sind)</string>
@@ -2579,7 +2579,7 @@
     <string name="room_preview_not_found">Der Raum ist gerade nicht zugänglich.
 \nVersuche es später nochmal, oder bitte einen Raum-Admin um Hilfe.</string>
     <string name="room_alias_published_alias_add_manually">Eine neue Adresse veröffentlichen</string>
-    <string name="room_alias_published_alias_subtitle">Mit einer öffentlichen Adresse kann jede*r mit jedem Server deinem Raum beitreten. Um eine Adresse zu veröffentlichen, muss sie zuerst als lokale Adresse gesetzt sein.</string>
+    <string name="room_alias_published_alias_subtitle">Mit einer öffentlichen Adresse kann jeder mit jedem Server deinem Raum beitreten. Um eine Adresse zu veröffentlichen, muss sie zuerst als lokale Adresse gesetzt sein.</string>
     <string name="room_alias_publish_to_directory">Diesen Raum im Verzeichnis von %1$s veröffentlichen\?</string>
     <string name="room_alias_unpublish_confirmation">Die Adresse \"%1$s\" nicht mehr veröffentlichen\?</string>
     <string name="room_alias_action_unpublish">Diese Adresse nicht mehr veröffentlichen</string>
