@@ -1318,7 +1318,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                         }
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
-                        viewModelScope.launch {
+                        session.launch {
                             tryOrNull { room.setReadReceipt(eventId) }
                         }
                     }

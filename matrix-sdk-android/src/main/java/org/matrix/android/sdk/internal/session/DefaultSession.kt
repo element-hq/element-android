@@ -19,12 +19,16 @@ package org.matrix.android.sdk.internal.session
 import androidx.annotation.MainThread
 import dagger.Lazy
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.pushrules.PushRuleService
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
@@ -38,6 +42,7 @@ import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
+import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
@@ -155,10 +160,13 @@ internal class DefaultSession @Inject constructor(
     override val isOpenable: Boolean
         get() = sessionParamsStore.get(sessionId)?.isTokenValid ?: false
 
+    private var sessionScope: CoroutineScope? = null
+
     @MainThread
     override fun open() {
         assert(!isOpen)
         isOpen = true
+        sessionScope = CoroutineScope(SupervisorJob())
         cryptoService.get().ensureDevice()
         uiHandler.post {
             lifecycleObservers.forEach { it.onSessionStarted() }
@@ -199,6 +207,8 @@ internal class DefaultSession @Inject constructor(
 
     override fun close() {
         assert(isOpen)
+        sessionScope?.coroutineContext?.cancelChildren(CancellationException("Closing session"))
+        sessionScope = null
         stopSync()
         // timelineEventDecryptor.destroy()
         uiHandler.post {
@@ -300,5 +310,11 @@ internal class DefaultSession @Inject constructor(
 
     override fun logDbUsageInfo() {
         RealmDebugTools(realmConfiguration).logInfo("Session")
+    }
+
+    override fun launch(block: suspend () -> Unit) {
+        sessionScope?.launch {
+            block()
+        }
     }
 }

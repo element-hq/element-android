@@ -272,4 +272,9 @@ interface Session :
      * Maintenance API, allows to print outs info on DB size to logcat
      */
     fun logDbUsageInfo()
+
+    /**
+     * Launch a coroutine using the session scope
+     */
+    fun launch(block: suspend () -> Unit )
 }
