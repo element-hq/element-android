@@ -25,10 +25,13 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
+import timber.log.Timber
 
 class AccountCreatedViewModel @AssistedInject constructor(
         @Assisted initialState: AccountCreatedViewState,
@@ -62,7 +65,14 @@ class AccountCreatedViewModel @AssistedInject constructor(
         session.rx()
                 .liveUser(session.myUserId)
                 .unwrap()
-                .map { it.toMatrixItem() }
+                .map {
+                    if (MatrixPatterns.isUserId(it.userId)) {
+                        it.toMatrixItem()
+                    } else {
+                        Timber.w("liveUser() has returned an invalid user: $it")
+                        MatrixItem.UserItem(session.myUserId, null, null)
+                    }
+                }
                 .execute {
                     copy(currentUser = it)
                 }
