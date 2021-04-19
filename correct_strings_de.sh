@@ -5,13 +5,10 @@
 
 # Replace known forms with easier grep-able ones:
 sed -i 's|!nnen|wolpertinger|g' "$strings_de"
-sed -i 's|/innen|wolpertinger|g' "$strings_de"
-sed -i 's|:innen|wolpertinger|g' "$strings_de"
-sed -i 's|*innen|wolpertinger|g' "$strings_de"
+sed -i 's|[/:*]innen|wolpertinger|g' "$strings_de"
 sed -i 's|!n|schlumpfwesen|g' "$strings_de"
-sed -i 's|/in|schlumpfwesen|g' "$strings_de"
-sed -i 's|:in|schlumpfwesen|g' "$strings_de"
-sed -i 's|*in|schlumpfwesen|g' "$strings_de"
+sed -i 's|[/:*]in|schlumpfwesen|g' "$strings_de"
+sed -i 's|\([a-zäöüß]\)[/:*]r|\1rschlumpfwesen|g' "$strings_de"
 # Automated manual intervention:
 sed -i 's|da der/die Benutzerschlumpfwesen dasselbe Berechtigungslevel wie du erhalten wirst|da der Benutzer dasselbe Berechtigungslevel wie du erhalten wird|g' "$strings_de"
 sed -i 's|des/der anderen Nutzerschlumpfwesen|der anderen Nutzer|g' "$strings_de"
