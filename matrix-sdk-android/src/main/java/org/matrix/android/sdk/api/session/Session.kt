@@ -279,5 +279,5 @@ interface Session :
      * Launch a coroutine using the session scope
      */
     fun launch(context: CoroutineContext = EmptyCoroutineContext,
-               block: suspend () -> Unit )
+               block: suspend () -> Unit)
 }

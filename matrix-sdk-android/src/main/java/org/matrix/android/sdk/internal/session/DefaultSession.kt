@@ -19,10 +19,6 @@ package org.matrix.android.sdk.internal.session
 import androidx.annotation.MainThread
 import dagger.Lazy
 import io.realm.RealmConfiguration
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
