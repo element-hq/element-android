@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.io.File
+import java.nio.charset.Charset
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -388,7 +389,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      */
     @Throws(CryptoStoreErrorException::class)
     suspend fun importKeys(keys: ByteArray, passphrase: String, listener: ProgressListener?): ImportRoomKeysResult = withContext(Dispatchers.IO) {
-        var decodedKeys = keys.toString()
+        val decodedKeys = String(keys, Charset.defaultCharset())
 
         var rustListener = CryptoProgressListener(listener)
 
