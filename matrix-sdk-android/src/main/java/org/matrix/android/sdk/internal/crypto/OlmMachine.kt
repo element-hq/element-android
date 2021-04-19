@@ -22,8 +22,8 @@ import java.io.File
 import java.nio.charset.Charset
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -47,7 +47,6 @@ import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
-import uniffi.olm.Sas as InnerSas
 import uniffi.olm.setLogger
 
 class CryptoLogger() : Logger {
@@ -90,11 +89,15 @@ fun setRustLogger() {
  * Convert a Rust Device into a Kotlin CryptoDeviceInfo
  */
 private fun toCryptoDeviceInfo(device: Device): CryptoDeviceInfo {
+    val keys = device.keys.map { (keyId, key) ->
+        "$keyId:$device.deviceId" to key
+    }.toMap()
+
     return CryptoDeviceInfo(
             device.deviceId,
             device.userId,
             device.algorithms,
-            device.keys,
+            keys,
             // TODO pass the signatures here, do we need this, why should the
             // Kotlin side care about signatures?
             mapOf(),
@@ -145,12 +148,18 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
     }
 
     fun ownDevice(): CryptoDeviceInfo {
+        val deviceId = this.deviceId()
+
+        val keys = this.identityKeys().map { (keyId, key) ->
+            "$keyId:$deviceId" to key
+        }.toMap()
+
         return CryptoDeviceInfo(
             this.deviceId(),
             this.userId(),
             // TODO pass the algorithms here.
             listOf(),
-            this.identityKeys(),
+            keys,
             mapOf(),
             UnsignedDeviceInfo(),
             DeviceTrustLevel(false, true),
@@ -409,9 +418,13 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      */
     @Throws(CryptoStoreErrorException::class)
     suspend fun getDevice(userId: String, deviceId: String): CryptoDeviceInfo? = withContext(Dispatchers.IO) {
-        when (val device: Device? = inner.getDevice(userId, deviceId)) {
-            null -> null
-            else -> toCryptoDeviceInfo(device)
+        // Our own device isn't part of our store on the rust side, return it
+        // using our ownDevice method
+        if (userId == userId() && deviceId == deviceId()) {
+            ownDevice()
+        } else {
+            val device = inner.getDevice(userId, deviceId)
+            if (device != null) toCryptoDeviceInfo(device) else null
         }
     }
 
@@ -424,7 +437,14 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      */
     @Throws(CryptoStoreErrorException::class)
     suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo> {
-        return inner.getUserDevices(userId).map { toCryptoDeviceInfo(it) }
+        val ownDevice = ownDevice()
+        var devices = inner.getUserDevices(userId).map { toCryptoDeviceInfo(it) }.toMutableList()
+
+        // EA doesn't differentiate much between our own and other devices of
+        // while the rust-sdk does, append our own device here.
+        devices.add(ownDevice)
+
+        return devices
     }
 
     suspend fun getUserDevicesMap(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
