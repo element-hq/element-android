@@ -16,17 +16,21 @@
 
 package im.vector.app.features.home.room.list
 
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import javax.inject.Inject
 
-class RoomSummaryListController(
+class RoomSummaryPagedControllerFactory @Inject constructor(
         private val roomSummaryItemFactory: RoomSummaryItemFactory
-) : CollapsableTypedEpoxyController<List<RoomSummary>>() {
+) {
 
-    var listener: RoomListListener? = null
+    fun createRoomSummaryPagedController(): RoomSummaryPagedController {
+        return RoomSummaryPagedController(roomSummaryItemFactory)
+    }
 
-    override fun buildModels(data: List<RoomSummary>?) {
-        data?.forEach {
-            add(roomSummaryItemFactory.create(it, emptyMap(), emptySet(), listener))
-        }
+    fun createRoomSummaryListController(): RoomSummaryListController {
+        return RoomSummaryListController(roomSummaryItemFactory)
+    }
+
+    fun createSuggestedRoomListController(): SuggestedRoomListController {
+        return SuggestedRoomListController(roomSummaryItemFactory)
     }
 }

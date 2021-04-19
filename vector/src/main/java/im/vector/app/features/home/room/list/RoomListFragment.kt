@@ -108,10 +108,10 @@ class RoomListFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomListViewModel.observeViewEvents {
             when (it) {
-                is RoomListViewEvents.Loading    -> showLoading(it.message)
-                is RoomListViewEvents.Failure    -> showFailure(it.throwable)
+                is RoomListViewEvents.Loading -> showLoading(it.message)
+                is RoomListViewEvents.Failure -> showFailure(it.throwable)
                 is RoomListViewEvents.SelectRoom -> handleSelectRoom(it)
-                is RoomListViewEvents.Done       -> Unit
+                is RoomListViewEvents.Done -> Unit
             }.exhaustive
         }
 
@@ -132,21 +132,15 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun refreshCollapseStates() {
-        var contentInsertIndex = 1
         roomListViewModel.sections.forEachIndexed { index, roomsSection ->
             val actualBlock = adapterInfosList[index]
             val isRoomSectionExpanded = roomsSection.isExpanded.value.orTrue()
             if (actualBlock.section.isExpanded && !isRoomSectionExpanded) {
-                // we have to remove the content adapter
-                concatAdapter?.removeAdapter(actualBlock.contentAdapter.adapter)
+                // mark controller as collapsed
+                actualBlock.contentAdapter.setCollapsed(true)
             } else if (!actualBlock.section.isExpanded && isRoomSectionExpanded) {
-                // we must add it back!
-                concatAdapter?.addAdapter(contentInsertIndex, actualBlock.contentAdapter.adapter)
-            }
-            contentInsertIndex = if (isRoomSectionExpanded) {
-                contentInsertIndex + 2
-            } else {
-                contentInsertIndex + 1
+                // we must expand!
+                actualBlock.contentAdapter.setCollapsed(false)
             }
             actualBlock.section = actualBlock.section.copy(
                     isExpanded = isRoomSectionExpanded
