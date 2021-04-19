@@ -84,6 +84,7 @@ import kotlin.coroutines.CoroutineContext
 @SessionScope
 internal class DefaultSession @Inject constructor(
         override val sessionParams: SessionParams,
+        private val sessionCoroutineScopeHolder: SessionCoroutineScopeHolder,
         private val workManagerProvider: WorkManagerProvider,
         private val globalErrorHandler: GlobalErrorHandler,
         @SessionId
@@ -161,13 +162,11 @@ internal class DefaultSession @Inject constructor(
     override val isOpenable: Boolean
         get() = sessionParamsStore.get(sessionId)?.isTokenValid ?: false
 
-    private var sessionScope: CoroutineScope? = null
-
     @MainThread
     override fun open() {
         assert(!isOpen)
         isOpen = true
-        sessionScope = CoroutineScope(SupervisorJob())
+        sessionCoroutineScopeHolder.start()
         cryptoService.get().ensureDevice()
         uiHandler.post {
             lifecycleObservers.forEach { it.onSessionStarted() }
@@ -208,8 +207,7 @@ internal class DefaultSession @Inject constructor(
 
     override fun close() {
         assert(isOpen)
-        sessionScope?.coroutineContext?.cancelChildren(CancellationException("Closing session"))
-        sessionScope = null
+        sessionCoroutineScopeHolder.stop()
         stopSync()
         // timelineEventDecryptor.destroy()
         uiHandler.post {
@@ -315,7 +313,7 @@ internal class DefaultSession @Inject constructor(
 
     override fun launch(context: CoroutineContext,
                         block: suspend () -> Unit) {
-        sessionScope?.launch(context) {
+        sessionCoroutineScopeHolder.scope?.launch(context) {
             block()
         }
     }
