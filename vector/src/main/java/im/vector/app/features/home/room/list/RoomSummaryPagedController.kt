@@ -21,31 +21,13 @@ import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.app.core.utils.createUIHandler
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import javax.inject.Inject
-
-class RoomSummaryPagedControllerFactory @Inject constructor(
-        private val roomSummaryItemFactory: RoomSummaryItemFactory
-) {
-
-    fun createRoomSummaryPagedController(): RoomSummaryPagedController {
-        return RoomSummaryPagedController(roomSummaryItemFactory)
-    }
-
-    fun createRoomSummaryListController(): RoomSummaryListController {
-        return RoomSummaryListController(roomSummaryItemFactory)
-    }
-
-    fun createSuggestedRoomListController(): SuggestedRoomListController {
-        return SuggestedRoomListController(roomSummaryItemFactory)
-    }
-}
 
 class RoomSummaryPagedController(
         private val roomSummaryItemFactory: RoomSummaryItemFactory
-) : PagedListEpoxyController<RoomSummary>(
+) : PagedListEpoxyController<RoomSummary> (
         // Important it must match the PageList builder notify Looper
         modelBuildingHandler = createUIHandler()
-) {
+), CollapsableControllerExtension {
 
     var listener: RoomListListener? = null
 
@@ -55,6 +37,22 @@ class RoomSummaryPagedController(
             // ideally we could search for visible models and update only those
             requestForcedModelBuild()
         }
+
+    override var collapsed = false
+    set(value) {
+        if (field != value) {
+            field = value
+            requestForcedModelBuild()
+        }
+    }
+
+    override fun addModels(models: List<EpoxyModel<*>>) {
+        if (collapsed) {
+            super.addModels(emptyList())
+        } else {
+            super.addModels(models)
+        }
+    }
 
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
         // for place holder if enabled
