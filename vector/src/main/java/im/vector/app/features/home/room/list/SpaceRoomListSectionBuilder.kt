@@ -20,6 +20,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import im.vector.app.AppStateHandler
 import im.vector.app.R
@@ -51,6 +52,13 @@ class SpaceRoomListSectionBuilder(
         val onDisposable: (Disposable) -> Unit,
         val onUdpatable: (UpdatableLivePageResult) -> Unit
 ) : RoomListSectionBuilder {
+
+    val pagedListConfig = PagedList.Config.Builder()
+            .setPageSize(10)
+            .setInitialLoadSizeHint(20)
+            .setEnablePlaceholders(true)
+            .setPrefetchDistance(10)
+            .build()
 
     override fun buildSections(mode: RoomListDisplayMode): List<RoomsSection> {
         val sections = mutableListOf<RoomsSection>()
@@ -322,8 +330,8 @@ class SpaceRoomListSectionBuilder(
                                     }
                                 }
                                 RoomListViewModel.SpaceFilterStrategy.NONE       -> roomQueryParams
-                            }
-
+                            },
+                            pagedListConfig
                     ).also {
                         when (spaceFilterStrategy) {
                             RoomListViewModel.SpaceFilterStrategy.NORMAL     -> {
