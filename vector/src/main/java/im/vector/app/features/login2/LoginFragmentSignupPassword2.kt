@@ -28,7 +28,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.databinding.FragmentLoginSignupPassword2Binding
-import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
 
@@ -38,7 +37,7 @@ import javax.inject.Inject
  */
 class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginSignupPassword2Binding>() {
 
-    private var passwordsShown = false
+    private var passwordShown = false
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSignupPassword2Binding {
         return FragmentLoginSignupPassword2Binding.inflate(inflater, container, false)
@@ -51,7 +50,7 @@ class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment
         setupAutoFill()
         setupPasswordReveal()
 
-        views.passwordFieldRepeat.setOnEditorActionListener { _, actionId, _ ->
+        views.passwordField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 submit()
                 return@setOnEditorActionListener true
@@ -63,7 +62,6 @@ class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment
     private fun setupAutoFill() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
-            views.passwordFieldRepeat.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
         }
     }
 
@@ -79,13 +77,6 @@ class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment
             error++
         }
 
-        val passwordRepeat = views.passwordFieldRepeat.text.toString()
-
-        if (password != passwordRepeat) {
-            views.passwordFieldTilRepeat.error = getString(R.string.auth_password_dont_match)
-            error++
-        }
-
         if (error == 0) {
             loginViewModel.handle(LoginAction2.SetUserPassword(password))
         }
@@ -98,23 +89,19 @@ class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment
 
     private fun setupSubmitButton() {
         views.loginSubmit.setOnClickListener { submit() }
-        Observables.combineLatest(
-                views.passwordField.textChanges(),
-                views.passwordFieldRepeat.textChanges()
-        )
-                .subscribeBy { (password, passwordRepeat) ->
+        views.passwordField.textChanges()
+                .subscribeBy { password ->
                     views.passwordFieldTil.error = null
-                    views.passwordFieldTilRepeat.error = null
-                    views.loginSubmit.isEnabled = password.isNotEmpty() && passwordRepeat.isNotEmpty()
+                    views.loginSubmit.isEnabled = password.isNotEmpty()
                 }
                 .disposeOnDestroyView()
     }
 
     private fun setupPasswordReveal() {
-        passwordsShown = false
+        passwordShown = false
 
         views.passwordReveal.setOnClickListener {
-            passwordsShown = !passwordsShown
+            passwordShown = !passwordShown
 
             renderPasswordField()
         }
@@ -123,9 +110,8 @@ class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment
     }
 
     private fun renderPasswordField() {
-        views.passwordReveal.render(passwordsShown)
-        views.passwordField.showPassword(passwordsShown)
-        views.passwordFieldRepeat.showPassword(passwordsShown)
+        views.passwordReveal.render(passwordShown)
+        views.passwordField.showPassword(passwordShown)
     }
 
     override fun resetViewModel() {
@@ -140,8 +126,8 @@ class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment
         views.loginMatrixIdentifier.text = state.userIdentifier()
 
         if (state.isLoading) {
-            // Ensure passwords are hidden
-            passwordsShown = false
+            // Ensure password is hidden
+            passwordShown = false
             renderPasswordField()
         }
     }

@@ -3,7 +3,6 @@
 
     <!-- Those strings are not final, so do not put them into Weblate for the moment -->
 
-    <string name="login_signup_password_repeat_hint">Type it again</string>
     <string name="login_welcome_back">Welcome back %s!</string>
     <string name="login_please_enter_your_password">Please enter your password</string>
     <string name="login_please_enter_your_matrix_identifier">Please enter your Matrix identifier</string>

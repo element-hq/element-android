@@ -42,7 +42,7 @@ import javax.inject.Inject
  */
 class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginResetPassword2Binding>() {
 
-    private var passwordsShown = false
+    private var passwordShown = false
 
     // Show warning only once
     private var showWarning = true
@@ -58,9 +58,9 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
         setupPasswordReveal()
         setupAutoFill()
 
-        autoResetTextInputLayoutErrors(listOf(views.resetPasswordEmailTil, views.passwordFieldTil, views.passwordFieldTilRepeat))
+        autoResetTextInputLayoutErrors(listOf(views.resetPasswordEmailTil, views.passwordFieldTil))
 
-        views.passwordFieldRepeat.setOnEditorActionListener { _, actionId, _ ->
+        views.passwordField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 submit()
                 return@setOnEditorActionListener true
@@ -73,7 +73,6 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             views.resetPasswordEmail.setAutofillHints(HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS)
             views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
-            views.passwordFieldRepeat.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
         }
     }
 
@@ -105,7 +104,6 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
 
         val email = views.resetPasswordEmail.text.toString()
         val password = views.passwordField.text.toString()
-        val passwordRepeat = views.passwordFieldRepeat.text.toString()
 
         if (email.isEmpty()) {
             views.resetPasswordEmailTil.error = getString(R.string.auth_reset_password_missing_email)
@@ -114,9 +112,6 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
 
         if (password.isEmpty()) {
             views.passwordFieldTil.error = getString(R.string.login_please_choose_a_new_password)
-            error++
-        } else if (password != passwordRepeat) {
-            views.passwordFieldTilRepeat.error = getString(R.string.auth_password_dont_match)
             error++
         }
 
@@ -151,14 +146,13 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
         views.resetPasswordSubmit.hideKeyboard()
         views.resetPasswordEmailTil.error = null
         views.passwordFieldTil.error = null
-        views.passwordFieldTilRepeat.error = null
     }
 
     private fun setupPasswordReveal() {
-        passwordsShown = false
+        passwordShown = false
 
         views.passwordReveal.setOnClickListener {
-            passwordsShown = !passwordsShown
+            passwordShown = !passwordShown
 
             renderPasswordField()
         }
@@ -167,9 +161,8 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
     }
 
     private fun renderPasswordField() {
-        views.passwordField.showPassword(passwordsShown)
-        views.passwordFieldRepeat.showPassword(passwordsShown)
-        views.passwordReveal.render(passwordsShown)
+        views.passwordField.showPassword(passwordShown)
+        views.passwordReveal.render(passwordShown)
     }
 
     override fun resetViewModel() {
@@ -184,8 +177,8 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
         setupUi(state)
 
         if (state.isLoading) {
-            // Ensure new passwords are hidden
-            passwordsShown = false
+            // Ensure new password is hidden
+            passwordShown = false
             renderPasswordField()
         }
     }
