@@ -115,7 +115,7 @@ class VectorGlideDataFetcher(context: Context,
             callback.onLoadFailed(IllegalArgumentException("No File service"))
         }
         // Use the file vector service, will avoid flickering and redownload after upload
-        GlobalScope.launch {
+        activeSessionHolder.getSafeActiveSession()?.launch {
             val result = runCatching {
                 fileService.downloadFile(
                         fileName = data.filename,

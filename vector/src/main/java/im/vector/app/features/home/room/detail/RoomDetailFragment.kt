@@ -1749,7 +1749,7 @@ class RoomDetailFragment @Inject constructor(
             sharedActionViewModel.pendingAction = action
             return
         }
-        lifecycleScope.launch {
+        session.launch {
             val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
             if (!isAdded) return@launch
             result.fold(
