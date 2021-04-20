@@ -812,11 +812,8 @@ internal class DefaultCryptoService @Inject constructor(
                             }
                         }
                         is Request.ToDevice -> {
-                            // TODO this sends out mostly key requests, it's a
-                            // bit spammy as of now so it's disabled, needs to
-                            // be fixed on the Rust side.
                             async {
-                                // sendToDevice(it)
+                                sendToDevice(it)
                             }
                         }
                         else -> {
