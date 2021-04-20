@@ -372,6 +372,17 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
         }
     }
 
+    /**
+     * Request the room key that was used to encrypt the given undecrypted
+     * event.
+     *
+     * @param event The that we're not able to decrypt and want to request a
+     * room key for.
+     *
+     * @return a key request pair, consisting of an optional key request
+     * cancellation and the key request itself. The cancellation *must* be sent
+     * out before the request, otherwise devices will ignore the key request.
+     */
     @Throws(DecryptionErrorException::class)
     suspend fun requestRoomKey(event: Event): KeyRequestPair = withContext(Dispatchers.IO) {
         val adapter = MoshiProvider.providesMoshi().adapter<Event>(Event::class.java)
