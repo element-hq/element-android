@@ -20,7 +20,7 @@ use matrix_sdk_common::{
     events::{room::encrypted::EncryptedEventContent, AnyMessageEventContent, EventContent},
     identifiers::{DeviceKeyAlgorithm, RoomId, UserId},
     uuid::Uuid,
-    UInt,
+    IncomingResponse, UInt,
 };
 
 use matrix_sdk_crypto::{
@@ -168,10 +168,18 @@ impl OlmMachine {
         let response = response_from_string(&response_body);
 
         let response: OwnedResponse = match request_type {
-            RequestType::KeysUpload => KeysUploadResponse::try_from(response).map(Into::into),
-            RequestType::KeysQuery => KeysQueryResponse::try_from(response).map(Into::into),
-            RequestType::ToDevice => ToDeviceResponse::try_from(response).map(Into::into),
-            RequestType::KeysClaim => KeysClaimResponse::try_from(response).map(Into::into),
+            RequestType::KeysUpload => {
+                KeysUploadResponse::try_from_http_response(response).map(Into::into)
+            }
+            RequestType::KeysQuery => {
+                KeysQueryResponse::try_from_http_response(response).map(Into::into)
+            }
+            RequestType::ToDevice => {
+                ToDeviceResponse::try_from_http_response(response).map(Into::into)
+            }
+            RequestType::KeysClaim => {
+                KeysClaimResponse::try_from_http_response(response).map(Into::into)
+            }
         }
         .expect("Can't convert json string to response");
 

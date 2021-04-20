@@ -23,11 +23,11 @@ features = ["lax_deserialize"]
 
 [dependencies.matrix-sdk-common]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-branch = "encryption-info"
+branch = "corroded-android"
 
 [dependencies.matrix-sdk-crypto]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-branch = "encryption-info"
+branch = "corroded-android"
 features = ["sled_cryptostore"]
 
 [dependencies.tokio]
