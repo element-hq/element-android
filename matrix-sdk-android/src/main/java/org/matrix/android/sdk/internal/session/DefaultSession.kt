@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session
 import androidx.annotation.MainThread
 import dagger.Lazy
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
@@ -308,9 +309,9 @@ internal class DefaultSession @Inject constructor(
     }
 
     override fun launch(context: CoroutineContext,
-                        block: suspend () -> Unit) {
-        sessionCoroutineScopeHolder.scope?.launch(context) {
+                        block: suspend () -> Unit): Job {
+        return sessionCoroutineScopeHolder.scope?.launch(context) {
             block()
-        }
+        } ?: throw IllegalStateException("Session is closed")
     }
 }

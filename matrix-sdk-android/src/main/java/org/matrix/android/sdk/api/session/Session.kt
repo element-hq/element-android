@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.Job
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
@@ -279,5 +280,5 @@ interface Session :
      * Launch a coroutine using the session scope
      */
     fun launch(context: CoroutineContext = EmptyCoroutineContext,
-               block: suspend () -> Unit)
+               block: suspend () -> Unit): Job
 }
