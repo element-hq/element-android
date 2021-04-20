@@ -2,7 +2,7 @@ Changes in Element 1.1.7 (2021-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Spaces beta
 
 Improvements 🙌:
  -

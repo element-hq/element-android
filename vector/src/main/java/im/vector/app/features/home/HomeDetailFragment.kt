@@ -22,7 +22,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
@@ -32,7 +31,6 @@ import com.google.android.material.badge.BadgeDrawable
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
@@ -56,13 +54,8 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
-
-private const val INDEX_PEOPLE = 0
-private const val INDEX_ROOMS = 1
-private const val INDEX_CATCHUP = 2
 
 class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
@@ -251,19 +244,8 @@ class HomeDetailFragment @Inject constructor(
     private fun onGroupChange(groupSummary: GroupSummary?) {
         groupSummary ?: return
         if (groupSummary.groupId == ALL_COMMUNITIES_GROUP_ID) {
-            // Special case
-            avatarRenderer.clear(views.groupToolbarAvatarImageView)
-            views.groupToolbarAvatarImageView.background = null
-
-            val myMxItem = withState(viewModel) { it.myMatrixItem }
-            if (myMxItem != null) {
-                avatarRenderer.render(myMxItem, views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
-            }
             views.groupToolbarSpaceTitleView.isVisible = false
         } else {
-            views.groupToolbarAvatarImageView.background = null
-            // Use GlideApp with activity context to avoid the glideRequests to be paused
-            avatarRenderer.render(groupSummary.toMatrixItem(), views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = groupSummary.displayName
         }
@@ -271,24 +253,9 @@ class HomeDetailFragment @Inject constructor(
 
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
         spaceSummary ?: return
-
-        // Use GlideApp with activity context to avoid the glideRequests to be paused
         if (spaceSummary.roomId == ALL_COMMUNITIES_GROUP_ID) {
-            // Special case
-            views.groupToolbarAvatarImageView.background = ContextCompat.getDrawable(requireContext(), R.drawable.space_home_background)
-            views.groupToolbarAvatarImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
-            ThemeUtils.tintDrawableWithColor(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_space_home)!!,
-                    ThemeUtils.getColor(requireContext(), R.attr.riot_primary_text_color)
-            ).let {
-                views.groupToolbarAvatarImageView.setImageDrawable(it)
-            }
-
             views.groupToolbarSpaceTitleView.isVisible = false
         } else {
-            avatarRenderer.clear(views.groupToolbarAvatarImageView)
-            views.groupToolbarAvatarImageView.background = null
-            avatarRenderer.renderSpace(spaceSummary.toMatrixItem(), views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = spaceSummary.displayName
         }

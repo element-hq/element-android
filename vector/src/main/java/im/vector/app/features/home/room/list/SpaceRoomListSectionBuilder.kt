@@ -314,23 +314,7 @@ class SpaceRoomListSectionBuilder(
 
                     val name = stringProvider.getString(nameRes)
                     session.getFilteredPagedRoomSummariesLive(
-                            when (spaceFilterStrategy) {
-                                RoomListViewModel.SpaceFilterStrategy.NORMAL     -> {
-                                    roomQueryParams.copy(
-                                            activeSpaceId = ActiveSpaceFilter.ActiveSpace(appStateHandler.safeActiveSpaceId())
-                                    )
-                                }
-                                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL -> {
-                                    if (appStateHandler.safeActiveSpaceId() == null) {
-                                        roomQueryParams
-                                    } else {
-                                        roomQueryParams.copy(
-                                                activeSpaceId = ActiveSpaceFilter.ActiveSpace(appStateHandler.safeActiveSpaceId())
-                                        )
-                                    }
-                                }
-                                RoomListViewModel.SpaceFilterStrategy.NONE       -> roomQueryParams
-                            },
+                            roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
                             pagedListConfig
                     ).also {
                         when (spaceFilterStrategy) {
@@ -371,7 +355,9 @@ class SpaceRoomListSectionBuilder(
                                         .subscribe {
                                             sections.find { it.sectionName == name }
                                                     ?.notificationCount
-                                                    ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
+                                                    ?.postValue(session.getNotificationCountForRooms(
+                                                            roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
+                                                    ))
                                         }.also {
                                             onDisposable.invoke(it)
                                         }
@@ -394,5 +380,25 @@ class SpaceRoomListSectionBuilder(
                 .apply { builder.invoke(this) }
                 .build()
                 .let { block(it) }
+    }
+
+    internal fun RoomSummaryQueryParams.process(spaceFilter: RoomListViewModel.SpaceFilterStrategy, currentSpace: String?): RoomSummaryQueryParams {
+        return when (spaceFilter) {
+            RoomListViewModel.SpaceFilterStrategy.NORMAL -> {
+                copy(
+                        activeSpaceId = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                )
+            }
+            RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL -> {
+                if (currentSpace == null) {
+                    this
+                } else {
+                    copy(
+                            activeSpaceId = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                    )
+                }
+            }
+            RoomListViewModel.SpaceFilterStrategy.NONE -> this
+        }
     }
 }

@@ -349,6 +349,29 @@ internal class RoomSummaryUpdater @Inject constructor(
 //                        Timber.v("## SPACES: flatten of ${dmRoom.otherMemberIds.joinToString(",")} is ${dmRoom.flattenParentIds}")
                     }
 
+            // Maybe a good place to count the number of notifications for spaces?
+
+            realm.where(RoomSummaryEntity::class.java)
+                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                    .equalTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
+                    .findAll().forEach { space ->
+                        // get all children
+                        var highlightCount = 0
+                        var notificationCount = 0
+                        realm.where(RoomSummaryEntity::class.java)
+                                .process(RoomSummaryEntityFields.MEMBERSHIP_STR, listOf(Membership.JOIN))
+                                .notEqualTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
+                                .contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, space.roomId)
+                                .findAll().forEach {
+                                    highlightCount += it.highlightCount
+                                    notificationCount += it.notificationCount
+                                }
+
+                        space.highlightCount = highlightCount
+                        space.notificationCount = notificationCount
+                    }
+            // xxx invites??
+
             // LEGACY GROUPS
             // lets mark rooms that belongs to groups
             val existingGroups = GroupSummaryEntity.where(realm).findAll()

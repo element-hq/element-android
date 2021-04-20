@@ -30,6 +30,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableConstraintLayout
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass(layout = R.layout.item_space)
@@ -44,6 +45,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute var hasChildren: Boolean = false
     @EpoxyAttribute var indent: Int = 0
+    @EpoxyAttribute var countState : UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -91,6 +93,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         holder.indentSpace.isVisible = indent > 0
 
         avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
+        holder.counterBadgeView.render(countState)
     }
 
     override fun unbind(holder: Holder) {
@@ -105,5 +108,6 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         val moreView by bind<ImageView>(R.id.groupTmpLeave)
         val collapseIndicator by bind<ImageView>(R.id.groupChildrenCollapse)
         val indentSpace by bind<Space>(R.id.indent)
+        val counterBadgeView by bind<UnreadCounterBadgeView>(R.id.groupCounterBadge)
     }
 }
