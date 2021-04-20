@@ -135,7 +135,9 @@ class UserListController @Inject constructor(private val session: Session,
     }
 
     private fun buildDirectoryUsers(directoryUsers: List<User>, selectedUsers: List<String>, searchTerms: String, ignoreIds: List<String>) {
-        val toDisplay = directoryUsers.filter { !ignoreIds.contains(it.userId) }
+        val toDisplay = directoryUsers
+                .filter { !ignoreIds.contains(it.userId) && it.userId != session.myUserId }
+
         if (toDisplay.isEmpty() && searchTerms.isBlank()) {
             return
         }
@@ -147,16 +149,14 @@ class UserListController @Inject constructor(private val session: Session,
             renderEmptyState()
         } else {
             toDisplay.forEach { user ->
-                if (user.userId != session.myUserId) {
-                    val isSelected = selectedUsers.contains(user.userId)
-                    userDirectoryUserItem {
-                        id(user.userId)
-                        selected(isSelected)
-                        matrixItem(user.toMatrixItem())
-                        avatarRenderer(avatarRenderer)
-                        clickListener { _ ->
-                            callback?.onItemClick(user)
-                        }
+                val isSelected = selectedUsers.contains(user.userId)
+                userDirectoryUserItem {
+                    id(user.userId)
+                    selected(isSelected)
+                    matrixItem(user.toMatrixItem())
+                    avatarRenderer(avatarRenderer)
+                    clickListener { _ ->
+                        callback?.onItemClick(user)
                     }
                 }
             }
