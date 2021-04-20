@@ -109,29 +109,31 @@ class UserListController @Inject constructor(private val session: Session,
     }
 
     private fun buildKnownUsers(currentState: UserListViewState, selectedUsers: List<String>) {
-        currentState.knownUsers()?.let { userList ->
-            userListHeaderItem {
-                id("known_header")
-                header(stringProvider.getString(R.string.direct_room_user_list_known_title))
-            }
+        currentState.knownUsers()
+                ?.filter { it.userId != session.myUserId }
+                ?.let { userList ->
+                    userListHeaderItem {
+                        id("known_header")
+                        header(stringProvider.getString(R.string.direct_room_user_list_known_title))
+                    }
 
-            if (userList.isEmpty()) {
-                renderEmptyState()
-                return
-            }
-            userList.forEach { item ->
-                val isSelected = selectedUsers.contains(item.userId)
-                userDirectoryUserItem {
-                    id(item.userId)
-                    selected(isSelected)
-                    matrixItem(item.toMatrixItem())
-                    avatarRenderer(avatarRenderer)
-                    clickListener { _ ->
-                        callback?.onItemClick(item)
+                    if (userList.isEmpty()) {
+                        renderEmptyState()
+                        return
+                    }
+                    userList.forEach { item ->
+                        val isSelected = selectedUsers.contains(item.userId)
+                        userDirectoryUserItem {
+                            id(item.userId)
+                            selected(isSelected)
+                            matrixItem(item.toMatrixItem())
+                            avatarRenderer(avatarRenderer)
+                            clickListener { _ ->
+                                callback?.onItemClick(item)
+                            }
+                        }
                     }
                 }
-            }
-        }
     }
 
     private fun buildDirectoryUsers(directoryUsers: List<User>, selectedUsers: List<String>, searchTerms: String, ignoreIds: List<String>) {
