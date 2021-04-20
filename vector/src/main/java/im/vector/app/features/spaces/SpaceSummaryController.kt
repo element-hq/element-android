@@ -82,8 +82,7 @@ class SpaceSummaryController @Inject constructor(
                                 id(it.roomId)
                                 matrixItem(it.toMatrixItem())
                                 selected(false)
-                                listener { callback?.onSpaceSelected(it) }
-//                                lea { callback?.onSpaceSelected(it) }
+                                listener { callback?.onSpaceInviteSelected(it) }
                             }
                         }
                         genericFooterItem {
@@ -173,6 +172,7 @@ class SpaceSummaryController @Inject constructor(
 
     interface Callback {
         fun onSpaceSelected(spaceSummary: RoomSummary)
+        fun onSpaceInviteSelected(spaceSummary: RoomSummary)
         fun onSpaceSettings(spaceSummary: RoomSummary)
         fun onToggleExpand(spaceSummary: RoomSummary)
         fun onAddSpaceSelected()

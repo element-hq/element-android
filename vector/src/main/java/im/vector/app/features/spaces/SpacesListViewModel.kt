@@ -129,31 +129,21 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
             is SpaceListAction.LeaveSpace -> handleLeaveSpace(action)
             SpaceListAction.AddSpace -> handleAddSpace()
             is SpaceListAction.ToggleExpand -> handleToggleExpand(action)
+            is SpaceListAction.OpenSpaceInvite -> handleSelectSpaceInvite(action)
         }
     }
 
 // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
-        // get uptodate version of the space
-        val summary = session.spaceService().getSpaceSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Equals(action.spaceSummary.roomId) })
-                .firstOrNull()
-        if (summary?.membership == Membership.INVITE) {
-            _viewEvents.post(SpaceListViewEvents.OpenSpaceSummary(summary.roomId))
-//            viewModelScope.launch(Dispatchers.IO) {
-//                tryOrNull { session.spaceService().peekSpace(action.spaceSummary.spaceId) }.let {
-//                    Timber.d("PEEK RESULT/ $it")
-//                }
-//            }
-        } else {
-            if (state.selectedSpace?.roomId != action.spaceSummary.roomId) {
-//                state.selectedSpace?.let {
-//                    selectedSpaceDataSource.post(Option.just(state.selectedSpace))
-//                }
-                setState { copy(selectedSpace = action.spaceSummary) }
-                uiStateRepository.storeSelectedSpace(action.spaceSummary.roomId, session.sessionId)
-            }
+        if (state.selectedSpace?.roomId != action.spaceSummary.roomId) {
+            setState { copy(selectedSpace = action.spaceSummary) }
+            uiStateRepository.storeSelectedSpace(action.spaceSummary.roomId, session.sessionId)
         }
+    }
+
+    private fun handleSelectSpaceInvite(action: SpaceListAction.OpenSpaceInvite) {
+        _viewEvents.post(SpaceListViewEvents.OpenSpaceSummary(action.spaceSummary.roomId))
     }
 
     private fun handleToggleExpand(action: SpaceListAction.ToggleExpand) = withState { state ->
