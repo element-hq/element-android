@@ -1,0 +1,2 @@
+Main changes in this version: hot fixes for 1.1.4
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.1.5

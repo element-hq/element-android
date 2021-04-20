@@ -34,7 +34,6 @@ import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
@@ -216,19 +215,22 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
                     }
                 }
 
-        session.createRoom(createRoomParams, object : MatrixCallback<String> {
-            override fun onSuccess(data: String) {
-                setState {
-                    copy(asyncCreateRoomRequest = Success(data))
-                }
-            }
-
-            override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(asyncCreateRoomRequest = Fail(failure))
-                }
-                _viewEvents.post(CreateRoomViewEvents.Failure(failure))
-            }
-        })
+        // TODO: Should this be non-cancellable?
+        viewModelScope.launch {
+            val result = runCatching { session.createRoom(createRoomParams) }
+            result.fold(
+                    { roomId ->
+                        setState {
+                            copy(asyncCreateRoomRequest = Success(roomId))
+                        }
+                    },
+                    { failure ->
+                        setState {
+                            copy(asyncCreateRoomRequest = Fail(failure))
+                        }
+                        _viewEvents.post(CreateRoomViewEvents.Failure(failure))
+                    }
+            )
+        }
     }
 }

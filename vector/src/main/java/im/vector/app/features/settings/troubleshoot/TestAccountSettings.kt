@@ -20,8 +20,11 @@ import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleKind
 import javax.inject.Inject
@@ -50,10 +53,12 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
                         if (manager?.diagStatus == TestStatus.RUNNING) return // wait before all is finished
 
                         GlobalScope.launch {
-                            runCatching {
+                            tryOrNull {
                                 session.updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled)
                             }
-                            manager?.retry(activityResultLauncher)
+                            withContext(Dispatchers.Main) {
+                                manager?.retry(activityResultLauncher)
+                            }
                         }
                     }
                 }

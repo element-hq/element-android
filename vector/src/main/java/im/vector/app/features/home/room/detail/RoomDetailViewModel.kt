@@ -178,13 +178,15 @@ class RoomDetailViewModel @AssistedInject constructor(
         updateShowDialerOptionState()
         room.getRoomSummaryLive()
         viewModelScope.launch {
+            tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+        }
+        // Inform the SDK that the room is displayed
+        viewModelScope.launch {
             try {
-                room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
+                session.onRoomDisplayed(initialState.roomId)
             } catch (_: Exception) {
             }
         }
-        // Inform the SDK that the room is displayed
-        session.onRoomDisplayed(initialState.roomId)
         callManager.addPstnSupportListener(this)
         callManager.checkForPSTNSupportIfNeeded()
         chatEffectManager.delegate = this
@@ -546,10 +548,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (trackUnreadMessages.getAndSet(false)) {
             mostRecentDisplayedEvent?.root?.eventId?.also {
                 viewModelScope.launch {
-                    try {
-                        room.setReadMarker(it)
-                    } catch (_: Exception) {
-                    }
+                    tryOrNull { room.setReadMarker(it) }
                 }
             }
             mostRecentDisplayedEvent = null
@@ -902,19 +901,19 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
-        session.joinRoom(command.roomAlias, command.reason, emptyList(), object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                session.getRoomSummary(command.roomAlias)
-                        ?.roomId
-                        ?.let {
-                            _viewEvents.post(RoomDetailViewEvents.JoinRoomCommandSuccess(it))
-                        }
-            }
-
-            override fun onFailure(failure: Throwable) {
+        viewModelScope.launch {
+            try {
+                session.joinRoom(command.roomAlias, command.reason, emptyList())
+            } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+                return@launch
             }
-        })
+            session.getRoomSummary(command.roomAlias)
+                    ?.roomId
+                    ?.let {
+                        _viewEvents.post(RoomDetailViewEvents.JoinRoomCommandSuccess(it))
+                    }
+        }
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
@@ -1254,7 +1253,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
                         viewModelScope.launch {
-                            room.setReadReceipt(eventId)
+                            tryOrNull { room.setReadReceipt(eventId) }
                         }
                     }
                 })
@@ -1263,10 +1262,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleMarkAllAsRead() {
         viewModelScope.launch {
-            try {
-                room.markAsRead(ReadService.MarkAsReadParams.BOTH)
-            } catch (_: Exception) {
-            }
+            tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.BOTH) }
         }
     }
 

@@ -43,7 +43,6 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
-import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.FlowResult
@@ -773,34 +772,34 @@ class LoginViewModel @AssistedInject constructor(
                 null
             }
 
-            if (data is LoginFlowResult.Success) {
-                // Valid Homeserver, add it to the history.
-                // Note: we add what the user has input, data.homeServerUrl can be different
-                rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
+            data ?: return@launch
 
-                val loginMode = when {
-                    // SSO login is taken first
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                    else                                                                  -> LoginMode.Unsupported
-                }
+            // Valid Homeserver, add it to the history.
+            // Note: we add what the user has input, data.homeServerUrl can be different
+            rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
 
-                // FIXME We should post a view event here normally?
-                setState {
-                    copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized,
-                            homeServerUrl = data.homeServerUrl,
-                            loginMode = loginMode,
-                            loginModeSupportedTypes = data.supportedLoginTypes.toList()
-                    )
-                }
-                if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                        || data.isOutdatedHomeserver) {
-                    // Notify the UI
-                    _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
-                }
+            val loginMode = when {
+                // SSO login is taken first
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                        && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+                else                                                                  -> LoginMode.Unsupported
+            }
+
+            // FIXME We should post a view event here normally?
+            setState {
+                copy(
+                        asyncHomeServerLoginFlowRequest = Uninitialized,
+                        homeServerUrl = data.homeServerUrl,
+                        loginMode = loginMode,
+                        loginModeSupportedTypes = data.supportedLoginTypes.toList()
+                )
+            }
+            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
+                    || data.isOutdatedHomeserver) {
+                // Notify the UI
+                _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
             }
         }
     }

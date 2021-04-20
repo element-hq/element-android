@@ -1,8 +1,46 @@
-Changes in Element 1.1.4 (2021-XX-XX)
+Changes in Element 1.1.7 (2021-XX-XX)
 ===================================================
 
 Features ✨:
  -
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ - Message states cosmetic changes (#3007)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ - Upgrade to gradle 7
+
+Test:
+ -
+
+Other changes:
+ - New store descriptions
+
+Changes in Element 1.1.6 (2021-04-16)
+===================================================
+
+Bugfix 🐛:
+ - Fix crash on the timeline
+ - App crashes on "troubleshoot notifications" button (#3187)
+
+Changes in Element 1.1.5 (2021-04-15)
+===================================================
+
+Bugfix 🐛:
+ - Fix crash during Realm migration
+ - Fix crash when playing video (#3179)
+
+Changes in Element 1.1.4 (2021-04-09)
+===================================================
 
 Improvements 🙌:
  - Split network request `/keys/query` into smaller requests (250 users max) (#2925)
@@ -18,6 +56,8 @@ Improvements 🙌:
  - Room list improvements (paging)
  - Fix quick click action (#3127)
  - Get Event after a Push for a faster notification display in some conditions
+ - Always try to retry Http requests in case of 429 (#1300)
+ - registration availability endpoint added to matrix-sdk
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity
@@ -26,9 +66,7 @@ Bugfix 🐛:
  - Fix avatar rendering for DMs, after initial sync (#2693)
  - Fix mandatory parameter in API (#3065)
  - If signout request fails, do not start LoginActivity, but restart the app (#3099)
-
-Translations 🗣:
- -
+ - Retain keyword order in emoji import script, and update the generated file (#3147)
 
 SDK API changes ⚠️:
  - Several Services have been migrated to coroutines (#2449)
@@ -36,9 +74,6 @@ SDK API changes ⚠️:
 
 Build 🧱:
  - Properly exclude gms dependencies in fdroid build flavour which were pulled in through the jitsi SDK (#3125)
-
-Test:
- -
 
 Other changes:
  - Add version details on the login screen, in debug or developer mode

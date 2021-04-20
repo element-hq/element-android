@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
-import org.matrix.android.sdk.internal.util.awaitCallback
 import javax.inject.Inject
 
 class DirectRoomHelper @Inject constructor(
@@ -45,9 +44,7 @@ class DirectRoomHelper @Inject constructor(
                 setDirectMessage()
                 enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
             }
-            roomId = awaitCallback {
-                session.createRoom(roomParams, it)
-            }
+            roomId = session.createRoom(roomParams)
         }
         return roomId
     }

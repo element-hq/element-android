@@ -203,9 +203,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                     _viewEvents.post(
                             HomeActivityViewEvents.OnNewSession(
                                     session.getUser(session.myUserId)?.toMatrixItem(),
-                                    // If it's an old unverified, we should send requests
-                                    // instead of waiting for an incoming one
-                                    reAuthHelper.data != null
+                                    // Always send request instead of waiting for an incoming as per recent EW changes
+                                    false
                             )
                     )
                 }
