@@ -29,7 +29,6 @@ import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.profile.ProfileService
@@ -49,8 +48,6 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
 
     private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
     private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
-
-    private var currentUserSearchDisposable: Disposable? = null
 
     @AssistedFactory
     interface Factory {
@@ -114,8 +111,6 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                 .execute { async ->
                     copy(knownUsers = async)
                 }
-
-        currentUserSearchDisposable?.dispose()
 
         directoryUsersSearch
                 .debounce(300, TimeUnit.MILLISECONDS)
