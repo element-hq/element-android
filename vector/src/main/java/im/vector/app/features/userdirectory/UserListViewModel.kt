@@ -144,15 +144,19 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                                     }
                                     .onErrorReturn { Optional.empty() }
 
-                            Single.zip(searchObservable, profileObservable, { searchResults, optionalProfile ->
-                                val profile = optionalProfile.getOrNull() ?: return@zip searchResults
-                                val searchContainsProfile = searchResults.indexOfFirst { it.userId == profile.userId } != -1
-                                if (searchContainsProfile) {
-                                    searchResults
-                                } else {
-                                    listOf(profile) + searchResults
-                                }
-                            })
+                            Single.zip(
+                                    searchObservable,
+                                    profileObservable,
+                                    { searchResults, optionalProfile ->
+                                        val profile = optionalProfile.getOrNull() ?: return@zip searchResults
+                                        val searchContainsProfile = searchResults.any { it.userId == profile.userId }
+                                        if (searchContainsProfile) {
+                                            searchResults
+                                        } else {
+                                            listOf(profile) + searchResults
+                                        }
+                                    }
+                            )
                         }
                     }
                     stream.toAsync {
