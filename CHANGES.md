@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)
+ - Fix color issues when the system theme is changed (#2738)
 
 Translations 🗣:
  -
