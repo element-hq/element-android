@@ -327,7 +327,9 @@ internal class DefaultCryptoService @Inject constructor(
         try {
             setRustLogger()
             olmMachine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver)
-            Timber.v("Successfully started up an Olm machine, identity keys: ${olmMachine?.identityKeys()}")
+            Timber.v(
+                "## CRYPTO | Successfully started up an Olm machine for " +
+                "${userId}, ${deviceId}, identity keys: ${olmMachine?.identityKeys()}")
         } catch (throwable: Throwable) {
             Timber.v("Failed create an Olm machine: $throwable")
         }
