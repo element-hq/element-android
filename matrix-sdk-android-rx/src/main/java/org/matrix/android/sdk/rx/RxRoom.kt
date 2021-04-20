@@ -19,9 +19,7 @@ package org.matrix.android.sdk.rx
 import android.net.Uri
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
 import kotlinx.coroutines.rx2.rxCompletable
-import kotlinx.coroutines.rx2.rxSingle
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -89,15 +87,6 @@ class RxRoom(private val room: Room) {
 
     fun liveReadReceipt(): Observable<Optional<String>> {
         return room.getMyReadReceiptLive().asObservable()
-    }
-
-    fun loadRoomMembersIfNeeded(): Single<Unit> = rxSingle {
-        room.loadRoomMembersIfNeeded()
-    }
-
-    fun joinRoom(reason: String? = null,
-                 viaServers: List<String> = emptyList()): Single<Unit> = rxSingle {
-        room.join(reason, viaServers)
     }
 
     fun liveEventReadReceipts(eventId: String): Observable<List<ReadReceipt>> {

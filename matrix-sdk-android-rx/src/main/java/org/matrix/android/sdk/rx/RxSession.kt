@@ -38,7 +38,6 @@ import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -124,20 +123,10 @@ class RxSession(private val session: Session) {
                 .startWithCallable { session.getPendingThreePids() }
     }
 
-    fun createRoom(roomParams: CreateRoomParams): Single<String> = rxSingle {
-        session.createRoom(roomParams)
-    }
-
     fun searchUsersDirectory(search: String,
                              limit: Int,
                              excludedUserIds: Set<String>): Single<List<User>> = rxSingle {
         session.searchUsersDirectory(search, limit, excludedUserIds)
-    }
-
-    fun joinRoom(roomIdOrAlias: String,
-                 reason: String? = null,
-                 viaServers: List<String> = emptyList()): Single<Unit> = rxSingle {
-        session.joinRoom(roomIdOrAlias, reason, viaServers)
     }
 
     fun getRoomIdByAlias(roomAlias: String,
