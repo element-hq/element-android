@@ -309,7 +309,7 @@ class TchapLoginViewModel @AssistedInject constructor(
         }
 
         when (action.signMode) {
-            SignMode.SignUp             -> startRegistrationFlow()
+            SignMode.SignUp             -> _viewEvents.post(TchapLoginViewEvents.OnSignModeSelected(SignMode.SignUp))
             SignMode.SignIn             -> _viewEvents.post(TchapLoginViewEvents.OnSignModeSelected(SignMode.SignIn))
             SignMode.SignInWithMatrixId -> Unit // Unsupported on Tchap
             SignMode.Unknown            -> Unit

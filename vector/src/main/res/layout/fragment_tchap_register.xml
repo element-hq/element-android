@@ -4,22 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_tchap_register"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingEnd="22dp"
-    android:paddingLeft="22dp"
-    android:paddingRight="22dp"
-    android:paddingStart="22dp">
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp"
+        android:theme="@style/Vector.ActionBarTheme.TchapLogin"
+        app:title="@string/tchap_register_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tchap_register_email_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
         android:textColorHint="@color/tchap_text_color_light"
         app:hintTextAppearance="@style/TchapTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tchap_register_email"
@@ -41,6 +49,8 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginStart="4dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
         android:fontFamily="sans-serif"
         android:text="@string/tchap_connection_email_help"
         android:textColor="#a1a1a1"
@@ -53,6 +63,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
         android:textColorHint="@color/tchap_text_color_light"
         app:hintTextAppearance="@style/TchapTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,6 +91,8 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginStart="4dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
         android:fontFamily="sans-serif"
         android:text="@string/tchap_connection_password_help"
         android:textColor="#a1a1a1"
@@ -91,6 +105,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
         android:textColorHint="@color/tchap_text_color_light"
         app:hintTextAppearance="@style/TchapTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"

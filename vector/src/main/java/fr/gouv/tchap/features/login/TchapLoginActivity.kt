@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.viewModel
+import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -192,9 +193,10 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (loginViewEvents.signMode) {
             SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
-            SignMode.SignUp             -> {
-                // This is managed by the LoginViewEvents
-            }
+            SignMode.SignUp             -> addFragmentToBackstack(R.id.loginFragmentContainer,
+                    TchapRegisterFragment::class.java,
+                    tag = FRAGMENT_REGISTER_TAG,
+                    option = commonOption)
             SignMode.SignIn             -> addFragmentToBackstack(R.id.loginFragmentContainer,
                     TchapLoginFragment::class.java,
                     tag = FRAGMENT_LOGIN_TAG,
@@ -233,26 +235,10 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         when (stage) {
-            is Stage.ReCaptcha -> addFragmentToBackstack(R.id.loginFragmentContainer,
-                    LoginCaptchaFragment::class.java,
-                    LoginCaptchaFragmentArgument(stage.publicKey),
-                    tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                    option = commonOption)
-            is Stage.Email     -> addFragmentToBackstack(R.id.loginFragmentContainer,
-                    LoginGenericTextInputFormFragment::class.java,
-                    LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
-                    tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                    option = commonOption)
-            is Stage.Msisdn    -> addFragmentToBackstack(R.id.loginFragmentContainer,
-                    LoginGenericTextInputFormFragment::class.java,
-                    LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
-                    tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                    option = commonOption)
-            is Stage.Terms     -> addFragmentToBackstack(R.id.loginFragmentContainer,
-                    LoginTermsFragment::class.java,
-                    LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(getString(R.string.resources_language))),
-                    tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                    option = commonOption)
+            is Stage.ReCaptcha -> Unit // Should not happen
+            is Stage.Email     -> Unit //TODO: send email validation here
+            is Stage.Msisdn    -> Unit // Should not happen
+            is Stage.Terms     -> Unit // Should not happen
             else               -> Unit // Should not happen
         }
     }
@@ -264,6 +250,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
     companion object {
         private const val FRAGMENT_REGISTRATION_STAGE_TAG = "FRAGMENT_REGISTRATION_STAGE_TAG"
         private const val FRAGMENT_LOGIN_TAG = "FRAGMENT_LOGIN_TAG"
+        private const val FRAGMENT_REGISTER_TAG = "FRAGMENT_REGISTER_TAG"
 
         private const val EXTRA_CONFIG = "EXTRA_CONFIG"
 

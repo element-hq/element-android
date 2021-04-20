@@ -34,18 +34,14 @@ import javax.inject.Inject
 
 /**
  * In this screen:
- * In signin mode:
- * - the user is asked for login (or email) and password to sign in to a homeserver.
+ * - the user is asked for email and password to sign in to a homeserver.
  * - He also can reset his password
- * In signup mode:
- * - the user is asked for login and password
  */
 class TchapLoginFragment @Inject constructor(
         private val platformViewModelFactory: PlatformViewModel.Factory
 ) : TchapAbstractLoginFragment<FragmentTchapLoginBinding>(), PlatformViewModel.Factory {
 
     private val viewModel: PlatformViewModel by fragmentViewModel()
-    private var isSignupMode = false
     private lateinit var login: String
     private lateinit var password: String
 
@@ -100,19 +96,11 @@ class TchapLoginFragment @Inject constructor(
         // This can be called by the IME action, so deal with empty cases
         var error = 0
         if (login.isEmpty()) {
-            views.tchapLoginEmail.error = getString(if (isSignupMode) {
-                R.string.error_empty_field_choose_user_name
-            } else {
-                R.string.error_empty_field_enter_user_name
-            })
+            views.tchapLoginEmail.error = getString(R.string.error_empty_field_enter_user_name)
             error++
         }
         if (password.isEmpty()) {
-            views.tchapLoginPassword.error = getString(if (isSignupMode) {
-                R.string.error_empty_field_choose_password
-            } else {
-                R.string.error_empty_field_your_password
-            })
+            views.tchapLoginPassword.error = getString(R.string.error_empty_field_your_password)
             error++
         }
 

@@ -24,6 +24,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import fr.gouv.tchap.features.login.TchapLoginFragment
 import fr.gouv.tchap.features.login.TchapWelcomeFragment
+import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
@@ -636,4 +637,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(TchapLoginFragment::class)
     fun bindTchapLoginFragment(fragment: TchapLoginFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(TchapRegisterFragment::class)
+    fun bindTchapRegisterFragment(fragment: TchapRegisterFragment): Fragment
 }
