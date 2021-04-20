@@ -70,6 +70,11 @@ dictionary Sas {
     Request request;
 };
 
+dictionary KeyRequestPair {
+    Request? cancellation;
+    Request key_request;
+};
+
 [Enum]
 interface Request {
     ToDevice(string request_id, string event_type, string body);
@@ -98,6 +103,7 @@ interface OlmMachine {
     string receive_sync_changes([ByRef] string events,
                               DeviceLists device_changes,
                               record<DOMString, i32> key_counts);
+    [Throws=CryptoStoreError]
     sequence<Request> outgoing_requests();
     [Throws=CryptoStoreError]
     void mark_request_as_sent(
@@ -124,6 +130,9 @@ interface OlmMachine {
 
     [Throws=CryptoStoreError]
     Sas start_verification([ByRef] Device device);
+
+    [Throws=DecryptionError]
+    KeyRequestPair request_room_key([ByRef] string event, [ByRef] string room_id);
 
     [Throws=CryptoStoreError]
     string export_keys([ByRef] string passphrase, i32 rounds);

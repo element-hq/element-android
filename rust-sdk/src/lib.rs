@@ -7,7 +7,7 @@ mod responses;
 pub use device::Device;
 pub use error::{CryptoStoreError, DecryptionError, KeyImportError, MachineCreationError};
 pub use logger::{set_logger, Logger};
-pub use machine::{OlmMachine, Sas};
+pub use machine::{OlmMachine, Sas, KeyRequestPair};
 pub use responses::{DeviceLists, KeysImportResult, Request, RequestType};
 
 pub trait ProgressListener {

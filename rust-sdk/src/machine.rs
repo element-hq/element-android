@@ -47,6 +47,11 @@ pub struct Sas {
     pub request: Request,
 }
 
+pub struct KeyRequestPair {
+    pub cancellation: Option<Request>,
+    pub key_request: Request,
+}
+
 impl OlmMachine {
     /// Create a new `OlmMachine`
     ///
@@ -133,12 +138,13 @@ impl OlmMachine {
     /// [mark_request_as_sent()](#method.mark_request_as_sent) method.
     ///
     /// **Note**: This method call should be locked per call.
-    pub fn outgoing_requests(&self) -> Vec<Request> {
-        self.runtime
-            .block_on(self.inner.outgoing_requests())
+    pub fn outgoing_requests(&self) -> Result<Vec<Request>, CryptoStoreError> {
+        Ok(self
+            .runtime
+            .block_on(self.inner.outgoing_requests())?
             .into_iter()
             .map(|r| r.into())
-            .collect()
+            .collect())
     }
 
     /// Mark a request that was sent to the server as sent.
@@ -415,6 +421,27 @@ impl OlmMachine {
                     .cloned(),
                 forwarding_curve25519_chain: forwarding_curve25519_key_chain.to_owned(),
             },
+        })
+    }
+
+    pub fn request_room_key(
+        &self,
+        event: &str,
+        room_id: &str,
+    ) -> Result<KeyRequestPair, DecryptionError> {
+        let event: SyncMessageEvent<EncryptedEventContent> = serde_json::from_str(event)?;
+        let room_id = RoomId::try_from(room_id)?;
+
+        let (cancel, request) = self
+            .runtime
+            .block_on(self.inner.request_room_key(&event, &room_id))?;
+
+        let cancellation = cancel.map(|r| r.into());
+        let key_request = request.into();
+
+        Ok(KeyRequestPair {
+            cancellation,
+            key_request,
         })
     }
 

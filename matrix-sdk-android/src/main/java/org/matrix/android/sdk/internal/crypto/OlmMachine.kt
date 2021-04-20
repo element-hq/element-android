@@ -40,8 +40,10 @@ import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCount
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
 import uniffi.olm.CryptoStoreErrorException
+import uniffi.olm.DecryptionErrorException
 import uniffi.olm.Device
 import uniffi.olm.DeviceLists
+import uniffi.olm.KeyRequestPair
 import uniffi.olm.Logger
 import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.ProgressListener as RustProgressListener
@@ -368,6 +370,14 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
             val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, throwable.message, "m.megolm.v1.aes-sha2")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
         }
+    }
+
+    @Throws(DecryptionErrorException::class)
+    suspend fun requestRoomKey(event: Event): KeyRequestPair = withContext(Dispatchers.IO) {
+        val adapter = MoshiProvider.providesMoshi().adapter<Event>(Event::class.java)
+        val serializedEvent = adapter.toJson(event)
+
+        inner.requestRoomKey(serializedEvent, event.roomId!!)
     }
 
     /**

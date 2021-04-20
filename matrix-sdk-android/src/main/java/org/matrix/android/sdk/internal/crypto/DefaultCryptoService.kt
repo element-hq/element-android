@@ -952,7 +952,23 @@ internal class DefaultCryptoService @Inject constructor(
      * @param event the event to decrypt again.
      */
     override fun reRequestRoomKeyForEvent(event: Event) {
-        // TODO
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            val requestPair = olmMachine!!.requestRoomKey(event)
+
+            if (requestPair.cancellation != null) {
+                when (requestPair.cancellation) {
+                    is Request.ToDevice -> {
+                        sendToDevice(requestPair.cancellation)
+                    }
+                }
+            }
+
+            when(requestPair.keyRequest) {
+                is Request.ToDevice -> {
+                    sendToDevice(requestPair.keyRequest)
+                }
+            }
+        }
     }
 
     /**
