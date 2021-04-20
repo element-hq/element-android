@@ -28,6 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableConstraintLayout
+import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_space)
@@ -35,6 +36,7 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
 
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute var listener: (() -> Unit)? = null
+    @EpoxyAttribute var countState : UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
 
     override fun getViewType(): Int {
         // mm.. it's reusing the same layout for basic space item
@@ -52,6 +54,8 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
         holder.avatarImageView.imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(holder.view.context, R.attr.riot_primary_text_color))
         holder.avatarImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
         holder.leaveView.isVisible = false
+
+        holder.counterBadgeView.render(countState)
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -59,5 +63,6 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
         val groupNameView by bind<TextView>(R.id.groupNameView)
         val rootView by bind<CheckableConstraintLayout>(R.id.itemGroupLayout)
         val leaveView by bind<ImageView>(R.id.groupTmpLeave)
+        val counterBadgeView by bind<UnreadCounterBadgeView>(R.id.groupCounterBadge)
     }
 }

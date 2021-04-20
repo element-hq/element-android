@@ -20,10 +20,12 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 
 data class SpaceListViewState(
         val asyncSpaces: Async<List<RoomSummary>> = Uninitialized,
         val selectedSpace: RoomSummary? = null,
         val rootSpaces: List<RoomSummary>? = null,
-        val expandedStates: Map<String, Boolean> = emptyMap()
+        val expandedStates: Map<String, Boolean> = emptyMap(),
+        val homeAggregateCount : RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0)
 ) : MvRxState

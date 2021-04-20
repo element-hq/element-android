@@ -32,12 +32,16 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
+import java.util.concurrent.TimeUnit
 
 const val ALL_COMMUNITIES_GROUP_ID = "+ALL_COMMUNITIES_GROUP_ID"
 
@@ -78,6 +82,27 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                     }
                 }
                 .disposeOnClear()
+
+        session.getPagedRoomSummariesLive(
+                roomSummaryQueryParams {
+                    this.memberships = listOf(Membership.JOIN)
+                    this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                }, sortOrder = RoomSortOrder.NONE
+        ).asObservable()
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    val counts = session.getNotificationCountForRooms(
+                            roomSummaryQueryParams {
+                                this.memberships = listOf(Membership.JOIN)
+                                this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                            }
+                    )
+                    setState {
+                        copy(
+                                homeAggregateCount = counts
+                        )
+                    }
+                }.disposeOnClear()
     }
 
     private fun observeSelectionState() {

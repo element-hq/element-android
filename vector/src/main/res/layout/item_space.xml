@@ -33,6 +33,28 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
+    <im.vector.app.features.home.room.list.UnreadCounterBadgeView
+        android:id="@+id/groupCounterBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:gravity="center"
+        android:minWidth="16dp"
+        android:minHeight="16dp"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        app:layout_constraintCircle="@+id/groupAvatarImageView"
+        app:layout_constraintCircleAngle="45"
+        app:layout_constraintCircleRadius="24dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:background="@drawable/bg_unread_highlight"
+        tools:text="147" />
+
+
     <TextView
         android:id="@+id/groupNameView"
         android:layout_width="0dp"
