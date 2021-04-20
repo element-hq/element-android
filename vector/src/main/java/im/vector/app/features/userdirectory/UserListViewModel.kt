@@ -89,7 +89,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
 
     private fun handleShareMyMatrixToLink() {
         session.permalinkService().createPermalink(session.myUserId)?.let {
-            _viewEvents.post(UserListViewEvents.OpenShareMatrixToLing(it))
+            _viewEvents.post(UserListViewEvents.OpenShareMatrixToLink(it))
         }
     }
 
