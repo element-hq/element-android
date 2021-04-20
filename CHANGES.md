@@ -14,7 +14,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - RegistrationWizard.createAccount() parameters are now all optional, following Matrix spec (#3205)
 
 Build 🧱:
  - Upgrade to gradle 7
