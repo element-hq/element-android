@@ -29,6 +29,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
 import im.vector.app.R
+import im.vector.app.core.mvrx.foldToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
@@ -139,7 +140,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
     override fun handle(action: RoomMemberProfileAction) {
         when (action) {
-            is RoomMemberProfileAction.RetryFetchingInfo      -> fetchProfileInfo()
+            is RoomMemberProfileAction.RetryFetchingInfo      -> handleRetryFetchProfileInfo()
             is RoomMemberProfileAction.IgnoreUser             -> handleIgnoreAction()
             is RoomMemberProfileAction.VerifyUser             -> prepareVerification()
             is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
@@ -259,18 +260,27 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 }
     }
 
-    private fun fetchProfileInfo() {
-        session.rx().getProfileInfo(initialState.userId)
-                .map {
-                    MatrixItem.UserItem(
-                            id = initialState.userId,
-                            displayName = it[ProfileService.DISPLAY_NAME_KEY] as? String,
-                            avatarUrl = it[ProfileService.AVATAR_URL_KEY] as? String
-                    )
-                }
-                .execute {
-                    copy(userMatrixItem = it)
-                }
+    private fun handleRetryFetchProfileInfo() {
+        viewModelScope.launch {
+            fetchProfileInfo()
+        }
+    }
+
+    private suspend fun fetchProfileInfo() {
+        val result = runCatching {
+            session.getProfile(initialState.userId)
+                    .let {
+                        MatrixItem.UserItem(
+                                id = initialState.userId,
+                                displayName = it[ProfileService.DISPLAY_NAME_KEY] as? String,
+                                avatarUrl = it[ProfileService.AVATAR_URL_KEY] as? String
+                        )
+                    }
+        }.foldToAsync()
+
+        setState {
+            copy(userMatrixItem = result)
+        }
     }
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
