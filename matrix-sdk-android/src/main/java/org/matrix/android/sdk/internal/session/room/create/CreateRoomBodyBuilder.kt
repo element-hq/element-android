@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
+import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.session.content.FileUploader
 import org.matrix.android.sdk.internal.session.identity.EnsureIdentityTokenTask
@@ -43,6 +44,8 @@ internal class CreateRoomBodyBuilder @Inject constructor(
         private val deviceListManager: DeviceListManager,
         private val identityStore: IdentityStore,
         private val fileUploader: FileUploader,
+        @UserId
+        private val userId: String,
         @AuthenticatedIdentity
         private val accessTokenProvider: AccessTokenProvider
 ) {
@@ -80,7 +83,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 roomAliasName = params.roomAliasName,
                 name = params.name,
                 topic = params.topic,
-                invitedUserIds = params.invitedUserIds,
+                invitedUserIds = params.invitedUserIds.filter { it != userId },
                 invite3pids = invite3pids,
                 creationContent = params.creationContent.takeIf { it.isNotEmpty() },
                 initialStates = initialStates,

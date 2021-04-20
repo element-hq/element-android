@@ -10,6 +10,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)
  - Fix exception in rxSingle (#3180)
+ - Do not invite the current user when creating a room (#3123)
 
 Translations 🗣:
  -
