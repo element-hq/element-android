@@ -87,7 +87,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
                     val joinedRoomIds = list
                             ?.map { it.roomId }
                             ?.toSet()
-                            ?: emptySet()
+                            .orEmpty()
 
                     setState {
                         copy(joinedRoomsIds = joinedRoomIds)

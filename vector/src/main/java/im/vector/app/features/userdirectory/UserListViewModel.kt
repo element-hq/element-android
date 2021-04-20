@@ -119,7 +119,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                         Single.just(emptyList<User>())
                     } else {
                         val searchObservable = session.rx()
-                                .searchUsersDirectory(search, 50, state.excludedUserIds ?: emptySet())
+                                .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
                                 .map { users ->
                                     users.sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                                 }
