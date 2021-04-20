@@ -126,7 +126,7 @@ interface OlmMachine {
     [Throws=CryptoStoreError]
     Request? get_missing_sessions(sequence<string> users);
     [Throws=CryptoStoreError]
-    sequence<Request> share_group_session([ByRef] string room_id, sequence<string> users);
+    sequence<Request> share_room_key([ByRef] string room_id, sequence<string> users);
 
     [Throws=CryptoStoreError]
     Sas start_verification([ByRef] Device device);

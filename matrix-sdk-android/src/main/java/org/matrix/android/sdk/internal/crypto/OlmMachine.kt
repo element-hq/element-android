@@ -262,7 +262,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      * mark_request_as_sent() method.
      *
      * This method should be called every time before a call to
-     * share_group_session() is made.
+     * shareRoomKey() is made.
      *
      * @param users The list of users for which we would like to establish 1:1
      * Olm sessions for.
@@ -294,8 +294,8 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      * @return The list of requests that need to be sent out.
      */
     @Throws(CryptoStoreErrorException::class)
-    suspend fun shareGroupSession(roomId: String, users: List<String>): List<Request> = withContext(Dispatchers.IO) {
-        inner.shareGroupSession(roomId, users)
+    suspend fun shareRoomKey(roomId: String, users: List<String>): List<Request> = withContext(Dispatchers.IO) {
+        inner.shareRoomKey(roomId, users)
     }
 
     /**
@@ -313,7 +313,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *    using the [`get_missing_sessions()`](#method.get_missing_sessions)
      *    method. This method call should be locked per call.
      *
-     * 2. Share a room key with all the room members using the share_group_session().
+     * 2. Share a room key with all the room members using the shareRoomKey().
      *    This method call should be locked per room.
      *
      * 3. Encrypt the event using this method.

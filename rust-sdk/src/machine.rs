@@ -315,7 +315,7 @@ impl OlmMachine {
     ///
     /// * `users` - The list of users which are considered to be members of the
     /// room and should receive the room key.
-    pub fn share_group_session(
+    pub fn share_room_key(
         &self,
         room_id: &str,
         users: Vec<String>,

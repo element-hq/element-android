@@ -535,7 +535,7 @@ internal class DefaultCryptoService @Inject constructor(
                 val t0 = System.currentTimeMillis()
                 Timber.v("## CRYPTO | encryptEventContent() starts")
                 runCatching {
-                    preshareGroupSession(roomId, userIds)
+                    preshareRoomKey(roomId, userIds)
                     val content = encrypt(roomId, eventType, eventContent)
                     Timber.v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
                     MXEncryptEventContentResult(content, EventType.ENCRYPTED)
@@ -694,7 +694,7 @@ internal class DefaultCryptoService @Inject constructor(
             }
     }
 
-    private suspend fun preshareGroupSession(roomId: String, roomMembers: List<String>) {
+    private suspend fun preshareRoomKey(roomId: String, roomMembers: List<String>) {
         keyClaimLock.withLock {
             val request = olmMachine!!.getMissingSessions(roomMembers)
             if (request != null) {
@@ -711,7 +711,7 @@ internal class DefaultCryptoService @Inject constructor(
 
         keyShareLock.withLock {
             coroutineScope {
-                olmMachine!!.shareGroupSession(roomId, roomMembers).map {
+                olmMachine!!.shareRoomKey(roomId, roomMembers).map {
                     when (it) {
                         is Request.ToDevice -> {
                             async {
@@ -1077,7 +1077,7 @@ internal class DefaultCryptoService @Inject constructor(
             }
 
             runCatching {
-                preshareGroupSession(roomId, userIds)
+                preshareRoomKey(roomId, userIds)
             }.fold(
                     { callback.onSuccess(Unit) },
                     {
