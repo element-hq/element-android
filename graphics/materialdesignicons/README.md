@@ -1,5 +1,5 @@
 Icons in this directory have been taken from [materialdesignicons.com](https://materialdesignicons.com/),
-released under the [SIL Open Font License 1.1](https://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web).
+released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
 
 Listed below are the original icon names and authors:
 
