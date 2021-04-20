@@ -175,7 +175,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * After the request was sent out and a successful response was received
      * the response body should be passed back to the state machine using the
-     * mark_request_as_sent method.
+     * markRequestAsSent() method.
      *
      * @return the list of requests that needs to be sent to the homeserver
      */
@@ -259,7 +259,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * After the request was sent out and a successful response was received
      * the response body should be passed back to the state machine using the
-     * mark_request_as_sent() method.
+     * markRequestAsSent() method.
      *
      * This method should be called every time before a call to
      * shareRoomKey() is made.
@@ -279,7 +279,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * After the request was sent out and a successful response was received
      * the response body should be passed back to the state machine using the
-     * mark_request_as_sent() method.
+     * markRequestAsSent() method.
      *
      * This method should be called every time before a call to
      * `encrypt()` with the given `room_id` is made.

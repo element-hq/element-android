@@ -432,6 +432,15 @@ impl OlmMachine {
         })
     }
 
+    /// Request or re-request a room key that was used to encrypt the given
+    /// event.
+    ///
+    /// # Arguments
+    ///
+    /// * `event` - The undecryptable event that we would wish to request a room
+    /// key for.
+    ///
+    /// * `room_id` - The id of the room the event was sent to.
     pub fn request_room_key(
         &self,
         event: &str,

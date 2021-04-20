@@ -867,6 +867,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param warn true to warn when some unknown devices are detected.
      */
     override fun setWarnOnUnknownDevices(warn: Boolean) {
+        // TODO this doesn't seem to be used anymore?
         warnOnUnknownDevicesRepository.setWarnOnUnknownDevices(warn)
     }
 
