@@ -263,8 +263,8 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             val graph = Graph()
             lookupMap
-                    // focus only on spaces, as room are just leaf
-                    .filter { it.key.roomType == RoomType.SPACE }
+                    // focus only on joined spaces, as room are just leaf
+                    .filter { it.key.roomType == RoomType.SPACE && it.key.membership == Membership.JOIN }
                     .forEach { (sum, children) ->
                         graph.getOrCreateNode(sum.roomId)
                         children.forEach {
@@ -294,7 +294,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 //            Timber.v("## SPACES: lookup map ${lookupMap.map { it.key.name to it.value.map { it.name } }.toMap()}")
 
             lookupMap.entries
-                    .filter { it.key.roomType == RoomType.SPACE }
+                    .filter { it.key.roomType == RoomType.SPACE && it.key.membership == Membership.JOIN  }
                     .forEach { entry ->
                         val parent = RoomSummaryEntity.where(realm, entry.key.roomId).findFirst()
                         if (parent != null) {

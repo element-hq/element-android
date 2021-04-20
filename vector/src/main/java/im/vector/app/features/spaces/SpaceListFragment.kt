@@ -80,6 +80,9 @@ class SpaceListFragment @Inject constructor(
         viewModel.handle(SpaceListAction.SelectSpace(spaceSummary))
     }
 
+    override fun onSpaceInviteSelected(spaceSummary: RoomSummary) {
+        viewModel.handle(SpaceListAction.OpenSpaceInvite(spaceSummary))
+    }
     override fun onSpaceSettings(spaceSummary: RoomSummary) {
         sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(spaceSummary.roomId))
     }
