@@ -245,7 +245,7 @@
     <string name="title_activity_settings">Iestatījumi</string>
     <string name="title_activity_member_details">Dalībnieka informācija</string>
     <string name="title_activity_historical">Bijušie</string>
-    <string name="ok">Lai notiek</string>
+    <string name="ok">Labi</string>
     <string name="cancel">Atcelt</string>
     <string name="save">Saglabāt</string>
     <string name="leave">Pamest</string>
@@ -267,9 +267,9 @@
 \nPievienojies ar %1$s vai %2$s iespēju</string>
     <string name="ongoing_conference_call_voice">Balss</string>
     <string name="ongoing_conference_call_video">Video</string>
-    <string name="cannot_start_call">Nevarēja sākt zvanu. Lūdzu, pamēģini vēlāk</string>
-    <string name="missing_permissions_warning">Dēļ nepietiekamām atļaujām, dažas iespējas var nebūt pieejamas…</string>
-    <string name="missing_permissions_to_start_conf_call">Tev ir nepieciešams iegūt atļauju, lai varētu sākt konferenci šajā istabā</string>
+    <string name="cannot_start_call">Nevarēja sākt zvanu. Lūdzu, mēģiniet vēlāk</string>
+    <string name="missing_permissions_warning">Dēļ nepietiekamām atļaujām dažas iespējas var nebūt pieejamas…</string>
+    <string name="missing_permissions_to_start_conf_call">Jums nepieciešams iegūt atļauju, lai spētu uzaicināt sākt konferenci šajā istabā</string>
     <string name="missing_permissions_title_to_start_conf_call">Nav iespējams sākt zvanu</string>
     <string name="device_information">Ierīces informācija</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferences zvani netiek atbalstīti šifrētās istabās</string>
@@ -1228,7 +1228,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="done">Gatavs</string>
     <string name="skip">Izlaist</string>
     <string name="accept">Pieņemt</string>
-    <string name="no_permissions_to_start_conf_call">Šajā istabā nav atļaujas sākt konferences zvanu</string>
+    <string name="no_permissions_to_start_conf_call">Jums nav atļaujas sākt konferences zvanu šajā istabā</string>
     <string name="reset">Atiestatīt</string>
     <string name="dismiss">Aizvērt</string>
     <string name="pause_video">Pauzēt</string>
@@ -1922,7 +1922,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="system_alerts_header">Sistēmas Brīdinājumi</string>
     <string name="action_unpublish">Nepublicēt</string>
     <string name="call_notification_hangup">Nolikt</string>
-    <string name="call_anyway">Zvanīt Tāpat</string>
+    <string name="call_anyway">Zvanīt vienalga</string>
     <string name="failed_to_remove_widget">Neizdevās noņemt logrīku</string>
     <string name="failed_to_add_widget">Neizdevās ielādēt logrīku</string>
     <string name="notification_sync_init">Startē pakalpojumu</string>
@@ -2137,8 +2137,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Jums nav atļaujas sākt zvanu</string>
     <string name="no_permissions_to_start_webrtc_call">Jums nav atļaujas sākt zvanu šajā istabā</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Jums nav atļaujas sākt konferences zvanu</string>
-    <string name="missing_permissions_error">Trūkstošo atļauju dēļ, šī darbība nav iespējama.</string>
-    <string name="start_chatting">Sākt Sarunu</string>
+    <string name="missing_permissions_error">Trūkstošo atļauju dēļ šī darbība nav iespējama.</string>
+    <string name="start_chatting">Sākt sarunu</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Ja jūs nedublēsiet atslēgas pirms izrakstīšanās, zaudēsiet piekļuvi jūsu šifrētām ziņām.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Drošs Atslēgu Dublējums jābūt ieslēgts visās jūsu sesijās, lai izvairītos no piekļuves zaudēšanas jūsu šifrētām ziņām.</string>
     <string name="backup">Dublēt</string>
