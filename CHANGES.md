@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)
+ - Fix exception in rxSingle (#3180)
 
 Translations 🗣:
  -

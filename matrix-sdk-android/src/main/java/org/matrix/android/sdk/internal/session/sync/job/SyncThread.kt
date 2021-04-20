@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.squareup.moshi.JsonEncodingException
+import kotlinx.coroutines.CancellationException
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.api.session.sync.SyncState
@@ -199,7 +200,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
             if (failure is Failure.NetworkConnection && failure.cause is SocketTimeoutException) {
                 // Timeout are not critical
                 Timber.v("Timeout")
-            } else if (failure is Failure.Cancelled) {
+            } else if (failure is CancellationException) {
                 Timber.v("Cancelled")
             } else if (failure.isTokenError()) {
                 // No token or invalid token, stop the thread

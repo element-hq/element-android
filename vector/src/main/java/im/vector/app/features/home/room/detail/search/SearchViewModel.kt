@@ -28,9 +28,9 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.search.SearchResult
 
@@ -120,7 +120,7 @@ class SearchViewModel @AssistedInject constructor(
                 )
                 onSearchResultSuccess(result)
             } catch (failure: Throwable) {
-                if (failure is Failure.Cancelled) return@launch
+                if (failure is CancellationException) return@launch
 
                 _viewEvents.post(SearchViewEvents.Failure(failure))
                 setState {

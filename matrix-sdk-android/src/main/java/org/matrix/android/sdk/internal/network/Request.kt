@@ -88,8 +88,8 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
                 throw when (exception) {
                     is IOException              -> Failure.NetworkConnection(exception)
                     is Failure.ServerError,
-                    is Failure.OtherServerError -> exception
-                    is CancellationException    -> Failure.Cancelled(exception)
+                    is Failure.OtherServerError,
+                    is CancellationException    -> exception
                     else                        -> Failure.Unknown(exception)
                 }
             }
