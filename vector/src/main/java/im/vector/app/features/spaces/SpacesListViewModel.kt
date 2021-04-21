@@ -30,6 +30,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
@@ -90,6 +91,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 }, sortOrder = RoomSortOrder.NONE
         ).asObservable()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .observeOn(Schedulers.computation())
                 .subscribe {
                     val counts = session.getNotificationCountForRooms(
                             roomSummaryQueryParams {
@@ -168,7 +170,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     }
 
     private fun observeSpaceSummaries() {
-        val spaceSummaryQueryParams = roomSummaryQueryParams() {
+        val spaceSummaryQueryParams = roomSummaryQueryParams {
             memberships = listOf(Membership.JOIN, Membership.INVITE)
             displayName = QueryStringValue.IsNotEmpty
             excludeType = listOf(/**RoomType.MESSAGING,$*/
