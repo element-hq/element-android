@@ -16,11 +16,9 @@
 
 package im.vector.app.features.home.room.list
 
-import com.airbnb.epoxy.TypedEpoxyController
-
 class SuggestedRoomListController(
         private val roomSummaryItemFactory: RoomSummaryItemFactory
-) : TypedEpoxyController<SuggestedRoomInfo>() {
+) : CollapsableTypedEpoxyController<SuggestedRoomInfo>() {
 
     var listener: RoomListListener? = null
 
