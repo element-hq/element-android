@@ -43,6 +43,7 @@ import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
+import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
@@ -71,6 +72,7 @@ class HomeDetailFragment @Inject constructor(
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
+    private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -154,6 +156,19 @@ class HomeDetailFragment @Inject constructor(
                         promptToReviewChanges(uid, state, olderUnverified.map { it.deviceInfo })
                     }
                 }
+            }
+        }
+
+        unreadMessagesSharedViewModel.subscribe { state ->
+            if (vectorPreferences.labSpaces()) {
+                views.drawerUnreadCounterBadgeView.render(
+                        UnreadCounterBadgeView.State(
+                                count = state.otherSpacesUnread.totalCount,
+                                highlighted = state.otherSpacesUnread.isHighlight
+                        )
+                )
+            } else {
+                views.drawerUnreadCounterBadgeView.isVisible = false
             }
         }
 

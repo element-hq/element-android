@@ -85,6 +85,7 @@ class HomeActivity :
         ToolbarConfigurable,
         UnknownDeviceDetectorSharedViewModel.Factory,
         ServerBackupStatusViewModel.Factory,
+        UnreadMessagesSharedViewModel.Factory,
         NavigationInterceptor {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -103,6 +104,7 @@ class HomeActivity :
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
     @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
+    @Inject lateinit var unreadMessagesSharedViewModelFactory: UnreadMessagesSharedViewModel.Factory
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
@@ -138,6 +140,10 @@ class HomeActivity :
 
     override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
         return serverBackupviewModelFactory.create(initialState)
+    }
+
+    override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel {
+        return unreadMessagesSharedViewModelFactory.create(initialState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
