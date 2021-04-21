@@ -251,7 +251,10 @@ class RoomListFragment @Inject constructor(
                                     .also { controller ->
                                         section.livePages.observe(viewLifecycleOwner) { pl ->
                                             controller.submitList(pl)
-                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(isHidden = pl.isEmpty()))
+                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
+                                                    isHidden = pl.isEmpty(),
+                                                    isLoading = false
+                                            ))
                                             checkEmptyState()
                                         }
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
@@ -271,7 +274,10 @@ class RoomListFragment @Inject constructor(
                                     .also { controller ->
                                         section.liveSuggested.observe(viewLifecycleOwner) { info ->
                                             controller.setData(info)
-                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(isHidden = info.rooms.isEmpty()))
+                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
+                                                    isHidden = info.rooms.isEmpty(),
+                                                    isLoading = false
+                                            ))
                                             checkEmptyState()
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
@@ -285,7 +291,9 @@ class RoomListFragment @Inject constructor(
                                     .also { controller ->
                                         section.liveList?.observe(viewLifecycleOwner) { list ->
                                             controller.setData(list)
-                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(isHidden = list.isEmpty()))
+                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
+                                                    isHidden = list.isEmpty(),
+                                                    isLoading = false))
                                             checkEmptyState()
                                         }
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
@@ -393,8 +401,9 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun checkEmptyState() {
-        val hasNoRoom = adapterInfosList.all { it.headerHeaderAdapter.roomsSectionData.isHidden }
-        if (hasNoRoom) {
+        val shouldShowEmpty = adapterInfosList.all { it.headerHeaderAdapter.roomsSectionData.isHidden }
+                && !adapterInfosList.any { it.headerHeaderAdapter.roomsSectionData.isLoading }
+        if (shouldShowEmpty) {
             val emptyState = when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> {
                     StateView.State.Empty(
@@ -422,7 +431,12 @@ class RoomListFragment @Inject constructor(
             }
             views.stateView.state = emptyState
         } else {
-            views.stateView.state = StateView.State.Content
+            // is there something to show already?
+            if (adapterInfosList.any { !it.headerHeaderAdapter.roomsSectionData.isHidden }) {
+                views.stateView.state = StateView.State.Content
+            } else {
+                views.stateView.state = StateView.State.Loading
+            }
         }
     }
 

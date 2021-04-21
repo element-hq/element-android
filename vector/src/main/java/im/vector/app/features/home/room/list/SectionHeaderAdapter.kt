@@ -35,7 +35,9 @@ class SectionHeaderAdapter constructor(
             val isExpanded: Boolean = true,
             val notificationCount: Int = 0,
             val isHighlighted: Boolean = false,
-            val isHidden: Boolean = true
+            val isHidden: Boolean = true,
+            // This will be false until real data has been submitted once
+            val isLoading: Boolean = true
     )
 
     lateinit var roomsSectionData: RoomsSectionData
