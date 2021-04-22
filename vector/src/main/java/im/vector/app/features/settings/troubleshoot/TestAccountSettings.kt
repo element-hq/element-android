@@ -20,7 +20,9 @@ import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
@@ -50,7 +52,7 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
                     override fun doFix() {
                         if (manager?.diagStatus == TestStatus.RUNNING) return // wait before all is finished
 
-                        session.launch {
+                        session.coroutineScope.launch {
                             tryOrNull {
                                 session.updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled)
                             }

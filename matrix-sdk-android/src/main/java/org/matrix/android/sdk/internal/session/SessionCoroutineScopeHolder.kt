@@ -21,19 +21,24 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import javax.inject.Inject
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 
 @SessionScope
-internal class SessionCoroutineScopeHolder @Inject constructor() {
+internal class SessionCoroutineScopeHolder @Inject constructor(): SessionLifecycleObserver {
 
-    var scope: CoroutineScope? = null
-        private set
+    val scope: CoroutineScope = CoroutineScope(SupervisorJob())
 
-    fun start() {
-        scope = CoroutineScope(SupervisorJob())
+    override fun onSessionStopped(session: Session) {
+        scope.cancelChildren()
     }
 
-    fun stop() {
-        scope?.coroutineContext?.cancelChildren(CancellationException("Closing session"))
-        scope = null
+    override fun onClearCache(session: Session) {
+        scope.cancelChildren()
     }
+
+    private fun CoroutineScope.cancelChildren(){
+        coroutineContext.cancelChildren(CancellationException("Closing session"))
+    }
+
 }

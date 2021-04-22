@@ -53,6 +53,7 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.Observable
@@ -570,7 +571,7 @@ class RoomDetailViewModel @AssistedInject constructor(
      * Convert a send mode to a draft and save the draft
      */
     private fun handleSaveDraft(action: RoomDetailAction.SaveDraft) = withState {
-        session.launch {
+        session.coroutineScope.launch {
             when {
                 it.sendMode is SendMode.REGULAR && !it.sendMode.fromSharing -> {
                     setState { copy(sendMode = it.sendMode.copy(action.draft)) }
@@ -1317,7 +1318,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                         }
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
-                        session.launch {
+                        session.coroutineScope.launch {
                             tryOrNull { room.setReadReceipt(eventId) }
                         }
                     }

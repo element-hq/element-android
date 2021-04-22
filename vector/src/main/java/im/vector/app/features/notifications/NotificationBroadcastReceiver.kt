@@ -23,6 +23,8 @@ import androidx.core.app.RemoteInput
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.Room
@@ -76,7 +78,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             val room = session.getRoom(roomId)
             if (room != null) {
-                session.launch {
+                session.coroutineScope.launch {
                     tryOrNull { room.join() }
                 }
             }
@@ -87,7 +89,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             val room = session.getRoom(roomId)
             if (room != null) {
-                session.launch {
+                session.coroutineScope.launch {
                     tryOrNull { room.leave() }
                 }
             }
@@ -98,7 +100,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         activeSessionHolder.getActiveSession().let { session ->
             val room = session.getRoom(roomId)
             if (room != null) {
-                session.launch {
+                session.coroutineScope.launch {
                     tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
                 }
             }

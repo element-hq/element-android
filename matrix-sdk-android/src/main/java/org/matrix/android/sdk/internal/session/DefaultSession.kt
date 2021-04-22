@@ -19,14 +19,15 @@ package org.matrix.android.sdk.internal.session
 import androidx.annotation.MainThread
 import dagger.Lazy
 import io.realm.RealmConfiguration
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
 import org.matrix.android.sdk.api.session.cache.CacheService
@@ -76,7 +77,6 @@ import org.matrix.android.sdk.internal.util.createUIHandler
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
-import kotlin.coroutines.CoroutineContext
 
 @SessionScope
 internal class DefaultSession @Inject constructor(
@@ -163,10 +163,12 @@ internal class DefaultSession @Inject constructor(
     override fun open() {
         assert(!isOpen)
         isOpen = true
-        sessionCoroutineScopeHolder.start()
         cryptoService.get().ensureDevice()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onSessionStarted() }
+            lifecycleObservers.forEach { it.onSessionStarted(this) }
+            sessionListeners.dispatch {
+                it.onSessionStarted(this)
+            }
         }
         globalErrorHandler.listener = this
     }
@@ -204,11 +206,13 @@ internal class DefaultSession @Inject constructor(
 
     override fun close() {
         assert(isOpen)
-        sessionCoroutineScopeHolder.stop()
         stopSync()
         // timelineEventDecryptor.destroy()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onSessionStopped() }
+            lifecycleObservers.forEach { it.onSessionStopped(this) }
+            sessionListeners.dispatch {
+                it.onSessionStopped(this)
+            }
         }
         cryptoService.get().close()
         isOpen = false
@@ -233,14 +237,21 @@ internal class DefaultSession @Inject constructor(
         stopSync()
         stopAnyBackgroundSync()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onClearCache() }
+            lifecycleObservers.forEach { it.onClearCache(this) }
+            sessionListeners.dispatch {
+                it.onClearCache(this)
+            }
         }
-        cacheService.get().clearCache()
+        withContext(NonCancellable) {
+            cacheService.get().clearCache()
+        }
         workManagerProvider.cancelAllWorks()
     }
 
     override fun onGlobalError(globalError: GlobalError) {
-        sessionListeners.dispatchGlobalError(globalError)
+        sessionListeners.dispatch {
+            it.onGlobalError(this, globalError)
+        }
     }
 
     override fun contentUrlResolver() = contentUrlResolver
@@ -306,12 +317,5 @@ internal class DefaultSession @Inject constructor(
 
     override fun logDbUsageInfo() {
         RealmDebugTools(realmConfiguration).logInfo("Session")
-    }
-
-    override fun launch(context: CoroutineContext,
-                        block: suspend () -> Unit): Job {
-        return sessionCoroutineScopeHolder.scope?.launch(context) {
-            block()
-        } ?: throw IllegalStateException("Session is closed")
     }
 }

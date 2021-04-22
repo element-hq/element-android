@@ -18,7 +18,6 @@ package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
-import kotlinx.coroutines.Job
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
@@ -57,8 +56,6 @@ import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * This interface defines interactions with a session.
@@ -258,13 +255,13 @@ interface Session :
     /**
      * A global session listener to get notified for some events.
      */
-    interface Listener {
+    interface Listener : SessionLifecycleObserver {
         /**
          * Possible cases:
          * - The access token is not valid anymore,
          * - a M_CONSENT_NOT_GIVEN error has been received from the homeserver
          */
-        fun onGlobalError(globalError: GlobalError)
+        fun onGlobalError(session: Session, globalError: GlobalError)
     }
 
     val sharedSecretStorageService: SharedSecretStorageService
@@ -275,10 +272,4 @@ interface Session :
      * Maintenance API, allows to print outs info on DB size to logcat
      */
     fun logDbUsageInfo()
-
-    /**
-     * Launch a coroutine using the session scope
-     */
-    fun launch(context: CoroutineContext = EmptyCoroutineContext,
-               block: suspend () -> Unit): Job
 }

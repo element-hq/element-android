@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session.room.send.queue
 
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 
 internal interface EventSenderProcessor: SessionLifecycleObserver {
 
