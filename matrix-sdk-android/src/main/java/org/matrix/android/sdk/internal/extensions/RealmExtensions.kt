@@ -16,8 +16,18 @@
 
 package org.matrix.android.sdk.internal.extensions
 
+import io.realm.RealmList
 import io.realm.RealmObject
 
 internal fun RealmObject.assertIsManaged() {
     check(isManaged) { "${javaClass.simpleName} entity should be managed to use this function" }
+}
+
+/**
+ * Clear a RealmList by deleting all its items calling the provided lambda
+ */
+internal fun <T> RealmList<T>.clearWith(delete: (T) -> Unit) {
+    while (!isEmpty()) {
+        first()?.let { delete.invoke(it) }
+    }
 }

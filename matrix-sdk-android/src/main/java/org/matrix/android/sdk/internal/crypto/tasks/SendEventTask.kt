@@ -22,7 +22,6 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
-import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
@@ -51,18 +50,17 @@ internal class DefaultSendEventTask @Inject constructor(
 
             val event = handleEncryption(params)
             val localId = event.eventId!!
-
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENDING)
-            val executeRequest = executeRequest<SendResponse>(globalErrorReceiver) {
-                apiCall = roomAPI.send(
+            val response = executeRequest(globalErrorReceiver) {
+                roomAPI.send(
                         localId,
                         roomId = event.roomId ?: "",
                         content = event.content,
-                        eventType = event.type
+                        eventType = event.type ?: ""
                 )
             }
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENT)
-            return executeRequest.eventId
+            return response.eventId
         } catch (e: Throwable) {
 //            localEchoRepository.updateSendState(params.event.eventId!!, SendState.UNDELIVERED)
             throw e

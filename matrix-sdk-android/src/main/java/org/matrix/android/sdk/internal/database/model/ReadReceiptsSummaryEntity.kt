@@ -34,3 +34,8 @@ internal open class ReadReceiptsSummaryEntity(
 
     companion object
 }
+
+internal fun ReadReceiptsSummaryEntity.deleteOnCascade() {
+    readReceipts.deleteAllFromRealm()
+    deleteFromRealm()
+}

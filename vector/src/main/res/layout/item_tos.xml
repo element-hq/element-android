@@ -44,6 +44,7 @@
         android:id="@+id/term_policy_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
         android:rotationY="@integer/rtl_mirror_flip"
         android:src="@drawable/ic_material_chevron_right_black"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -21,8 +21,9 @@ import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.Operation
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -71,9 +72,9 @@ internal class DefaultSendService @AssistedInject constructor(
         private val cancelSendTracker: CancelSendTracker
 ) : SendService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): SendService
+        fun create(roomId: String): DefaultSendService
     }
 
     private val workerFutureListenerExecutor = Executors.newSingleThreadExecutor()
@@ -231,6 +232,14 @@ internal class DefaultSendService @AssistedInject constructor(
         }
     }
 
+    override fun cancelAllFailedMessages() {
+        taskExecutor.executorScope.launch {
+            localEchoRepository.getAllFailedEventsToResend(roomId).forEach { event ->
+                cancelSend(event.eventId)
+            }
+        }
+    }
+
     override fun sendMedia(attachment: ContentAttachmentData,
                            compressBeforeSending: Boolean,
                            roomIds: Set<String>): Cancelable {
@@ -309,7 +318,7 @@ internal class DefaultSendService @AssistedInject constructor(
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .startChain(true)
                 .setInputData(uploadWorkData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
     }
 
@@ -323,7 +332,7 @@ internal class DefaultSendService @AssistedInject constructor(
                 // .setConstraints(WorkManagerProvider.workConstraints)
                 .startChain(false)
                 .setInputData(workData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
     }
 }

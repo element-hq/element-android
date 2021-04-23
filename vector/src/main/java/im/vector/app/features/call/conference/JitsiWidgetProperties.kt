@@ -16,22 +16,9 @@
 
 package im.vector.app.features.call.conference
 
-import android.net.Uri
-import im.vector.app.R
-import im.vector.app.core.resources.StringProvider
-
-class JitsiWidgetProperties(private val uriString: String, val stringProvider: StringProvider) {
-    val domain: String by lazy { configs["conferenceDomain"] ?: stringProvider.getString(R.string.preferred_jitsi_domain) }
-    val displayName: String? by lazy { configs["displayName"] }
-    val avatarUrl: String? by lazy { configs["avatarUrl"] }
-
-    private val configString: String? by lazy { Uri.parse(uriString).fragment }
-
-    private val configs: Map<String, String?> by lazy {
-        configString?.split("&")
-                ?.map { it.split("=") }
-                ?.map { (key, value) -> key to value }
-                ?.toMap()
-                ?: mapOf()
-    }
-}
+data class JitsiWidgetProperties(
+        val domain: String,
+        val confId: String?,
+        val displayName: String?,
+        val avatarUrl: String?
+)

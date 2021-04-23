@@ -54,10 +54,7 @@ class UserListController @Inject constructor(private val session: Session,
 
         // Build generic items
         if (currentState.searchTerm.isBlank()) {
-            // For now we remove this option if in invite to existing room flow (and not create DM)
-            if (currentState.pendingInvitees.isEmpty()
-                    // For now we remove this option if in invite to existing room flow (and not create DM)
-                    && currentState.existingRoomId == null) {
+            if (currentState.showInviteActions()) {
                 actionItem {
                     id(R.drawable.ic_share)
                     title(stringProvider.getString(R.string.invite_friends))
@@ -67,17 +64,17 @@ class UserListController @Inject constructor(private val session: Session,
                     })
                 }
             }
-            actionItem {
-                id(R.drawable.ic_baseline_perm_contact_calendar_24)
-                title(stringProvider.getString(R.string.contacts_book_title))
-                actionIconRes(R.drawable.ic_baseline_perm_contact_calendar_24)
-                clickAction(View.OnClickListener {
-                    callback?.onContactBookClick()
-                })
+            if (currentState.showContactBookAction) {
+                actionItem {
+                    id(R.drawable.ic_baseline_perm_contact_calendar_24)
+                    title(stringProvider.getString(R.string.contacts_book_title))
+                    actionIconRes(R.drawable.ic_baseline_perm_contact_calendar_24)
+                    clickAction(View.OnClickListener {
+                        callback?.onContactBookClick()
+                    })
+                }
             }
-            if (currentState.pendingInvitees.isEmpty()
-                    // For now we remove this option if in invite to existing room flow (and not create DM)
-                    && currentState.existingRoomId == null) {
+            if (currentState.showInviteActions()) {
                 actionItem {
                     id(R.drawable.ic_qr_code_add)
                     title(stringProvider.getString(R.string.qr_code))

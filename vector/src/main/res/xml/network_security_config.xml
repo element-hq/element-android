@@ -11,6 +11,8 @@
         <domain includeSubdomains="true">127.0.0.1</domain>
         <!-- Localhost for Android emulator -->
         <domain includeSubdomains="true">10.0.2.2</domain>
+        <!-- Onion services -->
+        <domain includeSubdomains="true">onion</domain>
     </domain-config>
 
     <debug-overrides>

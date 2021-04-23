@@ -143,7 +143,7 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
         override fun bindView(itemView: View) {
             super.bindView(itemView)
             val buttons = listOf(button1, button2, button3, button4, button5)
-            val clickListener = DebouncedClickListener(View.OnClickListener {
+            val clickListener = DebouncedClickListener({
                 val optionIndex = buttons.indexOf(it)
                 if (optionIndex != -1 && pollId != null) {
                     val compatValue = if (optionIndex < optionValues?.size ?: 0) optionValues?.get(optionIndex) else null

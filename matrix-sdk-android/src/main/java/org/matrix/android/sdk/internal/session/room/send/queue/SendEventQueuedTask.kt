@@ -31,9 +31,7 @@ internal class SendEventQueuedTask(
         val cryptoService: CryptoService,
         val localEchoRepository: LocalEchoRepository,
         val cancelSendTracker: CancelSendTracker
-) : QueuedTask() {
-
-    override fun toString() = "[SendEventQueuedTask ${event.eventId}]"
+) : QueuedTask(queueIdentifier = event.roomId!!, taskIdentifier = event.eventId!!) {
 
     override suspend fun doExecute() {
         sendEventTask.execute(SendEventTask.Params(event, encrypt))

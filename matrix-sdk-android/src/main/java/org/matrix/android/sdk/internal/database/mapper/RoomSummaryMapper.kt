@@ -26,7 +26,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                                                      private val typingUsersTracker: DefaultTypingUsersTracker) {
 
     fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
-        val tags = roomSummaryEntity.tags.map {
+        val tags = roomSummaryEntity.tags().map {
             RoomTag(it.tagName, it.tagOrder)
         }
 

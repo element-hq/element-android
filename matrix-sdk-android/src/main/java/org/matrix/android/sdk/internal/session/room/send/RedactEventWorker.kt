@@ -55,8 +55,8 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters)
     override suspend fun doSafeWork(params: Params): Result {
         val eventId = params.eventId
         return runCatching {
-            executeRequest<SendResponse>(globalErrorReceiver) {
-                apiCall = roomAPI.redactEvent(
+            executeRequest(globalErrorReceiver) {
+                roomAPI.redactEvent(
                         params.txID,
                         params.roomId,
                         eventId,

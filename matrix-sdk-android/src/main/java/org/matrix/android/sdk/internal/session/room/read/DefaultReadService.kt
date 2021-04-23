@@ -18,10 +18,10 @@ package org.matrix.android.sdk.internal.session.room.read
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.util.Optional
@@ -35,7 +35,6 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 
 internal class DefaultReadService @AssistedInject constructor(
         @Assisted private val roomId: String,
@@ -46,40 +45,28 @@ internal class DefaultReadService @AssistedInject constructor(
         @UserId private val userId: String
 ) : ReadService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): ReadService
+        fun create(roomId: String): DefaultReadService
     }
 
-    override fun markAsRead(params: ReadService.MarkAsReadParams, callback: MatrixCallback<Unit>) {
+    override suspend fun markAsRead(params: ReadService.MarkAsReadParams) {
         val taskParams = SetReadMarkersTask.Params(
                 roomId = roomId,
                 forceReadMarker = params.forceReadMarker(),
                 forceReadReceipt = params.forceReadReceipt()
         )
-        setReadMarkersTask
-                .configureWith(taskParams) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        setReadMarkersTask.execute(taskParams)
     }
 
-    override fun setReadReceipt(eventId: String, callback: MatrixCallback<Unit>) {
+    override suspend fun setReadReceipt(eventId: String) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = null, readReceiptEventId = eventId)
-        setReadMarkersTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        setReadMarkersTask.execute(params)
     }
 
-    override fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>) {
+    override suspend fun setReadMarker(fullyReadEventId: String) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = fullyReadEventId, readReceiptEventId = null)
-        setReadMarkersTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        setReadMarkersTask.execute(params)
     }
 
     override fun isEventRead(eventId: String): Boolean {

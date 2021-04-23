@@ -24,17 +24,9 @@ import com.squareup.moshi.JsonClass
  * Enum for [RoomJoinRulesContent] : https://matrix.org/docs/spec/client_server/r0.4.0#m-room-join-rules
  */
 @JsonClass(generateAdapter = false)
-enum class RoomJoinRules(val value: String) {
-
-    @Json(name = "public")
-    PUBLIC("public"),
-
-    @Json(name = "invite")
-    INVITE("invite"),
-
-    @Json(name = "knock")
-    KNOCK("knock"),
-
-    @Json(name = "private")
-    PRIVATE("private")
+enum class RoomJoinRules {
+    @Json(name = "public") PUBLIC,
+    @Json(name = "invite") INVITE,
+    @Json(name = "knock") KNOCK,
+    @Json(name = "private") PRIVATE
 }

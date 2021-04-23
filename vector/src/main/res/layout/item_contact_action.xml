@@ -15,6 +15,7 @@
         android:layout_height="44dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:importantForAccessibility="no"
         android:padding="10dp"
         app:tint="?riotx_text_secondary"
         tools:src="@drawable/ic_invite_people" />

@@ -36,7 +36,7 @@ internal class DefaultRegisterTask(
     override suspend fun execute(params: RegisterTask.Params): Credentials {
         try {
             return executeRequest(null) {
-                apiCall = authAPI.register(params.registrationParams)
+                authAPI.register(params.registrationParams)
             }
         } catch (throwable: Throwable) {
             throw throwable.toRegistrationFlowResponse()

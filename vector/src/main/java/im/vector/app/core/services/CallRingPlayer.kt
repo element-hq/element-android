@@ -16,33 +16,76 @@
 
 package im.vector.app.core.services
 
+import android.app.NotificationChannel
 import android.content.Context
-import android.media.Ringtone
-import android.media.RingtoneManager
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.media.Ringtone
+import android.media.RingtoneManager
 import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.core.content.getSystemService
 import im.vector.app.R
+import im.vector.app.features.notifications.NotificationUtils
+import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 
 class CallRingPlayerIncoming(
-        context: Context
+        context: Context,
+        private val notificationUtils: NotificationUtils
 ) {
 
     private val applicationContext = context.applicationContext
-    private var r: Ringtone? = null
+    private var ringtone: Ringtone? = null
+    private var vibrator: Vibrator? = null
 
-    fun start() {
-        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-        r = RingtoneManager.getRingtone(applicationContext, notification)
-        Timber.v("## VOIP Starting ringing incomming")
-        r?.play()
+    private val VIBRATE_PATTERN = longArrayOf(0, 400, 600)
+
+    fun start(fromBg: Boolean) {
+        val audioManager = applicationContext.getSystemService<AudioManager>()
+        val incomingCallChannel = notificationUtils.getChannelForIncomingCall(fromBg)
+        val ringerMode = audioManager?.ringerMode
+        if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+            playRingtoneIfNeeded(incomingCallChannel)
+        } else if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+            vibrateIfNeeded(incomingCallChannel)
+        }
+    }
+
+    private fun playRingtoneIfNeeded(incomingCallChannel: NotificationChannel?) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && incomingCallChannel?.sound != null) {
+            Timber.v("Ringtone already configured by notification channel")
+            return
+        }
+        val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        ringtone = RingtoneManager.getRingtone(applicationContext, ringtoneUri)
+        Timber.v("Play ringtone for incoming call")
+        ringtone?.play()
+    }
+
+    private fun vibrateIfNeeded(incomingCallChannel: NotificationChannel?) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && incomingCallChannel?.shouldVibrate().orFalse()) {
+            Timber.v("## Vibration already configured by notification channel")
+            return
+        }
+        vibrator = applicationContext.getSystemService()
+        Timber.v("Vibrate for incoming call")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val vibrationEffect = VibrationEffect.createWaveform(VIBRATE_PATTERN, 0)
+            vibrator?.vibrate(vibrationEffect)
+        } else {
+            @Suppress("DEPRECATION")
+            vibrator?.vibrate(VIBRATE_PATTERN, 0)
+        }
     }
 
     fun stop() {
-        r?.stop()
+        ringtone?.stop()
+        ringtone = null
+        vibrator?.cancel()
+        vibrator = null
     }
 }
 
@@ -55,12 +98,12 @@ class CallRingPlayerOutgoing(
     private var player: MediaPlayer? = null
 
     fun start() {
-        val audioManager = applicationContext.getSystemService<AudioManager>()!!
+        val audioManager: AudioManager? = applicationContext.getSystemService()
         player?.release()
         player = createPlayer()
 
         // Check if sound is enabled
-        val ringerMode = audioManager.ringerMode
+        val ringerMode = audioManager?.ringerMode
         if (player != null && ringerMode == AudioManager.RINGER_MODE_NORMAL) {
             try {
                 if (player?.isPlaying == false) {
@@ -89,14 +132,14 @@ class CallRingPlayerOutgoing(
 
             mediaPlayer.setOnErrorListener(MediaPlayerErrorListener())
             mediaPlayer.isLooping = true
-            if (Build.VERSION.SDK_INT <= 21) {
-                @Suppress("DEPRECATION")
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING)
-            } else {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                 mediaPlayer.setAudioAttributes(AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                         .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
                         .build())
+            } else {
+                @Suppress("DEPRECATION")
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING)
             }
             return mediaPlayer
         } catch (failure: Throwable) {

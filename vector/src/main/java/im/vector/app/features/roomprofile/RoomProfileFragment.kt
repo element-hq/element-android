@@ -25,9 +25,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -46,16 +44,13 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomProfileHeaderBinding
-import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
-import im.vector.app.features.media.BigImageViewerActivity
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
-import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject
@@ -103,8 +98,8 @@ class RoomProfileFragment @Inject constructor(
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
                 headerView,
                 listOf(views.matrixProfileToolbarAvatarImageView,
-                       views.matrixProfileToolbarTitleView,
-                       views.matrixProfileDecorationToolbarAvatarImageView)
+                        views.matrixProfileToolbarTitleView,
+                        views.matrixProfileDecorationToolbarAvatarImageView)
         )
         views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.observeViewEvents {
@@ -119,12 +114,36 @@ class RoomProfileFragment @Inject constructor(
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
+        setupClicks()
         setupLongClicks()
     }
 
     private fun setupWaitingView() {
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
+    }
+
+    private fun setupClicks() {
+        // Shortcut to room settings
+        setOf(
+                headerViews.roomProfileNameView,
+                views.matrixProfileToolbarTitleView
+        ).forEach {
+            it.setOnClickListener {
+                roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomSettings)
+            }
+        }
+        // Shortcut to room alias
+        headerViews.roomProfileAliasView.setOnClickListener {
+            roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
+        }
+        // Open Avatar
+        setOf(
+                headerViews.roomProfileAvatarView,
+                views.matrixProfileToolbarAvatarImageView
+        ).forEach { view ->
+            view.setOnClickListener { onAvatarClicked(view) }
+        }
     }
 
     private fun setupLongClicks() {
@@ -173,7 +192,7 @@ class RoomProfileFragment @Inject constructor(
     override fun invalidate() = withState(roomProfileViewModel) { state ->
         views.waitingView.root.isVisible = state.isLoading
 
-        state.roomSummary()?.also {
+        state.roomSummary()?.let {
             if (it.membership.isLeft()) {
                 Timber.w("The room has been left")
                 activity?.finish()
@@ -184,16 +203,8 @@ class RoomProfileFragment @Inject constructor(
                 val matrixItem = it.toMatrixItem()
                 avatarRenderer.render(matrixItem, headerViews.roomProfileAvatarView)
                 avatarRenderer.render(matrixItem, views.matrixProfileToolbarAvatarImageView)
-                headerViews.roomProfileDecorationImageView.isVisible = it.roomEncryptionTrustLevel != null
-                headerViews.roomProfileDecorationImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
-                views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
-
-                headerViews.roomProfileAvatarView.setOnClickListener { view ->
-                    onAvatarClicked(view, matrixItem)
-                }
-                views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
-                    onAvatarClicked(view, matrixItem)
-                }
+                headerViews.roomProfileDecorationImageView.render(it.roomEncryptionTrustLevel)
+                views.matrixProfileDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
             }
         }
         roomProfileController.setData(state)
@@ -272,8 +283,20 @@ class RoomProfileFragment @Inject constructor(
                 }
     }
 
+    override fun onRoomAliasesClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
+    }
+
+    override fun onRoomPermissionsClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPermissionsSettings)
+    }
+
     override fun onRoomIdClicked() {
         copyToClipboard(requireContext(), roomProfileArgs.roomId)
+    }
+
+    override fun onRoomDevToolsClicked() {
+        navigator.openDevTools(requireContext(), roomProfileArgs.roomId)
     }
 
     override fun onUrlInTopicLongClicked(url: String) {
@@ -289,13 +312,9 @@ class RoomProfileFragment @Inject constructor(
         )
     }
 
-    private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) = withState(roomProfileViewModel) {
-        matrixItem.avatarUrl
-                ?.takeIf { it.isNotEmpty() }
-                ?.let { avatarUrl ->
-                    val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), avatarUrl)
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
-                    startActivity(intent, options.toBundle())
-                }
+    private fun onAvatarClicked(view: View) = withState(roomProfileViewModel) { state ->
+        state.roomSummary()?.toMatrixItem()?.let { matrixItem ->
+            navigator.openBigImageViewer(requireActivity(), view, matrixItem)
+        }
     }
 }

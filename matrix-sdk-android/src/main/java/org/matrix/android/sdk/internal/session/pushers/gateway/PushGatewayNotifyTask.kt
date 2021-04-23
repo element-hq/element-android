@@ -45,8 +45,8 @@ internal class DefaultPushGatewayNotifyTask @Inject constructor(
         )
                 .create(PushGatewayAPI::class.java)
 
-        val response = executeRequest<PushGatewayNotifyResponse>(null) {
-            apiCall = sygnalApi.notify(
+        val response = executeRequest(null) {
+            sygnalApi.notify(
                     PushGatewayNotifyBody(
                             PushGatewayNotification(
                                     eventId = params.eventId,

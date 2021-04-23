@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    tools:style="@style/AlertStyle">
+
+    <ImageView
+        android:id="@+id/incomingCallAvatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/call_notification_answer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/incomingCallNameView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?riotx_text_primary"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/incomingCallRejectView"
+        app:layout_constraintStart_toEndOf="@id/incomingCallAvatar"
+        app:layout_constraintTop_toTopOf="@id/incomingCallAvatar"
+        tools:text="@sample/matrix.json/data/displayName" />
+
+    <TextView
+        android:id="@+id/incomingCallKindView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
+        android:drawablePadding="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="15sp"
+        app:drawableTint="?riotx_text_secondary"
+        app:layout_constraintEnd_toStartOf="@+id/incomingCallRejectView"
+        app:layout_constraintStart_toStartOf="@id/incomingCallNameView"
+        app:layout_constraintTop_toBottomOf="@id/incomingCallNameView"
+        tools:text="@string/action_voice_call" />
+
+    <ImageView
+        android:id="@+id/incomingCallAcceptView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/bg_rounded_button"
+        android:backgroundTint="@color/riotx_accent"
+        android:clickable="true"
+        android:contentDescription="@string/call_notification_answer"
+        android:focusable="true"
+        android:padding="8dp"
+        android:src="@drawable/ic_call_answer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/incomingCallRejectView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/bg_rounded_button"
+        android:backgroundTint="@color/riotx_destructive_accent"
+        android:clickable="true"
+        android:contentDescription="@string/call_notification_reject"
+        android:focusable="true"
+        android:padding="8dp"
+        android:src="@drawable/ic_call_hangup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/incomingCallAcceptView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

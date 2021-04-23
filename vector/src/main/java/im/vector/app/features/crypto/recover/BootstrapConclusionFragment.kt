@@ -44,7 +44,7 @@ class BootstrapConclusionFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.bootstrapConclusionContinue.views.itemVerificationClickableZone.debouncedClicks { sharedViewModel.handle(BootstrapActions.Completed) }
+        views.bootstrapConclusionContinue.views.bottomSheetActionClickableZone.debouncedClicks { sharedViewModel.handle(BootstrapActions.Completed) }
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->

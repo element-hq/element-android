@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.crypto.verification
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 
@@ -79,8 +78,7 @@ interface VerificationService {
                                   transactionId: String,
                                   roomId: String,
                                   otherUserId: String,
-                                  otherDeviceId: String,
-                                  callback: MatrixCallback<String>?): String?
+                                  otherDeviceId: String): String
 
     /**
      * Returns false if the request is unknown

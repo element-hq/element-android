@@ -47,6 +47,7 @@
             android:id="@+id/backupCompleteImage"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:importantForAccessibility="no"
             android:visibility="gone"
             app:srcCompat="@drawable/unit_test_ok"
             tools:visibility="visible" />

@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.api.session.room
 
 import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.session.room.model.Membership
 
 fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): RoomSummaryQueryParams {
@@ -31,7 +33,9 @@ data class RoomSummaryQueryParams(
         val roomId: QueryStringValue,
         val displayName: QueryStringValue,
         val canonicalAlias: QueryStringValue,
-        val memberships: List<Membership>
+        val memberships: List<Membership>,
+        val roomCategoryFilter: RoomCategoryFilter?,
+        val roomTagQueryFilter: RoomTagQueryFilter?
 ) {
 
     class Builder {
@@ -40,12 +44,16 @@ data class RoomSummaryQueryParams(
         var displayName: QueryStringValue = QueryStringValue.IsNotEmpty
         var canonicalAlias: QueryStringValue = QueryStringValue.NoCondition
         var memberships: List<Membership> = Membership.all()
+        var roomCategoryFilter: RoomCategoryFilter? = RoomCategoryFilter.ALL
+        var roomTagQueryFilter: RoomTagQueryFilter? = null
 
         fun build() = RoomSummaryQueryParams(
                 roomId = roomId,
                 displayName = displayName,
                 canonicalAlias = canonicalAlias,
-                memberships = memberships
+                memberships = memberships,
+                roomCategoryFilter = roomCategoryFilter,
+                roomTagQueryFilter = roomTagQueryFilter
         )
     }
 }

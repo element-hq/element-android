@@ -40,6 +40,9 @@ android\:summary=\"[^@|\%s]
 app\:ms_floatingLabelText=\"[^@]
 app\:ms_hint=\"[^@]
 
+### Do not use `template_` string. Please remove the prefix `template_` to use the generated resource instead.
+\"@string/template_
+
 ### "DO NOT COMMIT" has been committed
 DO NOT COMMIT
 

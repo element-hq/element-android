@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="resources_language">nl</string>
+    <string name="resources_country_code">NL</string>
+    <string name="resources_script">Latn</string>
+
+</resources>

@@ -18,9 +18,7 @@ package org.matrix.android.sdk.api.session.user
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 
 /**
@@ -38,17 +36,16 @@ interface UserService {
     /**
      * Try to resolve user from known users, or using profile api
      */
-    fun resolveUser(userId: String, callback: MatrixCallback<User>)
+    suspend fun resolveUser(userId: String): User
 
     /**
      * Search list of users on server directory.
      * @param search the searched term
      * @param limit the max number of users to return
      * @param excludedUserIds the user ids to filter from the search
-     * @param callback the async callback
      * @return Cancelable
      */
-    fun searchUsersDirectory(search: String, limit: Int, excludedUserIds: Set<String>, callback: MatrixCallback<List<User>>): Cancelable
+    suspend fun searchUsersDirectory(search: String, limit: Int, excludedUserIds: Set<String>): List<User>
 
     /**
      * Observe a live user from a userId
@@ -79,10 +76,10 @@ interface UserService {
     /**
      * Ignore users
      */
-    fun ignoreUserIds(userIds: List<String>, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun ignoreUserIds(userIds: List<String>)
 
     /**
      * Un-ignore some users
      */
-    fun unIgnoreUserIds(userIds: List<String>, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun unIgnoreUserIds(userIds: List<String>)
 }

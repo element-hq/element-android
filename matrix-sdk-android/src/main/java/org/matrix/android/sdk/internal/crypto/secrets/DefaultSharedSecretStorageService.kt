@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto.secrets
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
@@ -43,10 +42,9 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
 import org.matrix.android.sdk.internal.crypto.tools.HkdfSha256
 import org.matrix.android.sdk.internal.crypto.tools.withOlmDecryption
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.olm.OlmPkMessage
 import java.security.SecureRandom
 import javax.crypto.Cipher
@@ -64,21 +62,15 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         private val cryptoCoroutineScope: CoroutineScope
 ) : SharedSecretStorageService {
 
-    override fun generateKey(keyId: String,
-                             key: SsssKeySpec?,
-                             keyName: String,
-                             keySigner: KeySigner?,
-                             callback: MatrixCallback<SsssKeyCreationInfo>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            val bytes = try {
-                (key as? RawBytesKeySpec)?.privateKey
-                        ?: ByteArray(32).also {
-                            SecureRandom().nextBytes(it)
-                        }
-            } catch (failure: Throwable) {
-                callback.onFailure(failure)
-                return@launch
-            }
+    override suspend fun generateKey(keyId: String,
+                                     key: SsssKeySpec?,
+                                     keyName: String,
+                                     keySigner: KeySigner?): SsssKeyCreationInfo {
+        return withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.main) {
+            val bytes = (key as? RawBytesKeySpec)?.privateKey
+                    ?: ByteArray(32).also {
+                        SecureRandom().nextBytes(it)
+                    }
 
             val storageKeyContent = SecretStorageKeyContent(
                     name = keyName,
@@ -92,34 +84,22 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 )
             } ?: storageKeyContent
 
-            accountDataService.updateAccountData(
-                    "$KEY_ID_BASE.$keyId",
-                    signedContent.toContent(),
-                    object : MatrixCallback<Unit> {
-                        override fun onFailure(failure: Throwable) {
-                            callback.onFailure(failure)
-                        }
-
-                        override fun onSuccess(data: Unit) {
-                            callback.onSuccess(SsssKeyCreationInfo(
-                                    keyId = keyId,
-                                    content = storageKeyContent,
-                                    recoveryKey = computeRecoveryKey(bytes),
-                                    keySpec = RawBytesKeySpec(bytes)
-                            ))
-                        }
-                    }
+            accountDataService.updateAccountData("$KEY_ID_BASE.$keyId", signedContent.toContent())
+            SsssKeyCreationInfo(
+                    keyId = keyId,
+                    content = storageKeyContent,
+                    recoveryKey = computeRecoveryKey(bytes),
+                    keySpec = RawBytesKeySpec(bytes)
             )
         }
     }
 
-    override fun generateKeyWithPassphrase(keyId: String,
-                                           keyName: String,
-                                           passphrase: String,
-                                           keySigner: KeySigner,
-                                           progressListener: ProgressListener?,
-                                           callback: MatrixCallback<SsssKeyCreationInfo>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+    override suspend fun generateKeyWithPassphrase(keyId: String,
+                                                   keyName: String,
+                                                   passphrase: String,
+                                                   keySigner: KeySigner,
+                                                   progressListener: ProgressListener?): SsssKeyCreationInfo {
+        return withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.main) {
             val privatePart = generatePrivateKeyWithPassword(passphrase, progressListener)
 
             val storageKeyContent = SecretStorageKeyContent(
@@ -135,21 +115,13 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
 
             accountDataService.updateAccountData(
                     "$KEY_ID_BASE.$keyId",
-                    signedContent.toContent(),
-                    object : MatrixCallback<Unit> {
-                        override fun onFailure(failure: Throwable) {
-                            callback.onFailure(failure)
-                        }
-
-                        override fun onSuccess(data: Unit) {
-                            callback.onSuccess(SsssKeyCreationInfo(
-                                    keyId = keyId,
-                                    content = storageKeyContent,
-                                    recoveryKey = computeRecoveryKey(privatePart.privateKey),
-                                    keySpec = RawBytesKeySpec(privatePart.privateKey)
-                            ))
-                        }
-                    }
+                    signedContent.toContent()
+            )
+            SsssKeyCreationInfo(
+                    keyId = keyId,
+                    content = storageKeyContent,
+                    recoveryKey = computeRecoveryKey(privatePart.privateKey),
+                    keySpec = RawBytesKeySpec(privatePart.privateKey)
             )
         }
     }
@@ -168,15 +140,12 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         } ?: KeyInfoResult.Error(SharedSecretStorageError.UnknownAlgorithm(keyId))
     }
 
-    override fun setDefaultKey(keyId: String, callback: MatrixCallback<Unit>) {
+    override suspend fun setDefaultKey(keyId: String) {
         val existingKey = getKey(keyId)
         if (existingKey is KeyInfoResult.Success) {
-            accountDataService.updateAccountData(DEFAULT_KEY_ID,
-                    mapOf("key" to keyId),
-                    callback
-            )
+            accountDataService.updateAccountData(DEFAULT_KEY_ID, mapOf("key" to keyId))
         } else {
-            callback.onFailure(SharedSecretStorageError.UnknownKey(keyId))
+            throw SharedSecretStorageError.UnknownKey(keyId)
         }
     }
 
@@ -188,42 +157,31 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         return getKey(keyId)
     }
 
-    override fun storeSecret(name: String, secretBase64: String, keys: List<SharedSecretStorageService.KeyRef>, callback: MatrixCallback<Unit>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+    override suspend fun storeSecret(name: String, secretBase64: String, keys: List<SharedSecretStorageService.KeyRef>) {
+        withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.main) {
             val encryptedContents = HashMap<String, EncryptedSecretContent>()
-            try {
-                keys.forEach {
-                    val keyId = it.keyId
-                    // encrypt the content
-                    when (val key = keyId?.let { getKey(keyId) } ?: getDefaultKey()) {
-                        is KeyInfoResult.Success -> {
-                            if (key.keyInfo.content.algorithm == SSSS_ALGORITHM_AES_HMAC_SHA2) {
-                                encryptAesHmacSha2(it.keySpec!!, name, secretBase64).let {
-                                    encryptedContents[key.keyInfo.id] = it
-                                }
-                            } else {
-                                // Unknown algorithm
-                                callback.onFailure(SharedSecretStorageError.UnknownAlgorithm(key.keyInfo.content.algorithm ?: ""))
-                                return@launch
+            keys.forEach {
+                val keyId = it.keyId
+                // encrypt the content
+                when (val key = keyId?.let { getKey(keyId) } ?: getDefaultKey()) {
+                    is KeyInfoResult.Success -> {
+                        if (key.keyInfo.content.algorithm == SSSS_ALGORITHM_AES_HMAC_SHA2) {
+                            encryptAesHmacSha2(it.keySpec!!, name, secretBase64).let {
+                                encryptedContents[key.keyInfo.id] = it
                             }
-                        }
-                        is KeyInfoResult.Error   -> {
-                            callback.onFailure(key.error)
-                            return@launch
+                        } else {
+                            // Unknown algorithm
+                            throw SharedSecretStorageError.UnknownAlgorithm(key.keyInfo.content.algorithm ?: "")
                         }
                     }
+                    is KeyInfoResult.Error -> throw key.error
                 }
-
-                accountDataService.updateAccountData(
-                        type = name,
-                        content = mapOf(
-                                "encrypted" to encryptedContents
-                        ),
-                        callback = callback
-                )
-            } catch (failure: Throwable) {
-                callback.onFailure(failure)
             }
+
+            accountDataService.updateAccountData(
+                    type = name,
+                    content = mapOf("encrypted" to encryptedContents)
+            )
         }
     }
 
@@ -344,57 +302,40 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         return results
     }
 
-    override fun getSecret(name: String, keyId: String?, secretKey: SsssKeySpec, callback: MatrixCallback<String>) {
-        val accountData = accountDataService.getAccountDataEvent(name) ?: return Unit.also {
-            callback.onFailure(SharedSecretStorageError.UnknownSecret(name))
-        }
-        val encryptedContent = accountData.content[ENCRYPTED] as? Map<*, *> ?: return Unit.also {
-            callback.onFailure(SharedSecretStorageError.SecretNotEncrypted(name))
-        }
-        val key = keyId?.let { getKey(it) } as? KeyInfoResult.Success ?: getDefaultKey() as? KeyInfoResult.Success ?: return Unit.also {
-            callback.onFailure(SharedSecretStorageError.UnknownKey(name))
-        }
+    override suspend fun getSecret(name: String, keyId: String?, secretKey: SsssKeySpec): String {
+        val accountData = accountDataService.getAccountDataEvent(name) ?: throw SharedSecretStorageError.UnknownSecret(name)
+        val encryptedContent = accountData.content[ENCRYPTED] as? Map<*, *> ?: throw SharedSecretStorageError.SecretNotEncrypted(name)
+        val key = keyId?.let { getKey(it) } as? KeyInfoResult.Success ?: getDefaultKey() as? KeyInfoResult.Success
+        ?: throw SharedSecretStorageError.UnknownKey(name)
 
-        val encryptedForKey = encryptedContent[key.keyInfo.id] ?: return Unit.also {
-            callback.onFailure(SharedSecretStorageError.SecretNotEncryptedWithKey(name, key.keyInfo.id))
-        }
+        val encryptedForKey = encryptedContent[key.keyInfo.id] ?: throw SharedSecretStorageError.SecretNotEncryptedWithKey(name, key.keyInfo.id)
 
         val secretContent = EncryptedSecretContent.fromJson(encryptedForKey)
-                ?: return Unit.also {
-                    callback.onFailure(SharedSecretStorageError.ParsingError)
-                }
+                ?: throw SharedSecretStorageError.ParsingError
 
         val algorithm = key.keyInfo.content
         if (SSSS_ALGORITHM_CURVE25519_AES_SHA2 == algorithm.algorithm) {
-            val keySpec = secretKey as? RawBytesKeySpec ?: return Unit.also {
-                callback.onFailure(SharedSecretStorageError.BadKeyFormat)
-            }
-            cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-                runCatching {
-                    // decrypt from recovery key
-                    withOlmDecryption { olmPkDecryption ->
-                        olmPkDecryption.setPrivateKey(keySpec.privateKey)
-                        olmPkDecryption.decrypt(OlmPkMessage()
-                                .apply {
-                                    mCipherText = secretContent.ciphertext
-                                    mEphemeralKey = secretContent.ephemeral
-                                    mMac = secretContent.mac
-                                }
-                        )
-                    }
-                }.foldToCallback(callback)
+            val keySpec = secretKey as? RawBytesKeySpec ?: throw SharedSecretStorageError.BadKeyFormat
+            return withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.main) {
+                // decrypt from recovery key
+                withOlmDecryption { olmPkDecryption ->
+                    olmPkDecryption.setPrivateKey(keySpec.privateKey)
+                    olmPkDecryption.decrypt(OlmPkMessage()
+                            .apply {
+                                mCipherText = secretContent.ciphertext
+                                mEphemeralKey = secretContent.ephemeral
+                                mMac = secretContent.mac
+                            }
+                    )
+                }
             }
         } else if (SSSS_ALGORITHM_AES_HMAC_SHA2 == algorithm.algorithm) {
-            val keySpec = secretKey as? RawBytesKeySpec ?: return Unit.also {
-                callback.onFailure(SharedSecretStorageError.BadKeyFormat)
-            }
-            cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-                runCatching {
-                    decryptAesHmacSha2(keySpec, name, secretContent)
-                }.foldToCallback(callback)
+            val keySpec = secretKey as? RawBytesKeySpec ?: throw SharedSecretStorageError.BadKeyFormat
+            return withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.main) {
+                decryptAesHmacSha2(keySpec, name, secretContent)
             }
         } else {
-            callback.onFailure(SharedSecretStorageError.UnsupportedAlgorithm(algorithm.algorithm ?: ""))
+            throw SharedSecretStorageError.UnsupportedAlgorithm(algorithm.algorithm ?: "")
         }
     }
 

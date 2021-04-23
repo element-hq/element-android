@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.room
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -24,6 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
+import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
@@ -178,4 +180,29 @@ interface RoomService {
      * This call will try to gather some information on this room, but it could fail and get nothing more
      */
     fun peekRoom(roomIdOrAlias: String, callback: MatrixCallback<PeekResult>)
+
+    /**
+     * TODO Doc
+     */
+    fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                  pagedListConfig: PagedList.Config = defaultPagedListConfig): LiveData<PagedList<RoomSummary>>
+
+    /**
+     * TODO Doc
+     */
+    fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                          pagedListConfig: PagedList.Config = defaultPagedListConfig): UpdatableFilterLivePageResult
+
+    /**
+     * TODO Doc
+     */
+    fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount
+
+    private val defaultPagedListConfig
+        get() = PagedList.Config.Builder()
+                .setPageSize(10)
+                .setInitialLoadSizeHint(20)
+                .setEnablePlaceholders(false)
+                .setPrefetchDistance(10)
+                .build()
 }

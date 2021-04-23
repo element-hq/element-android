@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.AsyncTask
 import android.os.Build
 import android.view.View
 import androidx.fragment.app.DialogFragment
@@ -37,6 +36,11 @@ import im.vector.app.features.settings.devtools.GossipingEventsSerializer
 import im.vector.app.features.settings.locale.SystemLocaleProvider
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -97,6 +101,8 @@ class BugReporter @Inject constructor(
      */
     var screenshot: Bitmap? = null
         private set
+
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     private val LOGCAT_CMD_ERROR = arrayOf("logcat", // /< Run 'logcat' command
             "-d", // /< Dump the log rather than continue outputting it
@@ -159,14 +165,15 @@ class BugReporter @Inject constructor(
                       withKeyRequestHistory: Boolean,
                       withScreenshot: Boolean,
                       theBugDescription: String,
+                      serverVersion: String,
                       listener: IMXBugReportListener?) {
-        object : AsyncTask<Void, Int, String>() {
-            // enumerate files to delete
-            val mBugReportFiles: MutableList<File> = ArrayList()
+        // enumerate files to delete
+        val mBugReportFiles: MutableList<File> = ArrayList()
 
-            override fun doInBackground(vararg voids: Void?): String? {
+        coroutineScope.launch {
+            var serverError: String? = null
+            withContext(Dispatchers.IO) {
                 var bugDescription = theBugDescription
-                var serverError: String? = null
                 val crashCallStack = getCrashDescription(context)
 
                 if (null != crashCallStack) {
@@ -267,6 +274,7 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
                             .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
+                            .addFormDataPart("server_version", serverVersion)
 
                     val buildNumber = context.getString(R.string.build_number)
                     if (buildNumber.isNotEmpty() && buildNumber != "0") {
@@ -342,7 +350,11 @@ class BugReporter @Inject constructor(
                         }
 
                         Timber.v("## onWrite() : $percentage%")
-                        publishProgress(percentage)
+                        try {
+                            listener?.onProgress(percentage)
+                        } catch (e: Exception) {
+                            Timber.e(e, "## onProgress() : failed")
+                        }
                     }
 
                     // build the request
@@ -369,7 +381,7 @@ class BugReporter @Inject constructor(
                     if (responseCode != HttpURLConnection.HTTP_OK) {
                         if (null != errorMessage) {
                             serverError = "Failed with error $errorMessage"
-                        } else if (null == response || null == response.body) {
+                        } else if (response?.body == null) {
                             serverError = "Failed with error $responseCode"
                         } else {
                             try {
@@ -386,11 +398,13 @@ class BugReporter @Inject constructor(
                                 }
 
                                 // check if the error message
-                                try {
-                                    val responseJSON = JSONObject(serverError)
-                                    serverError = responseJSON.getString("error")
-                                } catch (e: JSONException) {
-                                    Timber.e(e, "doInBackground ; Json conversion failed")
+                                serverError?.let {
+                                    try {
+                                        val responseJSON = JSONObject(it)
+                                        serverError = responseJSON.getString("error")
+                                    } catch (e: JSONException) {
+                                        Timber.e(e, "doInBackground ; Json conversion failed")
+                                    }
                                 }
 
                                 // should never happen
@@ -403,21 +417,9 @@ class BugReporter @Inject constructor(
                         }
                     }
                 }
-
-                return serverError
             }
 
-            override fun onProgressUpdate(vararg progress: Int?) {
-                if (null != listener) {
-                    try {
-                        listener.onProgress(progress[0] ?: 0)
-                    } catch (e: Exception) {
-                        Timber.e(e, "## onProgress() : failed")
-                    }
-                }
-            }
-
-            override fun onPostExecute(reason: String?) {
+            withContext(Dispatchers.Main) {
                 mBugReportCall = null
 
                 // delete when the bug report has been successfully sent
@@ -429,17 +431,17 @@ class BugReporter @Inject constructor(
                     try {
                         if (mIsCancelled) {
                             listener.onUploadCancelled()
-                        } else if (null == reason) {
+                        } else if (null == serverError) {
                             listener.onUploadSucceed()
                         } else {
-                            listener.onUploadFailed(reason)
+                            listener.onUploadFailed(serverError)
                         }
                     } catch (e: Exception) {
                         Timber.e(e, "## onPostExecute() : failed")
                     }
                 }
             }
-        }.execute()
+        }
     }
 
     /**
@@ -457,9 +459,9 @@ class BugReporter @Inject constructor(
         activity.startActivity(intent)
     }
 
-    // ==============================================================================================================
-    // crash report management
-    // ==============================================================================================================
+// ==============================================================================================================
+// crash report management
+// ==============================================================================================================
 
     /**
      * Provides the crash file
@@ -529,9 +531,9 @@ class BugReporter @Inject constructor(
         return null
     }
 
-    // ==============================================================================================================
-    // Screenshot management
-    // ==============================================================================================================
+// ==============================================================================================================
+// Screenshot management
+// ==============================================================================================================
 
     /**
      * Take a screenshot of the display.
@@ -598,9 +600,9 @@ class BugReporter @Inject constructor(
         }
     }
 
-    // ==============================================================================================================
-    // Logcat management
-    // ==============================================================================================================
+// ==============================================================================================================
+// Logcat management
+// ==============================================================================================================
 
     /**
      * Save the logcat
@@ -660,9 +662,9 @@ class BugReporter @Inject constructor(
         }
     }
 
-    // ==============================================================================================================
-    // File compression management
-    // ==============================================================================================================
+// ==============================================================================================================
+// File compression management
+// ==============================================================================================================
 
     /**
      * GZip a file

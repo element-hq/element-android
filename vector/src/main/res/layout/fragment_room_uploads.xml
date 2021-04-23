@@ -7,12 +7,12 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        style="@style/VectorAppBarLayoutStyle"
         android:id="@+id/roomUploadsAppBar"
-        android:transitionName="toolbar"
+        style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp">
+        android:elevation="4dp"
+        android:transitionName="toolbar">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/roomUploadsToolbar"
@@ -33,20 +33,20 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:contentDescription="@string/avatar"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@tools:sample/avatars" />
 
-                <ImageView
+                <im.vector.app.core.ui.views.ShieldImageView
                     android:id="@+id/roomUploadsDecorationToolbarAvatarImageView"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     app:layout_constraintCircle="@+id/roomUploadsToolbarAvatarImageView"
                     app:layout_constraintCircleAngle="135"
                     app:layout_constraintCircleRadius="20dp"
-                    tools:ignore="MissingConstraints"
-                    tools:src="@drawable/ic_shield_trusted" />
+                    tools:ignore="MissingConstraints" />
 
                 <TextView
                     android:id="@+id/roomUploadsToolbarTitleView"

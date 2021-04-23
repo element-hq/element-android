@@ -1,0 +1,2 @@
+Главна измена у овој верзији: подршка за пријављивање са друштвених мрежа.
+Цео дневник измена: https://github.com/vector-im/element-android/releases/tag/v1.0.15 и https://github.com/vector-im/element-android/releases/tag/v1.0.16

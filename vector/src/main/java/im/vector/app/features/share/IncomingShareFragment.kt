@@ -121,7 +121,7 @@ class IncomingShareFragment @Inject constructor(
                 return true
             }
         })
-        views.sendShareButton.setOnClickListener { _ ->
+        views.sendShareButton.setOnClickListener {
             handleSendShare()
         }
     }

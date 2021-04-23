@@ -11,6 +11,7 @@
         android:id="@+id/itemHelpPicto"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_idea"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/itemHelpText"

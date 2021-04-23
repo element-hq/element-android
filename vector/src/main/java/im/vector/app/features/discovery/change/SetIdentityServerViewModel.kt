@@ -19,8 +19,9 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.extensions.exhaustive
@@ -32,7 +33,6 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.terms.TermsService
-import org.matrix.android.sdk.internal.util.awaitCallback
 import java.net.UnknownHostException
 
 class SetIdentityServerViewModel @AssistedInject constructor(
@@ -41,7 +41,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
         stringProvider: StringProvider)
     : VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: SetIdentityServerState): SetIdentityServerViewModel
     }
@@ -96,9 +96,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 // First ping the identity server v2 API
-                awaitCallback<Unit> {
-                    mxSession.identityService().isValidIdentityServer(baseUrl, it)
-                }
+                mxSession.identityService().isValidIdentityServer(baseUrl)
                 // Ok, next step
                 checkTerms(baseUrl)
             } catch (failure: Throwable) {

@@ -28,7 +28,7 @@ import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragm
 import im.vector.app.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStoragePassphraseFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStorageResetAllFragment
-import im.vector.app.features.crypto.recover.BootstrapAccountPasswordFragment
+import im.vector.app.features.crypto.recover.BootstrapReAuthFragment
 import im.vector.app.features.crypto.recover.BootstrapConclusionFragment
 import im.vector.app.features.crypto.recover.BootstrapConfirmPassphraseFragment
 import im.vector.app.features.crypto.recover.BootstrapEnterPassphraseFragment
@@ -45,6 +45,10 @@ import im.vector.app.features.crypto.verification.emoji.VerificationEmojiCodeFra
 import im.vector.app.features.crypto.verification.qrconfirmation.VerificationQRWaitingFragment
 import im.vector.app.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.app.features.crypto.verification.request.VerificationRequestFragment
+import im.vector.app.features.devtools.RoomDevToolEditFragment
+import im.vector.app.features.devtools.RoomDevToolFragment
+import im.vector.app.features.devtools.RoomDevToolSendFormFragment
+import im.vector.app.features.devtools.RoomDevToolStateEventListFragment
 import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
 import im.vector.app.features.grouplist.GroupListFragment
@@ -106,6 +110,7 @@ import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailFragmen
 import im.vector.app.features.settings.devtools.IncomingKeyRequestListFragment
 import im.vector.app.features.settings.devtools.KeyRequestsFragment
 import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
+import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.app.features.settings.locale.LocalePickerFragment
 import im.vector.app.features.settings.push.PushGatewaysFragment
@@ -285,6 +290,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VectorSettingsP2PFragment::class)
     fun bindVectorSettingsP2PFragment(fragment: VectorSettingsP2PFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(HomeserverSettingsFragment::class)
+    fun bindHomeserverSettingsFragment(fragment: HomeserverSettingsFragment): Fragment
 
     @Binds
     @IntoMap
@@ -528,8 +538,8 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(BootstrapAccountPasswordFragment::class)
-    fun bindBootstrapAccountPasswordFragment(fragment: BootstrapAccountPasswordFragment): Fragment
+    @FragmentKey(BootstrapReAuthFragment::class)
+    fun bindBootstrapReAuthFragment(fragment: BootstrapReAuthFragment): Fragment
 
     @Binds
     @IntoMap
@@ -600,4 +610,24 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(ShowUserCodeFragment::class)
     fun bindShowUserCodeFragment(fragment: ShowUserCodeFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomDevToolFragment::class)
+    fun bindRoomDevToolFragment(fragment: RoomDevToolFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomDevToolStateEventListFragment::class)
+    fun bindRoomDevToolStateEventListFragment(fragment: RoomDevToolStateEventListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomDevToolEditFragment::class)
+    fun bindRoomDevToolEditFragment(fragment: RoomDevToolEditFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomDevToolSendFormFragment::class)
+    fun bindRoomDevToolSendFormFragment(fragment: RoomDevToolSendFormFragment): Fragment
 }

@@ -68,7 +68,7 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
 
         views.ssssKeyUseFile.debouncedClicks { startImportTextFromFileIntent(requireContext(), importFileStartForActivityResult) }
 
-        views.ssssKeyReset.views.itemVerificationClickableZone.debouncedClicks {
+        views.ssssKeyReset.views.bottomSheetActionClickableZone.debouncedClicks {
             sharedViewModel.handle(SharedSecureStorageAction.ForgotResetAll)
         }
 

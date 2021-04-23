@@ -19,7 +19,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.observeEvent
@@ -54,7 +53,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         viewModel = viewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
         viewModel.initSession(session)
 
-        viewModel.keySourceModel.observe(this, Observer { keySource ->
+        viewModel.keySourceModel.observe(this) { keySource ->
             if (keySource != null && !keySource.isInQuadS && supportFragmentManager.fragments.isEmpty()) {
                 val isBackupCreatedFromPassphrase =
                         viewModel.keyVersionResult.value?.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
@@ -64,7 +63,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                     replaceFragment(R.id.container, KeysBackupRestoreFromKeyFragment::class.java)
                 }
             }
-        })
+        }
 
         viewModel.keyVersionResultError.observeEvent(this) { message ->
             AlertDialog.Builder(this)
@@ -111,9 +110,9 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
             }
         }
 
-        viewModel.loadingEvent.observe(this, Observer {
+        viewModel.loadingEvent.observe(this) {
             updateWaitingView(it)
-        })
+        }
 
         viewModel.importRoomKeysFinishWithResult.observeEvent(this) {
             // set data?

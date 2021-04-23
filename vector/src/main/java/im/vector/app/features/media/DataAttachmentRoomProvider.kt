@@ -19,7 +19,10 @@ package im.vector.app.features.media
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -77,20 +80,18 @@ class DataAttachmentRoomProvider(
 
     override fun getFileForSharing(position: Int, callback: (File?) -> Unit) {
         val item = getItem(position)
-        fileService.downloadFile(
-                fileName = item.filename,
-                mimeType = item.mimeType,
-                url = item.url,
-                elementToDecrypt = item.elementToDecrypt,
-                callback = object : MatrixCallback<File> {
-                    override fun onSuccess(data: File) {
-                        callback(data)
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        callback(null)
-                    }
-                }
-        )
+        GlobalScope.launch {
+            val result = runCatching {
+                fileService.downloadFile(
+                        fileName = item.filename,
+                        mimeType = item.mimeType,
+                        url = item.url,
+                        elementToDecrypt = item.elementToDecrypt
+                )
+            }
+            withContext(Dispatchers.Main) {
+                callback(result.getOrNull())
+            }
+        }
     }
 }

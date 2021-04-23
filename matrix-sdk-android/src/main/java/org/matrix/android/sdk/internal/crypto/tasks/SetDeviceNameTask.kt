@@ -42,7 +42,7 @@ internal class DefaultSetDeviceNameTask @Inject constructor(
                 displayName = params.deviceName
         )
         return executeRequest(globalErrorReceiver) {
-            apiCall = cryptoApi.updateDeviceInfo(params.deviceId, body)
+            cryptoApi.updateDeviceInfo(params.deviceId, body)
         }
     }
 }

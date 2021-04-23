@@ -89,8 +89,8 @@ internal class DefaultGetWellknownTask @Inject constructor(
                 .create(WellKnownAPI::class.java)
 
         return try {
-            val wellKnown = executeRequest<WellKnown>(null) {
-                apiCall = wellKnownAPI.getWellKnown(domain)
+            val wellKnown = executeRequest(null) {
+                wellKnownAPI.getWellKnown(domain)
             }
 
             // Success
@@ -140,8 +140,8 @@ internal class DefaultGetWellknownTask @Inject constructor(
                 .create(CapabilitiesAPI::class.java)
 
         try {
-            executeRequest<Unit>(null) {
-                apiCall = capabilitiesAPI.ping()
+            executeRequest(null) {
+                capabilitiesAPI.ping()
             }
         } catch (throwable: Throwable) {
             return WellknownResult.FailError
@@ -178,8 +178,8 @@ internal class DefaultGetWellknownTask @Inject constructor(
                 .create(IdentityAuthAPI::class.java)
 
         return try {
-            executeRequest<Unit>(null) {
-                apiCall = identityPingApi.ping()
+            executeRequest(null) {
+                identityPingApi.ping()
             }
 
             true

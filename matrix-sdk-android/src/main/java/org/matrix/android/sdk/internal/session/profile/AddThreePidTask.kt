@@ -50,13 +50,14 @@ internal class DefaultAddThreePidTask @Inject constructor(
         val clientSecret = UUID.randomUUID().toString()
         val sendAttempt = 1
 
-        val result = executeRequest<AddEmailResponse>(globalErrorReceiver) {
-            val body = AddEmailBody(
-                    clientSecret = clientSecret,
-                    email = threePid.email,
-                    sendAttempt = sendAttempt
-            )
-            apiCall = profileAPI.addEmail(body)
+        val body = AddEmailBody(
+                clientSecret = clientSecret,
+                email = threePid.email,
+                sendAttempt = sendAttempt
+        )
+
+        val result = executeRequest(globalErrorReceiver) {
+            profileAPI.addEmail(body)
         }
 
         // Store as a pending three pid
@@ -84,14 +85,15 @@ internal class DefaultAddThreePidTask @Inject constructor(
         val countryCode = parsedNumber.countryCode
         val country = phoneNumberUtil.getRegionCodeForCountryCode(countryCode)
 
-        val result = executeRequest<AddMsisdnResponse>(globalErrorReceiver) {
-            val body = AddMsisdnBody(
-                    clientSecret = clientSecret,
-                    country = country,
-                    phoneNumber = parsedNumber.nationalNumber.toString(),
-                    sendAttempt = sendAttempt
-            )
-            apiCall = profileAPI.addMsisdn(body)
+        val body = AddMsisdnBody(
+                clientSecret = clientSecret,
+                country = country,
+                phoneNumber = parsedNumber.nationalNumber.toString(),
+                sendAttempt = sendAttempt
+        )
+
+        val result = executeRequest(globalErrorReceiver) {
+            profileAPI.addMsisdn(body)
         }
 
         // Store as a pending three pid

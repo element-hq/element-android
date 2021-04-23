@@ -21,7 +21,6 @@ import arrow.core.Success
 import arrow.core.Try
 import arrow.core.TryOf
 import arrow.core.fix
-import org.matrix.android.sdk.api.MatrixCallback
 
 inline fun <A> TryOf<A>.onError(f: (Throwable) -> Unit): Try<A> = fix()
         .fold(
@@ -31,10 +30,6 @@ inline fun <A> TryOf<A>.onError(f: (Throwable) -> Unit): Try<A> = fix()
                 },
                 { Success(it) }
         )
-
-fun <A> Try<A>.foldToCallback(callback: MatrixCallback<A>): Unit = fold(
-        { callback.onFailure(it) },
-        { callback.onSuccess(it) })
 
 /**
  * Same as doOnNext for Observables

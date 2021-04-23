@@ -16,8 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.room.tags
 
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import org.matrix.android.sdk.api.session.room.tags.TagsService
 
 internal class DefaultTagsService @AssistedInject constructor(
@@ -26,9 +27,9 @@ internal class DefaultTagsService @AssistedInject constructor(
         private val deleteTagFromRoomTask: DeleteTagFromRoomTask
 ) : TagsService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): TagsService
+        fun create(roomId: String): DefaultTagsService
     }
 
     override suspend fun addTag(tag: String, order: Double?) {

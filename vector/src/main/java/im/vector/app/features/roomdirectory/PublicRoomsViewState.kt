@@ -29,7 +29,7 @@ data class PublicRoomsViewState(
         // Store cumul of pagination result
         val publicRooms: List<PublicRoom> = emptyList(),
         // Current pagination request
-        val asyncPublicRoomsRequest: Async<List<PublicRoom>> = Uninitialized,
+        val asyncPublicRoomsRequest: Async<Unit> = Uninitialized,
         // True if more result are available server side
         val hasMore: Boolean = false,
         // Set of joined roomId,

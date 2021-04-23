@@ -20,6 +20,7 @@ import android.net.Uri
 import android.view.View
 import androidx.annotation.StringRes
 import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.command.Command
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -72,6 +73,8 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     ) : RoomDetailViewEvents()
 
     abstract class SendMessageResult : RoomDetailViewEvents()
+
+    data class DisplayAndAcceptCall(val call: WebRtcCall): RoomDetailViewEvents()
 
     object DisplayPromptForIntegrationManager : RoomDetailViewEvents()
 

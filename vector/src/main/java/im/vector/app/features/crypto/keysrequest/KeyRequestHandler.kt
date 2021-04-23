@@ -183,11 +183,11 @@ class KeyRequestHandler @Inject constructor(
             denyAllRequests(mappingKey)
         }
 
-        alert.addButton(context.getString(R.string.share_without_verifying_short_label), Runnable {
+        alert.addButton(context.getString(R.string.share_without_verifying_short_label), {
             shareAllSessions(mappingKey)
         })
 
-        alert.addButton(context.getString(R.string.ignore_request_short_label), Runnable {
+        alert.addButton(context.getString(R.string.ignore_request_short_label), {
             denyAllRequests(mappingKey)
         })
 

@@ -12,6 +12,6 @@
     <string name="matrix_room_alias_prefix" translatable="false">#</string>
 
     <!-- Temporary string -->
-    <string name="not_implemented" translatable="false">Not implemented yet in Element</string>
+    <string name="template_not_implemented" translatable="false">Not implemented yet in ${app_name}</string>
 
 </resources>

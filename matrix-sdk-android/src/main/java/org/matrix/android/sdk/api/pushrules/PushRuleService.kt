@@ -39,6 +39,8 @@ interface PushRuleService {
 
     fun removePushRuleListener(listener: PushRuleListener)
 
+    fun getActions(event: Event): List<Action>
+
 //    fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule?
 
     interface PushRuleListener {

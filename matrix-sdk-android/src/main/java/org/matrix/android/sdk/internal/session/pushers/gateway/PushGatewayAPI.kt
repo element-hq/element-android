@@ -16,7 +16,6 @@
 package org.matrix.android.sdk.internal.session.pushers.gateway
 
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -27,5 +26,5 @@ internal interface PushGatewayAPI {
      * Ref: https://matrix.org/docs/spec/push_gateway/r0.1.1#post-matrix-push-v1-notify
      */
     @POST(NetworkConstants.URI_PUSH_GATEWAY_PREFIX_PATH + "notify")
-    fun notify(@Body body: PushGatewayNotifyBody): Call<PushGatewayNotifyResponse>
+    suspend fun notify(@Body body: PushGatewayNotifyBody): PushGatewayNotifyResponse
 }

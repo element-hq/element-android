@@ -17,9 +17,7 @@
 package org.matrix.android.sdk.api.session.accountdata
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 
 interface AccountDataService {
@@ -48,5 +46,5 @@ interface AccountDataService {
     /**
      * Update the account data with the provided type and the provided account data content
      */
-    fun updateAccountData(type: String, content: Content, callback: MatrixCallback<Unit>? = null): Cancelable
+    suspend fun updateAccountData(type: String, content: Content)
 }

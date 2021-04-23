@@ -10,6 +10,7 @@
         android:id="@+id/itemDefaultAvatarView"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:contentDescription="@string/avatar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />

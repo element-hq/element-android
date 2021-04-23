@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.text.set
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.Observer
 import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
@@ -51,17 +50,17 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
         viewModel = fragmentViewModelProvider.get(KeysBackupRestoreFromPassphraseViewModel::class.java)
         sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
 
-        viewModel.passphraseErrorText.observe(viewLifecycleOwner, Observer { newValue ->
+        viewModel.passphraseErrorText.observe(viewLifecycleOwner) { newValue ->
             views.keysBackupPassphraseEnterTil.error = newValue
-        })
+        }
 
         views.helperTextWithLink.text = spannableStringForHelperText()
 
-        viewModel.showPasswordMode.observe(viewLifecycleOwner, Observer {
+        viewModel.showPasswordMode.observe(viewLifecycleOwner) {
             val shouldBeVisible = it ?: false
             views.keysBackupPassphraseEnterEdittext.showPassword(shouldBeVisible)
-            views.keysBackupViewShowPassword.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
-        })
+            views.keysBackupViewShowPassword.render(shouldBeVisible)
+        }
 
         views.keysBackupPassphraseEnterEdittext.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {

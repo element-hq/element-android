@@ -80,8 +80,6 @@ class RoomMemberProfileController @Inject constructor(
                 action = { callback?.onIgnoreClicked() }
         )
         if (!state.isMine) {
-            buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
-
             buildProfileAction(
                     id = "direct",
                     editable = false,

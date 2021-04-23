@@ -138,7 +138,7 @@ class MatrixToBottomSheet :
         fun withLink(matrixToLink: String, listener: InteractionListener?): MatrixToBottomSheet {
             return MatrixToBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, MatrixToBottomSheet.MatrixToArgs(
+                    putParcelable(MvRx.KEY_ARG, MatrixToArgs(
                             matrixToLink = matrixToLink
                     ))
                 }

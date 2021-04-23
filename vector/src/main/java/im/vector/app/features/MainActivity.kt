@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -30,7 +31,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
-import im.vector.app.databinding.FragmentLoadingBinding
+import im.vector.app.databinding.ActivityMainBinding
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.login.LoginActivity
@@ -42,13 +43,12 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
+import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import javax.inject.Inject
@@ -67,7 +67,7 @@ data class MainActivityArgs(
  * This Activity, when started with argument, is also doing some cleanup when user signs out,
  * clears cache, is logged out, or is soft logged out
  */
-class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActivity {
+class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity {
 
     companion object {
         private const val EXTRA_ARGS = "EXTRA_ARGS"
@@ -82,7 +82,9 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
         }
     }
 
-    override fun getBinding() = FragmentLoadingBinding.inflate(layoutInflater)
+    override fun getBinding() = ActivityMainBinding.inflate(layoutInflater)
+
+    override fun getOtherThemes() = ActivityOtherThemes.Launcher
 
     private lateinit var args: MainActivityArgs
 
@@ -147,38 +149,36 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
         }
         when {
             args.isAccountDeactivated -> {
-                // Just do the local cleanup
-                Timber.w("Account deactivated, start app")
-                sessionHolder.clearActiveSession()
-                doLocalCleanup(clearPreferences = true)
-                startNextActivityAndFinish()
+                lifecycleScope.launch {
+                    // Just do the local cleanup
+                    Timber.w("Account deactivated, start app")
+                    sessionHolder.clearActiveSession()
+                    doLocalCleanup(clearPreferences = true)
+                    startNextActivityAndFinish()
+                }
             }
-            args.clearCredentials     -> session.signOut(
-                    !args.isUserLoggedOut,
-                    object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            Timber.w("SIGN_OUT: success, start app")
-                            sessionHolder.clearActiveSession()
-                            doLocalCleanup(clearPreferences = true)
-                            startNextActivityAndFinish()
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            displayError(failure)
-                        }
-                    })
-            args.clearCache           -> session.clearCache(
-                    object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            doLocalCleanup(clearPreferences = false)
-                            session.startSyncing(applicationContext)
-                            startNextActivityAndFinish()
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            displayError(failure)
-                        }
-                    })
+            args.clearCredentials     -> {
+                lifecycleScope.launch {
+                    try {
+                        session.signOut(!args.isUserLoggedOut)
+                    } catch (failure: Throwable) {
+                        displayError(failure)
+                        return@launch
+                    }
+                    Timber.w("SIGN_OUT: success, start app")
+                    sessionHolder.clearActiveSession()
+                    doLocalCleanup(clearPreferences = true)
+                    startNextActivityAndFinish()
+                }
+            }
+            args.clearCache           -> {
+                lifecycleScope.launch {
+                    session.clearCache()
+                    doLocalCleanup(clearPreferences = false)
+                    session.startSyncing(applicationContext)
+                    startNextActivityAndFinish()
+                }
+            }
         }
     }
 
@@ -187,24 +187,22 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
         Timber.w("Ignoring invalid token global error")
     }
 
-    private fun doLocalCleanup(clearPreferences: Boolean) {
-        GlobalScope.launch(Dispatchers.Main) {
-            // On UI Thread
-            Glide.get(this@MainActivity).clearMemory()
+    private suspend fun doLocalCleanup(clearPreferences: Boolean) {
+        // On UI Thread
+        Glide.get(this@MainActivity).clearMemory()
 
-            if (clearPreferences) {
-                vectorPreferences.clearPreferences()
-                uiStateRepository.reset()
-                pinLocker.unlock()
-                pinCodeStore.deleteEncodedPin()
-            }
-            withContext(Dispatchers.IO) {
-                // On BG thread
-                Glide.get(this@MainActivity).clearDiskCache()
+        if (clearPreferences) {
+            vectorPreferences.clearPreferences()
+            uiStateRepository.reset()
+            pinLocker.unlock()
+            pinCodeStore.deleteEncodedPin()
+        }
+        withContext(Dispatchers.IO) {
+            // On BG thread
+            Glide.get(this@MainActivity).clearDiskCache()
 
-                // Also clear cache (Logs, etc...)
-                deleteAllFiles(this@MainActivity.cacheDir)
-            }
+            // Also clear cache (Logs, etc...)
+            deleteAllFiles(this@MainActivity.cacheDir)
         }
     }
 
@@ -214,15 +212,16 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(errorFormatter.toHumanReadable(failure))
                     .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
-                    .setNegativeButton(R.string.cancel) { _, _ -> startNextActivityAndFinish() }
+                    .setNegativeButton(R.string.cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
                     .setCancelable(false)
                     .show()
         }
     }
 
-    private fun startNextActivityAndFinish() {
+    private fun startNextActivityAndFinish(ignoreClearCredentials: Boolean = false) {
         val intent = when {
             args.clearCredentials
+                    && !ignoreClearCredentials
                     && (!args.isUserLoggedOut || args.isAccountDeactivated) ->
                 // User has explicitly asked to log out or deactivated his account
                 LoginActivity.newIntent(this, null)

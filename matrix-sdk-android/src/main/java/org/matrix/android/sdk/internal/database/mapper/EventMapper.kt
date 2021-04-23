@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.database.mapper
 import com.squareup.moshi.JsonDataException
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
@@ -29,8 +30,6 @@ import timber.log.Timber
 internal object EventMapper {
 
     fun map(event: Event, roomId: String): EventEntity {
-        val uds = if (event.unsignedData == null) null
-        else MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(event.unsignedData)
         val eventEntity = EventEntity()
         // TODO change this as we shouldn't use event everywhere
         eventEntity.eventId = event.eventId ?: "$$roomId-${System.currentTimeMillis()}-${event.hashCode()}"
@@ -39,14 +38,16 @@ internal object EventMapper {
         eventEntity.prevContent = ContentMapper.map(event.resolvedPrevContent())
         eventEntity.isUseless = IsUselessResolver.isUseless(event)
         eventEntity.stateKey = event.stateKey
-        eventEntity.type = event.type
+        eventEntity.type = event.type ?: EventType.MISSING_TYPE
         eventEntity.sender = event.senderId
         eventEntity.originServerTs = event.originServerTs
         eventEntity.redacts = event.redacts
         eventEntity.age = event.unsignedData?.age ?: event.originServerTs
-        eventEntity.unsignedData = uds
+        eventEntity.unsignedData = event.unsignedData?.let {
+            MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(it)
+        }
         eventEntity.decryptionResultJson = event.mxDecryptionResult?.let {
-            MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java).toJson(it)
+            MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).toJson(it)
         }
         eventEntity.decryptionErrorReason = event.mCryptoErrorReason
         eventEntity.decryptionErrorCode = event.mCryptoError?.name

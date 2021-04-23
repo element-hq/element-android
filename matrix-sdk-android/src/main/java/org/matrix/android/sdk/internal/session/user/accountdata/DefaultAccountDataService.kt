@@ -18,16 +18,15 @@ package org.matrix.android.sdk.internal.session.user.accountdata
 
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.sync.UserAccountDataSyncHandler
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
+import org.matrix.android.sdk.internal.util.awaitCallback
 import javax.inject.Inject
 
 internal class DefaultAccountDataService @Inject constructor(
@@ -54,26 +53,18 @@ internal class DefaultAccountDataService @Inject constructor(
         return accountDataDataSource.getLiveAccountDataEvents(types)
     }
 
-    override fun updateAccountData(type: String, content: Content, callback: MatrixCallback<Unit>?): Cancelable {
-        return updateUserAccountDataTask.configureWith(UpdateUserAccountDataTask.AnyParams(
-                type = type,
-                any = content
-        )) {
-            this.retryCount = 5
-            this.callback = object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    // TODO Move that to the task (but it created a circular dependencies...)
-                    monarchy.runTransactionSync { realm ->
-                        userAccountDataSyncHandler.handleGenericAccountData(realm, type, content)
-                    }
-                    callback?.onSuccess(data)
-                }
-
-                override fun onFailure(failure: Throwable) {
-                    callback?.onFailure(failure)
-                }
+    override suspend fun updateAccountData(type: String, content: Content) {
+        val params = UpdateUserAccountDataTask.AnyParams(type = type, any = content)
+        awaitCallback<Unit> { callback ->
+            updateUserAccountDataTask.configureWith(params) {
+                this.retryCount = 5 // TODO: Need to refactor retrying out into a helper method.
+                this.callback = callback
             }
+                    .executeBy(taskExecutor)
         }
-                .executeBy(taskExecutor)
+        // TODO Move that to the task (but it created a circular dependencies...)
+        monarchy.runTransactionSync { realm ->
+            userAccountDataSyncHandler.handleGenericAccountData(realm, type, content)
+        }
     }
 }

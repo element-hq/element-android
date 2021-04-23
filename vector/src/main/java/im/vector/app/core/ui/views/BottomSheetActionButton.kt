@@ -41,13 +41,13 @@ class BottomSheetActionButton @JvmOverloads constructor(
     var title: String? = null
         set(value) {
             field = value
-            views.itemVerificationActionTitle.setTextOrHide(value)
+            views.bottomSheetActionTitle.setTextOrHide(value)
         }
 
     var subTitle: String? = null
         set(value) {
             field = value
-            views.itemVerificationActionSubTitle.setTextOrHide(value)
+            views.bottomSheetActionSubTitle.setTextOrHide(value)
         }
 
     var forceStartPadding: Boolean? = null
@@ -55,9 +55,9 @@ class BottomSheetActionButton @JvmOverloads constructor(
             field = value
             if (leftIcon == null) {
                 if (forceStartPadding == true) {
-                    views.itemVerificationLeftIcon.isInvisible = true
+                    views.bottomSheetActionLeftIcon.isInvisible = true
                 } else {
-                    views.itemVerificationLeftIcon.isGone = true
+                    views.bottomSheetActionLeftIcon.isGone = true
                 }
             }
         }
@@ -67,33 +67,33 @@ class BottomSheetActionButton @JvmOverloads constructor(
             field = value
             if (value == null) {
                 if (forceStartPadding == true) {
-                    views.itemVerificationLeftIcon.isInvisible = true
+                    views.bottomSheetActionLeftIcon.isInvisible = true
                 } else {
-                    views.itemVerificationLeftIcon.isGone = true
+                    views.bottomSheetActionLeftIcon.isGone = true
                 }
-                views.itemVerificationLeftIcon.setImageDrawable(null)
+                views.bottomSheetActionLeftIcon.setImageDrawable(null)
             } else {
-                views.itemVerificationLeftIcon.isVisible = true
-                views.itemVerificationLeftIcon.setImageDrawable(value)
+                views.bottomSheetActionLeftIcon.isVisible = true
+                views.bottomSheetActionLeftIcon.setImageDrawable(value)
             }
         }
 
     var rightIcon: Drawable? = null
         set(value) {
             field = value
-            views.itemVerificationActionIcon.setImageDrawable(value)
+            views.bottomSheetActionIcon.setImageDrawable(value)
         }
 
     var tint: Int? = null
         set(value) {
             field = value
-            views.itemVerificationLeftIcon.imageTintList = value?.let { ColorStateList.valueOf(value) }
+            views.bottomSheetActionLeftIcon.imageTintList = value?.let { ColorStateList.valueOf(value) }
         }
 
     var titleTextColor: Int? = null
         set(value) {
             field = value
-            value?.let { views.itemVerificationActionTitle.setTextColor(it) }
+            value?.let { views.bottomSheetActionTitle.setTextColor(it) }
         }
 
     init {

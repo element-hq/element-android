@@ -48,9 +48,15 @@ internal fun RoomSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: Strin
     return where(realm, roomId).findFirst() ?: realm.createObject(roomId)
 }
 
-internal fun RoomSummaryEntity.Companion.getDirectRooms(realm: Realm): RealmResults<RoomSummaryEntity> {
+internal fun RoomSummaryEntity.Companion.getDirectRooms(realm: Realm,
+                                                        excludeRoomIds: Set<String>? = null): RealmResults<RoomSummaryEntity> {
     return RoomSummaryEntity.where(realm)
             .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            .apply {
+                if (!excludeRoomIds.isNullOrEmpty()) {
+                    not().`in`(RoomSummaryEntityFields.ROOM_ID, excludeRoomIds.toTypedArray())
+                }
+            }
             .findAll()
 }
 

@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.crypto.verification
 import android.os.Handler
 import android.os.Looper
 import dagger.Lazy
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -1293,8 +1292,7 @@ internal class DefaultVerificationService @Inject constructor(
                                            transactionId: String,
                                            roomId: String,
                                            otherUserId: String,
-                                           otherDeviceId: String,
-                                           callback: MatrixCallback<String>?): String? {
+                                           otherDeviceId: String): String {
         if (method == VerificationMethod.SAS) {
             val tx = DefaultOutgoingSASDefaultVerificationTransaction(
                     setDeviceVerificationAction,

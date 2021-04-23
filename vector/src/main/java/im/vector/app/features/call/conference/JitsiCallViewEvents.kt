@@ -17,5 +17,21 @@
 package im.vector.app.features.call.conference
 
 import im.vector.app.core.platform.VectorViewEvents
+import org.jitsi.meet.sdk.JitsiMeetUserInfo
 
-sealed class JitsiCallViewEvents : VectorViewEvents
+sealed class JitsiCallViewEvents : VectorViewEvents {
+    data class StartConference(
+            val enableVideo: Boolean,
+            val jitsiUrl: String,
+            val subject: String,
+            val confId: String,
+            val userInfo: JitsiMeetUserInfo
+    ) : JitsiCallViewEvents()
+
+    data class ConfirmSwitchingConference(
+            val args: VectorJitsiActivity.Args
+    ) : JitsiCallViewEvents()
+
+    object LeaveConference : JitsiCallViewEvents()
+    object Finish : JitsiCallViewEvents()
+}

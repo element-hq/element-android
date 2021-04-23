@@ -1,0 +1,2 @@
+Olulisemad muutused selles versioonis: URLide eelvaade, uus klahvistik emojide jaoks, jututubade uued seadistused ja natuke lund jõuludeks!
+Muudatuste logi täismahus: https://github.com/vector-im/element-android/releases/tag/v1.0.12

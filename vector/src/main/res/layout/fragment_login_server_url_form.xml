@@ -64,6 +64,7 @@
                     android:id="@+id/loginServerUrlFormHomeServerUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="@string/hs_url"
                     android:imeOptions="actionDone"
                     android:inputType="textUri"
                     android:maxLines="1" />

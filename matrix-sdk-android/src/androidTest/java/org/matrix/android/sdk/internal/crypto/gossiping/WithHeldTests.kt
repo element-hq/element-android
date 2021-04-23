@@ -51,7 +51,7 @@ class WithHeldTests : InstrumentedTest {
         // =============================
 
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
-        val bobSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
+        val bobSession = mTestHelper.createAccount(TestConstants.USER_BOB, SessionTestParams(true))
 
         // Initialize cross signing on both
         mCryptoTestHelper.initializeCrossSigning(aliceSession)

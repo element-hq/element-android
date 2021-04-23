@@ -48,7 +48,7 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
     }
 
     @EpoxyAttribute
-    var title: String? = null
+    var title: CharSequence? = null
 
     @EpoxyAttribute
     var description: CharSequence? = null

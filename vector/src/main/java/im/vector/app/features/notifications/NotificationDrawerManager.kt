@@ -26,6 +26,7 @@ import im.vector.app.ActiveSessionDataSource
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
@@ -88,7 +89,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         // If we support multi session, event list should be per userId
         // Currently only manage single session
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.v("%%%%%%%% onNotifiableEventReceived $notifiableEvent")
+            Timber.d("onNotifiableEventReceived(): $notifiableEvent")
+        } else {
+            Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.isPushGatewayEvent}")
         }
         synchronized(eventList) {
             val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
@@ -194,10 +197,14 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         notificationUtils.cancelNotificationMessage(roomId, ROOM_INVITATION_NOTIFICATION_ID)
     }
 
+    private var firstThrottler = FirstThrottler(200)
+
     fun refreshNotificationDrawer() {
         // Implement last throttler
-        Timber.v("refreshNotificationDrawer()")
+        val canHandle = firstThrottler.canHandle()
+        Timber.v("refreshNotificationDrawer(), delay: ${canHandle.waitMillis()} ms")
         backgroundHandler.removeCallbacksAndMessages(null)
+
         backgroundHandler.postDelayed(
                 {
                     try {
@@ -206,7 +213,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
                         Timber.w(throwable, "refreshNotificationDrawerBg failure")
                     }
-                }, 200)
+                },
+                canHandle.waitMillis())
     }
 
     @WorkerThread
@@ -544,7 +552,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         return bitmapLoader.getRoomBitmap(roomAvatarPath)
     }
 
-    private fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
+    fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
         return currentRoomId != null && roomId == currentRoomId
     }
 

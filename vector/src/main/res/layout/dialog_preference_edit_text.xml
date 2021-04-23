@@ -20,6 +20,7 @@
             android:id="@android:id/edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/dialog_edit_hint"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
             tools:ignore="TextFields" />

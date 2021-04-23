@@ -29,7 +29,7 @@ To create a new screen:
 - Then right click on the package, and select `New/New Vector/RiotX Feature`.
 - Follow the Wizard, especially replace `Main` by something more relevant to your feature.
 - Click on `Finish`.
-- Remaining steps are described as TODO in the generated files, or will be pointed out by the compilator, or at runtime :)
+- Remaining steps are described as TODO in the generated files, or will be pointed out by the compiler, or at runtime :)
 
 Note that if the templates are modified, the only things to do is to restart Android Studio for the change to take effect.
 

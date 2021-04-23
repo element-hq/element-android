@@ -18,10 +18,8 @@ package org.matrix.android.sdk.internal.session.pushers
 import androidx.lifecycle.LiveData
 import androidx.work.BackoffPolicy
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.pushers.PushersService
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.PusherEntity
 import org.matrix.android.sdk.internal.database.query.where
@@ -47,16 +45,11 @@ internal class DefaultPushersService @Inject constructor(
         private val taskExecutor: TaskExecutor
 ) : PushersService {
 
-    override fun testPush(url: String,
-                          appId: String,
-                          pushkey: String,
-                          eventId: String,
-                          callback: MatrixCallback<Unit>): Cancelable {
-        return pushGatewayNotifyTask
-                .configureWith(PushGatewayNotifyTask.Params(url, appId, pushkey, eventId)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun testPush(url: String,
+                                  appId: String,
+                                  pushkey: String,
+                                  eventId: String) {
+        pushGatewayNotifyTask.execute(PushGatewayNotifyTask.Params(url, appId, pushkey, eventId))
     }
 
     override fun refreshPushers() {
@@ -96,20 +89,15 @@ internal class DefaultPushersService @Inject constructor(
         val request = workManagerProvider.matrixOneTimeWorkRequestBuilder<AddHttpPusherWorker>()
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .setInputData(WorkerParamsFactory.toData(params))
-                .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000L, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
         workManagerProvider.workManager.enqueue(request)
         return request.id
     }
 
-    override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun removeHttpPusher(pushkey: String, appId: String) {
         val params = RemovePusherTask.Params(pushkey, appId)
-        return removePusherTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                // .enableRetry() ??
-                .executeBy(taskExecutor)
+        removePusherTask.execute(params)
     }
 
     override fun getPushersLive(): LiveData<List<Pusher>> {

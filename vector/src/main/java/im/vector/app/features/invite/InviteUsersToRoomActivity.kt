@@ -39,6 +39,7 @@ import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.toast
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.contactsbook.ContactsBookViewModel
+import im.vector.app.features.contactsbook.ContactsBookViewState
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
@@ -53,7 +54,7 @@ import javax.inject.Inject
 @Parcelize
 data class InviteUsersToRoomArgs(val roomId: String) : Parcelable
 
-class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Factory {
+class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Factory, ContactsBookViewModel.Factory, InviteUsersToRoomViewModel.Factory {
 
     private val viewModel: InviteUsersToRoomViewModel by viewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
@@ -67,9 +68,11 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
         injector.inject(this)
     }
 
-    override fun create(initialState: UserListViewState): UserListViewModel {
-        return userListViewModelFactory.create(initialState)
-    }
+    override fun create(initialState: UserListViewState) = userListViewModelFactory.create(initialState)
+
+    override fun create(initialState: ContactsBookViewState) = contactsBookViewModelFactory.create(initialState)
+
+    override fun create(initialState: InviteUsersToRoomViewState) = inviteUsersToRoomViewModelFactory.create(initialState)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +95,6 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
                 }
                 .disposeOnDestroy()
         if (isFirstCreation()) {
-            val args: InviteUsersToRoomArgs? = intent.extras?.getParcelable(MvRx.KEY_ARG)
             addFragment(
                     R.id.container,
                     UserListFragment::class.java,
@@ -100,7 +102,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
                             title = getString(R.string.invite_users_to_room_title),
                             menuResId = R.menu.vector_invite_users_to_room,
                             excludedUserIds = viewModel.getUserIdsOfRoomMembers(),
-                            existingRoomId = args?.roomId
+                            showInviteActions = false
                     )
             )
         }
@@ -110,7 +112,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
 
     private fun onMenuItemSelected(action: UserListSharedAction.OnMenuItemSelected) {
         if (action.itemId == R.id.action_invite_users_to_room_invite) {
-            viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.invitees))
+            viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.selections))
         }
     }
 

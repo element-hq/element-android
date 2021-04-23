@@ -21,7 +21,7 @@ import org.matrix.olm.OlmPkEncryption
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
 
-fun <T> withOlmEncryption(block: (OlmPkEncryption) -> T): T {
+internal fun <T> withOlmEncryption(block: (OlmPkEncryption) -> T): T {
     val olmPkEncryption = OlmPkEncryption()
     try {
         return block(olmPkEncryption)
@@ -30,7 +30,7 @@ fun <T> withOlmEncryption(block: (OlmPkEncryption) -> T): T {
     }
 }
 
-fun <T> withOlmDecryption(block: (OlmPkDecryption) -> T): T {
+internal fun <T> withOlmDecryption(block: (OlmPkDecryption) -> T): T {
     val olmPkDecryption = OlmPkDecryption()
     try {
         return block(olmPkDecryption)
@@ -39,7 +39,7 @@ fun <T> withOlmDecryption(block: (OlmPkDecryption) -> T): T {
     }
 }
 
-fun <T> withOlmSigning(block: (OlmPkSigning) -> T): T {
+internal fun <T> withOlmSigning(block: (OlmPkSigning) -> T): T {
     val olmPkSigning = OlmPkSigning()
     try {
         return block(olmPkSigning)
@@ -48,7 +48,7 @@ fun <T> withOlmSigning(block: (OlmPkSigning) -> T): T {
     }
 }
 
-fun <T> withOlmUtility(block: (OlmUtility) -> T): T {
+internal fun <T> withOlmUtility(block: (OlmUtility) -> T): T {
     val olmUtility = OlmUtility()
     try {
         return block(olmUtility)

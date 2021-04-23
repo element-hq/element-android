@@ -26,6 +26,7 @@ import javax.inject.Inject
 internal class RoomTypingUsersHandler @Inject constructor(@UserId private val userId: String,
                                                           private val typingUsersTracker: DefaultTypingUsersTracker) {
 
+    // TODO This could be handled outside of the Realm transaction. Use the new aggregator?
     fun handle(realm: Realm, roomId: String, ephemeralResult: RoomSyncHandler.EphemeralResult?) {
         val roomMemberHelper = RoomMemberHelper(realm, roomId)
         val typingIds = ephemeralResult?.typingUserIds?.filter { it != userId }.orEmpty()

@@ -33,14 +33,14 @@ internal class DefaultIdentityPingTask @Inject constructor() : IdentityPingTask 
 
     override suspend fun execute(params: IdentityPingTask.Params) {
         try {
-            executeRequest<Unit>(null) {
-                apiCall = params.identityAuthAPI.ping()
+            executeRequest(null) {
+                params.identityAuthAPI.ping()
             }
         } catch (throwable: Throwable) {
             if (throwable is Failure.ServerError && throwable.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
                 // Check if API v1 is available
-                executeRequest<Unit>(null) {
-                    apiCall = params.identityAuthAPI.pingV1()
+                executeRequest(null) {
+                    params.identityAuthAPI.pingV1()
                 }
                 // API V1 is responding, but not V2 -> Outdated
                 throw IdentityServiceError.OutdatedIdentityServer

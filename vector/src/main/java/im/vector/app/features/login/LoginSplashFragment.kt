@@ -16,27 +16,25 @@
 
 package im.vector.app.features.login
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import im.vector.app.DendriteService
+import androidx.core.view.isVisible
+import im.vector.app.BuildConfig
 import im.vector.app.databinding.FragmentLoginSplashBinding
-import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.internal.auth.DefaultSessionCreator_Factory
+import im.vector.app.features.settings.VectorPreferences
 
 import javax.inject.Inject
 
 /**
  * In this screen, the user is viewing an introduction to what he can do with this application
  */
-class LoginSplashFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginSplashBinding>() {
+class LoginSplashFragment @Inject constructor(
+        private val vectorPreferences: VectorPreferences
+) : AbstractLoginFragment<FragmentLoginSplashBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSplashBinding {
         return FragmentLoginSplashBinding.inflate(inflater, container, false)
@@ -50,6 +48,14 @@ class LoginSplashFragment @Inject constructor() : AbstractLoginFragment<Fragment
 
     private fun setupViews() {
         views.loginSplashSubmit.setOnClickListener { getStarted() }
+
+        if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
+            views.loginSplashVersion.isVisible = true
+            @SuppressLint("SetTextI18n")
+            views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}\n" +
+                    "Branch: ${BuildConfig.GIT_BRANCH_NAME}\n" +
+                    "Build: ${BuildConfig.BUILD_NUMBER}"
+        }
     }
 
     private fun getStarted() {

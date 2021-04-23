@@ -156,7 +156,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         // Do not compress gif
                         && attachment.mimeType != MimeTypes.Gif
                         && params.compressBeforeSending) {
-                    fileToUpload = imageCompressor.compress(context, workingFile, MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
+                    fileToUpload = imageCompressor.compress(workingFile, MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
                             .also { compressedFile ->
                                 // Get new Bitmap size
                                 compressedFile.inputStream().use {

@@ -21,7 +21,6 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.registration.SuccessResult
 import org.matrix.android.sdk.internal.auth.registration.ValidationCodeBody
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -37,70 +36,70 @@ internal interface ProfileAPI {
      * @param userId the user id to fetch profile info
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}")
-    fun getProfile(@Path("userId") userId: String): Call<JsonDict>
+    suspend fun getProfile(@Path("userId") userId: String): JsonDict
 
     /**
      * List all 3PIDs linked to the Matrix user account.
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid")
-    fun getThreePIDs(): Call<AccountThreePidsResponse>
+    suspend fun getThreePIDs(): AccountThreePidsResponse
 
     /**
      * Change user display name
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}/displayname")
-    fun setDisplayName(@Path("userId") userId: String,
-                       @Body body: SetDisplayNameBody): Call<Unit>
+    suspend fun setDisplayName(@Path("userId") userId: String,
+                               @Body body: SetDisplayNameBody)
 
     /**
      * Change user avatar url.
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}/avatar_url")
-    fun setAvatarUrl(@Path("userId") userId: String,
-                     @Body body: SetAvatarUrlBody): Call<Unit>
+    suspend fun setAvatarUrl(@Path("userId") userId: String,
+                             @Body body: SetAvatarUrlBody)
 
     /**
      * Bind a threePid
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-account-3pid-bind
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "account/3pid/bind")
-    fun bindThreePid(@Body body: BindThreePidBody): Call<Unit>
+    suspend fun bindThreePid(@Body body: BindThreePidBody)
 
     /**
      * Unbind a threePid
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-account-3pid-unbind
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "account/3pid/unbind")
-    fun unbindThreePid(@Body body: UnbindThreePidBody): Call<UnbindThreePidResponse>
+    suspend fun unbindThreePid(@Body body: UnbindThreePidBody): UnbindThreePidResponse
 
     /**
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-email-requesttoken
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/email/requestToken")
-    fun addEmail(@Body body: AddEmailBody): Call<AddEmailResponse>
+    suspend fun addEmail(@Body body: AddEmailBody): AddEmailResponse
 
     /**
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-msisdn-requesttoken
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/msisdn/requestToken")
-    fun addMsisdn(@Body body: AddMsisdnBody): Call<AddMsisdnResponse>
+    suspend fun addMsisdn(@Body body: AddMsisdnBody): AddMsisdnResponse
 
     /**
      * Validate Msisdn code (same model than for Identity server API)
      */
     @POST
-    fun validateMsisdn(@Url url: String,
-                       @Body params: ValidationCodeBody): Call<SuccessResult>
+    suspend fun validateMsisdn(@Url url: String,
+                               @Body params: ValidationCodeBody): SuccessResult
 
     /**
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-add
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/add")
-    fun finalizeAddThreePid(@Body body: FinalizeAddThreePidBody): Call<Unit>
+    suspend fun finalizeAddThreePid(@Body body: FinalizeAddThreePidBody)
 
     /**
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-delete
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/delete")
-    fun deleteThreePid(@Body body: DeleteThreePidBody): Call<DeleteThreePidResponse>
+    suspend fun deleteThreePid(@Body body: DeleteThreePidBody): DeleteThreePidResponse
 }

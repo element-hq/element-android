@@ -33,6 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
         tools:src="@tools:sample/avatars" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
@@ -75,6 +76,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@drawable/circle"
+        android:contentDescription="@string/a11y_unsent_draft"
         android:padding="3dp"
         android:src="@drawable/ic_edit"
         android:visibility="gone"

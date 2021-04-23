@@ -43,6 +43,7 @@ import io.realm.annotations.RealmModule
             EventAnnotationsSummaryEntity::class,
             ReactionAggregatedSummaryEntity::class,
             EditAggregatedSummaryEntity::class,
+            EditionOfEvent::class,
             PollResponseAggregatedSummaryEntity::class,
             ReferencesAggregatedSummaryEntity::class,
             PushRulesEntity::class,

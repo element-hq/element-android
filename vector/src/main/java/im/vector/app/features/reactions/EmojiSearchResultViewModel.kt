@@ -19,8 +19,9 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.reactions.data.EmojiDataSource
@@ -36,7 +37,7 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
         private val dataSource: EmojiDataSource)
     : VectorViewModel<EmojiSearchResultViewState, EmojiSearchAction, EmptyViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: EmojiSearchResultViewState): EmojiSearchResultViewModel
     }

@@ -43,7 +43,7 @@ abstract class RoomWidgetItem : EpoxyModelWithHolder<RoomWidgetItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.widgetName.text = widget.name
-        holder.widgetUrl.text = tryOrNull { URL(widget.computedUrl) }?.host ?: widget.computedUrl
+        holder.widgetUrl.text = tryOrNull { URL(widget.widgetContent.url) }?.host ?: widget.widgetContent.url
         if (iconRes != null) {
             holder.iconImage.isVisible = true
             holder.iconImage.setImageResource(iconRes!!)

@@ -25,5 +25,5 @@ enum class SdpType {
     OFFER,
 
     @Json(name = "answer")
-    ANSWER
+    ANSWER;
 }

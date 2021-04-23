@@ -30,10 +30,8 @@ import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentSsssAccessFromPassphraseBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -59,8 +57,9 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
                 key
         )
                 .toSpannable()
-                .colorizeMatchingText(pass, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
-                .colorizeMatchingText(key, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+        // TODO Restore coloration when we will have a FAQ to open with those terms
+        // .colorizeMatchingText(pass, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+        // .colorizeMatchingText(key, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
         views.ssssPassphraseEnterEdittext.editorActionEvents()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
@@ -79,7 +78,7 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        views.ssssPassphraseReset.views.itemVerificationClickableZone.debouncedClicks {
+        views.ssssPassphraseReset.views.bottomSheetActionClickableZone.debouncedClicks {
             sharedViewModel.handle(SharedSecureStorageAction.ForgotResetAll)
         }
 
@@ -106,6 +105,6 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
     override fun invalidate() = withState(sharedViewModel) { state ->
         val shouldBeVisible = state.passphraseVisible
         views.ssssPassphraseEnterEdittext.showPassword(shouldBeVisible)
-        views.ssssViewShowPassword.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+        views.ssssViewShowPassword.render(shouldBeVisible)
     }
 }

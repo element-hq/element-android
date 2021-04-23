@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.openid.GetOpenIdTokenTask
-import org.matrix.android.sdk.internal.session.widgets.RegisterWidgetResponse
 import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
 import org.matrix.android.sdk.internal.session.widgets.WidgetsAPI
 import org.matrix.android.sdk.internal.session.widgets.WidgetsAPIProvider
@@ -59,8 +58,8 @@ internal class DefaultGetScalarTokenTask @Inject constructor(private val widgets
 
     private suspend fun getNewScalarToken(widgetsAPI: WidgetsAPI, serverUrl: String): String {
         val openId = getOpenIdTokenTask.execute(Unit)
-        val registerWidgetResponse = executeRequest<RegisterWidgetResponse>(null) {
-            apiCall = widgetsAPI.register(openId, WIDGET_API_VERSION)
+        val registerWidgetResponse = executeRequest(null) {
+            widgetsAPI.register(openId, WIDGET_API_VERSION)
         }
         if (registerWidgetResponse.scalarToken == null) {
             // Should not happen
@@ -72,8 +71,8 @@ internal class DefaultGetScalarTokenTask @Inject constructor(private val widgets
 
     private suspend fun validateToken(widgetsAPI: WidgetsAPI, serverUrl: String, scalarToken: String): String {
         return try {
-            executeRequest<Unit>(null) {
-                apiCall = widgetsAPI.validateToken(scalarToken, WIDGET_API_VERSION)
+            executeRequest(null) {
+                widgetsAPI.validateToken(scalarToken, WIDGET_API_VERSION)
             }
             scalarToken
         } catch (failure: Throwable) {

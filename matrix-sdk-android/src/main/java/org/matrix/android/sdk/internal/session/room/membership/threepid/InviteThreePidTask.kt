@@ -59,7 +59,7 @@ internal class DefaultInviteThreePidTask @Inject constructor(
                     medium = params.threePid.toMedium(),
                     address = params.threePid.value
             )
-            apiCall = roomAPI.invite3pid(params.roomId, body)
+            roomAPI.invite3pid(params.roomId, body)
         }
     }
 }

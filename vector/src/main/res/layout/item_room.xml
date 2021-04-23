@@ -34,15 +34,16 @@
             android:id="@+id/roomAvatarImageView"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:contentDescription="@string/avatar"
             tools:src="@tools:sample/avatars" />
 
         <ImageView
             android:id="@+id/roomAvatarCheckedImageView"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:contentDescription="@string/a11y_checked"
             android:scaleType="centerInside"
             android:src="@drawable/ic_material_done"
-            android:visibility="visible"
             app:tint="@android:color/white"
             tools:ignore="MissingPrefix" />
 
@@ -52,21 +53,21 @@
         android:id="@+id/roomAvatarFailSendingImageView"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:contentDescription="@string/a11y_error_some_message_not_sent"
         android:src="@drawable/ic_warning_badge"
         app:layout_constraintCircle="@id/roomAvatarContainer"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="30dp"
         tools:ignore="MissingConstraints" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/roomAvatarDecorationImageView"
         android:layout_width="24dp"
         android:layout_height="24dp"
         app:layout_constraintCircle="@id/roomAvatarContainer"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
-        tools:ignore="MissingConstraints"
-        tools:src="@drawable/ic_shield_trusted" />
+        tools:ignore="MissingConstraints" />
 
     <!-- Margin bottom does not work, so I use space -->
     <Space
@@ -104,15 +105,16 @@
         android:layout_height="16dp"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
+        android:contentDescription="@string/a11y_unsent_draft"
         android:src="@drawable/ic_edit"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
         app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
         app:layout_constraintStart_toEndOf="@+id/roomNameView"
         app:layout_constraintTop_toTopOf="@+id/roomNameView"
-        tools:visibility="visible"
         app:tint="?riotx_text_primary"
-        tools:ignore="MissingPrefix" />
+        tools:ignore="MissingPrefix"
+        tools:visibility="visible" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomUnreadCounterBadgeView"

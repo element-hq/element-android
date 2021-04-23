@@ -25,15 +25,18 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.features.MainActivity
+import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.call.CallControlsBottomSheet
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.conference.VectorJitsiActivity
+import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
+import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.HomeModule
 import im.vector.app.features.home.room.detail.RoomDetailActivity
@@ -86,7 +89,6 @@ import im.vector.app.features.workers.signout.SignOutBottomSheetDialogFragment
             VectorComponent::class
         ],
         modules = [
-            AssistedInjectModule::class,
             ViewModelModule::class,
             FragmentModule::class,
             HomeModule::class,
@@ -146,6 +148,9 @@ interface ScreenComponent {
     fun inject(activity: VectorJitsiActivity)
     fun inject(activity: SearchActivity)
     fun inject(activity: UserCodeActivity)
+    fun inject(activity: CallTransferActivity)
+    fun inject(activity: ReAuthActivity)
+    fun inject(activity: RoomDevToolActivity)
 
     /* ==========================================================================================
      * BottomSheets

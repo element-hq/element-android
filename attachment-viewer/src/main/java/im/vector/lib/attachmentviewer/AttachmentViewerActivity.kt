@@ -18,15 +18,19 @@
 package im.vector.lib.attachmentviewer
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -94,14 +98,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // This is important for the dispatchTouchEvent, if not we must correct
-        // the touch coordinates
-        window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE)
-        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+        setDecorViewFullScreen()
 
         views = ActivityAttachmentViewerBinding.inflate(layoutInflater)
         setContentView(views.root)
@@ -131,6 +128,29 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
             topInset = insets.systemWindowInsetTop
             bottomInset = insets.systemWindowInsetBottom
             insets
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun setDecorViewFullScreen() {
+        // This is important for the dispatchTouchEvent, if not we must correct
+        // the touch coordinates
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            window.setDecorFitsSystemWindows(false)
+            // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
+            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
+            // New API instead of FLAG_TRANSLUCENT_STATUS
+            window.statusBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
+            // new API instead of FLAG_TRANSLUCENT_NAVIGATION
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
+        } else {
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE)
+            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
         }
     }
 
@@ -313,28 +333,48 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
                 ?.handleCommand(commands)
     }
 
+    @Suppress("DEPRECATION")
     private fun hideSystemUI() {
         systemUiVisibility = false
         // Enables regular immersive mode.
         // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
         // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
-                // Set the content to appear under the system bars so that the
-                // content doesn't resize when the system bars hide and show.
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                // Hide the nav bar and status bar
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            window.setDecorFitsSystemWindows(false)
+            // new API instead of SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            window.decorView.windowInsetsController?.hide(WindowInsets.Type.navigationBars())
+            // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
+            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
+            // New API instead of FLAG_TRANSLUCENT_STATUS
+            window.statusBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
+            // New API instead of FLAG_TRANSLUCENT_NAVIGATION
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
+        } else {
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                    // Set the content to appear under the system bars so that the
+                    // content doesn't resize when the system bars hide and show.
+                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    // Hide the nav bar and status bar
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN)
+        }
     }
 
     // Shows the system bars by removing all the flags
 // except for the ones that make the content appear under the system bars.
+    @Suppress("DEPRECATION")
     private fun showSystemUI() {
         systemUiVisibility = true
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            window.setDecorFitsSystemWindows(false)
+        } else {
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+        }
     }
 }

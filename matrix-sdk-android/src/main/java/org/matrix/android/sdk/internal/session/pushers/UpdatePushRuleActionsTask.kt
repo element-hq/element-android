@@ -38,8 +38,8 @@ internal class DefaultUpdatePushRuleActionsTask @Inject constructor(
     override suspend fun execute(params: UpdatePushRuleActionsTask.Params) {
         if (params.oldPushRule.enabled != params.newPushRule.enabled) {
             // First change enabled state
-            executeRequest<Unit>(globalErrorReceiver) {
-                apiCall = pushRulesApi.updateEnableRuleStatus(params.kind.value, params.newPushRule.ruleId, params.newPushRule.enabled)
+            executeRequest(globalErrorReceiver) {
+                pushRulesApi.updateEnableRuleStatus(params.kind.value, params.newPushRule.ruleId, params.newPushRule.enabled)
             }
         }
 
@@ -47,8 +47,8 @@ internal class DefaultUpdatePushRuleActionsTask @Inject constructor(
             // Also ensure the actions are up to date
             val body = mapOf("actions" to params.newPushRule.actions)
 
-            executeRequest<Unit>(globalErrorReceiver) {
-                apiCall = pushRulesApi.updateRuleActions(params.kind.value, params.newPushRule.ruleId, body)
+            executeRequest(globalErrorReceiver) {
+                pushRulesApi.updateRuleActions(params.kind.value, params.newPushRule.ruleId, body)
             }
         }
     }

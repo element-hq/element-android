@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.identity
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRegisterResponse
 import org.matrix.android.sdk.internal.session.openid.RequestOpenIdTokenResponse
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -40,18 +39,18 @@ internal interface IdentityAuthAPI {
      * @return 200 in case of success
      */
     @GET(NetworkConstants.URI_IDENTITY_PREFIX_PATH)
-    fun ping(): Call<Unit>
+    suspend fun ping()
 
     /**
      * Ping v1 will be used to check outdated Identity server
      */
     @GET("_matrix/identity/api/v1")
-    fun pingV1(): Call<Unit>
+    suspend fun pingV1()
 
     /**
      * Exchanges an OpenID token from the homeserver for an access token to access the identity server.
      * The request body is the same as the values returned by /openid/request_token in the Client-Server API.
      */
     @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "account/register")
-    fun register(@Body openIdToken: RequestOpenIdTokenResponse): Call<IdentityRegisterResponse>
+    suspend fun register(@Body openIdToken: RequestOpenIdTokenResponse): IdentityRegisterResponse
 }

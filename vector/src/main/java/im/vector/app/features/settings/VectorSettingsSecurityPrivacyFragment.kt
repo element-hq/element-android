@@ -311,10 +311,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         }
 
         mCrossSigningStatePreference.isVisible = true
-        if (!vectorPreferences.developerMode()) {
-            // When not in developer mode, intercept click on this preference
-            mCrossSigningStatePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener { true }
-        }
     }
 
     private val saveMegolmStartForActivityResult = registerStartForActivityResult {
@@ -462,7 +458,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             views.importDialogShowPassword.setOnClickListener {
                 passwordVisible = !passwordVisible
                 views.dialogE2eKeysPassphraseEditText.showPassword(passwordVisible)
-                views.importDialogShowPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+                views.importDialogShowPassword.render(passwordVisible)
             }
 
             views.dialogE2eKeysPassphraseEditText.addTextChangedListener(object : SimpleTextWatcher() {

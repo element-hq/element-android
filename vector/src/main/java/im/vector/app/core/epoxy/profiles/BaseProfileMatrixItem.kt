@@ -21,7 +21,6 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -47,6 +46,6 @@ abstract class BaseProfileMatrixItem<T : ProfileMatrixItem.Holder> : VectorEpoxy
         holder.subtitleView.setTextOrHide(matrixId)
         holder.editableView.isVisible = editable
         avatarRenderer.render(matrixItem, holder.avatarImageView)
-        holder.avatarDecorationImageView.setImageResource(userEncryptionTrustLevel.toImageRes())
+        holder.avatarDecorationImageView.render(userEncryptionTrustLevel)
     }
 }

@@ -32,6 +32,7 @@ import javax.inject.Inject
 
 class RoomPermissionsController @Inject constructor(
         private val stringProvider: StringProvider,
+        private val roleFormatter: RoleFormatter,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomPermissionsViewState>() {
 
@@ -124,7 +125,7 @@ class RoomPermissionsController @Inject constructor(
         buildProfileAction(
                 id = editablePermission.labelResId.toString(),
                 title = stringProvider.getString(editablePermission.labelResId),
-                subtitle = getSubtitle(currentRole),
+                subtitle = roleFormatter.format(currentRole),
                 dividerColor = dividerColor,
                 divider = true,
                 editable = editable,
@@ -134,15 +135,6 @@ class RoomPermissionsController @Inject constructor(
                             ?.onEditPermission(editablePermission, currentRole)
                 }
         )
-    }
-
-    private fun getSubtitle(currentRole: Role): String {
-        return when (currentRole) {
-            Role.Admin,
-            Role.Moderator,
-            Role.Default   -> stringProvider.getString(currentRole.res)
-            is Role.Custom -> stringProvider.getString(currentRole.res, currentRole.value)
-        }
     }
 
     private fun getCurrentRole(editablePermission: EditablePermission, content: PowerLevelsContent): Role {

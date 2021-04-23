@@ -51,7 +51,7 @@ import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.di.VectorComponent
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.rx.RxConfig
-import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.disclaimer.doNotShowDisclaimerDialog
 import im.vector.app.features.lifecycle.VectorActivityLifecycleCallbacks
@@ -60,11 +60,13 @@ import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
 import im.vector.app.push.fcm.FcmHelper
+import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -99,7 +101,7 @@ class VectorApplication :
     @Inject lateinit var rxConfig: RxConfig
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var pinLocker: PinLocker
-    @Inject lateinit var webRtcPeerConnectionManager: WebRtcPeerConnectionManager
+    @Inject lateinit var callManager: WebRtcCallManager
 
     lateinit var vectorComponent: VectorComponent
 
@@ -127,6 +129,11 @@ class VectorApplication :
         Intent(this, DendriteService::class.java).also { intent ->
             startService(intent)
         }
+        
+        // Remove Log handler statically added by Jitsi
+        Timber.forest()
+                .filterIsInstance(JitsiMeetDefaultLogHandler::class.java)
+                .forEach { Timber.uproot(it) }
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -196,7 +203,7 @@ class VectorApplication :
         })
         ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)
         ProcessLifecycleOwner.get().lifecycle.addObserver(pinLocker)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(webRtcPeerConnectionManager)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(callManager)
         // This should be done as early as possible
         // initKnownEmojiHashSet(appContext)
 
@@ -218,7 +225,12 @@ class VectorApplication :
         }
     }
 
-    override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)
+    override fun providesMatrixConfiguration(): MatrixConfiguration {
+        return MatrixConfiguration(
+                applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
+                roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(this)
+        )
+    }
 
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()

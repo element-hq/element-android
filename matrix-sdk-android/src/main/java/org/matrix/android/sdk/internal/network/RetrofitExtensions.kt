@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.ResponseBody
+import retrofit2.HttpException
 import retrofit2.Response
 import timber.log.Timber
 import java.io.IOException
@@ -55,6 +56,13 @@ internal suspend fun okhttp3.Call.awaitResponse(): okhttp3.Response {
  */
 internal fun <T> Response<T>.toFailure(globalErrorReceiver: GlobalErrorReceiver?): Failure {
     return toFailure(errorBody(), code(), globalErrorReceiver)
+}
+
+/**
+ * Convert a HttpException to a Failure, and eventually parse errorBody to convert it to a MatrixError
+ */
+internal fun HttpException.toFailure(globalErrorReceiver: GlobalErrorReceiver?): Failure {
+    return toFailure(response()?.errorBody(), code(), globalErrorReceiver)
 }
 
 /**

@@ -16,12 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import io.realm.Realm
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
 import org.matrix.android.sdk.internal.database.query.createUnmanaged
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
-import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,7 +36,9 @@ typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, D
 private const val READ_KEY = "m.read"
 private const val TIMESTAMP_KEY = "ts"
 
-internal class ReadReceiptHandler @Inject constructor() {
+internal class ReadReceiptHandler @Inject constructor(
+        private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
+) {
 
     companion object {
 
@@ -52,22 +55,29 @@ internal class ReadReceiptHandler @Inject constructor() {
         }
     }
 
-    fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?, isInitialSync: Boolean) {
-        if (content == null) {
-            return
-        }
+    fun handle(realm: Realm,
+               roomId: String,
+               content: ReadReceiptContent?,
+               isInitialSync: Boolean,
+               aggregator: SyncResponsePostTreatmentAggregator?) {
+        content ?: return
+
         try {
-            handleReadReceiptContent(realm, roomId, content, isInitialSync)
+            handleReadReceiptContent(realm, roomId, content, isInitialSync, aggregator)
         } catch (exception: Exception) {
             Timber.e("Fail to handle read receipt for room $roomId")
         }
     }
 
-    private fun handleReadReceiptContent(realm: Realm, roomId: String, content: ReadReceiptContent, isInitialSync: Boolean) {
+    private fun handleReadReceiptContent(realm: Realm,
+                                         roomId: String,
+                                         content: ReadReceiptContent,
+                                         isInitialSync: Boolean,
+                                         aggregator: SyncResponsePostTreatmentAggregator?) {
         if (isInitialSync) {
             initialSyncStrategy(realm, roomId, content)
         } else {
-            incrementalSyncStrategy(realm, roomId, content)
+            incrementalSyncStrategy(realm, roomId, content, aggregator)
         }
     }
 
@@ -87,7 +97,21 @@ internal class ReadReceiptHandler @Inject constructor() {
         realm.insertOrUpdate(readReceiptSummaries)
     }
 
-    private fun incrementalSyncStrategy(realm: Realm, roomId: String, content: ReadReceiptContent) {
+    private fun incrementalSyncStrategy(realm: Realm,
+                                        roomId: String,
+                                        content: ReadReceiptContent,
+                                        aggregator: SyncResponsePostTreatmentAggregator?) {
+        // First check if we have data from init sync to handle
+        getContentFromInitSync(roomId)?.let {
+            Timber.w("INIT_SYNC Insert during incremental sync RR for room $roomId")
+            doIncrementalSyncStrategy(realm, roomId, it)
+            aggregator?.ephemeralFilesToDelete?.add(roomId)
+        }
+
+        doIncrementalSyncStrategy(realm, roomId, content)
+    }
+
+    private fun doIncrementalSyncStrategy(realm: Realm, roomId: String, content: ReadReceiptContent) {
         for ((eventId, receiptDict) in content) {
             val userIdsDict = receiptDict[READ_KEY] ?: continue
             val readReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
@@ -109,5 +133,28 @@ internal class ReadReceiptHandler @Inject constructor() {
                 }
             }
         }
+    }
+
+    fun getContentFromInitSync(roomId: String): ReadReceiptContent? {
+        val dataFromFile = roomSyncEphemeralTemporaryStore.read(roomId)
+
+        dataFromFile ?: return null
+
+        @Suppress("UNCHECKED_CAST")
+        val content = dataFromFile
+                .events
+                .firstOrNull { it.type == EventType.RECEIPT }
+                ?.content as? ReadReceiptContent
+
+        if (content == null) {
+            // We can delete the file now
+            roomSyncEphemeralTemporaryStore.delete(roomId)
+        }
+
+        return content
+    }
+
+    fun onContentFromInitSyncHandled(roomId: String) {
+        roomSyncEphemeralTemporaryStore.delete(roomId)
     }
 }

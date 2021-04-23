@@ -64,14 +64,14 @@ internal class DefaultGetGroupDataTask @Inject constructor(
         }
         Timber.v("Fetch data for group with ids: ${groupIds.joinToString(";")}")
         val data = groupIds.map { groupId ->
-            val groupSummary = executeRequest<GroupSummaryResponse>(globalErrorReceiver) {
-                apiCall = groupAPI.getSummary(groupId)
+            val groupSummary = executeRequest(globalErrorReceiver) {
+                groupAPI.getSummary(groupId)
             }
-            val groupRooms = executeRequest<GroupRooms>(globalErrorReceiver) {
-                apiCall = groupAPI.getRooms(groupId)
+            val groupRooms = executeRequest(globalErrorReceiver) {
+                groupAPI.getRooms(groupId)
             }
-            val groupUsers = executeRequest<GroupUsers>(globalErrorReceiver) {
-                apiCall = groupAPI.getUsers(groupId)
+            val groupUsers = executeRequest(globalErrorReceiver) {
+                groupAPI.getUsers(groupId)
             }
             GroupData(groupId, groupSummary, groupRooms, groupUsers)
         }

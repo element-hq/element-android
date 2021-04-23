@@ -44,7 +44,7 @@ class PromptPasswordDialog {
         views.promptPasswordPasswordReveal.setOnClickListener {
             passwordVisible = !passwordVisible
             views.promptPassword.showPassword(passwordVisible)
-            views.promptPasswordPasswordReveal.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+            views.promptPasswordPasswordReveal.render(passwordVisible)
         }
 
         AlertDialog.Builder(activity)

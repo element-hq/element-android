@@ -26,7 +26,7 @@ import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
-import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
+import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
@@ -35,10 +35,10 @@ import javax.inject.Inject
 internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
                                                      private val verificationService: DefaultVerificationService) {
 
-    fun handleToDevice(toDevice: ToDeviceSyncResponse, initialSyncProgressService: DefaultInitialSyncProgressService? = null) {
+    fun handleToDevice(toDevice: ToDeviceSyncResponse, progressReporter: ProgressReporter? = null) {
         val total = toDevice.events?.size ?: 0
         toDevice.events?.forEachIndexed { index, event ->
-            initialSyncProgressService?.reportProgress(((index / total.toFloat()) * 100).toInt())
+            progressReporter?.reportProgress(index * 100F / total)
             // Decrypt event if necessary
             Timber.i("## CRYPTO | To device event from ${event.senderId} of type:${event.type}")
             decryptToDeviceEvent(event, null)
@@ -75,7 +75,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
                 // try to find device id to ease log reading
                 val deviceId = cryptoService.getCryptoDeviceInfo(event.senderId!!).firstOrNull {
                     it.identityKey() == senderKey
-                 }?.deviceId ?: senderKey
+                }?.deviceId ?: senderKey
                 Timber.e("## CRYPTO | Failed to decrypt to device event from ${event.senderId}|$deviceId reason:<${event.mCryptoError ?: exception}>")
             }
 

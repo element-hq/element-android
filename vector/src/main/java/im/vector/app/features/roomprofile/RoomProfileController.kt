@@ -54,7 +54,10 @@ class RoomProfileController @Inject constructor(
         fun createShortcut()
         fun onSettingsClicked()
         fun onLeaveRoomClicked()
+        fun onRoomAliasesClicked()
+        fun onRoomPermissionsClicked()
         fun onRoomIdClicked()
+        fun onRoomDevToolsClicked()
         fun onUrlInTopicLongClicked(url: String)
     }
 
@@ -174,16 +177,55 @@ class RoomProfileController @Inject constructor(
         )
 
         // Advanced
+        buildProfileSection(stringProvider.getString(R.string.room_settings_category_advanced_title))
+
+        buildProfileAction(
+                id = "alias",
+                title = stringProvider.getString(R.string.room_settings_alias_title),
+                subtitle = stringProvider.getString(R.string.room_settings_alias_subtitle),
+                dividerColor = dividerColor,
+                divider = true,
+                editable = true,
+                action = { callback?.onRoomAliasesClicked() }
+        )
+
+        buildProfileAction(
+                id = "permissions",
+                title = stringProvider.getString(R.string.room_settings_permissions_title),
+                subtitle = stringProvider.getString(R.string.room_settings_permissions_subtitle),
+                dividerColor = dividerColor,
+                divider = false,
+                editable = true,
+                action = { callback?.onRoomPermissionsClicked() }
+        )
+
         if (vectorPreferences.developerMode()) {
-            buildProfileSection(stringProvider.getString(R.string.room_settings_category_advanced_title))
             buildProfileAction(
                     id = "roomId",
                     title = stringProvider.getString(R.string.room_settings_room_internal_id),
                     subtitle = roomSummary.roomId,
                     dividerColor = dividerColor,
-                    divider = false,
+                    divider = true,
                     editable = false,
                     action = { callback?.onRoomIdClicked() }
+            )
+            data.roomCreateContent()?.roomVersion?.let {
+                buildProfileAction(
+                        id = "roomVersion",
+                        title = stringProvider.getString(R.string.room_settings_room_version_title),
+                        subtitle = it,
+                        dividerColor = dividerColor,
+                        divider = true,
+                        editable = false
+                )
+            }
+            buildProfileAction(
+                    id = "devTools",
+                    title = stringProvider.getString(R.string.dev_tools_menu_name),
+                    dividerColor = dividerColor,
+                    divider = false,
+                    editable = true,
+                    action = { callback?.onRoomDevToolsClicked() }
             )
         }
     }

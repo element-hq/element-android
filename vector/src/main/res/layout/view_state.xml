@@ -62,6 +62,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="30dp"
+            android:importantForAccessibility="no"
             android:maxHeight="350dp"
             app:layout_constraintBottom_toTopOf="@id/emptyTitleView"
             app:layout_constraintEnd_toEndOf="parent"

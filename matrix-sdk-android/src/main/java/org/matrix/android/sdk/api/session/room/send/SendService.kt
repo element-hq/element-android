@@ -132,4 +132,9 @@ interface SendService {
      * Resend all failed messages one by one (and keep order)
      */
     fun resendAllFailedMessages()
+
+    /**
+     * Cancel all failed messages
+     */
+    fun cancelAllFailedMessages()
 }

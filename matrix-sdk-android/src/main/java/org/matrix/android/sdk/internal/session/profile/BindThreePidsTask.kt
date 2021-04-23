@@ -43,8 +43,8 @@ internal class DefaultBindThreePidsTask @Inject constructor(private val profileA
         val identityServerAccessToken = accessTokenProvider.getToken() ?: throw IdentityServiceError.NoIdentityServerConfigured
         val identityPendingBinding = identityStore.getPendingBinding(params.threePid) ?: throw IdentityServiceError.NoCurrentBindingError
 
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = profileAPI.bindThreePid(
+        executeRequest(globalErrorReceiver) {
+            profileAPI.bindThreePid(
                     BindThreePidBody(
                             clientSecret = identityPendingBinding.clientSecret,
                             identityServerUrlWithoutProtocol = identityServerUrlWithoutProtocol,

@@ -9,6 +9,7 @@
         android:id="@+id/attachmentBigImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/a11y_image"
         tools:src="@tools:sample/backgrounds/scenic" />
 
 </FrameLayout>

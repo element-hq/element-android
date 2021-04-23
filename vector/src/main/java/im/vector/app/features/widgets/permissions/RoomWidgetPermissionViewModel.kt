@@ -20,12 +20,14 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
@@ -51,11 +53,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
                 .filter { it.isNotEmpty() }
                 .map {
                     val widget = it.first()
-                    val domain = try {
-                        URL(widget.computedUrl).host
-                    } catch (e: Throwable) {
-                        null
-                    }
+                    val domain = tryOrNull { URL(widget.widgetContent.url) }?.host
                     // TODO check from widget urls the perms that should be shown?
                     // For now put all
                     if (widget.type == WidgetType.Jitsi) {
@@ -141,7 +139,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
         }
     }
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel
     }

@@ -91,7 +91,7 @@ internal class SendEventWorker(context: Context,
             if (/*currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING ||**/ !exception.shouldBeRetried()) {
                 Timber.e("## SendEvent: [${System.currentTimeMillis()}]  Send event Failed cannot retry ${params.eventId} > ${exception.localizedMessage}")
                 localEchoRepository.updateSendState(event.eventId, event.roomId, SendState.UNDELIVERED)
-                return Result.success()
+                Result.success()
             } else {
                 Timber.e("## SendEvent: [${System.currentTimeMillis()}]  Send event Failed schedule retry ${params.eventId} > ${exception.localizedMessage}")
                 Result.retry()

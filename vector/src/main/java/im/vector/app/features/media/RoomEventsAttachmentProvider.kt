@@ -19,7 +19,10 @@ package im.vector.app.features.media
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -125,21 +128,18 @@ class RoomEventsAttachmentProvider(
             val messageContent = timelineEvent.root.getClearContent().toModel<MessageContent>()
                     as? MessageWithAttachmentContent
                     ?: return@let
-            fileService.downloadFile(
-                    fileName = messageContent.body,
-                    mimeType = messageContent.mimeType,
-                    url = messageContent.getFileUrl(),
-                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                    callback = object : MatrixCallback<File> {
-                        override fun onSuccess(data: File) {
-                            callback(data)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            callback(null)
-                        }
-                    }
-            )
+            GlobalScope.launch {
+                val result = runCatching {
+                    fileService.downloadFile(
+                            fileName = messageContent.body,
+                            mimeType = messageContent.mimeType,
+                            url = messageContent.getFileUrl(),
+                            elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
+                }
+                withContext(Dispatchers.Main) {
+                    callback(result.getOrNull())
+                }
+            }
         }
     }
 }

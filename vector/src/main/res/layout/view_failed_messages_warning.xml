@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <View
+        android:id="@+id/failedMessagesWarningDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:background="?attr/vctr_list_divider_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/failedMessagesWarningTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="8dp"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:text="@string/event_status_failed_messages_warning"
+        android:textColor="?riotx_text_primary"
+        android:textSize="14sp"
+        app:drawableStartCompat="@drawable/ic_sending_message_failed"
+        app:layout_constraintBottom_toBottomOf="@id/failedMessagesRetryButton"
+        app:layout_constraintEnd_toStartOf="@+id/failedMessagesDeleteAllButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/failedMessagesRetryButton" />
+
+    <ImageButton
+        android:id="@+id/failedMessagesDeleteAllButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/event_status_a11y_delete_all"
+        android:src="@drawable/ic_delete_unsent_messages"
+        app:layout_constraintBottom_toBottomOf="@id/failedMessagesRetryButton"
+        app:layout_constraintEnd_toStartOf="@id/failedMessagesRetryButton"
+        app:layout_constraintTop_toTopOf="@id/failedMessagesRetryButton" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/failedMessagesRetryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:text="@string/global_retry"
+        android:textSize="14sp"
+        app:icon="@drawable/ic_retry_sending_messages"
+        app:iconTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/failedMessagesWarningDivider" />
+
+</merge>

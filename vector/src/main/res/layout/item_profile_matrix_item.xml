@@ -19,21 +19,21 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_centerVertical="true"
+        android:contentDescription="@string/avatar"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/matrixItemAvatarDecoration"
         android:layout_width="20dp"
         android:layout_height="20dp"
         app:layout_constraintCircle="@+id/matrixItemAvatar"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="16dp"
-        tools:ignore="MissingConstraints"
-        tools:src="@drawable/ic_shield_trusted" />
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/matrixItemTitle"
@@ -79,6 +79,7 @@
         android:id="@+id/matrixItemEditable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_arrow_right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

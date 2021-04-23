@@ -52,9 +52,9 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.recoverySave.views.itemVerificationClickableZone.debouncedClicks { downloadRecoveryKey() }
-        views.recoveryCopy.views.itemVerificationClickableZone.debouncedClicks { shareRecoveryKey() }
-        views.recoveryContinue.views.itemVerificationClickableZone.debouncedClicks {
+        views.recoverySave.views.bottomSheetActionClickableZone.debouncedClicks { downloadRecoveryKey() }
+        views.recoveryCopy.views.bottomSheetActionClickableZone.debouncedClicks { shareRecoveryKey() }
+        views.recoveryContinue.views.bottomSheetActionClickableZone.debouncedClicks {
             // We do not display the final Fragment anymore
             // TODO Do some cleanup
             // sharedViewModel.handle(BootstrapActions.GoToCompleted)
@@ -62,8 +62,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
         }
     }
 
-    private fun downloadRecoveryKey() = withState(sharedViewModel) { _ ->
-
+    private fun downloadRecoveryKey() {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "text/plain"

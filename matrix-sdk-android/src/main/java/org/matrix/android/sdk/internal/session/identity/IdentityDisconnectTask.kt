@@ -42,8 +42,8 @@ internal class DefaultIdentityDisconnectTask @Inject constructor(
             return
         }
 
-        executeRequest<Unit>(null) {
-            apiCall = identityAPI.logout()
+        executeRequest(null) {
+            identityAPI.logout()
         }
     }
 }

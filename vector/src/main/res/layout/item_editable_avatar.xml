@@ -14,6 +14,7 @@
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:background="@drawable/header_panel_round_background"
+        android:contentDescription="@string/a11y_change_avatar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,12 +24,14 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_add_image" />
 
         <ImageView
             android:id="@+id/itemEditableAvatarImage"
             android:layout_width="128dp"
             android:layout_height="128dp"
+            android:importantForAccessibility="no"
             android:scaleType="center"
             tools:alpha="0.3"
             tools:src="@tools:sample/avatars" />
@@ -40,6 +43,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:background="@drawable/header_panel_round_background"
+        android:contentDescription="@string/a11y_delete_avatar"
         android:scaleType="center"
         android:src="@drawable/ic_delete"
         android:visibility="gone"

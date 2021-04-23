@@ -21,8 +21,9 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -31,14 +32,17 @@ import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.rx.RxRoom
+import org.matrix.android.sdk.rx.mapOptional
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
@@ -49,7 +53,7 @@ class RoomProfileViewModel @AssistedInject constructor(
         private val session: Session
 ) : VectorViewModel<RoomProfileViewState, RoomProfileAction, RoomProfileViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: RoomProfileViewState): RoomProfileViewModel
     }
@@ -68,8 +72,18 @@ class RoomProfileViewModel @AssistedInject constructor(
     init {
         val rxRoom = room.rx()
         observeRoomSummary(rxRoom)
+        observeRoomCreateContent(rxRoom)
         observeBannedRoomMembers(rxRoom)
         observePermissions()
+    }
+
+    private fun observeRoomCreateContent(rxRoom: RxRoom) {
+        rxRoom.liveStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.NoCondition)
+                .mapOptional { it.content.toModel<RoomCreateContent>() }
+                .unwrap()
+                .execute {
+                    copy(roomCreateContent = it)
+                }
     }
 
     private fun observeRoomSummary(rxRoom: RxRoom) {
@@ -154,15 +168,14 @@ class RoomProfileViewModel @AssistedInject constructor(
 
     private fun handleLeaveRoom() {
         _viewEvents.post(RoomProfileViewEvents.Loading(stringProvider.getString(R.string.room_profile_leaving_room)))
-        room.leave(null, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                room.leave(null)
                 // Do nothing, we will be closing the room automatically when it will get back from sync
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))
             }
-        })
+        }
     }
 
     private fun handleShareRoomProfile() {

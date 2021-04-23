@@ -37,4 +37,7 @@ internal abstract class SyncModule {
 
     @Binds
     abstract fun bindSyncTask(task: DefaultSyncTask): SyncTask
+
+    @Binds
+    abstract fun bindRoomSyncEphemeralTemporaryStore(store: RoomSyncEphemeralTemporaryStoreFile): RoomSyncEphemeralTemporaryStore
 }

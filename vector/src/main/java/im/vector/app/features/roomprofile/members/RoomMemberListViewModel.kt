@@ -20,15 +20,15 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -53,7 +53,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                                                           private val session: Session)
     : VectorViewModel<RoomMemberListViewState, RoomMemberListAction, EmptyViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: RoomMemberListViewState): RoomMemberListViewModel
     }
@@ -89,7 +89,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                                 .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
                                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                                 .unwrap(),
-                        BiFunction { roomMembers, powerLevelsContent ->
+                        { roomMembers, powerLevelsContent ->
                             buildRoomMemberSummaries(powerLevelsContent, roomMembers)
                         }
                 )

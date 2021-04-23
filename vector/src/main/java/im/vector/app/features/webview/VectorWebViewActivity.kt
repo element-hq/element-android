@@ -64,7 +64,9 @@ class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>()
             // Allow use of Local Storage
             domStorageEnabled = true
 
+            @Suppress("DEPRECATION")
             allowFileAccessFromFileURLs = true
+            @Suppress("DEPRECATION")
             allowUniversalAccessFromFileURLs = true
 
             displayZoomControls = false
@@ -73,7 +75,7 @@ class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>()
         val cookieManager = android.webkit.CookieManager.getInstance()
         cookieManager.setAcceptThirdPartyCookies(views.simpleWebview, true)
 
-        val url = intent.extras?.getString(EXTRA_URL)
+        val url = intent.extras?.getString(EXTRA_URL) ?: return
         val title = intent.extras?.getString(EXTRA_TITLE, USE_TITLE_FROM_WEB_PAGE)
         if (title != USE_TITLE_FROM_WEB_PAGE) {
             setTitle(title)

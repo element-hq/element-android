@@ -26,18 +26,19 @@ import im.vector.app.EmojiCompatWrapper
 import im.vector.app.VectorApplication
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.core.utils.DimensionConverter
-import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.HomeRoomListDataSource
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.login.ReAuthHelper
@@ -112,8 +113,6 @@ interface VectorComponent {
 
     fun errorFormatter(): ErrorFormatter
 
-    fun homeRoomListObservableStore(): HomeRoomListDataSource
-
     fun selectedGroupStore(): SelectedGroupDataSource
 
     fun roomDetailPendingActionStore(): RoomDetailPendingActionStore
@@ -142,6 +141,8 @@ interface VectorComponent {
 
     fun vectorPreferences(): VectorPreferences
 
+    fun wifiDetector(): WifiDetector
+
     fun vectorFileLogger(): VectorFileLogger
 
     fun uiStateRepository(): UiStateRepository
@@ -156,7 +157,9 @@ interface VectorComponent {
 
     fun pinLocker(): PinLocker
 
-    fun webRtcPeerConnectionManager(): WebRtcPeerConnectionManager
+    fun webRtcCallManager(): WebRtcCallManager
+
+    fun roomSummaryHolder(): RoomSummariesHolder
 
     @Component.Factory
     interface Factory {

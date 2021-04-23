@@ -32,7 +32,7 @@ internal class DefaultGetKeysBackupVersionTask @Inject constructor(
 
     override suspend fun execute(params: String): KeysVersionResult {
         return executeRequest(globalErrorReceiver) {
-            apiCall = roomKeysApi.getKeysBackupVersion(params)
+            roomKeysApi.getKeysBackupVersion(params)
         }
     }
 }

@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.database.helper
 
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
-import org.matrix.android.sdk.internal.extensions.assertIsManaged
 import io.realm.Realm
 
 internal fun TimelineEventEntity.Companion.nextId(realm: Realm): Long {
@@ -28,12 +27,4 @@ internal fun TimelineEventEntity.Companion.nextId(realm: Realm): Long {
     } else {
         currentIdNum.toLong() + 1
     }
-}
-
-internal fun TimelineEventEntity.deleteOnCascade() {
-    assertIsManaged()
-    root?.deleteFromRealm()
-    annotations?.deleteFromRealm()
-    readReceipts?.deleteFromRealm()
-    deleteFromRealm()
 }

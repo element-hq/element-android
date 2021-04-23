@@ -45,8 +45,8 @@ internal class DefaultSignOutTask @Inject constructor(
         if (params.signOutFromHomeserver) {
             Timber.d("SignOut: send request...")
             try {
-                executeRequest<Unit>(globalErrorReceiver) {
-                    apiCall = signOutAPI.signOut()
+                executeRequest(globalErrorReceiver) {
+                    signOutAPI.signOut()
                 }
             } catch (throwable: Throwable) {
                 // Maybe due to https://github.com/matrix-org/synapse/issues/5756

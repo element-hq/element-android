@@ -20,11 +20,15 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 
 object RoomSummaryConstants {
 
+    /**
+     *
+     */
     val PREVIEWABLE_TYPES = listOf(
             // TODO filter message type (KEY_VERIFICATION_READY, etc.)
             EventType.MESSAGE,
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
+            EventType.CALL_REJECT,
             EventType.CALL_ANSWER,
             EventType.ENCRYPTED,
             EventType.STICKER,

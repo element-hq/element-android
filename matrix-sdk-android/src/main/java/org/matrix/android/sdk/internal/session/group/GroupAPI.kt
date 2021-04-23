@@ -20,7 +20,6 @@ import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.session.group.model.GroupRooms
 import org.matrix.android.sdk.internal.session.group.model.GroupSummaryResponse
 import org.matrix.android.sdk.internal.session.group.model.GroupUsers
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -32,7 +31,7 @@ internal interface GroupAPI {
      * @param groupId the group id
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "groups/{groupId}/summary")
-    fun getSummary(@Path("groupId") groupId: String): Call<GroupSummaryResponse>
+    suspend fun getSummary(@Path("groupId") groupId: String): GroupSummaryResponse
 
     /**
      * Request the rooms list.
@@ -40,7 +39,7 @@ internal interface GroupAPI {
      * @param groupId the group id
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "groups/{groupId}/rooms")
-    fun getRooms(@Path("groupId") groupId: String): Call<GroupRooms>
+    suspend fun getRooms(@Path("groupId") groupId: String): GroupRooms
 
     /**
      * Request the users list.
@@ -48,5 +47,5 @@ internal interface GroupAPI {
      * @param groupId the group id
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "groups/{groupId}/users")
-    fun getUsers(@Path("groupId") groupId: String): Call<GroupUsers>
+    suspend fun getUsers(@Path("groupId") groupId: String): GroupUsers
 }

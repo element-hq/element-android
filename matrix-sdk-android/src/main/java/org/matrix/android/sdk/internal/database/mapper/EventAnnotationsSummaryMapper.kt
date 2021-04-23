@@ -20,11 +20,7 @@ import org.matrix.android.sdk.api.session.room.model.EditAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReactionAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedSummary
-import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
-import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryEntity
-import org.matrix.android.sdk.internal.database.model.ReferencesAggregatedSummaryEntity
-import io.realm.RealmList
 
 internal object EventAnnotationsSummaryMapper {
     fun map(annotationsSummary: EventAnnotationsSummaryEntity): EventAnnotationsSummary {
@@ -40,14 +36,18 @@ internal object EventAnnotationsSummaryMapper {
                             it.sourceLocalEcho.toList()
                     )
                 },
-                editSummary = annotationsSummary.editSummary?.let {
-                    EditAggregatedSummary(
-                            ContentMapper.map(it.aggregatedContent),
-                            it.sourceEvents.toList(),
-                            it.sourceLocalEchoEvents.toList(),
-                            it.lastEditTs
-                    )
-                },
+                editSummary = annotationsSummary.editSummary
+                        ?.let {
+                            val latestEdition = it.editions.maxByOrNull { editionOfEvent -> editionOfEvent.timestamp } ?: return@let null
+                            EditAggregatedSummary(
+                                    latestContent = ContentMapper.map(latestEdition.content),
+                                    sourceEvents = it.editions.filter { editionOfEvent -> !editionOfEvent.isLocalEcho }
+                                            .map { editionOfEvent -> editionOfEvent.eventId },
+                                    localEchos = it.editions.filter { editionOfEvent -> editionOfEvent.isLocalEcho }
+                                            .map { editionOfEvent -> editionOfEvent.eventId },
+                                    lastEditTs = latestEdition.timestamp
+                            )
+                        },
                 referencesAggregatedSummary = annotationsSummary.referencesSummaryEntity?.let {
                     ReferencesAggregatedSummary(
                             it.eventId,
@@ -61,46 +61,6 @@ internal object EventAnnotationsSummaryMapper {
                 }
 
         )
-    }
-
-    fun map(annotationsSummary: EventAnnotationsSummary, roomId: String): EventAnnotationsSummaryEntity {
-        val eventAnnotationsSummaryEntity = EventAnnotationsSummaryEntity()
-        eventAnnotationsSummaryEntity.eventId = annotationsSummary.eventId
-        eventAnnotationsSummaryEntity.roomId = roomId
-        eventAnnotationsSummaryEntity.editSummary = annotationsSummary.editSummary?.let {
-            EditAggregatedSummaryEntity(
-                    ContentMapper.map(it.aggregatedContent),
-                    RealmList<String>().apply { addAll(it.sourceEvents) },
-                    RealmList<String>().apply { addAll(it.localEchos) },
-                    it.lastEditTs
-            )
-        }
-        eventAnnotationsSummaryEntity.reactionsSummary = annotationsSummary.reactionsSummary.let {
-            RealmList<ReactionAggregatedSummaryEntity>().apply {
-                addAll(it.map {
-                    ReactionAggregatedSummaryEntity(
-                            it.key,
-                            it.count,
-                            it.addedByMe,
-                            it.firstTimestamp,
-                            RealmList<String>().apply { addAll(it.sourceEvents) },
-                            RealmList<String>().apply { addAll(it.localEchoEvents) }
-                    )
-                })
-            }
-        }
-        eventAnnotationsSummaryEntity.referencesSummaryEntity = annotationsSummary.referencesAggregatedSummary?.let {
-            ReferencesAggregatedSummaryEntity(
-                    it.eventId,
-                    ContentMapper.map(it.content),
-                    RealmList<String>().apply { addAll(it.sourceEvents) },
-                    RealmList<String>().apply { addAll(it.localEchos) }
-            )
-        }
-        eventAnnotationsSummaryEntity.pollResponseSummary = annotationsSummary.pollResponseSummary?.let {
-            PollResponseAggregatedSummaryEntityMapper.map(it)
-        }
-        return eventAnnotationsSummaryEntity
     }
 }
 

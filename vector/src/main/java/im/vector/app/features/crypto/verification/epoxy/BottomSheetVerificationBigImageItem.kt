@@ -16,13 +16,13 @@
  */
 package im.vector.app.features.crypto.verification.epoxy
 
-import android.widget.ImageView
-import androidx.core.view.ViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.ui.views.ShieldImageView
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 
 /**
  * A action for bottom sheet.
@@ -31,24 +31,14 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomSheetVerificationBigImageItem.Holder>() {
 
     @EpoxyAttribute
-    var imageRes: Int = 0
-
-    @EpoxyAttribute
-    var contentDescription: String? = null
+    lateinit var roomEncryptionTrustLevel: RoomEncryptionTrustLevel
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.image.setImageResource(imageRes)
-
-        if (contentDescription == null) {
-            ViewCompat.setImportantForAccessibility(holder.image, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)
-        } else {
-            ViewCompat.setImportantForAccessibility(holder.image, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES)
-            holder.image.contentDescription = contentDescription
-        }
+        holder.image.render(roomEncryptionTrustLevel)
     }
 
     class Holder : VectorEpoxyHolder() {
-        val image by bind<ImageView>(R.id.itemVerificationBigImage)
+        val image by bind<ShieldImageView>(R.id.itemVerificationBigImage)
     }
 }

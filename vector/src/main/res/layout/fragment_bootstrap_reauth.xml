@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/bootstrapDescriptionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="?riotx_text_primary"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/waitingProgress"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/re_authentication_activity_title" />
+
+    <ProgressBar
+        android:id="@+id/waitingProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@id/reAuthFailureText"
+        app:layout_constraintTop_toBottomOf="@+id/bootstrapDescriptionText" />
+
+    <TextView
+        android:id="@+id/reAuthFailureText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="?colorError"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/buttonFlow"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintTop_toBottomOf="@id/waitingProgress"
+        tools:text="Authentication failed" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bootstrapCancelButton"
+        style="@style/VectorButtonStyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:text="@string/cancel"
+        tools:ignore="MissingConstraints" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bootstrapRetryButton"
+        style="@style/VectorButtonStyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:text="@string/global_retry"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/buttonFlow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:constraint_referenced_ids="bootstrapCancelButton, bootstrapRetryButton"
+        app:layout_constraintTop_toBottomOf="@id/reAuthFailureText"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

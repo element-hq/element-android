@@ -43,8 +43,8 @@ fun showDisclaimerDialog(activity: Activity) {
         AlertDialog.Builder(activity)
                 .setView(dialogLayout)
                 .setCancelable(false)
-                .setNegativeButton(R.string.element_disclaimer_negative_button, null)
-                .setPositiveButton(R.string.element_disclaimer_positive_button) { _, _ ->
+                .setNegativeButton(R.string.disclaimer_negative_button, null)
+                .setPositiveButton(R.string.disclaimer_positive_button) { _, _ ->
                     openUrlInChromeCustomTab(activity, null, VectorSettingsUrls.DISCLAIMER_URL)
                 }
                 .show()

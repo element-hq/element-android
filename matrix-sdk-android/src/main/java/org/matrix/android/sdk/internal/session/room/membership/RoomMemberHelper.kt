@@ -75,6 +75,11 @@ internal class RoomMemberHelper(private val realm: Realm,
                 .equalTo(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, Membership.INVITE.name)
     }
 
+    fun queryLeftRoomMembersEvent(): RealmQuery<RoomMemberSummaryEntity> {
+        return queryRoomMembersEvent()
+                .equalTo(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, Membership.LEAVE.name)
+    }
+
     fun queryActiveRoomMembersEvent(): RealmQuery<RoomMemberSummaryEntity> {
         return queryRoomMembersEvent()
                 .beginGroup()

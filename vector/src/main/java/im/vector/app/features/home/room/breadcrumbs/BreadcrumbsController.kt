@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.breadcrumbs
 
-import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.core.epoxy.zeroItem
 import im.vector.app.core.utils.DebouncedClickListener
@@ -65,7 +64,7 @@ class BreadcrumbsController @Inject constructor(
                         hasUnreadMessage(it.hasUnreadMessages)
                         hasDraft(it.userDrafts.isNotEmpty())
                         itemClickListener(
-                                DebouncedClickListener(View.OnClickListener { _ ->
+                                DebouncedClickListener({ _ ->
                                     listener?.onBreadcrumbClicked(it.roomId)
                                 })
                         )

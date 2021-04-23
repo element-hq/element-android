@@ -27,7 +27,7 @@ internal interface SessionLifecycleObserver {
     Called when the session is opened
      */
     @MainThread
-    fun onStart() {
+    fun onSessionStarted() {
         // noop
     }
 
@@ -43,7 +43,7 @@ internal interface SessionLifecycleObserver {
     Called when the session is closed
      */
     @MainThread
-    fun onStop() {
+    fun onSessionStopped() {
         // noop
     }
 }

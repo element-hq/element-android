@@ -16,8 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.room.alias
 
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import org.matrix.android.sdk.api.session.room.alias.AliasService
 
 internal class DefaultAliasService @AssistedInject constructor(
@@ -26,9 +27,9 @@ internal class DefaultAliasService @AssistedInject constructor(
         private val addRoomAliasTask: AddRoomAliasTask
 ) : AliasService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): AliasService
+        fun create(roomId: String): DefaultAliasService
     }
 
     override suspend fun getRoomAliases(): List<String> {

@@ -29,7 +29,6 @@
         style="@style/VectorTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColorHint="?attr/vctr_default_text_hint_color"
         app:layout_constraintEnd_toStartOf="@+id/importDialogShowPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dialog_e2e_keys_passphrase_filename">
@@ -44,19 +43,17 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <ImageView
+    <im.vector.app.core.ui.views.RevealPasswordImageView
         android:id="@+id/importDialogShowPassword"
         android:layout_width="@dimen/layout_touch_size"
         android:layout_height="@dimen/layout_touch_size"
         android:layout_marginTop="8dp"
         android:background="?attr/selectableItemBackground"
         android:scaleType="center"
-        android:src="@drawable/ic_eye"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/importDialogTil"
         app:layout_constraintTop_toTopOf="@id/importDialogTil"
-        app:tint="?attr/colorAccent"
-        tools:ignore="MissingPrefix" />
+        app:tint="?attr/colorAccent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/dialog_e2e_keys_import_button"

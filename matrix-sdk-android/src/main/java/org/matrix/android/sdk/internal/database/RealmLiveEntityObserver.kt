@@ -46,7 +46,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
     private val backgroundRealm = AtomicReference<Realm>()
     private lateinit var results: AtomicReference<RealmResults<T>>
 
-    override fun onStart() {
+    override fun onSessionStarted() {
         if (isStarted.compareAndSet(false, true)) {
             BACKGROUND_HANDLER.post {
                 val realm = Realm.getInstance(realmConfiguration)
@@ -58,7 +58,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
         }
     }
 
-    override fun onStop() {
+    override fun onSessionStopped() {
         if (isStarted.compareAndSet(true, false)) {
             BACKGROUND_HANDLER.post {
                 results.getAndSet(null).removeAllChangeListeners()

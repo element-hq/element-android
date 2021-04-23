@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListen
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.internal.crypto.algorithms.IMXGroupEncryption
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.rest.GossipingDefaultContent
@@ -290,12 +291,16 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                 .also { cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED) }
 
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            val isSuccess = roomEncryptor.reshareKey(sessionId, userId, deviceId, senderKey)
+            if (roomEncryptor is IMXGroupEncryption) {
+                val isSuccess = roomEncryptor.reshareKey(sessionId, userId, deviceId, senderKey)
 
-            if (isSuccess) {
-                cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTED)
+                if (isSuccess) {
+                    cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTED)
+                } else {
+                    cryptoStore.updateGossipingRequestState(request, GossipingRequestState.UNABLE_TO_PROCESS)
+                }
             } else {
-                cryptoStore.updateGossipingRequestState(request, GossipingRequestState.UNABLE_TO_PROCESS)
+                Timber.e("## CRYPTO | handleKeyRequestFromOtherUser() from:$userId: Unable to handle IMXGroupEncryption.reshareKey for $alg")
             }
         }
         cryptoStore.updateGossipingRequestState(request, GossipingRequestState.RE_REQUESTED)

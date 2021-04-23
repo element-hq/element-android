@@ -3,7 +3,7 @@ Element ist eine neuartige Messaging- und Kollaborationsapp:
 1. Volle Kontrolle über deine Privatssphäre
 2. Kommuniziere mit jedem aus dem Matrix-Netzwerk und mit der Integration von z.B. Slack sogar über Matrix hinaus
 3. Schutz vor Werbung, Datamining und geschlossenen Platformen
-4. Absicherung durch Ende-zu-Ende-Verschlüsselung, und Cross Signing um andere zu verifizieren
+4. Absicherung durch Ende-zu-Ende-Verschlüsselung, und Cross-Signing um andere zu verifizieren
 
 Element unterscheidet sich durch Dezentralität und Open Source deutlich von anderen Messaging- und Kollaborationsapps.
 
@@ -11,11 +11,11 @@ Element ermöglicht es einen eigenen Server zu betreiben - oder einen beliebigen
 
 Element ist zu all diesem in der Lage, weil es Matrix nutzt - einen Standard für offene, dezentrale Kommunikation.
 
-Element gibt dir die Kontrolle, indem es dir die Wahl darüber lässt, wer deine Konversationen hostet. In der Element App kannst du zwischen verschiedenen Möglichkeiten auswählen:
+Element gibt dir die Kontrolle, indem es dir die Wahl darüber lässt, wer deine Konversationen hostet. In der Element-App kannst du zwischen verschiedenen Möglichkeiten auswählen:
 
 1. Kostenlos auf dem öffentlichen matrix.org Server registrieren, der von den Matrix-Entwicklern gehostet wird, oder wähle aus Tausenden von öffentlichen Servern, die von Freiwilligen gehostet werden
-2. Einen Account auf einem eigenen Server auf eigener Hardware betreiben
-3. Einen Account auf einem benutzerdefinierten Server erstellen, zum Beispiel durch ein Abonnment bei der Element Matrix Services Hosting-Platform
+2. Einen Konto auf einem eigenen Server auf eigener Hardware betreiben
+3. Einen Konto auf einem benutzerdefinierten Server erstellen, zum Beispiel durch ein Abonnement bei Element Matrix Services (kurz EMS)
 
 <b>Wieso Element nutzen?</b>
 
@@ -23,8 +23,8 @@ Element gibt dir die Kontrolle, indem es dir die Wahl darüber lässt, wer deine
 
 <b>OFFENE KOMMUNIKATION UND KOLLABORATION</b>: Du kannst mit jedem im Matrix-Netzwerk schreiben, ob sie nun Element oder eine andere Matrix-App nutzen, oder gar ein anderes Kommunikationssystem wie z.B. Slack, IRC oder XMPP.
 
-<b>SUPER SICHER</b>: Echte Ende-zu-Ende-Verschlüsselung (nur Personen in der Konversation können die Nachrichten entschlüsseln), und Cross Signing um die Geräte der anderen Personen zu verifizieren.
+<b>SUPER SICHER</b>: Echte Ende-zu-Ende-Verschlüsselung (nur Personen in der Konversation können die Nachrichten entschlüsseln), und Cross-Signing um die Geräte der anderen Personen zu verifizieren.
 
 <b>VOLLSTÄNDIGE KOMMUNIKATION</b>: Nachrichten, Telefonate und Videoanrufe, Teilen von Dateien oder dem eigenen Bildschirm und viele andere Integrationen, Bots und Widgets. Erstelle Räume, Communities, bleib in Kontakt und sei produktiv.
 
-<b>ÜBERALL WO DU BIST</b>: Bleib in Kontakt wo auch immer du bist - mit einem vollständig synchronisierten Nachrichtenverlauf über alle Geräte und im Web auf https://app.element.io.
+<b>ÜBERALL WO DU BIST</b>: Bleib in Kontakt wo auch immer du bist - mit einem vollständig synchronisierten Nachrichtenverlauf über alle Geräte und im Netz auf https://app.element.io.

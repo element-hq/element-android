@@ -21,12 +21,15 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import com.airbnb.mvrx.viewModel
+import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityBugReportBinding
 
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Form to send a bug report
@@ -38,6 +41,10 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
     }
 
     override fun getBinding() = ActivityBugReportBinding.inflate(layoutInflater)
+
+    @Inject lateinit var bugReportViewModelFactory: BugReportViewModel.Factory
+
+    private val viewModel: BugReportViewModel by viewModel()
 
     private var forSuggestion: Boolean = false
 
@@ -114,7 +121,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
     /**
      * Send the bug report
      */
-    private fun sendBugReport() {
+    private fun sendBugReport() = withState(viewModel) { state ->
         views.bugReportScrollview.alpha = 0.3f
         views.bugReportMaskView.isVisible = true
 
@@ -133,6 +140,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                 views.bugReportButtonIncludeKeyShareHistory.isChecked,
                 views.bugReportButtonIncludeScreenshot.isChecked,
                 views.bugReportEditText.text.toString(),
+                state.serverVersion,
                 object : BugReporter.IMXBugReportListener {
                     override fun onUploadFailed(reason: String?) {
                         try {

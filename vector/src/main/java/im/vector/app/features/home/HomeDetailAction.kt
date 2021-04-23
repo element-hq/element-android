@@ -20,4 +20,5 @@ import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class HomeDetailAction : VectorViewModelAction {
     data class SwitchDisplayMode(val displayMode: RoomListDisplayMode) : HomeDetailAction()
+    object MarkAllRoomsRead : HomeDetailAction()
 }

@@ -24,6 +24,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
+import im.vector.app.core.ui.views.toDrawableRes
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
@@ -62,7 +63,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                 trustMSK = data.accountCrossSigningIsTrusted,
                 legacyMode = !data.hasAccountCrossSigning,
                 deviceTrustLevel = cryptoDeviceInfo.trustLevel
-        )
+        ).toDrawableRes()
 
         if (data.hasAccountCrossSigning) {
             // Cross Signing is enabled

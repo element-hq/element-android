@@ -16,12 +16,12 @@
 
 package org.matrix.android.sdk.internal.session.room.membership
 
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
 import org.matrix.android.sdk.internal.session.user.UserEntityFactory
-import io.realm.Realm
 import javax.inject.Inject
 
 internal class RoomMemberEventHandler @Inject constructor() {
@@ -31,7 +31,7 @@ internal class RoomMemberEventHandler @Inject constructor() {
             return false
         }
         val userId = event.stateKey ?: return false
-        val roomMember = event.content.toModel<RoomMemberContent>()
+        val roomMember = event.getFixedRoomMemberContent()
         return handle(realm, roomId, userId, roomMember)
     }
 

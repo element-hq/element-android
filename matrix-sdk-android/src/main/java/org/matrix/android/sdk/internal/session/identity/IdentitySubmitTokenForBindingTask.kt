@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.identity
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.identity.toMedium
-import org.matrix.android.sdk.internal.auth.registration.SuccessResult
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
@@ -44,8 +43,8 @@ internal class DefaultIdentitySubmitTokenForBindingTask @Inject constructor(
         val identityAPI = getIdentityApiAndEnsureTerms(identityApiProvider, userId)
         val identityPendingBinding = identityStore.getPendingBinding(params.threePid) ?: throw IdentityServiceError.NoCurrentBindingError
 
-        val tokenResponse = executeRequest<SuccessResult>(null) {
-            apiCall = identityAPI.submitToken(
+        val tokenResponse = executeRequest(null) {
+            identityAPI.submitToken(
                     params.threePid.toMedium(),
                     IdentityRequestOwnershipParams(
                             clientSecret = identityPendingBinding.clientSecret,

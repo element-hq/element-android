@@ -1,13 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?><!-- tools:ignore is needed because lint thinks this can be replaced with a merge. Replacing this
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- tools:ignore is needed because lint thinks this can be replaced with a merge. Replacing this
      with a merge causes the fullscreen SurfaceView not to be centered. -->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background"
+    android:background="@color/bg_call_screen"
     tools:ignore="MergeRootFrame">
+
+    <ImageView
+        android:id="@+id/bgCallView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars" />
 
     <org.webrtc.SurfaceViewRenderer
         android:id="@+id/fullscreenRenderer"
@@ -26,48 +37,76 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/participantNameText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_horizontal_margin"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:gravity="center"
-        android:textColor="?riotx_text_primary"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/callTypeText"
+    <FrameLayout
+        android:id="@+id/otherKnownCallLayout"
+        android:layout_width="80dp"
+        android:layout_height="144dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/riotx_background_light"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="@sample/matrix.json/data/displayName" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
-    <TextView
-        android:id="@+id/callTypeText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_horizontal_margin"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toTopOf="@id/otherMemberAvatar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/action_video_call" />
+        <ImageView
+            android:id="@+id/otherKnownCallAvatarView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="?attr/selectableItemBackground"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/otherSmallIsHeldIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_call_small_pause" />
+
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/otherMemberAvatar"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:contentDescription="@string/avatar"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
         tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/smallIsHeldIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_call_small_pause"
+        app:layout_constraintBottom_toBottomOf="@id/otherMemberAvatar"
+        app:layout_constraintEnd_toEndOf="@id/otherMemberAvatar"
+        app:layout_constraintStart_toStartOf="@id/otherMemberAvatar"
+        app:layout_constraintTop_toTopOf="@id/otherMemberAvatar" />
+
+    <TextView
+        android:id="@+id/participantNameText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/otherMemberAvatar"
+        tools:text="@sample/matrix.json/data/displayName" />
 
     <TextView
         android:id="@+id/callStatusText"
@@ -78,18 +117,32 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:gravity="center"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="22sp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/otherMemberAvatar"
+        app:layout_constraintTop_toBottomOf="@id/participantNameText"
         tools:text="@string/call_connecting" />
+
+    <Button
+        android:id="@+id/callActionText"
+        style="@style/VectorButtonStyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:textColor="?attr/colorAccent"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/callStatusText"
+        tools:text="@string/call_resume_action" />
 
     <ProgressBar
         android:id="@+id/callConnectingProgress"
         style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_margin="8dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +155,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="participantNameText,callTypeText,otherMemberAvatar,callStatusText" />
+        app:constraint_referenced_ids="participantNameText, otherMemberAvatar,callStatusText" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/callVideoGroup"

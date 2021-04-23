@@ -40,9 +40,9 @@ internal class DefaultGetContextOfEventTask @Inject constructor(
 
     override suspend fun execute(params: GetContextOfEventTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
-        val response = executeRequest<EventContextResponse>(globalErrorReceiver) {
+        val response = executeRequest(globalErrorReceiver) {
             // We are limiting the response to the event with eventId to be sure we don't have any issue with potential merging process.
-            apiCall = roomAPI.getContextOfEvent(params.roomId, params.eventId, 0, filter)
+            roomAPI.getContextOfEvent(params.roomId, params.eventId, 0, filter)
         }
         return tokenChunkEventPersistor.insertInDb(response, params.roomId, PaginationDirection.FORWARDS)
     }

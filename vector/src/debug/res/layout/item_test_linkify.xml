@@ -12,7 +12,6 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/ListHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="AutoLink" />
@@ -26,7 +25,6 @@
             tools:text="www.example.org" />
 
         <TextView
-            style="@style/ListHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Custom Link" />

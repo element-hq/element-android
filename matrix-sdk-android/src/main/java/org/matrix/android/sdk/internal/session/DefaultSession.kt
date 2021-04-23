@@ -20,11 +20,11 @@ import androidx.annotation.MainThread
 import dagger.Lazy
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
+import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.pushrules.PushRuleService
-import org.matrix.android.sdk.api.session.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
@@ -50,9 +51,12 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.terms.TermsService
+import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
+import org.matrix.android.sdk.api.util.appendParamToUrl
+import org.matrix.android.sdk.internal.auth.SSO_UIA_FALLBACK_PATH
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
@@ -62,7 +66,6 @@ import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.network.GlobalErrorHandler
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
-import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
@@ -86,6 +89,7 @@ internal class DefaultSession @Inject constructor(
         private val groupService: Lazy<GroupService>,
         private val userService: Lazy<UserService>,
         private val filterService: Lazy<FilterService>,
+        private val federationService: Lazy<FederationService>,
         private val cacheService: Lazy<CacheService>,
         private val signOutService: Lazy<SignOutService>,
         private val pushRuleService: Lazy<PushRuleService>,
@@ -111,12 +115,13 @@ internal class DefaultSession @Inject constructor(
         private val accountDataService: Lazy<AccountDataService>,
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
+        private val eventService: Lazy<EventService>,
         private val defaultIdentityService: DefaultIdentityService,
         private val integrationManagerService: IntegrationManagerService,
+        private val thirdPartyService: Lazy<ThirdPartyService>,
         private val callSignalingService: Lazy<CallSignalingService>,
         @UnauthenticatedWithCertificate
-        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
-        private val eventSenderProcessor: EventSenderProcessor
+        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
 ) : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
@@ -126,6 +131,7 @@ internal class DefaultSession @Inject constructor(
         FilterService by filterService.get(),
         PushRuleService by pushRuleService.get(),
         PushersService by pushersService.get(),
+        EventService by eventService.get(),
         TermsService by termsService.get(),
         InitialSyncProgressService by initialSyncProgressService.get(),
         SecureStorageService by secureStorageService.get(),
@@ -153,10 +159,9 @@ internal class DefaultSession @Inject constructor(
         isOpen = true
         cryptoService.get().ensureDevice()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onStart() }
+            lifecycleObservers.forEach { it.onSessionStarted() }
         }
         globalErrorHandler.listener = this
-        eventSenderProcessor.start()
     }
 
     override fun requireBackgroundSync() {
@@ -195,12 +200,11 @@ internal class DefaultSession @Inject constructor(
         stopSync()
         // timelineEventDecryptor.destroy()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onStop() }
+            lifecycleObservers.forEach { it.onSessionStopped() }
         }
         cryptoService.get().close()
         isOpen = false
         globalErrorHandler.listener = null
-        eventSenderProcessor.interrupt()
     }
 
     override fun getSyncStateLive() = getSyncThread().liveState()
@@ -217,13 +221,13 @@ internal class DefaultSession @Inject constructor(
         }
     }
 
-    override fun clearCache(callback: MatrixCallback<Unit>) {
+    override suspend fun clearCache() {
         stopSync()
         stopAnyBackgroundSync()
         uiHandler.post {
             lifecycleObservers.forEach { it.onClearCache() }
         }
-        cacheService.get().clearCache(callback)
+        cacheService.get().clearCache()
         workManagerProvider.cancelAllWorks()
     }
 
@@ -257,6 +261,10 @@ internal class DefaultSession @Inject constructor(
 
     override fun searchService(): SearchService = searchService.get()
 
+    override fun federationService(): FederationService = federationService.get()
+
+    override fun thirdPartyService(): ThirdPartyService = thirdPartyService.get()
+
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()
     }
@@ -272,6 +280,18 @@ internal class DefaultSession @Inject constructor(
     // For easy debugging
     override fun toString(): String {
         return "$myUserId - ${sessionParams.deviceId}"
+    }
+
+    override fun getUiaSsoFallbackUrl(authenticationSessionId: String): String {
+        val hsBas = sessionParams.homeServerConnectionConfig
+                .homeServerUri
+                .toString()
+                .trim { it == '/' }
+        return buildString {
+            append(hsBas)
+            append(SSO_UIA_FALLBACK_PATH)
+            appendParamToUrl("session", authenticationSessionId)
+        }
     }
 
     override fun logDbUsageInfo() {

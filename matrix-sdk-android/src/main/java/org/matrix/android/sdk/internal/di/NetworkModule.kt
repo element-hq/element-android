@@ -28,6 +28,7 @@ import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingIntercept
 import org.matrix.android.sdk.internal.network.interceptors.FormattedJsonHttpLogger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.matrix.android.sdk.internal.network.ApiInterceptor
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -63,7 +64,8 @@ internal object NetworkModule {
                              timeoutInterceptor: TimeOutInterceptor,
                              userAgentInterceptor: UserAgentInterceptor,
                              httpLoggingInterceptor: HttpLoggingInterceptor,
-                             curlLoggingInterceptor: CurlLoggingInterceptor): OkHttpClient {
+                             curlLoggingInterceptor: CurlLoggingInterceptor,
+                             apiInterceptor: ApiInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
@@ -76,6 +78,7 @@ internal object NetworkModule {
                 .addInterceptor(timeoutInterceptor)
                 .addInterceptor(userAgentInterceptor)
                 .addInterceptor(httpLoggingInterceptor)
+                .addInterceptor(apiInterceptor)
                 .apply {
                     if (BuildConfig.LOG_PRIVATE_DATA) {
                         addInterceptor(curlLoggingInterceptor)

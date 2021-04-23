@@ -154,7 +154,7 @@ internal class MXOlmDecryption(
      * @return payload, if decrypted successfully.
      */
     private fun decryptMessage(message: JsonDict, theirDeviceIdentityKey: String): String? {
-        val sessionIds = olmDevice.getSessionIds(theirDeviceIdentityKey) ?: emptySet()
+        val sessionIds = olmDevice.getSessionIds(theirDeviceIdentityKey).orEmpty()
 
         val messageBody = message["body"] as? String ?: return null
         val messageType = when (val typeAsVoid = message["type"]) {

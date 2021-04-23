@@ -63,7 +63,7 @@ class RoomMemberListController @Inject constructor(
                 ?.filter { event ->
                     event.content.toModel<RoomThirdPartyInviteContent>()
                             ?.takeIf {
-                                data.filter.isEmpty() || it.displayName.contains(data.filter, ignoreCase = true)
+                                data.filter.isEmpty() || it.displayName?.contains(data.filter, ignoreCase = true) == true
                             } != null
                 }
                 .orEmpty()

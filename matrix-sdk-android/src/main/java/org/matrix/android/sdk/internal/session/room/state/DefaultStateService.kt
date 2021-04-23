@@ -18,18 +18,17 @@ package org.matrix.android.sdk.internal.session.room.state
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
-import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
-import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
@@ -42,9 +41,9 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                                                                private val fileUploader: FileUploader
 ) : StateService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): StateService
+        fun create(roomId: String): DefaultStateService
     }
 
     override fun getStateEvent(eventType: String, stateKey: QueryStringValue): Event? {
@@ -130,14 +129,14 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         if (joinRules != null) {
             sendStateEvent(
                     eventType = EventType.STATE_ROOM_JOIN_RULES,
-                    body = RoomJoinRulesContent(joinRules).toContent(),
+                    body = mapOf("join_rule" to joinRules),
                     stateKey = null
             )
         }
         if (guestAccess != null) {
             sendStateEvent(
                     eventType = EventType.STATE_ROOM_GUEST_ACCESS,
-                    body = RoomGuestAccessContent(guestAccess).toContent(),
+                    body = mapOf("guest_access" to guestAccess),
                     stateKey = null
             )
         }

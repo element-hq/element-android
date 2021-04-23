@@ -17,8 +17,9 @@
 package org.matrix.android.sdk.internal.session.room.typing
 
 import android.os.SystemClock
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.util.Cancelable
@@ -38,9 +39,9 @@ internal class DefaultTypingService @AssistedInject constructor(
         private val sendTypingTask: SendTypingTask
 ) : TypingService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): TypingService
+        fun create(roomId: String): DefaultTypingService
     }
 
     private var currentTask: Cancelable? = null

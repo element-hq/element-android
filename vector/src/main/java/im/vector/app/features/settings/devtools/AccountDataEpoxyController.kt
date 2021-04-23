@@ -68,7 +68,7 @@ class AccountDataEpoxyController @Inject constructor(
                         genericItemWithValue {
                             id(accountData.type)
                             title(accountData.type)
-                            itemClickAction(DebouncedClickListener(View.OnClickListener {
+                            itemClickAction(DebouncedClickListener({
                                 interactionListener?.didTap(accountData)
                             }))
                             itemLongClickAction(View.OnLongClickListener {

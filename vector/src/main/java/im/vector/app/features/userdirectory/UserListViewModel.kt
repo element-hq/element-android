@@ -21,8 +21,9 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
@@ -51,7 +52,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
 
     private var currentUserSearchDisposable: Disposable? = null
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: UserListViewState): UserListViewModel
     }
@@ -68,21 +69,15 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
     }
 
     init {
-        setState {
-            copy(
-                    myUserId = session.myUserId,
-                    existingRoomId = initialState.existingRoomId
-            )
-        }
         observeUsers()
     }
 
     override fun handle(action: UserListAction) {
         when (action) {
-            is UserListAction.SearchUsers                -> handleSearchUsers(action.value)
-            is UserListAction.ClearSearchUsers           -> handleClearSearchUsers()
-            is UserListAction.SelectPendingInvitee       -> handleSelectUser(action)
-            is UserListAction.RemovePendingInvitee       -> handleRemoveSelectedUser(action)
+            is UserListAction.SearchUsers -> handleSearchUsers(action.value)
+            is UserListAction.ClearSearchUsers -> handleClearSearchUsers()
+            is UserListAction.AddPendingSelection -> handleSelectUser(action)
+            is UserListAction.RemovePendingSelection -> handleRemoveSelectedUser(action)
             UserListAction.ComputeMatrixToLinkForSharing -> handleShareMyMatrixToLink()
         }.exhaustive
     }
@@ -168,13 +163,13 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                 .disposeOnClear()
     }
 
-    private fun handleSelectUser(action: UserListAction.SelectPendingInvitee) = withState { state ->
-        val selectedUsers = state.pendingInvitees.toggle(action.pendingInvitee)
-        setState { copy(pendingInvitees = selectedUsers) }
+    private fun handleSelectUser(action: UserListAction.AddPendingSelection) = withState { state ->
+        val selections = state.pendingSelections.toggle(action.pendingSelection, singleElement = state.singleSelection)
+        setState { copy(pendingSelections = selections) }
     }
 
-    private fun handleRemoveSelectedUser(action: UserListAction.RemovePendingInvitee) = withState { state ->
-        val selectedUsers = state.pendingInvitees.minus(action.pendingInvitee)
-        setState { copy(pendingInvitees = selectedUsers) }
+    private fun handleRemoveSelectedUser(action: UserListAction.RemovePendingSelection) = withState { state ->
+        val selections = state.pendingSelections.minus(action.pendingSelection)
+        setState { copy(pendingSelections = selections) }
     }
 }

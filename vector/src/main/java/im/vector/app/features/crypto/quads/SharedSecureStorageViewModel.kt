@@ -26,8 +26,9 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -42,7 +43,6 @@ import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
@@ -71,7 +71,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         private val session: Session)
     : VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: SharedSecureStorageViewState, args: SharedSecureStorageActivity.Args): SharedSecureStorageViewModel
     }
@@ -219,13 +219,10 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 withContext(Dispatchers.IO) {
                     args.requestedSecrets.forEach {
                         if (session.getAccountDataEvent(it) != null) {
-                            val res = awaitCallback<String> { callback ->
-                                session.sharedSecretStorageService.getSecret(
-                                        name = it,
-                                        keyId = keyInfo.id,
-                                        secretKey = keySpec,
-                                        callback = callback)
-                            }
+                            val res = session.sharedSecretStorageService.getSecret(
+                                    name = it,
+                                    keyId = keyInfo.id,
+                                    secretKey = keySpec)
                             decryptedSecretMap[it] = res
                         } else {
                             Timber.w("## Cannot find secret $it in SSSS, skip")
@@ -291,13 +288,10 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 withContext(Dispatchers.IO) {
                     args.requestedSecrets.forEach {
                         if (session.getAccountDataEvent(it) != null) {
-                            val res = awaitCallback<String> { callback ->
-                                session.sharedSecretStorageService.getSecret(
-                                        name = it,
-                                        keyId = keyInfo.id,
-                                        secretKey = keySpec,
-                                        callback = callback)
-                            }
+                            val res = session.sharedSecretStorageService.getSecret(
+                                    name = it,
+                                    keyId = keyInfo.id,
+                                    secretKey = keySpec)
                             decryptedSecretMap[it] = res
                         } else {
                             Timber.w("## Cannot find secret $it in SSSS, skip")

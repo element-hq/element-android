@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: VoIP (audio a video hovory v DM), vylepšení a opravy chyb!
+Úplný záznam změn: https://github.com/vector-im/element-android/releases/tag/v1.1.0

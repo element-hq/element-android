@@ -32,7 +32,7 @@ internal class DefaultGetDevicesTask @Inject constructor(
 
     override suspend fun execute(params: Unit): DevicesListResponse {
         return executeRequest(globalErrorReceiver) {
-            apiCall = cryptoApi.getDevices()
+            cryptoApi.getDevices()
         }
     }
 }

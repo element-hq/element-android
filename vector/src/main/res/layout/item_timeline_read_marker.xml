@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
     android:padding="8dp">
 
     <View
@@ -17,10 +16,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="?riotx_background"
+        android:background="?android:attr/windowBackground"
         android:fontFamily="sans-serif-medium"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:text="@string/timeline_unread_messages"
         android:textColor="@color/notification_accent_color"
         android:textSize="15sp" />

@@ -58,7 +58,7 @@ class AudioPicker : Picker<MultiPickerAudioType>() {
                     context.contentResolver.openFileDescriptor(selectedUri, "r")?.use { pfd ->
                         val mediaMetadataRetriever = MediaMetadataRetriever()
                         mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
-                        duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
+                        duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
                     }
 
                     audioList.add(

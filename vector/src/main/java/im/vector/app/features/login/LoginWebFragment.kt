@@ -155,18 +155,15 @@ class LoginWebFragment @Inject constructor(
                 // avoid infinite onPageFinished call
                 if (url.startsWith("http")) {
                     // Generic method to make a bridge between JS and the UIWebView
-                    val mxcJavascriptSendObjectMessage = assetReader.readAssetFile("sendObject.js")
-                    view.loadUrl(mxcJavascriptSendObjectMessage)
+                    assetReader.readAssetFile("sendObject.js")?.let { view.loadUrl(it) }
 
                     if (state.signMode == SignMode.SignIn) {
                         // The function the fallback page calls when the login is complete
-                        val mxcJavascriptOnLogin = assetReader.readAssetFile("onLogin.js")
-                        view.loadUrl(mxcJavascriptOnLogin)
+                        assetReader.readAssetFile("onLogin.js")?.let { view.loadUrl(it) }
                     } else {
                         // MODE_REGISTER
                         // The function the fallback page calls when the registration is complete
-                        val mxcJavascriptOnRegistered = assetReader.readAssetFile("onRegistered.js")
-                        view.loadUrl(mxcJavascriptOnRegistered)
+                        assetReader.readAssetFile("onRegistered.js")?.let { view.loadUrl(it) }
                     }
                 }
             }

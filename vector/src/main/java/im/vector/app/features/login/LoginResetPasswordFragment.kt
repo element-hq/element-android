@@ -32,7 +32,6 @@ import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 
 import javax.inject.Inject
@@ -69,7 +68,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
                 .combineLatest(
                         views.resetPasswordEmail.textChanges().map { it.isEmail() },
                         views.passwordField.textChanges().map { it.isNotEmpty() },
-                        BiFunction<Boolean, Boolean, Boolean> { isEmail, isPasswordNotEmpty ->
+                        { isEmail, isPasswordNotEmpty ->
                             isEmail && isPasswordNotEmpty
                         }
                 )
@@ -127,14 +126,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
 
     private fun renderPasswordField() {
         views.passwordField.showPassword(passwordShown)
-
-        if (passwordShown) {
-            views.passwordReveal.setImageResource(R.drawable.ic_eye_closed)
-            views.passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
-        } else {
-            views.passwordReveal.setImageResource(R.drawable.ic_eye)
-            views.passwordReveal.contentDescription = getString(R.string.a11y_show_password)
-        }
+        views.passwordReveal.render(passwordShown)
     }
 
     override fun resetViewModel() {
@@ -153,9 +145,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
             is Fail    -> {
                 views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
-            is Success -> {
-                Unit
-            }
+            is Success -> Unit
         }
     }
 }

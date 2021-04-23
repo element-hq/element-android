@@ -28,9 +28,8 @@ import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
-internal class ImageCompressor @Inject constructor() {
+internal class ImageCompressor @Inject constructor(private val context: Context) {
     suspend fun compress(
-            context: Context,
             imageFile: File,
             desiredWidth: Int,
             desiredHeight: Int,
@@ -46,7 +45,7 @@ internal class ImageCompressor @Inject constructor() {
                 }
             } ?: return@withContext imageFile
 
-            val destinationFile = createDestinationFile(context)
+            val destinationFile = createDestinationFile()
 
             runCatching {
                 destinationFile.outputStream().use {
@@ -118,7 +117,7 @@ internal class ImageCompressor @Inject constructor() {
         }
     }
 
-    private fun createDestinationFile(context: Context): File {
+    private fun createDestinationFile(): File {
         return File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
     }
 }

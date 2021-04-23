@@ -17,8 +17,9 @@
 package org.matrix.android.sdk.internal.session.room.draft
 
 import androidx.lifecycle.LiveData
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.room.send.DraftService
 import org.matrix.android.sdk.api.session.room.send.UserDraft
@@ -30,9 +31,9 @@ internal class DefaultDraftService @AssistedInject constructor(@Assisted private
                                                                private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : DraftService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): DraftService
+        fun create(roomId: String): DefaultDraftService
     }
 
     /**

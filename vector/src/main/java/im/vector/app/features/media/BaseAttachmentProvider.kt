@@ -31,7 +31,10 @@ import im.vector.lib.attachmentviewer.AttachmentInfo
 import im.vector.lib.attachmentviewer.AttachmentSourceProvider
 import im.vector.lib.attachmentviewer.ImageLoaderTarget
 import im.vector.lib.attachmentviewer.VideoLoaderTarget
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -83,7 +86,7 @@ abstract class BaseAttachmentProvider<Type>(
             val dateString = dateFormatter.format(timelineEvent.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
             overlayView?.updateWith(
                     counter = stringProvider.getString(R.string.attachment_viewer_item_x_of_y, position + 1, getItemCount()),
-                    senderInfo = "${timelineEvent.senderInfo.displayName} $dateString"
+                    senderInfo = "${timelineEvent.senderInfo.disambiguatedDisplayName} $dateString"
             )
             overlayView?.views?.overlayVideoControlsGroup?.isVisible = timelineEvent.root.isVideoMessage()
         } else {
@@ -152,21 +155,22 @@ abstract class BaseAttachmentProvider<Type>(
             target.onVideoURLReady(info.uid, data.url)
         } else {
             target.onVideoFileLoading(info.uid)
-            fileService.downloadFile(
-                    fileName = data.filename,
-                    mimeType = data.mimeType,
-                    url = data.url,
-                    elementToDecrypt = data.elementToDecrypt,
-                    callback = object : MatrixCallback<File> {
-                        override fun onSuccess(data: File) {
-                            target.onVideoFileReady(info.uid, data)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            target.onVideoFileLoadFailed(info.uid)
-                        }
-                    }
-            )
+            GlobalScope.launch {
+                val result = runCatching {
+                    fileService.downloadFile(
+                            fileName = data.filename,
+                            mimeType = data.mimeType,
+                            url = data.url,
+                            elementToDecrypt = data.elementToDecrypt
+                    )
+                }
+                withContext(Dispatchers.Main) {
+                    result.fold(
+                            { target.onVideoFileReady(info.uid, it) },
+                            { target.onVideoFileLoadFailed(info.uid) }
+                    )
+                }
+            }
         }
     }
 

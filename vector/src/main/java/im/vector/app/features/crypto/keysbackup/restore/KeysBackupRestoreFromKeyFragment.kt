@@ -22,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.Observer
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
@@ -56,9 +55,9 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
         }
 
         views.keyInputLayout.error = viewModel.recoveryCodeErrorText.value
-        viewModel.recoveryCodeErrorText.observe(viewLifecycleOwner, Observer { newValue ->
+        viewModel.recoveryCodeErrorText.observe(viewLifecycleOwner) { newValue ->
             views.keyInputLayout.error = newValue
-        })
+        }
 
         views.keysRestoreButton.setOnClickListener { onRestoreFromKey() }
         views.keysBackupImport.setOnClickListener { onImport() }

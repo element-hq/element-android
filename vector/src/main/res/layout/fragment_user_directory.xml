@@ -29,6 +29,7 @@
                     android:layout_width="@dimen/layout_touch_size"
                     android:layout_height="@dimen/layout_touch_size"
                     android:clickable="true"
+                    android:contentDescription="@string/action_close"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
                     android:scaleType="center"

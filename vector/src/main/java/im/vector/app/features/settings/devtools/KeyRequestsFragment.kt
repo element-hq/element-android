@@ -67,7 +67,7 @@ class KeyRequestsFragment @Inject constructor(
 
         override fun onPageScrollStateChanged(state: Int) {
             childFragmentManager.fragments.forEach {
-                setHasOptionsMenu(state == SCROLL_STATE_IDLE)
+                it.setHasOptionsMenu(state == SCROLL_STATE_IDLE)
             }
             invalidateOptionsMenu()
         }

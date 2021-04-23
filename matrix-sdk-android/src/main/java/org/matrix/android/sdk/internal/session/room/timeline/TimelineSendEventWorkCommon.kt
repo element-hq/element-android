@@ -50,7 +50,7 @@ internal class TimelineSendEventWorkCommon @Inject constructor(
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .startChain(startChain)
                 .setInputData(data)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
     }
 
@@ -60,6 +60,5 @@ internal class TimelineSendEventWorkCommon @Inject constructor(
 
     companion object {
         private const val SEND_WORK = "SEND_WORK"
-        private const val BACKOFF_DELAY = 10_000L
     }
 }
