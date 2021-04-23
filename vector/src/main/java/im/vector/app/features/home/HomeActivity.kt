@@ -32,6 +32,7 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -108,6 +109,7 @@ class HomeActivity :
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
+    @Inject lateinit var appStateHandler: AppStateHandler
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -152,9 +154,14 @@ class HomeActivity :
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            replaceFragment(R.id.homeDetailFragmentContainer, LoadingFragment::class.java)
+            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
             replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
+
+//        appStateHandler.selectedRoomGroupingObservable.subscribe {
+//            if (supportFragmentManager.getFragment())
+//            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+//        }.disposeOnDestroy()
 
         sharedActionViewModel
                 .observe()
@@ -164,13 +171,17 @@ class HomeActivity :
                         is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.OpenGroup -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
+
                             // Temporary
+                            // When switching from space to group or group to space, we need to reload the fragment
+                            // To be removed when dropping legacy groups
+                            if (sharedAction.clearFragment) {
+                                replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+                            } else {
+                                // nop
+                            }
                             // we might want to delay that to avoid having the drawer animation lagging
                             // would be probably better to let the drawer do that? in the on closed callback?
-                            views.coordinatorLayout.postDelayed({
-                                replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
-                            }, 200)
-                            Unit
                         }
                         is HomeActivitySharedAction.OpenSpacePreview -> {
                             startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))

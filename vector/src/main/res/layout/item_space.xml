@@ -39,20 +39,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
         android:gravity="center"
         android:minWidth="16dp"
         android:minHeight="16dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:textColor="@android:color/white"
         android:textSize="10sp"
+        android:visibility="gone"
         app:layout_constraintCircle="@+id/groupAvatarImageView"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="24dp"
-        android:visibility="gone"
-        tools:visibility="visible"
         tools:background="@drawable/bg_unread_highlight"
-        tools:text="147" />
+        tools:text="147"
+        tools:visibility="visible" />
 
 
     <TextView
@@ -66,10 +66,30 @@
         android:textColor="?riotx_text_primary"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
+        app:layout_constraintBottom_toTopOf="@+id/groupDescView"
         app:layout_constraintEnd_toStartOf="@+id/groupChildrenCollapse"
         app:layout_constraintStart_toEndOf="@+id/groupAvatarImageView"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/groupDescView"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
+        app:layout_constraintEnd_toStartOf="@+id/groupChildrenCollapse"
+        app:layout_constraintStart_toEndOf="@+id/groupAvatarImageView"
+        app:layout_constraintTop_toBottomOf="@id/groupNameView"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="@tools:sample/lorem/random" />
 
 

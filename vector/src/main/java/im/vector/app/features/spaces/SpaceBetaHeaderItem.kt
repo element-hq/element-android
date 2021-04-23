@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.grouplist
+package im.vector.app.features.spaces
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
+import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.app.R
+import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 
-data class GroupListViewState(
-        val asyncGroups: Async<List<GroupSummary>> = Uninitialized,
-        val selectedGroup: GroupSummary? = null
-) : MvRxState
+@EpoxyModelClass(layout = R.layout.item_space_beta_header)
+abstract class SpaceBetaHeaderItem : VectorEpoxyModel<SpaceBetaHeaderItem.Holder>() {
+
+    class Holder : VectorEpoxyHolder()
+}

@@ -27,6 +27,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.CheckableConstraintLayout
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
@@ -46,6 +47,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
     @EpoxyAttribute var hasChildren: Boolean = false
     @EpoxyAttribute var indent: Int = 0
     @EpoxyAttribute var countState : UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
+    @EpoxyAttribute var description: String? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -62,6 +64,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
             holder.moreView.isVisible = false
         }
 
+        holder.secondLineText.setTextOrHide(description)
         if (hasChildren) {
 //            holder.collapseIndicator.setOnClickListener(
 //                    DebouncedClickListener({ _ ->
@@ -104,6 +107,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
     class Holder : VectorEpoxyHolder() {
         val avatarImageView by bind<ImageView>(R.id.groupAvatarImageView)
         val groupNameView by bind<TextView>(R.id.groupNameView)
+        val secondLineText by bind<TextView>(R.id.groupDescView)
         val rootView by bind<CheckableConstraintLayout>(R.id.itemGroupLayout)
         val moreView by bind<ImageView>(R.id.groupTmpLeave)
         val collapseIndicator by bind<ImageView>(R.id.groupChildrenCollapse)

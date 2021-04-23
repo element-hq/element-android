@@ -17,6 +17,7 @@
 package im.vector.app.features.spaces
 
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 sealed class SpaceListAction : VectorViewModelAction {
@@ -25,4 +26,6 @@ sealed class SpaceListAction : VectorViewModelAction {
     data class LeaveSpace(val spaceSummary: RoomSummary) : SpaceListAction()
     data class ToggleExpand(val spaceSummary: RoomSummary) : SpaceListAction()
     object AddSpace : SpaceListAction()
+
+    data class SelectLegacyGroup(val groupSummary: GroupSummary?) : SpaceListAction()
 }

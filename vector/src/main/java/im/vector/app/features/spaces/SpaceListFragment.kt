@@ -32,6 +32,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGroupListBinding
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
+import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -56,8 +57,9 @@ class SpaceListFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is SpaceListViewEvents.OpenSpaceSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpacePreview(it.id))
-                is SpaceListViewEvents.OpenSpace -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
-                is SpaceListViewEvents.AddSpace -> sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
+                is SpaceListViewEvents.OpenSpace        -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
+                is SpaceListViewEvents.AddSpace         -> sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
+                is SpaceListViewEvents.OpenGroup        -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
             }.exhaustive
         }
     }
@@ -93,5 +95,9 @@ class SpaceListFragment @Inject constructor(
 
     override fun onAddSpaceSelected() {
         viewModel.handle(SpaceListAction.AddSpace)
+    }
+
+    override fun onGroupSelected(groupSummary: GroupSummary?) {
+        viewModel.handle(SpaceListAction.SelectLegacyGroup(groupSummary))
     }
 }

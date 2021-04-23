@@ -20,6 +20,8 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.session.Session
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -59,14 +61,36 @@ class SharedPreferencesUiStateRepository @Inject constructor(
         }
     }
 
-    override fun storeSelectedSpace(spaceId: String?, sessionId: String) {
-        sharedPreferences.edit {
+    override fun storeSelectedSpace(spaceId: String?, sessionId: Session?) {
+        Timber.w("VAL: storeSelectedSpace $spaceId")
+        sharedPreferences.edit(true)  {
             putString("$KEY_SELECTED_SPACE@$sessionId", spaceId)
         }
     }
 
+    override fun storeSelectedGroup(groupId: String?, sessionId: Session?) {
+        Timber.w("VAL: storeSelectedSpace $groupId")
+        sharedPreferences.edit(true) {
+            putString("$KEY_SELECTED_GROUP@$sessionId", groupId)
+        }
+    }
+
+    override fun storeGroupingMethod(isSpace: Boolean, sessionId: Session?) {
+        sharedPreferences.edit(true)  {
+            putBoolean("$KEY_SELECTED_METHOD@$sessionId", isSpace)
+        }
+    }
+
+    override fun getSelectedGroup(sessionId: String): String? {
+        return sharedPreferences.getString("$KEY_SELECTED_GROUP@$sessionId", null)
+    }
+
     override fun getSelectedSpace(sessionId: String): String? {
         return sharedPreferences.getString("$KEY_SELECTED_SPACE@$sessionId", null)
+    }
+
+    override fun isGroupingMethodSpace(sessionId: String): Boolean {
+        return sharedPreferences.getBoolean("$KEY_SELECTED_METHOD@$sessionId", true)
     }
 
     companion object {
@@ -76,5 +100,7 @@ class SharedPreferencesUiStateRepository @Inject constructor(
         private const val VALUE_DISPLAY_MODE_ROOMS = 2
 
         private const val KEY_SELECTED_SPACE = "UI_STATE_SELECTED_SPACE"
+        private const val KEY_SELECTED_GROUP = "UI_STATE_SELECTED_GROUP"
+        private const val KEY_SELECTED_METHOD = "UI_STATE_SELECTED_METHOD"
     }
 }

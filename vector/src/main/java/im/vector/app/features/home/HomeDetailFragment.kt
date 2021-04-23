@@ -29,6 +29,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import im.vector.app.R
+import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.ToolbarConfigurable
@@ -48,7 +49,6 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
-import im.vector.app.features.spaces.ALL_COMMUNITIES_GROUP_ID
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
@@ -125,15 +125,14 @@ class HomeDetailFragment @Inject constructor(
             views.bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
-            if (!vectorPreferences.labSpaces()) {
-                onGroupChange(groupSummary.orNull())
-            }
-        }
-
-        viewModel.selectSubscribe(this, HomeDetailViewState::spaceSummary) { spaceSummary ->
-            if (vectorPreferences.labSpaces()) {
-                onSpaceChange(spaceSummary.orNull())
+        viewModel.selectSubscribe(this, HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
+            when (roomGroupingMethod) {
+                is RoomGroupingMethod.ByLegacyGroup -> {
+                    onGroupChange(roomGroupingMethod.groupSummary)
+                }
+                is RoomGroupingMethod.BySpace -> {
+                    onSpaceChange(roomGroupingMethod.spaceSummary)
+                }
             }
         }
 
@@ -257,8 +256,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun onGroupChange(groupSummary: GroupSummary?) {
-        groupSummary ?: return
-        if (groupSummary.groupId == ALL_COMMUNITIES_GROUP_ID) {
+        if (groupSummary == null) {
             views.groupToolbarSpaceTitleView.isVisible = false
         } else {
             views.groupToolbarSpaceTitleView.isVisible = true
@@ -267,8 +265,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
-        spaceSummary ?: return
-        if (spaceSummary.roomId == ALL_COMMUNITIES_GROUP_ID) {
+        if (spaceSummary == null) {
             views.groupToolbarSpaceTitleView.isVisible = false
         } else {
             views.groupToolbarSpaceTitleView.isVisible = true
@@ -310,11 +307,14 @@ class HomeDetailFragment @Inject constructor(
 
         views.homeToolbarContent.debouncedClicks {
             withState(viewModel) {
-                if (vectorPreferences.labSpaces()) {
-                    val currentSpace = it.spaceSummary.orNull()
-                            ?.takeIf { it.roomId != ALL_COMMUNITIES_GROUP_ID }
-                    if (vectorPreferences.labSpaces() && currentSpace != null) {
-                        sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(currentSpace.roomId))
+                when (it.roomGroupingMethod) {
+                    is RoomGroupingMethod.ByLegacyGroup -> {
+                        // nothing do far
+                    }
+                    is RoomGroupingMethod.BySpace -> {
+                        it.roomGroupingMethod.spaceSummary?.let {
+                            sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(it.roomId))
+                        }
                     }
                 }
             }

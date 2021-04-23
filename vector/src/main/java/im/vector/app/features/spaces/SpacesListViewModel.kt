@@ -18,16 +18,21 @@ package im.vector.app.features.spaces
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.R
+import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.app.group
+import im.vector.app.space
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -36,10 +41,12 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.group.groupSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
@@ -67,22 +74,41 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
         }
     }
 
-    private var currentGroupId = ""
+//    private var currentGroupingMethod : RoomGroupingMethod? = null
 
     init {
-        observeSpaceSummaries()
-        observeSelectionState()
-        appStateHandler.selectedSpaceObservable
+
+        session.getUserLive(session.myUserId).asObservable()
                 .subscribe {
-                    if (currentGroupId != it.orNull()?.roomId) {
-                        setState {
-                            copy(
-                                    selectedSpace = it.orNull()
-                            )
-                        }
+                    setState {
+                        copy(
+                                myMxItem = it?.getOrNull()?.toMatrixItem()?.let { Success(it) } ?: Loading()
+                        )
+                    }
+                }.disposeOnClear()
+
+        observeSpaceSummaries()
+//        observeSelectionState()
+        appStateHandler.selectedRoomGroupingObservable
+                .distinctUntilChanged()
+                .subscribe {
+                    setState {
+                        copy(
+                                selectedGroupingMethod = it
+                        )
                     }
                 }
                 .disposeOnClear()
+
+        session.getGroupSummariesLive(groupSummaryQueryParams {})
+                .asObservable()
+                .subscribe {
+                    setState {
+                        copy(
+                                legacyGroups = it
+                        )
+                    }
+                }.disposeOnClear()
 
         session.getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
@@ -107,23 +133,23 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 }.disposeOnClear()
     }
 
-    private fun observeSelectionState() {
-        selectSubscribe(SpaceListViewState::selectedSpace) { spaceSummary ->
-            if (spaceSummary != null) {
-                // We only want to open group if the updated selectedGroup is a different one.
-                if (currentGroupId != spaceSummary.roomId) {
-                    currentGroupId = spaceSummary.roomId
-                    _viewEvents.post(SpaceListViewEvents.OpenSpace)
-                }
-                appStateHandler.setCurrentSpace(spaceSummary)
-            } else {
-                // If selected group is null we force to default. It can happens when leaving the selected group.
-                setState {
-                    copy(selectedSpace = this.asyncSpaces()?.find { it.roomId == ALL_COMMUNITIES_GROUP_ID })
-                }
-            }
-        }
-    }
+//    private fun observeSelectionState() {
+//        selectSubscribe(SpaceListViewState::selectedSpace) { spaceSummary ->
+//            if (spaceSummary != null) {
+//                // We only want to open group if the updated selectedGroup is a different one.
+//                if (currentGroupId != spaceSummary.roomId) {
+//                    currentGroupId = spaceSummary.roomId
+//                    _viewEvents.post(SpaceListViewEvents.OpenSpace)
+//                }
+//                appStateHandler.setCurrentSpace(spaceSummary.roomId)
+//            } else {
+//                // If selected group is null we force to default. It can happens when leaving the selected group.
+//                setState {
+//                    copy(selectedSpace = this.asyncSpaces()?.find { it.roomId == ALL_COMMUNITIES_GROUP_ID })
+//                }
+//            }
+//        }
+//    }
 
     override fun handle(action: SpaceListAction) {
         when (action) {
@@ -132,15 +158,31 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
             SpaceListAction.AddSpace -> handleAddSpace()
             is SpaceListAction.ToggleExpand -> handleToggleExpand(action)
             is SpaceListAction.OpenSpaceInvite -> handleSelectSpaceInvite(action)
+            is SpaceListAction.SelectLegacyGroup -> handleSelectGroup(action)
         }
     }
 
 // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
-        if (state.selectedSpace?.roomId != action.spaceSummary.roomId) {
-            setState { copy(selectedSpace = action.spaceSummary) }
-            uiStateRepository.storeSelectedSpace(action.spaceSummary.roomId, session.sessionId)
+        val groupingMethod = state.selectedGroupingMethod
+        if (groupingMethod is RoomGroupingMethod.ByLegacyGroup || groupingMethod.space()?.roomId != action.spaceSummary.roomId) {
+            setState { copy(selectedGroupingMethod = RoomGroupingMethod.BySpace(action.spaceSummary)) }
+            if (action.spaceSummary.roomId == ALL_COMMUNITIES_GROUP_ID) {
+                appStateHandler.setCurrentSpace(null)
+            } else {
+                appStateHandler.setCurrentSpace(action.spaceSummary.roomId)
+            }
+            _viewEvents.post(SpaceListViewEvents.OpenSpace(groupingMethod is RoomGroupingMethod.ByLegacyGroup))
+        }
+    }
+
+    private fun handleSelectGroup(action: SpaceListAction.SelectLegacyGroup) = withState { state ->
+        val groupingMethod = state.selectedGroupingMethod
+        if (groupingMethod is RoomGroupingMethod.BySpace || groupingMethod.group()?.groupId != action.groupSummary?.groupId) {
+            setState { copy(selectedGroupingMethod = RoomGroupingMethod.ByLegacyGroup(action.groupSummary)) }
+            appStateHandler.setCurrentGroup(action.groupSummary?.groupId)
+            _viewEvents.post(SpaceListViewEvents.OpenGroup(groupingMethod is RoomGroupingMethod.BySpace))
         }
     }
 
@@ -199,15 +241,14 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 }
         )
                 .execute { async ->
-                    val currentSelectedGroupId = selectedSpace?.roomId
-                    val newSelectedGroup = if (currentSelectedGroupId != null) {
-                        async()?.find { it.roomId == currentSelectedGroupId }
-                    } else {
-                        async()?.firstOrNull()
-                    }
+//                    val currentSelectedGroupId = selectedGroupingMethod?.roomId
+//                    val newSelectedGroup = if (currentSelectedGroupId != null) {
+//                        async()?.find { it.roomId == currentSelectedGroupId }
+//                    } else {
+//                        async()?.firstOrNull()
+//                    }
                     copy(
                             asyncSpaces = async,
-                            selectedSpace = newSelectedGroup,
                             rootSpaces = session.spaceService().getRootSpaceSummaries()
                     )
                 }

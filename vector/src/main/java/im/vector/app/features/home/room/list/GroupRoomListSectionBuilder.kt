@@ -17,10 +17,10 @@
 package im.vector.app.features.home.room.list
 
 import androidx.annotation.StringRes
+import im.vector.app.AppStateHandler
 import im.vector.app.R
+import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.grouplist.ALL_COMMUNITIES_GROUP_ID
-import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.home.RoomListDisplayMode
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -37,25 +37,24 @@ class GroupRoomListSectionBuilder(
         val session: Session,
         val stringProvider: StringProvider,
         val viewModelScope: CoroutineScope,
-        val selectedGroupDataSource: SelectedGroupDataSource,
+        val appStateHandler: AppStateHandler,
         val onDisposable: (Disposable) -> Unit,
         val onUdpatable: (UpdatableLivePageResult) -> Unit
 ) : RoomListSectionBuilder {
 
     override fun buildSections(mode: RoomListDisplayMode): List<RoomsSection> {
-        val activeSpaceAwareQueries = mutableListOf<UpdatableLivePageResult>()
+        val activeGroupAwareQueries = mutableListOf<UpdatableLivePageResult>()
         val sections = mutableListOf<RoomsSection>()
-        val actualGroupId = selectedGroupDataSource.currentValue?.orNull()
-                ?.groupId?.takeIf { it != ALL_COMMUNITIES_GROUP_ID }
+        val actualGroupId = appStateHandler.safeActiveGroupId()
 
         when (mode) {
             RoomListDisplayMode.PEOPLE -> {
                 // 3 sections Invites / Fav / Dms
-                buildPeopleSections(sections, activeSpaceAwareQueries, actualGroupId)
+                buildPeopleSections(sections, activeGroupAwareQueries, actualGroupId)
             }
             RoomListDisplayMode.ROOMS -> {
                 // 5 sections invites / Fav / Rooms / Low Priority / Server notice
-                buildRoomsSections(sections, activeSpaceAwareQueries, actualGroupId)
+                buildRoomsSections(sections, activeGroupAwareQueries, actualGroupId)
             }
             RoomListDisplayMode.FILTERED -> {
                 // Used when searching for rooms
@@ -76,7 +75,7 @@ class GroupRoomListSectionBuilder(
             RoomListDisplayMode.NOTIFICATIONS -> {
                 addSection(
                         sections,
-                        activeSpaceAwareQueries,
+                        activeGroupAwareQueries,
                         R.string.invitations_header,
                         true
                 ) {
@@ -87,7 +86,7 @@ class GroupRoomListSectionBuilder(
 
                 addSection(
                         sections,
-                        activeSpaceAwareQueries,
+                        activeGroupAwareQueries,
                         R.string.bottom_action_rooms,
                         false
                 ) {
@@ -98,11 +97,11 @@ class GroupRoomListSectionBuilder(
             }
         }
 
-        selectedGroupDataSource.observe()
+        appStateHandler.selectedRoomGroupingObservable
                 .distinctUntilChanged()
-                .subscribe { activeSpaceOption ->
-                    val selectedGroupId = activeSpaceOption.orNull()?.groupId?.takeIf { it != ALL_COMMUNITIES_GROUP_ID }
-                    activeSpaceAwareQueries.onEach { updater ->
+                .subscribe { groupingMethod ->
+                    val selectedGroupId = (groupingMethod as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
+                    activeGroupAwareQueries.onEach { updater ->
                         updater.updateQuery { query ->
                             query.copy(activeGroupId = selectedGroupId)
                         }

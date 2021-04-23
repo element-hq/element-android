@@ -26,13 +26,13 @@ import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
+import im.vector.app.space
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
@@ -110,12 +110,12 @@ class SpaceRoomListSectionBuilder(
             }
         }
 
-        appStateHandler.selectedSpaceObservable
+        appStateHandler.selectedRoomGroupingObservable
                 .distinctUntilChanged()
-                .subscribe { activeSpaceOption ->
-                    val selectedSpace = activeSpaceOption.orNull()
+                .subscribe { groupingMethod ->
+                    val selectedSpace = groupingMethod.space()
                     activeSpaceAwareQueries.onEach { updater ->
-                        updater.updateForSpaceId(selectedSpace?.roomId?.takeIf { MatrixPatterns.isRoomId(it) })
+                        updater.updateForSpaceId(selectedSpace?.roomId)
                     }
                 }.also {
                     onDisposable.invoke(it)
@@ -185,10 +185,10 @@ class SpaceRoomListSectionBuilder(
 
         // add suggested rooms
         val suggestedRoomsObservable = // MutableLiveData<List<SpaceChildInfo>>()
-                appStateHandler.selectedSpaceObservable
+                appStateHandler.selectedRoomGroupingObservable
                         .distinctUntilChanged()
-                        .switchMap { activeSpaceOption ->
-                            val selectedSpace = activeSpaceOption.orNull()
+                        .switchMap { groupingMethod ->
+                            val selectedSpace = groupingMethod.space()
                             if (selectedSpace == null) {
                                 Observable.just(emptyList())
                             } else {
