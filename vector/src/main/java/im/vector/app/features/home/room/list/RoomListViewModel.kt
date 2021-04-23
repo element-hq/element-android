@@ -26,10 +26,10 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.AppStateHandler
+import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +49,6 @@ class RoomListViewModel @Inject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,
-        private val selectedGroupDataSource: SelectedGroupDataSource,
         private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
@@ -72,15 +71,14 @@ class RoomListViewModel @Inject constructor(
     }
 
     init {
+        Timber.w("VAL: RoomListViewModel INIT")
         observeMembershipChanges()
 
-        appStateHandler.selectedSpaceObservable
-                .distinctUntilChanged()
-                .map { it.orNull() }
+        appStateHandler.selectedRoomGroupingObservable
                 .distinctUntilChanged()
                 .execute {
                     copy(
-                            currentSpace = it
+                            currentRoomGrouping = it
                     )
                 }
 
@@ -113,7 +111,7 @@ class RoomListViewModel @Inject constructor(
     }
 
     val sections: List<RoomsSection> by lazy {
-        if (vectorPreferences.labSpaces()) {
+        if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
             SpaceRoomListSectionBuilder(
                     session,
                     stringProvider,
@@ -132,7 +130,7 @@ class RoomListViewModel @Inject constructor(
                     session,
                     stringProvider,
                     viewModelScope,
-                    selectedGroupDataSource,
+                    appStateHandler,
                     {
                         it.disposeOnClear()
                     },

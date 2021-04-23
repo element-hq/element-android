@@ -35,7 +35,6 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
-import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.CurrentSpaceSuggestedRoomListDataSource
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
@@ -114,8 +113,6 @@ interface VectorComponent {
     fun navigator(): Navigator
 
     fun errorFormatter(): ErrorFormatter
-
-    fun selectedGroupStore(): SelectedGroupDataSource
 
     fun appStateHandler(): AppStateHandler
 

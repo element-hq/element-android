@@ -179,14 +179,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         observePowerLevel()
         updateShowDialerOptionState()
         room.getRoomSummaryLive()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
         }
         // Inform the SDK that the room is displayed
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO)  {
             try {
                 session.onRoomDisplayed(initialState.roomId)
-            } catch (_: Exception) {
+            } catch (_: Throwable) {
             }
         }
         callManager.addPstnSupportListener(this)

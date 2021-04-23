@@ -107,8 +107,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                 }.disposeOnClear()
 
         Observable.combineLatest(
-                appStateHandler.selectedSpaceObservable.distinctUntilChanged(),
-                appStateHandler.selectedSpaceObservable.switchMap {
+                appStateHandler.selectedRoomGroupingObservable.distinctUntilChanged(),
+                appStateHandler.selectedRoomGroupingObservable.switchMap {
                     session.getPagedRoomSummariesLive(
                             roomSummaryQueryParams {
                                 this.memberships = Membership.activeMemberships()

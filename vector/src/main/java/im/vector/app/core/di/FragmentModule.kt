@@ -51,7 +51,6 @@ import im.vector.app.features.devtools.RoomDevToolSendFormFragment
 import im.vector.app.features.devtools.RoomDevToolStateEventListFragment
 import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
-import im.vector.app.features.grouplist.GroupListFragment
 import im.vector.app.features.home.HomeDetailFragment
 import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
@@ -149,11 +148,6 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LocalePickerFragment::class)
     fun bindLocalePickerFragment(fragment: LocalePickerFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(GroupListFragment::class)
-    fun bindGroupListFragment(fragment: GroupListFragment): Fragment
 
     @Binds
     @IntoMap

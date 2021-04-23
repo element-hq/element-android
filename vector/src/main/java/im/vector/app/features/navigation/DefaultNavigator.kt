@@ -31,6 +31,7 @@ import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import im.vector.app.AppStateHandler
 import im.vector.app.R
+import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.platform.VectorBaseActivity
@@ -76,13 +77,13 @@ import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
+import im.vector.app.space
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -106,17 +107,11 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun switchToSpace(context: Context, spaceId: String, roomId: String?, openShareSheet: Boolean) {
-        if (sessionHolder.getSafeActiveSession()?.spaceService()?.getSpace(spaceId) == null) {
+        if (sessionHolder.getSafeActiveSession()?.getRoomSummary(spaceId) == null) {
             fatalError("Trying to open an unknown space $spaceId", vectorPreferences.failFast())
             return
         }
-
-        sessionHolder.getSafeActiveSession()?.spaceService()?.getSpace(spaceId)?.spaceSummary()?.let {
-            Timber.d("## Nav: Switching to space $spaceId / ${it.name}")
-            appStateHandler.setCurrentSpace(it)
-        } ?: kotlin.run {
-            Timber.d("## Nav: Failed to switch to space $spaceId")
-        }
+        appStateHandler.setCurrentSpace(spaceId)
         if (roomId != null) {
             val args = RoomDetailArgs(roomId, eventId = null, openShareSpaceForId = spaceId.takeIf { openShareSheet })
             val intent = RoomDetailActivity.newIntent(context, args)
@@ -251,15 +246,22 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomDirectory(context: Context, initialFilter: String) {
-        val selectedSpace = appStateHandler.safeActiveSpace()?.let {
-            sessionHolder.getSafeActiveSession()?.getRoomSummary(it.roomId)
-        }
-        if (selectedSpace == null) {
-            val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
-            context.startActivity(intent)
-        } else {
-            SpaceExploreActivity.newIntent(context, selectedSpace.roomId).let {
-                context.startActivity(it)
+        when (val groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
+            is RoomGroupingMethod.ByLegacyGroup -> {
+                // TODO should open list of rooms of this group
+                val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
+                context.startActivity(intent)
+            }
+            is RoomGroupingMethod.BySpace -> {
+                val selectedSpace = groupingMethod.space()
+                if (selectedSpace == null) {
+                    val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
+                    context.startActivity(intent)
+                } else {
+                    SpaceExploreActivity.newIntent(context, selectedSpace.roomId).let {
+                        context.startActivity(it)
+                    }
+                }
             }
         }
     }
@@ -275,29 +277,36 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openInviteUsersToRoom(context: Context, roomId: String) {
-        val selectedSpace = appStateHandler.safeActiveSpace()
-        if (vectorPreferences.labSpaces() && selectedSpace != null) {
-            // let user decides if he does it from space or room
-            (context as? AppCompatActivity)?.supportFragmentManager?.let { fm ->
-                InviteRoomSpaceChooserBottomSheet.newInstance(
-                        selectedSpace.roomId,
-                        roomId,
-                        object : InviteRoomSpaceChooserBottomSheet.InteractionListener {
-                            override fun inviteToSpace(spaceId: String) {
-                                val intent = InviteUsersToRoomActivity.getIntent(context, spaceId)
-                                context.startActivity(intent)
-                            }
-
-                            override fun inviteToRoom(roomId: String) {
-                                val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
-                                context.startActivity(intent)
-                            }
-                        }
-                ).show(fm, InviteRoomSpaceChooserBottomSheet::class.java.name)
+        when (val currentGroupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
+            is RoomGroupingMethod.ByLegacyGroup -> {
+                val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
+                context.startActivity(intent)
             }
-        } else {
-            val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
-            context.startActivity(intent)
+            is RoomGroupingMethod.BySpace -> {
+                if (currentGroupingMethod.spaceSummary != null) {
+                    // let user decides if he does it from space or room
+                    (context as? AppCompatActivity)?.supportFragmentManager?.let { fm ->
+                        InviteRoomSpaceChooserBottomSheet.newInstance(
+                                currentGroupingMethod.spaceSummary.roomId,
+                                roomId,
+                                object : InviteRoomSpaceChooserBottomSheet.InteractionListener {
+                                    override fun inviteToSpace(spaceId: String) {
+                                        val intent = InviteUsersToRoomActivity.getIntent(context, spaceId)
+                                        context.startActivity(intent)
+                                    }
+
+                                    override fun inviteToRoom(roomId: String) {
+                                        val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
+                                        context.startActivity(intent)
+                                    }
+                                }
+                        ).show(fm, InviteRoomSpaceChooserBottomSheet::class.java.name)
+                    }
+                } else {
+                    val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
+                    context.startActivity(intent)
+                }
+            }
         }
     }
 
