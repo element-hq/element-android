@@ -38,4 +38,5 @@ sealed class TchapLoginViewEvents : VectorViewEvents {
     object OnForgetPasswordClicked : TchapLoginViewEvents()
 
     data class OnSendEmailSuccess(val email: String) : TchapLoginViewEvents()
+    object OnGoToSignInClicked : TchapLoginViewEvents()
 }

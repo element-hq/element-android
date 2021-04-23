@@ -21,9 +21,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.isDigitsOnly
+import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.fragmentViewModel
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
+import fr.gouv.tchap.core.utils.TchapUtils
 import fr.gouv.tchap.features.login.TchapAbstractLoginFragment
 import fr.gouv.tchap.features.login.TchapLoginAction
 import fr.gouv.tchap.features.login.TchapLoginViewEvents
@@ -33,7 +34,13 @@ import fr.gouv.tchap.features.platform.PlatformViewModel
 import fr.gouv.tchap.features.platform.PlatformViewState
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentTchapRegisterBinding
+import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
+import org.matrix.android.sdk.api.auth.registration.Stage
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
 
 /**
@@ -46,10 +53,6 @@ import javax.inject.Inject
  */
 class TchapRegisterFragment @Inject constructor(private val platformViewModelFactory: PlatformViewModel.Factory
 ) : TchapAbstractLoginFragment<FragmentTchapRegisterBinding>(), PlatformViewModel.Factory {
-
-    // Temporary patch for https://github.com/vector-im/riotX-android/issues/1410,
-    // waiting for https://github.com/matrix-org/synapse/issues/7576
-    private var isNumericOnlyUserIdForbidden = false
 
     private val viewModel: PlatformViewModel by fragmentViewModel()
     private lateinit var login: String
@@ -74,12 +77,26 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
             }.exhaustive
         }
 
-        loginViewModel.observeViewEvents {
-            when (it) {
-                TchapLoginViewEvents.OnLoginFlowRetrieved -> loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
-                else                                      ->
-                    // This is handled by the Activity
-                    Unit
+        loginViewModel.observeViewEvents { loginViewEvents ->
+            when (loginViewEvents) {
+                TchapLoginViewEvents.OnLoginFlowRetrieved       -> loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                is TchapLoginViewEvents.RegistrationFlowResult  -> {
+                    // Result from registration request when the account password is set.
+                    // Email stage is mandatory at this time and another stage should not happen.
+                    val emailStage = loginViewEvents.flowResult.missingStages.firstOrNull { it.mandatory && it is Stage.Email }
+
+                    if (emailStage != null) {
+                        loginViewModel.handle(TchapLoginAction.AddThreePid(RegisterThreePid.Email(login)))
+                    } else {
+                        AlertDialog.Builder(requireActivity())
+                                .setTitle(R.string.dialog_title_error)
+                                .setMessage(R.string.login_error_unable_register)
+                                .setPositiveButton(R.string.ok, null)
+                                .show()
+                        Unit
+                    }
+                }
+                else                                             -> Unit // This is handled by the Activity
             }.exhaustive
         }
     }
@@ -105,12 +122,8 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
 
         // This can be called by the IME action, so deal with empty cases
         var error = 0
-        if (login.isEmpty()) {
-            views.tchapRegisterEmail.error = getString(R.string.error_empty_field_choose_user_name)
-            error++
-        }
-        if (isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
-            views.tchapRegisterEmail.error = "The homeserver does not accept username with only digits."
+        if (login.isEmpty() || !login.isEmail()) {
+            views.tchapRegisterEmail.error = getString(R.string.auth_invalid_email)
             error++
         }
         if (password.isEmpty()) {
@@ -135,73 +148,40 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
     }
 
     private fun updateHomeServer(platform: Platform) {
-        loginViewModel.handle(TchapLoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
+        if (TchapUtils.isExternalTchapServer(platform.hs)) {
+            AlertDialog.Builder(requireActivity())
+                    .setTitle(R.string.tchap_register_warning_for_external_title)
+                    .setCancelable(false)
+                    .setMessage(R.string.tchap_register_warning_for_external)
+                    .setPositiveButton(R.string.tchap_register_warning_for_external_proceed) { _, _ ->
+                        loginViewModel.handle(TchapLoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+        } else {
+            loginViewModel.handle(TchapLoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
+        }
     }
 
     override fun resetViewModel() {
         loginViewModel.handle(TchapLoginAction.ResetLogin)
     }
 
-//    override fun onError(throwable: Throwable) {
-//        // Show M_WEAK_PASSWORD error in the password field
-//        if (throwable is Failure.ServerError
-//                && throwable.error.code == MatrixError.M_WEAK_PASSWORD) {
-//            views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
-//        } else {
-//            views.loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
-//        }
-//    }
-//
-//    override fun updateWithState(state: LoginViewState) {
-//        isSignupMode = state.signMode == SignMode.SignUp
-//        isNumericOnlyUserIdForbidden = state.serverType == ServerType.MatrixOrg
-//
-//        setupUi(state)
-//        setupAutoFill(state)
-//        setupButtons(state)
-//
-//        when (state.asyncLoginAction) {
-//            is Loading -> {
-//                // Ensure password is hidden
-//                passwordShown = false
-//                renderPasswordField()
-//            }
-//            is Fail    -> {
-//                val error = state.asyncLoginAction.error
-//                if (error is Failure.ServerError
-//                        && error.error.code == MatrixError.M_FORBIDDEN
-//                        && error.error.message.isEmpty()) {
-//                    // Login with email, but email unknown
-//                    views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
-//                } else {
-//                    // Trick to display the error without text.
-//                    views.loginFieldTil.error = " "
-//                    if (error.isInvalidPassword() && spaceInPassword()) {
-//                        views.passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
-//                    } else {
-//                        views.passwordFieldTil.error = errorFormatter.toHumanReadable(error)
-//                    }
-//                }
-//            }
-//            // Success is handled by the LoginActivity
-//            is Success -> Unit
-//        }
-//
-//        when (state.asyncRegistration) {
-//            is Loading -> {
-//                // Ensure password is hidden
-//                passwordShown = false
-//                renderPasswordField()
-//            }
-//            // Success is handled by the LoginActivity
-//            is Success -> Unit
-//        }
-//    }
+    override fun onError(throwable: Throwable) {
+        val passwordErrors = setOf(MatrixError.M_WEAK_PASSWORD, MatrixError.M_PASSWORD_TOO_SHORT, MatrixError.M_PASSWORD_NO_UPPERCASE,
+                MatrixError.M_PASSWORD_NO_DIGIT, MatrixError.M_PASSWORD_NO_SYMBOL, MatrixError.M_PASSWORD_NO_LOWERCASE, MatrixError.M_PASSWORD_IN_DICTIONARY)
 
-    /**
-     * Detect if password ends or starts with spaces
-     */
-//    private fun spaceInPassword() = views.passwordField.text.toString().let { it.trim() != it }
+        if (throwable is Failure.ServerError
+                && throwable.error.code in passwordErrors) {
+            // Show password error in the password field
+            views.tchapRegisterPassword.error = errorFormatter.toHumanReadable(throwable)
+        } else if (throwable.is401()) {
+            // This is normal use case, we go to the mail waiting screen
+            loginViewModel.handle(TchapLoginAction.PostViewEvent(TchapLoginViewEvents.OnSendEmailSuccess(loginViewModel.currentThreePid ?: "")))
+        } else {
+            views.tchapRegisterEmail.error = errorFormatter.toHumanReadable(throwable)
+        }
+    }
 
     override fun create(initialState: PlatformViewState): PlatformViewModel {
         return platformViewModelFactory.create(initialState)

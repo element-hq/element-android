@@ -87,13 +87,15 @@ internal data class AddThreePidRegistrationParams(
                 is RegisterThreePid.Email  -> AddThreePidRegistrationParams(
                         email = params.threePid.email,
                         clientSecret = params.clientSecret,
-                        sendAttempt = params.sendAttempt
+                        sendAttempt = params.sendAttempt,
+                        nextLink = params.nextLink
                 )
                 is RegisterThreePid.Msisdn -> AddThreePidRegistrationParams(
                         msisdn = params.threePid.msisdn,
                         countryCode = params.threePid.countryCode,
                         clientSecret = params.clientSecret,
-                        sendAttempt = params.sendAttempt
+                        sendAttempt = params.sendAttempt,
+                        nextLink = params.nextLink
                 )
             }
         }

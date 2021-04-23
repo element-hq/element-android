@@ -88,7 +88,7 @@ class TchapLoginViewModel @AssistedInject constructor(
     private var lastAction: TchapLoginAction? = null
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
-    private val currentThreePid: String?
+    val currentThreePid: String?
         get() = registrationWizard?.currentThreePid
 
     // True when login and password has been sent with success to the homeserver
@@ -144,20 +144,7 @@ class TchapLoginViewModel @AssistedInject constructor(
             is TchapLoginAction.AddThreePid                  -> handleAddThreePid(action)
             is TchapLoginAction.SendAgainThreePid            -> handleSendAgainThreePid()
             is TchapLoginAction.ValidateThreePid             -> handleValidateThreePid(action)
-            is TchapLoginAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailHasBeenValidated(action)
-            is TchapLoginAction.StopEmailValidationCheck     -> handleStopEmailValidationCheck()
         }
-    }
-
-    private fun handleCheckIfEmailHasBeenValidated(action: TchapLoginAction.CheckIfEmailHasBeenValidated) {
-        // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
-        currentJob = executeRegistrationStep(withLoading = false) {
-            it.checkIfEmailHasBeenValidated(action.delayMillis)
-        }
-    }
-
-    private fun handleStopEmailValidationCheck() {
-        currentJob = null
     }
 
     private fun handleValidateThreePid(action: TchapLoginAction.ValidateThreePid) {
@@ -249,10 +236,13 @@ class TchapLoginViewModel @AssistedInject constructor(
     private fun handleRegisterWith(action: TchapLoginAction.LoginOrRegister) {
         reAuthHelper.data = action.password
         currentJob = executeRegistrationStep {
+            // Tchap registration doesn't require userName.
+            // The initialDeviceDisplayName is useless because the account will be actually created after the email validation (eventually on another device).
+            // This first register request will link the account password with the returned session id (used in the following steps).
             it.createAccount(
-                    action.username,
+                    null,
                     action.password,
-                    action.initialDeviceName
+                    null
             )
         }
     }
@@ -385,12 +375,6 @@ class TchapLoginViewModel @AssistedInject constructor(
                             onSessionCreated(it)
                         }
             }
-        }
-    }
-
-    private fun startRegistrationFlow() {
-        currentJob = executeRegistrationStep {
-            it.getRegistrationFlow()
         }
     }
 

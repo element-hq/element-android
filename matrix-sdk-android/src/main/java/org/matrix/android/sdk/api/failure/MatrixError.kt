@@ -182,6 +182,24 @@ data class MatrixError(
         /** (Not documented yet) */
         const val M_WEAK_PASSWORD = "M_WEAK_PASSWORD"
 
+        /** (Not documented yet) */
+        const val M_PASSWORD_TOO_SHORT = "M_PASSWORD_TOO_SHORT"
+
+        /** (Not documented yet) */
+        const val M_PASSWORD_NO_DIGIT = "M_PASSWORD_NO_DIGIT"
+
+        /** (Not documented yet) */
+        const val M_PASSWORD_NO_UPPERCASE = "M_PASSWORD_NO_UPPERCASE"
+
+        /** (Not documented yet) */
+        const val M_PASSWORD_NO_LOWERCASE = "M_PASSWORD_NO_LOWERCASE"
+
+        /** (Not documented yet) */
+        const val M_PASSWORD_NO_SYMBOL = "M_PASSWORD_NO_SYMBOL"
+
+        /** (Not documented yet) */
+        const val M_PASSWORD_IN_DICTIONARY = "M_PASSWORD_IN_DICTIONARY"
+
         const val M_TERMS_NOT_SIGNED = "M_TERMS_NOT_SIGNED"
 
         // For identity service

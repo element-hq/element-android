@@ -25,7 +25,8 @@ internal interface RegisterAddThreePidTask : Task<RegisterAddThreePidTask.Params
     data class Params(
             val threePid: RegisterThreePid,
             val clientSecret: String,
-            val sendAttempt: Int
+            val sendAttempt: Int,
+            val nextLink: String? = null
     )
 }
 

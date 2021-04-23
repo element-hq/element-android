@@ -29,6 +29,7 @@ import fr.gouv.tchap.features.platform.PlatformViewModel
 import fr.gouv.tchap.features.platform.PlatformViewState
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentTchapLoginBinding
 import javax.inject.Inject
 
@@ -95,8 +96,8 @@ class TchapLoginFragment @Inject constructor(
 
         // This can be called by the IME action, so deal with empty cases
         var error = 0
-        if (login.isEmpty()) {
-            views.tchapLoginEmail.error = getString(R.string.error_empty_field_enter_user_name)
+        if (login.isEmpty() || !login.isEmail()) {
+            views.tchapLoginEmail.error = getString(R.string.auth_invalid_email)
             error++
         }
         if (password.isEmpty()) {

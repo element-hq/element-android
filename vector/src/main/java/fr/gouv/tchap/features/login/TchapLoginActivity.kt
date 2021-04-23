@@ -30,6 +30,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.viewModel
 import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
+import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragment
+import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragmentArgument
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -39,22 +41,12 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.home.HomeActivity
-import im.vector.app.features.login.LoginCaptchaFragment
-import im.vector.app.features.login.LoginCaptchaFragmentArgument
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginFragment
-import im.vector.app.features.login.LoginGenericTextInputFormFragment
-import im.vector.app.features.login.LoginGenericTextInputFormFragmentArgument
 import im.vector.app.features.login.LoginResetPasswordFragment
 import im.vector.app.features.login.LoginViewState
-import im.vector.app.features.login.LoginWaitForEmailFragment
-import im.vector.app.features.login.LoginWaitForEmailFragmentArgument
 import im.vector.app.features.login.SignMode
-import im.vector.app.features.login.TextInputFormFragmentMode
 import im.vector.app.features.login.isSupported
-import im.vector.app.features.login.terms.LoginTermsFragment
-import im.vector.app.features.login.terms.LoginTermsFragmentArgument
-import im.vector.app.features.login.terms.toLocalizedLoginTerms
 import im.vector.app.features.pin.UnlockedActivity
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
@@ -154,23 +146,23 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                 Unit
             }
             is TchapLoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
-            is TchapLoginViewEvents.OnLoginFlowRetrieved                       ->
-                // Handled by the Tchap login fragment
-                Unit
+            is TchapLoginViewEvents.OnLoginFlowRetrieved                       -> Unit // Handled by the Tchap login fragment
             is TchapLoginViewEvents.OnForgetPasswordClicked                    ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginResetPasswordFragment::class.java,
                         option = commonOption)
             is TchapLoginViewEvents.OnSendEmailSuccess                         ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
-                        LoginWaitForEmailFragment::class.java,
-                        LoginWaitForEmailFragmentArgument(loginViewEvents.email),
+                        TchapRegisterWaitForEmailFragment::class.java,
+                        TchapRegisterWaitForEmailFragmentArgument(loginViewEvents.email),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
+            is TchapLoginViewEvents.OnGoToSignInClicked                        -> {
+                supportFragmentManager.popBackStack(FRAGMENT_REGISTER_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                tchapLoginViewModel.handle(TchapLoginAction.UpdateSignMode(SignMode.SignIn))
+            }
             is TchapLoginViewEvents.Failure,
-            is TchapLoginViewEvents.Loading                                    ->
-                // This is handled by the Fragments
-                Unit
+            is TchapLoginViewEvents.Loading                                    -> Unit // This is handled by the Fragments
         }.exhaustive
     }
 
@@ -235,11 +227,11 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         when (stage) {
-            is Stage.ReCaptcha -> Unit // Should not happen
-            is Stage.Email     -> Unit //TODO: send email validation here
-            is Stage.Msisdn    -> Unit // Should not happen
-            is Stage.Terms     -> Unit // Should not happen
-            else               -> Unit // Should not happen
+            is Stage.ReCaptcha -> Unit // Should not happen in Tchap
+            is Stage.Email     -> Unit // Handled by the Tchap register fragment
+            is Stage.Msisdn    -> Unit // Should not happen in Tchap
+            is Stage.Terms     -> Unit // Should not happen in Tchap
+            else               -> Unit // Should not happen in Tchap
         }
     }
 
@@ -253,9 +245,6 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         private const val FRAGMENT_REGISTER_TAG = "FRAGMENT_REGISTER_TAG"
 
         private const val EXTRA_CONFIG = "EXTRA_CONFIG"
-
-        // Note that the domain can be displayed to the user for confirmation that he trusts it. So use a human readable string
-        const val VECTOR_REDIRECT_URL = "element://connect"
 
         fun newIntent(context: Context, loginConfig: LoginConfig?): Intent {
             return Intent(context, TchapLoginActivity::class.java).apply {

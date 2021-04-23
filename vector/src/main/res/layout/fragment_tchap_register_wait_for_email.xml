@@ -4,11 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_tchap_register_wait_for_email"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingEnd="22dp"
-    android:paddingLeft="22dp"
-    android:paddingRight="22dp"
-    android:paddingStart="22dp">
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp"
+        android:theme="@style/Vector.ActionBarTheme.TchapLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/tchap_register_title" />
 
     <TextView
         android:id="@+id/fragment_tchap_register_wait_for_email_title"
@@ -17,13 +23,15 @@
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center_horizontal"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
         android:text="@string/tchap_register_wait_for_email_title"
         android:textColor="@color/tchap_text_color_light"
         android:textSize="20sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <TextView
         android:id="@+id/fragment_tchap_register_wait_for_email_email"
@@ -32,6 +40,8 @@
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center_horizontal"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
         android:textColor="@color/tchap_gray_86"
         android:textSize="12.5sp"
         android:textStyle="normal"
@@ -47,6 +57,8 @@
         android:layout_marginTop="37dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center_horizontal"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
         android:text="@string/tchap_register_wait_for_email_subtitle"
         android:textColor="@color/tchap_text_color_light"
         android:textSize="17.5sp"
@@ -61,6 +73,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
         android:text="@string/tchap_register_wait_for_email_login_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_tchap_register_wait_for_email_subtitle" />
@@ -73,6 +87,8 @@
         android:fontFamily="sans-serif-light"
         android:gravity="center_horizontal"
         android:padding="8dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
         android:text="@string/tchap_register_wait_for_email_no_email"
         android:textColor="@color/tchap_text_color_light"
         android:textSize="17.5sp"
