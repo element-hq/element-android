@@ -9,7 +9,6 @@
         android:title="@string/settings"
         app:showAsAction="never" />
 
-<!--
     <item
         android:id="@+id/menu_home_suggestion"
         android:icon="@drawable/ic_material_bug_report"
@@ -19,7 +18,6 @@
         android:id="@+id/menu_home_report_bug"
         android:icon="@drawable/ic_material_bug_report"
         android:title="@string/send_bug_report" />
--->
 
     <item
         android:id="@+id/menu_home_init_sync_legacy"

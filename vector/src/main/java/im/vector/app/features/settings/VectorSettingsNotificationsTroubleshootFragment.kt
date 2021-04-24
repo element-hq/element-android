@@ -109,12 +109,12 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
                         } else {
                             views.toubleshootSummDescription.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_no_quickfix)
                         }
-                        //views.troubleshootSummButton.visibility = View.VISIBLE
+                        views.troubleshootSummButton.visibility = View.VISIBLE
                         views.troubleshootRunButton.visibility = View.VISIBLE
                     }
                     TroubleshootTest.TestStatus.SUCCESS          -> {
                         views.toubleshootSummDescription.text = getString(R.string.settings_troubleshoot_diagnostic_success_status)
-                        //views.troubleshootSummButton.visibility = View.VISIBLE
+                        views.troubleshootSummButton.visibility = View.VISIBLE
                         views.troubleshootRunButton.visibility = View.VISIBLE
                     }
                 }

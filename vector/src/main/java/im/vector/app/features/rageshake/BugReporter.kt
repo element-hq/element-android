@@ -246,7 +246,7 @@ class BugReporter @Inject constructor(
                 }
 
                 if (!mIsCancelled) {
-                    val text = "[Element] " +
+                    val text = "[SchildiChat] " +
                             if (forSuggestion) {
                                 "[Suggestion] "
                             } else {
@@ -257,7 +257,7 @@ class BugReporter @Inject constructor(
                     // build the multi part request
                     val builder = BugReporterMultipartBody.Builder()
                             .addFormDataPart("text", text)
-                            .addFormDataPart("app", "riot-android")
+                            .addFormDataPart("app", "schildichat-android")
                             .addFormDataPart("user_agent", Matrix.getInstance(context).getUserAgent())
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("device_id", deviceId)
@@ -319,7 +319,7 @@ class BugReporter @Inject constructor(
                     builder.addFormDataPart("label", context.getString(R.string.git_branch_name))
 
                     // Special for RiotX
-                    builder.addFormDataPart("label", "[Element]")
+                    builder.addFormDataPart("label", "[SchildiChat]")
 
                     // Suggestion
                     if (forSuggestion) {
