@@ -41,8 +41,7 @@
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_RAGE_SHAKE_CATEGORY_KEY"
         android:title="@string/settings_rageshake"
-        android:enabled="false"
-        app:isPreferenceVisible="false">
+        android:enabled="false">
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
