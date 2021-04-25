@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="send_bug_report_rage_shake">Lắc điện thoại để báo cáo lỗi</string>
-    <string name="send_bug_report_alert_message">Có vẻ bạn đang lắc điện thoại một cách tức giận. Bạn có muốn báo cáo lỗi không\?</string>
+    <string name="send_bug_report_alert_message">Có vẻ bạn đang lắc điện thoại một cách tức giận. Bạn có muốn mở màn hình báo cáo lỗi không\?</string>
     <string name="send_bug_report_placeholder">Miêu tả vấn đề của bạn ở đây</string>
     <string name="send_bug_report_description_in_english">Nếu có thể, vui lòng viết miêu tả bằng tiếng Anh.</string>
     <string name="send_bug_report_description">Vui lòng miêu tả lỗi. Bạn đã làm gì\? Bạn mong điều gì xảy ra\? Điều gì đã xảy ra\?</string>
@@ -27,7 +27,7 @@
     <string name="matrix_only_filter">Chỉ những liên hệ Matrix</string>
     <string name="user_directory_header">Thư mục người dùng</string>
     <string name="local_address_book_header">Sổ địa chỉ địa phương</string>
-    <string name="direct_chats_header">Các cuộc trò chuyện</string>
+    <string name="direct_chats_header">Cuộc trò chuyện</string>
     <string name="system_alerts_header">Cảnh báo hệ thống</string>
     <string name="low_priority_header">Ưu tiên thấp</string>
     <string name="invitations_header">Lời mời</string>
@@ -53,7 +53,7 @@
     <string name="action_mark_room_read">Đánh dấu đã đọc</string>
     <string name="action_quick_reply">Trả lời nhanh</string>
     <string name="action_mark_all_as_read">Đánh dấu tất cả đã đọc</string>
-    <string name="action_global_search">Tìm toàn bộ</string>
+    <string name="action_global_search">Tìm kiếm trong toàn bộ</string>
     <string name="action_video_call">Cuộc gọi bằng video</string>
     <string name="action_voice_call">Cuộc gọi bằng giọng nói</string>
     <string name="action_sign_out_confirmation_simple">Bạn có chắc mình muốn đăng xuất không\?</string>
@@ -209,9 +209,9 @@
     <string name="template_call_failed_no_connection">Cuộc gọi ${app_name} thất bại</string>
     <string name="call_failed_dont_ask_again">Đừng hỏi lại tôi</string>
     <string name="call_failed_no_ice_use_alt">Hãy thử dùng %s</string>
-    <string name="call_failed_no_ice_description">Vui lòng yêu cầu quản trị viên của máy chủ nhà của bạn (%1$s) thiết lập một máy chủ TURN để các cuộc gọi có thể hoạt động […].
+    <string name="call_failed_no_ice_description">Vui lòng yêu cầu quản trị viên của máy chủ nhà của bạn (%1$s) thiết lập một máy chủ TURN để các cuộc gọi có thể hoạt động một cách đáng tin cậy.
 \n
-\nBạn cũng có thể thử dùng máy chủ công cộng ở %2$s, nhưng cách này sẽ không […] bằng, và địa chỉ IP của bạn cũng sẽ được chia sẻ đến server đó. Bạn có thể quản lý việc này trong mục Cài đặt.</string>
+\nBạn cũng có thể thử dùng máy chủ công cộng ở %2$s, nhưng cách này sẽ không đáng tin cậy bằng, và địa chỉ IP của bạn sẽ được chia sẻ đến máy chủ đó. Bạn cũng có thể quản lý việc này trong Cài đặt.</string>
     <string name="call_failed_no_ice_title">Cuộc gọi thất bại do thiết lập máy chủ sai</string>
     <string name="start_video_call_prompt_msg">Bạn có chắc bạn muốn bắt đầu một cuộc gọi video\?</string>
     <string name="start_voice_call_prompt_msg">Bạn có chắc bạn muốn bắt đầu một cuộc gọi bằng giọng nói\?</string>
@@ -455,4 +455,6 @@
     <string name="summary_you_sent_image">Bạn đã gửi một hình ảnh.</string>
     <string name="summary_user_sent_image">%1$s đã gửi một hình ảnh.</string>
     <string name="summary_message">%1$s: %2$s</string>
+    <string name="notice_profile_change_redacted_by_you">Bạn đã cập nhật hồ sơ của bạn %1$s</string>
+    <string name="notice_profile_change_redacted">%1$s đã cập nhật hồ sơ của họ %2$s</string>
 </resources>
