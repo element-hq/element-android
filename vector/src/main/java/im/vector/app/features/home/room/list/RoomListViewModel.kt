@@ -71,14 +71,13 @@ class RoomListViewModel @Inject constructor(
     }
 
     init {
-        Timber.w("VAL: RoomListViewModel INIT")
         observeMembershipChanges()
 
         appStateHandler.selectedRoomGroupingObservable
                 .distinctUntilChanged()
                 .execute {
                     copy(
-                            currentRoomGrouping = it
+                            currentRoomGrouping = it.invoke()?.orNull()?.let { Success(it) } ?: Loading()
                     )
                 }
 

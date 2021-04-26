@@ -136,16 +136,13 @@ class SpaceSummaryController @Inject constructor(
                     }
                 }
 
-        summaries.firstOrNull { it.roomId == ALL_COMMUNITIES_GROUP_ID }
-                ?.let {
-                    val isSelected = selected is RoomGroupingMethod.BySpace && selected.space() == null
-                    homeSpaceSummaryItem {
-                        id(it.roomId)
-                        selected(isSelected)
-                        countState(UnreadCounterBadgeView.State(homeCount.totalCount, homeCount.isHighlight))
-                        listener { callback?.onSpaceSelected(it) }
-                    }
-                }
+        val isSelected = selected is RoomGroupingMethod.BySpace && selected.space() == null
+        homeSpaceSummaryItem {
+            id("space_home")
+            selected(isSelected)
+            countState(UnreadCounterBadgeView.State(homeCount.totalCount, homeCount.isHighlight))
+            listener { callback?.onSpaceSelected(null) }
+        }
 
         rootSpaces
                 ?.sortedBy { it.displayName }
@@ -180,7 +177,7 @@ class SpaceSummaryController @Inject constructor(
                         // it's expanded
                         subSpaces?.forEach { child ->
                             summaries.firstOrNull { it.roomId == child.childRoomId }?.let { childSum ->
-                                val isChildSelected = selected is RoomGroupingMethod.BySpace &&  childSum.roomId == selected.space()?.roomId
+                                val isChildSelected = selected is RoomGroupingMethod.BySpace && childSum.roomId == selected.space()?.roomId
                                 spaceSummaryItem {
                                     avatarRenderer(avatarRenderer)
                                     id(child.childRoomId)
@@ -209,7 +206,7 @@ class SpaceSummaryController @Inject constructor(
     }
 
     interface Callback {
-        fun onSpaceSelected(spaceSummary: RoomSummary)
+        fun onSpaceSelected(spaceSummary: RoomSummary?)
         fun onSpaceInviteSelected(spaceSummary: RoomSummary)
         fun onSpaceSettings(spaceSummary: RoomSummary)
         fun onToggleExpand(spaceSummary: RoomSummary)
