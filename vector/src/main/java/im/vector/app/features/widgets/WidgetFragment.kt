@@ -239,7 +239,7 @@ class WidgetFragment @Inject constructor() :
                 if (intent != null) {
                     try  {
                         context.startActivity(intent)
-                    } catch(activityNotFoundException: ActivityNotFoundException) {
+                    } catch (activityNotFoundException: ActivityNotFoundException) {
                         val fallbackUrl = intent.getStringExtra("browser_fallback_url")
                         openUrlInExternalBrowser(context, fallbackUrl)
                     }
