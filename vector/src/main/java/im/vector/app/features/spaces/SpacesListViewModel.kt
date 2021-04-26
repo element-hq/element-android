@@ -26,7 +26,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
-import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -46,12 +45,11 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
-
-const val ALL_COMMUNITIES_GROUP_ID = "+ALL_COMMUNITIES_GROUP_ID"
 
 class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
                                                       private val appStateHandler: AppStateHandler,
@@ -94,7 +92,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 .subscribe {
                     setState {
                         copy(
-                                selectedGroupingMethod = it
+                                selectedGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
                         )
                     }
                 }
@@ -166,13 +164,9 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
 
     private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
         val groupingMethod = state.selectedGroupingMethod
-        if (groupingMethod is RoomGroupingMethod.ByLegacyGroup || groupingMethod.space()?.roomId != action.spaceSummary.roomId) {
+        if (groupingMethod is RoomGroupingMethod.ByLegacyGroup || groupingMethod.space()?.roomId != action.spaceSummary?.roomId) {
             setState { copy(selectedGroupingMethod = RoomGroupingMethod.BySpace(action.spaceSummary)) }
-            if (action.spaceSummary.roomId == ALL_COMMUNITIES_GROUP_ID) {
-                appStateHandler.setCurrentSpace(null)
-            } else {
-                appStateHandler.setCurrentSpace(action.spaceSummary.roomId)
-            }
+            appStateHandler.setCurrentSpace(action.spaceSummary?.roomId)
             _viewEvents.post(SpaceListViewEvents.OpenSpace(groupingMethod is RoomGroupingMethod.ByLegacyGroup))
         }
     }
@@ -218,35 +212,21 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
             excludeType = listOf(/**RoomType.MESSAGING,$*/
                     null)
         }
-        Observable.combineLatest<RoomSummary, List<RoomSummary>, List<RoomSummary>>(
+        Observable.combineLatest<User?, List<RoomSummary>, List<RoomSummary>>(
                 session
                         .rx()
                         .liveUser(session.myUserId)
-                        .map { optionalUser ->
-                            RoomSummary(
-                                    roomId = ALL_COMMUNITIES_GROUP_ID,
-                                    membership = Membership.JOIN,
-                                    displayName = stringProvider.getString(R.string.group_all_communities),
-                                    avatarUrl = optionalUser.getOrNull()?.avatarUrl ?: "",
-                                    encryptionEventTs = 0,
-                                    isEncrypted = false,
-                                    typingUsers = emptyList()
-                            )
+                        .map {
+                             it.getOrNull()
                         },
                 session
                         .rx()
                         .liveSpaceSummaries(spaceSummaryQueryParams),
-                BiFunction { allCommunityGroup, communityGroups ->
-                    (listOf(allCommunityGroup) + communityGroups)
+                BiFunction { _, communityGroups ->
+                    communityGroups
                 }
         )
                 .execute { async ->
-//                    val currentSelectedGroupId = selectedGroupingMethod?.roomId
-//                    val newSelectedGroup = if (currentSelectedGroupId != null) {
-//                        async()?.find { it.roomId == currentSelectedGroupId }
-//                    } else {
-//                        async()?.firstOrNull()
-//                    }
                     copy(
                             asyncSpaces = async,
                             rootSpaces = session.spaceService().getRootSpaceSummaries()

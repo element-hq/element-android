@@ -113,7 +113,7 @@ class SpaceRoomListSectionBuilder(
         appStateHandler.selectedRoomGroupingObservable
                 .distinctUntilChanged()
                 .subscribe { groupingMethod ->
-                    val selectedSpace = groupingMethod.space()
+                    val selectedSpace = groupingMethod.orNull()?.space()
                     activeSpaceAwareQueries.onEach { updater ->
                         updater.updateForSpaceId(selectedSpace?.roomId)
                     }
@@ -188,7 +188,7 @@ class SpaceRoomListSectionBuilder(
                 appStateHandler.selectedRoomGroupingObservable
                         .distinctUntilChanged()
                         .switchMap { groupingMethod ->
-                            val selectedSpace = groupingMethod.space()
+                            val selectedSpace = groupingMethod.orNull()?.space()
                             if (selectedSpace == null) {
                                 Observable.just(emptyList())
                             } else {

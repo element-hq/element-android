@@ -92,10 +92,12 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                 this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
                             }
                     )
-                    val invites = session.getRoomSummaries(roomSummaryQueryParams {
-                        this.memberships = listOf(Membership.INVITE)
-                        this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
-                    }).size
+                    val invites = session.getRoomSummaries(
+                            roomSummaryQueryParams {
+                                this.memberships = listOf(Membership.INVITE)
+                                this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                            }
+                    ).size
                     setState {
                         copy(
                                 homeSpaceUnread = RoomAggregateNotificationCount(

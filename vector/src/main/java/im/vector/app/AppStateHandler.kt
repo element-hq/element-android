@@ -19,6 +19,7 @@ package im.vector.app
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import arrow.core.Option
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.BehaviorDataSource
 import im.vector.app.features.settings.VectorPreferences
@@ -30,7 +31,6 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -57,23 +57,18 @@ class AppStateHandler @Inject constructor(
 
     private val compositeDisposable = CompositeDisposable()
 
-    private val selectedSpaceDataSource = BehaviorDataSource(
-            // TODO get that from latest persisted?
-            if (vectorPreferences.labSpaces())
-                RoomGroupingMethod.BySpace(null)
-            else RoomGroupingMethod.ByLegacyGroup(null)
-    )
+    private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
 
     val selectedRoomGroupingObservable = selectedSpaceDataSource.observe()
 
-    fun getCurrentRoomGroupingMethod(): RoomGroupingMethod = selectedSpaceDataSource.currentValue ?: RoomGroupingMethod.BySpace(null)
+    fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? = selectedSpaceDataSource.currentValue?.orNull()
 
     fun setCurrentSpace(spaceId: String?, session: Session? = null) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession()
-        if (selectedSpaceDataSource.currentValue is RoomGroupingMethod.BySpace
-                && spaceId == selectedSpaceDataSource.currentValue?.space()?.roomId) return
+        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace
+                && spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
         val spaceSum = spaceId?.let { uSession?.getRoomSummary(spaceId) }
-        selectedSpaceDataSource.post(RoomGroupingMethod.BySpace(spaceSum))
+        selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.BySpace(spaceSum)))
         if (spaceId != null) {
             GlobalScope.launch {
                 tryOrNull {
@@ -85,10 +80,10 @@ class AppStateHandler @Inject constructor(
 
     fun setCurrentGroup(groupId: String?, session: Session? = null) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession()
-        if (selectedSpaceDataSource.currentValue is RoomGroupingMethod.ByLegacyGroup
-                && groupId == selectedSpaceDataSource.currentValue?.group()?.groupId) return
+        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.ByLegacyGroup
+                && groupId == selectedSpaceDataSource.currentValue?.orNull()?.group()?.groupId) return
         val activeGroup = groupId?.let { uSession?.getGroupSummary(groupId) }
-        selectedSpaceDataSource.post(RoomGroupingMethod.ByLegacyGroup(activeGroup))
+        selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.ByLegacyGroup(activeGroup)))
         if (groupId != null) {
             GlobalScope.launch {
                 tryOrNull {
@@ -99,19 +94,17 @@ class AppStateHandler @Inject constructor(
     }
 
     init {
-
         sessionDataSource.observe()
                 .distinctUntilChanged()
                 .subscribe {
+                    // sessionDataSource could already return a session while acitveSession holder still returns null
                     it.orNull()?.let { session ->
-                        Timber.w("VAL: Latest method is space? ${uiStateRepository.isGroupingMethodSpace(session.sessionId)}")
                         if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
-                            uiStateRepository.getSelectedSpace(session.sessionId)?.let { selectedSpaceId ->
-                                Timber.w("VAL: Latest selected space: $selectedSpaceId")
+                            uiStateRepository.getSelectedSpace(session.sessionId).let { selectedSpaceId ->
                                 setCurrentSpace(selectedSpaceId, session)
                             }
                         } else {
-                            uiStateRepository.getSelectedGroup(session.sessionId)?.let { selectedGroupId ->
+                            uiStateRepository.getSelectedGroup(session.sessionId).let { selectedGroupId ->
                                 setCurrentGroup(selectedGroupId, session)
                             }
                         }
@@ -119,15 +112,14 @@ class AppStateHandler @Inject constructor(
         }.also {
             compositeDisposable.add(it)
         }
-        // restore current space from ui state
     }
 
     fun safeActiveSpaceId(): String? {
-        return (selectedSpaceDataSource.currentValue as? RoomGroupingMethod.BySpace)?.spaceSummary?.roomId
+        return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.BySpace)?.spaceSummary?.roomId
     }
 
     fun safeActiveGroupId(): String? {
-        return (selectedSpaceDataSource.currentValue as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
+        return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -137,18 +129,15 @@ class AppStateHandler @Inject constructor(
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun entersBackground() {
         compositeDisposable.clear()
-        Timber.w("VAL: entersBackground session: ${ activeSessionHolder.getSafeActiveSession()?.myUserId}")
         val session = activeSessionHolder.getSafeActiveSession() ?: return
-        when (val currentMethod = selectedSpaceDataSource.currentValue ?: RoomGroupingMethod.BySpace(null)) {
+        when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
             is RoomGroupingMethod.BySpace -> {
-                uiStateRepository.storeGroupingMethod(true, session)
-                Timber.w("VAL: Store selected space: ${currentMethod.spaceSummary?.roomId}")
-                uiStateRepository.storeSelectedSpace(currentMethod.spaceSummary?.roomId, session)
+                uiStateRepository.storeGroupingMethod(true, session.sessionId)
+                uiStateRepository.storeSelectedSpace(currentMethod.spaceSummary?.roomId, session.sessionId)
             }
             is RoomGroupingMethod.ByLegacyGroup -> {
-                uiStateRepository.storeGroupingMethod(false, session)
-                Timber.w("VAL: Store group space: ${currentMethod.groupSummary?.groupId}")
-                uiStateRepository.storeSelectedGroup(currentMethod.groupSummary?.groupId, session)
+                uiStateRepository.storeGroupingMethod(false, session.sessionId)
+                uiStateRepository.storeSelectedGroup(currentMethod.groupSummary?.groupId, session.sessionId)
             }
         }
     }

@@ -78,7 +78,7 @@ class SpaceListFragment @Inject constructor(
         spaceController.update(state)
     }
 
-    override fun onSpaceSelected(spaceSummary: RoomSummary) {
+    override fun onSpaceSelected(spaceSummary: RoomSummary?) {
         viewModel.handle(SpaceListAction.SelectSpace(spaceSummary))
     }
 

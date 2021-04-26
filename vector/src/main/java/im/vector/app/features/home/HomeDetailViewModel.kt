@@ -140,7 +140,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 .subscribe {
                    setState {
                        copy(
-                               roomGroupingMethod = it
+                               roomGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
                        )
                    }
                 }

@@ -17,7 +17,6 @@
 package im.vector.app.features.ui
 
 import im.vector.app.features.home.RoomListDisplayMode
-import org.matrix.android.sdk.api.session.Session
 
 /**
  * This interface is used to persist UI state across application restart
@@ -33,10 +32,10 @@ interface UiStateRepository {
 
     fun storeDisplayMode(displayMode: RoomListDisplayMode)
 
-    fun storeSelectedSpace(spaceId: String?, sessionId: Session?)
-    fun storeSelectedGroup(groupId: String?, sessionId: Session?)
+    fun storeSelectedSpace(spaceId: String?, sessionId: String)
+    fun storeSelectedGroup(groupId: String?, sessionId: String)
 
-    fun storeGroupingMethod(isSpace: Boolean, sessionId: Session?)
+    fun storeGroupingMethod(isSpace: Boolean, sessionId: String)
 
     fun getSelectedSpace(sessionId: String): String?
     fun getSelectedGroup(sessionId: String): String?
