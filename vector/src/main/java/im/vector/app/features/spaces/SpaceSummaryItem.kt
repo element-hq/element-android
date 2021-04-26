@@ -55,6 +55,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         holder.groupNameView.text = matrixItem.displayName
         holder.rootView.isChecked = selected
         if (onMore != null) {
+            holder.moreView.isVisible = true
             holder.moreView.setOnClickListener(
                     DebouncedClickListener({ _ ->
                         onMore?.invoke()
@@ -66,16 +67,6 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
 
         holder.secondLineText.setTextOrHide(description)
         if (hasChildren) {
-//            holder.collapseIndicator.setOnClickListener(
-//                    DebouncedClickListener({ _ ->
-//                        toggleExpand?.invoke()
-//                    })
-//            )
-//            when (expanded) {
-//                null -> {
-//                    holder.collapseIndicator.isGone = true
-//                }
-//                else -> {
             holder.collapseIndicator.isVisible = true
             holder.collapseIndicator.setImageDrawable(
                     ContextCompat.getDrawable(holder.view.context,
@@ -87,8 +78,6 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
                         toggleExpand?.invoke()
                     })
             )
-//                }
-//            }
         } else {
             holder.collapseIndicator.isGone = true
         }
