@@ -19,6 +19,7 @@ package im.vector.app.features.createdirect
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
@@ -82,6 +83,8 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun createRoomAndInviteSelectedUsers(selections: Set<PendingSelection>) {
+        setState { copy(createAndInviteState = Loading()) }
+
         viewModelScope.launch(Dispatchers.IO) {
             val adminE2EByDefault = rawService.getElementWellknown(session.myUserId)
                     ?.isE2EByDefault()
