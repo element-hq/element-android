@@ -44,5 +44,4 @@ class SessionListener @Inject constructor() : Session.Listener {
     override fun onClearCache(session: Session) {
         session.coroutineScope.coroutineContext.cancelChildren()
     }
-
 }

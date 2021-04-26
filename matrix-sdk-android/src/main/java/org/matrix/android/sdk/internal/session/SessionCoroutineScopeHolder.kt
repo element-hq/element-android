@@ -37,8 +37,7 @@ internal class SessionCoroutineScopeHolder @Inject constructor(): SessionLifecyc
         scope.cancelChildren()
     }
 
-    private fun CoroutineScope.cancelChildren(){
+    private fun CoroutineScope.cancelChildren() {
         coroutineContext.cancelChildren(CancellationException("Closing session"))
     }
-
 }
