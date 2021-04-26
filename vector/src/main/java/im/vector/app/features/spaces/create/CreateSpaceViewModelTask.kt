@@ -18,8 +18,14 @@ package im.vector.app.features.spaces.create
 
 import android.net.Uri
 import im.vector.app.core.platform.ViewModelTask
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.raw.wellknown.isE2EByDefault
+import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
+import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
@@ -44,8 +50,9 @@ data class CreateSpaceTaskParams(
 )
 
 class CreateSpaceViewModelTask @Inject constructor(
-        private val session: Session
-//        private val stringProvider: StringProvider
+        private val session: Session,
+        private val vectorPreferences: VectorPreferences,
+        private val rawService: RawService
 ) : ViewModelTask<CreateSpaceTaskParams, CreateSpaceTaskResult> {
 
     override suspend fun execute(params: CreateSpaceTaskParams): CreateSpaceTaskResult {
@@ -59,16 +66,27 @@ class CreateSpaceViewModelTask @Inject constructor(
 
         val childErrors = mutableMapOf<String, Throwable>()
         val childIds = mutableListOf<String>()
+
+        val e2eByDefault = tryOrNull {
+            rawService.getElementWellknown(session.myUserId)
+                    ?.isE2EByDefault()
+                    ?: true
+        } ?: true
+
         params.defaultRooms
                 .filter { it.isNotBlank() }
                 .forEach { roomName ->
                     try {
                         val roomId = try {
                             if (params.isPublic) {
-                                    session.createRoom(CreateRoomParams().apply {
-                                        this.name = roomName
-                                        this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT })
+                                session.createRoom(
+                                        CreateRoomParams().apply {
+                                            this.name = roomName
+                                            this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+                                        }
+                                )
                             } else {
+                                if (vectorPreferences.labsUseExperimentalRestricted()) {
                                     session.createRoom(CreateRoomParams().apply {
                                         this.name = roomName
                                         this.joinRuleRestricted = listOf(
@@ -77,7 +95,20 @@ class CreateSpaceViewModelTask @Inject constructor(
                                                         via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
                                                 )
                                         )
+                                        if (e2eByDefault) {
+                                            this.enableEncryption()
+                                        }
                                     })
+                                } else {
+                                    session.createRoom(CreateRoomParams().apply {
+                                        this.name = roomName
+                                        visibility = RoomDirectoryVisibility.PRIVATE
+                                        this.preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
+                                        if (e2eByDefault) {
+                                            this.enableEncryption()
+                                        }
+                                    })
+                                }
                             }
                         } catch (timeout: CreateRoomFailure.CreatedWithTimeout) {
                             // we ignore that?

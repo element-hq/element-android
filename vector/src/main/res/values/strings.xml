@@ -3337,4 +3337,8 @@
     <string name="spaces_beta_welcome_to_spaces">Welcome to Spaces!</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Spaces are ways to group rooms and people for work, fun or just yourself.</string>
     <string name="you_are_invited">You are invited</string>
+
+
+    <string name="labs_use_restricted_join_rule">Experimental Space - Restricted Room.</string>
+    <string name="labs_use_restricted_join_rule_desc">Warning requires server support and experimental room version</string>
 </resources>
