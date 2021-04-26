@@ -37,7 +37,7 @@ object VectorLocale {
     private const val APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY"
     private const val APPLICATION_LOCALE_SCRIPT_KEY = "APPLICATION_LOCALE_SCRIPT_KEY"
 
-    private val defaultLocale = Locale("en", "US")
+    private val defaultLocale = Locale("fr", "FR")
 
     private const val ISO_15924_LATN = "Latn"
 
