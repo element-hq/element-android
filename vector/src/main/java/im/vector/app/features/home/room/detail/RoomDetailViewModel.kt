@@ -35,6 +35,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.call.dialpad.DialPadLookup
@@ -649,12 +650,15 @@ class RoomDetailViewModel @AssistedInject constructor(
             val viaServers = MatrixPatterns.extractServerNameFromId(action.event.senderId)
                     ?.let { listOf(it) }
                     .orEmpty()
-            session.rx()
-                    .joinRoom(roomId, viaServers = viaServers)
-                    .map { roomId }
-                    .execute {
-                        copy(tombstoneEventHandling = it)
-                    }
+            viewModelScope.launch {
+                val result = runCatchingToAsync {
+                    session.joinRoom(roomId, viaServers = viaServers)
+                    roomId
+                }
+                setState {
+                    copy(tombstoneEventHandling = result)
+                }
+            }
         }
     }
 

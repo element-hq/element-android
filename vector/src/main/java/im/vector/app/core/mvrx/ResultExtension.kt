@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.userdirectory
+package im.vector.app.core.mvrx
 
-import im.vector.app.core.platform.VectorViewEvents
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Success
 
 /**
- * Transient events for invite users to room screen
+ * Note: this will be removed when upgrading to mvrx2
  */
-sealed class UserListViewEvents : VectorViewEvents {
-    data class OpenShareMatrixToLink(val link: String) : UserListViewEvents()
+suspend fun <A> runCatchingToAsync(block: suspend () -> A): Async<A> {
+    return runCatching {
+        block.invoke()
+    }.fold(
+            { Success(it) },
+            { Fail(it) }
+    )
 }

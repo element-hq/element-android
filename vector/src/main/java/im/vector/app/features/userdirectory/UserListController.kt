@@ -109,33 +109,37 @@ class UserListController @Inject constructor(private val session: Session,
     }
 
     private fun buildKnownUsers(currentState: UserListViewState, selectedUsers: List<String>) {
-        currentState.knownUsers()?.let { userList ->
-            userListHeaderItem {
-                id("known_header")
-                header(stringProvider.getString(R.string.direct_room_user_list_known_title))
-            }
+        currentState.knownUsers()
+                ?.filter { it.userId != session.myUserId }
+                ?.let { userList ->
+                    userListHeaderItem {
+                        id("known_header")
+                        header(stringProvider.getString(R.string.direct_room_user_list_known_title))
+                    }
 
-            if (userList.isEmpty()) {
-                renderEmptyState()
-                return
-            }
-            userList.forEach { item ->
-                val isSelected = selectedUsers.contains(item.userId)
-                userDirectoryUserItem {
-                    id(item.userId)
-                    selected(isSelected)
-                    matrixItem(item.toMatrixItem())
-                    avatarRenderer(avatarRenderer)
-                    clickListener { _ ->
-                        callback?.onItemClick(item)
+                    if (userList.isEmpty()) {
+                        renderEmptyState()
+                        return
+                    }
+                    userList.forEach { item ->
+                        val isSelected = selectedUsers.contains(item.userId)
+                        userDirectoryUserItem {
+                            id(item.userId)
+                            selected(isSelected)
+                            matrixItem(item.toMatrixItem())
+                            avatarRenderer(avatarRenderer)
+                            clickListener { _ ->
+                                callback?.onItemClick(item)
+                            }
+                        }
                     }
                 }
-            }
-        }
     }
 
     private fun buildDirectoryUsers(directoryUsers: List<User>, selectedUsers: List<String>, searchTerms: String, ignoreIds: List<String>) {
-        val toDisplay = directoryUsers.filter { !ignoreIds.contains(it.userId) }
+        val toDisplay = directoryUsers
+                .filter { !ignoreIds.contains(it.userId) && it.userId != session.myUserId }
+
         if (toDisplay.isEmpty() && searchTerms.isBlank()) {
             return
         }
@@ -147,16 +151,14 @@ class UserListController @Inject constructor(private val session: Session,
             renderEmptyState()
         } else {
             toDisplay.forEach { user ->
-                if (user.userId != session.myUserId) {
-                    val isSelected = selectedUsers.contains(user.userId)
-                    userDirectoryUserItem {
-                        id(user.userId)
-                        selected(isSelected)
-                        matrixItem(user.toMatrixItem())
-                        avatarRenderer(avatarRenderer)
-                        clickListener { _ ->
-                            callback?.onItemClick(user)
-                        }
+                val isSelected = selectedUsers.contains(user.userId)
+                userDirectoryUserItem {
+                    id(user.userId)
+                    selected(isSelected)
+                    matrixItem(user.toMatrixItem())
+                    avatarRenderer(avatarRenderer)
+                    clickListener { _ ->
+                        callback?.onItemClick(user)
                     }
                 }
             }

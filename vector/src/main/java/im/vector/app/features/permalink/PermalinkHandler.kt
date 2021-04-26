@@ -112,7 +112,10 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     private fun PermalinkData.RoomLink.getRoomId(): Single<Optional<String>> {
         val session = activeSessionHolder.getSafeActiveSession()
         return if (isRoomAlias && session != null) {
-            session.rx().getRoomIdByAlias(roomIdOrAlias, true).map { it.getOrNull()?.roomId.toOptional() }.subscribeOn(Schedulers.io())
+            session.rx()
+                    .getRoomIdByAlias(roomIdOrAlias, true)
+                    .map { it.getOrNull()?.roomId.toOptional() }
+                    .subscribeOn(Schedulers.io())
         } else {
             Single.just(Optional.from(roomIdOrAlias))
         }
