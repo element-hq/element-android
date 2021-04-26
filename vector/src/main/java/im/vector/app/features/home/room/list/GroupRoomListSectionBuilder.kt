@@ -100,7 +100,7 @@ class GroupRoomListSectionBuilder(
         appStateHandler.selectedRoomGroupingObservable
                 .distinctUntilChanged()
                 .subscribe { groupingMethod ->
-                    val selectedGroupId = (groupingMethod as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
+                    val selectedGroupId = (groupingMethod.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
                     activeGroupAwareQueries.onEach { updater ->
                         updater.updateQuery { query ->
                             query.copy(activeGroupId = selectedGroupId)

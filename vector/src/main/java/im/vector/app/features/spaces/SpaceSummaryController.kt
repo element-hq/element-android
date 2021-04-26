@@ -136,10 +136,9 @@ class SpaceSummaryController @Inject constructor(
                     }
                 }
 
-        val isSelected = selected is RoomGroupingMethod.BySpace && selected.space() == null
         homeSpaceSummaryItem {
             id("space_home")
-            selected(isSelected)
+            selected(selected is RoomGroupingMethod.BySpace && selected.space() == null)
             countState(UnreadCounterBadgeView.State(homeCount.totalCount, homeCount.isHighlight))
             listener { callback?.onSpaceSelected(null) }
         }

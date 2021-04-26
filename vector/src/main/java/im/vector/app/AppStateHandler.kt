@@ -22,7 +22,6 @@ import androidx.lifecycle.OnLifecycleEvent
 import arrow.core.Option
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.BehaviorDataSource
-import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.GlobalScope
@@ -51,8 +50,7 @@ fun RoomGroupingMethod.group() = (this as? RoomGroupingMethod.ByLegacyGroup)?.gr
 class AppStateHandler @Inject constructor(
         sessionDataSource: ActiveSessionDataSource,
         private val uiStateRepository: UiStateRepository,
-        private val activeSessionHolder: ActiveSessionHolder,
-        vectorPreferences: VectorPreferences
+        private val activeSessionHolder: ActiveSessionHolder
 ) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
@@ -100,18 +98,14 @@ class AppStateHandler @Inject constructor(
                     // sessionDataSource could already return a session while acitveSession holder still returns null
                     it.orNull()?.let { session ->
                         if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
-                            uiStateRepository.getSelectedSpace(session.sessionId).let { selectedSpaceId ->
-                                setCurrentSpace(selectedSpaceId, session)
-                            }
+                            setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
                         } else {
-                            uiStateRepository.getSelectedGroup(session.sessionId).let { selectedGroupId ->
-                                setCurrentGroup(selectedGroupId, session)
-                            }
+                            setCurrentGroup(uiStateRepository.getSelectedGroup(session.sessionId), session)
                         }
                     }
-        }.also {
-            compositeDisposable.add(it)
-        }
+                }.also {
+                    compositeDisposable.add(it)
+                }
     }
 
     fun safeActiveSpaceId(): String? {
