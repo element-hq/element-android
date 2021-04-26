@@ -338,6 +338,12 @@ class SpaceRoomListSectionBuilder(
                                                         activeSpaceId = ActiveSpaceFilter.ActiveSpace(roomId)
                                                 )
                                             }
+                                        } else {
+                                            it.updateQuery {
+                                                it.copy(
+                                                        activeSpaceId = ActiveSpaceFilter.None
+                                                )
+                                            }
                                         }
                                     }
                                 })
