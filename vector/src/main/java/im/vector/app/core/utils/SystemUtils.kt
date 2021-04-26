@@ -165,9 +165,9 @@ fun startImportTextFromFileIntent(context: Context, activityResultLauncher: Acti
     val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
         type = "text/plain"
     }
-    if (intent.resolveActivity(context.packageManager) != null) {
+    try {
         activityResultLauncher.launch(intent)
-    } else {
+    } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(R.string.error_no_external_application_found)
     }
 }
