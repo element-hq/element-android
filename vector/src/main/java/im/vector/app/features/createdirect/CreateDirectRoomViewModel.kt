@@ -27,7 +27,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.mvrx.foldToAsync
+import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
@@ -102,9 +102,9 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                         enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
                     }
 
-            val result = runCatching {
+            val result = runCatchingToAsync {
                 session.createRoom(roomParams)
-            }.foldToAsync()
+            }
 
             setState {
                 copy(

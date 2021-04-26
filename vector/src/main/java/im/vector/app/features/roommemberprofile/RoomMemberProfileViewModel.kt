@@ -29,7 +29,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
 import im.vector.app.R
-import im.vector.app.core.mvrx.foldToAsync
+import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
@@ -267,7 +267,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     }
 
     private suspend fun fetchProfileInfo() {
-        val result = runCatching {
+        val result = runCatchingToAsync {
             session.getProfile(initialState.userId)
                     .let {
                         MatrixItem.UserItem(
@@ -276,7 +276,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                                 avatarUrl = it[ProfileService.AVATAR_URL_KEY] as? String
                         )
                     }
-        }.foldToAsync()
+        }
 
         setState {
             copy(userMatrixItem = result)
