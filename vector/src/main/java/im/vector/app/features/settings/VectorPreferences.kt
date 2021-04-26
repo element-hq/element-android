@@ -20,12 +20,10 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.content.edit
-import androidx.lifecycle.LiveData
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
-import im.vector.app.core.platform.livedata.SharedPreferenceLiveData
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
@@ -308,18 +306,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labAddNotificationTab(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB, false)
-    }
-
-    fun labSpaces(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_USE_SPACES, false)
-    }
-
-    fun labSpacesLive(): LiveData<Boolean> {
-        return SharedPreferenceLiveData.booleanLiveData(
-                defaultPrefs,
-                SETTINGS_LABS_USE_SPACES,
-                false
-        )
     }
 
     fun failFast(): Boolean {

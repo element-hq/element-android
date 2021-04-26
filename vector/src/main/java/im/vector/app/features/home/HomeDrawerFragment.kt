@@ -59,11 +59,7 @@ class HomeDrawerFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
 
         if (savedInstanceState == null) {
-//            if (vectorPreferences.labSpaces()) {
-                replaceChildFragment(R.id.homeDrawerGroupListContainer, SpaceListFragment::class.java)
-//            } else {
-//                replaceChildFragment(R.id.homeDrawerGroupListContainer, GroupListFragment::class.java)
-//            }
+            replaceChildFragment(R.id.homeDrawerGroupListContainer, SpaceListFragment::class.java)
         }
         session.getUserLive(session.myUserId).observeK(viewLifecycleOwner) { optionalUser ->
             val user = optionalUser?.getOrNull()
