@@ -17,6 +17,7 @@
 package im.vector.app.features.widgets
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -236,11 +237,9 @@ class WidgetFragment @Inject constructor() :
                 val context = requireContext()
                 val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
                 if (intent != null) {
-                    val packageManager: PackageManager = context.packageManager
-                    val info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
-                    if (info != null) {
+                    try  {
                         context.startActivity(intent)
-                    } else {
+                    } catch(activityNotFoundException: ActivityNotFoundException) {
                         val fallbackUrl = intent.getStringExtra("browser_fallback_url")
                         openUrlInExternalBrowser(context, fallbackUrl)
                     }
