@@ -17,9 +17,6 @@
 package im.vector.app.features.settings
 
 import im.vector.app.R
-import im.vector.app.core.preference.VectorSwitchPreference
-import im.vector.app.features.MainActivity
-import im.vector.app.features.MainActivityArgs
 import javax.inject.Inject
 
 class VectorSettingsLabsFragment @Inject constructor(
@@ -30,11 +27,6 @@ class VectorSettingsLabsFragment @Inject constructor(
     override val preferenceXmlRes = R.xml.vector_settings_labs
 
     override fun bindPref() {
-        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_USE_SPACES)!!.let { pref ->
-            pref.setOnPreferenceChangeListener { _, _ ->
-                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
-                true
-            }
-        }
+        // Nothing to do
     }
 }

@@ -159,16 +159,12 @@ class HomeDetailFragment @Inject constructor(
         }
 
         unreadMessagesSharedViewModel.subscribe { state ->
-            if (vectorPreferences.labSpaces()) {
-                views.drawerUnreadCounterBadgeView.render(
-                        UnreadCounterBadgeView.State(
-                                count = state.otherSpacesUnread.totalCount,
-                                highlighted = state.otherSpacesUnread.isHighlight
-                        )
-                )
-            } else {
-                views.drawerUnreadCounterBadgeView.isVisible = false
-            }
+            views.drawerUnreadCounterBadgeView.render(
+                    UnreadCounterBadgeView.State(
+                            count = state.otherSpacesUnread.totalCount,
+                            highlighted = state.otherSpacesUnread.isHighlight
+                    )
+            )
         }
 
         sharedCallActionViewModel

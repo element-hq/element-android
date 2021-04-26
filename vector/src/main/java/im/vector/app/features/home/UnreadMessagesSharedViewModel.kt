@@ -25,10 +25,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
+import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -53,8 +53,7 @@ data class CountInfo(
 
 class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initialState: UnreadMessagesState,
                                                                 session: Session,
-                                                                appStateHandler: AppStateHandler,
-                                                                private val vectorPreferences: VectorPreferences)
+                                                                appStateHandler: AppStateHandler)
     : VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -119,30 +118,47 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             .throttleFirst(300, TimeUnit.MILLISECONDS)
                             .observeOn(Schedulers.computation())
                 },
-                BiFunction { _, _ ->
-                    val selectedSpace = appStateHandler.safeActiveSpaceId()
-                    val counts = session.getNotificationCountForRooms(
-                            roomSummaryQueryParams {
-                                this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
-                            }
-                    )
-                    val rootCounts = session.spaceService().getRootSpaceSummaries()
-                            .filter {
-                                // filter out current selection
-                                it.roomId != selectedSpace
-                            }
-                    CountInfo(
-                            homeCount = counts,
-                            otherCount = RoomAggregateNotificationCount(
-                                    rootCounts.fold(0, { acc, rs ->
-                                        acc + rs.notificationCount
-                                    }) + (counts.notificationCount.takeIf { selectedSpace != null } ?: 0),
-                                    rootCounts.fold(0, { acc, rs ->
-                                        acc + rs.highlightCount
-                                    }) + (counts.highlightCount.takeIf { selectedSpace != null } ?: 0)
+                BiFunction { groupingMethod, _ ->
+                    when (groupingMethod.orNull()) {
+                        is RoomGroupingMethod.ByLegacyGroup -> {
+                            // currently not supported
+                            CountInfo(
+                                    RoomAggregateNotificationCount(0, 0),
+                                    RoomAggregateNotificationCount(0, 0)
                             )
-                    )
+                        }
+                        is RoomGroupingMethod.BySpace       -> {
+                            val selectedSpace = appStateHandler.safeActiveSpaceId()
+                            val counts = session.getNotificationCountForRooms(
+                                    roomSummaryQueryParams {
+                                        this.memberships = listOf(Membership.JOIN)
+                                        this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                                    }
+                            )
+                            val rootCounts = session.spaceService().getRootSpaceSummaries()
+                                    .filter {
+                                        // filter out current selection
+                                        it.roomId != selectedSpace
+                                    }
+                            CountInfo(
+                                    homeCount = counts,
+                                    otherCount = RoomAggregateNotificationCount(
+                                            rootCounts.fold(0, { acc, rs ->
+                                                acc + rs.notificationCount
+                                            }) + (counts.notificationCount.takeIf { selectedSpace != null } ?: 0),
+                                            rootCounts.fold(0, { acc, rs ->
+                                                acc + rs.highlightCount
+                                            }) + (counts.highlightCount.takeIf { selectedSpace != null } ?: 0)
+                                    )
+                            )
+                        }
+                        null                                -> {
+                            CountInfo(
+                                    RoomAggregateNotificationCount(0, 0),
+                                    RoomAggregateNotificationCount(0, 0)
+                            )
+                        }
+                    }
                 }
         ).execute {
             copy(
