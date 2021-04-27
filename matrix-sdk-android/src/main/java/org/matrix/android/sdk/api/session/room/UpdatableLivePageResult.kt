@@ -24,4 +24,12 @@ interface UpdatableLivePageResult {
     val livePagedList: LiveData<PagedList<RoomSummary>>
 
     fun updateQuery(builder: (RoomSummaryQueryParams) -> RoomSummaryQueryParams)
+
+    val liveBoundaries: LiveData<ResultBoundaries>
 }
+
+data class ResultBoundaries(
+        val frontLoaded: Boolean = false,
+        val endLoaded: Boolean = false,
+        val zeroItemLoaded: Boolean = false
+)
