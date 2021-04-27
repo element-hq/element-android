@@ -21,6 +21,9 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import fr.gouv.tchap.features.platform.PlatformAction
@@ -31,6 +34,10 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentTchapLoginBinding
+import im.vector.app.features.login.LoginViewState
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.isInvalidPassword
 import javax.inject.Inject
 
 /**
@@ -124,7 +131,39 @@ class TchapLoginFragment @Inject constructor(
         loginViewModel.handle(TchapLoginAction.ResetLogin)
     }
 
+    override fun onError(throwable: Throwable) {
+        views.tchapLoginEmail.error = errorFormatter.toHumanReadable(throwable)
+    }
+
+    override fun updateWithState(state: LoginViewState) {
+        when (state.asyncLoginAction) {
+            is Loading -> Unit
+            is Fail    -> {
+                val error = state.asyncLoginAction.error
+                if (error is Failure.ServerError
+                        && error.error.code == MatrixError.M_FORBIDDEN
+                        && error.error.message.isEmpty()) {
+                    // Login with email, but email unknown
+                    views.tchapLoginEmail.error = getString(R.string.login_error_forbidden)
+                } else {
+                    if (error.isInvalidPassword() && spaceInPassword()) {
+                        views.tchapLoginPassword.error = getString(R.string.auth_invalid_login_param_space_in_password)
+                    } else {
+                        views.tchapLoginPassword.error = errorFormatter.toHumanReadable(error)
+                    }
+                }
+            }
+            // Success is handled by the LoginActivity
+            is Success -> Unit
+        }
+    }
+
     override fun create(initialState: PlatformViewState): PlatformViewModel {
         return platformViewModelFactory.create(initialState)
     }
+
+    /**
+     * Detect if password ends or starts with spaces
+     */
+    private fun spaceInPassword() = views.tchapLoginPassword.text.toString().let { it.trim() != it }
 }
