@@ -48,7 +48,10 @@
 
 
     <!-- TextInputLayout -->
-    <style name="VectorTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+    <style name="VectorTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="boxBackgroundColor">@null</item>
+        <item name="boxStrokeColor">@color/tchap_text_input_color_selector</item>
+    </style>
 
     <!-- tabbar text color -->
     <style name="Vector.TabText" parent="Widget.AppCompat.ActionBar.TabText">
