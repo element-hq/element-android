@@ -2228,4 +2228,6 @@
     <string name="send_a_sticker">Tarra</string>
     <string name="uploads_files_title">TIEDOSTOT</string>
     <string name="uploads_media_title">MEDIA</string>
+    <string name="notice_room_server_acl_set_title_by_you">Asetit palvelimen käyttäjäoikeuslistan tähän huoneeseen.</string>
+    <string name="notice_room_server_acl_set_title">%s asetti palvelimen käyttäjäoikeuslistan tähän huoneeseen.</string>
 </resources>
