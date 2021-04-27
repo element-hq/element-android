@@ -349,7 +349,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
 
         // it may not have a parent relation but could be a child of some other....
         for (spaceSummary in getSpaceSummaries(spaceSummaryQueryParams { memberships = Membership.activeMemberships() })) {
-            if (spaceSummary.children?.any { it.childRoomId == roomSummary.roomId } == true) {
+            if (spaceSummary.spaceChildren?.any { it.childRoomId == roomSummary.roomId } == true) {
                 return false
             }
         }
@@ -358,7 +358,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
     }
 
     fun flattenChild(current: RoomSummary, parenting: List<String>, output: MutableList<RoomSummary>, memberShips: List<Membership>) {
-        current.children?.sortedBy { it.order ?: it.name }?.forEach { childInfo ->
+        current.spaceChildren?.sortedBy { it.order ?: it.name }?.forEach { childInfo ->
             if (childInfo.roomType == RoomType.SPACE) {
                 // Add recursive
                 if (!parenting.contains(childInfo.childRoomId)) { // avoid cycles!
@@ -388,7 +388,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         if (includeCurrent) {
             output.add(current)
         }
-        current.children?.sortedBy { it.order ?: it.name }?.forEach {
+        current.spaceChildren?.sortedBy { it.order ?: it.name }?.forEach {
             if (it.roomType == RoomType.SPACE) {
                 // Add recursive
                 if (!parenting.contains(it.childRoomId)) { // avoid cycles!

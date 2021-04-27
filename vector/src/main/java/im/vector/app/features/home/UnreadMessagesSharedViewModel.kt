@@ -30,7 +30,6 @@ import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.session.Session
@@ -66,8 +65,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: UnreadMessagesState): UnreadMessagesSharedViewModel? {
             val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? UnreadMessagesSharedViewModel.Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? UnreadMessagesSharedViewModel.Factory
+                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
+                is ActivityViewModelContext -> viewModelContext.activity as? Factory
             }
             return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
@@ -84,7 +83,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                 }, sortOrder = RoomSortOrder.NONE
         ).asObservable()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .subscribe {
+                .execute {
                     val counts = session.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
@@ -97,15 +96,13 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                 this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
                             }
                     ).size
-                    setState {
-                        copy(
-                                homeSpaceUnread = RoomAggregateNotificationCount(
-                                        counts.notificationCount + invites,
-                                        highlightCount = counts.highlightCount + invites
-                                )
-                        )
-                    }
-                }.disposeOnClear()
+                    copy(
+                            homeSpaceUnread = RoomAggregateNotificationCount(
+                                    counts.notificationCount + invites,
+                                    highlightCount = counts.highlightCount + invites
+                            )
+                    )
+                }
 
         Observable.combineLatest(
                 appStateHandler.selectedRoomGroupingObservable.distinctUntilChanged(),
@@ -118,7 +115,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             .throttleFirst(300, TimeUnit.MILLISECONDS)
                             .observeOn(Schedulers.computation())
                 },
-                BiFunction { groupingMethod, _ ->
+                { groupingMethod, _ ->
                     when (groupingMethod.orNull()) {
                         is RoomGroupingMethod.ByLegacyGroup -> {
                             // currently not supported

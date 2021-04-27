@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
+import org.matrix.android.sdk.api.session.space.JoinSpaceResult
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
@@ -40,6 +41,7 @@ import org.matrix.android.sdk.api.session.space.model.SpaceParentContent
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomGetter
 import org.matrix.android.sdk.internal.session.room.SpaceGetter
+import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
@@ -49,7 +51,7 @@ import javax.inject.Inject
 
 internal class DefaultSpaceService @Inject constructor(
         @UserId private val userId: String,
-        private val createSpaceTask: CreateSpaceTask,
+        private val createRoomTask: CreateRoomTask,
         private val joinSpaceTask: JoinSpaceTask,
         private val spaceGetter: SpaceGetter,
         private val roomGetter: RoomGetter,
@@ -61,7 +63,7 @@ internal class DefaultSpaceService @Inject constructor(
 ) : SpaceService {
 
     override suspend fun createSpace(params: CreateSpaceParams): String {
-        return createSpaceTask.executeRetry(params, 3)
+        return createRoomTask.executeRetry(params, 3)
     }
 
     override suspend fun createSpace(name: String, topic: String?, avatarUri: Uri?, isPublic: Boolean): String {
@@ -149,7 +151,7 @@ internal class DefaultSpaceService @Inject constructor(
 
     override suspend fun joinSpace(spaceIdOrAlias: String,
                                    reason: String?,
-                                   viaServers: List<String>): SpaceService.JoinSpaceResult {
+                                   viaServers: List<String>): JoinSpaceResult {
         return joinSpaceTask.execute(JoinSpaceTask.Params(spaceIdOrAlias, reason, viaServers))
     }
 

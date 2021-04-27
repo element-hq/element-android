@@ -63,7 +63,7 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         val spaceSum = session.getRoomSummary(initialState.spaceId)
         setState {
             copy(
-                    childList = spaceSum?.children ?: emptyList(),
+                    childList = spaceSum?.spaceChildren ?: emptyList(),
                     spaceSummaryApiResult = Loading()
             )
         }
@@ -95,17 +95,12 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         session
                 .rx()
                 .liveRoomSummaries(queryParams)
-                .subscribe { list ->
-                    val joinedRoomIds = list
-                            ?.map { it.roomId }
-                            ?.toSet()
-                            ?: emptySet()
-
-                    setState {
-                        copy(joinedRoomsIds = joinedRoomIds)
-                    }
+                .map {
+                    it.map { it.roomId }.toSet()
                 }
-                .disposeOnClear()
+                .execute {
+                    copy(joinedRoomsIds = it.invoke() ?: emptySet())
+                }
     }
 
     private fun observeMembershipChanges() {

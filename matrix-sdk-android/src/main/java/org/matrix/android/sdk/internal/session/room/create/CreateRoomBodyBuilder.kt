@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.toMedium
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
-import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
@@ -144,7 +143,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                     Event(
                             type = EventType.STATE_ROOM_GUEST_ACCESS,
                             stateKey = "",
-                            content = RoomGuestAccessContent(it.value).toContent()
+                            content = mapOf("guest_access" to it.value)
                     )
                 }
     }

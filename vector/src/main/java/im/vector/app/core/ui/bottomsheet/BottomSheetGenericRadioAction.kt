@@ -29,11 +29,11 @@ open class BottomSheetGenericRadioAction(
 ) : VectorSharedAction {
 
     fun toRadioBottomSheetItem(): BottomSheetRadioActionItem_ {
-        return BottomSheetRadioActionItem_().apply {
-            id("action_${this@BottomSheetGenericRadioAction.title}")
-            title(this@BottomSheetGenericRadioAction.title)
-            selected(this@BottomSheetGenericRadioAction.isSelected)
-            description(this@BottomSheetGenericRadioAction.description)
+        return BottomSheetRadioActionItem_().also {
+            it.id("action_$title")
+            it.title(title)
+            it.selected(isSelected)
+            it.description(description)
         }
     }
 }

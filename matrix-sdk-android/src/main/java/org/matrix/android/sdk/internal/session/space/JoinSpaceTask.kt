@@ -20,7 +20,7 @@ import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
-import org.matrix.android.sdk.api.session.space.SpaceService
+import org.matrix.android.sdk.api.session.space.JoinSpaceResult
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
@@ -32,7 +32,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-internal interface JoinSpaceTask : Task<JoinSpaceTask.Params, SpaceService.JoinSpaceResult> {
+internal interface JoinSpaceTask : Task<JoinSpaceTask.Params, JoinSpaceResult> {
     data class Params(
             val roomIdOrAlias: String,
             val reason: String?,
@@ -47,7 +47,7 @@ internal class DefaultJoinSpaceTask @Inject constructor(
         private val roomSummaryDataSource: RoomSummaryDataSource
 ) : JoinSpaceTask {
 
-    override suspend fun execute(params: JoinSpaceTask.Params): SpaceService.JoinSpaceResult {
+    override suspend fun execute(params: JoinSpaceTask.Params): JoinSpaceResult {
         Timber.v("## Space: > Joining root space ${params.roomIdOrAlias} ...")
         try {
             joinRoomTask.execute(JoinRoomTask.Params(
@@ -56,7 +56,7 @@ internal class DefaultJoinSpaceTask @Inject constructor(
                     params.viaServers
             ))
         } catch (failure: Throwable) {
-            return SpaceService.JoinSpaceResult.Fail(failure)
+            return JoinSpaceResult.Fail(failure)
         }
         Timber.v("## Space: < Joining root space done for ${params.roomIdOrAlias}")
         // we want to wait for sync result to check for auto join rooms
@@ -76,15 +76,15 @@ internal class DefaultJoinSpaceTask @Inject constructor(
             }
         } catch (exception: TimeoutCancellationException) {
             Timber.w("## Space: > Error created with timeout")
-            return SpaceService.JoinSpaceResult.PartialSuccess(emptyMap())
+            return JoinSpaceResult.PartialSuccess(emptyMap())
         }
 
         val errors = mutableMapOf<String, Throwable>()
         Timber.v("## Space: > Sync done ...")
         // after that i should have the children (? do I need to paginate to get state)
         val summary = roomSummaryDataSource.getSpaceSummary(params.roomIdOrAlias)
-        Timber.v("## Space: Found space summary Name:[${summary?.name}] children: ${summary?.children?.size}")
-        summary?.children?.forEach {
+        Timber.v("## Space: Found space summary Name:[${summary?.name}] children: ${summary?.spaceChildren?.size}")
+        summary?.spaceChildren?.forEach {
 //            val childRoomSummary = it.roomSummary ?: return@forEach
             Timber.v("## Space: Processing child :[${it.childRoomId}] autoJoin:${it.autoJoin}")
             if (it.autoJoin) {
@@ -92,13 +92,13 @@ internal class DefaultJoinSpaceTask @Inject constructor(
                 if (it.roomType == RoomType.SPACE) {
                     // recursively join auto-joined child of this space?
                     when (val subspaceJoinResult = execute(JoinSpaceTask.Params(it.childRoomId, null, it.viaServers))) {
-                        SpaceService.JoinSpaceResult.Success -> {
+                        JoinSpaceResult.Success           -> {
                             // nop
                         }
-                        is SpaceService.JoinSpaceResult.Fail -> {
+                        is JoinSpaceResult.Fail           -> {
                             errors[it.childRoomId] = subspaceJoinResult.error
                         }
-                        is SpaceService.JoinSpaceResult.PartialSuccess -> {
+                        is JoinSpaceResult.PartialSuccess -> {
                             errors.putAll(subspaceJoinResult.failedRooms)
                         }
                     }
@@ -119,9 +119,9 @@ internal class DefaultJoinSpaceTask @Inject constructor(
         }
 
         return if (errors.isEmpty()) {
-            SpaceService.JoinSpaceResult.Success
+            JoinSpaceResult.Success
         } else {
-            SpaceService.JoinSpaceResult.PartialSuccess(errors)
+            JoinSpaceResult.PartialSuccess(errors)
         }
     }
 }

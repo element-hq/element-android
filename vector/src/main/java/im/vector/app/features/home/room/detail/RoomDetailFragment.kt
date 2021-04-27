@@ -644,6 +644,9 @@ class RoomDetailFragment @Inject constructor(
     private fun handleSpaceShare() {
         roomDetailArgs.openShareSpaceForId?.let { spaceId ->
             ShareSpaceBottomSheet.show(childFragmentManager, spaceId)
+            view?.post {
+                handleChatEffect(ChatEffect.CONFETTI)
+            }
         }
     }
 

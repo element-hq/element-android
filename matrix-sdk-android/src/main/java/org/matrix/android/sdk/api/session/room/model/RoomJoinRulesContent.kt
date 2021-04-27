@@ -31,7 +31,7 @@ data class RoomJoinRulesContent(
         /**
          * If the allow key is an empty list (or not a list at all), then the room reverts to standard public join rules
          */
-        @Json(name = "allow") val allowList:List<RoomJoinRulesAllowEntry>? = null
+        @Json(name = "allow") val allowList: List<RoomJoinRulesAllowEntry>? = null
 ) {
     val joinRules: RoomJoinRules? = when (_joinRules) {
         "public" -> RoomJoinRules.PUBLIC

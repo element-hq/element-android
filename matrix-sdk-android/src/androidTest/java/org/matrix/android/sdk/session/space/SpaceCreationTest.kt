@@ -39,7 +39,7 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.api.session.space.SpaceService
+import org.matrix.android.sdk.api.session.space.JoinSpaceResult
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
 import kotlin.test.assertEquals
@@ -112,12 +112,12 @@ class SpaceCreationTest : InstrumentedTest {
 
         // Try to join from bob, it's a public space no need to invite
 
-        val joinResult: SpaceService.JoinSpaceResult
+        val joinResult: JoinSpaceResult
         runBlocking {
             joinResult = bobSession.spaceService().joinSpace(spaceId)
         }
 
-        assertEquals(SpaceService.JoinSpaceResult.Success, joinResult)
+        assertEquals(JoinSpaceResult.Success, joinResult)
 
         val spaceBobPov = bobSession.spaceService().getSpace(spaceId)
         assertEquals(roomName, spaceBobPov?.asRoom()?.roomSummary()?.name, "Room name should be set")
@@ -169,7 +169,7 @@ class SpaceCreationTest : InstrumentedTest {
             bobSession.spaceService().joinSpace(spaceId)
         }
 
-        assertEquals(SpaceService.JoinSpaceResult.Success, joinResult)
+        assertEquals(JoinSpaceResult.Success, joinResult)
 
         val spaceBobPov = bobSession.spaceService().getSpace(spaceId)
         assertEquals(roomName, spaceBobPov?.asRoom()?.roomSummary()?.name, "Room name should be set")
@@ -186,7 +186,7 @@ class SpaceCreationTest : InstrumentedTest {
             this.memberships = listOf(Membership.JOIN)
         }).firstOrNull()
 
-        assertEquals(2, spaceSummaryBobPov?.children?.size ?: -1, "Unexpected number of children")
+        assertEquals(2, spaceSummaryBobPov?.spaceChildren?.size ?: -1, "Unexpected number of children")
 
         commonTestHelper.signOutAndClose(aliceSession)
         commonTestHelper.signOutAndClose(bobSession)

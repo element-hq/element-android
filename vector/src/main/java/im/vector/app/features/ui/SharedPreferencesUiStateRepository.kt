@@ -60,13 +60,13 @@ class SharedPreferencesUiStateRepository @Inject constructor(
     }
 
     override fun storeSelectedSpace(spaceId: String?, sessionId: String) {
-        sharedPreferences.edit(true) {
+        sharedPreferences.edit {
             putString("$KEY_SELECTED_SPACE@$sessionId", spaceId)
         }
     }
 
     override fun storeSelectedGroup(groupId: String?, sessionId: String) {
-        sharedPreferences.edit(true) {
+        sharedPreferences.edit {
             putString("$KEY_SELECTED_GROUP@$sessionId", groupId)
         }
     }

@@ -18,36 +18,36 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:baselineAligned="false"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:orientation="horizontal">
 
             <RelativeLayout
                 android:id="@+id/groupToolbarAvatarImageView"
-                android:contentDescription="@string/a11y_open_drawer"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:contentDescription="@string/a11y_open_drawer"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_width="40dp"
-                android:layout_height="40dp">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:importantForAccessibility="no"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_space_icons"
-                    app:tint="?riotx_text_secondary"
                     android:layout_marginStart="4dp"
-                    />
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_space_icons"
+                    app:tint="?riotx_text_secondary" />
 
-                <!-- Not yet done -->
                 <im.vector.app.features.home.room.list.UnreadCounterBadgeView
                     android:id="@+id/drawerUnreadCounterBadgeView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginEnd="0dp"
                     android:gravity="center"
                     android:minWidth="16dp"
@@ -57,20 +57,18 @@
                     android:textColor="@android:color/white"
                     android:textSize="10sp"
                     android:visibility="gone"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
                     tools:background="@drawable/bg_unread_highlight"
                     tools:text="4"
                     tools:visibility="visible" />
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/homeToolbarContent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="start"
                 android:orientation="vertical"
-                android:id="@+id/homeToolbarContent"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp">
 
@@ -90,14 +88,14 @@
                     android:id="@+id/groupToolbarSpaceTitleView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:visibility="visible"
-                    android:visibility="gone"
                     android:ellipsize="end"
                     android:gravity="start"
                     android:maxLines="1"
                     android:textColor="?riotx_text_primary"
                     android:textSize="14sp"
-                    tools:text="@tools:sample/lorem/random" />
+                    android:visibility="gone"
+                    tools:text="@tools:sample/lorem/random"
+                    tools:visibility="visible" />
 
             </LinearLayout>
 

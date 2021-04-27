@@ -57,7 +57,7 @@ data class RoomSummary constructor(
         val hasFailedSending: Boolean = false,
         val roomType: String? = null,
         val spaceParents: List<SpaceParentInfo>? = null,
-        val children: List<SpaceChildInfo>? = null,
+        val spaceChildren: List<SpaceChildInfo>? = null,
         val flattenParentIds: List<String> = emptyList()
 ) {
 

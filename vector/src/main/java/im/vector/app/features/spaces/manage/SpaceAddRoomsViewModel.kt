@@ -44,7 +44,7 @@ import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 
 class AddRoomError(val errorList: Map<String, Throwable>) : Throwable() {
     override fun getLocalizedMessage(): String? {
-        return errorList.map { it.value.localizedMessage }.joinToString(",")
+        return errorList.map { it.value.localizedMessage }.joinToString()
     }
 }
 

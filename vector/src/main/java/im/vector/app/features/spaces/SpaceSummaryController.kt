@@ -148,7 +148,7 @@ class SpaceSummaryController @Inject constructor(
                 ?.forEach { groupSummary ->
                     val isSelected = selected is RoomGroupingMethod.BySpace && groupSummary.roomId == selected.space()?.roomId
                     // does it have children?
-                    val subSpaces = groupSummary.children?.filter { childInfo ->
+                    val subSpaces = groupSummary.spaceChildren?.filter { childInfo ->
                         summaries.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
                     }
                     val hasChildren = (subSpaces?.size ?: 0) > 0

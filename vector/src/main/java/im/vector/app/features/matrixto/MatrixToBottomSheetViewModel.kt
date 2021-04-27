@@ -40,7 +40,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
-import org.matrix.android.sdk.api.session.space.SpaceService
+import org.matrix.android.sdk.api.session.space.JoinSpaceResult
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -281,7 +281,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 if (joinResult.isSuccess()) {
                     _viewEvents.post(MatrixToViewEvents.NavigateToSpace(joinSpace.spaceID))
                 } else {
-                    val errMsg = errorFormatter.toHumanReadable((joinResult as? SpaceService.JoinSpaceResult.Fail)?.error)
+                    val errMsg = errorFormatter.toHumanReadable((joinResult as? JoinSpaceResult.Fail)?.error)
                     _viewEvents.post(MatrixToViewEvents.ShowModalError(errMsg))
                 }
             } catch (failure: Throwable) {

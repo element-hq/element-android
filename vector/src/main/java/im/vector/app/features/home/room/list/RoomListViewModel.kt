@@ -65,8 +65,17 @@ class RoomListViewModel @Inject constructor(
     }
 
     enum class SpaceFilterStrategy {
+        /**
+         * Filter the rooms if they are part of the current space (children and grand children).
+         * If current space is null, will return orphan rooms only
+         */
         NORMAL,
+        /**
+         * Special case when we don't want to discriminate rooms when current space is null.
+         * In this case return all.
+         */
         NOT_IF_ALL,
+        /** Do not filter based on space*/
         NONE
     }
 

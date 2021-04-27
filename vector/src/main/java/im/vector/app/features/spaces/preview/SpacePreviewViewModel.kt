@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
-import org.matrix.android.sdk.api.session.space.SpaceService
+import org.matrix.android.sdk.api.session.space.JoinSpaceResult
 import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
 import org.matrix.android.sdk.internal.session.space.peeking.SpaceSubChildPeekResult
 import timber.log.Timber
@@ -102,12 +102,12 @@ class SpacePreviewViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val joinResult = session.spaceService().joinSpace(initialState.idOrAlias, null, spaceVia)
             when (joinResult) {
-                SpaceService.JoinSpaceResult.Success,
-                is SpaceService.JoinSpaceResult.PartialSuccess -> {
+                JoinSpaceResult.Success,
+                is JoinSpaceResult.PartialSuccess -> {
                     // For now we don't handle partial success, it's just success
                     _viewEvents.post(SpacePreviewViewEvents.JoinSuccess)
                 }
-                is SpaceService.JoinSpaceResult.Fail -> {
+                is JoinSpaceResult.Fail           -> {
                     _viewEvents.post(SpacePreviewViewEvents.JoinFailure(joinResult.error.toString()))
                 }
             }

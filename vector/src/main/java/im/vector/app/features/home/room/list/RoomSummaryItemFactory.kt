@@ -32,7 +32,6 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
-import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -60,7 +59,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                          onJoinClick: View.OnClickListener): VectorEpoxyModel<*> {
         return SpaceChildInfoItem_()
                 .id("sug_${spaceChildInfo.childRoomId}")
-                .matrixItem(MatrixItem.RoomItem(spaceChildInfo.childRoomId, spaceChildInfo.name, spaceChildInfo.avatarUrl))
+                .matrixItem(spaceChildInfo.toMatrixItem())
                 .avatarRenderer(avatarRenderer)
                 .topic(spaceChildInfo.topic)
                 .buttonLabel(stringProvider.getString(R.string.join))

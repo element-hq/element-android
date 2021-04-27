@@ -25,12 +25,12 @@ import timber.log.Timber
 fun <T : RealmObject> RealmQuery<T>.process(field: String, queryStringValue: QueryStringValue): RealmQuery<T> {
     when (queryStringValue) {
         is QueryStringValue.NoCondition -> Timber.v("No condition to process")
-        is QueryStringValue.IsNotNull -> isNotNull(field)
-        is QueryStringValue.IsNull -> isNull(field)
-        is QueryStringValue.IsEmpty -> isEmpty(field)
-        is QueryStringValue.IsNotEmpty -> isNotEmpty(field)
-        is QueryStringValue.Equals -> equalTo(field, queryStringValue.string, queryStringValue.case.toRealmCase())
-        is QueryStringValue.Contains -> contains(field, queryStringValue.string, queryStringValue.case.toRealmCase())
+        is QueryStringValue.IsNotNull   -> isNotNull(field)
+        is QueryStringValue.IsNull      -> isNull(field)
+        is QueryStringValue.IsEmpty     -> isEmpty(field)
+        is QueryStringValue.IsNotEmpty  -> isNotEmpty(field)
+        is QueryStringValue.Equals      -> equalTo(field, queryStringValue.string, queryStringValue.case.toRealmCase())
+        is QueryStringValue.Contains    -> contains(field, queryStringValue.string, queryStringValue.case.toRealmCase())
     }
     return this
 }
@@ -38,6 +38,6 @@ fun <T : RealmObject> RealmQuery<T>.process(field: String, queryStringValue: Que
 private fun QueryStringValue.Case.toRealmCase(): Case {
     return when (this) {
         QueryStringValue.Case.INSENSITIVE -> Case.INSENSITIVE
-        QueryStringValue.Case.SENSITIVE -> Case.SENSITIVE
+        QueryStringValue.Case.SENSITIVE   -> Case.SENSITIVE
     }
 }

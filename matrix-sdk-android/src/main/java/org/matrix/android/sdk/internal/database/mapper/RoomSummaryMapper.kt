@@ -75,7 +75,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                             viaServers = relationInfoEntity.viaServers.toList()
                     )
                 },
-                children = roomSummaryEntity.children.map {
+                spaceChildren = roomSummaryEntity.children.map {
                     SpaceChildInfo(
                             childRoomId = it.childRoomId ?: "",
                             isKnown = it.childSummaryEntity != null,

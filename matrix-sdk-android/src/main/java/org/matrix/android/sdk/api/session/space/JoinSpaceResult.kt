@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.spaces.manage
+package org.matrix.android.sdk.api.session.space
 
-import im.vector.app.core.platform.VectorViewEvents
+sealed class JoinSpaceResult {
+    object Success : JoinSpaceResult()
+    data class Fail(val error: Throwable) : JoinSpaceResult()
 
-sealed class SpaceManagedSharedViewEvents : VectorViewEvents {
-    object Finish : SpaceManagedSharedViewEvents()
-    object ShowLoading : SpaceManagedSharedViewEvents()
-    object HideLoading : SpaceManagedSharedViewEvents()
+    /** Success fully joined the space, but failed to join all or some of it's rooms */
+    data class PartialSuccess(val failedRooms: Map<String, Throwable>) : JoinSpaceResult()
+
+    fun isSuccess() = this is Success || this is PartialSuccess
 }

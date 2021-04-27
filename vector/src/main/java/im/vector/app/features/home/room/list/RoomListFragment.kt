@@ -92,8 +92,8 @@ class RoomListFragment @Inject constructor(
 
     data class SectionAdapterInfo(
             var section: SectionKey,
-            val headerHeaderAdapter: SectionHeaderAdapter,
-            val contentAdapter: EpoxyController
+            val sectionHeaderAdapter: SectionHeaderAdapter,
+            val contentEpoxyController: EpoxyController
     )
 
     private val adapterInfosList = mutableListOf<SectionAdapterInfo>()
@@ -126,7 +126,7 @@ class RoomListFragment @Inject constructor(
             // it's for invites local echo
             adapterInfosList.filter { it.section.notifyOfLocalEcho }
                     .onEach {
-                        (it.contentAdapter as? RoomSummaryPagedController)?.roomChangeMembershipStates = ms
+                        (it.contentEpoxyController as? RoomSummaryPagedController)?.roomChangeMembershipStates = ms
                     }
         }
     }
@@ -137,16 +137,16 @@ class RoomListFragment @Inject constructor(
             val isRoomSectionExpanded = roomsSection.isExpanded.value.orTrue()
             if (actualBlock.section.isExpanded && !isRoomSectionExpanded) {
                 // mark controller as collapsed
-                actualBlock.contentAdapter.setCollapsed(true)
+                actualBlock.contentEpoxyController.setCollapsed(true)
             } else if (!actualBlock.section.isExpanded && isRoomSectionExpanded) {
                 // we must expand!
-                actualBlock.contentAdapter.setCollapsed(false)
+                actualBlock.contentEpoxyController.setCollapsed(false)
             }
             actualBlock.section = actualBlock.section.copy(
                     isExpanded = isRoomSectionExpanded
             )
-            actualBlock.headerHeaderAdapter.updateSection(
-                    actualBlock.headerHeaderAdapter.roomsSectionData.copy(isExpanded = isRoomSectionExpanded)
+            actualBlock.sectionHeaderAdapter.updateSection(
+                    actualBlock.sectionHeaderAdapter.roomsSectionData.copy(isExpanded = isRoomSectionExpanded)
             )
         }
     }
@@ -156,7 +156,7 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        adapterInfosList.onEach { it.contentAdapter.removeModelBuildListener(modelBuildListener) }
+        adapterInfosList.onEach { it.contentEpoxyController.removeModelBuildListener(modelBuildListener) }
         adapterInfosList.clear()
         modelBuildListener = null
         views.roomListView.cleanup()
@@ -401,8 +401,8 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun checkEmptyState() {
-        val shouldShowEmpty = adapterInfosList.all { it.headerHeaderAdapter.roomsSectionData.isHidden }
-                && !adapterInfosList.any { it.headerHeaderAdapter.roomsSectionData.isLoading }
+        val shouldShowEmpty = adapterInfosList.all { it.sectionHeaderAdapter.roomsSectionData.isHidden }
+                && !adapterInfosList.any { it.sectionHeaderAdapter.roomsSectionData.isLoading }
         if (shouldShowEmpty) {
             val emptyState = when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> {
@@ -432,7 +432,7 @@ class RoomListFragment @Inject constructor(
             views.stateView.state = emptyState
         } else {
             // is there something to show already?
-            if (adapterInfosList.any { !it.headerHeaderAdapter.roomsSectionData.isHidden }) {
+            if (adapterInfosList.any { !it.sectionHeaderAdapter.roomsSectionData.isHidden }) {
                 views.stateView.state = StateView.State.Content
             } else {
                 views.stateView.state = StateView.State.Loading

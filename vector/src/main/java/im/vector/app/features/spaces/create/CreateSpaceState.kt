@@ -29,7 +29,7 @@ data class CreateSpaceState(
         val spaceType: SpaceType? = null,
         val spaceTopology: SpaceTopology? = null,
         val nameInlineError: String? = null,
-        val defaultRooms: Map<Int, String?>? = null,
+        val defaultRooms: Map<Int /** position in form */, String?>? = null,
         val creationResult: Async<String> = Uninitialized
 ) : MvRxState {
 
