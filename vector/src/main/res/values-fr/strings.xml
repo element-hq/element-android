@@ -2501,7 +2501,7 @@
     <string name="a11y_rule_notify_silent">Notifier sans son</string>
     <string name="a11y_rule_notify_noisy">Notifier avec son</string>
     <string name="a11y_error_message_not_sent">Message non envoyé suite à une erreur</string>
-    <string name="a11y_checked">Vérifié</string>
+    <string name="a11y_checked">Coché</string>
     <string name="a11y_close_emoji_picker">Fermer le sélecteur d’émojis</string>
     <string name="a11y_open_emoji_picker">Ouvrir le sélecteur d’émojis</string>
     <string name="a11y_trust_level_trusted">Reconnu</string>
