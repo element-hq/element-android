@@ -51,7 +51,7 @@ import uniffi.olm.Request
 import uniffi.olm.RequestType
 import uniffi.olm.setLogger
 
-class CryptoLogger() : Logger {
+class CryptoLogger : Logger {
     override fun log(logLine: String) {
         Timber.d(logLine)
     }
@@ -68,11 +68,9 @@ private class CryptoProgressListener(listener: ProgressListener?) : RustProgress
 }
 
 internal class LiveDevice(
-    userIds: List<String>,
-    observer: DeviceUpdateObserver
+        internal var userIds: List<String>,
+        private var observer: DeviceUpdateObserver
 ) : MutableLiveData<List<CryptoDeviceInfo>>() {
-    internal var userIds: List<String> = userIds
-    private var observer: DeviceUpdateObserver = observer
 
     override fun onActive() {
         observer.addDeviceUpdateListener(this)
@@ -105,18 +103,18 @@ private fun toCryptoDeviceInfo(device: Device): CryptoDeviceInfo {
             mapOf(),
             UnsignedDeviceInfo(device.displayName),
             // TODO pass trust levels here
-            DeviceTrustLevel(false, false),
+            DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false),
             device.isBlocked,
             // TODO
             null
         )
 }
 
-internal class DeviceUpdateObserver() {
+internal class DeviceUpdateObserver {
     internal val listeners = ConcurrentHashMap<LiveDevice, List<String>>()
 
     fun addDeviceUpdateListener(device: LiveDevice) {
-        listeners.set(device, device.userIds)
+        listeners[device] = device.userIds
     }
 
     fun removeDeviceUpdateListener(device: LiveDevice) {
@@ -164,7 +162,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
             keys,
             mapOf(),
             UnsignedDeviceInfo(),
-            DeviceTrustLevel(false, true),
+            DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
             false,
             null
         )
@@ -226,14 +224,14 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
         deviceChanges: DeviceListResponse?,
         keyCounts: DeviceOneTimeKeysCountSyncResponse?
     ): ToDeviceSyncResponse = withContext(Dispatchers.IO) {
-            var counts: MutableMap<String, Int> = mutableMapOf()
+            val counts: MutableMap<String, Int> = mutableMapOf()
 
             if (keyCounts?.signedCurve25519 != null) {
-                counts.put("signed_curve25519", keyCounts.signedCurve25519)
+                counts["signed_curve25519"] = keyCounts.signedCurve25519
             }
 
             val devices = DeviceLists(deviceChanges?.changed ?: listOf(), deviceChanges?.left ?: listOf())
-            val adapter = MoshiProvider.providesMoshi().adapter<ToDeviceSyncResponse>(ToDeviceSyncResponse::class.java)
+            val adapter = MoshiProvider.providesMoshi().adapter(ToDeviceSyncResponse::class.java)
             val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
 
             adapter.fromJson(inner.receiveSyncChanges(events, devices, counts))!!
@@ -351,7 +349,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      */
     @Throws(MXCryptoError::class)
     suspend fun decryptRoomEvent(event: Event): MXEventDecryptionResult = withContext(Dispatchers.IO) {
-        val adapter = MoshiProvider.providesMoshi().adapter<Event>(Event::class.java)
+        val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
         val serializedEvent = adapter.toJson(event)
 
         try {
@@ -385,7 +383,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      */
     @Throws(DecryptionErrorException::class)
     suspend fun requestRoomKey(event: Event): KeyRequestPair = withContext(Dispatchers.IO) {
-        val adapter = MoshiProvider.providesMoshi().adapter<Event>(Event::class.java)
+        val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
         val serializedEvent = adapter.toJson(event)
 
         inner.requestRoomKey(serializedEvent, event.roomId!!)
@@ -421,9 +419,9 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
     suspend fun importKeys(keys: ByteArray, passphrase: String, listener: ProgressListener?): ImportRoomKeysResult = withContext(Dispatchers.IO) {
         val decodedKeys = String(keys, Charset.defaultCharset())
 
-        var rustListener = CryptoProgressListener(listener)
+        val rustListener = CryptoProgressListener(listener)
 
-        var result = inner.importKeys(decodedKeys, passphrase, rustListener)
+        val result = inner.importKeys(decodedKeys, passphrase, rustListener)
 
         ImportRoomKeysResult(result.total, result.imported)
     }
@@ -459,7 +457,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
     @Throws(CryptoStoreErrorException::class)
     suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo> {
         val ownDevice = ownDevice()
-        var devices = inner.getUserDevices(userId).map { toCryptoDeviceInfo(it) }.toMutableList()
+        val devices = inner.getUserDevices(userId).map { toCryptoDeviceInfo(it) }.toMutableList()
 
         // EA doesn't differentiate much between our own and other devices of
         // while the rust-sdk does, append our own device here.
@@ -485,7 +483,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
     /**
      * Get all the devices of multiple users.
      *
-     * @param userId The ids of the device owners.
+     * @param userIds The ids of the device owners.
      *
      * @return The list of Devices or an empty list if there aren't any.
      */
@@ -516,14 +514,14 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      * The live version will update the list of devices if some of the data
      * changes, or if new devices arrive for a certain user.
      *
-     * @param userId The ids of the device owners.
+     * @param userIds The ids of the device owners.
      *
      * @return The list of Devices or an empty list if there aren't any.
      */
     suspend fun getLiveDevices(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
         val plainDevices = getUserDevices(userIds)
         val devices = LiveDevice(userIds, deviceUpdateObserver)
-        devices.setValue(plainDevices)
+        devices.value = plainDevices
 
         return devices
     }
@@ -533,8 +531,6 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      */
     @Throws(CryptoStoreErrorException::class)
     fun discardRoomKey(roomId: String) {
-        runBlocking {
-            inner.discardRoomKey(roomId)
-        }
+        runBlocking { inner.discardRoomKey(roomId) }
     }
 }

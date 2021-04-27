@@ -160,7 +160,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     // Locks for some of our operations
     private val keyClaimLock: Mutex = Mutex()
-    private val outgointRequestsLock: Mutex = Mutex()
+    private val outgoingRequestsLock: Mutex = Mutex()
     private val roomKeyShareLocks: ConcurrentHashMap<String, Mutex> = ConcurrentHashMap()
 
     // TODO does this need to be concurrent?
@@ -182,7 +182,7 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    val gossipingBuffer = mutableListOf<Event>()
+    private val gossipingBuffer = mutableListOf<Event>()
 
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
         setDeviceNameTask
@@ -217,9 +217,7 @@ internal class DefaultCryptoService @Inject constructor(
         return if (longFormat) "Rust SDK 0.3" else "0.3"
     }
 
-    override fun getMyDevice(): CryptoDeviceInfo {
-        return olmMachine!!.ownDevice()
-    }
+    override fun getMyDevice(): CryptoDeviceInfo = this.olmMachine!!.ownDevice()
 
     override fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
@@ -281,15 +279,6 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Tells if the MXCrypto is starting.
-     *
-     * @return true if the crypto is starting
-     */
-    fun isStarting(): Boolean {
-        return isStarting.get()
-    }
-
-    /**
      * Start the crypto module.
      * Device keys will be uploaded, then one time keys if there are not enough on the homeserver
      * and, then, if this is the first time, this new device will be announced to all other users
@@ -326,10 +315,10 @@ internal class DefaultCryptoService @Inject constructor(
 
         try {
             setRustLogger()
-            olmMachine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver)
+            this.olmMachine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver)
             Timber.v(
                 "## CRYPTO | Successfully started up an Olm machine for " +
-                "${userId}, ${deviceId}, identity keys: ${olmMachine?.identityKeys()}")
+                "${userId}, ${deviceId}, identity keys: ${this.olmMachine?.identityKeys()}")
         } catch (throwable: Throwable) {
             Timber.v("Failed create an Olm machine: $throwable")
         }
@@ -401,7 +390,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
         return if (userId.isNotEmpty() && !deviceId.isNullOrEmpty()) {
             runBlocking {
-                olmMachine?.getDevice(userId, deviceId)
+                this@DefaultCryptoService.olmMachine?.getDevice(userId, deviceId)
             }
         } else {
             null
@@ -410,7 +399,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
         return runBlocking {
-            olmMachine?.getUserDevices(userId) ?: listOf()
+            this@DefaultCryptoService.olmMachine?.getUserDevices(userId) ?: listOf()
         }
     }
 
@@ -420,7 +409,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
         return runBlocking {
-            olmMachine?.getLiveDevices(userIds) ?: LiveDevice(userIds, deviceObserver)
+            this@DefaultCryptoService.olmMachine?.getLiveDevices(userIds) ?: LiveDevice(userIds, deviceObserver)
         }
     }
 
@@ -561,11 +550,10 @@ internal class DefaultCryptoService @Inject constructor(
      */
     @Throws(MXCryptoError::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-        val decrypted = runBlocking {
+
+        return runBlocking {
             olmMachine!!.decryptRoomEvent(event)
         }
-
-        return decrypted
     }
 
     /**
@@ -670,22 +658,22 @@ internal class DefaultCryptoService @Inject constructor(
         deviceChanges: DeviceListResponse?,
         keyCounts: DeviceOneTimeKeysCountSyncResponse?) {
             // Decrypt and handle our to-device events
-            val toDeviceEvents = olmMachine!!.receiveSyncChanges(toDevice, deviceChanges, keyCounts)
+            val toDeviceEvents = this.olmMachine!!.receiveSyncChanges(toDevice, deviceChanges, keyCounts)
 
             // Notify the our listeners about room keys so decryption is retried.
             if (toDeviceEvents.events != null) {
-                for (event in toDeviceEvents.events) {
+                toDeviceEvents.events.forEach { event ->
                     if (event.type == "m.room_key") {
-                        val content = event.getClearContent().toModel<RoomKeyContent>() ?: continue
+                        val content = event.getClearContent().toModel<RoomKeyContent>() ?: return@forEach
 
-                        val roomId = content.sessionId ?: continue
+                        val roomId = content.sessionId ?: return@forEach
                         val sessionId = content.sessionId
 
                         notifyRoomKeyReceival(roomId, sessionId)
                     } else if (event.type == "m.forwarded_room_key") {
-                        val content = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: continue
+                        val content = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: return@forEach
 
-                        val roomId = content.sessionId ?: continue
+                        val roomId = content.sessionId ?: return@forEach
                         val sessionId = content.sessionId
 
                         notifyRoomKeyReceival(roomId, sessionId)
@@ -696,13 +684,14 @@ internal class DefaultCryptoService @Inject constructor(
 
     private suspend fun preshareRoomKey(roomId: String, roomMembers: List<String>) {
         keyClaimLock.withLock {
-            val request = olmMachine!!.getMissingSessions(roomMembers)
+            val request = this.olmMachine!!.getMissingSessions(roomMembers)
+            // This request can only be a keys claim request.
             if (request != null) {
-                // This request can only be a keys claim request.
                 when (request) {
                     is Request.KeysClaim -> {
                         claimKeys(request)
                     }
+                    else                 -> {}
                 }
             }
         }
@@ -711,7 +700,7 @@ internal class DefaultCryptoService @Inject constructor(
 
         keyShareLock.withLock {
             coroutineScope {
-                olmMachine!!.shareRoomKey(roomId, roomMembers).map {
+                this@DefaultCryptoService.olmMachine!!.shareRoomKey(roomId, roomMembers).map {
                     when (it) {
                         is Request.ToDevice -> {
                             async {
@@ -745,14 +734,14 @@ internal class DefaultCryptoService @Inject constructor(
         val response = uploadKeysTask.execute(request)
         val adapter = MoshiProvider
             .providesMoshi()
-            .adapter<KeysUploadResponse>(KeysUploadResponse::class.java)
+            .adapter(KeysUploadResponse::class.java)
 
-        val json_response = adapter.toJson(response)!!
+        val jsonResponse = adapter.toJson(response)!!
 
-        olmMachine!!.markRequestAsSent(
+        this.olmMachine!!.markRequestAsSent(
             outgoingRequest.requestId,
             RequestType.KEYS_UPLOAD,
-            json_response
+            jsonResponse
         )
     }
 
@@ -761,9 +750,9 @@ internal class DefaultCryptoService @Inject constructor(
 
         try {
             val response = downloadKeysForUsersTask.execute(params)
-            val adapter = MoshiProvider.providesMoshi().adapter<KeysQueryResponse>(KeysQueryResponse::class.java)
-            val json_response = adapter.toJson(response)!!
-            olmMachine!!.markRequestAsSent(outgoingRequest.requestId, RequestType.KEYS_QUERY, json_response)
+            val adapter = MoshiProvider.providesMoshi().adapter(KeysQueryResponse::class.java)
+            val jsonResponse = adapter.toJson(response)!!
+            this.olmMachine!!.markRequestAsSent(outgoingRequest.requestId, RequestType.KEYS_QUERY, jsonResponse)
         } catch (throwable: Throwable) {
             Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
         }
@@ -790,14 +779,14 @@ internal class DefaultCryptoService @Inject constructor(
         val response = oneTimeKeysForUsersDeviceTask.execute(claimParams)
         val adapter = MoshiProvider
             .providesMoshi()
-            .adapter<KeysClaimResponse>(KeysClaimResponse::class.java)
-        val json_response = adapter.toJson(response)!!
+            .adapter(KeysClaimResponse::class.java)
+        val jsonResponse = adapter.toJson(response)!!
 
-        olmMachine!!.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, json_response)
+        olmMachine!!.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, jsonResponse)
     }
 
     private suspend fun sendOutgoingRequests() {
-        outgointRequestsLock.withLock {
+        outgoingRequestsLock.withLock {
             coroutineScope {
                 olmMachine!!.outgoingRequests().map {
                     when (it) {
@@ -995,9 +984,9 @@ internal class DefaultCryptoService @Inject constructor(
                 if (forceDownload) {
                     // TODO replicate the logic from the device list manager
                     // where we would download the fresh info from the server.
-                    olmMachine?.getUserDevicesMap(userIds) ?: MXUsersDevicesMap()
+                    this@DefaultCryptoService.olmMachine?.getUserDevicesMap(userIds) ?: MXUsersDevicesMap()
                 } else {
-                    olmMachine?.getUserDevicesMap(userIds) ?: MXUsersDevicesMap()
+                    this@DefaultCryptoService.olmMachine?.getUserDevicesMap(userIds) ?: MXUsersDevicesMap()
                 }
             }.foldToCallback(callback)
         }
