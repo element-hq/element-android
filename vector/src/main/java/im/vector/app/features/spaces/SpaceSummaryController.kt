@@ -102,10 +102,6 @@ class SpaceSummaryController @Inject constructor(
                                  rootSpaces: List<RoomSummary>?,
                                  expandedStates: Map<String, Boolean>,
                                  homeCount: RoomAggregateNotificationCount) {
-        if (summaries.isNullOrEmpty()) {
-            return
-        }
-
         genericItemHeader {
             id("spaces")
             text(stringProvider.getString(R.string.spaces_header))
@@ -115,24 +111,16 @@ class SpaceSummaryController @Inject constructor(
 
         // show invites on top
 
-        summaries.filter { it.membership == Membership.INVITE }
-                .let { invites ->
-                    if (invites.isNotEmpty()) {
-//                        genericItemHeader {
-//                            id("invites")
-//                            text(stringProvider.getString(R.string.spaces_invited_header))
-//                        }
-                        invites.forEach {
-                            spaceSummaryItem {
-                                avatarRenderer(avatarRenderer)
-                                id(it.roomId)
-                                matrixItem(it.toMatrixItem())
-                                countState(UnreadCounterBadgeView.State(1, true))
-                                selected(false)
-                                description(stringProvider.getString(R.string.you_are_invited))
-                                listener { callback?.onSpaceInviteSelected(it) }
-                            }
-                        }
+        summaries?.filter { it.membership == Membership.INVITE }
+                ?.forEach {
+                    spaceSummaryItem {
+                        avatarRenderer(avatarRenderer)
+                        id(it.roomId)
+                        matrixItem(it.toMatrixItem())
+                        countState(UnreadCounterBadgeView.State(1, true))
+                        selected(false)
+                        description(stringProvider.getString(R.string.you_are_invited))
+                        listener { callback?.onSpaceInviteSelected(it) }
                     }
                 }
 
@@ -149,7 +137,7 @@ class SpaceSummaryController @Inject constructor(
                     val isSelected = selected is RoomGroupingMethod.BySpace && groupSummary.roomId == selected.space()?.roomId
                     // does it have children?
                     val subSpaces = groupSummary.spaceChildren?.filter { childInfo ->
-                        summaries.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
+                        summaries?.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
                     }
                     val hasChildren = (subSpaces?.size ?: 0) > 0
                     val expanded = expandedStates[groupSummary.roomId] == true
@@ -175,7 +163,7 @@ class SpaceSummaryController @Inject constructor(
                     if (hasChildren && expanded) {
                         // it's expanded
                         subSpaces?.forEach { child ->
-                            summaries.firstOrNull { it.roomId == child.childRoomId }?.let { childSum ->
+                            summaries?.firstOrNull { it.roomId == child.childRoomId }?.let { childSum ->
                                 val isChildSelected = selected is RoomGroupingMethod.BySpace && childSum.roomId == selected.space()?.roomId
                                 spaceSummaryItem {
                                     avatarRenderer(avatarRenderer)
@@ -197,7 +185,6 @@ class SpaceSummaryController @Inject constructor(
                     }
                 }
 
-// Temporary item to create a new Space (will move with final design)
         spaceAddItem {
             id("create")
             listener { callback?.onAddSpaceSelected() }
