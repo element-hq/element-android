@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.session.space.model.SpaceParentContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.query.whereType
-import timber.log.Timber
 
 /**
  * Relationship between rooms and spaces
@@ -66,7 +65,7 @@ internal class RoomChildRelationInfo(
 //                }
                 .mapNotNull {
                     ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()?.let { scc ->
-                        Timber.v("## Space child desc state event $scc")
+//                        Timber.v("## Space child desc state event $scc")
                         // Children where via is not present are ignored.
                         scc.via?.let { via ->
                             SpaceChildInfo(

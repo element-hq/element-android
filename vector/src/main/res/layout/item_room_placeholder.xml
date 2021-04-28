@@ -25,7 +25,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:importantForAccessibility="no"
-            android:src="@drawable/header_panel_round_background" />
+            android:src="@drawable/placeholder_round_background" />
 
     </FrameLayout>
 
@@ -46,7 +46,7 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="70dp"
-        android:background="@drawable/rounded_rect_shape_8"
+        android:background="@drawable/placeholder_shape_8"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -61,7 +61,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/rounded_rect_shape_8"
+        android:background="@drawable/placeholder_shape_8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/roomNameView"
         app:layout_constraintTop_toBottomOf="@+id/roomNameView" />
