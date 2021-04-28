@@ -144,24 +144,22 @@ class RoomSettingsController @Inject constructor(
     }
 
     private fun RoomSettingsViewState.getJoinRuleWording(): String {
-        val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules
-        val resId = when (joinRule) {
-            RoomJoinRules.INVITE -> {
-                R.string.room_settings_room_access_private_title to null
+        return when (val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules) {
+            RoomJoinRules.INVITE     -> {
+                stringProvider.getString(R.string.room_settings_room_access_private_title)
             }
-            RoomJoinRules.PUBLIC -> {
-                R.string.room_settings_room_access_public_title to null
+            RoomJoinRules.PUBLIC     -> {
+                stringProvider.getString(R.string.room_settings_room_access_public_title)
             }
-            RoomJoinRules.KNOCK -> {
-                R.string.room_settings_room_access_entry_knock to null
+            RoomJoinRules.KNOCK      -> {
+                stringProvider.getString(R.string.room_settings_room_access_entry_knock)
             }
             RoomJoinRules.RESTRICTED -> {
-                R.string.room_settings_room_access_restricted_title to null
+                stringProvider.getString(R.string.room_settings_room_access_restricted_title)
             }
             else                     -> {
-                R.string.room_settings_room_access_entry_unknown to joinRule.value
+                stringProvider.getString(R.string.room_settings_room_access_entry_unknown, joinRule.value)
             }
         }
-        return if (resId.second == null) stringProvider.getString(resId.first) else stringProvider.getString(resId.first, resId.second)
     }
 }

@@ -72,7 +72,7 @@ class SharedPreferencesUiStateRepository @Inject constructor(
     }
 
     override fun storeGroupingMethod(isSpace: Boolean, sessionId: String) {
-        sharedPreferences.edit(true) {
+        sharedPreferences.edit {
             putBoolean("$KEY_SELECTED_METHOD@$sessionId", isSpace)
         }
     }
