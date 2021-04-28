@@ -13,6 +13,7 @@ Bugfix 🐛:
  - Do not invite the current user when creating a room (#3123)
  - Fix color issues when the system theme is changed (#2738)
  - Fix issues on Android 11 (#3067)
+ - Fix issue when opening encrypted files (#3186)
 
 Translations 🗣:
  -
