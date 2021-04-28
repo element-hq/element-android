@@ -36,6 +36,7 @@ data class RoomSummary constructor(
         val canonicalAlias: String? = null,
         val aliases: List<String> = emptyList(),
         val isDirect: Boolean = false,
+        val directUserId: String? = null,
         val joinedMembersCount: Int? = 0,
         val invitedMembersCount: Int? = 0,
         val latestPreviewableEvent: TimelineEvent? = null,
