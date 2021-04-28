@@ -25,9 +25,14 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
+import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
+import im.vector.app.features.roomdirectory.createroom.CreateRoomArgs
+import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -39,6 +44,7 @@ data class SpaceManageArgs(
 class SpaceManageActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceManageSharedViewModel.Factory {
 
     @Inject lateinit var sharedViewModelFactory: SpaceManageSharedViewModel.Factory
+    private lateinit var sharedDirectoryActionViewModel: RoomDirectorySharedActionViewModel
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -53,9 +59,20 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceMa
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        sharedDirectoryActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
+        sharedDirectoryActionViewModel
+                .observe()
+                .subscribe { sharedAction ->
+                    when (sharedAction) {
+                        is RoomDirectorySharedAction.Back,
+                        is RoomDirectorySharedAction.Close -> finish()
+                    }
+                }
+                .disposeOnDestroy()
+
+        val args = intent?.getParcelableExtra<SpaceManageArgs>(MvRx.KEY_ARG)
         if (isFirstCreation()) {
             val simpleName = SpaceAddRoomFragment::class.java.simpleName
-            val args = intent?.getParcelableExtra<SpaceManageArgs>(MvRx.KEY_ARG)
             if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
                 supportFragmentManager.commitTransaction {
                     replace(R.id.simpleFragmentContainer,
@@ -77,6 +94,13 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceMa
                 }
                 SpaceManagedSharedViewEvents.ShowLoading -> {
                     views.simpleActivityWaitingView.isVisible = true
+                }
+                SpaceManagedSharedViewEvents.NavigateToCreateRoom -> {
+                    addFragmentToBackstack(
+                            R.id.simpleFragmentContainer,
+                            CreateRoomFragment::class.java,
+                            CreateRoomArgs("", parentSpaceId = args?.spaceId)
+                    )
                 }
             }
         }

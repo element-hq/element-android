@@ -22,4 +22,5 @@ sealed class SpaceManagedSharedAction : VectorViewModelAction {
     object HandleBack : SpaceManagedSharedAction()
     object ShowLoading : SpaceManagedSharedAction()
     object HideLoading : SpaceManagedSharedAction()
+    object CreateRoom : SpaceManagedSharedAction()
 }

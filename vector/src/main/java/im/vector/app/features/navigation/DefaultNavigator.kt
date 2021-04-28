@@ -125,7 +125,11 @@ class DefaultNavigator @Inject constructor(
                 startActivity(context, SpaceManageActivity.newIntent(context, spaceId), false)
             }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom -> {
-                val args = RoomDetailArgs(postSwitchSpaceAction.roomId, eventId = null, openShareSpaceForId = spaceId.takeIf { postSwitchSpaceAction.showShareSheet })
+                val args = RoomDetailArgs(
+                        postSwitchSpaceAction.roomId,
+                        eventId = null,
+                        openShareSpaceForId = spaceId.takeIf { postSwitchSpaceAction.showShareSheet }
+                )
                 val intent = RoomDetailActivity.newIntent(context, args)
                 startActivity(context, intent, false)
             }

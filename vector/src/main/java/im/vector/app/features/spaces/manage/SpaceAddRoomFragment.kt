@@ -112,9 +112,9 @@ class SpaceAddRoomFragment @Inject constructor(
             }
         }.disposeOnDestroyView()
 
-//        views.createNewRoom.debouncedClicks {
-//            sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)
-//        }
+        views.createNewRoom.debouncedClicks {
+            sharedViewModel.handle(SpaceManagedSharedAction.CreateRoom)
+        }
 
         viewModel.observeViewEvents {
             when (it) {
