@@ -141,6 +141,9 @@ class RoomDetailViewModel @AssistedInject constructor(
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
 
+    // Slot to keep a pending event during permission request
+    var pendingEvent: RoomDetailViewEvents? = null
+
     private var trackUnreadMessages = AtomicBoolean(false)
     private var mostRecentDisplayedEvent: TimelineEvent? = null
 
@@ -1142,9 +1145,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (isLocalSendingFile) {
             tryOrNull { Uri.parse(mxcUrl) }?.let {
                 _viewEvents.post(RoomDetailViewEvents.OpenFile(
-                        action.messageFileContent.mimeType,
                         it,
-                        null
+                        action.messageFileContent.mimeType
                 ))
             }
         } else {
@@ -1169,9 +1171,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                     // We can now open the file
                     session.fileService().getTemporarySharableURI(action.messageFileContent)?.let { uri ->
                         _viewEvents.post(RoomDetailViewEvents.OpenFile(
-                                action.messageFileContent.mimeType,
                                 uri,
-                                null
+                                action.messageFileContent.mimeType
                         ))
                     }
                 }

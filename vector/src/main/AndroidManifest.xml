@@ -28,6 +28,9 @@
     <!-- Needed for incoming calls  -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <!-- To be able to install APK from the application -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <!-- Jitsi libs adds CALENDAR permissions, but we can remove them safely according to https://github.com/jitsi/jitsi-meet/issues/4068#issuecomment-480482481 -->
     <uses-permission
         android:name="android.permission.READ_CALENDAR"
