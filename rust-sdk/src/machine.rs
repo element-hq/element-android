@@ -4,7 +4,8 @@ use std::{
     io::Cursor,
 };
 
-use serde_json::{json, value::RawValue};
+use serde::{Deserialize, Serialize};
+use serde_json::value::RawValue;
 use tokio::runtime::Runtime;
 
 use matrix_sdk_common::{
@@ -16,8 +17,11 @@ use matrix_sdk_common::{
         sync::sync_events::{DeviceLists as RumaDeviceLists, ToDevice},
         to_device::send_event_to_device::Response as ToDeviceResponse,
     },
-    deserialized_responses::events::{AlgorithmInfo, SyncMessageEvent},
-    events::{room::encrypted::EncryptedEventContent, AnyMessageEventContent, EventContent},
+    deserialized_responses::AlgorithmInfo,
+    events::{
+        room::encrypted::EncryptedEventContent, AnyMessageEventContent, EventContent,
+        SyncMessageEvent,
+    },
     identifiers::{DeviceKeyAlgorithm, RoomId, UserId},
     uuid::Uuid,
     IncomingResponse, UInt,
@@ -47,8 +51,13 @@ pub struct Sas {
     pub request: Request,
 }
 
+/// A pair of outgoing room key requests, both of those are sendToDevice
+/// requests.
 pub struct KeyRequestPair {
+    /// The optional cancellation, this is None if no previous key request was
+    /// sent out for this key, thus it doesn't need to be cancelled.
     pub cancellation: Option<Request>,
+    /// The actual key request.
     pub key_request: Request,
 }
 
@@ -228,7 +237,7 @@ impl OlmMachine {
             .runtime
             .block_on(
                 self.inner
-                    .receive_sync_changes(&events, &device_changes, &key_counts),
+                    .receive_sync_changes(events, &device_changes, &key_counts),
             )
             .unwrap();
 
@@ -398,6 +407,17 @@ impl OlmMachine {
         event: &str,
         room_id: &str,
     ) -> Result<DecryptedEvent, DecryptionError> {
+        // Element Android wants only the content and the type and will create a
+        // decrypted event with those two itself, this struct makes sure we
+        // throw away all the other fields.
+        #[derive(Deserialize, Serialize)]
+        struct Event<'a> {
+            #[serde(rename = "type")]
+            event_type: String,
+            #[serde(borrow)]
+            content: &'a RawValue,
+        }
+
         let event: SyncMessageEvent<EncryptedEventContent> = serde_json::from_str(event)?;
         let room_id = RoomId::try_from(room_id)?;
 
@@ -406,15 +426,10 @@ impl OlmMachine {
             .block_on(self.inner.decrypt_room_event(&event, &room_id))?;
 
         let encryption_info = decrypted
-            .encryption_info()
+            .encryption_info
             .expect("Decrypted event didn't contain any encryption info");
 
-        let content = decrypted.content();
-
-        let clear_event = json!({
-            "type": content.event_type(),
-            "content": content,
-        });
+        let event_json: Event = serde_json::from_str(decrypted.event.json().get())?;
 
         Ok(match &encryption_info.algorithm_info {
             AlgorithmInfo::MegolmV1AesSha2 {
@@ -422,7 +437,7 @@ impl OlmMachine {
                 sender_claimed_keys,
                 forwarding_curve25519_key_chain,
             } => DecryptedEvent {
-                clear_event: serde_json::to_string(&clear_event)?,
+                clear_event: serde_json::to_string(&event_json)?,
                 sender_curve25519_key: curve25519_key.to_owned(),
                 claimed_ed25519_key: sender_claimed_keys
                     .get(&DeviceKeyAlgorithm::Ed25519)

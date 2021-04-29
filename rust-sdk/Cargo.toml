@@ -9,6 +9,7 @@ crate-type = ["cdylib", "lib"]
 name = "matrix_crypto"
 
 [dependencies]
+serde = "1.0.64"
 serde_json = "1.0.64"
 http = "0.2.4"
 
@@ -23,11 +24,11 @@ features = ["lax_deserialize"]
 
 [dependencies.matrix-sdk-common]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-branch = "corroded-android"
+branch = "encryption-info-v2"
 
 [dependencies.matrix-sdk-crypto]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-branch = "corroded-android"
+branch = "encryption-info-v2"
 features = ["sled_cryptostore"]
 
 [dependencies.tokio]
