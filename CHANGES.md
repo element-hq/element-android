@@ -29,6 +29,14 @@ Test:
 
 Other changes:
  - New store descriptions
+ - `master` branch has been renamed to `main`. To apply change to your dev environment, run:
+```sh
+git branch -m master main
+git fetch origin
+git branch -u origin/main main
+# And optionally
+git remote prune origin
+```
 
 Changes in Element 1.1.6 (2021-04-16)
 ===================================================
