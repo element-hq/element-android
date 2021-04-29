@@ -42,10 +42,6 @@ import javax.inject.Inject
  */
 class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragment2<FragmentLoginSignupUsername2Binding>() {
 
-    // Temporary patch for https://github.com/vector-im/riotX-android/issues/1410,
-    // waiting for https://github.com/matrix-org/synapse/issues/7576
-    private var isNumericOnlyUserIdForbidden = false
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSignupUsername2Binding {
         return FragmentLoginSignupUsername2Binding.inflate(inflater, container, false)
     }
@@ -77,10 +73,6 @@ class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragm
         var error = 0
         if (login.isEmpty()) {
             views.loginFieldTil.error = getString(R.string.error_empty_field_choose_user_name)
-            error++
-        }
-        if (isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
-            views.loginFieldTil.error = "The homeserver does not accept username with only digits."
             error++
         }
 
@@ -138,8 +130,6 @@ class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragm
 
     @SuppressLint("SetTextI18n")
     override fun updateWithState(state: LoginViewState2) {
-        isNumericOnlyUserIdForbidden = state.isNumericOnlyUserIdForbidden
-
         setupUi(state)
     }
 }

@@ -224,7 +224,6 @@ class LoginViewModel2 @AssistedInject constructor(
                     loginMode = LoginMode.Sso(action.ssoIdentityProviders),
                     homeServerUrlFromUser = action.homeServerUrl,
                     homeServerUrl = action.homeServerUrl,
-                    isNumericOnlyUserIdForbidden = action.homeServerUrl == matrixOrgUrl,
                     deviceId = action.deviceId
             )
         }
@@ -662,7 +661,6 @@ class LoginViewModel2 @AssistedInject constructor(
                     isLoading = false,
                     homeServerUrlFromUser = urlFromUser,
                     homeServerUrl = data.homeServerUrl,
-                    isNumericOnlyUserIdForbidden = urlFromUser == matrixOrgUrl,
                     loginMode = loginMode
             )
         }
@@ -818,7 +816,6 @@ class LoginViewModel2 @AssistedInject constructor(
                         isLoading = false,
                         homeServerUrlFromUser = homeServerConnectionConfig.homeServerUri.toString(),
                         homeServerUrl = data.homeServerUrl,
-                        isNumericOnlyUserIdForbidden = homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl,
                         loginMode = loginMode
                 )
             }

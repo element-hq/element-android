@@ -49,9 +49,6 @@ data class LoginViewState2(
         // Network result
         val loginProfileInfo: Async<LoginProfileInfo> = Uninitialized,
 
-        // True on Matrix.org
-        val isNumericOnlyUserIdForbidden: Boolean = false,
-
         // Network result
         @PersistState
         val loginMode: LoginMode = LoginMode.Unknown,
