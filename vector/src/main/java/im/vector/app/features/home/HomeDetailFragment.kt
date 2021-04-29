@@ -23,14 +23,15 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import im.vector.app.R
+import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
@@ -43,6 +44,7 @@ import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
+import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
@@ -52,14 +54,9 @@ import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
-import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import timber.log.Timber
 import javax.inject.Inject
-
-private const val INDEX_PEOPLE = 0
-private const val INDEX_ROOMS = 1
-private const val INDEX_CATCHUP = 2
 
 class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
@@ -75,6 +72,7 @@ class HomeDetailFragment @Inject constructor(
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
+    private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -127,9 +125,17 @@ class HomeDetailFragment @Inject constructor(
             views.bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
-            onGroupChange(groupSummary.orNull())
+        viewModel.selectSubscribe(this, HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
+            when (roomGroupingMethod) {
+                is RoomGroupingMethod.ByLegacyGroup -> {
+                    onGroupChange(roomGroupingMethod.groupSummary)
+                }
+                is RoomGroupingMethod.BySpace -> {
+                    onSpaceChange(roomGroupingMethod.spaceSummary)
+                }
+            }
         }
+
         viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
             switchDisplayMode(displayMode)
         }
@@ -150,6 +156,15 @@ class HomeDetailFragment @Inject constructor(
                     }
                 }
             }
+        }
+
+        unreadMessagesSharedViewModel.subscribe { state ->
+            views.drawerUnreadCounterBadgeView.render(
+                    UnreadCounterBadgeView.State(
+                            count = state.otherSpacesUnread.totalCount,
+                            highlighted = state.otherSpacesUnread.isHighlight
+                    )
+            )
         }
 
         sharedCallActionViewModel
@@ -237,9 +252,20 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun onGroupChange(groupSummary: GroupSummary?) {
-        groupSummary?.let {
-            // Use GlideApp with activity context to avoid the glideRequests to be paused
-            avatarRenderer.render(it.toMatrixItem(), views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
+        if (groupSummary == null) {
+            views.groupToolbarSpaceTitleView.isVisible = false
+        } else {
+            views.groupToolbarSpaceTitleView.isVisible = true
+            views.groupToolbarSpaceTitleView.text = groupSummary.displayName
+        }
+    }
+
+    private fun onSpaceChange(spaceSummary: RoomSummary?) {
+        if (spaceSummary == null) {
+            views.groupToolbarSpaceTitleView.isVisible = false
+        } else {
+            views.groupToolbarSpaceTitleView.isVisible = true
+            views.groupToolbarSpaceTitleView.text = spaceSummary.displayName
         }
     }
 
@@ -247,10 +273,10 @@ class HomeDetailFragment @Inject constructor(
         serverBackupStatusViewModel
                 .subscribe(this) {
                     when (val banState = it.bannerState.invoke()) {
-                        is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                        is BannerState.Setup -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
                         null,
-                        BannerState.Hidden    -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                        BannerState.Hidden -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
                     }
                 }
         views.homeKeysBackupBanner.delegate = this
@@ -274,6 +300,21 @@ class HomeDetailFragment @Inject constructor(
         views.groupToolbarAvatarImageView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.OpenDrawer)
         }
+
+        views.homeToolbarContent.debouncedClicks {
+            withState(viewModel) {
+                when (it.roomGroupingMethod) {
+                    is RoomGroupingMethod.ByLegacyGroup -> {
+                        // nothing do far
+                    }
+                    is RoomGroupingMethod.BySpace -> {
+                        it.roomGroupingMethod.spaceSummary?.let {
+                            sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(it.roomId))
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setupBottomNavigationView() {
@@ -281,7 +322,7 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
-                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
+                R.id.bottom_action_rooms -> RoomListDisplayMode.ROOMS
                 else                      -> RoomListDisplayMode.NOTIFICATIONS
             }
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
@@ -336,7 +377,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) {
-        Timber.v(it.toString())
+//        Timber.v(it.toString())
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
@@ -359,7 +400,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun RoomListDisplayMode.toMenuId() = when (this) {
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
+        RoomListDisplayMode.ROOMS -> R.id.bottom_action_rooms
         else                       -> R.id.bottom_action_notification
     }
 

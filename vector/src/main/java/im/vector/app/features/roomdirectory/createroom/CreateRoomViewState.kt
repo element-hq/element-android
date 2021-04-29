@@ -26,7 +26,7 @@ data class CreateRoomViewState(
         val avatarUri: Uri? = null,
         val roomName: String = "",
         val roomTopic: String = "",
-        val roomType: RoomType = RoomType.Private,
+        val roomVisibilityType: RoomVisibilityType = RoomVisibilityType.Private,
         val isEncrypted: Boolean = false,
         val showAdvanced: Boolean = false,
         val disableFederation: Boolean = false,
@@ -45,10 +45,10 @@ data class CreateRoomViewState(
     fun isEmpty() = avatarUri == null
             && roomName.isEmpty()
             && roomTopic.isEmpty()
-            && (roomType as? RoomType.Public)?.aliasLocalPart?.isEmpty().orTrue()
+            && (roomVisibilityType as? RoomVisibilityType.Public)?.aliasLocalPart?.isEmpty().orTrue()
 
-    sealed class RoomType {
-        object Private : RoomType()
-        data class Public(val aliasLocalPart: String) : RoomType()
+    sealed class RoomVisibilityType {
+        object Private : RoomVisibilityType()
+        data class Public(val aliasLocalPart: String) : RoomVisibilityType()
     }
 }

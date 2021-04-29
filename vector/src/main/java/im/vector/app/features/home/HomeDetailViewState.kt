@@ -16,16 +16,17 @@
 
 package im.vector.app.features.home
 
-import arrow.core.Option
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
+import im.vector.app.RoomGroupingMethod
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.sync.SyncState
+import org.matrix.android.sdk.api.util.MatrixItem
 
 data class HomeDetailViewState(
-        val groupSummary: Option<GroupSummary> = Option.empty(),
+        val roomGroupingMethod: RoomGroupingMethod = RoomGroupingMethod.BySpace(null),
+        val myMatrixItem: MatrixItem? = null,
         val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
         val displayMode: RoomListDisplayMode = RoomListDisplayMode.PEOPLE,
         val notificationCountCatchup: Int = 0,

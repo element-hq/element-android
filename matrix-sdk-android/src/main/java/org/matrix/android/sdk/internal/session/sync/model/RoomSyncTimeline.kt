@@ -27,7 +27,7 @@ internal data class RoomSyncTimeline(
         /**
          * List of events (array of Event).
          */
-        @Json(name = "events") val events: List<Event> = emptyList(),
+        @Json(name = "events") val events: List<Event>? = null,
 
         /**
          * Boolean which tells whether there are more events on the server

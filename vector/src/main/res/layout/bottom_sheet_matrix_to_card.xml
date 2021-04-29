@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,88 +9,13 @@
         android:id="@+id/matrixToCardContentLoading"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_centerInParent="true"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
-    <ImageView
-        android:id="@+id/matrixToCardAvatar"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="@dimen/layout_vertical_margin_big"
-        android:contentDescription="@string/avatar"
-        android:elevation="4dp"
-        android:transitionName="profile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/matrixToCardNameText"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/matrixToCardFragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/layout_vertical_margin_big"
-        android:layout_marginEnd="16dp"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:textAlignment="center"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
-        app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
-        tools:text="@sample/matrix.json/data/displayName" />
+        android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/matrixToCardUserIdText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:textAlignment="center"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="15sp"
-        app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
-        tools:text="@sample/matrix.json/data/mxid" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/matrixToCardSendMessageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="@dimen/layout_vertical_margin_big"
-        android:minWidth="130dp"
-        android:text="@string/start_chatting"
-        app:icon="@drawable/ic_fab_add_chat"
-        app:iconTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/matrixToCardUserIdText" />
-
-    <ProgressBar
-        android:id="@+id/matrixToCardButtonLoading"
-        style="?android:attr/progressBarStyleSmall"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/matrixToCardSendMessageButton"
-        app:layout_constraintEnd_toEndOf="@id/matrixToCardSendMessageButton"
-        app:layout_constraintStart_toStartOf="@id/matrixToCardSendMessageButton"
-        app:layout_constraintTop_toTopOf="@id/matrixToCardSendMessageButton"
-        tools:visibility="visible" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/matrixToCardUserContentVisibility"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="matrixToCardAvatar,matrixToCardNameText,matrixToCardUserIdText"
-        tools:visibility="visible" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

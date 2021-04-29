@@ -29,7 +29,9 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
+import im.vector.app.AppStateHandler
 import im.vector.app.R
+import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.platform.VectorBaseActivity
@@ -52,6 +54,7 @@ import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.search.SearchArgs
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
+import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
@@ -68,9 +71,13 @@ import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
+import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
+import im.vector.app.features.spaces.SpaceExploreActivity
+import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
+import im.vector.app.space
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
@@ -85,6 +92,7 @@ class DefaultNavigator @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences,
         private val widgetArgsBuilder: WidgetArgsBuilder,
+        private val appStateHandler: AppStateHandler,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
 ) : Navigator {
 
@@ -96,6 +104,29 @@ class DefaultNavigator @Inject constructor(
         val args = RoomDetailArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
         startActivity(context, intent, buildTask)
+    }
+
+    override fun switchToSpace(context: Context, spaceId: String, roomId: String?, openShareSheet: Boolean) {
+        if (sessionHolder.getSafeActiveSession()?.getRoomSummary(spaceId) == null) {
+            fatalError("Trying to open an unknown space $spaceId", vectorPreferences.failFast())
+            return
+        }
+        appStateHandler.setCurrentSpace(spaceId)
+        if (roomId != null) {
+            val args = RoomDetailArgs(roomId, eventId = null, openShareSpaceForId = spaceId.takeIf { openShareSheet })
+            val intent = RoomDetailActivity.newIntent(context, args)
+            startActivity(context, intent, false)
+        } else {
+            // go back to home if we are showing room details?
+            // This is a bit ugly, but the navigator is supposed to know about the activity stack
+            if (context is RoomDetailActivity) {
+                context.finish()
+            }
+        }
+    }
+
+    override fun openSpacePreview(context: Context, spaceId: String) {
+        startActivity(context, SpacePreviewActivity.newIntent(context, spaceId), false)
     }
 
     override fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String) {
@@ -197,9 +228,42 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
+    override fun openMatrixToBottomSheet(context: Context, link: String) {
+        if (context is AppCompatActivity) {
+            val listener = object : MatrixToBottomSheet.InteractionListener {
+                override fun navigateToRoom(roomId: String) {
+                    openRoom(context, roomId)
+                }
+
+                override fun switchToSpace(spaceId: String) {
+                    this@DefaultNavigator.switchToSpace(context, spaceId, null, openShareSheet = false)
+                }
+            }
+            // TODO check if there is already one??
+            MatrixToBottomSheet.withLink(link, listener)
+                    .show(context.supportFragmentManager, "HA#MatrixToBottomSheet")
+        }
+    }
+
     override fun openRoomDirectory(context: Context, initialFilter: String) {
-        val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
-        context.startActivity(intent)
+        when (val groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
+            is RoomGroupingMethod.ByLegacyGroup -> {
+                // TODO should open list of rooms of this group
+                val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
+                context.startActivity(intent)
+            }
+            is RoomGroupingMethod.BySpace -> {
+                val selectedSpace = groupingMethod.space()
+                if (selectedSpace == null) {
+                    val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
+                    context.startActivity(intent)
+                } else {
+                    SpaceExploreActivity.newIntent(context, selectedSpace.roomId).let {
+                        context.startActivity(it)
+                    }
+                }
+            }
+        }
     }
 
     override fun openCreateRoom(context: Context, initialName: String) {
@@ -213,8 +277,37 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openInviteUsersToRoom(context: Context, roomId: String) {
-        val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
-        context.startActivity(intent)
+        when (val currentGroupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
+            is RoomGroupingMethod.ByLegacyGroup -> {
+                val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
+                context.startActivity(intent)
+            }
+            is RoomGroupingMethod.BySpace -> {
+                if (currentGroupingMethod.spaceSummary != null) {
+                    // let user decides if he does it from space or room
+                    (context as? AppCompatActivity)?.supportFragmentManager?.let { fm ->
+                        InviteRoomSpaceChooserBottomSheet.newInstance(
+                                currentGroupingMethod.spaceSummary.roomId,
+                                roomId,
+                                object : InviteRoomSpaceChooserBottomSheet.InteractionListener {
+                                    override fun inviteToSpace(spaceId: String) {
+                                        val intent = InviteUsersToRoomActivity.getIntent(context, spaceId)
+                                        context.startActivity(intent)
+                                    }
+
+                                    override fun inviteToRoom(roomId: String) {
+                                        val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
+                                        context.startActivity(intent)
+                                    }
+                                }
+                        ).show(fm, InviteRoomSpaceChooserBottomSheet::class.java.name)
+                    }
+                } else {
+                    val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
+                    context.startActivity(intent)
+                }
+            }
+        }
     }
 
     override fun openRoomsFiltering(context: Context) {

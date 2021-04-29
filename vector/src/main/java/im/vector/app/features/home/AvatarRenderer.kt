@@ -26,7 +26,9 @@ import androidx.core.graphics.drawable.toBitmap
 import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.Transformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
@@ -35,6 +37,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.glide.GlideRequests
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import jp.wasabeef.glide.transformations.BlurTransformation
 import jp.wasabeef.glide.transformations.ColorFilterTransformation
@@ -48,7 +51,8 @@ import javax.inject.Inject
  */
 
 class AvatarRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                         private val matrixItemColorProvider: MatrixItemColorProvider) {
+                                         private val matrixItemColorProvider: MatrixItemColorProvider,
+                                         private val dimensionConverter: DimensionConverter) {
 
     companion object {
         private const val THUMBNAIL_SIZE = 250
@@ -59,6 +63,25 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
         render(GlideApp.with(imageView),
                 matrixItem,
                 DrawableImageViewTarget(imageView))
+    }
+
+    @UiThread
+    fun renderSpace(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
+        val placeholder = getSpacePlaceholderDrawable(matrixItem)
+        val resolvedUrl = resolvedUrl(matrixItem.avatarUrl)
+        glideRequests
+                .load(resolvedUrl)
+                .transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
+                .placeholder(placeholder)
+                .into(DrawableImageViewTarget(imageView))
+    }
+
+    fun renderSpace(matrixItem: MatrixItem, imageView: ImageView) {
+        renderSpace(
+                matrixItem,
+                imageView,
+                GlideApp.with(imageView)
+        )
     }
 
     fun clear(imageView: ImageView) {
@@ -157,6 +180,16 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 .bold()
                 .endConfig()
                 .buildRound(matrixItem.firstLetterOfDisplayName(), avatarColor)
+    }
+
+    @AnyThread
+    fun getSpacePlaceholderDrawable(matrixItem: MatrixItem): Drawable {
+        val avatarColor = matrixItemColorProvider.getColor(matrixItem)
+        return TextDrawable.builder()
+                .beginConfig()
+                .bold()
+                .endConfig()
+                .buildRoundRect(matrixItem.firstLetterOfDisplayName(), avatarColor, dimensionConverter.dpToPx(8))
     }
 
     // PRIVATE API *********************************************************************************

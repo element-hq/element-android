@@ -55,7 +55,11 @@ data class RoomSummary constructor(
         val inviterId: String? = null,
         val breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
         val roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null,
-        val hasFailedSending: Boolean = false
+        val hasFailedSending: Boolean = false,
+        val roomType: String? = null,
+        val spaceParents: List<SpaceParentInfo>? = null,
+        val spaceChildren: List<SpaceChildInfo>? = null,
+        val flattenParentIds: List<String> = emptyList()
 ) {
 
     val isVersioned: Boolean

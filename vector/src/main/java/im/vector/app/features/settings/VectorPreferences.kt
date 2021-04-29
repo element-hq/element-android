@@ -150,6 +150,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY = "SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
 
         const val SETTINGS_LABS_ALLOW_EXTENDED_LOGS = "SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
+        const val SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE = "SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE"
 
         private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
@@ -234,6 +235,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY,
                 SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY,
                 SETTINGS_LABS_ALLOW_EXTENDED_LOGS,
+                SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE,
                 SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
 
                 SETTINGS_USE_RAGE_SHAKE_KEY,
@@ -941,5 +943,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         } catch (e: Throwable) {
             BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
         }
+    }
+
+    fun labsUseExperimentalRestricted(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE, false)
     }
 }

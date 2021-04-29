@@ -38,6 +38,10 @@ interface Navigator {
 
     fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false)
 
+    fun switchToSpace(context: Context, spaceId: String, roomId: String?, openShareSheet: Boolean)
+
+    fun openSpacePreview(context: Context, spaceId: String)
+
     fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String)
 
     fun requestSessionVerification(context: Context, otherSessionId: String)
@@ -53,6 +57,8 @@ interface Navigator {
     fun openRoomPreview(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData)
 
     fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData)
+
+    fun openMatrixToBottomSheet(context: Context, link: String)
 
     fun openCreateRoom(context: Context, initialName: String = "")
 

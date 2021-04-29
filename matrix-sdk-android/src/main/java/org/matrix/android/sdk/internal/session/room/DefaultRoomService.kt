@@ -23,9 +23,11 @@ import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.RoomService
+import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
-import org.matrix.android.sdk.api.session.room.UpdatableFilterLivePageResult
+import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -67,7 +69,7 @@ internal class DefaultRoomService @Inject constructor(
 ) : RoomService {
 
     override suspend fun createRoom(createRoomParams: CreateRoomParams): String {
-        return createRoomTask.execute(createRoomParams)
+        return createRoomTask.executeRetry(createRoomParams, 3)
     }
 
     override fun getRoom(roomId: String): Room? {
@@ -90,14 +92,14 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getRoomSummariesLive(queryParams)
     }
 
-    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config)
+    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config, sortOrder: RoomSortOrder)
             : LiveData<PagedList<RoomSummary>> {
-        return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig)
+        return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
-    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config)
-            : UpdatableFilterLivePageResult {
-        return roomSummaryDataSource.getFilteredPagedRoomSummariesLive(queryParams, pagedListConfig)
+    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config, sortOrder: RoomSortOrder)
+            : UpdatableLivePageResult {
+        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
     override fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
@@ -162,5 +164,19 @@ internal class DefaultRoomService @Inject constructor(
 
     override suspend fun peekRoom(roomIdOrAlias: String): PeekResult {
         return peekRoomTask.execute(PeekRoomTask.Params(roomIdOrAlias))
+    }
+
+    override fun getFlattenRoomSummaryChildrenOf(spaceId: String?, memberships: List<Membership>): List<RoomSummary> {
+        if (spaceId == null) {
+            return roomSummaryDataSource.getFlattenOrphanRooms()
+        }
+        return roomSummaryDataSource.getAllRoomSummaryChildOf(spaceId, memberships)
+    }
+
+    override fun getFlattenRoomSummaryChildrenOfLive(spaceId: String?, memberships: List<Membership>): LiveData<List<RoomSummary>> {
+        if (spaceId == null) {
+            return roomSummaryDataSource.getFlattenOrphanRoomsLive()
+        }
+        return roomSummaryDataSource.getAllRoomSummaryChildOfLive(spaceId, memberships)
     }
 }

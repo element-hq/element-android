@@ -91,11 +91,11 @@ import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.ui.views.CurrentCallsView
-import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.core.ui.views.ActiveConferenceView
-import im.vector.app.core.ui.views.FailedMessagesWarningView
+import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.JumpToReadMarkerView
+import im.vector.app.core.ui.views.KnownCallsViewHolder
+import im.vector.app.core.ui.views.FailedMessagesWarningView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
@@ -164,6 +164,7 @@ import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
+import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
@@ -212,7 +213,8 @@ import javax.inject.Inject
 data class RoomDetailArgs(
         val roomId: String,
         val eventId: String? = null,
-        val sharedData: SharedData? = null
+        val sharedData: SharedData? = null,
+        val openShareSpaceForId: String? = null
 ) : Parcelable
 
 class RoomDetailFragment @Inject constructor(
@@ -295,7 +297,7 @@ class RoomDetailFragment @Inject constructor(
 
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var keyboardStateUtils: KeyboardStateUtils
-    private lateinit var callActionsHandler : StartCallActionsHandler
+    private lateinit var callActionsHandler: StartCallActionsHandler
 
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
@@ -409,6 +411,7 @@ class RoomDetailFragment @Inject constructor(
 
         if (savedInstanceState == null) {
             handleShareData()
+            handleSpaceShare()
         }
     }
 
@@ -421,7 +424,7 @@ class RoomDetailFragment @Inject constructor(
         startActivity(intent)
     }
 
-        private fun handleChatEffect(chatEffect: ChatEffect) {
+    private fun handleChatEffect(chatEffect: ChatEffect) {
         when (chatEffect) {
             ChatEffect.CONFETTI -> {
                 views.viewKonfetti.isVisible = true
@@ -673,6 +676,15 @@ class RoomDetailFragment @Inject constructor(
         }.exhaustive
     }
 
+    private fun handleSpaceShare() {
+        roomDetailArgs.openShareSpaceForId?.let { spaceId ->
+            ShareSpaceBottomSheet.show(childFragmentManager, spaceId)
+            view?.post {
+                handleChatEffect(ChatEffect.CONFETTI)
+            }
+        }
+    }
+
     override fun onDestroyView() {
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
@@ -838,7 +850,7 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.ManageIntegrations)
                 true
             }
-            R.id.voice_call -> {
+            R.id.voice_call       -> {
                 callActionsHandler.onVoiceCallClicked()
                 true
             }
@@ -1466,7 +1478,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onUrlClicked(url: String, title: String): Boolean {
         permalinkHandler
                 .launch(requireActivity(), url, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?): Boolean {
+                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
                         // Same room?
                         if (roomId == roomDetailArgs.roomId) {
                             // Navigation to same room
@@ -1674,7 +1686,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onRoomCreateLinkClicked(url: String) {
         permalinkHandler
                 .launch(requireContext(), url, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?): Boolean {
+                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
                         requireActivity().finish()
                         return false
                     }

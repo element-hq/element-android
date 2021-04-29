@@ -333,6 +333,7 @@ dependencies {
 
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
     // Log

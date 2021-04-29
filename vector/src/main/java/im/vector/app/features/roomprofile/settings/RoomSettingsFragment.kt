@@ -42,11 +42,11 @@ import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
-import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilityBottomSheet
+import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleBottomSheet
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
-
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.UUID
 import javax.inject.Inject
@@ -104,7 +104,7 @@ class RoomSettingsFragment @Inject constructor(
         roomJoinRuleSharedActionViewModel
                 .observe()
                 .subscribe { action ->
-                    viewModel.handle(RoomSettingsAction.SetRoomJoinRule(action.roomJoinRule, action.roomGuestAccess))
+                    viewModel.handle(RoomSettingsAction.SetRoomJoinRule(action.roomJoinRule))
                 }
                 .disposeOnDestroyView()
     }
@@ -174,11 +174,16 @@ class RoomSettingsFragment @Inject constructor(
                 .show(childFragmentManager, "RoomHistoryVisibilityBottomSheet")
     }
 
-    override fun onJoinRuleClicked()  = withState(viewModel) { state ->
+    override fun onJoinRuleClicked() = withState(viewModel) { state ->
         val currentJoinRule = state.newRoomJoinRules.newJoinRules ?: state.currentRoomJoinRules
-        val currentGuestAccess = state.newRoomJoinRules.newGuestAccess ?: state.currentGuestAccess
-        RoomJoinRuleBottomSheet.newInstance(currentJoinRule, currentGuestAccess)
+        RoomJoinRuleBottomSheet.newInstance(currentJoinRule)
                 .show(childFragmentManager, "RoomJoinRuleBottomSheet")
+    }
+
+    override fun onToggleGuestAccess() = withState(viewModel) { state ->
+        val currentGuestAccess = state.newRoomJoinRules.newGuestAccess ?: state.currentGuestAccess
+        val toggled = if (currentGuestAccess == GuestAccess.Forbidden) GuestAccess.CanJoin else GuestAccess.Forbidden
+        viewModel.handle(RoomSettingsAction.SetRoomGuestAccess(toggled))
     }
 
     override fun onImageReady(uri: Uri?) {

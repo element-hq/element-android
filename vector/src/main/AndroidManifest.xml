@@ -291,6 +291,10 @@
         </activity>
 
         <activity android:name=".features.devtools.RoomDevToolActivity" />
+        <activity android:name=".features.spaces.SpacePreviewActivity" />
+        <activity android:name=".features.spaces.SpaceExploreActivity" />
+        <activity android:name=".features.spaces.SpaceCreationActivity" />
+        <activity android:name=".features.spaces.manage.SpaceManageActivity" />
         <!-- Services -->
 
         <service

@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:textColor="?riotx_text_primary"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/itemBottomSheetTitleSubtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

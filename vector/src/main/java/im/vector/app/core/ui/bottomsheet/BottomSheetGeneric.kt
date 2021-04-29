@@ -32,7 +32,7 @@ import javax.inject.Inject
 /**
  * Generic Bottom sheet with actions
  */
-abstract class BottomSheetGeneric<STATE : BottomSheetGenericState, ACTION : BottomSheetGenericAction> :
+abstract class BottomSheetGeneric<STATE : BottomSheetGenericState, ACTION : BottomSheetGenericRadioAction> :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
         BottomSheetGenericController.Listener<ACTION> {
 
