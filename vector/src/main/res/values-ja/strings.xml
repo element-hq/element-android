@@ -1216,7 +1216,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">1つ以上のテストが失敗しました。調査に役立つバグレポートを送信してください。</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">1つ以上のテストが失敗しました。提案された修正を試してください。</string>
     <string name="settings_troubleshoot_diagnostic_success_status">基本的な診断はOKです。 それでも通知が届かない場合は、調査に役立つバグレポートを送信してください。</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">実行中... (%1$dの %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">実行中… (%1$dの %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">テストを実行する</string>
     <string name="settings_troubleshoot_diagnostic">診断トラブルシューティング</string>
     <string name="settings_notification_by_event">イベントごとの通知の優先順位</string>
@@ -1436,7 +1436,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="power_level_default">デフォルト</string>
     <string name="power_level_moderator">モデレーター</string>
     <string name="power_level_admin">管理者</string>
-    <string name="notice_widget_jitsi_modified_by_you">あなたが %1$sがビデオ会議を変更しました</string>
+    <string name="notice_widget_jitsi_modified_by_you">あなたががビデオ会議を変更しました</string>
     <string name="notice_widget_jitsi_modified">%1$sがビデオ会議を変更しました</string>
     <string name="notice_widget_jitsi_added_by_you">ビデオ会議を開始しました</string>
     <string name="notice_widget_jitsi_removed_by_you">ビデオ会議を終了しました</string>
