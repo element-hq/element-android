@@ -21,6 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
@@ -29,7 +30,7 @@ import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.internal.database.model.WellknownIntegrationManagerConfigEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.extensions.observeNotNull
-import org.matrix.android.sdk.internal.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
@@ -77,7 +78,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
         currentConfigs.add(defaultConfig)
     }
 
-    override fun onSessionStarted() {
+    override fun onSessionStarted(session: Session) {
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         observeWellknownConfig()
         accountDataDataSource
@@ -105,7 +106,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
                 }
     }
 
-    override fun onSessionStopped() {
+    override fun onSessionStopped(session: Session) {
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }
 

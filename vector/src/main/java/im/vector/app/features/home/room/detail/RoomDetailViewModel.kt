@@ -53,13 +53,13 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
@@ -188,10 +188,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
         // Inform the SDK that the room is displayed
         viewModelScope.launch(Dispatchers.IO)  {
-            try {
-                session.onRoomDisplayed(initialState.roomId)
-            } catch (_: Throwable) {
-            }
+            tryOrNull { session.onRoomDisplayed(initialState.roomId) }
         }
         callManager.addPstnSupportListener(this)
         callManager.checkForPSTNSupportIfNeeded()
@@ -574,7 +571,7 @@ class RoomDetailViewModel @AssistedInject constructor(
      * Convert a send mode to a draft and save the draft
      */
     private fun handleSaveDraft(action: RoomDetailAction.SaveDraft) = withState {
-        viewModelScope.launch(NonCancellable) {
+        session.coroutineScope.launch {
             when {
                 it.sendMode is SendMode.REGULAR && !it.sendMode.fromSharing -> {
                     setState { copy(sendMode = it.sendMode.copy(action.draft)) }
@@ -1162,19 +1159,13 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleRejectInvite() {
         viewModelScope.launch {
-            try {
-                room.leave(null)
-            } catch (_: Exception) {
-            }
+            tryOrNull { room.leave(null) }
         }
     }
 
     private fun handleAcceptInvite() {
         viewModelScope.launch {
-            try {
-                room.join()
-            } catch (_: Exception) {
-            }
+            tryOrNull { room.join() }
         }
     }
 
@@ -1327,7 +1318,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                         }
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
-                        viewModelScope.launch {
+                        session.coroutineScope.launch {
                             tryOrNull { room.setReadReceipt(eventId) }
                         }
                     }

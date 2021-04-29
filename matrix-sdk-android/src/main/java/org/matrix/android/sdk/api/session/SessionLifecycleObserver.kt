@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session
+package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
 
 /**
  * This defines methods associated with some lifecycle events of a session.
- * A list of SessionLifecycle will be injected into [DefaultSession]
  */
-internal interface SessionLifecycleObserver {
+interface SessionLifecycleObserver {
     /*
     Called when the session is opened
      */
     @MainThread
-    fun onSessionStarted() {
+    fun onSessionStarted(session: Session) {
         // noop
     }
 
@@ -35,7 +34,7 @@ internal interface SessionLifecycleObserver {
     Called when the session is cleared
      */
     @MainThread
-    fun onClearCache() {
+    fun onClearCache(session: Session) {
         // noop
     }
 
@@ -43,7 +42,7 @@ internal interface SessionLifecycleObserver {
     Called when the session is closed
      */
     @MainThread
-    fun onSessionStopped() {
+    fun onSessionStopped(session: Session) {
         // noop
     }
 }

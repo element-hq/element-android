@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.getRetryDelay
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Cancelable
@@ -72,7 +73,7 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
      */
     private val cancelableBag = ConcurrentHashMap<String, Cancelable>()
 
-    override fun onSessionStarted() {
+    override fun onSessionStarted(session: Session) {
         // We should check for sending events not handled because app was killed
         // But we should be careful of only took those that was submitted to us, because if it's
         // for example it's a media event it is handled by some worker and he will handle it

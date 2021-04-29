@@ -19,13 +19,15 @@ package org.matrix.android.sdk.internal.session
 import androidx.annotation.MainThread
 import dagger.Lazy
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.pushrules.PushRuleService
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
 import org.matrix.android.sdk.api.session.cache.CacheService
@@ -38,6 +40,7 @@ import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
+import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
@@ -161,7 +164,12 @@ internal class DefaultSession @Inject constructor(
         isOpen = true
         cryptoService.get().ensureDevice()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onSessionStarted() }
+            lifecycleObservers.forEach {
+                it.onSessionStarted(this)
+            }
+            sessionListeners.dispatch {
+                it.onSessionStarted(this)
+            }
         }
         globalErrorHandler.listener = this
     }
@@ -202,7 +210,10 @@ internal class DefaultSession @Inject constructor(
         stopSync()
         // timelineEventDecryptor.destroy()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onSessionStopped() }
+            lifecycleObservers.forEach { it.onSessionStopped(this) }
+            sessionListeners.dispatch {
+                it.onSessionStopped(this)
+            }
         }
         cryptoService.get().close()
         isOpen = false
@@ -227,14 +238,23 @@ internal class DefaultSession @Inject constructor(
         stopSync()
         stopAnyBackgroundSync()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onClearCache() }
+            lifecycleObservers.forEach {
+                it.onClearCache(this)
+            }
+            sessionListeners.dispatch {
+                it.onClearCache(this)
+            }
         }
-        cacheService.get().clearCache()
+        withContext(NonCancellable) {
+            cacheService.get().clearCache()
+        }
         workManagerProvider.cancelAllWorks()
     }
 
     override fun onGlobalError(globalError: GlobalError) {
-        sessionListeners.dispatchGlobalError(globalError)
+        sessionListeners.dispatch {
+            it.onGlobalError(this, globalError)
+        }
     }
 
     override fun contentUrlResolver() = contentUrlResolver

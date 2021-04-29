@@ -161,6 +161,7 @@ import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.reactions.EmojiReactionPickerActivity
 import im.vector.app.features.roomprofile.RoomProfileActivity
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
@@ -1749,7 +1750,7 @@ class RoomDetailFragment @Inject constructor(
             sharedActionViewModel.pendingAction = action
             return
         }
-        lifecycleScope.launch {
+        session.coroutineScope.launch {
             val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
             if (!isAdded) return@launch
             result.fold(
