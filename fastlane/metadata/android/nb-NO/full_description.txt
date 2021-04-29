@@ -1,0 +1,30 @@
+Element er en ny type messenger og samarbeidsapp som:
+
+1. Gir deg kontrollen for å bevare personvernet ditt
+2. Lar deg kommunisere med hvem som helst i Matrix-nettverket, og til og med ved å integrere med apper som Slack
+3. Beskytter deg mot reklame, datamining og inngjerdede hager
+4. Sikrer deg gjennom end-to-end-kryptering, med kryssignering for å bekrefte andre
+
+Element er helt forskjellig fra andre meldings- og samarbeidsapper fordi det er desentralisert og åpen kildekode.
+
+Element lar deg selv være vert - eller velge en vert - slik at du har personvern, eierskap og kontroll over dataene og samtalene dine. Det gir deg tilgang til et åpent nettverk; slik at du ikke bare holder på å snakke med bare andre Element-brukere. Og det er veldig sikkert.
+
+Element er i stand til å gjøre alt dette fordi det opererer på Matrix - standarden for åpen, desentralisert kommunikasjon.
+
+Element setter deg i kontroll ved å la deg velge hvem som er vert for samtalene dine. Fra Element-appen kan du velge å være vert på forskjellige måter:
+
+1. Få en gratis konto på matrix.org-serveren som er vert for Matrix-utviklerne, eller velg blant tusenvis av offentlige servere som er vert for frivillige
+2. Vær vert for kontoen din ved å kjøre en server på din egen maskinvare
+3. Registrer deg for en konto på en tilpasset server ved å bare abonnere på Hosting Matrix Services-vertsplattformen
+
+<b> Hvorfor velge Element? </b>
+
+<b> EGNE DATA DINE </b>: Du bestemmer hvor du vil oppbevare dataene og meldingene dine. Du eier den og kontrollerer den, ikke noe MEGACORP som utvinner dataene dine eller gir tilgang til tredjeparter.
+
+<b> ÅPEN MELDING OG SAMARBEID </b>: Du kan chatte med alle andre i Matrix-nettverket, enten de bruker Element eller en annen Matrix-app, og selv om de bruker et annet meldingssystem som Slack, IRC eller XMPP.
+
+<b> SUPER-SECURE </b>: Ekte end-to-end-kryptering (bare de i samtalen kan dekryptere meldinger), og kryssignering for å verifisere enhetene til samtaledeltakerne.
+
+<b> KOMPLETT KOMMUNIKASJON </b>: Meldinger, tale- og videosamtaler, fildeling, skjermdeling og en hel haug med integrasjoner, bots og widgets. Bygg rom, lokalsamfunn, hold kontakten og få ting gjort.
+
+<b> ALT DER DU ER </b>: Hold kontakten uansett hvor du er med fullt synkronisert meldingslogg på alle enhetene dine og på nettet på https://app.element.io.
