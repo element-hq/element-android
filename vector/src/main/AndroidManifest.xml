@@ -28,6 +28,9 @@
     <!-- Needed for incoming calls  -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <!-- To be able to install APK from the application -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <!-- Jitsi libs adds CALENDAR permissions, but we can remove them safely according to https://github.com/jitsi/jitsi-meet/issues/4068#issuecomment-480482481 -->
     <uses-permission
         android:name="android.permission.READ_CALENDAR"
@@ -47,6 +50,22 @@
     <uses-feature
         android:name="android.hardware.camera.autofocus"
         android:required="false" />
+
+    <!-- Since Android 11, see https://developer.android.com/training/package-visibility -->
+    <queries>
+        <!-- To open URL in CustomTab (prefetch, etc.). It makes CustomTabsClient.getPackageName() work
+         see https://developer.android.com/training/package-visibility/use-cases#open-urls-custom-tabs -->
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+
+        <!-- The app can open attachments of any mime type
+        see https://developer.android.com/training/package-visibility/use-cases#open-a-file -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
 
     <application
         android:name=".VectorApplication"
@@ -272,6 +291,10 @@
         </activity>
 
         <activity android:name=".features.devtools.RoomDevToolActivity" />
+        <activity android:name=".features.spaces.SpacePreviewActivity" />
+        <activity android:name=".features.spaces.SpaceExploreActivity" />
+        <activity android:name=".features.spaces.SpaceCreationActivity" />
+        <activity android:name=".features.spaces.manage.SpaceManageActivity" />
         <!-- Services -->
 
         <service

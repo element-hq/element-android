@@ -1152,8 +1152,8 @@
     <string name="account_additional_info">Informations additionnelles : %s</string>
     <string name="no_valid_google_play_services_apk">Aucun APK des services Google Play valide n’a été trouvé. Les notifications peuvent ne pas fonctionner correctement.</string>
     <string name="video_call_in_progress">Appel vidéo en cours…</string>
-    <string name="title_activity_keys_backup_setup">Sauvegarde de clés</string>
-    <string name="title_activity_keys_backup_restore">Utiliser la sauvegarde de clés</string>
+    <string name="title_activity_keys_backup_setup">Sauvegarde de clé</string>
+    <string name="title_activity_keys_backup_restore">Utiliser la sauvegarde de clé</string>
     <string name="keys_backup_is_not_finished_please_wait">La sauvegarde des clés n’est pas terminée, veuillez patienter…</string>
     <string name="skip">Passer</string>
     <string name="done">Terminé</string>

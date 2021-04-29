@@ -44,7 +44,7 @@ data class CryptoDeviceInfo(
      */
     fun fingerprint(): String? {
         return keys
-                ?.takeIf { !deviceId.isBlank() }
+                ?.takeIf { deviceId.isNotBlank() }
                 ?.get("ed25519:$deviceId")
     }
 
@@ -53,7 +53,7 @@ data class CryptoDeviceInfo(
      */
     fun identityKey(): String? {
         return keys
-                ?.takeIf { !deviceId.isBlank() }
+                ?.takeIf { deviceId.isNotBlank() }
                 ?.get("curve25519:$deviceId")
     }
 

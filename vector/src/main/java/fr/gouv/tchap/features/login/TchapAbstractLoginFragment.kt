@@ -32,6 +32,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.login.LoginViewState
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import java.util.concurrent.CancellationException
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -77,10 +78,10 @@ abstract class TchapAbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<
         }
 
         when (throwable) {
-            is Failure.Cancelled                      ->
+            is CancellationException ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
-            is Failure.ServerError                    ->
+            is Failure.ServerError   ->
                 if (throwable.error.code == MatrixError.M_FORBIDDEN
                         && throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
                     AlertDialog.Builder(requireActivity())

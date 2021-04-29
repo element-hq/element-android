@@ -25,8 +25,10 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.files.LocalFilesHelper
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import timber.log.Timber
@@ -83,21 +85,23 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                         url = data.url,
                                         elementToDecrypt = data.elementToDecrypt)
                     }
-                    result.fold(
-                            { data ->
-                                thumbnailView.isVisible = false
-                                loadingView.isVisible = false
-                                videoView.isVisible = true
+                    withContext(Dispatchers.Main) {
+                        result.fold(
+                                { data ->
+                                    thumbnailView.isVisible = false
+                                    loadingView.isVisible = false
+                                    videoView.isVisible = true
 
-                                videoView.setVideoPath(data.path)
-                                videoView.start()
-                            },
-                            {
-                                loadingView.isVisible = false
-                                errorView.isVisible = true
-                                errorView.text = errorFormatter.toHumanReadable(it)
-                            }
-                    )
+                                    videoView.setVideoPath(data.path)
+                                    videoView.start()
+                                },
+                                {
+                                    loadingView.isVisible = false
+                                    errorView.isVisible = true
+                                    errorView.text = errorFormatter.toHumanReadable(it)
+                                }
+                        )
+                    }
                 }
             }
         } else {
@@ -124,21 +128,23 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                         url = data.url,
                                         elementToDecrypt = null)
                     }
-                    result.fold(
-                            { data ->
-                                thumbnailView.isVisible = false
-                                loadingView.isVisible = false
-                                videoView.isVisible = true
+                    withContext(Dispatchers.Main) {
+                        result.fold(
+                                { data ->
+                                    thumbnailView.isVisible = false
+                                    loadingView.isVisible = false
+                                    videoView.isVisible = true
 
-                                videoView.setVideoPath(data.path)
-                                videoView.start()
-                            },
-                            {
-                                loadingView.isVisible = false
-                                errorView.isVisible = true
-                                errorView.text = errorFormatter.toHumanReadable(it)
-                            }
-                    )
+                                    videoView.setVideoPath(data.path)
+                                    videoView.start()
+                                },
+                                {
+                                    loadingView.isVisible = false
+                                    errorView.isVisible = true
+                                    errorView.text = errorFormatter.toHumanReadable(it)
+                                }
+                        )
+                    }
                 }
             }
         }

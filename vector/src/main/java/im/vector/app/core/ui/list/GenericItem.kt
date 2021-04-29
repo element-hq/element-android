@@ -38,11 +38,6 @@ import im.vector.app.core.extensions.setTextOrHide
 @EpoxyModelClass(layout = R.layout.item_generic_list)
 abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
 
-    enum class STYLE {
-        BIG_TEXT,
-        NORMAL_TEXT
-    }
-
     class Action(var title: String) {
         var perform: Runnable? = null
     }
@@ -54,7 +49,7 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
     var description: CharSequence? = null
 
     @EpoxyAttribute
-    var style: STYLE = STYLE.NORMAL_TEXT
+    var style: ItemStyle = ItemStyle.NORMAL_TEXT
 
     @EpoxyAttribute
     @DrawableRes
@@ -87,10 +82,7 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
             holder.titleIcon.isVisible = false
         }
 
-        when (style) {
-            STYLE.BIG_TEXT    -> holder.titleText.textSize = 18f
-            STYLE.NORMAL_TEXT -> holder.titleText.textSize = 14f
-        }
+        holder.titleText.textSize = style.toTextSize()
 
         holder.descriptionText.setTextOrHide(description)
 

@@ -1,3 +1,49 @@
+Changes in Element 1.1.7 (2021-XX-XX)
+===================================================
+
+Features ✨:
+ - Spaces beta
+
+Improvements 🙌:
+ - Add ability to install APK from directly from Element (#2381)
+
+Bugfix 🐛:
+ - Message states cosmetic changes (#3007)
+ - Fix exception in rxSingle (#3180)
+ - Do not invite the current user when creating a room (#3123)
+ - Fix color issues when the system theme is changed (#2738)
+ - Fix issues on Android 11 (#3067)
+ - Fix issue when opening encrypted files (#3186)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - RegistrationWizard.createAccount() parameters are now all optional, following Matrix spec (#3205)
+
+Build 🧱:
+ - Upgrade to gradle 7
+
+Test:
+ -
+
+Other changes:
+ - New store descriptions
+
+Changes in Element 1.1.6 (2021-04-16)
+===================================================
+
+Bugfix 🐛:
+ - Fix crash on the timeline
+ - App crashes on "troubleshoot notifications" button (#3187)
+
+Changes in Element 1.1.5 (2021-04-15)
+===================================================
+
+Bugfix 🐛:
+ - Fix crash during Realm migration
+ - Fix crash when playing video (#3179)
+
 Changes in Element 1.1.4 (2021-04-09)
 ===================================================
 

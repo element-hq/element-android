@@ -78,6 +78,12 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.app.features.share.IncomingShareActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
+import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
+import im.vector.app.features.spaces.ShareSpaceBottomSheet
+import im.vector.app.features.spaces.SpaceCreationActivity
+import im.vector.app.features.spaces.SpaceExploreActivity
+import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
+import im.vector.app.features.spaces.manage.SpaceManageActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.ui.UiStateRepository
 import im.vector.app.features.usercode.UserCodeActivity
@@ -153,6 +159,9 @@ interface ScreenComponent {
     fun inject(activity: ReAuthActivity)
     fun inject(activity: RoomDevToolActivity)
     fun inject(activity: TchapLoginActivity)
+    fun inject(activity: SpaceCreationActivity)
+    fun inject(activity: SpaceExploreActivity)
+    fun inject(activity: SpaceManageActivity)
 
     /* ==========================================================================================
      * BottomSheets
@@ -175,6 +184,9 @@ interface ScreenComponent {
     fun inject(bottomSheet: CallControlsBottomSheet)
     fun inject(bottomSheet: SignOutBottomSheetDialogFragment)
     fun inject(bottomSheet: MatrixToBottomSheet)
+    fun inject(bottomSheet: ShareSpaceBottomSheet)
+    fun inject(bottomSheet: SpaceSettingsMenuBottomSheet)
+    fun inject(bottomSheet: InviteRoomSpaceChooserBottomSheet)
 
     /* ==========================================================================================
      * Others

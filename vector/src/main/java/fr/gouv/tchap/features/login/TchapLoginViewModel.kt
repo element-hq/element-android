@@ -37,8 +37,10 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.login.HomeServerConnectionConfigFactory
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
+import im.vector.app.features.login.LoginViewEvents
 import im.vector.app.features.login.LoginViewState
 import im.vector.app.features.login.ReAuthHelper
+import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -432,35 +434,35 @@ class TchapLoginViewModel @AssistedInject constructor(
                             asyncHomeServerLoginFlowRequest = Uninitialized
                     )
                 }
+                null
             }
 
-            if (data is LoginFlowResult.Success) {
+            data ?: return@launch
 
-                val loginMode = when {
-                    // SSO login is taken first
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                    else                                                                  -> LoginMode.Unsupported
-                }
+            val loginMode = when {
+                // SSO login is taken first
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                        && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+                else                                                                  -> LoginMode.Unsupported
+            }
 
-                // FIXME We should post a view event here normally?
-                setState {
-                    copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized,
-                            homeServerUrl = data.homeServerUrl,
-                            loginMode = loginMode,
-                            loginModeSupportedTypes = data.supportedLoginTypes.toList()
-                    )
-                }
-                if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                        || data.isOutdatedHomeserver) {
-                    // Notify the UI
-                    _viewEvents.post(TchapLoginViewEvents.OutdatedHomeserver)
-                } else {
-                    _viewEvents.post(TchapLoginViewEvents.OnLoginFlowRetrieved)
-                }
+            // FIXME We should post a view event here normally?
+            setState {
+                copy(
+                        asyncHomeServerLoginFlowRequest = Uninitialized,
+                        homeServerUrl = data.homeServerUrl,
+                        loginMode = loginMode,
+                        loginModeSupportedTypes = data.supportedLoginTypes.toList()
+                )
+            }
+            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
+                    || data.isOutdatedHomeserver) {
+                // Notify the UI
+                _viewEvents.post(TchapLoginViewEvents.OutdatedHomeserver)
+            } else {
+                _viewEvents.post(TchapLoginViewEvents.OnLoginFlowRetrieved)
             }
         }
     }
