@@ -107,9 +107,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                     setResult(RESULT_OK, Intent().apply {
                         putExtra(RESULT_DATA_CREATED_SPACE_ID, it.spaceId)
                         putExtra(RESULT_DATA_DEFAULT_ROOM_ID, it.defaultRoomId)
-                        if (it.topology == SpaceTopology.JustMe) {
-                            putExtra(RESULT_DATA_CREATED_SPACE_IS_JUST_ME, true)
-                        }
+                        putExtra(RESULT_DATA_CREATED_SPACE_IS_JUST_ME, it.topology == SpaceTopology.JustMe)
                     })
                     finish()
                 }

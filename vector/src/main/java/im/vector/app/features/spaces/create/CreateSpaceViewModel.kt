@@ -130,7 +130,6 @@ class CreateSpaceViewModel @AssistedInject constructor(
                             defaultRooms = emptyMap()
                     )
                 }
-                // XXX finish and open the add rooms directly
                 handleNextFromDefaultRooms()
             }
             SpaceTopology.MeAndTeammates -> {
