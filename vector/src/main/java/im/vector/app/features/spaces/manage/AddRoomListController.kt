@@ -22,6 +22,8 @@ import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.list.RoomCategoryItem_
+import org.matrix.android.sdk.api.session.room.ResultBoundaries
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -54,6 +56,26 @@ class AddRoomListController @Inject constructor(
     var listener: Listener? = null
     var ignoreRooms: List<String>? = null
 
+    var initialLoadOccurred = false
+
+    fun boundaryChange(boundary: ResultBoundaries) {
+        val boundaryHasLoadedSomething = boundary.frontLoaded || boundary.zeroItemLoaded
+        if (initialLoadOccurred != boundaryHasLoadedSomething) {
+            initialLoadOccurred = boundaryHasLoadedSomething
+            requestForcedModelBuild()
+        }
+    }
+
+    var sectionName: String? = null
+        set(value) {
+            if (value != field) {
+                field = value
+                requestForcedModelBuild()
+            }
+        }
+
+    var totalSize: Int = 0
+
     var selectedItems: Map<String, Boolean> = emptyMap()
         set(value) {
             field = value
@@ -62,13 +84,27 @@ class AddRoomListController @Inject constructor(
         }
 
     override fun addModels(models: List<EpoxyModel<*>>) {
-        if (ignoreRooms == null) {
-            super.addModels(models)
+        val filteredModel = if (ignoreRooms == null) {
+            models
         } else {
-            super.addModels(
-                    models.filter {
-                        it !is RoomSelectionItem ||  !ignoreRooms!!.contains(it.matrixItem.id)
+            models.filter {
+                it !is RoomSelectionItem || !ignoreRooms!!.contains(it.matrixItem.id)
+            }
+        }
+        val somethingToShow = filteredModel.isNotEmpty() || !initialLoadOccurred
+        if (somethingToShow || filteredModel.isNotEmpty()) {
+            add(
+                    RoomCategoryItem_().apply {
+                        id("header")
+                        title(sectionName ?: "")
+                        expanded(true)
                     }
+            )
+        }
+        super.addModels(filteredModel)
+        if (!initialLoadOccurred) {
+            add(
+                    RoomSelectionPlaceHolderItem_().apply { id("loading") }
             )
         }
     }

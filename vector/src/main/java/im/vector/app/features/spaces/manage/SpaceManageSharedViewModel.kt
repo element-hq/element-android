@@ -54,6 +54,7 @@ class SpaceManageSharedViewModel @AssistedInject constructor(
             }
             SpaceManagedSharedAction.HideLoading -> _viewEvents.post(SpaceManagedSharedViewEvents.HideLoading)
             SpaceManagedSharedAction.ShowLoading -> _viewEvents.post(SpaceManagedSharedViewEvents.ShowLoading)
+            SpaceManagedSharedAction.CreateRoom ->  _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToCreateRoom)
         }
     }
 }

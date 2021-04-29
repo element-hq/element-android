@@ -18,6 +18,7 @@
 package org.matrix.android.sdk.internal.session.room.summary
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -28,6 +29,7 @@ import io.realm.Sort
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.session.room.ResultBoundaries
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
@@ -187,9 +189,25 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             roomSummaryMapper.map(it)
         }
 
+        val boundaries = MutableLiveData(ResultBoundaries())
+
         val mapped = monarchy.findAllPagedWithChanges(
                 realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory, pagedListConfig)
+                LivePagedListBuilder(dataSourceFactory, pagedListConfig).also {
+                    it.setBoundaryCallback(object : PagedList.BoundaryCallback<RoomSummary>() {
+                        override fun onItemAtEndLoaded(itemAtEnd: RoomSummary) {
+                            boundaries.postValue(boundaries.value?.copy(frontLoaded = true))
+                        }
+
+                        override fun onItemAtFrontLoaded(itemAtFront: RoomSummary) {
+                            boundaries.postValue(boundaries.value?.copy(endLoaded = true))
+                        }
+
+                        override fun onZeroItemsLoaded() {
+                            boundaries.postValue(boundaries.value?.copy(zeroItemLoaded = true))
+                        }
+                    })
+                }
         )
 
         return object : UpdatableLivePageResult {
@@ -200,6 +218,9 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                     roomSummariesQuery(it, builder.invoke(queryParams)).process(sortOrder)
                 }
             }
+
+            override val liveBoundaries: LiveData<ResultBoundaries>
+                get() = boundaries
         }
     }
 

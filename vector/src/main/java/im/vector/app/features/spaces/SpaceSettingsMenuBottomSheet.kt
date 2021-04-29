@@ -117,7 +117,8 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         }
 
         views.addRooms.views.bottomSheetActionClickableZone.debouncedClicks {
-            startActivity(SpaceManageActivity.newIntent(requireContext(), spaceArgs.spaceId))
+            dismiss()
+            startActivity(SpaceManageActivity.newIntent(requireActivity(), spaceArgs.spaceId))
         }
 
         views.leaveSpace.views.bottomSheetActionClickableZone.debouncedClicks {

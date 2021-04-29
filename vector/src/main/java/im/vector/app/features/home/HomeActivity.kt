@@ -48,6 +48,7 @@ import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
@@ -115,11 +116,21 @@ class HomeActivity :
         if (activityResult.resultCode == Activity.RESULT_OK) {
             val spaceId = SpaceCreationActivity.getCreatedSpaceId(activityResult.data)
             val defaultRoomId = SpaceCreationActivity.getDefaultRoomId(activityResult.data)
+            val isJustMe = SpaceCreationActivity.isJustMeSpace(activityResult.data)
             views.drawerLayout.closeDrawer(GravityCompat.START)
 
+            val postSwitchOption: Navigator.PostSwitchSpaceAction = if (defaultRoomId != null) {
+                Navigator.PostSwitchSpaceAction.OpenDefaultRoom(defaultRoomId, !isJustMe)
+            } else if (isJustMe) {
+                Navigator.PostSwitchSpaceAction.OpenAddExistingRooms
+            } else {
+                Navigator.PostSwitchSpaceAction.None
+            }
             // Here we want to change current space to the newly created one, and then immediately open the default room
             if (spaceId != null) {
-                navigator.switchToSpace(this, spaceId, defaultRoomId, true)
+                navigator.switchToSpace(context = this,
+                        spaceId = spaceId,
+                        postSwitchOption)
             }
         }
     }
@@ -267,7 +278,7 @@ class HomeActivity :
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.initialSyncProgressServiceStatus) {
-            is InitialSyncProgressService.Status.Idle        -> {
+            is InitialSyncProgressService.Status.Idle -> {
                 views.waitingView.root.isVisible = false
             }
             is InitialSyncProgressService.Status.Progressing -> {
@@ -494,7 +505,7 @@ class HomeActivity :
             }
 
             override fun switchToSpace(spaceId: String) {
-                navigator.switchToSpace(this@HomeActivity, spaceId, null, false)
+                navigator.switchToSpace(this@HomeActivity, spaceId, Navigator.PostSwitchSpaceAction.None)
             }
         }
 

@@ -36,6 +36,7 @@ import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
 import im.vector.app.features.spaces.create.CreateSpaceEvents
 import im.vector.app.features.spaces.create.CreateSpaceState
 import im.vector.app.features.spaces.create.CreateSpaceViewModel
+import im.vector.app.features.spaces.create.SpaceTopology
 import im.vector.app.features.spaces.create.SpaceType
 import javax.inject.Inject
 
@@ -61,7 +62,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                 CreateSpaceState.Step.SetDetails -> {
                     navigateToFragment(ChooseSpaceTypeFragment::class.java)
                 }
-                CreateSpaceState.Step.AddRooms ->  {
+                CreateSpaceState.Step.AddRooms -> {
                     navigateToFragment(CreateSpaceDefaultRoomsFragment::class.java)
                 }
                 CreateSpaceState.Step.ChoosePrivateType -> {
@@ -106,6 +107,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                     setResult(RESULT_OK, Intent().apply {
                         putExtra(RESULT_DATA_CREATED_SPACE_ID, it.spaceId)
                         putExtra(RESULT_DATA_DEFAULT_ROOM_ID, it.defaultRoomId)
+                        putExtra(RESULT_DATA_CREATED_SPACE_IS_JUST_ME, it.topology == SpaceTopology.JustMe)
                     })
                     finish()
                 }
@@ -155,6 +157,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
     companion object {
         private const val RESULT_DATA_CREATED_SPACE_ID = "RESULT_DATA_CREATED_SPACE_ID"
         private const val RESULT_DATA_DEFAULT_ROOM_ID = "RESULT_DATA_DEFAULT_ROOM_ID"
+        private const val RESULT_DATA_CREATED_SPACE_IS_JUST_ME = "RESULT_DATA_CREATED_SPACE_IS_JUST_ME"
 
         fun newIntent(context: Context): Intent {
             return Intent(context, SpaceCreationActivity::class.java).apply {
@@ -168,6 +171,10 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
 
         fun getDefaultRoomId(data: Intent?): String? {
             return data?.extras?.getString(RESULT_DATA_DEFAULT_ROOM_ID)
+        }
+
+        fun isJustMeSpace(data: Intent?): Boolean {
+            return data?.extras?.getBoolean(RESULT_DATA_CREATED_SPACE_IS_JUST_ME, false) == true
         }
     }
 
