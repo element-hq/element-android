@@ -2680,4 +2680,27 @@
     <string name="settings_room_directory_show_all_rooms">Afficher les salons au contenu choquant</string>
     <string name="settings_category_room_directory">Répertoire des salons</string>
     <string name="event_status_sent_message">Message envoyé</string>
+    <string name="create_spaces_you_can_change_later">Vous pouvez changer ceci plus tard</string>
+    <string name="create_spaces_choose_type_label">Quel type d’espace voulez-vous créer \?</string>
+    <string name="create_spaces_type_header">Les espaces sont un nouveau moyen de regrouper les salons et les personnes</string>
+    <string name="your_private_space">Votre espace privé</string>
+    <string name="your_public_space">Votre espace public</string>
+    <string name="add_space">Ajouter un espace</string>
+    <string name="command_description_leave_room">Partir du salon correspondant à l’identifiant donné (ou le salon actuel si aucun n’est fourni)</string>
+    <string name="command_description_join_space">Rejoindre l’espace avec l’identifiant donné</string>
+    <string name="command_description_create_space">Créer un espace</string>
+    <string name="a11y_unchecked">Décoché</string>
+    <string name="search_hint_room_name">Rechercher par nom</string>
+    <string name="room_settings_room_access_restricted_description">Tout membre d’un espace contenant ce salon peut le trouver et le rejoindre. Seuls les administrateurs de ce salon peuvent l’ajouter à un espace.</string>
+    <string name="room_settings_room_access_restricted_title">Espaces</string>
+    <string name="room_settings_room_access_public_description">Tout le monde peut trouver ce salon et le rejoindre</string>
+    <string name="room_settings_room_access_public_title">Public</string>
+    <string name="room_settings_room_access_private_description">Seules les personnes invitées peuvent le trouver et le rejoindre</string>
+    <string name="room_settings_room_access_private_title">Privé</string>
+    <string name="room_settings_room_access_entry_unknown">Paramètre d’accès inconnu (%s)</string>
+    <string name="room_settings_room_access_entry_knock">Tout le monde peut frapper à la porte du salon, les membres peuvent accepter ou rejeter la demande</string>
+    <string name="room_settings_guest_access_title">Permettre l’accès aux visiteurs</string>
+    <string name="spaces_header">Espaces</string>
+    <string name="spaces_invited_header">Invitations</string>
+    <string name="suggested_header">Salons recommandés</string>
 </resources>
