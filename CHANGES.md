@@ -14,6 +14,7 @@ Bugfix 🐛:
  - Fix color issues when the system theme is changed (#2738)
  - Fix issues on Android 11 (#3067)
  - Fix issue when opening encrypted files (#3186)
+ - Fix wording issue (#3242)
 
 Translations 🗣:
  -
