@@ -2033,7 +2033,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="template_settings_opt_in_of_analytics_prompt">Lūdzu, ieslēdziet analītiku, lai palīdzētu mums uzlabot ${app_name}.</string>
     <string name="template_settings_opt_in_of_analytics_summary">${app_name} apkopo anonīmu analītiku, lai ļautu mums uzlabot aplikāciju.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Iedot atļauju</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${App_name} ir nepieciešams fona savienojums, lai spētu laicīgi piegādāt notifikācijas.
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} ir nepieciešams fona savienojums, lai spētu laicīgi piegādāt notifikācijas.
 \nNākamajā ekrānā tiks piedāvāts atļaut ${app_name}, lai vienmēr darbotos fonā, lūdzu piekrītat.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Fona savienojums</string>
     <string name="startup_notification_privacy_button_other">Izvēlaties citu opciju</string>
@@ -2068,12 +2068,12 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Salabot Play Servisus</string>
     <string name="error_threepid_auth_failed">Pārliecinieties, ka esat nospiedis uz saites e-pasta ziņojumā, ko esam nosūtījuši jums.</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimizēts akumulatoram</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${App_name} sinhronizēsies fonā, tā lai ietaupītu telefona bateriju.
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} sinhronizēsies fonā, tā lai ietaupītu telefona bateriju.
 \nAtkarībā no ierīces baterijas stāvokļa, sinhronizāciju var atcelt operētājsistēma.</string>
     <string name="settings_notification_privacy_need_permission">Aplikācijai vajag atļauju, lai strādātu fonā</string>
     <string name="settings_notification_privacy_reduced">Samazināts privātums</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorēt optimizāciju</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${App_name} neietekmē akumulatora optimizācija.</string>
+    <string name="template_settings_troubleshoot_test_battery_success">${app_name} neietekmē akumulatora optimizācija.</string>
     <string name="settings_troubleshoot_test_battery_title">Akumulatora Optimizācija</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Ieslēgt Aplikācijas palaišanu kopā ar telefonu</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Servisu Pārbaude</string>
