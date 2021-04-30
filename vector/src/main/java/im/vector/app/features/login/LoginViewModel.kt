@@ -767,8 +767,17 @@ class LoginViewModel @AssistedInject constructor(
                 }
 
                 val credentials: Credentials = Credentials(userID, accessToken, "", action.homeServerUrl, state.deviceId)
-                viewModelScope.launch {
-                    authenticationService.createSessionFromSso(homeServerConnectionConfigFinal!!, credentials)
+
+                currentJob = viewModelScope.launch {
+                    try {
+                        authenticationService.createSessionFromSso(homeServerConnectionConfigFinal!!, credentials)
+                    } catch (failure: Throwable) {
+                        setState {
+                            copy(asyncLoginAction = Fail(failure))
+                        }
+                        null
+                    }
+                            ?.let { onSessionCreated(it) }
                 }
             }
             override fun onServiceDisconnected(className: ComponentName) {
