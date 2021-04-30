@@ -63,8 +63,7 @@ internal class FileUploader @Inject constructor(@Authenticated
                            mimeType: String?,
                            progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
         // Check size limit
-        // DO NOT COMMIT: 5 Mo
-        val maxUploadFileSize = 5 * 1024 * 1024L // homeServerCapabilitiesService.getHomeServerCapabilities().maxUploadFileSize
+        val maxUploadFileSize = homeServerCapabilitiesService.getHomeServerCapabilities().maxUploadFileSize
 
         if (maxUploadFileSize != HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
                 && file.length() > maxUploadFileSize) {

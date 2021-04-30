@@ -101,7 +101,6 @@ import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.KeyboardStateUtils
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.copyToClipboard
@@ -381,7 +380,6 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.ActionFailure                    -> displayRoomDetailActionFailure(it)
                 is RoomDetailViewEvents.ShowMessage                      -> showSnackWithMessage(it.message)
                 is RoomDetailViewEvents.NavigateToEvent                  -> navigateToEvent(it)
-                is RoomDetailViewEvents.FileTooBigError                  -> displayFileTooBigError(it)
                 is RoomDetailViewEvents.DownloadFileState                -> handleDownloadFileState(it)
                 is RoomDetailViewEvents.JoinRoomCommandSuccess           -> handleJoinedToAnotherRoom(it)
                 is RoomDetailViewEvents.SendMessageResult                -> renderSendMessageResult(it)
@@ -747,18 +745,6 @@ class RoomDetailFragment @Inject constructor(
             views.timelineRecyclerView.stopScroll()
             layoutManager.scrollToPosition(scrollPosition)
         }
-    }
-
-    private fun displayFileTooBigError(action: RoomDetailViewEvents.FileTooBigError) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(getString(R.string.error_file_too_big,
-                        action.filename,
-                        TextUtils.formatFileSize(requireContext(), action.fileSizeInBytes),
-                        TextUtils.formatFileSize(requireContext(), action.homeServerLimitInBytes)
-                ))
-                .setPositiveButton(R.string.ok, null)
-                .show()
     }
 
     private fun handleDownloadFileState(action: RoomDetailViewEvents.DownloadFileState) {

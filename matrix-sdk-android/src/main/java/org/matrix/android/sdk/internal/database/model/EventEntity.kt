@@ -22,7 +22,6 @@ import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import io.realm.RealmObject
 import io.realm.annotations.Index
-import org.matrix.android.sdk.api.failure.MatrixError
 
 internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var roomId: String = "",

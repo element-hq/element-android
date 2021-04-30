@@ -1106,27 +1106,6 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleSendMedia(action: RoomDetailAction.SendMedia) {
         room.sendMedias(action.attachments, action.compressBeforeSending, emptySet())
-
-        /*
-        TODO Cleanup this error is now managed by the SDK
-        val attachments = action.attachments
-        val homeServerCapabilities = session.getHomeServerCapabilities()
-        val maxUploadFileSize = homeServerCapabilities.maxUploadFileSize
-
-        if (maxUploadFileSize == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
-            // Unknown limitation
-            room.sendMedias(attachments, action.compressBeforeSending, emptySet())
-        } else {
-            when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
-                null -> room.sendMedias(attachments, action.compressBeforeSending, emptySet())
-                else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
-                        tooBigFile.name ?: tooBigFile.queryUri.toString(),
-                        tooBigFile.size,
-                        maxUploadFileSize
-                ))
-            }
-        }
-        */
     }
 
     private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {
