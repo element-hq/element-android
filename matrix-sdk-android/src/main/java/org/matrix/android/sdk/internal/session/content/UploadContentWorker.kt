@@ -41,6 +41,7 @@ import org.matrix.android.sdk.internal.session.room.send.CancelSendTracker
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoIdentifiers
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
+import org.matrix.android.sdk.internal.util.toMatrixErrorStr
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -129,6 +130,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 }
             }
 
+            // TODO Send the Thumbnail after the main content, because the main content can fail if too large.
             val uploadThumbnailResult = dealWithThumbnail(params)
 
             val progressListener = object : ProgressRequestBody.Listener {
@@ -304,7 +306,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         return Result.success(
                 WorkerParamsFactory.toData(
                         params.copy(
-                                lastFailureMessage = failure.localizedMessage
+                                lastFailureMessage = failure.toMatrixErrorStr()
                         )
                 )
         )

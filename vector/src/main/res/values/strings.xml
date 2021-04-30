@@ -2295,6 +2295,7 @@
         <item quantity="other">%d users read</item>
     </plurals>
 
+    <string name="error_file_too_big_simple">"The file is too large to upload."</string>
     <string name="error_file_too_big">"The file '%1$s' (%2$s) is too large to upload. The limit is %3$s."</string>
 
     <string name="error_attachment">"An error occurred while retrieving the attachment."</string>

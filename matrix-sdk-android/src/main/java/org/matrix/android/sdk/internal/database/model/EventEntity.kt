@@ -22,6 +22,7 @@ import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import io.realm.RealmObject
 import io.realm.annotations.Index
+import org.matrix.android.sdk.api.failure.MatrixError
 
 internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var roomId: String = "",
@@ -32,6 +33,8 @@ internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var stateKey: String? = null,
                                 var originServerTs: Long? = null,
                                 @Index var sender: String? = null,
+                                // Can contain a serialized MatrixError
+                                var sendStateDetails: String? = null,
                                 var age: Long? = 0,
                                 var unsignedData: String? = null,
                                 var redacts: String? = null,

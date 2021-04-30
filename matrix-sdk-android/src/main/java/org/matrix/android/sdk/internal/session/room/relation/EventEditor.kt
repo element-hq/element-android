@@ -99,6 +99,7 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
             entity.age = editedEventEntity.age
             entity.originServerTs = editedEventEntity.originServerTs
             entity.sendState = editedEventEntity.sendState
+            entity.sendStateDetails = editedEventEntity.sendStateDetails
         }
     }
 }

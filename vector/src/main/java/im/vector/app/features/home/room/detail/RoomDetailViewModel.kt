@@ -79,7 +79,6 @@ import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -292,7 +291,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.HandleTombstoneEvent -> handleTombstoneEvent(action)
             is RoomDetailAction.ResendMessage -> handleResendEvent(action)
             is RoomDetailAction.RemoveFailedEcho -> handleRemove(action)
-            is RoomDetailAction.ResendAll -> handleResendAll()
             is RoomDetailAction.MarkAllAsRead -> handleMarkAllAsRead()
             is RoomDetailAction.ReportContent -> handleReportContent(action)
             is RoomDetailAction.IgnoreUser -> handleIgnoreUser(action)
@@ -1107,6 +1105,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleSendMedia(action: RoomDetailAction.SendMedia) {
+        room.sendMedias(action.attachments, action.compressBeforeSending, emptySet())
+
+        /*
+        TODO Cleanup this error is now managed by the SDK
         val attachments = action.attachments
         val homeServerCapabilities = session.getHomeServerCapabilities()
         val maxUploadFileSize = homeServerCapabilities.maxUploadFileSize
@@ -1124,6 +1126,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 ))
             }
         }
+        */
     }
 
     private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {

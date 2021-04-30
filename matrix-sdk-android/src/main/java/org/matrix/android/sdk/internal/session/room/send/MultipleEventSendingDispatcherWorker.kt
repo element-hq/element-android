@@ -55,7 +55,12 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
 
     override fun doOnError(params: Params): Result {
         params.localEchoIds.forEach { localEchoIds ->
-            localEchoRepository.updateSendState(localEchoIds.eventId, localEchoIds.roomId, SendState.UNDELIVERED)
+            localEchoRepository.updateSendState(
+                    eventId = localEchoIds.eventId,
+                    roomId = localEchoIds.roomId,
+                    sendState = SendState.UNDELIVERED,
+                    sendStateDetails = params.lastFailureMessage
+            )
         }
 
         return super.doOnError(params)
