@@ -38,6 +38,7 @@ git branch -u origin/main main
 # And optionally
 git remote prune origin
 ```
+ - Allow cleartext (non-SSL) connections to Matrix servers on LAN hosts (#3166)
 
 Changes in Element 1.1.6 (2021-04-16)
 ===================================================
