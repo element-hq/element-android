@@ -111,7 +111,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         val attachment = params.attachment
         val filesToDelete = mutableListOf<File>()
 
-        try {
+        return try {
             val inputStream = context.contentResolver.openInputStream(attachment.queryUri)
                     ?: return Result.success(
                             WorkerParamsFactory.toData(
@@ -130,9 +130,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 }
             }
 
-            // TODO Send the Thumbnail after the main content, because the main content can fail if too large.
-            val uploadThumbnailResult = dealWithThumbnail(params)
-
             val progressListener = object : ProgressRequestBody.Listener {
                 override fun onProgress(current: Long, total: Long) {
                     notifyTracker(params) {
@@ -147,7 +144,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
             var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
-            return try {
+            try {
                 val fileToUpload: File
                 var newAttachmentAttributes = NewAttachmentAttributes(
                         params.attachment.width?.toInt(),
@@ -232,6 +229,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     Timber.e(failure, "## FileService: Failed to update file cache")
                 }
 
+                val uploadThumbnailResult = dealWithThumbnail(params)
+
                 handleSuccess(params,
                         contentUploadResponse.contentUri,
                         uploadedFileEncryptedFileInfo,
@@ -244,7 +243,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             }
         } catch (e: Exception) {
             Timber.e(e, "## FileService: ERROR")
-            return handleFailure(params, e)
+            handleFailure(params, e)
         } finally {
             // Delete all temporary files
             filesToDelete.forEach {
@@ -275,19 +274,23 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             Timber.v("Encrypt thumbnail")
                             notifyTracker(params) { contentUploadStateTracker.setEncryptingThumbnail(it) }
                             val encryptionResult = MXEncryptedAttachments.encryptAttachment(thumbnailData.bytes.inputStream(), thumbnailData.mimeType)
-                            val contentUploadResponse = fileUploader.uploadByteArray(encryptionResult.encryptedByteArray,
-                                    "thumb_${params.attachment.name}",
-                                    MimeTypes.OctetStream,
-                                    thumbnailProgressListener)
+                            val contentUploadResponse = fileUploader.uploadByteArray(
+                                    byteArray = encryptionResult.encryptedByteArray,
+                                    filename = "thumb_${params.attachment.name}",
+                                    mimeType = MimeTypes.OctetStream,
+                                    progressListener = thumbnailProgressListener
+                            )
                             UploadThumbnailResult(
                                     contentUploadResponse.contentUri,
                                     encryptionResult.encryptedFileInfo
                             )
                         } else {
-                            val contentUploadResponse = fileUploader.uploadByteArray(thumbnailData.bytes,
-                                    "thumb_${params.attachment.name}",
-                                    thumbnailData.mimeType,
-                                    thumbnailProgressListener)
+                            val contentUploadResponse = fileUploader.uploadByteArray(
+                                    byteArray = thumbnailData.bytes,
+                                    filename = "thumb_${params.attachment.name}",
+                                    mimeType = thumbnailData.mimeType,
+                                    progressListener = thumbnailProgressListener
+                            )
                             UploadThumbnailResult(
                                     contentUploadResponse.contentUri,
                                     null
