@@ -425,7 +425,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canRedact(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE are supported for the moment
+        // Only event of type EventType.MESSAGE or EventType.STICKER are supported for the moment
         if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER)) return false
         // Message sent by the current user can always be redacted
         if (event.root.senderId == session.myUserId) return true
