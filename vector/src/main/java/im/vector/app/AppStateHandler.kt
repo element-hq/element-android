@@ -24,6 +24,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.BehaviorDataSource
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -68,7 +69,7 @@ class AppStateHandler @Inject constructor(
         val spaceSum = spaceId?.let { uSession?.getRoomSummary(spaceId) }
         selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.BySpace(spaceSum)))
         if (spaceId != null) {
-            GlobalScope.launch {
+            GlobalScope.launch(Dispatchers.IO) {
                 tryOrNull {
                     uSession?.getRoom(spaceId)?.loadRoomMembersIfNeeded()
                 }

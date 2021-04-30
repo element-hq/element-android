@@ -37,16 +37,15 @@ class SpacePreviewController @Inject constructor(
     var interactionListener: InteractionListener? = null
 
     override fun buildModels(data: SpacePreviewState?) {
-        val result = data?.childInfoList?.invoke() ?: return
-
-        val memberCount = data.spaceInfo.invoke()?.memberCount ?: 0
+        val memberCount = data?.spaceInfo?.invoke()?.memberCount ?: 0
 
         spaceTopSummaryItem {
             id("info")
             formattedMemberCount(stringProvider.getQuantityString(R.plurals.room_title_members, memberCount, memberCount))
-            topic(data.spaceInfo.invoke()?.topic ?: data.topic ?: "")
+            topic(data?.spaceInfo?.invoke()?.topic ?: data?.topic ?: "")
         }
 
+        val result = data?.childInfoList?.invoke() ?: return
         if (result.isNotEmpty()) {
             genericItemHeader {
                 id("header_rooms")

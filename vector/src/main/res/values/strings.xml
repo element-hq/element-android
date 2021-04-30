@@ -3341,4 +3341,5 @@
 
     <string name="labs_use_restricted_join_rule">Experimental Space - Restricted Room.</string>
     <string name="labs_use_restricted_join_rule_desc">Warning requires server support and experimental room version</string>
+    <string name="user_invites_you">%s invites you</string>
 </resources>

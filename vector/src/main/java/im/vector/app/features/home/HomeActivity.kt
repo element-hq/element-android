@@ -60,6 +60,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
+import im.vector.app.features.spaces.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.themes.ThemeUtils
@@ -209,6 +210,18 @@ class HomeActivity :
                                         }
                                     })
                                     .show(supportFragmentManager, "SPACE_SETTINGS")
+                        }
+                        is HomeActivitySharedAction.OpenSpaceInvite -> {
+                            SpaceInviteBottomSheet.newInstance(sharedAction.spaceId, object : SpaceInviteBottomSheet.InteractionListener {
+                                override fun onAccept(spaceId: String) {
+                                    navigator.switchToSpace(this@HomeActivity, spaceId, Navigator.PostSwitchSpaceAction.None)
+                                }
+
+                                override fun onDecline(spaceId: String) {
+                                    // nop
+                                }
+                            })
+                                    .show(supportFragmentManager, "SPACE_INVITE")
                         }
                     }.exhaustive
                 }
