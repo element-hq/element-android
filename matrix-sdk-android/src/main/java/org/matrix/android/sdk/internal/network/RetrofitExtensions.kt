@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.ResponseBody
+import org.matrix.android.sdk.api.extensions.orFalse
 import retrofit2.HttpException
 import retrofit2.Response
 import timber.log.Timber
@@ -91,7 +92,7 @@ private fun toFailure(errorBody: ResponseBody?, httpCode: Int, globalErrorReceiv
             } else if (httpCode == HttpURLConnection.HTTP_UNAUTHORIZED /* 401 */
                     && matrixError.code == MatrixError.M_UNKNOWN_TOKEN) {
                 // Also send this error to the globalErrorReceiver, for a global management
-                globalErrorReceiver?.handleGlobalError(GlobalError.InvalidToken(matrixError.isSoftLogout))
+                globalErrorReceiver?.handleGlobalError(GlobalError.InvalidToken(matrixError.isSoftLogout.orFalse()))
             }
 
             return Failure.ServerError(matrixError, httpCode)
