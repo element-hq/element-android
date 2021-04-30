@@ -7,6 +7,7 @@ Features ✨:
 Improvements 🙌:
  - Add ability to install APK from directly from Element (#2381)
  - Delete and react to stickers (#3250)
+ - Compress video before sending (#442)
 
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)

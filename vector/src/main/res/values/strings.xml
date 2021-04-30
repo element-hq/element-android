@@ -2785,6 +2785,11 @@
         <item quantity="one">Send image with the original size</item>
         <item quantity="other">Send images with the original size</item>
     </plurals>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">Send video with the original size</item>
+        <item quantity="other">Send videos with the original size</item>
+    </plurals>
+    <string name="send_images_and_video_with_original_size">Send media with the original size</string>
 
     <string name="delete_event_dialog_title">Confirm Removal</string>
     <string name="delete_event_dialog_content">Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.</string>

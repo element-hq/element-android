@@ -168,6 +168,9 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
 
+    // Video compression
+    implementation 'com.github.AbedElazizShe:LightCompressor:0.9.0'
+
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.22'
 

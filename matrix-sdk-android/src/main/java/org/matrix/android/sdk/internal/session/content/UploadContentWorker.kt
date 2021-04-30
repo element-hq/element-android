@@ -77,6 +77,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     @Inject lateinit var fileService: DefaultFileService
     @Inject lateinit var cancelSendTracker: CancelSendTracker
     @Inject lateinit var imageCompressor: ImageCompressor
+    @Inject lateinit var videoCompressor: VideoCompressor
     @Inject lateinit var localEchoRepository: LocalEchoRepository
 
     override fun injectWith(injector: SessionComponent) {
@@ -168,6 +169,18 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                             newFileSize = compressedFile.length()
                                     )
                                 }
+                            }
+                            .also { filesToDelete.add(it) }
+                } else if (attachment.type == ContentAttachmentData.Type.VIDEO
+                        // Do not compress gif
+                        && attachment.mimeType != MimeTypes.Gif
+                        && params.compressBeforeSending) {
+                    fileToUpload = videoCompressor.compress(workingFile)
+                            .also { compressedFile ->
+                                // Get new Video size
+                                newAttachmentAttributes = NewAttachmentAttributes(
+                                        newFileSize = compressedFile.length()
+                                )
                             }
                             .also { filesToDelete.add(it) }
                 } else {
