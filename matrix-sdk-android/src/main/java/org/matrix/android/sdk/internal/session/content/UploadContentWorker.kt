@@ -176,10 +176,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         && params.compressBeforeSending) {
                     fileToUpload = videoCompressor.compress(workingFile)
                             .also { compressedFile ->
-                                // Get new Video size
-                                newAttachmentAttributes = NewAttachmentAttributes(
-                                        newFileSize = compressedFile.length()
-                                )
+                                // Get new Video file size. For now video dimensions are not updated
+                                newAttachmentAttributes = newAttachmentAttributes.copy(newFileSize = compressedFile.length())
                             }
                             .also { filesToDelete.add(it) }
                 } else {
@@ -346,8 +344,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             val messageContent: MessageContent? = event.asDomain().content.toModel()
             val updatedContent = when (messageContent) {
                 is MessageImageContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes)
-                is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo,
-                        newAttachmentAttributes.newFileSize)
+                is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo, newAttachmentAttributes)
                 is MessageFileContent  -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
                 is MessageAudioContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
                 else                   -> messageContent
@@ -378,14 +375,16 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                            encryptedFileInfo: EncryptedFileInfo?,
                                            thumbnailUrl: String?,
                                            thumbnailEncryptedFileInfo: EncryptedFileInfo?,
-                                           size: Long): MessageVideoContent {
+                                           newAttachmentAttributes: NewAttachmentAttributes?): MessageVideoContent {
         return copy(
                 url = if (encryptedFileInfo == null) url else null,
                 encryptedFileInfo = encryptedFileInfo?.copy(url = url),
                 videoInfo = videoInfo?.copy(
                         thumbnailUrl = if (thumbnailEncryptedFileInfo == null) thumbnailUrl else null,
                         thumbnailFile = thumbnailEncryptedFileInfo?.copy(url = thumbnailUrl),
-                        size = size
+                        width = newAttachmentAttributes?.newWidth ?: videoInfo.width,
+                        height = newAttachmentAttributes?.newHeight ?: videoInfo.height,
+                        size = newAttachmentAttributes?.newFileSize ?: videoInfo.size
                 )
         )
     }
