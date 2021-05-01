@@ -23,6 +23,7 @@ import com.abedelazizshe.lightcompressorlibrary.VideoQuality
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.listeners.ProgressListener
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
@@ -30,6 +31,7 @@ import javax.inject.Inject
 
 internal class VideoCompressor @Inject constructor(private val context: Context) {
     suspend fun compress(videoFile: File,
+                         progressListener: ProgressListener?,
                          quality: VideoQuality = VideoQuality.MEDIUM,
                          isMinBitRateEnabled: Boolean = false,
                          keepOriginalResolution: Boolean = true): File {
@@ -46,14 +48,17 @@ internal class VideoCompressor @Inject constructor(private val context: Context)
                     listener = object : CompressionListener {
                         override fun onProgress(percent: Float) {
                             Timber.d("Compressing: $percent%")
+                            progressListener?.onProgress(percent.toInt(), 100)
                         }
 
                         override fun onStart() {
                             Timber.d("Compressing: start")
+                            progressListener?.onProgress(0, 100)
                         }
 
                         override fun onSuccess() {
                             Timber.d("Compressing: success")
+                            progressListener?.onProgress(100, 100)
                             job.complete()
                         }
 

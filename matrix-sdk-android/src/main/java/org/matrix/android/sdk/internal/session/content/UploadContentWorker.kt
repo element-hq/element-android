@@ -21,6 +21,7 @@ import android.graphics.BitmapFactory
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -156,6 +157,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         // Do not compress gif
                         && attachment.mimeType != MimeTypes.Gif
                         && params.compressBeforeSending) {
+                    notifyTracker(params) { contentUploadStateTracker.setCompressingImage(it) }
+
                     fileToUpload = imageCompressor.compress(workingFile, MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
                             .also { compressedFile ->
                                 // Get new Bitmap size
@@ -174,7 +177,11 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         // Do not compress gif
                         && attachment.mimeType != MimeTypes.Gif
                         && params.compressBeforeSending) {
-                    fileToUpload = videoCompressor.compress(workingFile)
+                    fileToUpload = videoCompressor.compress(workingFile, object: ProgressListener {
+                        override fun onProgress(progress: Int, total: Int) {
+                            notifyTracker(params) { contentUploadStateTracker.setCompressingVideo(it, progress.toFloat()) }
+                        }
+                    })
                             .also { compressedFile ->
                                 // Get new Video file size. For now video dimensions are not updated
                                 newAttachmentAttributes = newAttachmentAttributes.copy(newFileSize = compressedFile.length())
