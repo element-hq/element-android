@@ -11,9 +11,9 @@
     <string name="notice_room_unban">رفعَ ⁨%1$s⁩ المنع عن ⁨%2$s⁩</string>
     <string name="notice_room_ban">منعَ ⁨%1$s⁩ ⁨%2$s⁩</string>
     <string name="notice_avatar_url_changed">غيّر ⁨%1$s⁩ صورته الشخصية</string>
-    <string name="notice_display_name_changed_from">إنَّ %1$s قد غيَّرَ اسمه الظاهر من %2$s إلى %3$s</string>
-    <string name="notice_display_name_removed">إنَّ %1$s قد أزالَ اسمه الظاهر (لقد كان %2$s)</string>
-    <string name="notice_room_topic_changed">إنَّ %1$s قد غيَّرَ الموضوع إلى: %2$s</string>
+    <string name="notice_display_name_changed_from">غيّر %1$s اسمه الظاهر من %2$s إلى %3$s</string>
+    <string name="notice_display_name_removed">أزال %1$s اسمه الظاهر (كان %2$s)</string>
+    <string name="notice_room_topic_changed">غيّر %1$s الموضوع إلى: %2$s</string>
     <string name="notice_room_name_changed">إنَّ %1$s قد غيَّرَ اسم الغُرفة إلى: %2$s</string>
     <string name="notice_answered_call">إنَّ %s قد أجابَ على المُكالمة.</string>
     <string name="notice_ended_call">إنَّ %s قد أنهى المُكالمة.</string>
@@ -74,10 +74,10 @@
     <string name="notice_room_ban_by_you">منعتَ ⁨%1$s⁩</string>
     <string name="notice_room_withdraw_by_you">سحبتَ الدعوة الموجّهة إلى ⁨%1$s⁩</string>
     <string name="notice_avatar_url_changed_by_you">غيّرتَ صورتك الشخصية</string>
-    <string name="notice_display_name_set_by_you">أنتَ قد عيَّنتَ اسمك الظاهر إلى %1$s</string>
-    <string name="notice_display_name_changed_from_by_you">أنتَ قد غيّرتَ اسمك الظاهر من ⁨%1$s⁩ إلى ⁨%2$s⁩</string>
-    <string name="notice_display_name_removed_by_you">أنتَ قد أزلتَ اسمك الظاهر (لقد كان ⁨%1$s⁩)</string>
-    <string name="notice_room_topic_changed_by_you">أنتَ قد غيَّرتَ الموضوع إلى: ⁨%1$s⁩</string>
+    <string name="notice_display_name_set_by_you">عيَّنتَ اسمك الظاهر إلى %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">غيّرتَ اسمك الظاهر من ⁨%1$s⁩ إلى ⁨%2$s⁩</string>
+    <string name="notice_display_name_removed_by_you">أزلتَ اسمك الظاهر (كان ⁨%1$s⁩)</string>
+    <string name="notice_room_topic_changed_by_you">غيَّرتَ الموضوع إلى: ⁨%1$s⁩</string>
     <string name="notice_room_avatar_changed">إنَّ %1$s قد غيَّرَ صورة الغُرفة</string>
     <string name="notice_room_avatar_changed_by_you">أنتَ قد غيَّرتَ صورة الغُرفة</string>
     <string name="notice_room_name_changed_by_you">أنتَ قد غيَّرتَ اسم الغُرفة إلى: %1$s</string>
@@ -1128,4 +1128,11 @@
     <string name="title_activity_keys_backup_setup">نسخ إحتياطي للمفتاح</string>
     <string name="notification_sync_init">جاري إعداد الخدمة</string>
     <string name="system_theme">إفتراضي النظام</string>
+    <string name="notice_room_canonical_alias_set">غير %1$s عنوان الغرفة الى %2$s.</string>
+    <string name="event_status_sent_message">أُرسلت الرسالة</string>
+    <string name="initial_sync_start_downloading">المزامنة الأولية:
+\nينزل البيانات…</string>
+    <string name="initial_sync_start_server_computing">المزامنة الأولية:
+\nينتظر رد الخادم…</string>
+    <string name="notice_display_name_set">غير %1$s اسمه الى %2$s</string>
 </resources>
