@@ -542,7 +542,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun stopTrackingUnreadMessages() {
         if (trackUnreadMessages.getAndSet(false)) {
             mostRecentDisplayedEvent?.root?.eventId?.also {
-                viewModelScope.launch {
+                viewModelScope.launch(NonCancellable) {
                     tryOrNull { room.setReadMarker(it) }
                 }
             }
