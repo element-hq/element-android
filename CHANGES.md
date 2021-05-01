@@ -16,6 +16,7 @@ Bugfix 🐛:
  - Fix issues on Android 11 (#3067)
  - Fix issue when opening encrypted files (#3186)
  - Fix wording issue (#3242)
+ - Fix missing sender information after edits (#3184)
 
 Translations 🗣:
  -
