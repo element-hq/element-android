@@ -100,13 +100,13 @@ data class RoomSummary constructor(
     fun scLatestPreviewableEvent(preferenceProvider: RoomSummaryPreferenceProvider?): TimelineEvent? {
         if (preferenceProvider == null) {
             // Fallback to default
-            return latestPreviewableEvent
+            return latestPreviewableOriginalContentEvent
         }
         return when(preferenceProvider.getUnreadKind(isDirect)) {
             UNREAD_KIND_ORIGINAL_CONTENT -> latestPreviewableOriginalContentEvent
             UNREAD_KIND_CONTENT -> latestPreviewableContentEvent
             // UNREAD_KIND_DEFAULT
-            else -> latestPreviewableEvent
+            else -> latestPreviewableOriginalContentEvent
         }
     }
 

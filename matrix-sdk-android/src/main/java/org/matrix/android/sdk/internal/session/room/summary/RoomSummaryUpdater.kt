@@ -100,7 +100,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         val latestPreviewableContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
         val latestPreviewableOriginalContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEventScOriginalContent(realm, roomId)
 
-        val lastActivityFromEvent = latestPreviewableEvent?.root?.originServerTs
+        val lastActivityFromEvent = latestPreviewableOriginalContentEvent?.root?.originServerTs
         if (lastActivityFromEvent != null) {
             roomSummaryEntity.lastActivityTime = lastActivityFromEvent
         }
@@ -140,9 +140,9 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
         roomSummaryEntity.updateHasFailedSending()
 
-        val root = latestPreviewableEvent?.root
+        val root = latestPreviewableOriginalContentEvent?.root
         if (root?.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
-            Timber.v("Should decrypt ${latestPreviewableEvent.eventId}")
+            Timber.v("Should decrypt ${latestPreviewableOriginalContentEvent.eventId}")
             // mmm i want to decrypt now or is it ok to do it async?
             tryOrNull {
                 eventDecryptor.decryptEvent(root.asDomain(), "")
@@ -174,5 +174,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         roomSummaryEntity.updateHasFailedSending()
         roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+        roomSummaryEntity.latestPreviewableContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+        roomSummaryEntity.latestPreviewableOriginalContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEventScOriginalContent(realm, roomId)
     }
 }

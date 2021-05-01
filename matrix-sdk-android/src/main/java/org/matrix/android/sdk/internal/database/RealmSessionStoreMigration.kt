@@ -207,7 +207,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                     obj.setBoolean(RoomSummaryEntityFields.IS_LOW_PRIORITY, isLowPriority)
 
 //                    XXX migrate last message origin server ts
-                    obj.getObject(RoomSummaryEntityFields.LATEST_PREVIEWABLE_EVENT.`$`)
+                    obj.getObject(RoomSummaryEntityFields.LATEST_PREVIEWABLE_ORIGINAL_CONTENT_EVENT.`$`)
                             ?.getObject(TimelineEventEntityFields.ROOT.`$`)
                             ?.getLong(EventEntityFields.ORIGIN_SERVER_TS)?.let {
                                 obj.setLong(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, it)
