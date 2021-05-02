@@ -1,0 +1,4 @@
+- Update codebase to Element v1.1.6
+- Fix some upstream bugs
+- Allow selecting text in the message longpress popup
+- Enable rageshake / bug reporting
