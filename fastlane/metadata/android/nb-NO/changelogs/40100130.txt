@@ -1,0 +1,2 @@
+Hovedendringene i denne versjonen: URL-forhåndsvisning, nytt Emoji-tastatur, nye rominnstillingsmuligheter og snø til jul!
+Full endringslogg: https://github.com/vector-im/element-android/releases/tag/v1.0.13

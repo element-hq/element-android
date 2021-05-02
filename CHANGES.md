@@ -1,3 +1,47 @@
+Changes in Element 1.1.7 (2021-XX-XX)
+===================================================
+
+Features ✨:
+ - Spaces beta
+
+Improvements 🙌:
+ - Add ability to install APK from directly from Element (#2381)
+ - Delete and react to stickers (#3250)
+
+Bugfix 🐛:
+ - Message states cosmetic changes (#3007)
+ - Fix exception in rxSingle (#3180)
+ - Do not invite the current user when creating a room (#3123)
+ - Fix color issues when the system theme is changed (#2738)
+ - Fix issues on Android 11 (#3067)
+ - Fix issue when opening encrypted files (#3186)
+ - Fix wording issue (#3242)
+ - Fix missing sender information after edits (#3184)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - RegistrationWizard.createAccount() parameters are now all optional, following Matrix spec (#3205)
+
+Build 🧱:
+ - Upgrade to gradle 7
+
+Test:
+ -
+
+Other changes:
+ - New store descriptions
+ - `master` branch has been renamed to `main`. To apply change to your dev environment, run:
+```sh
+git branch -m master main
+git fetch origin
+git branch -u origin/main main
+# And optionally
+git remote prune origin
+```
+ - Allow cleartext (non-SSL) connections to Matrix servers on LAN hosts (#3166)
+
 Changes in Element 1.1.6 (2021-04-16)
 ===================================================
 

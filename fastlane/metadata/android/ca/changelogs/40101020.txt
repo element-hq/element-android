@@ -1,0 +1,2 @@
+Canvis principals d'aquesta versió: millora de rendiment i correcció d'errors!
+Registre de canvis complet: https://github.com/vector-im/element-android/releases/tag/v1.1.2

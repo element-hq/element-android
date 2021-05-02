@@ -19,7 +19,10 @@ package org.matrix.android.sdk.internal.database
 import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
@@ -31,6 +34,9 @@ import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomTagEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.SpaceParentSummaryEntityFields
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,10 +45,10 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
     companion object {
         // SC-specific DB changes on top of Element
         // 1: added markedUnread field
-        const val SESSION_STORE_SCHEMA_SC_VERSION = 1L
+        const val SESSION_STORE_SCHEMA_SC_VERSION = 2L
         const val SESSION_STORE_SCHEMA_SC_VERSION_OFFSET = (1L shl 12)
 
-        const val SESSION_STORE_SCHEMA_VERSION = 9L +
+        const val SESSION_STORE_SCHEMA_VERSION = 10L +
                 SESSION_STORE_SCHEMA_SC_VERSION * SESSION_STORE_SCHEMA_SC_VERSION_OFFSET
     }
 
@@ -61,8 +67,10 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 6) migrateTo7(realm)
         if (oldVersion <= 7) migrateTo8(realm)
         if (oldVersion <= 8) migrateTo9(realm)
+        if (oldVersion <= 9) migrateTo10(realm)
 
         if (oldScVersion <= 0) migrateToSc1(realm)
+        if (oldScVersion <= 1) migrateToSc2(realm)
     }
 
     // SC Version 1L added markedUnread
@@ -70,6 +78,13 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         Timber.d("Step SC 0 -> 1")
         realm.schema.get("RoomSummaryEntity")
                 ?.addField(RoomSummaryEntityFields.MARKED_UNREAD, Boolean::class.java)
+    }
+
+    // SC Version 2L added unreadCount
+    private fun migrateToSc2(realm: DynamicRealm) {
+        Timber.d("Step SC 1 -> 2")
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.UNREAD_COUNT, Int::class.java)
     }
 
 
@@ -194,7 +209,6 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 ?.addIndex(RoomSummaryEntityFields.IS_SERVER_NOTICE)
 
                 ?.transform { obj ->
-
                     val isFavorite = obj.getList(RoomSummaryEntityFields.TAGS.`$`).any {
                         it.getString(RoomTagEntityFields.TAG_NAME) == RoomTag.ROOM_TAG_FAVOURITE
                     }
@@ -213,5 +227,45 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                                 obj.setLong(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, it)
                             }
                 }
+    }
+
+    fun migrateTo10(realm: DynamicRealm) {
+        Timber.d("Step 9 -> 10")
+        realm.schema.create("SpaceChildSummaryEntity")
+                ?.addField(SpaceChildSummaryEntityFields.ORDER, String::class.java)
+                ?.addField(SpaceChildSummaryEntityFields.CHILD_ROOM_ID, String::class.java)
+                ?.addField(SpaceChildSummaryEntityFields.AUTO_JOIN, Boolean::class.java)
+                ?.setNullable(SpaceChildSummaryEntityFields.AUTO_JOIN, true)
+                ?.addRealmObjectField(SpaceChildSummaryEntityFields.CHILD_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
+                ?.addRealmListField(SpaceChildSummaryEntityFields.VIA_SERVERS.`$`, String::class.java)
+
+        realm.schema.create("SpaceParentSummaryEntity")
+                ?.addField(SpaceParentSummaryEntityFields.PARENT_ROOM_ID, String::class.java)
+                ?.addField(SpaceParentSummaryEntityFields.CANONICAL, Boolean::class.java)
+                ?.setNullable(SpaceParentSummaryEntityFields.CANONICAL, true)
+                ?.addRealmObjectField(SpaceParentSummaryEntityFields.PARENT_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
+                ?.addRealmListField(SpaceParentSummaryEntityFields.VIA_SERVERS.`$`, String::class.java)
+
+        val creationContentAdapter = MoshiProvider.providesMoshi().adapter(RoomCreateContent::class.java)
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.ROOM_TYPE, String::class.java)
+                ?.addField(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, String::class.java)
+                ?.addField(RoomSummaryEntityFields.GROUP_IDS, String::class.java)
+                ?.transform { obj ->
+
+                    val creationEvent = realm.where("CurrentStateEventEntity")
+                            .equalTo(CurrentStateEventEntityFields.ROOM_ID, obj.getString(RoomSummaryEntityFields.ROOM_ID))
+                            .equalTo(CurrentStateEventEntityFields.TYPE, EventType.STATE_ROOM_CREATE)
+                            .findFirst()
+
+                    val roomType = creationEvent?.getObject(CurrentStateEventEntityFields.ROOT.`$`)
+                            ?.getString(EventEntityFields.CONTENT)?.let {
+                                creationContentAdapter.fromJson(it)?.type
+                            }
+
+                    obj.setString(RoomSummaryEntityFields.ROOM_TYPE, roomType)
+                }
+                ?.addRealmListField(RoomSummaryEntityFields.PARENTS.`$`, realm.schema.get("SpaceParentSummaryEntity")!!)
+                ?.addRealmListField(RoomSummaryEntityFields.CHILDREN.`$`, realm.schema.get("SpaceChildSummaryEntity")!!)
     }
 }

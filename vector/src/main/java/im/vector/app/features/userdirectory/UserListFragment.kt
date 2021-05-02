@@ -89,7 +89,7 @@ class UserListFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                is UserListViewEvents.OpenShareMatrixToLing -> {
+                is UserListViewEvents.OpenShareMatrixToLink -> {
                     val text = getString(R.string.invite_friends_text, it.link)
                     startSharePlainTextIntent(
                             fragment = this,

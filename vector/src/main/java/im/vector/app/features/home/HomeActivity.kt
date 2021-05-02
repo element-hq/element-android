@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -31,11 +32,13 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -47,6 +50,7 @@ import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
@@ -56,6 +60,10 @@ import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
+import im.vector.app.features.spaces.ShareSpaceBottomSheet
+import im.vector.app.features.spaces.SpaceCreationActivity
+import im.vector.app.features.spaces.SpacePreviewActivity
+import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
@@ -81,6 +89,7 @@ class HomeActivity :
         ToolbarConfigurable,
         UnknownDeviceDetectorSharedViewModel.Factory,
         ServerBackupStatusViewModel.Factory,
+        UnreadMessagesSharedViewModel.Factory,
         NavigationInterceptor {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -99,9 +108,34 @@ class HomeActivity :
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
     @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
+    @Inject lateinit var unreadMessagesSharedViewModelFactory: UnreadMessagesSharedViewModel.Factory
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
+    @Inject lateinit var appStateHandler: AppStateHandler
+
+    private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val spaceId = SpaceCreationActivity.getCreatedSpaceId(activityResult.data)
+            val defaultRoomId = SpaceCreationActivity.getDefaultRoomId(activityResult.data)
+            val isJustMe = SpaceCreationActivity.isJustMeSpace(activityResult.data)
+            views.drawerLayout.closeDrawer(GravityCompat.START)
+
+            val postSwitchOption: Navigator.PostSwitchSpaceAction = if (defaultRoomId != null) {
+                Navigator.PostSwitchSpaceAction.OpenDefaultRoom(defaultRoomId, !isJustMe)
+            } else if (isJustMe) {
+                Navigator.PostSwitchSpaceAction.OpenAddExistingRooms
+            } else {
+                Navigator.PostSwitchSpaceAction.None
+            }
+            // Here we want to change current space to the newly created one, and then immediately open the default room
+            if (spaceId != null) {
+                navigator.switchToSpace(context = this,
+                        spaceId = spaceId,
+                        postSwitchOption)
+            }
+        }
+    }
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -123,15 +157,24 @@ class HomeActivity :
         return serverBackupviewModelFactory.create(initialState)
     }
 
+    override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel {
+        return unreadMessagesSharedViewModelFactory.create(initialState)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            replaceFragment(R.id.homeDetailFragmentContainer, LoadingFragment::class.java)
+            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
             replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
+
+//        appStateHandler.selectedRoomGroupingObservable.subscribe {
+//            if (supportFragmentManager.getFragment())
+//            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+//        }.disposeOnDestroy()
 
         sharedActionViewModel
                 .observe()
@@ -141,7 +184,33 @@ class HomeActivity :
                         is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.OpenGroup -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
-                            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+
+                            // Temporary
+                            // When switching from space to group or group to space, we need to reload the fragment
+                            // To be removed when dropping legacy groups
+                            if (sharedAction.clearFragment) {
+                                replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+                            } else {
+                                // nop
+                            }
+                            // we might want to delay that to avoid having the drawer animation lagging
+                            // would be probably better to let the drawer do that? in the on closed callback?
+                        }
+                        is HomeActivitySharedAction.OpenSpacePreview -> {
+                            startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
+                        }
+                        is HomeActivitySharedAction.AddSpace -> {
+                            createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
+                        }
+                        is HomeActivitySharedAction.ShowSpaceSettings -> {
+                            // open bottom sheet
+                            SpaceSettingsMenuBottomSheet
+                                    .newInstance(sharedAction.spaceId, object : SpaceSettingsMenuBottomSheet.InteractionListener {
+                                        override fun onShareSpaceSelected(spaceId: String) {
+                                            ShareSpaceBottomSheet.show(supportFragmentManager, spaceId)
+                                        }
+                                    })
+                                    .show(supportFragmentManager, "SPACE_SETTINGS")
                         }
                     }.exhaustive
                 }
@@ -211,7 +280,7 @@ class HomeActivity :
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.initialSyncProgressServiceStatus) {
-            is InitialSyncProgressService.Status.Idle        -> {
+            is InitialSyncProgressService.Status.Idle -> {
                 views.waitingView.root.isVisible = false
             }
             is InitialSyncProgressService.Status.Progressing -> {
@@ -427,6 +496,23 @@ class HomeActivity :
             }
         }
         // TODO check if there is already one??
+        MatrixToBottomSheet.withLink(deepLink.toString(), listener)
+                .show(supportFragmentManager, "HA#MatrixToBottomSheet")
+        return true
+    }
+
+    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+        if (roomId == null) return false
+        val listener = object : MatrixToBottomSheet.InteractionListener {
+            override fun navigateToRoom(roomId: String) {
+                navigator.openRoom(this@HomeActivity, roomId)
+            }
+
+            override fun switchToSpace(spaceId: String) {
+                navigator.switchToSpace(this@HomeActivity, spaceId, Navigator.PostSwitchSpaceAction.None)
+            }
+        }
+
         MatrixToBottomSheet.withLink(deepLink.toString(), listener)
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true

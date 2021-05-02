@@ -73,7 +73,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 addDaySeparator
                         || event.senderInfo.avatarUrl != nextEvent?.senderInfo?.avatarUrl
                         || event.senderInfo.disambiguatedDisplayName != nextEvent?.senderInfo?.disambiguatedDisplayName
-                        || (nextEvent.root.getClearType() != EventType.MESSAGE && nextEvent.root.getClearType() != EventType.ENCRYPTED && nextEvent.root.getClearType() != EventType.STICKER)
+                        || nextEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED)
                         || isNextMessageReceivedMoreThanOneHourAgo
                         || isTileTypeMessage(nextEvent)
                         || nextEvent.isEdition()

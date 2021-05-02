@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.query
 
-import org.matrix.android.sdk.api.query.QueryStringValue
 import io.realm.Case
 import io.realm.RealmObject
 import io.realm.RealmQuery
+import org.matrix.android.sdk.api.query.QueryStringValue
 import timber.log.Timber
 
 fun <T : RealmObject> RealmQuery<T>.process(field: String, queryStringValue: QueryStringValue): RealmQuery<T> {

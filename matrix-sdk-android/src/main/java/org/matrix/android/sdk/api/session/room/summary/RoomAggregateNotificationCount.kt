@@ -22,7 +22,7 @@ data class RoomAggregateNotificationCount(
         val unreadCount: Int,
         val markedUnreadCount: Int
 ) {
-    val totalCount = notificationCount + highlightCount + markedUnreadCount
+    val totalCount = notificationCount + markedUnreadCount
     val isHighlight = highlightCount > 0
     val markedUnread = markedUnreadCount > 0
 }

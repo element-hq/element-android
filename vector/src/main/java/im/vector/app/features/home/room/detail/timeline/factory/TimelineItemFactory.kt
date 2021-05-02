@@ -72,6 +72,8 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.CALL_SELECT_ANSWER,
                 EventType.CALL_NEGOTIATE,
                 EventType.REACTION,
+                EventType.STATE_SPACE_CHILD,
+                EventType.STATE_SPACE_PARENT,
                 EventType.STATE_ROOM_POWER_LEVELS -> noticeItemFactory.create(params)
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(params)
