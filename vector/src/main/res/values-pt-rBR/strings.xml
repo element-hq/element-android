@@ -897,7 +897,7 @@
     <string name="room_settings_all_messages">Todas as mensagens novas</string>
     <string name="room_settings_mention_only">Apenas @menções</string>
     <string name="room_settings_mute">Silenciar</string>
-    <string name="room_settings_add_homescreen_shortcut">Adicionar o Element na tela inicial</string>
+    <string name="room_settings_add_homescreen_shortcut">Adicionar o SchildiChat na tela inicial</string>
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_containing_my_display_name">Mensagens que contenham o meu nome e sobrenome</string>
     <string name="settings_containing_my_user_name">Mensagens que contenham o meu nome de usuário</string>
@@ -1513,7 +1513,7 @@
     <string name="keys_backup_setup_backup_started_title">Começando o backup</string>
     <string name="keys_backup_setup_backup_started_message">O backup de suas chaves está sendo feito. O primeiro backup pode demorar vários minutos.</string>
     <string name="keys_backup_setup_skip_title">Você tem certeza\?</string>
-    <string name="keys_backup_setup_skip_msg">Você pode perder o acesso às suas mensagens se você sair do Element ou perder este aparelho.</string>
+    <string name="keys_backup_setup_skip_msg">Você pode perder o acesso às suas mensagens se você sair do SchildiChat ou perder este aparelho.</string>
     <string name="keys_backup_restore_is_getting_backup_version">Obtendo a versão do backup…</string>
     <string name="keys_backup_restore_with_passphrase">Use sua frase secreta de recuperação para desbloquear seu histórico de mensagens seguras</string>
     <string name="keys_backup_restore_use_recovery_key">use sua chave de recuperação</string>
@@ -1849,16 +1849,16 @@
     <string name="login_server_other_text">Configurações avançadas e preferências</string>
     <string name="login_continue">Continuar</string>
     <string name="login_connect_to">Conecte-se a %1$s</string>
-    <string name="login_connect_to_modular">Conecte-se aos serviços de Element no Matrix</string>
+    <string name="login_connect_to_modular">Conecte-se aos serviços de SchildiChat no Matrix</string>
     <string name="login_connect_to_a_custom_server">Conectar-se a um servidor personalizado</string>
     <string name="login_signin_to">Entrar com %1$s</string>
     <string name="login_signup">Cadastre-se</string>
     <string name="login_signin">Entrar</string>
     <string name="login_signin_sso">Continuar com ID único</string>
-    <string name="login_server_url_form_modular_hint">Endereço de serviço Element no Matrix</string>
+    <string name="login_server_url_form_modular_hint">Endereço de serviço SchildiChat no Matrix</string>
     <string name="login_server_url_form_other_hint">Endereço</string>
     <string name="login_server_url_form_modular_text">Hospedagem Premium para organizações</string>
-    <string name="login_server_url_form_modular_notice">Digite o endereço de Element Modular ou Servidor que você deseja usar</string>
+    <string name="login_server_url_form_modular_notice">Digite o endereço de SchildiChat Modular ou Servidor que você deseja usar</string>
     <string name="login_server_url_form_common_notice">Digite o endereço do servidor que você deseja usar</string>
     <string name="login_sso_error_message">Ocorreu um erro ao carregar a página: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">O aplicativo não pode entrar neste servidor. O servidor suporta os seguintes tipos de login: %1$s.
@@ -1919,7 +1919,7 @@
 \n
 \nCancelar o processo de registro\?</string>
     <string name="login_a11y_choose_matrix_org">Selecione matrix.org</string>
-    <string name="login_a11y_choose_modular">Selecione Element nos Serviços de Matrix</string>
+    <string name="login_a11y_choose_modular">Selecione SchildiChat nos Serviços de Matrix</string>
     <string name="login_a11y_choose_other">Selecione um servidor personalizado</string>
     <string name="login_a11y_captcha_container">Por favor, realize o desafio de Captcha</string>
     <string name="login_terms_title">Aceitar termos para continuar</string>
@@ -2359,7 +2359,7 @@
     <string name="crypto_error_withheld_unverified">Você não pode acessar esta mensagem porque a sessão não foi definida como confiável pelo remetente</string>
     <string name="crypto_error_withheld_generic">Você não pode acessar esta mensagem porque o remetente intencionalmente não enviou as chaves</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Aguardando o histórico de criptografia</string>
-    <string name="disclaimer_title">Riot agora é Element!</string>
+    <string name="disclaimer_title">Riot agora é SchildiChat!</string>
     <string name="disclaimer_content">Estamos felizes em anunciar que mudamos de nome! Seu aplicativo está atualizado e você está conectado à sua conta.</string>
     <string name="disclaimer_negative_button">OK, ENTENDI</string>
     <string name="disclaimer_positive_button">APRENDA MAIS</string>
@@ -2476,7 +2476,7 @@
 \n
 \nSuas mensagens estão protegidas, pois só você e seu contato têm as chaves únicas para desbloqueá-las.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">As mensagens nesta sala não estão criptografadas de ponta a ponta.</string>
-    <string name="login_error_outdated_homeserver_warning_content">Este servidor local está executando uma versão antiga do Element. Peça ao administrador do servidor para atualizá-lo. Você pode prosseguir, mas alguns recursos poderão não funcionar corretamente.</string>
+    <string name="login_error_outdated_homeserver_warning_content">Este servidor local está executando uma versão antiga do SchildiChat. Peça ao administrador do servidor para atualizá-lo. Você pode prosseguir, mas alguns recursos poderão não funcionar corretamente.</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">Exibir histórico completo em salas criptografadas</string>
     <string name="notification_unread_notified_messages_and_invitation">%1$s e %2$s</string>
     <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s em %2$s e %3$s</string>

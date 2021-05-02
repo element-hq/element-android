@@ -1160,7 +1160,7 @@
     <string name="settings_show_avatar_display_name_changes_messages">Mostra i cambiamenti degli account</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Includi cambiamenti dell\'avatar e del nome visualizzato.</string>
     <string name="settings_password">Password</string>
-    <string name="settings_labs_native_camera_summary">Avvia la fotocamera di sistema invece della fotocamera di Element.</string>
+    <string name="settings_labs_native_camera_summary">Avvia la fotocamera di sistema invece della fotocamera di SchildiChat.</string>
     <string name="settings_labs_enable_send_voice_summary">Questa opzione richiede un\'applicazione di terze parti per registrare i messaggi.</string>
     <string name="command_problem_with_parameters">Il comando \"%s\" necessita di più parametri, oppure alcuni parametri non sono corretti.</string>
     <string name="markdown_has_been_enabled">Markdown è stato abilitato.</string>
@@ -1219,7 +1219,7 @@
     <string name="settings_troubleshoot_test_service_boot_success">Il servizio inizierà quando il dispositivo sarà riavviato.</string>
     <string name="template_settings_troubleshoot_test_service_boot_failed">Il servizio non partirà al riavvio del dispositivo. Non riceverai notifiche finché ${app_name} non verrà aperto almeno una volta.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Abilita l\'esecuzione all\'avvio</string>
-    <string name="settings_troubleshoot_test_bg_restricted_title">Verifica se Element sia stato configurato per funzionare in modo limitato quando lavora in background</string>
+    <string name="settings_troubleshoot_test_bg_restricted_title">Verifica se SchildiChat sia stato configurato per funzionare in modo limitato quando lavora in background</string>
     <string name="template_settings_troubleshoot_test_bg_restricted_success">${app_name} non funziona senza alcuna restrizione anche quando è eseguito in background. Questo test andrebbe eseguito usando dati mobili (non WIFI).
 \n%1$s</string>
     <string name="template_settings_troubleshoot_test_bg_restricted_failed">${app_name} è stato configurato per funzionare in modo limitato quando è eseguito in background.
@@ -1647,7 +1647,7 @@
     <string name="settings_discovery_disconnect_with_bound_pid">In questo momento stai condividendo i tuoi indirizzi email o numeri di telefono sull\'Identity Server %1$s. Dovrai riconnetterti a %2$s per interromperne la condivisione.</string>
     <string name="settings_agree_to_terms">Accetta i termini di servizio dell\'Identity Server (%s) per permettere ad altri utenti di trovarti tramite la tua email o numero di telefono.</string>
     <string name="labs_allow_extended_logging">Attiva i log dettagliati.</string>
-    <string name="labs_allow_extended_logging_summary">I log dettagliati aiuteranno gli sviluppatori fornendo loro molte più informazioni nelle segnalazioni che invii scuotendo il dispositivo. Anche se attivi i log dettagliati, Element non registra mai i contenuti dei messaggi o altri dati personali.</string>
+    <string name="labs_allow_extended_logging_summary">I log dettagliati aiuteranno gli sviluppatori fornendo loro molte più informazioni nelle segnalazioni che invii scuotendo il dispositivo. Anche se attivi i log dettagliati, SchildiChat non registra mai i contenuti dei messaggi o altri dati personali.</string>
     <string name="error_terms_not_accepted">Riprova dopo avere accettato i termini di servizio del tuo Home Server.</string>
     <string name="error_network_timeout">Sembra che il server stia impiegando troppo tempo a rispondere. Ciò può essere causato da una cattiva connessione o da un errore del server. Riprova fra qualche minuto.</string>
     <string name="send_attachment">Invia allegato</string>
@@ -1768,7 +1768,7 @@
     <string name="login_server_url_form_modular_hint">Indirizzo Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Indirizzo</string>
     <string name="login_server_url_form_modular_text">Hosting premium per organizzazioni</string>
-    <string name="login_server_url_form_modular_notice">Inserisci l\'indirizzo del Element Modular o del server che vuoi usare</string>
+    <string name="login_server_url_form_modular_notice">Inserisci l\'indirizzo del SchildiChat Modular o del server che vuoi usare</string>
     <string name="login_sso_error_message">Si è verificato un errore caricando la pagina: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">L\'applicazione non riesce ad accedere a questo homeserver. L\'homeserver supporta i seguenti tipi di accesso: %1$s.
 \n
@@ -2352,7 +2352,7 @@
     <string name="crypto_error_withheld_unverified">Non puoi accedere a questo messaggio perché la tua sessione non è fidata dal mittente</string>
     <string name="crypto_error_withheld_generic">Non puoi accedere a questo messaggio perché il mittente non ha inviato le chiavi di proposito</string>
     <string name="notice_crypto_unable_to_decrypt_merged">In attesa della cronologia di crittografia</string>
-    <string name="disclaimer_title">Riot ora si chiama Element!</string>
+    <string name="disclaimer_title">Riot ora si chiama SchildiChat!</string>
     <string name="disclaimer_content">Siamo entusiasti di annunciare che abbiamo cambiato nome! La tua app è aggiornata e hai fatto l\'accesso al tuo account.</string>
     <string name="disclaimer_negative_button">CAPITO</string>
     <string name="disclaimer_positive_button">MAGGIORI INFO</string>
