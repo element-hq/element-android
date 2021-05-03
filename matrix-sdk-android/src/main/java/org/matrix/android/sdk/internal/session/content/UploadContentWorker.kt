@@ -389,9 +389,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 videoInfo = videoInfo?.copy(
                         thumbnailUrl = if (thumbnailEncryptedFileInfo == null) thumbnailUrl else null,
                         thumbnailFile = thumbnailEncryptedFileInfo?.copy(url = thumbnailUrl),
-                        // FIXME for now, the video size is not updated, but if it was, this code is not working.
-                        // width = newAttachmentAttributes?.newWidth ?: videoInfo.width,
-                        // height = newAttachmentAttributes?.newHeight ?: videoInfo.height,
+                        width = newAttachmentAttributes?.newWidth ?: videoInfo.width,
+                        height = newAttachmentAttributes?.newHeight ?: videoInfo.height,
                         size = newAttachmentAttributes?.newFileSize ?: videoInfo.size
                 )
         )
