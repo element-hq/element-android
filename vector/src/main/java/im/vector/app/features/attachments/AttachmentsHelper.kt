@@ -77,10 +77,10 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     }
 
     /**
-     * Starts the process for handling image picking
+     * Starts the process for handling image/video picking
      */
     fun selectGallery(activityResultLauncher: ActivityResultLauncher<Intent>) {
-        MultiPicker.get(MultiPicker.IMAGE).startWith(activityResultLauncher)
+        MultiPicker.get(MultiPicker.MEDIA).startWith(activityResultLauncher)
     }
 
     /**
@@ -133,9 +133,9 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                 }
     }
 
-    fun onImageResult(data: Intent?) {
+    fun onMediaResult(data: Intent?) {
         callback.onContentAttachmentsReady(
-                MultiPicker.get(MultiPicker.IMAGE)
+                MultiPicker.get(MultiPicker.MEDIA)
                         .getSelectedFiles(context, data)
                         .map { it.toContentAttachmentData() }
         )

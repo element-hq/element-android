@@ -988,9 +988,9 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val attachmentImageActivityResultLauncher = registerStartForActivityResult {
+    private val attachmentMediaActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onImageResult(it.data)
+            attachmentsHelper.onMediaResult(it.data)
         }
     }
 
@@ -1991,7 +1991,7 @@ class RoomDetailFragment @Inject constructor(
         when (type) {
             AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(requireContext(), attachmentPhotoActivityResultLauncher)
             AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentImageActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)

@@ -20,6 +20,7 @@ class MultiPicker<T> {
 
     companion object Type {
         val IMAGE by lazy { MultiPicker<ImagePicker>() }
+        val MEDIA by lazy { MultiPicker<MediaPicker>() }
         val FILE by lazy { MultiPicker<FilePicker>() }
         val VIDEO by lazy { MultiPicker<VideoPicker>() }
         val AUDIO by lazy { MultiPicker<AudioPicker>() }
@@ -31,6 +32,7 @@ class MultiPicker<T> {
             return when (type) {
                 IMAGE   -> ImagePicker() as T
                 VIDEO   -> VideoPicker() as T
+                MEDIA   -> MediaPicker() as T
                 FILE    -> FilePicker() as T
                 AUDIO   -> AudioPicker() as T
                 CONTACT -> ContactPicker() as T
