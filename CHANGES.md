@@ -10,6 +10,7 @@ Improvements 🙌:
  - Compress video before sending (#442)
  - Improve file too big error detection (#3245)
  - User can now select video when selecting Gallery to send attachments to a room
+ - Add option to record a video from the camera
 
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)

@@ -26,6 +26,7 @@ class MultiPicker<T> {
         val AUDIO by lazy { MultiPicker<AudioPicker>() }
         val CONTACT by lazy { MultiPicker<ContactPicker>() }
         val CAMERA by lazy { MultiPicker<CameraPicker>() }
+        val CAMERA_VIDEO by lazy { MultiPicker<CameraVideoPicker>() }
 
         @Suppress("UNCHECKED_CAST")
         fun <T> get(type: MultiPicker<T>): T {
@@ -37,6 +38,7 @@ class MultiPicker<T> {
                 AUDIO   -> AudioPicker() as T
                 CONTACT -> ContactPicker() as T
                 CAMERA  -> CameraPicker() as T
+                CAMERA_VIDEO  -> CameraVideoPicker() as T
                 else    -> throw IllegalArgumentException("Unsupported type $type")
             }
         }

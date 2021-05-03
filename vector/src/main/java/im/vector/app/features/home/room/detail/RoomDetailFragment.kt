@@ -994,9 +994,15 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val attachmentPhotoActivityResultLauncher = registerStartForActivityResult {
+    private val attachmentCameraActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onPhotoResult()
+            attachmentsHelper.onCameraResult()
+        }
+    }
+
+    private val attachmentCameraVideoActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onCameraVideoResult()
         }
     }
 
@@ -1989,7 +1995,12 @@ class RoomDetailFragment @Inject constructor(
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(requireContext(), attachmentPhotoActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(
+                    activity = requireActivity(),
+                    vectorPreferences = vectorPreferences,
+                    cameraActivityResultLauncher = attachmentCameraActivityResultLauncher,
+                    cameraVideoActivityResultLauncher = attachmentCameraVideoActivityResultLauncher
+            )
             AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
             AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
