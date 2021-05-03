@@ -18,12 +18,12 @@ package im.vector.lib.multipicker
 
 import android.content.Context
 import android.content.Intent
-import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
+import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -54,52 +54,7 @@ class CameraVideoPicker {
      * or user cancelled the operation.
      */
     fun getTakenVideo(context: Context, videoUri: Uri): MultiPickerVideoType? {
-        val projection = arrayOf(
-                MediaStore.Images.Media.DISPLAY_NAME,
-                MediaStore.Images.Media.SIZE,
-                MediaStore.Images.Media.MIME_TYPE
-        )
-
-        context.contentResolver.query(
-                videoUri,
-                projection,
-                null,
-                null,
-                null
-        )?.use { cursor ->
-            val nameColumn = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
-            val sizeColumn = cursor.getColumnIndex(MediaStore.Images.Media.SIZE)
-
-            if (cursor.moveToNext()) {
-                val name = cursor.getString(nameColumn)
-                val size = cursor.getLong(sizeColumn)
-                var duration = 0L
-                var width = 0
-                var height = 0
-                var orientation = 0
-
-                context.contentResolver.openFileDescriptor(videoUri, "r")?.use { pfd ->
-                    val mediaMetadataRetriever = MediaMetadataRetriever()
-                    mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
-                    duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
-                    width = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt() ?: 0
-                    height = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt() ?: 0
-                    orientation = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toInt() ?: 0
-                }
-
-                return MultiPickerVideoType(
-                        name,
-                        size,
-                        context.contentResolver.getType(videoUri),
-                        videoUri,
-                        width,
-                        height,
-                        orientation,
-                        duration
-                )
-            }
-        }
-        return null
+        return videoUri.toMultiPickerVideoType(context)
     }
 
     private fun createIntent(): Intent {

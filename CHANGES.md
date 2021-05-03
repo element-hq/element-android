@@ -22,6 +22,7 @@ Bugfix 🐛:
  - Fix wording issue (#3242)
  - Fix missing sender information after edits (#3184)
  - Fix read marker not updating automatically (#3267)
+ - Sent video does not contains duration (#3272)
 
 Translations 🗣:
  -

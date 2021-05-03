@@ -70,6 +70,16 @@ private fun MultiPickerBaseType.mapType(): ContentAttachmentData.Type {
     }
 }
 
+fun MultiPickerBaseType.toContentAttachmentData(): ContentAttachmentData {
+    return when (this) {
+        is MultiPickerImageType -> toContentAttachmentData()
+        is MultiPickerVideoType -> toContentAttachmentData()
+        is MultiPickerAudioType -> toContentAttachmentData()
+        is MultiPickerFileType  -> toContentAttachmentData()
+        else                    -> throw IllegalStateException("Unknown file type")
+    }
+}
+
 fun MultiPickerBaseMediaType.toContentAttachmentData(): ContentAttachmentData {
     return when (this) {
         is MultiPickerImageType -> toContentAttachmentData()
