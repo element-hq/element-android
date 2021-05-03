@@ -972,7 +972,7 @@ class RoomDetailFragment @Inject constructor(
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onImageResult(it.data)
+            attachmentsHelper.onFileResult(it.data)
         }
     }
 
