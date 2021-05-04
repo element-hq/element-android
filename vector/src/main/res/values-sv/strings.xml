@@ -2709,4 +2709,21 @@
     <string name="spaces_header">Utrymmen</string>
     <string name="spaces_invited_header">Inbjudningar</string>
     <string name="suggested_header">Föreslagna rum</string>
+    <string name="invite_to_space_with_name">Bjud in till %s</string>
+    <string name="invite_by_link">Dela länk</string>
+    <string name="invite_by_mxid">Bjud in med användarnamn</string>
+    <string name="invite_by_email">Bjud in via e-post</string>
+    <string name="invite_people_to_your_space_desc">Det är bara du här för tillfället. %s kommer att vara ännu bättre med fler.</string>
+    <string name="invite_people_to_your_space">Bjud in personer till ditt utrymme</string>
+    <string name="invite_people_menu">Bjud in personer</string>
+    <string name="create_space_topic_hint">Beskrivning</string>
+    <string name="create_spaces_loading_message">Skapar utrymme…</string>
+    <string name="create_spaces_default_public_random_room_name">Slumpmässigt</string>
+    <string name="create_spaces_default_public_room_name">Allmänt</string>
+    <string name="create_spaces_room_private_header_desc">Låt oss skapa ett rum för varje. Du kan lägga till fler senare också, även redan existerande.</string>
+    <string name="create_spaces_room_private_header">Vad för saker jobbar du med\?</string>
+    <string name="create_spaces_room_public_header_desc">Vi kommer att skapa rum för dem. Du kan lägga till fler senare.</string>
+    <string name="create_spaces_room_public_header">Vad är några diskussioner du vill ha i %s\?</string>
+    <string name="create_space_error_empty_field_space_name">Ge det ett namn för att fortsätta.</string>
+    <string name="create_spaces_details_private_header">Lägg till några detaljer för att hjälpa folk att identifiera det. Du kan ändra dessa när som helst.</string>
 </resources>
