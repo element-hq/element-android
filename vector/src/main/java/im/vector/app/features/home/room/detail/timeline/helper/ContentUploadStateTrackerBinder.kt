@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
@@ -126,12 +127,15 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
     }
 
+    // Add SuppressLint to fix a false positive
+    @SuppressLint("StringFormatMatches")
     private fun handleCompressingVideo(state: ContentUploadStateTracker.State.CompressingVideo) {
         progressLayout.visibility = View.VISIBLE
         progressBar.isVisible = true
         progressBar.isIndeterminate = false
         progressBar.progress = state.percent.toInt()
         progressTextView.isVisible = true
+        // False positive is here...
         progressTextView.text = progressLayout.context.getString(R.string.send_file_step_compressing_video, state.percent.toInt())
         progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
     }
