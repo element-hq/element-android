@@ -33,6 +33,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.format.EventDetailsFormatter
 import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
@@ -53,6 +54,7 @@ class MessageActionsEpoxyController @Inject constructor(
         private val imageContentRenderer: ImageContentRenderer,
         private val dimensionConverter: DimensionConverter,
         private val errorFormatter: ErrorFormatter,
+        private val eventDetailsFormatter: EventDetailsFormatter,
         private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<MessageActionState>() {
 
@@ -71,6 +73,7 @@ class MessageActionsEpoxyController @Inject constructor(
             data(state.timelineEvent()?.buildImageContentRendererData(dimensionConverter.dpToPx(66)))
             userClicked { listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
             body(state.messageBody.linkify(listener))
+            bodyDetails(eventDetailsFormatter.format(state.timelineEvent()?.root))
             time(formattedDate)
         }
 
