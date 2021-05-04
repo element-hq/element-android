@@ -23,6 +23,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -36,9 +39,6 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -84,11 +84,11 @@ class SpaceHierarchyTest : InstrumentedTest {
         }
 
         assertNotNull(parents)
-        assertEquals(1, parents.size)
+        assertEquals(1, parents!!.size)
         assertEquals(spaceName, parents.first().roomSummary?.name)
 
         assertNotNull(canonicalParents)
-        assertEquals(1, canonicalParents.size)
+        assertEquals(1, canonicalParents!!.size)
         assertEquals(spaceName, canonicalParents.first().roomSummary?.name)
     }
 
@@ -133,9 +133,9 @@ class SpaceHierarchyTest : InstrumentedTest {
             val canonicalParents = session.getRoom(it.first)?.roomSummary()?.spaceParents?.filter { it.canonical == true }
 
             assertNotNull(parents)
-            assertEquals(1, parents.size, "Unexpected number of parent")
-            assertEquals(spaceName, parents.first().roomSummary?.name, "Unexpected parent name ")
-            assertEquals(if (it.second) 1 else 0, canonicalParents?.size ?: 0, "Parent of ${it.first} should be canonical ${it.second}")
+            assertEquals("Unexpected number of parent", 1, parents!!.size)
+            assertEquals("Unexpected parent name", spaceName, parents.first().roomSummary?.name)
+            assertEquals("Parent of ${it.first} should be canonical ${it.second}", if (it.second) 1 else 0, canonicalParents?.size ?: 0)
         }
     }
 
@@ -178,21 +178,21 @@ class SpaceHierarchyTest : InstrumentedTest {
 
         val allRooms = session.getRoomSummaries(roomSummaryQueryParams { excludeType = listOf(RoomType.SPACE) })
 
-        assertEquals(9, allRooms.size, "Unexpected number of rooms")
+        assertEquals("Unexpected number of rooms", 9, allRooms.size)
 
         val orphans = session.getFlattenRoomSummaryChildrenOf(null)
 
-        assertEquals(2, orphans.size, "Unexpected number of orphan rooms")
-        assertTrue(orphans.indexOfFirst { it.roomId == orphan1 } != -1, "O1 should be an orphan")
-        assertTrue(orphans.indexOfFirst { it.roomId == orphan2 } != -1, "O2 should be an orphan ${orphans.map { it.name }}")
+        assertEquals("Unexpected number of orphan rooms", 2, orphans.size)
+        assertTrue("O1 should be an orphan", orphans.any { it.roomId == orphan1 })
+        assertTrue("O2 should be an orphan ${orphans.map { it.name }}", orphans.any { it.roomId == orphan2 })
 
         val aChildren = session.getFlattenRoomSummaryChildrenOf(spaceAInfo.spaceId)
 
-        assertEquals(4, aChildren.size, "Unexpected number of flatten child rooms")
-        assertTrue(aChildren.indexOfFirst { it.name == "A1" } != -1, "A1 should be a child of A")
-        assertTrue(aChildren.indexOfFirst { it.name == "A2" } != -1, "A2 should be a child of A")
-        assertTrue(aChildren.indexOfFirst { it.name == "C1" } != -1, "CA should be a grand child of A")
-        assertTrue(aChildren.indexOfFirst { it.name == "C2" } != -1, "A1 should be a grand child of A")
+        assertEquals("Unexpected number of flatten child rooms", 4, aChildren.size)
+        assertTrue("A1 should be a child of A", aChildren.any { it.name == "A1" })
+        assertTrue("A2 should be a child of A", aChildren.any { it.name == "A2" })
+        assertTrue("CA should be a grand child of A", aChildren.any { it.name == "C1" })
+        assertTrue("A1 should be a grand child of A", aChildren.any { it.name == "C2" })
 
         // Add a non canonical child and check that it does not appear as orphan
         val a3 = runBlocking {
@@ -205,7 +205,7 @@ class SpaceHierarchyTest : InstrumentedTest {
         }
 
         val orphansUpdate = session.getFlattenRoomSummaryChildrenOf(null)
-        assertEquals(2, orphansUpdate.size, "Unexpected number of orphan rooms ${orphansUpdate.map { it.name }}")
+        assertEquals("Unexpected number of orphan rooms ${orphansUpdate.map { it.name }}", 2, orphansUpdate.size)
     }
 
     @Test
@@ -242,11 +242,11 @@ class SpaceHierarchyTest : InstrumentedTest {
 
         val aChildren = session.getFlattenRoomSummaryChildrenOf(spaceAInfo.spaceId)
 
-        assertEquals(4, aChildren.size, "Unexpected number of flatten child rooms ${aChildren.map { it.name }}")
-        assertTrue(aChildren.indexOfFirst { it.name == "A1" } != -1, "A1 should be a child of A")
-        assertTrue(aChildren.indexOfFirst { it.name == "A2" } != -1, "A2 should be a child of A")
-        assertTrue(aChildren.indexOfFirst { it.name == "C1" } != -1, "CA should be a grand child of A")
-        assertTrue(aChildren.indexOfFirst { it.name == "C2" } != -1, "A1 should be a grand child of A")
+        assertEquals("Unexpected number of flatten child rooms ${aChildren.map { it.name }}", 4, aChildren.size)
+        assertTrue("A1 should be a child of A", aChildren.any { it.name == "A1" })
+        assertTrue("A2 should be a child of A", aChildren.any { it.name == "A2" })
+        assertTrue("CA should be a grand child of A", aChildren.any { it.name == "C1" })
+        assertTrue("A1 should be a grand child of A", aChildren.any { it.name == "C2" })
     }
 
     @Test
@@ -282,9 +282,7 @@ class SpaceHierarchyTest : InstrumentedTest {
                 override fun onChanged(children: List<RoomSummary>?) {
 //                    Log.d("## TEST", "Space A flat children update : ${children?.map { it.name }}")
                     System.out.println("## TEST | Space A flat children update : ${children?.map { it.name }}")
-                    if (children?.indexOfFirst { it.name == "C1" } != -1
-                            && children?.indexOfFirst { it.name == "C2" } != -1
-                    ) {
+                    if (children?.any { it.name == "C1" } == true && children.any { it.name == "C2" }) {
                         // B1 has been added live!
                         latch.countDown()
                         flatAChildren.removeObserver(this)
@@ -409,6 +407,6 @@ class SpaceHierarchyTest : InstrumentedTest {
 
         val rootSpaces = session.spaceService().getRootSpaceSummaries()
 
-        assertEquals(2, rootSpaces.size, "Unexpected number of root spaces ${rootSpaces.map { it.name }}")
+        assertEquals("Unexpected number of root spaces ${rootSpaces.map { it.name }}", 2, rootSpaces.size)
     }
 }

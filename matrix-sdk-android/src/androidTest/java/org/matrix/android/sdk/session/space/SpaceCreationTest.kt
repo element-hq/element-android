@@ -18,6 +18,8 @@ package org.matrix.android.sdk.session.space
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,8 +44,6 @@ import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -68,8 +68,8 @@ class SpaceCreationTest : InstrumentedTest {
         assertEquals(topic, syncedSpace?.asRoom()?.roomSummary()?.topic, "Room topic should be set")
         // assertEquals(topic, syncedSpace.asRoom().roomSummary()?., "Room topic should be set")
 
-        assertNotNull(syncedSpace, "Space should be found by Id")
-        val creationEvent = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_CREATE)
+        assertNotNull("Space should be found by Id", syncedSpace)
+        val creationEvent = syncedSpace!!.asRoom().getStateEvent(EventType.STATE_ROOM_CREATE)
         val createContent = creationEvent?.content.toModel<RoomCreateContent>()
         assertEquals(RoomType.SPACE, createContent?.type, "Room type should be space")
 
@@ -81,17 +81,17 @@ class SpaceCreationTest : InstrumentedTest {
                 toModel != null
             }
         }
-        assertEquals(100, powerLevelsContent?.eventsDefault, "Space-rooms should be created with a power level for events_default of 100")
+        assertEquals("Space-rooms should be created with a power level for events_default of 100", 100, powerLevelsContent?.eventsDefault)
 
         val guestAccess = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_GUEST_ACCESS)?.content
                 ?.toModel<RoomGuestAccessContent>()?.guestAccess
 
-        assertEquals(GuestAccess.CanJoin, guestAccess, "Public space room should be peekable by guest")
+        assertEquals("Public space room should be peekable by guest", GuestAccess.CanJoin, guestAccess)
 
         val historyVisibility = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY)?.content
                 ?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility
 
-        assertEquals(RoomHistoryVisibility.WORLD_READABLE, historyVisibility, "Public space room should be world readable")
+        assertEquals("Public space room should be world readable", RoomHistoryVisibility.WORLD_READABLE, historyVisibility)
 
         commonTestHelper.signOutAndClose(session)
     }
@@ -178,7 +178,7 @@ class SpaceCreationTest : InstrumentedTest {
         // check if bob has joined automatically the first room
 
         val bobMembershipFirstRoom = bobSession.getRoom(firstChild)?.roomSummary()?.membership
-        assertEquals(Membership.JOIN, bobMembershipFirstRoom, "Bob should have joined this room")
+        assertEquals("Bob should have joined this room", Membership.JOIN, bobMembershipFirstRoom)
         RoomSummaryQueryParams.Builder()
 
         val spaceSummaryBobPov = bobSession.spaceService().getSpaceSummaries(roomSummaryQueryParams {
@@ -186,7 +186,7 @@ class SpaceCreationTest : InstrumentedTest {
             this.memberships = listOf(Membership.JOIN)
         }).firstOrNull()
 
-        assertEquals(2, spaceSummaryBobPov?.spaceChildren?.size ?: -1, "Unexpected number of children")
+        assertEquals("Unexpected number of children", 2, spaceSummaryBobPov?.spaceChildren?.size ?: -1)
 
         commonTestHelper.signOutAndClose(aliceSession)
         commonTestHelper.signOutAndClose(bobSession)
