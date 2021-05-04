@@ -358,7 +358,7 @@
     <string name="black_theme">Melna tēma</string>
     <string name="notification_sync_in_progress">Sinhronizācija…</string>
     <string name="notification_listening_for_events">Notikumu monitorings</string>
-    <string name="notification_noisy_notifications">Skaņi paziņojumi</string>
+    <string name="notification_noisy_notifications">Skaņas paziņojumi</string>
     <string name="notification_silent_notifications">Klusi paziņojumi</string>
     <string name="title_activity_bug_report">Kļūdas atskaite</string>
     <string name="title_activity_group_details">Kopienas informācija</string>
@@ -1749,7 +1749,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \n
 \nMēs iesakām jums nekavējoties nomainīt paroli un atiestatīšanas atslēgu iestatījumos.</string>
     <string name="refresh">Atsvaidzināt</string>
-    <string name="share_confirm_room">Vai vēlaties sūtīt šo pielikumu uz %1$s\?</string>
+    <string name="share_confirm_room">Vai vēlaties sūtīt šo pielikumu %1$s\?</string>
     <string name="enter_secret_storage_passphrase_warning">Brīdinājums:</string>
     <string name="new_signin">Jauna pierakstīšanās</string>
     <string name="settings_account_data">Konta dati</string>
