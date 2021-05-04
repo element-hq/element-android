@@ -2748,4 +2748,5 @@
     <string name="room_settings_guest_access_title">Gäste erlauben beizutreten</string>
     <string name="spaces_invited_header">Einladungen</string>
     <string name="suggested_header">Vorgeschlagene Räume</string>
+    <string name="spaces_header">Spaces</string>
 </resources>
