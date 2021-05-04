@@ -392,7 +392,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 info = info?.copy(
                         width = newAttachmentAttributes?.newWidth ?: info.width,
                         height = newAttachmentAttributes?.newHeight ?: info.height,
-                        size = newAttachmentAttributes?.newFileSize?.toInt() ?: info.size
+                        size = newAttachmentAttributes?.newFileSize ?: info.size
                 )
         )
     }

@@ -40,7 +40,7 @@ data class ImageInfo(
         /**
          * Size of the image in bytes.
          */
-        @Json(name = "size") val size: Int = 0,
+        @Json(name = "size") val size: Long = 0,
 
         /**
          * Metadata about the image referred to in thumbnail_url.
