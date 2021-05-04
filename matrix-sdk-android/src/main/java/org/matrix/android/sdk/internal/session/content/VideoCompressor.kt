@@ -17,9 +17,8 @@
 package org.matrix.android.sdk.internal.session.content
 
 import android.content.Context
-import com.abedelazizshe.lightcompressorlibrary.CompressionListener
-import com.abedelazizshe.lightcompressorlibrary.VideoCompressor
-import com.abedelazizshe.lightcompressorlibrary.VideoQuality
+import com.otaliastudios.transcoder.Transcoder
+import com.otaliastudios.transcoder.TranscoderListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
@@ -31,51 +30,39 @@ import javax.inject.Inject
 
 internal class VideoCompressor @Inject constructor(private val context: Context) {
     suspend fun compress(videoFile: File,
-                         progressListener: ProgressListener?,
-                         quality: VideoQuality = VideoQuality.MEDIUM,
-                         isMinBitRateEnabled: Boolean = false,
-                         keepOriginalResolution: Boolean = true): File {
+                         progressListener: ProgressListener?): File {
         return withContext(Dispatchers.IO) {
             val job = Job()
             val destinationFile = createDestinationFile()
 
-            // Sadly it does not return the Job, the API is not ideal
-            VideoCompressor.start(
-                    context = null,
-                    srcUri = null,
-                    srcPath = videoFile.path,
-                    destPath = destinationFile.path,
-                    listener = object : CompressionListener {
-                        override fun onProgress(percent: Float) {
-                            Timber.d("Compressing: $percent%")
-                            progressListener?.onProgress(percent.toInt(), 100)
+            Timber.d("Compressing: start")
+            progressListener?.onProgress(0, 100)
+
+            Transcoder.into(destinationFile.path)
+                    .addDataSource(videoFile.path)
+                    .setListener(object: TranscoderListener {
+                        override fun onTranscodeProgress(progress: Double) {
+                            Timber.d("Compressing: $progress%")
+                            progressListener?.onProgress((progress * 100).toInt(), 100)
                         }
 
-                        override fun onStart() {
-                            Timber.d("Compressing: start")
-                            progressListener?.onProgress(0, 100)
-                        }
-
-                        override fun onSuccess() {
+                        override fun onTranscodeCompleted(successCode: Int) {
                             Timber.d("Compressing: success")
                             progressListener?.onProgress(100, 100)
                             job.complete()
                         }
 
-                        override fun onFailure(failureMessage: String) {
-                            Timber.d("Compressing: failure: $failureMessage")
-                            job.completeExceptionally(Exception(failureMessage))
-                        }
-
-                        override fun onCancelled() {
+                        override fun onTranscodeCanceled() {
                             Timber.d("Compressing: cancel")
                             job.cancel()
                         }
-                    },
-                    quality = quality,
-                    isMinBitRateEnabled = isMinBitRateEnabled,
-                    keepOriginalResolution = keepOriginalResolution
-            )
+
+                        override fun onTranscodeFailed(exception: Throwable) {
+                            Timber.d("Compressing: failure: ${exception.localizedMessage}")
+                            job.completeExceptionally(exception)
+                        }
+                    })
+                    .transcode()
 
             job.join()
             destinationFile

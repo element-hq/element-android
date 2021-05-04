@@ -48,8 +48,6 @@ allprojects {
                 // Chat effects
                 includeGroupByRegex 'com\\.github\\.jetradarmobile'
                 includeGroupByRegex 'nl\\.dionsegijn'
-                // LightCompressor
-                includeGroupByRegex 'com\\.github\\.AbedElazizShe'
             }
         }
         maven {
