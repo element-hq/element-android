@@ -1,0 +1,2 @@
+Disse nije ferzje bestjit foar in grut diel út brûkersinterfaasje en brûkersûnderfingsferbetteringen. No kinst freonen útnûgje, en gau DM's meitsje troch QR koades te scannen.
+Folsleine feroaringslist: https://github.com/vector-im/element-android/releases/tag/v1.0.11
