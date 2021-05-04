@@ -31,42 +31,43 @@ import javax.inject.Inject
 internal class VideoCompressor @Inject constructor(private val context: Context) {
     suspend fun compress(videoFile: File,
                          progressListener: ProgressListener?): File {
-        return withContext(Dispatchers.IO) {
-            val job = Job()
-            val destinationFile = createDestinationFile()
-
-            Timber.d("Compressing: start")
-            progressListener?.onProgress(0, 100)
-
-            Transcoder.into(destinationFile.path)
-                    .addDataSource(videoFile.path)
-                    .setListener(object: TranscoderListener {
-                        override fun onTranscodeProgress(progress: Double) {
-                            Timber.d("Compressing: $progress%")
-                            progressListener?.onProgress((progress * 100).toInt(), 100)
-                        }
-
-                        override fun onTranscodeCompleted(successCode: Int) {
-                            Timber.d("Compressing: success")
-                            progressListener?.onProgress(100, 100)
-                            job.complete()
-                        }
-
-                        override fun onTranscodeCanceled() {
-                            Timber.d("Compressing: cancel")
-                            job.cancel()
-                        }
-
-                        override fun onTranscodeFailed(exception: Throwable) {
-                            Timber.d("Compressing: failure: ${exception.localizedMessage}")
-                            job.completeExceptionally(exception)
-                        }
-                    })
-                    .transcode()
-
-            job.join()
-            destinationFile
+        val destinationFile = withContext(Dispatchers.IO) {
+            createDestinationFile()
         }
+
+        val job = Job()
+
+        Timber.d("Compressing: start")
+        progressListener?.onProgress(0, 100)
+
+        Transcoder.into(destinationFile.path)
+                .addDataSource(videoFile.path)
+                .setListener(object : TranscoderListener {
+                    override fun onTranscodeProgress(progress: Double) {
+                        Timber.d("Compressing: $progress%")
+                        progressListener?.onProgress((progress * 100).toInt(), 100)
+                    }
+
+                    override fun onTranscodeCompleted(successCode: Int) {
+                        Timber.d("Compressing: success")
+                        progressListener?.onProgress(100, 100)
+                        job.complete()
+                    }
+
+                    override fun onTranscodeCanceled() {
+                        Timber.d("Compressing: cancel")
+                        job.cancel()
+                    }
+
+                    override fun onTranscodeFailed(exception: Throwable) {
+                        Timber.d("Compressing: failure: ${exception.localizedMessage}")
+                        job.completeExceptionally(exception)
+                    }
+                })
+                .transcode()
+
+        job.join()
+        return destinationFile
     }
 
     private fun createDestinationFile(): File {
