@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.session.content
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
+import androidx.core.net.toUri
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -183,8 +185,25 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         }
                     })
                             .also { compressedFile ->
-                                // Get new Video file size. For now video dimensions are not updated
-                                newAttachmentAttributes = newAttachmentAttributes.copy(newFileSize = compressedFile.length())
+                                var compressedWidth = 0
+                                var compressedHeight = 0
+
+                                tryOrNull {
+                                    context.contentResolver.openFileDescriptor(compressedFile.toUri(), "r")?.use { pfd ->
+                                        val mediaMetadataRetriever = MediaMetadataRetriever()
+                                        mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
+                                        compressedWidth = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt() ?: 0
+                                        compressedHeight = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt()
+                                                ?: 0
+                                    }
+                                }
+
+                                // Get new Video file size and dimensions
+                                newAttachmentAttributes = newAttachmentAttributes.copy(
+                                        newFileSize = compressedFile.length(),
+                                        newWidth = compressedWidth.takeIf { it != 0 } ?: newAttachmentAttributes.newWidth,
+                                        newHeight = compressedHeight.takeIf { it != 0 } ?: newAttachmentAttributes.newHeight
+                                )
                             }
                             .also { filesToDelete.add(it) }
                 } else {
