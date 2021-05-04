@@ -179,33 +179,41 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         // Do not compress gif
                         && attachment.mimeType != MimeTypes.Gif
                         && params.compressBeforeSending) {
-                    fileToUpload = videoCompressor.compress(workingFile, object: ProgressListener {
+                    fileToUpload = videoCompressor.compress(workingFile, object : ProgressListener {
                         override fun onProgress(progress: Int, total: Int) {
                             notifyTracker(params) { contentUploadStateTracker.setCompressingVideo(it, progress.toFloat()) }
                         }
                     })
-                            .also { compressedFile ->
-                                var compressedWidth = 0
-                                var compressedHeight = 0
+                            .let { videoCompressionResult ->
+                                when (videoCompressionResult) {
+                                    is VideoCompressionResult.Success -> {
+                                        val compressedFile = videoCompressionResult.compressedFile
+                                        var compressedWidth: Int? = null
+                                        var compressedHeight: Int? = null
 
-                                tryOrNull {
-                                    context.contentResolver.openFileDescriptor(compressedFile.toUri(), "r")?.use { pfd ->
-                                        val mediaMetadataRetriever = MediaMetadataRetriever()
-                                        mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
-                                        compressedWidth = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt() ?: 0
-                                        compressedHeight = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt()
-                                                ?: 0
+                                        tryOrNull {
+                                            context.contentResolver.openFileDescriptor(compressedFile.toUri(), "r")?.use { pfd ->
+                                                val mediaMetadataRetriever = MediaMetadataRetriever()
+                                                mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
+                                                compressedWidth = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt()
+                                                compressedHeight = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt()
+                                            }
+                                        }
+
+                                        // Get new Video file size and dimensions
+                                        newAttachmentAttributes = newAttachmentAttributes.copy(
+                                                newFileSize = compressedFile.length(),
+                                                newWidth = compressedWidth ?: newAttachmentAttributes.newWidth,
+                                                newHeight = compressedHeight ?: newAttachmentAttributes.newHeight
+                                        )
+                                        compressedFile
+                                                .also { filesToDelete.add(it) }
+                                    }
+                                    is VideoCompressionResult.CompressionNotNeeded -> {
+                                        workingFile
                                     }
                                 }
-
-                                // Get new Video file size and dimensions
-                                newAttachmentAttributes = newAttachmentAttributes.copy(
-                                        newFileSize = compressedFile.length(),
-                                        newWidth = compressedWidth.takeIf { it != 0 } ?: newAttachmentAttributes.newWidth,
-                                        newHeight = compressedHeight.takeIf { it != 0 } ?: newAttachmentAttributes.newHeight
-                                )
                             }
-                            .also { filesToDelete.add(it) }
                 } else {
                     fileToUpload = workingFile
                     // Fix: OpenableColumns.SIZE may return -1 or 0
@@ -371,7 +379,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             val updatedContent = when (messageContent) {
                 is MessageImageContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes)
                 is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo, newAttachmentAttributes)
-                is MessageFileContent  -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
+                is MessageFileContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
                 is MessageAudioContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
                 else                   -> messageContent
             }

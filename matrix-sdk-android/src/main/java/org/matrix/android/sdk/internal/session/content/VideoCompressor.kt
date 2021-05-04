@@ -29,8 +29,9 @@ import java.util.UUID
 import javax.inject.Inject
 
 internal class VideoCompressor @Inject constructor(private val context: Context) {
+
     suspend fun compress(videoFile: File,
-                         progressListener: ProgressListener?): File {
+                         progressListener: ProgressListener?): VideoCompressionResult {
         val destinationFile = withContext(Dispatchers.IO) {
             createDestinationFile()
         }
@@ -40,6 +41,7 @@ internal class VideoCompressor @Inject constructor(private val context: Context)
         Timber.d("Compressing: start")
         progressListener?.onProgress(0, 100)
 
+        var result: Int = -1
         Transcoder.into(destinationFile.path)
                 .addDataSource(videoFile.path)
                 .setListener(object : TranscoderListener {
@@ -49,8 +51,8 @@ internal class VideoCompressor @Inject constructor(private val context: Context)
                     }
 
                     override fun onTranscodeCompleted(successCode: Int) {
-                        Timber.d("Compressing: success")
-                        progressListener?.onProgress(100, 100)
+                        Timber.d("Compressing: success: $successCode")
+                        result = successCode
                         job.complete()
                     }
 
@@ -60,14 +62,30 @@ internal class VideoCompressor @Inject constructor(private val context: Context)
                     }
 
                     override fun onTranscodeFailed(exception: Throwable) {
-                        Timber.d("Compressing: failure: ${exception.localizedMessage}")
+                        Timber.w(exception, "Compressing: failure")
                         job.completeExceptionally(exception)
                     }
                 })
                 .transcode()
 
         job.join()
-        return destinationFile
+
+        progressListener?.onProgress(100, 100)
+
+        return when (result) {
+            Transcoder.SUCCESS_TRANSCODED -> {
+                VideoCompressionResult.Success(destinationFile)
+            }
+            Transcoder.SUCCESS_NOT_NEEDED -> {
+                // Delete now the temporary file
+                withContext(Dispatchers.IO) {
+                    destinationFile.delete()
+                }
+                VideoCompressionResult.CompressionNotNeeded
+            }
+            else                          ->
+                throw IllegalStateException("Unknown result: $result")
+        }
     }
 
     private fun createDestinationFile(): File {
