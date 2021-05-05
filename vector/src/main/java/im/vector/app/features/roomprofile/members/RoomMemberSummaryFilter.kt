@@ -30,11 +30,10 @@ class RoomMemberSummaryFilter @Inject constructor() : Predicate<RoomMemberSummar
             return true
         }
         // if filter is "Jo Do", it should match "John Doe"
-        return filter.split(" ").fold(true) { acc, s ->
-            acc
-                    && (roomMemberSummary.displayName?.contains(s, ignoreCase = true).orFalse()
+        return filter.split(" ").all {
+            roomMemberSummary.displayName?.contains(it, ignoreCase = true).orFalse()
                     // We should maybe exclude the domain from the userId
-                    || roomMemberSummary.userId.contains(s, ignoreCase = true))
+                    || roomMemberSummary.userId.contains(it, ignoreCase = true)
         }
     }
 }

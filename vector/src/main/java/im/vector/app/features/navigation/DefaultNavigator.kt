@@ -284,21 +284,20 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openCreateDirectRoom(context: Context) {
-        when (val currentGroupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
+        val intent = when (val currentGroupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
             is RoomGroupingMethod.ByLegacyGroup -> {
-                val intent = CreateDirectRoomActivity.getIntent(context)
-                context.startActivity(intent)
+                CreateDirectRoomActivity.getIntent(context)
             }
             is RoomGroupingMethod.BySpace       -> {
                 if (currentGroupingMethod.spaceSummary != null) {
-                    val intent = SpacePeopleActivity.newIntent(context, currentGroupingMethod.spaceSummary.roomId)
-                    context.startActivity(intent)
+                    SpacePeopleActivity.newIntent(context, currentGroupingMethod.spaceSummary.roomId)
                 } else {
-                    val intent = CreateDirectRoomActivity.getIntent(context)
-                    context.startActivity(intent)
+                    CreateDirectRoomActivity.getIntent(context)
                 }
             }
-        }
+            else                                -> null
+        } ?: return
+        context.startActivity(intent)
     }
 
     override fun openInviteUsersToRoom(context: Context, roomId: String) {
