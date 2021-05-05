@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -33,6 +32,8 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentRecyclerviewWithSearchBinding
 import im.vector.app.features.roomprofile.members.RoomMemberListAction
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
@@ -45,6 +46,8 @@ import javax.inject.Inject
 class SpacePeopleFragment @Inject constructor(
         private val viewModelFactory: SpacePeopleViewModel.Factory,
         private val roomMemberModelFactory: RoomMemberListViewModel.Factory,
+        private val drawableProvider: DrawableProvider,
+        private val colorProvider: ColorProvider,
         private val epoxyController: SpacePeopleListController
 ) : VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
         SpacePeopleViewModel.Factory,
@@ -89,7 +92,10 @@ class SpacePeopleFragment @Inject constructor(
         setupRecyclerView()
         setupSearchView()
 
-        views.addRoomToSpaceToolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_close_24dp)
+        views.addRoomToSpaceToolbar.navigationIcon = drawableProvider.getDrawable(
+                R.drawable.ic_close_24dp,
+                colorProvider.getColorFromAttribute(R.attr.riot_primary_text_color)
+        )
         views.addRoomToSpaceToolbar.setNavigationOnClickListener {
             sharedActionViewModel.post(SpacePeopleSharedAction.Dismiss)
         }
