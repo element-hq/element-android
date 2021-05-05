@@ -86,12 +86,11 @@ class SpacePreviewViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 session.spaceService().rejectInvite(initialState.idOrAlias, null)
-                setState { copy(inviteTermination = Uninitialized) }
             } catch (failure: Throwable) {
-                setState { copy(inviteTermination = Uninitialized) }
                 Timber.e(failure, "## Space: Failed to reject invite")
                 _viewEvents.post(SpacePreviewViewEvents.JoinFailure(errorFormatter.toHumanReadable(failure)))
             }
+            setState { copy(inviteTermination = Uninitialized) }
         }
     }
 
@@ -115,12 +114,13 @@ class SpacePreviewViewModel @AssistedInject constructor(
                         _viewEvents.post(SpacePreviewViewEvents.JoinSuccess)
                     }
                     is JoinSpaceResult.Fail -> {
-                        _viewEvents.post(SpacePreviewViewEvents.JoinFailure(joinResult.error.toString()))
+                        _viewEvents.post(SpacePreviewViewEvents.JoinFailure(errorFormatter.toHumanReadable(joinResult.error)))
                     }
                 }
             } catch (failure: Throwable) {
                 // should not throw
                 Timber.w(failure, "## Failed to join space")
+                _viewEvents.post(SpacePreviewViewEvents.JoinFailure(errorFormatter.toHumanReadable(failure)))
             }
         }
     }

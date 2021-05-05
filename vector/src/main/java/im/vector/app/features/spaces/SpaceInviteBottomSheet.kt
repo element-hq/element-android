@@ -81,14 +81,14 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             dismiss()
         }
 
-        val inviter = summary.inviterId?.let { session.getUser(it) }
+        val inviter = summary.inviterId?.let { session.getUser(it) }?.toMatrixItem()
         if (inviter != null) {
             views.inviterAvatarImage.isVisible = true
             views.inviterText.isVisible = true
             views.inviterMxid.isVisible = true
-            avatarRenderer.render(inviter.toMatrixItem(), views.inviterAvatarImage)
-            views.inviterText.text = getString(R.string.user_invites_you, inviter.getBestName())
-            views.inviterMxid.text = inviter.userId
+            avatarRenderer.render(inviter, views.inviterAvatarImage)
+            views.inviterText.text = getString(R.string.user_invites_you, inviter.displayName)
+            views.inviterMxid.text = inviter.id
         } else {
             views.inviterAvatarImage.isVisible = false
             views.inviterText.isVisible = false
@@ -142,14 +142,14 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
         views.spaceCard.matrixToCardSecondaryButton.button.text = getString(R.string.reject)
         views.spaceCard.matrixToCardSecondaryButton.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
-                doJoin()
+                doReject()
             }
 
             override fun onRetryClicked() {
-                doJoin()
+                doReject()
             }
 
-            private fun doJoin() {
+            private fun doReject() {
                 views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Loading)
                 views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = false
                 GlobalScope.launch(Dispatchers.IO) {
