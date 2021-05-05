@@ -25,9 +25,9 @@ import com.airbnb.mvrx.MvRx
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.platform.GenericIdArgs
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleLoadingBinding
-import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.spaces.ShareSpaceBottomSheet
 
 class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
@@ -57,7 +57,7 @@ class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val args = intent?.getParcelableExtra<RoomProfileArgs>(MvRx.KEY_ARG)
+        val args = intent?.getParcelableExtra<GenericIdArgs>(MvRx.KEY_ARG)
         if (isFirstCreation()) {
             val simpleName = SpacePeopleFragment::class.java.simpleName
             if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
@@ -97,7 +97,7 @@ class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
     companion object {
         fun newIntent(context: Context, spaceId: String): Intent {
             return Intent(context, SpacePeopleActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, RoomProfileArgs(spaceId))
+                putExtra(MvRx.KEY_ARG, GenericIdArgs(spaceId))
             }
         }
     }

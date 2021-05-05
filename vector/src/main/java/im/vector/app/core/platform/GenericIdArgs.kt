@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.spaces.people
+package im.vector.app.core.platform
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
-import im.vector.app.core.platform.GenericIdArgs
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-data class SpacePeopleViewState(
-        val spaceId: String,
-        val createAndInviteState: Async<String> = Uninitialized
-) : MvRxState {
-    constructor(args: GenericIdArgs) : this(
-            spaceId = args.id
-    )
-}
+/**
+ * Generic argument with one String. Can be an id (ex: roomId, spaceId, callId, etc.), or anything else
+ */
+@Parcelize
+data class GenericIdArgs(
+        val id: String
+) : Parcelable
