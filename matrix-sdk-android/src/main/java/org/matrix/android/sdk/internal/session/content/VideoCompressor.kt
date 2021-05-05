@@ -70,6 +70,15 @@ internal class VideoCompressor @Inject constructor(private val context: Context)
 
         job.join()
 
+        if (job.isCancelled) {
+            Timber.w("Compressing: Job cancelled")
+            // Delete now the temporary file
+            deleteFile(destinationFile)
+            // We do not throw a CancellationException, because it's not critical, we will try to send the original file
+            // Anyway this should never occurs, since we never cancel the return value of transcode()
+            return VideoCompressionResult.CompressionCancelled
+        }
+
         progressListener?.onProgress(100, 100)
 
         return when (result) {
@@ -78,13 +87,17 @@ internal class VideoCompressor @Inject constructor(private val context: Context)
             }
             Transcoder.SUCCESS_NOT_NEEDED -> {
                 // Delete now the temporary file
-                withContext(Dispatchers.IO) {
-                    destinationFile.delete()
-                }
+                deleteFile(destinationFile)
                 VideoCompressionResult.CompressionNotNeeded
             }
             else                          ->
                 throw IllegalStateException("Unknown result: $result")
+        }
+    }
+
+    private suspend fun deleteFile(file: File) {
+        withContext(Dispatchers.IO) {
+            file.delete()
         }
     }
 

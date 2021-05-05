@@ -186,7 +186,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     })
                             .let { videoCompressionResult ->
                                 when (videoCompressionResult) {
-                                    is VideoCompressionResult.Success -> {
+                                    is VideoCompressionResult.Success           -> {
                                         val compressedFile = videoCompressionResult.compressedFile
                                         var compressedWidth: Int? = null
                                         var compressedHeight: Int? = null
@@ -209,7 +209,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                         compressedFile
                                                 .also { filesToDelete.add(it) }
                                     }
-                                    is VideoCompressionResult.CompressionNotNeeded -> {
+                                    VideoCompressionResult.CompressionNotNeeded,
+                                    VideoCompressionResult.CompressionCancelled -> {
                                         workingFile
                                     }
                                 }
