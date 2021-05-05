@@ -224,7 +224,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
                 val encryptedFile: File?
                 val contentUploadResponse = if (params.isEncrypted) {
-                    Timber.v("## FileService: Encrypt file")
+                    Timber.v("## Encrypt file")
 
                     encryptedFile = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
                             .also { filesToDelete.add(it) }
@@ -236,18 +236,18 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                 }
                             }
 
-                    Timber.v("## FileService: Uploading file")
+                    Timber.v("## Uploading file")
 
                     fileUploader
                             .uploadFile(encryptedFile, attachment.name, MimeTypes.OctetStream, progressListener)
                 } else {
-                    Timber.v("## FileService: Clear file")
+                    Timber.v("## Clear file")
                     encryptedFile = null
                     fileUploader
                             .uploadFile(fileToUpload, attachment.name, attachment.getSafeMimeType(), progressListener)
                 }
 
-                Timber.v("## FileService: Update cache storage for ${contentUploadResponse.contentUri}")
+                Timber.v("## Update cache storage for ${contentUploadResponse.contentUri}")
                 try {
                     fileService.storeDataFor(
                             mxcUrl = contentUploadResponse.contentUri,
@@ -256,9 +256,9 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             originalFile = workingFile,
                             encryptedFile = encryptedFile
                     )
-                    Timber.v("## FileService: cache storage updated")
+                    Timber.v("## cache storage updated")
                 } catch (failure: Throwable) {
-                    Timber.e(failure, "## FileService: Failed to update file cache")
+                    Timber.e(failure, "## Failed to update file cache")
                 }
 
                 val uploadThumbnailResult = dealWithThumbnail(params)
@@ -270,11 +270,11 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         uploadThumbnailResult?.uploadedThumbnailEncryptedFileInfo,
                         newAttachmentAttributes)
             } catch (t: Throwable) {
-                Timber.e(t, "## FileService: ERROR ${t.localizedMessage}")
+                Timber.e(t, "## ERROR ${t.localizedMessage}")
                 handleFailure(params, t)
             }
         } catch (e: Exception) {
-            Timber.e(e, "## FileService: ERROR")
+            Timber.e(e, "## ERROR")
             handleFailure(params, e)
         } finally {
             // Delete all temporary files
