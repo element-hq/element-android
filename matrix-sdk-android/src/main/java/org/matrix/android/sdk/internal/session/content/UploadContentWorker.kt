@@ -194,10 +194,11 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
                                         tryOrNull {
                                             context.contentResolver.openFileDescriptor(compressedFile.toUri(), "r")?.use { pfd ->
-                                                val mediaMetadataRetriever = MediaMetadataRetriever()
-                                                mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
-                                                compressedWidth = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt()
-                                                compressedHeight = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt()
+                                                MediaMetadataRetriever().let {
+                                                    it.setDataSource(pfd.fileDescriptor)
+                                                    compressedWidth = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt()
+                                                    compressedHeight = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt()
+                                                }
                                             }
                                         }
 
