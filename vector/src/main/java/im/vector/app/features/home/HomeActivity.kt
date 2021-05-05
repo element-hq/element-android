@@ -62,6 +62,7 @@ import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
+import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
@@ -88,7 +89,8 @@ class HomeActivity :
         UnknownDeviceDetectorSharedViewModel.Factory,
         ServerBackupStatusViewModel.Factory,
         UnreadMessagesSharedViewModel.Factory,
-        NavigationInterceptor {
+        NavigationInterceptor,
+        SpaceInviteBottomSheet.InteractionListener {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -209,6 +211,10 @@ class HomeActivity :
                                         }
                                     })
                                     .show(supportFragmentManager, "SPACE_SETTINGS")
+                        }
+                        is HomeActivitySharedAction.OpenSpaceInvite -> {
+                            SpaceInviteBottomSheet.newInstance(sharedAction.spaceId)
+                                    .show(supportFragmentManager, "SPACE_INVITE")
                         }
                     }.exhaustive
                 }
@@ -512,6 +518,14 @@ class HomeActivity :
         MatrixToBottomSheet.withLink(deepLink.toString(), listener)
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
+    }
+
+    override fun spaceInviteBottomSheetOnAccept(spaceId: String) {
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
+    }
+
+    override fun spaceInviteBottomSheetOnDecline(spaceId: String) {
+        // nop
     }
 
     companion object {

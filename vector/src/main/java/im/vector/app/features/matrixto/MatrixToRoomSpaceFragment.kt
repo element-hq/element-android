@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -71,8 +72,10 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                     is RoomInfoResult.FullInfo     -> {
                         val matrixItem = peek.roomItem
                         if (peek.roomType == RoomType.SPACE) {
+                            views.matrixToBetaTag.isVisible = true
                             avatarRenderer.renderSpace(matrixItem, views.matrixToCardAvatar)
                         } else {
+                            views.matrixToBetaTag.isVisible = false
                             avatarRenderer.render(matrixItem, views.matrixToCardAvatar)
                         }
                         views.matrixToCardNameText.setTextOrHide(peek.name)
@@ -97,19 +100,19 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                             Membership.LEAVE,
                             Membership.NONE   -> {
                                 views.matrixToCardMainButton.isVisible = true
-                                views.matrixToCardMainButton.text = getString(joinTextRes)
+                                views.matrixToCardMainButton.button.text = getString(joinTextRes)
                                 views.matrixToCardSecondaryButton.isVisible = false
                             }
                             Membership.INVITE -> {
                                 views.matrixToCardMainButton.isVisible = true
                                 views.matrixToCardSecondaryButton.isVisible = true
-                                views.matrixToCardMainButton.text = getString(joinTextRes)
-                                views.matrixToCardSecondaryButton.text = getString(R.string.decline)
+                                views.matrixToCardMainButton.button.text = getString(joinTextRes)
+                                views.matrixToCardSecondaryButton.button.text = getString(R.string.decline)
                             }
                             Membership.JOIN   -> {
                                 views.matrixToCardMainButton.isVisible = true
                                 views.matrixToCardSecondaryButton.isVisible = false
-                                views.matrixToCardMainButton.text = getString(R.string.action_open)
+                                views.matrixToCardMainButton.button.text = getString(R.string.action_open)
                             }
                             Membership.KNOCK,
                             Membership.BAN    -> {
@@ -126,7 +129,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                         views.matrixToMemberPills.isVisible = false
                         views.matrixToCardDescText.setTextOrHide(getString(R.string.room_preview_no_preview))
 
-                        views.matrixToCardMainButton.text = getString(R.string.join_anyway)
+                        views.matrixToCardMainButton.button.text = getString(R.string.join_anyway)
                         views.matrixToCardSecondaryButton.isVisible = false
                     }
                     RoomInfoResult.NotFound        -> {
@@ -156,12 +159,10 @@ class MatrixToRoomSpaceFragment @Inject constructor(
             }
         }
 
+        val images = listOf(views.knownMember1, views.knownMember2, views.knownMember3, views.knownMember4, views.knownMember5)
+                .onEach { it.isGone = true }
         when (state.peopleYouKnow) {
             is Success -> {
-                views.matrixToCardPeopleYouKnowVisibility.isVisible = true
-                val images = listOf(views.knownMember1, views.knownMember2, views.knownMember3, views.knownMember4, views.knownMember5)
-                        .onEach { it.isVisible = false }
-
                 val someYouKnow = state.peopleYouKnow.invoke()
                 someYouKnow.forEachIndexed { index, item ->
                     images[index].isVisible = true
@@ -175,7 +176,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                 )
             }
             else       -> {
-                views.matrixToCardPeopleYouKnowVisibility.isVisible = false
+                views.peopleYouMayKnowText.isVisible = false
             }
         }
 

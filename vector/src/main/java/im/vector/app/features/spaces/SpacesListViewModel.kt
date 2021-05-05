@@ -181,7 +181,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     }
 
     private fun handleSelectSpaceInvite(action: SpaceListAction.OpenSpaceInvite) {
-        _viewEvents.post(SpaceListViewEvents.OpenSpaceSummary(action.spaceSummary.roomId))
+        _viewEvents.post(SpaceListViewEvents.OpenSpaceInvite(action.spaceSummary.roomId))
     }
 
     private fun handleToggleExpand(action: SpaceListAction.ToggleExpand) = withState { state ->

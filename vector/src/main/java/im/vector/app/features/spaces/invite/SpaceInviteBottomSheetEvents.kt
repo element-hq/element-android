@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.spaces.preview
+package im.vector.app.features.spaces.invite
 
 import im.vector.app.core.platform.VectorViewEvents
 
-sealed class SpacePreviewViewEvents : VectorViewEvents {
-    object Dismiss: SpacePreviewViewEvents()
-    object JoinSuccess: SpacePreviewViewEvents()
-    data class JoinFailure(val message: String?): SpacePreviewViewEvents()
+sealed class SpaceInviteBottomSheetEvents : VectorViewEvents {
+    data class ShowError(val message: String) : SpaceInviteBottomSheetEvents()
 }
