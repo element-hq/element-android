@@ -81,7 +81,7 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             override fun onButtonClicked() {
                 // quick local echo
                 views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Loading)
-                views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = true
+                views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = false
                 viewModel.handle(SpaceInviteBottomSheetAction.DoJoin)
             }
 
@@ -89,8 +89,8 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
         }
         views.spaceCard.matrixToCardSecondaryButton.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
+                views.spaceCard.matrixToCardMainButton.button.isEnabled = false
                 views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Loading)
-                views.spaceCard.matrixToCardMainButton.button.isEnabled = true
                 viewModel.handle(SpaceInviteBottomSheetAction.DoReject)
             }
 
@@ -125,7 +125,7 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             views.inviterText.isVisible = true
             views.inviterMxid.isVisible = true
             avatarRenderer.render(inviter, views.inviterAvatarImage)
-            views.inviterText.text = getString(R.string.user_invites_you, inviter.displayName)
+            views.inviterText.text = getString(R.string.user_invites_you, inviter.getBestName())
             views.inviterMxid.text = inviter.id
         } else {
             views.inviterAvatarImage.isVisible = false
