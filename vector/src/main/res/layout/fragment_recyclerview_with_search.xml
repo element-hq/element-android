@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:background="?riotx_background"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?riotx_background">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/roomList"
@@ -49,10 +49,10 @@
                     android:ellipsize="end"
                     android:gravity="start|center"
                     android:maxLines="1"
-                    tools:text="@tools:sample/lorem/random"
                     android:textColor="?riotx_text_primary"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="@tools:sample/lorem/random" />
 
                 <TextView
                     android:id="@+id/appBarSpaceInfo"
@@ -64,7 +64,7 @@
                     android:maxLines="1"
                     android:textColor="?riotx_text_secondary"
                     android:textSize="16sp"
-                    tools:text="@tools:sample/lorem/random"/>
+                    tools:text="@tools:sample/lorem/random" />
 
             </LinearLayout>
 
@@ -83,13 +83,13 @@
             app:layout_constraintTop_toBottomOf="@+id/addRoomToSpaceToolbar"
             app:queryHint="@string/search_hint_room_name" />
 
-<!--        <ProgressBar-->
-<!--            android:id="@+id/listBuildingProgress"-->
-<!--            android:indeterminate="true"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="8dp"-->
-<!--            style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
-<!--            />-->
+        <!--        <ProgressBar-->
+        <!--            android:id="@+id/listBuildingProgress"-->
+        <!--            android:indeterminate="true"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="8dp"-->
+        <!--            style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+        <!--            />-->
 
     </com.google.android.material.appbar.AppBarLayout>
 
