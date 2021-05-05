@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:drawablePadding="16dp"
         android:ellipsize="end"
         android:maxLines="1"
@@ -48,7 +48,7 @@
         android:textSize="16sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/matrixItemSubtitle"
-        app:layout_constraintEnd_toStartOf="@+id/matrixItemEditable"
+        app:layout_constraintEnd_toStartOf="@+id/matrixItemPowerLevelLabel"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toTopOf="parent"
@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:drawablePadding="16dp"
         android:ellipsize="end"
         android:maxLines="1"
@@ -68,12 +68,26 @@
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/matrixItemEditable"
+        app:layout_constraintEnd_toStartOf="@+id/matrixItemPowerLevelLabel"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toBottomOf="@id/matrixItemTitle"
         app:layout_goneMarginStart="0dp"
         tools:text="@sample/matrix.json/data/mxid" />
+
+
+    <TextView
+        android:id="@+id/matrixItemPowerLevelLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/matrixItemEditable"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Admin"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/matrixItemEditable"

@@ -29,9 +29,12 @@ class RoomMemberSummaryFilter @Inject constructor() : Predicate<RoomMemberSummar
             // No filter
             return true
         }
-
-        return roomMemberSummary.displayName?.contains(filter, ignoreCase = true).orFalse()
-                // We should maybe exclude the domain from the userId
-                || roomMemberSummary.userId.contains(filter, ignoreCase = true)
+        // if filter is "Jo Do", it should match "John Doe"
+        return filter.split(" ").fold(true) { acc, s ->
+            acc
+                    && (roomMemberSummary.displayName?.contains(s, ignoreCase = true).orFalse()
+                    // We should maybe exclude the domain from the userId
+                    || roomMemberSummary.userId.contains(s, ignoreCase = true))
+        }
     }
 }

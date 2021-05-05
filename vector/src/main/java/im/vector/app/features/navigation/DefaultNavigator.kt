@@ -75,6 +75,7 @@ import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.manage.SpaceManageActivity
+import im.vector.app.features.spaces.people.SpacePeopleActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
@@ -283,8 +284,21 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openCreateDirectRoom(context: Context) {
-        val intent = CreateDirectRoomActivity.getIntent(context)
-        context.startActivity(intent)
+        when (val currentGroupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
+            is RoomGroupingMethod.ByLegacyGroup -> {
+                val intent = CreateDirectRoomActivity.getIntent(context)
+                context.startActivity(intent)
+            }
+            is RoomGroupingMethod.BySpace       -> {
+                if (currentGroupingMethod.spaceSummary != null) {
+                    val intent = SpacePeopleActivity.newIntent(context, currentGroupingMethod.spaceSummary.roomId)
+                    context.startActivity(intent)
+                } else {
+                    val intent = CreateDirectRoomActivity.getIntent(context)
+                    context.startActivity(intent)
+                }
+            }
+        }
     }
 
     override fun openInviteUsersToRoom(context: Context, roomId: String) {
