@@ -417,7 +417,7 @@ dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 
     // Chat effects
-    implementation 'nl.dionsegijn:konfetti:1.2.6'
+    implementation 'nl.dionsegijn:konfetti:1.3.2'
     implementation 'com.github.jetradarmobile:android-snowfall:1.2.0'
     // DI
     implementation "com.google.dagger:dagger:$daggerVersion"
