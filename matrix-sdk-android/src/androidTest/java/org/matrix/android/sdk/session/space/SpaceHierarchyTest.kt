@@ -248,7 +248,7 @@ class SpaceHierarchyTest : InstrumentedTest {
 
         Thread.sleep(2_000)
         val orphansUpdate = session.getRoomSummaries(roomSummaryQueryParams {
-            activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
         })
         assertEquals("Unexpected number of orphan rooms ${orphansUpdate.map { it.name }}", 2, orphansUpdate.size)
     }

@@ -282,7 +282,7 @@ class SpaceRoomListSectionBuilder(
                                     override fun updateForSpaceId(roomId: String?) {
                                         it.updateQuery {
                                             it.copy(
-                                                    activeSpaceId = ActiveSpaceFilter.ActiveSpace(roomId)
+                                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
                                             )
                                         }
                                     }
@@ -294,13 +294,13 @@ class SpaceRoomListSectionBuilder(
                                         if (roomId != null) {
                                             it.updateQuery {
                                                 it.copy(
-                                                        activeSpaceId = ActiveSpaceFilter.ActiveSpace(roomId)
+                                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
                                                 )
                                             }
                                         } else {
                                             it.updateQuery {
                                                 it.copy(
-                                                        activeSpaceId = ActiveSpaceFilter.None
+                                                        activeSpaceFilter = ActiveSpaceFilter.None
                                                 )
                                             }
                                         }
@@ -351,7 +351,7 @@ class SpaceRoomListSectionBuilder(
         return when (spaceFilter) {
             RoomListViewModel.SpaceFilterStrategy.NORMAL -> {
                 copy(
-                        activeSpaceId = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
                 )
             }
             RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL -> {
@@ -359,7 +359,7 @@ class SpaceRoomListSectionBuilder(
                     this
                 } else {
                     copy(
-                            activeSpaceId = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
                     )
                 }
             }

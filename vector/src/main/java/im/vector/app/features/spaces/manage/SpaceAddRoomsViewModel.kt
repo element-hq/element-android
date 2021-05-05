@@ -60,7 +60,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                     this.memberships = listOf(Membership.JOIN)
                     this.excludeType = null
                     this.includeType = listOf(RoomType.SPACE)
-                    this.activeSpaceId = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
                     this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
                 },
                 pagedListConfig = PagedList.Config.Builder()
@@ -80,7 +80,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                     this.excludeType = listOf(RoomType.SPACE)
                     this.includeType = null
                     this.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                    this.activeSpaceId = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
                     this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
                 },
                 pagedListConfig = PagedList.Config.Builder()
