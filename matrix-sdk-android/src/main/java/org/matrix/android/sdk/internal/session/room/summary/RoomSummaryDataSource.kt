@@ -178,7 +178,9 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             when (it) {
                 RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
                 RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-                RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0).or().equalTo(RoomSummaryEntityFields.MARKED_UNREAD, true)
+                RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.beginGroup()
+                        .greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0).or()
+                        .equalTo(RoomSummaryEntityFields.MARKED_UNREAD, true).endGroup()
                 RoomCategoryFilter.ALL                     -> {
                     // nop
                 }
