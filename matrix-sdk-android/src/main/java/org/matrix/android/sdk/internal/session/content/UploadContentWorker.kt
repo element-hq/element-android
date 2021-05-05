@@ -44,13 +44,13 @@ import org.matrix.android.sdk.internal.session.room.send.CancelSendTracker
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoIdentifiers
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
+import org.matrix.android.sdk.internal.util.TemporaryFileCreator
 import org.matrix.android.sdk.internal.util.toMatrixErrorStr
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import java.io.File
-import java.util.UUID
 import javax.inject.Inject
 
 private data class NewAttachmentAttributes(
@@ -83,6 +83,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     @Inject lateinit var imageCompressor: ImageCompressor
     @Inject lateinit var videoCompressor: VideoCompressor
     @Inject lateinit var localEchoRepository: LocalEchoRepository
+    @Inject lateinit var temporaryFileCreator: TemporaryFileCreator
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)
@@ -125,7 +126,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     )
 
             // always use a temporary file, it guaranties that we could report progress on upload and simplifies the flows
-            val workingFile = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
+            val workingFile = temporaryFileCreator.create()
                     .also { filesToDelete.add(it) }
             workingFile.outputStream().use { outputStream ->
                 inputStream.use { inputStream ->
@@ -228,7 +229,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 val contentUploadResponse = if (params.isEncrypted) {
                     Timber.v("## Encrypt file")
 
-                    encryptedFile = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
+                    encryptedFile = temporaryFileCreator.create()
                             .also { filesToDelete.add(it) }
 
                     uploadedFileEncryptedFileInfo =

@@ -41,10 +41,10 @@ import org.matrix.android.sdk.internal.network.ProgressRequestBody
 import org.matrix.android.sdk.internal.network.awaitResponse
 import org.matrix.android.sdk.internal.network.toFailure
 import org.matrix.android.sdk.internal.session.homeserver.DefaultHomeServerCapabilitiesService
+import org.matrix.android.sdk.internal.util.TemporaryFileCreator
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.util.UUID
 import javax.inject.Inject
 
 internal class FileUploader @Inject constructor(@Authenticated
@@ -52,6 +52,7 @@ internal class FileUploader @Inject constructor(@Authenticated
                                                 private val globalErrorReceiver: GlobalErrorReceiver,
                                                 private val homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService,
                                                 private val context: Context,
+                                                private val temporaryFileCreator: TemporaryFileCreator,
                                                 contentUrlResolver: ContentUrlResolver,
                                                 moshi: Moshi) {
 
@@ -110,7 +111,7 @@ internal class FileUploader @Inject constructor(@Authenticated
         val inputStream = withContext(Dispatchers.IO) {
             context.contentResolver.openInputStream(uri)
         } ?: throw FileNotFoundException()
-        val workingFile = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
+        val workingFile = temporaryFileCreator.create()
         workingFile.outputStream().use {
             inputStream.copyTo(it)
         }

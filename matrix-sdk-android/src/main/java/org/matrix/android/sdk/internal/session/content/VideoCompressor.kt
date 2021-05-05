@@ -16,25 +16,24 @@
 
 package org.matrix.android.sdk.internal.session.content
 
-import android.content.Context
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
+import org.matrix.android.sdk.internal.util.TemporaryFileCreator
 import timber.log.Timber
 import java.io.File
-import java.util.UUID
 import javax.inject.Inject
 
-internal class VideoCompressor @Inject constructor(private val context: Context) {
+internal class VideoCompressor @Inject constructor(
+        private val temporaryFileCreator: TemporaryFileCreator
+) {
 
     suspend fun compress(videoFile: File,
                          progressListener: ProgressListener?): VideoCompressionResult {
-        val destinationFile = withContext(Dispatchers.IO) {
-            createDestinationFile()
-        }
+        val destinationFile = temporaryFileCreator.create()
 
         val job = Job()
 
@@ -116,9 +115,5 @@ internal class VideoCompressor @Inject constructor(private val context: Context)
         withContext(Dispatchers.IO) {
             file.delete()
         }
-    }
-
-    private fun createDestinationFile(): File {
-        return File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
     }
 }
