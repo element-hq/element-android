@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.lib.multipicker.entity
+package im.vector.lib.multipicker.utils
 
-import android.net.Uri
-
-data class MultiPickerVideoType(
-        override val displayName: String?,
-        override val size: Long,
-        override val mimeType: String?,
-        override val contentUri: Uri,
-        override val width: Int,
-        override val height: Int,
-        override val orientation: Int,
-        val duration: Long
-) : MultiPickerBaseMediaType
+internal fun String?.isMimeTypeImage() = this?.startsWith("image/") == true
+internal fun String?.isMimeTypeVideo() = this?.startsWith("video/") == true
+internal fun String?.isMimeTypeAudio() = this?.startsWith("audio/") == true

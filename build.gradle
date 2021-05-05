@@ -45,7 +45,7 @@ allprojects {
                 // PFLockScreen-Android
                 includeGroupByRegex 'com\\.github\\.vector-im'
 
-                //Chat effects
+                // Chat effects
                 includeGroupByRegex 'com\\.github\\.jetradarmobile'
                 includeGroupByRegex 'nl\\.dionsegijn'
             }

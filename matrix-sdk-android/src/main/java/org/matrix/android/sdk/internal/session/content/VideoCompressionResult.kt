@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.lib.multipicker.entity
+package org.matrix.android.sdk.internal.session.content
 
-import android.net.Uri
+import java.io.File
 
-data class MultiPickerVideoType(
-        override val displayName: String?,
-        override val size: Long,
-        override val mimeType: String?,
-        override val contentUri: Uri,
-        override val width: Int,
-        override val height: Int,
-        override val orientation: Int,
-        val duration: Long
-) : MultiPickerBaseMediaType
+internal sealed class VideoCompressionResult {
+    data class Success(val compressedFile: File) : VideoCompressionResult()
+    object CompressionNotNeeded : VideoCompressionResult()
+    object CompressionCancelled : VideoCompressionResult()
+    data class CompressionFailed(val failure: Throwable) : VideoCompressionResult()
+}

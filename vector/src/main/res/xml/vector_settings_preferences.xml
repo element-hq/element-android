@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_USER_INTERFACE_KEY"
@@ -54,6 +55,12 @@
             android:key="SETTINGS_SHOW_EMOJI_KEYBOARD"
             android:summary="@string/settings_show_emoji_keyboard_summary"
             android:title="@string/settings_show_emoji_keyboard" />
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_INTERFACE_TAKE_PHOTO_VIDEO"
+            android:persistent="false"
+            android:title="@string/option_take_photo_video"
+            tools:summary="@string/option_always_ask" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
@@ -185,10 +192,10 @@
 
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_room_directory">
 
-    <im.vector.app.core.preference.VectorSwitchPreference
-        android:key="SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS"
-        android:summary="@string/settings_room_directory_show_all_rooms_summary"
-        android:title="@string/settings_room_directory_show_all_rooms" />
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS"
+            android:summary="@string/settings_room_directory_show_all_rooms_summary"
+            android:title="@string/settings_room_directory_show_all_rooms" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 </androidx.preference.PreferenceScreen>

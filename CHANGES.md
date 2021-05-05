@@ -7,6 +7,10 @@ Features ✨:
 Improvements 🙌:
  - Add ability to install APK from directly from Element (#2381)
  - Delete and react to stickers (#3250)
+ - Compress video before sending (#442)
+ - Improve file too big error detection (#3245)
+ - User can now select video when selecting Gallery to send attachments to a room
+ - Add option to record a video from the camera
 
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)
@@ -18,6 +22,7 @@ Bugfix 🐛:
  - Fix wording issue (#3242)
  - Fix missing sender information after edits (#3184)
  - Fix read marker not updating automatically (#3267)
+ - Sent video does not contains duration (#3272)
 
 Translations 🗣:
  -

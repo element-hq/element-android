@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,29 +22,29 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
-import im.vector.lib.multipicker.entity.MultiPickerImageType
-import im.vector.lib.multipicker.utils.toMultiPickerImageType
+import im.vector.lib.multipicker.entity.MultiPickerVideoType
+import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 /**
- * Implementation of taking a photo with Camera
+ * Implementation of taking a video with Camera
  */
-class CameraPicker {
+class CameraVideoPicker {
 
     /**
      * Start camera by using a ActivityResultLauncher
      * @return Uri of taken photo or null if the operation is cancelled.
      */
     fun startWithExpectingFile(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>): Uri? {
-        val photoUri = createPhotoUri(context)
+        val videoUri = createVideoUri(context)
         val intent = createIntent().apply {
-            putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+            putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
         }
         activityResultLauncher.launch(intent)
-        return photoUri
+        return videoUri
     }
 
     /**
@@ -53,27 +53,27 @@ class CameraPicker {
      * or result code is not Activity.RESULT_OK
      * or user cancelled the operation.
      */
-    fun getTakenPhoto(context: Context, photoUri: Uri): MultiPickerImageType? {
-        return photoUri.toMultiPickerImageType(context)
+    fun getTakenVideo(context: Context, videoUri: Uri): MultiPickerVideoType? {
+        return videoUri.toMultiPickerVideoType(context)
     }
 
     private fun createIntent(): Intent {
-        return Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        return Intent(MediaStore.ACTION_VIDEO_CAPTURE)
     }
 
     companion object {
-        fun createPhotoUri(context: Context): Uri {
-            val file = createImageFile(context)
+        fun createVideoUri(context: Context): Uri {
+            val file = createVideoFile(context)
             val authority = context.packageName + ".multipicker.fileprovider"
             return FileProvider.getUriForFile(context, authority, file)
         }
 
-        private fun createImageFile(context: Context): File {
+        private fun createVideoFile(context: Context): File {
             val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
             val storageDir: File = context.filesDir
             return File.createTempFile(
                     "${timeStamp}_", /* prefix */
-                    ".jpg", /* suffix */
+                    ".mp4", /* suffix */
                     storageDir /* directory */
             )
         }
