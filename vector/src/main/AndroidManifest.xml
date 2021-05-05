@@ -75,7 +75,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.Light"
+        android:theme="@style/AppTheme.Light.Variant1"
         tools:replace="android:allowBackup">
 
         <!-- No limit for screen ratio: avoid black strips -->
@@ -106,6 +106,7 @@
         <activity
             android:name="fr.gouv.tchap.features.login.TchapLoginActivity"
             android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Light.Variant2"
             android:windowSoftInputMode="adjustResize">
             <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
             <!--<intent-filter>

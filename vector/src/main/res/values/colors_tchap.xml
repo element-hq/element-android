@@ -1,60 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- main app colors -->
-    <color name="vector_tchap_primary_color">#162d58</color>
-    <color name="vector_tchap_secondary_color">#162d58</color>
-    <color name="vector_tchap_primary_color_light">#162d58</color>
-    <color name="vector_tchap_secondary_color_light">#162d58</color>
-    <color name="tchap_text_color_light">#124a9d</color>
-    <color name="tchap_text_color_light_with_alpha">#99124a9d</color>
-    <color name="vector_tchap_text_color_dark">#162d58</color>
-    <color name="vector_tchap_text_color_dark_grey">#858585</color>
-    <color name="vector_tchap_text_color_light_grey">#949494</color>
-    <color name="vector_tchap_hexagon_color_dark_grey">#979797</color>
-    <color name="vector_tchap_hexagon_background_color_dark_grey">#ECECEC</color>
-    <color name="vector_tchap_search_background_color">#90dee5f1</color>
-    <color name="tchap_search_bar">#90dee5f1</color>
-    <color name="tchap_search_bar_text">#7d7d7d</color>
-    <color name="tchap_general_search_bar">#12ffffff</color>
-    <color name="tchap_general_search_bar_border">#3bffffff</color>
-    <color name="tchap_action_bar_text_color">#ffffff</color>
-    <color name="tchap_action_bar_text_color_with_alpha">#9fffffff</color>
-    <color name="tchap_primary_text_color">#000000</color>
-    <color name="tchap_secondary_text_color">#aeaeae</color>
-    <color name="tchap_third_text_color">#848484</color>
-    <color name="tchap_gray_86">#FF868686</color>
-    <color name="tchap_navigation_menu_text_color">#9b9b9b</color>
-    <color name="tchap_presence_status_color">#60ad0d</color>
-    <color name="tchap_incoming_msg_phylact_background_color">#FFFFFF</color>
-    <color name="tchap_outgoing_msg_phylact_background_color">#374c72</color>
-    <color name="tchap_incoming_msg_markdown_block_background_color">#FFEEEEEE</color>
-    <color name="tchap_outgoing_msg_markdown_block_background_color">#FF4D4D4D</color>
-    <color name="tchap_unsent_msg_color">#FFF56679</color>
-    <color name="tchap_dark_red">#FF7f0d15</color>
-    <color name="tchap_light_background">#FFecf0f7</color>
-    <color name="tchap_coral_color">@color/vector_fuchsia_color</color>
-    <color name="tchap_pumpkin_orange_color">#fff07a12</color>
-    <color name="tchap_jade_green_color">#ff27ae60</color>
-    <color name="tchap_coral_border_color">#b2eb5757</color>
-    <color name="tchap_pumpkin_orange_border_color">#b2f07a12</color>
-    <color name="tchap_jade_green_border_color">#b227ae60</color>
-    <color name="tchap_greyish_brown_color">#ff4f4f4f</color>
-    <color name="tchap_pale_grey_color">#fff2f5f8</color>
+    <color name="tchap_dark_blue">#162d58</color>
+    <color name="tchap_dark_blue_alpha25">#3f162d58</color>
+    <color name="tchap_dark_grey_blue">#374c72</color>
+    <color name="tchap_light_navy">#124a9d</color>
+    <color name="tchap_light_navy_alpha60">#99124a9d</color>
+    <color name="tchap_greyish_purple">#8b8999</color>
+    <color name="tchap_warm_grey">#858585</color>
+    <color name="tchap_light_grey">#f0f0f0</color>
+    <color name="tchap_light_grey_alpha50">#7fb2b2b2</color>
+    <color name="tchap_dark_grey">#cccccc</color>
+    <color name="tchap_pale_grey">#f2f5f8</color>
+    <color name="tchap_coral">#eb5757</color>
+    <color name="tchap_coral_alpha70">#b2eb5757</color>
+    <color name="tchap_pumpkin_orange">#f07a12</color>
+    <color name="tchap_pumpkin_orange_alpha70">#b2f07a12</color>
+    <color name="tchap_jade_green">#27ae60</color>
+    <color name="tchap_jade_green_alpha70">#b227ae60</color>
+    <color name="tchap_greyish_brown">#4f4f4f</color>
 
-    <!-- home activity tab bar color -->
-    <color name="tab_favourites">#BD79CC</color>
-    <color name="tab_favourites_secondary">#744C7F</color>
-    <color name="tab_people">@color/vector_tchap_primary_color</color>
-    <color name="tab_people_secondary">@color/vector_tchap_secondary_color</color>
-    <color name="tab_rooms">@color/vector_tchap_primary_color</color>
-    <color name="tab_rooms_secondary">@color/vector_tchap_secondary_color</color>
-    <color name="tab_groups">#a6d0e5</color>
-    <color name="tab_groups_secondary">#81bddb</color>
+    <!-- Default/Android Status Bar -->
+    <color name="tchap_primary_color_dark_light">@color/tchap_dark_blue</color>
+    <!-- Default/Base -->
+    <color name="tchap_primary_color_light">@color/tchap_dark_blue</color>
+    <!-- Default/Accent -->
+    <color name="tchap_accent_color_light">@color/tchap_dark_blue</color>
+    <!-- Text colors -->
+    <color name="tchap_text_color_light">@color/tchap_light_navy</color>
+    <color name="tchap_text_color_light_with_alpha">@color/tchap_light_navy_alpha60</color>
+    <color name="tchap_text_color_dark">@color/tchap_dark_blue</color>
+    <color name="tchap_text_color_dark_grey">@color/tchap_warm_grey</color>
+
+<!--    <color name="vector_tchap_text_color_light_grey">#949494</color>-->
+<!--    <color name="vector_tchap_hexagon_color_dark_grey">#979797</color>-->
+<!--    <color name="vector_tchap_hexagon_background_color_dark_grey">#ECECEC</color>-->
+<!--    <color name="vector_tchap_search_background_color">#90dee5f1</color>-->
+<!--    <color name="tchap_search_bar">#90dee5f1</color>-->
+<!--    <color name="tchap_search_bar_text">#7d7d7d</color>-->
+<!--    <color name="tchap_general_search_bar">#12ffffff</color>-->
+<!--    <color name="tchap_general_search_bar_border">#3bffffff</color>-->
+
+    <!-- Action bar text colors -->
+    <color name="tchap_action_bar_text_color">@color/white</color>
+    <color name="tchap_action_bar_text_color_with_alpha">#9fffffff</color>
+
+<!--    <color name="tchap_primary_text_color">#000000</color>-->
+<!--    <color name="tchap_secondary_text_color">#aeaeae</color>-->
+<!--    <color name="tchap_third_text_color">#848484</color>-->
+<!--    <color name="tchap_navigation_menu_text_color">#9b9b9b</color>-->
+<!--    <color name="tchap_presence_status_color">#60ad0d</color>-->
+<!--    <color name="tchap_incoming_msg_phylact_background_color">#FFFFFF</color>-->
+<!--    <color name="tchap_outgoing_msg_phylact_background_color">#374c72</color>-->
+<!--    <color name="tchap_incoming_msg_markdown_block_background_color">#FFEEEEEE</color>-->
+<!--    <color name="tchap_outgoing_msg_markdown_block_background_color">#FF4D4D4D</color>-->
+<!--    <color name="tchap_unsent_msg_color">#FFF56679</color>-->
+<!--    <color name="tchap_dark_red">#FF7f0d15</color>-->
+<!--    <color name="tchap_light_background">#FFecf0f7</color>-->
+    <color name="tchap_coral_border_color">@color/tchap_coral_alpha70</color>
+    <color name="tchap_pumpkin_orange_border_color">@color/tchap_pumpkin_orange_alpha70</color>
+    <color name="tchap_jade_green_border_color">@color/tchap_jade_green_alpha70</color>
 
     <!-- color of the tchap room avatar border -->
-    <color name="restricted_room_avatar_border_color">@color/vector_tchap_primary_color</color>
-    <color name="unrestricted_room_avatar_border_color">#cccccc</color>
+    <color name="restricted_room_avatar_border_color">@color/tchap_dark_blue</color>
+    <color name="unrestricted_room_avatar_border_color">@color/tchap_dark_grey</color>
 
     <!-- color of the direct chat avatar ring -->
-    <color name="direct_chat_ring_color">@color/vector_tchap_secondary_color</color>
+    <color name="direct_chat_ring_color">@color/tchap_dark_blue</color>
+
+    <!-- Bar color attributes  -->
+    <attr name="bar_bg_color" format="color" />
+    <attr name="bar_title_color" format="color" />
+    <attr name="bar_subtitle_color" format="color" />
+    <attr name="bar_action_color" format="color" />
+
+    <!-- Button color attributes -->
+    <attr name="button_bordered_title_color" format="color" />
+    <attr name="button_bordered_bg_color" format="color" />
+    <attr name="button_plain_title_color" format="color" />
+    <attr name="button_plain_bg_color" format="color" />
+
+    <!-- Body color attributes -->
+    <attr name="primary_bg_color" format="color" />
+    <attr name="primary_text_color" format="color" />
+    <attr name="primary_subtext_color" format="color" />
+    <attr name="placeholder_text_color" format="color" />
+    <attr name="separator_color" format="color" />
+    <attr name="secondary_bg_color" format="color" />
+    <attr name="secondary_text_color" format="color" />
+    <attr name="warn_text_color" format="color" />
+    <attr name="presence_indicator_online_color" format="color" />
+    <attr name="overlay_background_color" format="color" />
+    <attr name="box_bg_color" format="color" />
+    <attr name="box_text_color" format="color" />
 </resources>

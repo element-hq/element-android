@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- VARIANT 1 LIGHT THEME COLORS -->
+
+    <style name="AppTheme.Light.Variant1" parent="AppTheme.Light">
+        <!-- Bar -->
+        <item name="bar_bg_color">@color/tchap_dark_blue</item>
+        <item name="bar_title_color">@color/white</item>
+        <item name="bar_subtitle_color">@color/white</item>
+        <item name="bar_action_color">@color/white</item>
+
+        <!-- Button -->
+        <item name="button_bordered_title_color">@color/white</item>
+        <item name="button_bordered_bg_color">@color/tchap_light_navy</item>
+        <item name="button_plain_title_color">@color/tchap_light_navy</item>
+
+        <!-- Body -->
+        <item name="primary_bg_color">@color/white</item>
+        <item name="primary_text_color">@color/black</item>
+        <item name="primary_subtext_color">@color/tchap_dark_blue</item>
+        <item name="placeholder_text_color">@color/tchap_warm_grey</item>
+        <item name="separator_color">@color/tchap_light_navy</item>
+        <item name="secondary_bg_color">@color/tchap_light_grey</item>
+        <item name="secondary_text_color">@color/tchap_warm_grey</item>
+        <item name="warn_text_color">@color/tchap_coral</item> <!--TODO define warn color-->
+        <item name="presence_indicator_online_color">@color/tchap_jade_green</item>
+        <item name="overlay_background_color">@color/tchap_light_grey_alpha50</item>
+        <item name="box_bg_color">@color/tchap_pale_grey</item>
+        <item name="box_text_color">@color/tchap_greyish_brown</item>
+    </style>
+
+</resources>

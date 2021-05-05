@@ -8,7 +8,7 @@
     <color name="vector_info_color">#2f9edb</color>
 
     <!-- main app colors -->
-    <color name="vector_fuchsia_color">#eb5757</color>
+    <color name="vector_fuchsia_color">@color/tchap_coral</color>
     <color name="vector_silver_color">#FFC7C7C7</color>
     <color name="vector_dark_grey_color">#FF999999</color>
 
@@ -22,11 +22,11 @@
     <color name="riot_primary_background_color_black">#F000</color>
 
     <!--Default/Android Status Bar-->
-    <color name="primary_color_dark_light">#162d58</color>
+    <color name="primary_color_dark_light">@color/tchap_primary_color_dark_light</color>
     <!--Default/Base-->
-    <color name="primary_color_light">#162d58</color>
+    <color name="primary_color_light">@color/tchap_primary_color_light</color>
     <!--Default/Accent-->
-    <color name="accent_color_light">#162d58</color>
+    <color name="accent_color_light">@color/tchap_accent_color_light</color>
 
     <!--Dark/Android Status Bar-->
     <color name="primary_color_dark_dark">#FF0D0E10</color>
@@ -58,7 +58,7 @@
 
     <!-- Hint Colors -->
     <color name="primary_hint_text_color_light">@color/vector_silver_color</color>
-    <color name="primary_hint_text_color_dark">@color/vector_tchap_primary_color</color>
+    <color name="primary_hint_text_color_dark">@color/tchap_dark_blue</color>
 
     <color name="default_text_hint_color_light">#903C3C3C</color>
     <color name="default_text_hint_color_dark">#CCDDDDDD</color>
@@ -112,9 +112,8 @@
         <!-- Source: https://zpl.io/aBKw9Mk -->
 
     <!-- Accents -->
-    <!-- TODO add tchap theme and colors -->
-    <color name="riotx_accent">@color/vector_tchap_primary_color</color>
-    <color name="riotx_accent_alpha25">#3F162d58</color>
+    <color name="riotx_accent">@color/tchap_dark_blue</color>
+    <color name="riotx_accent_alpha25">@color/tchap_dark_blue_alpha25</color>
 
 
     <color name="riotx_destructive_accent">#FFFF4B55</color>

@@ -42,7 +42,7 @@
         android:gravity="center_horizontal"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
-        android:textColor="@color/tchap_gray_86"
+        android:textColor="@color/tchap_text_color_dark_grey"
         android:textSize="12.5sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"

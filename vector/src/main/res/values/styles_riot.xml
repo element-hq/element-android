@@ -8,7 +8,7 @@
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
         <item name="subtitleTextAppearance">@style/Vector.Toolbar.SubTitle</item>
-        <item name="android:background">?riotx_background</item>
+        <item name="android:background">?bar_bg_color</item>
     </style>
 
     <style name="VectorToolbarStyle" parent="VectorToolbarStyleWithPadding">
@@ -30,7 +30,7 @@
     </style>
 
     <style name="VectorAppBarLayoutStyle" parent="Widget.Design.AppBarLayout">
-        <item name="android:background">?riotx_background</item>
+        <item name="android:background">?bar_bg_color</item>
     </style>
 
     <!-- Alert Dialog: Button color are not colorAccent by default -->

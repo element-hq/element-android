@@ -2,7 +2,7 @@
 <resources>
 
     <string name="tchap_app_name" translatable="false">Btchap</string>
-    <color name="padlock_icon_tint_color">@color/vector_tchap_text_color_dark</color>
+    <color name="padlock_icon_tint_color">@color/tchap_text_color_dark</color>
 
     <!-- Identity server names -->
     <string-array name="preferred_identity_server_names" translatable="false">

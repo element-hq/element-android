@@ -79,7 +79,7 @@
                     android:ellipsize="end"
                     android:gravity="start"
                     android:maxLines="1"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?bar_title_color"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     tools:text="@tools:sample/lorem/random" />
@@ -91,7 +91,7 @@
                     android:ellipsize="end"
                     android:gravity="start"
                     android:maxLines="1"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?bar_title_color"
                     android:textSize="14sp"
                     android:visibility="gone"
                     tools:text="@tools:sample/lorem/random"
