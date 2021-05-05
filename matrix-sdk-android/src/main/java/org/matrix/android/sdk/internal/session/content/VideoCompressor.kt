@@ -42,6 +42,7 @@ internal class VideoCompressor @Inject constructor(private val context: Context)
         progressListener?.onProgress(0, 100)
 
         var result: Int = -1
+        var failure: Throwable? = null
         Transcoder.into(destinationFile.path)
                 .addDataSource(videoFile.path)
                 .setListener(object : TranscoderListener {
@@ -63,6 +64,7 @@ internal class VideoCompressor @Inject constructor(private val context: Context)
 
                     override fun onTranscodeFailed(exception: Throwable) {
                         Timber.w(exception, "Compressing: failure")
+                        failure = exception
                         job.completeExceptionally(exception)
                     }
                 })
@@ -70,13 +72,23 @@ internal class VideoCompressor @Inject constructor(private val context: Context)
 
         job.join()
 
+        // Note: job is also cancelled if completeExceptionally() was called
         if (job.isCancelled) {
-            Timber.w("Compressing: Job cancelled")
             // Delete now the temporary file
             deleteFile(destinationFile)
-            // We do not throw a CancellationException, because it's not critical, we will try to send the original file
-            // Anyway this should never occurs, since we never cancel the return value of transcode()
-            return VideoCompressionResult.CompressionCancelled
+            return when (val finalFailure = failure) {
+                null -> {
+                    // We do not throw a CancellationException, because it's not critical, we will try to send the original file
+                    // Anyway this should never occurs, since we never cancel the return value of transcode()
+                    Timber.w("Compressing: A failure occurred")
+                    VideoCompressionResult.CompressionCancelled
+                }
+                else -> {
+                    // Compression failure can also be considered as not critical, but let the caller decide
+                    Timber.w("Compressing: Job cancelled")
+                    VideoCompressionResult.CompressionFailed(finalFailure)
+                }
+            }
         }
 
         progressListener?.onProgress(100, 100)
@@ -90,8 +102,13 @@ internal class VideoCompressor @Inject constructor(private val context: Context)
                 deleteFile(destinationFile)
                 VideoCompressionResult.CompressionNotNeeded
             }
-            else                          ->
-                throw IllegalStateException("Unknown result: $result")
+            else                          -> {
+                // Should not happen...
+                // Delete now the temporary file
+                deleteFile(destinationFile)
+                Timber.w("Unknown result: $result")
+                VideoCompressionResult.CompressionFailed(IllegalStateException("Unknown result: $result"))
+            }
         }
     }
 

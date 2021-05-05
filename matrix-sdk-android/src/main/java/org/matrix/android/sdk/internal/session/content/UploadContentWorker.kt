@@ -210,7 +210,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                                 .also { filesToDelete.add(it) }
                                     }
                                     VideoCompressionResult.CompressionNotNeeded,
-                                    VideoCompressionResult.CompressionCancelled -> {
+                                    VideoCompressionResult.CompressionCancelled,
+                                    is VideoCompressionResult.CompressionFailed -> {
                                         workingFile
                                     }
                                 }
@@ -380,7 +381,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             val updatedContent = when (messageContent) {
                 is MessageImageContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes)
                 is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo, newAttachmentAttributes)
-                is MessageFileContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
+                is MessageFileContent  -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
                 is MessageAudioContent -> messageContent.update(url, encryptedFileInfo, newAttachmentAttributes.newFileSize)
                 else                   -> messageContent
             }
