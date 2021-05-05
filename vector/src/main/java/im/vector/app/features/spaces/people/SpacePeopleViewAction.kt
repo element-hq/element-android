@@ -16,7 +16,10 @@
 
 package im.vector.app.features.spaces.people
 
-import im.vector.app.core.platform.VectorSharedActionViewModel
-import javax.inject.Inject
+import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 
-class SpacePeopleSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<SpacePeopleSharedAction>()
+sealed class SpacePeopleViewAction : VectorViewModelAction {
+    data class ChatWith(val member: RoomMemberSummary) : SpacePeopleViewAction()
+    object InviteToSpace : SpacePeopleViewAction()
+}

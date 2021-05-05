@@ -159,7 +159,7 @@ class SpacePeopleListController @Inject constructor(
 
     private fun RoomMemberListCategories.toPowerLevelLabel(): String? {
         return when (this) {
-            RoomMemberListCategories.ADMIN -> stringProvider.getString(R.string.power_level_admin)
+            RoomMemberListCategories.ADMIN     -> stringProvider.getString(R.string.power_level_admin)
             RoomMemberListCategories.MODERATOR -> stringProvider.getString(R.string.power_level_moderator)
             else                               -> null
         }

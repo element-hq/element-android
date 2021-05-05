@@ -16,7 +16,16 @@
 
 package im.vector.app.features.spaces.people
 
-import im.vector.app.core.platform.VectorSharedActionViewModel
-import javax.inject.Inject
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
+import im.vector.app.features.roomprofile.RoomProfileArgs
 
-class SpacePeopleSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<SpacePeopleSharedAction>()
+data class SpacePeopleViewState(
+        val spaceId: String,
+        val createAndInviteState: Async<String> = Uninitialized
+) : MvRxState {
+    constructor(args: RoomProfileArgs) : this(
+            spaceId = args.roomId
+    )
+}

@@ -71,7 +71,7 @@ class SpacePeopleFragment @Inject constructor(
         return roomMemberModelFactory.create(initialState)
     }
 
-    override fun invalidate() = withState(viewModel, membersViewModel) { baseState, memberListState ->
+    override fun invalidate() = withState(membersViewModel) { memberListState ->
         views.appBarTitle.text = getString(R.string.bottom_action_people)
         val memberCount = (memberListState.roomSummary.invoke()?.otherMemberIds?.size ?: 0) + 1
         views.appBarSpaceInfo.text = resources.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
@@ -133,7 +133,7 @@ class SpacePeopleFragment @Inject constructor(
 
     private fun handleViewEvents(events: SpacePeopleViewEvents) {
         when (events) {
-            is SpacePeopleViewEvents.OpenRoom -> {
+            is SpacePeopleViewEvents.OpenRoom      -> {
                 sharedActionViewModel.post(SpacePeopleSharedAction.NavigateToRoom(events.roomId))
             }
             is SpacePeopleViewEvents.InviteToSpace -> {

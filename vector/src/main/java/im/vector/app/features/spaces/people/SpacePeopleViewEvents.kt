@@ -16,7 +16,9 @@
 
 package im.vector.app.features.spaces.people
 
-import im.vector.app.core.platform.VectorSharedActionViewModel
-import javax.inject.Inject
+import im.vector.app.core.platform.VectorViewEvents
 
-class SpacePeopleSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<SpacePeopleSharedAction>()
+sealed class SpacePeopleViewEvents : VectorViewEvents {
+    data class OpenRoom(val roomId: String) : SpacePeopleViewEvents()
+    data class InviteToSpace(val spaceId: String) : SpacePeopleViewEvents()
+}

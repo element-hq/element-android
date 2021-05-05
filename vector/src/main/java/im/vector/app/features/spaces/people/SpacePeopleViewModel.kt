@@ -18,50 +18,24 @@ package im.vector.app.features.spaces.people
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
-import im.vector.app.features.roomprofile.RoomProfileArgs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
-
-data class SpacePeopleViewState(
-        val spaceId: String,
-        val createAndInviteState: Async<String> = Uninitialized
-) : MvRxState {
-    constructor(args: RoomProfileArgs) : this(
-            spaceId = args.roomId
-    )
-}
-
-sealed class SpacePeopleViewAction : VectorViewModelAction {
-    data class ChatWith(val member: RoomMemberSummary) : SpacePeopleViewAction()
-    object InviteToSpace : SpacePeopleViewAction()
-}
-
-sealed class SpacePeopleViewEvents : VectorViewEvents {
-    data class OpenRoom(val roomId: String) : SpacePeopleViewEvents()
-    data class InviteToSpace(val spaceId: String) : SpacePeopleViewEvents()
-}
 
 class SpacePeopleViewModel @AssistedInject constructor(
         @Assisted val initialState: SpacePeopleViewState,
@@ -86,7 +60,7 @@ class SpacePeopleViewModel @AssistedInject constructor(
 
     override fun handle(action: SpacePeopleViewAction) {
         when (action) {
-            is SpacePeopleViewAction.ChatWith -> handleChatWith(action)
+            is SpacePeopleViewAction.ChatWith   -> handleChatWith(action)
             SpacePeopleViewAction.InviteToSpace -> handleInviteToSpace()
         }.exhaustive
     }
