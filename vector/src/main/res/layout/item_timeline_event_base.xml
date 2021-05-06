@@ -208,6 +208,8 @@
                 android:layout_gravity="end|bottom"
                 android:layout_marginStart="4dp"
                 android:layout_alignEnd="@id/viewStubContainer"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="1dp"
                 tools:layout_alignBottom="@id/viewStubContainer"
                 tools:paddingTop="4dp"
                 android:id="@+id/bubbleFootView">
