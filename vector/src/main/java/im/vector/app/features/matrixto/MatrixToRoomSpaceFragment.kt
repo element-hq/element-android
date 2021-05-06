@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -31,6 +30,7 @@ import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentMatrixToRoomSpaceCardBinding
 import im.vector.app.features.home.AvatarRenderer
@@ -50,11 +50,18 @@ class MatrixToRoomSpaceFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.matrixToCardMainButton.debouncedClicks {
-            mainButtonClicked()
+        views.matrixToCardMainButton.callback = object : ButtonStateView.Callback {
+            override fun onButtonClicked() {
+                mainButtonClicked()
+            }
+
+            override fun onRetryClicked() = onButtonClicked()
         }
-        views.matrixToCardSecondaryButton.debouncedClicks {
-            secondaryButtonClicked()
+        views.matrixToCardSecondaryButton.callback = object : ButtonStateView.Callback {
+            override fun onButtonClicked() {
+                secondaryButtonClicked()
+            }
+            override fun onRetryClicked() = onButtonClicked()
         }
     }
 
@@ -182,21 +189,17 @@ class MatrixToRoomSpaceFragment @Inject constructor(
 
         when (state.startChattingState) {
             Uninitialized -> {
-                views.matrixToCardButtonLoading.isVisible = false
-//                views.matrixToCardMainButton.isVisible = false
+                views.matrixToCardMainButton.render(ButtonStateView.State.Button)
             }
             is Success -> {
-                views.matrixToCardButtonLoading.isVisible = false
-                views.matrixToCardMainButton.isVisible = true
+                views.matrixToCardMainButton.render(ButtonStateView.State.Button)
             }
             is Fail -> {
-                views.matrixToCardButtonLoading.isVisible = false
-                views.matrixToCardMainButton.isVisible = true
+                views.matrixToCardMainButton.render(ButtonStateView.State.Error)
                 // TODO display some error copy?
             }
             is Loading -> {
-                views.matrixToCardButtonLoading.isVisible = true
-                views.matrixToCardMainButton.isInvisible = true
+                views.matrixToCardMainButton.render(ButtonStateView.State.Loading)
             }
         }
     }

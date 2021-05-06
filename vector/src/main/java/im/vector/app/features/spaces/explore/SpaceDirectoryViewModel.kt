@@ -40,7 +40,7 @@ import timber.log.Timber
 
 class SpaceDirectoryViewModel @AssistedInject constructor(
         @Assisted initialState: SpaceDirectoryState,
-        private val session: Session
+        val session: Session
 ) : VectorViewModel<SpaceDirectoryState, SpaceDirectoryViewAction, SpaceDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
@@ -91,6 +91,7 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
     private fun observeJoinedRooms() {
         val queryParams = roomSummaryQueryParams {
             memberships = listOf(Membership.JOIN)
+            excludeType = null
         }
         session
                 .rx()
@@ -134,6 +135,9 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
             }
             is SpaceDirectoryViewAction.JoinOrOpen -> {
                 handleJoinOrOpen(action.spaceChildInfo)
+            }
+            is SpaceDirectoryViewAction.NavigateToRoom -> {
+                _viewEvents.post(SpaceDirectoryViewEvents.NavigateToRoom(action.roomId))
             }
         }
     }

@@ -56,7 +56,7 @@ class MatrixToBottomSheet :
         injector.inject(this)
     }
 
-    private var interactionListener: InteractionListener? = null
+    var interactionListener: InteractionListener? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetMatrixToCardBinding {
         return BottomSheetMatrixToCardBinding.inflate(inflater, container, false)

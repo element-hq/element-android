@@ -194,7 +194,7 @@ class SpaceRoomListSectionBuilder(
                             } else {
                                 liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
                                     val spaceSum = tryOrNull { session.spaceService().querySpaceChildren(selectedSpace.roomId, suggestedOnly = true) }
-                                    val value = spaceSum?.second ?: emptyList()
+                                    val value = spaceSum?.second.orEmpty().distinctBy { it.childRoomId }
                                     // i need to check if it's already joined.
                                     val filtered = value.filter {
                                         session.getRoomSummary(it.childRoomId)?.membership?.isActive() != true
