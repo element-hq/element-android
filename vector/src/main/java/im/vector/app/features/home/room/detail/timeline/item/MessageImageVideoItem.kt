@@ -31,6 +31,7 @@ import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.media.ImageContentRenderer
+import im.vector.app.features.themes.BubbleThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>() {
@@ -105,6 +106,20 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         // Case: Message information (sender name + date) makes the containing view wider than the ImageView
         // -> Align ImageView within its parent to the same side as message bubbles
         (holder.imageView.layoutParams as ConstraintLayout.LayoutParams).horizontalBias = if (reverseBubble) 1f else 0f
+
+        // Image outline
+        when {
+            bubbleStyle == BubbleThemeUtils.BUBBLE_STYLE_NONE || mode != ImageContentRenderer.Mode.THUMBNAIL -> {
+                // Don't show it for non-bubble layouts, don't show for Stickers, ...
+                holder.mediaContentView.background = null
+            }
+            attributes.informationData.sentByMe                                                           -> {
+                holder.mediaContentView.setBackgroundResource(R.drawable.background_image_border_outgoing)
+            }
+            else                                        -> {
+                holder.mediaContentView.setBackgroundResource(R.drawable.background_image_border_incoming)
+            }
+        }
     }
 
     override fun allowFooterOverlay(holder: Holder): Boolean {
