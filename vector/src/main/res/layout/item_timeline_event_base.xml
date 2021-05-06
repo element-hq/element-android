@@ -121,6 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/bubbleMessageMemberNameView"
                 android:layout_alignEnd="@id/viewStubContainer"
+                android:layout_marginBottom="4dp"
                 android:maxLines="1"
                 android:textColor="?riotx_text_secondary"
                 android:textSize="12sp"
