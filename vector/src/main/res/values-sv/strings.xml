@@ -2728,4 +2728,7 @@
     <string name="create_spaces_details_private_header">Lägg till några detaljer för att hjälpa folk att identifiera det. Du kan ändra dessa när som helst.</string>
     <string name="invite_just_to_this_room">Bara till det här rummet</string>
     <string name="invite_to_space_with_name_desc">De kommer att kunna utforska %s</string>
+    <string name="skip_for_now">Hoppa över för tillfället</string>
+    <string name="share_space_link_message">Gå med i mitt utrymme %1$s %2$s</string>
+    <string name="invite_just_to_this_room_desc">De kommer inte att bli en del av %s</string>
 </resources>
