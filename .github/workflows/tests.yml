@@ -3,7 +3,7 @@ name: Test
 on:
   pull_request: {}
   push:
-    branches: [master, develop]
+    branches: [main, develop]
 
 jobs:
   unit-tests:
