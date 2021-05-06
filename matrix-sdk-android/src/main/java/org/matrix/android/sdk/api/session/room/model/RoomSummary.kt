@@ -59,7 +59,8 @@ data class RoomSummary constructor(
         val roomType: String? = null,
         val spaceParents: List<SpaceParentInfo>? = null,
         val spaceChildren: List<SpaceChildInfo>? = null,
-        val flattenParentIds: List<String> = emptyList()
+        val flattenParentIds: List<String> = emptyList(),
+        val joinRules: RoomJoinRules? = null
 ) {
 
     val isVersioned: Boolean

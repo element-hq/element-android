@@ -22,6 +22,7 @@ import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
@@ -239,6 +240,23 @@ internal open class RoomSummaryEntity(
         set(value) {
             if (value.name != versioningStateStr) {
                 versioningStateStr = value.name
+            }
+        }
+
+    private var joinnRulesStr: String? = null
+    var joinnRules: RoomJoinRules?
+        get() {
+            return joinnRulesStr?.let {
+                try {
+                    RoomJoinRules.valueOf(it)
+                } catch (failure: Throwable) {
+                    null
+                }
+            }
+        }
+        set(value) {
+            if (value?.name != joinnRulesStr) {
+                joinnRulesStr = value?.name
             }
         }
 

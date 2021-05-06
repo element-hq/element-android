@@ -91,7 +91,8 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                             parentRoomId = roomSummaryEntity.roomId
                     )
                 },
-                flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList()
+                flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList(),
+                joinRules = roomSummaryEntity.joinnRules
         )
     }
 }

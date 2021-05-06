@@ -123,7 +123,8 @@ internal class DefaultSpaceService @Inject constructor(
                             encryptionEventTs = null,
                             typingUsers = emptyList(),
                             isEncrypted = false,
-                            flattenParentIds = emptyList()
+                            flattenParentIds = emptyList(),
+                            joinRules = null
                     ),
                     second = response.rooms
                             ?.filter { it.roomId != spaceId }
