@@ -2726,4 +2726,6 @@
     <string name="create_spaces_room_public_header">Vad är några diskussioner du vill ha i %s\?</string>
     <string name="create_space_error_empty_field_space_name">Ge det ett namn för att fortsätta.</string>
     <string name="create_spaces_details_private_header">Lägg till några detaljer för att hjälpa folk att identifiera det. Du kan ändra dessa när som helst.</string>
+    <string name="invite_just_to_this_room">Bara till det här rummet</string>
+    <string name="invite_to_space_with_name_desc">De kommer att kunna utforska %s</string>
 </resources>
