@@ -210,7 +210,7 @@ class SpaceCreationTest : InstrumentedTest {
 
         val childCount = bobSession.getRoomSummaries(
                 roomSummaryQueryParams {
-                    activeSpaceId = ActiveSpaceFilter.ActiveSpace(spaceId)
+                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(spaceId)
                 }
         ).size
 

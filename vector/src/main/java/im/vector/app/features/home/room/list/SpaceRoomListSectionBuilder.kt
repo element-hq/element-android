@@ -129,7 +129,7 @@ class SpaceRoomListSectionBuilder(
                 sections, activeSpaceAwareQueries,
                 R.string.invitations_header,
                 true,
-                RoomListViewModel.SpaceFilterStrategy.NONE
+                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
         ) {
             it.memberships = listOf(Membership.INVITE)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
@@ -259,47 +259,6 @@ class SpaceRoomListSectionBuilder(
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
             it.roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
         }
-
-//        // For DMs we still need some post query filter :/
-//        // It's probably less important as home is not filtering at all
-//        val dmList = MutableLiveData<List<RoomSummary>>()
-//        Observables.combineLatest(
-//                session.getRoomSummariesLive(
-//                        roomSummaryQueryParams {
-//                            memberships = listOf(Membership.JOIN)
-//                            roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-//                        }
-//                ).asObservable(),
-//                appStateHandler.selectedSpaceDataSource.observe()
-//
-//        ) { rooms, currentSpaceOption ->
-//            val currentSpace = currentSpaceOption.orNull()
-//                    .takeIf {
-//                        // the +ALL trick is annoying, should find a way to fix that at the source!
-//                        MatrixPatterns.isRoomId(it?.roomId)
-//                    }
-//            if (currentSpace == null) {
-//                rooms
-//            } else {
-//                rooms.filter {
-//                    it.otherMemberIds
-//                            .intersect(currentSpace.otherMemberIds)
-//                            .isNotEmpty()
-//                }
-//            }
-//        }.subscribe {
-//            dmList.postValue(it)
-//        }.also {
-//            onDisposable.invoke(it)
-//        }
-//
-//        sections.add(
-//                RoomsSection(
-//                        sectionName = stringProvider.getString(R.string.bottom_action_people_x),
-//                        liveList = dmList,
-//                        notifyOfLocalEcho = false
-//                )
-//        )
     }
 
     private fun addSection(sections: MutableList<RoomsSection>,
@@ -323,7 +282,7 @@ class SpaceRoomListSectionBuilder(
                                     override fun updateForSpaceId(roomId: String?) {
                                         it.updateQuery {
                                             it.copy(
-                                                    activeSpaceId = ActiveSpaceFilter.ActiveSpace(roomId)
+                                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
                                             )
                                         }
                                     }
@@ -335,13 +294,13 @@ class SpaceRoomListSectionBuilder(
                                         if (roomId != null) {
                                             it.updateQuery {
                                                 it.copy(
-                                                        activeSpaceId = ActiveSpaceFilter.ActiveSpace(roomId)
+                                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
                                                 )
                                             }
                                         } else {
                                             it.updateQuery {
                                                 it.copy(
-                                                        activeSpaceId = ActiveSpaceFilter.None
+                                                        activeSpaceFilter = ActiveSpaceFilter.None
                                                 )
                                             }
                                         }
@@ -392,7 +351,7 @@ class SpaceRoomListSectionBuilder(
         return when (spaceFilter) {
             RoomListViewModel.SpaceFilterStrategy.NORMAL -> {
                 copy(
-                        activeSpaceId = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
                 )
             }
             RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL -> {
@@ -400,7 +359,7 @@ class SpaceRoomListSectionBuilder(
                     this
                 } else {
                     copy(
-                            activeSpaceId = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
                     )
                 }
             }

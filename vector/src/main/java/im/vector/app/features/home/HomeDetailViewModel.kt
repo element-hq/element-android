@@ -166,10 +166,12 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                             // TODO!!
                         }
                         is RoomGroupingMethod.BySpace -> {
+                            val activeSpaceRoomId = groupingMethod.spaceSummary?.roomId
                             val dmInvites = session.getRoomSummaries(
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.INVITE)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                                        activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
                                     }
                             ).size
 
@@ -177,6 +179,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.INVITE)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
                                     }
                             ).size
 
@@ -184,6 +187,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                                        activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
                                     }
                             )
 
@@ -191,7 +195,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                        activeSpaceId = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
+                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
                                     }
                             )
 
