@@ -1,4 +1,4 @@
-name: Integeration Test
+name: Integration Test
 
 on:
   pull_request: { }
