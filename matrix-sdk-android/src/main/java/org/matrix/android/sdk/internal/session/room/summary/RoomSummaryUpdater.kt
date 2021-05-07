@@ -132,6 +132,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
         roomSummaryEntity.name = ContentMapper.map(lastNameEvent?.content).toModel<RoomNameContent>()?.name
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
+        roomSummaryEntity.joinRules = ContentMapper.map(joinRulesEvent?.content).toModel<RoomJoinRulesContent>()?.joinRules
         roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
         roomSummaryEntity.canonicalAlias = ContentMapper.map(lastCanonicalAliasEvent?.content).toModel<RoomCanonicalAliasContent>()
                 ?.canonicalAlias
@@ -173,8 +174,6 @@ internal class RoomSummaryUpdater @Inject constructor(
                 crossSigningService.onUsersDeviceUpdate(otherRoomMembers)
             }
         }
-
-        roomSummaryEntity.joinnRules = ContentMapper.map(joinRulesEvent?.content).toModel<RoomJoinRulesContent>()?.joinRules
     }
 
     private fun RoomSummaryEntity.updateHasFailedSending() {

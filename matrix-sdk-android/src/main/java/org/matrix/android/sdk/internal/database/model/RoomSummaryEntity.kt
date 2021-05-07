@@ -21,6 +21,7 @@ import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -243,20 +244,16 @@ internal open class RoomSummaryEntity(
             }
         }
 
-    private var joinnRulesStr: String? = null
-    var joinnRules: RoomJoinRules?
+    private var joinRulesStr: String? = null
+    var joinRules: RoomJoinRules?
         get() {
-            return joinnRulesStr?.let {
-                try {
-                    RoomJoinRules.valueOf(it)
-                } catch (failure: Throwable) {
-                    null
-                }
+            return joinRulesStr?.let {
+                tryOrNull { RoomJoinRules.valueOf(it) }
             }
         }
         set(value) {
-            if (value?.name != joinnRulesStr) {
-                joinnRulesStr = value?.name
+            if (value?.name != joinRulesStr) {
+                joinRulesStr = value?.name
             }
         }
 

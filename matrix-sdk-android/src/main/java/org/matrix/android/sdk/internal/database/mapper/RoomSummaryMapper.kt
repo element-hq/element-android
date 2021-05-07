@@ -44,6 +44,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                 name = roomSummaryEntity.name ?: "",
                 topic = roomSummaryEntity.topic ?: "",
                 avatarUrl = roomSummaryEntity.avatarUrl ?: "",
+                joinRules = roomSummaryEntity.joinRules,
                 isDirect = roomSummaryEntity.isDirect,
                 directUserId = roomSummaryEntity.directUserId,
                 latestPreviewableEvent = latestEvent,
@@ -91,8 +92,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                             parentRoomId = roomSummaryEntity.roomId
                     )
                 },
-                flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList(),
-                joinRules = roomSummaryEntity.joinnRules
+                flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList()
         )
     }
 }

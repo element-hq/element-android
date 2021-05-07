@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
  * This class holds some data of a room.
  * It can be retrieved by [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService]
  */
-data class RoomSummary constructor(
+data class RoomSummary(
         val roomId: String,
         // Computed display name
         val displayName: String = "",
@@ -35,6 +35,7 @@ data class RoomSummary constructor(
         val avatarUrl: String = "",
         val canonicalAlias: String? = null,
         val aliases: List<String> = emptyList(),
+        val joinRules: RoomJoinRules? = null,
         val isDirect: Boolean = false,
         val directUserId: String? = null,
         val joinedMembersCount: Int? = 0,
@@ -59,8 +60,7 @@ data class RoomSummary constructor(
         val roomType: String? = null,
         val spaceParents: List<SpaceParentInfo>? = null,
         val spaceChildren: List<SpaceChildInfo>? = null,
-        val flattenParentIds: List<String> = emptyList(),
-        val joinRules: RoomJoinRules? = null
+        val flattenParentIds: List<String> = emptyList()
 ) {
 
     val isVersioned: Boolean
