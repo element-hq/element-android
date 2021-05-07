@@ -79,6 +79,12 @@ dictionary KeyRequestPair {
 };
 
 [Enum]
+interface OutgoingVerificationRequest {
+    ToDevice(string request_id, string event_type, string body);
+    InRoom(string request_id, string room_id, string event_type, string content);
+};
+
+[Enum]
 interface Request {
     ToDevice(string request_id, string event_type, string body);
     KeysUpload(string request_id, string body);
@@ -130,8 +136,17 @@ interface OlmMachine {
     [Throws=CryptoStoreError]
     sequence<Request> share_room_key([ByRef] string room_id, sequence<string> users);
 
+    Sas? get_verification([ByRef] string flow_id);
+
     [Throws=CryptoStoreError]
     Sas start_verification([ByRef] Device device);
+    [Throws=CryptoStoreError]
+    OutgoingVerificationRequest? confirm_verification([ByRef] string flow_id);
+    OutgoingVerificationRequest? cancel_verification([ByRef] string flow_id);
+    OutgoingVerificationRequest? accept_verification([ByRef] string flow_id);
+
+    sequence<i32>? get_emoji_index([ByRef] string flow_id);
+    sequence<i32>? get_decimals([ByRef] string flow_id);
 
     [Throws=DecryptionError]
     KeyRequestPair request_room_key([ByRef] string event, [ByRef] string room_id);

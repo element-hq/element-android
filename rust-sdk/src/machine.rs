@@ -30,12 +30,12 @@ use tokio::runtime::Runtime;
 use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
 use matrix_sdk_crypto::{
     decrypt_key_export, encrypt_key_export, EncryptionSettings, OlmMachine as InnerMachine,
-    OutgoingVerificationRequest, Sas as InnerSas,
+    Sas as InnerSas,
 };
 
 use crate::{
     error::{CryptoStoreError, DecryptionError, MachineCreationError},
-    responses::{response_from_string, OwnedResponse},
+    responses::{response_from_string, OutgoingVerificationRequest, OwnedResponse},
     DecryptedEvent, Device, DeviceLists, KeyImportError, KeysImportResult, ProgressListener,
     Request, RequestType,
 };
@@ -252,13 +252,11 @@ impl OlmMachine {
             })
             .collect();
 
-        let events = self
-            .runtime
-            .block_on(
-                self.inner
-                    .receive_sync_changes(events, &device_changes, &key_counts),
-            )
-            .unwrap();
+        let events = self.runtime.block_on(self.inner.receive_sync_changes(
+            events,
+            &device_changes,
+            &key_counts,
+        ))?;
 
         Ok(serde_json::to_string(&events)?)
     }
@@ -570,6 +568,7 @@ impl OlmMachine {
     pub fn start_verification(&self, device: &Device) -> Result<Sas, CryptoStoreError> {
         let user_id = UserId::try_from(device.user_id.clone())?;
         let device_id = device.device_id.as_str().into();
+        // TODO remove the unwrap
         let device = self
             .runtime
             .block_on(self.inner.get_device(&user_id, device_id))?

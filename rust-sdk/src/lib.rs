@@ -7,8 +7,10 @@ mod responses;
 pub use device::Device;
 pub use error::{CryptoStoreError, DecryptionError, KeyImportError, MachineCreationError};
 pub use logger::{set_logger, Logger};
-pub use machine::{OlmMachine, Sas, KeyRequestPair};
-pub use responses::{DeviceLists, KeysImportResult, Request, RequestType};
+pub use machine::{KeyRequestPair, OlmMachine, Sas};
+pub use responses::{
+    DeviceLists, KeysImportResult, OutgoingVerificationRequest, Request, RequestType,
+};
 
 pub trait ProgressListener {
     fn on_progress(&self, progress: i32, total: i32);

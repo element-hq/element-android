@@ -13,10 +13,47 @@ use ruma::{
         to_device::send_event_to_device::Response as ToDeviceResponse,
     },
     assign,
+    events::EventContent,
     identifiers::UserId,
 };
 
-use matrix_sdk_crypto::{IncomingResponse, OutgoingRequest, ToDeviceRequest};
+use matrix_sdk_crypto::{
+    IncomingResponse, OutgoingRequest, OutgoingVerificationRequest as SdkVerificationRequest,
+    ToDeviceRequest,
+};
+
+pub enum OutgoingVerificationRequest {
+    ToDevice {
+        request_id: String,
+        event_type: String,
+        body: String,
+    },
+    InRoom {
+        request_id: String,
+        room_id: String,
+        event_type: String,
+        content: String,
+    },
+}
+
+impl From<SdkVerificationRequest> for OutgoingVerificationRequest {
+    fn from(r: SdkVerificationRequest) -> Self {
+        match r {
+            SdkVerificationRequest::ToDevice(r) => Self::ToDevice {
+                request_id: r.txn_id_string(),
+                event_type: r.event_type.to_string(),
+                body: serde_json::to_string(&r.messages).expect("Can't serialize to-device body"),
+            },
+            SdkVerificationRequest::InRoom(r) => Self::InRoom {
+                request_id: r.txn_id.to_string(),
+                room_id: r.room_id.to_string(),
+                content: serde_json::to_string(&r.content)
+                    .expect("Can't serialize message content"),
+                event_type: r.content.event_type().to_string(),
+            },
+        }
+    }
+}
 
 pub enum Request {
     ToDevice {
@@ -74,7 +111,7 @@ impl From<ToDeviceRequest> for Request {
         Request::ToDevice {
             request_id: r.txn_id_string(),
             event_type: r.event_type.to_string(),
-            body: serde_json::to_string(&r.messages).unwrap(),
+            body: serde_json::to_string(&r.messages).expect("Can't serialize to-device body"),
         }
     }
 }
@@ -84,7 +121,7 @@ impl From<&ToDeviceRequest> for Request {
         Request::ToDevice {
             request_id: r.txn_id_string(),
             event_type: r.event_type.to_string(),
-            body: serde_json::to_string(&r.messages).unwrap(),
+            body: serde_json::to_string(&r.messages).expect("Can't serialize to-device body"),
         }
     }
 }

@@ -28,12 +28,14 @@ import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
+import org.matrix.android.sdk.internal.crypto.verification.getEmojiForCode
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
@@ -41,6 +43,8 @@ import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
 import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.DecryptionErrorException
+import uniffi.olm.Sas as InnerSas
+import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Device
 import uniffi.olm.DeviceLists
 import uniffi.olm.KeyRequestPair
@@ -119,6 +123,65 @@ internal class DeviceUpdateObserver {
 
     fun removeDeviceUpdateListener(device: LiveDevice) {
         listeners.remove(device)
+    }
+}
+
+internal class Sas(private val machine: InnerMachine, private var inner: InnerSas) {
+    private fun refreshData() {
+        val sas = this.machine.getVerification(this.inner.flowId)
+
+         if (sas != null) {
+             this.inner = sas
+         }
+
+         return
+    }
+
+    fun isCanceled(): Boolean {
+        refreshData()
+        return this.inner.isCanceled
+    }
+
+    fun isDone(): Boolean {
+        refreshData()
+        return this.inner.isDone
+    }
+    
+    fun timedOut(): Boolean {
+        refreshData()
+        return this.inner.timedOut
+    }
+
+    fun canBePresented(): Boolean {
+        refreshData()
+        return this.inner.canBePresented
+    }
+
+    fun accept(): OutgoingVerificationRequest? {
+        return this.machine.acceptVerification(inner.flowId)
+    }
+
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun confirm(): OutgoingVerificationRequest? = withContext(Dispatchers.IO) {
+        machine.confirmVerification(inner.flowId)
+    }
+
+    fun cancel(): OutgoingVerificationRequest? {
+        return this.machine.cancelVerification(inner.flowId)
+    }
+
+    fun emoji(): List<EmojiRepresentation> {
+        val emojiIndex = this.machine.getEmojiIndex(this.inner.flowId)
+
+        return if (emojiIndex != null) {
+            emojiIndex.map { getEmojiForCode(it) }
+        } else {
+            listOf()
+        }
+    }
+
+    fun decimals(): List<Int>? {
+        return this.machine.getDecimals(this.inner.flowId)
     }
 }
 
@@ -533,4 +596,17 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
     fun discardRoomKey(roomId: String) {
         runBlocking { inner.discardRoomKey(roomId) }
     }
+
+    /**
+     * Get an active verification
+     */
+     fun getVerification(flowId: String): Sas? {
+         val sas = this.inner.getVerification(flowId)
+
+         return if (sas == null) {
+             null
+         } else {
+             Sas(this.inner, sas)
+         }
+     }
 }
