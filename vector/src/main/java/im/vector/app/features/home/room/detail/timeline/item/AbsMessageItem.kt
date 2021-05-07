@@ -66,6 +66,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     override fun bind(holder: H) {
         super.bind(holder)
         val contentInBubble = infoInBubbles(holder.memberNameView.context)
+        val senderInBubble = senderNameInBubble(holder.memberNameView.context)
 
         val avatarImageView: ImageView?
         var memberNameView: TextView?
@@ -77,15 +78,18 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
         // Select which views are visible, based on bubble style and other criteria
         if (attributes.informationData.showInformation) {
-            if (contentInBubble) {
+            if (senderInBubble) {
                 memberNameView = holder.bubbleMemberNameView
-                timeView = holder.bubbleTimeView
                 hiddenViews.add(holder.memberNameView)
-                hiddenViews.add(holder.timeView)
             } else {
                 memberNameView = holder.memberNameView
-                timeView = holder.timeView
                 hiddenViews.add(holder.bubbleMemberNameView)
+            }
+            if (contentInBubble) {
+                timeView = holder.bubbleTimeView
+                hiddenViews.add(holder.timeView)
+            } else {
+                timeView = holder.timeView
                 hiddenViews.add(holder.bubbleTimeView)
             }
         } else if (attributes.informationData.forceShowTimestamp) {
@@ -124,6 +128,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                         // In the case of footer time, we can also hide the names without making it look awkward
                         hiddenViews.add(holder.bubbleMemberNameView)
                         memberNameView = null
+                        hiddenViews.add(holder.bubbleTimeView)
+                    } else if (!senderInBubble) {
+                        // We don't need to reserve space here
                         hiddenViews.add(holder.bubbleTimeView)
                     } else {
                         // Don't completely remove, just hide, so our relative layout rules still work
@@ -165,7 +172,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         memberNameView?.setOnLongClickListener(attributes.itemLongClickListener)
 
         // More extra views added by Schildi
-        holder.viewStubContainer.minimumWidth = getViewStubMinimumWidth(holder, contentInBubble, attributes.informationData.showInformation)
+        if (senderInBubble) {
+            holder.viewStubContainer.minimumWidth = getViewStubMinimumWidth(holder, contentInBubble, attributes.informationData.showInformation)
+        } else {
+            holder.viewStubContainer.minimumWidth = 0
+        }
         if (contentInBubble) {
             holder.bubbleFootView.visibility = View.VISIBLE
         } else {
@@ -299,6 +310,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     private fun infoInBubbles(context: Context): Boolean {
         return BubbleThemeUtils.getBubbleStyle(context) == BubbleThemeUtils.BUBBLE_STYLE_BOTH &&
                 (messageBubbleAllowed(context) || pseudoBubbleAllowed())
+    }
+
+    private fun senderNameInBubble(context: Context): Boolean {
+        return infoInBubbles(context) && !pseudoBubbleAllowed()
     }
 
     override fun shouldReverseBubble(): Boolean {
@@ -470,6 +485,24 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                         removeFooterOverlayStyle(holder, density)
                     }
                 }
+                if (bubbleStyle == BubbleThemeUtils.BUBBLE_STYLE_BOTH_HIDDEN) {
+                    // We need to align the non-bubble member name view to pseudo bubbles
+                    if (reverseBubble) {
+                        holder.memberNameView.setPaddingRelative(
+                                shortPaddingDp,
+                                0,
+                                longPaddingDp,
+                                0
+                        )
+                    } else {
+                        holder.memberNameView.setPaddingRelative(
+                                longPaddingDp,
+                                0,
+                                shortPaddingDp,
+                                0
+                        )
+                    }
+                }
             }
             //BubbleThemeUtils.BUBBLE_STYLE_NONE,
             else -> {
@@ -482,6 +515,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 (bubbleView.layoutParams as RelativeLayout.LayoutParams).bottomMargin = 0
                  */
                 bubbleView.setPadding(0, 0, 0, 0)
+                holder.memberNameView.setPadding(0, 0, 0, 0)
             }
         }
 
