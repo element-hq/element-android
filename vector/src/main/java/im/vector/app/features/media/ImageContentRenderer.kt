@@ -16,6 +16,7 @@
 
 package im.vector.app.features.media
 
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
@@ -119,6 +120,25 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         imageView.contentDescription = data.filename
 
         createGlideRequest(data, mode, imageView, size)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                        return false
+                    }
+
+                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        if (data.width == null || data.height == null || data.width == 0 || data.height == 0) {
+                            if (resource is BitmapDrawable) {
+                                val updatedData = data.copy(width = resource.intrinsicWidth, height = resource.intrinsicHeight)
+                                val newSize = processSize(updatedData, mode)
+                                imageView.updateLayoutParams {
+                                    width = newSize.width
+                                    height = newSize.height
+                                }
+                            }
+                        }
+                        return false
+                    }
+                })
                 .dontAnimate()
                 .transform(RoundedCorners(dimensionConverter.dpToPx(3)))
                 // .thumbnail(0.3f)
