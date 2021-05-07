@@ -75,6 +75,9 @@ data class RoomSummary(
     val isFavorite: Boolean
         get() = hasTag(RoomTag.ROOM_TAG_FAVOURITE)
 
+    val isPublic: Boolean
+        get() = joinRules == RoomJoinRules.PUBLIC
+
     fun hasTag(tag: String) = tags.any { it.name == tag }
 
     val canStartCall: Boolean
