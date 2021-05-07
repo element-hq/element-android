@@ -17,6 +17,7 @@
 package im.vector.app.features.settings
 
 import android.bluetooth.BluetoothAdapter
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.preference.Preference
@@ -59,11 +60,13 @@ class VectorSettingsP2PFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         mMulticastPeersEnabled.isChecked = vectorPreferences.p2pEnableMulticast()
-        mBluetoothPeersEnabled.isChecked = vectorPreferences.p2pEnableBluetooth()
+        mBluetoothPeersEnabled.isChecked = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && vectorPreferences.p2pEnableBluetooth()
         mStaticPeerEnabled.isChecked = vectorPreferences.p2pEnableStatic()
         mStaticPeerURI.summary = vectorPreferences.p2pStaticURI().ifEmpty { "No static peer is configured" }
-        mBLECodedPhy.isChecked = vectorPreferences.p2pBLECodedPhy()
-        mBLECodedPhy.isEnabled = BluetoothAdapter.getDefaultAdapter().isLeCodedPhySupported
+        mBLECodedPhy.isChecked = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && vectorPreferences.p2pBLECodedPhy()
+
+        mBluetoothPeersEnabled.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+        mBLECodedPhy.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && BluetoothAdapter.getDefaultAdapter().isLeCodedPhySupported
     }
 
     override fun bindPref() {

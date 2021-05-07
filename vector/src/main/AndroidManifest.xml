@@ -288,8 +288,10 @@
             </intent-filter>
         </service>
 
+        <!-- P2P -->
+
         <service android:name=".DendriteService"
-                 android:exported="false" />
+            android:exported="false" />
 
         <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite and for lintGplayRelease check :/ -->
         <service
