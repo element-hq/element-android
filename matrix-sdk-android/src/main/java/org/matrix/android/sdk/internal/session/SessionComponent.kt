@@ -52,6 +52,7 @@ import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
 import org.matrix.android.sdk.internal.session.search.SearchModule
 import org.matrix.android.sdk.internal.session.signout.SignOutModule
+import org.matrix.android.sdk.internal.session.space.SpaceModule
 import org.matrix.android.sdk.internal.session.sync.SyncModule
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
@@ -91,7 +92,8 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
             FederationModule::class,
             CallModule::class,
             SearchModule::class,
-            ThirdPartyModule::class
+            ThirdPartyModule::class,
+            SpaceModule::class
         ]
 )
 @SessionScope

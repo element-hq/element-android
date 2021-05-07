@@ -22,6 +22,7 @@ import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -34,7 +35,7 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManager
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
@@ -57,12 +58,12 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
 
-    override fun onSessionStarted() {
+    override fun onSessionStarted(session: Session) {
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         integrationManager.addListener(this)
     }
 
-    override fun onSessionStopped() {
+    override fun onSessionStopped(session: Session) {
         integrationManager.removeListener(this)
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }

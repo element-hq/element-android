@@ -107,6 +107,8 @@ class NoticeEventFormatter @Inject constructor(
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_KEY,
             EventType.KEY_VERIFICATION_READY,
+            EventType.STATE_SPACE_CHILD,
+            EventType.STATE_SPACE_PARENT,
             EventType.REDACTION                     -> formatDebug(timelineEvent.root)
             else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
@@ -119,8 +121,8 @@ class NoticeEventFormatter @Inject constructor(
         val powerLevelsContent: PowerLevelsContent = event.getClearContent().toModel() ?: return null
         val previousPowerLevelsContent: PowerLevelsContent = event.resolvedPrevContent().toModel() ?: return null
         val userIds = HashSet<String>()
-        userIds.addAll(powerLevelsContent.users.keys)
-        userIds.addAll(previousPowerLevelsContent.users.keys)
+        userIds.addAll(powerLevelsContent.users.orEmpty().keys)
+        userIds.addAll(previousPowerLevelsContent.users.orEmpty().keys)
         val diffs = ArrayList<String>()
         userIds.forEach { userId ->
             val from = PowerLevelsHelper(previousPowerLevelsContent).getUserRole(userId)

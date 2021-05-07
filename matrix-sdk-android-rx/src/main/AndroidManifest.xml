@@ -1,2 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.matrix.android.sdk.rx" />
+<manifest package="org.matrix.android.sdk.rx" />

@@ -78,6 +78,16 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
         updateState(key, progressData)
     }
 
+    internal fun setCompressingImage(key: String) {
+        val progressData = ContentUploadStateTracker.State.CompressingImage
+        updateState(key, progressData)
+    }
+
+    internal fun setCompressingVideo(key: String, percent: Float) {
+        val progressData = ContentUploadStateTracker.State.CompressingVideo(percent)
+        updateState(key, progressData)
+    }
+
     internal fun setProgress(key: String, current: Long, total: Long) {
         val progressData = ContentUploadStateTracker.State.Uploading(current, total)
         updateState(key, progressData)

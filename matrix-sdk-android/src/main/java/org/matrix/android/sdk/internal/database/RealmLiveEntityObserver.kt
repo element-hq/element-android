@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.database
 
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.internal.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import io.realm.Realm
 import io.realm.RealmChangeListener
@@ -28,6 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.cancelChildren
+import org.matrix.android.sdk.api.session.Session
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
@@ -46,7 +47,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
     private val backgroundRealm = AtomicReference<Realm>()
     private lateinit var results: AtomicReference<RealmResults<T>>
 
-    override fun onSessionStarted() {
+    override fun onSessionStarted(session: Session) {
         if (isStarted.compareAndSet(false, true)) {
             BACKGROUND_HANDLER.post {
                 val realm = Realm.getInstance(realmConfiguration)
@@ -58,7 +59,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
         }
     }
 
-    override fun onSessionStopped() {
+    override fun onSessionStopped(session: Session) {
         if (isStarted.compareAndSet(true, false)) {
             BACKGROUND_HANDLER.post {
                 results.getAndSet(null).removeAllChangeListeners()
@@ -70,7 +71,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
         }
     }
 
-    override fun onClearCache() {
+    override fun onClearCache(session: Session) {
         observerScope.coroutineContext.cancelChildren()
     }
 }

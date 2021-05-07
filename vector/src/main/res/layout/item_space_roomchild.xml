@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <im.vector.app.features.spaces.preview.SpaceTabView
+        android:id="@+id/spaceChildTabView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/space_home_background"
+        android:clipToPadding="false"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/childRoomAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:contentDescription="@string/avatar"
+            android:scaleType="centerInside"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingPrefix"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/childRoomName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="?riotx_text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/childRoomTopic"
+            app:layout_constraintEnd_toStartOf="@id/spaceChildMemberCountIcon"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/childRoomAvatar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/full_names" />
+
+        <TextView
+            android:id="@+id/childRoomTopic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:textColor="?riotx_text_secondary"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/spaceChildBarrier"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/childRoomName"
+            app:layout_constraintTop_toBottomOf="@+id/childRoomName"
+            tools:text="@sample/matrix.json/data/roomTopic" />
+
+        <ImageView
+            android:id="@+id/spaceChildMemberCountIcon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="4dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_room_profile_member_list"
+            app:layout_constraintBottom_toBottomOf="@+id/spaceChildMemberCountText"
+            app:layout_constraintEnd_toStartOf="@+id/spaceChildMemberCountText"
+            app:layout_constraintTop_toTopOf="@+id/spaceChildMemberCountText"
+            app:tint="?riotx_text_secondary" />
+
+        <TextView
+            android:id="@+id/spaceChildMemberCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:maxLength="5"
+            android:textColor="?riotx_text_secondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="123" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/spaceChildBarrier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="childRoomAvatar,childRoomTopic"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spaceChildBarrier" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

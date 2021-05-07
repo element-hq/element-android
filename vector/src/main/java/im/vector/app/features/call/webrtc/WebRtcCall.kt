@@ -21,6 +21,7 @@ import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
 import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.CountUpTimer
+import im.vector.app.core.utils.TextUtils.formatDuration
 import im.vector.app.features.call.CameraEventsHandlerAdapter
 import im.vector.app.features.call.CameraProxy
 import im.vector.app.features.call.CameraType
@@ -826,17 +827,6 @@ class WebRtcCall(val mxCall: MxCall,
                     tryOrNull { it.onHoldUnhold() }
                 }
             }
-        }
-    }
-
-    private fun formatDuration(duration: Duration): String {
-        val hours = duration.seconds / 3600
-        val minutes = (duration.seconds % 3600) / 60
-        val seconds = duration.seconds % 60
-        return if (hours > 0) {
-            String.format("%d:%02d:%02d", hours, minutes, seconds)
-        } else {
-            String.format("%02d:%02d", minutes, seconds)
         }
     }
 

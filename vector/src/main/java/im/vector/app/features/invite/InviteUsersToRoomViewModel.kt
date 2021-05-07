@@ -92,6 +92,6 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     fun getUserIdsOfRoomMembers(): Set<String> {
-        return room.roomSummary()?.otherMemberIds?.toSet() ?: emptySet()
+        return room.roomSummary()?.otherMemberIds?.toSet().orEmpty()
     }
 }

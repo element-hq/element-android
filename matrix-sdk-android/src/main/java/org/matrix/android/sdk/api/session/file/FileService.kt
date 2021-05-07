@@ -29,14 +29,19 @@ import java.io.File
  */
 interface FileService {
 
-    enum class FileState {
-        IN_CACHE,
-        DOWNLOADING,
-        UNKNOWN
+    sealed class FileState {
+        /**
+         * The original file is in cache, but the decrypted files can be deleted for security reason.
+         * To decrypt the file again, call [downloadFile], the encrypted file will not be downloaded again
+         * @param decryptedFileInCache true if the decrypted file is available. Always true for clear files.
+         */
+        data class InCache(val decryptedFileInCache: Boolean) : FileState()
+        object Downloading : FileState()
+        object Unknown : FileState()
     }
 
     /**
-     * Download a file.
+     * Download a file if necessary and ensure that if the file is encrypted, the file is decrypted.
      * Result will be a decrypted file, stored in the cache folder. url parameter will be used to create unique filename to avoid name collision.
      */
     suspend fun downloadFile(fileName: String,

@@ -21,23 +21,13 @@ import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.app.core.utils.createUIHandler
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import javax.inject.Inject
-
-class RoomSummaryPagedControllerFactory @Inject constructor(
-        private val roomSummaryItemFactory: RoomSummaryItemFactory
-) {
-
-    fun createRoomSummaryPagedController(): RoomSummaryPagedController {
-        return RoomSummaryPagedController(roomSummaryItemFactory)
-    }
-}
 
 class RoomSummaryPagedController(
         private val roomSummaryItemFactory: RoomSummaryItemFactory
 ) : PagedListEpoxyController<RoomSummary>(
         // Important it must match the PageList builder notify Looper
         modelBuildingHandler = createUIHandler()
-) {
+), CollapsableControllerExtension {
 
     var listener: RoomListListener? = null
 
@@ -48,21 +38,25 @@ class RoomSummaryPagedController(
             requestForcedModelBuild()
         }
 
+    override var collapsed = false
+        set(value) {
+            if (field != value) {
+                field = value
+                requestForcedModelBuild()
+            }
+        }
+
+    override fun addModels(models: List<EpoxyModel<*>>) {
+        if (collapsed) {
+            super.addModels(emptyList())
+        } else {
+            super.addModels(models)
+        }
+    }
+
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
         // for place holder if enabled
-        item ?: return roomSummaryItemFactory.createRoomItem(
-                roomSummary = RoomSummary(
-                        roomId = "null_item_pos_$currentPosition",
-                        name = "",
-                        encryptionEventTs = null,
-                        isEncrypted = false,
-                        typingUsers = emptyList()
-                ),
-                selectedRoomIds = emptySet(),
-                onClick = null,
-                onLongClick = null
-        )
-
+        item ?: return RoomSummaryItemPlaceHolder_().apply { id(currentPosition) }
         return roomSummaryItemFactory.create(item, roomChangeMembershipStates.orEmpty(), emptySet(), listener)
     }
 }

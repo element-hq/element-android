@@ -54,12 +54,6 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     object ShowWaitingView : RoomDetailViewEvents()
     object HideWaitingView : RoomDetailViewEvents()
 
-    data class FileTooBigError(
-            val filename: String,
-            val fileSizeInBytes: Long,
-            val homeServerLimitInBytes: Long
-    ) : RoomDetailViewEvents()
-
     data class DownloadFileState(
             val mimeType: String?,
             val file: File?,
@@ -67,9 +61,8 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     ) : RoomDetailViewEvents()
 
     data class OpenFile(
-            val mimeType: String?,
-            val uri: Uri?,
-            val throwable: Throwable?
+            val uri: Uri,
+            val mimeType: String?
     ) : RoomDetailViewEvents()
 
     abstract class SendMessageResult : RoomDetailViewEvents()

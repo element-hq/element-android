@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isTokenError
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.sync.SyncState
@@ -64,11 +65,11 @@ internal class EventSenderProcessorThread @Inject constructor(
         memento.unTrack(task)
     }
 
-    override fun onSessionStarted() {
+    override fun onSessionStarted(session: Session) {
         start()
     }
 
-    override fun onSessionStopped() {
+    override fun onSessionStopped(session: Session) {
         interrupt()
     }
 

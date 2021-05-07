@@ -52,6 +52,10 @@ object EventType {
     const val STATE_ROOM_GUEST_ACCESS = "m.room.guest_access"
     const val STATE_ROOM_POWER_LEVELS = "m.room.power_levels"
 
+    const val STATE_SPACE_CHILD = "m.space.child"
+
+    const val STATE_SPACE_PARENT = "m.space.parent"
+
     /**
      * Note that this Event has been deprecated, see
      * - https://matrix.org/docs/spec/client_server/r0.6.1#historical-events
@@ -74,6 +78,7 @@ object EventType {
     const val CALL_NEGOTIATE = "m.call.negotiate"
     const val CALL_REJECT = "m.call.reject"
     const val CALL_HANGUP = "m.call.hangup"
+
     // This type is not processed by the client, just sent to the server
     const val CALL_REPLACES = "m.call.replaces"
 

@@ -24,7 +24,10 @@ import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotification
 
 data class RoomsSection(
         val sectionName: String,
-        val livePages: LiveData<PagedList<RoomSummary>>,
+        // can be a paged list or a regular list
+        val livePages: LiveData<PagedList<RoomSummary>>? = null,
+        val liveList: LiveData<List<RoomSummary>>? = null,
+        val liveSuggested: LiveData<SuggestedRoomInfo>? = null,
         val isExpanded: MutableLiveData<Boolean> = MutableLiveData(true),
         val notificationCount: MutableLiveData<RoomAggregateNotificationCount> = MutableLiveData(RoomAggregateNotificationCount(0, 0)),
         val notifyOfLocalEcho: Boolean = false

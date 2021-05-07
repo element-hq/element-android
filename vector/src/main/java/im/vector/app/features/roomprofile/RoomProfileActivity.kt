@@ -54,6 +54,7 @@ class RoomProfileActivity :
 
         const val EXTRA_DIRECT_ACCESS_ROOM_ROOT = 0
         const val EXTRA_DIRECT_ACCESS_ROOM_SETTINGS = 1
+        const val EXTRA_DIRECT_ACCESS_ROOM_MEMBERS = 2
 
         fun newIntent(context: Context, roomId: String, directAccess: Int?): Intent {
             val roomProfileArgs = RoomProfileArgs(roomId)
@@ -80,7 +81,6 @@ class RoomProfileActivity :
     }
 
     override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
         injector.inject(this)
     }
 
@@ -96,6 +96,9 @@ class RoomProfileActivity :
                 EXTRA_DIRECT_ACCESS_ROOM_SETTINGS -> {
                     addFragment(R.id.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
                     addFragmentToBackstack(R.id.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
+                }
+                EXTRA_DIRECT_ACCESS_ROOM_MEMBERS -> {
+                    addFragment(R.id.simpleFragmentContainer, RoomMemberListFragment::class.java, roomProfileArgs)
                 }
                 else -> addFragment(R.id.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
             }

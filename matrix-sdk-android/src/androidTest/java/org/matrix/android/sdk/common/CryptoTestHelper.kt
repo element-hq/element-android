@@ -66,8 +66,8 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     fun doE2ETestWithAliceInARoom(encryptedRoom: Boolean = true): CryptoTestData {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
 
-        val roomId = mTestHelper.doSync<String> {
-            aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" }, it)
+        val roomId = mTestHelper.runBlockingTest {
+            aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" })
         }
 
         if (encryptedRoom) {
@@ -135,7 +135,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             bobRoomSummariesLive.observeForever(roomJoinedObserver)
         }
 
-        mTestHelper.doSync<Unit> { bobSession.joinRoom(aliceRoomId, callback = it) }
+        mTestHelper.runBlockingTest { bobSession.joinRoom(aliceRoomId) }
 
         mTestHelper.await(lock)
 
@@ -176,8 +176,8 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             room.invite(samSession.myUserId, null)
         }
 
-        mTestHelper.doSync<Unit> {
-            samSession.joinRoom(room.roomId, null, emptyList(), it)
+        mTestHelper.runBlockingTest {
+            samSession.joinRoom(room.roomId, null, emptyList())
         }
 
         return samSession
@@ -256,8 +256,8 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     }
 
     fun createDM(alice: Session, bob: Session): String {
-        val roomId = mTestHelper.doSync<String> {
-            alice.createDirectRoom(bob.myUserId, it)
+        val roomId = mTestHelper.runBlockingTest {
+            alice.createDirectRoom(bob.myUserId)
         }
 
         mTestHelper.waitWithLatch { latch ->
@@ -300,7 +300,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
                 bobRoomSummariesLive.observeForever(newRoomObserver)
             }
 
-            mTestHelper.doSync<Unit> { bob.joinRoom(roomId, callback = it) }
+            mTestHelper.runBlockingTest { bob.joinRoom(roomId) }
         }
 
         return roomId
@@ -398,8 +398,8 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
         aliceSession.cryptoService().setWarnOnUnknownDevices(false)
 
-        val roomId = mTestHelper.doSync<String> {
-            aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" }, it)
+        val roomId = mTestHelper.runBlockingTest {
+            aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" })
         }
         val room = aliceSession.getRoom(roomId)!!
 
@@ -412,7 +412,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             val session = mTestHelper.createAccount("User_$index", defaultSessionParams)
             mTestHelper.runBlockingTest(timeout = 600_000) { room.invite(session.myUserId, null) }
             println("TEST -> " + session.myUserId + " invited")
-            mTestHelper.doSync<Unit> { session.joinRoom(room.roomId, null, emptyList(), it) }
+            mTestHelper.runBlockingTest { session.joinRoom(room.roomId, null, emptyList()) }
             println("TEST -> " + session.myUserId + " joined")
             sessions.add(session)
         }

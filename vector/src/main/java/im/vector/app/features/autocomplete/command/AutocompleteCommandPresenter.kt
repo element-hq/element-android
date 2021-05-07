@@ -21,10 +21,12 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.RecyclerViewPresenter
 import im.vector.app.features.command.Command
+import im.vector.app.features.settings.VectorPreferences
 import javax.inject.Inject
 
 class AutocompleteCommandPresenter @Inject constructor(context: Context,
-                                                       private val controller: AutocompleteCommandController) :
+                                                       private val controller: AutocompleteCommandController,
+                                                       private val vectorPreferences: VectorPreferences) :
         RecyclerViewPresenter<Command>(context), AutocompleteClickListener<Command> {
 
     init {
@@ -40,13 +42,17 @@ class AutocompleteCommandPresenter @Inject constructor(context: Context,
     }
 
     override fun onQuery(query: CharSequence?) {
-        val data = Command.values().filter {
-            if (query.isNullOrEmpty()) {
-                true
-            } else {
-                it.command.startsWith(query, 1, true)
-            }
-        }
+        val data = Command.values()
+                .filter {
+                    !it.isDevCommand || vectorPreferences.developerMode()
+                }
+                .filter {
+                    if (query.isNullOrEmpty()) {
+                        true
+                    } else {
+                        it.command.startsWith(query, 1, true)
+                    }
+                }
         controller.setData(data)
     }
 

@@ -19,9 +19,28 @@ package im.vector.app
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import arrow.core.Option
+import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.utils.BehaviorDataSource
+import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 import javax.inject.Singleton
+
+sealed class RoomGroupingMethod {
+    data class ByLegacyGroup(val groupSummary: GroupSummary?) : RoomGroupingMethod()
+    data class BySpace(val spaceSummary: RoomSummary?) : RoomGroupingMethod()
+}
+
+fun RoomGroupingMethod.space() = (this as? RoomGroupingMethod.BySpace)?.spaceSummary
+fun RoomGroupingMethod.group() = (this as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary
 
 /**
  * This class handles the global app state.
@@ -29,9 +48,74 @@ import javax.inject.Singleton
  */
 // TODO Keep this class for now, will maybe be used fro Space
 @Singleton
-class AppStateHandler @Inject constructor() : LifecycleObserver {
+class AppStateHandler @Inject constructor(
+        sessionDataSource: ActiveSessionDataSource,
+        private val uiStateRepository: UiStateRepository,
+        private val activeSessionHolder: ActiveSessionHolder
+) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
+
+    private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
+
+    val selectedRoomGroupingObservable = selectedSpaceDataSource.observe()
+
+    fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? = selectedSpaceDataSource.currentValue?.orNull()
+
+    fun setCurrentSpace(spaceId: String?, session: Session? = null) {
+        val uSession = session ?: activeSessionHolder.getSafeActiveSession()
+        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace
+                && spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
+        val spaceSum = spaceId?.let { uSession?.getRoomSummary(spaceId) }
+        selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.BySpace(spaceSum)))
+        if (spaceId != null) {
+            GlobalScope.launch(Dispatchers.IO) {
+                tryOrNull {
+                    uSession?.getRoom(spaceId)?.loadRoomMembersIfNeeded()
+                }
+            }
+        }
+    }
+
+    fun setCurrentGroup(groupId: String?, session: Session? = null) {
+        val uSession = session ?: activeSessionHolder.getSafeActiveSession()
+        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.ByLegacyGroup
+                && groupId == selectedSpaceDataSource.currentValue?.orNull()?.group()?.groupId) return
+        val activeGroup = groupId?.let { uSession?.getGroupSummary(groupId) }
+        selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.ByLegacyGroup(activeGroup)))
+        if (groupId != null) {
+            GlobalScope.launch {
+                tryOrNull {
+                    uSession?.getGroup(groupId)?.fetchGroupData()
+                }
+            }
+        }
+    }
+
+    init {
+        sessionDataSource.observe()
+                .distinctUntilChanged()
+                .subscribe {
+                    // sessionDataSource could already return a session while acitveSession holder still returns null
+                    it.orNull()?.let { session ->
+                        if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
+                            setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
+                        } else {
+                            setCurrentGroup(uiStateRepository.getSelectedGroup(session.sessionId), session)
+                        }
+                    }
+                }.also {
+                    compositeDisposable.add(it)
+                }
+    }
+
+    fun safeActiveSpaceId(): String? {
+        return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.BySpace)?.spaceSummary?.roomId
+    }
+
+    fun safeActiveGroupId(): String? {
+        return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
@@ -40,5 +124,16 @@ class AppStateHandler @Inject constructor() : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun entersBackground() {
         compositeDisposable.clear()
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+        when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
+            is RoomGroupingMethod.BySpace -> {
+                uiStateRepository.storeGroupingMethod(true, session.sessionId)
+                uiStateRepository.storeSelectedSpace(currentMethod.spaceSummary?.roomId, session.sessionId)
+            }
+            is RoomGroupingMethod.ByLegacyGroup -> {
+                uiStateRepository.storeGroupingMethod(false, session.sessionId)
+                uiStateRepository.storeSelectedGroup(currentMethod.groupSummary?.groupId, session.sessionId)
+            }
+        }
     }
 }

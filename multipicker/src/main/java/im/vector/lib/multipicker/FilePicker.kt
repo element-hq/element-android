@@ -19,41 +19,55 @@ package im.vector.lib.multipicker
 import android.content.Context
 import android.content.Intent
 import android.provider.OpenableColumns
+import im.vector.lib.multipicker.entity.MultiPickerBaseType
 import im.vector.lib.multipicker.entity.MultiPickerFileType
+import im.vector.lib.multipicker.utils.isMimeTypeAudio
+import im.vector.lib.multipicker.utils.isMimeTypeImage
+import im.vector.lib.multipicker.utils.isMimeTypeVideo
+import im.vector.lib.multipicker.utils.toMultiPickerAudioType
+import im.vector.lib.multipicker.utils.toMultiPickerImageType
+import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 
 /**
  * Implementation of selecting any type of files
  */
-class FilePicker : Picker<MultiPickerFileType>() {
+class FilePicker : Picker<MultiPickerBaseType>() {
 
     /**
      * Call this function from onActivityResult(int, int, Intent).
      * Returns selected files or empty list if user did not select any files.
      */
-    override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerFileType> {
-        val fileList = mutableListOf<MultiPickerFileType>()
+    override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerBaseType> {
+        return getSelectedUriList(data).mapNotNull { selectedUri ->
+            val type = context.contentResolver.getType(selectedUri)
 
-        getSelectedUriList(data).forEach { selectedUri ->
-            context.contentResolver.query(selectedUri, null, null, null, null)
-                    ?.use { cursor ->
-                        val nameColumn = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                        val sizeColumn = cursor.getColumnIndex(OpenableColumns.SIZE)
-                        if (cursor.moveToFirst()) {
-                            val name = cursor.getString(nameColumn)
-                            val size = cursor.getLong(sizeColumn)
+            when {
+                type.isMimeTypeVideo() -> selectedUri.toMultiPickerVideoType(context)
+                type.isMimeTypeImage() -> selectedUri.toMultiPickerImageType(context)
+                type.isMimeTypeAudio() -> selectedUri.toMultiPickerAudioType(context)
+                else                   -> {
+                    // Other files
+                    context.contentResolver.query(selectedUri, null, null, null, null)
+                            ?.use { cursor ->
+                                val nameColumn = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                                val sizeColumn = cursor.getColumnIndex(OpenableColumns.SIZE)
+                                if (cursor.moveToFirst()) {
+                                    val name = cursor.getString(nameColumn)
+                                    val size = cursor.getLong(sizeColumn)
 
-                            fileList.add(
                                     MultiPickerFileType(
                                             name,
                                             size,
                                             context.contentResolver.getType(selectedUri),
                                             selectedUri
                                     )
-                            )
-                        }
-                    }
+                                } else {
+                                    null
+                                }
+                            }
+                }
+            }
         }
-        return fileList
     }
 
     override fun createIntent(): Intent {

@@ -71,13 +71,12 @@ class KeyShareTests : InstrumentedTest {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
         // Create an encrypted room and add a message
-        val roomId = mTestHelper.doSync<String> {
+        val roomId = mTestHelper.runBlockingTest {
             aliceSession.createRoom(
                     CreateRoomParams().apply {
                         visibility = RoomDirectoryVisibility.PRIVATE
                         enableEncryption()
-                    },
-                    it
+                    }
             )
         }
         val room = aliceSession.getRoom(roomId)
@@ -332,13 +331,12 @@ class KeyShareTests : InstrumentedTest {
         }
 
         // Create an encrypted room and send a couple of messages
-        val roomId = mTestHelper.doSync<String> {
+        val roomId = mTestHelper.runBlockingTest {
             aliceSession.createRoom(
                     CreateRoomParams().apply {
                         visibility = RoomDirectoryVisibility.PRIVATE
                         enableEncryption()
-                    },
-                    it
+                    }
             )
         }
         val roomAlicePov = aliceSession.getRoom(roomId)
@@ -371,8 +369,8 @@ class KeyShareTests : InstrumentedTest {
             roomAlicePov.invite(bobSession.myUserId, null)
         }
 
-        mTestHelper.doSync<Unit> {
-            bobSession.joinRoom(roomAlicePov.roomId, null, emptyList(), it)
+        mTestHelper.runBlockingTest {
+            bobSession.joinRoom(roomAlicePov.roomId, null, emptyList())
         }
 
         // we want to discard alice outbound session

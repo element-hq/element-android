@@ -116,7 +116,7 @@
     <string name="direct_chats_header">会話</string>
     <string name="no_public_room_placeholder">公開された部屋がありません</string>
     <plurals name="public_room_nb_users">
-        <item quantity="other">%d 名</item>
+        <item quantity="other">%d名</item>
     </plurals>
     <string name="send_bug_report">バグを報告</string>
     <string name="send_bug_report_description">不具合の内容と状況の説明をお願い致します。あなたは何をしましたか？何が起こると思いますか？実際何が起こったのですか？</string>
@@ -355,7 +355,7 @@
     <string name="option_take_photo_video">写真または動画を撮影</string>
     <string name="auth_send_reset_email">初期化メール送信</string>
     <string name="template_permissions_rationale_msg_camera">写真撮影やビデオ通話には, ${app_name}アプリに端末のカメラの使用を許可する必要があります.</string>
-    <string name="cannot_start_call">通話を開始できませんでした。後ほど試してください。</string>
+    <string name="cannot_start_call">通話を開始できませんでした。後ほどお試しください</string>
     <string name="missing_permissions_warning">権限が無いため、一部の機能を利用できない可能性があります…</string>
     <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するためには招待権限が必要です</string>
     <string name="send_anyway">とにかく送る</string>
@@ -388,9 +388,9 @@
     <string name="auth_missing_email_or_phone">電子メールアドレスまたは電話番号が違います</string>
     <string name="auth_use_server_options">接続先サーバを指定する(追加設定)</string>
     <string name="auth_invalid_token">指定が正しくありません</string>
-    <string name="auth_threepid_warning_message">電子メールと電話番号の同時登録は, まだシステムが対応できません. 電話番号だけの登録は可能です.
-
-お手数おかけしますが, 後ほど個人情報設定から電子メールアドレスを登録してください.</string>
+    <string name="auth_threepid_warning_message">メールと電話番号の同時登録はまだシステムが対応できませんが、電話番号だけの登録は可能です。
+\n
+\n設定からプロフィールにメールアドレスを追加できます。</string>
     <string name="auth_recaptcha_message">接続先サーバ側かが、機械による自動登録ではなく、あなたが人間であることを確認したいとのことです</string>
     <string name="auth_username_in_use">ユーザ名はすでに使用されています</string>
     <string name="auth_home_server">接続先サーバ:</string>
@@ -401,9 +401,9 @@
     <string name="auth_reset_password_missing_password">新しいパスワードの入力が必要です.</string>
     <string name="auth_reset_password_email_validation_message">%s へ電子メールが送信されました. リンクをたどったら以下をクリックしてください.</string>
     <string name="auth_reset_password_error_unauthorized">電子メールアドレスの確認に失敗しました: 電子メールのリンクをクリックしたことを確認してください</string>
-    <string name="auth_reset_password_success_message">あなたのパスワードは初期化されました.
-
-あなたはすべての端末から切断しており、プッシュ通知を受け取ることはありません。通知を再度有効にするには、各端末に再度ログインします。</string>
+    <string name="auth_reset_password_success_message">パスワードがリセットされました。
+\n
+\nすべてのセッションからログアウトしたため、プッシュ通知を受け取れなくなりました。通知を再び有効にするには、各デバイスで再ログインをお願いします。</string>
     <string name="login_error_unable_register_mail_ownership">登録ができません : 電子メールがあなた個人のものであるか確認できません</string>
     <string name="login_error_unknown_token">指定されたアクセストークンが認識されませんでした</string>
     <string name="login_error_bad_json">不正な形式のJSON</string>
@@ -516,9 +516,9 @@
 \n
 \n通話をするには、次のポップアップでアクセスできるように設定してください。"</string>
     <string name="template_permissions_rationale_msg_record_audio">${app_name}アプリは、音声通話を実行するためにマイクへアクセスするための許可が必要です。</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">
-
-通話をするには、次のポップアップでアクセスできるようにしてください。</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\n通話をするためには、次のポップアップでアクセスを許可してください。"</string>
     <string name="template_permissions_rationale_msg_camera_and_audio">ビデオ通話を行うには、カメラとマイクにアクセスするための権限が${app_name}アプリに必要です。
 
 通話をするには、次のポップアップでのアクセスを許可してください。</string>
@@ -674,11 +674,11 @@ ${app_name}アプリがあなたの電話帳へアクセスすることを許可
     <string name="start_voice_call_prompt_msg">音声通話を開始して本当によろしいですか？</string>
     <string name="start_video_call_prompt_msg">本当にビデオ通話を開始しますか？</string>
     <string name="groups_list">グループリスト</string>
-    <string name="room_participants_ban_prompt_msg">このユーザが対話に参加するのを本当にブロックしますか？</string>
+    <string name="room_participants_ban_prompt_msg">ユーザーを禁止するとこの部屋から追い出され、二度と参加できなくなります。</string>
     <string name="room_settings_all_messages_noisy">すべてのメッセージ (大音量)</string>
     <string name="room_settings_all_messages">すべてのメッセージ</string>
     <string name="room_settings_mute">ミュート</string>
-    <string name="room_settings_add_homescreen_shortcut">ホーム画面へのショートカットを作成</string>
+    <string name="room_settings_add_homescreen_shortcut">ホーム画面にショートカットを作成</string>
     <string name="settings_inline_url_preview">インラインURLプレビュー</string>
     <string name="room_settings_room_notifications_title">通知</string>
     <string name="room_settings_no_flair">この部屋はコミュニティの特色を表示していません</string>
@@ -714,13 +714,13 @@ ${app_name}アプリがあなたの電話帳へアクセスすることを許可
     <string name="rejoin">再参加</string>
     <string name="send_bug_report_rage_shake">バグを報告するには端末を降ってください</string>
     <plurals name="membership_changes">
-        <item quantity="other">%d権限の変更</item>
+        <item quantity="other">%dメンバーシップの変更</item>
     </plurals>
     <string name="list_members">参加者を表示</string>
     <string name="open_chat_header">見出しを開く</string>
     <string name="room_sync_in_progress">同期中…</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="other">%d名のオンラインの参加者</item>
+        <item quantity="other">%d名の参加者</item>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="other">%d名</item>
@@ -729,7 +729,7 @@ ${app_name}アプリがあなたの電話帳へアクセスすることを許可
         <item quantity="other">%d件の新しいメッセージ</item>
     </plurals>
     <plurals name="directory_search_rooms">
-        <item quantity="other">%d 部屋</item>
+        <item quantity="other">%d部屋</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="other">%2$s に %1$s 部屋見つかりました</item>
@@ -753,26 +753,26 @@ ${app_name}アプリがあなたの電話帳へアクセスすることを許可
     <string name="send_bug_report_description_in_english">可能であれば、英語で説明を書いてください。</string>
     <string name="option_send_voice">音声を送信</string>
     <string name="option_send_sticker">スタンプを送信</string>
-    <string name="no_sticker_application_dialog_content">現在使用可能なスタンプパックがありません。
-
-今いくつか追加しますか？</string>
-    <string name="go_on_with">…で続行</string>
+    <string name="no_sticker_application_dialog_content">使用可能なスタンプパックがありません。 
+\n
+\n追加しますか？</string>
+    <string name="go_on_with">続行する…</string>
     <string name="error_no_external_application_found">申し訳ありません、この操作を完了するための外部アプリが見つかりません。</string>
     <string name="e2e_re_request_encryption_key">他のデバイスから <u>暗号鍵を再度要求</u> します。</string>
     <string name="e2e_re_request_encryption_key_sent">鍵のリクエストが送信されました。</string>
     <string name="e2e_re_request_encryption_key_dialog_title">リクエスト送信済</string>
     <string name="template_e2e_re_request_encryption_key_dialog_content">鍵をこのデバイスに送信できるように、メッセージを復号化できる他のデバイスで${app_name}を起動してください。</string>
     <plurals name="format_time_s">
-        <item quantity="other">%d 秒</item>
+        <item quantity="other">%d秒</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="other">%d 分</item>
+        <item quantity="other">%d分</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="other">%d 時間</item>
+        <item quantity="other">%d時間</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="other">%d 日</item>
+        <item quantity="other">%d日</item>
     </plurals>
     <string name="room_participants_now">現在 %1$s</string>
     <string name="room_participants_ago">%2$s 前 %1$s</string>
@@ -782,7 +782,7 @@ ${app_name}アプリがあなたの電話帳へアクセスすることを許可
     <string name="room_message_placeholder_reply_to_encrypted">暗号化された返信を送信…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">返信を送信 (未暗号化)…</string>
     <plurals name="room_details_selected">
-        <item quantity="other">%d 個選択済</item>
+        <item quantity="other">%d個選択済</item>
     </plurals>
     <string name="settings_notification_privacy_reduced">低プライバシー</string>
     <string name="settings_notification_privacy_secure_message_content">• 通知中のメッセージの内容は <b>Matrixのホームサーバから直接安全に入手しています</b></string>
@@ -903,7 +903,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="ongoing_conference_call_voice">音声</string>
     <string name="ongoing_conference_call_video">ビデオ</string>
     <string name="settings_notification_advanced">詳細な通知設定</string>
-    <string name="settings_background_fdroid_sync_mode">バックグラウンド同期モード (実験)</string>
+    <string name="settings_background_fdroid_sync_mode">バックグラウンド同期モード</string>
     <string name="settings_background_fdroid_sync_mode_battery">バッテリーを考慮して最適化</string>
     <string name="settings_background_fdroid_sync_mode_real_time">リアルタイム性を重視して最適化</string>
     <string name="settings_background_fdroid_sync_mode_disabled">バックグラウンド同期を行わない</string>
@@ -1142,7 +1142,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="settings_call_show_confirmation_dialog_summary">通話の開始前に確認する</string>
     <string name="settings_call_show_confirmation_dialog_title">意図しない通話を阻止する</string>
     <string name="login_error_ssl_handshake">お使いの端末は脆弱性のある古いTLSセキュリティプロトコルを使用しています、このセキュリティでは接続できません</string>
-    <string name="login_error_ssl_other">SSLエラー</string>
+    <string name="login_error_ssl_other">SSLエラー。</string>
     <string name="login_error_ssl_peer_unverified">SSLエラー:相手のアイデンティティが認証されていません。</string>
     <string name="login_error_homeserver_not_found">このURLからホームサーバーに接続できませんでした、ご確認ください</string>
     <string name="login_error_no_homeserver_found">有効なMatrixサーバーアドレスではありません</string>
@@ -1196,4 +1196,364 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="user_directory_search_hint">名前または ID で検索</string>
     <string name="direct_room_user_list_known_title">既知のユーザー</string>
     <string name="invalid_qr_code_uri">無効な QR コード (無効な URI)！</string>
+    <string name="passwords_do_not_match">パスワードが一致しません</string>
+    <string name="account_email_error">メールアドレスの確認中にエラーが発生しました。</string>
+    <string name="disabled_integration_dialog_content">これを行うには設定からインテグレーションを許可を有効にしてください。</string>
+    <string name="disabled_integration_dialog_title">インテグレーションが無効になっています</string>
+    <string name="settings_integration_manager">インテグレーションマネージャー（統合管理）</string>
+    <string name="settings_integration_allow">インテグレーションを許可</string>
+    <string name="settings_data_save_mode_summary">データセーブモードでは、特定のフィルターを適用することで、プレゼンスの更新やタイピングの通知がフィルタリングされます。</string>
+    <string name="settings_troubleshoot_test_fcm_success">FCMトークンが正常に取得されました:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_title">Firebaseトークン</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Playサービスを修正する</string>
+    <string name="settings_troubleshoot_test_play_services_success">GooglePlayサービスAPKは利用可能で最新の状態になっています。</string>
+    <string name="settings_troubleshoot_test_play_services_title">Playサービスチェック</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">設定を確認する</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">カスタムルールの読み込みに失敗しました。再試行してください。</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">一部の通知はカスタム設定で無効になっています。</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">一部のメッセージがサイレントに設定されていることに注意してください（音を出さずに通知します）。</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">1つ以上のテストが失敗しました。調査に役立つバグレポートを送信してください。</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">1つ以上のテストが失敗しました。提案された修正を試してください。</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">基本的な診断はOKです。 それでも通知が届かない場合は、調査に役立つバグレポートを送信してください。</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">実行中… (%1$dの %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">テストを実行する</string>
+    <string name="settings_troubleshoot_diagnostic">診断トラブルシューティング</string>
+    <string name="settings_notification_by_event">イベントごとの通知の優先順位</string>
+    <string name="error_threepid_auth_failed">メールであなたに送ったリンクをクリックして確認してください。</string>
+    <string name="settings_remove_three_pid_confirmation_content">%sを削除しますか？</string>
+    <string name="settings_add_3pid_authentication_needed">認証が必要です</string>
+    <string name="settings_add_3pid_confirm_password_title">あなたのパスワードを確認する</string>
+    <string name="search_is_not_supported_in_e2e_room">暗号化された部屋での検索はまだサポートされていません。</string>
+    <string name="search_banned_user_hint">禁止されたユーザーをフィルタリングする</string>
+    <string name="room_permissions_change_topic">トピックを変更する</string>
+    <string name="room_permissions_upgrade_the_room">ルームをアップグレード</string>
+    <string name="room_permissions_send_m_room_server_acl_events">m.room.server_acl eventsを送信します</string>
+    <string name="room_permissions_change_permissions">権限を変更する</string>
+    <string name="room_permissions_change_room_name">部屋名を変更する</string>
+    <string name="room_permissions_change_history_visibility">履歴を見えるように変更する</string>
+    <string name="room_permissions_enable_room_encryption">部屋の暗号化を有効にする</string>
+    <string name="room_permissions_change_main_address_for_the_room">部屋のメインアドレスを変更する</string>
+    <string name="room_permissions_change_room_avatar">部屋のアバターを変更する</string>
+    <string name="room_permissions_modify_widgets">ウィジェットを変更する</string>
+    <string name="room_permissions_notify_everyone">全員に通知する</string>
+    <string name="room_permissions_remove_messages_sent_by_others">他の人から送信されたメッセージを削除する</string>
+    <string name="room_permissions_ban_users">禁止ユーザー</string>
+    <string name="room_permissions_kick_users">キックユーザー</string>
+    <string name="room_permissions_change_settings">設定を変更する</string>
+    <string name="room_permissions_invite_users">招待されたユーザー</string>
+    <string name="room_permissions_send_messages">メッセージを送る</string>
+    <string name="room_permissions_default_role">デフォルトルール</string>
+    <string name="room_permissions_notice_read_only">部屋のさまざまな部分を変更するための必要な役割を更新する権限がありません</string>
+    <string name="room_permissions_notice">部屋のさまざまな部分を変更するために必要な役割を選択します</string>
+    <string name="room_settings_permissions_title">部屋の権限</string>
+    <string name="room_permissions_title">権限</string>
+    <string name="room_settings_permissions_subtitle">部屋のさまざまな部分を変更するために必要な役割を表示し更新します。</string>
+    <string name="room_participants_unban_prompt_msg">ユーザーの禁止を解除すると、ユーザーは再び部屋に参加できるようになります。</string>
+    <string name="room_participants_ban_title">禁止されたユーザー</string>
+    <string name="room_participants_ban_reason">禁止の理由</string>
+    <string name="room_participants_unban_title">ユーザーの禁止を解除する</string>
+    <string name="room_participants_kick_prompt_msg">キックするユーザーは、この部屋から削除されます。
+\n
+\n再び参加するのを防ぐためには永久追放する必要があります。</string>
+    <string name="room_participants_kick_reason">キックする理由</string>
+    <string name="room_participants_kick_title">ユーザーをキックする</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">このユーザーの招待をキャンセルしてよろしいですか？</string>
+    <string name="room_participants_action_cancel_invite_title">招待をキャンセル</string>
+    <string name="room_participants_action_unignore_prompt_msg">このユーザーを解除すると、そのユーザーからのすべてのメッセージが再び表示されます。</string>
+    <string name="room_participants_action_unignore_title">ユーザーを無視しない</string>
+    <string name="room_participants_action_ignore_prompt_msg">このユーザーを無視すると、あなたが共有している部屋からそのユーザーのメッセージが削除されます。
+\n
+\nこの動作は設定からいつでも元に戻すことができます。</string>
+    <string name="room_participants_action_ignore_title">ユーザーを無視する</string>
+    <string name="room_participants_power_level_demote">広角</string>
+    <string name="room_participants_power_level_demote_warning_prompt">あなたは自分自身を降格させているので、この変更を元に戻すことはできません。あなたが部屋の中で最後の特権ユーザーである場合、特権を取り戻すことはできません。</string>
+    <string name="room_participants_power_level_demote_warning_title">降格しますか？</string>
+    <string name="room_participants_action_cancel_invite">招待をキャンセル</string>
+    <string name="room_participants_leave_private_warning">この部屋は公開されていません。 招待なしで再参加することはできません。</string>
+    <string name="invite_no_identity_server_error">このアクションを実行するには、設定にIDサーバーを追加します。</string>
+    <string name="permissions_denied_add_contact">連絡先へのアクセスを許可します。</string>
+    <string name="permissions_denied_qr_code">QRコードをスキャンするには、カメラへのアクセスを許可する必要があります。</string>
+    <string name="call_held_by_you">通話をかけました</string>
+    <string name="call_held_by_user">%sが通話をかけました</string>
+    <string name="call_hold_action">かける</string>
+    <string name="return_to_call">コールし直す</string>
+    <string name="call_resume_action">通話をやり直す</string>
+    <string name="active_call_with_duration">アクティブな通話（%s）</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">ホームサーバーにアシスト機能を提供しない場合は、代わりに%sを使用します（IPアドレスは通話中に共有されます）</string>
+    <string name="video_call_in_progress">ビデオ通話が行われています…</string>
+    <string name="settings_call_ringtone_use_default_stun">フォールバックコールアシストサーバーを許可する</string>
+    <string name="error_unauthorized">有効な認証情報ではありません</string>
+    <string name="template_call_failed_no_connection">${app_name} 呼び出し失敗</string>
+    <string name="call_failed_no_ice_description">通話が確実に機能させるためには、ホームサーバー(%1$s)の管理者にTURNサーバーの設定を依頼してください。
+\n
+\n代わりに、%2$sのパブリックサーバーを使用することもできますが、信頼性は低く、あなたのIPアドレスがそのサーバーと共有されてしまいます。これは設定から管理することができます。</string>
+    <string name="settings_room_directory_show_all_rooms_summary">ルームディレクトリのすべての部屋を詳しい説明を含めて表示します。</string>
+    <string name="settings_room_directory_show_all_rooms">部屋の詳しい説明を表示する</string>
+    <string name="settings_category_room_directory">ルームディレクトリ</string>
+    <string name="dialog_edit_hint">新着情報</string>
+    <string name="action_return">戻る</string>
+    <string name="action_unpublish">非公開</string>
+    <string name="action_switch">切り替える</string>
+    <string name="action_add">加える</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$sはエンドツーエンド暗号化 (認識されていないアルゴリズム%2$s) をオンにしました。</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">エンドツーエンド暗号化 (認識されていないアルゴリズム%1$s) をオンにしました。</string>
+    <string name="start_chatting">会話を始める</string>
+    <string name="notice_end_to_end_ok">%1$sがエンドツーエンド暗号化をオンにしました。</string>
+    <string name="notice_end_to_end_ok_by_you">エンドツーエンド暗号化をオンにしました。</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">ゲストが部屋に入るのを防いでいます。</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$sはゲストが部屋に参加するのを妨げました。</string>
+    <string name="notice_room_guest_access_forbidden_by_you">ゲストが部屋に参加するのを妨ぎました。</string>
+    <string name="notice_room_guest_access_forbidden">%1$sはゲストが部屋に参加するのを妨ぎました。</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">ここへのゲストの入室を許可しました。</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$sはここにゲストが参加することを許可しました。</string>
+    <string name="notice_room_guest_access_can_join_by_you">この部屋へのゲストの入室を許可しました。</string>
+    <string name="notice_room_guest_access_can_join">%1$s がゲストの部屋への参加を許可しました。</string>
+    <string name="system_theme">システムデフォルト</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">この部屋のメインおよび代替のアドレスを変更しました。</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">この部屋の代替アドレスを変更しました。</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="other">この部屋の代替アドレス%1$sを削除しました。</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="other">この部屋の代替アドレス%1$sを追加しました。</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset_by_you">この部屋のメインアドレスを削除しました。</string>
+    <string name="notice_room_canonical_alias_set_by_you">この部屋のメイン・アドレスを%1$sに設定しました。</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">この部屋のアドレスとして、%1$sを追加し%2$sを削除しました。</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="other">この部屋のアドレスの%1$sを削除しました。</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">%1$sの招待を取り消しました。理由:%2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">%1$sの招待を受諾しました%2$。理由:%2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">%1$sの部屋への招待を取り消しました。理由:%2$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">%1$sにルームへの招待状を送りました。理由:%2$s</string>
+    <string name="notice_requested_voip_conference_by_you">VoIPカンファレンスをリクエストしました</string>
+    <string name="notice_room_server_acl_updated_title_by_you">この部屋のサーバのACLを変更しました。</string>
+    <string name="notice_room_server_acl_set_title_by_you">この部屋のサーバACLを設定しました。</string>
+    <string name="notice_direct_room_update_by_you">ここをアップグレードしました。</string>
+    <string name="notice_room_update_by_you">この部屋をアップグレードしました。</string>
+    <string name="notice_ended_call_by_you">通話を終えました。</string>
+    <string name="notice_answered_call_by_you">通話に応えました。</string>
+    <string name="notice_call_candidates_by_you">通話を設定するためのデータを送信しました。</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">この部屋のアドレスを変更しました。</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s はこの部屋のメインおよび代替アドレスを変更しました。</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s がこの部屋のアドレスを変更しました。</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$sはこの部屋の代替アドレスを変更しました。</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="other">%1$s がこの部屋の代替アドレス%2$sを削除しました。</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="other">%1$s はこの部屋の代替アドレス%2$sを追加しました。</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset">%1$sがこの部屋のメインアドレスを削除しました。</string>
+    <string name="notice_room_canonical_alias_set">%1$sがこの部屋のメインアドレスを%2$sに設定しました。</string>
+    <string name="notice_room_aliases_added_and_removed">%1$sはこの部屋のアドレスとして %2$sを追加し%3$sを削除しました。</string>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="other">%1$s はこの部屋のアドレスの%2$sを削除しました。</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="other">この部屋のアドレスとして%1$sが追加されました。</item>
+    </plurals>
+    <string name="notice_room_third_party_invite_with_reason">%1$sが%2$s にルームへの招待を送りました。理由:%3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$sが%2$sの部屋への招待を取り消しました。理由:%3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$sが %2$sの招待を承諾しました。理由:%3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$sは%2$sの招待を取り下げました。理由:%3$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="other">%1$sはこの部屋のアドレスとして%2$sを追加しました。</item>
+    </plurals>
+    <string name="notice_profile_change_redacted_by_you">あなたのプロフィールが更新されました %1$s</string>
+    <string name="notice_room_server_acl_updated_title">%sがこの部屋のサーバのACLを変更しました。</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">・サーバーにマッチするIPリテラルを禁止されています。</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">・サーバーにマッチするIPリテラルを許可されています。</string>
+    <string name="notice_room_server_acl_set_allowed">・%sに一致するサーバは許可されています。</string>
+    <string name="notice_room_server_acl_set_banned">・%sに一致するサーバは禁止されています。</string>
+    <string name="notice_room_server_acl_set_title">%sがこの部屋のサーバACLを設定しました。</string>
+    <string name="notice_direct_room_update">%sがここをアップグレードしました。</string>
+    <string name="notice_room_update">%sがこの部屋をアップグレードしました。</string>
+    <string name="notice_end_to_end_by_you">エンドツーエンド暗号化をオンにしました (%1$s)</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">将来の部屋のメッセージを %1$sに見えるようにしました</string>
+    <string name="notice_made_future_room_visibility_by_you">将来の部屋の履歴を %1$sに見えるようにしました</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s は将来のメッセージを %2$sに見えるようにしました</string>
+    <string name="notice_call_candidates">%sが通話を設定するためのデータを送信しました。</string>
+    <string name="notice_placed_voice_call_by_you">通話をしました。</string>
+    <string name="notice_placed_video_call_by_you">ビデオ通話をしました。</string>
+    <string name="notice_room_ban_with_reason_by_you">あなたが%1$sを永久追放しました。理由: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$sが%2$sを永久追放しました。理由: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">あなたが%1$sの禁止を解除しました。理由: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$sが%2$sの禁止を解除しました。理由: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">あなたは%1$sをキックしました。理由: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$sが%2$sをキックしました。理由: %3$s</string>
+    <string name="notice_room_reject_with_reason_by_you">あなたは招待を拒否しました。理由: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s は招待を拒否しました。理由: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">退出しました。理由: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$sが退出しました。理由: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">あなたがこの部屋を退出しました。理由: %1$s</string>
+    <string name="initial_sync_start_importing_account_left_rooms">初期同期:
+\n退出した部屋のインポート</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">初期同期：
+\n招待された部屋のインポート</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">初期同期:
+\n参加した部屋のインポート</string>
+    <string name="notice_room_leave_with_reason">%1$sがこの部屋を退出しました。理由: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">あなたがこの部屋に参加しました。理由: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$sがこの部屋に参加しました。理由: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">あなたがこの部屋に参加しました。理由: %1$s</string>
+    <string name="notice_room_join_with_reason">%1$sがこの部屋に参加しました。理由: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$sがあなたを招待しました。 理由: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">あなたが%1$sを招待しました。 理由: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$sが%2$sを招待しました。 理由: %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">あなたの招待です。理由: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$sの招待です。理由: %2$s</string>
+    <string name="clear_timeline_send_queue">送信キューのクリア</string>
+    <string name="event_status_sending_message">メッセージを送っています…</string>
+    <string name="event_status_sent_message">メッセージを送る</string>
+    <string name="initial_sync_start_importing_account_data">初期同期:
+\nアカウントデータをインポート</string>
+    <string name="initial_sync_start_importing_account_groups">初期同期:
+\nコミュニティをインポート</string>
+    <string name="initial_sync_start_importing_account_rooms">初期同期:
+\n部屋をインポート</string>
+    <string name="initial_sync_start_importing_account_crypto">初期同期:
+\n暗号をインポート</string>
+    <string name="initial_sync_start_importing_account">初期同期:
+\nアカウントをインポートしています…</string>
+    <string name="initial_sync_start_downloading">初期同期:
+\nデータをダウンロードしています…</string>
+    <string name="initial_sync_start_server_computing">初期同期:
+\nサーバーからの応答を待っています…</string>
+    <string name="room_displayname_empty_room_was">空の部屋（%sでした）</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="other">%1$sと%2$sと%3$sそれに%4$dその他</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$sと%2$sと%3$sそれに%4$s</string>
+    <string name="room_displayname_3_members">%1$sと%2$s それに%3$s</string>
+    <string name="notice_power_level_diff">%1$sを%2$sから%3$sへ</string>
+    <string name="notice_power_level_changed">%2$sが%1$sの権限を変更しました。</string>
+    <string name="notice_power_level_changed_by_you">%1$sの権限を変更しました。</string>
+    <string name="power_level_custom_no_value">カスタム</string>
+    <string name="power_level_custom">カスタム (%1$d)</string>
+    <string name="power_level_default">デフォルト</string>
+    <string name="power_level_moderator">モデレーター</string>
+    <string name="power_level_admin">管理者</string>
+    <string name="notice_widget_jitsi_modified_by_you">あなたががビデオ会議を変更しました</string>
+    <string name="notice_widget_jitsi_modified">%1$sがビデオ会議を変更しました</string>
+    <string name="notice_widget_jitsi_added_by_you">ビデオ会議を開始しました</string>
+    <string name="notice_widget_jitsi_removed_by_you">ビデオ会議を終了しました</string>
+    <string name="notice_widget_jitsi_removed">%1$sがビデオ会議を開始しました</string>
+    <string name="notice_widget_jitsi_added">%1$sがビデオ会議を開始しました</string>
+    <string name="notice_widget_modified_by_you">あなたは%1$sウィジェットを変更しました</string>
+    <string name="notice_widget_modified">%1$sは%2$sウィジェットを変更しました</string>
+    <string name="notice_widget_removed_by_you">あなたは%1$sウィジェットを削除しました</string>
+    <string name="notice_widget_removed">%1$sが %2$sウィジェットを削除しました</string>
+    <string name="notice_widget_added_by_you">あなたは%1$sウィジェットを追加しました</string>
+    <string name="notice_room_third_party_registered_invite_by_you">あなたは %1$sの招待を受けました</string>
+    <string name="notice_widget_added">%1$sが %2$sウィジェットを追加しました</string>
+    <string name="notice_room_name_changed_by_you">部屋名を変更しました:%1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">あなたは%1$sの招待を取り消しました</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$sが%2$sの招待を取り消しました</string>
+    <string name="notice_direct_room_third_party_invite_by_you">あなたは%1$sを招待しました</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">あなたは%1$sの部屋への招待を取り消しました</string>
+    <string name="notice_room_third_party_revoked_invite">%1$sが%2$sの部屋への招待を取り消しました</string>
+    <string name="notice_direct_room_third_party_invite">%1$sが%2$sを招待しました</string>
+    <string name="notice_room_third_party_invite_by_you">あなたは%1$sに部屋への招待を送りました</string>
+    <string name="notice_event_redacted_by_with_reason">メッセージが%1$sによって削除されました [理由: %2$s]</string>
+    <string name="notice_event_redacted_with_reason">メッセージが削除されました [理由: %1$s]</string>
+    <string name="notice_event_redacted_by">%1$sがメッセージを削除しました</string>
+    <string name="notice_event_redacted">メッセージを削除</string>
+    <string name="notice_room_avatar_removed_by_you">部屋のアバターを削除しました</string>
+    <string name="notice_room_avatar_removed">%1$s が部屋のアバターを削除しました</string>
+    <string name="notice_room_topic_removed_by_you">部屋のトピックを削除しました</string>
+    <string name="notice_room_name_removed_by_you">部屋名を削除しました</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">許可を与える</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name}は、信頼できる通知を受け取るために、影響の少ないバックグラウンド接続を維持する必要があります。
+\n次の画面で、${app_name}を常にバックグラウンドで実行することを許可するように求められます。同意してください。</string>
+    <string name="startup_notification_fdroid_battery_optim_title">バックグラウンド接続</string>
+    <string name="settings_discovery_manage">ディスカバリー設定を管理します。</string>
+    <string name="settings_discovery_category">ディスカバリー（発見）</string>
+    <string name="reset_secure_backup_warning">これにより、現在のキーまたはフレーズが置き換えられます。</string>
+    <string name="reset_secure_backup_title">新しいセキュリティキーを生成するか、既存のバックアップに新しいセキュリティフレーズを設定します。</string>
+    <string name="settings_secure_backup_section_info">サーバー上の暗号化キーをバックアップすることにより、暗号化されたメッセージとデータへのアクセスが失われるのを防ぎます。</string>
+    <string name="settings_show_emoji_keyboard_summary">メッセージ作成画面に絵文字キーボードを開くボタンを追加する</string>
+    <string name="settings_show_emoji_keyboard">絵文字キーボードを表示する</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">アバターと表示名の変更が含まれます。</string>
+    <string name="settings_show_avatar_display_name_changes_messages">アカウントイベントを表示する</string>
+    <string name="settings_show_join_leave_messages_summary">招待、キック、禁止は影響を受けません。</string>
+    <string name="settings_show_room_member_state_events_summary">招待/入室/退室/キック/禁止イベントや、アバター/表示名の変更など。</string>
+    <string name="settings_show_join_leave_messages">入室と退室イベントの表示</string>
+    <string name="settings_chat_effects_description">Use /confettiコマンドを使用するか、❄️または🎉を含むメッセージを送信します</string>
+    <string name="settings_chat_effects_title">チャットでエフェクトを表示する</string>
+    <string name="settings_show_room_member_state_events">部屋のメンバーのイベントを表示する</string>
+    <string name="settings_inline_url_preview_summary">ホームサーバーがこの機能をサポートしている場合は、チャット内のリンクをプレビューします。</string>
+    <string name="settings_integrations_summary">インテグレーションマネージャーを使用して、ボット、ブリッジ、ウィジェット、およびステッカーパックの管理をします。
+\nインテグレーションマネージャーは、構成データを受信し、ウィジェットを変更したり、部屋の招待状を送信したり、ユーザーに代わって権限を設定したりできます。</string>
+    <string name="settings_background_sync_update_error">設定の更新に失敗しました。</string>
+    <string name="settings_integrations">インテグレーション（統合）</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">アプリがバックグラウンドにある場合、着信メッセージは通知されません。</string>
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name}は正確な時間に定期的にバックグラウンドで同期します（構成可能）。
+\nこれはラジオとバッテリーの使用量に影響し$ {app_name}がイベントをリッスンしていることを示す永続的な通知が表示されます。</string>
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name}は、デバイスの限られたリソース（バッテリー）を維持する方法でバックグラウンド同期をします。
+\nデバイスの状態によっては、OSによって同期が延期される場合があります。</string>
+    <string name="settings_system_preferences_summary">LEDの色、振動、音を選択してください…</string>
+    <string name="settings_silent_notifications_preferences">サイレント通知を構成する</string>
+    <string name="settings_call_notifications_preferences">通話の通知を設定する</string>
+    <string name="settings_noisy_notifications_preferences">うるさい通知を設定する</string>
+    <string name="settings_notification_privacy_no_background_sync">アプリはバックグラウンドでホームサーバーに接続する<b>必要がない</b>ためバッテリー使用量を減らすことができます</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">最適化を無視する</string>
+    <string name="settings_troubleshoot_test_battery_failed">画面をオフにした状態でデバイスのプラグを抜いて一定時間静止したままにすると、デバイスは機内モードになります。 これにより、アプリがネットワークにアクセスできなくなり、ジョブ、同期、および標準のアラームが防止されます。</string>
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">${app_name}に対してバックグラウンド制限が有効になっています。
+\nアプリがバックグラウンドで実行しようとすると積極的に制限され、通知に影響を与える可能性があります。
+\n%1$s</string>
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">${app_name}のバックグラウンド制限は無効になっています。 このテストは、モバイル（WIFIでない）を使用して実行する必要があります。
+\n%1$s</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">デバイスを再起動してもサービスは開始されません。${app_name}が一度開かれるまで通知は届きません。</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">%1$s
+\nこのエラーは${app_name}の管理外です。 これはいくつかの理由で発生する可能性があります。 後で再試行すればうまくいくかもしれません。システム設定でGoogle Play Serviceのデータ使用量が制限されていないか、デバイスの時刻が正しいかどうか、もしくはカスタムROMで起こることがあります。</string>
+    <string name="template_settings_add_3pid_flow_not_supported">${app_name}モバイルからこれを行うことはできません</string>
+    <string name="template_settings_troubleshoot_test_battery_success">${app_name}はバッテリー最適化の影響を受けません。</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">制限を無効にする</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">起動時の開始を有効にする</string>
+    <string name="settings_troubleshoot_test_service_boot_success">デバイスを再起動するとサービスが開始されます。</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">サービスの再起動に失敗しました</string>
+    <string name="settings_troubleshoot_test_service_restart_success">サービスが強制終了され、自動的に再起動されました。</string>
+    <string name="settings_troubleshoot_test_service_restart_title">通知サービスの自動再起動</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">開始する</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">通知サービスが実行されていません。
+\nアプリケーションを再起動してみてください。</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">通知サービスが機能しています。</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_title">通知サービス</string>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">通知がクリックされました！</string>
+    <string name="settings_troubleshoot_test_notification_notice">通知をクリックしてください。 通知が表示されない場合は、システム設定を確認してください。</string>
+    <string name="settings_troubleshoot_test_notification_title">通知を表示</string>
+    <string name="settings_troubleshoot_test_push_notification_content">通知を表示しています。 クリックしてください！</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">プッシュの受信に失敗しました。 解決策は、アプリケーションを再インストールすることです。</string>
+    <string name="settings_troubleshoot_test_push_loop_success">アプリケーションはプッシュを受信しています</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">アプリケーションはプッシュを待っています</string>
+    <string name="settings_troubleshoot_test_push_loop_title">テストプッシュ</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCMトークンのホームサーバーへの登録に失敗しました。
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCMトークンがホームサーバーに正常に登録されました。</string>
+    <string name="settings_troubleshoot_test_token_registration_title">トークンの登録</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">アカウントを追加する</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nこのエラーは、${app_name}の管理外です。スマホにはGoogleアカウントがありません。アカウントマネージャーを開いて、Googleアカウントを追加してください。</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">%1$s
+\nこのエラーは${app_name}の管理外であり、Googleによると、このエラーは、デバイスにFCMに登録されているアプリが多すぎることを示しています。 このエラーは、アプリの数が極端に多い場合にのみ発生するため、平均的なユーザーには影響しません。</string>
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name}はGoogle Playサービスを使用してプッシュメッセージを配信していますが、正しく設定されていないようです:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">FCMトークンの取得に失敗しました:
+\n%1$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉すべてのサーバーの参加を禁止されています！この部屋は使用できなくなりました。</string>
+    <string name="notice_room_server_acl_updated_no_change">変化がありません。</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• サーバーにマッチするIPリテラルが禁止されるようになりました。</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• サーバーにマッチするIPリテラルが許可されるようになりました。</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• %sに一致するサーバーが許可リストから削除されました。</string>
+    <string name="notice_room_server_acl_updated_allowed">• %sに一致するサーバーが許可されるようになりました。</string>
+    <string name="notice_room_server_acl_updated_was_banned">• %sに一致するサーバーが禁止リストから削除されました。</string>
+    <string name="notice_room_server_acl_updated_banned">• %sに一致するサーバーは禁止されました。</string>
+    <plurals name="two_and_some_others_read">
+        <item quantity="other">%1$sや %2$sそれに%3$dに他の人も読みました</item>
+    </plurals>
+    <string name="three_users_read">%1$sや %2$sそれに%3$sが読みました</string>
+    <string name="command_description_plain">メッセージをマークダウンとして解釈せずにプレーンテキストとして送信する</string>
 </resources>

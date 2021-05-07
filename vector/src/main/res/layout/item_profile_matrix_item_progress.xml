@@ -37,11 +37,10 @@
 
     <TextView
         android:id="@+id/matrixItemTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:drawablePadding="16dp"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?riotx_text_primary"
@@ -49,19 +48,17 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/matrixItemSubtitle"
         app:layout_constraintEnd_toStartOf="@+id/matrixItemProgress"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_goneMarginStart="0dp"
+        app:layout_goneMarginEnd="80dp"
         tools:text="@sample/matrix.json/data/displayName" />
 
     <TextView
         android:id="@+id/matrixItemSubtitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:drawablePadding="16dp"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?riotx_text_secondary"
@@ -69,10 +66,9 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/matrixItemProgress"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toBottomOf="@id/matrixItemTitle"
-        app:layout_goneMarginStart="0dp"
+        app:layout_goneMarginEnd="8dp"
         tools:text="@sample/matrix.json/data/mxid" />
 
     <ProgressBar
@@ -93,12 +89,10 @@
         android:layout_height="wrap_content"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_arrow_right"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?riotx_text_secondary"
-        tools:ignore="MissingPrefix"
-        tools:visibility="visible" />
+        tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
