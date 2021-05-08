@@ -2749,4 +2749,5 @@
     <string name="spaces_invited_header">Einladungen</string>
     <string name="suggested_header">Vorgeschlagene Räume</string>
     <string name="spaces_header">Spaces</string>
+    <string name="room_settings_room_access_entry_knock">Jeder kann im Raum anklopfen, Mitglieder können dann zustimmen oder ablehnen</string>
 </resources>
