@@ -324,7 +324,6 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                             .setKey(event.senderId)
                             .build()
 
-
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         val openRoomIntent = RoomDetailActivity.shortcutIntent(context, roomId)
 
@@ -332,8 +331,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                                 .setLongLived(true)
                                 .setIntent(openRoomIntent)
                                 .setShortLabel(roomName)
-                                .setIcon(largeBitmap?.let{IconCompat.createWithAdaptiveBitmap(it)}?: iconLoader.getUserIcon(event.senderAvatarPath))
-                                .setCategories()
+                                .setIcon(largeBitmap?.let { IconCompat.createWithAdaptiveBitmap(it) } ?: iconLoader.getUserIcon(event.senderAvatarPath))
                                 .build()
 
                         ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)

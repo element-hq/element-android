@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Priority conversations for Android 11+ (#2734)
 
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)
