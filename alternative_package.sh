@@ -2,14 +2,26 @@
 # Convert app to a different package with different icon and name,
 # to allow multiple installations on the same device.
 
-package_add="$1"
-name_add="$2"
 mydir="$(dirname "$(realpath "$0")")"
+
+if [ "$1" = "--name-replace" ]; then
+    replace_name=1
+    shift
+else
+    replace_name=0
+fi
+package_add="$1"
+if ((replace_name)); then
+    name_replace="$2"
+else
+    name_add="$2"
+    name_replace="SchildiChat.$name_add"
+fi
 
 source "$mydir/merge_helpers.sh"
 
-if [ -z "$package_add" ] || [ -z "$name_add" ]; then
-    echo "Usage: $0 <package_add> <name_add>"
+if [ -z "$package_add" ] || [ -z "$name_replace" ]; then
+    echo "Usage: $0 [--name-replace] <package_add> <name_add/replace>"
     exit 1
 fi
 
@@ -71,6 +83,10 @@ case "$package_add" in
     # pink
     logo_alternative "#D81B60" "#880E4F" "#F8BBD0"
     ;;
+"sf")
+    # green with different background
+    logo_alternative "#8BC34A" "#33691E" "#f2e4ae"
+    ;;
 "x")
     # cyan
     logo_alternative "#00ACC1" "#006064" "#B2EBF2"
@@ -81,9 +97,9 @@ case "$package_add" in
     ;;
 esac
 
-sed -i "s|SchildiChat|SchildiChat.$name_add|g" "$build_gradle"
+sed -i "s|SchildiChat|$name_replace|g" "$build_gradle"
 sed -i "s|de.spiritcroc.riotx|de.spiritcroc.riotx.$package_add|g" "$build_gradle" `find "$src_dir" -name google-services.json`
-sed -i "s|SchildiChat|SchildiChat.$name_add|g" `find "$fastlane_dir/metadata/android" -name "title.txt"`
+sed -i "s|SchildiChat|$name_replace|g" `find "$fastlane_dir/metadata/android" -name "title.txt"`
 
 
 if [ "$package_add" = "testing.foss" ]; then
@@ -97,4 +113,4 @@ elif [ "$package_add" = "testing.fcm" ]; then
 fi
 
 git add -A
-git commit -m "Switch to alternative $name_add ($package_add)"
+git commit -m "Switch to alternative $name_replace ($package_add)"
