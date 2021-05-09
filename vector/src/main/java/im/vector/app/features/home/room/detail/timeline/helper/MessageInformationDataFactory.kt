@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
+import org.matrix.android.sdk.api.session.room.timeline.isEdition
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import javax.inject.Inject
 
@@ -66,9 +67,10 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 addDaySeparator
                         || event.senderInfo.avatarUrl != nextEvent?.senderInfo?.avatarUrl
                         || event.senderInfo.disambiguatedDisplayName != nextEvent?.senderInfo?.disambiguatedDisplayName
-                        || (nextEvent.root.getClearType() != EventType.MESSAGE && nextEvent.root.getClearType() != EventType.ENCRYPTED)
+                        || nextEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED)
                         || isNextMessageReceivedMoreThanOneHourAgo
                         || isTileTypeMessage(nextEvent)
+                        || nextEvent.isEdition()
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val e2eDecoration = getE2EDecoration(event)

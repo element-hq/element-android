@@ -19,8 +19,10 @@ package im.vector.app.features.media
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -87,7 +89,9 @@ class DataAttachmentRoomProvider(
                         elementToDecrypt = item.elementToDecrypt
                 )
             }
-            callback(result.getOrNull())
+            withContext(Dispatchers.Main) {
+                callback(result.getOrNull())
+            }
         }
     }
 }

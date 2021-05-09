@@ -28,8 +28,10 @@ import com.bumptech.glide.signature.ObjectKey
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.features.media.ImageContentRenderer
-import kotlinx.coroutines.GlobalScope
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import timber.log.Timber
 import java.io.IOException
@@ -113,7 +115,7 @@ class VectorGlideDataFetcher(context: Context,
             callback.onLoadFailed(IllegalArgumentException("No File service"))
         }
         // Use the file vector service, will avoid flickering and redownload after upload
-        GlobalScope.launch {
+        activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch {
             val result = runCatching {
                 fileService.downloadFile(
                         fileName = data.filename,
@@ -121,10 +123,12 @@ class VectorGlideDataFetcher(context: Context,
                         url = data.url,
                         elementToDecrypt = data.elementToDecrypt)
             }
-            result.fold(
-                    { callback.onDataReady(it.inputStream()) },
-                    { callback.onLoadFailed(it as? Exception ?: IOException(it.localizedMessage)) }
-            )
+            withContext(Dispatchers.Main) {
+                result.fold(
+                        { callback.onDataReady(it.inputStream()) },
+                        { callback.onLoadFailed(it as? Exception ?: IOException(it.localizedMessage)) }
+                )
+            }
         }
 //        val url = contentUrlResolver.resolveFullSize(data.url)
 //                ?: return

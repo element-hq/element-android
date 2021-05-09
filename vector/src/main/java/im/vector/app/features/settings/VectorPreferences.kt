@@ -150,6 +150,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY = "SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
 
         const val SETTINGS_LABS_ALLOW_EXTENDED_LOGS = "SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
+        const val SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE = "SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE"
 
         private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
@@ -191,6 +192,13 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val MEDIA_SAVING_FOREVER = 3
 
         private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
+
+        private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
+
+        // Possible values for TAKE_PHOTO_VIDEO_MODE
+        const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
+        const val TAKE_PHOTO_VIDEO_MODE_PHOTO = 1
+        const val TAKE_PHOTO_VIDEO_MODE_VIDEO = 2
 
         // Background sync modes
 
@@ -234,6 +242,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY,
                 SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY,
                 SETTINGS_LABS_ALLOW_EXTENDED_LOGS,
+                SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE,
                 SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
 
                 SETTINGS_USE_RAGE_SHAKE_KEY,
@@ -940,6 +949,23 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             BackgroundSyncMode.values().firstOrNull { it.name == strPref } ?: BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
         } catch (e: Throwable) {
             BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
+        }
+    }
+
+    fun labsUseExperimentalRestricted(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE, false)
+    }
+
+    /*
+     * Photo / video picker
+     */
+    fun getTakePhotoVideoMode(): Int {
+        return defaultPrefs.getInt(TAKE_PHOTO_VIDEO_MODE, TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK)
+    }
+
+    fun setTakePhotoVideoMode(mode: Int) {
+        return defaultPrefs.edit {
+            putInt(TAKE_PHOTO_VIDEO_MODE, mode)
         }
     }
 }

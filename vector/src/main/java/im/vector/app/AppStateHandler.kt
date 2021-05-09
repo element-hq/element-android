@@ -19,16 +19,35 @@ package im.vector.app
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import arrow.core.Option
+import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.utils.BehaviorDataSource
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.rx.rx
 import javax.inject.Inject
 import javax.inject.Singleton
-import org.matrix.android.sdk.rx.rx
+
+sealed class RoomGroupingMethod {
+    data class ByLegacyGroup(val groupSummary: GroupSummary?) : RoomGroupingMethod()
+    data class BySpace(val spaceSummary: RoomSummary?) : RoomGroupingMethod()
+}
+
+fun RoomGroupingMethod.space() = (this as? RoomGroupingMethod.BySpace)?.spaceSummary
+fun RoomGroupingMethod.group() = (this as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary
 
 /**
  * This class handles the global app state.
@@ -38,9 +57,73 @@ import org.matrix.android.sdk.rx.rx
 @Singleton
 class AppStateHandler @Inject constructor(
         private val sessionDataSource: ActiveSessionDataSource,
-        private val matrixItemColorProvider: MatrixItemColorProvider) : LifecycleObserver {
+        private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val uiStateRepository: UiStateRepository,
+        private val activeSessionHolder: ActiveSessionHolder
+) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
+
+    private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
+
+    val selectedRoomGroupingObservable = selectedSpaceDataSource.observe()
+
+    fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? = selectedSpaceDataSource.currentValue?.orNull()
+
+    fun setCurrentSpace(spaceId: String?, session: Session? = null) {
+        val uSession = session ?: activeSessionHolder.getSafeActiveSession()
+        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace
+                && spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
+        val spaceSum = spaceId?.let { uSession?.getRoomSummary(spaceId) }
+        selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.BySpace(spaceSum)))
+        if (spaceId != null) {
+            GlobalScope.launch(Dispatchers.IO) {
+                tryOrNull {
+                    uSession?.getRoom(spaceId)?.loadRoomMembersIfNeeded()
+                }
+            }
+        }
+    }
+
+    fun setCurrentGroup(groupId: String?, session: Session? = null) {
+        val uSession = session ?: activeSessionHolder.getSafeActiveSession()
+        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.ByLegacyGroup
+                && groupId == selectedSpaceDataSource.currentValue?.orNull()?.group()?.groupId) return
+        val activeGroup = groupId?.let { uSession?.getGroupSummary(groupId) }
+        selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.ByLegacyGroup(activeGroup)))
+        if (groupId != null) {
+            GlobalScope.launch {
+                tryOrNull {
+                    uSession?.getGroup(groupId)?.fetchGroupData()
+                }
+            }
+        }
+    }
+
+    init {
+        sessionDataSource.observe()
+                .distinctUntilChanged()
+                .subscribe {
+                    // sessionDataSource could already return a session while acitveSession holder still returns null
+                    it.orNull()?.let { session ->
+                        if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
+                            setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
+                        } else {
+                            setCurrentGroup(uiStateRepository.getSelectedGroup(session.sessionId), session)
+                        }
+                    }
+                }.also {
+                    compositeDisposable.add(it)
+                }
+    }
+
+    fun safeActiveSpaceId(): String? {
+        return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.BySpace)?.spaceSummary?.roomId
+    }
+
+    fun safeActiveGroupId(): String? {
+        return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
@@ -50,6 +133,17 @@ class AppStateHandler @Inject constructor(
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun entersBackground() {
         compositeDisposable.clear()
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+        when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
+            is RoomGroupingMethod.BySpace -> {
+                uiStateRepository.storeGroupingMethod(true, session.sessionId)
+                uiStateRepository.storeSelectedSpace(currentMethod.spaceSummary?.roomId, session.sessionId)
+            }
+            is RoomGroupingMethod.ByLegacyGroup -> {
+                uiStateRepository.storeGroupingMethod(false, session.sessionId)
+                uiStateRepository.storeSelectedGroup(currentMethod.groupSummary?.groupId, session.sessionId)
+            }
+        }
     }
 
     private fun observeUserAccountData() {

@@ -23,8 +23,9 @@ import androidx.core.app.RemoteInput
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.vectorComponent
-import kotlinx.coroutines.GlobalScope
+import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.read.ReadService
@@ -77,8 +78,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             val room = session.getRoom(roomId)
             if (room != null) {
-                GlobalScope.launch {
-                    room.join()
+                session.coroutineScope.launch {
+                    tryOrNull { room.join() }
                 }
             }
         }
@@ -88,8 +89,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             val room = session.getRoom(roomId)
             if (room != null) {
-                GlobalScope.launch {
-                    room.leave()
+                session.coroutineScope.launch {
+                    tryOrNull { room.leave() }
                 }
             }
         }
@@ -99,11 +100,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         activeSessionHolder.getActiveSession().let { session ->
             val room = session.getRoom(roomId)
             if (room != null) {
-                GlobalScope.launch {
-                    try {
-                        room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
-                    } catch (_: Exception) {
-                    }
+                session.coroutineScope.launch {
+                    tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
                 }
             }
         }

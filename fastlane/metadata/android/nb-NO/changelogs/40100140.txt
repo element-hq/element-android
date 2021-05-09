@@ -1,0 +1,2 @@
+Hovedendringene i denne versjonen: Rediger romtillatelser, automatisk lys/mørkt tema og en haug med feilrettinger.
+Full endringslogg: https://github.com/vector-im/element-android/releases/tag/v1.0.14

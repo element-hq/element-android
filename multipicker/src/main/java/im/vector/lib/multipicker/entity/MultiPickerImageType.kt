@@ -23,7 +23,7 @@ data class MultiPickerImageType(
         override val size: Long,
         override val mimeType: String?,
         override val contentUri: Uri,
-        val width: Int,
-        val height: Int,
-        val orientation: Int
-) : MultiPickerBaseType
+        override val width: Int,
+        override val height: Int,
+        override val orientation: Int
+) : MultiPickerBaseMediaType

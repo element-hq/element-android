@@ -23,6 +23,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.children
 import androidx.preference.Preference
 import im.vector.app.R
+import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.preference.VectorListPreference
 import im.vector.app.core.preference.VectorPreference
@@ -44,6 +45,9 @@ class VectorSettingsPreferencesFragment @Inject constructor(
     }
     private val textSizePreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTERFACE_TEXT_SIZE_KEY)!!
+    }
+    private val takePhotoOrVideoPreference by lazy {
+        findPreference<VectorPreference>("SETTINGS_INTERFACE_TAKE_PHOTO_VIDEO")!!
     }
 
     override fun bindPref() {
@@ -123,6 +127,28 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 false
             }
         }
+
+        // Take photo or video
+        updateTakePhotoOrVideoPreferenceSummary()
+        takePhotoOrVideoPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            PhotoOrVideoDialog(requireActivity(), vectorPreferences).showForSettings(object: PhotoOrVideoDialog.PhotoOrVideoDialogSettingsListener {
+                override fun onUpdated() {
+                    updateTakePhotoOrVideoPreferenceSummary()
+                }
+            })
+            true
+        }
+    }
+
+    private fun updateTakePhotoOrVideoPreferenceSummary() {
+        takePhotoOrVideoPreference.summary = getString(
+                when (vectorPreferences.getTakePhotoVideoMode()) {
+                    VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO -> R.string.option_take_photo
+                    VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO -> R.string.option_take_video
+                    /* VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK */
+                    else                                          -> R.string.option_always_ask
+                }
+        )
     }
 
     // ==============================================================================================================

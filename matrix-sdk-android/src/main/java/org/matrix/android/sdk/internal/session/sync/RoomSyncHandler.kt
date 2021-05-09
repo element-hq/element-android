@@ -95,8 +95,14 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, aggregator, reporter)
         handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, aggregator, reporter)
         handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, aggregator, reporter)
+
+        // post room sync validation
+//        roomSummaryUpdater.validateSpaceRelationship(realm)
     }
 
+    fun postSyncSpaceHierarchyHandle(realm: Realm) {
+        roomSummaryUpdater.validateSpaceRelationship(realm)
+    }
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleRoomSync(realm: Realm,
@@ -212,6 +218,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
                 val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
+                    // Timber.v("## Space state event: $eventEntity")
                     eventId = event.eventId
                     root = eventEntity
                 }
@@ -455,7 +462,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
     }
 
     private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {
-        for (event in accountData.events) {
+        accountData.events?.forEach { event ->
             val eventType = event.getClearType()
             if (eventType == EventType.TAG) {
                 val content = event.getClearContent().toModel<RoomTagContent>()

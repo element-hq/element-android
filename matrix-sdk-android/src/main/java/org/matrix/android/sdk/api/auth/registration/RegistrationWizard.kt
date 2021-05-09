@@ -20,7 +20,9 @@ interface RegistrationWizard {
 
     suspend fun getRegistrationFlow(): RegistrationResult
 
-    suspend fun createAccount(userName: String, password: String, initialDeviceDisplayName: String?): RegistrationResult
+    suspend fun createAccount(userName: String?,
+                              password: String?,
+                              initialDeviceDisplayName: String?): RegistrationResult
 
     suspend fun performReCaptcha(response: String): RegistrationResult
 

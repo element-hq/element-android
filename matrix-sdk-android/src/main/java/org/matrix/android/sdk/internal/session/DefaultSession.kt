@@ -19,13 +19,15 @@ package org.matrix.android.sdk.internal.session
 import androidx.annotation.MainThread
 import dagger.Lazy
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.pushrules.PushRuleService
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
 import org.matrix.android.sdk.api.session.cache.CacheService
@@ -38,6 +40,7 @@ import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
+import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
@@ -49,6 +52,7 @@ import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
+import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
@@ -120,6 +124,7 @@ internal class DefaultSession @Inject constructor(
         private val integrationManagerService: IntegrationManagerService,
         private val thirdPartyService: Lazy<ThirdPartyService>,
         private val callSignalingService: Lazy<CallSignalingService>,
+        private val spaceService: Lazy<SpaceService>,
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
 ) : Session,
@@ -159,7 +164,12 @@ internal class DefaultSession @Inject constructor(
         isOpen = true
         cryptoService.get().ensureDevice()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onSessionStarted() }
+            lifecycleObservers.forEach {
+                it.onSessionStarted(this)
+            }
+            sessionListeners.dispatch {
+                it.onSessionStarted(this)
+            }
         }
         globalErrorHandler.listener = this
     }
@@ -200,7 +210,10 @@ internal class DefaultSession @Inject constructor(
         stopSync()
         // timelineEventDecryptor.destroy()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onSessionStopped() }
+            lifecycleObservers.forEach { it.onSessionStopped(this) }
+            sessionListeners.dispatch {
+                it.onSessionStopped(this)
+            }
         }
         cryptoService.get().close()
         isOpen = false
@@ -225,14 +238,23 @@ internal class DefaultSession @Inject constructor(
         stopSync()
         stopAnyBackgroundSync()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onClearCache() }
+            lifecycleObservers.forEach {
+                it.onClearCache(this)
+            }
+            sessionListeners.dispatch {
+                it.onClearCache(this)
+            }
         }
-        cacheService.get().clearCache()
+        withContext(NonCancellable) {
+            cacheService.get().clearCache()
+        }
         workManagerProvider.cancelAllWorks()
     }
 
     override fun onGlobalError(globalError: GlobalError) {
-        sessionListeners.dispatchGlobalError(globalError)
+        sessionListeners.dispatch {
+            it.onGlobalError(this, globalError)
+        }
     }
 
     override fun contentUrlResolver() = contentUrlResolver
@@ -264,6 +286,8 @@ internal class DefaultSession @Inject constructor(
     override fun federationService(): FederationService = federationService.get()
 
     override fun thirdPartyService(): ThirdPartyService = thirdPartyService.get()
+
+    override fun spaceService(): SpaceService = spaceService.get()
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()

@@ -19,8 +19,10 @@ package im.vector.app.features.media
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -28,6 +30,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
@@ -76,8 +79,7 @@ class RoomEventsAttachmentProvider(
                         eventId = it.eventId,
                         filename = content.body,
                         mimeType = content.mimeType,
-                        url = content.videoInfo?.thumbnailFile?.url
-                                ?: content.videoInfo?.thumbnailUrl,
+                        url = content.videoInfo?.getThumbnailUrl(),
                         elementToDecrypt = content.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                         height = content.videoInfo?.height,
                         maxHeight = -1,
@@ -100,8 +102,7 @@ class RoomEventsAttachmentProvider(
                         data = data,
                         thumbnail = AttachmentInfo.Image(
                                 uid = it.eventId,
-                                url = content.videoInfo?.thumbnailFile?.url
-                                        ?: content.videoInfo?.thumbnailUrl ?: "",
+                                url = content.videoInfo?.getThumbnailUrl() ?: "",
                                 data = thumbnailData
 
                         )
@@ -134,7 +135,9 @@ class RoomEventsAttachmentProvider(
                             url = messageContent.getFileUrl(),
                             elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
                 }
-                callback(result.getOrNull())
+                withContext(Dispatchers.Main) {
+                    callback(result.getOrNull())
+                }
             }
         }
     }

@@ -28,16 +28,19 @@ import im.vector.app.core.epoxy.bottomsheet.bottomSheetMessagePreviewItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetSendStateItem
 import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.format.EventDetailsFormatter
 import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
 
@@ -50,6 +53,8 @@ class MessageActionsEpoxyController @Inject constructor(
         private val fontProvider: EmojiCompatFontProvider,
         private val imageContentRenderer: ImageContentRenderer,
         private val dimensionConverter: DimensionConverter,
+        private val errorFormatter: ErrorFormatter,
+        private val eventDetailsFormatter: EventDetailsFormatter,
         private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<MessageActionState>() {
 
@@ -68,16 +73,21 @@ class MessageActionsEpoxyController @Inject constructor(
             data(state.timelineEvent()?.buildImageContentRendererData(dimensionConverter.dpToPx(66)))
             userClicked { listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
             body(state.messageBody.linkify(listener))
+            bodyDetails(eventDetailsFormatter.format(state.timelineEvent()?.root))
             time(formattedDate)
         }
 
         // Send state
         val sendState = state.sendState()
         if (sendState?.hasFailed().orFalse()) {
+            // Get more details about the error
+            val errorMessage = state.timelineEvent()?.root?.sendStateError()
+                    ?.let { errorFormatter.toHumanReadable(Failure.ServerError(it, 0)) }
+                    ?: stringProvider.getString(R.string.unable_to_send_message)
             bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(false)
-                text(stringProvider.getString(R.string.unable_to_send_message))
+                text(errorMessage)
                 drawableStart(R.drawable.ic_warning_badge)
             }
         } else if (sendState?.isSending().orFalse()) {

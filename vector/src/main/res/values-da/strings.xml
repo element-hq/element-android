@@ -1,12 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s sendte et billede.</string>
-
     <string name="notice_room_invite_no_invitee">%ss invitation</string>
     <string name="notice_room_invite">%1$s inviterede %2$s</string>
     <string name="notice_room_invite_you">%1$s inviterede dig</string>
-    <string name="notice_room_join">%1$s forbandt</string>
+    <string name="notice_room_join">%1$s kom ind i rummet</string>
     <string name="notice_room_leave">%1$s forlod rummet</string>
     <string name="notice_room_reject">%1$s afviste invitationen</string>
     <string name="notice_room_kick">%1$s kickede %2$s</string>
@@ -30,59 +29,44 @@
     <string name="notice_room_visibility_world_readable">alle.</string>
     <string name="notice_room_visibility_unknown">ukendt (%s).</string>
     <string name="notice_end_to_end">%1$s slog ende-til-ende kryptering til (%2$s)</string>
-
-    <string name="notice_requested_voip_conference">%1$s forespurgte en VoIP konference</string>
-    <string name="notice_voip_started">VoIP konference startet</string>
-    <string name="notice_voip_finished">VoIP konference afsluttet</string>
-
+    <string name="notice_requested_voip_conference">%1$s anmodede om en VoIP konference</string>
+    <string name="notice_voip_started">VoIP-konference startet</string>
+    <string name="notice_voip_finished">VoIP-konference afsluttet</string>
     <string name="notice_avatar_changed_too">(avatar blev også ændret)</string>
     <string name="notice_room_name_removed">%1$s fjernede navnet på rummet</string>
     <string name="notice_room_topic_removed">%1$s fjernede emnet for rummet</string>
     <string name="notice_profile_change_redacted">%1$s opdaterede sin profil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s inviterede %2$s til rummet</string>
     <string name="notice_room_third_party_registered_invite">%1$s accepterede invitationen til %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Kunne ikke dekryptere: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Afsenderens enhed har ikke sendt os nøglerne til denne besked.</string>
-
     <string name="could_not_redact">Kunne ikke hemmeligholde</string>
     <string name="unable_to_send_message">Kunne ikke sende besked</string>
-
     <string name="message_failed_to_upload">Kunne ikke uploade billede</string>
-
     <string name="network_error">Netværks fejl</string>
     <string name="matrix_error">Matrix fejl</string>
-
     <string name="room_error_join_failed_empty_room">Det er i øjeblikket ikke muligt at genforbinde til et tomt rum.</string>
-
     <string name="encrypted_message">Krypteret besked</string>
-
     <string name="medium_email">mailadresse</string>
     <string name="medium_phone_number">Telefonnummer</string>
-
     <string name="room_displayname_invite_from">Invitation fra %s</string>
     <string name="room_displayname_room_invite">Invitation til rum</string>
     <string name="room_displayname_two_members">%1$s og %2$s</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s og 1 anden</item>
         <item quantity="other">%1$s og %2$d andre</item>
     </plurals>
-
     <string name="room_displayname_empty_room">Tomt rum</string>
     <string name="light_theme">Lyst Tema</string>
     <string name="dark_theme">Mørkt Tema</string>
     <string name="black_theme">Sort Tema</string>
-
     <string name="notification_sync_in_progress">Synkroniserer</string>
     <string name="notification_listening_for_events">Lyt efter begivenheder</string>
-
     <string name="title_activity_home">Beskeder</string>
     <string name="title_activity_room">Rum</string>
     <string name="title_activity_settings">Indstillinger</string>
     <string name="title_activity_member_details">Medlemsdetaljer</string>
     <string name="title_activity_historical">Historisk</string>
-
     <string name="ok">OK</string>
     <string name="cancel">Afbryd</string>
     <string name="save">Gem</string>
@@ -114,7 +98,6 @@
     <string name="or">eller</string>
     <string name="invite">Invitér</string>
     <string name="offline">Offline</string>
-
     <string name="action_sign_out">Log ud</string>
     <string name="action_voice_call">Stemmeopkald</string>
     <string name="action_video_call">Videoopkald</string>
@@ -126,23 +109,18 @@
     <string name="action_close">Luk</string>
     <string name="copied_to_clipboard">Kopieret til udklipsholder</string>
     <string name="disable">Slå fra</string>
-
     <string name="dialog_title_confirmation">Bekræftigelse</string>
     <string name="dialog_title_warning">Advarsel</string>
-
     <string name="bottom_action_home">Hjem</string>
     <string name="bottom_action_favourites">Favoritter</string>
     <string name="bottom_action_people">Folk</string>
     <string name="bottom_action_rooms">Rum</string>
-
     <string name="home_filter_placeholder_home">Søg efter rum</string>
     <string name="home_filter_placeholder_favorites">Søg efter favoritter</string>
     <string name="home_filter_placeholder_people">Søg efter folk</string>
     <string name="home_filter_placeholder_rooms">Søg efter rum</string>
-
     <string name="invitations_header">Invitationer</string>
     <string name="low_priority_header">Lav prioritet</string>
-
     <string name="direct_chats_header">Samtaler</string>
     <string name="local_address_book_header">Lokal adressebog</string>
     <string name="user_directory_header">Bruger katalog</string>
@@ -150,7 +128,6 @@
     <string name="no_conversation_placeholder">Ingen samtaler</string>
     <string name="template_no_contact_access_placeholder">Du gav ikke ${app_name} tilladelse til at se dine lokale kontakter</string>
     <string name="no_result_placeholder">Ingen resultater</string>
-
     <string name="rooms_header">Rum</string>
     <string name="rooms_directory_header">Rum katalog</string>
     <string name="no_room_placeholder">Ingen rum</string>
@@ -159,7 +136,6 @@
         <item quantity="one">1 bruger</item>
         <item quantity="other">%d brugere</item>
     </plurals>
-
     <string name="send_bug_report_include_logs">Send logfiler</string>
     <string name="send_bug_report_include_crash_logs">Send crashlogfiler</string>
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
@@ -169,14 +145,11 @@
     <string name="send_bug_report_logs_description">For at diagnosticere problemer vil logs fra denne klient blive sendt sammen med fejlrapporten. Hvis du vil foretrække kun at sende teksten foroven, bedes du fjerne fluebenet:</string>
     <string name="send_bug_report_alert_message">Du lader til at ryste din telefon i frustration. Vil du sende en fejlmeddelelse?</string>
     <string name="send_bug_report_app_crashed">Programmet crashede sidst. Vil du sende en crash rapport?</string>
-
     <string name="send_bug_report_sent">Fejlrapporten lykkedes med at blive sendt</string>
     <string name="send_bug_report_failed">Fejlmeddelelsen kunne ikke sendes (%s)</string>
     <string name="send_bug_report_progress">Fremskridt (%s%%)</string>
-
     <string name="send_files_in">Send ind i</string>
     <string name="read_receipt">Læs</string>
-
     <string name="join_room">Forbind til Rum</string>
     <string name="username">Brugernavn</string>
     <string name="create_account">Registrér</string>
@@ -185,14 +158,11 @@
     <string name="hs_url">Home Server URL</string>
     <string name="identity_url">Identity Server URL</string>
     <string name="search">Søg</string>
-
     <string name="start_new_chat">Start Ny Chat</string>
     <string name="start_voice_call">Start Stemmeopkald</string>
     <string name="start_video_call">Start Videoopkald</string>
-
     <string name="option_send_files">Send filer</string>
     <string name="option_take_photo_video">Tag billede eller video</string>
-
     <string name="auth_login">Log ind</string>
     <string name="auth_register">Registrer</string>
     <string name="auth_submit">Send</string>
@@ -240,7 +210,6 @@ Du kan tilføje din emailadresse til din profil i indstillinger.</string>
     <string name="auth_reset_password_success_message">Dit password er blevet gendannet.
 
 Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifikationer. For at slå notifikationer til igen skal du logge ind på hver enhed igen.</string>
-
     <string name="login_error_must_start_http">URLen skal starte med http[s]://</string>
     <string name="login_error_network_error">Kunne ikke logge ind: Netværksfejl</string>
     <string name="login_error_unable_login">Kunne ikke logge ind</string>
@@ -248,7 +217,6 @@ Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifika
     <string name="login_error_unable_register">Kunne ikke registrere</string>
     <string name="login_error_unable_register_mail_ownership">Kunne ikke registrere : email ejerskabsfejl</string>
     <string name="login_error_invalid_home_server">Skriv gyldig URL</string>
-
     <string name="login_error_forbidden">Ugyldigt brugernavn/password</string>
     <string name="login_error_unknown_token">Adgangstokenen du skrev blev ikke godkendt</string>
     <string name="login_error_bad_json">Fejlformet JSON</string>
@@ -256,30 +224,23 @@ Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifika
     <string name="login_error_limit_exceeded">For mange forespørgsler blev sendt</string>
     <string name="login_error_user_in_use">Brugernavnet er allerede i brug</string>
     <string name="login_error_login_email_not_yet">Emaillinket som ikke er blevet trykket på endnu</string>
-
     <string name="notification_noisy_notifications">Larmende notifikationer</string>
     <string name="notification_silent_notifications">Stille notifikationer</string>
-
     <string name="option_take_photo">Tag billede</string>
     <string name="option_take_video">Optag video</string>
-
     <string name="compression_options">"Send som "</string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Stor</string>
     <string name="compression_opt_list_medium">Middel</string>
     <string name="compression_opt_list_small">Lille</string>
-
     <string name="attachment_cancel_download">Afbryd hentningen?</string>
     <string name="attachment_cancel_upload">Afbryd uploadningen?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm:%2$ds</string>
-
     <string name="yesterday">I går</string>
     <string name="today">I dag</string>
-
     <string name="room_info_room_name">Rum navn</string>
     <string name="room_info_room_topic">Rum emne</string>
-
     <string name="call">Opkald</string>
     <string name="call_connected">Opkald forbundet</string>
     <string name="call_connecting">Opkald forbinder…</string>
@@ -289,15 +250,12 @@ Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifika
     <string name="incoming_video_call">Indgående Videoopkald</string>
     <string name="incoming_voice_call">Indgående Stemmeopkald</string>
     <string name="call_in_progress">Opkald I Gang</string>
-
     <string name="call_error_user_not_responding">Den anden side tog den ikke.</string>
     <string name="call_error_ice_failed">Medie Forbindelse Mislykkedes</string>
     <string name="call_error_camera_init_failed">Kan ikke starte kameraet</string>
     <string name="call_error_answered_elsewhere">opkald besvaret et andet sted</string>
-
     <string name="media_picker_both_capture_title">Tag et billede eller optag en video</string>
     <string name="media_picker_cannot_record_video">Kan ikke optage video</string>
-
     <string name="permissions_rationale_popup_title">Information</string>
     <string name="template_permissions_rationale_msg_storage">${app_name} skal bruge tilladelse til at tilgå dit billed- og videoarkiv for at sende og gemme vedhæftninger.
 Giv venligst tilladelse ved næste pop-up for at kunne sende filer fra din telefon.</string>
@@ -318,47 +276,37 @@ Giv venligst tilladelse ved næste pop-up for at finde kontakter der er på ${ap
     <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} skal bruge adgang til dine kontakter for at finde andre Matrix brugere ud fra deres email og telefonnumre.
 
 Vil du give ${app_name} adgang til dine kontakter?</string>
-
     <string name="permissions_action_not_performed_missing_permissions">Beklager… Handlingen blev ikke udført fordi der mangler tilladelser</string>
-
     <string name="media_slider_saved">Gemt</string>
     <string name="media_slider_saved_message">Gem til downloads</string>
     <string name="yes">JA</string>
     <string name="no">NEJ</string>
     <string name="_continue">Fortsæt</string>
-
     <string name="remove">Fjern</string>
     <string name="join">Forbind</string>
     <string name="preview">Forhåndsvisning</string>
     <string name="reject">Afvis</string>
-
     <string name="room_jump_to_first_unread">Spring til første ulæste besked.</string>
-
     <string name="room_preview_invitation_format">Du er blevet inviteret til at forbinde til dette rum af %s</string>
     <string name="room_preview_unlinked_email_warning">Denne invitation blev sendt til %s som ikke er tilknyttet denne konto.
 Det kan være du vil logge ind med en anden konto eller tilføje denne email til din konto.</string>
     <string name="room_preview_try_join_an_unknown_room">Du forsøger at tilgå %s. Vil du forbinde for at deltage i diskussionen?</string>
     <string name="room_preview_try_join_an_unknown_room_default">et rum</string>
     <string name="room_preview_room_interactions_disabled">Dette er en forhåndsvisning af dette rum. Interaktion med rummet er slået fra.</string>
-
     <string name="room_creation_title">Ny chat</string>
     <string name="room_creation_add_member">Tilføj medlem</string>
     <string name="room_title_one_member">1 medlem</string>
-
     <string name="room_participants_leave_prompt_title">Forlad rum</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlade rummet?</string>
     <string name="room_participants_remove_prompt_msg">Er du sikker på du vil fjerne %s fra denne chat?</string>
     <string name="room_participants_create">Skab</string>
-
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Passiv</string>
-
     <string name="room_participants_header_admin_tools">ADMINSTRATIONSVÆRKTØJER</string>
     <string name="room_participants_header_call">OPKALD</string>
     <string name="room_participants_header_direct_chats">DIREKTE CHATS</string>
     <string name="room_participants_header_devices">ENHEDER</string>
-
     <string name="room_participants_action_invite">Invitér</string>
     <string name="room_participants_action_leave">Forlad dette rum</string>
     <string name="room_participants_action_remove">Fjern fra dette rum</string>
@@ -374,18 +322,14 @@ Det kan være du vil logge ind med en anden konto eller tilføje denne email til
     <string name="room_participants_action_devices_list">Hvis Enhedsliste</string>
     <string name="room_participants_power_level_prompt">Du vil ikke kunne omgøre denne ændring da du forfremmer brugeren til at have samme magt niveau som dig selv.
 Er du sikker?</string>
-
     <string name="room_participants_invite_prompt_msg">Er du sikker på du vil invitere %s til denne chat?</string>
-
     <string name="people_search_invite_by_id"><u>Invitér med ID</u></string>
     <string name="people_search_local_contacts">LOKALE KONTAKTER (%d)</string>
     <string name="people_search_user_directory">BRUGERKATALOG (%s)</string>
     <string name="people_search_filter_text">Kun Matrix brugere</string>
-
     <string name="people_search_invite_by_id_dialog_title">Invitér bruger med ID</string>
     <string name="people_search_invite_by_id_dialog_description">Indtast venligst en eller flere emails eller Matrix ID</string>
     <string name="people_search_invite_by_id_dialog_hint">Email eller Matrix ID</string>
-
     <string name="room_menu_search">Søg</string>
     <string name="room_one_user_is_typing">%s skriver…</string>
     <string name="room_two_users_are_typing">"%1$s &amp; %2$s  skriver…"</string>
@@ -401,7 +345,6 @@ Er du sikker?</string>
     <string name="room_delete_unsent_messages">Slet usendte beskeder</string>
     <string name="room_message_file_not_found">Fil ikke fundet</string>
     <string name="room_do_not_have_permission_to_post">Du har ikke tilladelse til at skrive i dette rum</string>
-
     <string name="ssl_trust">Stol på</string>
     <string name="ssl_do_not_trust">Stol ikke på</string>
     <string name="ssl_logout_account">Log ud</string>
@@ -412,12 +355,9 @@ Er du sikker?</string>
     <string name="ssl_cert_new_account_expl">Hvis serveradministratoren har sagt det er forventeligt skal du sikre dig at fingeraftrykket forneden passer med det fingeraftryk de har oplyst.</string>
     <string name="ssl_unexpected_existing_expl">Certifikatet har ændret sig fra det din telefon stolede på. Dette er HØJST USÆDVANLIGT. Det anbefales at du IKKE ACCEPTERE dette nye certifikat.</string>
     <string name="title_activity_bug_report">Nug rapport</string>
-
     <string name="read_receipts_list">Kvitteringer for læsning</string>
-
     <string name="ssl_expected_existing_expl">Certifikatet er ændret fra et tidligere betroet, til et der ikke er betroet. Serveren kan have fornyet sit certifikat. Kontakt server administratoren for det forventede fingeraftryk.</string>
     <string name="ssl_only_accept">Accepter kun certifikatet hvis server administratoren har publiceret et fingeraftryk der matcher det ovenstående.</string>
-
     <string name="room_details_title">Detaljer for rummet</string>
     <string name="room_details_people">Personer</string>
     <string name="room_details_files">Filer</string>
@@ -425,30 +365,22 @@ Er du sikker?</string>
     <string name="malformed_id">Ugyldigt ID. Det skal være en e-mail adresse eller et Matrix ID som \'@lokaldel:domæne\'</string>
     <string name="room_details_people_invited_group_name">INVITERET</string>
     <string name="title_activity_group_details">Detaljer om community</string>
-
     <string name="loading">Loader…</string>
-
     <string name="action_exit">Afslut</string>
     <string name="actions">Handlinger</string>
     <string name="bottom_action_groups">Communities</string>
-
     <string name="home_filter_placeholder_groups">Søg efter communities</string>
-
     <string name="groups_header">Communities</string>
     <string name="no_group_placeholder">Ingen grupper</string>
-
     <string name="start_new_chat_prompt_msg">Er du sikker på, at du ønsker at starte en ny chat med %s?</string>
     <string name="start_voice_call_prompt_msg">Er du sikker på, at du ønsker at starte et opkald?</string>
     <string name="start_video_call_prompt_msg">Er du sikker på, at du ønsker at starte et videoopkald\?</string>
-
     <string name="groups_invite_header">Inviter</string>
     <string name="groups_list">Liste over grupper</string>
-
     <plurals name="membership_changes">
         <item quantity="one">1 medlemsændring</item>
         <item quantity="other">%d medlemsændringer</item>
     </plurals>
-
     <string name="list_members">Medlemsoversigt</string>
     <string name="room_sync_in_progress">Synkroniserer…</string>
     <plurals name="room_header_active_members_count">
@@ -460,18 +392,14 @@ Er du sikker?</string>
         <item quantity="other">%d medlemmer</item>
     </plurals>
     <string name="room_participants_ban_prompt_msg">Er du sikker på, at du ønsker at blokere denne bruger fra denne chat?</string>
-
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 ny meddelelse</item>
         <item quantity="other">%d nye meddelelser</item>
     </plurals>
-
     <string name="room_event_action_report_prompt_reason">Årsag til rapportering</string>
     <string name="room_event_action_report_prompt_ignore_user">Ønsker du at skjule alle meddelelser fra denne bruger?</string>
     <string name="room_event_action_cancel_upload">Annuller upload</string>
     <string name="room_event_action_cancel_download">Annuller download</string>
-
-
     <string name="search_hint">Søg</string>
     <string name="search_members_hint">Filtrer medlemmer i rum</string>
     <string name="search_no_results">Ingen resultater</string>
@@ -479,7 +407,6 @@ Er du sikker?</string>
     <string name="tab_title_search_messages">MEDDELELSER</string>
     <string name="tab_title_search_people">FOLK</string>
     <string name="tab_title_search_files">FILER</string>
-
     <string name="room_recents_directory">OVERSIGT</string>
     <string name="room_recents_favourites">FAVORITTER</string>
     <string name="room_recents_conversations">RUM</string>
@@ -488,7 +415,6 @@ Er du sikker?</string>
     <string name="room_recents_start_chat">Start chat</string>
     <string name="room_recents_create_room">Opret rum</string>
     <string name="room_recents_join_room_prompt">Indtast ID eller alias på et rum</string>
-
     <string name="directory_search_results_title">Gennemse oversigt</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">1 rum</item>
@@ -499,7 +425,6 @@ Er du sikker?</string>
         <item quantity="other">%1$s rum fundet for %2$s</item>
     </plurals>
     <string name="directory_searching_title">Søger i liste…</string>
-
     <string name="room_settings_all_messages_noisy">Alle meddelelser (højlydt)</string>
     <string name="room_settings_all_messages">Alle meddelelser</string>
     <string name="room_settings_favourite">Favorit</string>
@@ -508,7 +433,6 @@ Er du sikker?</string>
     <string name="room_settings_leave_conversation">Forlad samtale</string>
     <string name="room_settings_forget">Glem</string>
     <string name="room_settings_add_homescreen_shortcut">Opret genvej på startskærm</string>
-
     <string name="room_sliding_menu_messages">Meddelelser</string>
     <string name="room_sliding_menu_settings">Indstillinger</string>
     <string name="room_sliding_menu_version">"Version "</string>
@@ -516,7 +440,6 @@ Er du sikker?</string>
     <string name="room_sliding_menu_third_party_notices">Beskeder fra tredjepart</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
     <string name="room_sliding_menu_privacy_policy">Privacy-politik</string>
-
     <string name="settings_profile_picture">Profilbillede</string>
     <string name="settings_display_name">Navn til visning</string>
     <string name="settings_email_address">Email</string>
@@ -524,7 +447,6 @@ Er du sikker?</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Tilføj telefonnummer</string>
     <string name="settings_turn_screen_on">Tænd skærmen 3 sekunder</string>
-
     <string name="settings_containing_my_display_name">Meddelelser med mit navn</string>
     <string name="settings_containing_my_user_name">Meddelelser med mit brugernavn</string>
     <string name="settings_messages_in_one_to_one">Meddelelser i direkte chats</string>
@@ -532,13 +454,11 @@ Er du sikker?</string>
     <string name="settings_invited_to_room">Når jeg bliver inviteret til et rum</string>
     <string name="settings_call_invitations">Invitation til opkald</string>
     <string name="settings_messages_sent_by_bot">Meddelelser sendt af bot</string>
-
     <string name="settings_start_on_boot">Start ved opstart</string>
     <string name="settings_background_sync">Synkronisering i baggrunden</string>
     <string name="settings_enable_background_sync">Aktiver baggrundssynkronisering</string>
     <string name="settings_set_sync_timeout">Timeout for synkroniseringskald</string>
     <string name="settings_set_sync_delay">Pause mellem to synkroniseringskald</string>
-
     <string name="settings_version">Version</string>
     <string name="settings_app_term_conditions">Anvendelsesbetingelser</string>
     <string name="settings_third_party_notices">Meddelelser fra tredjepart</string>
@@ -547,7 +467,6 @@ Er du sikker?</string>
     <string name="settings_clear_cache">Ryd cache</string>
     <string name="settings_clear_media_cache">Ryd mediecache</string>
     <string name="settings_keep_media">Beholde mediefiler</string>
-
     <string name="settings_user_settings">Brugerindstillinger</string>
     <string name="settings_ignored_users">Ignorerede brugere</string>
     <string name="settings_other">Andet</string>
@@ -559,7 +478,6 @@ Er du sikker?</string>
     <string name="title_activity_keys_backup_setup">Nøgle-backup</string>
     <string name="title_activity_keys_backup_restore">Brug Nøgle-backup</string>
     <string name="title_activity_verify_device">Bekræft session</string>
-
     <string name="keys_backup_is_not_finished_please_wait">Nøgle-backup er ikke færdig, vent venligst…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Du vil miste dine krypterede beskeder, hvis du logger ud nu</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Jeg ønsker ikke mine krypterede beskeder</string>
@@ -567,7 +485,60 @@ Er du sikker?</string>
     <string name="are_you_sure">Er du sikker\?</string>
     <string name="backup">Back up</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Du vil miste adgang til dine krypterede beskeder, medmindre du tager backup af dine nøgler, før du logger ud.</string>
-
     <string name="dialog_title_third_party_licences">Tredjeparts licenser</string>
-
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Du trak invitationen til %1$s tilbage</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s trak invitationen til %2$s tilbage</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Du trak invitationen til %1$s tilbage</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s trak invitationen til %2$s tilbage</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Du inviterede %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s inviterede %2$s</string>
+    <string name="notice_room_third_party_invite_by_you">Du inviterede %1$s til rummet</string>
+    <string name="notice_room_name_removed_by_you">Du fjernede navnet på rummet</string>
+    <string name="notice_requested_voip_conference_by_you">Du anmodede om en VoIP-konference</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Alle servere er bannet fra at deltage! Dette rum kan ikke længere bruges.</string>
+    <string name="notice_room_server_acl_updated_no_change">Ingen ændring.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Du satte serverens ACLer for dette rum.</string>
+    <string name="notice_room_server_acl_set_title">%s satte serverens ACLer for dette rum.</string>
+    <string name="notice_direct_room_update_by_you">Du opgraderede her.</string>
+    <string name="notice_direct_room_update">%s opgraderede her.</string>
+    <string name="notice_room_update_by_you">Du opgraderede dette rum.</string>
+    <string name="notice_room_update">%s opgraderede dette rum.</string>
+    <string name="notice_end_to_end_by_you">Du slog ende-til-ende kryptering til (%1$s)</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Du gjorde fremtidige beskeder synlige for %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s gjorde fremtidige beskeder synlige for %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Du gjorde den fremtidige historik for rummet synlig for %1$s</string>
+    <string name="notice_ended_call_by_you">Du afsluttede opkaldet.</string>
+    <string name="notice_answered_call_by_you">Du besvarede opkaldet.</string>
+    <string name="notice_call_candidates_by_you">Du sendte data til at forberede opkaldet.</string>
+    <string name="notice_call_candidates">%s sendte data til at forberede opkaldet.</string>
+    <string name="notice_placed_voice_call_by_you">Du foretog et opkald.</string>
+    <string name="notice_placed_video_call_by_you">Du foretog et video-opkald.</string>
+    <string name="notice_room_name_changed_by_you">Du skiftede rummets navn til: %1$s</string>
+    <string name="notice_room_avatar_changed_by_you">Du skiftede rummets logo</string>
+    <string name="notice_room_avatar_changed">%1$s skiftede rummets logo</string>
+    <string name="notice_room_topic_changed_by_you">Du skiftede emnet til: %1$s</string>
+    <string name="notice_display_name_removed_by_you">Du fjernede dit viste navn (det var %1$s)</string>
+    <string name="notice_display_name_changed_from_by_you">Du skiftede dit viste navn fra %1$s til %2$s</string>
+    <string name="notice_display_name_set_by_you">Du satte dit viste navn til %1$s</string>
+    <string name="notice_avatar_url_changed_by_you">Du skiftede din avatar</string>
+    <string name="notice_room_withdraw_by_you">Du trak %1$ss invitation tilbage</string>
+    <string name="notice_room_ban_by_you">Du bannede %1$s</string>
+    <string name="notice_room_unban_by_you">Du unbannede %1$s</string>
+    <string name="notice_room_kick_by_you">Du smed %1$s ud</string>
+    <string name="notice_room_reject_by_you">Du afslog invitationen</string>
+    <string name="notice_direct_room_leave_by_you">Du gik ud af rummet</string>
+    <string name="notice_direct_room_leave">%1$s gik ud af rummet</string>
+    <string name="notice_room_leave_by_you">Du gik ud af rummet</string>
+    <string name="notice_direct_room_join_by_you">Du kom ind</string>
+    <string name="notice_direct_room_join">%1$s kom ind</string>
+    <string name="notice_room_join_by_you">Du kom ind i rummet</string>
+    <string name="notice_room_invite_by_you">Du inviterede %1$s</string>
+    <string name="notice_direct_room_created_by_you">Du oprettede diskussionen</string>
+    <string name="notice_direct_room_created">%1$s oprettede diskussionen</string>
+    <string name="notice_room_created_by_you">Du oprettede rummet</string>
+    <string name="notice_room_created">%1$s oprettede rummet</string>
+    <string name="notice_room_invite_no_invitee_by_you">Din invitation</string>
+    <string name="summary_you_sent_sticker">Du har sendt et klistermærke.</string>
+    <string name="summary_user_sent_sticker">%1$s har sendt et klistermærke.</string>
+    <string name="summary_you_sent_image">Du har sendt et billede.</string>
 </resources>

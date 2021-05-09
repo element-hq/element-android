@@ -47,10 +47,15 @@ class RoomMemberListFragment @Inject constructor(
         private val roomMemberListController: RoomMemberListController,
         private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomMemberListBinding>(),
-        RoomMemberListController.Callback {
+        RoomMemberListController.Callback,
+        RoomMemberListViewModel.Factory {
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
+
+    override fun create(initialState: RoomMemberListViewState): RoomMemberListViewModel {
+        return viewModelFactory.create(initialState)
+    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomMemberListBinding {
         return FragmentRoomMemberListBinding.inflate(inflater, container, false)

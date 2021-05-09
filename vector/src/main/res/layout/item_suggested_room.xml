@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemRoomLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?riotx_background"
+    android:foreground="?attr/selectableItemBackground">
+
+    <FrameLayout
+        android:id="@+id/roomAvatarContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/roomAvatarImageView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:contentDescription="@string/avatar"
+            tools:src="@tools:sample/avatars" />
+
+    </FrameLayout>
+
+
+    <!-- Margin bottom does not work, so I use space -->
+    <Space
+        android:id="@+id/roomAvatarBottomSpace"
+        android:layout_width="0dp"
+        android:layout_height="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomAvatarContainer"
+        tools:layout_marginStart="20dp" />
+
+    <TextView
+        android:id="@+id/roomNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?riotx_text_primary"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/joinSuggestedRoomButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@sample/matrix.json/data/displayName" />
+
+    <TextView
+        android:id="@+id/suggestedRoomDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@id/joinSuggestedRoomButton"
+        app:layout_constraintStart_toStartOf="@+id/roomNameView"
+        app:layout_constraintTop_toBottomOf="@+id/roomNameView"
+        tools:text="@sample/matrix.json/data/message" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/joinSuggestedRoomButton"
+        style="@style/VectorButtonStyleOutlined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:maxWidth="@dimen/button_max_width"
+        android:text="@string/join"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/joinSuggestedLoading"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/joinSuggestedRoomButton"
+        app:layout_constraintEnd_toEndOf="@id/joinSuggestedRoomButton"
+        app:layout_constraintStart_toStartOf="@id/joinSuggestedRoomButton"
+        app:layout_constraintTop_toTopOf="@id/joinSuggestedRoomButton"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/roomBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="roomAvatarBottomSpace" />
+
+    <View
+        android:id="@+id/roomDividerView"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?riotx_header_panel_border_mobile"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomBottomBarrier" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

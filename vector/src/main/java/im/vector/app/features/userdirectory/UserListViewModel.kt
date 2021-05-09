@@ -29,7 +29,6 @@ import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.profile.ProfileService
@@ -49,8 +48,6 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
 
     private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
     private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
-
-    private var currentUserSearchDisposable: Disposable? = null
 
     @AssistedFactory
     interface Factory {
@@ -92,7 +89,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
 
     private fun handleShareMyMatrixToLink() {
         session.permalinkService().createPermalink(session.myUserId)?.let {
-            _viewEvents.post(UserListViewEvents.OpenShareMatrixToLing(it))
+            _viewEvents.post(UserListViewEvents.OpenShareMatrixToLink(it))
         }
     }
 
@@ -115,8 +112,6 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                     copy(knownUsers = async)
                 }
 
-        currentUserSearchDisposable?.dispose()
-
         directoryUsersSearch
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .switchMapSingle { search ->
@@ -124,7 +119,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                         Single.just(emptyList<User>())
                     } else {
                         val searchObservable = session.rx()
-                                .searchUsersDirectory(search, 50, state.excludedUserIds ?: emptySet())
+                                .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
                                 .map { users ->
                                     users.sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                                 }
@@ -144,15 +139,19 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                                     }
                                     .onErrorReturn { Optional.empty() }
 
-                            Single.zip(searchObservable, profileObservable, { searchResults, optionalProfile ->
-                                val profile = optionalProfile.getOrNull() ?: return@zip searchResults
-                                val searchContainsProfile = searchResults.indexOfFirst { it.userId == profile.userId } != -1
-                                if (searchContainsProfile) {
-                                    searchResults
-                                } else {
-                                    listOf(profile) + searchResults
-                                }
-                            })
+                            Single.zip(
+                                    searchObservable,
+                                    profileObservable,
+                                    { searchResults, optionalProfile ->
+                                        val profile = optionalProfile.getOrNull() ?: return@zip searchResults
+                                        val searchContainsProfile = searchResults.any { it.userId == profile.userId }
+                                        if (searchContainsProfile) {
+                                            searchResults
+                                        } else {
+                                            listOf(profile) + searchResults
+                                        }
+                                    }
+                            )
                         }
                     }
                     stream.toAsync {

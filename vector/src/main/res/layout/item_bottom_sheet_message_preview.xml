@@ -76,10 +76,29 @@
         android:textColor="?riotx_text_secondary"
         android:textIsSelectable="false"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_sheet_message_preview_body_details"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
         app:layout_constraintTop_toBottomOf="@id/bottom_sheet_message_preview_image"
-        tools:text="Quis harum id autem cumque consequatur laboriosam aliquam sed. Sint accusamus dignissimos nobis ullam earum debitis aspernatur. Sint accusamus dignissimos nobis ullam earum debitis aspernatur. " />
+        app:layout_goneMarginBottom="4dp"
+        tools:text="Quis harum id autem cumque consequatur laboriosam aliquam sed. Sint accusamus dignissimos nobis ullam earum debitis aspernatur. Sint accusamus dignissimos nobis ullam earum debitis aspernatur." />
+
+    <TextView
+        android:id="@+id/bottom_sheet_message_preview_body_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?riotx_text_tertiary"
+        android:textIsSelectable="false"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/bottom_sheet_message_preview_body"
+        app:layout_constraintStart_toStartOf="@id/bottom_sheet_message_preview_body"
+        app:layout_constraintTop_toBottomOf="@id/bottom_sheet_message_preview_body"
+        tools:text="1080 x 1024 - 43s - 12kB"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
