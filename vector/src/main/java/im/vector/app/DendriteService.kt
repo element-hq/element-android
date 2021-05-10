@@ -70,6 +70,7 @@ import java.nio.ByteBuffer
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
+import kotlin.concurrent.schedule
 import kotlin.concurrent.thread
 
 class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -293,118 +294,135 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
     }
 
     private fun startBluetooth() {
+        if (!vectorPreferences.p2pEnableBluetooth()) {
+            return
+        }
         if (adapter == null) {
             return
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             return
         }
-        if (!vectorPreferences.p2pEnableBluetooth()) {
+        if (!adapter.isEnabled) {
             return
         }
 
-        if (adapter.isEnabled && adapter.isMultipleAdvertisementSupported) {
-            manager = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-            advertiser = adapter.bluetoothLeAdvertiser
-            scanner = adapter.bluetoothLeScanner
+        manager = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        advertiser = adapter.bluetoothLeAdvertiser
+        scanner = adapter.bluetoothLeScanner
 
-            val advertiseData = AdvertiseData.Builder()
-                    .addServiceUuid(serviceUUID)
-                    .build()
+        val isCodedPHY = vectorPreferences.p2pBLECodedPhy() && manager.adapter.isLeCodedPhySupported
 
-            l2capServer = adapter.listenUsingInsecureL2capChannel()
-            l2capPSM = intToBytes(l2capServer.psm.toShort())
+        advertiser.stopAdvertising(advertiseCallback)
+        advertiser.stopAdvertisingSet(advertiseSetCallback)
+        scanner.stopScan(scanCallback)
 
-            if (vectorPreferences.p2pBLECodedPhy() && manager.adapter.isLeCodedPhySupported) {
-                val parameters = AdvertisingSetParameters.Builder()
-                        .setLegacyMode(false)
-                        .setInterval(AdvertisingSetParameters.INTERVAL_HIGH)
-                        .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_MAX)
-                        .setConnectable(true)
+        connecting.clear()
+        connections.clear()
+        conduits.clear()
 
+        val advertiseData = AdvertiseData.Builder()
+                .addServiceUuid(serviceUUID)
+                .build()
+
+        l2capServer = adapter.listenUsingInsecureL2capChannel()
+        l2capPSM = intToBytes(l2capServer.psm.toShort())
+
+        if (isCodedPHY) {
+            val parameters = AdvertisingSetParameters.Builder()
+                    .setLegacyMode(false)
+                    .setInterval(AdvertisingSetParameters.INTERVAL_HIGH)
+                    .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_MAX)
+                    .setConnectable(true)
+
+            if (isCodedPHY) {
                 parameters.setPrimaryPhy(BluetoothDevice.PHY_LE_CODED)
                 parameters.setSecondaryPhy(BluetoothDevice.PHY_LE_1M)
                 Toast.makeText(applicationContext, "Requesting Coded PHY + 1M PHY", Toast.LENGTH_SHORT).show()
-
-                advertiser.startAdvertisingSet(parameters.build(), advertiseData, null, null, null, advertiseSetCallback)
-            } else {
-                val advertiseSettings = AdvertiseSettings.Builder()
-                        .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
-                        .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
-                        .setTimeout(0)
-                        .setConnectable(true)
-                        .build()
-
-                advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
             }
 
-            val scanFilter = ScanFilter.Builder()
-                    .setServiceUuid(serviceUUID)
+            advertiser.startAdvertisingSet(parameters.build(), advertiseData, null, null, null, advertiseSetCallback)
+        } else {
+            val advertiseSettings = AdvertiseSettings.Builder()
+                    .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
+                    .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+                    .setTimeout(0)
+                    .setConnectable(true)
                     .build()
 
-            val scanFilters: MutableList<ScanFilter> = ArrayList()
-            scanFilters.add(scanFilter)
+            advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
+        }
 
-            val scanSettingsBuilder = ScanSettings.Builder()
-                    .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
-                    .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+        gattCharacteristic = BluetoothGattCharacteristic(psmUUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
+        gattService.addCharacteristic(gattCharacteristic)
 
-            if (vectorPreferences.p2pBLECodedPhy() && manager.adapter.isLeCodedPhySupported) {
-                scanSettingsBuilder.setPhy(BluetoothDevice.PHY_LE_CODED)
-            } else {
-                scanSettingsBuilder.setPhy(ScanSettings.PHY_LE_ALL_SUPPORTED)
-            }
+        gattServer = manager.openGattServer(applicationContext, gattServerCallback)
+        gattServer.addService(gattService)
 
-            val scanSettings = scanSettingsBuilder.build()
+        val scanFilter = ScanFilter.Builder()
+                .setServiceUuid(serviceUUID)
+                .build()
 
-            scanner.startScan(scanFilters, scanSettings, scanCallback)
+        val scanFilters: MutableList<ScanFilter> = ArrayList()
+        scanFilters.add(scanFilter)
 
-            gattCharacteristic = BluetoothGattCharacteristic(psmUUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
-            gattService.addCharacteristic(gattCharacteristic)
+        val scanSettingsBuilder = ScanSettings.Builder()
+                .setLegacy(false)
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+                .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+                .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
 
-            gattServer = manager.openGattServer(applicationContext, gattServerCallback)
-            gattServer.addService(gattService)
+        if (isCodedPHY) {
+            scanSettingsBuilder.setPhy(BluetoothDevice.PHY_LE_CODED)
+        } else {
+            scanSettingsBuilder.setPhy(ScanSettings.PHY_LE_ALL_SUPPORTED)
+        }
 
-            GlobalScope.launch {
-                while (true) {
-                    Timber.i("BLE: Waiting for connection on PSM ${l2capServer.psm}")
-                    try {
-                        val remote = l2capServer.accept() ?: continue
-                        val device = remote.remoteDevice.address.toString()
+        val scanSettings = scanSettingsBuilder.build()
 
-                        val connection = connections[device]
-                        if (connection != null) {
-                            if (connection.isConnected) {
-                                connection.close()
-                            } else {
-                                connections.remove(device)
-                                conduits.remove(device)
-                            }
+        scanner.startScan(scanFilters, scanSettings, scanCallback)
+
+        GlobalScope.launch {
+            while (true) {
+                Timber.i("BLE: Waiting for connection on PSM ${l2capServer.psm}")
+                try {
+                    val remote = l2capServer.accept() ?: continue
+                    val device = remote.remoteDevice.address.toString()
+
+                    val connection = connections[device]
+                    if (connection != null) {
+                        if (connection.isConnected) {
+                            connection.close()
+                        } else {
+                            connections.remove(device)
+                            conduits.remove(device)
                         }
-
-                        Timber.i("BLE: Connected inbound $device PSM $l2capPSM")
-
-                        Timber.i("Creating DendriteBLEPeering")
-                        val conduit = monolith!!.conduit("ble", Gobind.PeerTypeBluetooth)
-                        conduits[device] = conduit
-                        connections[device] = DendriteBLEPeering(conduit, remote)
-                        Timber.i("Starting DendriteBLEPeering")
-                        connections[device]!!.start()
-
-                        Timber.i("BLE: Created BLE peering with $device PSM $l2capPSM")
-                        connecting.remove(device)
-                    } catch (e: Exception) {
-                        Timber.i("BLE: Accept exception: ${e.message}")
                     }
+
+                    Timber.i("BLE: Connected inbound $device PSM $l2capPSM")
+
+                    Timber.i("Creating DendriteBLEPeering")
+                    val conduit = monolith!!.conduit("ble", Gobind.PeerTypeBluetooth)
+                    conduits[device] = conduit
+                    connections[device] = DendriteBLEPeering(conduit, remote)
+                    Timber.i("Starting DendriteBLEPeering")
+                    connections[device]!!.start()
+
+                    Timber.i("BLE: Created BLE peering with $device PSM $l2capPSM")
+                    connecting.remove(device)
+                } catch (e: Exception) {
+                    Timber.i("BLE: Accept exception: ${e.message}")
                 }
             }
         }
     }
 
     private fun stopBluetooth() {
-        advertiser.stopAdvertising(advertiseCallback)
-        advertiser.stopAdvertisingSet(advertiseSetCallback)
-        scanner.stopScan(scanCallback)
+        if (adapter.isEnabled()) {
+            advertiser.stopAdvertising(advertiseCallback)
+            advertiser.stopAdvertisingSet(advertiseSetCallback)
+            scanner.stopScan(scanCallback)
+        }
 
         connections.forEach { (_, c) ->
             if (c.isConnected) {
@@ -536,7 +554,9 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
     private val advertiseCallback: AdvertiseCallback = object : AdvertiseCallback() {
         override fun onStartFailure(errorCode: Int) {
             super.onStartFailure(errorCode)
-            Toast.makeText(applicationContext, "BLE legacy advertise failed: $errorCode", Toast.LENGTH_SHORT).show()
+            if (errorCode != ADVERTISE_FAILED_ALREADY_STARTED) {
+                Toast.makeText(applicationContext, "BLE legacy advertise failed: $errorCode", Toast.LENGTH_SHORT).show()
+            }
         }
 
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
@@ -562,8 +582,10 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
     private val scanCallback: ScanCallback = object : ScanCallback() {
         override fun onScanFailed(errorCode: Int) {
             super.onScanFailed(errorCode)
-            Timber.i("BLE: error %s", errorCode)
-            Toast.makeText(applicationContext, "BLE: Error $errorCode scanning for devices", Toast.LENGTH_SHORT).show()
+            if (errorCode != SCAN_FAILED_ALREADY_STARTED) {
+                Timber.i("BLE: error %s", errorCode)
+                Toast.makeText(applicationContext, "BLE: Error $errorCode scanning for devices", Toast.LENGTH_SHORT).show()
+            }
         }
 
         override fun onScanResult(callbackType: Int, result: ScanResult) {
@@ -573,18 +595,18 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
             }
 
             val key = result.device.address.toString()
-            // Timber.i("BLE: Scan result found $key")
+            Timber.i("BLE: Scan result found $key")
 
             if (connections.containsKey(key)) {
                 val connection = connections[key]
                 if (connection?.isConnected == true) {
-                    // Timber.i("BLE: Ignoring device $key that we are already connected to")
+                    Timber.i("BLE: Ignoring device $key that we are already connected to")
                     return
                 }
             }
 
             if (connecting.containsKey(key)) {
-                // Timber.i("BLE: Ignoring device $key that we are already connecting to")
+                Timber.i("BLE: Ignoring device $key that we are already connecting to")
                 return
             }
 

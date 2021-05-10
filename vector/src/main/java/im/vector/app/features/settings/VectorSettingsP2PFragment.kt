@@ -66,7 +66,11 @@ class VectorSettingsP2PFragment @Inject constructor(
         mBLECodedPhy.isChecked = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && vectorPreferences.p2pBLECodedPhy()
 
         mBluetoothPeersEnabled.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-        mBLECodedPhy.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && BluetoothAdapter.getDefaultAdapter().isLeCodedPhySupported
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            mBLECodedPhy.isEnabled = BluetoothAdapter.getDefaultAdapter().isLeCodedPhySupported
+        } else {
+            mBLECodedPhy.isEnabled = false
+        }
     }
 
     override fun bindPref() {
