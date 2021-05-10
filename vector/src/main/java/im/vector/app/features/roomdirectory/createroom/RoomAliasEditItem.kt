@@ -27,7 +27,6 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.extensions.setTextSafe
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_room_alias_text_input)
@@ -62,8 +61,12 @@ abstract class RoomAliasEditItem : VectorEpoxyModel<RoomAliasEditItem.Holder>() 
         holder.textInputLayout.isEnabled = enabled
         holder.textInputLayout.error = errorMessage
 
-        // Update only if text is different and value is not null
-        holder.textInputEditText.setTextSafe(value)
+        if (holder.view.isAttachedToWindow) {
+            // the view is attached to the window
+            // So it is a rebind of new data and you could ignore it assuming this is text that was already inputted into the view.
+        } else {
+            holder.textInputEditText.setText(value)
+        }
         holder.textInputEditText.isEnabled = enabled
         holder.textInputEditText.addTextChangedListener(onTextChangeListener)
         holder.homeServerText.text = homeServer

@@ -40,7 +40,7 @@ abstract class FormSwitchItem : VectorEpoxyModel<FormSwitchItem.Holder>() {
     var switchChecked: Boolean = false
 
     @EpoxyAttribute
-    var title: String? = null
+    var title: CharSequence? = null
 
     @EpoxyAttribute
     var summary: String? = null
@@ -61,10 +61,15 @@ abstract class FormSwitchItem : VectorEpoxyModel<FormSwitchItem.Holder>() {
 
         holder.switchView.isEnabled = enabled
 
-        holder.switchView.setOnCheckedChangeListener(null)
-        holder.switchView.isChecked = switchChecked
-        holder.switchView.setOnCheckedChangeListener { _, isChecked ->
-            listener?.invoke(isChecked)
+        if (holder.view.isAttachedToWindow) {
+            // the view is attached to the window
+            // So it is a rebind of new data and you could ignore it assuming this is value that was already inputted into the view.
+        } else {
+            holder.switchView.setOnCheckedChangeListener(null)
+            holder.switchView.isChecked = switchChecked
+            holder.switchView.setOnCheckedChangeListener { _, isChecked ->
+                listener?.invoke(isChecked)
+            }
         }
         holder.divider.isVisible = showDivider
     }
