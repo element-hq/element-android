@@ -74,7 +74,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val hiddenViews = ArrayList<View>()
         val invisibleViews = ArrayList<View>()
 
-        val avatarUnnecessary = canHideAvatars()
+        val canHideAvatar = canHideAvatars()
+        val canHideSender = canHideSender()
 
         // Select which views are visible, based on bubble style and other criteria
         if (attributes.informationData.showInformation) {
@@ -124,7 +125,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             if (BubbleThemeUtils.getBubbleTimeLocation(holder.bubbleTimeView.context) == BubbleThemeUtils.BUBBLE_TIME_BOTTOM) {
                 timeView = holder.bubbleFooterTimeView
                 if (attributes.informationData.showInformation) {
-                    if (avatarUnnecessary) {
+                    if (canHideSender) {
                         // In the case of footer time, we can also hide the names without making it look awkward
                         hiddenViews.add(holder.bubbleMemberNameView)
                         memberNameView = null
@@ -147,7 +148,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
         // Dual-side bubbles: hide own avatar, and all in direct chats
         if ((!attributes.informationData.showInformation) ||
-                (contentInBubble && avatarUnnecessary)) {
+                (contentInBubble && canHideAvatar)) {
             avatarImageView = null
             hiddenViews.add(holder.avatarImageView)
         } else {
@@ -277,7 +278,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val time = attributes.informationData.time.toString()
         return if (contentInBubble) {
             if (BubbleThemeUtils.getBubbleTimeLocation(holder.bubbleTimeView.context) == BubbleThemeUtils.BUBBLE_TIME_BOTTOM) {
-                if (attributes.informationData.showInformation && !canHideAvatars()) {
+                if (attributes.informationData.showInformation && !canHideSender()) {
                     // Since timeView automatically gets enough space, either within or outside the viewStub, we just need to ensure the member name view has enough space
                     // Somehow not enough without extra space...
                     ceil(BubbleThemeUtils.guessTextWidth(holder.bubbleMemberNameView, "$memberName ")).toInt()
@@ -354,6 +355,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     }
 
     private fun canHideAvatars(): Boolean {
+        return attributes.informationData.sentByMe || attributes.informationData.isDirect
+    }
+
+    private fun canHideSender(): Boolean {
         return attributes.informationData.sentByMe ||
                 (attributes.informationData.isDirect && attributes.informationData.senderId == attributes.informationData.dmChatPartnerId)
     }

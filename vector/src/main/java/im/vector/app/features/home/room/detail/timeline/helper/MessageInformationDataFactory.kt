@@ -46,6 +46,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import org.matrix.android.sdk.api.session.room.timeline.isEdition
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -81,24 +82,32 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val e2eDecoration = getE2EDecoration(event)
 
-        var isEffectivelyDirect = false
+        // Sometimes, member information is not available at this point yet, so let's completely rely on the DM flag for now.
+        // Since this can change while processing multiple messages in the same chat, we want to stick to information that is always available,
+        // instead of mixing different layouts in the same chat.
+        val roomSummary = roomSummariesHolder.get(event.roomId)
+        if (roomSummary == null) {
+            Timber.e("Room summary not available for determining DM status")
+        }
+        val isEffectivelyDirect = roomSummary?.isDirect ?: false
+        //var isEffectivelyDirect = false
         var dmOtherMemberId: String? = null
-        if ((roomSummariesHolder.get(event.roomId)?.isDirect == true) && event.root.roomId != null) {
+        if ((roomSummary?.isDirect == true) && event.root.roomId != null) {
             val members = session.getRoom(event.root.roomId!!)
                     ?.getRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.JOIN) })
                     ?.map { it.userId }
                     .orEmpty()
                     .toSet()
             if (members.size == 2) {
-                var foundSelf = false
+                //var foundSelf = false
                 for (member in members) {
                     if (member == session.myUserId) {
-                        foundSelf = true
+                        //foundSelf = true
                     } else {
                         dmOtherMemberId = member
                     }
                 }
-                isEffectivelyDirect = foundSelf && (dmOtherMemberId != null)
+                //isEffectivelyDirect = foundSelf && (dmOtherMemberId != null)
             }
         }
 
