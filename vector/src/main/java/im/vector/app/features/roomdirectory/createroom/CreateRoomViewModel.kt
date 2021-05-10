@@ -42,8 +42,9 @@ import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
+import timber.log.Timber
 
-class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
+class CreateRoomViewModel @AssistedInject constructor(@Assisted private val initialState: CreateRoomViewState,
                                                       private val session: Session,
                                                       private val rawService: RawService
 ) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
@@ -133,7 +134,8 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
             CreateRoomViewState(
                     isEncrypted = adminE2EByDefault,
-                    hsAdminHasDisabledE2E = !adminE2EByDefault
+                    hsAdminHasDisabledE2E = !adminE2EByDefault,
+                    parentSpaceId = initialState.parentSpaceId
             )
         }
 
@@ -228,9 +230,21 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
         // TODO: Should this be non-cancellable?
         viewModelScope.launch {
-            val result = runCatching { session.createRoom(createRoomParams) }
-            result.fold(
+            runCatching { session.createRoom(createRoomParams) }.fold(
                     { roomId ->
+
+                        if (initialState.parentSpaceId != null) {
+                            // add it as a child
+                            try {
+                                val via = session.sessionParams.homeServerHost?.let { listOf(it) }.orEmpty()
+                                session.spaceService()
+                                        .getSpace(initialState.parentSpaceId)
+                                        ?.addChildren(roomId, viaServers = via, order = null)
+                            } catch (failure: Throwable) {
+                                Timber.w(failure, "Failed to add as a child")
+                            }
+                        }
+
                         setState {
                             copy(asyncCreateRoomRequest = Success(roomId))
                         }

@@ -74,6 +74,8 @@ import im.vector.app.features.share.SharedData
 import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
+import im.vector.app.features.spaces.manage.SpaceManageActivity
+import im.vector.app.features.spaces.people.SpacePeopleActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
@@ -106,21 +108,31 @@ class DefaultNavigator @Inject constructor(
         startActivity(context, intent, buildTask)
     }
 
-    override fun switchToSpace(context: Context, spaceId: String, roomId: String?, openShareSheet: Boolean) {
+    override fun switchToSpace(context: Context, spaceId: String, postSwitchSpaceAction: Navigator.PostSwitchSpaceAction) {
         if (sessionHolder.getSafeActiveSession()?.getRoomSummary(spaceId) == null) {
             fatalError("Trying to open an unknown space $spaceId", vectorPreferences.failFast())
             return
         }
         appStateHandler.setCurrentSpace(spaceId)
-        if (roomId != null) {
-            val args = RoomDetailArgs(roomId, eventId = null, openShareSpaceForId = spaceId.takeIf { openShareSheet })
-            val intent = RoomDetailActivity.newIntent(context, args)
-            startActivity(context, intent, false)
-        } else {
-            // go back to home if we are showing room details?
-            // This is a bit ugly, but the navigator is supposed to know about the activity stack
-            if (context is RoomDetailActivity) {
-                context.finish()
+        when (postSwitchSpaceAction) {
+            Navigator.PostSwitchSpaceAction.None -> {
+                // go back to home if we are showing room details?
+                // This is a bit ugly, but the navigator is supposed to know about the activity stack
+                if (context is RoomDetailActivity) {
+                    context.finish()
+                }
+            }
+            Navigator.PostSwitchSpaceAction.OpenAddExistingRooms -> {
+                startActivity(context, SpaceManageActivity.newIntent(context, spaceId), false)
+            }
+            is Navigator.PostSwitchSpaceAction.OpenDefaultRoom -> {
+                val args = RoomDetailArgs(
+                        postSwitchSpaceAction.roomId,
+                        eventId = null,
+                        openShareSpaceForId = spaceId.takeIf { postSwitchSpaceAction.showShareSheet }
+                )
+                val intent = RoomDetailActivity.newIntent(context, args)
+                startActivity(context, intent, false)
             }
         }
     }
@@ -236,7 +248,7 @@ class DefaultNavigator @Inject constructor(
                 }
 
                 override fun switchToSpace(spaceId: String) {
-                    this@DefaultNavigator.switchToSpace(context, spaceId, null, openShareSheet = false)
+                    this@DefaultNavigator.switchToSpace(context, spaceId, Navigator.PostSwitchSpaceAction.None)
                 }
             }
             // TODO check if there is already one??
@@ -272,7 +284,19 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openCreateDirectRoom(context: Context) {
-        val intent = CreateDirectRoomActivity.getIntent(context)
+        val intent = when (val currentGroupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
+            is RoomGroupingMethod.ByLegacyGroup -> {
+                CreateDirectRoomActivity.getIntent(context)
+            }
+            is RoomGroupingMethod.BySpace       -> {
+                if (currentGroupingMethod.spaceSummary != null) {
+                    SpacePeopleActivity.newIntent(context, currentGroupingMethod.spaceSummary.roomId)
+                } else {
+                    CreateDirectRoomActivity.getIntent(context)
+                }
+            }
+            else                                -> null
+        } ?: return
         context.startActivity(intent)
     }
 

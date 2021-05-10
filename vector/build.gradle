@@ -64,9 +64,9 @@ static def gitBranchName() {
     }
 }
 
-// For Google Play build, build on any other branch than master will have a "-dev" suffix
+// For Google Play build, build on any other branch than main will have a "-dev" suffix
 static def getGplayVersionSuffix() {
-    if (gitBranchName() == "master") {
+    if (gitBranchName() == "main") {
         return ""
     } else {
         return "-dev"
@@ -119,7 +119,7 @@ android {
         renderscriptSupportModeEnabled true
 
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
-        // Other branches (master, features, etc.) will have version code based on application version.
+        // Other branches (main, features, etc.) will have version code based on application version.
         versionCode project.getVersionCode()
 
         // Required for sonar analysis
@@ -380,7 +380,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.21'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.22'
 
     // rx
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'

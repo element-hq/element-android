@@ -32,6 +32,8 @@ internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var stateKey: String? = null,
                                 var originServerTs: Long? = null,
                                 @Index var sender: String? = null,
+                                // Can contain a serialized MatrixError
+                                var sendStateDetails: String? = null,
                                 var age: Long? = 0,
                                 var unsignedData: String? = null,
                                 var redacts: String? = null,

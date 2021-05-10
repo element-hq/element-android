@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 
@@ -45,15 +46,16 @@ fun TimelineEvent.buildImageContentRendererData(maxHeight: Int): ImageContentRen
                 }
         root.isVideoMessage() -> root.getClearContent().toModel<MessageVideoContent>()
                 ?.let { messageVideoContent ->
+                    val videoInfo = messageVideoContent.videoInfo
                     ImageContentRenderer.Data(
                             eventId = eventId,
                             filename = messageVideoContent.body,
-                            mimeType = messageVideoContent.mimeType,
-                            url = messageVideoContent.getFileUrl(),
-                            elementToDecrypt = messageVideoContent.encryptedFileInfo?.toElementToDecrypt(),
-                            height = messageVideoContent.videoInfo?.height,
+                            mimeType = videoInfo?.thumbnailInfo?.mimeType,
+                            url = videoInfo?.getThumbnailUrl(),
+                            elementToDecrypt = videoInfo?.thumbnailFile?.toElementToDecrypt(),
+                            height = videoInfo?.thumbnailInfo?.height,
                             maxHeight = maxHeight,
-                            width = messageVideoContent.videoInfo?.width,
+                            width = videoInfo?.thumbnailInfo?.width,
                             maxWidth = maxHeight * 2,
                             allowNonMxcUrls = false
                     )

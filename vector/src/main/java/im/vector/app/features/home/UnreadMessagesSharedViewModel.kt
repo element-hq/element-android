@@ -79,7 +79,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
         session.getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                 }, sortOrder = RoomSortOrder.NONE
         ).asObservable()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
@@ -87,13 +87,13 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                     val counts = session.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                             }
                     )
                     val invites = session.getRoomSummaries(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.INVITE)
-                                this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                             }
                     ).size
                     copy(
@@ -129,7 +129,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             val counts = session.getNotificationCountForRooms(
                                     roomSummaryQueryParams {
                                         this.memberships = listOf(Membership.JOIN)
-                                        this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                                        this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                                     }
                             )
                             val rootCounts = session.spaceService().getRootSpaceSummaries()

@@ -46,6 +46,7 @@ import im.vector.app.core.pushers.PushersManager
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
@@ -59,6 +60,7 @@ import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
+import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.userdirectory.UserListViewModel
 import im.vector.app.features.userdirectory.UserListViewState
@@ -86,7 +88,8 @@ class HomeActivity :
         ServerBackupStatusViewModel.Factory,
         UserListViewModel.Factory,
         UnreadMessagesSharedViewModel.Factory,
-        NavigationInterceptor {
+        NavigationInterceptor,
+        SpaceInviteBottomSheet.InteractionListener {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -115,11 +118,21 @@ class HomeActivity :
         if (activityResult.resultCode == Activity.RESULT_OK) {
             val spaceId = SpaceCreationActivity.getCreatedSpaceId(activityResult.data)
             val defaultRoomId = SpaceCreationActivity.getDefaultRoomId(activityResult.data)
+            val isJustMe = SpaceCreationActivity.isJustMeSpace(activityResult.data)
             views.drawerLayout.closeDrawer(GravityCompat.START)
 
+            val postSwitchOption: Navigator.PostSwitchSpaceAction = if (defaultRoomId != null) {
+                Navigator.PostSwitchSpaceAction.OpenDefaultRoom(defaultRoomId, !isJustMe)
+            } else if (isJustMe) {
+                Navigator.PostSwitchSpaceAction.OpenAddExistingRooms
+            } else {
+                Navigator.PostSwitchSpaceAction.None
+            }
             // Here we want to change current space to the newly created one, and then immediately open the default room
             if (spaceId != null) {
-                navigator.switchToSpace(this, spaceId, defaultRoomId, true)
+                navigator.switchToSpace(context = this,
+                        spaceId = spaceId,
+                        postSwitchOption)
             }
         }
     }
@@ -200,6 +213,10 @@ class HomeActivity :
                                         }
                                     })
                                     .show(supportFragmentManager, "SPACE_SETTINGS")
+                        }
+                        is HomeActivitySharedAction.OpenSpaceInvite -> {
+                            SpaceInviteBottomSheet.newInstance(sharedAction.spaceId)
+                                    .show(supportFragmentManager, "SPACE_INVITE")
                         }
                     }.exhaustive
                 }
@@ -470,13 +487,21 @@ class HomeActivity :
             }
 
             override fun switchToSpace(spaceId: String) {
-                navigator.switchToSpace(this@HomeActivity, spaceId, null, false)
+                navigator.switchToSpace(this@HomeActivity, spaceId, Navigator.PostSwitchSpaceAction.None)
             }
         }
 
         MatrixToBottomSheet.withLink(deepLink.toString(), listener)
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
+    }
+
+    override fun spaceInviteBottomSheetOnAccept(spaceId: String) {
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
+    }
+
+    override fun spaceInviteBottomSheetOnDecline(spaceId: String) {
+        // nop
     }
 
     companion object {

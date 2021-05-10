@@ -255,13 +255,13 @@ interface Session :
     /**
      * A global session listener to get notified for some events.
      */
-    interface Listener {
+    interface Listener : SessionLifecycleObserver {
         /**
          * Possible cases:
          * - The access token is not valid anymore,
          * - a M_CONSENT_NOT_GIVEN error has been received from the homeserver
          */
-        fun onGlobalError(globalError: GlobalError)
+        fun onGlobalError(session: Session, globalError: GlobalError)
     }
 
     val sharedSecretStorageService: SharedSecretStorageService

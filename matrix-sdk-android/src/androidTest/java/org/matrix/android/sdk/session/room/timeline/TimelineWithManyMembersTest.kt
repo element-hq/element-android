@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
+import org.junit.Assert.fail
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,7 +30,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import java.util.concurrent.CountDownLatch
-import kotlin.test.fail
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -80,6 +80,7 @@ class TimelineWithManyMembersTest : InstrumentedTest {
                                     return@createEventListener true
                                 } else {
                                     fail("User " + session.myUserId + " decrypted as " + body + " CryptoError: " + it.root.mCryptoError)
+                                    false
                                 }
                             } ?: return@createEventListener false
                 }

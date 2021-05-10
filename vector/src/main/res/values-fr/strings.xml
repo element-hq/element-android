@@ -2679,4 +2679,5 @@
     <string name="settings_room_directory_show_all_rooms_summary">Afficher tous les salons dans le répertoire, y compris ceux au contenu choquant.</string>
     <string name="settings_room_directory_show_all_rooms">Afficher les salons au contenu choquant</string>
     <string name="settings_category_room_directory">Répertoire des salons</string>
+    <string name="event_status_sent_message">Message envoyé</string>
 </resources>

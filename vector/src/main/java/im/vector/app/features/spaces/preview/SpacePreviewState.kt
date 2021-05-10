@@ -26,7 +26,8 @@ data class SpacePreviewState(
         val topic: String?  = null,
         val avatarUrl: String? = null,
         val spaceInfo: Async<ChildInfo> = Uninitialized,
-        val childInfoList: Async<List<ChildInfo>> = Uninitialized
+        val childInfoList: Async<List<ChildInfo>> = Uninitialized,
+        val inviteTermination: Async<Unit> = Uninitialized
 ) : MvRxState {
     constructor(args: SpacePreviewArgs) : this(idOrAlias = args.idOrAlias)
 }

@@ -575,6 +575,9 @@
     <string name="option_take_photo_video">Take photo or video</string>
     <string name="option_take_photo">Take photo</string>
     <string name="option_take_video">Take video</string>
+    <string name="option_always_ask">Always ask</string>
+
+    <string name="use_as_default_and_do_not_ask_again">Use as default and do not ask again</string>
 
     <!-- No sticker application dialog -->
     <string name="no_sticker_application_dialog_content">You don’t currently have any stickerpacks enabled.\n\nAdd some now?</string>
@@ -2174,6 +2177,8 @@
     <string name="send_file_step_sending_thumbnail">Sending thumbnail (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_file">Encrypting file…</string>
     <string name="send_file_step_sending_file">Sending file (%1$s / %2$s)</string>
+    <string name="send_file_step_compressing_image">Compressing image…</string>
+    <string name="send_file_step_compressing_video">Compressing video %d%%</string>
 
     <string name="downloading_file">Downloading file %1$s…</string>
     <string name="downloaded_file">File %1$s has been downloaded!</string>
@@ -2295,6 +2300,7 @@
         <item quantity="other">%d users read</item>
     </plurals>
 
+    <string name="error_file_too_big_simple">"The file is too large to upload."</string>
     <string name="error_file_too_big">"The file '%1$s' (%2$s) is too large to upload. The limit is %3$s."</string>
 
     <string name="error_attachment">"An error occurred while retrieving the attachment."</string>
@@ -2378,7 +2384,7 @@
 
     <string name="login_server_title">Select a server</string>
     <string name="login_server_text">Just like email, accounts have one home, although you can talk to anyone</string>
-    <string name="login_server_matrix_org_text">Join millions free on the largest public server</string>
+    <string name="login_server_matrix_org_text">Join millions for free on the largest public server</string>
     <string name="login_server_modular_text">Premium hosting for organisations</string>
     <string name="login_server_modular_learn_more">Learn more</string>
     <string name="login_server_other_title">Other</string>
@@ -2785,6 +2791,11 @@
         <item quantity="one">Send image with the original size</item>
         <item quantity="other">Send images with the original size</item>
     </plurals>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">Send video with the original size</item>
+        <item quantity="other">Send videos with the original size</item>
+    </plurals>
+    <string name="send_images_and_video_with_original_size">Send media with the original size</string>
 
     <string name="delete_event_dialog_title">Confirm Removal</string>
     <string name="delete_event_dialog_content">Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.</string>
@@ -3240,6 +3251,7 @@
     <string name="a11y_rule_notify_silent">Notify without sound</string>
     <string name="a11y_rule_notify_off">Do not notify</string>
     <string name="a11y_view_read_receipts">View read receipts</string>
+    <string name="a11y_public_room">This room is public</string>
 
     <string name="dev_tools_menu_name">Dev Tools</string>
     <string name="dev_tools_explore_room_state">Explore Room State</string>
@@ -3341,4 +3353,7 @@
 
     <string name="labs_use_restricted_join_rule">Experimental Space - Restricted Room.</string>
     <string name="labs_use_restricted_join_rule_desc">Warning requires server support and experimental room version</string>
+    <string name="user_invites_you">%s invites you</string>
+
+    <string name="looking_for_someone_not_in_space">Looking for someone not in %s?</string>
 </resources>

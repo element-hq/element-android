@@ -21,15 +21,15 @@ import org.matrix.android.sdk.api.util.MimeTypes
 
 private val listOfPreviewableMimeTypes = listOf(
         MimeTypes.Jpeg,
-        MimeTypes.BadJpg,
         MimeTypes.Png,
         MimeTypes.Gif
 )
 
 fun ContentAttachmentData.isPreviewable(): Boolean {
-    // For now the preview only supports still image
-    return type == ContentAttachmentData.Type.IMAGE
-            && listOfPreviewableMimeTypes.contains(getSafeMimeType() ?: "")
+    // Preview supports image and video
+    return (type == ContentAttachmentData.Type.IMAGE
+            && listOfPreviewableMimeTypes.contains(getSafeMimeType() ?: ""))
+            || type == ContentAttachmentData.Type.VIDEO
 }
 
 data class GroupedContentAttachmentData(

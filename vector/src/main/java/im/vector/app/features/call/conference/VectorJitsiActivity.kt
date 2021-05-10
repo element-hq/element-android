@@ -67,7 +67,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     private val jitsiViewModel: JitsiCallViewModel by viewModel()
 
     override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
         injector.inject(this)
     }
 

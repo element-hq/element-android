@@ -28,6 +28,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,6 +42,7 @@ import timber.log.Timber
 
 class SpacePreviewViewModel @AssistedInject constructor(
         @Assisted private val initialState: SpacePreviewState,
+        private val errorFormatter: ErrorFormatter,
         private val session: Session
 ) : VectorViewModel<SpacePreviewState, SpacePreviewViewAction, SpacePreviewViewEvents>(initialState) {
 
@@ -80,13 +82,15 @@ class SpacePreviewViewModel @AssistedInject constructor(
 
     private fun handleDismissInvite() {
         // Here we need to join the space himself as well as the default rooms in that space
-        // TODO modal loading
+        setState { copy(inviteTermination = Loading()) }
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 session.spaceService().rejectInvite(initialState.idOrAlias, null)
             } catch (failure: Throwable) {
                 Timber.e(failure, "## Space: Failed to reject invite")
+                _viewEvents.post(SpacePreviewViewEvents.JoinFailure(errorFormatter.toHumanReadable(failure)))
             }
+            setState { copy(inviteTermination = Uninitialized) }
         }
     }
 
@@ -98,18 +102,25 @@ class SpacePreviewViewModel @AssistedInject constructor(
         val spaceVia = spaceInfo?.viaServers ?: emptyList()
 
         // trigger modal loading
-        _viewEvents.post(SpacePreviewViewEvents.StartJoining)
+        setState { copy(inviteTermination = Loading()) }
         viewModelScope.launch(Dispatchers.IO) {
-            val joinResult = session.spaceService().joinSpace(initialState.idOrAlias, null, spaceVia)
-            when (joinResult) {
-                JoinSpaceResult.Success,
-                is JoinSpaceResult.PartialSuccess -> {
-                    // For now we don't handle partial success, it's just success
-                    _viewEvents.post(SpacePreviewViewEvents.JoinSuccess)
+            try {
+                val joinResult = session.spaceService().joinSpace(initialState.idOrAlias, null, spaceVia)
+                setState { copy(inviteTermination = Uninitialized) }
+                when (joinResult) {
+                    JoinSpaceResult.Success,
+                    is JoinSpaceResult.PartialSuccess -> {
+                        // For now we don't handle partial success, it's just success
+                        _viewEvents.post(SpacePreviewViewEvents.JoinSuccess)
+                    }
+                    is JoinSpaceResult.Fail -> {
+                        _viewEvents.post(SpacePreviewViewEvents.JoinFailure(errorFormatter.toHumanReadable(joinResult.error)))
+                    }
                 }
-                is JoinSpaceResult.Fail           -> {
-                    _viewEvents.post(SpacePreviewViewEvents.JoinFailure(joinResult.error.toString()))
-                }
+            } catch (failure: Throwable) {
+                // should not throw
+                Timber.w(failure, "## Failed to join space")
+                _viewEvents.post(SpacePreviewViewEvents.JoinFailure(errorFormatter.toHumanReadable(failure)))
             }
         }
     }
@@ -221,7 +232,21 @@ class SpacePreviewViewModel @AssistedInject constructor(
             }
         } catch (failure: Throwable) {
             setState {
-                copy(spaceInfo = Fail(failure), childInfoList = Fail(failure))
+                copy(
+                        spaceInfo = session.getRoomSummary(initialState.idOrAlias)?.let {
+                            Success(
+                                    ChildInfo(
+                                            roomId = it.roomId,
+                                            avatarUrl = it.avatarUrl,
+                                            name = it.displayName,
+                                            topic = it.topic,
+                                            memberCount = it.joinedMembersCount,
+                                            isSubSpace = false,
+                                            viaServers = null,
+                                            children = Uninitialized
+                                    )
+                            )
+                        } ?: Fail(failure), childInfoList = Fail(failure))
             }
         }
     }

@@ -119,14 +119,17 @@ class SpacePreviewFragment @Inject constructor(
             }
         }
         updateToolbar(it)
+
+        when (it.inviteTermination) {
+            is Loading -> sharedActionViewModel.post(SpacePreviewSharedAction.ShowModalLoading)
+            else       -> sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)
+        }
     }
 
     private fun handleViewEvents(viewEvents: SpacePreviewViewEvents) {
         when (viewEvents) {
             SpacePreviewViewEvents.Dismiss -> {
-            }
-            SpacePreviewViewEvents.StartJoining -> {
-                sharedActionViewModel.post(SpacePreviewSharedAction.ShowModalLoading)
+                sharedActionViewModel.post(SpacePreviewSharedAction.DismissAction)
             }
             SpacePreviewViewEvents.JoinSuccess -> {
                 sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)

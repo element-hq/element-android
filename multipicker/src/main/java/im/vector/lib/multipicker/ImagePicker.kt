@@ -18,9 +18,8 @@ package im.vector.lib.multipicker
 
 import android.content.Context
 import android.content.Intent
-import android.provider.MediaStore
 import im.vector.lib.multipicker.entity.MultiPickerImageType
-import im.vector.lib.multipicker.utils.ImageUtils
+import im.vector.lib.multipicker.utils.toMultiPickerImageType
 
 /**
  * Image Picker implementation
@@ -32,46 +31,9 @@ class ImagePicker : Picker<MultiPickerImageType>() {
      * Returns selected image files or empty list if user did not select any files.
      */
     override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerImageType> {
-        val imageList = mutableListOf<MultiPickerImageType>()
-
-        getSelectedUriList(data).forEach { selectedUri ->
-            val projection = arrayOf(
-                    MediaStore.Images.Media.DISPLAY_NAME,
-                    MediaStore.Images.Media.SIZE
-            )
-
-            context.contentResolver.query(
-                    selectedUri,
-                    projection,
-                    null,
-                    null,
-                    null
-            )?.use { cursor ->
-                val nameColumn = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
-                val sizeColumn = cursor.getColumnIndex(MediaStore.Images.Media.SIZE)
-
-                if (cursor.moveToNext()) {
-                    val name = cursor.getString(nameColumn)
-                    val size = cursor.getLong(sizeColumn)
-
-                    val bitmap = ImageUtils.getBitmap(context, selectedUri)
-                    val orientation = ImageUtils.getOrientation(context, selectedUri)
-
-                    imageList.add(
-                            MultiPickerImageType(
-                                    name,
-                                    size,
-                                    context.contentResolver.getType(selectedUri),
-                                    selectedUri,
-                                    bitmap?.width ?: 0,
-                                    bitmap?.height ?: 0,
-                                    orientation
-                            )
-                    )
-                }
-            }
+        return getSelectedUriList(data).mapNotNull { selectedUri ->
+            selectedUri.toMultiPickerImageType(context)
         }
-        return imageList
     }
 
     override fun createIntent(): Intent {

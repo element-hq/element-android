@@ -13,6 +13,16 @@
         <domain includeSubdomains="true">10.0.2.2</domain>
         <!-- Onion services -->
         <domain includeSubdomains="true">onion</domain>
+
+        <!-- Domains that are used for LANs -->
+        <!-- These are IANA recognized special use domain names, see https://www.iana.org/assignments/special-use-domain-names/special-use-domain-names.xhtml -->
+        <domain includeSubdomains="true">home.arpa</domain>
+        <domain includeSubdomains="true">local</domain> <!-- Note this has been reserved for use with mDNS -->
+        <domain includeSubdomains="true">test</domain>
+        <!-- These are observed in the wild either by convention or RFCs that have not been accepted, and are not currently TLDs -->
+        <domain includeSubdomains="true">home</domain>
+        <domain includeSubdomains="true">lan</domain>
+        <domain includeSubdomains="true">localdomain</domain>
     </domain-config>
 
     <debug-overrides>

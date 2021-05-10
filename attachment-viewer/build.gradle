@@ -17,20 +17,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-buildscript {
-    repositories {
-        maven {
-            url 'https://jitpack.io'
-            content {
-                // PhotoView
-                includeGroupByRegex 'com\\.github\\.chrisbanes'
-            }
-        }
-        jcenter()
-    }
-
-}
-
 android {
     compileSdkVersion 30
 

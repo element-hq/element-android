@@ -47,3 +47,10 @@ data class FileInfo(
          */
         @Json(name = "thumbnail_file") val thumbnailFile: EncryptedFileInfo? = null
 )
+
+/**
+ * Get the url of the encrypted thumbnail or of the thumbnail
+ */
+fun FileInfo.getThumbnailUrl(): String? {
+        return thumbnailFile?.url ?: thumbnailUrl
+}

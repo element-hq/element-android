@@ -129,6 +129,7 @@ import im.vector.app.features.spaces.create.CreateSpaceDefaultRoomsFragment
 import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
 import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
 import im.vector.app.features.spaces.manage.SpaceAddRoomFragment
+import im.vector.app.features.spaces.people.SpacePeopleFragment
 import im.vector.app.features.spaces.preview.SpacePreviewFragment
 import im.vector.app.features.terms.ReviewTermsFragment
 import im.vector.app.features.usercode.ShowUserCodeFragment
@@ -657,6 +658,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(TchapRegisterWaitForEmailFragment::class)
     fun bindTchapRegisterWaitForEmailFragment(fragment: TchapRegisterWaitForEmailFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(SpacePreviewFragment::class)
     fun bindSpacePreviewFragment(fragment: SpacePreviewFragment): Fragment
 
@@ -699,4 +703,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SpaceAddRoomFragment::class)
     fun bindSpaceAddRoomFragment(fragment: SpaceAddRoomFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpacePeopleFragment::class)
+    fun bindSpacePeopleFragment(fragment: SpacePeopleFragment): Fragment
 }

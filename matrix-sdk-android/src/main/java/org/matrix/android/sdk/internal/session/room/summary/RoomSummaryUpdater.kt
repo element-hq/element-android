@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomAliasesContent
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.RoomNameContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
 import org.matrix.android.sdk.api.session.room.model.RoomType
@@ -104,6 +105,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         val lastCanonicalAliasEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CANONICAL_ALIAS, stateKey = "")?.root
         val lastAliasesEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ALIASES, stateKey = "")?.root
         val roomCreateEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CREATE, stateKey = "")?.root
+        val joinRulesEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_JOIN_RULES, stateKey = "")?.root
 
         val roomType = ContentMapper.map(roomCreateEvent?.content).toModel<RoomCreateContent>()?.type
         roomSummaryEntity.roomType = roomType
@@ -130,6 +132,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
         roomSummaryEntity.name = ContentMapper.map(lastNameEvent?.content).toModel<RoomNameContent>()?.name
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
+        roomSummaryEntity.joinRules = ContentMapper.map(joinRulesEvent?.content).toModel<RoomJoinRulesContent>()?.joinRules
         roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
         roomSummaryEntity.canonicalAlias = ContentMapper.map(lastCanonicalAliasEvent?.content).toModel<RoomCanonicalAliasContent>()
                 ?.canonicalAlias

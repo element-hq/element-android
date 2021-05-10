@@ -42,8 +42,7 @@ class ChoosePrivateSpaceTypeFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         views.justMeButton.setOnClickListener(DebouncedClickListener({
-            vectorBaseActivity.notImplemented("Organize room as space is not yet implemented")
-//            sharedViewModel.handle(CreateSpaceAction.SetSpaceTopology(SpaceTopology.JustMe))
+            sharedViewModel.handle(CreateSpaceAction.SetSpaceTopology(SpaceTopology.JustMe))
         }))
 
         views.teammatesButton.setOnClickListener(DebouncedClickListener({

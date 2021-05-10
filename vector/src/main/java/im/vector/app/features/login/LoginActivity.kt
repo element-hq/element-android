@@ -183,18 +183,24 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
                 // Go back to the login fragment
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
-            is LoginViewEvents.OnSendEmailSuccess                         ->
+            is LoginViewEvents.OnSendEmailSuccess                         -> {
+                // Pop the enter email Fragment
+                supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginWaitForEmailFragment::class.java,
                         LoginWaitForEmailFragmentArgument(loginViewEvents.email),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
-            is LoginViewEvents.OnSendMsisdnSuccess                        ->
+            }
+            is LoginViewEvents.OnSendMsisdnSuccess                        -> {
+                // Pop the enter Msisdn Fragment
+                supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginGenericTextInputFormFragment::class.java,
                         LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, loginViewEvents.msisdn),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
+            }
             is LoginViewEvents.Failure,
             is LoginViewEvents.Loading                                    ->
                 // This is handled by the Fragments

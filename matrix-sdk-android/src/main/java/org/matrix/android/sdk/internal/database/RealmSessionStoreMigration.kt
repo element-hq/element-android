@@ -20,6 +20,7 @@ import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
@@ -33,9 +34,9 @@ import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomTagEntityFields
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.SpaceParentSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,7 +44,7 @@ import javax.inject.Inject
 class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 10L
+        const val SESSION_STORE_SCHEMA_VERSION = 12L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -59,6 +60,8 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 7) migrateTo8(realm)
         if (oldVersion <= 8) migrateTo9(realm)
         if (oldVersion <= 9) migrateTo10(realm)
+        if (oldVersion <= 10) migrateTo11(realm)
+        if (oldVersion <= 11) migrateTo12(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -163,7 +166,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 ?.addRealmListField(EditAggregatedSummaryEntityFields.EDITIONS.`$`, editionOfEventSchema)
     }
 
-    fun migrateTo9(realm: DynamicRealm) {
+    private fun migrateTo9(realm: DynamicRealm) {
         Timber.d("Step 8 -> 9")
 
         realm.schema.get("RoomSummaryEntity")
@@ -201,7 +204,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 }
     }
 
-    fun migrateTo10(realm: DynamicRealm) {
+    private fun migrateTo10(realm: DynamicRealm) {
         Timber.d("Step 9 -> 10")
         realm.schema.create("SpaceChildSummaryEntity")
                 ?.addField(SpaceChildSummaryEntityFields.ORDER, String::class.java)
@@ -239,5 +242,32 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 }
                 ?.addRealmListField(RoomSummaryEntityFields.PARENTS.`$`, realm.schema.get("SpaceParentSummaryEntity")!!)
                 ?.addRealmListField(RoomSummaryEntityFields.CHILDREN.`$`, realm.schema.get("SpaceChildSummaryEntity")!!)
+    }
+
+    private fun migrateTo11(realm: DynamicRealm) {
+        Timber.d("Step 10 -> 11")
+        realm.schema.get("EventEntity")
+                ?.addField(EventEntityFields.SEND_STATE_DETAILS, String::class.java)
+    }
+
+    private fun migrateTo12(realm: DynamicRealm) {
+        Timber.d("Step 11 -> 12")
+
+        val joinRulesContentAdapter = MoshiProvider.providesMoshi().adapter(RoomJoinRulesContent::class.java)
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.JOIN_RULES_STR, String::class.java)
+                ?.transform { obj ->
+                    val joinRulesEvent = realm.where("CurrentStateEventEntity")
+                            .equalTo(CurrentStateEventEntityFields.ROOM_ID, obj.getString(RoomSummaryEntityFields.ROOM_ID))
+                            .equalTo(CurrentStateEventEntityFields.TYPE, EventType.STATE_ROOM_JOIN_RULES)
+                            .findFirst()
+
+                    val roomJoinRules = joinRulesEvent?.getObject(CurrentStateEventEntityFields.ROOT.`$`)
+                            ?.getString(EventEntityFields.CONTENT)?.let {
+                                joinRulesContentAdapter.fromJson(it)?.joinRules
+                            }
+
+                    obj.setString(RoomSummaryEntityFields.JOIN_RULES_STR, roomJoinRules?.value)
+                }
     }
 }

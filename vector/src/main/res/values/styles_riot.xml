@@ -159,7 +159,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@null</item>
-        <!--item name="android:textColor">?colorAccent</item-->
+        <item name="android:textColor">?colorAccent</item>
         <item name="colorControlHighlight">?colorAccent</item>
     </style>
 
@@ -169,7 +169,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@null</item>
-        <!--item name="android:textColor">?colorAccent</item-->
+        <item name="android:textColor">?colorAccent</item>
         <item name="colorControlHighlight">?colorAccent</item>
         <item name="strokeColor">@color/button_background_tint_selector</item>
         <item name="strokeWidth">1dp</item>

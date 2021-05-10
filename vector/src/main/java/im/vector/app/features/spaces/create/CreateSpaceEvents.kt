@@ -24,7 +24,7 @@ sealed class CreateSpaceEvents : VectorViewEvents {
     object NavigateToAddRooms : CreateSpaceEvents()
     object NavigateToChoosePrivateType : CreateSpaceEvents()
     object Dismiss : CreateSpaceEvents()
-    data class FinishSuccess(val spaceId: String, val defaultRoomId: String?) : CreateSpaceEvents()
+    data class FinishSuccess(val spaceId: String, val defaultRoomId: String?, val topology: SpaceTopology?) : CreateSpaceEvents()
     data class ShowModalError(val errorMessage: String) : CreateSpaceEvents()
     object HideModalLoading : CreateSpaceEvents()
 }

@@ -143,7 +143,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .disposeOnClear()
     }
 
-    private fun observeGuestAccess() {
+    private fun observeJoinRule() {
         room.rx()
                 .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomJoinRulesContent>() }
@@ -156,7 +156,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .disposeOnClear()
     }
 
-    private fun observeJoinRule() {
+    private fun observeGuestAccess() {
         room.rx()
                 .liveStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomGuestAccessContent>() }

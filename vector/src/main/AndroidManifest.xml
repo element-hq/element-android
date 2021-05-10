@@ -296,6 +296,7 @@
         <activity android:name=".features.spaces.SpaceExploreActivity" />
         <activity android:name=".features.spaces.SpaceCreationActivity" />
         <activity android:name=".features.spaces.manage.SpaceManageActivity" />
+        <activity android:name=".features.spaces.people.SpacePeopleActivity" />
         <!-- Services -->
 
         <service

@@ -111,7 +111,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
         session.getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                 }, sortOrder = RoomSortOrder.NONE
         ).asObservable()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
@@ -120,7 +120,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                     val counts = session.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                             }
                     )
                     setState {
@@ -181,7 +181,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     }
 
     private fun handleSelectSpaceInvite(action: SpaceListAction.OpenSpaceInvite) {
-        _viewEvents.post(SpaceListViewEvents.OpenSpaceSummary(action.spaceSummary.roomId))
+        _viewEvents.post(SpaceListViewEvents.OpenSpaceInvite(action.spaceSummary.roomId))
     }
 
     private fun handleToggleExpand(action: SpaceListAction.ToggleExpand) = withState { state ->

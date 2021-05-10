@@ -193,6 +193,13 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
 
+        private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
+
+        // Possible values for TAKE_PHOTO_VIDEO_MODE
+        const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
+        const val TAKE_PHOTO_VIDEO_MODE_PHOTO = 1
+        const val TAKE_PHOTO_VIDEO_MODE_VIDEO = 2
+
         // Background sync modes
 
         // some preferences keys must be kept after a logout
@@ -947,5 +954,18 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labsUseExperimentalRestricted(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE, false)
+    }
+
+    /*
+     * Photo / video picker
+     */
+    fun getTakePhotoVideoMode(): Int {
+        return defaultPrefs.getInt(TAKE_PHOTO_VIDEO_MODE, TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK)
+    }
+
+    fun setTakePhotoVideoMode(mode: Int) {
+        return defaultPrefs.edit {
+            putInt(TAKE_PHOTO_VIDEO_MODE, mode)
+        }
     }
 }

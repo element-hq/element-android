@@ -139,7 +139,17 @@ class AttachmentsPreviewFragment @Inject constructor(
             attachmentBigPreviewController.setData(state)
             views.attachmentPreviewerBigList.scrollToPosition(state.currentAttachmentIndex)
             views.attachmentPreviewerMiniatureList.scrollToPosition(state.currentAttachmentIndex)
-            views.attachmentPreviewerSendImageOriginalSize.text = resources.getQuantityString(R.plurals.send_images_with_original_size, state.attachments.size)
+            views.attachmentPreviewerSendImageOriginalSize.text = getCheckboxText(state)
+        }
+    }
+
+    private fun getCheckboxText(state: AttachmentsPreviewViewState): CharSequence {
+        val nbImages = state.attachments.count { it.type == ContentAttachmentData.Type.IMAGE }
+        val nbVideos = state.attachments.count { it.type == ContentAttachmentData.Type.VIDEO }
+        return when {
+            nbVideos == 0 -> resources.getQuantityString(R.plurals.send_images_with_original_size, nbImages)
+            nbImages == 0 -> resources.getQuantityString(R.plurals.send_videos_with_original_size, nbVideos)
+            else          -> getString(R.string.send_images_and_video_with_original_size)
         }
     }
 

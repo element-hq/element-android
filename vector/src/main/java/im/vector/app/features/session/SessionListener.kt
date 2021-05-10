@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import im.vector.app.core.extensions.postLiveEvent
 import im.vector.app.core.utils.LiveEvent
+import kotlinx.coroutines.cancelChildren
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
@@ -32,7 +33,15 @@ class SessionListener @Inject constructor() : Session.Listener {
     val globalErrorLiveData: LiveData<LiveEvent<GlobalError>>
         get() = _globalErrorLiveData
 
-    override fun onGlobalError(globalError: GlobalError) {
+    override fun onGlobalError(session: Session, globalError: GlobalError) {
         _globalErrorLiveData.postLiveEvent(globalError)
+    }
+
+    override fun onSessionStopped(session: Session) {
+        session.coroutineScope.coroutineContext.cancelChildren()
+    }
+
+    override fun onClearCache(session: Session) {
+        session.coroutineScope.coroutineContext.cancelChildren()
     }
 }

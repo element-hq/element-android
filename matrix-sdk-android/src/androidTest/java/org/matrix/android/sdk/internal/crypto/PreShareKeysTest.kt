@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.crypto
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,8 +31,6 @@ import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -54,7 +54,7 @@ class PreShareKeysTest : InstrumentedTest {
                     && it.getClearType() == EventType.ROOM_KEY
         }
 
-        assertEquals(0, preShareCount, "Bob should not have receive any key from alice at this point")
+        assertEquals("Bob should not have receive any key from alice at this point", 0, preShareCount)
         Log.d("#Test", "Room Key Received from alice $preShareCount")
 
         // Force presharing of new outbound key
@@ -78,14 +78,14 @@ class PreShareKeysTest : InstrumentedTest {
         }
 
         val content = latest?.getClearContent().toModel<RoomKeyContent>()
-        assertNotNull(content, "Bob should have received and decrypted a room key event from alice")
-        assertEquals(e2eRoomID, content.roomId, "Wrong room")
+        assertNotNull("Bob should have received and decrypted a room key event from alice", content)
+        assertEquals("Wrong room", e2eRoomID, content!!.roomId)
         val megolmSessionId = content.sessionId!!
 
         val sharedIndex = aliceSession.cryptoService().getSharedWithInfo(e2eRoomID, megolmSessionId)
                 .getObject(bobSession.myUserId, bobSession.sessionParams.deviceId)
 
-        assertEquals(0, sharedIndex, "The session received by bob should match what alice sent")
+        assertEquals("The session received by bob should match what alice sent", 0, sharedIndex)
 
         // Just send a real message as test
         val sentEvent = mTestHelper.sendTextMessage(aliceSession.getRoom(e2eRoomID)!!, "Allo", 1).first()
