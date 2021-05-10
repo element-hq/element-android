@@ -26,7 +26,7 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/room_round_avatars" />
 
         <ImageView
             android:id="@+id/matrixToBetaTag"
@@ -128,7 +128,7 @@
             app:layout_constraintCircleAngle="90"
             app:layout_constraintCircleRadius="20dp"
             tools:ignore="MissingConstraints"
-            tools:src="@tools:sample/avatars"
+            tools:src="@sample/user_round_avatars"
             tools:visibility="gone" />
 
         <ImageView
@@ -140,7 +140,7 @@
             app:layout_constraintCircleAngle="90"
             app:layout_constraintCircleRadius="20dp"
             tools:ignore="MissingConstraints"
-            tools:src="@tools:sample/avatars"
+            tools:src="@sample/user_round_avatars"
             tools:visibility="gone" />
 
         <ImageView
@@ -152,7 +152,7 @@
             app:layout_constraintCircleAngle="90"
             app:layout_constraintCircleRadius="20dp"
             tools:ignore="MissingConstraints"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
         <ImageView
             android:id="@+id/knownMember2"
@@ -163,7 +163,7 @@
             app:layout_constraintCircleAngle="90"
             app:layout_constraintCircleRadius="20dp"
             tools:ignore="MissingConstraints"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
         <ImageView
             android:id="@+id/knownMember1"
@@ -173,7 +173,7 @@
             android:contentDescription="@string/avatar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/matrixToCardDescText"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
         <TextView
             android:id="@+id/peopleYouMayKnowText"

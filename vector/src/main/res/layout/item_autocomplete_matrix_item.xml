@@ -14,7 +14,7 @@
         android:layout_height="28dp"
         android:layout_gravity="center_vertical"
         android:importantForAccessibility="no"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <LinearLayout
         android:layout_width="match_parent"

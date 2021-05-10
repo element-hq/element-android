@@ -58,7 +58,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:alpha="1"
-                        tools:src="@tools:sample/avatars" />
+                        tools:src="@sample/room_round_avatars" />
 
                     <im.vector.app.core.ui.views.ShieldImageView
                         android:id="@+id/matrixProfileDecorationToolbarAvatarImageView"

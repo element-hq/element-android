@@ -22,7 +22,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:contentDescription="@string/avatar"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <TextView
         android:id="@+id/messageMemberNameView"

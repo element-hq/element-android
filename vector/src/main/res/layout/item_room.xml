@@ -35,7 +35,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:contentDescription="@string/avatar"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/room_round_avatars" />
 
         <ImageView
             android:id="@+id/roomAvatarCheckedImageView"

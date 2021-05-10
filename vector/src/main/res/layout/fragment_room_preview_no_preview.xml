@@ -32,7 +32,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@tools:sample/avatars" />
+                    tools:src="@sample/room_round_avatars" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewToolbarTitle"
@@ -82,7 +82,7 @@
                     android:layout_height="128dp"
                     android:layout_marginTop="60dp"
                     android:importantForAccessibility="no"
-                    tools:src="@tools:sample/avatars" />
+                    tools:src="@sample/room_round_avatars" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewName"
