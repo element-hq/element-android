@@ -23,9 +23,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.annotation.DrawableRes
-import com.google.android.material.textfield.TextInputEditText
 import im.vector.app.R
-import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.platform.SimpleTextWatcher
 
 fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_search,
@@ -58,18 +56,4 @@ fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_searc
         }
         return@OnTouchListener false
     })
-}
-
-/**
- * Set the initial value of the textEdit.
- * Avoids issue with two way bindings, the value is only set the first time
- */
-fun TextInputEditText.setValueOnce(value: String?, holder: VectorEpoxyHolder) {
-    if (holder.view.isAttachedToWindow) {
-        // the view is attached to the window
-        // So it is a rebind of new data and you could ignore it assuming this is text that was already inputted into the view.
-        // Downside is if you ever wanted to programmatically change the content of the edit text while it is on screen you would not be able to
-    } else {
-        setText(value)
-    }
 }

@@ -25,6 +25,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.extensions.setTextOrHide
 
 @EpoxyModelClass(layout = R.layout.item_form_switch)
@@ -61,16 +62,10 @@ abstract class FormSwitchItem : VectorEpoxyModel<FormSwitchItem.Holder>() {
 
         holder.switchView.isEnabled = enabled
 
-        if (holder.view.isAttachedToWindow) {
-            // the view is attached to the window
-            // So it is a rebind of new data and you could ignore it assuming this is value that was already inputted into the view.
-        } else {
-            holder.switchView.setOnCheckedChangeListener(null)
-            holder.switchView.isChecked = switchChecked
-            holder.switchView.setOnCheckedChangeListener { _, isChecked ->
-                listener?.invoke(isChecked)
-            }
+        holder.setValueOnce(holder.switchView, switchChecked) { _, isChecked ->
+            listener?.invoke(isChecked)
         }
+
         holder.divider.isVisible = showDivider
     }
 

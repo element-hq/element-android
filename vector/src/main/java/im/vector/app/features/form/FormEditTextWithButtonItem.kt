@@ -26,7 +26,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.extensions.setValueOnce
+import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_form_text_input_with_button)
@@ -61,7 +61,7 @@ abstract class FormEditTextWithButtonItem : VectorEpoxyModel<FormEditTextWithBut
         holder.textInputLayout.isEnabled = enabled
         holder.textInputLayout.hint = hint
 
-        holder.textInputEditText.setValueOnce(value, holder)
+        holder.setValueOnce(holder.textInputEditText, value)
 
         holder.textInputEditText.isEnabled = enabled
 

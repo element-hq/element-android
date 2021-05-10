@@ -27,7 +27,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.extensions.setValueOnce
+import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_form_multiline_text_input)
@@ -76,7 +76,7 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
         holder.textInputEditText.textSize = textSizeSp?.toFloat() ?: 14f
         holder.textInputEditText.minLines = minLines
 
-        holder.textInputEditText.setValueOnce(value, holder)
+        holder.setValueOnce(holder.textInputEditText, value)
 
         holder.textInputEditText.isEnabled = enabled
 

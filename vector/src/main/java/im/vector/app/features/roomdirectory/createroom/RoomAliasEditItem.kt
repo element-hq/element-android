@@ -27,7 +27,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.extensions.setValueOnce
+import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_room_alias_text_input)
@@ -62,7 +62,7 @@ abstract class RoomAliasEditItem : VectorEpoxyModel<RoomAliasEditItem.Holder>() 
         holder.textInputLayout.isEnabled = enabled
         holder.textInputLayout.error = errorMessage
 
-        holder.textInputEditText.setValueOnce(value, holder)
+        holder.setValueOnce(holder.textInputEditText, value)
         holder.textInputEditText.isEnabled = enabled
         holder.textInputEditText.addTextChangedListener(onTextChangeListener)
         holder.homeServerText.text = homeServer

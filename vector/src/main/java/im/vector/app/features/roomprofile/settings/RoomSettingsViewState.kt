@@ -70,24 +70,24 @@ data class RoomSettingsViewState(
     ) {
         fun hasChanged() = newJoinRules != null || newGuestAccess != null
     }
-}
 
-fun RoomSettingsViewState.getJoinRuleWording(stringProvider: StringProvider): String {
-    return when (val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules) {
-        RoomJoinRules.INVITE -> {
-            stringProvider.getString(R.string.room_settings_room_access_private_title)
-        }
-        RoomJoinRules.PUBLIC -> {
-            stringProvider.getString(R.string.room_settings_room_access_public_title)
-        }
-        RoomJoinRules.KNOCK -> {
-            stringProvider.getString(R.string.room_settings_room_access_entry_knock)
-        }
-        RoomJoinRules.RESTRICTED -> {
-            stringProvider.getString(R.string.room_settings_room_access_restricted_title)
-        }
-        else                     -> {
-            stringProvider.getString(R.string.room_settings_room_access_entry_unknown, joinRule.value)
+    fun getJoinRuleWording(stringProvider: StringProvider): String {
+        return when (val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules) {
+            RoomJoinRules.INVITE -> {
+                stringProvider.getString(R.string.room_settings_room_access_private_title)
+            }
+            RoomJoinRules.PUBLIC -> {
+                stringProvider.getString(R.string.room_settings_room_access_public_title)
+            }
+            RoomJoinRules.KNOCK -> {
+                stringProvider.getString(R.string.room_settings_room_access_entry_knock)
+            }
+            RoomJoinRules.RESTRICTED -> {
+                stringProvider.getString(R.string.room_settings_room_access_restricted_title)
+            }
+            else                     -> {
+                stringProvider.getString(R.string.room_settings_room_access_entry_unknown, joinRule.value)
+            }
         }
     }
 }
