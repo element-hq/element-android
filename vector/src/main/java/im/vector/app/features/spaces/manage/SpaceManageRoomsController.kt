@@ -24,8 +24,6 @@ import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
-import io.reactivex.functions.Predicate
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -80,22 +78,6 @@ class SpaceManageRoomsController @Inject constructor(
                     listener?.toggleSelection(childInfo)
                 }))
             }
-        }
-    }
-}
-
-class SpaceChildInfoMatchFilter : Predicate<SpaceChildInfo> {
-    var filter: String = ""
-
-    override fun test(spaceChildInfo: SpaceChildInfo): Boolean {
-        if (filter.isEmpty()) {
-            // No filter
-            return true
-        }
-        // if filter is "Jo Do", it should match "John Doe"
-        return filter.split(" ").all {
-            spaceChildInfo.name?.contains(it, ignoreCase = true).orFalse()
-                    || spaceChildInfo.topic?.contains(it, ignoreCase = true).orFalse()
         }
     }
 }

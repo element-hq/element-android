@@ -11,7 +11,7 @@
         <item name="android:background">?riotx_background</item>
     </style>
 
-    <style name="ActionModeTheme" parent="Base.Widget.AppCompat.ActionMode">
+    <style name="ActionModeTheme" parent="Widget.AppCompat.ActionMode">
         <item name="background">?riotx_background</item>
         <item name="titleTextStyle">@style/Vector.Toolbar.Title</item>
         <item name="subtitleTextStyle">@style/Vector.Toolbar.SubTitle</item>

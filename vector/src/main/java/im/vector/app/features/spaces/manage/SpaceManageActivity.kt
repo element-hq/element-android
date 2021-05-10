@@ -111,17 +111,19 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                     }
                     ManageType.Settings -> {
                         val simpleName = SpaceSettingsFragment::class.java.simpleName
-                        if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
+                        if (supportFragmentManager.findFragmentByTag(simpleName) == null && args?.spaceId != null) {
                             supportFragmentManager.commitTransaction {
                                 replace(R.id.simpleFragmentContainer,
                                         SpaceSettingsFragment::class.java,
-                                        Bundle().apply { this.putParcelable(MvRx.KEY_ARG, RoomProfileArgs(args?.spaceId ?: "")) },
+                                        Bundle().apply { this.putParcelable(MvRx.KEY_ARG, RoomProfileArgs(args.spaceId)) },
                                         simpleName
                                 )
                             }
                         }
                     }
-                    ManageType.ManageRooms -> TODO()
+                    ManageType.ManageRooms -> {
+                        // no direct access for now
+                    }
                 }
             }
         }
@@ -145,11 +147,13 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                     )
                 }
                 SpaceManagedSharedViewEvents.NavigateToManageRooms -> {
-                    addFragmentToBackstack(
-                            R.id.simpleFragmentContainer,
-                            SpaceManageRoomsFragment::class.java,
-                            SpaceManageArgs(args?.spaceId ?: "", ManageType.ManageRooms)
-                    )
+                    args?.spaceId?.let { spaceId ->
+                        addFragmentToBackstack(
+                                R.id.simpleFragmentContainer,
+                                SpaceManageRoomsFragment::class.java,
+                                SpaceManageArgs(spaceId, ManageType.ManageRooms)
+                        )
+                    }
                 }
             }
         }

@@ -195,7 +195,9 @@ class SpaceSettingsFragment @Inject constructor(
         viewModel.handle(RoomSettingsAction.SetRoomTopic(topic))
     }
 
-    override fun onHistoryVisibilityClicked() {}
+    override fun onHistoryVisibilityClicked() {
+        // N/A for space settings screen
+    }
 
     override fun onJoinRuleClicked() = withState(viewModel) { state ->
         val currentJoinRule = state.newRoomJoinRules.newJoinRules ?: state.currentRoomJoinRules

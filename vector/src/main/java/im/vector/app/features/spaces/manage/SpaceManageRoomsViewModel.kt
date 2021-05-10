@@ -27,7 +27,6 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.session.coroutineScope
@@ -37,8 +36,7 @@ import org.matrix.android.sdk.api.session.Session
 
 class SpaceManageRoomsViewModel @AssistedInject constructor(
         @Assisted val initialState: SpaceManageRoomViewState,
-        private val session: Session,
-        private val errorFormatter: ErrorFormatter
+        private val session: Session
 ) : VectorViewModel<SpaceManageRoomViewState, SpaceManageRoomViewAction, SpaceManageRoomViewEvents>(initialState) {
 
     init {
@@ -79,20 +77,20 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceManageRoomViewAction) {
         when (action) {
-            is SpaceManageRoomViewAction.ToggleSelection    -> handleToggleSelection(action)
-            is SpaceManageRoomViewAction.UpdateFilter       -> {
+            is SpaceManageRoomViewAction.ToggleSelection -> handleToggleSelection(action)
+            is SpaceManageRoomViewAction.UpdateFilter -> {
                 setState { copy(currentFilter = action.filter) }
             }
-            SpaceManageRoomViewAction.ClearSelection        -> {
+            SpaceManageRoomViewAction.ClearSelection -> {
                 setState { copy(selectedRooms = emptyList()) }
             }
-            SpaceManageRoomViewAction.BulkRemove            -> {
+            SpaceManageRoomViewAction.BulkRemove -> {
                 handleBulkRemove()
             }
             is SpaceManageRoomViewAction.MarkAllAsSuggested -> {
                 handleBulkMarkAsSuggested(action.suggested)
             }
-            SpaceManageRoomViewAction.RefreshFromServer     -> {
+            SpaceManageRoomViewAction.RefreshFromServer -> {
                 refreshSummaryAPI()
             }
         }
@@ -112,10 +110,10 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
             }
             if (errorList.isEmpty()) {
                 // success
-                _viewEvents.post(SpaceManageRoomViewEvents.BulkActionSuccess)
             } else {
-                _viewEvents.post(SpaceManageRoomViewEvents.BulkActionFailure(errorList.map { errorFormatter.toHumanReadable(it) }))
+                _viewEvents.post(SpaceManageRoomViewEvents.BulkActionFailure(errorList))
             }
+            refreshSummaryAPI()
             setState { copy(actionState = Uninitialized) }
         }
     }
@@ -142,11 +140,10 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
             }
             if (errorList.isEmpty()) {
                 // success
-                _viewEvents.post(SpaceManageRoomViewEvents.BulkActionSuccess)
-                refreshSummaryAPI()
             } else {
-                _viewEvents.post(SpaceManageRoomViewEvents.BulkActionFailure(errorList.map { errorFormatter.toHumanReadable(it) }))
+                _viewEvents.post(SpaceManageRoomViewEvents.BulkActionFailure(errorList))
             }
+            refreshSummaryAPI()
             setState { copy(actionState = Uninitialized) }
         }
     }

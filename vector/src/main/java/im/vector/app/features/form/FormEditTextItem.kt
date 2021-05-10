@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.extensions.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_form_text_input)
@@ -75,13 +76,8 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         holder.textInputLayout.error = errorMessage
         holder.textInputLayout.endIconMode = endIconMode ?: TextInputLayout.END_ICON_NONE
 
-        if (holder.view.isAttachedToWindow) {
-            // the view is attached to the window
-            // So it is a rebind of new data and you could ignore it assuming this is text that was already inputted into the view.
-            // Downside is if you ever wanted to programmatically change the content of the edit text while it is on screen you would not be able to
-        } else {
-            holder.textInputEditText.setText(value)
-        }
+        holder.textInputEditText.setValueOnce(value, holder)
+
         holder.textInputEditText.isEnabled = enabled
         inputType?.let { holder.textInputEditText.inputType = it }
         holder.textInputEditText.isSingleLine = singleLine ?: false

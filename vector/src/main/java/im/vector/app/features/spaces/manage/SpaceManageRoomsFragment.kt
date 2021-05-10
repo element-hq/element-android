@@ -91,12 +91,7 @@ class SpaceManageRoomsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is SpaceManageRoomViewEvents.BulkActionFailure -> {
-                    it.errorList.forEach {
-                        vectorBaseActivity.toast(it)
-                    }
-                }
-                SpaceManageRoomViewEvents.BulkActionSuccess -> {
-                    //
+                    vectorBaseActivity.toast(errorFormatter.toHumanReadable(it.errorList.firstOrNull()))
                 }
             }
         }

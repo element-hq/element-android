@@ -27,7 +27,6 @@ import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.form.formSwitchItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
-import im.vector.app.features.roomprofile.settings.RoomSettingsViewState.Companion.getJoinRuleWording
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules

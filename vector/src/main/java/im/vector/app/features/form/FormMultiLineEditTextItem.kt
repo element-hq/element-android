@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.extensions.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_form_multiline_text_input)
@@ -75,13 +76,8 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
         holder.textInputEditText.textSize = textSizeSp?.toFloat() ?: 14f
         holder.textInputEditText.minLines = minLines
 
-        // Update only if text is different and value is not null
-        if (holder.view.isAttachedToWindow) {
-            // the view is attached to the window
-            // So it is a rebind of new data and you could ignore it assuming this is text that was already inputted into the view.
-        } else {
-            holder.textInputEditText.setText(value)
-        }
+        holder.textInputEditText.setValueOnce(value, holder)
+
         holder.textInputEditText.isEnabled = enabled
 
         holder.textInputEditText.addTextChangedListener(onTextChangeListener)
