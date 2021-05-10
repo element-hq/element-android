@@ -40,7 +40,7 @@ import timber.log.Timber
 
 class SpaceDirectoryViewModel @AssistedInject constructor(
         @Assisted initialState: SpaceDirectoryState,
-        val session: Session
+        private val session: Session
 ) : VectorViewModel<SpaceDirectoryState, SpaceDirectoryViewAction, SpaceDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
@@ -138,6 +138,13 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
             }
             is SpaceDirectoryViewAction.NavigateToRoom -> {
                 _viewEvents.post(SpaceDirectoryViewEvents.NavigateToRoom(action.roomId))
+            }
+            is SpaceDirectoryViewAction.ShowDetails ->  {
+                // This is temporary for now to at least display something for the space beta
+                // It's not ideal as it's doing some peeking that is not needed.
+                session.permalinkService().createRoomPermalink(action.spaceChildInfo.childRoomId)?.let {
+                   _viewEvents.post(SpaceDirectoryViewEvents.NavigateToMxToBottomSheet(it))
+                }
             }
         }
     }

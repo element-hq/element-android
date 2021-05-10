@@ -19,6 +19,7 @@ package im.vector.app.features.spaces
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import im.vector.app.R
@@ -26,6 +27,7 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.spaces.explore.SpaceDirectoryArgs
 import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
 import im.vector.app.features.spaces.explore.SpaceDirectoryState
@@ -33,7 +35,7 @@ import im.vector.app.features.spaces.explore.SpaceDirectoryViewEvents
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
 import javax.inject.Inject
 
-class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceDirectoryViewModel.Factory {
+class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceDirectoryViewModel.Factory, MatrixToBottomSheet.InteractionListener {
 
     @Inject lateinit var spaceDirectoryViewModelFactory: SpaceDirectoryViewModel.Factory
 
@@ -72,8 +74,18 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
                 is SpaceDirectoryViewEvents.NavigateToRoom -> {
                     navigator.openRoom(this, it.roomId)
                 }
+                is SpaceDirectoryViewEvents.NavigateToMxToBottomSheet -> {
+                    MatrixToBottomSheet.withLink(it.link, this).show(supportFragmentManager, "ShowChild")
+                }
             }
         }
+    }
+
+    override fun onAttachFragment(fragment: Fragment) {
+        if (fragment is MatrixToBottomSheet) {
+            fragment.interactionListener = this
+        }
+        super.onAttachFragment(fragment)
     }
 
     companion object {
@@ -86,4 +98,8 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
 
     override fun create(initialState: SpaceDirectoryState): SpaceDirectoryViewModel =
             spaceDirectoryViewModelFactory.create(initialState)
+
+    override fun navigateToRoom(roomId: String) {
+        navigator.openRoom(this, roomId)
+    }
 }

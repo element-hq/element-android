@@ -21,7 +21,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentOnAttachListener
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -30,7 +29,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomDirectoryPickerBinding
-import im.vector.app.features.matrixto.MatrixToBottomSheet
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import javax.inject.Inject
@@ -44,18 +42,12 @@ class SpaceDirectoryFragment @Inject constructor(
         private val epoxyController: SpaceDirectoryController
 ) : VectorBaseFragment<FragmentRoomDirectoryPickerBinding>(),
         SpaceDirectoryController.InteractionListener,
-        OnBackPressed, MatrixToBottomSheet.InteractionListener {
+        OnBackPressed {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             FragmentRoomDirectoryPickerBinding.inflate(layoutInflater, container, false)
 
     private val viewModel by activityViewModel(SpaceDirectoryViewModel::class)
-
-    private var fragmentOnAttachListener = FragmentOnAttachListener { _, fragment ->
-        if (fragment is MatrixToBottomSheet) {
-            fragment.interactionListener = this
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,12 +60,9 @@ class SpaceDirectoryFragment @Inject constructor(
         }
         epoxyController.listener = this
         views.roomDirectoryPickerList.configureWith(epoxyController)
-
-        childFragmentManager.addFragmentOnAttachListener(fragmentOnAttachListener)
     }
 
     override fun onDestroyView() {
-        childFragmentManager.removeFragmentOnAttachListener(fragmentOnAttachListener)
         epoxyController.listener = null
         views.roomDirectoryPickerList.cleanup()
         super.onDestroyView()
@@ -97,11 +86,7 @@ class SpaceDirectoryFragment @Inject constructor(
     }
 
     override fun onRoomClick(spaceChildInfo: SpaceChildInfo) {
-        // This is temporary for now to at least display something for the space beta
-        // It's not ideal as it's doing some peeking that is not needed.
-        viewModel.session.permalinkService().createRoomPermalink(spaceChildInfo.childRoomId)?.let {
-            MatrixToBottomSheet.withLink(it, this).show(childFragmentManager, "ShowChild")
-        }
+        viewModel.handle(SpaceDirectoryViewAction.ShowDetails(spaceChildInfo))
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
@@ -109,7 +94,7 @@ class SpaceDirectoryFragment @Inject constructor(
         return true
     }
 
-    override fun navigateToRoom(roomId: String) {
-        viewModel.handle(SpaceDirectoryViewAction.NavigateToRoom(roomId))
-    }
+//    override fun navigateToRoom(roomId: String) {
+//        viewModel.handle(SpaceDirectoryViewAction.NavigateToRoom(roomId))
+//    }
 }

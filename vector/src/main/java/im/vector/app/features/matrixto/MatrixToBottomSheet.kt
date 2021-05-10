@@ -36,6 +36,7 @@ import im.vector.app.databinding.BottomSheetMatrixToCardBinding
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -56,7 +57,13 @@ class MatrixToBottomSheet :
         injector.inject(this)
     }
 
-    var interactionListener: InteractionListener? = null
+    var weakReference = WeakReference<InteractionListener>(null)
+
+    var interactionListener: InteractionListener?
+        set(value) {
+            weakReference = WeakReference(value)
+        }
+        get() = weakReference.get()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetMatrixToCardBinding {
         return BottomSheetMatrixToCardBinding.inflate(inflater, container, false)

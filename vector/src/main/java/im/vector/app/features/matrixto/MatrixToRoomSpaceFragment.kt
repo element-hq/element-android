@@ -171,16 +171,20 @@ class MatrixToRoomSpaceFragment @Inject constructor(
         when (state.peopleYouKnow) {
             is Success -> {
                 val someYouKnow = state.peopleYouKnow.invoke()
-                someYouKnow.forEachIndexed { index, item ->
-                    images[index].isVisible = true
-                    avatarRenderer.render(item, images[index])
+                if (someYouKnow.isEmpty()) {
+                    views.peopleYouMayKnowText.isVisible = false
+                } else {
+                    someYouKnow.forEachIndexed { index, item ->
+                        images[index].isVisible = true
+                        avatarRenderer.render(item, images[index])
+                    }
+                    views.peopleYouMayKnowText.setTextOrHide(
+                            resources.getQuantityString(R.plurals.space_people_you_know,
+                                    someYouKnow.count(),
+                                    someYouKnow.count()
+                            )
+                    )
                 }
-                views.peopleYouMayKnowText.setTextOrHide(
-                        resources.getQuantityString(R.plurals.space_people_you_know,
-                                someYouKnow.count(),
-                                someYouKnow.count()
-                        )
-                )
             }
             else       -> {
                 views.peopleYouMayKnowText.isVisible = false
