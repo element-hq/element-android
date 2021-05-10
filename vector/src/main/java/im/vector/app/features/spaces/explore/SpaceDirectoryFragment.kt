@@ -23,13 +23,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomDirectoryPickerBinding
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import javax.inject.Inject
 
@@ -68,8 +68,13 @@ class SpaceDirectoryFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun invalidate() = withState(viewModel) {
-        epoxyController.setData(it)
+    override fun invalidate() = withState(viewModel) { state ->
+        epoxyController.setData(state)
+
+        val title = state.hierarchyStack.lastOrNull()?.let { currentParent ->
+            state.spaceSummaryApiResult.invoke()?.firstOrNull { it.childRoomId == currentParent }
+        }?.name ?: getString(R.string.space_explore_activity_title)
+        views.toolbar.title = title
     }
 
     override fun onButtonClick(spaceChildInfo: SpaceChildInfo) {
@@ -77,13 +82,19 @@ class SpaceDirectoryFragment @Inject constructor(
     }
 
     override fun onSpaceChildClick(spaceChildInfo: SpaceChildInfo) {
-        if (spaceChildInfo.roomType == RoomType.SPACE) {
-            viewModel.handle(SpaceDirectoryViewAction.ExploreSubSpace(spaceChildInfo))
-        }
+        viewModel.handle(SpaceDirectoryViewAction.ExploreSubSpace(spaceChildInfo))
+    }
+
+    override fun onRoomClick(spaceChildInfo: SpaceChildInfo) {
+        viewModel.handle(SpaceDirectoryViewAction.ShowDetails(spaceChildInfo))
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         viewModel.handle(SpaceDirectoryViewAction.HandleBack)
         return true
     }
+
+//    override fun navigateToRoom(roomId: String) {
+//        viewModel.handle(SpaceDirectoryViewAction.NavigateToRoom(roomId))
+//    }
 }

@@ -120,6 +120,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                         ?.roomSummary()
                         // don't take if not active, as it could be outdated
                         ?.takeIf { it.membership.isActive() }
+                // XXX fix that
                 val forceRefresh = true
                 if (!forceRefresh && knownRoom != null) {
                     setState {
@@ -147,7 +148,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                                     topic = peekResult.topic ?: "",
                                     memberCount = peekResult.numJoinedMembers,
                                     alias = peekResult.alias,
-                                    membership = Membership.NONE,
+                                    membership = knownRoom?.membership ?: Membership.NONE,
                                     roomType = peekResult.roomType,
                                     viaServers = peekResult.viaServers.takeIf { it.isNotEmpty() } ?: permalinkData.viaParameters
                             ).also {

@@ -38,6 +38,7 @@ class SpaceDirectoryController @Inject constructor(
     interface InteractionListener {
         fun onButtonClick(spaceChildInfo: SpaceChildInfo)
         fun onSpaceChildClick(spaceChildInfo: SpaceChildInfo)
+        fun onRoomClick(spaceChildInfo: SpaceChildInfo)
     }
 
     var listener: InteractionListener? = null
@@ -81,6 +82,8 @@ class SpaceDirectoryController @Inject constructor(
                         apply {
                             if (isSpace) {
                                 itemClickListener(View.OnClickListener { listener?.onSpaceChildClick(info) })
+                            } else {
+                                itemClickListener(View.OnClickListener { listener?.onRoomClick(info) })
                             }
                         }
                         buttonClickListener(View.OnClickListener { listener?.onButtonClick(info) })
