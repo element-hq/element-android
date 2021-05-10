@@ -141,7 +141,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                                         // In this case allow inviting valid user ids.
                                         User(
                                                 userId = search,
-                                                displayName = search,
+                                                displayName = null,
                                                 avatarUrl = null
                                         ).toOptional()
                                     }
