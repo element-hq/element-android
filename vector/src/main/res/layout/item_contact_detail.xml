@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="@tools:sample/full_names" />
+        tools:text="@sample/matrix.json/data/displayName" />
 
     <TextView
         android:id="@+id/contactDetailMatrixId"

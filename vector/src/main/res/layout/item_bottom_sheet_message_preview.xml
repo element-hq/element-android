@@ -37,7 +37,8 @@
         app:layout_constraintEnd_toStartOf="@+id/bottom_sheet_message_preview_timestamp"
         app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
         app:layout_constraintTop_toTopOf="@id/bottom_sheet_message_preview_avatar"
-        tools:text="@tools:sample/full_names" />
+        tools:fontFamily="sans-serif"
+        tools:text="@sample/matrix.json/data/displayName" />
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_timestamp"

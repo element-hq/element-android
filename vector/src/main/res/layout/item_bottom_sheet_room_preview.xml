@@ -41,7 +41,8 @@
         app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewLowPriority"
         app:layout_constraintStart_toEndOf="@id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
-        tools:text="@tools:sample/full_names" />
+        tools:fontFamily="sans-serif"
+        tools:text="@sample/matrix.json/data/roomName" />
 
     <ImageView
         android:id="@+id/bottomSheetRoomPreviewLowPriority"

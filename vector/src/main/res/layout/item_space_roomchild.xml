@@ -57,7 +57,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/childRoomAvatar"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@tools:sample/full_names" />
+            tools:text="@sample/matrix.json/data/spaceName" />
 
         <TextView
             android:id="@+id/childRoomTopic"
