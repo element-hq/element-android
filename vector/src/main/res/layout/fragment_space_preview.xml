@@ -63,7 +63,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/spacePreviewToolbarAvatar"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="@sample/matrix.json/data/displayName" />
+                    tools:text="@sample/users.json/data/displayName" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

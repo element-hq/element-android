@@ -25,7 +25,7 @@
         android:textColor="?riotx_text_primary"
         android:textSize="15sp"
         android:textStyle="bold"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
 
     <TextView

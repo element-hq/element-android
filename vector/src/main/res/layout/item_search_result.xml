@@ -33,7 +33,7 @@
         app:layout_constraintEnd_toStartOf="@+id/messageTimeView"
         app:layout_constraintStart_toEndOf="@+id/messageAvatarImageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/messageTimeView"
