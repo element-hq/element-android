@@ -369,7 +369,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
         val scanSettingsBuilder = ScanSettings.Builder()
                 .setLegacy(false)
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
-                .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+                .setCallbackType(ScanSettings.CALLBACK_TYPE_FIRST_MATCH)
                 .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
 
         if (isCodedPHY) {
