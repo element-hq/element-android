@@ -25,6 +25,7 @@ Bugfix 🐛:
  - Sent video does not contains duration (#3272)
  - Properly clean the back stack if the user cancel registration when waiting for email validation
  - Fix read marker visibility/position when filtering some events 
+ - Fix user invitation in case of restricted profile api (#3306)
 
 Translations 🗣:
  -
@@ -35,6 +36,7 @@ SDK API changes ⚠️:
 Build 🧱:
  - Upgrade to gradle 7
  - https://github.com/Piasy/BigImageViewer is now hosted on mavenCentral()
+ - Upgrade Realm to version 10.4.0
 
 Test:
  -
