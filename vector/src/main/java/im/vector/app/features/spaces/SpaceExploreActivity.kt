@@ -57,6 +57,13 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
             }
             super.onFragmentAttached(fm, f, context)
         }
+
+        override fun onFragmentDetached(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = null
+            }
+            super.onFragmentDetached(fm, f)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

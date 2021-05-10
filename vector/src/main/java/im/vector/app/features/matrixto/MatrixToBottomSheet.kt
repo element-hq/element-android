@@ -57,7 +57,7 @@ class MatrixToBottomSheet :
         injector.inject(this)
     }
 
-    var weakReference = WeakReference<InteractionListener>(null)
+    private var weakReference = WeakReference<InteractionListener>(null)
 
     var interactionListener: InteractionListener?
         set(value) {
