@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import im.vector.app.R
@@ -49,8 +50,18 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
 
     val sharedViewModel: SpaceDirectoryViewModel by viewModel()
 
+    private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentAttached(fm: FragmentManager, f: Fragment, context: Context) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = this@SpaceExploreActivity
+            }
+            super.onFragmentAttached(fm, f, context)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
 
         if (isFirstCreation()) {
             val simpleName = SpaceDirectoryFragment::class.java.simpleName
@@ -79,6 +90,11 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
+        super.onDestroy()
     }
 
     override fun onAttachFragment(fragment: Fragment) {
