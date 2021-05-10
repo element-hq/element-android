@@ -11,6 +11,7 @@ Improvements 🙌:
  - Improve file too big error detection (#3245)
  - User can now select video when selecting Gallery to send attachments to a room
  - Add option to record a video from the camera
+ - Add the public icon on the rooms in the room list (#3292)
 
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)

@@ -3251,6 +3251,7 @@
     <string name="a11y_rule_notify_silent">Notify without sound</string>
     <string name="a11y_rule_notify_off">Do not notify</string>
     <string name="a11y_view_read_receipts">View read receipts</string>
+    <string name="a11y_public_room">This room is public</string>
 
     <string name="dev_tools_menu_name">Dev Tools</string>
     <string name="dev_tools_explore_room_state">Explore Room State</string>
