@@ -24,6 +24,7 @@ Bugfix 🐛:
  - Fix read marker not updating automatically (#3267)
  - Sent video does not contains duration (#3272)
  - Properly clean the back stack if the user cancel registration when waiting for email validation
+ - Fix read marker visibility/position when filtering some events 
  - Fix user invitation in case of restricted profile api (#3306)
 
 Translations 🗣:
