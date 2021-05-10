@@ -43,7 +43,7 @@
             app:layout_constraintStart_toEndOf="@id/spaceAvatarImageView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:text="@sample/users.json/data/displayName" />
+            tools:text="@sample/spaces.json/data/name" />
 
         <TextView
             android:id="@+id/spaceDescription"
@@ -61,7 +61,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/spaceAvatarImageView"
             app:layout_constraintTop_toBottomOf="@+id/spaceNameView"
-            tools:text="@sample/messages.json/data/message"
+            tools:text="@sample/spaces.json/data/topic"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

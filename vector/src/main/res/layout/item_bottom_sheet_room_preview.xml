@@ -42,7 +42,7 @@
         app:layout_constraintStart_toEndOf="@id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
         tools:fontFamily="sans-serif"
-        tools:text="@sample/matrix.json/data/roomName" />
+        tools:text="@sample/rooms.json/data/name" />
 
     <ImageView
         android:id="@+id/bottomSheetRoomPreviewLowPriority"

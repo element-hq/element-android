@@ -52,7 +52,7 @@
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
-            tools:text="@sample/matrix.json/data/roomName" />
+            tools:text="@sample/rooms.json/data/name" />
 
         <TextView
             android:id="@+id/matrixToCardAliasText"
@@ -67,7 +67,8 @@
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
             app:layout_goneMarginTop="0dp"
-            tools:text="@sample/matrix.json/data/roomAlias" />
+            tools:text="@sample/rooms.json/data/alias"
+            tools:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/matrixToMemberPills"
@@ -117,7 +118,7 @@
             android:textColor="?riotx_text_secondary"
             android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@id/matrixToMemberPills"
-            tools:text="@sample/matrix.json/data/roomTopic" />
+            tools:text="@sample/rooms.json/data/topic" />
 
         <ImageView
             android:id="@+id/knownMember5"
