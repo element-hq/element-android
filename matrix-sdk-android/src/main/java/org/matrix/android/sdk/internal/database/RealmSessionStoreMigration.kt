@@ -144,10 +144,6 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         Timber.d("Step 7 -> 8")
 
         val editionOfEventSchema = realm.schema.create("EditionOfEvent")
-                .apply {
-                    // setEmbedded does not return `this`...
-                    isEmbedded = true
-                }
                 .addField(EditionOfEventFields.CONTENT, String::class.java)
                 .addField(EditionOfEventFields.EVENT_ID, String::class.java)
                 .setRequired(EditionOfEventFields.EVENT_ID, true)
@@ -162,6 +158,10 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 ?.removeField("lastEditTs")
                 ?.removeField("sourceLocalEchoEvents")
                 ?.addRealmListField(EditAggregatedSummaryEntityFields.EDITIONS.`$`, editionOfEventSchema)
+
+        // This has to be done once a parent use the model as a child
+        // See https://github.com/realm/realm-java/issues/7402
+        editionOfEventSchema.isEmbedded = true
     }
 
     private fun migrateTo9(realm: DynamicRealm) {

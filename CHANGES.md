@@ -34,6 +34,7 @@ SDK API changes ⚠️:
 Build 🧱:
  - Upgrade to gradle 7
  - https://github.com/Piasy/BigImageViewer is now hosted on mavenCentral()
+ - Upgrade Realm to version 10.4.0
 
 Test:
  -
