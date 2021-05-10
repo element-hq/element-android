@@ -175,17 +175,19 @@
             app:layout_constraintTop_toBottomOf="@id/matrixToCardDescText"
             tools:src="@sample/user_round_avatars" />
 
+        <!-- layout_goneMarginStart: add half the width of the avatar: 15dp -->
         <TextView
             android:id="@+id/peopleYouMayKnowText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:textColor="?riotx_text_secondary"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/knownMember1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/knownMember5"
             app:layout_constraintTop_toTopOf="@id/knownMember1"
+            app:layout_goneMarginStart="25dp"
             tools:text="7 people you may know" />
 
         <im.vector.app.core.platform.ButtonStateView
