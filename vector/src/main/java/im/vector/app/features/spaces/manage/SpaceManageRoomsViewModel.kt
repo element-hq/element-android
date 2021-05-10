@@ -129,13 +129,12 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
             val errorList = mutableListOf<Throwable>()
             selection.forEach { info ->
                 try {
-//                    session.spaceService().getSpace(state.spaceId)?.setChildrenSuggested(roomId, suggested)
                     session.spaceService().getSpace(state.spaceId)?.addChildren(
                             roomId = info.childRoomId,
-                            viaServers = info?.viaServers ?: emptyList(),
-                            order = info?.order,
+                            viaServers = info.viaServers,
+                            order = info.order,
                             suggested = suggested,
-                            autoJoin = info?.autoJoin ?: false
+                            autoJoin = info.autoJoin
                     )
                 } catch (failure: Throwable) {
                     errorList.add(failure)
