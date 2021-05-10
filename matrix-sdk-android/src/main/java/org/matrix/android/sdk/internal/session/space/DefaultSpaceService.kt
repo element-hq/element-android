@@ -141,9 +141,9 @@ internal class DefaultSpaceService @Inject constructor(
                                                         name = childSummary.name,
                                                         topic = childSummary.topic,
                                                         avatarUrl = childSummary.avatarUrl,
-                                                        order = childStateEvContent?.order,
-                                                        autoJoin = childStateEvContent?.autoJoin ?: false,
-                                                        viaServers = childStateEvContent?.via ?: emptyList(),
+                                                        order = childStateEvContent.order,
+                                                        autoJoin = childStateEvContent.autoJoin ?: false,
+                                                        viaServers = childStateEvContent.via.orEmpty(),
                                                         activeMemberCount = childSummary.numJoinedMembers,
                                                         parentRoomId = childStateEv.roomId
                                                 )
