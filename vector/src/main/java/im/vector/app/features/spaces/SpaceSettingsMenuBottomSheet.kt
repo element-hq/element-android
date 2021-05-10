@@ -35,6 +35,7 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.spaces.manage.ManageType
 import im.vector.app.features.spaces.manage.SpaceManageActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.GlobalScope
@@ -94,6 +95,13 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     val powerLevelsHelper = PowerLevelsHelper(powerLevelContent)
                     val canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
                     val canAddChild = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_SPACE_CHILD)
+
+                    val canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR)
+                    val canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME)
+                    val canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC)
+
+                    views.spaceSettings.isVisible = canChangeAvatar || canChangeName || canChangeTopic
+
                     views.invitePeople.isVisible = canInvite
                     views.addRooms.isVisible = canAddChild
                 }.disposeOnDestroyView()
@@ -107,9 +115,9 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
             navigator.openRoomProfile(requireContext(), spaceArgs.spaceId, RoomProfileActivity.EXTRA_DIRECT_ACCESS_ROOM_MEMBERS)
         }
 
-        views.spaceSettings.isVisible = vectorPreferences.developerMode()
         views.spaceSettings.views.bottomSheetActionClickableZone.debouncedClicks {
-            navigator.openRoomProfile(requireContext(), spaceArgs.spaceId)
+//            navigator.openRoomProfile(requireContext(), spaceArgs.spaceId)
+            startActivity(SpaceManageActivity.newIntent(requireActivity(), spaceArgs.spaceId, ManageType.Settings))
         }
 
         views.exploreRooms.views.bottomSheetActionClickableZone.debouncedClicks {
@@ -118,7 +126,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
 
         views.addRooms.views.bottomSheetActionClickableZone.debouncedClicks {
             dismiss()
-            startActivity(SpaceManageActivity.newIntent(requireActivity(), spaceArgs.spaceId))
+            startActivity(SpaceManageActivity.newIntent(requireActivity(), spaceArgs.spaceId, ManageType.AddRooms))
         }
 
         views.leaveSpace.views.bottomSheetActionClickableZone.debouncedClicks {

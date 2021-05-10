@@ -63,20 +63,21 @@ internal class DefaultSpace(
     }
 
     override suspend fun removeChildren(roomId: String) {
-        val existing = room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
-                .firstOrNull()
-                ?.content.toModel<SpaceChildContent>()
-                ?: // should we throw here?
-                return
+//        val existing = room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
+//                .firstOrNull()
+//                ?.content.toModel<SpaceChildContent>()
+//                ?: // should we throw here?
+//                return
 
         // edit state event and set via to null
         room.sendStateEvent(
                 eventType = EventType.STATE_SPACE_CHILD,
                 stateKey = roomId,
                 body = SpaceChildContent(
-                        order = existing.order,
+                        order = null,
                         via = null,
-                        autoJoin = existing.autoJoin
+                        autoJoin = null,
+                        suggested = null
                 ).toContent()
         )
     }
@@ -94,7 +95,8 @@ internal class DefaultSpace(
                 body = SpaceChildContent(
                         order = order,
                         via = existing.via,
-                        autoJoin = existing.autoJoin
+                        autoJoin = existing.autoJoin,
+                        suggested = existing.suggested
                 ).toContent()
         )
     }
@@ -105,6 +107,11 @@ internal class DefaultSpace(
                 ?.content.toModel<SpaceChildContent>()
                 ?: throw IllegalArgumentException("$roomId is not a child of this space")
 
+        if (existing.autoJoin == autoJoin) {
+            // nothing to do?
+            return
+        }
+
         // edit state event and set via to null
         room.sendStateEvent(
                 eventType = EventType.STATE_SPACE_CHILD,
@@ -112,7 +119,31 @@ internal class DefaultSpace(
                 body = SpaceChildContent(
                         order = existing.order,
                         via = existing.via,
-                        autoJoin = autoJoin
+                        autoJoin = autoJoin,
+                        suggested = existing.suggested
+                ).toContent()
+        )
+    }
+
+    override suspend fun setChildrenSuggested(roomId: String, suggested: Boolean) {
+        val existing = room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
+                .firstOrNull()
+                ?.content.toModel<SpaceChildContent>()
+                ?: throw IllegalArgumentException("$roomId is not a child of this space")
+
+        if (existing.suggested == suggested) {
+            // nothing to do?
+            return
+        }
+        // edit state event and set via to null
+        room.sendStateEvent(
+                eventType = EventType.STATE_SPACE_CHILD,
+                stateKey = roomId,
+                body = SpaceChildContent(
+                        order = existing.order,
+                        via = existing.via,
+                        autoJoin = existing.autoJoin,
+                        suggested = suggested
                 ).toContent()
         )
     }

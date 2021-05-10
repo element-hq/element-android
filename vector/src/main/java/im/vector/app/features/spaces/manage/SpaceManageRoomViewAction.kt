@@ -18,10 +18,11 @@ package im.vector.app.features.spaces.manage
 
 import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class SpaceManagedSharedAction : VectorViewModelAction {
-    object HandleBack : SpaceManagedSharedAction()
-    object ShowLoading : SpaceManagedSharedAction()
-    object HideLoading : SpaceManagedSharedAction()
-    object CreateRoom : SpaceManagedSharedAction()
-    object ManageRooms : SpaceManagedSharedAction()
+sealed class SpaceManageRoomViewAction : VectorViewModelAction {
+    data class ToggleSelection(val roomId: String) : SpaceManageRoomViewAction()
+    data class UpdateFilter(val filter: String) : SpaceManageRoomViewAction()
+    object ClearSelection : SpaceManageRoomViewAction()
+    data class MarkAllAsSuggested(val suggested: Boolean) : SpaceManageRoomViewAction()
+    object BulkRemove : SpaceManageRoomViewAction()
+    object RefreshFromServer : SpaceManageRoomViewAction()
 }

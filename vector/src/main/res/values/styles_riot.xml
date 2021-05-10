@@ -11,6 +11,13 @@
         <item name="android:background">?riotx_background</item>
     </style>
 
+    <style name="ActionModeTheme" parent="Base.Widget.AppCompat.ActionMode">
+        <item name="background">?riotx_background</item>
+        <item name="titleTextStyle">@style/Vector.Toolbar.Title</item>
+        <item name="subtitleTextStyle">@style/Vector.Toolbar.SubTitle</item>
+        <item name="actionMenuTextColor">?colorOnPrimary</item>
+    </style>
+
     <style name="VectorToolbarStyle" parent="VectorToolbarStyleWithPadding">
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
@@ -65,7 +72,7 @@
 
     <!-- actionbar icons color -->
     <style name="Vector.ActionBarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
-        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlNormal">?android:attr/textColorPrimary</item>
     </style>
 
     <!-- custom action bar -->

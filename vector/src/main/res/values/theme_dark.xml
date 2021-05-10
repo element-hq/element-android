@@ -181,6 +181,8 @@
 
         <!-- chat effect -->
         <item name="vctr_chat_effect_snow_background">@android:color/transparent</item>
+
+        <item name="actionModeStyle">@style/ActionModeTheme</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />

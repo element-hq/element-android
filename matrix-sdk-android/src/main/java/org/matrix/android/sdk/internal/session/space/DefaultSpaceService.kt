@@ -145,7 +145,8 @@ internal class DefaultSpaceService @Inject constructor(
                                                         autoJoin = childStateEvContent.autoJoin ?: false,
                                                         viaServers = childStateEvContent.via.orEmpty(),
                                                         activeMemberCount = childSummary.numJoinedMembers,
-                                                        parentRoomId = childStateEv.roomId
+                                                        parentRoomId = childStateEv.roomId,
+                                                        suggested = childStateEvContent.suggested
                                                 )
                                             }
                                         }.orEmpty()

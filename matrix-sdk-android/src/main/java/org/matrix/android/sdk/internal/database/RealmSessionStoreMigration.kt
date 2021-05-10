@@ -269,5 +269,9 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
                     obj.setString(RoomSummaryEntityFields.JOIN_RULES_STR, roomJoinRules?.name)
                 }
+
+        realm.schema.get("SpaceChildSummaryEntity")
+                ?.addField(SpaceChildSummaryEntityFields.SUGGESTED, Boolean::class.java)
+                ?.setNullable(SpaceChildSummaryEntityFields.SUGGESTED, true)
     }
 }
