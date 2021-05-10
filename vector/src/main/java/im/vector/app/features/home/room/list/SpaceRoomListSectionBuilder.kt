@@ -18,8 +18,6 @@ package im.vector.app.features.home.room.list
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import im.vector.app.AppStateHandler
@@ -27,13 +25,9 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.space
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
@@ -132,20 +126,20 @@ class SpaceRoomListSectionBuilder(
                 RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
         ) {
             it.memberships = listOf(Membership.INVITE)
-            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            it.roomCategoryFilter = RoomCategoryFilter.ALL
         }
 
-        addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.bottom_action_favourites,
-                false,
-                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
-        ) {
-            it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
-        }
+//        addSection(
+//                sections,
+//                activeSpaceAwareQueries,
+//                R.string.bottom_action_favourites,
+//                false,
+//                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
+//        ) {
+//            it.memberships = listOf(Membership.JOIN)
+//            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+//            it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
+//        }
 
         addSection(
                 sections,
@@ -155,76 +149,76 @@ class SpaceRoomListSectionBuilder(
                 RoomListViewModel.SpaceFilterStrategy.NORMAL
         ) {
             it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
+            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, false, false)
         }
 
-        addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.low_priority_header,
-                false,
-                RoomListViewModel.SpaceFilterStrategy.NORMAL
-        ) {
-            it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
-        }
-
-        addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.system_alerts_header,
-                false,
-                RoomListViewModel.SpaceFilterStrategy.NORMAL
-        ) {
-            it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
-        }
-
-        // add suggested rooms
-        val suggestedRoomsObservable = // MutableLiveData<List<SpaceChildInfo>>()
-                appStateHandler.selectedRoomGroupingObservable
-                        .distinctUntilChanged()
-                        .switchMap { groupingMethod ->
-                            val selectedSpace = groupingMethod.orNull()?.space()
-                            if (selectedSpace == null) {
-                                Observable.just(emptyList())
-                            } else {
-                                liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
-                                    val spaceSum = tryOrNull { session.spaceService().querySpaceChildren(selectedSpace.roomId, suggestedOnly = true) }
-                                    val value = spaceSum?.second ?: emptyList()
-                                    // i need to check if it's already joined.
-                                    val filtered = value.filter {
-                                        session.getRoomSummary(it.childRoomId)?.membership?.isActive() != true
-                                    }
-                                    emit(filtered)
-                                }.asObservable()
-                            }
-                        }
-
-        val liveSuggestedRooms = MutableLiveData<SuggestedRoomInfo>()
-        Observables.combineLatest(
-                suggestedRoomsObservable,
-                suggestedRoomJoiningState.asObservable()
-        ) { rooms, joinStates ->
-            SuggestedRoomInfo(
-                    rooms,
-                    joinStates
-            )
-        }.subscribe {
-            liveSuggestedRooms.postValue(it)
-        }.also {
-            onDisposable.invoke(it)
-        }
-        sections.add(
-                RoomsSection(
-                        sectionName = stringProvider.getString(R.string.suggested_header),
-                        liveSuggested = liveSuggestedRooms,
-                        notifyOfLocalEcho = false
-                )
-        )
+//        addSection(
+//                sections,
+//                activeSpaceAwareQueries,
+//                R.string.low_priority_header,
+//                false,
+//                RoomListViewModel.SpaceFilterStrategy.NORMAL
+//        ) {
+//            it.memberships = listOf(Membership.JOIN)
+//            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+//            it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
+//        }
+//
+//        addSection(
+//                sections,
+//                activeSpaceAwareQueries,
+//                R.string.system_alerts_header,
+//                false,
+//                RoomListViewModel.SpaceFilterStrategy.NORMAL
+//        ) {
+//            it.memberships = listOf(Membership.JOIN)
+//            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+//            it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
+//        }
+//
+//        // add suggested rooms
+//        val suggestedRoomsObservable = // MutableLiveData<List<SpaceChildInfo>>()
+//                appStateHandler.selectedRoomGroupingObservable
+//                        .distinctUntilChanged()
+//                        .switchMap { groupingMethod ->
+//                            val selectedSpace = groupingMethod.orNull()?.space()
+//                            if (selectedSpace == null) {
+//                                Observable.just(emptyList())
+//                            } else {
+//                                liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+//                                    val spaceSum = tryOrNull { session.spaceService().querySpaceChildren(selectedSpace.roomId, suggestedOnly = true) }
+//                                    val value = spaceSum?.second ?: emptyList()
+//                                    // i need to check if it's already joined.
+//                                    val filtered = value.filter {
+//                                        session.getRoomSummary(it.childRoomId)?.membership?.isActive() != true
+//                                    }
+//                                    emit(filtered)
+//                                }.asObservable()
+//                            }
+//                        }
+//
+//        val liveSuggestedRooms = MutableLiveData<SuggestedRoomInfo>()
+//        Observables.combineLatest(
+//                suggestedRoomsObservable,
+//                suggestedRoomJoiningState.asObservable()
+//        ) { rooms, joinStates ->
+//            SuggestedRoomInfo(
+//                    rooms,
+//                    joinStates
+//            )
+//        }.subscribe {
+//            liveSuggestedRooms.postValue(it)
+//        }.also {
+//            onDisposable.invoke(it)
+//        }
+//        sections.add(
+//                RoomsSection(
+//                        sectionName = stringProvider.getString(R.string.suggested_header),
+//                        liveSuggested = liveSuggestedRooms,
+//                        notifyOfLocalEcho = false
+//                )
+//        )
     }
 
     private fun buildDmSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {

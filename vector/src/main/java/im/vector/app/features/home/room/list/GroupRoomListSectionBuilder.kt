@@ -126,17 +126,17 @@ class GroupRoomListSectionBuilder(
             it.activeGroupId = actualGroupId
         }
 
-        addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.bottom_action_favourites,
-                false
-        ) {
-            it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ALL
-            it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
-            it.activeGroupId = actualGroupId
-        }
+//        addSection(
+//                sections,
+//                activeSpaceAwareQueries,
+//                R.string.bottom_action_favourites,
+//                false
+//        ) {
+//            it.memberships = listOf(Membership.JOIN)
+//            it.roomCategoryFilter = RoomCategoryFilter.ALL
+//            it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
+//            it.activeGroupId = actualGroupId
+//        }
 
         addSection(
                 sections,
@@ -146,7 +146,7 @@ class GroupRoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ALL
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, false, false)
             it.activeGroupId = actualGroupId
         }
 
