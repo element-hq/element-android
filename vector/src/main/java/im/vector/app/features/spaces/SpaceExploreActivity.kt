@@ -97,13 +97,6 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
         super.onDestroy()
     }
 
-    override fun onAttachFragment(fragment: Fragment) {
-        if (fragment is MatrixToBottomSheet) {
-            fragment.interactionListener = this
-        }
-        super.onAttachFragment(fragment)
-    }
-
     companion object {
         fun newIntent(context: Context, spaceId: String): Intent {
             return Intent(context, SpaceExploreActivity::class.java).apply {
