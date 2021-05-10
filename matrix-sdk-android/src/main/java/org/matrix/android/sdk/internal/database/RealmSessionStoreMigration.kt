@@ -267,7 +267,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                                 joinRulesContentAdapter.fromJson(it)?.joinRules
                             }
 
-                    obj.setString(RoomSummaryEntityFields.JOIN_RULES_STR, roomJoinRules?.value)
+                    obj.setString(RoomSummaryEntityFields.JOIN_RULES_STR, roomJoinRules?.name)
                 }
     }
 }
