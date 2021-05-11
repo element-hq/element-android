@@ -94,6 +94,9 @@ class SpaceDirectoryFragment @Inject constructor(
         return true
     }
 
+    override fun retry() {
+        viewModel.handle(SpaceDirectoryViewAction.Retry)
+    }
 //    override fun navigateToRoom(roomId: String) {
 //        viewModel.handle(SpaceDirectoryViewAction.NavigateToRoom(roomId))
 //    }
