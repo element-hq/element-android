@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import javax.inject.Inject
@@ -131,7 +132,7 @@ class UploadsMediaController @Inject constructor(
                 eventId = eventId,
                 filename = messageContent.body,
                 mimeType = messageContent.mimeType,
-                url = messageContent.videoInfo?.thumbnailFile?.url ?: messageContent.videoInfo?.thumbnailUrl,
+                url = messageContent.videoInfo?.getThumbnailUrl(),
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = itemSize,

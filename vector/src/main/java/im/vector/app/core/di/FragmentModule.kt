@@ -51,7 +51,6 @@ import im.vector.app.features.devtools.RoomDevToolSendFormFragment
 import im.vector.app.features.devtools.RoomDevToolStateEventListFragment
 import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
-import im.vector.app.features.grouplist.GroupListFragment
 import im.vector.app.features.home.HomeDetailFragment
 import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
@@ -72,6 +71,8 @@ import im.vector.app.features.login.LoginSplashFragment
 import im.vector.app.features.login.LoginWaitForEmailFragment
 import im.vector.app.features.login.LoginWebFragment
 import im.vector.app.features.login.terms.LoginTermsFragment
+import im.vector.app.features.matrixto.MatrixToRoomSpaceFragment
+import im.vector.app.features.matrixto.MatrixToUserFragment
 import im.vector.app.features.pin.PinFragment
 import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.reactions.EmojiChooserFragment
@@ -117,6 +118,17 @@ import im.vector.app.features.settings.push.PushRulesFragment
 import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
 import im.vector.app.features.share.IncomingShareFragment
 import im.vector.app.features.signout.soft.SoftLogoutFragment
+import im.vector.app.features.spaces.SpaceListFragment
+import im.vector.app.features.spaces.create.ChoosePrivateSpaceTypeFragment
+import im.vector.app.features.spaces.create.ChooseSpaceTypeFragment
+import im.vector.app.features.spaces.create.CreateSpaceDefaultRoomsFragment
+import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
+import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
+import im.vector.app.features.spaces.manage.SpaceAddRoomFragment
+import im.vector.app.features.spaces.manage.SpaceManageRoomsFragment
+import im.vector.app.features.spaces.manage.SpaceSettingsFragment
+import im.vector.app.features.spaces.people.SpacePeopleFragment
+import im.vector.app.features.spaces.preview.SpacePreviewFragment
 import im.vector.app.features.terms.ReviewTermsFragment
 import im.vector.app.features.usercode.ShowUserCodeFragment
 import im.vector.app.features.userdirectory.UserListFragment
@@ -142,8 +154,8 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(GroupListFragment::class)
-    fun bindGroupListFragment(fragment: GroupListFragment): Fragment
+    @FragmentKey(SpaceListFragment::class)
+    fun bindSpaceListFragment(fragment: SpaceListFragment): Fragment
 
     @Binds
     @IntoMap
@@ -624,4 +636,64 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomDevToolSendFormFragment::class)
     fun bindRoomDevToolSendFormFragment(fragment: RoomDevToolSendFormFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpacePreviewFragment::class)
+    fun bindSpacePreviewFragment(fragment: SpacePreviewFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ChooseSpaceTypeFragment::class)
+    fun bindChooseSpaceTypeFragment(fragment: ChooseSpaceTypeFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CreateSpaceDetailsFragment::class)
+    fun bindCreateSpaceDetailsFragment(fragment: CreateSpaceDetailsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CreateSpaceDefaultRoomsFragment::class)
+    fun bindCreateSpaceDefaultRoomsFragment(fragment: CreateSpaceDefaultRoomsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(MatrixToUserFragment::class)
+    fun bindMatrixToUserFragment(fragment: MatrixToUserFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(MatrixToRoomSpaceFragment::class)
+    fun bindMatrixToRoomSpaceFragment(fragment: MatrixToRoomSpaceFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceDirectoryFragment::class)
+    fun bindSpaceDirectoryFragment(fragment: SpaceDirectoryFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ChoosePrivateSpaceTypeFragment::class)
+    fun bindChoosePrivateSpaceTypeFragment(fragment: ChoosePrivateSpaceTypeFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceAddRoomFragment::class)
+    fun bindSpaceAddRoomFragment(fragment: SpaceAddRoomFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpacePeopleFragment::class)
+    fun bindSpacePeopleFragment(fragment: SpacePeopleFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceSettingsFragment::class)
+    fun bindSpaceSettingsFragment(fragment: SpaceSettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceManageRoomsFragment::class)
+    fun bindSpaceManageRoomsFragment(fragment: SpaceManageRoomsFragment): Fragment
 }

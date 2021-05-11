@@ -16,6 +16,9 @@
 
 package im.vector.app.features.home.room.list
 
+import android.view.View
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Loading
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
@@ -28,6 +31,7 @@ import im.vector.app.features.home.room.typing.TypingHelper
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -48,6 +52,20 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
             }
             else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
         }
+    }
+
+    fun createSuggestion(spaceChildInfo: SpaceChildInfo,
+                         suggestedRoomJoiningStates: Map<String, Async<Unit>>,
+                         onJoinClick: View.OnClickListener): VectorEpoxyModel<*> {
+        return SpaceChildInfoItem_()
+                .id("sug_${spaceChildInfo.childRoomId}")
+                .matrixItem(spaceChildInfo.toMatrixItem())
+                .avatarRenderer(avatarRenderer)
+                .topic(spaceChildInfo.topic)
+                .buttonLabel(stringProvider.getString(R.string.join))
+                .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
+                .memberCount(spaceChildInfo.activeMemberCount ?: 0)
+                .buttonClickListener(onJoinClick)
     }
 
     private fun createInvitationItem(roomSummary: RoomSummary,
@@ -94,6 +112,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .avatarRenderer(avatarRenderer)
                 // We do not display shield in the room list anymore
                 // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+                .izPublic(roomSummary.isPublic)
                 .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)

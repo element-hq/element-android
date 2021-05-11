@@ -29,6 +29,7 @@ import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
@@ -126,6 +127,17 @@ fun startAddGoogleAccountIntent(context: Context, activityResultLauncher: Activi
     try {
         val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
         intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
+        activityResultLauncher.launch(intent)
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        context.toast(R.string.error_no_external_application_found)
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun startInstallFromSourceIntent(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
+    try {
+        val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+                .setData(Uri.parse(String.format("package:%s", context.packageName)))
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(R.string.error_no_external_application_found)

@@ -287,16 +287,18 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         val roomSummaryLive = room.rx().liveRoomSummary().unwrap()
         val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
 
-        powerLevelsContentLive.subscribe {
-            val powerLevelsHelper = PowerLevelsHelper(it)
-            val permissions = ActionPermissions(
-                    canKick = powerLevelsHelper.isUserAbleToKick(session.myUserId),
-                    canBan = powerLevelsHelper.isUserAbleToBan(session.myUserId),
-                    canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId),
-                    canEditPowerLevel = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_POWER_LEVELS)
-            )
-            setState { copy(powerLevelsContent = it, actionPermissions = permissions) }
-        }.disposeOnClear()
+        powerLevelsContentLive
+                .subscribe {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    val permissions = ActionPermissions(
+                            canKick = powerLevelsHelper.isUserAbleToKick(session.myUserId),
+                            canBan = powerLevelsHelper.isUserAbleToBan(session.myUserId),
+                            canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId),
+                            canEditPowerLevel = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_POWER_LEVELS)
+                    )
+                    setState { copy(powerLevelsContent = it, actionPermissions = permissions) }
+                }
+                .disposeOnClear()
 
         roomSummaryLive.execute {
             copy(isRoomEncrypted = it.invoke()?.isEncrypted == true)

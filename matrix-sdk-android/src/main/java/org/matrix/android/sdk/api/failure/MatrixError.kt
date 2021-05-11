@@ -41,7 +41,7 @@ data class MatrixError(
         // For M_LIMIT_EXCEEDED
         @Json(name = "retry_after_ms") val retryAfterMillis: Long? = null,
         // For M_UNKNOWN_TOKEN
-        @Json(name = "soft_logout") val isSoftLogout: Boolean = false,
+        @Json(name = "soft_logout") val isSoftLogout: Boolean? = null,
         // For M_INVALID_PEPPER
         // {"error": "pepper does not match 'erZvr'", "lookup_pepper": "pQgMS", "algorithm": "sha256", "errcode": "M_INVALID_PEPPER"}
         @Json(name = "lookup_pepper") val newLookupPepper: String? = null,

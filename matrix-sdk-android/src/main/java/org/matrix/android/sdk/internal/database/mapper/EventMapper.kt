@@ -80,6 +80,7 @@ internal object EventMapper {
         ).also {
             it.ageLocalTs = eventEntity.ageLocalTs
             it.sendState = eventEntity.sendState
+            it.sendStateDetails = eventEntity.sendStateDetails
             eventEntity.decryptionResultJson?.let { json ->
                 try {
                     it.mxDecryptionResult = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).fromJson(json)

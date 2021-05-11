@@ -17,6 +17,7 @@
 package im.vector.app.core.epoxy.profiles
 
 import android.view.View
+import androidx.annotation.CallSuper
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -34,6 +35,7 @@ abstract class BaseProfileMatrixItem<T : ProfileMatrixItem.Holder> : VectorEpoxy
     var userEncryptionTrustLevel: RoomEncryptionTrustLevel? = null
     @EpoxyAttribute var clickListener: View.OnClickListener? = null
 
+    @CallSuper
     override fun bind(holder: T) {
         super.bind(holder)
         val bestName = matrixItem.getBestName()

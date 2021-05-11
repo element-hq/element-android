@@ -23,6 +23,7 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.task.Task
+import org.matrix.android.sdk.internal.util.toMatrixErrorStr
 import javax.inject.Inject
 
 internal interface SendVerificationMessageTask : Task<SendVerificationMessageTask.Params, String> {
@@ -55,7 +56,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
             localEchoRepository.updateSendState(localId, event.roomId, SendState.SENT)
             return response.eventId
         } catch (e: Throwable) {
-            localEchoRepository.updateSendState(localId, event.roomId, SendState.UNDELIVERED)
+            localEchoRepository.updateSendState(localId, event.roomId, SendState.UNDELIVERED, e.toMatrixErrorStr())
             throw e
         }
     }

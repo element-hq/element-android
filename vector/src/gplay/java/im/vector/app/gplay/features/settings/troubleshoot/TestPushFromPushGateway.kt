@@ -42,8 +42,10 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
     : TroubleshootTest(R.string.settings_troubleshoot_test_push_loop_title) {
 
     private var action: Job? = null
+    private var pushReceived: Boolean = false
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
+        pushReceived = false
         val fcmToken = FcmHelper.getFcmToken(context) ?: run {
             status = TestStatus.FAILED
             return
@@ -55,9 +57,15 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
                 status = result
                         .fold(
                                 {
-                                    // Wait for the push to be received
-                                    description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_waiting_for_push)
-                                    TestStatus.RUNNING
+                                    if (pushReceived) {
+                                        // Push already received (race condition)
+                                        description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_success)
+                                        TestStatus.SUCCESS
+                                    } else {
+                                        // Wait for the push to be received
+                                        description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_waiting_for_push)
+                                        TestStatus.RUNNING
+                                    }
                                 },
                                 {
                                     description = if (it is PushGatewayFailure.PusherRejected) {
@@ -73,6 +81,7 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
     }
 
     override fun onPushReceived() {
+        pushReceived = true
         description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_success)
         status = TestStatus.SUCCESS
     }

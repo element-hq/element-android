@@ -26,7 +26,6 @@ data class RoomJoinRuleState(
 ) : BottomSheetGenericState() {
 
     constructor(args: RoomJoinRuleBottomSheetArgs) : this(
-            currentRoomJoinRule = args.currentRoomJoinRule,
-            currentGuestAccess = args.currentGuestAccess
+            currentRoomJoinRule = args.currentRoomJoinRule
     )
 }

@@ -26,13 +26,13 @@ import javax.inject.Inject
 class RoomHistoryVisibilityController @Inject constructor(
         private val historyVisibilityFormatter: RoomHistoryVisibilityFormatter,
         private val stringProvider: StringProvider
-) : BottomSheetGenericController<RoomHistoryVisibilityState, RoomHistoryVisibilityAction>() {
+) : BottomSheetGenericController<RoomHistoryVisibilityState, RoomHistoryVisibilityRadioAction>() {
 
     override fun getTitle() = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_dialog_title)
 
     override fun getSubTitle() = stringProvider.getString(R.string.room_settings_room_read_history_dialog_subtitle)
 
-    override fun getActions(state: RoomHistoryVisibilityState): List<RoomHistoryVisibilityAction> {
+    override fun getActions(state: RoomHistoryVisibilityState): List<RoomHistoryVisibilityRadioAction> {
         return listOf(
                 RoomHistoryVisibility.WORLD_READABLE,
                 RoomHistoryVisibility.SHARED,
@@ -40,10 +40,9 @@ class RoomHistoryVisibilityController @Inject constructor(
                 RoomHistoryVisibility.JOINED
         )
                 .map { roomHistoryVisibility ->
-                    RoomHistoryVisibilityAction(
+                    RoomHistoryVisibilityRadioAction(
                             roomHistoryVisibility = roomHistoryVisibility,
                             title = historyVisibilityFormatter.getSetting(roomHistoryVisibility),
-                            iconResId = 0,
                             isSelected = roomHistoryVisibility == state.currentRoomHistoryVisibility
                     )
                 }

@@ -11,6 +11,13 @@
         <item name="android:background">?riotx_background</item>
     </style>
 
+    <style name="ActionModeTheme" parent="Widget.AppCompat.ActionMode">
+        <item name="background">?riotx_background</item>
+        <item name="titleTextStyle">@style/Vector.Toolbar.Title</item>
+        <item name="subtitleTextStyle">@style/Vector.Toolbar.SubTitle</item>
+        <item name="actionMenuTextColor">?colorOnPrimary</item>
+    </style>
+
     <style name="VectorToolbarStyle" parent="VectorToolbarStyleWithPadding">
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
@@ -65,7 +72,7 @@
 
     <!-- actionbar icons color -->
     <style name="Vector.ActionBarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
-        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlNormal">?android:attr/textColorPrimary</item>
     </style>
 
     <!-- custom action bar -->
@@ -152,7 +159,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@null</item>
-        <!--item name="android:textColor">?colorAccent</item-->
+        <item name="android:textColor">?colorAccent</item>
         <item name="colorControlHighlight">?colorAccent</item>
     </style>
 
@@ -162,7 +169,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@null</item>
-        <!--item name="android:textColor">?colorAccent</item-->
+        <item name="android:textColor">?colorAccent</item>
         <item name="colorControlHighlight">?colorAccent</item>
         <item name="strokeColor">@color/button_background_tint_selector</item>
         <item name="strokeWidth">1dp</item>
