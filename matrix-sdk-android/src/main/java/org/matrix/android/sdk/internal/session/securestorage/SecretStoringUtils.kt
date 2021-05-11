@@ -18,12 +18,14 @@
 
 package org.matrix.android.sdk.internal.session.securestorage
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.security.KeyPairGeneratorSpec
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import androidx.annotation.RequiresApi
+import org.matrix.android.sdk.internal.util.system.BuildVersionSdkIntProvider
 import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -78,7 +80,10 @@ import javax.security.auth.x500.X500Principal
  * Important: Keys stored in the keystore can be wiped out (depends of the OS version, like for example if you
  * add a pin or change the schema); So you might and with a useless pile of bytes.
  */
-internal class SecretStoringUtils @Inject constructor(private val context: Context) {
+internal class SecretStoringUtils @Inject constructor(
+        private val context: Context,
+        private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider
+) {
 
     companion object {
         private const val ANDROID_KEY_STORE = "AndroidKeyStore"
@@ -114,36 +119,40 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
      *
      * The secret is encrypted using the following method: AES/GCM/NoPadding
      */
+    @SuppressLint("NewApi")
     @Throws(Exception::class)
     fun securelyStoreString(secret: String, keyAlias: String): ByteArray {
         return when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> encryptStringM(secret, keyAlias)
-            else                                           -> encryptString(secret, keyAlias)
+            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> encryptStringM(secret, keyAlias)
+            else                                                      -> encryptString(secret, keyAlias)
         }
     }
 
     /**
      * Decrypt a secret that was encrypted by #securelyStoreString()
      */
+    @SuppressLint("NewApi")
     @Throws(Exception::class)
     fun loadSecureSecret(encrypted: ByteArray, keyAlias: String): String {
         return when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> decryptStringM(encrypted, keyAlias)
-            else                                           -> decryptString(encrypted, keyAlias)
+            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> decryptStringM(encrypted, keyAlias)
+            else                                                      -> decryptString(encrypted, keyAlias)
         }
     }
 
+    @SuppressLint("NewApi")
     fun securelyStoreObject(any: Any, keyAlias: String, output: OutputStream) {
         when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> saveSecureObjectM(keyAlias, output, any)
-            else                                           -> saveSecureObject(keyAlias, output, any)
+            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> saveSecureObjectM(keyAlias, output, any)
+            else                                                      -> saveSecureObject(keyAlias, output, any)
         }
     }
 
+    @SuppressLint("NewApi")
     fun <T> loadSecureSecret(inputStream: InputStream, keyAlias: String): T? {
         return when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> loadSecureObjectM(keyAlias, inputStream)
-            else                                           -> loadSecureObject(keyAlias, inputStream)
+            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> loadSecureObjectM(keyAlias, inputStream)
+            else                                                      -> loadSecureObject(keyAlias, inputStream)
         }
     }
 
