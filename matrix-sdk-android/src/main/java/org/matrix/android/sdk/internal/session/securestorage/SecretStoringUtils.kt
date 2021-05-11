@@ -34,6 +34,7 @@ import java.io.InputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.OutputStream
+import java.lang.IllegalArgumentException
 import java.math.BigInteger
 import java.security.KeyPairGenerator
 import java.security.KeyStore
@@ -134,9 +135,13 @@ internal class SecretStoringUtils @Inject constructor(
     @SuppressLint("NewApi")
     @Throws(Exception::class)
     fun loadSecureSecret(encrypted: ByteArray, keyAlias: String): String {
-        return when {
-            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> decryptStringM(encrypted, keyAlias)
-            else                                                      -> decryptString(encrypted, keyAlias)
+        encrypted.inputStream().use { inputStream ->
+            // First get the format
+            return when (val format = inputStream.read().toByte()) {
+                FORMAT_API_M -> decryptStringM(inputStream, keyAlias)
+                FORMAT_1     -> decryptString(inputStream, keyAlias)
+                else         -> throw IllegalArgumentException("Unknown format $format")
+            }
         }
     }
 
@@ -150,9 +155,11 @@ internal class SecretStoringUtils @Inject constructor(
 
     @SuppressLint("NewApi")
     fun <T> loadSecureSecret(inputStream: InputStream, keyAlias: String): T? {
-        return when {
-            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> loadSecureObjectM(keyAlias, inputStream)
-            else                                                      -> loadSecureObject(keyAlias, inputStream)
+        // First get the format
+        return when (val format = inputStream.read().toByte()) {
+            FORMAT_API_M -> loadSecureObjectM(keyAlias, inputStream)
+            FORMAT_1     -> loadSecureObject(keyAlias, inputStream)
+            else         -> throw IllegalArgumentException("Unknown format $format")
         }
     }
 
@@ -196,7 +203,7 @@ internal class SecretStoringUtils @Inject constructor(
                 .setAlias(alias)
                 .setSubject(X500Principal("CN=$alias"))
                 .setSerialNumber(BigInteger.TEN)
-                // .setEncryptionRequired() requires that the phone as a pin/schema
+                // .setEncryptionRequired() requires that the phone has a pin/schema
                 .setStartDate(start.time)
                 .setEndDate(end.time)
                 .build()
@@ -220,8 +227,8 @@ internal class SecretStoringUtils @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun decryptStringM(encryptedChunk: ByteArray, keyAlias: String): String {
-        val (iv, encryptedText) = formatMExtract(encryptedChunk.inputStream())
+    private fun decryptStringM(inputStream: InputStream, keyAlias: String): String {
+        val (iv, encryptedText) = formatMExtract(inputStream)
 
         val secretKey = getOrGenerateSymmetricKeyForAliasM(keyAlias)
 
@@ -249,8 +256,8 @@ internal class SecretStoringUtils @Inject constructor(
         return format1Make(encryptedKey, iv, encryptedBytes)
     }
 
-    private fun decryptString(data: ByteArray, keyAlias: String): String {
-        val (encryptedKey, iv, encrypted) = format1Extract(ByteArrayInputStream(data))
+    private fun decryptString(inputStream: InputStream, keyAlias: String): String {
+        val (encryptedKey, iv, encrypted) = format1Extract(inputStream)
 
         // we need to decrypt the key
         val sKeyBytes = rsaDecrypt(keyAlias, ByteArrayInputStream(encryptedKey))
@@ -315,9 +322,6 @@ internal class SecretStoringUtils @Inject constructor(
     private fun <T> loadSecureObjectM(keyAlias: String, inputStream: InputStream): T? {
         val secretKey = getOrGenerateSymmetricKeyForAliasM(keyAlias)
 
-        val format = inputStream.read()
-        assert(format.toByte() == FORMAT_API_M)
-
         val ivSize = inputStream.read()
         val iv = ByteArray(ivSize)
         inputStream.read(iv, 0, ivSize)
@@ -380,9 +384,6 @@ internal class SecretStoringUtils @Inject constructor(
     }
 
     private fun formatMExtract(bis: InputStream): Pair<ByteArray, ByteArray> {
-        val format = bis.read().toByte()
-        assert(format == FORMAT_API_M)
-
         val ivSize = bis.read()
         val iv = ByteArray(ivSize)
         bis.read(iv, 0, ivSize)
@@ -401,9 +402,6 @@ internal class SecretStoringUtils @Inject constructor(
     }
 
     private fun format1Extract(bis: InputStream): Triple<ByteArray, ByteArray, ByteArray> {
-        val format = bis.read()
-        assert(format.toByte() == FORMAT_1)
-
         val keySizeBig = bis.read()
         val keySizeLow = bis.read()
         val encryptedKeySize = keySizeBig.shl(8) + keySizeLow

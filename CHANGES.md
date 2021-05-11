@@ -27,6 +27,7 @@ Bugfix 🐛:
  - Properly clean the back stack if the user cancel registration when waiting for email validation
  - Fix read marker visibility/position when filtering some events 
  - Fix user invitation in case of restricted profile api (#3306)
+ - Make sure the SDK can retrieve the secret storage if the system is upgraded (#3304)
 
 Translations 🗣:
  -
