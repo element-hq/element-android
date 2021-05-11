@@ -2742,8 +2742,8 @@
     <string name="create_spaces_room_private_header_desc">Créons un salon pour chacun d’entre eux. Vous pourrez en ajouter plus tard, y compris certains déjà existant.</string>
     <string name="create_spaces_room_private_header">Sur quels projets travaillez-vous \?</string>
     <string name="create_spaces_room_public_header_desc">Nous allons créer les salons pour ces sujets. Vous pourrez en ajouter d’autres plus tard.</string>
-    <string name="create_spaces_room_public_header">De quoi allez vous parler dans %s \?</string>
-    <string name="create_space_error_empty_field_space_name">Donnez lui un nom pour poursuivre.</string>
+    <string name="create_spaces_room_public_header">De quoi allez-vous parler dans %s \?</string>
+    <string name="create_space_error_empty_field_space_name">Donnez-lui un nom pour poursuivre.</string>
     <string name="create_spaces_details_private_header">Ajoutez quelques informations pour renforcer son identité. Vous pourrez changer ceci plus tard.</string>
     <string name="create_spaces_details_public_header">Ajoutez quelques informations pour l’aider à se démarquer. Vous pourrez changer ceci plus tard.</string>
     <string name="activity_create_space_title">Créer un espace</string>
@@ -2758,4 +2758,9 @@
     <string name="create_spaces_make_sure_access">Assurez-vous que les accès à %s sont accordés aux bonnes personnes. Vous pourrez changer ceci plus tard.</string>
     <string name="create_spaces_who_are_you_working_with">Avec qui travaillez-vous \?</string>
     <string name="create_spaces_join_info_help">Pour rejoindre un espace existant, il vous faut une invitation.</string>
+    <string name="error_file_too_big_simple">Le fichier est trop volumineux pour être téléversé.</string>
+    <string name="send_file_step_compressing_video">Compression de la vidéo %d %%</string>
+    <string name="send_file_step_compressing_image">Compression de l’image…</string>
+    <string name="use_as_default_and_do_not_ask_again">Utiliser par défaut et ne plus demander</string>
+    <string name="option_always_ask">Toujours demander</string>
 </resources>
