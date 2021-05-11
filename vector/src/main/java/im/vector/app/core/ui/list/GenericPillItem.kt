@@ -20,6 +20,7 @@ import android.view.Gravity
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -30,10 +31,7 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.themes.ThemeUtils
 
 /**
- * A generic list item.
- * Displays an item with a title, and optional description.
- * Can display an accessory on the right, that can be an image or an indeterminate progress.
- * If provided with an action, will display a button at the bottom of the list item.
+ * A generic list item with a rounded corner background and an optional icon
  */
 @EpoxyModelClass(layout = R.layout.item_generic_pill_footer)
 abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>() {
@@ -65,7 +63,12 @@ abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>() {
         holder.textView.textSize = style.toTextSize()
         holder.textView.gravity = if (centered) Gravity.CENTER_HORIZONTAL else Gravity.START
 
-        imageRes?.let { holder.imageView.setImageResource(it) }
+        if (imageRes != null) {
+            holder.imageView.setImageResource(imageRes!!)
+            holder.imageView.isVisible = true
+        } else {
+            holder.imageView.isVisible = false
+        }
         if (tintIcon) {
             val iconTintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
             ImageViewCompat.setImageTintList(holder.imageView, ColorStateList.valueOf(iconTintColor))

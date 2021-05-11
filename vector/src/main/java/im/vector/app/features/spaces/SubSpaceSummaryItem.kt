@@ -20,7 +20,6 @@ import android.widget.ImageView
 import android.widget.Space
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
@@ -37,16 +36,16 @@ import org.matrix.android.sdk.api.util.MatrixItem
 @EpoxyModelClass(layout = R.layout.item_sub_space)
 abstract class SubSpaceSummaryItem : VectorEpoxyModel<SubSpaceSummaryItem.Holder>() {
 
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)  lateinit var avatarRenderer: AvatarRenderer
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: (() -> Unit)? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)  var onMore: (() -> Unit)? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)  var toggleExpand: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onMore: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var toggleExpand: (() -> Unit)? = null
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute var hasChildren: Boolean = false
     @EpoxyAttribute var indent: Int = 0
-    @EpoxyAttribute var countState : UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
+    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -64,21 +63,18 @@ abstract class SubSpaceSummaryItem : VectorEpoxyModel<SubSpaceSummaryItem.Holder
             holder.moreView.isVisible = false
         }
 
-        if (hasChildren) {
-            holder.collapseIndicator.isVisible = true
-            holder.collapseIndicator.setImageDrawable(
-                    ContextCompat.getDrawable(holder.view.context,
-                            if (expanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more
-                    )
-            )
-            holder.collapseIndicator.setOnClickListener(
-                    DebouncedClickListener({ _ ->
-                        toggleExpand?.invoke()
-                    })
-            )
-        } else {
-            holder.collapseIndicator.isGone = true
-        }
+        holder.collapseIndicator.setImageDrawable(
+                ContextCompat.getDrawable(holder.view.context,
+                        if (expanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more
+                )
+        )
+        holder.collapseIndicator.setOnClickListener(
+                DebouncedClickListener({ _ ->
+                    toggleExpand?.invoke()
+                })
+        )
+
+        holder.collapseIndicator.isVisible = hasChildren
 
         holder.indentSpace.isVisible = indent > 0
         holder.indentSpace.updateLayoutParams {

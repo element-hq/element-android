@@ -179,31 +179,31 @@ class SpaceSummaryController @Inject constructor(
     private fun buildSubSpace(summaries: List<RoomSummary>?,
                               expandedStates: Map<String, Boolean>,
                               selected: RoomGroupingMethod,
-                              childSum: SpaceChildInfo, currentDepth: Int, maxDepth: Int) {
+                              info: SpaceChildInfo, currentDepth: Int, maxDepth: Int) {
         if (currentDepth >= maxDepth) return
-        val childSum = summaries?.firstOrNull { it.roomId == childSum.childRoomId } ?: return
+        val childSummary = summaries?.firstOrNull { it.roomId == info.childRoomId } ?: return
         // does it have children?
-        val subSpaces = childSum.spaceChildren?.filter { childInfo ->
+        val subSpaces = childSummary.spaceChildren?.filter { childInfo ->
             summaries.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
         }?.sortedWith(subSpaceComparator)
-        val expanded = expandedStates[childSum.roomId] == true
-        val isSelected = selected is RoomGroupingMethod.BySpace && childSum.roomId == selected.space()?.roomId
+        val expanded = expandedStates[childSummary.roomId] == true
+        val isSelected = selected is RoomGroupingMethod.BySpace && childSummary.roomId == selected.space()?.roomId
 
         subSpaceSummaryItem {
             avatarRenderer(avatarRenderer)
-            id(childSum.roomId)
+            id(childSummary.roomId)
             hasChildren(!subSpaces.isNullOrEmpty())
             selected(isSelected)
             expanded(expanded)
-            onMore { callback?.onSpaceSettings(childSum) }
-            matrixItem(childSum.toMatrixItem())
-            listener { callback?.onSpaceSelected(childSum) }
-            toggleExpand { callback?.onToggleExpand(childSum) }
+            onMore { callback?.onSpaceSettings(childSummary) }
+            matrixItem(childSummary.toMatrixItem())
+            listener { callback?.onSpaceSelected(childSummary) }
+            toggleExpand { callback?.onToggleExpand(childSummary) }
             indent(currentDepth)
             countState(
                     UnreadCounterBadgeView.State(
-                            childSum.notificationCount,
-                            childSum.highlightCount > 0
+                            childSummary.notificationCount,
+                            childSummary.highlightCount > 0
                     )
             )
         }
