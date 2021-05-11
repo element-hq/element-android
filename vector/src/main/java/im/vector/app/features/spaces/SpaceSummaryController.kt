@@ -43,6 +43,8 @@ class SpaceSummaryController @Inject constructor(
     var callback: Callback? = null
     private var viewState: SpaceListViewState? = null
 
+    private val subSpaceComparator: Comparator<SpaceChildInfo> = compareBy<SpaceChildInfo> { it.order }.thenBy { it.childRoomId }
+
     init {
         requestModelBuild()
     }
@@ -132,13 +134,13 @@ class SpaceSummaryController @Inject constructor(
         }
 
         rootSpaces
-                ?.sortedBy { it.displayName }
+                ?.sortedBy { it.roomId }
                 ?.forEach { groupSummary ->
                     val isSelected = selected is RoomGroupingMethod.BySpace && groupSummary.roomId == selected.space()?.roomId
                     // does it have children?
                     val subSpaces = groupSummary.spaceChildren?.filter { childInfo ->
                         summaries?.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
-                    }
+                    }?.sortedWith(subSpaceComparator)
                     val hasChildren = (subSpaces?.size ?: 0) > 0
                     val expanded = expandedStates[groupSummary.roomId] == true
 
@@ -183,7 +185,7 @@ class SpaceSummaryController @Inject constructor(
         // does it have children?
         val subSpaces = childSum.spaceChildren?.filter { childInfo ->
             summaries.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
-        }
+        }?.sortedWith(subSpaceComparator)
         val expanded = expandedStates[childSum.roomId] == true
         val isSelected = selected is RoomGroupingMethod.BySpace && childSum.roomId == selected.space()?.roomId
 
