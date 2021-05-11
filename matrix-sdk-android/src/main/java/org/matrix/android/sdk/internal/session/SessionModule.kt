@@ -66,6 +66,7 @@ import org.matrix.android.sdk.internal.network.DefaultNetworkConnectivityChecker
 import org.matrix.android.sdk.internal.network.FallbackNetworkCallbackStrategy
 import org.matrix.android.sdk.internal.network.GlobalErrorHandler
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
+import org.matrix.android.sdk.internal.network.LowBandwidthInterceptor
 import org.matrix.android.sdk.internal.network.NetworkCallbackStrategy
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.network.PreferredNetworkCallbackStrategy
@@ -218,10 +219,12 @@ internal abstract class SessionModule {
         fun providesOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
                                  @Authenticated accessTokenProvider: AccessTokenProvider,
                                  @SessionId sessionId: String,
+                                 lowBandwidthInterceptor: LowBandwidthInterceptor,
                                  @MockHttpInterceptor testInterceptor: TestInterceptor?): OkHttpClient {
             return okHttpClient
                     .newBuilder()
                     .addAccessTokenInterceptor(accessTokenProvider)
+                    .addInterceptor(lowBandwidthInterceptor)
                     .apply {
                         if (testInterceptor != null) {
                             testInterceptor.sessionId = sessionId

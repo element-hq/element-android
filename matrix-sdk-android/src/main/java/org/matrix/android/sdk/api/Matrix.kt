@@ -21,6 +21,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
+import mobile.Mobile
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
@@ -55,6 +56,11 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     @Inject internal lateinit var apiInterceptor: ApiInterceptor
 
     init {
+        // First time setup for development
+        val cp = Mobile.params()
+        cp.insecureSkipVerify = true
+        Mobile.setParams(cp)
+        
         Monarchy.init(context)
         DaggerMatrixComponent.factory().create(context, matrixConfiguration).inject(this)
         if (context.applicationContext !is Configuration.Provider) {

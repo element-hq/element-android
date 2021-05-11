@@ -44,6 +44,8 @@ allprojects {
                 includeGroupByRegex 'com\\.github\\.chrisbanes'
                 // PFLockScreen-Android
                 includeGroupByRegex 'com\\.github\\.vector-im'
+                // low bandwidth
+                includeGroupByRegex 'com\\.github\\.matrix-org'
 
                 // Chat effects
                 includeGroupByRegex 'com\\.github\\.jetradarmobile'
