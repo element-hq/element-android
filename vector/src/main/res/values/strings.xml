@@ -3362,4 +3362,7 @@
     <string name="space_mark_as_suggested">Mark as suggested</string>
     <string name="space_mark_as_not_suggested">Mark as not suggested</string>
     <string name="space_manage_rooms_and_spaces">Manage rooms and spaces</string>
+
+
+    <string name="labs_space_show_orphan_in_home">Experimental Space - Only show orphans in Home</string>
 </resources>

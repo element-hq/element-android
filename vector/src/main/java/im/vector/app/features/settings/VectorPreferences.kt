@@ -151,6 +151,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         const val SETTINGS_LABS_ALLOW_EXTENDED_LOGS = "SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
         const val SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE = "SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE"
+        const val SETTINGS_LABS_SPACES_HOME_AS_ORPHAN = "SETTINGS_LABS_SPACES_HOME_AS_ORPHAN"
 
         private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
@@ -954,6 +955,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labsUseExperimentalRestricted(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE, false)
+    }
+
+    fun labsSpacesOnlyOrphansInHome(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_SPACES_HOME_AS_ORPHAN, false)
     }
 
     /*
