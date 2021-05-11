@@ -54,9 +54,28 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
 
+    var lastAllowedFooterOverlay: Boolean = true
+    var lastShowFooterBellow: Boolean = true
+    var forceAllowFooterOverlay: Boolean? = null
+    var showFooterBellow: Boolean = true
+
     override fun bind(holder: Holder) {
+        forceAllowFooterOverlay = null
         super.bind(holder)
-        imageContentRenderer.render(mediaData, mode, holder.imageView)
+
+        val onImageSizeListener = object: ImageContentRenderer.OnImageSizeListener {
+            override fun onImageSizeUpdated(width: Int, height: Int) {
+                // Image size change -> different footer space situation possible
+                val footerMeasures = getFooterMeasures(holder)
+                forceAllowFooterOverlay = shouldAllowFooterOverlay(footerMeasures, width, height)
+                val newShowFooterBellow = shouldShowFooterBellow(footerMeasures, width)
+                if (lastAllowedFooterOverlay != forceAllowFooterOverlay || newShowFooterBellow != lastShowFooterBellow) {
+                    showFooterBellow = newShowFooterBellow
+                    updateMessageBubble(holder.imageView.context, holder)
+                }
+            }
+        }
+        imageContentRenderer.render(mediaData, mode, holder.imageView, onImageSizeListener)
         if (!attributes.informationData.sendState.hasFailed()) {
             contentUploadStateTrackerBinder.bind(
                     attributes.informationData.eventId,
@@ -122,8 +141,42 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         }
     }
 
+    private fun shouldAllowFooterOverlay(footerMeasures: Array<Int>, imageWidth: Int, imageHeight: Int): Boolean {
+        val footerWidth = footerMeasures[0]
+        val footerHeight = footerMeasures[1]
+        return imageWidth > 1.5*footerWidth && imageHeight > 1.5*footerHeight
+    }
+
+    private fun shouldShowFooterBellow(footerMeasures: Array<Int>, imageWidth: Int): Boolean {
+        // Only show footer bellow if the width is not the limiting factor (or it will get cut).
+        // Otherwise, we can not be sure in this place that we'll have enough space on the side
+        val footerWidth = footerMeasures[0]
+        return imageWidth > 1.5*footerWidth
+    }
+
     override fun allowFooterOverlay(holder: Holder): Boolean {
-        return true
+        val rememberedAllowFooterOverlay = forceAllowFooterOverlay
+        if (rememberedAllowFooterOverlay != null) {
+            lastAllowedFooterOverlay = rememberedAllowFooterOverlay
+            return rememberedAllowFooterOverlay
+        }
+        val imageWidth = holder.imageView.width
+        val imageHeight = holder.imageView.height
+        if (imageWidth == 0 && imageHeight == 0) {
+            // Not initialised yet, assume true
+            lastAllowedFooterOverlay = true
+            return true
+        }
+        // If the footer covers most of the image, or is even larger than the image, move it outside
+        val footerMeasures = getFooterMeasures(holder)
+        lastAllowedFooterOverlay = shouldAllowFooterOverlay(footerMeasures, imageWidth, imageHeight)
+        return lastAllowedFooterOverlay
+    }
+
+    override fun allowFooterBelow(holder: Holder): Boolean {
+        val showBellow = showFooterBellow
+        lastShowFooterBellow = showBellow
+        return showBellow
     }
 
 

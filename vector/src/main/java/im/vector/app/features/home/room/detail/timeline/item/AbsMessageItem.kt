@@ -343,8 +343,18 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         }
     }
 
+    /**
+     * Whether to show the footer in front of the viewStub
+     */
     open fun allowFooterOverlay(holder: H): Boolean {
         return false
+    }
+
+    /**
+     * Whether to show the footer aligned below the viewStub - requires enough width!
+     */
+    open fun allowFooterBelow(holder: H): Boolean {
+        return true
     }
 
     open fun needsFooterReservation(holder: H): Boolean {
@@ -361,6 +371,45 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     private fun canHideSender(): Boolean {
         return attributes.informationData.sentByMe ||
                 (attributes.informationData.isDirect && attributes.informationData.senderId == attributes.informationData.dmChatPartnerId)
+    }
+
+    protected fun getFooterMeasures(holder: H): Array<Int> {
+        val anonymousReadReceipt = BubbleThemeUtils.getVisibleAnonymousReadReceipts(holder.bubbleFootView.context,
+                attributes.informationData.readReceiptAnonymous, attributes.informationData.sentByMe)
+        return getFooterMeasures(holder, anonymousReadReceipt)
+    }
+
+    private fun getFooterMeasures(holder: H, anonymousReadReceipt: AnonymousReadReceipt): Array<Int> {
+        val timeWidth: Int
+        val timeHeight: Int
+        if (BubbleThemeUtils.getBubbleTimeLocation(holder.bubbleTimeView.context) == BubbleThemeUtils.BUBBLE_TIME_BOTTOM) {
+            // Guess text width for name and time
+            timeWidth = ceil(BubbleThemeUtils.guessTextWidth(holder.bubbleFooterTimeView, attributes.informationData.time.toString())).toInt() + holder.bubbleFooterTimeView.paddingLeft + holder.bubbleFooterTimeView.paddingRight
+            timeHeight = ceil(holder.bubbleFooterTimeView.textSize).toInt() + holder.bubbleFooterTimeView.paddingTop + holder.bubbleFooterTimeView.paddingBottom
+        } else {
+            timeWidth = 0
+            timeHeight = 0
+        }
+        val readReceiptWidth: Int
+        val readReceiptHeight: Int
+        if (anonymousReadReceipt == AnonymousReadReceipt.NONE) {
+            readReceiptWidth = 0
+            readReceiptHeight = 0
+        } else {
+            readReceiptWidth = holder.bubbleFooterReadReceipt.maxWidth + holder.bubbleFooterReadReceipt.paddingLeft + holder.bubbleFooterReadReceipt.paddingRight
+            readReceiptHeight = holder.bubbleFooterReadReceipt.maxHeight + holder.bubbleFooterReadReceipt.paddingTop + holder.bubbleFooterReadReceipt.paddingBottom
+        }
+
+        var footerWidth = timeWidth + readReceiptWidth
+        var footerHeight = max(timeHeight, readReceiptHeight)
+        // Reserve extra padding, if we do have actual content
+        if (footerWidth > 0) {
+            footerWidth += holder.bubbleFootView.paddingLeft + holder.bubbleFootView.paddingRight
+        }
+        if (footerHeight > 0) {
+            footerHeight += holder.bubbleFootView.paddingTop + holder.bubbleFootView.paddingBottom
+        }
+        return arrayOf(footerWidth, footerHeight)
     }
 
     override fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
@@ -442,53 +491,60 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                         }
                     }
 
+                    val footerLayoutParams = holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams
+                    var footerMarginStartDp = 4
+                    var footerMarginEndDp = 1
                     if (allowFooterOverlay(holder)) {
-                        (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).addRule(RelativeLayout.ALIGN_BOTTOM, R.id.viewStubContainer)
-                        (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).removeRule(RelativeLayout.BELOW)
+                        footerLayoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.viewStubContainer)
+                        footerLayoutParams.addRule(RelativeLayout.ALIGN_END, R.id.viewStubContainer)
+                        footerLayoutParams.removeRule(RelativeLayout.BELOW)
+                        footerLayoutParams.removeRule(RelativeLayout.END_OF)
                         if (needsFooterReservation(holder)) {
                             // Remove style used when not having reserved space
                             removeFooterOverlayStyle(holder, density)
 
                             // Calculate required footer space
-                            val timeWidth: Int
-                            val timeHeight: Int
-                            if (BubbleThemeUtils.getBubbleTimeLocation(holder.bubbleTimeView.context) == BubbleThemeUtils.BUBBLE_TIME_BOTTOM) {
-                                // Guess text width for name and time
-                                timeWidth = ceil(BubbleThemeUtils.guessTextWidth(holder.bubbleFooterTimeView, attributes.informationData.time.toString())).toInt() + holder.bubbleFooterTimeView.paddingLeft + holder.bubbleFooterTimeView.paddingRight
-                                timeHeight = ceil(holder.bubbleFooterTimeView.textSize).toInt() + holder.bubbleFooterTimeView.paddingTop + holder.bubbleFooterTimeView.paddingBottom
-                            } else {
-                                timeWidth = 0
-                                timeHeight = 0
-                            }
-                            val readReceiptWidth: Int
-                            val readReceiptHeight: Int
-                            if (anonymousReadReceipt == AnonymousReadReceipt.NONE) {
-                                readReceiptWidth = 0
-                                readReceiptHeight = 0
-                            } else {
-                                readReceiptWidth = holder.bubbleFooterReadReceipt.maxWidth + holder.bubbleFooterReadReceipt.paddingLeft + holder.bubbleFooterReadReceipt.paddingRight
-                                readReceiptHeight = holder.bubbleFooterReadReceipt.maxHeight + holder.bubbleFooterReadReceipt.paddingTop + holder.bubbleFooterReadReceipt.paddingBottom
-                            }
+                            val footerMeasures = getFooterMeasures(holder, anonymousReadReceipt)
+                            val footerWidth = footerMeasures[0]
+                            val footerHeight = footerMeasures[1]
 
-                            var footerWidth = timeWidth + readReceiptWidth
-                            var footerHeight = max(timeHeight, readReceiptHeight)
-                            // Reserve extra padding, if we do have actual content
-                            if (footerWidth > 0) {
-                                footerWidth += holder.bubbleFootView.paddingLeft + holder.bubbleFootView.paddingRight
-                            }
-                            if (footerHeight > 0) {
-                                footerHeight += holder.bubbleFootView.paddingTop + holder.bubbleFootView.paddingBottom
-                            }
                             reserveFooterSpace(holder, footerWidth, footerHeight)
                         } else {
                             // We have no reserved space -> style it to ensure readability on arbitrary backgrounds
                             styleFooterOverlay(holder, density)
                         }
                     } else {
-                        (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).addRule(RelativeLayout.BELOW, R.id.viewStubContainer)
-                        (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).removeRule(RelativeLayout.ALIGN_BOTTOM)
+                        when {
+                            allowFooterBelow(holder) -> {
+                                footerLayoutParams.addRule(RelativeLayout.BELOW, R.id.viewStubContainer)
+                                footerLayoutParams.addRule(RelativeLayout.ALIGN_END, R.id.viewStubContainer)
+                                footerLayoutParams.removeRule(RelativeLayout.ALIGN_BOTTOM)
+                                footerLayoutParams.removeRule(RelativeLayout.END_OF)
+                                footerLayoutParams.removeRule(RelativeLayout.START_OF)
+                            }
+                            reverseBubble            -> /* force footer on the left / at the start */ {
+                                footerLayoutParams.addRule(RelativeLayout.START_OF, R.id.viewStubContainer)
+                                footerLayoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.viewStubContainer)
+                                footerLayoutParams.removeRule(RelativeLayout.ALIGN_END)
+                                footerLayoutParams.removeRule(RelativeLayout.END_OF)
+                                footerLayoutParams.removeRule(RelativeLayout.BELOW)
+                                // Reverse margins
+                                footerMarginStartDp = 1
+                                // 4 as previously the start margin, +4 to compensate the missing inner padding for the textView which we have on the other side
+                                footerMarginEndDp = 8
+                            }
+                            else                     -> /* footer on the right / at the end */ {
+                                footerLayoutParams.addRule(RelativeLayout.END_OF, R.id.viewStubContainer)
+                                footerLayoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.viewStubContainer)
+                                footerLayoutParams.removeRule(RelativeLayout.ALIGN_END)
+                                footerLayoutParams.removeRule(RelativeLayout.BELOW)
+                                footerLayoutParams.removeRule(RelativeLayout.START_OF)
+                            }
+                        }
                         removeFooterOverlayStyle(holder, density)
                     }
+                    footerLayoutParams.marginStart = round(footerMarginStartDp*density).toInt()
+                    footerLayoutParams.marginEnd = round(footerMarginEndDp*density).toInt()
                 }
                 if (bubbleStyle == BubbleThemeUtils.BUBBLE_STYLE_BOTH_HIDDEN) {
                     // We need to align the non-bubble member name view to pseudo bubbles

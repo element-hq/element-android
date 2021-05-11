@@ -110,12 +110,13 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 .into(imageView)
     }
 
-    fun render(data: Data, mode: Mode, imageView: ImageView) {
+    fun render(data: Data, mode: Mode, imageView: ImageView, onImageSizeListener: OnImageSizeListener? = null) {
         val size = processSize(data, mode)
         imageView.updateLayoutParams {
             width = size.width
             height = size.height
         }
+        onImageSizeListener?.onImageSizeUpdated(size.width, size.height)
         // a11y
         imageView.contentDescription = data.filename
 
@@ -134,6 +135,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                     width = newSize.width
                                     height = newSize.height
                                 }
+                                onImageSizeListener?.onImageSizeUpdated(newSize.width, newSize.height)
                             }
                         }
                         return false
@@ -349,5 +351,9 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
             finalWidth = maxImageWidth
         }
         return Size(finalWidth, finalHeight)
+    }
+
+    interface OnImageSizeListener {
+        fun onImageSizeUpdated(width: Int, height: Int)
     }
 }

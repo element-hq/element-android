@@ -208,11 +208,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:layout_marginStart="4dp"
-                android:layout_alignEnd="@id/viewStubContainer"
-                android:layout_marginEnd="1dp"
                 android:layout_marginBottom="1dp"
+                tools:layout_marginStart="4dp"
+                tools:layout_marginEnd="1dp"
                 tools:layout_alignBottom="@id/viewStubContainer"
+                tools:layout_alignEnd="@id/viewStubContainer"
                 tools:paddingTop="4dp"
                 android:id="@+id/bubbleFootView">
                 <TextView
