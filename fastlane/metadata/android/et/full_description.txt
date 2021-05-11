@@ -1,30 +1,39 @@
-Element on uut tüüpi suhtlus- ja koostöörakendus, mis:
+Element on nii suhtlus- ja koostöörakendus, mis sobib ideaalselt rühmavestlusteks kaugtöö ajal. Läbiv krüptimine on kasutusel sõnumivahetuseks, videokõnedeks, häälkõnedeks ja failide jagamiseks.
 
-1. Võimaldab täielikku kontrolli privaatsuse üle
-2. Võimaldab suhelda kõigiga Matrixi võrgus ja isegi väljaspool seda, olles integreeritud selliste rakendustega nagu Slack
-3. Kaitseb sind reklaamide ja andmekogumise eest
-4. Tagab turvalisuse läbiva krüptimise abil, kasutades risttunnustamist vestlejate tuvastamiseks
+<b>Element pakub muu hulgas selliseid võimalusi</b>
+- moodsad võrgupõhised suhtlusvahendid
+- läbivalt krüptitud sõnumid võimaldavad turvalist suhtlust, sealhulgas kaugtöötajatega
+- Matrix'i protokollil põhinev hajutatud suhtlusvõrk
+- projektide jaoks vajalike failide jagamine turvaliselt ja krüptitult
+- VoIP'i põhised videokõned ja ekraani jagamine
+- lihtne lõimimine harjumispäraste võrgupõhiste koostöövahenditega, projektihalduse rakendustega, VoIP-teenustega ja muude ühistöörakendustega
 
-Element erineb täielikult teistest sõnumside- ja koostöörakendustest, kuna see on detsentraliseeritud ja avatud lähtekoodiga.
+Element erineb teistest sõnumi- ja koostöörakendustest. Tema aluseks on Matrix - avatud võrk turvalise ja hajutatud suhtluse jaoks.
 
-Element võimaldab ise hostida - või valida hosti -, et oleks tagatud privaatsus ja kontroll oma andmete ja vestluste üle. Element annab ka juurdepääsu avatud võrgule, nii et te ei pea vaid Elemendi kasutajatega rääkima. Ning kogu süsteem on väga turvaline.
+<b>Privaatsus ja krüptitud sõnumivahetus</b>
+Element tagab, et sa ei ole seotud reklaamidega, andmekogumisega ja suletud süsteemidega. Kasutades läbivat krüptimist ja risttunnustamisel põhinevat verifitseerimist on sinu sõnumid, andmed, kahepoolsed videokõned ja häälkõned turvatud.
 
-Element töötab Matrixil - avatud, detsentraliseeritud suhtlus-standardil.
+Lubades suhelda turvaliselt ükspuha kellega Matrix'i võrgus või muude ärikeskondades kasutatavate koostöörakendustega nagu Slack, jätab Element sulle kontrolli oma privaatsuse üle.
 
-Võimaldades valida, kes vestlusi korraldab, annab Element annab kontrolli sinule. Rakendust Element saad kasutada mitmel viisil.
+<b>Võid kasutada Element'i jaoks oma serverid</b>
+Kui vajad suuremat kontrolli oma suhtluse ja andmete üle, siis võid kasutada oma serverit või tellida teenuse ükspuha missuguselt Matrix'i-teenuse pakkujalt. Matrix on standard avatud lähtekoodil põhineva detsentraliseeritud suhtluse jaoks.
 
-1. Tasuta konto Matrixi arendajate hostitud avalikus serveris matrix.org või vali tuhandete avalike serverite hulgast, mida haldavad vabatahtlikud
-2. Hosti oma kontot ise, paigaldades serveri oma riistvarale
-3. Registreeruge serveris olevale kontole, tellides Element Matrix Services teenuseplatvormi
+<b>Andmed on Sinu omad</b>
+Sina otsustad seda, kus hoiad oma sõnumeid ja andmeid. Ning seejuures puudub andmekaevandamise risk ja ligipääs kolmandatele osapooltele.
 
-<b> Miks valida element? </b>
+Element annab kontrolli sinule valikuga mitme võimaluse vahel:
+1. tasuta konto Matrix'i arendajate hostitud avalikus serveris matrix.org või vali tuhandete avalike serverite hulgast, mida haldavad vabatahtlikud
+2. hosti oma kontot ise, paigaldades serveri oma IT-taristule
+3. telli tasuline kasutajakonto Element Matrix Services teenuseplatvormilt
 
-<b> KONTROLL ANDMETE ÜLE</b>: otsustad ise, kus oma andmeid ja sõnumeid hoida. Need kuuluvad sulle ja sinu käes on kontroll, mitte mõne MEGAFIRMA käes, mis andmeid oma kasuks kaevandab või kolmandatele isikutele juurdepääsu annab.
+<b>Avatud suhtlus ja koostöö</b>
+Saad vestelda kõigi teistega Matrix'i võrgus, olenemata sellest, kas nad kasutavad Elementi või mõnda muud Matrixi rakendust ja isegi kui nad kasutavad mõnda teistsugust suhtlussüsteemi.
 
-<b> AVATUD SUHTLUS JA KOOSTÖÖ </b>: saad vestelda kõigi teistega Matrixi võrgus, olenemata sellest, kas nad kasutavad Elementi või mõnda muud Matrixi rakendust, ja isegi kui nad kasutavad teistsugust suhtlussüsteemi nagu Slack, IRC või XMPP.
+<b>Üliturvaline</b>
+Tõeline läbiv krüptimine (ainult vestluses osalejad saavad sõnumeid lugeda) ja risttunnustamine vestluses osalejate tuvastamiseks.
 
-<b> ÜLITURVALINE </b>: tõeline läbiv krüptimine (ainult vestluses osalejad saavad sõnumeid lugeda) ja risttunnustamine vestluses osalejate tuvastamiseks.
+<b>Kõik suhtlusvõimalused</b>
+Sõnumid, hääl- ja videokõned, failide jagamine, ekraani jagamine ja terve hulk lõiminguid, roboteid ja vidinaid. Loo tubasid, kogukondi, hoia ühendust ja saa asjad aetud.
 
-<b> KÕIK SUHTLUSVÕIMALUSED</b>: sõnumid, hääl- ja videokõned, failide jagamine, ekraani jagamine ja terve hulk lõiminguid, roboteid ja vidinaid. Loo tubasid, kogukondi, hoia ühendust ja saa asjad aetud.
-
-<b> KÕIKJAL, KUS VIIBITE</b>: saad suhelda kõigis oma seadmetes ja ka veebis aadressil https://app.element.io ning sealjuures täielikult sünkroonitud sõnumite ajalooga.
+<b>Jätka sealt, kus pooleli jäid</b>
+Saad suhelda kõigis oma seadmetes ja ka veebis aadressil https://app.element.io ning sealjuures täielikult sünkroonitud sõnumite ajalooga.
