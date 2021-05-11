@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.search.SearchTask
@@ -66,6 +67,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val roomMembersService: MembershipService,
                                                private val roomPushRuleService: RoomPushRuleService,
                                                private val sendStateTask: SendStateTask,
+                                               private val viaParameterFinder: ViaParameterFinder,
                                                private val searchTask: SearchTask) :
         Room,
         TimelineService by timelineService,
@@ -154,6 +156,6 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
 
     override fun asSpace(): Space? {
         if (roomSummary()?.roomType != RoomType.SPACE) return null
-        return DefaultSpace(this, roomSummaryDataSource)
+        return DefaultSpace(this, roomSummaryDataSource, viaParameterFinder)
     }
 }
