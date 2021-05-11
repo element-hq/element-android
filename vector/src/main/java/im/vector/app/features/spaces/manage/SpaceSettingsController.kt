@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.settings
+package im.vector.app.features.spaces.manage
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
@@ -23,22 +23,21 @@ import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.form.formEditTextItem
-import im.vector.app.features.form.formEditableAvatarItem
+import im.vector.app.features.form.formEditableSquareAvatarItem
+import im.vector.app.features.form.formMultiLineEditTextItem
 import im.vector.app.features.form.formSwitchItem
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
+import im.vector.app.features.roomprofile.settings.RoomSettingsViewState
 import im.vector.app.features.settings.VectorPreferences
-import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomSettingsController @Inject constructor(
+class SpaceSettingsController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
-        private val vectorPreferences: VectorPreferences,
-        colorProvider: ColorProvider
+        colorProvider: ColorProvider,
+        private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
     interface Callback {
@@ -50,20 +49,20 @@ class RoomSettingsController @Inject constructor(
         fun onHistoryVisibilityClicked()
         fun onJoinRuleClicked()
         fun onToggleGuestAccess()
+        fun onDevTools()
+        fun onDevRoomSettings()
+        fun onManageRooms()
+        fun setIsPublic(public: Boolean)
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var callback: Callback? = null
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: RoomSettingsViewState?) {
         val roomSummary = data?.roomSummary?.invoke() ?: return
 
-        formEditableAvatarItem {
+        formEditableSquareAvatarItem {
             id("avatar")
             enabled(data.actionPermissions.canChangeAvatar)
             when (val avatarAction = data.avatarAction) {
@@ -90,56 +89,84 @@ class RoomSettingsController @Inject constructor(
             id("name")
             enabled(data.actionPermissions.canChangeName)
             value(data.newName ?: roomSummary.displayName)
-            hint(stringProvider.getString(R.string.room_settings_name_hint))
-
+            hint(stringProvider.getString(R.string.create_room_name_hint))
+            showBottomSeparator(false)
             onTextChange { text ->
                 callback?.onNameChanged(text)
             }
         }
 
-        formEditTextItem {
+        formMultiLineEditTextItem {
             id("topic")
             enabled(data.actionPermissions.canChangeTopic)
             value(data.newTopic ?: roomSummary.topic)
-            hint(stringProvider.getString(R.string.room_settings_topic_hint))
-
+            hint(stringProvider.getString(R.string.create_space_topic_hint))
+            showBottomSeparator(false)
             onTextChange { text ->
                 callback?.onTopicChanged(text)
             }
         }
 
-        buildProfileAction(
-                id = "historyReadability",
-                title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
-                subtitle = roomHistoryVisibilityFormatter.getSetting(data.newHistoryVisibility ?: data.currentHistoryVisibility),
-                dividerColor = dividerColor,
-                divider = true,
-                editable = data.actionPermissions.canChangeHistoryVisibility,
-                action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
-        )
-
-        buildProfileAction(
-                id = "joinRule",
-                title = stringProvider.getString(R.string.room_settings_room_access_title),
-                subtitle = data.getJoinRuleWording(stringProvider),
-                dividerColor = dividerColor,
-                divider = false,
-                editable = data.actionPermissions.canChangeJoinRule,
-                action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
-        )
-
-        val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
-        if (vectorPreferences.developerMode() && isPublic) {
-            val guestAccess = data.newRoomJoinRules.newGuestAccess ?: data.currentGuestAccess
-            // add guest access option?
+        if (vectorPreferences.labsUseExperimentalRestricted()) {
+            buildProfileAction(
+                    id = "joinRule",
+                    title = stringProvider.getString(R.string.room_settings_room_access_title),
+                    subtitle = data.getJoinRuleWording(stringProvider),
+                    dividerColor = dividerColor,
+                    divider = true,
+                    editable = data.actionPermissions.canChangeJoinRule,
+                    action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+            )
+        } else {
+            val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
             formSwitchItem {
-                id("guest_access")
-                title(stringProvider.getString(R.string.room_settings_guest_access_title))
-                switchChecked(guestAccess == GuestAccess.CanJoin)
-                listener {
-                    callback?.onToggleGuestAccess()
+                id("isPublic")
+                enabled(data.actionPermissions.canChangeJoinRule)
+                title(stringProvider.getString(R.string.make_this_space_public))
+                switchChecked(isPublic)
+
+                listener { value ->
+                    callback?.setIsPublic(value)
                 }
             }
+        }
+
+        buildProfileAction(
+                id = "manage_rooms",
+                title = stringProvider.getString(R.string.space_settings_manage_rooms),
+                // subtitle = data.getJoinRuleWording(stringProvider),
+                dividerColor = dividerColor,
+                divider = vectorPreferences.developerMode(),
+                editable = data.actionPermissions.canAddChildren,
+                action = {
+                    if (data.actionPermissions.canAddChildren) callback?.onManageRooms()
+                }
+        )
+
+        if (vectorPreferences.developerMode()) {
+            buildProfileAction(
+                    id = "dev_tools",
+                    title = stringProvider.getString(R.string.settings_dev_tools),
+                    icon = R.drawable.ic_verification_glasses,
+                    tintIcon = false,
+                    dividerColor = dividerColor,
+                    divider = true,
+                    action = {
+                        callback?.onDevTools()
+                    }
+            )
+
+            buildProfileAction(
+                    id = "room_tools",
+                    title = stringProvider.getString(R.string.room_list_quick_actions_room_settings),
+                    icon = R.drawable.ic_verification_glasses,
+                    tintIcon = false,
+                    dividerColor = dividerColor,
+                    divider = false,
+                    action = {
+                        callback?.onDevRoomSettings()
+                    }
+            )
         }
     }
 }

@@ -16,12 +16,9 @@
 
 package im.vector.app.features.spaces.manage
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.platform.VectorViewEvents
 
-sealed class SpaceManagedSharedAction : VectorViewModelAction {
-    object HandleBack : SpaceManagedSharedAction()
-    object ShowLoading : SpaceManagedSharedAction()
-    object HideLoading : SpaceManagedSharedAction()
-    object CreateRoom : SpaceManagedSharedAction()
-    object ManageRooms : SpaceManagedSharedAction()
+sealed class SpaceManageRoomViewEvents : VectorViewEvents {
+//    object BulkActionSuccess: SpaceManageRoomViewEvents()
+    data class BulkActionFailure(val errorList: List<Throwable>) : SpaceManageRoomViewEvents()
 }

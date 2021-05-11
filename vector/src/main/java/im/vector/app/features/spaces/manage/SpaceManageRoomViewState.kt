@@ -16,19 +16,21 @@
 
 package im.vector.app.features.spaces.manage
 
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 
-enum class ManageType {
-    AddRooms,
-    Settings,
-    ManageRooms
-}
-data class SpaceManageViewState(
-        val spaceId: String = "",
-        val manageType: ManageType
+data class SpaceManageRoomViewState(
+        val spaceId: String,
+        val spaceSummary: Async<RoomSummary> = Uninitialized,
+        val childrenInfo: Async<List<SpaceChildInfo>> = Uninitialized,
+        val selectedRooms: List<String> = emptyList(),
+        val currentFilter: String = "",
+        val actionState: Async<Unit> = Uninitialized
 ) : MvRxState {
     constructor(args: SpaceManageArgs) : this(
-            spaceId = args.spaceId,
-            manageType = args.manageType
+            spaceId = args.spaceId
     )
 }

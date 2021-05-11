@@ -94,12 +94,10 @@
         android:id="@+id/spaceSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         app:actionTitle="@string/settings"
         app:leftIcon="@drawable/ic_settings_root_general"
         app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary"
-        tools:visibility="visible" />
+        app:titleTextColor="?attr/riotx_text_primary"/>
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/exploreRooms"

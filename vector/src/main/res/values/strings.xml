@@ -3356,4 +3356,10 @@
     <string name="user_invites_you">%s invites you</string>
 
     <string name="looking_for_someone_not_in_space">Looking for someone not in %s?</string>
+    <string name="space_settings_manage_rooms">Manage rooms</string>
+    <string name="make_this_space_public">Make this space public</string>
+    <string name="space_suggested">Suggested</string>
+    <string name="space_mark_as_suggested">Mark as suggested</string>
+    <string name="space_mark_as_not_suggested">Mark as not suggested</string>
+    <string name="space_manage_rooms_and_spaces">Manage rooms and spaces</string>
 </resources>

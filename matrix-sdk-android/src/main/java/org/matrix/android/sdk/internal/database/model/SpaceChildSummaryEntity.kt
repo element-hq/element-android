@@ -29,6 +29,8 @@ internal open class SpaceChildSummaryEntity(
 
         var autoJoin: Boolean? = null,
 
+        var suggested: Boolean? = null,
+
         var childRoomId: String? = null,
         // Link to the actual space summary if it is known locally
         var childSummaryEntity: RoomSummaryEntity? = null,

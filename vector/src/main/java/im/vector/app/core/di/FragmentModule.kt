@@ -125,6 +125,8 @@ import im.vector.app.features.spaces.create.CreateSpaceDefaultRoomsFragment
 import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
 import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
 import im.vector.app.features.spaces.manage.SpaceAddRoomFragment
+import im.vector.app.features.spaces.manage.SpaceManageRoomsFragment
+import im.vector.app.features.spaces.manage.SpaceSettingsFragment
 import im.vector.app.features.spaces.people.SpacePeopleFragment
 import im.vector.app.features.spaces.preview.SpacePreviewFragment
 import im.vector.app.features.terms.ReviewTermsFragment
@@ -684,4 +686,14 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SpacePeopleFragment::class)
     fun bindSpacePeopleFragment(fragment: SpacePeopleFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceSettingsFragment::class)
+    fun bindSpaceSettingsFragment(fragment: SpaceSettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceManageRoomsFragment::class)
+    fun bindSpaceManageRoomsFragment(fragment: SpaceManageRoomsFragment): Fragment
 }

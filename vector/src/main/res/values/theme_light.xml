@@ -183,6 +183,9 @@
 
         <!-- chat effect -->
         <item name="vctr_chat_effect_snow_background">@color/black_alpha</item>
+
+        <item name="actionModeStyle">@style/ActionModeTheme</item>
+
     </style>
 
     <style name="AppTheme.Light" parent="AppTheme.Base.Light" />
