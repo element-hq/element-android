@@ -33,7 +33,7 @@ interface Space {
     fun spaceSummary(): RoomSummary?
 
     suspend fun addChildren(roomId: String,
-                            viaServers: List<String>,
+                            viaServers: List<String>?,
                             order: String?,
                             autoJoin: Boolean = false,
                             suggested: Boolean? = false)

@@ -3362,4 +3362,10 @@
     <string name="space_mark_as_suggested">Mark as suggested</string>
     <string name="space_mark_as_not_suggested">Mark as not suggested</string>
     <string name="space_manage_rooms_and_spaces">Manage rooms and spaces</string>
+
+
+    <string name="labs_space_show_orphan_in_home">Experimental Space - Only show orphans in Home</string>
+    <string name="spaces_feeling_experimental_subspace">Feeling experimental?\nYou can add existing spaces to a space.</string>
+    <string name="spaces_no_server_support_title">It looks like your homeserver does not support Spaces yet</string>
+    <string name="spaces_no_server_support_description">Please contact your homserver admin for further information</string>
 </resources>

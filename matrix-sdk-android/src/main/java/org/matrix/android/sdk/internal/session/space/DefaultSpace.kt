@@ -24,11 +24,13 @@ import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
+import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 
 internal class DefaultSpace(
         private val room: Room,
-        private val spaceSummaryDataSource: RoomSummaryDataSource
+        private val spaceSummaryDataSource: RoomSummaryDataSource,
+        private val viaParameterFinder: ViaParameterFinder
 ) : Space {
 
     override fun asRoom(): Room {
@@ -46,15 +48,17 @@ internal class DefaultSpace(
     }
 
     override suspend fun addChildren(roomId: String,
-                                     viaServers: List<String>,
+                                     viaServers: List<String>?,
                                      order: String?,
                                      autoJoin: Boolean,
                                      suggested: Boolean?) {
+        // Find best via
+
         room.sendStateEvent(
                 eventType = EventType.STATE_SPACE_CHILD,
                 stateKey = roomId,
                 body = SpaceChildContent(
-                        via = viaServers,
+                        via = viaServers ?: viaParameterFinder.computeViaParams(roomId, 3),
                         autoJoin = autoJoin,
                         order = order,
                         suggested = suggested

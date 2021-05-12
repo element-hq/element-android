@@ -16,9 +16,6 @@
 
 package im.vector.app.features.spaces.manage
 
-import android.graphics.Canvas
-import android.graphics.Rect
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -26,12 +23,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.epoxy.EpoxyViewHolder
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -41,7 +34,6 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceAddRoomsBinding
-import im.vector.app.features.home.room.list.RoomCategoryItem_
 import io.reactivex.rxkotlin.subscribeBy
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import java.util.concurrent.TimeUnit
@@ -88,6 +80,7 @@ class SpaceAddRoomFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
+        spaceEpoxyController.subHeaderText = getString(R.string.spaces_feeling_experimental_subspace)
         viewModel.selectionListLiveData.observe(viewLifecycleOwner) {
             spaceEpoxyController.selectedItems = it
             roomEpoxyController.selectedItems = it
@@ -183,36 +176,6 @@ class SpaceAddRoomFragment @Inject constructor(
         }
 
         views.roomList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        views.roomList.addItemDecoration(
-
-                object : DividerItemDecoration(context, VERTICAL) {
-                    val decorationDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.divider_horizontal)
-
-                    override fun getDrawable(): Drawable? {
-                        return decorationDrawable
-                    }
-
-                    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                        val position = parent.getChildAdapterPosition(view)
-                        val vh = parent.findViewHolderForAdapterPosition(position)
-                        val nextIsSectionOrFinal = parent.findViewHolderForAdapterPosition(position + 1)?.let {
-                            (it as? EpoxyViewHolder)?.model is RoomCategoryItem_
-                        } ?: true
-                        if (vh == null
-                                || (vh as? EpoxyViewHolder)?.model is RoomCategoryItem_
-                                || nextIsSectionOrFinal
-                        ) {
-                            outRect.setEmpty()
-                        } else {
-                            super.getItemOffsets(outRect, view, parent, state)
-                        }
-                    }
-
-                    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-                        super.onDraw(c, parent, state)
-                    }
-                }
-        )
         views.roomList.setHasFixedSize(true)
 
         concatAdapter.addAdapter(roomEpoxyController.adapter)

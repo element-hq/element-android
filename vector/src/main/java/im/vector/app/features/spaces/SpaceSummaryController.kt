@@ -31,8 +31,8 @@ import im.vector.app.space
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
-import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -42,6 +42,8 @@ class SpaceSummaryController @Inject constructor(
 
     var callback: Callback? = null
     private var viewState: SpaceListViewState? = null
+
+    private val subSpaceComparator: Comparator<SpaceChildInfo> = compareBy<SpaceChildInfo> { it.order }.thenBy { it.childRoomId }
 
     init {
         requestModelBuild()
@@ -132,13 +134,13 @@ class SpaceSummaryController @Inject constructor(
         }
 
         rootSpaces
-                ?.sortedBy { it.displayName }
+                ?.sortedBy { it.roomId }
                 ?.forEach { groupSummary ->
                     val isSelected = selected is RoomGroupingMethod.BySpace && groupSummary.roomId == selected.space()?.roomId
                     // does it have children?
                     val subSpaces = groupSummary.spaceChildren?.filter { childInfo ->
                         summaries?.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
-                    }
+                    }?.sortedWith(subSpaceComparator)
                     val hasChildren = (subSpaces?.size ?: 0) > 0
                     val expanded = expandedStates[groupSummary.roomId] == true
 
@@ -163,24 +165,7 @@ class SpaceSummaryController @Inject constructor(
                     if (hasChildren && expanded) {
                         // it's expanded
                         subSpaces?.forEach { child ->
-                            summaries?.firstOrNull { it.roomId == child.childRoomId }?.let { childSum ->
-                                val isChildSelected = selected is RoomGroupingMethod.BySpace && childSum.roomId == selected.space()?.roomId
-                                spaceSummaryItem {
-                                    avatarRenderer(avatarRenderer)
-                                    id(child.childRoomId)
-                                    hasChildren(false)
-                                    selected(isChildSelected)
-                                    matrixItem(MatrixItem.RoomItem(child.childRoomId, child.name, child.avatarUrl))
-                                    listener { callback?.onSpaceSelected(childSum) }
-                                    indent(1)
-                                    countState(
-                                            UnreadCounterBadgeView.State(
-                                                    groupSummary.notificationCount,
-                                                    groupSummary.highlightCount > 0
-                                            )
-                                    )
-                                }
-                            }
+                            buildSubSpace(summaries, expandedStates, selected, child, 1, 3)
                         }
                     }
                 }
@@ -188,6 +173,45 @@ class SpaceSummaryController @Inject constructor(
         spaceAddItem {
             id("create")
             listener { callback?.onAddSpaceSelected() }
+        }
+    }
+
+    private fun buildSubSpace(summaries: List<RoomSummary>?,
+                              expandedStates: Map<String, Boolean>,
+                              selected: RoomGroupingMethod,
+                              info: SpaceChildInfo, currentDepth: Int, maxDepth: Int) {
+        if (currentDepth >= maxDepth) return
+        val childSummary = summaries?.firstOrNull { it.roomId == info.childRoomId } ?: return
+        // does it have children?
+        val subSpaces = childSummary.spaceChildren?.filter { childInfo ->
+            summaries.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
+        }?.sortedWith(subSpaceComparator)
+        val expanded = expandedStates[childSummary.roomId] == true
+        val isSelected = selected is RoomGroupingMethod.BySpace && childSummary.roomId == selected.space()?.roomId
+
+        subSpaceSummaryItem {
+            avatarRenderer(avatarRenderer)
+            id(childSummary.roomId)
+            hasChildren(!subSpaces.isNullOrEmpty())
+            selected(isSelected)
+            expanded(expanded)
+            onMore { callback?.onSpaceSettings(childSummary) }
+            matrixItem(childSummary.toMatrixItem())
+            listener { callback?.onSpaceSelected(childSummary) }
+            toggleExpand { callback?.onToggleExpand(childSummary) }
+            indent(currentDepth)
+            countState(
+                    UnreadCounterBadgeView.State(
+                            childSummary.notificationCount,
+                            childSummary.highlightCount > 0
+                    )
+            )
+        }
+
+        if (expanded) {
+            subSpaces?.forEach {
+                buildSubSpace(summaries, expandedStates, selected, it, currentDepth + 1, maxDepth)
+            }
         }
     }
 
