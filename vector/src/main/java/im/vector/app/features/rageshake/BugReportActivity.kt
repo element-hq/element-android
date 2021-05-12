@@ -34,12 +34,6 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import javax.inject.Inject
 
-enum class ReportType {
-    BUG_REPORT,
-    SUGGESTION,
-    SPACE_BETA_FEEDBACK
-}
-
 /**
  * Form to send a bug report
  */
