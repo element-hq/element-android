@@ -142,10 +142,12 @@ class SpaceRoomListSectionBuilder(
 
     private fun buildUnifiedSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
         addSection(
-                sections, activeSpaceAwareQueries,
-                R.string.invitations_header,
-                true,
-                RoomListViewModel.SpaceFilterStrategy.NONE
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.invitations_header,
+                notifyOfLocalEcho = true,
+                spaceFilterStrategy = RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL,
+                countRoomAsNotif = true
         ) {
             it.memberships = listOf(Membership.INVITE)
         }
@@ -155,40 +157,52 @@ class SpaceRoomListSectionBuilder(
                 activeSpaceAwareQueries,
                 R.string.bottom_action_favourites,
                 false,
-                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
+                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.normal_priority_header,
-                false,
-                RoomListViewModel.SpaceFilterStrategy.NORMAL
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.bottom_action_rooms,
+                notifyOfLocalEcho = false,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                }
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.low_priority_header,
-                false,
-                RoomListViewModel.SpaceFilterStrategy.NORMAL
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.low_priority_header,
+                notifyOfLocalEcho = false,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                }
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.system_alerts_header,
-                false,
-                RoomListViewModel.SpaceFilterStrategy.NORMAL
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.system_alerts_header,
+                notifyOfLocalEcho = false,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                }
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
@@ -205,7 +219,7 @@ class SpaceRoomListSectionBuilder(
                             } else {
                                 liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
                                     val spaceSum = tryOrNull { session.spaceService().querySpaceChildren(selectedSpace.roomId, suggestedOnly = true) }
-                                    val value = spaceSum?.second ?: emptyList()
+                                    val value = spaceSum?.second.orEmpty().distinctBy { it.childRoomId }
                                     // i need to check if it's already joined.
                                     val filtered = value.filter {
                                         session.getRoomSummary(it.childRoomId)?.membership?.isActive() != true
@@ -393,7 +407,7 @@ class SpaceRoomListSectionBuilder(
                 activeSpaceAwareQueries,
                 R.string.low_priority_header,
                 false,
-                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
+                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
@@ -464,7 +478,7 @@ class SpaceRoomListSectionBuilder(
                                                     ?.notificationCount
                                                     ?.postValue(
                                                             if (countRoomAsNotif) {
-                                                                RoomAggregateNotificationCount(it.size, it.size)
+                                                                RoomAggregateNotificationCount(it.size, it.size, 0, 0)
                                                             } else {
                                                                 session.getNotificationCountForRooms(
                                                                         roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),

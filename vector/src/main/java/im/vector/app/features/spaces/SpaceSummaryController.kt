@@ -209,7 +209,9 @@ class SpaceSummaryController @Inject constructor(
             countState(
                     UnreadCounterBadgeView.State(
                             childSummary.notificationCount,
-                            childSummary.highlightCount > 0
+                            childSummary.highlightCount > 0,
+                            childSummary.unreadCount ?: 0,
+                            childSummary.markedUnread
                     )
             )
         }

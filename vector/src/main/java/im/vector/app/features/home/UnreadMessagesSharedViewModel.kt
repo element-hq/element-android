@@ -150,7 +150,9 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
 
                             val counts = RoomAggregateNotificationCount(
                                     totalCount.notificationCount + inviteCount,
-                                    totalCount.highlightCount + inviteCount
+                                    totalCount.highlightCount + inviteCount,
+                                    totalCount.unreadCount,
+                                    totalCount.markedUnreadCount
                             )
                             val rootCounts = session.spaceService().getRootSpaceSummaries()
                                     .filter {
