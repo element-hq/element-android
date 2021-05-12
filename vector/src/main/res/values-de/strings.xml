@@ -2750,7 +2750,7 @@
     <string name="suggested_header">Vorgeschlagene Räume</string>
     <string name="spaces_header">Spaces</string>
     <string name="room_settings_room_access_entry_knock">Jeder kann im Raum anklopfen, Mitglieder können dann zustimmen oder ablehnen</string>
-    <string name="invite_people_to_your_space_desc"></string>
+    <string name="invite_people_to_your_space_desc">Momentan bist nur du hier. Mit anderen Leuten wird %s noch viel besser.</string>
     <string name="invite_to_space_with_name_desc">Diese werden in der Lage sein %s zu durchsuchen</string>
     <string name="invite_just_to_this_room_desc">Diese werden kein Teil von %s sein</string>
     <string name="share_space_link_message">Tritt meinem Space %1$s %2$s bei</string>
@@ -2806,4 +2806,32 @@
     <string name="command_description_create_space">Space erstellen</string>
     <string name="room_settings_room_access_restricted_description">Jeder, der sich in einem Space mit diesem Raum befindet, kann diesen Raum finden und ihm beitreten. Nur die Administratoren des Raums können diesen zu einem Space hinzufügen.</string>
     <string name="room_settings_room_access_restricted_title">Spaces</string>
+    <plurals name="space_people_you_know">
+        <item quantity="one">%d Person, die du kennst, ist bereits beigetreten</item>
+        <item quantity="other">%d Personen, die du kennst, sind bereits beigetreten</item>
+    </plurals>
+    <string name="looking_for_someone_not_in_space">Suchst du jemanden außerhalb %s\?</string>
+    <string name="create_spaces_room_public_header_desc">Wir erstellen dir für jedes einen Raum. Du kannst jederzeit weitere Räume hinzufügen.</string>
+    <string name="space_manage_rooms_and_spaces">Räume und Spaces verwalten</string>
+    <string name="space_mark_as_suggested">Als \"vorgeschlagen\" markieren</string>
+    <string name="space_mark_as_not_suggested">Als \"nicht vorgeschlagen\" markieren</string>
+    <string name="space_suggested">Vorgeschlagen</string>
+    <string name="make_this_space_public">Teile deinen öffentlichen Space mit der Welt</string>
+    <string name="space_settings_manage_rooms">Räume verwalten</string>
+    <string name="user_invites_you">%s lädt dich ein</string>
+    <string name="room_alias_preview_not_found">Dieser Alias ist gerade nicht verfügbar.
+\nVersuche es später noch einmal oder kontaktiere einen Admin.</string>
+    <string name="create_spaces_room_private_header_desc">Wir erstellen dir für jedes einen Raum. Du kannst jederzeit neue oder existierende Räume hinzufügen.</string>
+    <string name="create_spaces_room_private_header">An welchen Projekten arbeitest du gerade\?</string>
+    <string name="a11y_public_room">Dieser Raum ist öffentlich</string>
+    <string name="send_images_and_video_with_original_size">Mediendatei in Originalgröße senden</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">Video in Originalauflösung senden</item>
+        <item quantity="other">Videos in Originalauflösung senden</item>
+    </plurals>
+    <string name="error_file_too_big_simple">Die Datei ist zu groß.</string>
+    <string name="send_file_step_compressing_video">Video wird komprimiert (%d%)</string>
+    <string name="send_file_step_compressing_image">Bild wird komprimiert…</string>
+    <string name="use_as_default_and_do_not_ask_again">Als Standard festsetzen und nicht mehr fragen</string>
+    <string name="option_always_ask">Jedes Mal fragen</string>
 </resources>
