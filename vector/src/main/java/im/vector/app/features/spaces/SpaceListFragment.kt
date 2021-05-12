@@ -101,4 +101,8 @@ class SpaceListFragment @Inject constructor(
     override fun onGroupSelected(groupSummary: GroupSummary?) {
         viewModel.handle(SpaceListAction.SelectLegacyGroup(groupSummary))
     }
+
+    override fun sendFeedBack() {
+        sharedActionViewModel.post(HomeActivitySharedAction.SendSpaceFeedBack)
+    }
 }

@@ -55,6 +55,7 @@ import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.popup.DefaultVectorAlert
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
+import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
@@ -215,6 +216,9 @@ class HomeActivity :
                         is HomeActivitySharedAction.OpenSpaceInvite -> {
                             SpaceInviteBottomSheet.newInstance(sharedAction.spaceId)
                                     .show(supportFragmentManager, "SPACE_INVITE")
+                        }
+                        HomeActivitySharedAction.SendSpaceFeedBack -> {
+                            bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
                         }
                     }.exhaustive
                 }
@@ -449,11 +453,11 @@ class HomeActivity :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_home_suggestion -> {
-                bugReporter.openBugReportScreen(this, true)
+                bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
                 return true
             }
             R.id.menu_home_report_bug -> {
-                bugReporter.openBugReportScreen(this, false)
+                bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
                 return true
             }
             R.id.menu_home_init_sync_legacy -> {
