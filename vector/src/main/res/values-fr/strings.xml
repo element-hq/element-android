@@ -427,7 +427,7 @@
     <string name="ssl_do_not_trust">Ne pas faire confiance</string>
     <string name="ssl_logout_account">Se déconnecter</string>
     <string name="ssl_remain_offline">Ignorer</string>
-    <string name="room_details_title">Informations sur le salon</string>
+    <string name="room_details_title">Information sur le salon</string>
     <string name="room_details_people">Participants</string>
     <string name="room_details_files">Fichiers</string>
     <string name="room_details_settings">Paramètres</string>
@@ -606,8 +606,8 @@
     <string name="send_bug_report_sent">Le rapport d’anomalie a bien été envoyé</string>
     <string name="send_bug_report_failed">L’envoi du rapport d’anomalie a échoué (%s)</string>
     <string name="auth_invalid_user_name">Les noms d’utilisateurs ne peuvent contenir que des lettres, des nombres, des points, des traits d’union et des tirets bas</string>
-    <string name="auth_invalid_email">Ceci ne ressemble pas à une adresse e-mail valide</string>
-    <string name="auth_invalid_phone">Ceci ne ressemble pas à un numéro de téléphone valide</string>
+    <string name="auth_invalid_email">Cela ne ressemble pas à une adresse e-mail valide</string>
+    <string name="auth_invalid_phone">Cela ne ressemble pas à un numéro de téléphone valide</string>
     <string name="auth_email_already_defined">Cette adresse e-mail est déjà utilisée.</string>
     <string name="auth_email_validation_message">Veuillez vérifier votre e-mail pour continuer votre inscription</string>
     <string name="auth_threepid_warning_message">L’inscription avec e-mail et numéro de téléphone à la fois n’est pas prise en charge tant que l’API n’existe pas. Seul le numéro de téléphone sera pris en compte.
@@ -1613,7 +1613,7 @@
 \nAutorisez l’accès dans le prochaine fenêtre pour pouvoir exporter vos clés manuellement.</string>
     <string name="no_network_indicator">Il n’y a aucune connexion au réseau pour le moment</string>
     <string name="settings_add_3pid_confirm_password_title">Confirmez votre mot de passe</string>
-    <string name="settings_add_3pid_flow_not_supported">Vous ne pouvez pas faire cela depuis SchildiChat mobile</string>
+    <string name="settings_add_3pid_flow_not_supported">Vous ne pouvez pas faire cela depuis Element mobile</string>
     <string name="settings_add_3pid_authentication_needed">Une authentification est nécessaire</string>
     <string name="settings_integrations">Intégrations</string>
     <string name="settings_integrations_summary">Utilisez un gestionnaire d’intégrations pour gérer les robots, les passerelles, les widgets et les jeux d’autocollants.
@@ -1681,7 +1681,7 @@
     <string name="login_server_url_form_modular_hint">Adresse Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Adresse</string>
     <string name="login_server_url_form_modular_text">Hébergement privé pour les organisations</string>
-    <string name="login_server_url_form_modular_notice">Saisir l’adresse de SchildiChat ou du serveur de Modular que vous voulez utiliser</string>
+    <string name="login_server_url_form_modular_notice">Saisir l’adresse de Element ou du serveur de Modular que vous voulez utiliser</string>
     <string name="login_sso_error_message">Une erreur est survenue pendant le chargement de la page : %1$s (%2$d)</string>
     <string name="login_mode_not_supported">L’application ne peut pas s’authentifier sur ce serveur d’accueil. Le serveur d’accueil prend en charge le(s) type(s) d’authentification suivant(s) : %1$s.
 \n
@@ -2213,7 +2213,7 @@
     <string name="disclaimer_positive_button">EN SAVOIR PLUS</string>
     <string name="disclaimer_negative_button">COMPRIS</string>
     <string name="disclaimer_content">Nous sommes heureux de vous annoncer que nous avons un nouveau nom ! Votre application est à jour et vous êtes connectés à votre compte.</string>
-    <string name="disclaimer_title">Riot est désormais SchildiChat !</string>
+    <string name="disclaimer_title">Riot est désormais Element !</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Attente de l’historique du chiffrement</string>
     <string name="crypto_error_withheld_generic">Impossible d’accéder à ce message car l’envoyeur n’a intentionnellement pas envoyé les clés</string>
     <string name="crypto_error_withheld_unverified">Vous ne pouvez pas accéder à ce message car l’envoyeur n’a pas confiance en votre session</string>
@@ -2501,7 +2501,7 @@
     <string name="a11y_rule_notify_silent">Notifier sans son</string>
     <string name="a11y_rule_notify_noisy">Notifier avec son</string>
     <string name="a11y_error_message_not_sent">Message non envoyé suite à une erreur</string>
-    <string name="a11y_checked">Coché</string>
+    <string name="a11y_checked">Vérifié</string>
     <string name="a11y_close_emoji_picker">Fermer le sélecteur d’émojis</string>
     <string name="a11y_open_emoji_picker">Ouvrir le sélecteur d’émojis</string>
     <string name="a11y_trust_level_trusted">Reconnu</string>
@@ -2629,13 +2629,13 @@
     <string name="call_held_by_user">%s a mis l’appel en attente</string>
     <string name="call_hold_action">Mettre en attente</string>
     <string name="call_resume_action">Reprendre</string>
-    <string name="error_unauthorized">Non autorisé, identifiants d’authentification valides manquants</string>
+    <string name="error_unauthorized">Non autorisé, informations d’authentification manquantes</string>
     <string name="dialog_edit_hint">Nouvelle valeur</string>
     <string name="action_return">Revenir</string>
     <string name="action_unpublish">Dé-publier</string>
     <string name="action_switch">Changer</string>
     <string name="action_add">Ajouter</string>
-    <string name="system_theme">Par défaut du système</string>
+    <string name="system_theme">Comme le système</string>
     <string name="notice_room_canonical_alias_no_change_by_you">Vous avez modifié les adresses de ce salon.</string>
     <string name="notice_room_canonical_alias_no_change">%1$s a modifié les adresses de ce salon.</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Vous avez modifié les adresses principale et alternative de ce salon.</string>
@@ -2679,5 +2679,4 @@
     <string name="settings_room_directory_show_all_rooms_summary">Afficher tous les salons dans le répertoire, y compris ceux au contenu choquant.</string>
     <string name="settings_room_directory_show_all_rooms">Afficher les salons au contenu choquant</string>
     <string name="settings_category_room_directory">Répertoire des salons</string>
-    <string name="event_status_sent_message">Message envoyé</string>
 </resources>
