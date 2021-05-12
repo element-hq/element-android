@@ -51,6 +51,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var lastFormattedEvent: CharSequence
     @EpoxyAttribute lateinit var lastEventTime: CharSequence
     @EpoxyAttribute var encryptionTrustLevel: RoomEncryptionTrustLevel? = null
+    @EpoxyAttribute var izPublic: Boolean = false
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
     @EpoxyAttribute var markedUnread: Boolean = false
@@ -77,6 +78,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.draftView.isVisible = hasDraft
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.roomAvatarDecorationImageView.render(encryptionTrustLevel)
+        holder.roomAvatarPublicDecorationImageView.isVisible = izPublic
         holder.roomAvatarFailSendingImageView.isVisible = hasFailedSending
         renderSelection(holder, showSelected)
         holder.typingView.setTextOrHide(typingMessage)
@@ -113,6 +115,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val roomAvatarDecorationImageView by bind<ShieldImageView>(R.id.roomAvatarDecorationImageView)
+        val roomAvatarPublicDecorationImageView by bind<ImageView>(R.id.roomAvatarPublicDecorationImageView)
         val roomAvatarFailSendingImageView by bind<ImageView>(R.id.roomAvatarFailSendingImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)
     }

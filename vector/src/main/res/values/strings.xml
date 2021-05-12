@@ -476,6 +476,7 @@
     <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>
     <string name="system_alerts_header">"System Alerts"</string>
+    <string name="suggested_header">Suggested Rooms</string>
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
@@ -507,6 +508,9 @@
     <string name="groups_invite_header">Invite</string>
     <string name="groups_header">Communities</string>
     <string name="no_group_placeholder">No groups</string>
+
+    <string name="spaces_invited_header">Invites</string>
+    <string name="spaces_header">Spaces</string>
 
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
@@ -571,6 +575,9 @@
     <string name="option_take_photo_video">Take photo or video</string>
     <string name="option_take_photo">Take photo</string>
     <string name="option_take_video">Take video</string>
+    <string name="option_always_ask">Always ask</string>
+
+    <string name="use_as_default_and_do_not_ask_again">Use as default and do not ask again</string>
 
     <!-- No sticker application dialog -->
     <string name="no_sticker_application_dialog_content">You don’t currently have any stickerpacks enabled.\n\nAdd some now?</string>
@@ -1401,6 +1408,7 @@
     <string name="room_settings_room_read_history_dialog_subtitle">Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
     <string name="room_settings_room_access_title">Room access</string>
+    <string name="room_settings_guest_access_title">Allow guests to join</string>
 
     <!-- room settings : alias -->
     <string name="room_settings_alias_title">Room addresses</string>
@@ -1447,6 +1455,14 @@
     <string name="room_settings_room_access_entry_only_invited">Only people who have been invited</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room’s link, apart from guests</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room’s link, including guests</string>
+    <string name="room_settings_room_access_entry_knock">Anyone can knock on the room, members can then accept or reject</string>
+    <string name="room_settings_room_access_entry_unknown">Unknown access setting (%s)</string>
+    <string name="room_settings_room_access_private_title">Private</string>
+    <string name="room_settings_room_access_private_description">Only people invited can find and join</string>
+    <string name="room_settings_room_access_public_title">Public</string>
+    <string name="room_settings_room_access_public_description">Anyone can find the room and join</string>
+    <string name="room_settings_room_access_restricted_title">Spaces</string>
+    <string name="room_settings_room_access_restricted_description">Anyone in a space with this room can find and join it. Only admins of this room can add it to a space.</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Banned users</string>
@@ -2151,6 +2167,14 @@
     <string name="send_suggestion_sent">Thanks, the suggestion has been successfully sent</string>
     <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
 
+    <string name="send_feedback_space_title">Spaces feedback</string>
+    <string name="feedback">Feedback</string>
+    <string name="send_feedback_space_info">You’re using a beta version of spaces. Your feedback will help inform the next versions. Your platform and username will be noted to help us use your feedback as much as we can.</string>
+    <string name="you_may_contact_me">You may contact me if you have any follow up questions</string>
+    <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
+    <string name="feedback_failed">The feedback failed to be sent (%s)</string>
+    <string name="give_feedback">Give Feedback</string>
+
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">"Show complete history in encrypted rooms"</string>
 
@@ -2161,6 +2185,8 @@
     <string name="send_file_step_sending_thumbnail">Sending thumbnail (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_file">Encrypting file…</string>
     <string name="send_file_step_sending_file">Sending file (%1$s / %2$s)</string>
+    <string name="send_file_step_compressing_image">Compressing image…</string>
+    <string name="send_file_step_compressing_video">Compressing video %d%%</string>
 
     <string name="downloading_file">Downloading file %1$s…</string>
     <string name="downloaded_file">File %1$s has been downloaded!</string>
@@ -2179,6 +2205,8 @@
 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
     <string name="user_directory_search_hint">Search by name or ID</string>
+
+    <string name="search_hint_room_name">Search Name</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
     <string name="labs_show_unread_notifications_as_tab">Add a dedicated tab for unread notifications on main screen.</string>
@@ -2266,6 +2294,7 @@
     <string name="a11y_show_password">Show password</string>
     <string name="a11y_hide_password">Hide password</string>
     <string name="a11y_jump_to_bottom">Jump to bottom</string>
+    <string name="a11y_beta">This feature is in beta</string>
 
     <!-- Read receipts list a11y -->
     <plurals name="two_and_some_others_read">
@@ -2280,6 +2309,7 @@
         <item quantity="other">%d users read</item>
     </plurals>
 
+    <string name="error_file_too_big_simple">"The file is too large to upload."</string>
     <string name="error_file_too_big">"The file '%1$s' (%2$s) is too large to upload. The limit is %3$s."</string>
 
     <string name="error_attachment">"An error occurred while retrieving the attachment."</string>
@@ -2363,7 +2393,7 @@
 
     <string name="login_server_title">Select a server</string>
     <string name="login_server_text">Just like email, accounts have one home, although you can talk to anyone</string>
-    <string name="login_server_matrix_org_text">Join millions free on the largest public server</string>
+    <string name="login_server_matrix_org_text">Join millions for free on the largest public server</string>
     <string name="login_server_modular_text">Premium hosting for organisations</string>
     <string name="login_server_modular_learn_more">Learn more</string>
     <string name="login_server_other_title">Other</string>
@@ -2770,6 +2800,11 @@
         <item quantity="one">Send image with the original size</item>
         <item quantity="other">Send images with the original size</item>
     </plurals>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">Send video with the original size</item>
+        <item quantity="other">Send videos with the original size</item>
+    </plurals>
+    <string name="send_images_and_video_with_original_size">Send media with the original size</string>
 
     <string name="delete_event_dialog_title">Confirm Removal</string>
     <string name="delete_event_dialog_content">Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.</string>
@@ -3219,11 +3254,13 @@
     <string name="a11y_open_emoji_picker">Open Emoji picker</string>
     <string name="a11y_close_emoji_picker">Close Emoji picker</string>
     <string name="a11y_checked">Checked</string>
+    <string name="a11y_unchecked">Unchecked</string>
     <string name="a11y_error_message_not_sent">Message not sent due to error</string>
     <string name="a11y_rule_notify_noisy">Notify with sound</string>
     <string name="a11y_rule_notify_silent">Notify without sound</string>
     <string name="a11y_rule_notify_off">Do not notify</string>
     <string name="a11y_view_read_receipts">View read receipts</string>
+    <string name="a11y_public_room">This room is public</string>
 
     <string name="dev_tools_menu_name">Dev Tools</string>
     <string name="dev_tools_explore_room_state">Explore Room State</string>
@@ -3242,6 +3279,10 @@
     <string name="dev_tools_success_state_event">State event sent!</string>
     <string name="dev_tools_event_content_hint">Event content</string>
 
+    <string name="command_description_create_space">Create a Space</string>
+    <string name="command_description_join_space">Join the Space with the given id</string>
+    <string name="command_description_leave_room">Leave room with given id (or current room if null)</string>
+
     <string name="event_status_a11y_sending">Sending</string>
     <string name="event_status_a11y_sent">Sent</string>
     <string name="event_status_a11y_failed">Failed</string>
@@ -3250,4 +3291,90 @@
     <string name="event_status_failed_messages_warning">Messages failed to send</string>
     <string name="event_status_delete_all_failed_dialog_title">Delete unsent messages</string>
     <string name="event_status_delete_all_failed_dialog_message">Are you sure you want to delete all unsent messages in this room?</string>
+
+    <string name="add_space">Add Space</string>
+    <string name="your_public_space">Your public space</string>
+    <string name="your_private_space">Your private space</string>
+    <string name="create_spaces_type_header">Spaces are a new way to group rooms and people</string>
+    <string name="create_spaces_choose_type_label">What type of space do you want to create?</string>
+    <string name="create_spaces_you_can_change_later">You can change this later</string>
+    <string name="create_spaces_join_info_help">To join an existing space, you need an invite.</string>
+    <string name="create_spaces_who_are_you_working_with">Who are you working with?</string>
+    <string name="create_spaces_make_sure_access">Make sure the right people have access to %s. You can change this later.</string>
+    <string name="create_spaces_just_me">Just me</string>
+    <string name="create_spaces_organise_rooms">A private space to organise your rooms</string>
+    <string name="create_spaces_me_and_teammates">Me and teammates</string>
+    <string name="create_spaces_private_teammates">A private space for you &amp; your teammates</string>
+    <string name="space_type_public">Public</string>
+    <string name="space_type_public_desc">Open to anyone, best for communities</string>
+    <string name="space_type_private">Private</string>
+    <string name="space_type_private_desc">Invite only, best for yourself or teams</string>
+    <string name="activity_create_space_title">Create a space</string>
+    <string name="create_spaces_details_public_header">Add some details to help it stand out. You can change these at any point.</string>
+    <string name="create_spaces_details_private_header">Add some details to help people identify it. You can change these at any point.</string>
+    <string name="create_space_error_empty_field_space_name">Give it a name to continue.</string>
+    <string name="create_spaces_room_public_header">What are some discussions you want to have in %s?</string>
+    <string name="create_spaces_room_public_header_desc">We’ll create rooms for them. You can add more later too.</string>
+    <string name="create_spaces_room_private_header">What things are you working on?</string>
+    <string name="create_spaces_room_private_header_desc">Let’s create a room for each of them. You can add more later too, including already existing ones.</string>
+    <string name="create_spaces_default_public_room_name">General</string>
+    <string name="create_spaces_default_public_random_room_name">Random</string>
+    <string name="create_spaces_loading_message">Creating Space…</string>
+    <string name="create_space_topic_hint">Description</string>
+    <string name="invite_people_to_your_space">Invite people to your space</string>
+    <string name="invite_people_menu">Invite people</string>
+    <string name="invite_people_to_your_space_desc">It’s just you at the moment.  %s will be even better with others.</string>
+    <string name="invite_by_email">Invite by email</string>
+    <string name="invite_by_mxid">Invite by username</string>
+    <string name="invite_by_link">Share link</string>
+    <string name="invite_to_space_with_name">Invite to %s</string>
+    <string name="invite_to_space_with_name_desc">"They’ll be able to explore %s"</string>
+    <string name="invite_just_to_this_room">Just to this room</string>
+    <string name="invite_just_to_this_room_desc">"They won’t be a part of %s"</string>
+    <!-- First one is the space name, and the second one is the matrix.to link -->
+    <string name="share_space_link_message">Join my space %1$s %2$s</string>
+    <string name="skip_for_now">Skip for now</string>
+    <string name="create_space">Create Space</string>
+    <string name="join_space">Join Space</string>
+    <string name="join_anyway">Join Anyway</string>
+    <string name="room_alias_preview_not_found">This alias is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
+
+    <string name="suggested_rooms_pills_on_empty_text">You’re not in any rooms yet. Below are some suggested rooms, but you can see more with the green button bottom right.</string>
+    <!-- First one is the space name, and the second one is user name -->
+    <string name="suggested_rooms_pills_on_empty_header">Welcome to %1$s, %2$s.</string>
+
+    <plurals name="space_people_you_know">
+        <item quantity="one">%d person you know has already joined</item>
+        <item quantity="other">%d people you know have already joined</item>
+    </plurals>
+
+    <string name="space_explore_activity_title">Explore rooms</string>
+    <string name="space_add_child_title">Add rooms</string>
+    <string name="leave_space">Leave Space</string>
+    <string name="space_leave_prompt_msg">Are you sure you want to leave the space?</string>
+
+
+    <string name="space_add_existing_rooms">Add existing rooms and space</string>
+    <string name="spaces_beta_welcome_to_spaces">Welcome to Spaces!</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Spaces are a new way to group rooms and people.</string>
+    <string name="you_are_invited">You are invited</string>
+
+
+    <string name="labs_use_restricted_join_rule">Experimental Space - Restricted Room.</string>
+    <string name="labs_use_restricted_join_rule_desc">Warning requires server support and experimental room version</string>
+    <string name="user_invites_you">%s invites you</string>
+
+    <string name="looking_for_someone_not_in_space">Looking for someone not in %s?</string>
+    <string name="space_settings_manage_rooms">Manage rooms</string>
+    <string name="make_this_space_public">Make this space public</string>
+    <string name="space_suggested">Suggested</string>
+    <string name="space_mark_as_suggested">Mark as suggested</string>
+    <string name="space_mark_as_not_suggested">Mark as not suggested</string>
+    <string name="space_manage_rooms_and_spaces">Manage rooms and spaces</string>
+
+
+    <string name="labs_space_show_orphan_in_home">Experimental Space - Only show orphans in Home</string>
+    <string name="spaces_feeling_experimental_subspace">Feeling experimental?\nYou can add existing spaces to a space.</string>
+    <string name="spaces_no_server_support_title">It looks like your homeserver does not support Spaces yet</string>
+    <string name="spaces_no_server_support_description">Please contact your homserver admin for further information</string>
 </resources>

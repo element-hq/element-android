@@ -17,6 +17,7 @@
 package im.vector.app.features.attachments
 
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
+import im.vector.lib.multipicker.entity.MultiPickerBaseMediaType
 import im.vector.lib.multipicker.entity.MultiPickerBaseType
 import im.vector.lib.multipicker.entity.MultiPickerContactType
 import im.vector.lib.multipicker.entity.MultiPickerFileType
@@ -66,6 +67,24 @@ private fun MultiPickerBaseType.mapType(): ContentAttachmentData.Type {
         mimeType?.isMimeTypeVideo() == true -> ContentAttachmentData.Type.VIDEO
         mimeType?.isMimeTypeAudio() == true -> ContentAttachmentData.Type.AUDIO
         else                                -> ContentAttachmentData.Type.FILE
+    }
+}
+
+fun MultiPickerBaseType.toContentAttachmentData(): ContentAttachmentData {
+    return when (this) {
+        is MultiPickerImageType -> toContentAttachmentData()
+        is MultiPickerVideoType -> toContentAttachmentData()
+        is MultiPickerAudioType -> toContentAttachmentData()
+        is MultiPickerFileType  -> toContentAttachmentData()
+        else                    -> throw IllegalStateException("Unknown file type")
+    }
+}
+
+fun MultiPickerBaseMediaType.toContentAttachmentData(): ContentAttachmentData {
+    return when (this) {
+        is MultiPickerImageType -> toContentAttachmentData()
+        is MultiPickerVideoType -> toContentAttachmentData()
+        else                    -> throw IllegalStateException("Unknown media type")
     }
 }
 

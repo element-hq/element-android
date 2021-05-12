@@ -1,4 +1,4 @@
-Changes in Element 1.1.7 (2021-XX-XX)
+Changes in Element 1.1.7 (2021-05-12)
 ===================================================
 
 Features ✨:
@@ -7,6 +7,11 @@ Features ✨:
 Improvements 🙌:
  - Add ability to install APK from directly from Element (#2381)
  - Delete and react to stickers (#3250)
+ - Compress video before sending (#442)
+ - Improve file too big error detection (#3245)
+ - User can now select video when selecting Gallery to send attachments to a room
+ - Add option to record a video from the camera
+ - Add the public icon on the rooms in the room list (#3292)
 
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)
@@ -17,18 +22,19 @@ Bugfix 🐛:
  - Fix issue when opening encrypted files (#3186)
  - Fix wording issue (#3242)
  - Fix missing sender information after edits (#3184)
-
-Translations 🗣:
- -
+ - Fix read marker not updating automatically (#3267)
+ - Sent video does not contains duration (#3272)
+ - Properly clean the back stack if the user cancel registration when waiting for email validation
+ - Fix read marker visibility/position when filtering some events 
+ - Fix user invitation in case of restricted profile api (#3306)
 
 SDK API changes ⚠️:
  - RegistrationWizard.createAccount() parameters are now all optional, following Matrix spec (#3205)
 
 Build 🧱:
  - Upgrade to gradle 7
-
-Test:
- -
+ - https://github.com/Piasy/BigImageViewer is now hosted on mavenCentral()
+ - Upgrade Realm to version 10.4.0
 
 Other changes:
  - New store descriptions

@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.tasks.SendEventTask
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.SessionComponent
+import org.matrix.android.sdk.internal.util.toMatrixErrorStr
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import timber.log.Timber
@@ -77,7 +78,12 @@ internal class SendEventWorker(context: Context,
         }
 
         if (params.lastFailureMessage != null) {
-            localEchoRepository.updateSendState(event.eventId, event.roomId, SendState.UNDELIVERED)
+            localEchoRepository.updateSendState(
+                    eventId = event.eventId,
+                    roomId = event.roomId,
+                    sendState = SendState.UNDELIVERED,
+                    sendStateDetails = params.lastFailureMessage
+            )
             // Transmit the error
             return Result.success(inputData)
                     .also { Timber.e("Work cancelled due to input error from parent") }
@@ -90,7 +96,12 @@ internal class SendEventWorker(context: Context,
         } catch (exception: Throwable) {
             if (/*currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING ||**/ !exception.shouldBeRetried()) {
                 Timber.e("## SendEvent: [${System.currentTimeMillis()}]  Send event Failed cannot retry ${params.eventId} > ${exception.localizedMessage}")
-                localEchoRepository.updateSendState(event.eventId, event.roomId, SendState.UNDELIVERED)
+                localEchoRepository.updateSendState(
+                        eventId = event.eventId,
+                        roomId = event.roomId,
+                        sendState = SendState.UNDELIVERED,
+                        sendStateDetails = exception.toMatrixErrorStr()
+                )
                 Result.success()
             } else {
                 Timber.e("## SendEvent: [${System.currentTimeMillis()}]  Send event Failed schedule retry ${params.eventId} > ${exception.localizedMessage}")

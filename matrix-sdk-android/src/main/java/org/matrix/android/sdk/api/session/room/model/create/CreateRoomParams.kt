@@ -160,6 +160,6 @@ open class CreateRoomParams {
 
     companion object {
         private const val CREATION_CONTENT_KEY_M_FEDERATE = "m.federate"
-        private const val CREATION_CONTENT_KEY_ROOM_TYPE = "org.matrix.msc1772.type"
+        private const val CREATION_CONTENT_KEY_ROOM_TYPE = "type"
     }
 }

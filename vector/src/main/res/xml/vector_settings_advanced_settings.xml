@@ -7,6 +7,7 @@
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
             android:key="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
+            android:icon="@drawable/ic_verification_glasses"
             android:summary="@string/settings_developer_mode_summary"
             android:title="@string/settings_developer_mode" />
 

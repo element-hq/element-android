@@ -4,7 +4,7 @@
     <JetCodeStyleSettings>
       <option name="PACKAGES_TO_USE_STAR_IMPORTS">
         <value>
-          <package name="kotlinx.android.synthetic" withSubpackages="true" static="false" />
+          <package name="kotlinx.android.synthetic" alias="false" withSubpackages="true" />
         </value>
       </option>
       <option name="ALIGN_IN_COLUMNS_CASE_BRANCH" value="true" />

@@ -18,9 +18,10 @@ package im.vector.app.features.settings
 
 import androidx.preference.Preference
 import im.vector.app.R
-import im.vector.app.core.extensions.restart
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.MainActivity
+import im.vector.app.features.MainActivityArgs
 import javax.inject.Inject
 
 class VectorSettingsLabsFragment @Inject constructor(
@@ -54,5 +55,12 @@ class VectorSettingsLabsFragment @Inject constructor(
          */
 
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY)?.isEnabled = vectorPreferences.showUrlPreviews()
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_SPACES_HOME_AS_ORPHAN)!!.let { pref ->
+            pref.setOnPreferenceChangeListener { _, _ ->
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
+                true
+            }
+        }
     }
 }

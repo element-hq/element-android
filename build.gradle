@@ -45,15 +45,9 @@ allprojects {
                 // PFLockScreen-Android
                 includeGroupByRegex 'com\\.github\\.vector-im'
 
-                //Chat effects
+                // Chat effects
                 includeGroupByRegex 'com\\.github\\.jetradarmobile'
                 includeGroupByRegex 'nl\\.dionsegijn'
-            }
-        }
-        maven {
-            url "https://dl.bintray.com/piasy/maven"
-            content {
-                includeGroupByRegex "com\\.github\\.piasy"
             }
         }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
@@ -64,6 +58,7 @@ allprojects {
             // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-3.1.0"
         }
         google()
+        mavenCentral()
         jcenter()
     }
 

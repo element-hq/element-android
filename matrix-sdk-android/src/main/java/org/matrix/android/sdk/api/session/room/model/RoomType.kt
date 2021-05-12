@@ -18,6 +18,5 @@ package org.matrix.android.sdk.api.session.room.model
 
 object RoomType {
 
-    const val SPACE = "org.matrix.msc1772.space" // "m.space"
-//    const val MESSAGING = "org.matrix.msc1840.messaging"
+    const val SPACE = "m.space"
 }

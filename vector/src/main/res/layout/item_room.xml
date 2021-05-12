@@ -60,6 +60,7 @@
         app:layout_constraintCircleRadius="30dp"
         tools:ignore="MissingConstraints" />
 
+    <!-- Note: this is always gone now -->
     <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/roomAvatarDecorationImageView"
         android:layout_width="24dp"
@@ -67,7 +68,23 @@
         app:layout_constraintCircle="@id/roomAvatarContainer"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/roomAvatarPublicDecorationImageView"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/background_circle"
+        android:contentDescription="@string/a11y_public_room"
+        android:padding="2dp"
+        android:src="@drawable/ic_public_room"
+        android:visibility="gone"
+        app:layout_constraintCircle="@id/roomAvatarContainer"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="28dp"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
 
     <!-- Margin bottom does not work, so I use space -->
     <Space

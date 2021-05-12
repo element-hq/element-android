@@ -19,6 +19,7 @@ package im.vector.app.core.utils
 import android.content.Context
 import android.os.Build
 import android.text.format.Formatter
+import org.threeten.bp.Duration
 import java.util.TreeMap
 
 object TextUtils {
@@ -66,6 +67,17 @@ object TextUtils {
             Formatter.formatShortFileSize(context, normalizedSize)
         } else {
             Formatter.formatFileSize(context, normalizedSize)
+        }
+    }
+
+    fun formatDuration(duration: Duration): String {
+        val hours = duration.seconds / 3600
+        val minutes = (duration.seconds % 3600) / 60
+        val seconds = duration.seconds % 60
+        return if (hours > 0) {
+            String.format("%d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            String.format("%02d:%02d", minutes, seconds)
         }
     }
 }

@@ -27,7 +27,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.extensions.setTextSafe
+import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_form_text_input)
@@ -60,7 +60,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     @EpoxyAttribute
     var endIconMode: Int? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onTextChange: ((String) -> Unit)? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
@@ -76,8 +76,8 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         holder.textInputLayout.error = errorMessage
         holder.textInputLayout.endIconMode = endIconMode ?: TextInputLayout.END_ICON_NONE
 
-        // Update only if text is different and value is not null
-        holder.textInputEditText.setTextSafe(value)
+        holder.setValueOnce(holder.textInputEditText, value)
+
         holder.textInputEditText.isEnabled = enabled
         inputType?.let { holder.textInputEditText.inputType = it }
         holder.textInputEditText.isSingleLine = singleLine ?: false

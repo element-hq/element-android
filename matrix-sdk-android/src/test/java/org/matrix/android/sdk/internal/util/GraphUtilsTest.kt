@@ -16,14 +16,14 @@
 
 package org.matrix.android.sdk.internal.util
 
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.MatrixTest
 import org.matrix.android.sdk.internal.session.room.summary.Graph
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 @FixMethodOrder(MethodSorters.JVM)
 class GraphUtilsTest : MatrixTest {
@@ -44,7 +44,7 @@ class GraphUtilsTest : MatrixTest {
 
         val backEdges = graph.findBackwardEdges(graph.getOrCreateNode("E"))
 
-        assertTrue(backEdges.isEmpty(), "There should not be any cycle in this graphs")
+        assertTrue("There should not be any cycle in this graphs", backEdges.isEmpty())
     }
 
     @Test
@@ -68,21 +68,21 @@ class GraphUtilsTest : MatrixTest {
         val backEdges = graph.findBackwardEdges(graph.getOrCreateNode("E"))
         System.out.println(backEdges.joinToString(" | ") { "${it.source.name} -> ${it.destination.name}" })
 
-        assertTrue(backEdges.size == 2, "There should be 2 backward edges not ${backEdges.size}")
+        assertEquals("There should be 2 backward edges not ${backEdges.size}", 2, backEdges.size)
 
         val edge1 = backEdges.find { it.source.name == "C" }
-        assertNotNull(edge1, "There should be a back edge from C")
-        assertEquals("E", edge1.destination.name, "There should be a back edge C -> E")
+        assertNotNull("There should be a back edge from C", edge1)
+        assertEquals("There should be a back edge C -> E", "E", edge1!!.destination.name)
 
         val edge2 = backEdges.find { it.source.name == "B" }
-        assertNotNull(edge2, "There should be a back edge from B")
-        assertEquals("B", edge2.destination.name, "There should be a back edge C -> C")
+        assertNotNull("There should be a back edge from B", edge2)
+        assertEquals("There should be a back edge C -> C", "B", edge2!!.destination.name)
 
         // clean the graph
         val acyclicGraph = graph.withoutEdges(backEdges)
         System.out.println(acyclicGraph.toString())
 
-        assertTrue(acyclicGraph.findBackwardEdges(acyclicGraph.getOrCreateNode("E")).isEmpty(), "There should be no backward edges")
+        assertTrue("There should be no backward edges", acyclicGraph.findBackwardEdges(acyclicGraph.getOrCreateNode("E")).isEmpty())
 
         val flatten = acyclicGraph.flattenDestination()
 
@@ -93,7 +93,7 @@ class GraphUtilsTest : MatrixTest {
         assertTrue(flattenParentsB.contains(acyclicGraph.getOrCreateNode("A")))
 
         val flattenParentsE = flatten[acyclicGraph.getOrCreateNode("E")]
-        assertTrue(flattenParentsE!!.size == 3)
+        assertEquals(3, flattenParentsE!!.size)
         assertTrue(flattenParentsE.contains(acyclicGraph.getOrCreateNode("A")))
         assertTrue(flattenParentsE.contains(acyclicGraph.getOrCreateNode("C")))
         assertTrue(flattenParentsE.contains(acyclicGraph.getOrCreateNode("D")))

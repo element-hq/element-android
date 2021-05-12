@@ -28,5 +28,5 @@ data class RoomCreateContent(
         @Json(name = "room_version") val roomVersion: String? = null,
         @Json(name = "predecessor") val predecessor: Predecessor? = null,
         // Defines the room type, see #RoomType (user extensible)
-        @Json(name = "org.matrix.msc1772.type") val type: String? = null
+        @Json(name = "type") val type: String? = null
 )

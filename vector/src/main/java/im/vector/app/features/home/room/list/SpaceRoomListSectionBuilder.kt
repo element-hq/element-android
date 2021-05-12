@@ -42,6 +42,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.rx.asObservable
 
 class SpaceRoomListSectionBuilder(
@@ -52,7 +53,8 @@ class SpaceRoomListSectionBuilder(
         val viewModelScope: CoroutineScope,
         private val suggestedRoomJoiningState: LiveData<Map<String, Async<Unit>>>,
         val onDisposable: (Disposable) -> Unit,
-        val onUdpatable: (UpdatableLivePageResult) -> Unit
+        val onUdpatable: (UpdatableLivePageResult) -> Unit,
+        val onlyOrphansInHome: Boolean = false
 ) : RoomListSectionBuilder {
 
     val pagedListConfig = PagedList.Config.Builder()
@@ -92,22 +94,31 @@ class SpaceRoomListSectionBuilder(
             }
             RoomListDisplayMode.NOTIFICATIONS -> {
                 addSection(
-                        sections,
-                        activeSpaceAwareQueries,
-                        R.string.invitations_header,
-                        true,
-                        RoomListViewModel.SpaceFilterStrategy.NORMAL
+                        sections = sections,
+                        activeSpaceUpdaters = activeSpaceAwareQueries,
+                        nameRes = R.string.invitations_header,
+                        notifyOfLocalEcho = true,
+                        spaceFilterStrategy = if (onlyOrphansInHome) {
+                            RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                        } else {
+                            RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                        },
+                        countRoomAsNotif = true
                 ) {
                     it.memberships = listOf(Membership.INVITE)
                     it.roomCategoryFilter = RoomCategoryFilter.ALL
                 }
 
                 addSection(
-                        sections,
-                        activeSpaceAwareQueries,
-                        R.string.bottom_action_rooms,
-                        false,
-                        RoomListViewModel.SpaceFilterStrategy.NORMAL
+                        sections = sections,
+                        activeSpaceUpdaters = activeSpaceAwareQueries,
+                        nameRes = R.string.bottom_action_rooms,
+                        notifyOfLocalEcho = false,
+                        spaceFilterStrategy = if (onlyOrphansInHome) {
+                            RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                        } else {
+                            RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                        }
                 ) {
                     it.memberships = listOf(Membership.JOIN)
                     it.roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
@@ -229,10 +240,12 @@ class SpaceRoomListSectionBuilder(
 
     private fun buildRoomsSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
         addSection(
-                sections, activeSpaceAwareQueries,
-                R.string.invitations_header,
-                true,
-                RoomListViewModel.SpaceFilterStrategy.NONE
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.invitations_header,
+                notifyOfLocalEcho = true,
+                spaceFilterStrategy = RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL,
+                countRoomAsNotif = true
         ) {
             it.memberships = listOf(Membership.INVITE)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
@@ -243,7 +256,7 @@ class SpaceRoomListSectionBuilder(
                 activeSpaceAwareQueries,
                 R.string.bottom_action_favourites,
                 false,
-                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
+                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
@@ -251,11 +264,15 @@ class SpaceRoomListSectionBuilder(
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.bottom_action_rooms,
-                false,
-                RoomListViewModel.SpaceFilterStrategy.NORMAL
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.bottom_action_rooms,
+                notifyOfLocalEcho = false,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                }
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
@@ -263,11 +280,15 @@ class SpaceRoomListSectionBuilder(
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.low_priority_header,
-                false,
-                RoomListViewModel.SpaceFilterStrategy.NORMAL
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.low_priority_header,
+                notifyOfLocalEcho = false,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                }
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
@@ -275,11 +296,15 @@ class SpaceRoomListSectionBuilder(
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.system_alerts_header,
-                false,
-                RoomListViewModel.SpaceFilterStrategy.NORMAL
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.system_alerts_header,
+                notifyOfLocalEcho = false,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                }
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
@@ -297,7 +322,7 @@ class SpaceRoomListSectionBuilder(
                             } else {
                                 liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
                                     val spaceSum = tryOrNull { session.spaceService().querySpaceChildren(selectedSpace.roomId, suggestedOnly = true) }
-                                    val value = spaceSum?.second ?: emptyList()
+                                    val value = spaceSum?.second.orEmpty().distinctBy { it.childRoomId }
                                     // i need to check if it's already joined.
                                     val filtered = value.filter {
                                         session.getRoomSummary(it.childRoomId)?.membership?.isActive() != true
@@ -331,11 +356,12 @@ class SpaceRoomListSectionBuilder(
     }
 
     private fun buildDmSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
-        addSection(sections,
-                activeSpaceAwareQueries,
-                R.string.invitations_header,
-                true,
-                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
+        addSection(sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.invitations_header,
+                notifyOfLocalEcho = true,
+                spaceFilterStrategy = RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL,
+                countRoomAsNotif = true
         ) {
             it.memberships = listOf(Membership.INVITE)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
@@ -345,7 +371,7 @@ class SpaceRoomListSectionBuilder(
                 activeSpaceAwareQueries,
                 R.string.bottom_action_favourites,
                 false,
-                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
+                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
@@ -356,7 +382,7 @@ class SpaceRoomListSectionBuilder(
                 activeSpaceAwareQueries,
                 R.string.bottom_action_people_x,
                 false,
-                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
+                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
@@ -374,47 +400,6 @@ class SpaceRoomListSectionBuilder(
             it.roomTagQueryFilter = RoomTagQueryFilter(false, true, null)
         }
 
-
-//        // For DMs we still need some post query filter :/
-//        // It's probably less important as home is not filtering at all
-//        val dmList = MutableLiveData<List<RoomSummary>>()
-//        Observables.combineLatest(
-//                session.getRoomSummariesLive(
-//                        roomSummaryQueryParams {
-//                            memberships = listOf(Membership.JOIN)
-//                            roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-//                        }
-//                ).asObservable(),
-//                appStateHandler.selectedSpaceDataSource.observe()
-//
-//        ) { rooms, currentSpaceOption ->
-//            val currentSpace = currentSpaceOption.orNull()
-//                    .takeIf {
-//                        // the +ALL trick is annoying, should find a way to fix that at the source!
-//                        MatrixPatterns.isRoomId(it?.roomId)
-//                    }
-//            if (currentSpace == null) {
-//                rooms
-//            } else {
-//                rooms.filter {
-//                    it.otherMemberIds
-//                            .intersect(currentSpace.otherMemberIds)
-//                            .isNotEmpty()
-//                }
-//            }
-//        }.subscribe {
-//            dmList.postValue(it)
-//        }.also {
-//            onDisposable.invoke(it)
-//        }
-//
-//        sections.add(
-//                RoomsSection(
-//                        sectionName = stringProvider.getString(R.string.bottom_action_people_x),
-//                        liveList = dmList,
-//                        notifyOfLocalEcho = false
-//                )
-//        )
     }
 
     private fun addSection(sections: MutableList<RoomsSection>,
@@ -422,6 +407,7 @@ class SpaceRoomListSectionBuilder(
                            @StringRes nameRes: Int,
                            notifyOfLocalEcho: Boolean = false,
                            spaceFilterStrategy: RoomListViewModel.SpaceFilterStrategy = RoomListViewModel.SpaceFilterStrategy.NONE,
+                           countRoomAsNotif: Boolean = false,
                            query: (RoomSummaryQueryParams.Builder) -> Unit) {
         withQueryParams(
                 { query.invoke(it) },
@@ -433,37 +419,37 @@ class SpaceRoomListSectionBuilder(
                             pagedListConfig
                     ).also {
                         when (spaceFilterStrategy) {
-                            RoomListViewModel.SpaceFilterStrategy.NORMAL     -> {
+                            RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                                 activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                                     override fun updateForSpaceId(roomId: String?) {
                                         it.updateQuery {
                                             it.copy(
-                                                    activeSpaceId = ActiveSpaceFilter.ActiveSpace(roomId)
+                                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
                                             )
                                         }
                                     }
                                 })
                             }
-                            RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL -> {
+                            RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL     -> {
                                 activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                                     override fun updateForSpaceId(roomId: String?) {
                                         if (roomId != null) {
                                             it.updateQuery {
                                                 it.copy(
-                                                        activeSpaceId = ActiveSpaceFilter.ActiveSpace(roomId)
+                                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
                                                 )
                                             }
                                         } else {
                                             it.updateQuery {
                                                 it.copy(
-                                                        activeSpaceId = ActiveSpaceFilter.None
+                                                        activeSpaceFilter = ActiveSpaceFilter.None
                                                 )
                                             }
                                         }
                                     }
                                 })
                             }
-                            RoomListViewModel.SpaceFilterStrategy.NONE       -> {
+                            RoomListViewModel.SpaceFilterStrategy.NONE                  -> {
                                 // we ignore current space for this one
                             }
                         }
@@ -476,10 +462,16 @@ class SpaceRoomListSectionBuilder(
                                         .subscribe {
                                             sections.find { it.sectionName == name }
                                                     ?.notificationCount
-                                                    ?.postValue(session.getNotificationCountForRooms(
-                                                            roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
-                                                            scSdkPreferences
-                                                    ))
+                                                    ?.postValue(
+                                                            if (countRoomAsNotif) {
+                                                                RoomAggregateNotificationCount(it.size, it.size)
+                                                            } else {
+                                                                session.getNotificationCountForRooms(
+                                                                        roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
+                                                                        scSdkPreferences
+                                                                )
+                                                            }
+                                                    )
                                         }.also {
                                             onDisposable.invoke(it)
                                         }
@@ -506,17 +498,19 @@ class SpaceRoomListSectionBuilder(
 
     internal fun RoomSummaryQueryParams.process(spaceFilter: RoomListViewModel.SpaceFilterStrategy, currentSpace: String?): RoomSummaryQueryParams {
         return when (spaceFilter) {
-            RoomListViewModel.SpaceFilterStrategy.NORMAL -> {
+            RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                 copy(
-                        activeSpaceId = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
                 )
             }
-            RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL -> {
+            RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL -> {
                 if (currentSpace == null) {
-                    this
+                    copy(
+                            activeSpaceFilter = ActiveSpaceFilter.None
+                    )
                 } else {
                     copy(
-                            activeSpaceId = ActiveSpaceFilter.ActiveSpace(currentSpace)
+                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
                     )
                 }
             }

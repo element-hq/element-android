@@ -74,7 +74,9 @@ import im.vector.app.features.share.SharedData
 import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
+import im.vector.app.features.spaces.manage.ManageType
 import im.vector.app.features.spaces.manage.SpaceManageActivity
+import im.vector.app.features.spaces.people.SpacePeopleActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
@@ -122,7 +124,7 @@ class DefaultNavigator @Inject constructor(
                 }
             }
             Navigator.PostSwitchSpaceAction.OpenAddExistingRooms -> {
-                startActivity(context, SpaceManageActivity.newIntent(context, spaceId), false)
+                startActivity(context, SpaceManageActivity.newIntent(context, spaceId, ManageType.AddRooms), false)
             }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom -> {
                 val args = RoomDetailArgs(
@@ -283,7 +285,19 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openCreateDirectRoom(context: Context) {
-        val intent = CreateDirectRoomActivity.getIntent(context)
+        val intent = when (val currentGroupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
+            is RoomGroupingMethod.ByLegacyGroup -> {
+                CreateDirectRoomActivity.getIntent(context)
+            }
+            is RoomGroupingMethod.BySpace       -> {
+                if (currentGroupingMethod.spaceSummary != null) {
+                    SpacePeopleActivity.newIntent(context, currentGroupingMethod.spaceSummary.roomId)
+                } else {
+                    CreateDirectRoomActivity.getIntent(context)
+                }
+            }
+            else                                -> null
+        } ?: return
         context.startActivity(intent)
     }
 

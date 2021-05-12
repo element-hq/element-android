@@ -60,7 +60,8 @@ class RoomSettingsFragment @Inject constructor(
         VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomSettingsController.Callback,
         OnBackPressed,
-        GalleryOrCameraDialogHelper.Listener {
+        GalleryOrCameraDialogHelper.Listener,
+        RoomSettingsViewModel.Factory {
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private lateinit var roomProfileSharedActionViewModel: RoomProfileSharedActionViewModel
@@ -75,6 +76,10 @@ class RoomSettingsFragment @Inject constructor(
     }
 
     override fun getMenuRes() = R.menu.vector_room_settings
+
+    override fun create(initialState: RoomSettingsViewState): RoomSettingsViewModel {
+        return viewModelFactory.create(initialState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

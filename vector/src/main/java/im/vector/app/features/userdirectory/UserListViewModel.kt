@@ -33,7 +33,6 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.rx.rx
@@ -137,7 +136,15 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                                                 avatarUrl = json[ProfileService.AVATAR_URL_KEY] as? String
                                         ).toOptional()
                                     }
-                                    .onErrorReturn { Optional.empty() }
+                                    .onErrorReturn {
+                                        // Profile API can be restricted and doesn't have to return result.
+                                        // In this case allow inviting valid user ids.
+                                        User(
+                                                userId = search,
+                                                displayName = null,
+                                                avatarUrl = null
+                                        ).toOptional()
+                                    }
 
                             Single.zip(
                                     searchObservable,

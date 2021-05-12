@@ -54,13 +54,18 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
         private val session: Session
 ) : VectorViewModel<SpaceAddRoomsState, SpaceAddRoomActions, SpaceAddRoomsViewEvents>(initialState) {
 
+    @AssistedFactory
+    interface Factory {
+        fun create(initialState: SpaceAddRoomsState): SpaceAddRoomsViewModel
+    }
+
     val updatableLiveSpacePageResult: UpdatableLivePageResult by lazy {
         session.getFilteredPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
                     this.excludeType = null
                     this.includeType = listOf(RoomType.SPACE)
-                    this.activeSpaceId = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
                     this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
                 },
                 pagedListConfig = PagedList.Config.Builder()
@@ -80,7 +85,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                     this.excludeType = listOf(RoomType.SPACE)
                     this.includeType = null
                     this.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                    this.activeSpaceId = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
                     this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
                 },
                 pagedListConfig = PagedList.Config.Builder()
@@ -104,11 +109,6 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                     ignoreRooms = (spaceSummary?.flattenParentIds ?: emptyList()) + listOf(initialState.spaceId)
             )
         }
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(initialState: SpaceAddRoomsState): SpaceAddRoomsViewModel
     }
 
     companion object : MvRxViewModelFactory<SpaceAddRoomsViewModel, SpaceAddRoomsState> {
@@ -174,7 +174,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 try {
                     session.spaceService().getSpace(initialState.spaceId)!!.addChildren(
                             roomId = roomId,
-                            viaServers = listOf(session.sessionParams.homeServerHost ?: ""),
+                            viaServers = null,
                             order = null
                     )
                     completed.add(roomId)
