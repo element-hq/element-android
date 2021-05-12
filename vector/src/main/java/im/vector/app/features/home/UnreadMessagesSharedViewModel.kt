@@ -129,9 +129,9 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                         is RoomGroupingMethod.BySpace       -> {
                             val selectedSpace = appStateHandler.safeActiveSpaceId()
 
-                            val inviteCount = session.getRoomSummaries(roomSummaryQueryParams {
-                                this.memberships = listOf(Membership.INVITE)
-                            }).size
+                            val inviteCount = session.getRoomSummaries(
+                                    roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
+                            ).size
 
                             val totalCount = session.getNotificationCountForRooms(
                                     roomSummaryQueryParams {
