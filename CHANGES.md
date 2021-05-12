@@ -1,4 +1,4 @@
-Changes in Element 1.1.7 (2021-XX-XX)
+Changes in Element 1.1.7 (2021-05-12)
 ===================================================
 
 Features ✨:
@@ -28,9 +28,6 @@ Bugfix 🐛:
  - Fix read marker visibility/position when filtering some events 
  - Fix user invitation in case of restricted profile api (#3306)
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
  - RegistrationWizard.createAccount() parameters are now all optional, following Matrix spec (#3205)
 
@@ -38,9 +35,6 @@ Build 🧱:
  - Upgrade to gradle 7
  - https://github.com/Piasy/BigImageViewer is now hosted on mavenCentral()
  - Upgrade Realm to version 10.4.0
-
-Test:
- -
 
 Other changes:
  - New store descriptions
