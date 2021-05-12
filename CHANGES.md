@@ -17,7 +17,7 @@ SDK API changes ⚠️:
  -
 
 Build 🧱:
- -
+ - Sign APK with build tools 30.0.3
 
 Test:
  -
