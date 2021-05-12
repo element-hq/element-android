@@ -2164,15 +2164,13 @@
     <string name="send_suggestion">Make a suggestion</string>
     <string name="send_suggestion_content">Please write your suggestion below.</string>
     <string name="send_suggestion_report_placeholder">Describe your suggestion here</string>
-    <string name="send_suggestion_sent">Thanks, the suggestion has been successfully sent</string>
-    <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
 
     <string name="send_feedback_space_title">Spaces feedback</string>
     <string name="feedback">Feedback</string>
-    <string name="send_feedback_space_info">You’re using a beta version of spaces.  Your feedback will help inform the next versions.  Your platform and username will be noted to help us use your feedback as much as we can. To leave the beta, visit your settings.</string>
+    <string name="send_feedback_space_info">You’re using a beta version of spaces. Your feedback will help inform the next versions. Your platform and username will be noted to help us use your feedback as much as we can.</string>
     <string name="you_may_contact_me">You may contact me if you have any follow up questions</string>
-    <string name="space_feedback_sent">Thanks, your feedback has been successfully sent</string>
-    <string name="space_feedback_failed">The feedback failed to be sent (%s)</string>
+    <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
+    <string name="feedback_failed">The feedback failed to be sent (%s)</string>
     <string name="give_feedback">Give Feedback</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>

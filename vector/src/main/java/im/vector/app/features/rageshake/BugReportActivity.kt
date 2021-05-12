@@ -71,7 +71,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
         when (reportType) {
             ReportType.BUG_REPORT -> {
                 supportActionBar?.setTitle(R.string.title_activity_bug_report)
-                views.bugReportButtonContactMe.isVisible = false
+                views.bugReportButtonContactMe.isVisible = true
             }
             ReportType.SUGGESTION -> {
                 supportActionBar?.setTitle(R.string.send_suggestion)
@@ -172,13 +172,10 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                                         Toast.makeText(this@BugReportActivity,
                                                 getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show()
                                     }
-                                    ReportType.SUGGESTION          -> {
-                                        Toast.makeText(this@BugReportActivity,
-                                                getString(R.string.send_suggestion_failed, reason), Toast.LENGTH_LONG).show()
-                                    }
+                                    ReportType.SUGGESTION,
                                     ReportType.SPACE_BETA_FEEDBACK -> {
                                         Toast.makeText(this@BugReportActivity,
-                                                getString(R.string.space_feedback_failed, reason), Toast.LENGTH_LONG).show()
+                                                getString(R.string.feedback_failed, reason), Toast.LENGTH_LONG).show()
                                     }
                                 }
                             }
@@ -211,11 +208,9 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                                 ReportType.BUG_REPORT          -> {
                                     Toast.makeText(this@BugReportActivity, R.string.send_bug_report_sent, Toast.LENGTH_LONG).show()
                                 }
-                                ReportType.SUGGESTION          -> {
-                                    Toast.makeText(this@BugReportActivity, R.string.send_suggestion_sent, Toast.LENGTH_LONG).show()
-                                }
+                                ReportType.SUGGESTION,
                                 ReportType.SPACE_BETA_FEEDBACK -> {
-                                    Toast.makeText(this@BugReportActivity, R.string.space_feedback_sent, Toast.LENGTH_LONG).show()
+                                    Toast.makeText(this@BugReportActivity, R.string.feedback_sent, Toast.LENGTH_LONG).show()
                                 }
                             }
                         } catch (e: Exception) {
