@@ -2700,4 +2700,22 @@
     <string name="spaces_header">空間</string>
     <string name="spaces_invited_header">邀請</string>
     <string name="suggested_header">建議的聊天室</string>
+    <string name="space_manage_rooms_and_spaces">管理聊天室與空間</string>
+    <string name="space_mark_as_not_suggested">標記為不建議</string>
+    <string name="space_mark_as_suggested">標記為建議</string>
+    <string name="space_suggested">建議</string>
+    <string name="make_this_space_public">讓此空間公開</string>
+    <string name="space_settings_manage_rooms">管理聊天室</string>
+    <string name="looking_for_someone_not_in_space">正在尋找不在 %s 中的人？</string>
+    <string name="user_invites_you">%s 邀請您</string>
+    <string name="a11y_public_room">此聊天室是公開的</string>
+    <string name="send_images_and_video_with_original_size">傳送原始大小的媒體</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="other">傳送原始大小的影片</item>
+    </plurals>
+    <string name="error_file_too_big_simple">檔案太大了，無法上傳。</string>
+    <string name="send_file_step_compressing_video">正在壓縮影片 %d%%</string>
+    <string name="send_file_step_compressing_image">正在壓縮圖片……</string>
+    <string name="use_as_default_and_do_not_ask_again">預設使用，不再詢問</string>
+    <string name="option_always_ask">總是詢問</string>
 </resources>
