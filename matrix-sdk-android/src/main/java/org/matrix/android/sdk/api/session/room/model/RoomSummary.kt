@@ -37,6 +37,7 @@ data class RoomSummary constructor(
         val canonicalAlias: String? = null,
         val aliases: List<String> = emptyList(),
         val isDirect: Boolean = false,
+        val directUserId: String? = null,
         val joinedMembersCount: Int? = 0,
         val invitedMembersCount: Int? = 0,
         val latestPreviewableEvent: TimelineEvent? = null,
@@ -48,6 +49,7 @@ data class RoomSummary constructor(
         val hasUnreadMessages: Boolean = false,
         val hasUnreadContentMessages: Boolean = false,
         val hasUnreadOriginalContentMessages: Boolean = false,
+        val unreadCount: Int? = 0,
         val markedUnread: Boolean = false,
         val tags: List<RoomTag> = emptyList(),
         val membership: Membership = Membership.NONE,
@@ -60,7 +62,11 @@ data class RoomSummary constructor(
         val inviterId: String? = null,
         val breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
         val roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null,
-        val hasFailedSending: Boolean = false
+        val hasFailedSending: Boolean = false,
+        val roomType: String? = null,
+        val spaceParents: List<SpaceParentInfo>? = null,
+        val spaceChildren: List<SpaceChildInfo>? = null,
+        val flattenParentIds: List<String> = emptyList()
 ) {
 
     val isVersioned: Boolean

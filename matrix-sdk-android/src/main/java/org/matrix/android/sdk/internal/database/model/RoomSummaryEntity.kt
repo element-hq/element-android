@@ -27,7 +27,10 @@ import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 
 internal open class RoomSummaryEntity(
-        @PrimaryKey var roomId: String = ""
+        @PrimaryKey var roomId: String = "",
+        var roomType: String? = null,
+        var parents: RealmList<SpaceParentSummaryEntity> = RealmList(),
+        var children: RealmList<SpaceChildSummaryEntity> = RealmList()
 ) : RealmObject() {
 
     var displayName: String? = ""
@@ -101,6 +104,17 @@ internal open class RoomSummaryEntity(
     var highlightCount: Int = 0
         set(value) {
             if (value != field) field = value
+        }
+
+    var unreadCount: Int = 0
+        set(value) {
+            if (value != field) field = value
+        }
+        get() {
+            if (field == 0 && hasUnreadOriginalContentMessages) {
+                return 1
+            }
+            return field
         }
 
     var readMarkerId: String? = null
@@ -229,6 +243,16 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
+    var flattenParentIds: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var groupIds: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
     @Index
     private var membershipStr: String = Membership.NONE.name
 
@@ -269,6 +293,5 @@ internal open class RoomSummaryEntity(
                 roomEncryptionTrustLevelStr = value?.name
             }
         }
-
     companion object
 }

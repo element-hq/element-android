@@ -38,7 +38,10 @@ class SectionHeaderAdapter constructor(
             val isHidden: Boolean = true,
             // SC additions
             val unread: Int = 0,
-            val markedUnread: Boolean = true
+            val markedUnread: Boolean = true,
+
+            // This will be false until real data has been submitted once
+            val isLoading: Boolean = true
     )
 
     lateinit var roomsSectionData: RoomsSectionData

@@ -59,7 +59,6 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
     override fun getCoordinatorLayout() = views.vectorCoordinatorLayout
 
     override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
         injector.inject(this)
     }
 

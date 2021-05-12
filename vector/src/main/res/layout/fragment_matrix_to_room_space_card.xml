@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="200dp"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/matrixToCardAvatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="@dimen/layout_vertical_margin_big"
+        android:contentDescription="@string/avatar"
+        android:elevation="4dp"
+        android:transitionName="profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/matrixToCardNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAlignment="textStart"
+        android:textColor="?riotx_text_primary"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
+        tools:text="@sample/matrix.json/data/roomName" />
+
+    <TextView
+        android:id="@+id/matrixToCardAliasText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAlignment="textStart"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
+        app:layout_goneMarginTop="0dp"
+        tools:text="@sample/matrix.json/data/roomAlias" />
+
+    <LinearLayout
+        android:id="@+id/matrixToMemberPills"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/pill_receipt"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/matrixToCardAliasText">
+
+        <ImageView
+            android:id="@+id/spaceChildMemberCountIcon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="4dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_room_profile_member_list"
+            app:tint="?riotx_text_primary"
+            tools:ignore="MissingPrefix" />
+
+        <TextView
+            android:id="@+id/spaceChildMemberCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="?riotx_text_primary"
+            tools:text="123 members" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/matrixToCardDescText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:maxLines="4"
+        android:textAlignment="textStart"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@id/matrixToMemberPills"
+        tools:text="@sample/matrix.json/data/roomTopic" />
+
+    <ImageView
+        android:id="@+id/knownMember5"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintCircle="@id/knownMember4"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/knownMember4"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintCircle="@id/knownMember3"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/knownMember3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintCircle="@id/knownMember2"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/knownMember2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintCircle="@id/knownMember1"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/knownMember1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/matrixToCardDescText"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/peopleYouMayKnowText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@id/knownMember1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/knownMember5"
+        app:layout_constraintTop_toTopOf="@id/knownMember1"
+        tools:text="7 people you may know" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/matrixToCardMainButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="@dimen/layout_vertical_margin_big"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/knownMember1"
+        app:layout_constraintWidth_max="400dp"
+        tools:text="@string/join" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/matrixToCardSecondaryButton"
+        style="@style/VectorButtonStyleOutlined"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/layout_vertical_margin_big"
+        android:textAllCaps="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/matrixToCardMainButton"
+        app:layout_constraintWidth_max="400dp"
+        tools:text="@string/dismiss" />
+
+    <ProgressBar
+        android:id="@+id/matrixToCardButtonLoading"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/matrixToCardMainButton"
+        app:layout_constraintEnd_toEndOf="@id/matrixToCardMainButton"
+        app:layout_constraintStart_toStartOf="@id/matrixToCardMainButton"
+        app:layout_constraintTop_toTopOf="@id/matrixToCardMainButton"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/matrixToCardPeopleYouKnowVisibility"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="knownMember1,knownMember2,knownMember3,knownMember4,knownMember5,peopleYouMayKnowText"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/matrixToCardContentVisibility"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="matrixToCardNameText,matrixToCardAvatar,matrixToCardNameText,matrixToCardDescText, matrixToCardMainButton, matrixToCardAliasText, matrixToCardSecondaryButton, matrixToMemberPills,matrixToCardPeopleYouKnowVisibility"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

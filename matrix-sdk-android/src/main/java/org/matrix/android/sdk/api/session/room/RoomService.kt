@@ -18,15 +18,14 @@ package org.matrix.android.sdk.api.session.room
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 
@@ -38,22 +37,19 @@ interface RoomService {
     /**
      * Create a room asynchronously
      */
-    fun createRoom(createRoomParams: CreateRoomParams,
-                   callback: MatrixCallback<String>): Cancelable
+    suspend fun createRoom(createRoomParams: CreateRoomParams): String
 
     /**
      * Create a direct room asynchronously. This is a facility method to create a direct room with the necessary parameters
      */
-    fun createDirectRoom(otherUserId: String,
-                         callback: MatrixCallback<String>): Cancelable {
+    suspend fun createDirectRoom(otherUserId: String): String {
         return createRoom(
                 CreateRoomParams()
                         .apply {
                             invitedUserIds.add(otherUserId)
                             setDirectMessage()
                             enableEncryptionIfInvitedUsersSupportIt = true
-                        },
-                callback
+                        }
         )
     }
 
@@ -63,10 +59,9 @@ interface RoomService {
      * @param reason optional reason for joining the room
      * @param viaServers the servers to attempt to join the room through. One of the servers must be participating in the room.
      */
-    fun joinRoom(roomIdOrAlias: String,
-                 reason: String? = null,
-                 viaServers: List<String> = emptyList(),
-                 callback: MatrixCallback<Unit>): Cancelable
+    suspend fun joinRoom(roomIdOrAlias: String,
+                         reason: String? = null,
+                         viaServers: List<String> = emptyList())
 
     /**
      * Get a room from a roomId
@@ -112,20 +107,18 @@ interface RoomService {
      * Inform the Matrix SDK that a room is displayed.
      * The SDK will update the breadcrumbs in the user account data
      */
-    fun onRoomDisplayed(roomId: String): Cancelable
+    suspend fun onRoomDisplayed(roomId: String)
 
     /**
      * Mark all rooms as read
      */
-    fun markAllAsRead(roomIds: List<String>,
-                      callback: MatrixCallback<Unit>): Cancelable
+    suspend fun markAllAsRead(roomIds: List<String>)
 
     /**
      * Resolve a room alias to a room ID.
      */
-    fun getRoomIdByAlias(roomAlias: String,
-                         searchOnServer: Boolean,
-                         callback: MatrixCallback<Optional<RoomAliasDescription>>): Cancelable
+    suspend fun getRoomIdByAlias(roomAlias: String,
+                                 searchOnServer: Boolean): Optional<RoomAliasDescription>
 
     /**
      * Delete a room alias
@@ -172,26 +165,28 @@ interface RoomService {
     /**
      * Get some state events about a room
      */
-    fun getRoomState(roomId: String, callback: MatrixCallback<List<Event>>)
+    suspend fun getRoomState(roomId: String): List<Event>
 
     /**
      * Use this if you want to get information from a room that you are not yet in (or invited)
      * It might be possible to get some information on this room if it is public or if guest access is allowed
      * This call will try to gather some information on this room, but it could fail and get nothing more
      */
-    fun peekRoom(roomIdOrAlias: String, callback: MatrixCallback<PeekResult>)
+    suspend fun peekRoom(roomIdOrAlias: String): PeekResult
 
     /**
      * TODO Doc
      */
     fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                  pagedListConfig: PagedList.Config = defaultPagedListConfig): LiveData<PagedList<RoomSummary>>
+                                  pagedListConfig: PagedList.Config = defaultPagedListConfig,
+                                  sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): LiveData<PagedList<RoomSummary>>
 
     /**
      * TODO Doc
      */
     fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                          pagedListConfig: PagedList.Config = defaultPagedListConfig): UpdatableFilterLivePageResult
+                                          pagedListConfig: PagedList.Config = defaultPagedListConfig,
+                                          sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): UpdatableLivePageResult
 
     /**
      * TODO Doc
@@ -205,4 +200,12 @@ interface RoomService {
                 .setEnablePlaceholders(false)
                 .setPrefetchDistance(10)
                 .build()
+
+    fun getFlattenRoomSummaryChildrenOf(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()) : List<RoomSummary>
+
+    /**
+     * Returns all the children of this space, as LiveData
+     */
+    fun getFlattenRoomSummaryChildrenOfLive(spaceId: String?,
+                                            memberships: List<Membership> = Membership.activeMemberships()): LiveData<List<RoomSummary>>
 }

@@ -29,6 +29,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
 import im.vector.app.R
+import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
@@ -139,7 +140,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
     override fun handle(action: RoomMemberProfileAction) {
         when (action) {
-            is RoomMemberProfileAction.RetryFetchingInfo      -> fetchProfileInfo()
+            is RoomMemberProfileAction.RetryFetchingInfo      -> handleRetryFetchProfileInfo()
             is RoomMemberProfileAction.IgnoreUser             -> handleIgnoreAction()
             is RoomMemberProfileAction.VerifyUser             -> prepareVerification()
             is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
@@ -259,34 +260,45 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 }
     }
 
-    private fun fetchProfileInfo() {
-        session.rx().getProfileInfo(initialState.userId)
-                .map {
-                    MatrixItem.UserItem(
-                            id = initialState.userId,
-                            displayName = it[ProfileService.DISPLAY_NAME_KEY] as? String,
-                            avatarUrl = it[ProfileService.AVATAR_URL_KEY] as? String
-                    )
-                }
-                .execute {
-                    copy(userMatrixItem = it)
-                }
+    private fun handleRetryFetchProfileInfo() {
+        viewModelScope.launch {
+            fetchProfileInfo()
+        }
+    }
+
+    private suspend fun fetchProfileInfo() {
+        val result = runCatchingToAsync {
+            session.getProfile(initialState.userId)
+                    .let {
+                        MatrixItem.UserItem(
+                                id = initialState.userId,
+                                displayName = it[ProfileService.DISPLAY_NAME_KEY] as? String,
+                                avatarUrl = it[ProfileService.AVATAR_URL_KEY] as? String
+                        )
+                    }
+        }
+
+        setState {
+            copy(userMatrixItem = result)
+        }
     }
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
         val roomSummaryLive = room.rx().liveRoomSummary().unwrap()
         val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
 
-        powerLevelsContentLive.subscribe {
-            val powerLevelsHelper = PowerLevelsHelper(it)
-            val permissions = ActionPermissions(
-                    canKick = powerLevelsHelper.isUserAbleToKick(session.myUserId),
-                    canBan = powerLevelsHelper.isUserAbleToBan(session.myUserId),
-                    canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId),
-                    canEditPowerLevel = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_POWER_LEVELS)
-            )
-            setState { copy(powerLevelsContent = it, actionPermissions = permissions) }
-        }.disposeOnClear()
+        powerLevelsContentLive
+                .subscribe {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    val permissions = ActionPermissions(
+                            canKick = powerLevelsHelper.isUserAbleToKick(session.myUserId),
+                            canBan = powerLevelsHelper.isUserAbleToBan(session.myUserId),
+                            canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId),
+                            canEditPowerLevel = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_POWER_LEVELS)
+                    )
+                    setState { copy(powerLevelsContent = it, actionPermissions = permissions) }
+                }
+                .disposeOnClear()
 
         roomSummaryLive.execute {
             copy(isRoomEncrypted = it.invoke()?.isEncrypted == true)

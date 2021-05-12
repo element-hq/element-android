@@ -31,7 +31,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.roomdirectory.JoinState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -39,7 +38,6 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
@@ -77,9 +75,7 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
         }
         viewModelScope.launch(Dispatchers.IO) {
             val peekResult = tryOrNull {
-                awaitCallback<PeekResult> {
-                    session.peekRoom(initialState.roomAlias ?: initialState.roomId, it)
-                }
+                session.peekRoom(initialState.roomAlias ?: initialState.roomId)
             }
 
             when (peekResult) {
@@ -177,15 +173,14 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
         }
-        session.joinRoom(state.roomId, viaServers = state.homeServers, callback = object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                session.joinRoom(state.roomId, viaServers = state.homeServers)
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 setState { copy(lastError = failure) }
             }
-        })
+        }
     }
 }

@@ -128,7 +128,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     setState {
                         copy(actionPermissions = permissions)
                     }
-                }.disposeOnClear()
+                }
+                .disposeOnClear()
     }
 
     private fun observeEvent() {
@@ -394,7 +395,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
         if (!actionPermissions.canSendMessage) return false
-        // Only event of type Event.EVENT_TYPE_MESSAGE and EventType.STICKER are supported for the moment
+        // Only event of type Event.MESSAGE and EventType.STICKER are supported for the moment
         val clearType = event.root.getClearType()
         if (clearType == EventType.STICKER) return true
         if (clearType != EventType.MESSAGE) return false
@@ -411,7 +412,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canQuote(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+        // Only event of type EventType.MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
         if (!actionPermissions.canSendMessage) return false
         return when (messageContent?.msgType) {
@@ -426,9 +427,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canRedact(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type Event.EVENT_TYPE_MESSAGE and EventType.STICKER are supported for the moment
-        val clearType = event.root.getClearType()
-        if (clearType != EventType.MESSAGE && clearType != EventType.STICKER) return false
+        // Only event of type EventType.MESSAGE or EventType.STICKER are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER)) return false
         // Message sent by the current user can always be redacted
         if (event.root.senderId == session.myUserId) return true
         // Check permission for messages sent by other users
@@ -442,14 +442,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
-        // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-        if (event.root.getClearType() != EventType.MESSAGE) return false
-        // TODO if user is admin or moderator
+        // Only event of type EventType.MESSAGE and EventType.STICKER are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER)) return false
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 
     private fun canEdit(event: TimelineEvent, myUserId: String, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+        // Only event of type EventType.MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
         if (!actionPermissions.canSendMessage) return false
         // TODO if user is admin or moderator

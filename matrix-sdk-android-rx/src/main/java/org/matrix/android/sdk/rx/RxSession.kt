@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -63,6 +64,13 @@ class RxSession(private val session: Session) {
         return session.getGroupSummariesLive(queryParams).asObservable()
                 .startWithCallable {
                     session.getGroupSummaries(queryParams)
+                }
+    }
+
+    fun liveSpaceSummaries(queryParams: SpaceSummaryQueryParams): Observable<List<RoomSummary>> {
+        return session.spaceService().getSpaceSummariesLive(queryParams).asObservable()
+                .startWithCallable {
+                    session.spaceService().getSpaceSummaries(queryParams)
                 }
     }
 
@@ -124,8 +132,8 @@ class RxSession(private val session: Session) {
                 .startWithCallable { session.getPendingThreePids() }
     }
 
-    fun createRoom(roomParams: CreateRoomParams): Single<String> = singleBuilder {
-        session.createRoom(roomParams, it)
+    fun createRoom(roomParams: CreateRoomParams): Single<String> = rxSingle {
+        session.createRoom(roomParams)
     }
 
     fun searchUsersDirectory(search: String,
@@ -136,13 +144,13 @@ class RxSession(private val session: Session) {
 
     fun joinRoom(roomIdOrAlias: String,
                  reason: String? = null,
-                 viaServers: List<String> = emptyList()): Single<Unit> = singleBuilder {
-        session.joinRoom(roomIdOrAlias, reason, viaServers, it)
+                 viaServers: List<String> = emptyList()): Single<Unit> = rxSingle {
+        session.joinRoom(roomIdOrAlias, reason, viaServers)
     }
 
     fun getRoomIdByAlias(roomAlias: String,
-                         searchOnServer: Boolean): Single<Optional<RoomAliasDescription>> = singleBuilder {
-        session.getRoomIdByAlias(roomAlias, searchOnServer, it)
+                         searchOnServer: Boolean): Single<Optional<RoomAliasDescription>> = rxSingle {
+        session.getRoomIdByAlias(roomAlias, searchOnServer)
     }
 
     fun getProfileInfo(userId: String): Single<JsonDict> = rxSingle {

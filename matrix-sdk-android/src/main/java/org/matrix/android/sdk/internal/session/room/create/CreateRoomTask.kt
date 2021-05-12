@@ -102,7 +102,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
                         .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
             }
         } catch (exception: TimeoutCancellationException) {
-            throw CreateRoomFailure.CreatedWithTimeout
+            throw CreateRoomFailure.CreatedWithTimeout(roomId)
         }
 
         Realm.getInstance(realmConfiguration).executeTransactionAsync {

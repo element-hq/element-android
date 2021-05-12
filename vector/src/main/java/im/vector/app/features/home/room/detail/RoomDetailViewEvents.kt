@@ -67,9 +67,8 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     ) : RoomDetailViewEvents()
 
     data class OpenFile(
-            val mimeType: String?,
-            val uri: Uri?,
-            val throwable: Throwable?
+            val uri: Uri,
+            val mimeType: String?
     ) : RoomDetailViewEvents()
 
     abstract class SendMessageResult : RoomDetailViewEvents()

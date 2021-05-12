@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
+import java.lang.UnsupportedOperationException
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val stateEventDataSource: StateEventDataSource,
@@ -73,7 +74,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 eventType = eventType,
                 body = body.toSafeJson(eventType)
         )
-        sendStateTask.execute(params)
+        sendStateTask.executeRetry(params, 3)
     }
 
     private fun JsonDict.toSafeJson(eventType: String): JsonDict {
@@ -127,6 +128,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
 
     override suspend fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?) {
         if (joinRules != null) {
+            if (joinRules == RoomJoinRules.RESTRICTED) throw UnsupportedOperationException("No yet supported")
             sendStateEvent(
                     eventType = EventType.STATE_ROOM_JOIN_RULES,
                     body = mapOf("join_rule" to joinRules),

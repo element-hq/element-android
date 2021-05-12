@@ -17,40 +17,47 @@
 package im.vector.app.features.roomprofile.settings.joinrule
 
 import im.vector.app.R
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.bottomsheet.BottomSheetGenericController
-import org.matrix.android.sdk.api.session.room.model.GuestAccess
+import me.gujun.android.span.image
+import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
 class RoomJoinRuleController @Inject constructor(
-        private val stringProvider: StringProvider
-) : BottomSheetGenericController<RoomJoinRuleState, RoomJoinRuleAction>() {
+        private val stringProvider: StringProvider,
+        private val drawableProvider: DrawableProvider
+) : BottomSheetGenericController<RoomJoinRuleState, RoomJoinRuleRadioAction>() {
 
     override fun getTitle() = stringProvider.getString(R.string.room_settings_room_access_rules_pref_dialog_title)
 
-    override fun getActions(state: RoomJoinRuleState): List<RoomJoinRuleAction> {
+    override fun getActions(state: RoomJoinRuleState): List<RoomJoinRuleRadioAction> {
         return listOf(
-                RoomJoinRuleAction(
+                RoomJoinRuleRadioAction(
                         roomJoinRule = RoomJoinRules.INVITE,
-                        roomGuestAccess = null,
-                        title = stringProvider.getString(R.string.room_settings_room_access_entry_only_invited),
-                        iconResId = 0,
+                        description = stringProvider.getString(R.string.room_settings_room_access_private_description),
+                        title = stringProvider.getString(R.string.room_settings_room_access_private_title),
                         isSelected = state.currentRoomJoinRule == RoomJoinRules.INVITE
                 ),
-                RoomJoinRuleAction(
+                RoomJoinRuleRadioAction(
                         roomJoinRule = RoomJoinRules.PUBLIC,
-                        roomGuestAccess = GuestAccess.Forbidden,
-                        title = stringProvider.getString(R.string.room_settings_room_access_entry_anyone_with_link_apart_guest),
-                        iconResId = 0,
-                        isSelected = state.currentRoomJoinRule == RoomJoinRules.PUBLIC && state.currentGuestAccess == GuestAccess.Forbidden
+                        description = stringProvider.getString(R.string.room_settings_room_access_public_description),
+                        title = stringProvider.getString(R.string.room_settings_room_access_public_title),
+                        isSelected = state.currentRoomJoinRule == RoomJoinRules.PUBLIC
                 ),
-                RoomJoinRuleAction(
-                        roomJoinRule = RoomJoinRules.PUBLIC,
-                        roomGuestAccess = GuestAccess.CanJoin,
-                        title = stringProvider.getString(R.string.room_settings_room_access_entry_anyone_with_link_including_guest),
-                        iconResId = 0,
-                        isSelected = state.currentRoomJoinRule == RoomJoinRules.PUBLIC && state.currentGuestAccess == GuestAccess.CanJoin
+                RoomJoinRuleRadioAction(
+                        roomJoinRule = RoomJoinRules.RESTRICTED,
+                        description = stringProvider.getString(R.string.room_settings_room_access_restricted_description),
+                        title = span {
+                            +stringProvider.getString(R.string.room_settings_room_access_restricted_title)
+                            + " "
+                            image(
+                                    drawableProvider.getDrawable(R.drawable.ic_beta_pill)!!,
+                                    "bottom"
+                            )
+                        },
+                        isSelected = state.currentRoomJoinRule == RoomJoinRules.RESTRICTED
                 )
         )
     }

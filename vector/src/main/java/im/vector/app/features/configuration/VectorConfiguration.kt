@@ -43,6 +43,8 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
             Timber.v("## onConfigurationChanged(): night mode has changed")
             ThemeUtils.invalidateNightMode(context)
         }
+        // Night mode may have changed
+        ThemeUtils.init(context)
     }
 
     fun applyToApplicationContext() {

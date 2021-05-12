@@ -47,7 +47,8 @@ import javax.inject.Inject
 
 @Parcelize
 data class CreateRoomArgs(
-        val initialName: String
+        val initialName: String,
+        val parentSpaceId: String? = null
 ) : Parcelable
 
 class CreateRoomFragment @Inject constructor(

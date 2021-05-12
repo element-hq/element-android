@@ -1816,4 +1816,8 @@
     <string name="notice_room_update_by_you">Bu odayı geliştirdiniz.</string>
     <string name="notice_room_update">%s bu odayı geliştirdi.</string>
     <string name="notice_end_to_end_by_you">Uçtan uca şifrelemeyi açtınız (%1$s)</string>
+    <string name="notice_widget_modified">%1$s %2$s widgetını düzenledi</string>
+    <string name="notice_widget_removed">%1$s %2$s widgetını kaldırdı</string>
+    <string name="notice_end_to_end">%1$s uçtan uca şifrelemeyi etkinleştirdi (%2$s)</string>
+    <string name="notice_room_visibility_unknown">bilinmeyen (%s).</string>
 </resources>

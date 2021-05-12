@@ -2723,4 +2723,5 @@
     <string name="settings_room_directory_show_all_rooms_summary">Zobrazit všechny místnosti v adresáři místností, včetně místností s explicitním obsahem.</string>
     <string name="settings_room_directory_show_all_rooms">Zobrazit místnosti s explicitním obsahem</string>
     <string name="settings_category_room_directory">Adresář místností</string>
+    <string name="event_status_sent_message">Zpráva odeslána</string>
 </resources>

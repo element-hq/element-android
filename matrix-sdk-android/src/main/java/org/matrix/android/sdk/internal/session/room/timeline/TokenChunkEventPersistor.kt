@@ -149,7 +149,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                     }
                             ?: ChunkEntity.create(realm, prevToken, nextToken)
 
-                    if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
+                    if (receivedChunk.events.isNullOrEmpty() && !receivedChunk.hasMore()) {
                         handleReachEnd(realm, roomId, direction, currentChunk)
                     } else {
                         handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
