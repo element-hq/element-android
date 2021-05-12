@@ -406,7 +406,7 @@ dependencies {
     implementation "com.github.piasy:GlideImageViewFactory:$big_image_viewer_version"
 
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.2'
-    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
