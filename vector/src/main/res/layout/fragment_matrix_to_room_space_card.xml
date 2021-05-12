@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_vertical_margin_big"
-            android:importantForAccessibility="no"
+            android:contentDescription="@string/a11y_beta"
             android:src="@drawable/ic_beta_pill"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
