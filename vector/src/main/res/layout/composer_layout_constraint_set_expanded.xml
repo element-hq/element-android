@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toStartOf="@+id/composerRelatedMessageTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/composerRelatedMessageTitle"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <TextView
         android:id="@+id/composerRelatedMessageTitle"

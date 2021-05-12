@@ -35,7 +35,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:contentDescription="@string/avatar"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/room_round_avatars" />
 
         <ImageView
             android:id="@+id/roomAvatarCheckedImageView"
@@ -114,7 +114,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <ImageView
         android:id="@+id/roomDraftBadge"
@@ -179,7 +179,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/roomNameView"
         app:layout_constraintTop_toBottomOf="@+id/roomNameView"
-        tools:text="@sample/matrix.json/data/message" />
+        tools:text="@sample/messages.json/data/message" />
 
     <TextView
         android:id="@+id/roomTypingView"

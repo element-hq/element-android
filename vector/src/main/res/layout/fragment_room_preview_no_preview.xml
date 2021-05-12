@@ -32,7 +32,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@tools:sample/avatars" />
+                    tools:src="@sample/room_round_avatars" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewToolbarTitle"
@@ -49,7 +49,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/roomPreviewNoPreviewToolbarAvatar"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="@sample/matrix.json/data/displayName" />
+                    tools:text="@sample/users.json/data/displayName" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -82,7 +82,7 @@
                     android:layout_height="128dp"
                     android:layout_marginTop="60dp"
                     android:importantForAccessibility="no"
-                    tools:src="@tools:sample/avatars" />
+                    tools:src="@sample/room_round_avatars" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewName"
@@ -93,7 +93,7 @@
                     android:textAppearance="@style/TextAppearance.Vector.Title"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    tools:text="@sample/matrix.json/data/roomName" />
+                    tools:text="@sample/rooms.json/data/name" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewTopic"
@@ -104,7 +104,7 @@
                     android:gravity="center"
                     android:textAppearance="@style/TextAppearance.Vector.Subtitle"
                     android:textSize="15sp"
-                    tools:text="@sample/matrix.json/data/roomTopic" />
+                    tools:text="@sample/rooms.json/data/topic" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewLabel"
