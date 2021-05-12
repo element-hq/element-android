@@ -16,9 +16,11 @@
 
 package im.vector.app.features.spaces
 
+import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItemHeader
@@ -38,6 +40,7 @@ import javax.inject.Inject
 
 class SpaceSummaryController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
+        private val colorProvider: ColorProvider,
         private val stringProvider: StringProvider) : EpoxyController() {
 
     var callback: Callback? = null
@@ -72,6 +75,7 @@ class SpaceSummaryController @Inject constructor(
             genericItemHeader {
                 id("legacy_groups")
                 text(stringProvider.getString(R.string.groups_header))
+                textColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
             }
 
             // add home for communities
@@ -104,12 +108,12 @@ class SpaceSummaryController @Inject constructor(
                                  rootSpaces: List<RoomSummary>?,
                                  expandedStates: Map<String, Boolean>,
                                  homeCount: RoomAggregateNotificationCount) {
-        genericItemHeader {
-            id("spaces")
-            text(stringProvider.getString(R.string.spaces_header))
+        spaceBetaHeaderItem {
+            id("beta_header")
+            clickAction(View.OnClickListener {
+                callback?.sendFeedBack()
+            })
         }
-
-        spaceBetaHeaderItem { id("beta_header") }
 
         // show invites on top
 
@@ -221,7 +225,7 @@ class SpaceSummaryController @Inject constructor(
         fun onSpaceSettings(spaceSummary: RoomSummary)
         fun onToggleExpand(spaceSummary: RoomSummary)
         fun onAddSpaceSelected()
-
         fun onGroupSelected(groupSummary: GroupSummary?)
+        fun sendFeedBack()
     }
 }

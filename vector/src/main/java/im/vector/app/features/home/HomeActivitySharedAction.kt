@@ -29,4 +29,5 @@ sealed class HomeActivitySharedAction : VectorSharedAction {
     data class OpenSpacePreview(val spaceId: String) : HomeActivitySharedAction()
     data class OpenSpaceInvite(val spaceId: String) : HomeActivitySharedAction()
     data class ShowSpaceSettings(val spaceId: String) : HomeActivitySharedAction()
+    object SendSpaceFeedBack : HomeActivitySharedAction()
 }
