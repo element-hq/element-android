@@ -2294,7 +2294,7 @@
     <string name="a11y_show_password">Show password</string>
     <string name="a11y_hide_password">Hide password</string>
     <string name="a11y_jump_to_bottom">Jump to bottom</string>
-    <string name="a11y_beta">This feature is undergoing beta testing</string>
+    <string name="a11y_beta">This feature is in beta</string>
 
     <!-- Read receipts list a11y -->
     <plurals name="two_and_some_others_read">
