@@ -3,7 +3,7 @@
 
     <!-- DARK THEME COLORS -->
 
-    <style name="AppTheme.Base.Dark" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+    <style name="AppTheme.Base.Dark" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Riotx attribute for palette -->
         <item name="riotx_background">@color/riotx_background_dark</item>
         <item name="vctr_home_drawer_header_background">@color/vctr_home_drawer_header_background_dark</item>
@@ -181,6 +181,8 @@
 
         <!-- chat effect -->
         <item name="vctr_chat_effect_snow_background">@android:color/transparent</item>
+
+        <item name="actionModeStyle">@style/ActionModeTheme</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />

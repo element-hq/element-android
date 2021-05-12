@@ -91,17 +91,16 @@ import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.ui.views.CurrentCallsView
-import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.core.ui.views.ActiveConferenceView
-import im.vector.app.core.ui.views.FailedMessagesWarningView
+import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.JumpToReadMarkerView
+import im.vector.app.core.ui.views.KnownCallsViewHolder
+import im.vector.app.core.ui.views.FailedMessagesWarningView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.KeyboardStateUtils
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.copyToClipboard
@@ -113,6 +112,7 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.core.utils.shareText
+import im.vector.app.core.utils.startInstallFromSourceIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentRoomDetailBinding
@@ -160,9 +160,11 @@ import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.reactions.EmojiReactionPickerActivity
 import im.vector.app.features.roomprofile.RoomProfileActivity
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
+import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
@@ -197,6 +199,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
@@ -210,7 +213,8 @@ import javax.inject.Inject
 data class RoomDetailArgs(
         val roomId: String,
         val eventId: String? = null,
-        val sharedData: SharedData? = null
+        val sharedData: SharedData? = null,
+        val openShareSpaceForId: String? = null
 ) : Parcelable
 
 class RoomDetailFragment @Inject constructor(
@@ -293,7 +297,7 @@ class RoomDetailFragment @Inject constructor(
 
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var keyboardStateUtils: KeyboardStateUtils
-    private lateinit var callActionsHandler : StartCallActionsHandler
+    private lateinit var callActionsHandler: StartCallActionsHandler
 
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
@@ -376,7 +380,6 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.ActionFailure                    -> displayRoomDetailActionFailure(it)
                 is RoomDetailViewEvents.ShowMessage                      -> showSnackWithMessage(it.message)
                 is RoomDetailViewEvents.NavigateToEvent                  -> navigateToEvent(it)
-                is RoomDetailViewEvents.FileTooBigError                  -> displayFileTooBigError(it)
                 is RoomDetailViewEvents.DownloadFileState                -> handleDownloadFileState(it)
                 is RoomDetailViewEvents.JoinRoomCommandSuccess           -> handleJoinedToAnotherRoom(it)
                 is RoomDetailViewEvents.SendMessageResult                -> renderSendMessageResult(it)
@@ -407,6 +410,7 @@ class RoomDetailFragment @Inject constructor(
 
         if (savedInstanceState == null) {
             handleShareData()
+            handleSpaceShare()
         }
     }
 
@@ -419,7 +423,7 @@ class RoomDetailFragment @Inject constructor(
         startActivity(intent)
     }
 
-        private fun handleChatEffect(chatEffect: ChatEffect) {
+    private fun handleChatEffect(chatEffect: ChatEffect) {
         when (chatEffect) {
             ChatEffect.CONFETTI -> {
                 views.viewKonfetti.isVisible = true
@@ -589,18 +593,51 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun startOpenFileIntent(action: RoomDetailViewEvents.OpenFile) {
-        if (action.uri != null) {
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndTypeAndNormalize(action.uri, action.mimeType)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                requireActivity().startActivity(intent)
-            } else {
-                requireActivity().toast(R.string.error_no_external_application_found)
-            }
+        if (action.mimeType == MimeTypes.Apk) {
+            installApk(action)
+        } else {
+            openFile(action)
         }
+    }
+
+    private fun openFile(action: RoomDetailViewEvents.OpenFile) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndTypeAndNormalize(action.uri, action.mimeType)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+            requireActivity().startActivity(intent)
+        } else {
+            requireActivity().toast(R.string.error_no_external_application_found)
+        }
+    }
+
+    private fun installApk(action: RoomDetailViewEvents.OpenFile) {
+        val safeContext = context ?: return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!safeContext.packageManager.canRequestPackageInstalls()) {
+                roomDetailViewModel.pendingEvent = action
+                startInstallFromSourceIntent(safeContext, installApkActivityResultLauncher)
+            } else {
+                openFile(action)
+            }
+        } else {
+            openFile(action)
+        }
+    }
+
+    private val installApkActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            roomDetailViewModel.pendingEvent?.let {
+                if (it is RoomDetailViewEvents.OpenFile) {
+                    openFile(it)
+                }
+            }
+        } else {
+            // User cancelled
+        }
+        roomDetailViewModel.pendingEvent = null
     }
 
     private fun displayPromptForIntegrationManager() {
@@ -636,6 +673,15 @@ class RoomDetailFragment @Inject constructor(
             }
             null                      -> Timber.v("No share data to process")
         }.exhaustive
+    }
+
+    private fun handleSpaceShare() {
+        roomDetailArgs.openShareSpaceForId?.let { spaceId ->
+            ShareSpaceBottomSheet.show(childFragmentManager, spaceId)
+            view?.post {
+                handleChatEffect(ChatEffect.CONFETTI)
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -699,18 +745,6 @@ class RoomDetailFragment @Inject constructor(
             views.timelineRecyclerView.stopScroll()
             layoutManager.scrollToPosition(scrollPosition)
         }
-    }
-
-    private fun displayFileTooBigError(action: RoomDetailViewEvents.FileTooBigError) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(getString(R.string.error_file_too_big,
-                        action.filename,
-                        TextUtils.formatFileSize(requireContext(), action.fileSizeInBytes),
-                        TextUtils.formatFileSize(requireContext(), action.homeServerLimitInBytes)
-                ))
-                .setPositiveButton(R.string.ok, null)
-                .show()
     }
 
     private fun handleDownloadFileState(action: RoomDetailViewEvents.DownloadFileState) {
@@ -803,7 +837,7 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.ManageIntegrations)
                 true
             }
-            R.id.voice_call -> {
+            R.id.voice_call       -> {
                 callActionsHandler.onVoiceCallClicked()
                 true
             }
@@ -938,7 +972,7 @@ class RoomDetailFragment @Inject constructor(
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onImageResult(it.data)
+            attachmentsHelper.onFileResult(it.data)
         }
     }
 
@@ -954,15 +988,21 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val attachmentImageActivityResultLauncher = registerStartForActivityResult {
+    private val attachmentMediaActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onImageResult(it.data)
+            attachmentsHelper.onMediaResult(it.data)
         }
     }
 
-    private val attachmentPhotoActivityResultLauncher = registerStartForActivityResult {
+    private val attachmentCameraActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onPhotoResult()
+            attachmentsHelper.onCameraResult()
+        }
+    }
+
+    private val attachmentCameraVideoActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onCameraVideoResult()
         }
     }
 
@@ -1431,7 +1471,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onUrlClicked(url: String, title: String): Boolean {
         permalinkHandler
                 .launch(requireActivity(), url, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?): Boolean {
+                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
                         // Same room?
                         if (roomId == roomDetailArgs.roomId) {
                             // Navigation to same room
@@ -1639,7 +1679,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onRoomCreateLinkClicked(url: String) {
         permalinkHandler
                 .launch(requireContext(), url, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?): Boolean {
+                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
                         requireActivity().finish()
                         return false
                     }
@@ -1702,7 +1742,7 @@ class RoomDetailFragment @Inject constructor(
             sharedActionViewModel.pendingAction = action
             return
         }
-        lifecycleScope.launch {
+        session.coroutineScope.launch {
             val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
             if (!isAdded) return@launch
             result.fold(
@@ -1955,9 +1995,14 @@ class RoomDetailFragment @Inject constructor(
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(requireContext(), attachmentPhotoActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(
+                    activity = requireActivity(),
+                    vectorPreferences = vectorPreferences,
+                    cameraActivityResultLauncher = attachmentCameraActivityResultLauncher,
+                    cameraVideoActivityResultLauncher = attachmentCameraVideoActivityResultLauncher
+            )
             AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentImageActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)

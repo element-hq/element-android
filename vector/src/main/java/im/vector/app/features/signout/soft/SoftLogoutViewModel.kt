@@ -33,7 +33,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.login.LoginMode
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
-import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -100,21 +99,21 @@ class SoftLogoutViewModel @AssistedInject constructor(
                 null
             }
 
-            if (data is LoginFlowResult.Success) {
-                val loginMode = when {
-                    // SSO login is taken first
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                    else                                                                  -> LoginMode.Unsupported
-                }
+            data ?: return@launch
 
-                setState {
-                    copy(
-                            asyncHomeServerLoginFlowRequest = Success(loginMode)
-                    )
-                }
+            val loginMode = when {
+                // SSO login is taken first
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                        && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+                else                                                                  -> LoginMode.Unsupported
+            }
+
+            setState {
+                copy(
+                        asyncHomeServerLoginFlowRequest = Success(loginMode)
+                )
             }
         }
     }

@@ -1,0 +1,2 @@
+Main changes in this version: beta support for Spaces. Compress video before sending.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.1.7

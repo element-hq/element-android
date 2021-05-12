@@ -2740,4 +2740,14 @@
     <string name="event_status_a11y_failed">Ha fallat</string>
     <string name="event_status_a11y_sent">Enviat</string>
     <string name="event_status_a11y_sending">Enviant</string>
+    <string name="event_status_sent_message">Missatge enviat</string>
+    <string name="search_hint_room_name">Cerca nom</string>
+    <string name="room_settings_room_access_public_description">Qualsevol pot trobar la sala i unir-s\'hi</string>
+    <string name="room_settings_room_access_private_title">Privat</string>
+    <string name="room_settings_room_access_public_title">Públic</string>
+    <string name="room_settings_room_access_private_description">Només els convidats poden trobar-la i unir-s\'hi</string>
+    <string name="room_settings_room_access_entry_knock">Qualsevol pot demanar entrar a la sala, els participants poden acceptar-ho o rebutjar-ho</string>
+    <string name="room_settings_guest_access_title">Permet als convidats unir-se</string>
+    <string name="spaces_invited_header">Invitacions</string>
+    <string name="suggested_header">Sales suggerides</string>
 </resources>

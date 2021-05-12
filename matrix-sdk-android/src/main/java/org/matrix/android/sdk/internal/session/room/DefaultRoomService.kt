@@ -20,19 +20,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.RoomService
+import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
-import org.matrix.android.sdk.api.session.room.UpdatableFilterLivePageResult
+import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -50,8 +50,6 @@ import org.matrix.android.sdk.internal.session.room.peeking.ResolveRoomStateTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateBreadcrumbsTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.fetchCopied
 import javax.inject.Inject
 
@@ -67,16 +65,11 @@ internal class DefaultRoomService @Inject constructor(
         private val peekRoomTask: PeekRoomTask,
         private val roomGetter: RoomGetter,
         private val roomSummaryDataSource: RoomSummaryDataSource,
-        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
-        private val taskExecutor: TaskExecutor
+        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource
 ) : RoomService {
 
-    override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
-        return createRoomTask
-                .configureWith(createRoomParams) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun createRoom(createRoomParams: CreateRoomParams): String {
+        return createRoomTask.executeRetry(createRoomParams, 3)
     }
 
     override fun getRoom(roomId: String): Room? {
@@ -99,14 +92,14 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getRoomSummariesLive(queryParams)
     }
 
-    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config)
+    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config, sortOrder: RoomSortOrder)
             : LiveData<PagedList<RoomSummary>> {
-        return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig)
+        return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
-    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config)
-            : UpdatableFilterLivePageResult {
-        return roomSummaryDataSource.getFilteredPagedRoomSummariesLive(queryParams, pagedListConfig)
+    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config, sortOrder: RoomSortOrder)
+            : UpdatableLivePageResult {
+        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
     override fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
@@ -121,34 +114,20 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getBreadcrumbsLive(queryParams)
     }
 
-    override fun onRoomDisplayed(roomId: String): Cancelable {
-        return updateBreadcrumbsTask
-                .configureWith(UpdateBreadcrumbsTask.Params(roomId))
-                .executeBy(taskExecutor)
+    override suspend fun onRoomDisplayed(roomId: String) {
+        updateBreadcrumbsTask.execute(UpdateBreadcrumbsTask.Params(roomId))
     }
 
-    override fun joinRoom(roomIdOrAlias: String, reason: String?, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
-        return joinRoomTask
-                .configureWith(JoinRoomTask.Params(roomIdOrAlias, reason, viaServers)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun joinRoom(roomIdOrAlias: String, reason: String?, viaServers: List<String>) {
+        joinRoomTask.execute(JoinRoomTask.Params(roomIdOrAlias, reason, viaServers))
     }
 
-    override fun markAllAsRead(roomIds: List<String>, callback: MatrixCallback<Unit>): Cancelable {
-        return markAllRoomsReadTask
-                .configureWith(MarkAllRoomsReadTask.Params(roomIds)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun markAllAsRead(roomIds: List<String>) {
+        markAllRoomsReadTask.execute(MarkAllRoomsReadTask.Params(roomIds))
     }
 
-    override fun getRoomIdByAlias(roomAlias: String, searchOnServer: Boolean, callback: MatrixCallback<Optional<RoomAliasDescription>>): Cancelable {
-        return roomIdByAliasTask
-                .configureWith(GetRoomIdByAliasTask.Params(roomAlias, searchOnServer)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun getRoomIdByAlias(roomAlias: String, searchOnServer: Boolean): Optional<RoomAliasDescription> {
+        return roomIdByAliasTask.execute(GetRoomIdByAliasTask.Params(roomAlias, searchOnServer))
     }
 
     override suspend fun deleteRoomAlias(roomAlias: String) {
@@ -179,19 +158,25 @@ internal class DefaultRoomService @Inject constructor(
         }
     }
 
-    override fun getRoomState(roomId: String, callback: MatrixCallback<List<Event>>) {
-        resolveRoomStateTask
-                .configureWith(ResolveRoomStateTask.Params(roomId)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun getRoomState(roomId: String): List<Event> {
+        return resolveRoomStateTask.execute(ResolveRoomStateTask.Params(roomId))
     }
 
-    override fun peekRoom(roomIdOrAlias: String, callback: MatrixCallback<PeekResult>) {
-        peekRoomTask
-                .configureWith(PeekRoomTask.Params(roomIdOrAlias)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun peekRoom(roomIdOrAlias: String): PeekResult {
+        return peekRoomTask.execute(PeekRoomTask.Params(roomIdOrAlias))
+    }
+
+    override fun getFlattenRoomSummaryChildrenOf(spaceId: String?, memberships: List<Membership>): List<RoomSummary> {
+        if (spaceId == null) {
+            return roomSummaryDataSource.getFlattenOrphanRooms()
+        }
+        return roomSummaryDataSource.getAllRoomSummaryChildOf(spaceId, memberships)
+    }
+
+    override fun getFlattenRoomSummaryChildrenOfLive(spaceId: String?, memberships: List<Membership>): LiveData<List<RoomSummary>> {
+        if (spaceId == null) {
+            return roomSummaryDataSource.getFlattenOrphanRoomsLive()
+        }
+        return roomSummaryDataSource.getAllRoomSummaryChildOfLive(spaceId, memberships)
     }
 }

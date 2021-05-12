@@ -18,6 +18,13 @@
 package org.matrix.android.sdk.api.session.room.powerlevels
 
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.banOrDefault
+import org.matrix.android.sdk.api.session.room.model.eventsDefaultOrDefault
+import org.matrix.android.sdk.api.session.room.model.inviteOrDefault
+import org.matrix.android.sdk.api.session.room.model.kickOrDefault
+import org.matrix.android.sdk.api.session.room.model.redactOrDefault
+import org.matrix.android.sdk.api.session.room.model.stateDefaultOrDefault
+import org.matrix.android.sdk.api.session.room.model.usersDefaultOrDefault
 
 /**
  * This class is an helper around PowerLevelsContent.
@@ -31,9 +38,9 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @return the power level
      */
     fun getUserPowerLevelValue(userId: String): Int {
-        return powerLevelsContent.users.getOrElse(userId) {
-            powerLevelsContent.usersDefault
-        }
+        return powerLevelsContent.users
+                ?.get(userId)
+                ?: powerLevelsContent.usersDefaultOrDefault()
     }
 
     /**
@@ -45,7 +52,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
     fun getUserRole(userId: String): Role {
         val value = getUserPowerLevelValue(userId)
         // I think we should use powerLevelsContent.usersDefault, but Ganfra told me that it was like that on riot-Web
-        return Role.fromValue(value, powerLevelsContent.eventsDefault)
+        return Role.fromValue(value, powerLevelsContent.eventsDefaultOrDefault())
     }
 
     /**
@@ -59,11 +66,11 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
     fun isUserAllowedToSend(userId: String, isState: Boolean, eventType: String?): Boolean {
         return if (userId.isNotEmpty()) {
             val powerLevel = getUserPowerLevelValue(userId)
-            val minimumPowerLevel = powerLevelsContent.events[eventType]
+            val minimumPowerLevel = powerLevelsContent.events?.get(eventType)
                     ?: if (isState) {
-                        powerLevelsContent.stateDefault
+                        powerLevelsContent.stateDefaultOrDefault()
                     } else {
-                        powerLevelsContent.eventsDefault
+                        powerLevelsContent.eventsDefaultOrDefault()
                     }
             powerLevel >= minimumPowerLevel
         } else false
@@ -76,7 +83,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      */
     fun isUserAbleToInvite(userId: String): Boolean {
         val powerLevel = getUserPowerLevelValue(userId)
-        return powerLevel >= powerLevelsContent.invite
+        return powerLevel >= powerLevelsContent.inviteOrDefault()
     }
 
     /**
@@ -86,7 +93,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      */
     fun isUserAbleToBan(userId: String): Boolean {
         val powerLevel = getUserPowerLevelValue(userId)
-        return powerLevel >= powerLevelsContent.ban
+        return powerLevel >= powerLevelsContent.banOrDefault()
     }
 
     /**
@@ -96,7 +103,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      */
     fun isUserAbleToKick(userId: String): Boolean {
         val powerLevel = getUserPowerLevelValue(userId)
-        return powerLevel >= powerLevelsContent.kick
+        return powerLevel >= powerLevelsContent.kickOrDefault()
     }
 
     /**
@@ -106,6 +113,6 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      */
     fun isUserAbleToRedact(userId: String): Boolean {
         val powerLevel = getUserPowerLevelValue(userId)
-        return powerLevel >= powerLevelsContent.redact
+        return powerLevel >= powerLevelsContent.redactOrDefault()
     }
 }

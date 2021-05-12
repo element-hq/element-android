@@ -22,5 +22,5 @@ import im.vector.app.core.platform.VectorViewEvents
  * Transient events for invite users to room screen
  */
 sealed class UserListViewEvents : VectorViewEvents {
-    data class OpenShareMatrixToLing(val link: String) : UserListViewEvents()
+    data class OpenShareMatrixToLink(val link: String) : UserListViewEvents()
 }

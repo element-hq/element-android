@@ -29,11 +29,10 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsFilter
@@ -88,7 +87,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
                     val joinedRoomIds = list
                             ?.map { it.roomId }
                             ?.toSet()
-                            ?: emptySet()
+                            .orEmpty()
 
                     setState {
                         copy(joinedRoomsIds = joinedRoomIds)
@@ -184,7 +183,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
                         )
                 )
             } catch (failure: Throwable) {
-                if (failure is Failure.Cancelled) {
+                if (failure is CancellationException) {
                     // Ignore, another request should be already started
                     return@launch
                 }
@@ -234,17 +233,16 @@ class RoomDirectoryViewModel @AssistedInject constructor(
         val viaServers = state.roomDirectoryData.homeServer
                 ?.let { listOf(it) }
                 .orEmpty()
-        session.joinRoom(action.roomId, viaServers = viaServers, callback = object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                session.joinRoom(action.roomId, viaServers = viaServers)
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 // Notify the user
                 _viewEvents.post(RoomDirectoryViewEvents.Failure(failure))
             }
-        })
+        }
     }
 
     override fun onCleared() {

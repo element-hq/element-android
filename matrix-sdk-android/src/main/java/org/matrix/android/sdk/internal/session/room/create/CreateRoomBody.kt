@@ -111,5 +111,12 @@ internal data class CreateRoomBody(
          * The power level content to override in the default power level event
          */
         @Json(name = "power_level_content_override")
-        val powerLevelContentOverride: PowerLevelsContent?
+        val powerLevelContentOverride: PowerLevelsContent?,
+
+        /**
+         * The room version to set for the room. If not provided, the homeserver is to use its configured default.
+         * If provided, the homeserver will return a 400 error with the errcode M_UNSUPPORTED_ROOM_VERSION if it does not support the room version.
+         */
+        @Json(name = "room_version")
+        val roomVersion: String?
 )

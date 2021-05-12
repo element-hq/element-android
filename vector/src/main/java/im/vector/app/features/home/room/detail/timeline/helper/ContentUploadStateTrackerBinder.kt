@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
@@ -25,6 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenScope
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
@@ -70,6 +72,9 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
                                           private val messageColorProvider: MessageColorProvider,
                                           private val errorFormatter: ErrorFormatter) : ContentUploadStateTracker.UpdateListener {
 
+    private val progressBar: ProgressBar = progressLayout.findViewById(R.id.mediaProgressBar)
+    private val progressTextView: TextView = progressLayout.findViewById(R.id.mediaProgressTextView)
+
     override fun onUpdate(state: ContentUploadStateTracker.State) {
         when (state) {
             is ContentUploadStateTracker.State.Idle                -> handleIdle()
@@ -79,19 +84,19 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
             is ContentUploadStateTracker.State.Uploading           -> handleProgress(state)
             is ContentUploadStateTracker.State.Failure             -> handleFailure(/*state*/)
             is ContentUploadStateTracker.State.Success             -> handleSuccess()
-        }
+            is ContentUploadStateTracker.State.CompressingImage    -> handleCompressingImage()
+            is ContentUploadStateTracker.State.CompressingVideo    -> handleCompressingVideo(state)
+        }.exhaustive
     }
 
     private fun handleIdle() {
         if (isLocalFile) {
             progressLayout.isVisible = true
-            val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
-            val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
-            progressBar?.isVisible = true
-            progressBar?.isIndeterminate = true
-            progressBar?.progress = 0
-            progressTextView?.text = progressLayout.context.getString(R.string.send_file_step_idle)
-            progressTextView?.setTextColor(messageColorProvider.getMessageTextColor(SendState.UNSENT))
+            progressBar.isVisible = true
+            progressBar.isIndeterminate = true
+            progressBar.progress = 0
+            progressTextView.text = progressLayout.context.getString(R.string.send_file_step_idle)
+            progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.UNSENT))
         } else {
             progressLayout.isVisible = false
         }
@@ -113,38 +118,54 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         doHandleProgress(R.string.send_file_step_sending_file, state.current, state.total)
     }
 
+    private fun handleCompressingImage() {
+        progressLayout.visibility = View.VISIBLE
+        progressBar.isVisible = true
+        progressBar.isIndeterminate = true
+        progressTextView.isVisible = true
+        progressTextView.text = progressLayout.context.getString(R.string.send_file_step_compressing_image)
+        progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
+    }
+
+    // Add SuppressLint to fix a false positive
+    @SuppressLint("StringFormatMatches")
+    private fun handleCompressingVideo(state: ContentUploadStateTracker.State.CompressingVideo) {
+        progressLayout.visibility = View.VISIBLE
+        progressBar.isVisible = true
+        progressBar.isIndeterminate = false
+        progressBar.progress = state.percent.toInt()
+        progressTextView.isVisible = true
+        // False positive is here...
+        progressTextView.text = progressLayout.context.getString(R.string.send_file_step_compressing_video, state.percent.toInt())
+        progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
+    }
+
     private fun doHandleEncrypting(resId: Int, current: Long, total: Long) {
         progressLayout.visibility = View.VISIBLE
         val percent = if (total > 0) (100L * (current.toFloat() / total.toFloat())) else 0f
-        val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
-        val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
-        progressBar?.isIndeterminate = false
-        progressBar?.progress = percent.toInt()
+        progressBar.isIndeterminate = false
+        progressBar.progress = percent.toInt()
         progressTextView.isVisible = true
-        progressTextView?.text = progressLayout.context.getString(resId)
-        progressTextView?.setTextColor(messageColorProvider.getMessageTextColor(SendState.ENCRYPTING))
+        progressTextView.text = progressLayout.context.getString(resId)
+        progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.ENCRYPTING))
     }
 
     private fun doHandleProgress(resId: Int, current: Long, total: Long) {
         progressLayout.visibility = View.VISIBLE
         val percent = 100L * (current.toFloat() / total.toFloat())
-        val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
-        val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
-        progressBar?.isVisible = true
-        progressBar?.isIndeterminate = false
-        progressBar?.progress = percent.toInt()
+        progressBar.isVisible = true
+        progressBar.isIndeterminate = false
+        progressBar.progress = percent.toInt()
         progressTextView.isVisible = true
-        progressTextView?.text = progressLayout.context.getString(resId,
+        progressTextView.text = progressLayout.context.getString(resId,
                 TextUtils.formatFileSize(progressLayout.context, current, true),
                 TextUtils.formatFileSize(progressLayout.context, total, true))
-        progressTextView?.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
+        progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
     }
 
     private fun handleFailure(/*state: ContentUploadStateTracker.State.Failure*/) {
         progressLayout.visibility = View.VISIBLE
-        val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
-        val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
-        progressBar?.isVisible = false
+        progressBar.isVisible = false
         // Do not show the message it's too technical for users, and unfortunate when upload is cancelled
         // in the middle by turning airplane mode for example
         progressTextView.isVisible = false

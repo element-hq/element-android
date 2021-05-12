@@ -47,6 +47,9 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     lateinit var body: CharSequence
 
     @EpoxyAttribute
+    var bodyDetails: CharSequence? = null
+
+    @EpoxyAttribute
     var imageContentRenderer: ImageContentRenderer? = null
 
     @EpoxyAttribute
@@ -73,6 +76,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         holder.imagePreview.isVisible = data != null
         holder.body.movementMethod = movementMethod
         holder.body.text = body
+        holder.bodyDetails.setTextOrHide(bodyDetails)
         body.findPillsAndProcess(coroutineScope) { it.bind(holder.body) }
         holder.timestamp.setTextOrHide(time)
     }
@@ -86,6 +90,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         val avatar by bind<ImageView>(R.id.bottom_sheet_message_preview_avatar)
         val sender by bind<TextView>(R.id.bottom_sheet_message_preview_sender)
         val body by bind<TextView>(R.id.bottom_sheet_message_preview_body)
+        val bodyDetails by bind<TextView>(R.id.bottom_sheet_message_preview_body_details)
         val timestamp by bind<TextView>(R.id.bottom_sheet_message_preview_timestamp)
         val imagePreview by bind<ImageView>(R.id.bottom_sheet_message_preview_image)
     }

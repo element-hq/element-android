@@ -599,8 +599,8 @@
     <string name="room_event_action_report_prompt_ignore_user">Desideri nascondere tutti i messaggi di questo utente\? 
 \n
 \nTieni presente che questa azione riavvierà l\'app e ciò potrebbe richiedere molto tempo.</string>
-    <string name="room_event_action_cancel_upload">Annulla l\'upload</string>
-    <string name="room_event_action_cancel_download">Annulla il download</string>
+    <string name="room_event_action_cancel_upload">Annulla il caricamento</string>
+    <string name="room_event_action_cancel_download">Annulla lo scaricamento</string>
     <!-- Search -->
     <string name="search_hint">Cerca</string>
     <string name="search_members_hint">Cerca tra i membri della stanza</string>
@@ -1084,20 +1084,20 @@
     <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi precedenti</string>
     <string name="missing_permissions_error">Non hai permessi sufficienti per effettuare questa azione.</string>
     <plurals name="format_time_s">
-        <item quantity="one">%ds</item>
-        <item quantity="other">%ds</item>
+        <item quantity="one">%d s</item>
+        <item quantity="other">%d s</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">%dm</item>
-        <item quantity="other">%dm</item>
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d min</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%dh</item>
-        <item quantity="other">%dh</item>
+        <item quantity="one">%d h</item>
+        <item quantity="other">%d h</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">%dd</item>
-        <item quantity="other">%dd</item>
+        <item quantity="one">%d g.</item>
+        <item quantity="other">%d g.</item>
     </plurals>
     <string name="room_participants_now">%1$s ora</string>
     <string name="room_participants_ago">%1$s %2$s fa</string>
@@ -2734,4 +2734,84 @@
 \nScaricamento dati…</string>
     <string name="initial_sync_start_server_computing">Sinc. iniziale:
 \nIn attesa di risposta dal server…</string>
+    <string name="event_status_sent_message">Messaggio inviato</string>
+    <string name="labs_use_restricted_join_rule_desc">L\'avviso richiede il supporto del server e una versione di stanza sperimentale</string>
+    <string name="labs_use_restricted_join_rule">Spazio sperimentale - stanza riservata.</string>
+    <string name="you_are_invited">Sei invitato</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Gli spazi sono modi di raggruppare stanze e persone per lavoro, divertimento o solo per te stesso.</string>
+    <string name="spaces_beta_welcome_to_spaces">Benvenuti negli spazi!</string>
+    <string name="space_add_existing_rooms">Aggiungi stanze e spazi esistenti</string>
+    <string name="space_leave_prompt_msg">Vuoi veramente uscire dallo spazio\?</string>
+    <string name="leave_space">Esci dallo spazio</string>
+    <string name="space_add_child_title">Aggiungi stanze</string>
+    <string name="space_explore_activity_title">Esplora stanze</string>
+    <plurals name="space_people_you_know">
+        <item quantity="one">%d persona che conosci si è già unita</item>
+        <item quantity="other">%d persone che conosci si sono già unite</item>
+    </plurals>
+    <string name="suggested_rooms_pills_on_empty_header">Benvenuti a %1$s, %2$s.</string>
+    <string name="suggested_rooms_pills_on_empty_text">Non sei ancora in nessuna stanza. Sotto trovi alcune stanze consigliate, ma puoi vederne altre con il pulsante verde in fondo a destra.</string>
+    <string name="room_alias_preview_not_found">Questo alias non è accessibile al momento.
+\nRiprova più tardi, o chiedi ad un amministratore della stanza di controllare se hai l\'accesso.</string>
+    <string name="join_anyway">Unisciti comunque</string>
+    <string name="join_space">Unisciti ad uno spazio</string>
+    <string name="create_space">Crea spazio</string>
+    <string name="skip_for_now">Salta per adesso</string>
+    <string name="share_space_link_message">Unisciti al mio spazio %1$s %2$s</string>
+    <string name="invite_just_to_this_room_desc">Non faranno parte di %s</string>
+    <string name="invite_just_to_this_room">Solo in questa stanza</string>
+    <string name="invite_to_space_with_name_desc">Potranno esplorare %s</string>
+    <string name="invite_to_space_with_name">Invita in %s</string>
+    <string name="invite_by_link">Condividi collegamento</string>
+    <string name="invite_by_mxid">Invita per nome utente</string>
+    <string name="invite_by_email">Invita per email</string>
+    <string name="invite_people_to_your_space_desc">Ci sei solo tu al momento. %s sarà ancora meglio con gli altri.</string>
+    <string name="invite_people_menu">Invita persone</string>
+    <string name="invite_people_to_your_space">Invita persone nel tuo spazio</string>
+    <string name="create_space_topic_hint">Descrizione</string>
+    <string name="create_spaces_loading_message">Creazione spazio…</string>
+    <string name="create_spaces_default_public_random_room_name">Casuale</string>
+    <string name="create_spaces_default_public_room_name">Generale</string>
+    <string name="create_spaces_room_private_header_desc">Creiamo una stanza per ognuno di esse. Puoi aggiungerne altre in seguito, incluse quelle già esistenti.</string>
+    <string name="create_spaces_room_private_header">Su quali cose stai lavorando\?</string>
+    <string name="create_spaces_room_public_header_desc">Creeremo delle stanze per ognuno di essi. Puoi aggiungerne altre in seguito.</string>
+    <string name="create_spaces_room_public_header">Di quali argomenti vorresti parlare in %s\?</string>
+    <string name="create_space_error_empty_field_space_name">Dagli un nome per continuare.</string>
+    <string name="create_spaces_details_private_header">Aggiungi alcuni dettagli per aiutare le persone ad identificarlo. Puoi modificarli in qualsiasi momento.</string>
+    <string name="create_spaces_details_public_header">Aggiungi alcuni dettagli per renderlo più distinguibile. Puoi modificarli in qualsiasi momento.</string>
+    <string name="activity_create_space_title">Crea uno spazio</string>
+    <string name="space_type_private_desc">Solo su invito, consigliato per te o i team</string>
+    <string name="space_type_private">Privato</string>
+    <string name="space_type_public_desc">Aperto a tutti, consigliato per le comunità</string>
+    <string name="space_type_public">Pubblico</string>
+    <string name="create_spaces_private_teammates">Uno spazio privato per te e i tuoi compagni</string>
+    <string name="create_spaces_me_and_teammates">Io e i miei compagni</string>
+    <string name="create_spaces_organise_rooms">Uno spazio privato per organizzare le tue stanze</string>
+    <string name="create_spaces_just_me">Solo io</string>
+    <string name="create_spaces_make_sure_access">Assicurati che le persone giuste abbiano accesso a %s. Puoi cambiarlo in seguito.</string>
+    <string name="create_spaces_who_are_you_working_with">Con chi stai lavorando\?</string>
+    <string name="create_spaces_join_info_help">Per unirti ad uno spazio esistente, ti serve un invito.</string>
+    <string name="create_spaces_you_can_change_later">Puoi cambiarlo in seguito</string>
+    <string name="create_spaces_choose_type_label">Che tipo di spazio vuoi creare\?</string>
+    <string name="create_spaces_type_header">Gli spazi sono un nuovo modo di raggruppare stanze e persone</string>
+    <string name="your_private_space">Il tuo spazio privato</string>
+    <string name="your_public_space">Il tuo spazio pubblico</string>
+    <string name="add_space">Aggiungi spazio</string>
+    <string name="command_description_leave_room">Esci dalla stanza con un dato ID (o dalla stanza attuale se vuoto)</string>
+    <string name="command_description_join_space">Unisciti allo spazio con un dato ID</string>
+    <string name="command_description_create_space">Crea uno spazio</string>
+    <string name="a11y_unchecked">Non controllato</string>
+    <string name="search_hint_room_name">Cerca nome</string>
+    <string name="room_settings_room_access_restricted_description">Chiunque in uno spazio con questa stanza può trovarla ed entrarci. Solo gli amministratori della stanza possono aggiungerla ad uno spazio.</string>
+    <string name="room_settings_room_access_restricted_title">Spazi</string>
+    <string name="room_settings_room_access_public_description">Chiunque può trovarla ed entrare</string>
+    <string name="room_settings_room_access_public_title">Pubblica</string>
+    <string name="room_settings_room_access_private_description">Solo le persone invitate possono trovarla ed entrare</string>
+    <string name="room_settings_room_access_private_title">Privata</string>
+    <string name="room_settings_room_access_entry_unknown">Impostazione di accesso sconosciuta (%s)</string>
+    <string name="room_settings_room_access_entry_knock">Chiunque può bussare alla porta, poi i membri possono accettare o rifiutare</string>
+    <string name="room_settings_guest_access_title">Permetti l\'ingresso agli ospiti</string>
+    <string name="spaces_header">Spazi</string>
+    <string name="spaces_invited_header">Inviti</string>
+    <string name="suggested_header">Stanze suggerite</string>
 </resources>

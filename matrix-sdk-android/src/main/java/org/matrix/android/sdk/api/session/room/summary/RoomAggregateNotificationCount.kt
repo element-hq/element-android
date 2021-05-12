@@ -20,6 +20,6 @@ data class RoomAggregateNotificationCount(
         val notificationCount: Int,
         val highlightCount: Int
 ) {
-    val totalCount = notificationCount + highlightCount
+    val totalCount = notificationCount
     val isHighlight = highlightCount > 0
 }

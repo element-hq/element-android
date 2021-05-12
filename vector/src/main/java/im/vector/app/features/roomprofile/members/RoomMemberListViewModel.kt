@@ -17,12 +17,13 @@
 package im.vector.app.features.roomprofile.members
 
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -62,8 +63,11 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomMemberListViewState): RoomMemberListViewModel? {
-            val fragment: RoomMemberListFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
+            val factory = when (viewModelContext) {
+                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
+                is ActivityViewModelContext -> viewModelContext.activity as? Factory
+            }
+            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 
@@ -138,7 +142,8 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     setState {
                         copy(actionsPermissions = permissions)
                     }
-                }.disposeOnClear()
+                }
+                .disposeOnClear()
     }
 
     private fun observeRoomSummary() {
@@ -187,7 +192,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     override fun handle(action: RoomMemberListAction) {
         when (action) {
             is RoomMemberListAction.RevokeThreePidInvite -> handleRevokeThreePidInvite(action)
-            is RoomMemberListAction.FilterMemberList     -> handleFilterMemberList(action)
+            is RoomMemberListAction.FilterMemberList -> handleFilterMemberList(action)
         }.exhaustive
     }
 

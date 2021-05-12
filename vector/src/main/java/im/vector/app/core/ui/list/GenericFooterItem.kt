@@ -36,10 +36,10 @@ import im.vector.app.features.themes.ThemeUtils
 abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() {
 
     @EpoxyAttribute
-    var text: String? = null
+    var text: CharSequence? = null
 
     @EpoxyAttribute
-    var style: GenericItem.STYLE = GenericItem.STYLE.NORMAL_TEXT
+    var style: ItemStyle = ItemStyle.NORMAL_TEXT
 
     @EpoxyAttribute
     var itemClickAction: GenericItem.Action? = null
@@ -53,11 +53,10 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+
         holder.text.setTextOrHide(text)
-        when (style) {
-            GenericItem.STYLE.BIG_TEXT    -> holder.text.textSize = 18f
-            GenericItem.STYLE.NORMAL_TEXT -> holder.text.textSize = 14f
-        }
+        holder.text.typeface = style.toTypeFace()
+        holder.text.textSize = style.toTextSize()
         holder.text.gravity = if (centered) Gravity.CENTER_HORIZONTAL else Gravity.START
 
         if (textColor != null) {

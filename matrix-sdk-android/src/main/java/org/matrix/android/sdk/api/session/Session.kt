@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
+import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -228,6 +229,11 @@ interface Session :
     fun thirdPartyService(): ThirdPartyService
 
     /**
+     * Returns the space service associated with the session
+     */
+    fun spaceService(): SpaceService
+
+    /**
      * Add a listener to the session.
      * @param listener the listener to add.
      */
@@ -249,13 +255,13 @@ interface Session :
     /**
      * A global session listener to get notified for some events.
      */
-    interface Listener {
+    interface Listener : SessionLifecycleObserver {
         /**
          * Possible cases:
          * - The access token is not valid anymore,
          * - a M_CONSENT_NOT_GIVEN error has been received from the homeserver
          */
-        fun onGlobalError(globalError: GlobalError)
+        fun onGlobalError(session: Session, globalError: GlobalError)
     }
 
     val sharedSecretStorageService: SharedSecretStorageService
