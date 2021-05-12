@@ -2164,6 +2164,8 @@
     <string name="send_suggestion">Make a suggestion</string>
     <string name="send_suggestion_content">Please write your suggestion below.</string>
     <string name="send_suggestion_report_placeholder">Describe your suggestion here</string>
+    <string name="send_suggestion_sent">Thanks, the suggestion has been successfully sent</string>
+    <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
 
     <string name="send_feedback_space_title">Spaces feedback</string>
     <string name="feedback">Feedback</string>
@@ -3353,7 +3355,7 @@
 
     <string name="space_add_existing_rooms">Add existing rooms and space</string>
     <string name="spaces_beta_welcome_to_spaces">Welcome to Spaces!</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Spaces are ways to group rooms and people for work, fun or just yourself.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Spaces are a new way to group rooms and people.</string>
     <string name="you_are_invited">You are invited</string>
 
 

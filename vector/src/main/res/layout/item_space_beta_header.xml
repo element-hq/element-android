@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rounded_rect_stroke_8"
-        android:padding="8dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -16,26 +16,21 @@
             android:layout_marginTop="8dp"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_beta_pill" />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/spaces_beta_welcome_to_spaces"
+                android:text="@string/spaces_header"
                 android:textColor="?riotx_text_primary"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:drawableEndCompat="@drawable/ic_beta_pill" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/spaces_beta_welcome_to_spaces_desc"
                 android:textColor="?riotx_text_secondary"
                 android:textSize="15sp" />
@@ -44,14 +39,14 @@
                 android:id="@+id/spaceBetaFeedbackAction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:drawablePadding="8dp"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:layout_marginBottom="4dp"
                 android:text="@string/give_feedback"
-                android:drawableStart="@drawable/ic_feedback"
-                android:drawablePadding="8dp"
                 android:textColor="@color/vector_info_color"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                app:drawableStartCompat="@drawable/ic_feedback" />
         </LinearLayout>
 
     </FrameLayout>

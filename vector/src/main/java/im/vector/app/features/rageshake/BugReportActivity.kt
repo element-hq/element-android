@@ -172,7 +172,10 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                                         Toast.makeText(this@BugReportActivity,
                                                 getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show()
                                     }
-                                    ReportType.SUGGESTION,
+                                    ReportType.SUGGESTION          -> {
+                                        Toast.makeText(this@BugReportActivity,
+                                                getString(R.string.send_suggestion_failed, reason), Toast.LENGTH_LONG).show()
+                                    }
                                     ReportType.SPACE_BETA_FEEDBACK -> {
                                         Toast.makeText(this@BugReportActivity,
                                                 getString(R.string.feedback_failed, reason), Toast.LENGTH_LONG).show()
@@ -208,7 +211,9 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                                 ReportType.BUG_REPORT          -> {
                                     Toast.makeText(this@BugReportActivity, R.string.send_bug_report_sent, Toast.LENGTH_LONG).show()
                                 }
-                                ReportType.SUGGESTION,
+                                ReportType.SUGGESTION          -> {
+                                    Toast.makeText(this@BugReportActivity, R.string.send_suggestion_sent, Toast.LENGTH_LONG).show()
+                                }
                                 ReportType.SPACE_BETA_FEEDBACK -> {
                                     Toast.makeText(this@BugReportActivity, R.string.feedback_sent, Toast.LENGTH_LONG).show()
                                 }
