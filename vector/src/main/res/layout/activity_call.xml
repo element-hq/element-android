@@ -79,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/smallIsHeldIcon"
@@ -106,7 +106,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/otherMemberAvatar"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/callStatusText"

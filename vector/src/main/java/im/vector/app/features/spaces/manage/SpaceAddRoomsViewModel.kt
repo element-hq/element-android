@@ -174,7 +174,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 try {
                     session.spaceService().getSpace(initialState.spaceId)!!.addChildren(
                             roomId = roomId,
-                            viaServers = listOf(session.sessionParams.homeServerHost ?: ""),
+                            viaServers = null,
                             order = null
                     )
                     completed.add(roomId)

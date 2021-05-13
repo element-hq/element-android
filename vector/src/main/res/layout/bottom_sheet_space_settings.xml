@@ -23,14 +23,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/space_avatars" />
 
         <TextView
             android:id="@+id/spaceNameView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
-            android:layout_marginEnd="8dp"
             android:duplicateParentState="true"
             android:ellipsize="end"
             android:maxLines="1"
@@ -39,11 +38,21 @@
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@+id/spaceDescription"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/spaceBetaTag"
             app:layout_constraintStart_toEndOf="@id/spaceAvatarImageView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:text="@sample/matrix.json/data/displayName" />
+            tools:text="@sample/spaces.json/data/name" />
+
+        <ImageView
+            android:id="@+id/spaceBetaTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/a11y_beta"
+            android:src="@drawable/ic_beta_pill"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/spaceDescription"
@@ -61,7 +70,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/spaceAvatarImageView"
             app:layout_constraintTop_toBottomOf="@+id/spaceNameView"
-            tools:text="@sample/matrix.json/data/message"
+            tools:text="@sample/spaces.json/data/topic"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -97,7 +106,7 @@
         app:actionTitle="@string/settings"
         app:leftIcon="@drawable/ic_settings_root_general"
         app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary"/>
+        app:titleTextColor="?attr/riotx_text_primary" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/exploreRooms"

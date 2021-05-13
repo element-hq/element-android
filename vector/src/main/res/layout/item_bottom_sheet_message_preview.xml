@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_sender"
@@ -37,7 +37,8 @@
         app:layout_constraintEnd_toStartOf="@+id/bottom_sheet_message_preview_timestamp"
         app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
         app:layout_constraintTop_toTopOf="@id/bottom_sheet_message_preview_avatar"
-        tools:text="@tools:sample/full_names" />
+        tools:fontFamily="sans-serif"
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_timestamp"

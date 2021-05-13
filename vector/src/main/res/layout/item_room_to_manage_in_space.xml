@@ -38,7 +38,7 @@
         app:layout_constraintStart_toEndOf="@id/itemAddRoomRoomAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="@sample/matrix.json/data/roomName" />
+        tools:text="@sample/rooms.json/data/name" />
 
     <TextView
         android:id="@+id/itemManageRoomSuggested"

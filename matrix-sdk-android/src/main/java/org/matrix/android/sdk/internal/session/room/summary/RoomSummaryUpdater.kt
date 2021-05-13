@@ -364,6 +364,8 @@ internal class RoomSummaryUpdater @Inject constructor(
                         realm.where(RoomSummaryEntity::class.java)
                                 .process(RoomSummaryEntityFields.MEMBERSHIP_STR, listOf(Membership.JOIN))
                                 .notEqualTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
+                                // also we do not count DM in here, because home space will already show them
+                                .equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                                 .contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, space.roomId)
                                 .findAll().forEach {
                                     highlightCount += it.highlightCount

@@ -37,7 +37,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@tools:sample/avatars" />
+                    tools:src="@sample/room_round_avatars" />
 
                 <im.vector.app.core.ui.views.ShieldImageView
                     android:id="@+id/roomUploadsDecorationToolbarAvatarImageView"
@@ -62,7 +62,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/roomUploadsToolbarAvatarImageView"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="@sample/matrix.json/data/roomName" />
+                    tools:text="@sample/rooms.json/data/name" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,0 +1,2 @@
+Haadferoaring yn disse ferzje: URL ynsjen, nij emoji toetseboerd, nij keamer ynstellings moochlikheden, en snie foar kryst.
+Folsleine feroaringslist: https://github.com/vector-im/element-android/releases/tag/v1.0.13

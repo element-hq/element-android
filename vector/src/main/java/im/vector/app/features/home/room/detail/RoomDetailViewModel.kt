@@ -832,7 +832,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                                     session.spaceService().getSpace(spaceId)
                                             ?.addChildren(
                                                     state.roomId,
-                                                    listOf(session.sessionParams.homeServerHost ?: ""),
+                                                    null,
                                                     null,
                                                     true
                                             )
@@ -849,7 +849,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                                     session.spaceService().getSpace(slashCommandResult.spaceId)
                                             ?.addChildren(
                                                     room.roomId,
-                                                    listOf(session.sessionParams.homeServerHost ?: ""),
+                                                    null,
                                                     null,
                                                     false
                                             )

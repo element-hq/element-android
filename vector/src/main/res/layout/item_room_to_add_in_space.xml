@@ -20,7 +20,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/room_round_avatars" />
 
     <TextView
         android:id="@+id/itemAddRoomRoomNameText"
@@ -38,7 +38,7 @@
         app:layout_constraintStart_toEndOf="@id/itemAddRoomRoomAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="@sample/matrix.json/data/roomName" />
+        tools:text="@sample/rooms.json/data/name" />
 
     <ImageView
         android:id="@+id/itemAddRoomRoomCheckBox"

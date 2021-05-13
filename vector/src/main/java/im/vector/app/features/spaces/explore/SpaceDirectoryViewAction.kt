@@ -25,4 +25,5 @@ sealed class SpaceDirectoryViewAction : VectorViewModelAction {
     data class ShowDetails(val spaceChildInfo: SpaceChildInfo) : SpaceDirectoryViewAction()
     data class NavigateToRoom(val roomId: String) : SpaceDirectoryViewAction()
     object HandleBack : SpaceDirectoryViewAction()
+    object Retry : SpaceDirectoryViewAction()
 }

@@ -25,7 +25,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/avatar"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
         <ImageView
             android:id="@+id/createDirectRoomUserAvatarChecked"
@@ -55,7 +55,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/createDirectRoomUserAvatarContainer"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/full_names" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/createDirectRoomUserID"
@@ -70,6 +70,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/createDirectRoomUserName"
         app:layout_constraintTop_toBottomOf="@+id/createDirectRoomUserName"
-        tools:text="Blabla" />
+        tools:text="@sample/users.json/data/id" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

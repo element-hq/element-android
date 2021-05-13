@@ -28,7 +28,7 @@
             android:importantForAccessibility="no"
             android:scaleType="fitCenter"
             tools:alpha="0.3"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/space_avatars" />
 
     </FrameLayout>
 

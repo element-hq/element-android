@@ -1,2 +1,2 @@
-Diese neue Version enthält hauptsächlich Verbesserungen der Benutzeroberfläche und der Handhabung. Du kannst jetzt ganz schnell Freund*innen einladen und DMs erstellen, indem du schlicht einen QR-Code scannst.
+Diese neue Version enthält hauptsächlich Verbesserungen der Benutzeroberfläche und der Handhabung. Du kannst jetzt ganz schnell Freunde einladen und DMs erstellen, indem du schlicht einen QR-Code scannst.
 Vollständige Versionshinweise: https://github.com/vector-im/element-android/releases/tag/v1.0.11

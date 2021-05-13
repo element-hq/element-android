@@ -2167,6 +2167,14 @@
     <string name="send_suggestion_sent">Thanks, the suggestion has been successfully sent</string>
     <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
 
+    <string name="send_feedback_space_title">Spaces feedback</string>
+    <string name="feedback">Feedback</string>
+    <string name="send_feedback_space_info">You’re using a beta version of spaces. Your feedback will help inform the next versions. Your platform and username will be noted to help us use your feedback as much as we can.</string>
+    <string name="you_may_contact_me">You may contact me if you have any follow up questions</string>
+    <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
+    <string name="feedback_failed">The feedback failed to be sent (%s)</string>
+    <string name="give_feedback">Give Feedback</string>
+
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">"Show complete history in encrypted rooms"</string>
 
@@ -2286,6 +2294,7 @@
     <string name="a11y_show_password">Show password</string>
     <string name="a11y_hide_password">Hide password</string>
     <string name="a11y_jump_to_bottom">Jump to bottom</string>
+    <string name="a11y_beta">This feature is in beta</string>
 
     <!-- Read receipts list a11y -->
     <plurals name="two_and_some_others_read">
@@ -3347,7 +3356,7 @@
 
     <string name="space_add_existing_rooms">Add existing rooms and space</string>
     <string name="spaces_beta_welcome_to_spaces">Welcome to Spaces!</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Spaces are ways to group rooms and people for work, fun or just yourself.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Spaces are a new way to group rooms and people.</string>
     <string name="you_are_invited">You are invited</string>
 
 
@@ -3362,4 +3371,10 @@
     <string name="space_mark_as_suggested">Mark as suggested</string>
     <string name="space_mark_as_not_suggested">Mark as not suggested</string>
     <string name="space_manage_rooms_and_spaces">Manage rooms and spaces</string>
+
+
+    <string name="labs_space_show_orphan_in_home">Experimental Space - Only show orphans in Home</string>
+    <string name="spaces_feeling_experimental_subspace">Feeling experimental?\nYou can add existing spaces to a space.</string>
+    <string name="spaces_no_server_support_title">It looks like your homeserver does not support Spaces yet</string>
+    <string name="spaces_no_server_support_description">Please contact your homserver admin for further information</string>
 </resources>
