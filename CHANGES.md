@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix a problem with database migration on nightly builds (#3335)
 
 Translations 🗣:
  -
