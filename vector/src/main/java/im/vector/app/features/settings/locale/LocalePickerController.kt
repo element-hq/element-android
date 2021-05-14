@@ -24,6 +24,7 @@ import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.epoxy.profiles.profileSectionItem
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.safeCapitalize
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import java.util.Locale
@@ -46,7 +47,7 @@ class LocalePickerController @Inject constructor(
         }
         localeItem {
             id(data.currentLocale.toString())
-            title(VectorLocale.localeToLocalisedString(data.currentLocale).capitalize(data.currentLocale))
+            title(VectorLocale.localeToLocalisedString(data.currentLocale).safeCapitalize(data.currentLocale))
             if (vectorPreferences.developerMode()) {
                 subtitle(VectorLocale.localeToLocalisedStringInfo(data.currentLocale))
             }
@@ -75,7 +76,7 @@ class LocalePickerController @Inject constructor(
                             .forEach {
                                 localeItem {
                                     id(it.toString())
-                                    title(VectorLocale.localeToLocalisedString(it).capitalize(it))
+                                    title(VectorLocale.localeToLocalisedString(it).safeCapitalize(it))
                                     if (vectorPreferences.developerMode()) {
                                         subtitle(VectorLocale.localeToLocalisedStringInfo(it))
                                     }
