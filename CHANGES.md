@@ -13,6 +13,7 @@ Bugfix 🐛:
  - Fix a problem with database migration on nightly builds (#3335)
  - Implement a workaround to render &lt;del&gt; and &lt;u&gt; in the timeline (#1817)
  - Make sure the SDK can retrieve the secret storage if the system is upgraded (#3304)
+ - #+ button on lower right when looking at an empty space goes to an empty 'Explore rooms' (#3327)
 
 Translations 🗣:
  -
