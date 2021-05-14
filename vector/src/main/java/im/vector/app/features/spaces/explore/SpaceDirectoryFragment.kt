@@ -89,12 +89,8 @@ class SpaceDirectoryFragment @Inject constructor(
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) = withState(viewModel) { state ->
-        menu.findItem(R.id.spaceAddRoom)?.let {
-            it.isVisible = state.canAddRooms
-        }
-        menu.findItem(R.id.spaceCreateRoom)?.let {
-            it.isVisible = false // Not yet implemented
-        }
+        menu.findItem(R.id.spaceAddRoom)?.isVisible = state.canAddRooms
+        menu.findItem(R.id.spaceCreateRoom)?.isVisible = false // Not yet implemented
         super.onPrepareOptionsMenu(menu)
     }
 
