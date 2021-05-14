@@ -87,7 +87,7 @@ class ShareSpaceViewModel @AssistedInject constructor(
                     session.permalinkService().createRoomPermalink(initialState.spaceId)
                 }
                 if (permalink != null) {
-                    _viewEvents.post(ShareSpaceViewEvents.ShowInviteByLing(permalink, roomSummary?.name ?: ""))
+                    _viewEvents.post(ShareSpaceViewEvents.ShowInviteByLink(permalink, roomSummary?.name ?: ""))
                 }
             }
             ShareSpaceAction.InviteByMxId -> {

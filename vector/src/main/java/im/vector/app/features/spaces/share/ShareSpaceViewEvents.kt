@@ -20,5 +20,5 @@ import im.vector.app.core.platform.VectorViewEvents
 
 sealed class ShareSpaceViewEvents : VectorViewEvents {
     data class NavigateToInviteUser(val spaceId: String) : ShareSpaceViewEvents()
-    data class ShowInviteByLing(val permalink: String, val spaceName: String) : ShareSpaceViewEvents()
+    data class ShowInviteByLink(val permalink: String, val spaceName: String) : ShareSpaceViewEvents()
 }

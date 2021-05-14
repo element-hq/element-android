@@ -100,7 +100,7 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
                     val intent = InviteUsersToRoomActivity.getIntent(requireContext(), event.spaceId)
                     startActivity(intent)
                 }
-                is ShareSpaceViewEvents.ShowInviteByLing -> {
+                is ShareSpaceViewEvents.ShowInviteByLink     -> {
                     startSharePlainTextIntent(
                             fragment = this,
                             activityResultLauncher = null,
@@ -117,7 +117,6 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
 
         fun show(fragmentManager: FragmentManager, spaceId: String, postCreation: Boolean = false): ShareSpaceBottomSheet {
             return ShareSpaceBottomSheet().apply {
-                isCancelable = true
                 setArguments(Args(spaceId = spaceId, postCreation = postCreation))
             }.also {
                 it.show(fragmentManager, ShareSpaceBottomSheet::class.java.name)
