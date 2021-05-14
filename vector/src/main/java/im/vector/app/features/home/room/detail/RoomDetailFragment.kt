@@ -1745,20 +1745,19 @@ class RoomDetailFragment @Inject constructor(
         session.coroutineScope.launch {
             val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
             if (!isAdded) return@launch
-            result.fold(
-                    {
-                        saveMedia(
-                                context = requireContext(),
-                                file = it,
-                                title = action.messageContent.body,
-                                mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), it.toUri()),
-                                notificationUtils = notificationUtils
-                        )
-                    },
-                    {
+            result.mapCatching {
+                saveMedia(
+                        context = requireContext(),
+                        file = it,
+                        title = action.messageContent.body,
+                        mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), it.toUri()),
+                        notificationUtils = notificationUtils
+                )
+            }
+                    .onFailure {
+                        if (!isAdded) return@onFailure
                         showErrorInSnackbar(it)
                     }
-            )
         }
     }
 
