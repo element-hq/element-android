@@ -83,7 +83,8 @@
         app:layout_constraintCircle="@id/roomAvatarContainer"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
-        tools:ignore="MissingConstraints"
+        app:tint="?riotx_text_secondary"
+        tools:ignore="MissingConstraints,MissingPrefix"
         tools:visibility="visible" />
 
     <!-- Margin bottom does not work, so I use space -->
