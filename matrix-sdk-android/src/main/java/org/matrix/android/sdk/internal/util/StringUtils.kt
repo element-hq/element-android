@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.util
 
 import timber.log.Timber
+import java.util.Locale
 
 /**
  * Convert a string to an UTF8 String
@@ -78,3 +79,14 @@ internal val spaceChars = "[\u00A0\u2000-\u200B\u2800\u3000]".toRegex()
  * Strip all the UTF-8 chars which are actually spaces
  */
 internal fun String.replaceSpaceChars() = replace(spaceChars, "")
+
+// String.capitalize is now deprecated
+internal fun String.safeCapitalize(): String {
+    return replaceFirstChar { char ->
+        if (char.isLowerCase()) {
+            char.titlecase(Locale.getDefault())
+        } else {
+            char.toString()
+        }
+    }
+}
