@@ -8,7 +8,8 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Space Invite by link not always displayed for public space (#3345)
+ - Wrong copy in share space bottom sheet (#3346)
 
 Translations 🗣:
  -
