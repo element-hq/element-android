@@ -25,7 +25,7 @@ import java.util.Locale
  * @param s the string to convert
  * @return the utf-8 string
  */
-fun convertToUTF8(s: String): String {
+internal fun convertToUTF8(s: String): String {
     return try {
         val bytes = s.toByteArray(Charsets.UTF_8)
         String(bytes)
@@ -41,7 +41,7 @@ fun convertToUTF8(s: String): String {
  * @param s the string to convert
  * @return the utf-16 string
  */
-fun convertFromUTF8(s: String): String {
+internal fun convertFromUTF8(s: String): String {
     return try {
         val bytes = s.toByteArray()
         String(bytes, Charsets.UTF_8)
@@ -57,7 +57,7 @@ fun convertFromUTF8(s: String): String {
  * @param subString  the string to search for
  * @return whether a match was found
  */
-fun String.caseInsensitiveFind(subString: String): Boolean {
+internal fun String.caseInsensitiveFind(subString: String): Boolean {
     // add sanity checks
     if (subString.isEmpty() || isEmpty()) {
         return false
