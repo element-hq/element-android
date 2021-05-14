@@ -237,7 +237,8 @@
                     android:paddingEnd="0dp"
                     android:layout_gravity="bottom"
                     tools:tint="?riotx_text_secondary"
-                    tools:src="@drawable/ic_processing_msg" />
+                    tools:src="@drawable/ic_processing_msg"
+                    android:contentDescription="@string/footer_read_receipt_content_description" />
             </LinearLayout>
 
         </RelativeLayout>

@@ -68,4 +68,6 @@
     <string name="room_list_quick_actions_mark_room_unread">Als ungelesen markieren</string>
     <string name="room_list_quick_actions_mark_room_read">Als gelesen markieren</string>
 
+    <string name="footer_read_receipt_content_description">Status der Nachricht</string>
+
 </resources>
