@@ -31,8 +31,8 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import im.vector.app.R
 import im.vector.app.features.reactions.data.EmojiDataSource
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
@@ -278,6 +278,7 @@ class EmojiRecyclerAdapter @Inject constructor(
     }
 
     interface InteractionListener {
+        fun getCoroutineScope(): CoroutineScope
         fun firstVisibleSectionChange(section: Int)
     }
 
@@ -323,11 +324,11 @@ class EmojiRecyclerAdapter @Inject constructor(
             // Log.i("SCROLL SPEED","scroll speed $dy")
             isFastScroll = abs(dy) > 50
             val visible = (recyclerView.layoutManager as GridLayoutManager).findFirstCompletelyVisibleItemPosition()
-            GlobalScope.launch {
+            interactionListener?.getCoroutineScope()?.launch {
                 val section = getSectionForAbsoluteIndex(visible)
                 if (section != currentFirstVisibleSection) {
                     currentFirstVisibleSection = section
-                    GlobalScope.launch(Dispatchers.Main) {
+                    interactionListener?.getCoroutineScope()?.launch(Dispatchers.Main) {
                         interactionListener?.firstVisibleSectionChange(currentFirstVisibleSection)
                     }
                 }
