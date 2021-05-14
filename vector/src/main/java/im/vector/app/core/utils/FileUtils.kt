@@ -131,5 +131,5 @@ fun getSizeOfFiles(root: File): Int {
                 Timber.v("Get size of ${it.absolutePath}")
                 true
             }
-            .sumBy { it.length().toInt() }
+            .sumOf { it.length().toInt() }
 }

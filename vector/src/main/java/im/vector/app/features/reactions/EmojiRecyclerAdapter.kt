@@ -221,7 +221,7 @@ class EmojiRecyclerAdapter @Inject constructor(
     }
 
     override fun getItemCount() = dataSource.rawData.categories
-            .sumBy { emojiCategory -> 1 /* Section */ + emojiCategory.emojis.size }
+            .sumOf { emojiCategory -> 1 /* Section */ + emojiCategory.emojis.size }
 
     abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         abstract fun bind(s: String?)

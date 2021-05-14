@@ -66,7 +66,7 @@ class MatrixItemColorProvider @Inject constructor(
 
         @ColorRes
         private fun getColorFromRoomId(roomId: String?): Int {
-            return when ((roomId?.toList()?.sumBy { it.code } ?: 0) % 3) {
+            return when ((roomId?.toList()?.sumOf { it.code } ?: 0) % 3) {
                 1    -> R.color.riotx_avatar_fill_2
                 2    -> R.color.riotx_avatar_fill_3
                 else -> R.color.riotx_avatar_fill_1
