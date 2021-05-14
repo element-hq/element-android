@@ -124,13 +124,12 @@
         android:layout_marginEnd="4dp"
         android:contentDescription="@string/a11y_unsent_draft"
         android:src="@drawable/ic_edit"
-        android:tint="?android:textColorSecondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
         app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
         app:layout_constraintStart_toEndOf="@+id/roomNameView"
         app:layout_constraintTop_toTopOf="@+id/roomNameView"
-        app:tint="?riotx_text_primary"
+        app:tint="?riotx_text_secondary"
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />
 
