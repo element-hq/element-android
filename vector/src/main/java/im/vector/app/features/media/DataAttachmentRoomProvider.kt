@@ -19,6 +19,7 @@ package im.vector.app.features.media
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
+import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.Room
@@ -32,8 +33,16 @@ class DataAttachmentRoomProvider(
         imageContentRenderer: ImageContentRenderer,
         dateFormatter: VectorDateFormatter,
         fileService: FileService,
+        coroutineScope: CoroutineScope,
         stringProvider: StringProvider
-) : BaseAttachmentProvider<AttachmentData>(attachments, imageContentRenderer, fileService, dateFormatter, stringProvider) {
+) : BaseAttachmentProvider<AttachmentData>(
+        attachments = attachments,
+        imageContentRenderer = imageContentRenderer,
+        fileService = fileService,
+        coroutineScope = coroutineScope,
+        dateFormatter = dateFormatter,
+        stringProvider = stringProvider
+) {
 
     override fun getAttachmentInfoAt(position: Int): AttachmentInfo {
         return getItem(position).let {
