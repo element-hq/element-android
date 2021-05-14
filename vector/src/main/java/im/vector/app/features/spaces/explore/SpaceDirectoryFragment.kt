@@ -135,7 +135,7 @@ class SpaceDirectoryFragment @Inject constructor(
         viewModel.handle(SpaceDirectoryViewAction.Retry)
     }
 
-    private val addExistingRoomActivityResult = registerStartForActivityResult { activityResult ->
+    private val addExistingRoomActivityResult = registerStartForActivityResult { _ ->
         viewModel.handle(SpaceDirectoryViewAction.Retry)
     }
 
