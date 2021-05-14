@@ -132,7 +132,7 @@ sealed class MatrixItem(
 
                     dn.substring(startIndex, startIndex + length)
                 }
-                .toUpperCase(Locale.ROOT)
+                .uppercase(Locale.ROOT)
     }
 
     companion object {

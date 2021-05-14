@@ -112,7 +112,7 @@ fun getFileExtension(fileUri: String): String? {
                 val ext = filename.substring(dotPos + 1)
 
                 if (ext.isNotBlank()) {
-                    return ext.toLowerCase(Locale.ROOT)
+                    return ext.lowercase(Locale.ROOT)
                 }
             }
         }
