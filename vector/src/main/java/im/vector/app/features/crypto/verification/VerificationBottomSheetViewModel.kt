@@ -427,7 +427,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     }
 
     private fun tentativeRestoreBackup(res: Map<String, String>?) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME) ?: return@launch Unit.also {
                     Timber.v("## Keybackup secret not restored from SSSS")
