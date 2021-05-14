@@ -178,5 +178,5 @@ abstract class BaseAttachmentProvider<Type>(
         // TODO("Not yet implemented")
     }
 
-    abstract fun getFileForSharing(position: Int, callback: ((File?) -> Unit))
+    abstract suspend fun getFileForSharing(position: Int): File?
 }

@@ -19,10 +19,7 @@ package im.vector.app.features.media
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -121,24 +118,19 @@ class RoomEventsAttachmentProvider(
         return getItem(position)
     }
 
-    override fun getFileForSharing(position: Int, callback: (File?) -> Unit) {
-        getItem(position).let { timelineEvent ->
-
-            val messageContent = timelineEvent.root.getClearContent().toModel<MessageContent>()
-                    as? MessageWithAttachmentContent
-                    ?: return@let
-            GlobalScope.launch {
-                val result = runCatching {
-                    fileService.downloadFile(
-                            fileName = messageContent.body,
-                            mimeType = messageContent.mimeType,
-                            url = messageContent.getFileUrl(),
-                            elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
+    override suspend fun getFileForSharing(position: Int): File? {
+        return getItem(position)
+                .let { timelineEvent ->
+                    timelineEvent.root.getClearContent().toModel<MessageContent>() as? MessageWithAttachmentContent
                 }
-                withContext(Dispatchers.Main) {
-                    callback(result.getOrNull())
+                ?.let { messageContent ->
+                    tryOrNull {
+                        fileService.downloadFile(
+                                fileName = messageContent.body,
+                                mimeType = messageContent.mimeType,
+                                url = messageContent.getFileUrl(),
+                                elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
+                    }
                 }
-            }
-        }
     }
 }
