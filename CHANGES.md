@@ -23,7 +23,7 @@ Test:
  -
 
 Other changes:
- -
+ - Add documentation on LoginWizard and RegistrationWizard (#3303)
 
 Changes in Element 1.1.7 (2021-05-12)
 ===================================================
