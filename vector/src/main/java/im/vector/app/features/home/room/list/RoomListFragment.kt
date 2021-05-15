@@ -35,6 +35,7 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
@@ -67,6 +68,7 @@ data class RoomListParams(
 ) : Parcelable
 
 class RoomListFragment @Inject constructor(
+        private val appStateHandler: AppStateHandler,
         private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
         val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
@@ -76,6 +78,7 @@ class RoomListFragment @Inject constructor(
 ) : VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener,
         OnBackPressed,
+        AppStateHandler.OnSwitchSpaceListener,
         NotifsFabMenuView.Listener {
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
@@ -83,6 +86,8 @@ class RoomListFragment @Inject constructor(
     private val roomListParams: RoomListParams by args()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
     private lateinit var stateRestorer: LayoutManagerStateRestorer
+
+    private var expandStatusSpaceId: String? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
         return FragmentRoomListBinding.inflate(inflater, container, false)
@@ -133,6 +138,7 @@ class RoomListFragment @Inject constructor(
                         (it.contentEpoxyController as? RoomSummaryPagedController)?.roomChangeMembershipStates = ms
                     }
         }
+        appStateHandler.onSwitchSpaceListener = this
     }
 
     override fun onPause() {
@@ -355,9 +361,7 @@ class RoomListFragment @Inject constructor(
         views.roomListView.adapter = concatAdapter
 
         // Load initial expand statuses from settings
-        roomListViewModel.sections.forEach { section ->
-            roomListViewModel.handle(RoomListAction.SetSectionExpanded(section, shouldInitiallyExpand(section)))
-        }
+        loadExpandStatus()
     }
 
     private val showFabRunnable = Runnable {
@@ -527,10 +531,18 @@ class RoomListFragment @Inject constructor(
 
     // SC addition: remember expanded sections across restarts
     companion object {
-        const val ROOM_LIST_ROOM_EXPANDED_ANY_PREFIX = "ROOM_LIST_ROOM_EXPANDED_"
+        const val ROOM_LIST_ROOM_EXPANDED_ANY_PREFIX = "ROOM_LIST_ROOM_EXPANDED"
     }
 
-    fun persistExpandStatus() {
+    override fun onSwitchSpace(spaceId: String?) {
+        if (spaceId != expandStatusSpaceId) {
+            persistExpandStatus()
+            expandStatusSpaceId = spaceId
+            loadExpandStatus()
+        }
+    }
+
+    private fun persistExpandStatus() {
         val spEdit = getSharedPreferences().edit()
         roomListViewModel.sections.forEach{section ->
             val isExpanded = section.isExpanded.value
@@ -540,6 +552,12 @@ class RoomListFragment @Inject constructor(
             }
         }
         spEdit.apply()
+    }
+
+    private fun loadExpandStatus() {
+        roomListViewModel.sections.forEach { section ->
+            roomListViewModel.handle(RoomListAction.SetSectionExpanded(section, shouldInitiallyExpand(section)))
+        }
     }
 
     private fun shouldInitiallyExpand(section: RoomsSection): Boolean {
@@ -552,6 +570,6 @@ class RoomListFragment @Inject constructor(
         return PreferenceManager.getDefaultSharedPreferences(context)
     }
     private fun getRoomListExpandedPref(section: RoomsSection): String {
-        return ROOM_LIST_ROOM_EXPANDED_ANY_PREFIX + section.sectionName + roomListParams.displayMode.toString()
+        return "${ROOM_LIST_ROOM_EXPANDED_ANY_PREFIX}_${section.sectionName}_${roomListParams.displayMode}_${expandStatusSpaceId}"
     }
 }
