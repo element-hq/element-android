@@ -166,7 +166,7 @@ class SpaceRoomListSectionBuilder(
         addSection(
                 sections = sections,
                 activeSpaceUpdaters = activeSpaceAwareQueries,
-                nameRes = R.string.bottom_action_rooms,
+                nameRes = R.string.normal_priority_header,
                 notifyOfLocalEcho = false,
                 spaceFilterStrategy = if (onlyOrphansInHome) {
                     RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
