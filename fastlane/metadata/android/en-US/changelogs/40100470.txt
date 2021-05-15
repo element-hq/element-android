@@ -1,0 +1,6 @@
+- Update codebase to Element v1.1.7
+- Add border to sent pictures
+- Add some space between message sender and content
+- Properly adjust image view bounds when the size is not available before loading
+- Improve handling of the DM layout
+- Message footer: handle small width/height pictures
