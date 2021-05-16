@@ -70,6 +70,17 @@ data class RoomSummary(
         val flattenParentIds: List<String> = emptyList()
 ) {
 
+    val safeUnreadCount: Int
+        get() {
+            return if (unreadCount != null && unreadCount > 0) {
+                unreadCount
+            } else if (hasUnreadOriginalContentMessages) {
+                1
+            } else {
+                0
+            }
+        }
+
     val isVersioned: Boolean
         get() = versioningState != VersioningState.NONE
 
@@ -117,6 +128,14 @@ data class RoomSummary(
             UNREAD_KIND_CONTENT -> latestPreviewableContentEvent
             // UNREAD_KIND_DEFAULT
             else -> latestPreviewableOriginalContentEvent
+        }
+    }
+
+    fun scUnreadCount(preferenceProvider: RoomSummaryPreferenceProvider?): Int {
+        return if (preferenceProvider?.shouldShowUnimportantCounterBadge() == true) {
+            safeUnreadCount
+        } else {
+            0
         }
     }
 

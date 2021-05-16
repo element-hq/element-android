@@ -27,6 +27,7 @@ import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.features.grouplist.groupSummaryItem
 import im.vector.app.features.grouplist.homeSpaceSummaryItem
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.group
 import im.vector.app.space
@@ -39,6 +40,7 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class SpaceSummaryController @Inject constructor(
+        private val scSdkPreferences: ScSdkPreferences,
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
         private val stringProvider: StringProvider) : EpoxyController() {
@@ -162,7 +164,7 @@ class SpaceSummaryController @Inject constructor(
                                 UnreadCounterBadgeView.State(
                                         groupSummary.notificationCount,
                                         groupSummary.highlightCount > 0,
-                                        groupSummary.unreadCount ?: 0,
+                                        groupSummary.scUnreadCount(scSdkPreferences),
                                         groupSummary.markedUnread
                                 )
                         )
@@ -210,7 +212,7 @@ class SpaceSummaryController @Inject constructor(
                     UnreadCounterBadgeView.State(
                             childSummary.notificationCount,
                             childSummary.highlightCount > 0,
-                            childSummary.unreadCount ?: 0,
+                            childSummary.scUnreadCount(scSdkPreferences),
                             childSummary.markedUnread
                     )
             )

@@ -386,7 +386,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                                 .findAll().forEach {
                                     highlightCount += it.highlightCount
                                     notificationCount += it.notificationCount
-                                    unreadCount += if (it.hasUnreadOriginalContentMessages) 1 else 0
+                                    unreadCount += it.unreadCount
                                     markedUnreadCount += if (it.markedUnread) 1 else 0
                                 }
 
