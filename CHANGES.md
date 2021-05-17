@@ -17,7 +17,8 @@ SDK API changes ⚠️:
  -
 
 Build 🧱:
- -
+ - Compile with Kotlin 1.5.
+ - Upgrade some dependencies: gradle wrapper, third party lib, etc.
 
 Test:
  -
