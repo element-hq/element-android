@@ -91,7 +91,6 @@ class RoomUploadsFragment @Inject constructor(
                             if (!isAdded) return@onFailure
                             showErrorInSnackbar(failure)
                         }
-
                     }
                     Unit
                 }
