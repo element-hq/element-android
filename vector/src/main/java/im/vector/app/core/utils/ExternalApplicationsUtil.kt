@@ -512,7 +512,7 @@ fun selectTxtFileToWrite(
  * @param sourceFile     the file source path
  * @param dstDirPath     the dst path
  * @param outputFilename optional the output filename
- * @param callback       the asynchronous callback
+ * @return               the created file
  */
 @Suppress("DEPRECATION")
 fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?): File? {

@@ -44,7 +44,7 @@ import javax.inject.Inject
 class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 12L
+        const val SESSION_STORE_SCHEMA_VERSION = 13L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -62,6 +62,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 9) migrateTo10(realm)
         if (oldVersion <= 10) migrateTo11(realm)
         if (oldVersion <= 11) migrateTo12(realm)
+        if (oldVersion <= 12) migrateTo13(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -271,6 +272,16 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 }
 
         realm.schema.get("SpaceChildSummaryEntity")
+                ?.addField(SpaceChildSummaryEntityFields.SUGGESTED, Boolean::class.java)
+                ?.setNullable(SpaceChildSummaryEntityFields.SUGGESTED, true)
+    }
+
+    private fun migrateTo13(realm: DynamicRealm) {
+        Timber.d("Step 12 -> 13")
+
+        // Fix issue with the nightly build. Eventually play again the migration which has been included in migrateTo12()
+        realm.schema.get("SpaceChildSummaryEntity")
+                ?.takeIf { !it.hasField(SpaceChildSummaryEntityFields.SUGGESTED) }
                 ?.addField(SpaceChildSummaryEntityFields.SUGGESTED, Boolean::class.java)
                 ?.setNullable(SpaceChildSummaryEntityFields.SUGGESTED, true)
     }
