@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.format
 
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
@@ -50,7 +51,9 @@ class DisplayableEventFormatter @Inject constructor(
             return stringProvider.getString(R.string.encrypted_message)
         }
 
-        val senderName = timelineEvent.senderInfo.disambiguatedDisplayName
+        val senderName = TchapUtils.getNameFromDisplayName(
+                timelineEvent.senderInfo.disambiguatedDisplayName
+        )
 
         when (timelineEvent.root.getClearType()) {
             EventType.STICKER               -> {
@@ -143,9 +146,11 @@ class DisplayableEventFormatter @Inject constructor(
         return if (appendAuthor) {
             span {
                 text = senderName
-                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_primary)
+                textColor = colorProvider.getColorFromAttribute(R.attr.secondary_text_color)
+                textStyle = "bold"
             }
-                    .append(": ")
+                    .append(stringProvider.getString(R.string.tchap_colon_append))
+                    .append(" ")
                     .append(body)
         } else {
             body

@@ -54,6 +54,7 @@
     <string name="tchap_burger_menu_public_rooms">Salons forums</string>
     <string name="tchap_burger_menu_info">Cette application n’est pas approuvée\npour l’échange d’informations en diffusion restreinte</string>
     <string name="tchap_error_message_default">Une erreur est survenue, veuillez réessayer ultérieurement</string>
+    <string name="tchap_colon_append">&#160;:</string>
 
     <!-- tchap discussion -->
     <string name="tchap_cannot_invite_deactivated_account_user">Votre correspondant a quitté définitivement cette discussion.\nVous devez en créer une nouvelle pour le recontacter.</string>

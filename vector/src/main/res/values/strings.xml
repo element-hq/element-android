@@ -1797,6 +1797,8 @@
     <string name="receipt_avatar">Receipt avatar</string>
     <string name="notice_avatar">Notice avatar</string>
     <string name="avatar">Avatar</string>
+    <string name="room_encrypted">Encrypted room</string>
+    <string name="room_status_online">Online</string>
 
     <!-- Consent modal -->
     <string name="dialog_user_consent_content">To continue using the %1$s homeserver you must review and agree to the terms and conditions.</string>

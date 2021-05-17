@@ -1012,6 +1012,8 @@
         <item quantity="one">%d j</item>
         <item quantity="other">%d j</item>
     </plurals>
+    <string name="room_encrypted">Salon chiffré</string>
+    <string name="room_status_online">En ligne</string>
     <string name="room_participants_now">%1$s maintenant</string>
     <string name="room_participants_ago">%1$s depuis %2$s</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>

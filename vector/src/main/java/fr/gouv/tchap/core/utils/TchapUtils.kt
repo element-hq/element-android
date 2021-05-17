@@ -16,15 +16,46 @@
 
 package fr.gouv.tchap.core.utils
 
-class TchapUtils {
+object TchapUtils {
 
-    companion object {
-        /**
-         * Tells whether a homeserver name corresponds to an external server or not
-         *
-         * @param homeServerName
-         * @return true if external
-         */
-        fun isExternalTchapServer(homeServerName: String) = homeServerName.startsWith("e.") || homeServerName.startsWith("agent.externe.")
+    /**
+     * Tells whether a homeserver name corresponds to an external server or not
+     *
+     * @param homeServerName
+     * @return true if external
+     */
+    fun isExternalTchapServer(homeServerName: String) = homeServerName.startsWith("e.") || homeServerName.startsWith("agent.externe.")
+
+    /**
+     * Get name part of a display name by removing the domain part if any.
+     * For example in case of "Jean Martin [Modernisation]", this will return "Jean Martin".
+     *
+     * @param displayName
+     * @return displayName without domain (null if the provided display name is null).
+     */
+    fun getNameFromDisplayName(displayName: String): String {
+        return displayName.split(DISPLAY_NAME_FIRST_DELIMITER)
+                .first()
+                .trim()
     }
+
+    /**
+     * Get the potential domain name from a display name.
+     * For example in case of "Jean Martin [Modernisation]", this will return "Modernisation".
+     *
+     * @param displayName
+     * @return displayName without name, empty string if no domain is available.
+     */
+    fun getDomainFromDisplayName(displayName: String): String {
+        return displayName.split(DISPLAY_NAME_FIRST_DELIMITER)
+                .elementAtOrNull(1)
+                ?.split(DISPLAY_NAME_SECOND_DELIMITER)
+                ?.first()
+                ?.trim()
+                ?: DEFAULT_EMPTY_STRING
+    }
+
+    private const val DISPLAY_NAME_FIRST_DELIMITER = "["
+    private const val DISPLAY_NAME_SECOND_DELIMITER = "]"
+    private const val DEFAULT_EMPTY_STRING = ""
 }

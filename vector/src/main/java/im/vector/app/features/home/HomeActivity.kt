@@ -61,6 +61,7 @@ import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
+import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.userdirectory.UserListViewModel
 import im.vector.app.features.userdirectory.UserListViewState
@@ -144,6 +145,8 @@ class HomeActivity :
     }
 
     override fun getBinding() = ActivityHomeBinding.inflate(layoutInflater)
+
+    override fun getOtherThemes() = ActivityOtherThemes.LightVariant2
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)

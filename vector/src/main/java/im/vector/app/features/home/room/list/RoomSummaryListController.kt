@@ -16,10 +16,11 @@
 
 package im.vector.app.features.home.room.list
 
+import fr.gouv.tchap.features.home.room.list.TchapRoomSummaryItemFactory
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class RoomSummaryListController(
-        private val roomSummaryItemFactory: RoomSummaryItemFactory
+        private val roomSummaryItemFactory: TchapRoomSummaryItemFactory
 ) : CollapsableTypedEpoxyController<List<RoomSummary>>() {
 
     var listener: RoomListListener? = null

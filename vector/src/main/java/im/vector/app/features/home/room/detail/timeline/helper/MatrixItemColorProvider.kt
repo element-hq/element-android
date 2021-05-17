@@ -35,12 +35,7 @@ class MatrixItemColorProvider @Inject constructor(
     @ColorInt
     fun getColor(matrixItem: MatrixItem): Int {
         return cache.getOrPut(matrixItem.id) {
-            colorProvider.getColor(
-                    when (matrixItem) {
-                        is MatrixItem.UserItem -> getColorFromUserId(matrixItem.id)
-                        else                   -> getColorFromRoomId(matrixItem.id)
-                    }
-            )
+            colorProvider.getColor(R.color.tchap_greyish_purple)
         }
     }
 

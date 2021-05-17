@@ -47,7 +47,7 @@
 
 <!--    <color name="tchap_primary_text_color">#000000</color>-->
 <!--    <color name="tchap_secondary_text_color">#aeaeae</color>-->
-<!--    <color name="tchap_third_text_color">#848484</color>-->
+<!--    <color name="tchap_third_text_color">@color/tchap_text_color_dark_grey</color>-->
 <!--    <color name="tchap_navigation_menu_text_color">#9b9b9b</color>-->
 <!--    <color name="tchap_presence_status_color">#60ad0d</color>-->
 <!--    <color name="tchap_incoming_msg_phylact_background_color">#FFFFFF</color>-->
@@ -93,4 +93,5 @@
     <attr name="overlay_background_color" format="color" />
     <attr name="box_bg_color" format="color" />
     <attr name="box_text_color" format="color" />
+    <attr name="avatar_border_color" format="color" />
 </resources>

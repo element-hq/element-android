@@ -129,17 +129,17 @@ class SpaceRoomListSectionBuilder(
             it.roomCategoryFilter = RoomCategoryFilter.ALL
         }
 
-//        addSection(
-//                sections,
-//                activeSpaceAwareQueries,
-//                R.string.bottom_action_favourites,
-//                false,
-//                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
-//        ) {
-//            it.memberships = listOf(Membership.JOIN)
-//            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-//            it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
-//        }
+        addSection(
+                sections,
+                activeSpaceAwareQueries,
+                R.string.bottom_action_favourites,
+                false,
+                RoomListViewModel.SpaceFilterStrategy.NOT_IF_ALL
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
+        }
 
         addSection(
                 sections,
@@ -150,7 +150,7 @@ class SpaceRoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ALL
-            it.roomTagQueryFilter = RoomTagQueryFilter(null, false, false)
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
         }
 
 //        addSection(

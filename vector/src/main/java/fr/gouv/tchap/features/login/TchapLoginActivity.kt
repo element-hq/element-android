@@ -48,6 +48,7 @@ import im.vector.app.features.login.LoginViewState
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.isSupported
 import im.vector.app.features.pin.UnlockedActivity
+import im.vector.app.features.themes.ActivityOtherThemes
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import javax.inject.Inject
@@ -87,6 +88,8 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
     }
 
     final override fun getBinding() = ActivityLoginBinding.inflate(layoutInflater)
+
+    override fun getOtherThemes() = ActivityOtherThemes.LightVariant2
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
