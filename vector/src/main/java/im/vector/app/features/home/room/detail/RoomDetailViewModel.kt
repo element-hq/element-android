@@ -449,7 +449,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 widgetSessionId = widgetSessionId.substring(0, 7)
             }
             val roomId: String = room.roomId
-            val confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase(VectorLocale.applicationLocale)
+            val confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.lowercase(VectorLocale.applicationLocale)
 
             val preferredJitsiDomain = tryOrNull {
                 rawService.getElementWellknown(session.myUserId)
