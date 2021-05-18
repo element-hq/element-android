@@ -98,7 +98,7 @@ Changes in Element 1.1.4 (2021-04-09)
 
 Improvements 🙌:
  - Split network request `/keys/query` into smaller requests (250 users max) (#2925)
- - Crypto improvement | Bulk send NO_OLM withheld code
+ - Crypto improvement | Bulk send NO_OLM withheld code
  - Display the room shield in all room setting screens
  - Improve message with Emoji only detection (#3017)
  - Picture preview when replying. Also add the image preview in the message detail bottomsheet (#2916)
@@ -657,7 +657,7 @@ Improvements 🙌:
  - Sending events is now retried only 3 times, so we avoid blocking the sending queue too long.
  - Display warning when fail to send events in room list
  - Improve UI of edit role action in member profile
- - Moderation | New screen to display list of banned users in room settings, with unban action
+ - Moderation | New screen to display list of banned users in room settings, with unban action
 
 Bugfix 🐛:
  - Fix theme issue on Room directory screen (#1613)
