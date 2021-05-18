@@ -2768,7 +2768,7 @@
     <string name="create_spaces_make_sure_access">Stelle sicher, dass die richtigen Personen Zugang zu %s besitzen. Du kannst das später noch ändern.</string>
     <string name="create_spaces_who_are_you_working_with">Mit wem arbeitest du zusammen\?</string>
     <string name="command_description_leave_room">Verlasse den Raum mit der angegebenen ID (oder den aktuellen Raum, indem du keine ID angibst)</string>
-    <string name="search_hint_room_name">Name des Spaces</string>
+    <string name="search_hint_room_name">Name suchen</string>
     <string name="you_are_invited">Du wurdest eingeladen</string>
     <string name="space_leave_prompt_msg">Bist du dir sicher, dass du den Space verlassen willst\?</string>
     <string name="leave_space">Space verlassen</string>
