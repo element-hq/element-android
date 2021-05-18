@@ -13,12 +13,13 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="16dp"
         android:importantForAccessibility="no"
-        android:tint="?riotx_reaction_background_off"
         app:layout_constraintBottom_toTopOf="@id/emptyItemTitleView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_empty_space_explore" />
+        app:tint="?riotx_reaction_background_on"
+        tools:ignore="MissingPrefix"
+        tools:src="@drawable/ic_empty_icon_room" />
 
     <TextView
         android:id="@+id/emptyItemTitleView"
