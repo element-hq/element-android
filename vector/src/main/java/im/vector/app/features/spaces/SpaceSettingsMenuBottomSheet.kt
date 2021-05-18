@@ -43,6 +43,7 @@ import im.vector.app.features.spaces.manage.SpaceManageActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -105,7 +106,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
 
                     views.spaceSettings.isVisible = canChangeAvatar || canChangeName || canChangeTopic
 
-                    views.invitePeople.isVisible = canInvite
+                    views.invitePeople.isVisible = canInvite || roomSummary?.isPublic.orFalse()
                     views.addRooms.isVisible = canAddChild
                 }.disposeOnDestroyView()
 

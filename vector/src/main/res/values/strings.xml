@@ -3323,6 +3323,7 @@
     <string name="create_space_topic_hint">Description</string>
     <string name="invite_people_to_your_space">Invite people to your space</string>
     <string name="invite_people_menu">Invite people</string>
+    <string name="invite_to_space">Invite to %s</string>
     <string name="invite_people_to_your_space_desc">It’s just you at the moment.  %s will be even better with others.</string>
     <string name="invite_by_email">Invite by email</string>
     <string name="invite_by_mxid">Invite by username</string>
