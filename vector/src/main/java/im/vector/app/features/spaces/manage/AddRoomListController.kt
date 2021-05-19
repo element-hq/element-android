@@ -88,6 +88,7 @@ class AddRoomListController @Inject constructor(
         }
 
     override fun addModels(models: List<EpoxyModel<*>>) {
+        val host = this
         val filteredModel = if (ignoreRooms == null) {
             models
         } else {
@@ -100,7 +101,7 @@ class AddRoomListController @Inject constructor(
             add(
                     RoomCategoryItem_().apply {
                         id("header")
-                        title(sectionName ?: "")
+                        title(host.sectionName ?: "")
                         expanded(true)
                     }
             )
@@ -108,7 +109,7 @@ class AddRoomListController @Inject constructor(
                 add(
                         GenericPillItem_().apply {
                             id("sub_header")
-                            text(subHeaderText)
+                            text(host.subHeaderText)
                             imageRes(R.drawable.ic_info)
                         }
                 )
@@ -123,15 +124,16 @@ class AddRoomListController @Inject constructor(
     }
 
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
+        val host = this
         if (item == null) return RoomSelectionPlaceHolderItem_().apply { id(currentPosition) }
         return RoomSelectionItem_().apply {
             id(item.roomId)
             matrixItem(item.toMatrixItem())
             avatarRenderer(this@AddRoomListController.avatarRenderer)
             space(item.roomType == RoomType.SPACE)
-            selected(selectedItems[item.roomId] ?: false)
+            selected(host.selectedItems[item.roomId] ?: false)
             itemClickListener(DebouncedClickListener({
-                listener?.onItemSelected(item)
+                host.listener?.onItemSelected(item)
             }))
         }
     }

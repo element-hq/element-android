@@ -36,23 +36,24 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
 //    var shouldForceFocusOnce = true
 
     override fun buildModels(data: CreateSpaceState?) {
+        val host = this
         genericFooterItem {
             id("info_help_header")
             style(ItemStyle.TITLE)
             text(
                     if (data?.spaceType == SpaceType.Public) {
-                        stringProvider.getString(R.string.create_spaces_room_public_header, data.name)
+                        host.stringProvider.getString(R.string.create_spaces_room_public_header, data.name)
                     } else {
-                        stringProvider.getString(R.string.create_spaces_room_private_header)
+                        host.stringProvider.getString(R.string.create_spaces_room_private_header)
                     }
             )
-            textColor(colorProvider.getColorFromAttribute(R.attr.riot_primary_text_color))
+            textColor(host.colorProvider.getColorFromAttribute(R.attr.riot_primary_text_color))
         }
 
         genericFooterItem {
             id("info_help")
             text(
-                    stringProvider.getString(
+                    host.stringProvider.getString(
                             if (data?.spaceType == SpaceType.Public) {
                                 R.string.create_spaces_room_public_header_desc
                             } else {
@@ -60,7 +61,7 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
                             }
                     )
             )
-            textColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary))
+            textColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary))
         }
 
         val firstRoomName = data?.defaultRooms?.get(0)
@@ -69,11 +70,11 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
             enabled(true)
             value(firstRoomName)
             singleLine(true)
-            hint(stringProvider.getString(R.string.create_room_name_section))
+            hint(host.stringProvider.getString(R.string.create_room_name_section))
             endIconMode(TextInputLayout.END_ICON_CLEAR_TEXT)
             showBottomSeparator(false)
             onTextChange { text ->
-                listener?.onNameChange(0, text)
+                host.listener?.onNameChange(0, text)
             }
         }
 
@@ -83,11 +84,11 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
             enabled(true)
             value(secondRoomName)
             singleLine(true)
-            hint(stringProvider.getString(R.string.create_room_name_section))
+            hint(host.stringProvider.getString(R.string.create_room_name_section))
             endIconMode(TextInputLayout.END_ICON_CLEAR_TEXT)
             showBottomSeparator(false)
             onTextChange { text ->
-                listener?.onNameChange(1, text)
+                host.listener?.onNameChange(1, text)
             }
         }
 
@@ -97,11 +98,11 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
             enabled(true)
             value(thirdRoomName)
             singleLine(true)
-            hint(stringProvider.getString(R.string.create_room_name_section))
+            hint(host.stringProvider.getString(R.string.create_room_name_section))
             endIconMode(TextInputLayout.END_ICON_CLEAR_TEXT)
             showBottomSeparator(false)
             onTextChange { text ->
-                listener?.onNameChange(2, text)
+                host.listener?.onNameChange(2, text)
             }
 //            onBind { _, view, _ ->
 //                if (shouldForceFocusOnce

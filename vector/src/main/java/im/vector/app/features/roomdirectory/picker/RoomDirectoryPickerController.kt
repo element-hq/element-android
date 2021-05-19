@@ -38,6 +38,7 @@ class RoomDirectoryPickerController @Inject constructor(private val stringProvid
     var index = 0
 
     override fun buildModels(viewState: RoomDirectoryPickerViewState) {
+        val host = this
         val asyncThirdPartyProtocol = viewState.asyncThirdPartyRequest
 
         when (asyncThirdPartyProtocol) {
@@ -56,24 +57,25 @@ class RoomDirectoryPickerController @Inject constructor(private val stringProvid
             is Fail       -> {
                 errorWithRetryItem {
                     id("error")
-                    text(errorFormatter.toHumanReadable(asyncThirdPartyProtocol.error))
-                    listener { callback?.retry() }
+                    text(host.errorFormatter.toHumanReadable(asyncThirdPartyProtocol.error))
+                    listener { host.callback?.retry() }
                 }
             }
         }
     }
 
     private fun buildDirectory(roomDirectoryData: RoomDirectoryData) {
+        val host = this
         roomDirectoryItem {
-            id(index++)
+            id(host.index++)
 
             directoryName(roomDirectoryData.displayName)
 
             val description = when {
                 roomDirectoryData.includeAllNetworks      ->
-                    stringProvider.getString(R.string.directory_server_all_rooms_on_server, roomDirectoryData.displayName)
+                    host.stringProvider.getString(R.string.directory_server_all_rooms_on_server, roomDirectoryData.displayName)
                 "Matrix" == roomDirectoryData.displayName ->
-                    stringProvider.getString(R.string.directory_server_native_rooms, roomDirectoryData.displayName)
+                    host.stringProvider.getString(R.string.directory_server_native_rooms, roomDirectoryData.displayName)
                 else                                      ->
                     null
             }
@@ -83,7 +85,7 @@ class RoomDirectoryPickerController @Inject constructor(private val stringProvid
             includeAllNetworks(roomDirectoryData.includeAllNetworks)
 
             globalListener {
-                callback?.onRoomDirectoryClicked(roomDirectoryData)
+                host.callback?.onRoomDirectoryClicked(roomDirectoryData)
             }
         }
     }

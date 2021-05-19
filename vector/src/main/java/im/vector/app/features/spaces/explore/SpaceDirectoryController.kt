@@ -55,6 +55,7 @@ class SpaceDirectoryController @Inject constructor(
     var listener: InteractionListener? = null
 
     override fun buildModels(data: SpaceDirectoryState?) {
+        val host = this
         val results = data?.spaceSummaryApiResult
 
         if (results is Incomplete) {
@@ -70,13 +71,13 @@ class SpaceDirectoryController @Inject constructor(
                     tintIcon(false)
                     text(
                             span {
-                                span(stringProvider.getString(R.string.spaces_no_server_support_title)) {
+                                span(host.stringProvider.getString(R.string.spaces_no_server_support_title)) {
                                     textStyle = "bold"
-                                    textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_primary)
+                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary)
                                 }
                                 +"\n\n"
-                                span(stringProvider.getString(R.string.spaces_no_server_support_description)) {
-                                    textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                span(host.stringProvider.getString(R.string.spaces_no_server_support_description)) {
+                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
                                 }
                             }
                     )
@@ -84,8 +85,8 @@ class SpaceDirectoryController @Inject constructor(
             } else {
                 errorWithRetryItem {
                     id("api_err")
-                    text(errorFormatter.toHumanReadable(failure))
-                    listener { listener?.retry() }
+                    text(host.errorFormatter.toHumanReadable(failure))
+                    listener { host.listener?.retry() }
                 }
             }
         } else {
@@ -98,7 +99,7 @@ class SpaceDirectoryController @Inject constructor(
             if (flattenChildInfo.isEmpty()) {
                 genericFooterItem {
                     id("empty_footer")
-                    stringProvider.getString(R.string.no_result_placeholder)
+                    host.stringProvider.getString(R.string.no_result_placeholder)
                 }
             } else {
                 flattenChildInfo.forEach { info ->
@@ -108,23 +109,23 @@ class SpaceDirectoryController @Inject constructor(
                     spaceChildInfoItem {
                         id(info.childRoomId)
                         matrixItem(MatrixItem.RoomItem(info.childRoomId, info.name, info.avatarUrl))
-                        avatarRenderer(avatarRenderer)
+                        avatarRenderer(host.avatarRenderer)
                         topic(info.topic)
                         memberCount(info.activeMemberCount ?: 0)
                         space(isSpace)
                         loading(isLoading)
                         buttonLabel(
-                                if (isJoined) stringProvider.getString(R.string.action_open)
-                                else stringProvider.getString(R.string.join)
+                                if (isJoined) host.stringProvider.getString(R.string.action_open)
+                                else host.stringProvider.getString(R.string.join)
                         )
                         apply {
                             if (isSpace) {
-                                itemClickListener(View.OnClickListener { listener?.onSpaceChildClick(info) })
+                                itemClickListener(View.OnClickListener { host.listener?.onSpaceChildClick(info) })
                             } else {
-                                itemClickListener(View.OnClickListener { listener?.onRoomClick(info) })
+                                itemClickListener(View.OnClickListener { host.listener?.onRoomClick(info) })
                             }
                         }
-                        buttonClickListener(View.OnClickListener { listener?.onButtonClick(info) })
+                        buttonClickListener(View.OnClickListener { host.listener?.onButtonClick(info) })
                     }
                 }
             }
