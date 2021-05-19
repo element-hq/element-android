@@ -7,7 +7,7 @@ on:
 
 jobs:
   debug:
-    name: Build debug APK (${{ matrix.target }})
+    name: Build debug APKs (${{ matrix.target }})
     runs-on: ubuntu-latest
     if: github.ref != 'refs/heads/main'
     strategy:
@@ -29,12 +29,12 @@ jobs:
       - name: Upload ${{ matrix.target }} debug APKs
         uses: actions/upload-artifact@v2
         with:
-          name: release-apk-debug-${{ matrix.target }}
+          name: vector-${{ matrix.target }}-debug
           path: |
             vector/build/outputs/apk/*/debug/*.apk
 
-  gplay:
-    name: Build unsigned GPlay APK
+  release:
+    name: Build unsigned GPlay APKs
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
@@ -52,8 +52,8 @@ jobs:
       - name: Upload Gplay unsigned APKs
         uses: actions/upload-artifact@v2
         with:
-          name: release-apk-unsigned-GPlay
+          name: vector-gplay-release-unsigned
           path: |
-            vector/build/outputs/apk/*/debug/*.apk
+            vector/build/outputs/apk/*/release/*.apk
 
 # TODO: add exodus checks
