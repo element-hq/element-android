@@ -146,7 +146,9 @@ internal class DefaultSpaceService @Inject constructor(
                                                         viaServers = childStateEvContent.via.orEmpty(),
                                                         activeMemberCount = childSummary.numJoinedMembers,
                                                         parentRoomId = childStateEv.roomId,
-                                                        suggested = childStateEvContent.suggested
+                                                        suggested = childStateEvContent.suggested,
+                                                        canonicalAlias = childSummary.canonicalAlias,
+                                                        aliases = childSummary.aliases
                                                 )
                                             }
                                         }.orEmpty()
