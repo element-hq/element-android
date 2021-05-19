@@ -13,6 +13,9 @@ Bugfix 🐛:
  - Fix a problem with database migration on nightly builds (#3335)
  - Implement a workaround to render &lt;del&gt; and &lt;u&gt; in the timeline (#1817)
  - Make sure the SDK can retrieve the secret storage if the system is upgraded (#3304)
+ - Spaces | Personal spaces add DM - Web Parity (#3271)
+ - Spaces | Improve 'Leave Space' UX/UI (#3359)
+ - Don't create private spaces with encryption enabled (#3363)
 
 Translations 🗣:
  -
