@@ -497,14 +497,22 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                         }
                     }
 
+                    // We can't use end and start because of our weird layout RTL tricks
+                    val alignEnd = if(defaultRtl) RelativeLayout.ALIGN_LEFT else RelativeLayout.ALIGN_RIGHT
+                    val alignStart = if(defaultRtl) RelativeLayout.ALIGN_RIGHT else RelativeLayout.ALIGN_LEFT
+                    val startOf = if(defaultRtl) RelativeLayout.RIGHT_OF else RelativeLayout.LEFT_OF
+                    val endOf = if(defaultRtl) RelativeLayout.LEFT_OF else RelativeLayout.RIGHT_OF
+
                     val footerLayoutParams = holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams
                     var footerMarginStartDp = 4
                     var footerMarginEndDp = 1
                     if (allowFooterOverlay(holder)) {
                         footerLayoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.viewStubContainer)
-                        footerLayoutParams.addRule(RelativeLayout.ALIGN_END, R.id.viewStubContainer)
+                        footerLayoutParams.addRule(alignEnd, R.id.viewStubContainer)
+                        footerLayoutParams.removeRule(alignStart)
                         footerLayoutParams.removeRule(RelativeLayout.BELOW)
-                        footerLayoutParams.removeRule(RelativeLayout.END_OF)
+                        footerLayoutParams.removeRule(endOf)
+                        footerLayoutParams.removeRule(startOf)
                         if (needsFooterReservation(holder)) {
                             // Remove style used when not having reserved space
                             removeFooterOverlayStyle(holder, density)
@@ -523,16 +531,20 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                         when {
                             allowFooterBelow(holder) -> {
                                 footerLayoutParams.addRule(RelativeLayout.BELOW, R.id.viewStubContainer)
-                                footerLayoutParams.addRule(RelativeLayout.ALIGN_END, R.id.viewStubContainer)
+                                footerLayoutParams.addRule(alignEnd, R.id.viewStubContainer)
+                                footerLayoutParams.removeRule(alignStart)
                                 footerLayoutParams.removeRule(RelativeLayout.ALIGN_BOTTOM)
-                                footerLayoutParams.removeRule(RelativeLayout.END_OF)
+                                footerLayoutParams.removeRule(endOf)
+                                footerLayoutParams.removeRule(startOf)
                                 footerLayoutParams.removeRule(RelativeLayout.START_OF)
                             }
                             reverseBubble            -> /* force footer on the left / at the start */ {
                                 footerLayoutParams.addRule(RelativeLayout.START_OF, R.id.viewStubContainer)
                                 footerLayoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.viewStubContainer)
-                                footerLayoutParams.removeRule(RelativeLayout.ALIGN_END)
-                                footerLayoutParams.removeRule(RelativeLayout.END_OF)
+                                footerLayoutParams.removeRule(alignEnd)
+                                footerLayoutParams.removeRule(alignStart)
+                                footerLayoutParams.removeRule(endOf)
+                                footerLayoutParams.removeRule(startOf)
                                 footerLayoutParams.removeRule(RelativeLayout.BELOW)
                                 // Reverse margins
                                 footerMarginStartDp = 1
@@ -540,17 +552,24 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                                 footerMarginEndDp = 8
                             }
                             else                     -> /* footer on the right / at the end */ {
-                                footerLayoutParams.addRule(RelativeLayout.END_OF, R.id.viewStubContainer)
+                                footerLayoutParams.addRule(endOf, R.id.viewStubContainer)
                                 footerLayoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.viewStubContainer)
-                                footerLayoutParams.removeRule(RelativeLayout.ALIGN_END)
+                                footerLayoutParams.removeRule(startOf)
+                                footerLayoutParams.removeRule(alignEnd)
+                                footerLayoutParams.removeRule(alignStart)
                                 footerLayoutParams.removeRule(RelativeLayout.BELOW)
                                 footerLayoutParams.removeRule(RelativeLayout.START_OF)
                             }
                         }
                         removeFooterOverlayStyle(holder, density)
                     }
-                    footerLayoutParams.marginStart = round(footerMarginStartDp*density).toInt()
-                    footerLayoutParams.marginEnd = round(footerMarginEndDp*density).toInt()
+                    if (defaultRtl) {
+                        footerLayoutParams.rightMargin = round(footerMarginStartDp * density).toInt()
+                        footerLayoutParams.leftMargin = round(footerMarginEndDp * density).toInt()
+                    } else {
+                        footerLayoutParams.leftMargin = round(footerMarginStartDp * density).toInt()
+                        footerLayoutParams.rightMargin = round(footerMarginEndDp * density).toInt()
+                    }
                 }
                 if (bubbleStyle == BubbleThemeUtils.BUBBLE_STYLE_BOTH_HIDDEN) {
                     // We need to align the non-bubble member name view to pseudo bubbles
