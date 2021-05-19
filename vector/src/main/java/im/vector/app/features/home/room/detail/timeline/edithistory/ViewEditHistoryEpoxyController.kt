@@ -47,6 +47,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                                      val eventHtmlRenderer: EventHtmlRenderer) : TypedEpoxyController<ViewEditHistoryViewState>() {
 
     override fun buildModels(state: ViewEditHistoryViewState) {
+        val host = this
         when (state.editList) {
             is Incomplete -> {
                 genericLoaderItem {
@@ -56,7 +57,8 @@ class ViewEditHistoryEpoxyController(private val context: Context,
             is Fail       -> {
                 genericFooterItem {
                     id("failure")
-                    text(context.getString(R.string.unknown_error))
+                    // FIXME Should use stringprovider
+                    text(host.context.getString(R.string.unknown_error))
                 }
             }
             is Success    -> {
@@ -66,10 +68,12 @@ class ViewEditHistoryEpoxyController(private val context: Context,
     }
 
     private fun renderEvents(sourceEvents: List<Event>, isOriginalReply: Boolean) {
+        val host = this
         if (sourceEvents.isEmpty()) {
             genericItem {
                 id("footer")
-                title(context.getString(R.string.no_message_edits_found))
+                // TODO use a stringProvider
+                title(host.context.getString(R.string.no_message_edits_found))
             }
         } else {
             var lastDate: Calendar? = null
@@ -83,7 +87,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                     // need to display header with day
                     genericItemHeader {
                         id(evDate.hashCode())
-                        text(dateFormatter.format(evDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
+                        text(host.dateFormatter.format(evDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
                     }
                 }
                 lastDate = evDate
@@ -127,7 +131,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                 }
                 genericItem {
                     id(timelineEvent.eventId)
-                    title(dateFormatter.format(timelineEvent.originServerTs, DateFormatKind.EDIT_HISTORY_ROW))
+                    title(host.dateFormatter.format(timelineEvent.originServerTs, DateFormatKind.EDIT_HISTORY_ROW))
                     description(spannedDiff ?: body)
                 }
             }

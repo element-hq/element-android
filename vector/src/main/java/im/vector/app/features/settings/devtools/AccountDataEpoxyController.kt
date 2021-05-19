@@ -43,11 +43,12 @@ class AccountDataEpoxyController @Inject constructor(
 
     override fun buildModels(data: AccountDataViewState?) {
         if (data == null) return
+        val host = this
         when (data.accountData) {
             is Loading -> {
                 loadingItem {
                     id("loading")
-                    loadingText(stringProvider.getString(R.string.loading))
+                    loadingText(host.stringProvider.getString(R.string.loading))
                 }
             }
             is Fail    -> {
@@ -61,7 +62,7 @@ class AccountDataEpoxyController @Inject constructor(
                 if (dataList.isEmpty()) {
                     genericFooterItem {
                         id("noResults")
-                        text(stringProvider.getString(R.string.no_result_placeholder))
+                        text(host.stringProvider.getString(R.string.no_result_placeholder))
                     }
                 } else {
                     dataList.forEach { accountData ->
@@ -69,10 +70,10 @@ class AccountDataEpoxyController @Inject constructor(
                             id(accountData.type)
                             title(accountData.type)
                             itemClickAction(DebouncedClickListener({
-                                interactionListener?.didTap(accountData)
+                                host.interactionListener?.didTap(accountData)
                             }))
                             itemLongClickAction(View.OnLongClickListener {
-                                interactionListener?.didLongTap(accountData)
+                                host.interactionListener?.didLongTap(accountData)
                                 true
                             })
                         }

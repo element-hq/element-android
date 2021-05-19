@@ -43,6 +43,7 @@ class SpaceManageRoomsController @Inject constructor(
     private val matchFilter = SpaceChildInfoMatchFilter()
 
     override fun buildModels(data: SpaceManageRoomViewState?) {
+        val host = this
         val roomListAsync = data?.childrenInfo
         if (roomListAsync is Incomplete) {
             loadingItem { id("loading") }
@@ -51,8 +52,8 @@ class SpaceManageRoomsController @Inject constructor(
         if (roomListAsync is Fail) {
             errorWithRetryItem {
                 id("Api Error")
-                text(errorFormatter.toHumanReadable(roomListAsync.error))
-                listener { listener?.retry() }
+                text(host.errorFormatter.toHumanReadable(roomListAsync.error))
+                listener { host.listener?.retry() }
             }
             return
         }
@@ -70,12 +71,12 @@ class SpaceManageRoomsController @Inject constructor(
             roomManageSelectionItem {
                 id(childInfo.childRoomId)
                 matrixItem(childInfo.toMatrixItem())
-                avatarRenderer(avatarRenderer)
+                avatarRenderer(host.avatarRenderer)
                 suggested(childInfo.suggested ?: false)
                 space(childInfo.roomType == RoomType.SPACE)
                 selected(data.selectedRooms.contains(childInfo.childRoomId))
                 itemClickListener(DebouncedClickListener({
-                    listener?.toggleSelection(childInfo)
+                    host.listener?.toggleSelection(childInfo)
                 }))
             }
         }
