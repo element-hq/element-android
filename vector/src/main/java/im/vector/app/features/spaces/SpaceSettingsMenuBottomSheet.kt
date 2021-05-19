@@ -16,6 +16,7 @@
 
 package im.vector.app.features.spaces
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -28,6 +29,7 @@ import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetSpaceSettingsBinding
@@ -81,7 +83,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         injector.inject(this)
     }
 
-    var isAdmin: Boolean = false
+    var isLastAdmin: Boolean = false
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetSpaceSettingsBinding {
         return BottomSheetSpaceSettingsBinding.inflate(inflater, container, false)
@@ -117,7 +119,12 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     views.invitePeople.isVisible = canInvite || roomSummary?.isPublic.orFalse()
                     views.addRooms.isVisible = canAddChild
 
-                    isAdmin = powerLevelsHelper.getUserRole(session.myUserId) is Role.Admin
+                    val isAdmin = powerLevelsHelper.getUserRole(session.myUserId) is Role.Admin
+                    val otherAdminCount = roomSummary?.otherMemberIds
+                            ?.map { powerLevelsHelper.getUserRole(it) }
+                            ?.count { it is Role.Admin }
+                            ?: 0
+                    isLastAdmin = isAdmin && otherAdminCount == 0
                 }.disposeOnDestroyView()
 
         views.spaceBetaTag.setOnClickListener {
@@ -150,36 +157,25 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         views.leaveSpace.views.bottomSheetActionClickableZone.debouncedClicks {
             val spaceSummary = activeSessionHolder.getSafeActiveSession()?.getRoomSummary(spaceArgs.spaceId)
                     ?: return@debouncedClicks
-            val warningMessage: CharSequence = if (spaceSummary.otherMemberIds.isEmpty()) {
-                span {
-                    +getString(R.string.space_leave_prompt_msg)
-                    +"\n"
-                    span(getString(R.string.space_leave_prompt_msg_only_you)) {
-                        textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
-                    }
+            val warningMessage: CharSequence? = if (spaceSummary.otherMemberIds.isEmpty()) {
+                span(getString(R.string.space_leave_prompt_msg_only_you)) {
+                    textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
                 }
-            } else if (isAdmin) {
-                span {
-                    +getString(R.string.space_leave_prompt_msg)
-                    +"\n"
-                    span(getString(R.string.space_leave_prompt_msg_as_admin)) {
-                        textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
-                    }
+            } else if (isLastAdmin) {
+                span(getString(R.string.space_leave_prompt_msg_as_admin)) {
+                    textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
                 }
             } else if (!spaceSummary.isPublic) {
-                span {
-                    +getString(R.string.space_leave_prompt_msg)
-                    +"\n"
-                    span(getString(R.string.space_leave_prompt_msg_private)) {
-                        textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
-                    }
+                span(getString(R.string.space_leave_prompt_msg_private)) {
+                    textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
                 }
             } else {
-                getString(R.string.space_leave_prompt_msg)
+                null
             }
 
             AlertDialog.Builder(requireContext())
                     .setMessage(warningMessage)
+                    .setTitle(getString(R.string.space_leave_prompt_msg))
                     .setPositiveButton(R.string.leave) { _, _ ->
                         session.coroutineScope.launch {
                             try {
@@ -192,6 +188,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
+                    .withColoredButton(DialogInterface.BUTTON_POSITIVE)
         }
     }
 

@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
@@ -109,6 +108,10 @@ class SpaceAddRoomFragment @Inject constructor(
             }
         }.disposeOnDestroyView()
 
+        viewModel.selectSubscribe(this, SpaceAddRoomsState::shouldShowDMs) {
+           dmEpoxyController.disabled = !it
+        }.disposeOnDestroyView()
+
         views.createNewRoom.debouncedClicks {
             sharedViewModel.handle(SpaceManagedSharedAction.CreateRoom)
         }
@@ -125,11 +128,11 @@ class SpaceAddRoomFragment @Inject constructor(
                             .setNegativeButton(R.string.cancel, null)
                             .show()
                 }
-                is SpaceAddRoomsViewEvents.SaveFailed -> {
+                is SpaceAddRoomsViewEvents.SaveFailed      -> {
                     showErrorInSnackbar(it.reason)
                     invalidateOptionsMenu()
                 }
-                SpaceAddRoomsViewEvents.SavedDone -> {
+                SpaceAddRoomsViewEvents.SavedDone          -> {
                     sharedViewModel.handle(SpaceManagedSharedAction.HandleBack)
                 }
             }
@@ -186,20 +189,18 @@ class SpaceAddRoomFragment @Inject constructor(
         concatAdapter.addAdapter(roomEpoxyController.adapter)
         concatAdapter.addAdapter(spaceEpoxyController.adapter)
 
-        val shouldShowDm = withState(viewModel) { it.shouldShowDMs }
-        if (shouldShowDm) {
-            viewModel.updatableDMLivePageResult.liveBoundaries.observe(viewLifecycleOwner) {
-                dmEpoxyController.boundaryChange(it)
-            }
-            viewModel.updatableDMLivePageResult.livePagedList.observe(viewLifecycleOwner) {
-                dmEpoxyController.totalSize = it.size
-                dmEpoxyController.submitList(it)
-            }
-            dmEpoxyController.sectionName = getString(R.string.direct_chats_header)
-            dmEpoxyController.listener = this
-
-            concatAdapter.addAdapter(dmEpoxyController.adapter)
+        // This controller can be disabled depending on the space type (public or not)
+        viewModel.updatableDMLivePageResult.liveBoundaries.observe(viewLifecycleOwner) {
+            dmEpoxyController.boundaryChange(it)
         }
+        viewModel.updatableDMLivePageResult.livePagedList.observe(viewLifecycleOwner) {
+            dmEpoxyController.totalSize = it.size
+            dmEpoxyController.submitList(it)
+        }
+        dmEpoxyController.sectionName = getString(R.string.direct_chats_header)
+        dmEpoxyController.listener = this
+
+        concatAdapter.addAdapter(dmEpoxyController.adapter)
 
         views.roomList.adapter = concatAdapter
     }
