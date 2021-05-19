@@ -221,7 +221,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
         val eventBaseView by bind<RelativeLayout>(R.id.eventBaseView)
-        val bubbleView by bind<View>(R.id.bubbleView)
+        val bubbleView by bind<ViewGroup>(R.id.bubbleView)
         val bubbleMemberNameView by bind<TextView>(R.id.bubbleMessageMemberNameView)
         val bubbleTimeView by bind<TextView>(R.id.bubbleMessageTimeView)
         val bubbleFootView by bind<LinearLayout>(R.id.bubbleFootView)
@@ -419,6 +419,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val bubbleView = holder.bubbleView
         val contentInBubble = infoInBubbles(holder.memberNameView.context)
 
+        val defaultDirection = holder.eventBaseView.resources.configuration.layoutDirection;
+        val defaultRtl = defaultDirection == View.LAYOUT_DIRECTION_RTL
+        val reverseDirection = if (defaultRtl) View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
+
         when (bubbleStyle) {
             BubbleThemeUtils.BUBBLE_STYLE_START,
             BubbleThemeUtils.BUBBLE_STYLE_BOTH,
@@ -447,12 +451,13 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                     shortPadding = 0//if (attributes.informationData.showInformation && !hideSenderInformation()) { 8 } else { 0 }
                 }
                 val density = bubbleView.resources.displayMetrics.density
-                if (reverseBubble) {
-                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = getBubbleMargin(bubbleView.resources, bubbleStyle, reverseBubble)
-                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = 0
+                if (reverseBubble != defaultRtl) {
+                    // Use left/right instead of start/end: bubbleView is always LTR
+                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).leftMargin = getBubbleMargin(bubbleView.resources, bubbleStyle, reverseBubble)
+                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).rightMargin = 0
                 } else {
-                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = 0
-                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = getBubbleMargin(bubbleView.resources, bubbleStyle, reverseBubble)
+                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).leftMargin = 0
+                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).rightMargin = getBubbleMargin(bubbleView.resources, bubbleStyle, reverseBubble)
                 }
                 /*
                 (bubbleView.layoutParams as RelativeLayout.LayoutParams).marginStart = round(20*density).toInt()
@@ -461,15 +466,16 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                  */
                 val shortPaddingDp = round(shortPadding * density).toInt()
                 val longPaddingDp = round(longPadding * density).toInt()
-                if (reverseBubble) {
-                    bubbleView.setPaddingRelative(
+                if (reverseBubble != defaultRtl) {
+                    // Use left/right instead of start/end: bubbleView is always LTR
+                    bubbleView.setPadding(
                             shortPaddingDp,
                             shortPaddingDp,
                             longPaddingDp,
                             shortPaddingDp
                     )
                 } else {
-                    bubbleView.setPaddingRelative(
+                    bubbleView.setPadding(
                             longPaddingDp,
                             shortPaddingDp,
                             shortPaddingDp,
@@ -580,9 +586,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             }
         }
 
-        val defaultDirection = holder.eventBaseView.resources.configuration.layoutDirection;
-        val defaultRtl = defaultDirection == View.LAYOUT_DIRECTION_RTL
-        val reverseDirection = if (defaultRtl) View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
         /*
         holder.eventBaseView.layoutDirection = if (shouldRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
         setRtl(shouldRtl)
@@ -590,6 +593,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         (holder.bubbleView.layoutParams as FrameLayout.LayoutParams).gravity = if (reverseBubble) Gravity.END else Gravity.START
         //holder.informationBottom.layoutDirection = if (shouldRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
         setFlatRtl(holder.reactionsContainer, if (reverseBubble) reverseDirection else defaultDirection,
+                holder.eventBaseView.resources.configuration.layoutDirection)
+        // Layout is broken if bubbleView is RTL (for some reason, Android uses left/end padding for right/start as well...)
+        setFlatRtl(holder.bubbleView, View.LAYOUT_DIRECTION_LTR,
                 holder.eventBaseView.resources.configuration.layoutDirection)
     }
 
