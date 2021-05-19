@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.R
@@ -43,9 +44,11 @@ import im.vector.app.features.spaces.manage.SpaceManageActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import me.gujun.android.span.span
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject
@@ -55,6 +58,7 @@ data class SpaceBottomSheetSettingsArgs(
         val spaceId: String
 ) : Parcelable
 
+// XXX make proper view model before leaving beta
 class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceSettingsBinding>() {
 
     @Inject lateinit var navigator: Navigator
@@ -71,9 +75,13 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
 
     var interactionListener: InteractionListener? = null
 
+    override val showExpanded = true
+
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
+
+    var isAdmin: Boolean = false
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetSpaceSettingsBinding {
         return BottomSheetSpaceSettingsBinding.inflate(inflater, container, false)
@@ -108,6 +116,8 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
 
                     views.invitePeople.isVisible = canInvite || roomSummary?.isPublic.orFalse()
                     views.addRooms.isVisible = canAddChild
+
+                    isAdmin = powerLevelsHelper.getUserRole(session.myUserId) is Role.Admin
                 }.disposeOnDestroyView()
 
         views.spaceBetaTag.setOnClickListener {
@@ -138,8 +148,38 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         }
 
         views.leaveSpace.views.bottomSheetActionClickableZone.debouncedClicks {
+            val spaceSummary = activeSessionHolder.getSafeActiveSession()?.getRoomSummary(spaceArgs.spaceId)
+                    ?: return@debouncedClicks
+            val warningMessage: CharSequence = if (spaceSummary.otherMemberIds.isEmpty()) {
+                span {
+                    +getString(R.string.space_leave_prompt_msg)
+                    +"\n"
+                    span(getString(R.string.space_leave_prompt_msg_only_you)) {
+                        textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+                    }
+                }
+            } else if (isAdmin) {
+                span {
+                    +getString(R.string.space_leave_prompt_msg)
+                    +"\n"
+                    span(getString(R.string.space_leave_prompt_msg_as_admin)) {
+                        textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+                    }
+                }
+            } else if (!spaceSummary.isPublic) {
+                span {
+                    +getString(R.string.space_leave_prompt_msg)
+                    +"\n"
+                    span(getString(R.string.space_leave_prompt_msg_private)) {
+                        textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+                    }
+                }
+            } else {
+                getString(R.string.space_leave_prompt_msg)
+            }
+
             AlertDialog.Builder(requireContext())
-                    .setMessage(getString(R.string.space_leave_prompt_msg))
+                    .setMessage(warningMessage)
                     .setPositiveButton(R.string.leave) { _, _ ->
                         session.coroutineScope.launch {
                             try {
