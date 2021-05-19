@@ -140,7 +140,7 @@ class RoomMemberListController @Inject constructor(
                                     ?.let { content ->
                                         profileMatrixItem {
                                             id("3pid_$idx")
-                                            matrixItem(content.toMatrixItem())
+                                            matrixItem(MatrixItem.UserItem("@", displayName = content.displayName))
                                             avatarRenderer(host.avatarRenderer)
                                             editable(data.actionsPermissions.canRevokeThreePidInvite)
                                             clickListener { _ ->
@@ -156,9 +156,5 @@ class RoomMemberListController @Inject constructor(
                             }
                         }
                 )
-    }
-
-    private fun RoomThirdPartyInviteContent.toMatrixItem(): MatrixItem {
-        return MatrixItem.UserItem("@", displayName = displayName)
     }
 }

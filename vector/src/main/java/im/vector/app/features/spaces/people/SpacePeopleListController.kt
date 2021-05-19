@@ -86,7 +86,7 @@ class SpacePeopleListController @Inject constructor(
                                     avatarRenderer(host.avatarRenderer)
                                     userEncryptionTrustLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
                                             .apply {
-                                                val pl = memberEntry.first.toPowerLevelLabel()
+                                                val pl = host.toPowerLevelLabel(memberEntry.first)
                                                 if (memberEntry.first == RoomMemberListCategories.INVITE) {
                                                     powerLevelLabel(
                                                             span {
@@ -158,8 +158,8 @@ class SpacePeopleListController @Inject constructor(
         }
     }
 
-    private fun RoomMemberListCategories.toPowerLevelLabel(): String? {
-        return when (this) {
+    private fun toPowerLevelLabel(categories: RoomMemberListCategories): String? {
+        return when (categories) {
             RoomMemberListCategories.ADMIN     -> stringProvider.getString(R.string.power_level_admin)
             RoomMemberListCategories.MODERATOR -> stringProvider.getString(R.string.power_level_moderator)
             else                               -> null
