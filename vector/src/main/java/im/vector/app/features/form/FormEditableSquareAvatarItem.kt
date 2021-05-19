@@ -83,7 +83,6 @@ abstract class FormEditableSquareAvatarItem : EpoxyModelWithHolder<FormEditableS
 
     override fun unbind(holder: Holder) {
         avatarRenderer?.clear(holder.image)
-        GlideApp.with(holder.image).clear(holder.image)
         super.unbind(holder)
     }
 

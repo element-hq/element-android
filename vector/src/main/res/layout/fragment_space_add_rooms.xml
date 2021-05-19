@@ -10,7 +10,7 @@
         android:id="@+id/roomList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?riotx_header_panel_background"
+        android:background="?riotx_background"
         android:overScrollMode="always"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_room_to_add_in_space" />
@@ -63,7 +63,7 @@
                     android:maxLines="1"
                     android:textColor="?riotx_text_secondary"
                     android:textSize="16sp"
-                    tools:text="@sample/matrix.json/data/spaceName" />
+                    tools:text="@sample/spaces.json/data/name" />
 
             </LinearLayout>
 

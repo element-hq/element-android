@@ -134,6 +134,15 @@
                     android:text="@string/send_bug_report_include_key_share_history" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/bug_report_button_contact_me"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:checked="false"
+                    android:text="@string/you_may_contact_me" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/bug_report_button_include_screenshot"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

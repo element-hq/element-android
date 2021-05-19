@@ -1,30 +1,39 @@
-Element ist eine neuartige Messaging- und Kollaborationsapp:
+Element ist mehr als ein sicherer Messenger. Es ist ein produktives Kolaborationsapp für das Team und eignet sich ideal für den Gruppenchat beim Arbeiten von zuhause aus. Mit eingebauter Ende-zu-Ende-Verschlüsselung ermöglicht Element umfangreiche und sichere Videokonferenzen, das Teilen von Dokumenten/Dateien und Videoanrufe.
 
-1. Volle Kontrolle über deine Privatssphäre
-2. Kommuniziere mit jedem aus dem Matrix-Netzwerk und mit der Integration von z.B. Slack sogar über Matrix hinaus
-3. Schutz vor Werbung, Datamining und geschlossenen Platformen
-4. Absicherung durch Ende-zu-Ende-Verschlüsselung, und Cross-Signing um andere zu verifizieren
+<b>Element enthält folgende Funktionen:</b>
+- Fortgeschrittene Werkzeuge für die Online-Kommunikation
+- Vollverschlüsselte Nachrichten um eine sichere Kommunikation innerhalb und außerhalb des Unternehmens zu ermöglichen
+- Dezentralisierte Chats basierend auf das quelloffene Matrix-Framework
+- Sichere und kontrollierte Dateienfreigabe durch verschlüsselte Daten beim verwalten von Projekten
+- Videochats über VoIP und Bildschirmübertragung
+- Einfache Einbindungen mit Ihren favorisierten Online-Kolaborationswerkzeugen, Projektverwaltungswerkzeugen, VoIP-Diensten und andere Kommunikationsapps für Ihren Team
 
-Element unterscheidet sich durch Dezentralität und Open Source deutlich von anderen Messaging- und Kollaborationsapps.
+Element unterscheidet sich deutlich von anderen Kommunikations- und Kollaborationsapps. Es läuft auf Matrix, ein offenes Netzwerk für eine sichere und dezentralisierte Kommunikation. Es erlaubt den Nutzern ihre eigenen Matrix-Dienste zu betreiben und gibt ihnen damit die vollständige Kontrolle und Besitz über ihre eigenen Daten und Nachrichten.
 
-Element ermöglicht es einen eigenen Server zu betreiben - oder einen beliebigen auszuwählen, sodass du nicht nur Privatssphäre gewinnst, sondern auch deine Daten und Konversationen in deiner Hand sind und du sie kontrollieren kannst. Du hast Zugriff auf ein offenes Netzwerk, und kannst daher nicht nur mit Element-Nutzern schreiben. Und es ist sehr sicher.
+<b>Privatsphäre/Datenschutz und verschlüsselte Kommunikation</b>
+Element schützt Ihnen vor unerwünschte Werbung, das Datenschürfen und geschlossene unentkommbare Dienste. Auch schützt es all Ihre Daten, Video und Sprachkommunikation unter vier Augen durch Ende-zu-Ende-Verschlüsselung und das Quersignieren von Geräten zur Verifizierung.
 
-Element ist zu all diesem in der Lage, weil es Matrix nutzt - einen Standard für offene, dezentrale Kommunikation.
+Element gibt Ihnen die Kontrolle über Ihre Privatsphäre, während es Ihnen ermöglicht mit jeden auf dem Matrix-Netzwerk oder andere geschäftliche Kollaborationswerkzeuge durch das Einbinden von Apps wie Slack sicher zu kommunizieren. 
 
-Element gibt dir die Kontrolle, indem es dir die Wahl darüber lässt, wer deine Konversationen hostet. In der Element-App kannst du zwischen verschiedenen Möglichkeiten auswählen:
+<b>Element kann man selber betreiben</b>
+Um mehr Kontrolle über Ihre sensiblen Daten und Konversationen zu ermöglichen, kann man Element selbst betreiben oder Sie wählen irgendeinen Matrix-basierten Dienst - der standard für quelloffene, dezentralisierte Kommunikation. Element gibt Ihnen Privatsphäre, Sicherheitskonformität und die Flexibilität zum Integrieren.
 
+<b>Besitzen Sie Ihre Daten</b>
+Sie entscheiden wo Sie Ihre Daten und Nachrichten aufbewahren, ohne das Risiko des Datenschürfens oder des Zugriffes Dritter.
+
+Element gibt Ihnen die Kontrolle durch verschiedene Wege:
 1. Kostenlos auf dem öffentlichen matrix.org Server registrieren, der von den Matrix-Entwicklern gehostet wird, oder wähle aus Tausenden von öffentlichen Servern, die von Freiwilligen gehostet werden
-2. Einen Konto auf einem eigenen Server auf eigener Hardware betreiben
+2. Einen Konto auf einem eigenen Server in der eigenen IT-Infrastruktur betreiben
 3. Einen Konto auf einem benutzerdefinierten Server erstellen, zum Beispiel durch ein Abonnement bei Element Matrix Services (kurz EMS)
 
-<b>Wieso Element nutzen?</b>
+<b>Offene Kommunikation und Zusammenarbeit</b>
+Sie können mit jeden auf dem Matrix-Netzwerk chatten, egal ob sie Element, eine Matrix-App oder sogar eine andere Kommunikationsapp nutzen.
 
-<b>BESITZE DEINE DATEN</b>: Du entscheidest wo deine Daten und Nachrichten gespeichert werden. Du besitzt und kontrollierst sie, anstatt ein Großkonzern, der deine Daten analysiert und Dritten Zugriff gibt.
+<b>Super sicher</b>
+Reale Ende-zu-Ende-Verschlüsselung (nur die Personen in der Konversation können die Nachricht entschüsseln) und Quersignierung von Geräten zur Verifizierung.
 
-<b>OFFENE KOMMUNIKATION UND KOLLABORATION</b>: Du kannst mit jedem im Matrix-Netzwerk schreiben, ob sie nun Element oder eine andere Matrix-App nutzen, oder gar ein anderes Kommunikationssystem wie z.B. Slack, IRC oder XMPP.
+<b>Vollständige Kommunikation und Integration</b>
+Kurznachrichten, Sprach- und Videoanrufe, kontrollierte Dateifreigaben, Bildschirmübertragungen und eine ganze Reihe an Integrationen, Bots and Widgets. Schaffe Räume, Gemeinschaften, bleibe auf dem Laufenden und erledige Sachen.
 
-<b>SUPER SICHER</b>: Echte Ende-zu-Ende-Verschlüsselung (nur Personen in der Konversation können die Nachrichten entschlüsseln), und Cross-Signing um die Geräte der anderen Personen zu verifizieren.
-
-<b>VOLLSTÄNDIGE KOMMUNIKATION</b>: Nachrichten, Telefonate und Videoanrufe, Teilen von Dateien oder dem eigenen Bildschirm und viele andere Integrationen, Bots und Widgets. Erstelle Räume, Communities, bleib in Kontakt und sei produktiv.
-
-<b>ÜBERALL WO DU BIST</b>: Bleib in Kontakt wo auch immer du bist - mit einem vollständig synchronisierten Nachrichtenverlauf über alle Geräte und im Netz auf https://app.element.io.
+<b>Das Stehengelassene später wieder aufgreifen</b>
+Bleibe auf dem Laufenden, egal wo Sie sind, mit vollständig synchronisierter Nachrichtenverlauf quer über all Ihrer Geräte und im Netz auf https://app.element.io

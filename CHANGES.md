@@ -1,4 +1,35 @@
-Changes in Element 1.1.7 (2021-XX-XX)
+Changes in Element 1.1.8 (2021-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ - Space Invite by link not always displayed for public space (#3345)
+ - Wrong copy in share space bottom sheet (#3346)
+ - Fix a problem with database migration on nightly builds (#3335)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ - Compile with Kotlin 1.5.
+ - Upgrade some dependencies: gradle wrapper, third party lib, etc.
+ - Sign APK with build tools 30.0.3
+
+Test:
+ -
+
+Other changes:
+ - Add documentation on LoginWizard and RegistrationWizard (#3303)
+
+Changes in Element 1.1.7 (2021-05-12)
 ===================================================
 
 Features ✨:
@@ -12,6 +43,7 @@ Improvements 🙌:
  - Improve file too big error detection (#3245)
  - User can now select video when selecting Gallery to send attachments to a room
  - Add option to record a video from the camera
+ - Add the public icon on the rooms in the room list (#3292)
 
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)
@@ -25,9 +57,8 @@ Bugfix 🐛:
  - Fix read marker not updating automatically (#3267)
  - Sent video does not contains duration (#3272)
  - Properly clean the back stack if the user cancel registration when waiting for email validation
-
-Translations 🗣:
- -
+ - Fix read marker visibility/position when filtering some events 
+ - Fix user invitation in case of restricted profile api (#3306)
 
 SDK API changes ⚠️:
  - RegistrationWizard.createAccount() parameters are now all optional, following Matrix spec (#3205)
@@ -35,9 +66,7 @@ SDK API changes ⚠️:
 Build 🧱:
  - Upgrade to gradle 7
  - https://github.com/Piasy/BigImageViewer is now hosted on mavenCentral()
-
-Test:
- -
+ - Upgrade Realm to version 10.4.0
 
 Other changes:
  - New store descriptions
@@ -70,7 +99,7 @@ Changes in Element 1.1.4 (2021-04-09)
 
 Improvements 🙌:
  - Split network request `/keys/query` into smaller requests (250 users max) (#2925)
- - Crypto improvement | Bulk send NO_OLM withheld code
+ - Crypto improvement | Bulk send NO_OLM withheld code
  - Display the room shield in all room setting screens
  - Improve message with Emoji only detection (#3017)
  - Picture preview when replying. Also add the image preview in the message detail bottomsheet (#2916)
@@ -629,7 +658,7 @@ Improvements 🙌:
  - Sending events is now retried only 3 times, so we avoid blocking the sending queue too long.
  - Display warning when fail to send events in room list
  - Improve UI of edit role action in member profile
- - Moderation | New screen to display list of banned users in room settings, with unban action
+ - Moderation | New screen to display list of banned users in room settings, with unban action
 
 Bugfix 🐛:
  - Fix theme issue on Room directory screen (#1613)

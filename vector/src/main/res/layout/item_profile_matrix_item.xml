@@ -24,7 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/matrixItemAvatarDecoration"
@@ -51,7 +51,7 @@
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginEnd="80dp"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/matrixItemSubtitle"
@@ -69,7 +69,7 @@
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toBottomOf="@id/matrixItemTitle"
         app:layout_goneMarginEnd="8dp"
-        tools:text="@sample/matrix.json/data/mxid" />
+        tools:text="@sample/users.json/data/id" />
 
     <TextView
         android:id="@+id/matrixItemPowerLevelLabel"

@@ -74,6 +74,7 @@ import im.vector.app.features.share.SharedData
 import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
+import im.vector.app.features.spaces.manage.ManageType
 import im.vector.app.features.spaces.manage.SpaceManageActivity
 import im.vector.app.features.spaces.people.SpacePeopleActivity
 import im.vector.app.features.terms.ReviewTermsActivity
@@ -123,7 +124,7 @@ class DefaultNavigator @Inject constructor(
                 }
             }
             Navigator.PostSwitchSpaceAction.OpenAddExistingRooms -> {
-                startActivity(context, SpaceManageActivity.newIntent(context, spaceId), false)
+                startActivity(context, SpaceManageActivity.newIntent(context, spaceId, ManageType.AddRooms), false)
             }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom -> {
                 val args = RoomDetailArgs(

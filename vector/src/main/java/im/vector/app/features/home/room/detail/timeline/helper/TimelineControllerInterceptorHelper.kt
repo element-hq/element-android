@@ -62,6 +62,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         val firstUnreadEventId = (unreadState as? UnreadState.HasUnread)?.firstUnreadEventId
         var atLeastOneVisibleItemSinceLastDaySeparator = false
         var atLeastOneVisibleItemsBeforeReadMarker = false
+        var appendReadMarker = false
 
         // Then iterate on models so we have the exact positions in the adapter
         modelsIterator.forEach { epoxyModel ->
@@ -72,11 +73,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                 }
                 epoxyModel.getEventIds().forEach { eventId ->
                     adapterPositionMapping[eventId] = index
-                    if (epoxyModel.canAppendReadMarker() && eventId == firstUnreadEventId && atLeastOneVisibleItemsBeforeReadMarker) {
-                        modelsIterator.addReadMarkerItem(callback)
-                        index++
-                        positionOfReadMarker.set(index)
-                    }
+                    appendReadMarker = epoxyModel.canAppendReadMarker() && eventId == firstUnreadEventId && atLeastOneVisibleItemsBeforeReadMarker
                 }
             }
             if (epoxyModel is DaySeparatorItem) {
@@ -91,6 +88,12 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                     atLeastOneVisibleItemSinceLastDaySeparator = true
                 }
             }
+            if (appendReadMarker) {
+                modelsIterator.addReadMarkerItem(callback)
+                index++
+                positionOfReadMarker.set(index)
+                appendReadMarker = false
+            }
             index++
         }
         previousModelsSize = models.size
@@ -103,8 +106,6 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                     it.setOnVisibilityStateChanged(ReadMarkerVisibilityStateChangedListener(callback))
                 }
         add(readMarker)
-        // Use next as we still have some process to do before the next iterator loop
-        next()
     }
 
     private fun MutableListIterator<EpoxyModel<*>>.removeCallItemIfNeeded(

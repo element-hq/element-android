@@ -1,0 +1,2 @@
+Haadferoaring yn disse ferzje: Breksoplossings!
+Folsleine feroaringslist: https://github.com/vector-im/element-android/releases/tag/v1.0.17

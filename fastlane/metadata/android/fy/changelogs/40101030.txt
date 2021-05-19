@@ -1,0 +1,2 @@
+Haadferoaring yn disse ferzje: Prestaasje feroaringen en breksoplossings!
+Folsleine feroaringslist: https://github.com/vector-im/element-android/releases/tag/v1.1.3
