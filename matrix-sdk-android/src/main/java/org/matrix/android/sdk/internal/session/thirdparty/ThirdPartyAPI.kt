@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.thirdparty
 
+import org.matrix.android.sdk.api.session.room.model.thirdparty.OpenIdToken
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import org.matrix.android.sdk.api.session.thirdparty.model.ThirdPartyUser
 import org.matrix.android.sdk.internal.network.NetworkConstants
@@ -41,4 +42,16 @@ internal interface ThirdPartyAPI {
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "thirdparty/protocols/user/{protocol}")
     suspend fun getThirdPartyUser(@Path("protocol") protocol: String,
                                   @QueryMap params: Map<String, String>?): List<ThirdPartyUser>
+
+    /**
+     * Gets an OpenID token object that the requester may supply to another service to verify their identity in Matrix.
+     * The generated token is only valid for exchanging for user information from the federation API for OpenID.
+     * The access token generated is only valid for the OpenID API. It cannot be used to request another OpenID access token or call /sync, for example.
+     *
+     * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-user-userid-openid-request-token
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/openid/request_token")
+    suspend fun requestOpenIdToken(@Path("userId") userId: String): OpenIdToken
+
+
 }

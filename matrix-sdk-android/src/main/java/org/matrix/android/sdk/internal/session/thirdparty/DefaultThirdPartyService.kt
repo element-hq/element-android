@@ -16,13 +16,15 @@
 
 package org.matrix.android.sdk.internal.session.thirdparty
 
+import org.matrix.android.sdk.api.session.room.model.thirdparty.OpenIdToken
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.thirdparty.model.ThirdPartyUser
 import javax.inject.Inject
 
 internal class DefaultThirdPartyService @Inject constructor(private val getThirdPartyProtocolTask: GetThirdPartyProtocolsTask,
-                                                            private val getThirdPartyUserTask: GetThirdPartyUserTask)
+                                                            private val getThirdPartyUserTask: GetThirdPartyUserTask,
+                                                            private val getOpenIdTokenTask: GetOpenIdTokenTask)
     : ThirdPartyService {
 
     override suspend fun getThirdPartyProtocols(): Map<String, ThirdPartyProtocol> {
@@ -35,5 +37,9 @@ internal class DefaultThirdPartyService @Inject constructor(private val getThird
                 fields = fields
         )
         return getThirdPartyUserTask.execute(taskParams)
+    }
+
+    override suspend fun getOpenIdToken(): OpenIdToken {
+        return getOpenIdTokenTask.execute(Unit)
     }
 }
