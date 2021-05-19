@@ -122,8 +122,6 @@ class AddRoomListController @Inject constructor(
                     RoomCategoryItem_().apply {
                         id("header")
                         title(host.sectionName ?: "")
-                        expanded(true)
-                        title(sectionName ?: "")
                         expanded(host.expanded)
                         listener {
                             host.expanded = !host.expanded
