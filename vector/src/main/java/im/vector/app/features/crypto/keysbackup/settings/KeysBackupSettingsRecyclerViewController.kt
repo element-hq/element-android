@@ -35,9 +35,11 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersion
 import java.util.UUID
 import javax.inject.Inject
 
-class KeysBackupSettingsRecyclerViewController @Inject constructor(private val stringProvider: StringProvider,
-                                                                   private val vectorPreferences: VectorPreferences,
-                                                                   private val session: Session) : TypedEpoxyController<KeysBackupSettingViewState>() {
+class KeysBackupSettingsRecyclerViewController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val vectorPreferences: VectorPreferences,
+        private val session: Session
+) : TypedEpoxyController<KeysBackupSettingViewState>() {
 
     var listener: Listener? = null
 
@@ -130,7 +132,8 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                     if (data.keysBackupVersionTrust()?.usable == false) {
                         description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
                     } else {
-                        description(host.stringProvider.getQuantityString(R.plurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup))
+                        description(host.stringProvider
+                                .getQuantityString(R.plurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup))
                     }
                 }
 
@@ -204,10 +207,12 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                                     endIconResourceId(R.drawable.e2e_verified)
                                 } else {
                                     if (isDeviceVerified) {
-                                        description(host.stringProvider.getString(R.string.keys_backup_settings_valid_signature_from_verified_device, deviceId))
+                                        description(host.stringProvider
+                                                .getString(R.string.keys_backup_settings_valid_signature_from_verified_device, deviceId))
                                         endIconResourceId(R.drawable.e2e_verified)
                                     } else {
-                                        description(host.stringProvider.getString(R.string.keys_backup_settings_valid_signature_from_unverified_device, deviceId))
+                                        description(host.stringProvider
+                                                .getString(R.string.keys_backup_settings_valid_signature_from_unverified_device, deviceId))
                                         endIconResourceId(R.drawable.e2e_warning)
                                     }
                                 }
@@ -215,9 +220,11 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                                 // Invalid signature
                                 endIconResourceId(R.drawable.e2e_warning)
                                 if (isDeviceVerified) {
-                                    description(host.stringProvider.getString(R.string.keys_backup_settings_invalid_signature_from_verified_device, deviceId))
+                                    description(host.stringProvider
+                                            .getString(R.string.keys_backup_settings_invalid_signature_from_verified_device, deviceId))
                                 } else {
-                                    description(host.stringProvider.getString(R.string.keys_backup_settings_invalid_signature_from_unverified_device, deviceId))
+                                    description(host.stringProvider
+                                            .getString(R.string.keys_backup_settings_invalid_signature_from_unverified_device, deviceId))
                                 }
                             }
                         }
