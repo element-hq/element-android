@@ -465,4 +465,17 @@
     <string name="room_alias_preview_not_found">Bí danh này không truy cập được vào lúc này.
 \nHãy thử lại sau, hoặc yêu cầu một quản trị viên của phòng kiểm tra xem bạn có quyền truy cập không.</string>
     <string name="join_anyway">Vẫn tham gia</string>
+    <string name="disclaimer_positive_button">TÌM HIỂU THÊM</string>
+    <string name="disclaimer_negative_button">HIỂU RỒI</string>
+    <string name="disclaimer_content">Chúng tôi rất háo hức muốn tuyên bố rằng chúng tôi đã đổi tên! Ứng dụng của bạn đã được cập nhật và bạn đã đăng nhập vào tài khoản của bạn.</string>
+    <string name="disclaimer_title">Riot bây giờ là Element!</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Đang đợi lịch sử mã hoá</string>
+    <string name="crypto_error_withheld_generic">Bạn không thể truy cập tin nhắn này vì người gửi đã cố tình không gửi các mã khoá</string>
+    <string name="crypto_error_withheld_unverified">Bạn không thể truy cập tin nhắn này vì phiên làm việc của bạn không được người gửi tin cậy</string>
+    <string name="crypto_error_withheld_blacklisted">Bạn không thể truy cập tin nhắn này vì bạn đã bị người gửi chặn</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Bởi vì mã hoá đầu cuối, bạn có thể sẽ cần đợi tin nhắn của một ai đó đến nơi vì các mã khoá mã hoá đã không được gửi đến bạn một cách đúng.</string>
+    <string name="crypto_utd">Không thể giải mã</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Đang đợi tin nhắn này, việc này có thể mất một lúc</string>
+    <string name="notice_room_leave_with_reason_by_you">Bạn đã rời phòng. Lý do: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s đã rời phòng. Lý do: %2$s</string>
 </resources>
