@@ -27,7 +27,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.extensions.setTextSafe
+import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_form_multiline_text_input)
@@ -57,7 +57,7 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
     @EpoxyAttribute
     var typeFace: Typeface = Typeface.DEFAULT
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onTextChange: ((String) -> Unit)? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
@@ -76,8 +76,8 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
         holder.textInputEditText.textSize = textSizeSp?.toFloat() ?: 14f
         holder.textInputEditText.minLines = minLines
 
-        // Update only if text is different and value is not null
-        holder.textInputEditText.setTextSafe(value)
+        holder.setValueOnce(holder.textInputEditText, value)
+
         holder.textInputEditText.isEnabled = enabled
 
         holder.textInputEditText.addTextChangedListener(onTextChangeListener)

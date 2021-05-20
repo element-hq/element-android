@@ -29,6 +29,7 @@ import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
@@ -52,6 +53,7 @@ data class CountInfo(
 
 class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initialState: UnreadMessagesState,
                                                                 session: Session,
+                                                                private val vectorPreferences: VectorPreferences,
                                                                 appStateHandler: AppStateHandler)
     : VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
@@ -79,7 +81,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
         session.getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                 }, sortOrder = RoomSortOrder.NONE
         ).asObservable()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
@@ -87,13 +89,13 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                     val counts = session.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                             }
                     )
                     val invites = session.getRoomSummaries(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.INVITE)
-                                this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                             }
                     ).size
                     copy(
@@ -126,11 +128,23 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                         }
                         is RoomGroupingMethod.BySpace       -> {
                             val selectedSpace = appStateHandler.safeActiveSpaceId()
-                            val counts = session.getNotificationCountForRooms(
+
+                            val inviteCount = session.getRoomSummaries(
+                                    roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
+                            ).size
+
+                            val totalCount = session.getNotificationCountForRooms(
                                     roomSummaryQueryParams {
                                         this.memberships = listOf(Membership.JOIN)
-                                        this.activeSpaceId = ActiveSpaceFilter.ActiveSpace(null)
+                                        this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                                            vectorPreferences.labsSpacesOnlyOrphansInHome()
+                                        } ?: ActiveSpaceFilter.None
                                     }
+                            )
+
+                            val counts = RoomAggregateNotificationCount(
+                                    totalCount.notificationCount + inviteCount,
+                                    totalCount.highlightCount + inviteCount
                             )
                             val rootCounts = session.spaceService().getRootSpaceSummaries()
                                     .filter {

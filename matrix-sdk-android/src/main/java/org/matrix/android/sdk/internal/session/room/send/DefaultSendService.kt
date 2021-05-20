@@ -109,14 +109,6 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun sendMedias(attachments: List<ContentAttachmentData>,
-                            compressBeforeSending: Boolean,
-                            roomIds: Set<String>): Cancelable {
-        return attachments.mapTo(CancelableBag()) {
-            sendMedia(it, compressBeforeSending, roomIds)
-        }
-    }
-
     override fun redactEvent(event: Event, reason: String?): Cancelable {
         // TODO manage media/attachements?
         val redactionEcho = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason)
@@ -149,7 +141,7 @@ internal class DefaultSendService @AssistedInject constructor(
                 is MessageImageContent -> {
                     // The image has not yet been sent
                     val attachmentData = ContentAttachmentData(
-                            size = messageContent.info!!.size.toLong(),
+                            size = messageContent.info!!.size,
                             mimeType = messageContent.info.mimeType!!,
                             width = messageContent.info.width.toLong(),
                             height = messageContent.info.height.toLong(),
@@ -237,6 +229,14 @@ internal class DefaultSendService @AssistedInject constructor(
             localEchoRepository.getAllFailedEventsToResend(roomId).forEach { event ->
                 cancelSend(event.eventId)
             }
+        }
+    }
+
+    override fun sendMedias(attachments: List<ContentAttachmentData>,
+                            compressBeforeSending: Boolean,
+                            roomIds: Set<String>): Cancelable {
+        return attachments.mapTo(CancelableBag()) {
+            sendMedia(it, compressBeforeSending, roomIds)
         }
     }
 

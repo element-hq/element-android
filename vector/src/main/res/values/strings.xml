@@ -575,6 +575,9 @@
     <string name="option_take_photo_video">Take photo or video</string>
     <string name="option_take_photo">Take photo</string>
     <string name="option_take_video">Take video</string>
+    <string name="option_always_ask">Always ask</string>
+
+    <string name="use_as_default_and_do_not_ask_again">Use as default and do not ask again</string>
 
     <!-- No sticker application dialog -->
     <string name="no_sticker_application_dialog_content">You don’t currently have any stickerpacks enabled.\n\nAdd some now?</string>
@@ -2164,6 +2167,14 @@
     <string name="send_suggestion_sent">Thanks, the suggestion has been successfully sent</string>
     <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
 
+    <string name="send_feedback_space_title">Spaces feedback</string>
+    <string name="feedback">Feedback</string>
+    <string name="send_feedback_space_info">You’re using a beta version of spaces. Your feedback will help inform the next versions. Your platform and username will be noted to help us use your feedback as much as we can.</string>
+    <string name="you_may_contact_me">You may contact me if you have any follow up questions</string>
+    <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
+    <string name="feedback_failed">The feedback failed to be sent (%s)</string>
+    <string name="give_feedback">Give Feedback</string>
+
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">"Show complete history in encrypted rooms"</string>
 
@@ -2174,6 +2185,8 @@
     <string name="send_file_step_sending_thumbnail">Sending thumbnail (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_file">Encrypting file…</string>
     <string name="send_file_step_sending_file">Sending file (%1$s / %2$s)</string>
+    <string name="send_file_step_compressing_image">Compressing image…</string>
+    <string name="send_file_step_compressing_video">Compressing video %d%%</string>
 
     <string name="downloading_file">Downloading file %1$s…</string>
     <string name="downloaded_file">File %1$s has been downloaded!</string>
@@ -2281,6 +2294,7 @@
     <string name="a11y_show_password">Show password</string>
     <string name="a11y_hide_password">Hide password</string>
     <string name="a11y_jump_to_bottom">Jump to bottom</string>
+    <string name="a11y_beta">This feature is in beta</string>
 
     <!-- Read receipts list a11y -->
     <plurals name="two_and_some_others_read">
@@ -2295,6 +2309,7 @@
         <item quantity="other">%d users read</item>
     </plurals>
 
+    <string name="error_file_too_big_simple">"The file is too large to upload."</string>
     <string name="error_file_too_big">"The file '%1$s' (%2$s) is too large to upload. The limit is %3$s."</string>
 
     <string name="error_attachment">"An error occurred while retrieving the attachment."</string>
@@ -2785,6 +2800,11 @@
         <item quantity="one">Send image with the original size</item>
         <item quantity="other">Send images with the original size</item>
     </plurals>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">Send video with the original size</item>
+        <item quantity="other">Send videos with the original size</item>
+    </plurals>
+    <string name="send_images_and_video_with_original_size">Send media with the original size</string>
 
     <string name="delete_event_dialog_title">Confirm Removal</string>
     <string name="delete_event_dialog_content">Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.</string>
@@ -3240,6 +3260,7 @@
     <string name="a11y_rule_notify_silent">Notify without sound</string>
     <string name="a11y_rule_notify_off">Do not notify</string>
     <string name="a11y_view_read_receipts">View read receipts</string>
+    <string name="a11y_public_room">This room is public</string>
 
     <string name="dev_tools_menu_name">Dev Tools</string>
     <string name="dev_tools_explore_room_state">Explore Room State</string>
@@ -3302,6 +3323,7 @@
     <string name="create_space_topic_hint">Description</string>
     <string name="invite_people_to_your_space">Invite people to your space</string>
     <string name="invite_people_menu">Invite people</string>
+    <string name="invite_to_space">Invite to %s</string>
     <string name="invite_people_to_your_space_desc">It’s just you at the moment.  %s will be even better with others.</string>
     <string name="invite_by_email">Invite by email</string>
     <string name="invite_by_mxid">Invite by username</string>
@@ -3335,10 +3357,25 @@
 
     <string name="space_add_existing_rooms">Add existing rooms and space</string>
     <string name="spaces_beta_welcome_to_spaces">Welcome to Spaces!</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Spaces are ways to group rooms and people for work, fun or just yourself.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Spaces are a new way to group rooms and people.</string>
     <string name="you_are_invited">You are invited</string>
 
 
     <string name="labs_use_restricted_join_rule">Experimental Space - Restricted Room.</string>
     <string name="labs_use_restricted_join_rule_desc">Warning requires server support and experimental room version</string>
+    <string name="user_invites_you">%s invites you</string>
+
+    <string name="looking_for_someone_not_in_space">Looking for someone not in %s?</string>
+    <string name="space_settings_manage_rooms">Manage rooms</string>
+    <string name="make_this_space_public">Make this space public</string>
+    <string name="space_suggested">Suggested</string>
+    <string name="space_mark_as_suggested">Mark as suggested</string>
+    <string name="space_mark_as_not_suggested">Mark as not suggested</string>
+    <string name="space_manage_rooms_and_spaces">Manage rooms and spaces</string>
+
+
+    <string name="labs_space_show_orphan_in_home">Experimental Space - Only show orphans in Home</string>
+    <string name="spaces_feeling_experimental_subspace">Feeling experimental?\nYou can add existing spaces to a space.</string>
+    <string name="spaces_no_server_support_title">It looks like your homeserver does not support Spaces yet</string>
+    <string name="spaces_no_server_support_description">Please contact your homserver admin for further information</string>
 </resources>

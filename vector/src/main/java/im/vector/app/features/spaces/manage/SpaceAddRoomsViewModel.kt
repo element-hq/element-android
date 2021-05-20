@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 
 class AddRoomError(val errorList: Map<String, Throwable>) : Throwable() {
@@ -53,13 +54,38 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
         private val session: Session
 ) : VectorViewModel<SpaceAddRoomsState, SpaceAddRoomActions, SpaceAddRoomsViewEvents>(initialState) {
 
-    val updatableLivePageResult: UpdatableLivePageResult by lazy {
+    @AssistedFactory
+    interface Factory {
+        fun create(initialState: SpaceAddRoomsState): SpaceAddRoomsViewModel
+    }
+
+    val updatableLiveSpacePageResult: UpdatableLivePageResult by lazy {
         session.getFilteredPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
                     this.excludeType = null
+                    this.includeType = listOf(RoomType.SPACE)
+                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                    this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
+                },
+                pagedListConfig = PagedList.Config.Builder()
+                        .setPageSize(10)
+                        .setInitialLoadSizeHint(20)
+                        .setEnablePlaceholders(true)
+                        .setPrefetchDistance(10)
+                        .build(),
+                sortOrder = RoomSortOrder.NAME
+        )
+    }
+
+    val updatableLivePageResult: UpdatableLivePageResult by lazy {
+        session.getFilteredPagedRoomSummariesLive(
+                roomSummaryQueryParams {
+                    this.memberships = listOf(Membership.JOIN)
+                    this.excludeType = listOf(RoomType.SPACE)
+                    this.includeType = null
                     this.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                    this.activeSpaceId = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
                     this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
                 },
                 pagedListConfig = PagedList.Config.Builder()
@@ -85,11 +111,6 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
         }
     }
 
-    @AssistedFactory
-    interface Factory {
-        fun create(initialState: SpaceAddRoomsState): SpaceAddRoomsViewModel
-    }
-
     companion object : MvRxViewModelFactory<SpaceAddRoomsViewModel, SpaceAddRoomsState> {
         override fun create(viewModelContext: ViewModelContext, state: SpaceAddRoomsState): SpaceAddRoomsViewModel? {
             val factory = when (viewModelContext) {
@@ -112,6 +133,11 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
         when (action) {
             is SpaceAddRoomActions.UpdateFilter -> {
                 updatableLivePageResult.updateQuery {
+                    it.copy(
+                            displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
+                    )
+                }
+                updatableLiveSpacePageResult.updateQuery {
                     it.copy(
                             displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
                     )
@@ -148,7 +174,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 try {
                     session.spaceService().getSpace(initialState.spaceId)!!.addChildren(
                             roomId = roomId,
-                            viaServers = listOf(session.sessionParams.homeServerHost ?: ""),
+                            viaServers = null,
                             order = null
                     )
                     completed.add(roomId)

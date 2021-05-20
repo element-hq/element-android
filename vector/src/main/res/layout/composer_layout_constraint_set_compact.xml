@@ -45,8 +45,7 @@
         android:contentDescription="@string/avatar"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        tools:src="@tools:sample/avatars" />
+        app:layout_constraintEnd_toStartOf="parent" />
 
     <TextView
         android:id="@+id/composerRelatedMessageTitle"

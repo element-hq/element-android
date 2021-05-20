@@ -32,11 +32,13 @@ data class CreateRoomViewState(
         val disableFederation: Boolean = false,
         val homeServerName: String = "",
         val hsAdminHasDisabledE2E: Boolean = false,
-        val asyncCreateRoomRequest: Async<String> = Uninitialized
+        val asyncCreateRoomRequest: Async<String> = Uninitialized,
+        val parentSpaceId: String?
 ) : MvRxState {
 
     constructor(args: CreateRoomArgs) : this(
-            roomName = args.initialName
+            roomName = args.initialName,
+            parentSpaceId = args.parentSpaceId
     )
 
     /**

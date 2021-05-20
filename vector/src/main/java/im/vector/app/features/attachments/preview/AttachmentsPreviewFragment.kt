@@ -30,6 +30,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -139,7 +140,17 @@ class AttachmentsPreviewFragment @Inject constructor(
             attachmentBigPreviewController.setData(state)
             views.attachmentPreviewerBigList.scrollToPosition(state.currentAttachmentIndex)
             views.attachmentPreviewerMiniatureList.scrollToPosition(state.currentAttachmentIndex)
-            views.attachmentPreviewerSendImageOriginalSize.text = resources.getQuantityString(R.plurals.send_images_with_original_size, state.attachments.size)
+            views.attachmentPreviewerSendImageOriginalSize.text = getCheckboxText(state)
+        }
+    }
+
+    private fun getCheckboxText(state: AttachmentsPreviewViewState): CharSequence {
+        val nbImages = state.attachments.count { it.type == ContentAttachmentData.Type.IMAGE }
+        val nbVideos = state.attachments.count { it.type == ContentAttachmentData.Type.VIDEO }
+        return when {
+            nbVideos == 0 -> resources.getQuantityString(R.plurals.send_images_with_original_size, nbImages)
+            nbImages == 0 -> resources.getQuantityString(R.plurals.send_videos_with_original_size, nbVideos)
+            else          -> getString(R.string.send_images_and_video_with_original_size)
         }
     }
 
@@ -162,12 +173,14 @@ class AttachmentsPreviewFragment @Inject constructor(
             view?.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         }
         ViewCompat.setOnApplyWindowInsetsListener(views.attachmentPreviewerBottomContainer) { v, insets ->
-            v.updatePadding(bottom = insets.systemWindowInsetBottom)
+            val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(bottom = systemBarsInsets.bottom)
             insets
         }
         ViewCompat.setOnApplyWindowInsetsListener(views.attachmentPreviewerToolbar) { v, insets ->
+            val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = insets.systemWindowInsetTop
+                topMargin = systemBarsInsets.top
             }
             insets
         }

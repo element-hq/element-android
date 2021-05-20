@@ -62,6 +62,7 @@ class RoomSettingsController @Inject constructor(
 
     override fun buildModels(data: RoomSettingsViewState?) {
         val roomSummary = data?.roomSummary?.invoke() ?: return
+        val host = this
 
         formEditableAvatarItem {
             id("avatar")
@@ -69,7 +70,7 @@ class RoomSettingsController @Inject constructor(
             when (val avatarAction = data.avatarAction) {
                 RoomSettingsViewState.AvatarAction.None -> {
                     // Use the current value
-                    avatarRenderer(avatarRenderer)
+                    avatarRenderer(host.avatarRenderer)
                     // We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
                     matrixItem(roomSummary.toMatrixItem().copy(avatarUrl = data.currentRoomAvatarUrl))
                 }
@@ -78,8 +79,8 @@ class RoomSettingsController @Inject constructor(
                 is RoomSettingsViewState.AvatarAction.UpdateAvatar ->
                     imageUri(avatarAction.newAvatarUri)
             }
-            clickListener { callback?.onAvatarChange() }
-            deleteListener { callback?.onAvatarDelete() }
+            clickListener { host.callback?.onAvatarChange() }
+            deleteListener { host.callback?.onAvatarDelete() }
         }
 
         buildProfileSection(
@@ -90,10 +91,10 @@ class RoomSettingsController @Inject constructor(
             id("name")
             enabled(data.actionPermissions.canChangeName)
             value(data.newName ?: roomSummary.displayName)
-            hint(stringProvider.getString(R.string.room_settings_name_hint))
+            hint(host.stringProvider.getString(R.string.room_settings_name_hint))
 
             onTextChange { text ->
-                callback?.onNameChanged(text)
+                host.callback?.onNameChanged(text)
             }
         }
 
@@ -101,10 +102,10 @@ class RoomSettingsController @Inject constructor(
             id("topic")
             enabled(data.actionPermissions.canChangeTopic)
             value(data.newTopic ?: roomSummary.topic)
-            hint(stringProvider.getString(R.string.room_settings_topic_hint))
+            hint(host.stringProvider.getString(R.string.room_settings_topic_hint))
 
             onTextChange { text ->
-                callback?.onTopicChanged(text)
+                host.callback?.onTopicChanged(text)
             }
         }
 
@@ -121,7 +122,7 @@ class RoomSettingsController @Inject constructor(
         buildProfileAction(
                 id = "joinRule",
                 title = stringProvider.getString(R.string.room_settings_room_access_title),
-                subtitle = data.getJoinRuleWording(),
+                subtitle = data.getJoinRuleWording(stringProvider),
                 dividerColor = dividerColor,
                 divider = false,
                 editable = data.actionPermissions.canChangeJoinRule,
@@ -134,31 +135,11 @@ class RoomSettingsController @Inject constructor(
             // add guest access option?
             formSwitchItem {
                 id("guest_access")
-                title(stringProvider.getString(R.string.room_settings_guest_access_title))
+                title(host.stringProvider.getString(R.string.room_settings_guest_access_title))
                 switchChecked(guestAccess == GuestAccess.CanJoin)
                 listener {
-                    callback?.onToggleGuestAccess()
+                    host.callback?.onToggleGuestAccess()
                 }
-            }
-        }
-    }
-
-    private fun RoomSettingsViewState.getJoinRuleWording(): String {
-        return when (val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules) {
-            RoomJoinRules.INVITE     -> {
-                stringProvider.getString(R.string.room_settings_room_access_private_title)
-            }
-            RoomJoinRules.PUBLIC     -> {
-                stringProvider.getString(R.string.room_settings_room_access_public_title)
-            }
-            RoomJoinRules.KNOCK      -> {
-                stringProvider.getString(R.string.room_settings_room_access_entry_knock)
-            }
-            RoomJoinRules.RESTRICTED -> {
-                stringProvider.getString(R.string.room_settings_room_access_restricted_title)
-            }
-            else                     -> {
-                stringProvider.getString(R.string.room_settings_room_access_entry_unknown, joinRule.value)
             }
         }
     }

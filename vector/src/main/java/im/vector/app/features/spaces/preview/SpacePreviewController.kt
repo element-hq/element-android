@@ -37,20 +37,20 @@ class SpacePreviewController @Inject constructor(
     var interactionListener: InteractionListener? = null
 
     override fun buildModels(data: SpacePreviewState?) {
-        val result = data?.childInfoList?.invoke() ?: return
-
-        val memberCount = data.spaceInfo.invoke()?.memberCount ?: 0
+        val host = this
+        val memberCount = data?.spaceInfo?.invoke()?.memberCount ?: 0
 
         spaceTopSummaryItem {
             id("info")
-            formattedMemberCount(stringProvider.getQuantityString(R.plurals.room_title_members, memberCount, memberCount))
-            topic(data.spaceInfo.invoke()?.topic ?: data.topic ?: "")
+            formattedMemberCount(host.stringProvider.getQuantityString(R.plurals.room_title_members, memberCount, memberCount))
+            topic(data?.spaceInfo?.invoke()?.topic ?: data?.topic ?: "")
         }
 
+        val result = data?.childInfoList?.invoke() ?: return
         if (result.isNotEmpty()) {
             genericItemHeader {
                 id("header_rooms")
-                text(stringProvider.getString(R.string.rooms))
+                text(host.stringProvider.getString(R.string.rooms))
             }
 
             buildChildren(result, 0)
@@ -58,6 +58,7 @@ class SpacePreviewController @Inject constructor(
     }
 
     private fun buildChildren(children: List<ChildInfo>, depth: Int) {
+        val host = this
         children.forEach { child ->
 
             if (child.isSubSpace == true) {
@@ -67,7 +68,7 @@ class SpacePreviewController @Inject constructor(
                     title(child.name)
                     depth(depth)
                     avatarUrl(child.avatarUrl)
-                    avatarRenderer(avatarRenderer)
+                    avatarRenderer(host.avatarRenderer)
                 }
                 when (child.children) {
                     is Loading -> {
@@ -88,7 +89,7 @@ class SpacePreviewController @Inject constructor(
                     topic(child.topic ?: "")
                     avatarUrl(child.avatarUrl)
                     memberCount(TextUtils.formatCountToShortDecimal(child.memberCount ?: 0))
-                    avatarRenderer(avatarRenderer)
+                    avatarRenderer(host.avatarRenderer)
                 }
             }
 //            when (child) {

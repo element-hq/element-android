@@ -79,11 +79,12 @@ import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.app.features.share.IncomingShareActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
 import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
-import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
+import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.manage.SpaceManageActivity
+import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.ui.UiStateRepository
 import im.vector.app.features.usercode.UserCodeActivity
@@ -187,6 +188,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: ShareSpaceBottomSheet)
     fun inject(bottomSheet: SpaceSettingsMenuBottomSheet)
     fun inject(bottomSheet: InviteRoomSpaceChooserBottomSheet)
+    fun inject(bottomSheet: SpaceInviteBottomSheet)
 
     /* ==========================================================================================
      * Others

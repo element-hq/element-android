@@ -60,6 +60,7 @@ class SpaceListFragment @Inject constructor(
                 is SpaceListViewEvents.OpenSpace        -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
                 is SpaceListViewEvents.AddSpace         -> sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
                 is SpaceListViewEvents.OpenGroup        -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
+                is SpaceListViewEvents.OpenSpaceInvite  -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(it.id))
             }.exhaustive
         }
     }
@@ -99,5 +100,9 @@ class SpaceListFragment @Inject constructor(
 
     override fun onGroupSelected(groupSummary: GroupSummary?) {
         viewModel.handle(SpaceListAction.SelectLegacyGroup(groupSummary))
+    }
+
+    override fun sendFeedBack() {
+        sharedActionViewModel.post(HomeActivitySharedAction.SendSpaceFeedBack)
     }
 }

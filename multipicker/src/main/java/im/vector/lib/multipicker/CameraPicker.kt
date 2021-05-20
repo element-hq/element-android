@@ -23,7 +23,7 @@ import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
 import im.vector.lib.multipicker.entity.MultiPickerImageType
-import im.vector.lib.multipicker.utils.ImageUtils
+import im.vector.lib.multipicker.utils.toMultiPickerImageType
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -54,40 +54,7 @@ class CameraPicker {
      * or user cancelled the operation.
      */
     fun getTakenPhoto(context: Context, photoUri: Uri): MultiPickerImageType? {
-        val projection = arrayOf(
-                MediaStore.Images.Media.DISPLAY_NAME,
-                MediaStore.Images.Media.SIZE
-        )
-
-        context.contentResolver.query(
-                photoUri,
-                projection,
-                null,
-                null,
-                null
-        )?.use { cursor ->
-            val nameColumn = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
-            val sizeColumn = cursor.getColumnIndex(MediaStore.Images.Media.SIZE)
-
-            if (cursor.moveToNext()) {
-                val name = cursor.getString(nameColumn)
-                val size = cursor.getLong(sizeColumn)
-
-                val bitmap = ImageUtils.getBitmap(context, photoUri)
-                val orientation = ImageUtils.getOrientation(context, photoUri)
-
-                return MultiPickerImageType(
-                        name,
-                        size,
-                        context.contentResolver.getType(photoUri),
-                        photoUri,
-                        bitmap?.width ?: 0,
-                        bitmap?.height ?: 0,
-                        orientation
-                )
-            }
-        }
-        return null
+        return photoUri.toMultiPickerImageType(context)
     }
 
     private fun createIntent(): Intent {

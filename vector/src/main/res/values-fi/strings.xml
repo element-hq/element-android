@@ -763,7 +763,7 @@
     <string name="encryption_export_saved_as">Huoneen osapuolten välisen salauksen avaimet tallennettiin tiedostoon \'%s\'
 \n
 \nVaroitus: tämä tiedosto saatetaan poistaa, mikäli Element poistetaan.</string>
-    <string name="encryption_import_e2e_room_keys">Tuo päästä päähän -salatun huoneen avaimet</string>
+    <string name="encryption_import_e2e_room_keys">Tuo salatun huoneen avaimet</string>
     <string name="encryption_import_room_keys">Tuo huoneen avaimet</string>
     <string name="encryption_import_room_keys_summary">Tuo avaimet paikallisesta tiedostosta</string>
     <string name="encryption_import_import">Tuo</string>
@@ -2228,4 +2228,6 @@
     <string name="send_a_sticker">Tarra</string>
     <string name="uploads_files_title">TIEDOSTOT</string>
     <string name="uploads_media_title">MEDIA</string>
+    <string name="notice_room_server_acl_set_title_by_you">Asetit palvelimen käyttäjäoikeuslistan tähän huoneeseen.</string>
+    <string name="notice_room_server_acl_set_title">%s asetti palvelimen käyttäjäoikeuslistan tähän huoneeseen.</string>
 </resources>

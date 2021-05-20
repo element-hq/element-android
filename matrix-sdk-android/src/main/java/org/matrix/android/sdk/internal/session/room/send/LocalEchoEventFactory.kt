@@ -244,7 +244,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         mimeType = attachment.getSafeMimeType(),
                         width = width?.toInt() ?: 0,
                         height = height?.toInt() ?: 0,
-                        size = attachment.size.toInt()
+                        size = attachment.size
                 ),
                 url = attachment.queryUri.toString()
         )

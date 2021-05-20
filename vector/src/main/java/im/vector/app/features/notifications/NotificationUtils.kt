@@ -559,9 +559,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                             NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
                                     stringProvider.getString(R.string.action_quick_reply), replyPendingIntent)
                                     .addRemoteInput(remoteInput)
-                                    .build()?.let {
-                                        addAction(it)
-                                    }
+                                    .build()
+                                    .let { addAction(it) }
                         }
                     }
 

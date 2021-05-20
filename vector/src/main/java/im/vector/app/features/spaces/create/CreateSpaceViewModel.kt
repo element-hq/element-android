@@ -126,10 +126,11 @@ class CreateSpaceViewModel @AssistedInject constructor(
             SpaceTopology.JustMe -> {
                 setState {
                     copy(
-                            spaceTopology = SpaceTopology.JustMe
+                            spaceTopology = SpaceTopology.JustMe,
+                            defaultRooms = emptyMap()
                     )
                 }
-                // XXX finish and open the add rooms directly
+                handleNextFromDefaultRooms()
             }
             SpaceTopology.MeAndTeammates -> {
                 setState {
@@ -237,14 +238,26 @@ class CreateSpaceViewModel @AssistedInject constructor(
                         setState {
                             copy(creationResult = Success(result.spaceId))
                         }
-                        _viewEvents.post(CreateSpaceEvents.FinishSuccess(result.spaceId, result.childIds.firstOrNull()))
+                        _viewEvents.post(
+                                CreateSpaceEvents.FinishSuccess(
+                                        result.spaceId,
+                                        result.childIds.firstOrNull(),
+                                        state.spaceTopology
+                                )
+                        )
                     }
                     is CreateSpaceTaskResult.PartialSuccess -> {
                         // XXX what can we do here?
                         setState {
                             copy(creationResult = Success(result.spaceId))
                         }
-                        _viewEvents.post(CreateSpaceEvents.FinishSuccess(result.spaceId, result.childIds.firstOrNull()))
+                        _viewEvents.post(
+                                CreateSpaceEvents.FinishSuccess(
+                                        result.spaceId,
+                                        result.childIds.firstOrNull(),
+                                        state.spaceTopology
+                                )
+                        )
                     }
                     is CreateSpaceTaskResult.FailedToCreateSpace -> {
                         setState {

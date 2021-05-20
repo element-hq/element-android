@@ -39,7 +39,7 @@ import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
 class SpaceDirectoryViewModel @AssistedInject constructor(
-        @Assisted initialState: SpaceDirectoryState,
+        @Assisted val initialState: SpaceDirectoryState,
         private val session: Session
 ) : VectorViewModel<SpaceDirectoryState, SpaceDirectoryViewAction, SpaceDirectoryViewEvents>(initialState) {
 
@@ -63,11 +63,21 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         val spaceSum = session.getRoomSummary(initialState.spaceId)
         setState {
             copy(
-                    childList = spaceSum?.spaceChildren ?: emptyList(),
-                    spaceSummaryApiResult = Loading()
+                    childList = spaceSum?.spaceChildren ?: emptyList()
             )
         }
 
+        refreshFromApi()
+        observeJoinedRooms()
+        observeMembershipChanges()
+    }
+
+    private fun refreshFromApi() {
+        setState {
+            copy(
+                    spaceSummaryApiResult = Loading()
+            )
+        }
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val query = session.spaceService().querySpaceChildren(initialState.spaceId)
@@ -84,13 +94,12 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                 }
             }
         }
-        observeJoinedRooms()
-        observeMembershipChanges()
     }
 
     private fun observeJoinedRooms() {
         val queryParams = roomSummaryQueryParams {
             memberships = listOf(Membership.JOIN)
+            excludeType = null
         }
         session
                 .rx()
@@ -134,6 +143,19 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
             }
             is SpaceDirectoryViewAction.JoinOrOpen -> {
                 handleJoinOrOpen(action.spaceChildInfo)
+            }
+            is SpaceDirectoryViewAction.NavigateToRoom -> {
+                _viewEvents.post(SpaceDirectoryViewEvents.NavigateToRoom(action.roomId))
+            }
+            is SpaceDirectoryViewAction.ShowDetails -> {
+                // This is temporary for now to at least display something for the space beta
+                // It's not ideal as it's doing some peeking that is not needed.
+                session.permalinkService().createRoomPermalink(action.spaceChildInfo.childRoomId)?.let {
+                    _viewEvents.post(SpaceDirectoryViewEvents.NavigateToMxToBottomSheet(it))
+                }
+            }
+            SpaceDirectoryViewAction.Retry -> {
+                refreshFromApi()
             }
         }
     }

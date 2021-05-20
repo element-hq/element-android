@@ -19,9 +19,13 @@ package im.vector.app.features.spaces.manage
 import androidx.recyclerview.widget.DiffUtil
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
+import im.vector.app.R
+import im.vector.app.core.ui.list.GenericPillItem_
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.list.RoomCategoryItem_
+import org.matrix.android.sdk.api.session.room.ResultBoundaries
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -54,6 +58,28 @@ class AddRoomListController @Inject constructor(
     var listener: Listener? = null
     var ignoreRooms: List<String>? = null
 
+    var subHeaderText: CharSequence? = null
+
+    var initialLoadOccurred = false
+
+    fun boundaryChange(boundary: ResultBoundaries) {
+        val boundaryHasLoadedSomething = boundary.frontLoaded || boundary.zeroItemLoaded
+        if (initialLoadOccurred != boundaryHasLoadedSomething) {
+            initialLoadOccurred = boundaryHasLoadedSomething
+            requestForcedModelBuild()
+        }
+    }
+
+    var sectionName: String? = null
+        set(value) {
+            if (value != field) {
+                field = value
+                requestForcedModelBuild()
+            }
+        }
+
+    var totalSize: Int = 0
+
     var selectedItems: Map<String, Boolean> = emptyMap()
         set(value) {
             field = value
@@ -62,27 +88,52 @@ class AddRoomListController @Inject constructor(
         }
 
     override fun addModels(models: List<EpoxyModel<*>>) {
-        if (ignoreRooms == null) {
-            super.addModels(models)
+        val host = this
+        val filteredModel = if (ignoreRooms == null) {
+            models
         } else {
-            super.addModels(
-                    models.filter {
-                        it !is RoomSelectionItem ||  !ignoreRooms!!.contains(it.matrixItem.id)
+            models.filter {
+                it !is RoomSelectionItem || !ignoreRooms!!.contains(it.matrixItem.id)
+            }
+        }
+        val somethingToShow = filteredModel.isNotEmpty() || !initialLoadOccurred
+        if (somethingToShow || filteredModel.isNotEmpty()) {
+            add(
+                    RoomCategoryItem_().apply {
+                        id("header")
+                        title(host.sectionName ?: "")
+                        expanded(true)
                     }
+            )
+            if (subHeaderText != null) {
+                add(
+                        GenericPillItem_().apply {
+                            id("sub_header")
+                            text(host.subHeaderText)
+                            imageRes(R.drawable.ic_info)
+                        }
+                )
+            }
+        }
+        super.addModels(filteredModel)
+        if (!initialLoadOccurred) {
+            add(
+                    RoomSelectionPlaceHolderItem_().apply { id("loading") }
             )
         }
     }
 
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
+        val host = this
         if (item == null) return RoomSelectionPlaceHolderItem_().apply { id(currentPosition) }
         return RoomSelectionItem_().apply {
             id(item.roomId)
             matrixItem(item.toMatrixItem())
             avatarRenderer(this@AddRoomListController.avatarRenderer)
             space(item.roomType == RoomType.SPACE)
-            selected(selectedItems[item.roomId] ?: false)
+            selected(host.selectedItems[item.roomId] ?: false)
             itemClickListener(DebouncedClickListener({
-                listener?.onItemSelected(item)
+                host.listener?.onItemSelected(item)
             }))
         }
     }

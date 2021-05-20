@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import javax.inject.Inject
@@ -59,16 +60,17 @@ class UploadsMediaController @Inject constructor(
 
     override fun buildModels(data: RoomUploadsViewState?) {
         data ?: return
+        val host = this
 
         buildMediaItems(data.mediaEvents)
 
         if (data.hasMore) {
             squareLoadingItem {
                 // Always use a different id, because we can be notified several times of visibility state changed
-                id("loadMore${idx++}")
+                id("loadMore${host.idx++}")
                 onVisibilityStateChanged { _, _, visibilityState ->
                     if (visibilityState == VisibilityState.VISIBLE) {
-                        listener?.loadMore()
+                        host.listener?.loadMore()
                     }
                 }
             }
@@ -76,17 +78,18 @@ class UploadsMediaController @Inject constructor(
     }
 
     private fun buildMediaItems(mediaEvents: List<UploadEvent>) {
+        val host = this
         mediaEvents.forEach { uploadEvent ->
             when (uploadEvent.contentWithAttachmentContent.msgType) {
                 MessageType.MSGTYPE_IMAGE -> {
                     val data = uploadEvent.toImageContentRendererData() ?: return@forEach
                     uploadsImageItem {
                         id(uploadEvent.eventId)
-                        imageContentRenderer(imageContentRenderer)
+                        imageContentRenderer(host.imageContentRenderer)
                         data(data)
                         listener(object : UploadsImageItem.Listener {
                             override fun onItemClicked(view: View, data: ImageContentRenderer.Data) {
-                                listener?.onOpenImageClicked(view, data)
+                                host.listener?.onOpenImageClicked(view, data)
                             }
                         })
                     }
@@ -95,11 +98,11 @@ class UploadsMediaController @Inject constructor(
                     val data = uploadEvent.toVideoContentRendererData() ?: return@forEach
                     uploadsVideoItem {
                         id(uploadEvent.eventId)
-                        imageContentRenderer(imageContentRenderer)
+                        imageContentRenderer(host.imageContentRenderer)
                         data(data)
                         listener(object : UploadsVideoItem.Listener {
                             override fun onItemClicked(view: View, data: VideoContentRenderer.Data) {
-                                listener?.onOpenVideoClicked(view, data)
+                                host.listener?.onOpenVideoClicked(view, data)
                             }
                         })
                     }
@@ -131,7 +134,7 @@ class UploadsMediaController @Inject constructor(
                 eventId = eventId,
                 filename = messageContent.body,
                 mimeType = messageContent.mimeType,
-                url = messageContent.videoInfo?.thumbnailFile?.url ?: messageContent.videoInfo?.thumbnailUrl,
+                url = messageContent.videoInfo?.getThumbnailUrl(),
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = itemSize,

@@ -23,13 +23,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
-import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceAddRoomsBinding
@@ -39,7 +40,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SpaceAddRoomFragment @Inject constructor(
-        private val epoxyController: AddRoomListController,
+        private val spaceEpoxyController: AddRoomListController,
+        private val roomEpoxyController: AddRoomListController,
         private val viewModelFactory: SpaceAddRoomsViewModel.Factory
 ) : VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
         OnBackPressed, AddRoomListController.Listener, SpaceAddRoomsViewModel.Factory {
@@ -78,8 +80,10 @@ class SpaceAddRoomFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
+        spaceEpoxyController.subHeaderText = getString(R.string.spaces_feeling_experimental_subspace)
         viewModel.selectionListLiveData.observe(viewLifecycleOwner) {
-            epoxyController.selectedItems = it
+            spaceEpoxyController.selectedItems = it
+            roomEpoxyController.selectedItems = it
             saveNeeded = it.values.any { it }
             invalidateOptionsMenu()
         }
@@ -89,7 +93,8 @@ class SpaceAddRoomFragment @Inject constructor(
         }.disposeOnDestroyView()
 
         viewModel.selectSubscribe(this, SpaceAddRoomsState::ignoreRooms) {
-            epoxyController.ignoreRooms = it
+            spaceEpoxyController.ignoreRooms = it
+            roomEpoxyController.ignoreRooms = it
         }.disposeOnDestroyView()
 
         viewModel.selectSubscribe(this, SpaceAddRoomsState::isSaving) {
@@ -100,9 +105,9 @@ class SpaceAddRoomFragment @Inject constructor(
             }
         }.disposeOnDestroyView()
 
-//        views.createNewRoom.debouncedClicks {
-//            sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)
-//        }
+        views.createNewRoom.debouncedClicks {
+            sharedViewModel.handle(SpaceManagedSharedAction.CreateRoom)
+        }
 
         viewModel.observeViewEvents {
             when (it) {
@@ -142,16 +147,41 @@ class SpaceAddRoomFragment @Inject constructor(
 
     override fun onDestroyView() {
         views.roomList.cleanup()
-        epoxyController.listener = null
+        spaceEpoxyController.listener = null
+        roomEpoxyController.listener = null
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
-        views.roomList.configureWith(epoxyController, showDivider = true)
-        epoxyController.listener = this
-        viewModel.updatableLivePageResult.livePagedList.observe(viewLifecycleOwner) {
-            epoxyController.submitList(it)
+        val concatAdapter = ConcatAdapter()
+        spaceEpoxyController.sectionName = getString(R.string.spaces_header)
+        roomEpoxyController.sectionName = getString(R.string.rooms_header)
+        spaceEpoxyController.listener = this
+        roomEpoxyController.listener = this
+
+        viewModel.updatableLiveSpacePageResult.liveBoundaries.observe(viewLifecycleOwner) {
+            spaceEpoxyController.boundaryChange(it)
         }
+        viewModel.updatableLiveSpacePageResult.livePagedList.observe(viewLifecycleOwner) {
+            spaceEpoxyController.totalSize = it.size
+            spaceEpoxyController.submitList(it)
+        }
+
+        viewModel.updatableLivePageResult.liveBoundaries.observe(viewLifecycleOwner) {
+            roomEpoxyController.boundaryChange(it)
+        }
+        viewModel.updatableLivePageResult.livePagedList.observe(viewLifecycleOwner) {
+            roomEpoxyController.totalSize = it.size
+            roomEpoxyController.submitList(it)
+        }
+
+        views.roomList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        views.roomList.setHasFixedSize(true)
+
+        concatAdapter.addAdapter(roomEpoxyController.adapter)
+        concatAdapter.addAdapter(spaceEpoxyController.adapter)
+
+        views.roomList.adapter = concatAdapter
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {

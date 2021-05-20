@@ -37,8 +37,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/avatar"
-        tools:ignore="MissingConstraints"
-        tools:src="@tools:sample/avatars" />
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/composerRelatedMessageTitle"

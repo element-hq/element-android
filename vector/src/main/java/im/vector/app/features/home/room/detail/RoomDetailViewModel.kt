@@ -79,7 +79,6 @@ import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -292,7 +291,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.HandleTombstoneEvent -> handleTombstoneEvent(action)
             is RoomDetailAction.ResendMessage -> handleResendEvent(action)
             is RoomDetailAction.RemoveFailedEcho -> handleRemove(action)
-            is RoomDetailAction.ResendAll -> handleResendAll()
             is RoomDetailAction.MarkAllAsRead -> handleMarkAllAsRead()
             is RoomDetailAction.ReportContent -> handleReportContent(action)
             is RoomDetailAction.IgnoreUser -> handleIgnoreUser(action)
@@ -451,7 +449,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 widgetSessionId = widgetSessionId.substring(0, 7)
             }
             val roomId: String = room.roomId
-            val confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase(VectorLocale.applicationLocale)
+            val confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.lowercase(VectorLocale.applicationLocale)
 
             val preferredJitsiDomain = tryOrNull {
                 rawService.getElementWellknown(session.myUserId)
@@ -550,7 +548,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun stopTrackingUnreadMessages() {
         if (trackUnreadMessages.getAndSet(false)) {
             mostRecentDisplayedEvent?.root?.eventId?.also {
-                viewModelScope.launch {
+                session.coroutineScope.launch {
                     tryOrNull { room.setReadMarker(it) }
                 }
             }
@@ -834,7 +832,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                                     session.spaceService().getSpace(spaceId)
                                             ?.addChildren(
                                                     state.roomId,
-                                                    listOf(session.sessionParams.homeServerHost ?: ""),
+                                                    null,
                                                     null,
                                                     true
                                             )
@@ -851,7 +849,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                                     session.spaceService().getSpace(slashCommandResult.spaceId)
                                             ?.addChildren(
                                                     room.roomId,
-                                                    listOf(session.sessionParams.homeServerHost ?: ""),
+                                                    null,
                                                     null,
                                                     false
                                             )
@@ -1107,23 +1105,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleSendMedia(action: RoomDetailAction.SendMedia) {
-        val attachments = action.attachments
-        val homeServerCapabilities = session.getHomeServerCapabilities()
-        val maxUploadFileSize = homeServerCapabilities.maxUploadFileSize
-
-        if (maxUploadFileSize == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
-            // Unknown limitation
-            room.sendMedias(attachments, action.compressBeforeSending, emptySet())
-        } else {
-            when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
-                null -> room.sendMedias(attachments, action.compressBeforeSending, emptySet())
-                else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
-                        tooBigFile.name ?: tooBigFile.queryUri.toString(),
-                        tooBigFile.size,
-                        maxUploadFileSize
-                ))
-            }
-        }
+        room.sendMedias(action.attachments, action.compressBeforeSending, emptySet())
     }
 
     private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {

@@ -93,15 +93,14 @@ import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.ActiveConferenceView
 import im.vector.app.core.ui.views.CurrentCallsView
+import im.vector.app.core.ui.views.FailedMessagesWarningView
 import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.KnownCallsViewHolder
-import im.vector.app.core.ui.views.FailedMessagesWarningView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.KeyboardStateUtils
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.copyToClipboard
@@ -165,7 +164,7 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
-import im.vector.app.features.spaces.ShareSpaceBottomSheet
+import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
@@ -381,7 +380,6 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.ActionFailure                    -> displayRoomDetailActionFailure(it)
                 is RoomDetailViewEvents.ShowMessage                      -> showSnackWithMessage(it.message)
                 is RoomDetailViewEvents.NavigateToEvent                  -> navigateToEvent(it)
-                is RoomDetailViewEvents.FileTooBigError                  -> displayFileTooBigError(it)
                 is RoomDetailViewEvents.DownloadFileState                -> handleDownloadFileState(it)
                 is RoomDetailViewEvents.JoinRoomCommandSuccess           -> handleJoinedToAnotherRoom(it)
                 is RoomDetailViewEvents.SendMessageResult                -> renderSendMessageResult(it)
@@ -679,7 +677,7 @@ class RoomDetailFragment @Inject constructor(
 
     private fun handleSpaceShare() {
         roomDetailArgs.openShareSpaceForId?.let { spaceId ->
-            ShareSpaceBottomSheet.show(childFragmentManager, spaceId)
+            ShareSpaceBottomSheet.show(childFragmentManager, spaceId, true)
             view?.post {
                 handleChatEffect(ChatEffect.CONFETTI)
             }
@@ -747,18 +745,6 @@ class RoomDetailFragment @Inject constructor(
             views.timelineRecyclerView.stopScroll()
             layoutManager.scrollToPosition(scrollPosition)
         }
-    }
-
-    private fun displayFileTooBigError(action: RoomDetailViewEvents.FileTooBigError) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(getString(R.string.error_file_too_big,
-                        action.filename,
-                        TextUtils.formatFileSize(requireContext(), action.fileSizeInBytes),
-                        TextUtils.formatFileSize(requireContext(), action.homeServerLimitInBytes)
-                ))
-                .setPositiveButton(R.string.ok, null)
-                .show()
     }
 
     private fun handleDownloadFileState(action: RoomDetailViewEvents.DownloadFileState) {
@@ -986,7 +972,7 @@ class RoomDetailFragment @Inject constructor(
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onImageResult(it.data)
+            attachmentsHelper.onFileResult(it.data)
         }
     }
 
@@ -1002,15 +988,21 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val attachmentImageActivityResultLauncher = registerStartForActivityResult {
+    private val attachmentMediaActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onImageResult(it.data)
+            attachmentsHelper.onMediaResult(it.data)
         }
     }
 
-    private val attachmentPhotoActivityResultLauncher = registerStartForActivityResult {
+    private val attachmentCameraActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onPhotoResult()
+            attachmentsHelper.onCameraResult()
+        }
+    }
+
+    private val attachmentCameraVideoActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onCameraVideoResult()
         }
     }
 
@@ -1753,20 +1745,19 @@ class RoomDetailFragment @Inject constructor(
         session.coroutineScope.launch {
             val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
             if (!isAdded) return@launch
-            result.fold(
-                    {
-                        saveMedia(
-                                context = requireContext(),
-                                file = it,
-                                title = action.messageContent.body,
-                                mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), it.toUri()),
-                                notificationUtils = notificationUtils
-                        )
-                    },
-                    {
+            result.mapCatching {
+                saveMedia(
+                        context = requireContext(),
+                        file = it,
+                        title = action.messageContent.body,
+                        mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), it.toUri()),
+                        notificationUtils = notificationUtils
+                )
+            }
+                    .onFailure {
+                        if (!isAdded) return@onFailure
                         showErrorInSnackbar(it)
                     }
-            )
         }
     }
 
@@ -2003,9 +1994,14 @@ class RoomDetailFragment @Inject constructor(
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(requireContext(), attachmentPhotoActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(
+                    activity = requireActivity(),
+                    vectorPreferences = vectorPreferences,
+                    cameraActivityResultLauncher = attachmentCameraActivityResultLauncher,
+                    cameraVideoActivityResultLauncher = attachmentCameraVideoActivityResultLauncher
+            )
             AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentImageActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)

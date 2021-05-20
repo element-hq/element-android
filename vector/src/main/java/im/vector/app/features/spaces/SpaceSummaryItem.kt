@@ -16,6 +16,7 @@
 
 package im.vector.app.features.spaces
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.Space
 import android.widget.TextView
@@ -37,17 +38,18 @@ import org.matrix.android.sdk.api.util.MatrixItem
 @EpoxyModelClass(layout = R.layout.item_space)
 abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
 
-    @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var selected: Boolean = false
-    @EpoxyAttribute var listener: (() -> Unit)? = null
-    @EpoxyAttribute var onMore: (() -> Unit)? = null
-    @EpoxyAttribute var toggleExpand: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onMore: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var toggleExpand: (() -> Unit)? = null
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute var hasChildren: Boolean = false
     @EpoxyAttribute var indent: Int = 0
     @EpoxyAttribute var countState : UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
     @EpoxyAttribute var description: String? = null
+    @EpoxyAttribute var showSeparator: Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -83,6 +85,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         }
 
         holder.indentSpace.isVisible = indent > 0
+        holder.separator.isVisible = showSeparator
 
         avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
         holder.counterBadgeView.render(countState)
@@ -102,5 +105,6 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         val collapseIndicator by bind<ImageView>(R.id.groupChildrenCollapse)
         val indentSpace by bind<Space>(R.id.indent)
         val counterBadgeView by bind<UnreadCounterBadgeView>(R.id.groupCounterBadge)
+        val separator by bind<View>(R.id.groupBottomSeparator)
     }
 }
