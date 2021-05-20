@@ -1379,36 +1379,3 @@ Changes in RiotX 0.1.0 (2019-07-11)
 First release!
 
 Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-android-b17952e8f771
-
-
-=======================================================
-+        TEMPLATE WHEN PREPARING A NEW RELEASE        +
-=======================================================
-
-
-Changes in Element 1.1.X (2021-XX-XX)
-===================================================
-
-Features ✨:
- -
-
-Improvements 🙌:
- -
-
-Bugfix 🐛:
- -
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- - 
-
-Build 🧱:
- -
-
-Test:
- -
-
-Other changes:
- -
