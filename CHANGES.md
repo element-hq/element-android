@@ -6,7 +6,6 @@ Features ✨:
 
 Improvements 🙌:
  - Add ability to install APK from directly from Element (#2381)
- - Improve login/register flow (#1410, #2585, #3172)
 
 Bugfix 🐛:
  - Message states cosmetic changes (#3007)
