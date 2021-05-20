@@ -19,8 +19,11 @@ package org.matrix.android.sdk.internal.session.thirdparty
 import org.matrix.android.sdk.api.session.room.model.thirdparty.OpenIdToken
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import org.matrix.android.sdk.api.session.thirdparty.model.ThirdPartyUser
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.network.NetworkConstants
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
 
@@ -50,8 +53,10 @@ internal interface ThirdPartyAPI {
      *
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-user-userid-openid-request-token
      */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/openid/request_token")
-    suspend fun requestOpenIdToken(@Path("userId") userId: String): OpenIdToken
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/openid/request_token")
+    suspend fun requestOpenIdToken(@Path("userId") userId: String,
+                                   // We should post an empty body
+                                   @Body body: JsonDict = HashMap()): OpenIdToken
 
 
 }
