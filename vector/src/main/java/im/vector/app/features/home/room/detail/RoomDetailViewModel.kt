@@ -1498,6 +1498,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
+            val previousSummary = roomSummariesHolder.get(summary.roomId)
             roomSummariesHolder.set(summary)
             setState {
                 val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
@@ -1515,6 +1516,9 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
             room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
                 setState { copy(tombstoneEvent = it) }
+            }
+            if (previousSummary == null || previousSummary.isDirect != summary.isDirect) {
+                timeline.onDmStateChanged()
             }
         }
     }
@@ -1566,5 +1570,9 @@ class RoomDetailViewModel @AssistedInject constructor(
         chatEffectManager.dispose()
         callManager.removePstnSupportListener(this)
         super.onCleared()
+    }
+
+    override fun onDmStateChanged() {
+        // No-op
     }
 }

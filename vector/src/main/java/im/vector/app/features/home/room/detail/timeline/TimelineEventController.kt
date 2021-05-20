@@ -46,6 +46,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventDiff
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
+import im.vector.app.features.home.room.detail.timeline.helper.InvalidateTimelineEventDiffUtilCallback
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
@@ -290,6 +291,18 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     override fun onNewTimelineEvents(eventIds: List<String>) {
         // no-op, already handled
+    }
+
+    override fun onDmStateChanged() {
+        backgroundHandler.post {
+            inSubmitList = true
+            // Invalidate all timeline events to rebuild the whole Room/DM layout
+            val diffCallback = InvalidateTimelineEventDiffUtilCallback(currentSnapshot)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(listUpdateCallback)
+            requestModelBuild()
+            inSubmitList = false
+        }
     }
 
     private fun submitSnapshot(newSnapshot: List<TimelineEvent>) {

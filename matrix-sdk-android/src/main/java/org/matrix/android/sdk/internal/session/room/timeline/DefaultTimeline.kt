@@ -285,6 +285,12 @@ internal class DefaultTimeline(
         }
     }
 
+    override fun onDmStateChanged() {
+        listeners.forEach {
+            it.onDmStateChanged()
+        }
+    }
+
     override fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
         return tryOrNull {
             builtEventsIdMap[eventId]?.let { builtIndex ->
