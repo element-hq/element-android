@@ -19,7 +19,6 @@ package im.vector.app.features.call.conference
 import im.vector.app.R
 import im.vector.app.core.network.await
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.ensureNoProtocol
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.toBase32String
 import im.vector.app.features.call.conference.jwt.JitsiJWTFactory
@@ -60,9 +59,8 @@ class JitsiService @Inject constructor(
             rawService.getElementWellknown(session.myUserId)
                     ?.jitsiServer
                     ?.preferredDomain
-                    ?.ensureNoProtocol()
         }
-        val jitsiDomain = (preferredJitsiDomain ?: stringProvider.getString(R.string.preferred_jitsi_domain))
+        val jitsiDomain = preferredJitsiDomain ?: stringProvider.getString(R.string.preferred_jitsi_domain)
         val jitsiAuth = getJitsiAuth(jitsiDomain)
         val confId = createConferenceId(roomId, jitsiAuth)
 
@@ -133,11 +131,10 @@ class JitsiService @Inject constructor(
     }
 
     private suspend fun getOpenIdJWTToken(roomId: String, domain: String, userDisplayName: String, userAvatar: String): String {
-        val openIdToken = session.thirdPartyService().getOpenIdToken()
+        val openIdToken = session.openIdService().getOpenIdToken()
         return jitsiJWTFactory.create(
-                homeServerName = session.sessionParams.homeServerUrl.ensureNoProtocol(),
+                openIdToken = openIdToken,
                 jitsiServerDomain = domain,
-                openIdAccessToken = openIdToken.accessToken,
                 roomId = roomId,
                 userAvatarUrl = userAvatar,
                 userDisplayName = userDisplayName

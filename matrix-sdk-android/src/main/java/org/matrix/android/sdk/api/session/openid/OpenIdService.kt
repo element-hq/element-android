@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.app.core.utils
 
-import org.apache.commons.codec.binary.Base32
+package org.matrix.android.sdk.api.session.openid
 
-fun String.toBase32String(padding: Boolean = true): String {
-    val base32 = Base32().encodeAsString(toByteArray())
-    return if (padding) {
-        base32
-    } else {
-        base32.trimEnd('=')
-    }
+interface OpenIdService {
+
+    /**
+     * Gets an OpenID token object that the requester may supply to another service to verify their identity in Matrix.
+     * The generated token is only valid for exchanging for user information from the federation API for OpenID.
+     */
+    suspend fun getOpenIdToken(): OpenIdToken
 }

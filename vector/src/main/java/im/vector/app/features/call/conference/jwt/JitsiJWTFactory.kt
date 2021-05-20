@@ -20,6 +20,7 @@ import im.vector.app.core.utils.ensureProtocol
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
+import org.matrix.android.sdk.api.session.openid.OpenIdToken
 import javax.inject.Inject
 
 class JitsiJWTFactory @Inject constructor() {
@@ -28,9 +29,8 @@ class JitsiJWTFactory @Inject constructor() {
      * Create a JWT token for jitsi openidtoken-jwt authentication
      * See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
      */
-    fun create(homeServerName: String,
+    fun create(openIdToken: OpenIdToken,
                jitsiServerDomain: String,
-               openIdAccessToken: String,
                roomId: String,
                userAvatarUrl: String,
                userDisplayName: String): String {
@@ -38,9 +38,9 @@ class JitsiJWTFactory @Inject constructor() {
         val key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
         val context = mapOf(
                 "matrix" to mapOf(
-                        "token" to openIdAccessToken,
+                        "token" to openIdToken.accessToken,
                         "room_id" to roomId,
-                        "server_name" to homeServerName
+                        "server_name" to openIdToken.matrixServerName
                 ),
                 "user" to mapOf(
                         "name" to userDisplayName,

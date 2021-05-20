@@ -30,7 +30,7 @@ fun String.isValidUrl(): Boolean {
 /**
  * Ensure string starts with "http". If it is not the case, "https://" is added, only if the String is not empty
  */
-internal fun String.ensureProtocol(): String {
+fun String.ensureProtocol(): String {
     return when {
         isEmpty()           -> this
         !startsWith("http") -> "https://$this"
@@ -38,14 +38,7 @@ internal fun String.ensureProtocol(): String {
     }
 }
 
-/**
- * Ensure string do not starts with "http" or "https" protocol.
- */
-internal fun String.ensureNoProtocol(): String {
-    return removePrefix("https://").removePrefix("http://")
-}
-
-internal fun String.ensureTrailingSlash(): String {
+fun String.ensureTrailingSlash(): String {
     return when {
         isEmpty()      -> this
         !endsWith("/") -> "$this/"

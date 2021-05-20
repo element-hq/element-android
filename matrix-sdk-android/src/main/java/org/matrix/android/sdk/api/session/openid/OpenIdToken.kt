@@ -14,32 +14,35 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.thirdparty
+package org.matrix.android.sdk.api.session.openid
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-/**
- * This class holds the response for openId request_token API
- * See https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-user-userid-openid-request-token
- */
 @JsonClass(generateAdapter = true)
 data class OpenIdToken(
         /**
          * Required. An access token the consumer may use to verify the identity of the person who generated the token.
          * This is given to the federation API GET /openid/userinfo to verify the user's identity.
          */
-        @Json(name = "access_token") val accessToken: String,
+        @Json(name = "access_token")
+        val accessToken: String,
+
         /**
-         * Required. The string Bearer.
+         * Required. The string "Bearer".
          */
-        @Json(name = "token_type") val tokenType: String,
+        @Json(name = "token_type")
+        val tokenType: String,
+
         /**
          * Required. The homeserver domain the consumer should use when attempting to verify the user's identity.
          */
-        @Json(name = "matrix_server_name") val matrix_server_name: String,
+        @Json(name = "matrix_server_name")
+        val matrixServerName: String,
+
         /**
          * Required. The number of seconds before this token expires and a new one must be generated.
          */
-        @Json(name = "expires_in") val expires_in: Int
+        @Json(name = "expires_in")
+        val expiresIn: Int
 )

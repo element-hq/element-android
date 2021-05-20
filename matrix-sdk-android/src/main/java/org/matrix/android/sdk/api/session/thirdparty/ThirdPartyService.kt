@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.thirdparty
 
-import org.matrix.android.sdk.api.session.room.model.thirdparty.OpenIdToken
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import org.matrix.android.sdk.api.session.thirdparty.model.ThirdPartyUser
 
@@ -37,10 +36,4 @@ interface ThirdPartyService {
      * @param fields One or more custom fields that are passed to the AS to help identify the user.
      */
     suspend fun getThirdPartyUser(protocol: String, fields: Map<String, String> = emptyMap()): List<ThirdPartyUser>
-
-    /**
-     * Gets an OpenID token object that the requester may supply to another service to verify their identity in Matrix.
-     * The generated token is only valid for exchanging for user information from the federation API for OpenID.
-     */
-    suspend fun getOpenIdToken(): OpenIdToken
 }
