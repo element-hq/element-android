@@ -65,7 +65,7 @@ class FooteredTextView @JvmOverloads constructor(
         val widthLastLine = layout.getLineWidth(lastLine)
 
         // Required width if putting footer in the same line as the last line
-        val widthWithHorizontalFooter = (if (looksLikeRtl == viewIsRtl) widthLastLine else maxLineWidth) + footerWidth
+        val widthWithHorizontalFooter = (if (looksLikeRtl == viewIsRtl) widthLastLine else (maxLineWidth + 4*resources.displayMetrics.density)) + footerWidth
 
         // Is there space for a horizontal footer?
         if (widthWithHorizontalFooter <= widthLimit) {
