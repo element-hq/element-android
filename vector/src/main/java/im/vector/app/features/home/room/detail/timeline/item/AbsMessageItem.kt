@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
@@ -412,6 +413,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         return arrayOf(footerWidth, footerHeight)
     }
 
+    @SuppressLint("RtlHardcoded")
     override fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
         super.setBubbleLayout(holder, bubbleStyle, bubbleStyleSetting, reverseBubble)
 
@@ -566,9 +568,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                     if (defaultRtl) {
                         footerLayoutParams.rightMargin = round(footerMarginStartDp * density).toInt()
                         footerLayoutParams.leftMargin = round(footerMarginEndDp * density).toInt()
+                        holder.bubbleMemberNameView.gravity = Gravity.RIGHT
                     } else {
                         footerLayoutParams.leftMargin = round(footerMarginStartDp * density).toInt()
                         footerLayoutParams.rightMargin = round(footerMarginEndDp * density).toInt()
+                        holder.bubbleMemberNameView.gravity = Gravity.LEFT
                     }
                 }
                 if (bubbleStyle == BubbleThemeUtils.BUBBLE_STYLE_BOTH_HIDDEN) {
