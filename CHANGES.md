@@ -12,6 +12,7 @@ Bugfix 🐛:
  - Wrong copy in share space bottom sheet (#3346)
  - Fix a problem with database migration on nightly builds (#3335)
  - Implement a workaround to render &lt;del&gt; and &lt;u&gt; in the timeline (#1817)
+ - Make sure the SDK can retrieve the secret storage if the system is upgraded (#3304)
 
 Translations 🗣:
  -
@@ -59,7 +60,6 @@ Bugfix 🐛:
  - Properly clean the back stack if the user cancel registration when waiting for email validation
  - Fix read marker visibility/position when filtering some events 
  - Fix user invitation in case of restricted profile api (#3306)
- - Make sure the SDK can retrieve the secret storage if the system is upgraded (#3304)
 
 SDK API changes ⚠️:
  - RegistrationWizard.createAccount() parameters are now all optional, following Matrix spec (#3205)
