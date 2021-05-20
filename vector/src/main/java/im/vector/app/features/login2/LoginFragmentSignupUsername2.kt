@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.autofill.HintConstants
-import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
