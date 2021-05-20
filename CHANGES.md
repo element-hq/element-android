@@ -2,10 +2,10 @@ Changes in Element 1.1.8 (2021-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - 
 
 Improvements 🙌:
- -
+ - Support Jitsi authentication (#3379)
 
 Bugfix 🐛:
  - Fix a problem with database migration on nightly builds (#3335)
