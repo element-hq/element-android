@@ -221,13 +221,13 @@
     <string name="notice_room_server_acl_updated_was_banned">• 伺服器符合 %s 已從禁止清單中移除。</string>
     <string name="notice_room_server_acl_updated_banned">• 現在禁止伺服器符合 %s。</string>
     <string name="notice_room_server_acl_updated_title_by_you">您為此聊天室變更了伺服器 ACL。</string>
-    <string name="notice_room_server_acl_updated_title">%s 為此聊天是變更了伺服器 ACL。</string>
+    <string name="notice_room_server_acl_updated_title">%s 為此聊天室變更了伺服器 ACL。</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">• 禁止伺服器符合 IP 文字。</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">• 允許伺服器符合 IP 文字。</string>
     <string name="notice_room_server_acl_set_allowed">• 已允許伺服器符合 %s。</string>
     <string name="notice_room_server_acl_set_banned">• 已禁止伺服器符合 %s。</string>
-    <string name="notice_room_server_acl_set_title_by_you">您為此聊天是設定了伺服器 ACL。</string>
-    <string name="notice_room_server_acl_set_title">%s 為此聊天是設定了伺服器 ACL。</string>
+    <string name="notice_room_server_acl_set_title_by_you">您為此聊天室設定了伺服器 ACL。</string>
+    <string name="notice_room_server_acl_set_title">%s 為此聊天室設定了伺服器 ACL。</string>
     <string name="notice_room_canonical_alias_no_change_by_you">您變更了此聊天室的地址。</string>
     <string name="notice_room_canonical_alias_no_change">%1$s 變更了此聊天室的地址。</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">您為此聊天室變更了主要及備用地址。</string>
@@ -2336,7 +2336,7 @@
     <string name="template_settings_security_pin_code_grace_period_summary_on">未使用 ${app_name} 2分鐘後，要求輸入 PIN 碼。</string>
     <string name="settings_security_pin_code_grace_period_title">2分鐘後要求輸入 PIN 碼</string>
     <string name="settings_security_pin_code_notifications_summary_off">在簡易通知中僅顯示未讀訊息數量。</string>
-    <string name="settings_security_pin_code_notifications_summary_on">顯示如聊天是名稱與訊息內容等詳細資訊。</string>
+    <string name="settings_security_pin_code_notifications_summary_on">顯示如聊天室名稱與訊息內容等詳細資訊。</string>
     <string name="settings_security_pin_code_notifications_title">在通知中顯示內容</string>
     <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN 碼是解鎖 ${app_name} 的唯一方式。</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">啟用特定裝置的生物識別技術，如指紋與臉部辨識。</string>
@@ -2393,7 +2393,7 @@
     <string name="create_room_settings_section">聊天室設定</string>
     <string name="create_room_topic_hint">主題</string>
     <string name="create_room_topic_section">聊天室主題（選擇性）</string>
-    <string name="create_room_name_section">聊天是名稱</string>
+    <string name="create_room_name_section">聊天室名稱</string>
     <string name="settings_export_trail">匯出審核</string>
     <string name="room_member_open_or_create_dm">直接訊息</string>
     <string name="send_bug_report_include_key_share_history">傳送金鑰共享請求歷史</string>
@@ -2688,7 +2688,7 @@
     <string name="command_description_create_space">建立空間</string>
     <string name="a11y_unchecked">未檢查</string>
     <string name="search_hint_room_name">搜尋名稱</string>
-    <string name="room_settings_room_access_restricted_description">擁有此聊天室空間中的任何人都可以尋找並加入。僅此聊天是的管理員可以將其新增到空間中。</string>
+    <string name="room_settings_room_access_restricted_description">擁有此聊天室空間中的任何人都可以尋找並加入。僅此聊天室的管理員可以將其新增到空間中。</string>
     <string name="room_settings_room_access_restricted_title">空間</string>
     <string name="room_settings_room_access_public_description">任何人都可以尋找聊天室並加入</string>
     <string name="room_settings_room_access_public_title">公開</string>
