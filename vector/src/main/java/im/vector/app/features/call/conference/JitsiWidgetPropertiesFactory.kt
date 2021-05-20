@@ -37,7 +37,7 @@ class JitsiWidgetPropertiesFactory @Inject constructor(
                 .orEmpty()
 
         return JitsiWidgetProperties(
-                domain = configs["conferenceDomain"] ?: stringProvider.getString(R.string.preferred_jitsi_domain),
+                domain = (configs["conferenceDomain"] ?: stringProvider.getString(R.string.preferred_jitsi_domain)),
                 confId = configs["conferenceId"],
                 displayName = configs["displayName"],
                 avatarUrl = configs["avatarUrl"]

@@ -38,6 +38,13 @@ internal fun String.ensureProtocol(): String {
     }
 }
 
+/**
+ * Ensure string do not starts with "http" or "https" protocol.
+ */
+internal fun String.ensureNoProtocol(): String {
+    return removePrefix("https://").removePrefix("http://")
+}
+
 internal fun String.ensureTrailingSlash(): String {
     return when {
         isEmpty()      -> this

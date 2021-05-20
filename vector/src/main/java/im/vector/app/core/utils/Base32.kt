@@ -25,4 +25,3 @@ fun String.toBase32String(padding: Boolean = true): String {
         base32.replace("=", "")
     }
 }
-

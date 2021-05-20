@@ -57,6 +57,4 @@ internal interface ThirdPartyAPI {
     suspend fun requestOpenIdToken(@Path("userId") userId: String,
                                    // We should post an empty body
                                    @Body body: JsonDict = HashMap()): OpenIdToken
-
-
 }

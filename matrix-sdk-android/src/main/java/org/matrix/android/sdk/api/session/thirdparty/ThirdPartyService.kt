@@ -43,5 +43,4 @@ interface ThirdPartyService {
      * The generated token is only valid for exchanging for user information from the federation API for OpenID.
      */
     suspend fun getOpenIdToken(): OpenIdToken
-
 }
