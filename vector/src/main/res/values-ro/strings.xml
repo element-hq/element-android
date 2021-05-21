@@ -55,4 +55,5 @@
     <string name="notice_call_candidates">%s a trimis informații pentru a incepe apelul.</string>
     <string name="notice_placed_voice_call_by_you">Ați început un apel video.</string>
     <string name="notice_placed_voice_call">%s a început un apel video.</string>
+    <string name="notice_call_candidates_by_you">Ați trimis informații pentru a incepe apelul.</string>
 </resources>
