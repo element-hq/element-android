@@ -62,6 +62,22 @@ class AddRoomListController @Inject constructor(
 
     var initialLoadOccurred = false
 
+    var expanded: Boolean = true
+        set(value) {
+            if (value != field) {
+                field = value
+                requestForcedModelBuild()
+            }
+        }
+
+    var disabled: Boolean = false
+        set(value) {
+            if (value != field) {
+                field = value
+                requestForcedModelBuild()
+            }
+        }
+
     fun boundaryChange(boundary: ResultBoundaries) {
         val boundaryHasLoadedSomething = boundary.frontLoaded || boundary.zeroItemLoaded
         if (initialLoadOccurred != boundaryHasLoadedSomething) {
@@ -88,6 +104,10 @@ class AddRoomListController @Inject constructor(
         }
 
     override fun addModels(models: List<EpoxyModel<*>>) {
+        if (disabled) {
+            super.addModels(emptyList())
+            return
+        }
         val host = this
         val filteredModel = if (ignoreRooms == null) {
             models
@@ -102,10 +122,13 @@ class AddRoomListController @Inject constructor(
                     RoomCategoryItem_().apply {
                         id("header")
                         title(host.sectionName ?: "")
-                        expanded(true)
+                        expanded(host.expanded)
+                        listener {
+                            host.expanded = !host.expanded
+                        }
                     }
             )
-            if (subHeaderText != null) {
+            if (expanded && subHeaderText != null) {
                 add(
                         GenericPillItem_().apply {
                             id("sub_header")
@@ -115,11 +138,13 @@ class AddRoomListController @Inject constructor(
                 )
             }
         }
-        super.addModels(filteredModel)
-        if (!initialLoadOccurred) {
-            add(
-                    RoomSelectionPlaceHolderItem_().apply { id("loading") }
-            )
+        if (expanded) {
+            super.addModels(filteredModel)
+            if (!initialLoadOccurred) {
+                add(
+                        RoomSelectionPlaceHolderItem_().apply { id("loading") }
+                )
+            }
         }
     }
 
@@ -129,7 +154,7 @@ class AddRoomListController @Inject constructor(
         return RoomSelectionItem_().apply {
             id(item.roomId)
             matrixItem(item.toMatrixItem())
-            avatarRenderer(this@AddRoomListController.avatarRenderer)
+            avatarRenderer(host.avatarRenderer)
             space(item.roomType == RoomType.SPACE)
             selected(host.selectedItems[item.roomId] ?: false)
             itemClickListener(DebouncedClickListener({

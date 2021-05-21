@@ -81,7 +81,6 @@ internal class DefaultSpaceService @Inject constructor(
             } else {
                 this.preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
                 visibility = RoomDirectoryVisibility.PRIVATE
-                enableEncryption()
             }
         })
     }
