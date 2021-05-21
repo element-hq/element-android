@@ -32,4 +32,24 @@
     <string name="notice_room_invite_no_invitee">Invitația lui %s</string>
     <string name="summary_you_sent_image">Ați trimis o imagine.</string>
     <string name="summary_user_sent_image">%1$s a trimis o imagine.</string>
+    <string name="notice_placed_video_call_by_you">Ați început un apel video</string>
+    <string name="notice_placed_video_call">%s a început un apel video.</string>
+    <string name="notice_room_name_changed_by_you">Ați schimbat numele camerei la: %1$s</string>
+    <string name="notice_room_name_changed">%1$s a schimbat numele camerei la: %2$s</string>
+    <string name="notice_room_avatar_changed_by_you">Ați schimbat avatarul camerei</string>
+    <string name="notice_room_avatar_changed">%1$s a schimbat avatarul camerei</string>
+    <string name="notice_room_topic_changed_by_you">Ați schimbat subiectul la: %1$s</string>
+    <string name="notice_room_topic_changed">%1$s a schimbat subiectul la: %2$s</string>
+    <string name="notice_display_name_removed_by_you">V-ați înlăturat numele (era %1$s)</string>
+    <string name="notice_display_name_removed">%1$s și-au înlăturat numele (era %2$s)</string>
+    <string name="notice_display_name_changed_from_by_you">V-ați schimbat numele de la %1$s la %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s și-au schimbat numele de la %2$s la %3$s</string>
+    <string name="notice_display_name_set_by_you">V-ați trecut numele ca %1$s</string>
+    <string name="notice_display_name_set">%1$s și-au trecut numele ca %2$s</string>
+    <string name="notice_avatar_url_changed_by_you">V-ați schimbat avatarul</string>
+    <string name="notice_avatar_url_changed">%1$s și-au schimbat avatarul</string>
+    <string name="notice_room_withdraw_by_you">Ați înlăturat invitația lui %1$s</string>
+    <string name="notice_room_withdraw">%1$s a înlăturat invitația lui %2$s</string>
+    <string name="notice_room_kick_by_you">Ați scos pe %1$s</string>
+    <string name="notice_room_kick">%1$s a scos pe %2$s</string>
 </resources>
