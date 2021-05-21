@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.R
@@ -32,6 +31,7 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.BottomSheetSpaceSettingsBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.navigation.Navigator
@@ -68,6 +68,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var bugReporter: BugReporter
+    @Inject lateinit var colorProvider: ColorProvider
 
     private val spaceArgs: SpaceBottomSheetSettingsArgs by args()
 
@@ -159,15 +160,15 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     ?: return@debouncedClicks
             val warningMessage: CharSequence? = if (spaceSummary.otherMemberIds.isEmpty()) {
                 span(getString(R.string.space_leave_prompt_msg_only_you)) {
-                    textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+                    textColor = colorProvider.getColor(R.color.riotx_destructive_accent)
                 }
             } else if (isLastAdmin) {
                 span(getString(R.string.space_leave_prompt_msg_as_admin)) {
-                    textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+                    textColor = colorProvider.getColor(R.color.riotx_destructive_accent)
                 }
             } else if (!spaceSummary.isPublic) {
                 span(getString(R.string.space_leave_prompt_msg_private)) {
-                    textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+                    textColor = colorProvider.getColor(R.color.riotx_destructive_accent)
                 }
             } else {
                 null
