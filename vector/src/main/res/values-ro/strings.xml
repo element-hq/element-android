@@ -56,4 +56,15 @@
     <string name="notice_placed_voice_call_by_you">Ați început un apel video.</string>
     <string name="notice_placed_voice_call">%s a început un apel video.</string>
     <string name="notice_call_candidates_by_you">Ați trimis informații pentru a incepe apelul.</string>
+    <string name="notice_room_visibility_unknown">necunoscut (%s)</string>
+    <string name="notice_room_visibility_world_readable">oricine.</string>
+    <string name="notice_room_visibility_shared">toți membrii camerei.</string>
+    <string name="notice_room_visibility_joined">toți membrii camerei, din punctul din care s-au alăturat.</string>
+    <string name="notice_room_visibility_invited">toți membrii camerei, din punctul din care sunt invitați.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Ați făcut mesajele viitoare vizibile pentru %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s a făcut mesajele viitoare vizibile pentru %2$s</string>
+    <string name="notice_ended_call_by_you">Ați încheiat apelul.</string>
+    <string name="notice_ended_call">%s a încheiat apelul.</string>
+    <string name="notice_answered_call_by_you">Ați răspuns la apel.</string>
+    <string name="notice_answered_call">%s a răspuns la apel.</string>
 </resources>
