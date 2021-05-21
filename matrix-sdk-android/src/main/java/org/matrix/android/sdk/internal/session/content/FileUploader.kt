@@ -121,11 +121,17 @@ internal class FileUploader @Inject constructor(
         }
     }
 
-    private suspend fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
+    private suspend fun upload(uploadBody: RequestBody,
+                               filename: String?,
+                               progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
         val urlBuilder = uploadUrl.toHttpUrlOrNull()?.newBuilder() ?: throw RuntimeException()
 
         val httpUrl = urlBuilder
-                .addQueryParameter("filename", filename)
+                .apply {
+                    if (filename != null) {
+                        addQueryParameter("filename", filename)
+                    }
+                }
                 .build()
 
         val requestBody = if (progressListener != null) ProgressRequestBody(uploadBody, progressListener) else uploadBody
