@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.util.toMatrixItem
+import java.util.Locale
 import javax.inject.Inject
 
 class SpaceSummaryController @Inject constructor(
@@ -140,7 +141,7 @@ class SpaceSummaryController @Inject constructor(
         }
 
         rootSpaces
-                ?.sortedBy { it.roomId }
+                ?.sortedBy { it.displayName.toLowerCase(Locale.getDefault()) }
                 ?.forEach { groupSummary ->
                     val isSelected = selected is RoomGroupingMethod.BySpace && groupSummary.roomId == selected.space()?.roomId
                     // does it have children?
