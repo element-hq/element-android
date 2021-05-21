@@ -71,7 +71,7 @@
     <string name="summary_user_sent_sticker">%1$s a trimis un autocolant.</string>
     <string name="summary_you_sent_sticker">Ați trimis un autocolant.</string>
     <string name="invite_friends">Invită prieteni</string>
-    <string name="notice_room_server_acl_updated_no_change">Nicio schimbare.</string>
+    <string name="notice_room_server_acl_updated_no_change">Fără schimbări.</string>
     <string name="notice_room_third_party_registered_invite_by_you">Ați acceptat invitația pentru %1$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s a acceptat invitația pentru %2$s</string>
     <string name="notice_direct_room_third_party_revoked_invite_by_you">Ați anulat invitația pentru %1$s</string>
