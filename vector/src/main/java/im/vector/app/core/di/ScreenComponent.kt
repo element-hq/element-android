@@ -53,6 +53,7 @@ import im.vector.app.features.invite.InviteUsersToRoomActivity
 import im.vector.app.features.invite.VectorInviteView
 import im.vector.app.features.link.LinkHandlerActivity
 import im.vector.app.features.login.LoginActivity
+import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
@@ -133,6 +134,7 @@ interface ScreenComponent {
     fun inject(activity: KeysBackupManageActivity)
     fun inject(activity: EmojiReactionPickerActivity)
     fun inject(activity: LoginActivity)
+    fun inject(activity: LoginActivity2)
     fun inject(activity: LinkHandlerActivity)
     fun inject(activity: MainActivity)
     fun inject(activity: RoomDirectoryActivity)

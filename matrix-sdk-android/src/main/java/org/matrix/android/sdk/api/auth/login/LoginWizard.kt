@@ -25,6 +25,11 @@ import org.matrix.android.sdk.api.session.Session
  */
 interface LoginWizard {
     /**
+     * Get some information about a matrixId: displayName and avatar url
+     */
+    suspend fun getProfileInfo(matrixId: String): LoginProfileInfo
+
+    /**
      * Login to the homeserver.
      *
      * @param login the login field. Can be a user name, or a msisdn (email or phone number) associated to the account

@@ -23,6 +23,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
 import im.vector.app.features.crypto.recover.SetupMode
+import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
@@ -35,6 +36,8 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.util.MatrixItem
 
 interface Navigator {
+
+    fun openLogin(context: Context, loginConfig: LoginConfig? = null, flags: Int = 0)
 
     fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false)
 
