@@ -27,7 +27,7 @@
     <string name="notice_direct_room_created_by_you">Ați creat discuția</string>
     <string name="notice_direct_room_created">%1$s a creat discuția</string>
     <string name="notice_room_created_by_you">Ați creat camera</string>
-    <string name="notice_room_created">%1$s a creat camera.</string>
+    <string name="notice_room_created">%1$s a creat camera</string>
     <string name="notice_room_invite_no_invitee_by_you">Invitația dumneavoastră</string>
     <string name="notice_room_invite_no_invitee">Invitația lui %s</string>
     <string name="summary_you_sent_image">Ați trimis o imagine.</string>
