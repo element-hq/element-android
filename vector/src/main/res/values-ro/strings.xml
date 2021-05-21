@@ -1,16 +1,35 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="light_theme">Temă luminoasă</string>
     <string name="dark_theme">Temă întunecată</string>
     <string name="black_theme">Temă Neagră</string>
-
     <string name="notification_sync_init">Inițializează serviciu</string>
     <string name="notification_sync_in_progress">Sincronizează…</string>
     <string name="notification_listening_for_events">Așteaptă evenimente</string>
     <string name="notification_noisy_notifications">Notificări zgomotoase</string>
     <string name="notification_silent_notifications">Notificări liniștite</string>
-
     <string name="title_activity_home">Mesaje</string>
     <string name="title_activity_room">Cameră</string>
     <string name="title_activity_settings">Setări</string>
+    <string name="notice_room_reject_by_you">Ați refuzat invitația</string>
+    <string name="notice_room_reject">%1$s a refuzat invitația</string>
+    <string name="notice_direct_room_leave_by_you">Ați părăsit camera</string>
+    <string name="notice_direct_room_leave">%1$s a părăsit camera</string>
+    <string name="notice_room_leave_by_you">Ați părăsit camera</string>
+    <string name="notice_room_leave">%1$s a părăsit camera</string>
+    <string name="notice_direct_room_join_by_you">Ați intrat</string>
+    <string name="notice_direct_room_join">%1$s a intrat</string>
+    <string name="notice_room_join_by_you">Ați intrat in cameră</string>
+    <string name="notice_room_join">%1$s s-a alăturat camerei</string>
+    <string name="notice_room_invite_you">%1$s v-a invitat</string>
+    <string name="notice_room_invite_by_you">Ați invitat pe %1$s</string>
+    <string name="notice_room_invite">%1$s a invitat pe %2$s</string>
+    <string name="notice_direct_room_created_by_you">Ați creat discuția</string>
+    <string name="notice_direct_room_created">%1$s a creat discuția</string>
+    <string name="notice_room_created_by_you">Ați creat camera</string>
+    <string name="notice_room_created">%1$s a creat camera.</string>
+    <string name="notice_room_invite_no_invitee_by_you">Invitația dumneavoastră</string>
+    <string name="notice_room_invite_no_invitee">Invitația lui %s</string>
+    <string name="summary_you_sent_image">Ați trimis o imagine.</string>
+    <string name="summary_user_sent_image">%1$s a trimis o imagine.</string>
 </resources>
