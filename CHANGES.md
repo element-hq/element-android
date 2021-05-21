@@ -14,6 +14,10 @@ Bugfix 🐛:
  - Implement a workaround to render &lt;del&gt; and &lt;u&gt; in the timeline (#1817)
  - Make sure the SDK can retrieve the secret storage if the system is upgraded (#3304)
  - Spaces | Explore room list: the RoomId is displayed instead of name (#3371)
+ - Spaces | Personal spaces add DM - Web Parity (#3271)
+ - Spaces | Improve 'Leave Space' UX/UI (#3359)
+ - Don't create private spaces with encryption enabled (#3363)
+ - #+ button on lower right when looking at an empty space goes to an empty 'Explore rooms' (#3327)
 
 Translations 🗣:
  -
@@ -1380,36 +1384,3 @@ Changes in RiotX 0.1.0 (2019-07-11)
 First release!
 
 Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-android-b17952e8f771
-
-
-=======================================================
-+        TEMPLATE WHEN PREPARING A NEW RELEASE        +
-=======================================================
-
-
-Changes in Element 1.1.X (2021-XX-XX)
-===================================================
-
-Features ✨:
- -
-
-Improvements 🙌:
- -
-
-Bugfix 🐛:
- -
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- - 
-
-Build 🧱:
- -
-
-Test:
- -
-
-Other changes:
- -
