@@ -52,7 +52,7 @@
     <string name="notice_room_withdraw">%1$s a înlăturat invitația lui %2$s</string>
     <string name="notice_room_kick_by_you">Ați scos pe %1$s</string>
     <string name="notice_room_kick">%1$s a scos pe %2$s</string>
-    <string name="notice_call_candidates">%s a trimis informații pentru a incepe apelul.</string>
+    <string name="notice_call_candidates">%s a trimis informații pentru a începe apelul.</string>
     <string name="notice_placed_voice_call_by_you">Ați început un apel video.</string>
     <string name="notice_placed_voice_call">%s a început un apel video.</string>
     <string name="notice_call_candidates_by_you">Ați trimis informații pentru a incepe apelul.</string>
