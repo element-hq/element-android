@@ -284,7 +284,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                     )
             )
             launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
-                session.updateAccountData(
+                session.userAccountDataService().updateAccountData(
                         type = UserAccountDataTypes.TYPE_WIDGETS,
                         content = addUserWidgetBody
                 )

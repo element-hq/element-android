@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.accountdata
+package org.matrix.android.sdk.api.session.room.accountdata
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.events.model.Content
-
-/**
- * This is a simplified Event with just a type and a content.
- * Currently used types are defined in [UserAccountDataTypes].
- */
-@JsonClass(generateAdapter = true)
-data class UserAccountDataEvent(
-        @Json(name = "type") val type: String,
-        @Json(name = "content") val content: Content
-)
+object RoomAccountDataTypes {
+    const val EVENT_TYPE_VIRTUAL_ROOM = "im.vector.is_virtual_room"
+    const val EVENT_TYPE_TAG = "m.tag"
+    const val EVENT_TYPE_FULLY_READ = "m.fully_read"
+}
