@@ -47,14 +47,15 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import javax.inject.Inject
 
-internal class FileUploader @Inject constructor(@Authenticated
-                                                private val okHttpClient: OkHttpClient,
-                                                private val globalErrorReceiver: GlobalErrorReceiver,
-                                                private val homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService,
-                                                private val context: Context,
-                                                private val temporaryFileCreator: TemporaryFileCreator,
-                                                contentUrlResolver: ContentUrlResolver,
-                                                moshi: Moshi) {
+internal class FileUploader @Inject constructor(
+        @Authenticated private val okHttpClient: OkHttpClient,
+        private val globalErrorReceiver: GlobalErrorReceiver,
+        private val homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService,
+        private val context: Context,
+        private val temporaryFileCreator: TemporaryFileCreator,
+        contentUrlResolver: ContentUrlResolver,
+        moshi: Moshi
+) {
 
     private val uploadUrl = contentUrlResolver.uploadUrl
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
