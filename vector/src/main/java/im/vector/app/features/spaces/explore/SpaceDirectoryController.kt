@@ -108,7 +108,7 @@ class SpaceDirectoryController @Inject constructor(
                     val isLoading = data?.changeMembershipStates?.get(info.childRoomId)?.isInProgress() ?: false
                     spaceChildInfoItem {
                         id(info.childRoomId)
-                        matrixItem(MatrixItem.RoomItem(info.childRoomId, info.name, info.avatarUrl))
+                        matrixItem(info.toMatrixItem())
                         avatarRenderer(host.avatarRenderer)
                         topic(info.topic)
                         memberCount(info.activeMemberCount ?: 0)
