@@ -316,10 +316,20 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                     ?: data.url?.takeIf { localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls })
 
     private fun processSize(data: Data, mode: Mode): Size {
-        val maxImageWidth = data.maxWidth
-        val maxImageHeight = data.maxHeight
+        var maxImageWidth = data.maxWidth
+        var maxImageHeight = data.maxHeight
         val width = data.width ?: maxImageWidth
         val height = data.height ?: maxImageHeight
+
+        // Avoid excessive upscaling
+        val maxUpscale = dimensionConverter.dpToPx(4)
+        if (width in 1 until maxImageWidth) {
+            maxImageWidth = min(maxImageWidth, width*maxUpscale)
+        }
+        if (height in 1 until maxImageHeight) {
+            maxImageHeight = min(maxImageHeight, height*maxUpscale)
+        }
+
         var finalWidth = -1
         var finalHeight = -1
 
