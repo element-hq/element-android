@@ -1,0 +1,5 @@
+- Section expand status: remember for each space
+- Fix counting unread chats in spaces
+- RTL fixes and improvements
+- Sort root spaces by display name instead of id
+- Other minor bugfixes
