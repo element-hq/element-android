@@ -7,7 +7,7 @@
     <string name="notification_sync_in_progress">Sincronizează…</string>
     <string name="notification_listening_for_events">Așteaptă evenimente</string>
     <string name="notification_noisy_notifications">Notificări zgomotoase</string>
-    <string name="notification_silent_notifications">Notificări liniștite</string>
+    <string name="notification_silent_notifications">Notificări silențioase</string>
     <string name="title_activity_home">Mesaje</string>
     <string name="title_activity_room">Cameră</string>
     <string name="title_activity_settings">Setări</string>
@@ -19,7 +19,7 @@
     <string name="notice_room_leave">%1$s a părăsit camera</string>
     <string name="notice_direct_room_join_by_you">Ați intrat</string>
     <string name="notice_direct_room_join">%1$s a intrat</string>
-    <string name="notice_room_join_by_you">Ați intrat in cameră</string>
+    <string name="notice_room_join_by_you">Ați intrat în cameră</string>
     <string name="notice_room_join">%1$s s-a alăturat camerei</string>
     <string name="notice_room_invite_you">%1$s v-a invitat</string>
     <string name="notice_room_invite_by_you">Ați invitat pe %1$s</string>
@@ -43,11 +43,11 @@
     <string name="notice_display_name_removed_by_you">V-ați înlăturat numele (era %1$s)</string>
     <string name="notice_display_name_removed">%1$s și-au înlăturat numele (era %2$s)</string>
     <string name="notice_display_name_changed_from_by_you">V-ați schimbat numele de la %1$s la %2$s</string>
-    <string name="notice_display_name_changed_from">%1$s și-au schimbat numele de la %2$s la %3$s</string>
+    <string name="notice_display_name_changed_from">%1$s și-a schimbat numele de la %2$s la %3$s</string>
     <string name="notice_display_name_set_by_you">V-ați trecut numele ca %1$s</string>
-    <string name="notice_display_name_set">%1$s și-au trecut numele ca %2$s</string>
+    <string name="notice_display_name_set">%1$s și-a trecut numele ca %2$s</string>
     <string name="notice_avatar_url_changed_by_you">V-ați schimbat avatarul</string>
-    <string name="notice_avatar_url_changed">%1$s și-au schimbat avatarul</string>
+    <string name="notice_avatar_url_changed">%1$s și-a schimbat avatarul</string>
     <string name="notice_room_withdraw_by_you">Ați înlăturat invitația lui %1$s</string>
     <string name="notice_room_withdraw">%1$s a înlăturat invitația lui %2$s</string>
     <string name="notice_room_kick_by_you">Ați scos pe %1$s</string>
@@ -79,7 +79,7 @@
     <string name="notice_direct_room_third_party_invite_by_you">Ați invitat pe %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s a invitat pe %2$s</string>
     <string name="notice_profile_change_redacted_by_you">V-ați actualizat profilul %1$s</string>
-    <string name="notice_profile_change_redacted">%1$s și-au actualizat profilul %2$s</string>
+    <string name="notice_profile_change_redacted">%1$s și-a actualizat profilul %2$s</string>
     <string name="notice_event_redacted_by_with_reason">Mesaj șters de %1$s [motiv: %2$s]</string>
     <string name="notice_event_redacted_with_reason">Mesaj șters [motiv: %1$s]</string>
     <string name="notice_event_redacted_by">Mesaj șters de %1$s</string>
@@ -99,4 +99,98 @@
     <string name="notice_direct_room_update">%s a actualizat aici.</string>
     <string name="notice_room_update_by_you">Ați actualizat această cameră.</string>
     <string name="notice_room_update">%s a actualizat această cameră.</string>
+    <string name="a11y_rule_notify_noisy">Notificați cu sunet</string>
+    <string name="room_list_quick_actions_notifications_all_noisy">Toate mesajele (zgomotos)</string>
+    <string name="settings_noisy_notifications_preferences">Configurează notificările zgomotoase</string>
+    <string name="notification_noisy">Zgomotos</string>
+    <string name="room_settings_all_messages_noisy">Toate mesajele (zgomotos)</string>
+    <string name="room_details_settings">Setări</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Solicitați confirmarea înainte de a începe un apel</string>
+    <string name="settings_call_show_confirmation_dialog_title">Preveniți apelul accidental</string>
+    <string name="settings_call_category">Apeluri</string>
+    <string name="join_space">Alătură-te spațiului</string>
+    <string name="create_space">Crează spațiul</string>
+    <string name="leave_space">Părăsește spațiul</string>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">%d membru activ</item>
+        <item quantity="few">%d membri activi</item>
+        <item quantity="other">%d de membri activi</item>
+    </plurals>
+    <string name="room_creation_add_member">Adaugă un membru</string>
+    <string name="list_members">Lista membrilor</string>
+    <string name="space_manage_rooms_and_spaces">Gestionați camerele și spațiile</string>
+    <string name="spaces_beta_welcome_to_spaces">Bine ați venit la spații!</string>
+    <string name="create_spaces_loading_message">Se creează spațiul…</string>
+    <string name="create_spaces_default_public_random_room_name">Aleatoriu</string>
+    <string name="create_spaces_organise_rooms">Un spațiu privat pentru organizarea camerelor</string>
+    <string name="create_spaces_join_info_help">Pentru a vă alătura unui spațiu existent, aveți nevoie de o invitație.</string>
+    <string name="create_spaces_you_can_change_later">Puteți schimba acest lucru mai târziu</string>
+    <string name="room_settings_room_access_restricted_title">Spații</string>
+    <string name="spaces_invited_header">Invitații</string>
+    <string name="send_a_sticker">Autocolant</string>
+    <string name="attachment_type_sticker">Autocolant</string>
+    <string name="no_sticker_application_dialog_content">Nu aveți seturi de autocolante activate în acest moment.
+\n
+\nDoriți să adăugați câteva\?</string>
+    <string name="option_send_sticker">Trimite un autocolant</string>
+    <string name="title_activity_choose_sticker">Trimite un autocolant</string>
+    <string name="crypto_error_withheld_blacklisted">Nu puteți accesa acest mesaj deoarece ați fost blocat către expeditor</string>
+    <string name="room_title_one_member">1 membru</string>
+    <plurals name="room_title_members">
+        <item quantity="one">%d membru</item>
+        <item quantity="few">%d membri</item>
+        <item quantity="other">%d de membri</item>
+    </plurals>
+    <string name="room_participants_leave_private_warning">Această cameră nu este publică. Nu veți putea să vă alăturați din nou fără o invitație.</string>
+    <string name="room_participants_leave_prompt_msg">Sigur doriți să părăsiți camera\?</string>
+    <string name="room_participants_leave_prompt_title">Părăsește camera</string>
+    <string name="room_participants_action_devices_list">Afișează lista de sesiuni</string>
+    <string name="room_participants_action_mention">Menționează</string>
+    <string name="room_participants_action_ignore">Ignoră</string>
+    <string name="reason_hint">Motiv</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">%d utilizator</item>
+        <item quantity="few">%d utilizatori</item>
+        <item quantity="other">%d de utilizatori</item>
+    </plurals>
+    <string name="spaces_header">Spații</string>
+    <string name="notice_room_ban_by_you">Ați interzis accesul lui %1$s</string>
+    <string name="notice_room_ban">%1$s a interzis accesul lui %2$s</string>
+    <string name="space_add_child_title">Adaugă camere</string>
+    <string name="room_list_sharing_header_other_rooms">Alte camere</string>
+    <string name="room_list_sharing_header_recent_rooms">Camere recente</string>
+    <string name="fab_menu_create_room">Camere</string>
+    <string name="room_list_rooms_empty_title">Camere</string>
+    <plurals name="group_rooms">
+        <item quantity="one">%d cameră</item>
+        <item quantity="few">%d camere</item>
+        <item quantity="other">%d de camere</item>
+    </plurals>
+    <string name="rooms">Camere</string>
+    <string name="group_details_rooms">Camere</string>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+        <item quantity="one">%d cameră</item>
+        <item quantity="few">%d camere</item>
+        <item quantity="other">%d de camere</item>
+    </plurals>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="one">%1$s cameră găsită pentru %2$s</item>
+        <item quantity="few">%1$s camere găsite pentru %2$s</item>
+        <item quantity="other">%1$s de camere găsite pentru %2$s</item>
+    </plurals>
+    <plurals name="directory_search_rooms">
+        <item quantity="one">%d cameră</item>
+        <item quantity="few">%d camere</item>
+        <item quantity="other">%d de camere</item>
+    </plurals>
+    <string name="room_recents_conversations">CAMERE</string>
+    <string name="tab_title_search_rooms">CAMERE</string>
+    <string name="rooms_header">Camere</string>
+    <string name="suggested_header">Camere sugerate</string>
+    <string name="bottom_action_rooms">Camere</string>
+    <string name="room_recents_favourites">FAVORITE</string>
+    <string name="bottom_action_favourites">Favorite</string>
+    <string name="settings_preferences">Preferințe</string>
+    <string name="medium_email">Adresă de e-mail</string>
+    <string name="medium_phone_number">Număr de telefon</string>
 </resources>
