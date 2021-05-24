@@ -35,7 +35,7 @@
     <string name="home_filter_placeholder_rooms">Lọc tên phòng</string>
     <string name="home_filter_placeholder_people">Lọc người</string>
     <string name="dialog_title_confirmation">Xác nhận</string>
-    <string name="disable">Vô hiệu hóa</string>
+    <string name="disable">Tắt</string>
     <string name="home_filter_placeholder_home">Lọc tên phòng</string>
     <string name="bottom_action_groups">Cộng đồng</string>
     <string name="bottom_action_rooms">Phòng</string>
@@ -548,4 +548,5 @@
     <string name="encryption_information_unverify">Huỷ xác minh</string>
     <string name="encryption_information_verify">Xác minh</string>
     <string name="hs_url">URL máy chủ nhà</string>
+    <string name="action_historical">Lịch sử</string>
 </resources>
