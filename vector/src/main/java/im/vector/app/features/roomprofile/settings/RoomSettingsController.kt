@@ -121,7 +121,7 @@ class RoomSettingsController @Inject constructor(
         buildProfileAction(
                 id = "joinRule",
                 title = stringProvider.getString(R.string.room_settings_room_access_title),
-                subtitle = data.getJoinRuleWording(),
+                subtitle = data.getJoinRuleWording(stringProvider),
                 dividerColor = dividerColor,
                 divider = false,
                 editable = data.actionPermissions.canChangeJoinRule,
@@ -139,26 +139,6 @@ class RoomSettingsController @Inject constructor(
                 listener {
                     callback?.onToggleGuestAccess()
                 }
-            }
-        }
-    }
-
-    private fun RoomSettingsViewState.getJoinRuleWording(): String {
-        return when (val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules) {
-            RoomJoinRules.INVITE     -> {
-                stringProvider.getString(R.string.room_settings_room_access_private_title)
-            }
-            RoomJoinRules.PUBLIC     -> {
-                stringProvider.getString(R.string.room_settings_room_access_public_title)
-            }
-            RoomJoinRules.KNOCK      -> {
-                stringProvider.getString(R.string.room_settings_room_access_entry_knock)
-            }
-            RoomJoinRules.RESTRICTED -> {
-                stringProvider.getString(R.string.room_settings_room_access_restricted_title)
-            }
-            else                     -> {
-                stringProvider.getString(R.string.room_settings_room_access_entry_unknown, joinRule.value)
             }
         }
     }

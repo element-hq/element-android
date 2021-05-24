@@ -457,4 +457,12 @@
     <string name="summary_message">%1$s: %2$s</string>
     <string name="notice_profile_change_redacted_by_you">Bạn đã cập nhật hồ sơ của bạn %1$s</string>
     <string name="notice_profile_change_redacted">%1$s đã cập nhật hồ sơ của họ %2$s</string>
+    <string name="invite_just_to_this_room_desc">Họ sẽ không ở trong %s</string>
+    <string name="invite_just_to_this_room">Chỉ vào phòng này</string>
+    <string name="invite_to_space_with_name_desc">Họ sẽ có thể khám phá %s</string>
+    <string name="invite_to_space_with_name">Mời vào %s</string>
+    <string name="invite_by_link">Chia sẻ liên kết</string>
+    <string name="room_alias_preview_not_found">Bí danh này không truy cập được vào lúc này.
+\nHãy thử lại sau, hoặc yêu cầu một quản trị viên của phòng kiểm tra xem bạn có quyền truy cập không.</string>
+    <string name="join_anyway">Vẫn tham gia</string>
 </resources>

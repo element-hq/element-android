@@ -54,6 +54,11 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
         private val session: Session
 ) : VectorViewModel<SpaceAddRoomsState, SpaceAddRoomActions, SpaceAddRoomsViewEvents>(initialState) {
 
+    @AssistedFactory
+    interface Factory {
+        fun create(initialState: SpaceAddRoomsState): SpaceAddRoomsViewModel
+    }
+
     val updatableLiveSpacePageResult: UpdatableLivePageResult by lazy {
         session.getFilteredPagedRoomSummariesLive(
                 roomSummaryQueryParams {
@@ -104,11 +109,6 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                     ignoreRooms = (spaceSummary?.flattenParentIds ?: emptyList()) + listOf(initialState.spaceId)
             )
         }
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(initialState: SpaceAddRoomsState): SpaceAddRoomsViewModel
     }
 
     companion object : MvRxViewModelFactory<SpaceAddRoomsViewModel, SpaceAddRoomsState> {
@@ -174,7 +174,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 try {
                     session.spaceService().getSpace(initialState.spaceId)!!.addChildren(
                             roomId = roomId,
-                            viaServers = listOf(session.sessionParams.homeServerHost ?: ""),
+                            viaServers = null,
                             order = null
                     )
                     completed.add(roomId)

@@ -1,0 +1,2 @@
+Haadferoaring yn disse ferzje: feroaringen foar 1.1.4
+Folsleine feroaringslist: https://github.com/vector-im/element-android/releases/tag/v1.1.5

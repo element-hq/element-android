@@ -19,6 +19,8 @@ package im.vector.app.features.spaces
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import im.vector.app.R
@@ -26,6 +28,7 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.spaces.explore.SpaceDirectoryArgs
 import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
 import im.vector.app.features.spaces.explore.SpaceDirectoryState
@@ -33,7 +36,7 @@ import im.vector.app.features.spaces.explore.SpaceDirectoryViewEvents
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
 import javax.inject.Inject
 
-class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceDirectoryViewModel.Factory {
+class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceDirectoryViewModel.Factory, MatrixToBottomSheet.InteractionListener {
 
     @Inject lateinit var spaceDirectoryViewModelFactory: SpaceDirectoryViewModel.Factory
 
@@ -47,8 +50,25 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
 
     val sharedViewModel: SpaceDirectoryViewModel by viewModel()
 
+    private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentAttached(fm: FragmentManager, f: Fragment, context: Context) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = this@SpaceExploreActivity
+            }
+            super.onFragmentAttached(fm, f, context)
+        }
+
+        override fun onFragmentDetached(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = null
+            }
+            super.onFragmentDetached(fm, f)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
 
         if (isFirstCreation()) {
             val simpleName = SpaceDirectoryFragment::class.java.simpleName
@@ -72,8 +92,16 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
                 is SpaceDirectoryViewEvents.NavigateToRoom -> {
                     navigator.openRoom(this, it.roomId)
                 }
+                is SpaceDirectoryViewEvents.NavigateToMxToBottomSheet -> {
+                    MatrixToBottomSheet.withLink(it.link, this).show(supportFragmentManager, "ShowChild")
+                }
             }
         }
+    }
+
+    override fun onDestroy() {
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
+        super.onDestroy()
     }
 
     companion object {
@@ -86,4 +114,8 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
 
     override fun create(initialState: SpaceDirectoryState): SpaceDirectoryViewModel =
             spaceDirectoryViewModelFactory.create(initialState)
+
+    override fun navigateToRoom(roomId: String) {
+        navigator.openRoom(this, roomId)
+    }
 }
