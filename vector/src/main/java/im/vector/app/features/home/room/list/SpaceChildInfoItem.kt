@@ -63,7 +63,7 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             itemLongClickListener?.onLongClick(it) ?: false
         }
-        holder.titleView.text = matrixItem.getBestName()
+        holder.titleView.text = matrixItem.displayName ?: holder.rootView.context.getString(R.string.unnamed_room)
         if (space) {
             avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
         } else {

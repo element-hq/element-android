@@ -3262,6 +3262,7 @@
     <string name="a11y_rule_notify_off">Do not notify</string>
     <string name="a11y_view_read_receipts">View read receipts</string>
     <string name="a11y_public_room">This room is public</string>
+    <string name="a11y_public_space">This Space is public</string>
 
     <string name="dev_tools_menu_name">Dev Tools</string>
     <string name="dev_tools_explore_room_state">Explore Room State</string>
@@ -3293,6 +3294,8 @@
     <string name="event_status_delete_all_failed_dialog_title">Delete unsent messages</string>
     <string name="event_status_delete_all_failed_dialog_message">Are you sure you want to delete all unsent messages in this room?</string>
 
+    <string name="public_space">Public space</string>
+    <string name="private_space">Private space</string>
     <string name="add_space">Add Space</string>
     <string name="your_public_space">Your public space</string>
     <string name="your_private_space">Your private space</string>
@@ -3388,4 +3391,5 @@
     <string name="this_space_has_no_rooms_not_admin">Some rooms may be hidden because they’re private and you need an invite.\nYou don’t have permission to add rooms.</string>
     <string name="this_space_has_no_rooms_admin">Some rooms may be hidden because they’re private and you need an invite.</string>
 
+    <string name="unnamed_room">Unnamed Room</string>
 </resources>

@@ -58,7 +58,7 @@
             android:id="@+id/matrixToCardAliasText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:maxLines="1"
             android:singleLine="true"
             android:textAlignment="textStart"
@@ -70,12 +70,43 @@
             tools:text="@sample/rooms.json/data/alias"
             tools:visibility="visible" />
 
+
+        <ImageView
+            android:id="@+id/matrixToAccessImage"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:importantForAccessibility="no"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/matrixToAccessText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/matrixToAccessText"
+            app:tint="?riotx_text_secondary"
+            tools:src="@drawable/ic_public_room"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/matrixToAccessText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textColor="?riotx_text_secondary"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/matrixToAccessImage"
+            app:layout_constraintTop_toBottomOf="@id/matrixToCardAliasText"
+            app:layout_goneMarginTop="0dp"
+            tools:text="Public Space"
+            tools:visibility="visible" />
+
         <LinearLayout
             android:id="@+id/matrixToMemberPills"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/pill_receipt"
+            android:backgroundTint="?riotx_reaction_background_off"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingStart="12dp"
@@ -85,7 +116,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/matrixToCardAliasText">
+            app:layout_constraintTop_toBottomOf="@id/matrixToAccessText">
 
             <ImageView
                 android:id="@+id/spaceChildMemberCountIcon"
@@ -113,6 +144,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:autoLink="web"
             android:maxLines="4"
             android:textAlignment="textStart"
             android:textColor="?riotx_text_secondary"

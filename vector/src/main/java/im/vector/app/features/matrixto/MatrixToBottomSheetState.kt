@@ -48,7 +48,8 @@ sealed class RoomInfoResult {
             val alias: String?,
             val membership: Membership,
             val roomType: String?,
-            val viaServers: List<String>?
+            val viaServers: List<String>?,
+            val isPublic: Boolean
     ) : RoomInfoResult()
 
     data class PartialInfo(

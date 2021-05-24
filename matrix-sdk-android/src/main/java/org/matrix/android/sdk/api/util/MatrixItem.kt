@@ -159,4 +159,4 @@ fun RoomMemberSummary.toMatrixItem() = MatrixItem.UserItem(userId, displayName, 
 
 fun SenderInfo.toMatrixItem() = MatrixItem.UserItem(userId, disambiguatedDisplayName, avatarUrl)
 
-fun SpaceChildInfo.toMatrixItem() = MatrixItem.RoomItem(childRoomId, name ?: canonicalAlias ?: "", avatarUrl)
+fun SpaceChildInfo.toMatrixItem() = MatrixItem.RoomItem(childRoomId, name ?: canonicalAlias, avatarUrl)

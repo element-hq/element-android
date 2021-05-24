@@ -81,6 +81,15 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                         if (peek.roomType == RoomType.SPACE) {
                             views.matrixToBetaTag.isVisible = true
                             avatarRenderer.renderSpace(matrixItem, views.matrixToCardAvatar)
+                            if (peek.isPublic) {
+                                views.matrixToAccessText.setTextOrHide(context?.getString(R.string.public_space))
+                                views.matrixToAccessImage.isVisible = true
+                                views.matrixToAccessImage.setImageResource(R.drawable.ic_public_room)
+                            } else {
+                                views.matrixToAccessText.setTextOrHide(context?.getString(R.string.private_space))
+                                views.matrixToAccessImage.isVisible = true
+                                views.matrixToAccessImage.setImageResource(R.drawable.ic_room_private)
+                            }
                         } else {
                             views.matrixToBetaTag.isVisible = false
                             avatarRenderer.render(matrixItem, views.matrixToCardAvatar)
