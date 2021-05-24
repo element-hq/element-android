@@ -32,11 +32,15 @@ import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
 
+/**
+ * Will be used to download encrypted attachment.
+ * Clear attachment will use regular http URL fetcher
+ */
 class VectorGlideModelLoaderFactory(private val context: Context) : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
 
     override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<ImageContentRenderer.Data, InputStream> {
@@ -69,7 +73,7 @@ class VectorGlideDataFetcher(context: Context,
     private val localFilesHelper = LocalFilesHelper(context)
     private val activeSessionHolder = context.vectorComponent().activeSessionHolder()
 
-    private val client = activeSessionHolder.getSafeActiveSession()?.getOkHttpClient() ?: OkHttpClient()
+    // private val client = activeSessionHolder.getSafeActiveSession()?.getOkHttpClient() ?: OkHttpClient()
 
     override fun getDataClass(): Class<InputStream> {
         return InputStream::class.java
@@ -102,14 +106,14 @@ class VectorGlideDataFetcher(context: Context,
     }
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in InputStream>) {
-        Timber.v("Load data: $data")
+        Timber.v("## Load data: ${data.url} is Local ${localFilesHelper.isLocalFile(data.url)}")
         if (localFilesHelper.isLocalFile(data.url)) {
             localFilesHelper.openInputStream(data.url)?.use {
+                Timber.v("## Load data: Got a local input stream!!")
                 callback.onDataReady(it)
             }
             return
         }
-//        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
 
         val fileService = activeSessionHolder.getSafeActiveSession()?.fileService() ?: return Unit.also {
             callback.onLoadFailed(IllegalArgumentException("No File service"))
@@ -125,30 +129,16 @@ class VectorGlideDataFetcher(context: Context,
             }
             withContext(Dispatchers.Main) {
                 result.fold(
-                        { callback.onDataReady(it.inputStream()) },
+                        {
+                            callback.onDataReady(
+                                    // from crash report (clearing eg clear media cache while download completing?)
+                                    tryOrNull {
+                                        it.inputStream()
+                                    })
+                        },
                         { callback.onLoadFailed(it as? Exception ?: IOException(it.localizedMessage)) }
                 )
             }
         }
-//        val url = contentUrlResolver.resolveFullSize(data.url)
-//                ?: return
-//
-//        val request = Request.Builder()
-//                .url(url)
-//                .build()
-//
-//        val response = client.newCall(request).execute()
-//        val inputStream = response.body?.byteStream()
-//        Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
-//        if (!response.isSuccessful) {
-//            callback.onLoadFailed(IOException("Unexpected code $response"))
-//            return
-//        }
-//        stream = if (data.elementToDecrypt != null && data.elementToDecrypt.k.isNotBlank()) {
-//            Matrix.decryptStream(inputStream, data.elementToDecrypt)
-//        } else {
-//            inputStream
-//        }
-//        callback.onDataReady(stream)
     }
 }

@@ -17,11 +17,13 @@
 package org.matrix.android.sdk.internal.session.content
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import androidx.core.net.toUri
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import io.trbl.blurhash.BlurHash
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -56,6 +58,7 @@ import javax.inject.Inject
 private data class NewAttachmentAttributes(
         val newWidth: Int? = null,
         val newHeight: Int? = null,
+        val blurHash: String? = null,
         val newFileSize: Long
 )
 
@@ -154,6 +157,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 var newAttachmentAttributes = NewAttachmentAttributes(
                         params.attachment.width?.toInt(),
                         params.attachment.height?.toInt(),
+                        null,
                         params.attachment.size
                 )
 
@@ -167,11 +171,25 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             .also { compressedFile ->
                                 // Get new Bitmap size
                                 compressedFile.inputStream().use {
-                                    val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                                    BitmapFactory.decodeStream(it, null, options)
+                                    val options = BitmapFactory.Options() // .apply { inJustDecodeBounds = true }
+                                    val bitmap = BitmapFactory.decodeStream(it, null, options)
+                                    val blurHash = if (bitmap != null) {
+                                        tryOrNull {
+                                            val width = bitmap.width
+                                            val height = bitmap.height
+                                            val pixels = IntArray(width * height)
+                                            if (bitmap.config != Bitmap.Config.ARGB_8888) {
+                                                bitmap.copy(Bitmap.Config.ARGB_8888, true)
+                                            } else {
+                                                bitmap
+                                            }.getPixels(pixels, 0, width, 0, 0, width, height)
+                                            BlurHash.encode(pixels, width, height, 4, 4)
+                                        }
+                                    } else null
                                     newAttachmentAttributes = NewAttachmentAttributes(
                                             newWidth = options.outWidth,
                                             newHeight = options.outHeight,
+                                            blurHash = blurHash,
                                             newFileSize = compressedFile.length()
                                     )
                                 }
@@ -410,7 +428,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 info = info?.copy(
                         width = newAttachmentAttributes?.newWidth ?: info.width,
                         height = newAttachmentAttributes?.newHeight ?: info.height,
-                        size = newAttachmentAttributes?.newFileSize ?: info.size
+                        size = newAttachmentAttributes?.newFileSize ?: info.size,
+                        blurHash = newAttachmentAttributes?.blurHash
                 )
         )
     }

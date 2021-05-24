@@ -130,6 +130,14 @@
             android:title="@string/settings_vibrate_on_mention"
             app:isPreferenceVisible="@bool/false_not_implemented" />
 
+        <im.vector.app.core.preference.VectorListPreference
+            android:defaultValue="0"
+            android:entries="@array/autoplay_gif"
+            android:entryValues="@array/autoplay_gif_values"
+            android:key="SETTINGS_AUTOPLAY_GIF_PREFERENCE"
+            android:summary="%s"
+            android:title="@string/settings_autoplay_gif" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory

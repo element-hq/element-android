@@ -692,6 +692,13 @@
     <string name="compression_opt_list_medium">Medium</string>
     <string name="compression_opt_list_small">Small</string>
 
+    <!-- Autoplay gif option -->
+    <string name="auto_play_never">Never</string>
+    <string name="auto_play_direct_message">In Direct Messages</string>
+    <string name="auto_play_direct_messages_and_private_rooms">In Direct Messages and Private Rooms</string>
+    <string name="auto_play_always">Always</string>
+
+
     <!-- media upload / download messages -->
     <string name="attachment_cancel_download">"Cancel the download?</string>
     <string name="attachment_cancel_upload">Cancel the upload?</string>
@@ -1370,6 +1377,7 @@
     <!-- Media settings -->
     <string name="settings_media">Media</string>
     <string name="settings_default_compression">Default compression</string>
+    <string name="settings_autoplay_gif">Autoplay Gif</string>
     <string name="compression_opt_list_choose">Choose</string>
     <string name="settings_default_media_source">Default media source</string>
     <string name="media_source_choose">Choose</string>
@@ -3270,6 +3278,8 @@
     <string name="a11y_view_read_receipts">View read receipts</string>
     <string name="a11y_public_room">This room is public</string>
     <string name="a11y_public_space">This Space is public</string>
+    <string name="a11y_download_media">Tap to download media</string>
+    <string name="a11y_media_permanent_error">Failed to read media</string>
 
     <string name="dev_tools_menu_name">Dev Tools</string>
     <string name="dev_tools_explore_room_state">Explore Room State</string>

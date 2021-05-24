@@ -17,6 +17,7 @@
 package im.vector.app.core.glide
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 
 import com.bumptech.glide.Glide
@@ -35,6 +36,12 @@ class MyAppGlideModule : AppGlideModule() {
     }
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
+        registry.append(
+                BlurHashData::class.java,
+                Drawable::class.java,
+                BlurHashModelLoaderFactory(context)
+        )
+
         registry.append(
                 ImageContentRenderer.Data::class.java,
                 InputStream::class.java,

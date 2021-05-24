@@ -410,6 +410,7 @@ dependencies {
     implementation "com.github.piasy:GlideImageLoader:$big_image_viewer_version"
     implementation "com.github.piasy:ProgressPieIndicator:$big_image_viewer_version"
     implementation "com.github.piasy:GlideImageViewFactory:$big_image_viewer_version"
+    implementation 'xyz.belvi.blurHash:blurHash:1.0.4'
 
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.2'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'

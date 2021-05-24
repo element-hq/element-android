@@ -23,8 +23,10 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenScope
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.platform.TimelineMediaStateView
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import javax.inject.Inject
 
@@ -33,13 +35,24 @@ class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSe
                                                             private val messageColorProvider: MessageColorProvider,
                                                             private val errorFormatter: ErrorFormatter) {
 
-    private val updateListeners = mutableMapOf<String, ContentDownloadUpdater>()
+    private val updateListeners = mutableMapOf<String, DownloadUpdater>()
 
     fun bind(mxcUrl: String,
              holder: MessageFileItem.Holder) {
         activeSessionHolder.getSafeActiveSession()?.also { session ->
             val downloadStateTracker = session.contentDownloadProgressTracker()
-            val updateListener = ContentDownloadUpdater(holder, messageColorProvider, errorFormatter)
+            val updateListener = FileContentDownloadUpdater(holder)
+            updateListeners[mxcUrl] = updateListener
+            downloadStateTracker.track(mxcUrl, updateListener)
+        }
+    }
+
+    fun bind(mxcUrl: String,
+             playable: Boolean,
+             holder: MessageImageVideoItem.Holder) {
+        activeSessionHolder.getSafeActiveSession()?.also { session ->
+            val downloadStateTracker = session.contentDownloadProgressTracker()
+            val updateListener = ImageContentDownloadUpdater(holder, playable)
             updateListeners[mxcUrl] = updateListener
             downloadStateTracker.track(mxcUrl, updateListener)
         }
@@ -62,9 +75,11 @@ class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSe
     }
 }
 
-private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder,
-                                     private val messageColorProvider: MessageColorProvider,
-                                     private val errorFormatter: ErrorFormatter) : ContentDownloadStateTracker.UpdateListener {
+private interface DownloadUpdater: ContentDownloadStateTracker.UpdateListener {
+    fun stop()
+}
+
+private class FileContentDownloadUpdater(private val holder: MessageFileItem.Holder) : DownloadUpdater {
 
     override fun onDownloadStateUpdate(state: ContentDownloadStateTracker.State) {
         when (state) {
@@ -83,7 +98,7 @@ private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder,
         }
     }
 
-    fun stop() {
+    override fun stop() {
         animatedDrawable?.unregisterAnimationCallback(animationLoopCallback)
         animatedDrawable?.stop()
         animatedDrawable = null
@@ -126,5 +141,64 @@ private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder,
         holder.fileDownloadProgress.isIndeterminate = false
         holder.fileDownloadProgress.progress = 100
         holder.fileImageView.setImageResource(R.drawable.ic_paperclip)
+    }
+}
+
+private class ImageContentDownloadUpdater(private val holder: MessageImageVideoItem.Holder, val playable: Boolean) : DownloadUpdater {
+
+    override fun onDownloadStateUpdate(state: ContentDownloadStateTracker.State) {
+        when (state) {
+            ContentDownloadStateTracker.State.Idle           -> handleIdle()
+            is ContentDownloadStateTracker.State.Downloading -> handleProgress(state)
+            ContentDownloadStateTracker.State.Decrypting     -> handleDecrypting()
+            ContentDownloadStateTracker.State.Success        -> handleSuccess()
+            is ContentDownloadStateTracker.State.Failure     -> handleFailure()
+        }
+    }
+
+//    private var animatedDrawable: AnimatedVectorDrawableCompat? = null
+//    private var animationLoopCallback = object : Animatable2Compat.AnimationCallback() {
+//        override fun onAnimationEnd(drawable: Drawable?) {
+//            animatedDrawable?.start()
+//        }
+//    }
+
+    override fun stop() {
+//        animatedDrawable?.unregisterAnimationCallback(animationLoopCallback)
+//        animatedDrawable?.stop()
+//        animatedDrawable = null
+    }
+
+    private fun handleIdle() {
+        holder.mediaStateView.render(TimelineMediaStateView.State.Downloading(0, true))
+    }
+
+    private fun handleDecrypting() {
+        holder.mediaStateView.render(TimelineMediaStateView.State.Downloading(0, true))
+    }
+
+    private fun handleProgress(state: ContentDownloadStateTracker.State.Downloading) {
+        doHandleProgress(state.current, state.total)
+    }
+
+    private fun doHandleProgress(current: Long, total: Long) {
+        val percent = 100L * (current.toFloat() / total.toFloat())
+        holder.mediaStateView.render(TimelineMediaStateView.State.Downloading(percent.toInt(), false))
+//        if (animatedDrawable == null) {
+//            animatedDrawable = AnimatedVectorDrawableCompat.create(holder.view.context, R.drawable.ic_download_anim)
+//            holder.fileImageView.setImageDrawable(animatedDrawable)
+//            animatedDrawable?.start()
+//            animatedDrawable?.registerAnimationCallback(animationLoopCallback)
+//        }
+    }
+
+    private fun handleFailure() {
+        stop()
+        holder.mediaStateView.render(TimelineMediaStateView.State.PermanentError)
+    }
+
+    private fun handleSuccess() {
+        stop()
+        holder.mediaStateView.render(if (playable) TimelineMediaStateView.State.ReadyToPlay else TimelineMediaStateView.State.None)
     }
 }

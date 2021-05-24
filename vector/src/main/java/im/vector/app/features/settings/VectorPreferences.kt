@@ -33,6 +33,13 @@ import javax.inject.Inject
 
 class VectorPreferences @Inject constructor(private val context: Context) {
 
+    enum class GifAutoPlayPreference(val value:String) {
+        NEVER("never"),
+        DM("dm"),
+        DM_PRIVATE("dm_private"),
+        ALWAYS("always")
+    }
+
     companion object {
         const val SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY = "SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
         const val SETTINGS_VERSION_PREFERENCE_KEY = "SETTINGS_VERSION_PREFERENCE_KEY"
@@ -129,6 +136,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_DEFAULT_MEDIA_SOURCE_KEY = "SETTINGS_DEFAULT_MEDIA_SOURCE_KEY"
         private const val SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY = "SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
         private const val SETTINGS_PLAY_SHUTTER_SOUND_KEY = "SETTINGS_PLAY_SHUTTER_SOUND_KEY"
+        const val SETTINGS_AUTOPLAY_GIF_PREFERENCE = "SETTINGS_AUTOPLAY_GIF_PREFERENCE"
 
         // background sync
         const val SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
@@ -959,6 +967,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labsSpacesOnlyOrphansInHome(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_SPACES_HOME_AS_ORPHAN, false)
+    }
+
+    fun getGifAutoPlayPreference(): GifAutoPlayPreference {
+        return when (defaultPrefs.getString(SETTINGS_AUTOPLAY_GIF_PREFERENCE, "never")) {
+            "always"     -> GifAutoPlayPreference.ALWAYS
+            "dm"         -> GifAutoPlayPreference.DM
+            "dm_private" -> GifAutoPlayPreference.DM_PRIVATE
+            else         -> GifAutoPlayPreference.NEVER
+        }
     }
 
     /*

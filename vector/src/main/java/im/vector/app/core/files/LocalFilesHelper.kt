@@ -20,6 +20,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import org.matrix.android.sdk.api.extensions.orFalse
+import timber.log.Timber
 import java.io.InputStream
 import javax.inject.Inject
 
@@ -29,7 +30,9 @@ class LocalFilesHelper @Inject constructor(private val context: Context) {
                 ?.let { Uri.parse(it) }
                 ?.let { DocumentFile.fromSingleUri(context, it) }
                 ?.exists()
-                .orFalse()
+                .orFalse().also {
+                    Timber.v("## Load data: is Local file $fileUri: $it")
+                }
     }
 
     fun openInputStream(fileUri: String?): InputStream? {

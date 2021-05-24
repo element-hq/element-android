@@ -123,7 +123,8 @@ class UploadsMediaController @Inject constructor(
                 height = messageContent.info?.height,
                 maxHeight = itemSize,
                 width = messageContent.info?.width,
-                maxWidth = itemSize
+                maxWidth = itemSize,
+                blurHash = messageContent.info?.blurHash
         )
     }
 
@@ -139,7 +140,8 @@ class UploadsMediaController @Inject constructor(
                 height = messageContent.videoInfo?.height,
                 maxHeight = itemSize,
                 width = messageContent.videoInfo?.width,
-                maxWidth = itemSize
+                maxWidth = itemSize,
+                blurHash = messageContent.videoInfo?.blurHash
         )
 
         return VideoContentRenderer.Data(

@@ -18,19 +18,48 @@
         tools:layout_height="300dp"
         tools:src="@tools:sample/backgrounds/scenic" />
 
-    <ImageView
-        android:id="@+id/messageMediaPlayView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:contentDescription="@string/play_video"
-        android:src="@drawable/ic_material_play_circle"
+<!--    <ProgressBar-->
+<!--        android:id="@+id/mediaDownloadProgressBar"-->
+<!--        style="?android:attr/progressBarStyleHorizontal"-->
+<!--        android:progressTint="?riotx_background"-->
+<!--        android:progressBackgroundTint="?riotx_reaction_background_off"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="4dp"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintWidth_percent="0.2"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/messageThumbnailView"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/messageThumbnailView"-->
+<!--        app:layout_constraintStart_toStartOf="@id/messageThumbnailView"-->
+<!--        app:layout_constraintTop_toTopOf="@id/messageThumbnailView"-->
+<!--        tools:visibility="visible"-->
+<!--        android:max="100"-->
+<!--        android:min="0"-->
+<!--        android:progress="0"-->
+<!--        tools:progress="45" />-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/messageMediaPlayView"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:contentDescription="@string/play_video"-->
+<!--        android:src="@drawable/ic_material_play_circle"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/messageThumbnailView"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/messageThumbnailView"-->
+<!--        app:layout_constraintStart_toStartOf="@id/messageThumbnailView"-->
+<!--        app:layout_constraintTop_toTopOf="@id/messageThumbnailView"-->
+<!--        tools:visibility="visible" />-->
+
+    <im.vector.app.core.platform.TimelineMediaStateView
+        android:id="@+id/messageMediaStateView"
+        android:layout_width="60dp"
+        android:layout_height="44dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/messageThumbnailView"
         app:layout_constraintEnd_toEndOf="@id/messageThumbnailView"
         app:layout_constraintStart_toStartOf="@id/messageThumbnailView"
         app:layout_constraintTop_toTopOf="@id/messageThumbnailView"
-        tools:visibility="visible" />
-
+        tools:visibility="visible"/>
 
     <include
         android:id="@+id/messageMediaUploadProgressLayout"

@@ -64,6 +64,7 @@ import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
+import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import org.commonmark.node.Document
 import org.matrix.android.sdk.api.session.Session
@@ -111,6 +112,7 @@ class MessageItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val spanUtils: SpanUtils,
+        private val vectorPreferences: VectorPreferences,
         private val session: Session) {
 
     // TODO inject this properly?
@@ -118,6 +120,24 @@ class MessageItemFactory @Inject constructor(
 
     private val pillsPostProcessor by lazy {
         pillsPostProcessorFactory.create(roomId)
+    }
+
+    private val shouldAutoPlayGif: Boolean by lazy {
+        val autoPref = vectorPreferences.getGifAutoPlayPreference()
+        session.getRoomSummary(roomId)?.let {
+            if (it.isDirect) {
+                autoPref == VectorPreferences.GifAutoPlayPreference.ALWAYS
+                        || autoPref == VectorPreferences.GifAutoPlayPreference.DM
+            } else {
+                if (it.isPublic) {
+                    autoPref == VectorPreferences.GifAutoPlayPreference.ALWAYS
+                } else {
+                    autoPref == VectorPreferences.GifAutoPlayPreference.ALWAYS
+                            || autoPref == VectorPreferences.GifAutoPlayPreference.DM_PRIVATE
+                }
+            }
+        }
+                ?: false
     }
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
@@ -308,13 +328,23 @@ class MessageItemFactory @Inject constructor(
                 maxHeight = maxHeight,
                 width = messageContent.info?.width,
                 maxWidth = maxWidth,
-                allowNonMxcUrls = informationData.sendState.isSending()
+                allowNonMxcUrls = informationData.sendState.isSending(),
+                blurHash = messageContent.info?.blurHash
         )
         return MessageImageVideoItem_()
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
+                .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
+                .autoPlayGifs(shouldAutoPlayGif)
+                .izLocalFile(localFilesHelper.isLocalFile(messageContent.getFileUrl()))
+                .izDownloaded(session.fileService().isFileInCache(
+                        messageContent.getFileUrl(),
+                        messageContent.getFileName(),
+                        messageContent.mimeType,
+                        messageContent.encryptedFileInfo?.toElementToDecrypt())
+                )
                 .playable(messageContent.info?.mimeType == MimeTypes.Gif)
                 .highlighted(highlight)
                 .mediaData(data)
@@ -346,7 +376,8 @@ class MessageItemFactory @Inject constructor(
                 maxHeight = maxHeight,
                 width = messageContent.videoInfo?.width,
                 maxWidth = maxWidth,
-                allowNonMxcUrls = informationData.sendState.isSending()
+                allowNonMxcUrls = informationData.sendState.isSending(),
+                blurHash = messageContent.videoInfo?.blurHash
         )
 
         val videoData = VideoContentRenderer.Data(
@@ -363,6 +394,14 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
+                .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
+                .izLocalFile(localFilesHelper.isLocalFile(messageContent.getFileUrl()))
+                .izDownloaded(session.fileService().isFileInCache(
+                        messageContent.getFileUrl(),
+                        messageContent.getFileName(),
+                        messageContent.mimeType,
+                        messageContent.encryptedFileInfo?.toElementToDecrypt())
+                )
                 .playable(true)
                 .highlighted(highlight)
                 .mediaData(thumbnailData)

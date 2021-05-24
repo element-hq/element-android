@@ -16,6 +16,20 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+
+    <string-array name="autoplay_gif">
+        <item>@string/auto_play_never</item>
+        <item>@string/auto_play_direct_message</item>
+        <item>@string/auto_play_direct_messages_and_private_rooms</item>
+        <item>@string/auto_play_always</item>
+    </string-array>
+    <string-array name="autoplay_gif_values">
+        <item>never</item>
+        <item>dm</item>
+        <item>dm_private</item>
+        <item>always</item>
+    </string-array>
+
     <string-array name="media_sources">
         <item>@string/media_source_choose</item>
         <item>@string/option_send_files</item>

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.Module
 import dagger.Provides
 import im.vector.app.core.glide.GlideApp
+import xyz.belvi.blurhash.BlurHash
 
 @Module
 object ScreenModule {
@@ -33,4 +34,9 @@ object ScreenModule {
     @JvmStatic
     @ScreenScope
     fun providesSharedViewPool() = RecyclerView.RecycledViewPool()
+
+    @Provides
+    @JvmStatic
+    @ScreenScope
+    fun providesBlurHash(context: AppCompatActivity) = BlurHash(context, 20, 1f)
 }

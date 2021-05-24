@@ -55,7 +55,13 @@ data class ImageInfo(
         /**
          * Information on the encrypted thumbnail file, as specified in End-to-end encryption. Only present if the thumbnail is encrypted.
          */
-        @Json(name = "thumbnail_file") val thumbnailFile: EncryptedFileInfo? = null
+        @Json(name = "thumbnail_file") val thumbnailFile: EncryptedFileInfo? = null,
+
+        /**
+         * MSC2448: BlurHash is a compact representation of a placeholder for an image (or a frame of video)
+         */
+        @Json(name = "blurhash") val blurHash: String? = null
+
 )
 
 /**

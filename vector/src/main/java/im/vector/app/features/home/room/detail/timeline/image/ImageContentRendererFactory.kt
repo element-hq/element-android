@@ -41,7 +41,8 @@ fun TimelineEvent.buildImageContentRendererData(maxHeight: Int): ImageContentRen
                             maxHeight = maxHeight,
                             width = messageImageContent.info?.width,
                             maxWidth = maxHeight * 2,
-                            allowNonMxcUrls = false
+                            allowNonMxcUrls = false,
+                            blurHash = messageImageContent.info?.blurHash
                     )
                 }
         root.isVideoMessage() -> root.getClearContent().toModel<MessageVideoContent>()
@@ -57,7 +58,8 @@ fun TimelineEvent.buildImageContentRendererData(maxHeight: Int): ImageContentRen
                             maxHeight = maxHeight,
                             width = videoInfo?.thumbnailInfo?.width,
                             maxWidth = maxHeight * 2,
-                            allowNonMxcUrls = false
+                            allowNonMxcUrls = false,
+                            blurHash = videoInfo?.blurHash
                     )
                 }
         else                  -> null

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.media
 
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
@@ -28,22 +29,27 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomViewTarget
+import com.bumptech.glide.request.target.ImageViewTarget
 import com.bumptech.glide.request.target.Target
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView.ORIENTATION_USE_EXIF
 import com.github.piasy.biv.view.BigImageView
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.files.LocalFilesHelper
+import im.vector.app.core.glide.BlurHashData
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.ui.model.Size
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.themes.ThemeUtils
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import timber.log.Timber
+import xyz.belvi.blurhash.BlurHash
 import java.io.File
 import javax.inject.Inject
 import kotlin.math.min
@@ -61,7 +67,8 @@ interface AttachmentData : Parcelable {
 
 class ImageContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
                                                private val activeSessionHolder: ActiveSessionHolder,
-                                               private val dimensionConverter: DimensionConverter) {
+                                               private val dimensionConverter: DimensionConverter,
+                                               private val blurHash: BlurHash) {
 
     @Parcelize
     data class Data(
@@ -74,8 +81,10 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
             val maxHeight: Int,
             val width: Int?,
             val maxWidth: Int,
+            val blurHash: String?,
             // If true will load non mxc url, be careful to set it only for images sent by you
-            override val allowNonMxcUrls: Boolean = false
+            override val allowNonMxcUrls: Boolean = false,
+            val autoDownload: Boolean = false
     ) : AttachmentData
 
     enum class Mode {
@@ -109,7 +118,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 .into(imageView)
     }
 
-    fun render(data: Data, mode: Mode, imageView: ImageView) {
+    fun render(data: Data, mode: Mode, imageView: ImageView, animate: Boolean = false) {
         val size = processSize(data, mode)
         imageView.updateLayoutParams {
             width = size.width
@@ -118,11 +127,45 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         // a11y
         imageView.contentDescription = data.filename
 
-        createGlideRequest(data, mode, imageView, size)
-                .dontAnimate()
+        createGlideRequest(data, mode, imageView, size, animate)
+                .apply {
+                    if (!animate) {
+                        dontAnimate()
+                    }
+                }
+                // .dontAnimate()
                 .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
-                // .thumbnail(0.3f)
-                .into(imageView)
+                .placeholder(ColorDrawable(ThemeUtils.getColor(imageView.context, R.attr.riotx_reaction_background_off)))
+                .apply {
+                    if (data.blurHash != null) {
+                        thumbnail(
+                                GlideApp.with(imageView)
+                                        .load(BlurHashData(data.blurHash))
+                                        .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
+                        )
+                    }
+                }
+
+                .apply {
+                    // In case of permanent error, the thumbnail might not be loaded and images goes directly to blank state instead of
+                    // loading the blurhash thumbnail.. so ensure that error will use the blur hash
+                    if (data.blurHash != null) {
+                        error(
+                                GlideApp.with(imageView)
+                                        .load(BlurHashData(data.blurHash))
+                                        .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
+                        ).error(ColorDrawable(ThemeUtils.getColor(imageView.context, R.attr.riotx_reaction_background_off)))
+                    } else {
+                        error(ColorDrawable(ThemeUtils.getColor(imageView.context, R.attr.riotx_reaction_background_off)))
+                    }
+                }
+                .into(object : ImageViewTarget<Drawable>(imageView) {
+                    override fun setResource(resource: Drawable?) {
+                        resource?.let {
+                            imageView.post { imageView.setImageDrawable(it) }
+                        }
+                    }
+                })
     }
 
     fun clear(imageView: ImageView) {
@@ -150,9 +193,14 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
             GlideApp
                     .with(contextView)
                     .load(resolvedUrl)
+                    .thumbnail()
         }
 
         req.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .thumbnail(
+                        GlideApp.with(contextView)
+                                .load(BlurHashData(data.blurHash))
+                )
                 .fitCenter()
                 .into(target)
     }
@@ -197,13 +245,14 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
             // Encrypted image
             GlideApp
                     .with(imageView)
+                    .asDrawable()
                     .load(data)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
             val resolvedUrl = resolveUrl(data)
             GlideApp
                     .with(imageView)
+                    .asDrawable()
                     .load(resolvedUrl)
         }
 
@@ -230,36 +279,52 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 .into(imageView)
     }
 
-    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
-        return createGlideRequest(data, mode, GlideApp.with(imageView), size)
+    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size, autoplay: Boolean = false): GlideRequest<Drawable> {
+        return createGlideRequest(data, mode, GlideApp.with(imageView), size, autoplay)
     }
 
-    fun createGlideRequest(data: Data, mode: Mode, glideRequests: GlideRequests, size: Size = processSize(data, mode)): GlideRequest<Drawable> {
+    fun createGlideRequest(data: Data, mode: Mode, glideRequests: GlideRequests, size: Size = processSize(data, mode), autoplay: Boolean = false): GlideRequest<Drawable> {
         return if (data.elementToDecrypt != null) {
             // Encrypted image
             glideRequests
+                    .apply {
+                        if (!autoplay && data.mimeType == MimeTypes.Gif) {
+                            // if it's a gif and that we don't auto play,
+                            // there is no point of loading all frames, just use this to take first one
+                            asBitmap()
+                        }
+                    }
                     .load(data)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
-            val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
-            val resolvedUrl = when (mode) {
-                Mode.FULL_SIZE,
-                Mode.STICKER   -> resolveUrl(data)
-                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
-            }
-            // Fallback to base url
-                    ?: data.url.takeIf { it?.startsWith("content://") == true }
+//            val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
+//            val resolvedUrl = when (mode) {
+//                Mode.FULL_SIZE,
+//                Mode.STICKER   -> resolveUrl(data)
+//                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
+//            }
+//            // Fallback to base url
+//                    ?: data.url.takeIf { it?.startsWith("content://") == true }
 
             glideRequests
-                    .load(resolvedUrl)
                     .apply {
-                        if (mode == Mode.THUMBNAIL) {
-                            error(
-                                    glideRequests.load(resolveUrl(data))
-                            )
+                        if (!autoplay && data.mimeType == MimeTypes.Gif) {
+                            // if it's a gif and that we don't auto play,
+                            // there is no point of loading all frames, just use this to take first one
+                            asBitmap()
                         }
                     }
+                    .load(data)
+                    // cache is handled by the VectorGlideModelLoader
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                    .apply {
+//                        if (mode == Mode.THUMBNAIL) {
+//                            error(
+//                                    glideRequests.load(resolveUrl(data))
+//                            )
+//                        }
+//                    }
         }
     }
 

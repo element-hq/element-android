@@ -50,6 +50,10 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         findPreference<VectorPreference>("SETTINGS_INTERFACE_TAKE_PHOTO_VIDEO")!!
     }
 
+    private val autoPlayGifPreference by lazy {
+        findPreference<VectorListPreference>(VectorPreferences.SETTINGS_AUTOPLAY_GIF_PREFERENCE)!!
+    }
+
     override fun bindPref() {
         // user interface preferences
         setUserInterfacePreferences()
@@ -65,6 +69,11 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             } else {
                 false
             }
+        }
+
+        // set initial value
+        findPreference<VectorListPreference>(VectorPreferences.SETTINGS_AUTOPLAY_GIF_PREFERENCE)?.let {
+            it.value = vectorPreferences.getGifAutoPlayPreference().value
         }
 
         // Url preview

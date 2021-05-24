@@ -169,7 +169,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
     }
 
     fun getAllFailedEventsToResend(roomId: String): List<TimelineEvent> {
-        return getAllEventsWithStates(roomId, SendState.HAS_FAILED_STATES)
+        return getAllEventsWithStates(roomId, listOf(SendState.UNDELIVERED, SendState.FAILED_UNKNOWN_DEVICES, SendState.SENT))
     }
 
     fun getAllEventsWithStates(roomId: String, states: List<SendState>): List<TimelineEvent> {

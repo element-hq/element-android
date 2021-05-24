@@ -134,7 +134,8 @@ class RoomUploadsMediaFragment @Inject constructor(
                             maxHeight = -1,
                             maxWidth = -1,
                             width = null,
-                            height = null
+                            height = null,
+                            blurHash = content.info?.blurHash
                     )
                 }
                 is MessageVideoContent -> {
@@ -147,7 +148,8 @@ class RoomUploadsMediaFragment @Inject constructor(
                             height = content.videoInfo?.height,
                             maxHeight = -1,
                             width = content.videoInfo?.width,
-                            maxWidth = -1
+                            maxWidth = -1,
+                            blurHash = content.videoInfo?.blurHash
                     )
                     VideoContentRenderer.Data(
                             eventId = it.eventId,

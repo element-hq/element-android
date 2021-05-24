@@ -26,6 +26,8 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.glide.GlideApp
+import im.vector.app.core.platform.TimelineMediaStateView
+import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.media.ImageContentRenderer
 
@@ -50,9 +52,20 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
 
+    @EpoxyAttribute
+    lateinit var contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder
+
+    @EpoxyAttribute
+    var izLocalFile = false
+
+    @EpoxyAttribute
+    var izDownloaded = false
+
+    @EpoxyAttribute
+    var autoPlayGifs = false
+
     override fun bind(holder: Holder) {
         super.bind(holder)
-        imageContentRenderer.render(mediaData, mode, holder.imageView)
         if (!attributes.informationData.sendState.hasFailed()) {
             contentUploadStateTrackerBinder.bind(
                     attributes.informationData.eventId,
@@ -62,18 +75,31 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         } else {
             holder.progressLayout.isVisible = false
         }
+
+        if (!izDownloaded && !izLocalFile) {
+            contentDownloadStateTrackerBinder.bind(
+                    mediaData.url ?: "",
+                    playable && !autoPlayGifs,
+                    holder)
+        } else {
+            holder.mediaStateView.render(if (playable && !autoPlayGifs) TimelineMediaStateView.State.ReadyToPlay else TimelineMediaStateView.State.None)
+        }
+
+        imageContentRenderer.render(mediaData, mode, holder.imageView, autoPlayGifs)
+
         holder.imageView.setOnClickListener(clickListener)
         holder.imageView.setOnLongClickListener(attributes.itemLongClickListener)
         ViewCompat.setTransitionName(holder.imageView, "imagePreview_${id()}")
         holder.mediaContentView.setOnClickListener(attributes.itemClickListener)
         holder.mediaContentView.setOnLongClickListener(attributes.itemLongClickListener)
-        holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
+        // holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
     }
 
     override fun unbind(holder: Holder) {
         GlideApp.with(holder.view.context.applicationContext).clear(holder.imageView)
         imageContentRenderer.clear(holder.imageView)
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
+        contentDownloadStateTrackerBinder.unbind(mediaData.url ?: "")
         holder.imageView.setOnClickListener(null)
         holder.imageView.setOnLongClickListener(null)
         super.unbind(holder)
@@ -83,8 +109,10 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)
+        val mediaStateView by bind<TimelineMediaStateView>(R.id.messageMediaStateView)
         val imageView by bind<ImageView>(R.id.messageThumbnailView)
-        val playContentView by bind<ImageView>(R.id.messageMediaPlayView)
+
+        //        val playContentView by bind<ImageView>(R.id.messageMediaPlayView)
         val mediaContentView by bind<ViewGroup>(R.id.messageContentMedia)
     }
 
