@@ -193,4 +193,8 @@
     <string name="settings_preferences">Preferințe</string>
     <string name="medium_email">Adresă de e-mail</string>
     <string name="medium_phone_number">Număr de telefon</string>
+    <string name="bottom_action_people_x">Mesaje directe</string>
+    <string name="fab_menu_create_chat">Mesaje directe</string>
+    <string name="room_participants_header_direct_chats">Mesaje directe</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Nu vreau mesajele mele criptate</string>
 </resources>
