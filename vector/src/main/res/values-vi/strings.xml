@@ -547,4 +547,5 @@
     <string name="encryption_information_block">Cho vào danh sách đen</string>
     <string name="encryption_information_unverify">Huỷ xác minh</string>
     <string name="encryption_information_verify">Xác minh</string>
+    <string name="hs_url">URL máy chủ nhà</string>
 </resources>
