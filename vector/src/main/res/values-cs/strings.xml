@@ -2211,7 +2211,7 @@
     <string name="identity_server_set_alternative_submit">Odeslat</string>
     <string name="play_video">Přehrát</string>
     <string name="pause_video">Pozastavit</string>
-    <string name="dismiss">Zavrhnout</string>
+    <string name="dismiss">Odmítnout</string>
     <string name="no_permissions_to_start_conf_call">Nemáte povolení zahájit konferenční hovor v této místnosti</string>
     <string name="conference_call_in_progress">Konference již probíhá!</string>
     <string name="video_meeting">Zahájit video schůzku</string>
@@ -2424,8 +2424,8 @@
     <string name="delete_account_data_warning">Smazat údaje účtu typu %1$s\?
 \n
 \nOpatrně, může vést k neočekávanému chování.</string>
-    <string name="warning_unsaved_change_discard">Změny zavrhnout</string>
-    <string name="warning_unsaved_change">Zůstávají neuložené změny. Zavrhnout změny\?</string>
+    <string name="warning_unsaved_change_discard">Zahodit změny</string>
+    <string name="warning_unsaved_change">Zahodit neuložené změny\?</string>
     <string name="warning_room_not_created_yet">Místnost nebyla ještě založena. Zrušit založení místnosti\?</string>
     <string name="template_settings_security_pin_code_grace_period_summary_off">Kód PIN se vyžaduje při každém otevření ${app_name}u.</string>
     <string name="template_settings_security_pin_code_grace_period_summary_on">Kód PIN se vyžaduje, pokud se ${app_name} nepoužil 2 minuty.</string>
