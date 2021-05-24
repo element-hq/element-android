@@ -2675,7 +2675,7 @@
     <string name="event_status_sent_message">Meddelande skickat</string>
     <string name="create_spaces_details_public_header">Lägg till några detaljer för att hjälpa det satt sticka ut. Du kan ändra dessa när som helst.</string>
     <string name="activity_create_space_title">Skapa ett utrymme</string>
-    <string name="space_type_private_desc">Endast inbjudan, bäst för dig själv eller team</string>
+    <string name="space_type_private_desc">Endast inbjudan, bäst för dig själv eller grupper</string>
     <string name="space_type_private">Privat</string>
     <string name="space_type_public_desc">Öppet för alla, bäst för gemenskaper</string>
     <string name="space_type_public">Offentligt</string>
