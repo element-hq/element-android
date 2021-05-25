@@ -26,7 +26,7 @@ SDK API changes ⚠️:
  -
 
 Build 🧱:
- - Compile with Kotlin 1.5.
+ - Compile with Kotlin 1.5.10.
  - Upgrade some dependencies: gradle wrapper, third party lib, etc.
  - Sign APK with build tools 30.0.3
 
