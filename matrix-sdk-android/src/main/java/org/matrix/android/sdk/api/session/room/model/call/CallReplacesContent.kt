@@ -42,7 +42,7 @@ data class CallReplacesContent(
          *  (possibly waiting for user confirmation) and then continues the transfer in this room.
          *  If absent, the transferee contacts the Matrix User ID given in the target_user field in a room of its choosing.
          */
-        @Json(name = "target_room") val targerRoomId: String? = null,
+        @Json(name = "target_room") val targetRoomId: String? = null,
         /**
          *  An object giving information about the transfer target
          */

@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.call
 
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.session.call.CallIdGenerator
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.room.model.call.CallCapabilities
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
@@ -63,7 +64,7 @@ internal class MxCallFactory @Inject constructor(
 
     fun createOutgoingCall(roomId: String, opponentUserId: String, isVideoCall: Boolean): MxCall {
         return MxCallImpl(
-                callId = UUID.randomUUID().toString(),
+                callId = CallIdGenerator.generate(),
                 isOutgoing = true,
                 roomId = roomId,
                 userId = userId,

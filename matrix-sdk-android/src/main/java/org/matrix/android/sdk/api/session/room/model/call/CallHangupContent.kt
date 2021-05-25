@@ -56,6 +56,9 @@ data class CallHangupContent(
         @Json(name = "user_hangup")
         USER_HANGUP,
 
+        @Json(name = "replaced")
+        REPLACED,
+
         @Json(name = "user_media_failed")
         USER_MEDIA_FAILED,
 

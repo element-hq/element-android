@@ -45,6 +45,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.call.CallIdGenerator
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
@@ -268,7 +269,7 @@ class WebRtcCall(val mxCall: MxCall,
 
         sessionScope?.launch(dispatcher) {
             when (mode) {
-                VectorCallActivity.INCOMING_ACCEPT -> {
+                VectorCallActivity.INCOMING_ACCEPT  -> {
                     internalAcceptIncomingCall()
                 }
                 VectorCallActivity.INCOMING_RINGING -> {
@@ -284,6 +285,34 @@ class WebRtcCall(val mxCall: MxCall,
                 }
             }
         }
+    }
+
+    suspend fun transferToUser(targetUserId: String, targetRoomId: String?) {
+        mxCall.transfer(
+                targetUserId = targetUserId,
+                targetRoomId = targetRoomId,
+                createCallId = CallIdGenerator.generate(),
+                awaitCallId = null
+        )
+        endCall(true, CallHangupContent.Reason.REPLACED)
+    }
+
+    suspend fun transferToCall(transferTargetCall: WebRtcCall) {
+        val newCallId = CallIdGenerator.generate()
+        transferTargetCall.mxCall.transfer(
+                targetUserId = this.mxCall.opponentUserId,
+                targetRoomId = null,
+                createCallId = null,
+                awaitCallId = newCallId
+        )
+        this.mxCall.transfer(
+                transferTargetCall.mxCall.opponentUserId,
+                targetRoomId = null,
+                createCallId = newCallId,
+                awaitCallId = null
+        )
+        endCall(true, CallHangupContent.Reason.REPLACED)
+        transferTargetCall.endCall(true, CallHangupContent.Reason.REPLACED)
     }
 
     fun acceptIncomingCall() {

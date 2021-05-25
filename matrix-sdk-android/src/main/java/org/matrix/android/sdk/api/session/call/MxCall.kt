@@ -92,7 +92,10 @@ interface MxCall : MxCallDetail {
     /**
      * Send a m.call.replaces event to initiate call transfer.
      */
-    suspend fun transfer(targetUserId: String, targetRoomId: String?)
+    suspend fun transfer(targetUserId: String,
+                         targetRoomId: String?,
+                         createCallId: String?,
+                         awaitCallId: String?)
 
     fun addListener(listener: StateListener)
     fun removeListener(listener: StateListener)

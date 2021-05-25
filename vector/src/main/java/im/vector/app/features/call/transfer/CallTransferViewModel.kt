@@ -75,7 +75,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
 
     override fun handle(action: CallTransferAction) {
         when (action) {
-            is CallTransferAction.ConnectWithUserId -> connectWithUserId(action)
+            is CallTransferAction.ConnectWithUserId      -> connectWithUserId(action)
             is CallTransferAction.ConnectWithPhoneNumber -> connectWithPhoneNumber(action)
         }.exhaustive
     }
@@ -84,7 +84,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
         viewModelScope.launch {
             try {
                 _viewEvents.post(CallTransferViewEvents.Loading)
-                call?.mxCall?.transfer(action.selectedUserId, null)
+                call?.transferToUser(action.selectedUserId, null)
                 _viewEvents.post(CallTransferViewEvents.Dismiss)
             } catch (failure: Throwable) {
                 _viewEvents.post(CallTransferViewEvents.FailToTransfer)
@@ -97,7 +97,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
             try {
                 _viewEvents.post(CallTransferViewEvents.Loading)
                 val result = dialPadLookup.lookupPhoneNumber(action.phoneNumber)
-                call?.mxCall?.transfer(result.userId, result.roomId)
+                call?.transferToUser(result.userId, result.roomId)
                 _viewEvents.post(CallTransferViewEvents.Dismiss)
             } catch (failure: Throwable) {
                 _viewEvents.post(CallTransferViewEvents.FailToTransfer)
