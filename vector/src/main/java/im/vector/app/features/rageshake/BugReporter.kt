@@ -317,8 +317,12 @@ class BugReporter @Inject constructor(
                     builder.addFormDataPart("label", BuildConfig.FLAVOR_DESCRIPTION)
                     builder.addFormDataPart("label", context.getString(R.string.git_branch_name))
 
+                    if (canContact) {
+                        builder.addFormDataPart("label", "can contact")
+                    }
+
                     // Special for RiotX
-                    builder.addFormDataPart("label", "[SchildiChat]")
+                    //builder.addFormDataPart("label", "[SchildiChat]")
 
                     when (reportType) {
                         ReportType.BUG_REPORT -> {
