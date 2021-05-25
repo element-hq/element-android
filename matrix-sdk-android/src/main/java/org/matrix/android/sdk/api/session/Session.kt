@@ -287,4 +287,6 @@ interface Session :
      * Maintenance API, allows to print outs info on DB size to logcat
      */
     fun logDbUsageInfo()
+
+    fun storageUsageService() : StorageUsageService
 }

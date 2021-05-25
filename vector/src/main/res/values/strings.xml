@@ -1230,6 +1230,7 @@
     <string name="settings_keep_media">Keep media</string>
     <string name="settings_clear_cache">Clear cache</string>
     <string name="settings_clear_media_cache">Clear media cache</string>
+    <string name="settings_storage_usage">Storage Usage</string>
 
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>

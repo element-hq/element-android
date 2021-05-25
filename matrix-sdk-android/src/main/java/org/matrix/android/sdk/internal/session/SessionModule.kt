@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.StorageUsageService
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
@@ -386,4 +387,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindEventSenderProcessor(processor: EventSenderProcessorCoroutine): EventSenderProcessor
+
+    @Binds
+    abstract fun bindStorageUsageService(processor: DefaultStorageUsageService): StorageUsageService
 }

@@ -122,6 +122,7 @@ import im.vector.app.features.settings.VectorSettingsPreferencesFragment
 import im.vector.app.features.settings.VectorSettingsSecurityPrivacyFragment
 import im.vector.app.features.settings.account.deactivation.DeactivateAccountFragment
 import im.vector.app.features.settings.crosssigning.CrossSigningSettingsFragment
+import im.vector.app.features.settings.data.DataAndStorageFragment
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.app.features.settings.devtools.AccountDataFragment
 import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailFragment
@@ -804,4 +805,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SpaceManageRoomsFragment::class)
     fun bindSpaceManageRoomsFragment(fragment: SpaceManageRoomsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DataAndStorageFragment::class)
+    fun bindDataAndStorageFragment(fragment: DataAndStorageFragment): Fragment
 }

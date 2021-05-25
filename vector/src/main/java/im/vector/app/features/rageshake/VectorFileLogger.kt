@@ -141,6 +141,15 @@ class VectorFileLogger @Inject constructor(
         logger.info(errors.toString())
     }
 
+    fun getLogSize(): Int {
+        return cacheDirectory.walkTopDown()
+                .onEnter {
+                    Timber.v("Get size of ${it.absolutePath}")
+                    true
+                }
+                .sumOf { it.length().toInt() }
+    }
+
     private fun logToFile(level: String, tag: String, content: String) {
         val b = StringBuilder()
         b.append(Thread.currentThread().id)

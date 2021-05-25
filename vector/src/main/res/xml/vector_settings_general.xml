@@ -95,6 +95,11 @@
             android:title="@string/settings_clear_media_cache" />
 
         <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_STORAGE_USAGE_PREFERENCE_KEY"
+            android:title="@string/settings_storage_usage"
+            app:fragment="im.vector.app.features.settings.data.DataAndStorageFragment" />
+
+        <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"
             android:title="@string/settings_clear_cache" />
 

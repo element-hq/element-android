@@ -118,6 +118,9 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 .into(imageView)
     }
 
+    /**
+     * In timeline
+     */
     fun render(data: Data, mode: Mode, imageView: ImageView, animate: Boolean = false) {
         val size = processSize(data, mode)
         imageView.updateLayoutParams {
@@ -142,6 +145,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                 GlideApp.with(imageView)
                                         .load(BlurHashData(data.blurHash))
                                         .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         )
                     }
                 }
@@ -154,6 +158,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                 GlideApp.with(imageView)
                                         .load(BlurHashData(data.blurHash))
                                         .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         ).error(ColorDrawable(ThemeUtils.getColor(imageView.context, R.attr.riotx_reaction_background_off)))
                     } else {
                         error(ColorDrawable(ThemeUtils.getColor(imageView.context, R.attr.riotx_reaction_background_off)))

@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.StorageUsageService
 import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
 import org.matrix.android.sdk.api.session.cache.CacheService
@@ -128,6 +129,7 @@ internal class DefaultSession @Inject constructor(
         private val callSignalingService: Lazy<CallSignalingService>,
         private val spaceService: Lazy<SpaceService>,
         private val openIdService: Lazy<OpenIdService>,
+        private val storageUsageService: Lazy<StorageUsageService>,
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
 ) : Session,
@@ -326,5 +328,9 @@ internal class DefaultSession @Inject constructor(
 
     override fun logDbUsageInfo() {
         RealmDebugTools(realmConfiguration).logInfo("Session")
+    }
+
+    override fun storageUsageService(): StorageUsageService {
+        return storageUsageService.get()
     }
 }
