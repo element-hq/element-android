@@ -344,10 +344,9 @@ internal class RoomSummaryUpdater @Inject constructor(
                                 if (it != null) addAll(it)
                             }
                         }.distinct()
-                        if (flattenRelated.isEmpty()) {
-                            dmRoom.flattenParentIds = null
-                        } else {
-                            dmRoom.flattenParentIds = "|${flattenRelated.joinToString("|")}|"
+                        if (flattenRelated.isNotEmpty()) {
+                            // we keep real m.child/m.parent relations and add the one for common memberships
+                            dmRoom.flattenParentIds += "|${flattenRelated.joinToString("|")}|"
                         }
 //                        Timber.v("## SPACES: flatten of ${dmRoom.otherMemberIds.joinToString(",")} is ${dmRoom.flattenParentIds}")
                     }

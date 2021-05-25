@@ -23,7 +23,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/room_round_avatars" />
 
     <TextView
         android:id="@+id/bottomSheetRoomPreviewName"
@@ -41,7 +41,8 @@
         app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewLowPriority"
         app:layout_constraintStart_toEndOf="@id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
-        tools:text="@tools:sample/full_names" />
+        tools:fontFamily="sans-serif"
+        tools:text="@sample/rooms.json/data/name" />
 
     <ImageView
         android:id="@+id/bottomSheetRoomPreviewLowPriority"

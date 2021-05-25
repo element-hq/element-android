@@ -63,7 +63,7 @@
                     android:maxLines="1"
                     android:textColor="?riotx_text_secondary"
                     android:textSize="16sp"
-                    tools:text="@sample/matrix.json/data/spaceName" />
+                    tools:text="@sample/spaces.json/data/name" />
 
             </LinearLayout>
 

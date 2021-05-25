@@ -12,7 +12,7 @@
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/avatar"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <TextView
         android:id="@+id/itemCallCreatorNameTextView"
@@ -25,7 +25,7 @@
         android:textColor="?riotx_text_primary"
         android:textSize="15sp"
         android:textStyle="bold"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
 
     <TextView

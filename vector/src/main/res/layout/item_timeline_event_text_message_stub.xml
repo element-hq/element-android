@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textColor="?riotx_text_primary"
         android:textSize="14sp"
-        tools:text="@sample/matrix.json/data/message" />
+        tools:text="@sample/messages.json/data/message" />
 
     <im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
         android:id="@+id/messageUrlPreview"

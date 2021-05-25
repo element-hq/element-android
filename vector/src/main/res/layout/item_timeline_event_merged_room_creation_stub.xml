@@ -35,7 +35,7 @@
             android:importantForAccessibility="no"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/creationEncryptionTile"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@sample/room_round_avatars" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/creationTileSetAvatarButton"
@@ -73,7 +73,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/creationTileRoomAvatarImageView"
-            tools:text="@sample/matrix.json/data/roomName" />
+            tools:text="@sample/rooms.json/data/name" />
 
         <TextView
             android:id="@+id/roomNameDescriptionText"
@@ -153,7 +153,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:contentDescription="@string/avatar"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@sample/user_round_avatars" />
 
         <TextView
             android:id="@+id/itemNoticeTextView"
