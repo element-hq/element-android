@@ -247,9 +247,9 @@ class BugReporter @Inject constructor(
 
                 if (!mIsCancelled) {
                     val text = when (reportType) {
-                        ReportType.BUG_REPORT -> "[SchildiChat] $bugDescription"
-                        ReportType.SUGGESTION -> "[SchildiChat] [Suggestion] $bugDescription"
-                        ReportType.SPACE_BETA_FEEDBACK -> "[SchildiChat] [spaces-feedback] $bugDescription"
+                        ReportType.BUG_REPORT -> "$bugDescription"
+                        ReportType.SUGGESTION -> "[Suggestion] $bugDescription"
+                        ReportType.SPACE_BETA_FEEDBACK -> "[spaces-feedback] $bugDescription"
                     }
 
                     // build the multi part request
