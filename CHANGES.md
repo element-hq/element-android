@@ -1,8 +1,5 @@
-Changes in Element 1.1.8 (2021-XX-XX)
+Changes in Element 1.1.8 (2021-05-25)
 ===================================================
-
-Features ✨:
- - 
 
 Improvements 🙌:
  - Support Jitsi authentication (#3379)
@@ -19,22 +16,14 @@ Bugfix 🐛:
  - Don't create private spaces with encryption enabled (#3363)
  - #+ button on lower right when looking at an empty space goes to an empty 'Explore rooms' (#3327)
 
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
-
 Build 🧱:
  - Compile with Kotlin 1.5.10.
  - Upgrade some dependencies: gradle wrapper, third party lib, etc.
  - Sign APK with build tools 30.0.3
 
-Test:
- -
-
 Other changes:
  - Add documentation on LoginWizard and RegistrationWizard (#3303)
+ - Setup towncrier tool (#3293)
 
 Changes in Element 1.1.7 (2021-05-12)
 ===================================================
