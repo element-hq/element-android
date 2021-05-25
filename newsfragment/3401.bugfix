@@ -1,1 +1,2 @@
 Fix | On Android it seems to be impossible to view the complete description of a Space (without dev tools) (#3386)
+Fix | Suggest Rooms, Show a detailed view of the room on click (#3406)

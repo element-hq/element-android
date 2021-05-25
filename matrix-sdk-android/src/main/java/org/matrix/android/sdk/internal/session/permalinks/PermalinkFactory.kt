@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.permalinks
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
 import org.matrix.android.sdk.internal.di.UserId
+import java.net.URLEncoder
 import javax.inject.Inject
 
 internal class PermalinkFactory @Inject constructor(
@@ -40,11 +41,18 @@ internal class PermalinkFactory @Inject constructor(
         } else MATRIX_TO_URL_BASE + escape(id)
     }
 
-    fun createRoomPermalink(roomId: String): String? {
+    fun createRoomPermalink(roomId: String, via: List<String>? = null): String? {
         return if (roomId.isEmpty()) {
             null
         } else {
-            MATRIX_TO_URL_BASE + escape(roomId) + viaParameterFinder.computeViaParams(userId, roomId)
+            buildString {
+                append(MATRIX_TO_URL_BASE)
+                append(escape(roomId))
+                append(
+                        via?.joinToString(prefix = "?via=", separator = "&via=") { URLEncoder.encode(it, "utf-8") }
+                                ?: viaParameterFinder.computeViaParams(userId, roomId)
+                )
+            }
         }
     }
 

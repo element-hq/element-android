@@ -30,4 +30,5 @@ sealed class RoomListAction : VectorViewModelAction {
     data class ToggleTag(val roomId: String, val tag: String) : RoomListAction()
     data class LeaveRoom(val roomId: String) : RoomListAction()
     data class JoinSuggestedRoom(val roomId: String, val viaServers: List<String>?) : RoomListAction()
+    data class ShowRoomDetails(val roomId: String, val viaServers: List<String>?) : RoomListAction()
 }
