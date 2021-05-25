@@ -109,9 +109,11 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     views.addRooms.isVisible = canAddChild
                 }.disposeOnDestroyView()
 
+        /*
         views.spaceBetaTag.setOnClickListener {
             bugReporter.openBugReportScreen(requireActivity(), ReportType.SPACE_BETA_FEEDBACK)
         }
+         */
 
         views.invitePeople.views.bottomSheetActionClickableZone.debouncedClicks {
             dismiss()
