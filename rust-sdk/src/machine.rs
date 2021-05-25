@@ -386,7 +386,7 @@ impl OlmMachine {
         let room_id = RoomId::try_from(room_id)?;
         let content: Box<RawValue> = serde_json::from_str(content)?;
 
-        let content = AnyMessageEventContent::from_parts(event_type, content)?;
+        let content = AnyMessageEventContent::from_parts(event_type, &content)?;
         let encrypted_content = self
             .runtime
             .block_on(self.inner.encrypt(&room_id, content))
