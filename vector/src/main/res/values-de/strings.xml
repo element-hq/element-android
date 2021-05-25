@@ -2830,7 +2830,7 @@
         <item quantity="other">Videos in Originalauflösung senden</item>
     </plurals>
     <string name="error_file_too_big_simple">Die Datei ist zu groß.</string>
-    <string name="send_file_step_compressing_video">Video wird komprimiert (%d%)</string>
+    <string name="send_file_step_compressing_video">Video wird komprimiert (%d%%)</string>
     <string name="send_file_step_compressing_image">Bild wird komprimiert…</string>
     <string name="use_as_default_and_do_not_ask_again">Als Standard festsetzen und nicht mehr fragen</string>
     <string name="option_always_ask">Jedes Mal fragen</string>
