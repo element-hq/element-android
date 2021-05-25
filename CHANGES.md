@@ -2,10 +2,10 @@ Changes in Element 1.1.8 (2021-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - 
 
 Improvements 🙌:
- -
+ - Support Jitsi authentication (#3379)
 
 Bugfix 🐛:
  - Space Invite by link not always displayed for public space (#3345)

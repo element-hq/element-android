@@ -43,6 +43,7 @@ import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesServi
 import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
+import org.matrix.android.sdk.api.session.openid.OpenIdService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
@@ -125,6 +126,7 @@ internal class DefaultSession @Inject constructor(
         private val thirdPartyService: Lazy<ThirdPartyService>,
         private val callSignalingService: Lazy<CallSignalingService>,
         private val spaceService: Lazy<SpaceService>,
+        private val openIdService: Lazy<OpenIdService>,
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
 ) : Session,
@@ -288,6 +290,8 @@ internal class DefaultSession @Inject constructor(
     override fun thirdPartyService(): ThirdPartyService = thirdPartyService.get()
 
     override fun spaceService(): SpaceService = spaceService.get()
+
+    override fun openIdService(): OpenIdService = openIdService.get()
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()

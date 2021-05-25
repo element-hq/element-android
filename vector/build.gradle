@@ -308,6 +308,7 @@ dependencies {
     def arch_version = '2.1.0'
     def lifecycle_version = '2.2.0'
     def rxbinding_version = '3.1.0'
+    def jjwt_version = '0.11.2'
 
     // Tests
     def kluent_version = '1.65'
@@ -449,9 +450,9 @@ dependencies {
 
     // Jitsi
     implementation('org.jitsi.react:jitsi-meet-sdk:3.1.0') {
-       exclude group: 'com.google.firebase'
-       exclude group: 'com.google.android.gms'
-       exclude group: 'com.android.installreferrer'
+        exclude group: 'com.google.firebase'
+        exclude group: 'com.google.android.gms'
+        exclude group: 'com.android.installreferrer'
     }
 
     // QR-code
@@ -464,6 +465,15 @@ dependencies {
     implementation 'com.vanniktech:emoji-google:0.7.0'
 
     implementation 'im.dlg:android-dialer:1.2.5'
+
+    // JWT
+    api "io.jsonwebtoken:jjwt-api:$jjwt_version"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:$jjwt_version"
+    runtimeOnly("io.jsonwebtoken:jjwt-orgjson:$jjwt_version") {
+        exclude group: 'org.json', module: 'json' //provided by Android natively
+    }
+    implementation 'commons-codec:commons-codec:1.15'
+
 
     // TESTS
     testImplementation 'junit:junit:4.13.2'
