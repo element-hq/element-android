@@ -287,7 +287,7 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
-    suspend fun transferToUser(targetUserId: String, targetRoomId: String?) {
+    suspend fun transferToUser(targetUserId: String, targetRoomId: String?) = withContext(dispatcher){
         mxCall.transfer(
                 targetUserId = targetUserId,
                 targetRoomId = targetRoomId,
@@ -297,21 +297,21 @@ class WebRtcCall(val mxCall: MxCall,
         endCall(true, CallHangupContent.Reason.REPLACED)
     }
 
-    suspend fun transferToCall(transferTargetCall: WebRtcCall) {
+    suspend fun transferToCall(transferTargetCall: WebRtcCall)= withContext(dispatcher) {
         val newCallId = CallIdGenerator.generate()
         transferTargetCall.mxCall.transfer(
-                targetUserId = this.mxCall.opponentUserId,
+                targetUserId = this@WebRtcCall.mxCall.opponentUserId,
                 targetRoomId = null,
                 createCallId = null,
                 awaitCallId = newCallId
         )
-        this.mxCall.transfer(
-                transferTargetCall.mxCall.opponentUserId,
+        this@WebRtcCall.mxCall.transfer(
+                targetUserId = transferTargetCall.mxCall.opponentUserId,
                 targetRoomId = null,
                 createCallId = newCallId,
                 awaitCallId = null
         )
-        endCall(true, CallHangupContent.Reason.REPLACED)
+        this@WebRtcCall.endCall(true, CallHangupContent.Reason.REPLACED)
         transferTargetCall.endCall(true, CallHangupContent.Reason.REPLACED)
     }
 

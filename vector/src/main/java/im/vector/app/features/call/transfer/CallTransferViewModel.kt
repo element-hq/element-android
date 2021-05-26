@@ -28,13 +28,16 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.createdirect.DirectRoomHelper
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 
 class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: CallTransferViewState,
                                                         private val dialPadLookup: DialPadLookup,
-                                                        callManager: WebRtcCallManager)
+                                                        private val directRoomHelper: DirectRoomHelper,
+                                                        private val callManager: WebRtcCallManager)
     : VectorViewModel<CallTransferViewState, CallTransferAction, CallTransferViewEvents>(initialState) {
 
     @AssistedFactory
@@ -83,9 +86,18 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
     private fun connectWithUserId(action: CallTransferAction.ConnectWithUserId) {
         viewModelScope.launch {
             try {
-                _viewEvents.post(CallTransferViewEvents.Loading)
-                call?.transferToUser(action.selectedUserId, null)
-                _viewEvents.post(CallTransferViewEvents.Dismiss)
+                if (action.consultFirst) {
+                    val dmRoomId = directRoomHelper.ensureDMExists(action.selectedUserId)
+                    callManager.startOutgoingCall(
+                            signalingRoomId = dmRoomId,
+                            otherUserId = action.selectedUserId,
+                            isVideoCall = call?.mxCall?.isVideoCall.orFalse(),
+                            transferee = call
+                    )
+                } else {
+                    call?.transferToUser(action.selectedUserId, null)
+                    _viewEvents.post(CallTransferViewEvents.Dismiss)
+                }
             } catch (failure: Throwable) {
                 _viewEvents.post(CallTransferViewEvents.FailToTransfer)
             }
@@ -97,8 +109,17 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
             try {
                 _viewEvents.post(CallTransferViewEvents.Loading)
                 val result = dialPadLookup.lookupPhoneNumber(action.phoneNumber)
-                call?.transferToUser(result.userId, result.roomId)
-                _viewEvents.post(CallTransferViewEvents.Dismiss)
+                if (action.consultFirst) {
+                    callManager.startOutgoingCall(
+                            signalingRoomId = result.roomId,
+                            otherUserId = result.userId,
+                            isVideoCall = call?.mxCall?.isVideoCall.orFalse(),
+                            transferee = call
+                    )
+                } else {
+                    call?.transferToUser(result.userId, result.roomId)
+                    _viewEvents.post(CallTransferViewEvents.Dismiss)
+                }
             } catch (failure: Throwable) {
                 _viewEvents.post(CallTransferViewEvents.FailToTransfer)
             }

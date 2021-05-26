@@ -18,6 +18,7 @@ package im.vector.app.features.call
 
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.call.audio.CallAudioManager
+import im.vector.app.features.call.webrtc.WebRtcCall
 
 sealed class VectorCallViewActions : VectorViewModelAction {
     object EndCall : VectorCallViewActions()
@@ -34,4 +35,5 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object ToggleCamera : VectorCallViewActions()
     object ToggleHDSD : VectorCallViewActions()
     object InitiateCallTransfer : VectorCallViewActions()
+    object TransferCall: VectorCallViewActions()
 }

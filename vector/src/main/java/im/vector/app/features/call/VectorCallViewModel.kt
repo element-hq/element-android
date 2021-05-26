@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.room.model.call.supportCallTransfer
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
 
 class VectorCallViewModel @AssistedInject constructor(
@@ -109,13 +110,22 @@ class VectorCallViewModel @AssistedInject constructor(
                     }
                 }
             }
+            val transfereeName = computeTransfereeNameIfAny(call)
             setState {
                 copy(
                         callState = Success(callState),
-                        canOpponentBeTransferred = call.capabilities.supportCallTransfer()
+                        canOpponentBeTransferred = call.capabilities.supportCallTransfer(),
+                        transfereeName = transfereeName
                 )
             }
         }
+    }
+
+    private fun computeTransfereeNameIfAny(call: MxCall): Optional<String> {
+        val transfereeCall = callManager.getTransfereeForCallId(call.callId) ?: return Optional.empty()
+        val transfereeRoom = session.getRoomSummary(transfereeCall.roomId)
+        val transfereeName = transfereeRoom?.displayName ?: "Unknown person"
+        return Optional.from(transfereeName)
     }
 
     private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
@@ -186,7 +196,8 @@ class VectorCallViewModel @AssistedInject constructor(
                         canSwitchCamera = webRtcCall.canSwitchCamera(),
                         formattedDuration = webRtcCall.formattedDuration(),
                         isHD = webRtcCall.mxCall.isVideoCall && webRtcCall.currentCaptureFormat() is CaptureFormat.HD,
-                        canOpponentBeTransferred = webRtcCall.mxCall.capabilities.supportCallTransfer()
+                        canOpponentBeTransferred = webRtcCall.mxCall.capabilities.supportCallTransfer(),
+                        transfereeName = computeTransfereeNameIfAny(webRtcCall.mxCall)
                 )
             }
             updateOtherKnownCall(webRtcCall)
@@ -273,7 +284,18 @@ class VectorCallViewModel @AssistedInject constructor(
                         VectorCallViewEvents.ShowCallTransferScreen
                 )
             }
+            VectorCallViewActions.TransferCall -> {
+                handleCallTransfer()
+            }
         }.exhaustive
+    }
+
+    private fun handleCallTransfer() {
+        viewModelScope.launch {
+            val currentCall = call ?: return@launch
+            val transfereeCall = callManager.getTransfereeForCallId(currentCall.callId) ?: return@launch
+            currentCall.transferToCall(transfereeCall)
+        }
     }
 
     @AssistedFactory

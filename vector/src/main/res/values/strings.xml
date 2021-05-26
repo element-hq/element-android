@@ -3231,7 +3231,8 @@
     <string name="call_transfer_title">Transfer</string>
     <string name="call_transfer_failure">An error occurred while transferring call</string>
     <string name="call_transfer_users_tab_title">Users</string>
-
+    <string name="call_transfer_consulting_with">Consulting with %1$s</string>
+    <string name="call_transfer_transfer_to_title">Transfer to %1$s</string>
 
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->

@@ -137,6 +137,10 @@ class WebRtcCallManager @Inject constructor(
     private val advertisedCalls = HashSet<String>()
     private val callsByCallId = ConcurrentHashMap<String, WebRtcCall>()
     private val callsByRoomId = ConcurrentHashMap<String, MutableList<WebRtcCall>>()
+    // Calls started as an attended transfer, ie. with the intention of transferring another
+    // call with a different party to this one.
+    // callId (target) -> call (transferee)
+    private val transferees = ConcurrentHashMap<String, WebRtcCall>()
 
     fun getCallById(callId: String): WebRtcCall? {
         return callsByCallId[callId]
@@ -144,6 +148,10 @@ class WebRtcCallManager @Inject constructor(
 
     fun getCallsByRoomId(roomId: String): List<WebRtcCall> {
         return callsByRoomId[roomId] ?: emptyList()
+    }
+
+    fun getTransfereeForCallId(callId: String): WebRtcCall? {
+        return transferees[callId]
     }
 
     fun getCurrentCall(): WebRtcCall? {
@@ -219,6 +227,7 @@ class WebRtcCallManager @Inject constructor(
         }
         CallService.onCallTerminated(context, callId)
         callsByRoomId[webRtcCall.roomId]?.remove(webRtcCall)
+        transferees.remove(callId)
         if (getCurrentCall()?.callId == callId) {
             val otherCall = getCalls().lastOrNull()
             currentCall.setAndNotify(otherCall)
@@ -245,7 +254,7 @@ class WebRtcCallManager @Inject constructor(
         }
     }
 
-    fun startOutgoingCall(signalingRoomId: String, otherUserId: String, isVideoCall: Boolean) {
+    fun startOutgoingCall(signalingRoomId: String, otherUserId: String, isVideoCall: Boolean, transferee: WebRtcCall? = null) {
         Timber.v("## VOIP startOutgoingCall in room $signalingRoomId to $otherUserId isVideo $isVideoCall")
         if (getCallsByRoomId(signalingRoomId).isNotEmpty()) {
             Timber.w("## VOIP you already have a call in this room")
@@ -263,7 +272,9 @@ class WebRtcCallManager @Inject constructor(
         val mxCall = currentSession?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
         val webRtcCall = createWebRtcCall(mxCall)
         currentCall.setAndNotify(webRtcCall)
-
+        if(transferee != null){
+            transferees[webRtcCall.callId] = transferee
+        }
         CallService.onOutgoingCallRinging(
                 context = context.applicationContext,
                 callId = mxCall.callId)
