@@ -37,7 +37,7 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.BottomSheetInvitedToSpaceBinding
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.matrixto.SpaceCardHelper
+import im.vector.app.features.matrixto.SpaceCardRenderer
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -60,7 +60,7 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
     lateinit var avatarRenderer: AvatarRenderer
 
     @Inject
-    lateinit var spaceCardHelper: SpaceCardHelper
+    lateinit var spaceCardRenderer: SpaceCardRenderer
 
     private val viewModel: SpaceInviteBottomSheetViewModel by fragmentViewModel(SpaceInviteBottomSheetViewModel::class)
 
@@ -135,7 +135,7 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             views.inviterMxid.isVisible = false
         }
 
-        spaceCardHelper.render(summary, state.peopleYouKnow.invoke().orEmpty(), null, views.spaceCard)
+        spaceCardRenderer.render(summary, state.peopleYouKnow.invoke().orEmpty(), null, views.spaceCard)
 
         views.spaceCard.matrixToCardMainButton.button.text = getString(R.string.accept)
         views.spaceCard.matrixToCardSecondaryButton.button.text = getString(R.string.decline)

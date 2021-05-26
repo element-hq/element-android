@@ -20,8 +20,6 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentMatrixToRoomSpaceCardBinding
 import im.vector.app.features.home.AvatarRenderer
@@ -31,14 +29,13 @@ import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class SpaceCardHelper @Inject constructor(
+class SpaceCardRenderer @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
-        private val stringProvider: StringProvider,
-        private val drawableProvider: DrawableProvider,
-        private val colorProvider: ColorProvider
+        private val stringProvider: StringProvider
 ) {
 
     fun render(spaceSummary: RoomSummary?,
@@ -74,28 +71,7 @@ class SpaceCardHelper @Inject constructor(
                 inCard.matrixToMemberPills.isVisible = false
             }
 
-            val images = listOf(
-                    inCard.knownMember1,
-                    inCard.knownMember2,
-                    inCard.knownMember3,
-                    inCard.knownMember4,
-                    inCard.knownMember5
-            ).onEach { it.isGone = true }
-
-            if (peopleYouKnow.isEmpty()) {
-                inCard.peopleYouMayKnowText.isVisible = false
-            } else {
-                peopleYouKnow.forEachIndexed { index, item ->
-                    images[index].isVisible = true
-                    avatarRenderer.render(item.toMatrixItem(), images[index])
-                }
-                inCard.peopleYouMayKnowText.setTextOrHide(
-                        stringProvider.getQuantityString(R.plurals.space_people_you_know,
-                                peopleYouKnow.count(),
-                                peopleYouKnow.count()
-                        )
-                )
-            }
+            renderPeopleYouKnow(inCard, peopleYouKnow.map { it.toMatrixItem() })
         }
         inCard.matrixToCardDescText.movementMethod = createLinkMovementMethod(object : TimelineEventController.UrlClickCallback {
             override fun onUrlClicked(url: String, title: String): Boolean {
@@ -142,28 +118,32 @@ class SpaceCardHelper @Inject constructor(
                 inCard.matrixToMemberPills.isVisible = false
             }
 
-            val images = listOf(
-                    inCard.knownMember1,
-                    inCard.knownMember2,
-                    inCard.knownMember3,
-                    inCard.knownMember4,
-                    inCard.knownMember5
-            ).onEach { it.isGone = true }
+            renderPeopleYouKnow(inCard, peopleYouKnow.map { it.toMatrixItem() })
+        }
+    }
 
-            if (peopleYouKnow.isEmpty()) {
-                inCard.peopleYouMayKnowText.isVisible = false
-            } else {
-                peopleYouKnow.forEachIndexed { index, item ->
-                    images[index].isVisible = true
-                    avatarRenderer.render(item.toMatrixItem(), images[index])
-                }
-                inCard.peopleYouMayKnowText.setTextOrHide(
-                        stringProvider.getQuantityString(R.plurals.space_people_you_know,
-                                peopleYouKnow.count(),
-                                peopleYouKnow.count()
-                        )
-                )
+    fun renderPeopleYouKnow(inCard: FragmentMatrixToRoomSpaceCardBinding, peopleYouKnow: List<MatrixItem.UserItem>) {
+        val images = listOf(
+                inCard.knownMember1,
+                inCard.knownMember2,
+                inCard.knownMember3,
+                inCard.knownMember4,
+                inCard.knownMember5
+        ).onEach { it.isGone = true }
+
+        if (peopleYouKnow.isEmpty()) {
+            inCard.peopleYouMayKnowText.isVisible = false
+        } else {
+            peopleYouKnow.forEachIndexed { index, item ->
+                images[index].isVisible = true
+                avatarRenderer.render(item, images[index])
             }
+            inCard.peopleYouMayKnowText.setTextOrHide(
+                    stringProvider.getQuantityString(R.plurals.space_people_you_know,
+                            peopleYouKnow.count(),
+                            peopleYouKnow.count()
+                    )
+            )
         }
     }
 }

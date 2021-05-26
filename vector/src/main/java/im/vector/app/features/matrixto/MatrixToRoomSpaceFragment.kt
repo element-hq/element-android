@@ -39,7 +39,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import javax.inject.Inject
 
 class MatrixToRoomSpaceFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val spaceCardRenderer: SpaceCardRenderer
 ) : VectorBaseFragment<FragmentMatrixToRoomSpaceCardBinding>() {
 
     private val sharedViewModel: MatrixToBottomSheetViewModel by parentFragmentViewModel()
@@ -81,13 +82,12 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                         avatarRenderer.render(matrixItem, views.matrixToCardAvatar)
                         if (peek.roomType == RoomType.SPACE) {
                             views.matrixToBetaTag.isVisible = true
+                            views.matrixToAccessImage.isVisible = true
                             if (peek.isPublic) {
                                 views.matrixToAccessText.setTextOrHide(context?.getString(R.string.public_space))
-                                views.matrixToAccessImage.isVisible = true
                                 views.matrixToAccessImage.setImageResource(R.drawable.ic_public_room)
                             } else {
                                 views.matrixToAccessText.setTextOrHide(context?.getString(R.string.private_space))
-                                views.matrixToAccessImage.isVisible = true
                                 views.matrixToAccessImage.setImageResource(R.drawable.ic_room_private)
                             }
                         } else {
@@ -179,20 +179,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
         when (state.peopleYouKnow) {
             is Success -> {
                 val someYouKnow = state.peopleYouKnow.invoke()
-                if (someYouKnow.isEmpty()) {
-                    views.peopleYouMayKnowText.isVisible = false
-                } else {
-                    someYouKnow.forEachIndexed { index, item ->
-                        images[index].isVisible = true
-                        avatarRenderer.render(item, images[index])
-                    }
-                    views.peopleYouMayKnowText.setTextOrHide(
-                            resources.getQuantityString(R.plurals.space_people_you_know,
-                                    someYouKnow.count(),
-                                    someYouKnow.count()
-                            )
-                    )
-                }
+                spaceCardRenderer.renderPeopleYouKnow(views, someYouKnow)
             }
             else       -> {
                 views.peopleYouMayKnowText.isVisible = false

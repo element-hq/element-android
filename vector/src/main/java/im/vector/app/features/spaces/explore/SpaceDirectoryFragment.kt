@@ -42,7 +42,7 @@ import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentRoomDirectoryPickerBinding
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.matrixto.SpaceCardHelper
+import im.vector.app.features.matrixto.SpaceCardRenderer
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.spaces.manage.ManageType
 import im.vector.app.features.spaces.manage.SpaceManageActivity
@@ -61,7 +61,7 @@ data class SpaceDirectoryArgs(
 class SpaceDirectoryFragment @Inject constructor(
         private val epoxyController: SpaceDirectoryController,
         private val permalinkHandler: PermalinkHandler,
-        private val spaceCardHelper: SpaceCardHelper,
+        private val spaceCardRenderer: SpaceCardRenderer,
         private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentRoomDirectoryPickerBinding>(),
         SpaceDirectoryController.InteractionListener,
@@ -93,12 +93,6 @@ class SpaceDirectoryFragment @Inject constructor(
 
         views.spaceCard.matrixToCardMainButton.isVisible = false
         views.spaceCard.matrixToCardSecondaryButton.isVisible = false
-        views.spaceCard.knownMember1.isVisible = false
-        views.spaceCard.knownMember2.isVisible = false
-        views.spaceCard.knownMember3.isVisible = false
-        views.spaceCard.knownMember4.isVisible = false
-        views.spaceCard.knownMember5.isVisible = false
-        views.spaceCard.peopleYouMayKnowText.isVisible = false
     }
 
     override fun onDestroyView() {
@@ -118,12 +112,12 @@ class SpaceDirectoryFragment @Inject constructor(
             val title = getString(R.string.space_explore_activity_title)
             views.toolbar.title = title
 
-            spaceCardHelper.render(state.spaceSummary.invoke(), emptyList(), this, views.spaceCard)
+            spaceCardRenderer.render(state.spaceSummary.invoke(), emptyList(), this, views.spaceCard)
         } else {
             val title = currentParent.name ?: currentParent.canonicalAlias ?: getString(R.string.space_explore_activity_title)
             views.toolbar.title = title
 
-            spaceCardHelper.render(currentParent, emptyList(), this, views.spaceCard)
+            spaceCardRenderer.render(currentParent, emptyList(), this, views.spaceCard)
         }
     }
 
