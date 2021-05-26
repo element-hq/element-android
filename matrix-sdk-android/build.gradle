@@ -112,7 +112,7 @@ dependencies {
     def lifecycle_version = '2.2.0'
     def arch_version = '2.1.0'
     def markwon_version = '3.1.0'
-    def daggerVersion = '2.35.1'
+    def daggerVersion = '2.36'
     def work_version = '2.5.0'
     def retrofit_version = '2.9.0'
 
