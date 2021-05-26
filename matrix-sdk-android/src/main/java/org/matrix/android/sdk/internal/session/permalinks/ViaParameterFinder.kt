@@ -43,6 +43,10 @@ internal class ViaParameterFinder @Inject constructor(
                 .joinToString(prefix = "?via=", separator = "&via=") { URLEncoder.encode(it, "utf-8") }
     }
 
+    fun computeViaParams(viaList: List<String>): String {
+        return viaList.joinToString(prefix = "?via=", separator = "&via=") { URLEncoder.encode(it, "utf-8") }
+    }
+
     fun computeViaParams(userId: String, roomId: String, max: Int): List<String> {
         val userHomeserver = userId.substringAfter(":")
         return getUserIdsOfJoinedMembers(roomId)

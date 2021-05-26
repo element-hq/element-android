@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.permalinks
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
 import org.matrix.android.sdk.internal.di.UserId
-import java.net.URLEncoder
 import javax.inject.Inject
 
 internal class PermalinkFactory @Inject constructor(
@@ -49,7 +48,7 @@ internal class PermalinkFactory @Inject constructor(
                 append(MATRIX_TO_URL_BASE)
                 append(escape(roomId))
                 append(
-                        via?.joinToString(prefix = "?via=", separator = "&via=") { URLEncoder.encode(it, "utf-8") }
+                        via?.takeIf { it.isNotEmpty() }?.let { viaParameterFinder.computeViaParams(it) }
                                 ?: viaParameterFinder.computeViaParams(userId, roomId)
                 )
             }
