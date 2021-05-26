@@ -32,7 +32,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/avatars" />
+                tools:src="@sample/room_round_avatars" />
 
             <im.vector.app.core.ui.views.ShieldImageView
                 android:id="@+id/roomToolbarDecorationImageView"
@@ -58,7 +58,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="@sample/matrix.json/data/roomName" />
+                tools:text="@sample/rooms.json/data/name" />
 
             <TextView
                 android:id="@+id/roomToolbarSubtitleView"
@@ -75,7 +75,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
                 app:layout_constraintTop_toBottomOf="@+id/roomToolbarTitleView"
-                tools:text="@sample/matrix.json/data/roomTopic" />
+                tools:text="@sample/rooms.json/data/topic" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

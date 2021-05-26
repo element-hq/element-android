@@ -58,7 +58,8 @@
         app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_generic_title_text"
-        tools:text="At totam delectus et aliquid dolorem. Consectetur voluptas tempore et non blanditiis id optio. Dolorum impedit quidem minus nihil. "
+        tools:maxLines="3"
+        tools:text="@tools:sample/lorem/random"
         tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Barrier

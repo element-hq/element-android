@@ -44,6 +44,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var message: CharSequence? = null
 
     @EpoxyAttribute
+    var canUseTextFuture: Boolean = true
+
+    @EpoxyAttribute
     var useBigFont: Boolean = false
 
     @EpoxyAttribute
@@ -88,6 +91,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
                 it.bind(holder.messageView)
             }
         }
+
         var m = message
         if (m != null && m.isNotEmpty()) {
             // Remove last trailing newline: looks especially bad in message bubble
@@ -98,17 +102,27 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             // (interestingly, this seems to be only relevant for the last character even for multi-line messages)
             m = TextUtils.concat(m, "\u202f")
         }
-        val textFuture = PrecomputedTextCompat.getTextFuture(
-                m ?: "",
-                TextViewCompat.getTextMetricsParams(holder.messageView),
-                null)
+
+        val textFuture = if (canUseTextFuture) {
+            PrecomputedTextCompat.getTextFuture(
+                    m ?: "",
+                    TextViewCompat.getTextMetricsParams(holder.messageView),
+                    null)
+        } else {
+            null
+        }
         super.bind(holder)
         holder.messageView.movementMethod = movementMethod
 
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.setOnClickListener(attributes.itemClickListener)
         holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
-        holder.messageView.setTextFuture(textFuture)
+
+        if (canUseTextFuture) {
+            holder.messageView.setTextFuture(textFuture)
+        } else {
+            holder.messageView.text = message
+        }
     }
 
     override fun unbind(holder: Holder) {

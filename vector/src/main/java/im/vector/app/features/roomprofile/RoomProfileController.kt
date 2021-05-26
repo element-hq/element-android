@@ -62,9 +62,8 @@ class RoomProfileController @Inject constructor(
     }
 
     override fun buildModels(data: RoomProfileViewState?) {
-        if (data == null) {
-            return
-        }
+        data ?: return
+        val host = this
         val roomSummary = data.roomSummary() ?: return
         val enableNonSimplifiedMode = !vectorPreferences.simplifiedMode()
 
@@ -85,7 +84,7 @@ class RoomProfileController @Inject constructor(
                             }
 
                             override fun onUrlLongClicked(url: String): Boolean {
-                                callback?.onUrlInTopicLongClicked(url)
+                                host.callback?.onUrlInTopicLongClicked(url)
                                 return true
                             }
                         }))
@@ -102,7 +101,7 @@ class RoomProfileController @Inject constructor(
         genericFooterItem {
             id("e2e info")
             centered(false)
-            text(stringProvider.getString(learnMoreSubtitle))
+            text(host.stringProvider.getString(learnMoreSubtitle))
         }
         // SC: Move down in the list, this one-time action is not important to enough to show this prevalent at the top
         //buildEncryptionAction(data.actionPermissions, roomSummary)

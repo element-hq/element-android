@@ -40,7 +40,7 @@
             android:transitionName="profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
         <TextView
             android:id="@+id/homeDrawerUsernameView"
@@ -55,7 +55,7 @@
             app:layout_constraintEnd_toStartOf="@+id/homeDrawerQRCodeButton"
             app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
             app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeaderAvatarView"
-            tools:text="@sample/matrix.json/data/displayName" />
+            tools:text="@sample/users.json/data/displayName" />
 
         <TextView
             android:id="@+id/homeDrawerUserIdView"
@@ -70,7 +70,7 @@
             app:layout_constraintEnd_toStartOf="@+id/homeDrawerQRCodeButton"
             app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
             app:layout_constraintTop_toBottomOf="@+id/homeDrawerUsernameView"
-            tools:text="@sample/matrix.json/data/mxid" />
+            tools:text="@sample/users.json/data/id" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/homeDrawerQRCodeButton"

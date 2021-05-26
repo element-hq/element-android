@@ -1675,6 +1675,7 @@
 
 
     <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 6.0)</string>
+    <string name="error_jitsi_join_conf">Sorry, an error occurred while trying to join the conference</string>
     <string name="jitsi_leave_conf_to_join_another_one_content">Leave the current conference and switch to the other one?</string>
 
     <string name="room_widget_resource_permission_title">This widget wants to use the following resources:</string>
@@ -3323,6 +3324,7 @@
     <string name="create_space_topic_hint">Description</string>
     <string name="invite_people_to_your_space">Invite people to your space</string>
     <string name="invite_people_menu">Invite people</string>
+    <string name="invite_to_space">Invite to %s</string>
     <string name="invite_people_to_your_space_desc">It’s just you at the moment.  %s will be even better with others.</string>
     <string name="invite_by_email">Invite by email</string>
     <string name="invite_by_mxid">Invite by username</string>
@@ -3352,9 +3354,13 @@
     <string name="space_add_child_title">Add rooms</string>
     <string name="leave_space">Leave Space</string>
     <string name="space_leave_prompt_msg">Are you sure you want to leave the space?</string>
+    <string name="space_leave_prompt_msg_only_you">You are the only person here. If you leave, no one will be able to join in the future, including you.</string>
+    <string name="space_leave_prompt_msg_private">This space is not public. You will not be able to rejoin without an invite.</string>
+    <string name="space_leave_prompt_msg_as_admin">You are admin of this space, ensure that you have transferred admin right to another member before leaving.</string>
 
 
     <string name="space_add_existing_rooms">Add existing rooms and space</string>
+    <string name="space_add_rooms">Add rooms</string>
     <string name="spaces_beta_welcome_to_spaces">Welcome to Spaces!</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Spaces are a new way to group rooms and people.</string>
     <string name="you_are_invited">You are invited</string>
@@ -3376,5 +3382,10 @@
     <string name="labs_space_show_orphan_in_home">Experimental Space - Only show orphans in Home</string>
     <string name="spaces_feeling_experimental_subspace">Feeling experimental?\nYou can add existing spaces to a space.</string>
     <string name="spaces_no_server_support_title">It looks like your homeserver does not support Spaces yet</string>
-    <string name="spaces_no_server_support_description">Please contact your homserver admin for further information</string>
+    <string name="spaces_no_server_support_description">Please contact your homeserver admin for further information</string>
+
+    <string name="this_space_has_no_rooms">This space has no rooms</string>
+    <string name="this_space_has_no_rooms_not_admin">Some rooms may be hidden because they’re private and you need an invite.\nYou don’t have permission to add rooms.</string>
+    <string name="this_space_has_no_rooms_admin">Some rooms may be hidden because they’re private and you need an invite.</string>
+
 </resources>

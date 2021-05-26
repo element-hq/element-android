@@ -37,8 +37,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/avatar"
-        tools:ignore="MissingConstraints"
-        tools:src="@tools:sample/avatars" />
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/composerRelatedMessageTitle"
@@ -82,8 +81,8 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/cancel"
         android:src="@drawable/ic_close_round"
-        android:tint="@color/riotx_notice"
-        tools:ignore="MissingConstraints" />
+        app:tint="@color/riotx_notice"
+        tools:ignore="MissingConstraints,MissingPrefix" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/composer_preview_barrier"

@@ -26,7 +26,7 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/room_round_avatars" />
 
         <ImageView
             android:id="@+id/matrixToBetaTag"
@@ -52,7 +52,7 @@
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
-            tools:text="@sample/matrix.json/data/roomName" />
+            tools:text="@sample/rooms.json/data/name" />
 
         <TextView
             android:id="@+id/matrixToCardAliasText"
@@ -67,7 +67,8 @@
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
             app:layout_goneMarginTop="0dp"
-            tools:text="@sample/matrix.json/data/roomAlias" />
+            tools:text="@sample/rooms.json/data/alias"
+            tools:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/matrixToMemberPills"
@@ -117,7 +118,7 @@
             android:textColor="?riotx_text_secondary"
             android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@id/matrixToMemberPills"
-            tools:text="@sample/matrix.json/data/roomTopic" />
+            tools:text="@sample/rooms.json/data/topic" />
 
         <ImageView
             android:id="@+id/knownMember5"
@@ -128,7 +129,7 @@
             app:layout_constraintCircleAngle="90"
             app:layout_constraintCircleRadius="20dp"
             tools:ignore="MissingConstraints"
-            tools:src="@tools:sample/avatars"
+            tools:src="@sample/user_round_avatars"
             tools:visibility="gone" />
 
         <ImageView
@@ -140,7 +141,7 @@
             app:layout_constraintCircleAngle="90"
             app:layout_constraintCircleRadius="20dp"
             tools:ignore="MissingConstraints"
-            tools:src="@tools:sample/avatars"
+            tools:src="@sample/user_round_avatars"
             tools:visibility="gone" />
 
         <ImageView
@@ -152,7 +153,7 @@
             app:layout_constraintCircleAngle="90"
             app:layout_constraintCircleRadius="20dp"
             tools:ignore="MissingConstraints"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
         <ImageView
             android:id="@+id/knownMember2"
@@ -163,7 +164,7 @@
             app:layout_constraintCircleAngle="90"
             app:layout_constraintCircleRadius="20dp"
             tools:ignore="MissingConstraints"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
         <ImageView
             android:id="@+id/knownMember1"
@@ -173,19 +174,21 @@
             android:contentDescription="@string/avatar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/matrixToCardDescText"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
+        <!-- layout_goneMarginStart: add half the width of the avatar: 15dp -->
         <TextView
             android:id="@+id/peopleYouMayKnowText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:textColor="?riotx_text_secondary"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/knownMember1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/knownMember5"
             app:layout_constraintTop_toTopOf="@id/knownMember1"
+            app:layout_goneMarginStart="25dp"
             tools:text="7 people you may know" />
 
         <im.vector.app.core.platform.ButtonStateView
