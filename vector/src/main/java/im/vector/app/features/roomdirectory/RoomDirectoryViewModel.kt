@@ -229,9 +229,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
         }
-        val viaServers = state.roomDirectoryData.homeServer
-                ?.let { listOf(it) }
-                .orEmpty()
+        val viaServers = listOfNotNull(state.roomDirectoryData.homeServer)
         viewModelScope.launch {
             try {
                 session.joinRoom(action.roomId, viaServers = viaServers)
