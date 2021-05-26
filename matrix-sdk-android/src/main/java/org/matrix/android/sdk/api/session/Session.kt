@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
+import org.matrix.android.sdk.api.session.openid.OpenIdService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
@@ -232,6 +233,11 @@ interface Session :
      * Returns the space service associated with the session
      */
     fun spaceService(): SpaceService
+
+    /**
+     * Returns the open id service associated with the session
+     */
+    fun openIdService(): OpenIdService
 
     /**
      * Add a listener to the session.
