@@ -62,7 +62,7 @@
     </plurals>
     <string name="summary_you_sent_image">أرسلتَ صورةً.</string>
     <string name="summary_you_sent_sticker">أرسلتَ ملصقًا.</string>
-    <string name="notice_room_invite_no_invitee_by_you">دعوة منك</string>
+    <string name="notice_room_invite_no_invitee_by_you">دعوتك</string>
     <string name="notice_room_created">أنشأ ⁨%1$s⁩ الغرفة</string>
     <string name="notice_room_created_by_you">أنشأتَ الغرفة</string>
     <string name="notice_room_invite_by_you">دعوتَ ⁨%1$s⁩</string>
@@ -1135,4 +1135,12 @@
     <string name="initial_sync_start_server_computing">المزامنة الأولية:
 \nينتظر رد الخادم…</string>
     <string name="notice_display_name_set">غير %1$s اسمه الى %2$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="zero"></item>
+        <item quantity="one">أضف كعنوان لهذه الغرفة</item>
+        <item quantity="two"></item>
+        <item quantity="few"></item>
+        <item quantity="many">أضف كعناوان لهذه الغرفة</item>
+        <item quantity="other"></item>
+    </plurals>
 </resources>
