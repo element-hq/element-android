@@ -1587,6 +1587,7 @@
     <string name="directory_server_placeholder">Homeserver URL</string>
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
+    <string name="directory_your_server">Your server</string>
 
     <!-- Lock screen-->
     <string name="lock_screen_hint">Type here…</string>
