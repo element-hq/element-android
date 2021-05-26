@@ -25,7 +25,7 @@ import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
-import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
+import im.vector.app.features.roomdirectory.RoomDirectoryData
 import javax.inject.Inject
 
 class RoomDirectoryPickerController @Inject constructor(private val stringProvider: StringProvider,
