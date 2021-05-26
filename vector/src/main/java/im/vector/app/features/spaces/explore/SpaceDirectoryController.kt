@@ -131,7 +131,6 @@ class SpaceDirectoryController @Inject constructor(
                         avatarRenderer(host.avatarRenderer)
                         topic(info.topic)
                         memberCount(info.activeMemberCount ?: 0)
-                        space(isSpace)
                         loading(isLoading)
                         buttonLabel(
                                 if (isJoined) host.stringProvider.getString(R.string.action_open)

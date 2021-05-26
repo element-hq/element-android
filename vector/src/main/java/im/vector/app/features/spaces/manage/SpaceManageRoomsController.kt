@@ -27,7 +27,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -83,7 +82,6 @@ class SpaceManageRoomsController @Inject constructor(
                     matrixItem(childInfo.toMatrixItem())
                     avatarRenderer(host.avatarRenderer)
                     suggested(childInfo.suggested ?: false)
-                    space(childInfo.roomType == RoomType.SPACE)
                     selected(data.selectedRooms.contains(childInfo.childRoomId))
                     itemClickListener(DebouncedClickListener({
                         host.listener?.toggleSelection(childInfo)

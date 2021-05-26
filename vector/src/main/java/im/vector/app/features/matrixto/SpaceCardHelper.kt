@@ -51,7 +51,7 @@ class SpaceCardHelper @Inject constructor(
         } else {
             inCard.matrixToCardContentVisibility.isVisible = true
             inCard.matrixToCardButtonLoading.isVisible = false
-            avatarRenderer.renderSpace(spaceSummary.toMatrixItem(), inCard.matrixToCardAvatar)
+            avatarRenderer.render(spaceSummary.toMatrixItem(), inCard.matrixToCardAvatar)
             inCard.matrixToCardNameText.text = spaceSummary.name
             inCard.matrixToBetaTag.isVisible = true
             inCard.matrixToCardAliasText.setTextOrHide(spaceSummary.canonicalAlias)
@@ -119,7 +119,7 @@ class SpaceCardHelper @Inject constructor(
         } else {
             inCard.matrixToCardContentVisibility.isVisible = true
             inCard.matrixToCardButtonLoading.isVisible = false
-            avatarRenderer.renderSpace(spaceChildInfo.toMatrixItem(), inCard.matrixToCardAvatar)
+            avatarRenderer.render(spaceChildInfo.toMatrixItem(), inCard.matrixToCardAvatar)
             inCard.matrixToCardNameText.setTextOrHide(spaceChildInfo.name)
             inCard.matrixToBetaTag.isVisible = true
             inCard.matrixToCardAliasText.setTextOrHide(spaceChildInfo.canonicalAlias)

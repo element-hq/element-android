@@ -78,9 +78,9 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                 when (val peek = item.invoke()) {
                     is RoomInfoResult.FullInfo     -> {
                         val matrixItem = peek.roomItem
+                        avatarRenderer.render(matrixItem, views.matrixToCardAvatar)
                         if (peek.roomType == RoomType.SPACE) {
                             views.matrixToBetaTag.isVisible = true
-                            avatarRenderer.renderSpace(matrixItem, views.matrixToCardAvatar)
                             if (peek.isPublic) {
                                 views.matrixToAccessText.setTextOrHide(context?.getString(R.string.public_space))
                                 views.matrixToAccessImage.isVisible = true
@@ -92,7 +92,6 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                             }
                         } else {
                             views.matrixToBetaTag.isVisible = false
-                            avatarRenderer.render(matrixItem, views.matrixToCardAvatar)
                         }
                         views.matrixToCardNameText.setTextOrHide(peek.name)
                         views.matrixToCardAliasText.setTextOrHide(peek.alias)
