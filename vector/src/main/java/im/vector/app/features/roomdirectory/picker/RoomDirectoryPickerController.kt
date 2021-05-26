@@ -39,6 +39,7 @@ class RoomDirectoryPickerController @Inject constructor(
         private val roomDirectoryListCreator: RoomDirectoryListCreator
 ) : TypedEpoxyController<RoomDirectoryPickerViewState>() {
 
+    var currentRoomDirectoryData: RoomDirectoryData? = null
     var callback: Callback? = null
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -105,7 +106,7 @@ class RoomDirectoryPickerController @Inject constructor(
                 }
                 directoryAvatarUrl(roomDirectoryData.avatarUrl)
                 includeAllNetworks(roomDirectoryData.includeAllNetworks)
-
+                checked(roomDirectoryData == host.currentRoomDirectoryData)
                 globalListener {
                     host.callback?.onRoomDirectoryClicked(roomDirectoryData)
                 }
