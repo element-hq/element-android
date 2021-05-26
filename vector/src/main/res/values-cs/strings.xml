@@ -2726,7 +2726,7 @@
     <string name="event_status_sent_message">Zpráva odeslána</string>
     <string name="a11y_unchecked">Neoznačeno</string>
     <string name="labs_use_restricted_join_rule">Experimentální, prostor - omezená místnost.</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Prostory jsou způsob organizace místností a lidí k práci, zábavě anebo jen pro Vás.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Prostory představují nový způsob seskupování místností a osob.</string>
     <string name="create_spaces_room_private_header_desc">Založme pro každé místnost. Později můžete přidat i další, včetně již existujících.</string>
     <string name="create_spaces_room_private_header">Na jakých tématech pracujete\?</string>
     <string name="create_spaces_room_public_header_desc">Založíme pro ně místnosti. Můžete přidat další později.</string>
@@ -2824,4 +2824,27 @@
     <string name="send_file_step_compressing_image">Komprimuji obrázek…</string>
     <string name="use_as_default_and_do_not_ask_again">Použít výchozí a dále se neptat</string>
     <string name="option_always_ask">Vždy se dotázat</string>
+    <string name="this_space_has_no_rooms_admin">Některé místnosti mohou být skryté, protože jsou soukromé a potřebujete pozvánku.</string>
+    <string name="this_space_has_no_rooms_not_admin">Některé místnosti mohou být skryté, protože jsou soukromé a potřebujete pozvánku.
+\nK přidávání místností nemáte oprávnění.</string>
+    <string name="this_space_has_no_rooms">Tento prostor nemá žádné místnosti</string>
+    <string name="spaces_no_server_support_description">Další informace získáte od správce domovského serveru</string>
+    <string name="spaces_no_server_support_title">Vypadá to, že váš domovský server zatím Prostory nepodporuje</string>
+    <string name="spaces_feeling_experimental_subspace">Chcete experimentovat\?
+\nDo prostoru můžete přidat existující prostory.</string>
+    <string name="labs_space_show_orphan_in_home">Experimentální prostor - Zobrazit pouze sirotky v Domově</string>
+    <string name="space_add_rooms">Přidat místnosti</string>
+    <string name="space_leave_prompt_msg_as_admin">Jste administrátorem tohoto prostoru, ujistěte se, že jste před odchodem převedli administrátorská práva na jiného člena.</string>
+    <string name="space_leave_prompt_msg_private">Tento prostor není veřejný. Bez pozvánky se do něj nebudete moci znovu připojit.</string>
+    <string name="space_leave_prompt_msg_only_you">Jste tu jediný člověk. Pokud odejdete, nikdo se k vám v budoucnu nebude moci připojit, včetně vás.</string>
+    <string name="invite_to_space">Pozvat do %s</string>
+    <string name="a11y_beta">Tato funkce je ve fázi beta</string>
+    <string name="give_feedback">Poskytněte zpětnou vazbu</string>
+    <string name="feedback_failed">Zpětnou vazbu se nepodařilo odeslat (%s)</string>
+    <string name="feedback_sent">Děkujeme, vaše zpětná vazba byla úspěšně odeslána</string>
+    <string name="you_may_contact_me">V případě dalších dotazů se na mě můžete obrátit</string>
+    <string name="send_feedback_space_info">Používáte beta verzi prostorů. Vaše zpětná vazba pomůže při tvorbě dalších verzí. Vaše platforma a uživatelské jméno budou zaznamenány, abychom mohli vaši zpětnou vazbu co nejlépe využít.</string>
+    <string name="feedback">Zpětná vazba</string>
+    <string name="send_feedback_space_title">Zpětná vazba prostorů</string>
+    <string name="error_jitsi_join_conf">Omlouváme se, při pokusu o připojení ke konferenci došlo k chybě</string>
 </resources>
