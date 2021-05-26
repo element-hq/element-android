@@ -537,7 +537,7 @@
     <string name="create_account">Create Account</string>
     <string name="login">Log in</string>
     <string name="logout">Sign out</string>
-    <string name="hs_url">Home Server URL</string>
+    <string name="hs_url">Homeserver URL</string>
     <string name="identity_url">Identity Server URL</string>
     <string name="search">Search</string>
 
@@ -625,9 +625,9 @@
     <string name="auth_use_server_options">Use custom server options (advanced)</string>
     <string name="auth_email_validation_message">Please check your email to continue registration</string>
     <string name="auth_threepid_warning_message">Registration with email and phone number at once is not supported yet until the api exists. Only the phone number will be taken into account.\n\nYou may add your email to your profile in settings.</string>
-    <string name="auth_recaptcha_message">This Home Server would like to make sure you are not a robot</string>
+    <string name="auth_recaptcha_message">This homeserver would like to make sure you are not a robot</string>
     <string name="auth_username_in_use">Username in use</string>
-    <string name="auth_home_server">Home Server:</string>
+    <string name="auth_home_server">Homeserver:</string>
     <string name="auth_identity_server">Identity Server:</string>
     <string name="auth_reset_password_next_step_button">I have verified my email address</string>
     <string name="auth_reset_password_message">To reset your password, enter the email address linked to your account:</string>
@@ -713,7 +713,7 @@
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_settings_call_ringtone_use_app_ringtone">Use default ${app_name} ringtone for incoming calls</string>
     <string name="settings_call_ringtone_use_default_stun">Allow fallback call assist server</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Will use "%s" as assist when your home server does not offer one (your IP address will be shared during a call)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Will use "%s" as assist when your homeserver does not offer one (your IP address will be shared during a call)</string>
     <string name="settings_call_ringtone_title">Incoming call ringtone</string>
     <string name="settings_call_ringtone_dialog_title">Select ringtone for calls:</string>
 
@@ -1314,7 +1314,7 @@
     <string name="devices_delete_submit_button_label">Submit</string>
 
     <string name="settings_logged_in">Logged in as</string>
-    <string name="settings_home_server">Home Server</string>
+    <string name="settings_home_server">Homeserver</string>
     <string name="settings_identity_server">Identity Server</string>
     <string name="settings_integration_allow">Allow integrations</string>
     <string name="settings_integration_manager">Integration Manager</string>
