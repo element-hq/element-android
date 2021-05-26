@@ -468,7 +468,7 @@
     <string name="disclaimer_positive_button">TÌM HIỂU THÊM</string>
     <string name="disclaimer_negative_button">HIỂU RỒI</string>
     <string name="disclaimer_content">Chúng tôi rất háo hức muốn tuyên bố rằng chúng tôi đã đổi tên! Ứng dụng của bạn đã được cập nhật và bạn đã đăng nhập vào tài khoản của bạn.</string>
-    <string name="disclaimer_title">Riot bây giờ là Element!</string>
+    <string name="disclaimer_title">Riot bây giờ là SchildiChat!</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Đang đợi lịch sử mã hoá</string>
     <string name="crypto_error_withheld_generic">Bạn không thể truy cập tin nhắn này vì người gửi đã cố tình không gửi các mã khoá</string>
     <string name="crypto_error_withheld_unverified">Bạn không thể truy cập tin nhắn này vì phiên làm việc của bạn không được người gửi tin cậy</string>
