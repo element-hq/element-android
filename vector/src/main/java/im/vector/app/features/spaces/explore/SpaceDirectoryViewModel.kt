@@ -102,9 +102,14 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val query = session.spaceService().querySpaceChildren(initialState.spaceId)
+                val knownSummaries = query.second.mapNotNull {
+                    session.getRoomSummary(it.childRoomId)
+                            ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
+                }
                 setState {
                     copy(
-                            spaceSummaryApiResult = Success(query.second)
+                            spaceSummaryApiResult = Success(query.second),
+                            knownRoomSummaries = knownSummaries
                     )
                 }
             } catch (failure: Throwable) {
