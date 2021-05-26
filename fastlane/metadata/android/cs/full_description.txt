@@ -1,30 +1,39 @@
-Element je nový typ aplikace pro výměnu zpráv a spolupráci, která:
+Element je zabezpečený komunikátor a zároveň aplikace pro týmovou spolupráci, která je ideální pro skupinové chaty při práci na dálku. Tato chatovací aplikace využívá end-to-end šifrování a poskytuje výkonné videokonference, sdílení souborů a hlasové hovory.
 
-1. Vám dá kontrolu nad ochranou vašeho soukromí
-2. Umožní vám komunikovat s kýmkoli v síti Matrix a dokonce i mimo ni pomocí integrací s aplikacemi, jako je Slack
-3. Ochrání vás před inzercí, dataminingem a uzavřenými zahradami
-4. Zabezpečí vás end-to-end šifrováním s křížovým podpisem pro ověření ostatních
+<b>Mezi funkce aplikace Element patří:</b>
+- Pokročilé nástroje pro online komunikaci
+- Plně šifrované zprávy umožňující bezpečnější firemní komunikaci i pro pracovníky na dálku
+- Decentralizovaný chat založený na open source frameworku Matrix
+- Bezpečné sdílení souborů se šifrovanými daty při správě projektů
+- Videochaty s funkcí Voice over IP a sdílením obrazovky
+- Snadná integrace s oblíbenými nástroji pro online spolupráci, nástroji pro správu projektů, službami VoIP a dalšími aplikacemi pro týmovou komunikaci
 
-Element je zcela odlišný od ostatních aplikací pro zasílání zpráv a spolupráci, protože je decentralizovaný a otevřený.
+Element se zcela liší od ostatních aplikací pro zasílání zpráv a spolupráci. Funguje na platformě Matrix, otevřené síti pro bezpečné zasílání zpráv a decentralizovanou komunikaci. Umožňuje vlastní hostování, aby uživatelé měli maximální vlastnictví a kontrolu nad svými daty a zprávami.
 
-Element vám umožňuje použít vlastní domovský server - nebo si vybrat hostitele - abyste měli soukromí, vlastnictví a kontrolu nad svými daty a konverzacemi. Poskytuje vám přístup k otevřené síti; takže nejste zaseknuti jen při konverzaci s ostatními uživateli Elementu. A je velmi bezpečný.
+<b>Soukromí a šifrované zprávy</b>
+Element vás chrání před nežádoucími reklamami, vytěžováním dat a tzv. walled gardens. Zabezpečuje také všechna vaše data, video a hlasovou komunikaci jeden na jednoho prostřednictvím šifrování end-to-end a křížového ověřování zařízení.
 
-Element je toho všeho schopen, protože pracuje na Matrixu - standardu otevřené, decentralizované komunikace.
+Element vám dává kontrolu nad vaším soukromím a zároveň vám umožňuje bezpečně komunikovat s kýmkoli v síti Matrix nebo s dalšími nástroji pro firemní spolupráci díky integraci s aplikacemi, jako je Slack.
 
-Element vám dává kontrolu nad tím, že si můžete vybrat, kdo bude hostovat vaše konverzace. Z aplikace Element si můžete vybrat hostování různými způsoby:
+<b>Element lze hostovat samostatně</b>
+Abyste měli větší kontrolu nad svými citlivými daty a konverzacemi, může být Element hostován na vlastním hardwaru nebo si můžete vybrat libovolného hostitele založeného na systému Matrix - standardu pro decentralizovanou komunikaci s otevřeným zdrojovým kódem. Element vám poskytuje soukromí, soulad se zásadami bezpečnosti a flexibilitu integrace.
 
-1. Získejte zdarma účet na veřejném serveru matrix.org hostovaném vývojáři Matrixu, nebo si vyberte z tisíců veřejných serverů hostovaných dobrovolníky
-2. Hostujte svůj účet spuštěním serveru na svém vlastním hardwaru
-3. Zaregistrujte si účet na vlastním serveru jednoduchým přihlášením k hostitelské platformě Element Matrix Services
+<b>Vlastněte svá data</b>
+Sami rozhodujete, kde budou vaše data a zprávy uloženy. Bez rizika vytěžování dat nebo přístupu třetích stran.
 
-<b>Proč zvolit Element?</b>
+Element vám dává kontrolu různými způsoby:
+1. Získejte bezplatný účet na veřejném serveru matrix.org, který hostují vývojáři Matrixu, nebo si vyberte z tisíců veřejných serverů hostovaných dobrovolníky.
+2. Vlastní hostování účtu spuštěním serveru na vlastní IT infrastruktuře.
+3. Zaregistrujte si účet na vlastním serveru tak, že si jednoduše předplatíte hostingovou platformu Element Matrix Services.
 
-<b>VLASTNĚTE SVÁ DATA</b>: Vy rozhodnete, kde svá data a zprávy ponecháte. Vlastníte je a jsou pod vaší kontrolou, ne nějaký MEGACORP, který těží vaše data nebo poskytuje přístup třetím stranám.
+<b>Otevřené zasílání zpráv a spolupráce</b>
+Můžete chatovat s kýmkoli v síti Matrix, ať už používá aplikaci Element, jinou aplikaci podporující protokol Matrix nebo dokonce i když používá jinou aplikaci pro zasílání zpráv.
 
-<b>ZPRÁVY A SPOLUPRÁCE</b>: Můžete chatovat s kýmkoli v síti Matrix, ať už používá Element nebo jinou aplikaci, a to i v případě, že používají jiný systém zasílání zpráv, jako je Slack, IRC nebo XMPP.
+<b>Superbezpečné</b>
+Skutečné end-to-end šifrování (zprávy mohou dešifrovat pouze účastníci konverzace) a křížové ověřování zařízení.
 
-<b>MAXIMÁLNĚ BEZPEČNÉ</b>: Skutečné šifrování typu end-to-end (pouze ti v konverzaci mohou dešifrovat zprávy) a křížové podepisování k ověření zařízení účastníků konverzace.
+<b>Kompletní komunikace a integrace</b>
+Zprávy, hlasové a videohovory, sdílení souborů, sdílení obrazovky a celá řada integrací, botů a widgetů. Vytvářejte místnosti, komunity, zůstaňte v kontaktu a spolupracujte.
 
-<b>KOMPLETNÍ KOMUNIKACE</b>: Zprávy, hlasové hovory a videohovory, sdílení souborů, sdílení obrazovky a celá řada integrací, robotů a widgetů. Budujte místnosti, komunity, zůstaňte v kontaktu a spolupracujte.
-
-<b>KDEKOLIV JSTE</b>: Zůstaňte v kontaktu, ať jste kdekoli, s plně synchronizovanou historií zpráv na všech vašich zařízeních a na webu na adrese https://app.element.io.
+<b>Navažte tam, kde jste skončili</b>
+Zůstaňte v kontaktu, ať jste kdekoli, díky plně synchronizované historii zpráv ve všech zařízeních a na webu https://app.element.io.
