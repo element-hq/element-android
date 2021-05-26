@@ -53,7 +53,7 @@
                 android:paddingBottom="16dp"
                 android:text="@string/login_clear_homeserver_history"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
-                android:textColor="@color/riotx_accent"
+                android:textColor="?colorAccent"
                 android:visibility="invisible"
                 tools:visibility="visible" />
 
