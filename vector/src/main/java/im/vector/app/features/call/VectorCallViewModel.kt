@@ -39,9 +39,7 @@ import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.room.model.call.supportCallTransfer
-import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toMatrixItem
 
 class VectorCallViewModel @AssistedInject constructor(
         @Assisted initialState: VectorCallViewState,

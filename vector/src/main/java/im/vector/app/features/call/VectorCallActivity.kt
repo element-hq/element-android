@@ -198,14 +198,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             }
             is CallState.Connected -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
-                    if(state.transfereeName.hasValue()){
+                    if (state.transfereeName.hasValue()) {
                         views.callActionText.text = getString(R.string.call_transfer_transfer_to_title, state.transfereeName.get())
                         views.callActionText.isVisible = true
                         views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.TransferCall) }
                         views.callStatusText.text = state.formattedDuration
                         configureCallInfo(state)
-                    }
-                    else if (state.isLocalOnHold || state.isRemoteOnHold) {
+                    } else if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
                         views.callVideoGroup.isInvisible = true
                         views.callInfoGroup.isVisible = true
@@ -254,9 +253,9 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         state.callInfo.otherUserItem?.let {
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
             avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter)
-            if(state.transfereeName.hasValue()) {
+            if (state.transfereeName.hasValue()) {
                 views.participantNameText.text = getString(R.string.call_transfer_consulting_with, it.getBestName())
-            }else {
+            } else {
                 views.participantNameText.text = it.getBestName()
             }
             if (blurAvatar) {

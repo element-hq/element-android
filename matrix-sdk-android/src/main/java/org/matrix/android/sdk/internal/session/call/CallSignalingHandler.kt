@@ -30,7 +30,6 @@ import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSignalingContent
-import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
