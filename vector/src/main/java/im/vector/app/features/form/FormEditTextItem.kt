@@ -61,7 +61,8 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     @EpoxyAttribute
     var endIconMode: Int? = null
 
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    // FIXME restore EpoxyAttribute.Option.DoNotHash and fix that properly
+    @EpoxyAttribute
     var onTextChange: ((String) -> Unit)? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
