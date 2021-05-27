@@ -51,9 +51,8 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     @EpoxyAttribute
     var inputType: Int? = null
 
-    // TODO Should be true by default
     @EpoxyAttribute
-    var singleLine: Boolean? = null
+    var singleLine: Boolean = true
 
     @EpoxyAttribute
     var imeOptions: Int? = null
@@ -82,7 +81,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
 
         holder.textInputEditText.isEnabled = enabled
         inputType?.let { holder.textInputEditText.inputType = it }
-        holder.textInputEditText.isSingleLine = singleLine ?: false
+        holder.textInputEditText.isSingleLine = singleLine
         holder.textInputEditText.imeOptions = imeOptions ?: EditorInfo.IME_ACTION_NONE
 
         holder.textInputEditText.addTextChangedListener(onTextChangeListener)

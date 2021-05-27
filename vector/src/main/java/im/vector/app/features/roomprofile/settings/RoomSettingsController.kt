@@ -102,6 +102,7 @@ class RoomSettingsController @Inject constructor(
             id("topic")
             enabled(data.actionPermissions.canChangeTopic)
             value(data.newTopic ?: roomSummary.topic)
+            singleLine(false)
             hint(host.stringProvider.getString(R.string.room_settings_topic_hint))
 
             onTextChange { text ->
