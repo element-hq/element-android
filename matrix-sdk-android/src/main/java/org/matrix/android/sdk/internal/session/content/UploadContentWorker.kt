@@ -82,6 +82,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     @Inject lateinit var cancelSendTracker: CancelSendTracker
     @Inject lateinit var imageCompressor: ImageCompressor
     @Inject lateinit var videoCompressor: VideoCompressor
+    @Inject lateinit var thumbnailExtractor: ThumbnailExtractor
     @Inject lateinit var localEchoRepository: LocalEchoRepository
     @Inject lateinit var temporaryFileCreator: TemporaryFileCreator
 
@@ -302,7 +303,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
      * If appropriate, it will create and upload a thumbnail
      */
     private suspend fun dealWithThumbnail(params: Params): UploadThumbnailResult? {
-        return ThumbnailExtractor.extractThumbnail(context, params.attachment)
+        return thumbnailExtractor.extractThumbnail(params.attachment)
                 ?.let { thumbnailData ->
                     val thumbnailProgressListener = object : ProgressRequestBody.Listener {
                         override fun onProgress(current: Long, total: Long) {
