@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.room
 
 import androidx.lifecycle.LiveData
+import org.matrix.android.sdk.api.session.accountdata.AccountDataService
 import org.matrix.android.sdk.api.session.room.alias.AliasService
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.api.session.room.crypto.RoomCryptoService
@@ -55,7 +56,8 @@ interface Room :
         RoomCallService,
         RelationService,
         RoomCryptoService,
-        RoomPushRuleService {
+        RoomPushRuleService,
+        AccountDataService {
 
     /**
      * The roomId of this room
@@ -86,12 +88,12 @@ interface Room :
      * @return The search result
      */
     suspend fun search(searchTerm: String,
-               nextBatch: String?,
-               orderByRecent: Boolean,
-               limit: Int,
-               beforeLimit: Int,
-               afterLimit: Int,
-               includeProfile: Boolean): SearchResult
+                       nextBatch: String?,
+                       orderByRecent: Boolean,
+                       limit: Int,
+                       beforeLimit: Int,
+                       afterLimit: Int,
+                       includeProfile: Boolean): SearchResult
 
     /**
      * Use this room as a Space, if the type is correct.

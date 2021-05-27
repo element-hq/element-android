@@ -86,6 +86,8 @@ private const val VIDEO_TRACK_ID = "ARDAMSv0"
 private val DEFAULT_AUDIO_CONSTRAINTS = MediaConstraints()
 
 class WebRtcCall(val mxCall: MxCall,
+                 // This is where the call is placed from an ui perspective. In case of virtual room, it can differs from the signalingRoomId.
+                 val nativeRoomId: String,
                  private val rootEglBase: EglBase?,
                  private val context: Context,
                  private val dispatcher: CoroutineContext,
@@ -116,7 +118,8 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     val callId = mxCall.callId
-    val roomId = mxCall.roomId
+    // room where call signaling is placed. In case of virtual room it can differs from the nativeRoomId.
+    val signalingRoomId = mxCall.roomId
 
     private var peerConnection: PeerConnection? = null
     private var localAudioSource: AudioSource? = null
@@ -385,6 +388,7 @@ class WebRtcCall(val mxCall: MxCall,
             peerConnection?.awaitSetRemoteDescription(offerSdp)
         } catch (failure: Throwable) {
             Timber.v("Failure putting remote description")
+            endCall(true, CallHangupContent.Reason.UNKWOWN_ERROR)
             return@withContext
         }
         // 2) Access camera + microphone, create local stream

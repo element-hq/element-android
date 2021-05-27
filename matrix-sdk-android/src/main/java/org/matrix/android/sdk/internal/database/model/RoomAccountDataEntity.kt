@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.call
+package org.matrix.android.sdk.internal.database.model
 
-interface CallSignallingContent {
-    /**
-     * Required. A unique identifier for the call.
-     */
-    val callId: String?
+import io.realm.RealmObject
+import io.realm.annotations.Index
+import io.realm.annotations.RealmClass
 
-    /**
-     * Required. ID to let user identify remote echo of their own events
-     */
-    val partyId: String?
-
-    /**
-     * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
-     */
-    val version: String?
-}
+@RealmClass(embedded = true)
+internal open class RoomAccountDataEntity(
+        @Index var type: String? = null,
+        var contentStr: String? = null
+) : RealmObject()

@@ -27,7 +27,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItemWithValue
 import im.vector.app.core.utils.DebouncedClickListener
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.api.session.accountdata.AccountDataEvent
 import javax.inject.Inject
 
 class AccountDataEpoxyController @Inject constructor(
@@ -35,8 +35,8 @@ class AccountDataEpoxyController @Inject constructor(
 ) : TypedEpoxyController<AccountDataViewState>() {
 
     interface InteractionListener {
-        fun didTap(data: UserAccountDataEvent)
-        fun didLongTap(data: UserAccountDataEvent)
+        fun didTap(data: AccountDataEvent)
+        fun didLongTap(data: AccountDataEvent)
     }
 
     var interactionListener: InteractionListener? = null
