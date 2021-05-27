@@ -1591,6 +1591,7 @@
     <string name="directory_add_a_new_server">Add a new server</string>
     <string name="directory_add_a_new_server_prompt">Enter the name of a new server you want to explore.</string>
     <string name="directory_add_a_new_server_error">"Can't find this server or its room list"</string>
+    <string name="directory_add_a_new_server_error_already_added">This server is already present in the list</string>
 
     <!-- Lock screen-->
     <string name="lock_screen_hint">Type here…</string>
