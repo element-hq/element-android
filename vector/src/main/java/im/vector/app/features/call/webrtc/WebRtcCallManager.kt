@@ -146,6 +146,7 @@ class WebRtcCallManager @Inject constructor(
     private val advertisedCalls = HashSet<String>()
     private val callsByCallId = ConcurrentHashMap<String, WebRtcCall>()
     private val callsByRoomId = ConcurrentHashMap<String, MutableList<WebRtcCall>>()
+
     // Calls started as an attended transfer, ie. with the intention of transferring another
     // call with a different party to this one.
     // callId (target) -> call (transferee)
@@ -242,30 +243,26 @@ class WebRtcCallManager @Inject constructor(
             val otherCall = getCalls().lastOrNull()
             currentCall.setAndNotify(otherCall)
         }
-        // This must be done in this thread
-        executor.execute {
-            // There is no active calls
-            if (getCurrentCall() == null) {
-                Timber.v("## VOIP Dispose peerConnectionFactory as there is no need to keep one")
-                peerConnectionFactory?.dispose()
-                peerConnectionFactory = null
-                audioManager.setMode(CallAudioManager.Mode.DEFAULT)
-                // did we start background sync? so we should stop it
-                if (isInBackground) {
-                    if (FcmHelper.isPushSupported()) {
-                        currentSession?.stopAnyBackgroundSync()
-                    } else {
-                        // for fdroid we should not stop, it should continue syncing
-                        // maybe we should restore default timeout/delay though?
-                    }
+        // There is no active calls
+        if (getCurrentCall() == null) {
+            Timber.v("## VOIP Dispose peerConnectionFactory as there is no need to keep one")
+            peerConnectionFactory?.dispose()
+            peerConnectionFactory = null
+            audioManager.setMode(CallAudioManager.Mode.DEFAULT)
+            // did we start background sync? so we should stop it
+            if (isInBackground) {
+                if (FcmHelper.isPushSupported()) {
+                    currentSession?.stopAnyBackgroundSync()
+                } else {
+                    // for fdroid we should not stop, it should continue syncing
+                    // maybe we should restore default timeout/delay though?
                 }
             }
-            Timber.v("## VOIP WebRtcPeerConnectionManager close() executor done")
         }
     }
 
     suspend fun startOutgoingCall(nativeRoomId: String, otherUserId: String, isVideoCall: Boolean, transferee: WebRtcCall? = null) {
-        val signalingRoomId =  callUserMapper?.getOrCreateVirtualRoomForRoom(nativeRoomId, otherUserId) ?: nativeRoomId
+        val signalingRoomId = callUserMapper?.getOrCreateVirtualRoomForRoom(nativeRoomId, otherUserId) ?: nativeRoomId
         Timber.v("## VOIP startOutgoingCall in room $signalingRoomId to $otherUserId isVideo $isVideoCall")
         if (getCallsByRoomId(nativeRoomId).isNotEmpty()) {
             Timber.w("## VOIP you already have a call in this room")
@@ -283,7 +280,7 @@ class WebRtcCallManager @Inject constructor(
         val mxCall = currentSession?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
         val webRtcCall = createWebRtcCall(mxCall, nativeRoomId)
         currentCall.setAndNotify(webRtcCall)
-        if(transferee != null){
+        if (transferee != null) {
             transferees[webRtcCall.callId] = transferee
         }
         CallService.onOutgoingCallRinging(

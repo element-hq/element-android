@@ -290,17 +290,17 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
-    suspend fun transferToUser(targetUserId: String, targetRoomId: String?) = withContext(dispatcher){
+    suspend fun transferToUser(targetUserId: String, targetRoomId: String?) {
         mxCall.transfer(
                 targetUserId = targetUserId,
                 targetRoomId = targetRoomId,
                 createCallId = CallIdGenerator.generate(),
                 awaitCallId = null
         )
-        endCall(true, CallHangupContent.Reason.REPLACED)
+        endCall(sendEndSignaling = false)
     }
 
-    suspend fun transferToCall(transferTargetCall: WebRtcCall)= withContext(dispatcher) {
+    suspend fun transferToCall(transferTargetCall: WebRtcCall) {
         val newCallId = CallIdGenerator.generate()
         transferTargetCall.mxCall.transfer(
                 targetUserId = this@WebRtcCall.mxCall.opponentUserId,
@@ -314,8 +314,8 @@ class WebRtcCall(val mxCall: MxCall,
                 createCallId = newCallId,
                 awaitCallId = null
         )
-        this@WebRtcCall.endCall(true, CallHangupContent.Reason.REPLACED)
-        transferTargetCall.endCall(true, CallHangupContent.Reason.REPLACED)
+            this@WebRtcCall.endCall(sendEndSignaling = false)
+            transferTargetCall.endCall(sendEndSignaling = false)
     }
 
     fun acceptIncomingCall() {
@@ -758,7 +758,7 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
-    fun endCall(originatedByMe: Boolean = true, reason: CallHangupContent.Reason? = null) {
+    fun endCall(sendEndSignaling: Boolean = true, reason: CallHangupContent.Reason? = null) {
         if (mxCall.state == CallState.Terminated) {
             return
         }
@@ -773,9 +773,9 @@ class WebRtcCall(val mxCall: MxCall,
         mxCall.state = CallState.Terminated
         sessionScope?.launch(dispatcher) {
             release()
+            onCallEnded(callId)
         }
-        onCallEnded(callId)
-        if (originatedByMe) {
+        if (sendEndSignaling) {
             if (wasRinging) {
                 mxCall.reject()
             } else {

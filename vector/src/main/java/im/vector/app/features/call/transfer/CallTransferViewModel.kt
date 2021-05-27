@@ -96,8 +96,8 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
                     )
                 } else {
                     call?.transferToUser(action.selectedUserId, null)
-                    _viewEvents.post(CallTransferViewEvents.Dismiss)
                 }
+                _viewEvents.post(CallTransferViewEvents.Dismiss)
             } catch (failure: Throwable) {
                 _viewEvents.post(CallTransferViewEvents.FailToTransfer)
             }
@@ -118,8 +118,8 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
                     )
                 } else {
                     call?.transferToUser(result.userId, result.roomId)
-                    _viewEvents.post(CallTransferViewEvents.Dismiss)
                 }
+                _viewEvents.post(CallTransferViewEvents.Dismiss)
             } catch (failure: Throwable) {
                 _viewEvents.post(CallTransferViewEvents.FailToTransfer)
             }
