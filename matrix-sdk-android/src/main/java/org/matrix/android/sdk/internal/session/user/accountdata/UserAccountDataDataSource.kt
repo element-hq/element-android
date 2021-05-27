@@ -21,7 +21,7 @@ import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.api.session.accountdata.AccountDataEvent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
@@ -31,27 +31,27 @@ import org.matrix.android.sdk.internal.database.model.UserAccountDataEntityField
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import javax.inject.Inject
 
-internal class AccountDataDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                         private val realmSessionProvider: RealmSessionProvider,
-                                                         private val accountDataMapper: AccountDataMapper) {
+internal class UserAccountDataDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
+                                                             private val realmSessionProvider: RealmSessionProvider,
+                                                             private val accountDataMapper: AccountDataMapper) {
 
-    fun getAccountDataEvent(type: String): UserAccountDataEvent? {
+    fun getAccountDataEvent(type: String): AccountDataEvent? {
         return getAccountDataEvents(setOf(type)).firstOrNull()
     }
 
-    fun getLiveAccountDataEvent(type: String): LiveData<Optional<UserAccountDataEvent>> {
+    fun getLiveAccountDataEvent(type: String): LiveData<Optional<AccountDataEvent>> {
         return Transformations.map(getLiveAccountDataEvents(setOf(type))) {
             it.firstOrNull()?.toOptional()
         }
     }
 
-    fun getAccountDataEvents(types: Set<String>): List<UserAccountDataEvent> {
+    fun getAccountDataEvents(types: Set<String>): List<AccountDataEvent> {
         return realmSessionProvider.withRealm {
             accountDataEventsQuery(it, types).findAll().map(accountDataMapper::map)
         }
     }
 
-    fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<UserAccountDataEvent>> {
+    fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<AccountDataEvent>> {
         return monarchy.findAllMappedWithChanges(
                 { accountDataEventsQuery(it, types) },
                 accountDataMapper::map

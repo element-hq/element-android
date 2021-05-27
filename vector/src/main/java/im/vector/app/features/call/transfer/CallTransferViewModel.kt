@@ -89,7 +89,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
                 if (action.consultFirst) {
                     val dmRoomId = directRoomHelper.ensureDMExists(action.selectedUserId)
                     callManager.startOutgoingCall(
-                            signalingRoomId = dmRoomId,
+                            nativeRoomId = dmRoomId,
                             otherUserId = action.selectedUserId,
                             isVideoCall = call?.mxCall?.isVideoCall.orFalse(),
                             transferee = call
@@ -111,7 +111,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
                 val result = dialPadLookup.lookupPhoneNumber(action.phoneNumber)
                 if (action.consultFirst) {
                     callManager.startOutgoingCall(
-                            signalingRoomId = result.roomId,
+                            nativeRoomId = result.roomId,
                             otherUserId = result.userId,
                             isVideoCall = call?.mxCall?.isVideoCall.orFalse(),
                             transferee = call
