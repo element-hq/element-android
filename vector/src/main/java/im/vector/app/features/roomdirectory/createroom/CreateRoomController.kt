@@ -75,6 +75,7 @@ class CreateRoomController @Inject constructor(
             id("topic")
             enabled(enableFormElement)
             value(viewState.roomTopic)
+            singleLine(false)
             hint(host.stringProvider.getString(R.string.create_room_topic_hint))
 
             onTextChange { text ->

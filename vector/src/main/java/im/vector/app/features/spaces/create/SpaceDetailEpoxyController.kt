@@ -64,7 +64,6 @@ class SpaceDetailEpoxyController @Inject constructor(
             enabled(true)
             value(data?.name)
             hint(host.stringProvider.getString(R.string.create_room_name_hint))
-            singleLine(true)
             showBottomSeparator(false)
             errorMessage(data?.nameInlineError)
 //            onBind { _, view, _ ->
