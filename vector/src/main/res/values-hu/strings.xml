@@ -847,11 +847,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
         <item quantity="other">%d tag</item>
     </plurals>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">1 új üzenet</item>
+        <item quantity="one">%d új üzenet</item>
         <item quantity="other">%d új üzenet</item>
     </plurals>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 szoba</item>
+        <item quantity="one">%d szoba</item>
         <item quantity="other">%d szoba</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
@@ -963,11 +963,11 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
         <item quantity="other">%dp</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1ó</item>
+        <item quantity="one">%dó</item>
         <item quantity="other">%dó</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1n</item>
+        <item quantity="one">%dn</item>
         <item quantity="other">%dn</item>
     </plurals>
     <string name="room_participants_now">Most: %1$s</string>
@@ -976,7 +976,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="room_participants_invite_join_names_and">%1$s és %2$s</string>
     <string name="room_participants_invite_join_names_combined">%2$s %1$s</string>
     <plurals name="room_details_selected">
-        <item quantity="one">1 kiválasztva</item>
+        <item quantity="one">%d kiválasztva</item>
         <item quantity="other">%d kiválasztva</item>
     </plurals>
     <plurals name="group_members">
@@ -2407,4 +2407,62 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="notice_widget_jitsi_removed">Videó konferenciát befejezte: %1$s</string>
     <string name="notice_widget_jitsi_added_by_you">Videó konferenciát indítottál</string>
     <string name="notice_widget_jitsi_added">Videó konferenciát elindította: %1$s</string>
+    <string name="call_held_by_user">%s felfüggesztetted a hívást</string>
+    <string name="settings_troubleshoot_test_notification_title">Értesítés megjelenítése</string>
+    <string name="settings_troubleshoot_test_push_notification_content">Az értesítést látod. Kattints ide!</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">A push-t nem sikerült megkapni. Megoldás lehet az alkalmazás újratelepítése.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">Az alkalmazás megkapta a PUSH-t</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Az alkalmazás a PUSH-ra vár</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Push tesztelése</string>
+    <string name="error_threepid_auth_failed">Ellenőrizd, hogy rákattintottál arra a hivatkozásra amit e-mailben küldtünk neked.</string>
+    <string name="settings_remove_three_pid_confirmation_content">%s törlése\?</string>
+    <string name="search_is_not_supported_in_e2e_room">Titkosított szobákban való keresés egyenlőre nem támogatott.</string>
+    <string name="search_banned_user_hint">Kitiltott felhasználók szűrése</string>
+    <string name="room_permissions_change_topic">Téma megváltoztatása</string>
+    <string name="room_permissions_upgrade_the_room">Szoba fejlesztése</string>
+    <string name="room_permissions_send_m_room_server_acl_events">m.room.server_acl esemény küldése</string>
+    <string name="room_permissions_change_permissions">Jogosultságok megváltoztatása</string>
+    <string name="room_permissions_change_room_name">Szoba nevének megváltoztatása</string>
+    <string name="room_permissions_change_history_visibility">Régi üzenetek láthatóságának megváltoztatása</string>
+    <string name="room_permissions_enable_room_encryption">Szoba titkosításának bekapcsolása</string>
+    <string name="room_permissions_change_main_address_for_the_room">A szoba elsődleges címének megváltoztatása</string>
+    <string name="room_permissions_change_room_avatar">Szoba profilkép megváltoztatása</string>
+    <string name="room_permissions_modify_widgets">Kisalkalmazások megváltoztatása</string>
+    <string name="room_permissions_notify_everyone">Mindenki értesítése</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Mások által küldött üzenetek törlése</string>
+    <string name="room_permissions_ban_users">Felhasználók kitiltása</string>
+    <string name="room_permissions_kick_users">Felhasználók kirúgása</string>
+    <string name="room_permissions_change_settings">Beállítások megváltoztatása</string>
+    <string name="room_permissions_invite_users">Felhasználók meghívása</string>
+    <string name="room_permissions_send_messages">Üzenet küldése</string>
+    <string name="room_permissions_default_role">Alapértelmezett szerep</string>
+    <string name="room_permissions_notice_read_only">Nincs jogosultságod a szerepek megváltoztatásához, amik szükségesek a szoba bizonyos részeinek megváltoztatásához</string>
+    <string name="room_permissions_notice">A szoba bizonyos beállításainak megváltoztatásához szükséges szerep kiválasztása</string>
+    <string name="room_permissions_title">Jogosultságok</string>
+    <string name="room_settings_permissions_subtitle">Szerepek megjelenítése és megváltoztatása, amik szükségesek a szoba bizonyos részeinek megváltoztatásához.</string>
+    <string name="room_settings_permissions_title">Szoba jogosultságok</string>
+    <string name="room_participants_leave_private_warning">Ez a szoba nem nyilvános. Kilépés után csak újabb meghívóval tudsz újra belépni a szobába.</string>
+    <string name="call_held_by_you">Felfüggesztetted a hívást</string>
+    <string name="call_hold_action">Várakoztat</string>
+    <string name="call_resume_action">Folytatás</string>
+    <string name="error_unauthorized">Jogosulatlan, érvényes azonosítási adatok hiányoznak</string>
+    <string name="use_as_default_and_do_not_ask_again">Használd alapértelmezettként és ne kérdezze újra</string>
+    <string name="option_always_ask">Mindig kérdez</string>
+    <string name="spaces_header">Terek</string>
+    <string name="spaces_invited_header">Meghívók</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Minden szoba megjelenítése ebben a könyvárban, beleértve a szókimondó tartalmú szobákat is.</string>
+    <string name="settings_room_directory_show_all_rooms">Szókimondó tartalmas szobák megjelenítése</string>
+    <string name="settings_category_room_directory">Szobák listája</string>
+    <string name="suggested_header">Javasolt szobák</string>
+    <string name="dialog_edit_hint">Új érték</string>
+    <string name="action_return">Visszatérés</string>
+    <string name="action_switch">Cserél</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">A végpontok közötti titkosítást bekapcsoltad (ismeretlen algoritmus: %1$s).</string>
+    <string name="notice_end_to_end_ok_by_you">A végpontok közötti titkosítást bekapcsoltad.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">A vendégeknek megtiltottad, hogy belépjenek a szobába.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s megtiltotta a vendégeknek, hogy belépjenek ebbe a szobába.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">A vendégeknek megtiltottad, hogy belépjenek a szobába.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">A vendégeknek megengedted, hogy belépjenek ide.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s megengedte a vendégeknek, hogy belépjenek ide.</string>
+    <string name="notice_room_guest_access_can_join_by_you">A vendégeknek megengedted, hogy belépjenek a szobába.</string>
 </resources>
