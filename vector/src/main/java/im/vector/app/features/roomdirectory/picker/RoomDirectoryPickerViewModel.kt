@@ -38,7 +38,8 @@ import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsPa
 class RoomDirectoryPickerViewModel @AssistedInject constructor(
         @Assisted initialState: RoomDirectoryPickerViewState,
         private val session: Session,
-        private val uiStateRepository: UiStateRepository
+        private val uiStateRepository: UiStateRepository,
+        private val roomDirectoryListCreator: RoomDirectoryListCreator
 ) : VectorViewModel<RoomDirectoryPickerViewState, RoomDirectoryPickerAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -56,8 +57,22 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
     }
 
     init {
+        observeAndCompute()
         load()
         loadCustomRoomDirectoryHomeservers()
+    }
+
+    private fun observeAndCompute() {
+        selectSubscribe(
+                RoomDirectoryPickerViewState::asyncThirdPartyRequest,
+                RoomDirectoryPickerViewState::customHomeservers
+        ) { async, custom ->
+            async()?.let {
+                setState {
+                    copy(directories = roomDirectoryListCreator.computeDirectories(it, custom))
+                }
+            }
+        }
     }
 
     private fun load() {

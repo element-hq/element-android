@@ -51,8 +51,7 @@ class RoomDirectoryPickerController @Inject constructor(
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
         private val dimensionConverter: DimensionConverter,
-        private val errorFormatter: ErrorFormatter,
-        private val roomDirectoryListCreator: RoomDirectoryListCreator
+        private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<RoomDirectoryPickerViewState>() {
 
     var currentRoomDirectoryData: RoomDirectoryData? = null
@@ -65,11 +64,7 @@ class RoomDirectoryPickerController @Inject constructor(
 
         when (val asyncThirdPartyProtocol = data.asyncThirdPartyRequest) {
             is Success    -> {
-                val directories = roomDirectoryListCreator.computeDirectories(
-                        asyncThirdPartyProtocol(),
-                        data.customHomeservers
-                )
-                directories.join(
+                data.directories.join(
                         each = { _, roomDirectoryServer -> buildDirectory(roomDirectoryServer) },
                         between = { idx, _ -> buildDivider(idx) }
                 )
