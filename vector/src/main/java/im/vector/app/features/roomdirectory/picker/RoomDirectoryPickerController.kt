@@ -17,7 +17,10 @@
 package im.vector.app.features.roomdirectory.picker
 
 import android.text.InputType
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -112,6 +115,18 @@ class RoomDirectoryPickerController @Inject constructor(
                 id("edit")
                 showBottomSeparator(false)
                 value(data.enteredServer)
+                imeOptions(EditorInfo.IME_ACTION_DONE)
+                editorActionListener(object : TextView.OnEditorActionListener {
+                    override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                        if (actionId == EditorInfo.IME_ACTION_DONE) {
+                            if (data.enteredServer.isNotEmpty()) {
+                                host.callback?.onSubmitServer()
+                            }
+                            return true
+                        }
+                        return false
+                    }
+                })
                 hint(host.stringProvider.getString(R.string.directory_server_placeholder))
                 inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI)
                 onTextChange { text ->

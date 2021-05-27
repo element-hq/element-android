@@ -19,6 +19,7 @@ package im.vector.app.features.form
 import android.text.Editable
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -64,6 +65,9 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     @EpoxyAttribute
     var onTextChange: ((String) -> Unit)? = null
 
+    @EpoxyAttribute
+    var editorActionListener: TextView.OnEditorActionListener? = null
+
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
             onTextChange?.invoke(s.toString())
@@ -85,6 +89,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         holder.textInputEditText.imeOptions = imeOptions ?: EditorInfo.IME_ACTION_NONE
 
         holder.textInputEditText.addTextChangedListener(onTextChangeListener)
+        holder.textInputEditText.setOnEditorActionListener(editorActionListener)
         holder.bottomSeparator.isVisible = showBottomSeparator
     }
 
