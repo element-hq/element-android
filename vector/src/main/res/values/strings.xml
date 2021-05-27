@@ -1584,10 +1584,13 @@
     <string name="select_room_directory">Select a room directory</string>
     <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
     <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
-    <string name="directory_server_placeholder">Homeserver URL</string>
+    <string name="directory_server_placeholder">Server name</string>
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
     <string name="directory_your_server">Your server</string>
+    <string name="directory_add_a_new_server">Add a new server</string>
+    <string name="directory_add_a_new_server_prompt">Enter the name of a new server you want to explore.</string>
+    <string name="directory_add_a_new_server_error">"Can't find this server or its room list"</string>
 
     <!-- Lock screen-->
     <string name="lock_screen_hint">Type here…</string>

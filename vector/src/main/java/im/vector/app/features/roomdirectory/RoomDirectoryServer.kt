@@ -25,6 +25,11 @@ data class RoomDirectoryServer(
         val isUserServer: Boolean,
 
         /**
+         * True if manually added, so it can be removed by the user
+         */
+        val isManuallyAdded: Boolean,
+
+        /**
          * Supported protocols
          * TODO Rename RoomDirectoryData to RoomDirectoryProtocols
          */

@@ -51,6 +51,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     @EpoxyAttribute
     var inputType: Int? = null
 
+    // TODO Should be true by default
     @EpoxyAttribute
     var singleLine: Boolean? = null
 

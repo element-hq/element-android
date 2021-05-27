@@ -29,7 +29,8 @@ class RoomDirectoryListCreator @Inject constructor(
         private val session: Session
 ) {
 
-    fun computeDirectories(thirdPartyProtocolData: Map<String, ThirdPartyProtocol>): List<RoomDirectoryServer> {
+    fun computeDirectories(thirdPartyProtocolData: Map<String, ThirdPartyProtocol>,
+                           customHomeservers: Set<String>): List<RoomDirectoryServer> {
         val result = ArrayList<RoomDirectoryServer>()
 
         val protocols = ArrayList<RoomDirectoryData>()
@@ -75,6 +76,7 @@ class RoomDirectoryListCreator @Inject constructor(
                 RoomDirectoryServer(
                         serverName = userHsName,
                         isUserServer = true,
+                        isManuallyAdded = false,
                         protocols = protocols
                 )
         )
@@ -88,6 +90,7 @@ class RoomDirectoryListCreator @Inject constructor(
                             RoomDirectoryServer(
                                     serverName = it,
                                     isUserServer = false,
+                                    isManuallyAdded = false,
                                     protocols = listOf(
                                             RoomDirectoryData(
                                                     homeServer = it,
@@ -99,7 +102,25 @@ class RoomDirectoryListCreator @Inject constructor(
                     )
                 }
 
-        // TODO Add manually added server by the user
+        // Add manually added server by the user
+        customHomeservers
+                .forEach {
+                    // Use the server name as a default display name
+                    result.add(
+                            RoomDirectoryServer(
+                                    serverName = it,
+                                    isUserServer = false,
+                                    isManuallyAdded = true,
+                                    protocols = listOf(
+                                            RoomDirectoryData(
+                                                    homeServer = it,
+                                                    displayName = RoomDirectoryData.MATRIX_PROTOCOL_NAME,
+                                                    includeAllNetworks = false
+                                            )
+                                    )
+                            )
+                    )
+                }
 
         return result
     }
