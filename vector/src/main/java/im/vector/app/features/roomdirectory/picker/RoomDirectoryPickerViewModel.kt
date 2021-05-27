@@ -138,7 +138,7 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
     private fun handleSetServerUrl(action: RoomDirectoryPickerAction.SetServerUrl) {
         setState {
             copy(
-                    enteredServer = action.url,
+                    enteredServer = action.url
             )
         }
     }

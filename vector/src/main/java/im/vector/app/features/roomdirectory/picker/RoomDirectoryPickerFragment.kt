@@ -18,7 +18,6 @@ package im.vector.app.features.roomdirectory.picker
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity

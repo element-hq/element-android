@@ -175,7 +175,7 @@ class RoomDirectoryPickerController @Inject constructor(
     private fun buildDivider(idx: Int) {
         val host = this
         dividerItem {
-            id("divider_${idx}")
+            id("divider_$idx")
             color(host.dividerColor)
         }
     }
