@@ -591,7 +591,7 @@
     <string name="room_details_people">Utenti</string>
     <string name="room_details_files">File</string>
     <string name="room_details_settings">Impostazioni</string>
-    <string name="malformed_id">ID malformato. Dovrebbe essere un indirizzo email o un ID utente come \'@localpart:domain\'</string>
+    <string name="malformed_id">ID malformato. Dovrebbe essere un indirizzo email o un ID utente Matrix come \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITATI</string>
     <string name="room_details_people_present_group_name">MEMBRI</string>
     <!-- Room events -->
@@ -814,9 +814,9 @@
     <string name="encryption_export_room_keys">Esporta le chiavi delle stanze</string>
     <string name="encryption_export_room_keys_summary">Esporta le chiavi in un file locale</string>
     <string name="encryption_export_export">Esporta</string>
-    <string name="passphrase_enter_passphrase">Inserisci frase di sicurezza</string>
-    <string name="passphrase_confirm_passphrase">Conferma frase di sicurezza</string>
-    <string name="encryption_export_saved_as">Le chiavi di crittografia E2E della stanza sono state salvate su \'%s\'.
+    <string name="passphrase_enter_passphrase">Inserisci la Passphrase</string>
+    <string name="passphrase_confirm_passphrase">Conferma la Passphrase</string>
+    <string name="encryption_export_saved_as">Le chiavi per la crittografia E2E della stanza sono state salvate su \'%s\'.
 \n
 \nAttenzione: se si disinstalla quest\'applicazione il file viene eliminato.</string>
     <string name="encryption_import_e2e_room_keys">Importa le chiavi di crittografia E2E della stanza</string>
@@ -1051,7 +1051,7 @@
     <string name="e2e_re_request_encryption_key">Richiedi di nuovo le chiavi di crittografia dalle tue altre sessioni.</string>
     <string name="e2e_re_request_encryption_key_sent">La richiesta della chiave è stata inviata.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Richiesta inviata</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Avvia ${app_name} su un altro dispositivo capace di decifrare il messaggio in modo che poi possa inviarti le chiavi su questa sessione.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Avvia ${app_name} su un altro dispositivo capace di decrittare il messaggio in modo che poi possa inviarti le chiavi su questa sessione.</string>
     <string name="lock_screen_hint">Digita qui…</string>
     <string name="option_send_voice">Invia messaggio vocale</string>
     <string name="go_on_with">prosegui con…</string>
@@ -1132,9 +1132,9 @@
     <string name="unknown_error">Spiacente, si è verificato un errore</string>
     <string name="settings_lazy_loading_title">Caricamento differito dei membri della stanza</string>
     <string name="room_sliding_menu_version_x">Versione %s</string>
-    <string name="encryption_export_notice">Crea una password per mettere al sicuro le chiavi esportate. La stessa password dovrà essere usata per poter importare le chiavi.</string>
-    <string name="passphrase_create_passphrase">Crea una frase di sicurezza</string>
-    <string name="passphrase_passphrase_does_not_match">La frase di sicurezza non corrisponde</string>
+    <string name="encryption_export_notice">Crea una Passphrase per mettere al sicuro le chiavi esportate. La stessa Passphrase dovrà essere usata anche per importare le chiavi.</string>
+    <string name="passphrase_create_passphrase">Crea una Passphrase</string>
+    <string name="passphrase_passphrase_does_not_match">La Passphrase non corrisponde</string>
     <string name="merged_events_expand">espandi</string>
     <string name="merged_events_collapse">riduci</string>
     <string name="settings_info_area_show">Mostra l\'area informazioni</string>
@@ -1246,14 +1246,14 @@
     <string name="done">Fatto</string>
     <string name="settings_notification_advanced">Impostazioni di notifica avanzate</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Se ti disconnetti adesso perderai i tuoi messaggi cifrati</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">Il Backup delle chiavi è in corso. Se ti disconnetti adesso perderai i tuoi messaggi cifrati.</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Il Backup delle chiavi è in corso. Se ti disconnetti adesso perderai i tuoi messaggi criptati.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Il Backup delle chiavi deve essere attivo su tutte le tue sessioni per evitare di perdere l\'accesso ai tuoi messaggi cifrati.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Non voglio i miei messaggi cifrati</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Backup delle chiavi…</string>
     <string name="keys_backup_activate">Usa il Backup delle chiavi</string>
     <string name="are_you_sure">Sei sicuro\?</string>
     <string name="backup">Backup</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perderai l\'accesso ai tuoi messaggi cifrati a meno che tu non faccia il Backup delle chiavi prima di disconnetterti.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perderai l\'accesso ai tuoi messaggi criptati a meno che tu non faccia il Backup delle chiavi prima di disconnetterti.</string>
     <string name="stay">Rimani</string>
     <string name="abort">Interrompi</string>
     <string name="ignore">Ignora</string>
@@ -1280,7 +1280,7 @@
     <string name="settings_system_preferences_summary">Scegli il colore del LED, la vibrazione, il suono…</string>
     <string name="settings_cryptography_manage_keys">Gestione chiavi crittografiche</string>
     <string name="settings_send_message_with_enter">Invia il messaggio col tasto Invio</string>
-    <string name="settings_send_message_with_enter_summary">Il tasto Invio della tastiera, invece di andare a capo invierà il messaggio</string>
+    <string name="settings_send_message_with_enter_summary">Il tasto Invio della tastiera invece di andare a capo invierà il messaggio</string>
     <string name="settings_data_save_mode_summary">La modalità risparmio dati applica un filtro specifico che esclude gli aggiornamenti di presenza e le notifiche di scrittura.</string>
     <string name="settings_change_password_submit">Aggiorna la password</string>
     <string name="settings_fail_to_update_password_invalid_current_password">La password non è valida</string>
@@ -1289,9 +1289,9 @@
     <string name="encryption_settings_manage_message_recovery_summary">Gestisci il Backup delle chiavi</string>
     <string name="notification_silent">Silenzioso</string>
     <string name="error_empty_field_enter_user_name">Inserisci un nome utente.</string>
-    <string name="passphrase_empty_error_message">Inserisci una password</string>
-    <string name="passphrase_passphrase_too_weak">La frase di sicurezza è troppo debole</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Cancella la password se vuoi che ${app_name} generi un codice di recupero.</string>
+    <string name="passphrase_empty_error_message">Inserisci una Passphrase</string>
+    <string name="passphrase_passphrase_too_weak">La Passphrase è troppo debole</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">Cancella la Passphrase se vuoi che ${app_name} generi un codice di recupero.</string>
     <string name="keys_backup_no_session_error">Non c\'è alcuna sessione Matrix disponibile</string>
     <string name="keys_backup_setup_step1_title">Non perdere mai i messaggi cifrati</string>
     <string name="keys_backup_setup_step1_description">I messaggi nelle stanze cifrate sono protetti con crittografia E2E. Solo tu e i destinatarii avete le chiavi crittografiche per leggere questi messaggi.
@@ -1300,18 +1300,18 @@
     <string name="keys_backup_setup">Inizia ad usare il Backup delle chiavi crittografiche</string>
     <string name="keys_backup_setup_step1_advanced">(Avanzato)</string>
     <string name="keys_backup_setup_step1_manual_export">Esporta manualmente le chiavi crittografiche</string>
-    <string name="keys_backup_setup_step2_text_title">Proteggi il tuo backup con una password.</string>
-    <string name="keys_backup_setup_step2_text_description">Una copia cifrata delle tue chiavi crittografiche sarà salvata sul tuo Home Server. Proteggi il tuo Backup con una password per tenerlo al sicuro. 
-\n 
-\nPer una maggior sicurezza, è meglio che la password del Backup delle chiavi sia diversa da quella del tuo account.</string>
-    <string name="keys_backup_setup_step2_button_title">Imposta frase di sicurezza</string>
+    <string name="keys_backup_setup_step2_text_title">Proteggi il tuo backup con una Passphrase.</string>
+    <string name="keys_backup_setup_step2_text_description">Una copia criptata delle tue chiavi crittografiche sarà salvata sul tuo Home Server. Proteggi il tuo Backup con una Passphrase per tenerla al sicuro.
+\n
+\nPer una maggior sicurezza, è meglio che la Passphrase del Backup delle chiavi sia diversa dalla password del tuo account.</string>
+    <string name="keys_backup_setup_step2_button_title">Imposta la Passphrase</string>
     <string name="keys_backup_setup_creating_backup">Creazione backup</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Oppure, proteggi il tuo Backup con un codice di recupero, salvandolo in un luogo sicuro.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Avanzato) Imposta un codice di recupero</string>
     <string name="keys_backup_setup_step3_success_title">Fatto!</string>
     <string name="keys_backup_setup_step3_text_line1">Il Backup delle tue chiavi crittografiche è in corso.</string>
-    <string name="keys_backup_setup_step3_text_line2">Il tuo codice di recupero è un\'ancora di salvezza - puoi usarlo per riaccedere ai tuoi messaggi cifrati se dimentichi la password. 
-\nSalva il tuo codice di recupero in un luogo sicuro, tipo un password manager (o una cassaforte)</string>
+    <string name="keys_backup_setup_step3_text_line2">Il tuo codice di recupero è un\'ancora di salvezza - puoi usarlo per riaccedere ai tuoi messaggi criptati qualora dimenticassi la Passphrase.
+\nSalva il tuo codice di recupero in un luogo sicuro, come un password manager (o una cassaforte)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Salva il tuo codice di recupero in un luogo sicuro, come un password manager (o una cassaforte)</string>
     <string name="keys_backup_setup_step3_button_title">Fatto</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">Ho fatto una copia</string>
@@ -1323,7 +1323,7 @@
 \nAttenzione: se l\'applicazione su cui è salvato venisse disinstallata, il codice di recupero verrà perso.</string>
     <string name="keys_backup_setup_step3_please_make_copy">Si prega di farne una copia</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Condividi il codice di recupero con…</string>
-    <string name="keys_backup_setup_step3_generating_key_status">Generazione del codice di recupero usando la password. Questo processo può durare alcuni secondi.</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Generazione del codice di recupero basato sulla Passphrase. Questo processo può durare alcuni secondi.</string>
     <string name="recovery_key">Codice di recupero</string>
     <string name="unexpected_error">Errore inatteso</string>
     <string name="keys_backup_setup_backup_started_title">Backup avviato</string>
@@ -1331,14 +1331,14 @@
     <string name="keys_backup_setup_skip_title">Sei sicuro\?</string>
     <string name="keys_backup_setup_skip_msg">Se ti disconnetti o perdessi questo dispositivo potresti perdere l\'accesso ai tuoi messaggi.</string>
     <string name="keys_backup_restore_is_getting_backup_version">Verifica versione backup…</string>
-    <string name="keys_backup_restore_with_passphrase">Usa la tua password di recupero per sbloccare i messaggi cifrati</string>
+    <string name="keys_backup_restore_with_passphrase">Usa la tua Passphrase per sbloccare i messaggi criptati</string>
     <string name="keys_backup_restore_use_recovery_key">usa il tuo codice di recupero</string>
-    <string name="keys_backup_restore_with_passphrase_helper_with_link">Se non conosci la tua password di recupero, puoi %s.</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Se non ricordi la tua Passphrase, puoi %s.</string>
     <string name="keys_backup_restore_with_recovery_key">Usa il tuo codice di recupero per sbloccare la Timeline dei messaggi cifrati</string>
     <string name="keys_backup_restore_key_enter_hint">Inserisci codice di recupero</string>
     <string name="keys_backup_restore_setup_recovery_key">Ripristino messaggio</string>
     <string name="keys_backup_restore_with_key_helper">Hai perso il codice di recupero\? Nelle Impostazioni puoi crearne uno nuovo.</string>
-    <string name="keys_backup_passphrase_error_decrypt">Impossibile decifrare il backup con questa password: verifica che la password di recupero inserita sia corretta.</string>
+    <string name="keys_backup_passphrase_error_decrypt">Impossibile decrittare il backup con questa Passphrase: verifica che sia corretta.</string>
     <string name="network_error_please_check_and_retry">Errore di rete: controlla la tua connessione e riprova.</string>
     <string name="keys_backup_restoring_waiting_message">Ripristino Backup:</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Codice di recupero in elaborazione…</string>
@@ -1370,7 +1370,7 @@
     <string name="keys_backup_settings_invalid_signature_from_verified_device">Il backup ha una firma non valida dalla sessione verificata %s</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Il backup ha una firma non valida dalla sessione non verificata %s</string>
     <string name="keys_backup_get_trust_error">Impossibile ottenere info di fiducia per il backup (%s).</string>
-    <string name="keys_backup_settings_untrusted_backup">Per usare il backup delle chiavi crittografiche su questa sessione, devi accedervi con la password o con il codice di recupero.</string>
+    <string name="keys_backup_settings_untrusted_backup">Per usare il backup delle chiavi crittografiche su questa sessione, devi accedervi con la Passphrase o con il codice di recupero.</string>
     <string name="keys_backup_settings_deleting_backup">Eliminazione Backup…</string>
     <string name="keys_backup_settings_delete_backup_error">Eliminazione backup fallita (%s)</string>
     <string name="keys_backup_settings_delete_confirm_title">Elimina Backup</string>
@@ -1745,7 +1745,7 @@
     <string name="room_join_rules_public">%1$s ha reso la stanza pubblica. Ora è raggiungibile da chiunque ne conosca l\'indirizzo.</string>
     <string name="room_join_rules_invite">%1$s ha reso la stanza accessibile solo su invito.</string>
     <string name="timeline_unread_messages">Messaggi non letti</string>
-    <string name="login_splash_title">Detieni il controllo sulle -tue- conversazioni.</string>
+    <string name="login_splash_title">Le -tue- conversazioni appartengono solo a te.</string>
     <string name="login_splash_text1">Scambia messaggi diretti o nei gruppi</string>
     <string name="login_splash_text2">Rendi sicure le tue conversazioni grazie alla crittografia</string>
     <string name="login_splash_text3">Estendi e personalizza la tua esperienza</string>
@@ -2033,11 +2033,11 @@
     </plurals>
     <string name="poll_item_selected_aria">Opzione selezionata</string>
     <string name="command_description_poll">Crea un semplice sondaggio</string>
-    <string name="verification_cannot_access_other_session">Usa una frase o chiave di recupero</string>
+    <string name="verification_cannot_access_other_session">Usa una Passphrase o un codice di recupero</string>
     <string name="verification_use_passphrase">Se non puoi accedere a una sessione esistente</string>
     <string name="new_signin">Nuovo accesso</string>
     <string name="enter_secret_storage_invalid">Impossibile trovare segreti nell\'archivio</string>
-    <string name="enter_secret_storage_passphrase">Inserisci la frase di sicurezza dell\'archivio segreto</string>
+    <string name="enter_secret_storage_passphrase">Inserisci la Passphrase dell\'archivio segreto</string>
     <string name="enter_secret_storage_passphrase_warning">Attenzione:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Dovresti accedere all\'archivio segreto solo da un dispositivo fidato</string>
     <string name="message_action_item_redact">Rimuovi…</string>
@@ -2075,7 +2075,7 @@
 \nTi consigliamo di cambiare immediatamente la password e le chiavi di recupero nelle impostazioni.</string>
     <string name="verify_cancelled_notice">Verifica i tuoi dispositivi nelle impostazioni.</string>
     <string name="verification_cancelled">Verifica annullata</string>
-    <string name="recovery_passphrase">Frase di ripristino</string>
+    <string name="recovery_passphrase">Passphrase di ripristino</string>
     <string name="message_key">Chiave dei messaggi</string>
     <string name="account_password">Password dell\'account</string>
     <string name="set_recovery_passphrase">Imposta una %s</string>
@@ -2093,7 +2093,7 @@
     <string name="finish">Fine</string>
     <string name="bootstrap_save_key_description">Usa questa %1$s come una rete di salvataggio in caso dimenticassi la tua %2$s.</string>
     <string name="bootstrap_crosssigning_progress_initializing">Pubblicazione delle chiavi di identità create</string>
-    <string name="bootstrap_crosssigning_progress_pbkdf2">Generazione della chiave di sicurezza dalla password</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Generazione di una chiave sicura basata sulla Passphrase</string>
     <string name="bootstrap_crosssigning_progress_default_key">Definizione della chiave predefinita SSSS</string>
     <string name="bootstrap_crosssigning_progress_save_msk">Sincronizzazione della chiave principale</string>
     <string name="bootstrap_crosssigning_progress_save_usk">Sincronizzazione della chiave utente</string>
@@ -2106,10 +2106,10 @@
     <string name="bootstrap_crosssigning_save_usb">Salvala in una penna USB o disco di backup</string>
     <string name="bootstrap_crosssigning_save_cloud">Copiala sul Cloud</string>
     <string name="auth_flow_not_supported">Non puoi farlo dallo smartphone</string>
-    <string name="bootstrap_skip_text">Impostare una password dei messaggi ti consente di proteggere e sbloccare i messaggi criptati e verifiche.
+    <string name="bootstrap_skip_text">Impostare una Passphrase di ripristino ti consente di proteggere e sbloccare i messaggi criptati e le verifiche.
 \n
-\nSe non vuoi impostare una password dei messaggi puoi generare una chiave dei messaggi.</string>
-    <string name="bootstrap_skip_text_no_gen_key">Impostare una password di ripristino ti consente di proteggere e sbloccare i messaggi cifrati le verifiche.</string>
+\nSe non vuoi impostare una Password dei messaggi puoi generare una chiave dei messaggi.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Impostare una Passphrase di ripristino ti consente di proteggere e sbloccare i messaggi criptati e le verifiche.</string>
     <string name="encryption_enabled">Crittografia attiva</string>
     <string name="encryption_enabled_tile_description">I messaggi in questa stanza sono crittografati E2E. Maggiori info e verifica degli utenti nel loro profilo.</string>
     <string name="encryption_not_enabled">Crittografia non attiva</string>
@@ -2134,20 +2134,20 @@
     <string name="bootstrap_enter_recovery">Inserisci la tua %s per continuare</string>
     <string name="use_file">Usa file</string>
     <string name="enter_backup_passphrase">Inserisci %s</string>
-    <string name="backup_recovery_passphrase">Frase di recupero</string>
+    <string name="backup_recovery_passphrase">Passphrase di ripristino</string>
     <string name="bootstrap_invalid_recovery_key">Non è una chiave di ripristino valida</string>
     <string name="recovery_key_empty_error_message">Inserisci una chiave di ripristino</string>
     <string name="bootstrap_progress_checking_backup">Controllo della chiave di backup</string>
     <string name="bootstrap_progress_checking_backup_with_info">Controllo della chiave di backup (%s)</string>
     <string name="bootstrap_progress_compute_curve_key">Rilevazione chiave di curva ellittica</string>
-    <string name="bootstrap_progress_generating_ssss">Generazione chiave SSSS dalla password</string>
-    <string name="bootstrap_progress_generating_ssss_with_info">Generazione chiave SSSS dalla password (%s)</string>
+    <string name="bootstrap_progress_generating_ssss">Generazione chiave SSSS basata sulla Passphrase</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Generazione chiave SSSS basata sulla Passphrase (%s)</string>
     <string name="bootstrap_progress_generating_ssss_recovery">Generazione chiave SSSS dalla chiave di ripristino</string>
     <string name="bootstrap_progress_storing_in_sss">Memorizzazione segreto della chiave in SSSS</string>
     <string name="new_session_review_with_info">%1$s (%2$s)</string>
-    <string name="bootstrap_migration_enter_backup_password">Inserisci la password del backup chiavi per continuare.</string>
+    <string name="bootstrap_migration_enter_backup_password">Per continuare inserisci la Passphrase del backup delle chiavi.</string>
     <string name="bootstrap_migration_use_recovery_key">usare la chiave di ripristino del backup chiavi</string>
-    <string name="bootstrap_migration_with_passphrase_helper_with_link">Non conosci la password del backup chiavi, puoi %s.</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Non conosci la Passphrase del backup delle chiavi, puoi %s.</string>
     <string name="bootstrap_migration_backup_recovery_key">Chiave di ripristino del backup chiavi</string>
     <string name="settings_security_prevent_screenshots_title">Impedisci la cattura di schermate dell\'app</string>
     <string name="settings_security_prevent_screenshots_summary">Attivandolo verrà aggiunto FLAG_SECURE a tutte le attività. Riavvia l\'applicazione per applicare le modifiche.</string>
@@ -2282,9 +2282,9 @@
     <string name="settings_secure_backup_setup">Imposta il Backup Sicuro</string>
     <string name="settings_secure_backup_reset">Reimposta il Backup Sicuro</string>
     <string name="settings_secure_backup_enter_to_setup">Configura in questo dispositivo</string>
-    <string name="settings_secure_backup_section_info">Per evitare di non poter più accedere ai messaggi e dati cifrati fai un backup delle chiavi crittografiche sul tuo server.</string>
+    <string name="settings_secure_backup_section_info">Per evitare di non poter più accedere ai messaggi e dati criptati fai un backup delle chiavi crittografiche sul tuo server.</string>
     <string name="reset_secure_backup_title">Genera una nuova chiave di sicurezza o imposta una nuova frase di sicurezza per il backup esistente.</string>
-    <string name="reset_secure_backup_warning">Ciò sostituirà la tua attuale chiave o frase.</string>
+    <string name="reset_secure_backup_warning">Questo sostituirà la tua attuale chiave o frase.</string>
     <string name="disabled_integration_dialog_title">Le integrazioni sono disattivate</string>
     <string name="disabled_integration_dialog_content">Attiva \'Permetti integrazioni\' nelle impostazioni per continuare.</string>
     <plurals name="room_settings_banned_users_count">
@@ -2457,7 +2457,7 @@
     <string name="secure_backup_reset_if_you_reset_all">Se reimposti tutto</string>
     <string name="secure_backup_reset_all_no_other_devices">Fallo solo se non hai altri dispositivi con cui fare la verifica.</string>
     <string name="secure_backup_reset_all">Reimposta tutto</string>
-    <string name="bad_passphrase_key_reset_all_action">Dimenticato o perso tutte le opzioni di recupero\? Reimposta tutto</string>
+    <string name="bad_passphrase_key_reset_all_action">Hai dimenticato o perso tutte le opzioni di ripristino\? Reimposta tutto</string>
     <string name="direct_room_created_summary_item_by_you">Sei entrato.</string>
     <string name="direct_room_encryption_enabled_tile_description">I messaggi in questa stanza sono crittografati E2E.</string>
     <string name="direct_room_profile_section_more_leave">Esci</string>
@@ -2506,7 +2506,7 @@
     <string name="create_room_name_section">Nome stanza</string>
     <string name="settings_export_trail">Esporta revisione</string>
     <string name="room_member_open_or_create_dm">Messaggio diretto</string>
-    <string name="send_bug_report_include_key_share_history">Invia cronologia di richieste condivisione chiave</string>
+    <string name="send_bug_report_include_key_share_history">Invia cronologia delle richieste di condivisione chiave</string>
     <string name="no_more_results">Nessun altro risultato</string>
     <string name="matrix_to_card_title">Link Matrix</string>
     <string name="qr_code_not_scanned">Codice QR non scansionato!</string>
