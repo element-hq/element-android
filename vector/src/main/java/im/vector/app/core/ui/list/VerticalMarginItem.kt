@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 /**
  * A generic item with empty space.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_space)
-abstract class GenericSpaceItem : VectorEpoxyModel<GenericSpaceItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_vertical_margin)
+abstract class VerticalMarginItem : VectorEpoxyModel<VerticalMarginItem.Holder>() {
 
     @EpoxyAttribute
     var heightInPx: Int = 0
@@ -40,6 +40,6 @@ abstract class GenericSpaceItem : VectorEpoxyModel<GenericSpaceItem.Holder>() {
     }
 
     class Holder : VectorEpoxyHolder() {
-        val space by bind<View>(R.id.item_generic_space)
+        val space by bind<View>(R.id.item_vertical_margin_space)
     }
 }

@@ -36,7 +36,7 @@ import im.vector.app.core.extensions.join
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
-import im.vector.app.core.ui.list.genericSpaceItem
+import im.vector.app.core.ui.list.verticalMarginItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.discovery.settingsContinueCancelItem
 import im.vector.app.features.discovery.settingsInformationItem
@@ -69,7 +69,7 @@ class RoomDirectoryPickerController @Inject constructor(
                         between = { idx, _ -> buildDivider(idx) }
                 )
                 buildForm(data)
-                genericSpaceItem {
+                verticalMarginItem {
                     id("space_bottom")
                     heightInPx(host.dimensionConverter.dpToPx(16))
                 }
@@ -93,7 +93,7 @@ class RoomDirectoryPickerController @Inject constructor(
         buildDivider(1000)
         val host = this
         if (data.inEditMode) {
-            genericSpaceItem {
+            verticalMarginItem {
                 id("form_space")
                 heightInPx(host.dimensionConverter.dpToPx(16))
             }
@@ -102,7 +102,7 @@ class RoomDirectoryPickerController @Inject constructor(
                 message(host.stringProvider.getString(R.string.directory_add_a_new_server_prompt))
                 colorProvider(host.colorProvider)
             }
-            genericSpaceItem {
+            verticalMarginItem {
                 id("form_space_2")
                 heightInPx(host.dimensionConverter.dpToPx(8))
             }
