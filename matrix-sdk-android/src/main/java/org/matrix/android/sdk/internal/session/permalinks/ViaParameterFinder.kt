@@ -39,11 +39,10 @@ internal class ViaParameterFinder @Inject constructor(
      * current user one.
      */
     fun computeViaParams(userId: String, roomId: String): String {
-        return computeViaParams(userId, roomId, 3)
-                .joinToString(prefix = "?via=", separator = "&via=") { URLEncoder.encode(it, "utf-8") }
+        return asUrlViaParameters(computeViaParams(userId, roomId, 3))
     }
 
-    fun computeViaParams(viaList: List<String>): String {
+    fun asUrlViaParameters(viaList: List<String>): String {
         return viaList.joinToString(prefix = "?via=", separator = "&via=") { URLEncoder.encode(it, "utf-8") }
     }
 

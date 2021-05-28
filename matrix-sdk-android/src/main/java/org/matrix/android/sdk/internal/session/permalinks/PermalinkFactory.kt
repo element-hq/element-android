@@ -48,7 +48,7 @@ internal class PermalinkFactory @Inject constructor(
                 append(MATRIX_TO_URL_BASE)
                 append(escape(roomId))
                 append(
-                        via?.takeIf { it.isNotEmpty() }?.let { viaParameterFinder.computeViaParams(it) }
+                        via?.takeIf { it.isNotEmpty() }?.let { viaParameterFinder.asUrlViaParameters(it) }
                                 ?: viaParameterFinder.computeViaParams(userId, roomId)
                 )
             }
