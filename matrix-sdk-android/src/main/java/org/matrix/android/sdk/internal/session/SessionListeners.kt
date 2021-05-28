@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.di.SessionId
+import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
@@ -43,15 +44,16 @@ internal class SessionListeners @Inject constructor(
 
     fun dispatch(block: (Session, Session.Listener) -> Unit) {
         synchronized(listeners) {
-            val session = getSession()
+            val session = getSession() ?: return Unit.also {
+                Timber.w("You don't have any attached session")
+            }
             listeners.forEach {
                 tryOrNull { block(session, it) }
             }
         }
     }
 
-    private fun getSession(): Session {
+    private fun getSession(): Session? {
         return sessionManager.getSessionComponent(sessionId)?.session()
-                ?: throw IllegalStateException("No session found with this id.")
     }
 }
