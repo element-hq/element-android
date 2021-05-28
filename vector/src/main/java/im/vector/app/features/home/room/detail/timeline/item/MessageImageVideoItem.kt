@@ -68,7 +68,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
                 // Image size change -> different footer space situation possible
                 val footerMeasures = getFooterMeasures(holder)
                 forceAllowFooterOverlay = shouldAllowFooterOverlay(footerMeasures, width, height)
-                val newShowFooterBellow = shouldShowFooterBellow(footerMeasures, width)
+                val newShowFooterBellow = shouldShowFooterBellow(footerMeasures, width, height)
                 if (lastAllowedFooterOverlay != forceAllowFooterOverlay || newShowFooterBellow != lastShowFooterBellow) {
                     showFooterBellow = newShowFooterBellow
                     updateMessageBubble(holder.imageView.context, holder)
@@ -144,14 +144,18 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     private fun shouldAllowFooterOverlay(footerMeasures: Array<Int>, imageWidth: Int, imageHeight: Int): Boolean {
         val footerWidth = footerMeasures[0]
         val footerHeight = footerMeasures[1]
-        return imageWidth > 1.5*footerWidth && imageHeight > 1.5*footerHeight
+        // We need enough space in both directions to remain within the image bounds.
+        // Furthermore, we do not want to hide a too big area, so check the total covered area as well.
+        return imageWidth > 1.5*footerWidth && imageHeight > 1.5*footerHeight && (imageWidth * imageHeight > 4 * footerWidth * footerHeight)
     }
 
-    private fun shouldShowFooterBellow(footerMeasures: Array<Int>, imageWidth: Int): Boolean {
+    private fun shouldShowFooterBellow(footerMeasures: Array<Int>, imageWidth: Int, imageHeight: Int): Boolean {
         // Only show footer bellow if the width is not the limiting factor (or it will get cut).
         // Otherwise, we can not be sure in this place that we'll have enough space on the side
+        // Also, prefer footer on the side if possible (i.e. enough height available)
         val footerWidth = footerMeasures[0]
-        return imageWidth > 1.5*footerWidth
+        val footerHeight = footerMeasures[1]
+        return imageWidth > 1.5*footerWidth && imageHeight < 1.5*footerHeight
     }
 
     override fun allowFooterOverlay(holder: Holder): Boolean {
