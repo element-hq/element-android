@@ -70,7 +70,6 @@ class SpaceSettingsController @Inject constructor(
                 RoomSettingsViewState.AvatarAction.None -> {
                     // Use the current value
                     avatarRenderer(host.avatarRenderer)
-                    val mxItem = roomSummary.toMatrixItem()
                     // We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
                     matrixItem(roomSummary.toMatrixItem().updateAvatar(data.currentRoomAvatarUrl))
                 }

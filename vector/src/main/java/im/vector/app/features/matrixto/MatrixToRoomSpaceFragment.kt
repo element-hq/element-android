@@ -174,7 +174,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
             }
         }
 
-        val images = listOf(views.knownMember1, views.knownMember2, views.knownMember3, views.knownMember4, views.knownMember5)
+        listOf(views.knownMember1, views.knownMember2, views.knownMember3, views.knownMember4, views.knownMember5)
                 .onEach { it.isGone = true }
         when (state.peopleYouKnow) {
             is Success -> {
