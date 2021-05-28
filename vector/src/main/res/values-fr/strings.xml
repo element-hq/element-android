@@ -2779,13 +2779,13 @@
         <item quantity="other">Envoyer les vidéos en taille originale</item>
     </plurals>
     <string name="labs_space_show_orphan_in_home">Espace expérimental – afficher seulement les orphelins dans Accueil</string>
-    <string name="space_leave_prompt_msg_as_admin">Vous êtes admin de cet espace, assurez-vous d’avoir transféré les droits d’admin à un autre membre avant de partir.</string>
+    <string name="space_leave_prompt_msg_as_admin">Vous êtes administrateur de cet espace, assurez-vous d’avoir transféré les droits d’administration à un autre membre avant de partir.</string>
     <string name="send_feedback_space_info">Vous utilisez une version bêta des espaces. Vos remarques aideront à concevoir les prochaines versions. Votre plateforme et votre nom d’utilisateur seront marqués pour nous aider à utiliser vos remarques autant que possible.</string>
     <string name="this_space_has_no_rooms_admin">Il se peut que certains salons soient masqués parce qu’ils sont privés et vous avez besoin d’une invitation.</string>
     <string name="this_space_has_no_rooms_not_admin">Il se peut que certains salons soient masqués parce qu’ils sont privés et vous avez besoin d’une invitation.
 \nVous n’avez pas l’autorisation d’ajouter des salons.</string>
     <string name="this_space_has_no_rooms">Cet espace n’a pas de salons</string>
-    <string name="spaces_no_server_support_description">Veuillez contacter votre admin de serveur pour plus d’informations</string>
+    <string name="spaces_no_server_support_description">Veuillez contacter l’administrateur de votre serveur d’accueil pour plus d’informations</string>
     <string name="spaces_no_server_support_title">Il semble que votre serveur d’accueil ne prend pas encore en charge les espaces</string>
     <string name="spaces_feeling_experimental_subspace">Envie d’expérimenter \?
 \nVous pouvez ajouter des espaces existants à un espace.</string>
