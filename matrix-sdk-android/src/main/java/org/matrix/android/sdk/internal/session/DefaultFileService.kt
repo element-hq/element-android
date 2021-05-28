@@ -25,6 +25,7 @@ import kotlinx.coroutines.completeWith
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
@@ -155,6 +156,11 @@ internal class DefaultFileService @Inject constructor(
                         }
                     }
                     if (!decryptSuccess) {
+                        // the cached file might be corrupted? what should we do here :/
+                        // For now delete, but could be nice to have a hash to check
+                        tryOrNull {
+                            cachedFiles.decryptedFile.delete()
+                        }
                         throw IllegalStateException("Decryption error")
                     }
                 } else {

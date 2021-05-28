@@ -8,9 +8,7 @@
 
     <RelativeLayout
         android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:background="@drawable/rounded_rect_shape_8"
-        android:backgroundTint="@color/black_alpha">
+        android:layout_height="60dp">
 
         <ImageView
             android:id="@+id/mediaStateNotDownloaded"
@@ -21,20 +19,27 @@
             android:src="@drawable/ic_download"
             app:tint="@color/white" />
 
-        <ProgressBar
-            android:id="@+id/mediaDownloadProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="40dp"
-            android:layout_height="6dp"
-            android:layout_centerInParent="true"
-            android:max="100"
-            android:min="0"
-            android:progress="0"
-            android:progressBackgroundTint="@color/white"
-            android:progressTint="@color/white"
-            android:visibility="gone"
-            tools:progress="45"
-            tools:visibility="visible" />
+        <FrameLayout
+            android:id="@+id/circularProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+            <include android:id="@+id/mediaProgressView" layout="@layout/view_media_progress" />
+        </FrameLayout>
+        <!--        <ProgressBar-->
+        <!--            android:id="@+id/mediaDownloadProgressBar"-->
+        <!--            style="?android:attr/progressBarStyleHorizontal"-->
+        <!--            android:layout_width="40dp"-->
+        <!--            android:layout_height="6dp"-->
+        <!--            android:layout_centerInParent="true"-->
+        <!--            android:max="100"-->
+        <!--            android:min="0"-->
+        <!--            android:progress="0"-->
+        <!--            android:progressBackgroundTint="@color/white"-->
+        <!--            android:progressTint="@color/white"-->
+        <!--            android:visibility="gone"-->
+        <!--            tools:progress="45"-->
+        <!--            tools:visibility="visible" />-->
 
         <ImageView
             android:id="@+id/mediaStateError"
@@ -42,8 +47,7 @@
             android:layout_height="22dp"
             android:layout_centerInParent="true"
             android:contentDescription="@string/a11y_media_permanent_error"
-            android:src="@drawable/ic_broken_image"
-            app:tint="@color/white" />
+            android:src="@drawable/ic_media_error" />
 
 
         <ImageView
@@ -52,8 +56,8 @@
             android:layout_height="22dp"
             android:layout_centerInParent="true"
             android:contentDescription="@string/play_video"
-            android:src="@drawable/ic_play_arrow"
-            app:tint="@color/white" />
+            android:src="@drawable/ic_media_play"
+            app:tint="?riotx_reaction_background_off" />
     </RelativeLayout>
 
 

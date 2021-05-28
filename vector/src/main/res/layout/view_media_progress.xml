@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mediaProgressView"
+    android:layout_width="44dp"
+    android:layout_height="44dp"
+    android:background="@drawable/circle"
+    android:backgroundTint="@color/black_alpha">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/circular_progress_shape"
+        android:indeterminate="false"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:indeterminateDrawable="@drawable/circular_progress_bar_indeterminate"
+        android:textAlignment="center"
+        tools:max="100"
+        tools:progress="40" />
+
+    <!-- cancel, autodownload off not yet managed -->
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/progressIconImage"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_cross"
+        app:tint="@color/white"
+        tools:contentDescription="@string/play_video"
+        tools:src="@drawable/ic_down_arrow" />
+
+
+</RelativeLayout>

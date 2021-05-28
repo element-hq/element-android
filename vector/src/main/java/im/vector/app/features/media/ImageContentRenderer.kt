@@ -68,6 +68,7 @@ interface AttachmentData : Parcelable {
 class ImageContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
                                                private val activeSessionHolder: ActiveSessionHolder,
                                                private val dimensionConverter: DimensionConverter,
+        // private val contentDownloadStateTracker: ContentDownloadStateTracker,
                                                private val blurHash: BlurHash) {
 
     @Parcelize
@@ -120,9 +121,13 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
 
     /**
      * In timeline
+     * All encrypted media will be downloaded by the SDK's FileService, so caller could follow progress using download tracker,
+     * but for clear media a server thumbnail will be requested and in this case it will be invisible to download tracker that's why there is the
+     * `mxcThumbnailCallback` callback. Caller can use it to know when media is loaded.
      */
-    fun render(data: Data, mode: Mode, imageView: ImageView, animate: Boolean = false) {
+    fun render(data: Data, mode: Mode, imageView: ImageView, animate: Boolean = false, mxcThumbnailCallback: ((Boolean) -> Unit)? = null) {
         val size = processSize(data, mode)
+        // This size will be used by glide for bitmap size
         imageView.updateLayoutParams {
             width = size.width
             height = size.height
@@ -130,7 +135,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         // a11y
         imageView.contentDescription = data.filename
 
-        createGlideRequest(data, mode, imageView, size, animate)
+        createGlideRequest(data, mode, imageView, size, animate, mxcThumbnailCallback)
                 .apply {
                     if (!animate) {
                         dontAnimate()
@@ -210,34 +215,34 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 .into(target)
     }
 
-    fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
-        val size = processSize(data, mode)
-
-        // a11y
-        imageView.contentDescription = data.filename
-
-        createGlideRequest(data, mode, imageView, size)
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(e: GlideException?,
-                                              model: Any?,
-                                              target: Target<Drawable>?,
-                                              isFirstResource: Boolean): Boolean {
-                        callback?.invoke(false)
-                        return false
-                    }
-
-                    override fun onResourceReady(resource: Drawable?,
-                                                 model: Any?,
-                                                 target: Target<Drawable>?,
-                                                 dataSource: DataSource?,
-                                                 isFirstResource: Boolean): Boolean {
-                        callback?.invoke(true)
-                        return false
-                    }
-                })
-                .fitCenter()
-                .into(imageView)
-    }
+//    fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
+//        val size = processSize(data, mode)
+//
+//        // a11y
+//        imageView.contentDescription = data.filename
+//
+//        createGlideRequest(data, mode, imageView, size)
+//                .listener(object : RequestListener<Drawable> {
+//                    override fun onLoadFailed(e: GlideException?,
+//                                              model: Any?,
+//                                              target: Target<Drawable>?,
+//                                              isFirstResource: Boolean): Boolean {
+//                        callback?.invoke(false)
+//                        return false
+//                    }
+//
+//                    override fun onResourceReady(resource: Drawable?,
+//                                                 model: Any?,
+//                                                 target: Target<Drawable>?,
+//                                                 dataSource: DataSource?,
+//                                                 isFirstResource: Boolean): Boolean {
+//                        callback?.invoke(true)
+//                        return false
+//                    }
+//                })
+//                .fitCenter()
+//                .into(imageView)
+//    }
 
     /**
      * onlyRetrieveFromCache is true!
@@ -284,11 +289,11 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 .into(imageView)
     }
 
-    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size, autoplay: Boolean = false): GlideRequest<Drawable> {
-        return createGlideRequest(data, mode, GlideApp.with(imageView), size, autoplay)
+    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size, autoplay: Boolean = false, mxcThumbnailCallback: ((Boolean) -> Unit)? = null): GlideRequest<Drawable> {
+        return createGlideRequest(data, mode, GlideApp.with(imageView), size, autoplay, mxcThumbnailCallback)
     }
 
-    fun createGlideRequest(data: Data, mode: Mode, glideRequests: GlideRequests, size: Size = processSize(data, mode), autoplay: Boolean = false): GlideRequest<Drawable> {
+    fun createGlideRequest(data: Data, mode: Mode, glideRequests: GlideRequests, size: Size = processSize(data, mode), autoplay: Boolean = false, mxcThumbnailCallback: ((Boolean) -> Unit)? = null): GlideRequest<Drawable> {
         return if (data.elementToDecrypt != null) {
             // Encrypted image
             glideRequests
@@ -303,26 +308,75 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
-//            val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
-//            val resolvedUrl = when (mode) {
-//                Mode.FULL_SIZE,
-//                Mode.STICKER   -> resolveUrl(data)
-//                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
-//            }
-//            // Fallback to base url
-//                    ?: data.url.takeIf { it?.startsWith("content://") == true }
+            // Check if it's worth it asking the server for a thumbnail
+            val shouldQueryThumb = if (mode == Mode.THUMBNAIL) {
+                (data.width == null || data.height == null
+                        || size.width * size.height < (data.width * data.height) * 2)
+            } else false
 
-            glideRequests
-                    .apply {
-                        if (!autoplay && data.mimeType == MimeTypes.Gif) {
-                            // if it's a gif and that we don't auto play,
-                            // there is no point of loading all frames, just use this to take first one
-                            asBitmap()
+            if (shouldQueryThumb) {
+                val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
+                glideRequests
+                        .apply {
+                            if (!autoplay && data.mimeType == MimeTypes.Gif) {
+                                // if it's a gif and that we don't auto play,
+                                // there is no point of loading all frames, just use this to take first one
+                                asBitmap()
+                            }
+                        }.load(
+                                contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
+                                        ?: data.url.takeIf { it?.startsWith("content://") == true }
+                        ).listener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                mxcThumbnailCallback?.invoke(false)
+                                return false
+                            }
+
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                mxcThumbnailCallback?.invoke(true)
+                                return false
+                            }
+                        })
+            } else {
+                glideRequests
+                        .apply {
+                            if (!autoplay && data.mimeType == MimeTypes.Gif) {
+                                // if it's a gif and that we don't auto play,
+                                // there is no point of loading all frames, just use this to take first one
+                                asBitmap()
+                            }
                         }
-                    }
-                    .load(data)
-                    // cache is handled by the VectorGlideModelLoader
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .load(data).diskCacheStrategy(DiskCacheStrategy.NONE)
+            }
+
+//            glideRequests
+//                    .apply {
+//                        if (!autoplay && data.mimeType == MimeTypes.Gif) {
+//                            // if it's a gif and that we don't auto play,
+//                            // there is no point of loading all frames, just use this to take first one
+//                            asBitmap()
+//                        }
+//                    }
+//                    .apply {
+//                        if (shouldQueryThumb) {
+//                            load(
+//                                    contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
+//                                            ?: data.url.takeIf { it?.startsWith("content://") == true }
+//                            )
+//                        } else {
+//                            load(data).diskCacheStrategy(DiskCacheStrategy.NONE)
+//                        }
+//                    }
+//                    .load(
+//                            if (shouldQueryThumb) {
+//                                contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
+//                                        ?: data.url.takeIf { it?.startsWith("content://") == true }
+//                            } else {
+//                                data
+//                            }
+//                    )
+            // cache is handled by the VectorGlideModelLoader
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE)
 //                    .apply {
 //                        if (mode == Mode.THUMBNAIL) {
 //                            error(

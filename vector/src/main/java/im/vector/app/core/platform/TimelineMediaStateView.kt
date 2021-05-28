@@ -77,8 +77,9 @@ class TimelineMediaStateView @JvmOverloads constructor(context: Context, attrs: 
 //                }
 
         if (isInEditMode) {
-            render(State.ReadyToPlay)
+            render(State.Downloading(20, false))
         }
+
         setOnClickListener(DebouncedClickListener({
             callback?.onButtonClicked()
         }))
@@ -87,10 +88,10 @@ class TimelineMediaStateView @JvmOverloads constructor(context: Context, attrs: 
     fun render(newState: State) {
         isVisible = newState != State.None
         views.mediaStateNotDownloaded.isVisible = newState == State.NotDownloaded
-        views.mediaDownloadProgressBar.isVisible = newState is State.Downloading
+        views.circularProgress.isVisible = newState is State.Downloading
         (newState as? State.Downloading)?.let {
-            views.mediaDownloadProgressBar.progress = it.progress
-            views.mediaDownloadProgressBar.isIndeterminate = it.indeterminate
+            views.mediaProgressView.progressBar.progress = it.progress
+            views.mediaProgressView.progressBar.isIndeterminate = it.indeterminate
         }
         views.mediaStateError.isVisible = newState == State.PermanentError
         views.mediaStatePlay.isVisible = newState == State.ReadyToPlay

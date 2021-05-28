@@ -337,6 +337,7 @@ class MessageItemFactory @Inject constructor(
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
+                .dimensionConverter(dimensionConverter)
                 .autoPlayGifs(shouldAutoPlayGif)
                 .izLocalFile(localFilesHelper.isLocalFile(messageContent.getFileUrl()))
                 .izDownloaded(session.fileService().isFileInCache(
@@ -395,6 +396,7 @@ class MessageItemFactory @Inject constructor(
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
+                .dimensionConverter(dimensionConverter)
                 .izLocalFile(localFilesHelper.isLocalFile(messageContent.getFileUrl()))
                 .izDownloaded(session.fileService().isFileInCache(
                         messageContent.getFileUrl(),

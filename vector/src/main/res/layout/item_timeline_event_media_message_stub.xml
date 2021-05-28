@@ -9,13 +9,14 @@
         android:id="@+id/messageThumbnailView"
         android:layout_width="375dp"
         android:layout_height="0dp"
-        android:minHeight="60dp"
+        app:layout_constraintHeight_min="60dp"
         android:layout_marginEnd="32dp"
         android:contentDescription="@string/a11y_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop"
         tools:layout_height="300dp"
         tools:src="@tools:sample/backgrounds/scenic" />
 
@@ -53,8 +54,8 @@
 
     <im.vector.app.core.platform.TimelineMediaStateView
         android:id="@+id/messageMediaStateView"
-        android:layout_width="60dp"
-        android:layout_height="44dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/messageThumbnailView"
         app:layout_constraintEnd_toEndOf="@id/messageThumbnailView"

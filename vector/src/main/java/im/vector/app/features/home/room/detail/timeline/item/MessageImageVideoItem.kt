@@ -27,6 +27,7 @@ import im.vector.app.R
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.platform.TimelineMediaStateView
+import im.vector.app.core.utils.setDebouncedClickListener
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.media.ImageContentRenderer
@@ -84,18 +85,37 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         } else {
             holder.mediaStateView.render(if (playable && !autoPlayGifs) TimelineMediaStateView.State.ReadyToPlay else TimelineMediaStateView.State.None)
         }
+        holder.mediaStateView.setTag(R.id.messageMediaStateView, mediaData.url)
+        imageContentRenderer.render(mediaData, mode, holder.imageView, autoPlayGifs) {
+            // if a server thumbnail was used the download tracker won't be called
+            mediaData.url?.let { mxcUrl ->
+                if (mxcUrl == holder.mediaStateView.getTag(R.id.messageMediaStateView)) {
+                    contentDownloadStateTrackerBinder.unbind(mxcUrl)
+                    // mmm annoying but have to post if not the previous contentDownloadStateTrackerBinder.bind call we render
+                    // an IDLE state (i.e a loading wheel...)
+                    holder.mediaStateView.post {
+                        holder.mediaStateView.render(if (it) TimelineMediaStateView.State.None else TimelineMediaStateView.State.PermanentError)
+                    }
+                }
+            }
+        }
 
-        imageContentRenderer.render(mediaData, mode, holder.imageView, autoPlayGifs)
-
-        holder.imageView.setOnClickListener(clickListener)
+        holder.mediaStateView.callback = object : TimelineMediaStateView.Callback {
+            override fun onButtonClicked() {
+                // for now delegate to regular click
+                clickListener?.onClick(holder.imageView)
+            }
+        }
+        holder.imageView.setDebouncedClickListener(clickListener)
         holder.imageView.setOnLongClickListener(attributes.itemLongClickListener)
         ViewCompat.setTransitionName(holder.imageView, "imagePreview_${id()}")
-        holder.mediaContentView.setOnClickListener(attributes.itemClickListener)
+        holder.mediaContentView.setDebouncedClickListener(attributes.itemClickListener)
         holder.mediaContentView.setOnLongClickListener(attributes.itemLongClickListener)
         // holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
     }
 
     override fun unbind(holder: Holder) {
+        holder.mediaStateView.setTag(R.id.messageMediaStateView, null)
         GlideApp.with(holder.view.context.applicationContext).clear(holder.imageView)
         imageContentRenderer.clear(holder.imageView)
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)

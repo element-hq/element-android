@@ -36,3 +36,7 @@ class DebouncedClickListener(val original: View.OnClickListener, private val min
         }
     }
 }
+
+fun View.setDebouncedClickListener(clickListener: View.OnClickListener?) {
+    setOnClickListener(clickListener?.let { DebouncedClickListener(it) })
+}

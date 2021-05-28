@@ -65,6 +65,7 @@ class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSe
                 it.stop()
                 downloadStateTracker.unTrack(mxcUrl, it)
             }
+            updateListeners.remove(mxcUrl)
         }
     }
 
