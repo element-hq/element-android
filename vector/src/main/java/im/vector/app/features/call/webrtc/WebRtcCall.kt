@@ -86,16 +86,19 @@ private const val AUDIO_TRACK_ID = "ARDAMSa0"
 private const val VIDEO_TRACK_ID = "ARDAMSv0"
 private val DEFAULT_AUDIO_CONSTRAINTS = MediaConstraints()
 
-class WebRtcCall(val mxCall: MxCall,
-                 // This is where the call is placed from an ui perspective. In case of virtual room, it can differs from the signalingRoomId.
-                 val nativeRoomId: String,
-                 private val rootEglBase: EglBase?,
-                 private val context: Context,
-                 private val dispatcher: CoroutineContext,
-                 private val sessionProvider: Provider<Session?>,
-                 private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
-                 private val onCallBecomeActive: (WebRtcCall) -> Unit,
-                 private val onCallEnded: (String) -> Unit) : MxCall.StateListener {
+class WebRtcCall(
+        val mxCall: MxCall,
+        // This is where the call is placed from an ui perspective.
+        // In case of virtual room, it can differs from the signalingRoomId.
+        val nativeRoomId: String,
+        private val rootEglBase: EglBase?,
+        private val context: Context,
+        private val dispatcher: CoroutineContext,
+        private val sessionProvider: Provider<Session?>,
+        private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
+        private val onCallBecomeActive: (WebRtcCall) -> Unit,
+        private val onCallEnded: (String) -> Unit
+) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
         fun onCaptureStateChanged() {}
@@ -119,6 +122,7 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     val callId = mxCall.callId
+
     // room where call signaling is placed. In case of virtual room it can differs from the nativeRoomId.
     val signalingRoomId = mxCall.roomId
 
@@ -290,6 +294,9 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
+    /**
+     * Without consultation
+     */
     suspend fun transferToUser(targetUserId: String, targetRoomId: String?) {
         mxCall.transfer(
                 targetUserId = targetUserId,
@@ -300,22 +307,25 @@ class WebRtcCall(val mxCall: MxCall,
         endCall(sendEndSignaling = false)
     }
 
+    /**
+     * With consultation
+     */
     suspend fun transferToCall(transferTargetCall: WebRtcCall) {
         val newCallId = CallIdGenerator.generate()
         transferTargetCall.mxCall.transfer(
-                targetUserId = this@WebRtcCall.mxCall.opponentUserId,
+                targetUserId = mxCall.opponentUserId,
                 targetRoomId = null,
                 createCallId = null,
                 awaitCallId = newCallId
         )
-        this@WebRtcCall.mxCall.transfer(
+        mxCall.transfer(
                 targetUserId = transferTargetCall.mxCall.opponentUserId,
                 targetRoomId = null,
                 createCallId = newCallId,
                 awaitCallId = null
         )
-            this@WebRtcCall.endCall(sendEndSignaling = false)
-            transferTargetCall.endCall(sendEndSignaling = false)
+        endCall(sendEndSignaling = false)
+        transferTargetCall.endCall(sendEndSignaling = false)
     }
 
     fun acceptIncomingCall() {

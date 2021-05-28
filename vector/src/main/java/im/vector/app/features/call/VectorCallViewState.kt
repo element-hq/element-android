@@ -46,9 +46,9 @@ data class VectorCallViewState(
 ) : MvRxState {
 
     sealed class TransfereeState {
-        object NoTransferee: TransfereeState()
-        data class KnownTransferee(val name:String): TransfereeState()
-        object UnknownTransferee: TransfereeState()
+        object NoTransferee : TransfereeState()
+        data class KnownTransferee(val name: String) : TransfereeState()
+        object UnknownTransferee : TransfereeState()
     }
 
     data class CallInfo(
@@ -56,7 +56,7 @@ data class VectorCallViewState(
             val otherUserItem: MatrixItem? = null
     )
 
-    constructor(callArgs: CallArgs): this(
+    constructor(callArgs: CallArgs) : this(
             callId = callArgs.callId,
             roomId = callArgs.signalingRoomId,
             isVideoCall = callArgs.isVideoCall

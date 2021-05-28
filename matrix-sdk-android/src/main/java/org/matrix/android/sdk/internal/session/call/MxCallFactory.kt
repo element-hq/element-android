@@ -75,7 +75,10 @@ internal class MxCallFactory @Inject constructor(
         }
     }
 
-    fun updateOutgoingCallWithOpponentData(call: MxCall, userId: String, content: CallSignalingContent, callCapabilities: CallCapabilities?) {
+    fun updateOutgoingCallWithOpponentData(call: MxCall,
+                                           userId: String,
+                                           content: CallSignalingContent,
+                                           callCapabilities: CallCapabilities?) {
         (call as? MxCallImpl)?.updateOpponentData(userId, content, callCapabilities)
     }
 }

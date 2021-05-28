@@ -89,6 +89,7 @@ interface MxCall : MxCallDetail {
 
     /**
      * Send a m.call.replaces event to initiate call transfer.
+     * See [org.matrix.android.sdk.api.session.room.model.call.CallReplacesContent] for documentation about the parameters
      */
     suspend fun transfer(targetUserId: String,
                          targetRoomId: String?,
