@@ -54,7 +54,7 @@ class SpaceDetailEpoxyController @Inject constructor(
             enabled(true)
             imageUri(data?.avatarUri)
             avatarRenderer(host.avatarRenderer)
-            matrixItem(data?.name?.let { MatrixItem.RoomItem("!", it, null).takeIf { !it.displayName.isNullOrBlank() } })
+            matrixItem(data?.name?.let { MatrixItem.SpaceItem("!", it, null).takeIf { !it.displayName.isNullOrBlank() } })
             clickListener { host.listener?.onAvatarChange() }
             deleteListener { host.listener?.onAvatarDelete() }
         }

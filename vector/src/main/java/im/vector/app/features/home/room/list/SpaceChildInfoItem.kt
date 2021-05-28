@@ -48,7 +48,6 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
 
     @EpoxyAttribute var memberCount: Int = 0
     @EpoxyAttribute var loading: Boolean = false
-    @EpoxyAttribute var space: Boolean = false
 
     @EpoxyAttribute var buttonLabel: String? = null
 
@@ -63,12 +62,8 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             itemLongClickListener?.onLongClick(it) ?: false
         }
-        holder.titleView.text = matrixItem.getBestName()
-        if (space) {
-            avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
-        } else {
-            avatarRenderer.render(matrixItem, holder.avatarImageView)
-        }
+        holder.titleView.text = matrixItem.displayName ?: holder.rootView.context.getString(R.string.unnamed_room)
+        avatarRenderer.render(matrixItem, holder.avatarImageView)
 
         holder.descriptionText.text = span {
             span {

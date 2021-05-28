@@ -24,11 +24,7 @@ class SuggestedRoomListController(
 
     override fun buildModels(data: SuggestedRoomInfo?) {
         data?.rooms?.forEach { info ->
-            roomSummaryItemFactory.createSuggestion(info, data.joinEcho) {
-                listener?.onJoinSuggestedRoom(info)
-            }.let {
-                add(it)
-            }
+            add(roomSummaryItemFactory.createSuggestion(info, data.joinEcho, listener))
         }
     }
 }

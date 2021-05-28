@@ -71,7 +71,7 @@ class SpaceSettingsController @Inject constructor(
                     // Use the current value
                     avatarRenderer(host.avatarRenderer)
                     // We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
-                    matrixItem(roomSummary.toMatrixItem().copy(avatarUrl = data.currentRoomAvatarUrl))
+                    matrixItem(roomSummary.toMatrixItem().updateAvatar(data.currentRoomAvatarUrl))
                 }
                 RoomSettingsViewState.AvatarAction.DeleteAvatar ->
                     imageUri(null)

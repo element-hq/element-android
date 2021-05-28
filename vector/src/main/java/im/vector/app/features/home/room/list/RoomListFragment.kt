@@ -108,10 +108,11 @@ class RoomListFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomListViewModel.observeViewEvents {
             when (it) {
-                is RoomListViewEvents.Loading -> showLoading(it.message)
-                is RoomListViewEvents.Failure -> showFailure(it.throwable)
-                is RoomListViewEvents.SelectRoom -> handleSelectRoom(it)
-                is RoomListViewEvents.Done -> Unit
+                is RoomListViewEvents.Loading                   -> showLoading(it.message)
+                is RoomListViewEvents.Failure                   -> showFailure(it.throwable)
+                is RoomListViewEvents.SelectRoom                -> handleSelectRoom(it)
+                is RoomListViewEvents.Done                      -> Unit
+                is RoomListViewEvents.NavigateToMxToBottomSheet -> handleShowMxToLink(it.link)
             }.exhaustive
         }
 
@@ -153,6 +154,10 @@ class RoomListFragment @Inject constructor(
 
     override fun showFailure(throwable: Throwable) {
         showErrorInSnackbar(throwable)
+    }
+
+    private fun handleShowMxToLink(link: String) {
+        navigator.openMatrixToBottomSheet(requireContext(), link)
     }
 
     override fun onDestroyView() {
@@ -472,6 +477,10 @@ class RoomListFragment @Inject constructor(
 
     override fun onJoinSuggestedRoom(room: SpaceChildInfo) {
         roomListViewModel.handle(RoomListAction.JoinSuggestedRoom(room.childRoomId, room.viaServers))
+    }
+
+    override fun onSuggestedRoomClicked(room: SpaceChildInfo) {
+        roomListViewModel.handle(RoomListAction.ShowRoomDetails(room.childRoomId, room.viaServers))
     }
 
     override fun onRejectRoomInvitation(room: RoomSummary) {

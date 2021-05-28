@@ -96,7 +96,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         val roomSummary = session.getRoomSummary(spaceArgs.spaceId)
         roomSummary?.toMatrixItem()?.let {
-            avatarRenderer.renderSpace(it, views.spaceAvatarImageView)
+            avatarRenderer.render(it, views.spaceAvatarImageView)
         }
         views.spaceNameView.text = roomSummary?.displayName
         views.spaceDescription.setTextOrHide(roomSummary?.topic?.takeIf { it.isNotEmpty() })

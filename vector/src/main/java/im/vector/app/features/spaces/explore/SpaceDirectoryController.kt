@@ -122,13 +122,15 @@ class SpaceDirectoryController @Inject constructor(
                     val isSpace = info.roomType == RoomType.SPACE
                     val isJoined = data?.joinedRoomsIds?.contains(info.childRoomId) == true
                     val isLoading = data?.changeMembershipStates?.get(info.childRoomId)?.isInProgress() ?: false
+                    // if it's known use that matrixItem because it would have a better computed name
+                    val matrixItem = data?.knownRoomSummaries?.find { it.roomId == info.childRoomId }?.toMatrixItem()
+                            ?: info.toMatrixItem()
                     spaceChildInfoItem {
                         id(info.childRoomId)
-                        matrixItem(info.toMatrixItem())
+                        matrixItem(matrixItem)
                         avatarRenderer(host.avatarRenderer)
                         topic(info.topic)
                         memberCount(info.activeMemberCount ?: 0)
-                        space(isSpace)
                         loading(isLoading)
                         buttonLabel(
                                 if (isJoined) host.stringProvider.getString(R.string.action_open)
