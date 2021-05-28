@@ -76,6 +76,8 @@ object EventType {
     const val CALL_NEGOTIATE = "m.call.negotiate"
     const val CALL_REJECT = "m.call.reject"
     const val CALL_HANGUP = "m.call.hangup"
+    const val CALL_ASSERTED_IDENTITY = "m.call.asserted_identity"
+    const val CALL_ASSERTED_IDENTITY_PREFIX = "org.matrix.call.asserted_identity"
 
     // This type is not processed by the client, just sent to the server
     const val CALL_REPLACES = "m.call.replaces"
