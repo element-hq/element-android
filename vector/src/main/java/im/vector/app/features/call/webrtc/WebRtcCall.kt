@@ -51,6 +51,7 @@ import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
+import org.matrix.android.sdk.api.session.room.model.call.CallAssertedIdentityContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
@@ -104,6 +105,7 @@ class WebRtcCall(
         fun onCaptureStateChanged() {}
         fun onCameraChanged() {}
         fun onHoldUnhold() {}
+        fun assertedIdentityChanged() {}
         fun onTick(formattedDuration: String) {}
         override fun onStateUpdate(call: MxCall) {}
     }
@@ -168,6 +170,8 @@ class WebRtcCall(
 
     // This value is used to track localOnHold when changing remoteOnHold value
     private var wasLocalOnHold = false
+    var remoteAssertedIdentity: CallAssertedIdentityContent.AssertedIdentity? = null
+        private set
 
     var offerSdp: CallInviteContent.Offer? = null
 
@@ -874,6 +878,14 @@ class WebRtcCall(
                     tryOrNull { it.onHoldUnhold() }
                 }
             }
+        }
+    }
+
+    fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {
+        if (callAssertedIdentityContent.assertedIdentity == null) return
+        remoteAssertedIdentity = callAssertedIdentityContent.assertedIdentity
+        listeners.forEach {
+            tryOrNull { it.assertedIdentityChanged() }
         }
     }
 

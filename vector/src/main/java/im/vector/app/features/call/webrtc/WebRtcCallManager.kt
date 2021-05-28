@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.session.call.CallListener
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
+import org.matrix.android.sdk.api.session.room.model.call.CallAssertedIdentityContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
@@ -419,5 +420,13 @@ class WebRtcCallManager @Inject constructor(
     override fun onCallManagedByOtherSession(callId: String) {
         Timber.v("## VOIP onCallManagedByOtherSession: $callId")
         onCallEnded(callId)
+    }
+
+    override fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {
+        val call = callsByCallId[callAssertedIdentityContent.callId]
+                ?: return Unit.also {
+                    Timber.w("onCallAssertedIdentityReceived for non active call? ${callAssertedIdentityContent.callId}")
+                }
+       call.onCallAssertedIdentityReceived(callAssertedIdentityContent)
     }
 }
