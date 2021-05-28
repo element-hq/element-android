@@ -22,7 +22,6 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.call.audio.CallAudioManager
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.api.util.Optional
 
 data class VectorCallViewState(
         val callId: String,
@@ -43,8 +42,14 @@ data class VectorCallViewState(
         val callInfo: CallInfo = CallInfo(callId),
         val formattedDuration: String = "",
         val canOpponentBeTransferred: Boolean = false,
-        val transfereeName: Optional<String> = Optional.empty()
+        val transferee: TransfereeState = TransfereeState.NoTransferee
 ) : MvRxState {
+
+    sealed class TransfereeState {
+        object NoTransferee: TransfereeState()
+        data class KnownTransferee(val name:String): TransfereeState()
+        object UnknownTransferee: TransfereeState()
+    }
 
     data class CallInfo(
             val callId: String,

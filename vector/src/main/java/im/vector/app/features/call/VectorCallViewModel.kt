@@ -23,8 +23,8 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.audio.CallAudioManager
@@ -39,7 +39,6 @@ import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.room.model.call.supportCallTransfer
-import org.matrix.android.sdk.api.util.Optional
 
 class VectorCallViewModel @AssistedInject constructor(
         @Assisted initialState: VectorCallViewState,
@@ -109,22 +108,22 @@ class VectorCallViewModel @AssistedInject constructor(
                     }
                 }
             }
-            val transfereeName = computeTransfereeNameIfAny(call)
             setState {
                 copy(
                         callState = Success(callState),
                         canOpponentBeTransferred = call.capabilities.supportCallTransfer(),
-                        transfereeName = transfereeName
+                        transferee = computeTransfereeState(call)
                 )
             }
         }
     }
 
-    private fun computeTransfereeNameIfAny(call: MxCall): Optional<String> {
-        val transfereeCall = callManager.getTransfereeForCallId(call.callId) ?: return Optional.empty()
+    private fun computeTransfereeState(call: MxCall): VectorCallViewState.TransfereeState {
+        val transfereeCall = callManager.getTransfereeForCallId(call.callId) ?: return VectorCallViewState.TransfereeState.NoTransferee
         val transfereeRoom = session.getRoomSummary(transfereeCall.nativeRoomId)
-        val transfereeName = transfereeRoom?.displayName ?: "Unknown person"
-        return Optional.from(transfereeName)
+        return transfereeRoom?.displayName?.let {
+            VectorCallViewState.TransfereeState.KnownTransferee(it)
+        } ?: VectorCallViewState.TransfereeState.UnknownTransferee
     }
 
     private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
@@ -176,7 +175,7 @@ class VectorCallViewModel @AssistedInject constructor(
         } else {
             call = webRtcCall
             callManager.addCurrentCallListener(currentCallListener)
-            val item  = webRtcCall.getOpponentAsMatrixItem(session)
+            val item = webRtcCall.getOpponentAsMatrixItem(session)
             webRtcCall.addListener(callListener)
             val currentSoundDevice = callManager.audioManager.selectedDevice
             if (currentSoundDevice == CallAudioManager.Device.PHONE) {
@@ -196,7 +195,7 @@ class VectorCallViewModel @AssistedInject constructor(
                         formattedDuration = webRtcCall.formattedDuration(),
                         isHD = webRtcCall.mxCall.isVideoCall && webRtcCall.currentCaptureFormat() is CaptureFormat.HD,
                         canOpponentBeTransferred = webRtcCall.mxCall.capabilities.supportCallTransfer(),
-                        transfereeName = computeTransfereeNameIfAny(webRtcCall.mxCall)
+                        transferee = computeTransfereeState(webRtcCall.mxCall)
                 )
             }
             updateOtherKnownCall(webRtcCall)
@@ -212,27 +211,27 @@ class VectorCallViewModel @AssistedInject constructor(
 
     override fun handle(action: VectorCallViewActions) = withState { state ->
         when (action) {
-            VectorCallViewActions.EndCall -> call?.endCall()
-            VectorCallViewActions.AcceptCall -> {
+            VectorCallViewActions.EndCall              -> call?.endCall()
+            VectorCallViewActions.AcceptCall           -> {
                 setState {
                     copy(callState = Loading())
                 }
                 call?.acceptIncomingCall()
             }
-            VectorCallViewActions.DeclineCall -> {
+            VectorCallViewActions.DeclineCall          -> {
                 setState {
                     copy(callState = Loading())
                 }
                 call?.endCall()
             }
-            VectorCallViewActions.ToggleMute -> {
+            VectorCallViewActions.ToggleMute           -> {
                 val muted = state.isAudioMuted
                 call?.muteCall(!muted)
                 setState {
                     copy(isAudioMuted = !muted)
                 }
             }
-            VectorCallViewActions.ToggleVideo -> {
+            VectorCallViewActions.ToggleVideo          -> {
                 if (state.isVideoCall) {
                     val videoEnabled = state.isVideoEnabled
                     call?.enableVideo(!videoEnabled)
@@ -242,14 +241,14 @@ class VectorCallViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            VectorCallViewActions.ToggleHoldResume -> {
+            VectorCallViewActions.ToggleHoldResume     -> {
                 val isRemoteOnHold = state.isRemoteOnHold
                 call?.updateRemoteOnHold(!isRemoteOnHold)
             }
             is VectorCallViewActions.ChangeAudioDevice -> {
                 callManager.audioManager.setAudioDevice(action.device)
             }
-            VectorCallViewActions.SwitchSoundDevice -> {
+            VectorCallViewActions.SwitchSoundDevice    -> {
                 _viewEvents.post(
                         VectorCallViewEvents.ShowSoundDeviceChooser(state.availableDevices, state.device)
                 )
@@ -265,17 +264,17 @@ class VectorCallViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            VectorCallViewActions.ToggleCamera -> {
+            VectorCallViewActions.ToggleCamera         -> {
                 call?.switchCamera()
             }
-            VectorCallViewActions.ToggleHDSD -> {
+            VectorCallViewActions.ToggleHDSD           -> {
                 if (!state.isVideoCall) return@withState
                 call?.setCaptureFormat(if (state.isHD) CaptureFormat.SD else CaptureFormat.HD)
             }
-            VectorCallViewActions.OpenDialPad -> {
+            VectorCallViewActions.OpenDialPad          -> {
                 _viewEvents.post(VectorCallViewEvents.ShowDialPad)
             }
-            is VectorCallViewActions.SendDtmfDigit -> {
+            is VectorCallViewActions.SendDtmfDigit     -> {
                 call?.sendDtmfDigit(action.digit)
             }
             VectorCallViewActions.InitiateCallTransfer -> {
@@ -283,7 +282,7 @@ class VectorCallViewModel @AssistedInject constructor(
                         VectorCallViewEvents.ShowCallTransferScreen
                 )
             }
-            VectorCallViewActions.TransferCall -> {
+            VectorCallViewActions.TransferCall         -> {
                 handleCallTransfer()
             }
         }.exhaustive

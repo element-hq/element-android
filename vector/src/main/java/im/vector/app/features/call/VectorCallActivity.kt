@@ -175,7 +175,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         when (callState) {
             is CallState.Idle,
             is CallState.CreateOffer,
-            is CallState.Dialing     -> {
+            is CallState.Dialing      -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
                 views.callStatusText.setText(R.string.call_ring)
@@ -189,17 +189,22 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 configureCallInfo(state)
             }
 
-            is CallState.Answering -> {
+            is CallState.Answering    -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
                 views.callStatusText.setText(R.string.call_connecting)
                 views.callConnectingProgress.isVisible = true
                 configureCallInfo(state)
             }
-            is CallState.Connected -> {
+            is CallState.Connected    -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
-                    if (state.transfereeName.hasValue()) {
-                        views.callActionText.text = getString(R.string.call_transfer_transfer_to_title, state.transfereeName.get())
+                    if (state.transferee !is VectorCallViewState.TransfereeState.NoTransferee) {
+                        val transfereeName = if (state.transferee is VectorCallViewState.TransfereeState.KnownTransferee) {
+                            state.transferee.name
+                        } else {
+                            getString(R.string.call_transfer_unknown_person)
+                        }
+                        views.callActionText.text = getString(R.string.call_transfer_transfer_to_title, transfereeName)
                         views.callActionText.isVisible = true
                         views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.TransferCall) }
                         views.callStatusText.text = state.formattedDuration
@@ -226,7 +231,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                         if (callArgs.isVideoCall) {
                             views.callVideoGroup.isVisible = true
                             views.callInfoGroup.isVisible = false
-                            views.pipRenderer.isVisible =  !state.isVideoCaptureInError && state.otherKnownCallInfo == null
+                            views.pipRenderer.isVisible = !state.isVideoCaptureInError && state.otherKnownCallInfo == null
                         } else {
                             views.callVideoGroup.isInvisible = true
                             views.callInfoGroup.isVisible = true
@@ -241,10 +246,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callConnectingProgress.isVisible = true
                 }
             }
-            is CallState.Terminated -> {
+            is CallState.Terminated   -> {
                 finish()
             }
-            null -> {
+            null                      -> {
             }
         }
     }
@@ -253,10 +258,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         state.callInfo.otherUserItem?.let {
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
             avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter)
-            if (state.transfereeName.hasValue()) {
-                views.participantNameText.text = getString(R.string.call_transfer_consulting_with, it.getBestName())
-            } else {
+            if (state.transferee is VectorCallViewState.TransfereeState.NoTransferee) {
                 views.participantNameText.text = it.getBestName()
+            } else {
+                views.participantNameText.text = getString(R.string.call_transfer_consulting_with, it.getBestName())
             }
             if (blurAvatar) {
                 avatarRenderer.renderBlur(it, views.otherMemberAvatar, sampling = 2, rounded = true, colorFilter = colorFilter)
@@ -332,13 +337,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.v("## VOIP handleViewEvents $event")
         when (event) {
-            VectorCallViewEvents.DismissNoCall -> {
+            VectorCallViewEvents.DismissNoCall             -> {
                 finish()
             }
-            is VectorCallViewEvents.ConnectionTimeout -> {
+            is VectorCallViewEvents.ConnectionTimeout      -> {
                 onErrorTimoutConnect(event.turn)
             }
-            is VectorCallViewEvents.ShowDialPad -> {
+            is VectorCallViewEvents.ShowDialPad            -> {
                 CallDialPadBottomSheet.newInstance(false).apply {
                     callback = dialPadCallback
                 }.show(supportFragmentManager, FRAGMENT_DIAL_PAD_TAG)
@@ -346,7 +351,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is VectorCallViewEvents.ShowCallTransferScreen -> {
                 navigator.openCallTransfer(this, callArgs.callId)
             }
-            null -> {
+            null                                           -> {
             }
         }
     }
