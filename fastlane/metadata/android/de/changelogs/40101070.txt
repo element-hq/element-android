@@ -1,0 +1,6 @@
+Hauptänderungen in dieser Version: 
+- Mit Spaces kannst du deine Räume gruppieren (Beta)
+- Optionale Videokomprimierung
+- Verschiedene Verbesserungen und Bugfixes
+
+Die vollständige Änderungsliste gibt es hier: https://github.com/vector-im/element-android/releases/tag/v1.1.7
