@@ -1,4 +1,4 @@
-Element ist ein sicherer Messenger und ideal für die produktive Zusammenarbeit mit deinem Team im Homeoffice. Mit eingebauter Ende-zu-Ende-Verschlüsselung ermöglicht Element auch umfangreiche und sichere Videokonferenzen, das Teilen von Dateien, Sprachanrufe und vieles mehr.
+Element ist ein sicherer Messenger und ideal für die produktive Zusammenarbeit mit Ihrem Team im Homeoffice. Mit eingebauter Ende-zu-Ende-Verschlüsselung ermöglicht Element auch umfangreiche und sichere Videokonferenzen, das Teilen von Dateien, Sprachanrufe und vieles mehr.
 
 <b>Element bietet folgende Funktionen:</b>
 - Fortschrittliche Werkzeuge für die Online-Kommunikation
@@ -22,7 +22,7 @@ Um mehr Kontrolle über Ihre sensiblen Daten und Konversationen zu ermöglichen,
 Sie entscheiden, wo Sie Ihre Daten und Nachrichten aufbewahren - ohne das Datensammeln oder den Zugriff Dritter zu riskieren.
 
 Element gibt Ihnen auf verschiedene Arten Kontrolle:
-1. Sie können sich kostenlos auf dem öffentlichen matrix.org-Server registrieren, der von den Matrix-Entwicklern gehostet wird, oder einen aus Tausenden von öffentlichen Servern, die von Freiwilligen betrieben werden, auswählen
+1. Sie können sich kostenlos auf dem öffentlichen matrix.org-Server registrieren, der von den Matrix-Entwicklern gehostet wird, oder einen von Tausenden öffentlichen Servern, die von Freiwilligen betrieben werden, auswählen
 2. Sie haben die Möglichkeit, ein Konto auf einem eigenen Server in der eigenen IT-Infrastruktur betreiben
 3. Außerdem können Sie durch ein Abonnement der Element Matrix Services ein Konto auf einem für Sie maßgeschneiderten Server erstellen
 
@@ -30,10 +30,10 @@ Element gibt Ihnen auf verschiedene Arten Kontrolle:
 Sie können mit jedem im Matrix-Netzwerk chatten, egal ob ihr Kontakt Element, eine andere Matrix-App oder sogar eine völlig andere Anwendung nutzt.
 
 <b>Super sicher</b>
-Durch Ende-zu-Ende-Verschlüsselung können nur die Personen, die in der Unterhaltung sind, die Nachrichten lesen können. Außerdem stellt die Verifizierung mittels Quersignierung sicher, dass Sie wirklich mit dem Chatten, mit dem Sie glauben -  und niemand anderen.
+Durch Ende-zu-Ende-Verschlüsselung können nur die Personen, die in der Unterhaltung sind, die Nachrichten lesen. Außerdem stellt die Verifizierung mittels Quersignierung sicher, dass Sie wirklich mit dem Chatten, mit dem Sie glauben - und niemand Anderem.
 
 <b>Vollständige Kommunikation und Integration</b>
 Kurznachrichten, Sprach- und Videoanrufe, Dateifreigaben, Bildschirmübertragungen und einer Menge an Integrationen, Bots und Widgets. Schaffen Sie Räume und Communities, bleiben Sie auf dem Laufenden und erledigen Sie Sachen.
 
 <b>Da Weitermachen, wo Sie aufgehört haben</b>
-Bleiben Sie in Kontakt, egal wo Sie sind, mit vollständig synchronisiertem Nachrichtenverlauf quer über all Ihre Geräte und im Browser auf https://app.element.io
+Bleiben Sie in Kontakt, egal wo Sie sind, mit vollständig synchronisiertem Nachrichtenverlauf quer über all Ihre Geräte und im Netz auf https://app.element.io
