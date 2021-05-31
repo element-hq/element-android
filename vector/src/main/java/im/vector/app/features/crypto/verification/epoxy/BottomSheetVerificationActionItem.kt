@@ -53,7 +53,7 @@ abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetV
     @EpoxyAttribute
     var iconColor: Int = -1
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var listener: ClickListener
 
     override fun bind(holder: Holder) {

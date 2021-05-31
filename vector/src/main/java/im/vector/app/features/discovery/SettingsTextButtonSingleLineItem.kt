@@ -78,7 +78,7 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
     @EpoxyAttribute
     var checked: Boolean? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var buttonClickListener: ClickListener? = null
 
     @EpoxyAttribute

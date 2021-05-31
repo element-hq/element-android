@@ -44,7 +44,7 @@ abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>() {
     @EpoxyAttribute
     var style: ItemStyle = ItemStyle.NORMAL_TEXT
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemClickAction: ClickListener? = null
 
     @EpoxyAttribute

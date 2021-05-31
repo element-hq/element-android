@@ -67,7 +67,7 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
     @EpoxyAttribute
     var destructive: Boolean = false
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {

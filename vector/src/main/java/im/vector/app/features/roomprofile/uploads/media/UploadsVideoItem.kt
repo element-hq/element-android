@@ -33,8 +33,7 @@ abstract class UploadsVideoItem : VectorEpoxyModel<UploadsVideoItem.Holder>() {
 
     @EpoxyAttribute lateinit var imageContentRenderer: ImageContentRenderer
     @EpoxyAttribute lateinit var data: VideoContentRenderer.Data
-
-    @EpoxyAttribute var listener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

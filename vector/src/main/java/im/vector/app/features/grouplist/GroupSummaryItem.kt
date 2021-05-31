@@ -36,7 +36,7 @@ abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>() {
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var selected: Boolean = false
-    @EpoxyAttribute var listener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

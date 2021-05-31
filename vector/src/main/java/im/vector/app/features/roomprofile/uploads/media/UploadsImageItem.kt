@@ -32,8 +32,7 @@ abstract class UploadsImageItem : VectorEpoxyModel<UploadsImageItem.Holder>() {
 
     @EpoxyAttribute lateinit var imageContentRenderer: ImageContentRenderer
     @EpoxyAttribute lateinit var data: ImageContentRenderer.Data
-
-    @EpoxyAttribute var listener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

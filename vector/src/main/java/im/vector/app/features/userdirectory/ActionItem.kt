@@ -33,7 +33,7 @@ abstract class ActionItem : VectorEpoxyModel<ActionItem.Holder>() {
 
     @EpoxyAttribute var title: CharSequence? = null
     @EpoxyAttribute @DrawableRes var actionIconRes: Int? = null
-    @EpoxyAttribute var clickAction: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var clickAction: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

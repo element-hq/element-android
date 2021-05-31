@@ -37,7 +37,7 @@ abstract class AutocompleteEmojiItem : VectorEpoxyModel<AutocompleteEmojiItem.Ho
     @EpoxyAttribute
     var emojiTypeFace: Typeface? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {

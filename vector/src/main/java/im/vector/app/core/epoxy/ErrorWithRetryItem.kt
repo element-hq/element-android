@@ -29,7 +29,7 @@ abstract class ErrorWithRetryItem : VectorEpoxyModel<ErrorWithRetryItem.Holder>(
     @EpoxyAttribute
     var text: String? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {

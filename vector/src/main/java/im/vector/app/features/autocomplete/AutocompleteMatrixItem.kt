@@ -35,7 +35,7 @@ abstract class AutocompleteMatrixItem : VectorEpoxyModel<AutocompleteMatrixItem.
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var subName: String? = null
-    @EpoxyAttribute var clickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var clickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

@@ -34,7 +34,9 @@ abstract class BaseProfileMatrixItem<T : ProfileMatrixItem.Holder> : VectorEpoxy
 
     @EpoxyAttribute
     var userEncryptionTrustLevel: RoomEncryptionTrustLevel? = null
-    @EpoxyAttribute var clickListener: ClickListener? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var clickListener: ClickListener? = null
 
     @CallSuper
     override fun bind(holder: T) {

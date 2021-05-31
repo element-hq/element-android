@@ -35,7 +35,7 @@ abstract class DisplayReadReceiptItem : EpoxyModelWithHolder<DisplayReadReceiptI
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var timestamp: CharSequence? = null
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute var userClicked: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var userClicked: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

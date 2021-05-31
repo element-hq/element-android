@@ -48,7 +48,7 @@ abstract class FormEditTextWithButtonItem : VectorEpoxyModel<FormEditTextWithBut
     @EpoxyAttribute
     var onTextChange: ((String) -> Unit)? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onButtonClicked: ClickListener? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {

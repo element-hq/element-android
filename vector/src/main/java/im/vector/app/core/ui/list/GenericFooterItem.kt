@@ -43,7 +43,7 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
     @EpoxyAttribute
     var style: ItemStyle = ItemStyle.NORMAL_TEXT
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemClickAction: ClickListener? = null
 
     @EpoxyAttribute

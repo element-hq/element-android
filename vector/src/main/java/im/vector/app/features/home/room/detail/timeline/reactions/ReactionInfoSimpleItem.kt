@@ -41,7 +41,7 @@ abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleI
     @EpoxyAttribute
     var timeStamp: CharSequence? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var userClicked: ClickListener? = null
 
     override fun bind(holder: Holder) {

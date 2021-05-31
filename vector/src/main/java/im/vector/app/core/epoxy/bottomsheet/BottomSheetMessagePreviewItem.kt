@@ -63,7 +63,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     @EpoxyAttribute
     var movementMethod: MovementMethod? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var userClicked: ClickListener? = null
 
     override fun bind(holder: Holder) {

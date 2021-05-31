@@ -37,7 +37,7 @@ abstract class SettingsInfoItem : EpoxyModelWithHolder<SettingsInfoItem.Holder>(
     @StringRes
     var helperTextResId: Int? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemClickListener: ClickListener? = null
 
     @EpoxyAttribute

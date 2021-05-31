@@ -38,7 +38,7 @@ abstract class ThreePidItem : EpoxyModelWithHolder<ThreePidItem.Holder>() {
     @DrawableRes
     var iconResId: Int? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var deleteClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {

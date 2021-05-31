@@ -31,7 +31,7 @@ abstract class LocaleItem : VectorEpoxyModel<LocaleItem.Holder>() {
 
     @EpoxyAttribute var title: String? = null
     @EpoxyAttribute var subtitle: String? = null
-    @EpoxyAttribute var clickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var clickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

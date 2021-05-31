@@ -66,7 +66,7 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
     @EpoxyAttribute
     var destructiveButtonAction: Action? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemClickAction: ClickListener? = null
 
     override fun bind(holder: Holder) {

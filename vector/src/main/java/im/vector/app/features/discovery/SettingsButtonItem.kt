@@ -44,7 +44,7 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
     @EpoxyAttribute
     var buttonStyle: ButtonStyle = ButtonStyle.POSITIVE
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var buttonClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {

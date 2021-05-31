@@ -36,7 +36,7 @@ abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultIte
     @EpoxyAttribute
     var currentQuery: String? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onClickListener: ClickListener? = null
 
     @EpoxyAttribute

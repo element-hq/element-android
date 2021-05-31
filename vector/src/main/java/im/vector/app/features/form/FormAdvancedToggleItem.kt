@@ -33,7 +33,7 @@ abstract class FormAdvancedToggleItem : VectorEpoxyModel<FormAdvancedToggleItem.
 
     @EpoxyAttribute lateinit var title: CharSequence
     @EpoxyAttribute var expanded: Boolean = false
-    @EpoxyAttribute var listener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

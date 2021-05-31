@@ -47,9 +47,9 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
     @EpoxyAttribute lateinit var stringProvider: StringProvider
     @EpoxyAttribute var izLowPriority: Boolean = false
     @EpoxyAttribute var izFavorite: Boolean = false
-    @EpoxyAttribute var settingsClickListener: ClickListener? = null
-    @EpoxyAttribute var lowPriorityClickListener: ClickListener? = null
-    @EpoxyAttribute var favoriteClickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var settingsClickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var lowPriorityClickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var favoriteClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

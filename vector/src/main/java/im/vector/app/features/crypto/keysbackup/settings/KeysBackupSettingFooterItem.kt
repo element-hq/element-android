@@ -33,13 +33,13 @@ abstract class KeysBackupSettingFooterItem : VectorEpoxyModel<KeysBackupSettingF
     @EpoxyAttribute
     var textButton1: String? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickOnButton1: ClickListener? = null
 
     @EpoxyAttribute
     var textButton2: String? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickOnButton2: ClickListener? = null
 
     override fun bind(holder: Holder) {

@@ -71,7 +71,7 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
     @EpoxyAttribute
     var destructive = false
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var listener: ClickListener
 
     override fun bind(holder: Holder) {

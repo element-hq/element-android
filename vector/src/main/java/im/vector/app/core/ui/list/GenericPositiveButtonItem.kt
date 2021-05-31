@@ -35,7 +35,7 @@ abstract class GenericPositiveButtonItem : VectorEpoxyModel<GenericPositiveButto
     @EpoxyAttribute
     var text: String? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var buttonClickAction: ClickListener? = null
 
     @EpoxyAttribute

@@ -48,7 +48,7 @@ abstract class BottomSheetRadioActionItem : VectorEpoxyModel<BottomSheetRadioAct
     @EpoxyAttribute
     var description: CharSequence? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var listener: ClickListener
 
     override fun bind(holder: Holder) {

@@ -54,7 +54,7 @@ abstract class GenericWithValueItem : VectorEpoxyModel<GenericWithValueItem.Hold
     @DrawableRes
     var titleIconResourceId: Int = -1
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemClickAction: ClickListener? = null
 
     @EpoxyAttribute

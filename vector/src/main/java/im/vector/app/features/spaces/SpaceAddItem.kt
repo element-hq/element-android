@@ -27,7 +27,7 @@ import im.vector.app.core.epoxy.onClick
 @EpoxyModelClass(layout = R.layout.item_space_add)
 abstract class SpaceAddItem : VectorEpoxyModel<SpaceAddItem.Holder>() {
 
-    @EpoxyAttribute var listener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

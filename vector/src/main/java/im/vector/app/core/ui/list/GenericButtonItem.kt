@@ -36,7 +36,7 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
     @EpoxyAttribute
     var text: String? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var buttonClickAction: ClickListener? = null
 
     @EpoxyAttribute

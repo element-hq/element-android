@@ -45,7 +45,7 @@ abstract class SettingsItem : EpoxyModelWithHolder<SettingsItem.Holder>() {
     @EpoxyAttribute
     var description: CharSequence? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {

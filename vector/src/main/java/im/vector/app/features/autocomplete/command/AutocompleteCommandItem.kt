@@ -37,7 +37,7 @@ abstract class AutocompleteCommandItem : VectorEpoxyModel<AutocompleteCommandIte
     @EpoxyAttribute
     var description: CharSequence? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
