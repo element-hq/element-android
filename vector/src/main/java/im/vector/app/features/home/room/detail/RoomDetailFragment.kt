@@ -438,7 +438,7 @@ class RoomDetailFragment @Inject constructor(
                         .setPosition(-50f, views.viewKonfetti.width + 50f, -50f, -50f)
                         .streamFor(150, 3000L)
             }
-            ChatEffect.SNOW     -> {
+            ChatEffect.SNOWFALL -> {
                 views.viewSnowFall.isVisible = true
                 views.viewSnowFall.restartFalling()
             }
