@@ -82,6 +82,9 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
     enum class Mode {
         FULL_SIZE,
         THUMBNAIL,
+        // Animated thumbnail: scale like a thumbnail, but use full_size resource,
+        // since the thumbnail resource might not support animating.
+        ANIMATED_THUMBNAIL,
         STICKER
     }
 
@@ -274,6 +277,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
             val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
             val resolvedUrl = when (mode) {
                 Mode.FULL_SIZE,
+                Mode.ANIMATED_THUMBNAIL,
                 Mode.STICKER -> resolveUrl(data)
                 Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
             }
@@ -348,6 +352,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                     finalHeight = height
                     finalWidth = width
                 }
+                Mode.ANIMATED_THUMBNAIL,
                 Mode.THUMBNAIL -> {
                     finalHeight = min(maxImageWidth * height / width, maxImageHeight)
                     finalWidth = finalHeight * width / height

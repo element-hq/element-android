@@ -77,7 +77,9 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
             }
         }
         val animate = mediaData.mimeType == MimeTypes.Gif
-        imageContentRenderer.render(mediaData, mode, holder.imageView, onImageSizeListener, animate)
+        // Do not use thumbnails for animated GIFs - sometimes thumbnails do not animate while the original GIF does
+        val effectiveMode = if (animate && mode == ImageContentRenderer.Mode.THUMBNAIL) ImageContentRenderer.Mode.ANIMATED_THUMBNAIL else mode
+        imageContentRenderer.render(mediaData, effectiveMode, holder.imageView, onImageSizeListener, animate)
         if (!attributes.informationData.sendState.hasFailed()) {
             contentUploadStateTrackerBinder.bind(
                     attributes.informationData.eventId,
