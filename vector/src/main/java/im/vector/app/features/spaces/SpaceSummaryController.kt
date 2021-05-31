@@ -22,7 +22,6 @@ import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
-import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.features.grouplist.groupSummaryItem
 import im.vector.app.features.grouplist.homeSpaceSummaryItem
 import im.vector.app.features.home.AvatarRenderer
@@ -72,7 +71,7 @@ class SpaceSummaryController @Inject constructor(
                 text(" ")
             }
 
-            genericItemHeader {
+            genericHeaderItem {
                 id("legacy_groups")
                 text(host.stringProvider.getString(R.string.groups_header))
                 textColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))

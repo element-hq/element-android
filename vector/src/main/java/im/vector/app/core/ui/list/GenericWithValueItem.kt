@@ -37,9 +37,8 @@ import im.vector.app.features.themes.ThemeUtils
  * Can display an accessory on the right, that can be an image or an indeterminate progress.
  * If provided with an action, will display a button at the bottom of the list item.
  */
-// TODO This class is not following the name convention. Should end with `Item
 @EpoxyModelClass(layout = R.layout.item_generic_with_value)
-abstract class GenericItemWithValue : VectorEpoxyModel<GenericItemWithValue.Holder>() {
+abstract class GenericWithValueItem : VectorEpoxyModel<GenericWithValueItem.Holder>() {
 
     @EpoxyAttribute
     var title: CharSequence? = null

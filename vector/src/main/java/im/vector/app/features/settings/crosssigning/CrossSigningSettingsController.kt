@@ -21,8 +21,8 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericItem
-import im.vector.app.core.ui.list.genericItemWithValue
 import im.vector.app.core.ui.list.genericPositiveButtonItem
+import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.core.utils.DimensionConverter
 import me.gujun.android.span.span
 import javax.inject.Inject
@@ -104,7 +104,7 @@ class CrossSigningSettingsController @Inject constructor(
         val crossSigningKeys = data.crossSigningInfo
 
         crossSigningKeys?.masterKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("msk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
@@ -120,7 +120,7 @@ class CrossSigningSettingsController @Inject constructor(
             }
         }
         crossSigningKeys?.userKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("usk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
@@ -136,7 +136,7 @@ class CrossSigningSettingsController @Inject constructor(
             }
         }
         crossSigningKeys?.selfSigningKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("ssk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
