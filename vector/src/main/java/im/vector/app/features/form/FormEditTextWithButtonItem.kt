@@ -24,6 +24,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.addTextChangedListenerOnce
@@ -47,7 +48,7 @@ abstract class FormEditTextWithButtonItem : VectorEpoxyModel<FormEditTextWithBut
     var buttonText: String? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    var onTextChange: ((String) -> Unit)? = null
+    var onTextChange: TextListener? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onButtonClicked: ClickListener? = null

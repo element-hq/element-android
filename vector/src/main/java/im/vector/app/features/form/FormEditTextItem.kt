@@ -26,6 +26,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.addTextChangedListenerOnce
@@ -63,7 +64,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     var endIconMode: Int? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    var onTextChange: ((String) -> Unit)? = null
+    var onTextChange: TextListener? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var editorActionListener: TextView.OnEditorActionListener? = null

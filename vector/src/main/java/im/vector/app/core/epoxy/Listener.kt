@@ -31,3 +31,9 @@ fun View.onClick(listener: ClickListener?) {
         setOnClickListener(DebouncedClickListener(listener))
     }
 }
+
+/**
+ * Simple Text listener lambda
+ */
+typealias TextListener = (String) -> Unit
+

@@ -26,6 +26,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.addTextChangedListenerOnce
@@ -45,7 +46,7 @@ abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Ho
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var passwordRevealClickListener: ClickListener? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var forgetPasswordClickListener: ClickListener? = null
     @EpoxyAttribute var submitClickListener: ((String) -> Unit)? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onPasswordEdited: ((String) -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onPasswordEdited: TextListener? = null
 
     private val textChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
