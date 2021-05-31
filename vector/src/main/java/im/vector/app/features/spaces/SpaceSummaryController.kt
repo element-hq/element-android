@@ -119,15 +119,15 @@ class SpaceSummaryController @Inject constructor(
         // show invites on top
 
         summaries?.filter { it.membership == Membership.INVITE }
-                ?.forEach {
+                ?.forEach { roomSummary ->
                     spaceSummaryItem {
                         avatarRenderer(host.avatarRenderer)
-                        id(it.roomId)
-                        matrixItem(it.toMatrixItem())
+                        id(roomSummary.roomId)
+                        matrixItem(roomSummary.toMatrixItem())
                         countState(UnreadCounterBadgeView.State(1, true))
                         selected(false)
                         description(host.stringProvider.getString(R.string.you_are_invited))
-                        listener { host.callback?.onSpaceInviteSelected(it) }
+                        listener { host.callback?.onSpaceInviteSelected(roomSummary) }
                     }
                 }
 

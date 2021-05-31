@@ -27,8 +27,8 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.ui.views.SendStateImageView
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -45,12 +45,17 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    private val _avatarClickListener = DebouncedClickListener({
-        attributes.avatarCallback?.onAvatarClicked(attributes.informationData)
-    })
-    private val _memberNameClickListener = DebouncedClickListener({
-        attributes.avatarCallback?.onMemberNameClicked(attributes.informationData)
-    })
+    private val _avatarClickListener = object : ClickListener {
+        override fun invoke(p1: View) {
+            attributes.avatarCallback?.onAvatarClicked(attributes.informationData)
+        }
+    }
+
+    private val _memberNameClickListener = object : ClickListener {
+        override fun invoke(p1: View) {
+            attributes.avatarCallback?.onMemberNameClicked(attributes.informationData)
+        }
+    }
 
     override fun bind(holder: H) {
         super.bind(holder)
@@ -60,9 +65,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 width = attributes.avatarSize
             }
             holder.avatarImageView.visibility = View.VISIBLE
-            holder.avatarImageView.setOnClickListener(_avatarClickListener)
+            holder.avatarImageView.onClick(_avatarClickListener)
             holder.memberNameView.visibility = View.VISIBLE
-            holder.memberNameView.setOnClickListener(_memberNameClickListener)
+            holder.memberNameView.onClick(_memberNameClickListener)
             holder.timeView.visibility = View.VISIBLE
             holder.timeView.text = attributes.informationData.time
             holder.memberNameView.text = attributes.informationData.memberName

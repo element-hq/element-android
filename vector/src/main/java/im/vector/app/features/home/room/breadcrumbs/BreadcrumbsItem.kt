@@ -54,11 +54,6 @@ abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
         holder.typingIndicator.isVisible = hasTypingUsers
     }
 
-    override fun unbind(holder: Holder) {
-        holder.rootView.setOnClickListener(null)
-        super.unbind(holder)
-    }
-
     class Holder : VectorEpoxyHolder() {
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.breadcrumbsUnreadCounterBadgeView)
         val unreadIndentIndicator by bind<View>(R.id.breadcrumbsUnreadIndicator)

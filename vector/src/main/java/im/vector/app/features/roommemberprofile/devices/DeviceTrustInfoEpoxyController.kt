@@ -45,8 +45,8 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
 
     override fun buildModels(data: DeviceListViewState?) {
         val host = this
-        data?.selectedDevice?.let {
-            val isVerified = it.trustLevel?.isVerified() == true
+        data?.selectedDevice?.let { cryptoDeviceInfo ->
+            val isVerified = cryptoDeviceInfo.trustLevel?.isVerified() == true
             genericItem {
                 id("title")
                 style(ItemStyle.BIG_TEXT)
@@ -78,13 +78,13 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
             }
 
             genericItemWithValue {
-                id(it.deviceId)
+                id(cryptoDeviceInfo.deviceId)
                 titleIconResourceId(if (isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                 title(
                         span {
-                            +(it.displayName() ?: "")
+                            +(cryptoDeviceInfo.displayName() ?: "")
                             span {
-                                text = " (${it.deviceId})"
+                                text = " (${cryptoDeviceInfo.deviceId})"
                                 textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
                                 textSize = host.dimensionConverter.spToPx(14)
                             }
@@ -107,7 +107,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                     iconRes(R.drawable.ic_arrow_right)
                     iconColor(host.colorProvider.getColor(R.color.riotx_accent))
                     listener {
-                        host.interactionListener?.onVerifyManually(it)
+                        host.interactionListener?.onVerifyManually(cryptoDeviceInfo)
                     }
                 }
             }

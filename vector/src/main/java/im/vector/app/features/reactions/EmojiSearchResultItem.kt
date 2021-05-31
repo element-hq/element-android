@@ -21,7 +21,9 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.reactions.data.EmojiItem
 
@@ -35,7 +37,7 @@ abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultIte
     var currentQuery: String? = null
 
     @EpoxyAttribute
-    var onClickListener: ReactionClickListener? = null
+    var onClickListener: ClickListener? = null
 
     @EpoxyAttribute
     var emojiTypeFace: Typeface? = null
@@ -47,9 +49,7 @@ abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultIte
         holder.emojiText.typeface = emojiTypeFace ?: Typeface.DEFAULT
         holder.emojiNameText.text = emojiItem.name
         holder.emojiKeywordText.setTextOrHide(emojiItem.keywords.joinToString())
-        holder.view.setOnClickListener {
-            onClickListener?.onReactionSelected(emojiItem.emoji)
-        }
+        holder.view.onClick(onClickListener)
     }
 
     class Holder : VectorEpoxyHolder() {

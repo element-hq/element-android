@@ -26,7 +26,6 @@ import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItemWithValue
-import im.vector.app.core.utils.DebouncedClickListener
 import org.matrix.android.sdk.api.session.accountdata.AccountDataEvent
 import javax.inject.Inject
 
@@ -69,9 +68,9 @@ class AccountDataEpoxyController @Inject constructor(
                         genericItemWithValue {
                             id(accountData.type)
                             title(accountData.type)
-                            itemClickAction(DebouncedClickListener({
+                            itemClickAction {
                                 host.interactionListener?.didTap(accountData)
-                            }))
+                            }
                             itemLongClickAction(View.OnLongClickListener {
                                 host.interactionListener?.didLongTap(accountData)
                                 true

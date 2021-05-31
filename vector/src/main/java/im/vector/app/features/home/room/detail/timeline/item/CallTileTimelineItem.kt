@@ -29,6 +29,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.features.home.AvatarRenderer
@@ -65,11 +66,11 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         }
         if (attributes.callStatus == CallStatus.INVITED && !attributes.informationData.sentByMe && attributes.isStillActive) {
             holder.acceptRejectViewGroup.isVisible = true
-            holder.acceptView.setOnClickListener {
+            holder.acceptView.onClick {
                 attributes.callback?.onTimelineItemAction(RoomDetailAction.AcceptCall(callId = attributes.callId))
             }
             holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.color.riotx_notice)
-            holder.rejectView.setOnClickListener {
+            holder.rejectView.onClick {
                 attributes.callback?.onTimelineItemAction(RoomDetailAction.EndCall)
             }
             holder.statusView.isVisible = false

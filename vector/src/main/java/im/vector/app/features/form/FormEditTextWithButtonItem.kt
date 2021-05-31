@@ -17,15 +17,16 @@
 package im.vector.app.features.form
 
 import android.text.Editable
-import android.view.View
 import androidx.appcompat.widget.AppCompatButton
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
@@ -48,7 +49,7 @@ abstract class FormEditTextWithButtonItem : VectorEpoxyModel<FormEditTextWithBut
     var onTextChange: ((String) -> Unit)? = null
 
     @EpoxyAttribute
-    var onButtonClicked: ((View) -> Unit)? = null
+    var onButtonClicked: ClickListener? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
@@ -68,8 +69,7 @@ abstract class FormEditTextWithButtonItem : VectorEpoxyModel<FormEditTextWithBut
         holder.textInputEditText.addTextChangedListener(onTextChangeListener)
 
         holder.textInputButton.text = buttonText
-
-        holder.textInputButton.setOnClickListener(onButtonClicked)
+        holder.textInputButton.onClick(onButtonClicked)
     }
 
     override fun shouldSaveViewState(): Boolean {

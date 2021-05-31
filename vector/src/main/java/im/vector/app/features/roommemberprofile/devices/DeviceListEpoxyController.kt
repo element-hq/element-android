@@ -16,7 +16,6 @@
  */
 package im.vector.app.features.roommemberprofile.devices
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -131,9 +130,9 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                             if (device.isVerified) R.color.riotx_positive_accent else R.color.riotx_destructive_accent
                                     )
                             )
-                            itemClickAction(View.OnClickListener {
+                            itemClickAction {
                                 host.interactionListener?.onDeviceSelected(device)
-                            })
+                            }
                         }
                     }
                 }
