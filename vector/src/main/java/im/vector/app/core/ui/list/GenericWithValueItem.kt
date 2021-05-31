@@ -57,7 +57,7 @@ abstract class GenericWithValueItem : VectorEpoxyModel<GenericWithValueItem.Hold
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemClickAction: ClickListener? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemLongClickAction: View.OnLongClickListener? = null
 
     override fun bind(holder: Holder) {
