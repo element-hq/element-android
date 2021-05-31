@@ -71,7 +71,8 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
             contentUploadStateTrackerBinder.bind(
                     attributes.informationData.eventId,
                     LocalFilesHelper(holder.view.context).isLocalFile(mediaData.url),
-                    holder.progressLayout
+                    holder.progressLayout,
+                    holder.mediaStateView
             )
         } else {
             holder.progressLayout.isVisible = false
@@ -86,19 +87,35 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
             holder.mediaStateView.render(if (playable && !autoPlayGifs) TimelineMediaStateView.State.ReadyToPlay else TimelineMediaStateView.State.None)
         }
         holder.mediaStateView.setTag(R.id.messageMediaStateView, mediaData.url)
-        imageContentRenderer.render(mediaData, mode, holder.imageView, autoPlayGifs) {
-            // if a server thumbnail was used the download tracker won't be called
-            mediaData.url?.let { mxcUrl ->
-                if (mxcUrl == holder.mediaStateView.getTag(R.id.messageMediaStateView)) {
-                    contentDownloadStateTrackerBinder.unbind(mxcUrl)
-                    // mmm annoying but have to post if not the previous contentDownloadStateTrackerBinder.bind call we render
-                    // an IDLE state (i.e a loading wheel...)
-                    holder.mediaStateView.post {
-                        holder.mediaStateView.render(if (it) TimelineMediaStateView.State.None else TimelineMediaStateView.State.PermanentError)
+        imageContentRenderer.render(mediaData, mode, holder.imageView, autoPlayGifs, rendererCallbacks =  object: ImageContentRenderer.ContentRendererCallbacks {
+            override fun onThumbnailModeFinish(success: Boolean) {
+                // if a server thumbnail was used the download tracker won't be called
+                mediaData.url?.let { mxcUrl ->
+                    if (mxcUrl == holder.mediaStateView.getTag(R.id.messageMediaStateView)) {
+                        contentDownloadStateTrackerBinder.unbind(mxcUrl)
+                        // mmm annoying but have to post if not the previous contentDownloadStateTrackerBinder.bind call we render
+                        // an IDLE state (i.e a loading wheel...)
+                        holder.mediaStateView.post {
+                            holder.mediaStateView.render(if (success) TimelineMediaStateView.State.None else TimelineMediaStateView.State.PermanentError)
+                        }
                     }
                 }
             }
-        }
+
+            override fun onLoadModeFinish(success: Boolean) {
+                // if a server thumbnail was used the download tracker won't be called
+                mediaData.url?.let { mxcUrl ->
+                    if (mxcUrl == holder.mediaStateView.getTag(R.id.messageMediaStateView)) {
+                        contentDownloadStateTrackerBinder.unbind(mxcUrl)
+                        // mmm annoying but have to post if not the previous contentDownloadStateTrackerBinder.bind call we render
+                        // an IDLE state (i.e a loading wheel...)
+                        holder.mediaStateView.post {
+                            holder.mediaStateView.render(if (success) TimelineMediaStateView.State.None else TimelineMediaStateView.State.PermanentError)
+                        }
+                    }
+                }
+            }
+        })
 
         holder.mediaStateView.callback = object : TimelineMediaStateView.Callback {
             override fun onButtonClicked() {

@@ -119,13 +119,18 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 .into(imageView)
     }
 
+    interface ContentRendererCallbacks {
+        fun onThumbnailModeFinish(success: Boolean)
+
+        fun onLoadModeFinish(success: Boolean)
+    }
     /**
      * In timeline
      * All encrypted media will be downloaded by the SDK's FileService, so caller could follow progress using download tracker,
      * but for clear media a server thumbnail will be requested and in this case it will be invisible to download tracker that's why there is the
      * `mxcThumbnailCallback` callback. Caller can use it to know when media is loaded.
      */
-    fun render(data: Data, mode: Mode, imageView: ImageView, animate: Boolean = false, mxcThumbnailCallback: ((Boolean) -> Unit)? = null) {
+    fun render(data: Data, mode: Mode, imageView: ImageView, animate: Boolean = false, rendererCallbacks: ContentRendererCallbacks? = null) {
         val size = processSize(data, mode)
         // This size will be used by glide for bitmap size
         imageView.updateLayoutParams {
@@ -135,7 +140,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         // a11y
         imageView.contentDescription = data.filename
 
-        createGlideRequest(data, mode, imageView, size, animate, mxcThumbnailCallback)
+        createGlideRequest(data, mode, imageView, size, animate, rendererCallbacks)
                 .apply {
                     if (!animate) {
                         dontAnimate()
@@ -289,11 +294,11 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 .into(imageView)
     }
 
-    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size, autoplay: Boolean = false, mxcThumbnailCallback: ((Boolean) -> Unit)? = null): GlideRequest<Drawable> {
-        return createGlideRequest(data, mode, GlideApp.with(imageView), size, autoplay, mxcThumbnailCallback)
+    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size, autoplay: Boolean = false, rendererCallbacks: ContentRendererCallbacks? = null): GlideRequest<Drawable> {
+        return createGlideRequest(data, mode, GlideApp.with(imageView), size, autoplay, rendererCallbacks)
     }
 
-    fun createGlideRequest(data: Data, mode: Mode, glideRequests: GlideRequests, size: Size = processSize(data, mode), autoplay: Boolean = false, mxcThumbnailCallback: ((Boolean) -> Unit)? = null): GlideRequest<Drawable> {
+    fun createGlideRequest(data: Data, mode: Mode, glideRequests: GlideRequests, size: Size = processSize(data, mode), autoplay: Boolean = false, rendererCallbacks: ContentRendererCallbacks? = null): GlideRequest<Drawable> {
         return if (data.elementToDecrypt != null) {
             // Encrypted image
             glideRequests
@@ -305,6 +310,17 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                         }
                     }
                     .load(data)
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            rendererCallbacks?.onLoadModeFinish(false)
+                            return false
+                        }
+
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            rendererCallbacks?.onLoadModeFinish(true)
+                            return false
+                        }
+                    })
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
@@ -328,12 +344,12 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                         ?: data.url.takeIf { it?.startsWith("content://") == true }
                         ).listener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                                mxcThumbnailCallback?.invoke(false)
+                                rendererCallbacks?.onThumbnailModeFinish(false)
                                 return false
                             }
 
                             override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                                mxcThumbnailCallback?.invoke(true)
+                                rendererCallbacks?.onThumbnailModeFinish(true)
                                 return false
                             }
                         })
@@ -346,7 +362,19 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                 asBitmap()
                             }
                         }
-                        .load(data).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .load(data)
+                        .listener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                rendererCallbacks?.onLoadModeFinish(false)
+                                return false
+                            }
+
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                rendererCallbacks?.onLoadModeFinish(true)
+                                return false
+                            }
+                        })
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
             }
 
 //            glideRequests

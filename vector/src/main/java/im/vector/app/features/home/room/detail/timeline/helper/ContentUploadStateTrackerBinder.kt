@@ -27,6 +27,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenScope
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.platform.TimelineMediaStateView
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
@@ -42,10 +43,11 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
 
     fun bind(eventId: String,
              isLocalFile: Boolean,
-             progressLayout: ViewGroup) {
+             progressLayout: ViewGroup,
+             mediaStateView: TimelineMediaStateView?) {
         activeSessionHolder.getSafeActiveSession()?.also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
-            val updateListener = ContentMediaProgressUpdater(progressLayout, isLocalFile, messageColorProvider, errorFormatter)
+            val updateListener = ContentMediaProgressUpdater(progressLayout, mediaStateView, isLocalFile, messageColorProvider, errorFormatter)
             updateListeners[eventId] = updateListener
             uploadStateTracker.track(eventId, updateListener)
         }
@@ -68,6 +70,7 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
 }
 
 private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
+                                          private val mediaStateView: TimelineMediaStateView?,
                                           private val isLocalFile: Boolean,
                                           private val messageColorProvider: MessageColorProvider,
                                           private val errorFormatter: ErrorFormatter) : ContentUploadStateTracker.UpdateListener {
@@ -91,14 +94,20 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
 
     private fun handleIdle() {
         if (isLocalFile) {
+            if (mediaStateView != null) {
+                progressBar.isVisible = false
+                mediaStateView.render(TimelineMediaStateView.State.Downloading(0, true))
+            } else {
+                progressBar.isVisible = true
+                progressBar.isIndeterminate = true
+                progressBar.progress = 0
+            }
             progressLayout.isVisible = true
-            progressBar.isVisible = true
-            progressBar.isIndeterminate = true
-            progressBar.progress = 0
             progressTextView.text = progressLayout.context.getString(R.string.send_file_step_idle)
             progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.UNSENT))
         } else {
             progressLayout.isVisible = false
+            mediaStateView?.render(TimelineMediaStateView.State.Downloading(0, true))
         }
     }
 
@@ -120,8 +129,13 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
 
     private fun handleCompressingImage() {
         progressLayout.visibility = View.VISIBLE
-        progressBar.isVisible = true
-        progressBar.isIndeterminate = true
+        if (mediaStateView != null) {
+            progressBar.isVisible = false
+            mediaStateView.render(TimelineMediaStateView.State.Downloading(10, true))
+        } else {
+            progressBar.isVisible = true
+            progressBar.isIndeterminate = true
+        }
         progressTextView.isVisible = true
         progressTextView.text = progressLayout.context.getString(R.string.send_file_step_compressing_image)
         progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
@@ -131,9 +145,14 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
     @SuppressLint("StringFormatMatches")
     private fun handleCompressingVideo(state: ContentUploadStateTracker.State.CompressingVideo) {
         progressLayout.visibility = View.VISIBLE
-        progressBar.isVisible = true
-        progressBar.isIndeterminate = false
-        progressBar.progress = state.percent.toInt()
+        if (mediaStateView != null) {
+            progressBar.isVisible = false
+            mediaStateView.render(TimelineMediaStateView.State.Downloading(state.percent.toInt(), false))
+        } else {
+            progressBar.isVisible = true
+            progressBar.isIndeterminate = false
+            progressBar.progress = state.percent.toInt()
+        }
         progressTextView.isVisible = true
         // False positive is here...
         progressTextView.text = progressLayout.context.getString(R.string.send_file_step_compressing_video, state.percent.toInt())
@@ -141,21 +160,33 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
     }
 
     private fun doHandleEncrypting(resId: Int, current: Long, total: Long) {
-        progressLayout.visibility = View.VISIBLE
         val percent = if (total > 0) (100L * (current.toFloat() / total.toFloat())) else 0f
-        progressBar.isIndeterminate = false
-        progressBar.progress = percent.toInt()
+        progressLayout.visibility = View.VISIBLE
+        if (mediaStateView != null) {
+            progressBar.isVisible = false
+            mediaStateView.render(TimelineMediaStateView.State.Downloading(percent.toInt(), false))
+        } else {
+            progressBar.isVisible = true
+            progressBar.isIndeterminate = false
+            progressBar.progress = percent.toInt()
+        }
+
         progressTextView.isVisible = true
         progressTextView.text = progressLayout.context.getString(resId)
         progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.ENCRYPTING))
     }
 
     private fun doHandleProgress(resId: Int, current: Long, total: Long) {
-        progressLayout.visibility = View.VISIBLE
         val percent = 100L * (current.toFloat() / total.toFloat())
-        progressBar.isVisible = true
-        progressBar.isIndeterminate = false
-        progressBar.progress = percent.toInt()
+        progressLayout.visibility = View.VISIBLE
+        if (mediaStateView != null) {
+            progressBar.isVisible = false
+            mediaStateView.render(TimelineMediaStateView.State.Downloading(percent.toInt(), false))
+        } else {
+            progressBar.isVisible = true
+            progressBar.isIndeterminate = false
+            progressBar.progress = percent.toInt()
+        }
         progressTextView.isVisible = true
         progressTextView.text = progressLayout.context.getString(resId,
                 TextUtils.formatFileSize(progressLayout.context, current, true),
@@ -164,6 +195,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
     }
 
     private fun handleFailure(/*state: ContentUploadStateTracker.State.Failure*/) {
+        mediaStateView?.render(TimelineMediaStateView.State.PermanentError)
         progressLayout.visibility = View.VISIBLE
         progressBar.isVisible = false
         // Do not show the message it's too technical for users, and unfortunate when upload is cancelled
