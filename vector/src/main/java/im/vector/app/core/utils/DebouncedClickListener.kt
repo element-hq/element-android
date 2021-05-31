@@ -17,6 +17,7 @@ package im.vector.app.core.utils
 
 import android.os.SystemClock
 import android.view.View
+import timber.log.Timber
 import java.util.WeakHashMap
 
 /**
@@ -30,13 +31,14 @@ class DebouncedClickListener(
     private val lastClickMap = WeakHashMap<View, Long>()
 
     override fun onClick(v: View) {
-        val previousClickTimestamp = lastClickMap[v]
+        val previousClickTimestamp = lastClickMap[v] ?: 0
         val currentTimestamp = SystemClock.elapsedRealtime()
-
         lastClickMap[v] = currentTimestamp
 
-        if (previousClickTimestamp == null || currentTimestamp - previousClickTimestamp > minimumInterval) {
+        if (currentTimestamp > previousClickTimestamp + minimumInterval) {
             original.onClick(v)
+        } else {
+            Timber.v("Debounced click!")
         }
     }
 }
