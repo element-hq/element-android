@@ -21,8 +21,10 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 
 @EpoxyModelClass(layout = R.layout.item_login_error_retry)
 abstract class LoginErrorWithRetryItem : VectorEpoxyModel<LoginErrorWithRetryItem.Holder>() {
@@ -30,13 +32,13 @@ abstract class LoginErrorWithRetryItem : VectorEpoxyModel<LoginErrorWithRetryIte
     @EpoxyAttribute
     var text: String? = null
 
-    @EpoxyAttribute
-    var listener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.textView.text = text
-        holder.buttonView.setOnClickListener { listener?.invoke() }
+        holder.buttonView.onClick(listener)
     }
 
     class Holder : VectorEpoxyHolder() {
