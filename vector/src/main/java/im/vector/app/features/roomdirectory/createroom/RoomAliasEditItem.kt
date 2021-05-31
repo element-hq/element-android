@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.addTextChangedListenerOnce
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
@@ -48,7 +49,7 @@ abstract class RoomAliasEditItem : VectorEpoxyModel<RoomAliasEditItem.Holder>() 
     @EpoxyAttribute
     var enabled: Boolean = true
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onTextChange: ((String) -> Unit)? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
@@ -64,7 +65,7 @@ abstract class RoomAliasEditItem : VectorEpoxyModel<RoomAliasEditItem.Holder>() 
 
         holder.setValueOnce(holder.textInputEditText, value)
         holder.textInputEditText.isEnabled = enabled
-        holder.textInputEditText.addTextChangedListener(onTextChangeListener)
+        holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
         holder.homeServerText.text = homeServer
         holder.bottomSeparator.isVisible = showBottomSeparator
     }
