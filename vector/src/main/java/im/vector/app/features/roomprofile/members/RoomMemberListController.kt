@@ -96,7 +96,7 @@ class RoomMemberListController @Inject constructor(
                             matrixItem(roomMember.toMatrixItem())
                             avatarRenderer(host.avatarRenderer)
                             userEncryptionTrustLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
-                            clickListener { _ ->
+                            clickListener {
                                 host.callback?.onRoomMemberClicked(roomMember)
                             }
                         }
@@ -143,7 +143,7 @@ class RoomMemberListController @Inject constructor(
                                             matrixItem(MatrixItem.UserItem("@", displayName = content.displayName))
                                             avatarRenderer(host.avatarRenderer)
                                             editable(data.actionsPermissions.canRevokeThreePidInvite)
-                                            clickListener { _ ->
+                                            clickListener {
                                                 host.callback?.onThreePidInviteClicked(event)
                                             }
                                         }

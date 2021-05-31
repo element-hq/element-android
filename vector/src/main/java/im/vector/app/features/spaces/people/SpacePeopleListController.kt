@@ -115,7 +115,7 @@ class SpacePeopleListController @Inject constructor(
                                                 }
                                             }
 
-                                    clickListener { _ ->
+                                    clickListener {
                                         host.listener?.onSpaceMemberClicked(roomMember)
                                     }
                                 }

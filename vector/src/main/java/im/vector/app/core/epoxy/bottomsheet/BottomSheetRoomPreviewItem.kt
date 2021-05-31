@@ -59,7 +59,7 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
         setLowPriorityState(holder, izLowPriority)
         setFavoriteState(holder, izFavorite)
 
-        holder.roomLowPriority.setOnClickListener {
+        holder.roomLowPriority.onClick {
             // Immediate echo
             setLowPriorityState(holder, !izLowPriority)
             if (!izLowPriority) {
@@ -67,9 +67,9 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
                 setFavoriteState(holder, false)
             }
             // And do the action
-            lowPriorityClickListener?.invoke()
+            lowPriorityClickListener?.invoke(it)
         }
-        holder.roomFavorite.setOnClickListener {
+        holder.roomFavorite.onClick {
             // Immediate echo
             setFavoriteState(holder, !izFavorite)
             if (!izFavorite) {
@@ -77,7 +77,7 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
                 setLowPriorityState(holder, false)
             }
             // And do the action
-            favoriteClickListener?.invoke()
+            favoriteClickListener?.invoke(it)
         }
         holder.roomSettings.apply {
             onClick(settingsClickListener)

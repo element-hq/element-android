@@ -28,6 +28,7 @@ import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.features.home.AvatarRenderer
@@ -147,7 +148,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             override val avatarRenderer: AvatarRenderer,
             override val messageColorProvider: MessageColorProvider,
             override val itemLongClickListener: View.OnLongClickListener? = null,
-            override val itemClickListener: View.OnClickListener? = null,
+            override val itemClickListener: ClickListener? = null,
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
     ) : AbsBaseMessageItem.Attributes

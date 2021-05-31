@@ -18,7 +18,6 @@ package im.vector.app.features.roomdirectory.picker
 
 import android.text.InputType
 import android.view.KeyEvent
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.airbnb.epoxy.TypedEpoxyController
@@ -156,9 +155,9 @@ class RoomDirectoryPickerController @Inject constructor(
                 id("add")
                 text(host.stringProvider.getString(R.string.directory_add_a_new_server))
                 textColor(host.colorProvider.getColor(R.color.riotx_accent))
-                buttonClickAction(View.OnClickListener {
+                buttonClickAction {
                     host.callback?.onStartEnterServer()
-                })
+                }
             }
         }
     }

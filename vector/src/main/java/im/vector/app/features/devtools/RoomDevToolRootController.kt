@@ -16,7 +16,6 @@
 
 package im.vector.app.features.devtools
 
-import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -38,23 +37,23 @@ class RoomDevToolRootController @Inject constructor(
         genericButtonItem {
             id("explore")
             text(host.stringProvider.getString(R.string.dev_tools_explore_room_state))
-            buttonClickAction(View.OnClickListener {
+            buttonClickAction {
                 host.interactionListener?.processAction(RoomDevToolAction.ExploreRoomState)
-            })
+            }
         }
         genericButtonItem {
             id("send")
             text(host.stringProvider.getString(R.string.dev_tools_send_custom_event))
-            buttonClickAction(View.OnClickListener {
+            buttonClickAction {
                 host.interactionListener?.processAction(RoomDevToolAction.SendCustomEvent(false))
-            })
+            }
         }
         genericButtonItem {
             id("send_state")
             text(host.stringProvider.getString(R.string.dev_tools_send_state_event))
-            buttonClickAction(View.OnClickListener {
+            buttonClickAction {
                 host.interactionListener?.processAction(RoomDevToolAction.SendCustomEvent(true))
-            })
+            }
         }
     }
 }

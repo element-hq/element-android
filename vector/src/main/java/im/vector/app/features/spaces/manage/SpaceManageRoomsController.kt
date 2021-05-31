@@ -25,7 +25,6 @@ import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -83,9 +82,9 @@ class SpaceManageRoomsController @Inject constructor(
                     avatarRenderer(host.avatarRenderer)
                     suggested(childInfo.suggested ?: false)
                     selected(data.selectedRooms.contains(childInfo.childRoomId))
-                    itemClickListener(DebouncedClickListener({
+                    itemClickListener {
                         host.listener?.toggleSelection(childInfo)
-                    }))
+                    }
                 }
             }
         }

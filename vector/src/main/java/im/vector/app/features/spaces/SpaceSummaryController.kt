@@ -16,7 +16,6 @@
 
 package im.vector.app.features.spaces
 
-import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
@@ -112,9 +111,9 @@ class SpaceSummaryController @Inject constructor(
         val host = this
         spaceBetaHeaderItem {
             id("beta_header")
-            clickAction(View.OnClickListener {
+            clickAction {
                 host.callback?.sendFeedBack()
-            })
+            }
         }
 
         // show invites on top

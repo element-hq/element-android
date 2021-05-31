@@ -24,8 +24,10 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -34,12 +36,12 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
-    @EpoxyAttribute var clickListener: View.OnClickListener? = null
+    @EpoxyAttribute var clickListener: ClickListener? = null
     @EpoxyAttribute var selected: Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener(clickListener)
+        holder.view.onClick(clickListener)
         // If name is empty, use userId as name and force it being centered
         if (matrixItem.displayName.isNullOrEmpty()) {
             holder.userIdView.visibility = View.GONE

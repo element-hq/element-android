@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.discovery
 
-import android.view.View
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -23,7 +22,9 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
 @EpoxyModelClass(layout = R.layout.item_settings_helper_info)
@@ -37,7 +38,7 @@ abstract class SettingsInfoItem : EpoxyModelWithHolder<SettingsInfoItem.Holder>(
     var helperTextResId: Int? = null
 
     @EpoxyAttribute
-    var itemClickListener: View.OnClickListener? = null
+    var itemClickListener: ClickListener? = null
 
     @EpoxyAttribute
     @DrawableRes
@@ -55,7 +56,7 @@ abstract class SettingsInfoItem : EpoxyModelWithHolder<SettingsInfoItem.Holder>(
             holder.text.setTextOrHide(helperText)
         }
 
-        holder.view.setOnClickListener(itemClickListener)
+        holder.view.onClick(itemClickListener)
 
         if (showCompoundDrawable) {
             holder.text.setCompoundDrawablesWithIntrinsicBounds(compoundDrawable, 0, 0, 0)

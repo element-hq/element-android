@@ -30,8 +30,10 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.themes.ThemeUtils
 
 /**
@@ -70,13 +72,11 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
     var destructive = false
 
     @EpoxyAttribute
-    lateinit var listener: View.OnClickListener
+    lateinit var listener: ClickListener
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener {
-            listener.onClick(it)
-        }
+        holder.view.onClick(listener)
         holder.startSpace.isVisible = subMenuItem
         val tintColor = if (destructive) {
             ContextCompat.getColor(holder.view.context, R.color.riotx_notice)

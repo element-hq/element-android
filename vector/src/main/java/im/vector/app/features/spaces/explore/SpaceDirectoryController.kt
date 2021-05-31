@@ -16,7 +16,6 @@
 
 package im.vector.app.features.spaces.explore
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -138,12 +137,12 @@ class SpaceDirectoryController @Inject constructor(
                         )
                         apply {
                             if (isSpace) {
-                                itemClickListener(View.OnClickListener { host.listener?.onSpaceChildClick(info) })
+                                itemClickListener { host.listener?.onSpaceChildClick(info) }
                             } else {
-                                itemClickListener(View.OnClickListener { host.listener?.onRoomClick(info) })
+                                itemClickListener { host.listener?.onRoomClick(info) }
                             }
                         }
-                        buttonClickListener(View.OnClickListener { host.listener?.onButtonClick(info) })
+                        buttonClickListener { host.listener?.onButtonClick(info) }
                     }
                 }
             }

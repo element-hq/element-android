@@ -17,7 +17,6 @@
 package im.vector.app.features.settings.threepids
 
 import android.text.InputType
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -131,7 +130,7 @@ class ThreePidsSettingsController @Inject constructor(
                     id("addEmail")
                     text(host.stringProvider.getString(R.string.settings_add_email_address))
                     textColor(host.colorProvider.getColor(R.color.riotx_accent))
-                    buttonClickAction(View.OnClickListener { host.interactionListener?.addEmail() })
+                    buttonClickAction { host.interactionListener?.addEmail() }
                 }
             is ThreePidsSettingsUiState.AddingEmail       -> {
                 settingsEditTextItem {
@@ -190,7 +189,7 @@ class ThreePidsSettingsController @Inject constructor(
                     id("addMsisdn")
                     text(host.stringProvider.getString(R.string.settings_add_phone_number))
                     textColor(host.colorProvider.getColor(R.color.riotx_accent))
-                    buttonClickAction(View.OnClickListener { host.interactionListener?.addMsisdn() })
+                    buttonClickAction { host.interactionListener?.addMsisdn() }
                 }
             is ThreePidsSettingsUiState.AddingEmail       -> Unit
             is ThreePidsSettingsUiState.AddingPhoneNumber -> {

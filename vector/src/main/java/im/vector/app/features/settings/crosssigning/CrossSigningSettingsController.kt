@@ -23,7 +23,6 @@ import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericItemWithValue
 import im.vector.app.core.ui.list.genericPositiveButtonItem
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.core.utils.DimensionConverter
 import me.gujun.android.span.span
 import javax.inject.Inject
@@ -53,9 +52,9 @@ class CrossSigningSettingsController @Inject constructor(
                 genericButtonItem {
                     id("Reset")
                     text(host.stringProvider.getString(R.string.reset_cross_signing))
-                    buttonClickAction(DebouncedClickListener({
+                    buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
-                    }))
+                    }
                 }
             }
             data.xSigningKeysAreTrusted    -> {
@@ -67,9 +66,9 @@ class CrossSigningSettingsController @Inject constructor(
                 genericButtonItem {
                     id("Reset")
                     text(host.stringProvider.getString(R.string.reset_cross_signing))
-                    buttonClickAction(DebouncedClickListener({
+                    buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
-                    }))
+                    }
                 }
             }
             data.xSigningIsEnableInAccount -> {
@@ -81,9 +80,9 @@ class CrossSigningSettingsController @Inject constructor(
                 genericButtonItem {
                     id("Reset")
                     text(host.stringProvider.getString(R.string.reset_cross_signing))
-                    buttonClickAction(DebouncedClickListener({
+                    buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
-                    }))
+                    }
                 }
             }
             else                           -> {
@@ -95,9 +94,9 @@ class CrossSigningSettingsController @Inject constructor(
                 genericPositiveButtonItem {
                     id("Initialize")
                     text(host.stringProvider.getString(R.string.initialize_cross_signing))
-                    buttonClickAction(DebouncedClickListener({
+                    buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
-                    }))
+                    }
                 }
             }
         }

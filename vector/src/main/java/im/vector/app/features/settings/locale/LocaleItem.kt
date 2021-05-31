@@ -35,8 +35,7 @@ abstract class LocaleItem : VectorEpoxyModel<LocaleItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-
-        holder.view.onClick { clickListener?.invoke() }
+        holder.view.onClick(clickListener)
         holder.titleView.setTextOrHide(title)
         holder.subtitleView.setTextOrHide(subtitle)
     }

@@ -52,7 +52,7 @@ abstract class ThreePidItem : EpoxyModelWithHolder<ThreePidItem.Holder>() {
         }
 
         holder.title.text = title
-        holder.delete.onClick { deleteClickListener?.invoke() }
+        holder.delete.onClick(deleteClickListener)
         holder.delete.isVisible = deleteClickListener != null
     }
 
