@@ -31,6 +31,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.addTextChangedListenerOnce
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.resources.StringProvider
@@ -39,13 +40,14 @@ import im.vector.app.core.ui.views.RevealPasswordImageView
 @EpoxyModelClass(layout = R.layout.item_login_password_form)
 abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Holder>() {
 
+    @EpoxyAttribute var passwordValue: String = ""
     @EpoxyAttribute var passwordShown: Boolean = false
     @EpoxyAttribute var submitEnabled: Boolean = false
     @EpoxyAttribute var errorText: String? = null
     @EpoxyAttribute lateinit var stringProvider: StringProvider
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var passwordRevealClickListener: ClickListener? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var forgetPasswordClickListener: ClickListener? = null
-    @EpoxyAttribute var submitClickListener: ((String) -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var submitClickListener: ClickListener? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onPasswordEdited: TextListener? = null
 
     private val textChangeListener = object : SimpleTextWatcher() {
@@ -63,7 +65,8 @@ abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Ho
         holder.passwordReveal.onClick(passwordRevealClickListener)
         holder.forgetPassword.onClick(forgetPasswordClickListener)
         holder.submit.isEnabled = submitEnabled
-        holder.submit.setOnClickListener { submitClickListener?.invoke(holder.passwordField.text.toString()) }
+        holder.submit.onClick(submitClickListener)
+        holder.setValueOnce(holder.passwordField, passwordValue)
         holder.passwordField.addTextChangedListenerOnce(textChangeListener)
     }
 
