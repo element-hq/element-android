@@ -17,6 +17,7 @@
 package im.vector.app.core.epoxy
 
 import android.view.View
+import im.vector.app.core.utils.DebouncedClickListener
 
 /**
  * View.OnClickListener lambda
@@ -24,5 +25,9 @@ import android.view.View
 typealias ClickListener = (View) -> Unit
 
 fun View.onClick(listener: ClickListener?) {
-    setOnClickListener { listener?.invoke(it) }
+    if (listener == null) {
+        setOnClickListener(null)
+    } else {
+        setOnClickListener(DebouncedClickListener(listener))
+    }
 }
