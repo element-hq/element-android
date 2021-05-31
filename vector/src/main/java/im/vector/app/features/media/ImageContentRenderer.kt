@@ -110,7 +110,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 .into(imageView)
     }
 
-    fun render(data: Data, mode: Mode, imageView: ImageView, onImageSizeListener: OnImageSizeListener? = null) {
+    fun render(data: Data, mode: Mode, imageView: ImageView, onImageSizeListener: OnImageSizeListener? = null, animate: Boolean = false) {
         val size = processSize(data, mode)
         imageView.updateLayoutParams {
             width = size.width
@@ -120,7 +120,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         // a11y
         imageView.contentDescription = data.filename
 
-        createGlideRequest(data, mode, imageView, size)
+        var request = createGlideRequest(data, mode, imageView, size)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                         return false
@@ -141,8 +141,15 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                         return false
                     }
                 })
-                .dontAnimate()
-                .transform(RoundedCorners(dimensionConverter.dpToPx(3)))
+        request = if (animate) {
+            // Glide seems to already do some dp to px calculation for animated gifs?
+            request.transform(RoundedCorners(3))
+            //request.apply(RequestOptions.bitmapTransform(RoundedCorners(3)))
+        } else {
+            request.dontAnimate()
+                    .transform(RoundedCorners(dimensionConverter.dpToPx(3)))
+        }
+        request
                 // .thumbnail(0.3f)
                 .into(imageView)
     }

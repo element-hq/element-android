@@ -32,6 +32,7 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.themes.BubbleThemeUtils
+import org.matrix.android.sdk.api.util.MimeTypes
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>() {
@@ -75,7 +76,8 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
                 }
             }
         }
-        imageContentRenderer.render(mediaData, mode, holder.imageView, onImageSizeListener)
+        val animate = mediaData.mimeType == MimeTypes.Gif
+        imageContentRenderer.render(mediaData, mode, holder.imageView, onImageSizeListener, animate)
         if (!attributes.informationData.sendState.hasFailed()) {
             contentUploadStateTrackerBinder.bind(
                     attributes.informationData.eventId,
@@ -90,7 +92,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         ViewCompat.setTransitionName(holder.imageView, "imagePreview_${id()}")
         holder.mediaContentView.setOnClickListener(attributes.itemClickListener)
         holder.mediaContentView.setOnLongClickListener(attributes.itemLongClickListener)
-        holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
+        holder.playContentView.visibility = if (playable && !animate) View.VISIBLE else View.GONE
     }
 
     override fun unbind(holder: Holder) {
