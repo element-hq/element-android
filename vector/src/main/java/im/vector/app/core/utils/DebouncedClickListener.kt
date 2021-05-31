@@ -15,6 +15,7 @@
  */
 package im.vector.app.core.utils
 
+import android.os.SystemClock
 import android.view.View
 import java.util.WeakHashMap
 
@@ -22,17 +23,20 @@ import java.util.WeakHashMap
  * Simple Debounced OnClickListener
  * Safe to use in different views
  */
-class DebouncedClickListener(val original: View.OnClickListener, private val minimumInterval: Long = 400) : View.OnClickListener {
+class DebouncedClickListener(
+        val original: View.OnClickListener,
+        private val minimumInterval: Long = 400
+) : View.OnClickListener {
     private val lastClickMap = WeakHashMap<View, Long>()
 
-    override fun onClick(clickedView: View) {
-        val previousClickTimestamp = lastClickMap[clickedView]
-        val currentTimestamp = System.currentTimeMillis()
+    override fun onClick(v: View) {
+        val previousClickTimestamp = lastClickMap[v]
+        val currentTimestamp = SystemClock.elapsedRealtime()
 
-        lastClickMap[clickedView] = currentTimestamp
+        lastClickMap[v] = currentTimestamp
 
-        if (previousClickTimestamp == null || currentTimestamp - previousClickTimestamp.toLong() > minimumInterval) {
-            original.onClick(clickedView)
+        if (previousClickTimestamp == null || currentTimestamp - previousClickTimestamp > minimumInterval) {
+            original.onClick(v)
         }
     }
 }
