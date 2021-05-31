@@ -26,13 +26,13 @@ import javax.inject.Inject
 
 enum class ChatEffect {
     CONFETTI,
-    SNOW
+    SNOWFALL
 }
 
 fun ChatEffect.toMessageType(): String {
     return when (this) {
         ChatEffect.CONFETTI -> MessageType.MSGTYPE_CONFETTI
-        ChatEffect.SNOW     -> MessageType.MSGTYPE_SNOW
+        ChatEffect.SNOWFALL -> MessageType.MSGTYPE_SNOWFALL
     }
 }
 
@@ -112,14 +112,14 @@ class ChatEffectManager @Inject constructor() {
     private fun findEffect(content: MessageContent, event: TimelineEvent): ChatEffect? {
         return when (content.msgType) {
             MessageType.MSGTYPE_CONFETTI -> ChatEffect.CONFETTI
-            MessageType.MSGTYPE_SNOW     -> ChatEffect.SNOW
+            MessageType.MSGTYPE_SNOWFALL -> ChatEffect.SNOWFALL
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT     -> {
                 event.root.getClearContent().toModel<MessageContent>()?.body
                         ?.let { text ->
                             when {
                                 EMOJIS_FOR_CONFETTI.any { text.contains(it) } -> ChatEffect.CONFETTI
-                                EMOJIS_FOR_SNOW.any { text.contains(it) }     -> ChatEffect.SNOW
+                                EMOJIS_FOR_SNOWFALL.any { text.contains(it) } -> ChatEffect.SNOWFALL
                                 else                                          -> null
                             }
                         }
@@ -133,7 +133,7 @@ class ChatEffectManager @Inject constructor() {
                 "🎉",
                 "🎊"
         )
-        private val EMOJIS_FOR_SNOW = listOf(
+        private val EMOJIS_FOR_SNOWFALL = listOf(
                 "⛄️",
                 "☃️",
                 "❄️"

@@ -893,7 +893,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (sendChatEffect.message.isBlank()) {
             val defaultMessage = stringProvider.getString(when (sendChatEffect.chatEffect) {
                 ChatEffect.CONFETTI -> R.string.default_message_emote_confetti
-                ChatEffect.SNOW     -> R.string.default_message_emote_snow
+                ChatEffect.SNOWFALL -> R.string.default_message_emote_snow
             })
             room.sendTextMessage(defaultMessage, MessageType.MSGTYPE_EMOTE)
         } else {
