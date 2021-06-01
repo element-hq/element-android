@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.app.gplay.features.settings.troubleshoot
+package im.vector.app.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
@@ -24,7 +24,6 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.session.coroutineScope
-import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import im.vector.app.core.pushers.UPHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -45,6 +44,7 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
 
     private var action: Job? = null
     private var pushReceived: Boolean = false
+
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         pushReceived = false

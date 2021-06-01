@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.app.gplay.features.settings.troubleshoot
+package im.vector.app.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
@@ -26,7 +26,6 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import im.vector.app.core.pushers.UPHelper
 import javax.inject.Inject
 
@@ -37,7 +36,7 @@ class TestTokenRegistration @Inject constructor(private val context: AppCompatAc
                                                 private val stringProvider: StringProvider,
                                                 private val pushersManager: PushersManager,
                                                 private val activeSessionHolder: ActiveSessionHolder)
-    : TroubleshootTest(R.string.settings_troubleshoot_test_token_registration_title) {
+    : TroubleshootTest(R.string.settings_troubleshoot_test_pusher_registration_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         // Check if we have a registered pusher for this token
@@ -57,7 +56,7 @@ class TestTokenRegistration @Inject constructor(private val context: AppCompatAc
             it.pushKey == pushToken && it.state == PusherState.REGISTERED
         }
         if (pushers.isEmpty()) {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_token_registration_failed,
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_pusher_registration_failed,
                     stringProvider.getString(R.string.sas_error_unknown))
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_token_registration_quick_fix) {
                 override fun doFix() {
@@ -76,7 +75,7 @@ class TestTokenRegistration @Inject constructor(private val context: AppCompatAc
 
             status = TestStatus.FAILED
         } else {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_token_registration_success)
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_pusher_registration_success)
             status = TestStatus.SUCCESS
         }
     }

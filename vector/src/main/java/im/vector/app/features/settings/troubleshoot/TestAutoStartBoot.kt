@@ -13,33 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.app.fdroid.features.settings.troubleshoot
+package im.vector.app.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AppCompatActivity
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.isIgnoringBatteryOptimizations
-import im.vector.app.core.utils.requestDisablingBatteryOptimization
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import javax.inject.Inject
 
-class TestBatteryOptimization @Inject constructor(
-        private val context: AppCompatActivity,
-        private val stringProvider: StringProvider
-) : TroubleshootTest(R.string.settings_troubleshoot_test_battery_title) {
+/**
+ * Test that the application is started on boot
+ */
+class TestAutoStartBoot @Inject constructor(private val vectorPreferences: VectorPreferences,
+                                            private val stringProvider: StringProvider)
+    : TroubleshootTest(R.string.settings_troubleshoot_test_service_boot_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
-        if (isIgnoringBatteryOptimizations(context)) {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_battery_success)
+        if (vectorPreferences.autoStartOnBoot()) {
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_service_boot_success)
             status = TestStatus.SUCCESS
             quickFix = null
         } else {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_battery_failed)
-            quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_battery_quickfix) {
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_service_boot_failed)
+            quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_service_boot_quickfix) {
                 override fun doFix() {
-                    requestDisablingBatteryOptimization(context, activityResultLauncher)
+                    vectorPreferences.setAutoStartOnBoot(true)
+                    manager?.retry(activityResultLauncher)
                 }
             }
             status = TestStatus.FAILED

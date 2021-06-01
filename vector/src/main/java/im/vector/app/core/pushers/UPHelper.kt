@@ -145,4 +145,9 @@ object UPHelper {
         }
         return false
     }
+
+    fun DistributorExists(context: Context): Boolean {
+        val up = Registration()
+        return up.getDistributor(context).isNotEmpty()
+    }
 }
