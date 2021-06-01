@@ -84,7 +84,7 @@ interface CryptoService {
 
     fun importRoomKeys(roomKeysAsArray: ByteArray, password: String, progressListener: ProgressListener?, callback: MatrixCallback<ImportRoomKeysResult>)
 
-    fun exportRoomKeys(password: String, callback: MatrixCallback<ByteArray>)
+    suspend fun exportRoomKeys(password: String): ByteArray
 
     fun setRoomBlacklistUnverifiedDevices(roomId: String)
 

@@ -32,6 +32,7 @@ import im.vector.app.features.call.conference.VectorJitsiActivity
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
+import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
@@ -138,6 +139,7 @@ interface ScreenComponent {
     fun inject(activity: LinkHandlerActivity)
     fun inject(activity: MainActivity)
     fun inject(activity: RoomDirectoryActivity)
+    fun inject(activity: KeysBackupSetupActivity)
     fun inject(activity: BugReportActivity)
     fun inject(activity: FilteredRoomsActivity)
     fun inject(activity: CreateRoomActivity)

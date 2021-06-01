@@ -928,14 +928,10 @@ internal class DefaultCryptoService @Inject constructor(
      * Export the crypto keys
      *
      * @param password the password
-     * @param callback the exported keys
+     * @return the exported keys
      */
-    override fun exportRoomKeys(password: String, callback: MatrixCallback<ByteArray>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            runCatching {
-                exportRoomKeys(password, MXMegolmExportEncryption.DEFAULT_ITERATION_COUNT)
-            }.foldToCallback(callback)
-        }
+    override suspend fun exportRoomKeys(password: String): ByteArray {
+        return exportRoomKeys(password, MXMegolmExportEncryption.DEFAULT_ITERATION_COUNT)
     }
 
     /**
