@@ -16,6 +16,7 @@
 
 package im.vector.app.core.pushers
 
+import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
@@ -33,29 +34,29 @@ class PushersManager @Inject constructor(
         private val stringProvider: StringProvider,
         private val appNameProvider: AppNameProvider
 ) {
-    suspend fun testPush(pushKey: String) {
+    suspend fun testPush(context: Context) {
         val currentSession = activeSessionHolder.getActiveSession()
 
         currentSession.testPush(
-                stringProvider.getString(R.string.pusher_http_url),
+                UPHelper.getPushGateway(context)!!,
                 stringProvider.getString(R.string.pusher_app_id),
-                pushKey,
+                UPHelper.getUpEndpoint(context)!!,
                 TEST_EVENT_ID
         )
     }
 
-    fun registerPusherWithFcmKey(pushKey: String): UUID {
+    fun registerPusher(pushKey: String, gateway: String): UUID {
         val currentSession = activeSessionHolder.getActiveSession()
         val profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(currentSession.myUserId.hashCode())
 
         return currentSession.addHttpPusher(
-                pushKey,
+                pushKey, // this is the UnifiedPush endpoint
                 stringProvider.getString(R.string.pusher_app_id),
                 profileTag,
                 localeProvider.current().language,
                 appNameProvider.getAppName(),
                 currentSession.sessionParams.deviceId ?: "MOBILE",
-                stringProvider.getString(R.string.pusher_http_url),
+                gateway,
                 append = false,
                 withEventIdOnly = true
         )

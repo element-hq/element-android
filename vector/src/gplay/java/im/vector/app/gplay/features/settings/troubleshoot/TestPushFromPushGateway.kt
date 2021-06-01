@@ -25,7 +25,7 @@ import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
-import im.vector.app.push.fcm.FcmHelper
+import im.vector.app.core.pushers.UPHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -48,12 +48,12 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         pushReceived = false
-        val fcmToken = FcmHelper.getFcmToken(context) ?: run {
+        UPHelper.getUpEndpoint(context) ?: run {
             status = TestStatus.FAILED
             return
         }
         action = activeSessionHolder.getActiveSession().coroutineScope.launch {
-            val result = runCatching { pushersManager.testPush(fcmToken) }
+            val result = runCatching { pushersManager.testPush(context) }
 
             withContext(Dispatchers.Main) {
                 status = result

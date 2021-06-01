@@ -22,7 +22,7 @@ import im.vector.app.features.settings.troubleshoot.TestDeviceSettings
 import im.vector.app.features.settings.troubleshoot.TestNotification
 import im.vector.app.features.settings.troubleshoot.TestPushRulesSettings
 import im.vector.app.features.settings.troubleshoot.TestSystemSettings
-import im.vector.app.gplay.features.settings.troubleshoot.TestFirebaseToken
+import im.vector.app.gplay.features.settings.troubleshoot.TestNewEndpoint
 import im.vector.app.gplay.features.settings.troubleshoot.TestPlayServices
 import im.vector.app.gplay.features.settings.troubleshoot.TestPushFromPushGateway
 import im.vector.app.gplay.features.settings.troubleshoot.TestTokenRegistration
@@ -34,7 +34,7 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
         private val testDeviceSettings: TestDeviceSettings,
         private val testBingRulesSettings: TestPushRulesSettings,
         private val testPlayServices: TestPlayServices,
-        private val testFirebaseToken: TestFirebaseToken,
+        private val testNewEndpoint: TestNewEndpoint,
         private val testTokenRegistration: TestTokenRegistration,
         private val testPushFromPushGateway: TestPushFromPushGateway,
         private val testNotification: TestNotification
@@ -47,7 +47,7 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
         mgr.addTest(testDeviceSettings)
         mgr.addTest(testBingRulesSettings)
         mgr.addTest(testPlayServices)
-        mgr.addTest(testFirebaseToken)
+        mgr.addTest(testNewEndpoint)
         mgr.addTest(testTokenRegistration)
         mgr.addTest(testPushFromPushGateway)
         mgr.addTest(testNotification)

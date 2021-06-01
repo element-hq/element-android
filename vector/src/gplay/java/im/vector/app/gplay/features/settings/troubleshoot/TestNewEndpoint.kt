@@ -18,7 +18,6 @@ package im.vector.app.gplay.features.settings.troubleshoot
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.messaging.FirebaseMessaging
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.startAddGoogleAccountIntent
@@ -28,13 +27,18 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /*
-* Test that app can successfully retrieve a token via firebase
+* Test that app can successfully retrieve a new endpoint
  */
-class TestFirebaseToken @Inject constructor(private val context: AppCompatActivity,
+class TestNewEndpoint @Inject constructor(private val context: AppCompatActivity,
                                             private val stringProvider: StringProvider) : TroubleshootTest(R.string.settings_troubleshoot_test_fcm_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
-        status = TestStatus.RUNNING
+        description = "bypassed"
+        status = TestStatus.SUCCESS
+        /**
+         * TODO
+         */
+        /*status = TestStatus.RUNNING
         try {
             FirebaseMessaging.getInstance().token
                     .addOnCompleteListener(context) { task ->
@@ -74,6 +78,6 @@ class TestFirebaseToken @Inject constructor(private val context: AppCompatActivi
         } catch (e: Throwable) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed, e.localizedMessage)
             status = TestStatus.FAILED
-        }
+        }*/
     }
 }
