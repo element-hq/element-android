@@ -221,7 +221,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                             views.callStatusText.setText(R.string.call_held_by_you)
                         } else {
                             views.callActionText.isInvisible = true
-                            state.callInfo.otherUserItem?.let {
+                            state.callInfo?.opponentUserItem?.let {
                                 views.callStatusText.text = getString(R.string.call_held_by_user, it.getBestName())
                             }
                         }
@@ -255,7 +255,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private fun configureCallInfo(state: VectorCallViewState, blurAvatar: Boolean = false) {
-        state.callInfo.otherUserItem?.let {
+        state.callInfo?.opponentUserItem?.let {
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
             avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter)
             if (state.transferee is VectorCallViewState.TransfereeState.NoTransferee) {
@@ -269,13 +269,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 avatarRenderer.render(it, views.otherMemberAvatar)
             }
         }
-        if (state.otherKnownCallInfo?.otherUserItem == null) {
+        if (state.otherKnownCallInfo?.opponentUserItem == null) {
             views.otherKnownCallLayout.isVisible = false
         } else {
             val otherCall = callManager.getCallById(state.otherKnownCallInfo.callId)
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
             avatarRenderer.renderBlur(
-                    matrixItem = state.otherKnownCallInfo.otherUserItem,
+                    matrixItem = state.otherKnownCallInfo.opponentUserItem,
                     imageView = views.otherKnownCallAvatarView,
                     sampling = 20,
                     rounded = false,

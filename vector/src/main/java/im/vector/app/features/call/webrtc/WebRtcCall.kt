@@ -27,6 +27,7 @@ import im.vector.app.features.call.CameraProxy
 import im.vector.app.features.call.CameraType
 import im.vector.app.features.call.CaptureFormat
 import im.vector.app.features.call.VectorCallActivity
+import im.vector.app.features.call.lookup.sipNativeLookup
 import im.vector.app.features.call.utils.asWebRTC
 import im.vector.app.features.call.utils.awaitCreateAnswer
 import im.vector.app.features.call.utils.awaitCreateOffer
@@ -882,10 +883,34 @@ class WebRtcCall(
     }
 
     fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {
-        if (callAssertedIdentityContent.assertedIdentity == null) return
-        remoteAssertedIdentity = callAssertedIdentityContent.assertedIdentity
-        listeners.forEach {
-            tryOrNull { it.assertedIdentityChanged() }
+        sessionScope?.launch(dispatcher) {
+            val session = sessionProvider.get() ?: return@launch
+            val newAssertedIdentity = callAssertedIdentityContent.assertedIdentity ?: return@launch
+            if (newAssertedIdentity.id == null && newAssertedIdentity.displayName == null) {
+                Timber.v("Asserted identity received with no relevant information, skip")
+                return@launch
+            }
+            remoteAssertedIdentity = newAssertedIdentity
+            if (newAssertedIdentity.id != null) {
+                val nativeUserId = session.sipNativeLookup(newAssertedIdentity.id!!).firstOrNull()?.userId
+                if (nativeUserId != null) {
+                    val resolvedUser = tryOrNull {
+                        session.resolveUser(nativeUserId)
+                    }
+                    if (resolvedUser != null) {
+                        remoteAssertedIdentity = newAssertedIdentity.copy(
+                                id = nativeUserId,
+                                avatarUrl = resolvedUser.avatarUrl,
+                                displayName = resolvedUser.displayName
+                        )
+                    } else {
+                        remoteAssertedIdentity = newAssertedIdentity.copy(id = nativeUserId)
+                    }
+                }
+            }
+            listeners.forEach {
+                tryOrNull { it.assertedIdentityChanged() }
+            }
         }
     }
 

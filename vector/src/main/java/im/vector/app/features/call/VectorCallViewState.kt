@@ -20,6 +20,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.call.audio.CallAudioManager
+import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -39,7 +40,7 @@ data class VectorCallViewState(
         val availableDevices: Set<CallAudioManager.Device> = emptySet(),
         val callState: Async<CallState> = Uninitialized,
         val otherKnownCallInfo: CallInfo? = null,
-        val callInfo: CallInfo = CallInfo(callId),
+        val callInfo: CallInfo? = null,
         val formattedDuration: String = "",
         val canOpponentBeTransferred: Boolean = false,
         val transferee: TransfereeState = TransfereeState.NoTransferee
@@ -53,7 +54,7 @@ data class VectorCallViewState(
 
     data class CallInfo(
             val callId: String,
-            val otherUserItem: MatrixItem? = null
+            val opponentUserItem: MatrixItem? = null,
     )
 
     constructor(callArgs: CallArgs) : this(

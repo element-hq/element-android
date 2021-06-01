@@ -21,6 +21,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import im.vector.app.ActiveSessionDataSource
+import im.vector.app.BuildConfig
 import im.vector.app.core.services.CallService
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.audio.CallAudioManager
@@ -423,6 +424,9 @@ class WebRtcCallManager @Inject constructor(
     }
 
     override fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {
+        if(!BuildConfig.handleCallAssertedIdentityEvents){
+            return
+        }
         val call = callsByCallId[callAssertedIdentityContent.callId]
                 ?: return Unit.also {
                     Timber.w("onCallAssertedIdentityReceived for non active call? ${callAssertedIdentityContent.callId}")
