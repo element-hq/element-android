@@ -340,7 +340,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.AddReaction(eventId))
             }
 
-            if (canQuote(timelineEvent, messageContent, actionPermissions)) {
+            if (canQuote(timelineEvent, messageContent, actionPermissions) && !vectorPreferences.simplifiedMode()) {
                 add(EventSharedAction.Quote(eventId))
             }
 
