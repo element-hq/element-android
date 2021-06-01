@@ -36,4 +36,3 @@ fun View.onClick(listener: ClickListener?) {
  * Simple Text listener lambda
  */
 typealias TextListener = (String) -> Unit
-
