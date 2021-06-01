@@ -53,7 +53,7 @@
         android:summary="@string/labs_mark_rooms_unread_summary" />
 
     <im.vector.app.core.preference.VectorSwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         android:title="@string/labs_swipe_to_reply_in_timeline" />
 
