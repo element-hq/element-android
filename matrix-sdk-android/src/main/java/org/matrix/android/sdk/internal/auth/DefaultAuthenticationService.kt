@@ -88,11 +88,9 @@ internal class DefaultAuthenticationService @Inject constructor(
 
         return buildString {
             append(homeServerUrlBase)
+            append(SSO_REDIRECT_PATH)
             if (providerId != null) {
-                append(MSC2858_SSO_REDIRECT_PATH)
                 append("/$providerId")
-            } else {
-                append(SSO_REDIRECT_PATH)
             }
             // Set the redirect url
             appendParamToUrl(SSO_REDIRECT_URL_PARAM, redirectUrl)
