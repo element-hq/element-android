@@ -7,13 +7,21 @@
     android:addStatesFromChildren="true"
     android:orientation="vertical">
 
+    <!-- Layout gravity left: fixes long display name pills moving text out:
+        https://github.com/SchildiChat/SchildiChat-android/issues/66
+        Interestingly, this not only fixes it for LTR texts for RTL locales,
+        but it also makes it align better for RTL texts in RTL locales - at least
+        until the user pill is touched...
+    -->
     <im.vector.app.core.ui.views.FooteredTextView
         android:id="@+id/messageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?riotx_text_primary"
         android:textSize="14sp"
-        tools:text="@sample/messages.json/data/message" />
+        android:layout_gravity="left"
+        tools:text="@sample/messages.json/data/message"
+        tools:ignore="RtlHardcoded" />
 
     <im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
         android:id="@+id/messageUrlPreview"
