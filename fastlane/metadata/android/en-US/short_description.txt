@@ -1,1 +1,1 @@
-Secure messenger for Matrix with a traditional instant messaging experience
+Group messenger - encrypted messaging, group chat and video calls
