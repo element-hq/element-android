@@ -27,7 +27,6 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.RoomCategoryItem_
 import org.matrix.android.sdk.api.session.room.ResultBoundaries
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -155,7 +154,6 @@ class AddRoomListController @Inject constructor(
             id(item.roomId)
             matrixItem(item.toMatrixItem())
             avatarRenderer(host.avatarRenderer)
-            space(item.roomType == RoomType.SPACE)
             selected(host.selectedItems[item.roomId] ?: false)
             itemClickListener(DebouncedClickListener({
                 host.listener?.onItemSelected(item)

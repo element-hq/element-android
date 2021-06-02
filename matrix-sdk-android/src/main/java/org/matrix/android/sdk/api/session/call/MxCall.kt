@@ -26,8 +26,12 @@ interface MxCallDetail {
     val callId: String
     val isOutgoing: Boolean
     val roomId: String
-    val opponentUserId: String
     val isVideoCall: Boolean
+    val ourPartyId: String
+    val opponentPartyId: Optional<String>?
+    val opponentVersion: Int
+    val opponentUserId: String
+    val capabilities: CallCapabilities?
 }
 
 /**
@@ -38,12 +42,6 @@ interface MxCall : MxCallDetail {
     companion object {
         const val VOIP_PROTO_VERSION = 1
     }
-
-    val ourPartyId: String
-    var opponentPartyId: Optional<String>?
-    var opponentVersion: Int
-
-    var capabilities: CallCapabilities?
 
     var state: CallState
 
@@ -91,8 +89,12 @@ interface MxCall : MxCallDetail {
 
     /**
      * Send a m.call.replaces event to initiate call transfer.
+     * See [org.matrix.android.sdk.api.session.room.model.call.CallReplacesContent] for documentation about the parameters
      */
-    suspend fun transfer(targetUserId: String, targetRoomId: String?)
+    suspend fun transfer(targetUserId: String,
+                         targetRoomId: String?,
+                         createCallId: String?,
+                         awaitCallId: String?)
 
     fun addListener(listener: StateListener)
     fun removeListener(listener: StateListener)

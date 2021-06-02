@@ -537,7 +537,7 @@
     <string name="create_account">Create Account</string>
     <string name="login">Log in</string>
     <string name="logout">Sign out</string>
-    <string name="hs_url">Home Server URL</string>
+    <string name="hs_url">Homeserver URL</string>
     <string name="identity_url">Identity Server URL</string>
     <string name="search">Search</string>
 
@@ -625,9 +625,9 @@
     <string name="auth_use_server_options">Use custom server options (advanced)</string>
     <string name="auth_email_validation_message">Please check your email to continue registration</string>
     <string name="auth_threepid_warning_message">Registration with email and phone number at once is not supported yet until the api exists. Only the phone number will be taken into account.\n\nYou may add your email to your profile in settings.</string>
-    <string name="auth_recaptcha_message">This Home Server would like to make sure you are not a robot</string>
+    <string name="auth_recaptcha_message">This homeserver would like to make sure you are not a robot</string>
     <string name="auth_username_in_use">Username in use</string>
-    <string name="auth_home_server">Home Server:</string>
+    <string name="auth_home_server">Homeserver:</string>
     <string name="auth_identity_server">Identity Server:</string>
     <string name="auth_reset_password_next_step_button">I have verified my email address</string>
     <string name="auth_reset_password_message">To reset your password, enter the email address linked to your account:</string>
@@ -713,7 +713,7 @@
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_settings_call_ringtone_use_app_ringtone">Use default ${app_name} ringtone for incoming calls</string>
     <string name="settings_call_ringtone_use_default_stun">Allow fallback call assist server</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Will use "%s" as assist when your home server does not offer one (your IP address will be shared during a call)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Will use "%s" as assist when your homeserver does not offer one (your IP address will be shared during a call)</string>
     <string name="settings_call_ringtone_title">Incoming call ringtone</string>
     <string name="settings_call_ringtone_dialog_title">Select ringtone for calls:</string>
 
@@ -1314,7 +1314,7 @@
     <string name="devices_delete_submit_button_label">Submit</string>
 
     <string name="settings_logged_in">Logged in as</string>
-    <string name="settings_home_server">Home Server</string>
+    <string name="settings_home_server">Homeserver</string>
     <string name="settings_identity_server">Identity Server</string>
     <string name="settings_integration_allow">Allow integrations</string>
     <string name="settings_integration_manager">Integration Manager</string>
@@ -1584,9 +1584,14 @@
     <string name="select_room_directory">Select a room directory</string>
     <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
     <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
-    <string name="directory_server_placeholder">Homeserver URL</string>
+    <string name="directory_server_placeholder">Server name</string>
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
+    <string name="directory_your_server">Your server</string>
+    <string name="directory_add_a_new_server">Add a new server</string>
+    <string name="directory_add_a_new_server_prompt">Enter the name of a new server you want to explore.</string>
+    <string name="directory_add_a_new_server_error">"Can't find this server or its room list"</string>
+    <string name="directory_add_a_new_server_error_already_added">This server is already present in the list</string>
 
     <!-- Lock screen-->
     <string name="lock_screen_hint">Type here…</string>
@@ -3005,11 +3010,11 @@
     </plurals>
 
     <string name="command_confetti">Sends the given message with confetti</string>
-    <string name="command_snow">Sends the given message with snow</string>
+    <string name="command_snow">Sends the given message with snowfall</string>
     <!-- Note to translators: please use the same emoji 🎉 in your translation -->
     <string name="default_message_emote_confetti">sends confetti 🎉</string>
     <!-- Note to translators: please use the same emoji ❄️ in your translation -->
-    <string name="default_message_emote_snow">sends snow ❄️</string>
+    <string name="default_message_emote_snow">sends snowfall ❄️</string>
 
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>
@@ -3232,7 +3237,9 @@
     <string name="call_transfer_title">Transfer</string>
     <string name="call_transfer_failure">An error occurred while transferring call</string>
     <string name="call_transfer_users_tab_title">Users</string>
-
+    <string name="call_transfer_consulting_with">Consulting with %1$s</string>
+    <string name="call_transfer_transfer_to_title">Transfer to %1$s</string>
+    <string name="call_transfer_unknown_person">Unknown person</string>
 
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
@@ -3262,6 +3269,7 @@
     <string name="a11y_rule_notify_off">Do not notify</string>
     <string name="a11y_view_read_receipts">View read receipts</string>
     <string name="a11y_public_room">This room is public</string>
+    <string name="a11y_public_space">This Space is public</string>
 
     <string name="dev_tools_menu_name">Dev Tools</string>
     <string name="dev_tools_explore_room_state">Explore Room State</string>
@@ -3293,6 +3301,8 @@
     <string name="event_status_delete_all_failed_dialog_title">Delete unsent messages</string>
     <string name="event_status_delete_all_failed_dialog_message">Are you sure you want to delete all unsent messages in this room?</string>
 
+    <string name="public_space">Public space</string>
+    <string name="private_space">Private space</string>
     <string name="add_space">Add Space</string>
     <string name="your_public_space">Your public space</string>
     <string name="your_private_space">Your private space</string>
@@ -3388,4 +3398,5 @@
     <string name="this_space_has_no_rooms_not_admin">Some rooms may be hidden because they’re private and you need an invite.\nYou don’t have permission to add rooms.</string>
     <string name="this_space_has_no_rooms_admin">Some rooms may be hidden because they’re private and you need an invite.</string>
 
+    <string name="unnamed_room">Unnamed Room</string>
 </resources>

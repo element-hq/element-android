@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.call
+package im.vector.app.features.roomdirectory
 
-interface CallSignallingContent {
-    /**
-     * Required. A unique identifier for the call.
-     */
-    val callId: String?
+data class RoomDirectoryServer(
+        val serverName: String,
 
-    /**
-     * Required. ID to let user identify remote echo of their own events
-     */
-    val partyId: String?
+        /**
+         * True if this is the current user server
+         */
+        val isUserServer: Boolean,
 
-    /**
-     * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
-     */
-    val version: String?
-}
+        /**
+         * True if manually added, so it can be removed by the user
+         */
+        val isManuallyAdded: Boolean,
+
+        /**
+         * Supported protocols
+         * TODO Rename RoomDirectoryData to RoomDirectoryProtocols
+         */
+        val protocols: List<RoomDirectoryData>
+)

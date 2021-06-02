@@ -161,6 +161,7 @@ class RoomListViewModel @Inject constructor(
             is RoomListAction.ToggleTag                   -> handleToggleTag(action)
             is RoomListAction.ToggleSection               -> handleToggleSection(action.section)
             is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
+            is RoomListAction.ShowRoomDetails             -> handleShowRoomDetails(action)
         }.exhaustive
     }
 
@@ -286,6 +287,12 @@ class RoomListViewModel @Inject constructor(
                     this[action.roomId] = Fail(failure)
                 }.toMap())
             }
+        }
+    }
+
+    private fun handleShowRoomDetails(action: RoomListAction.ShowRoomDetails) {
+        session.permalinkService().createRoomPermalink(action.roomId, action.viaServers)?.let {
+            _viewEvents.post(RoomListViewEvents.NavigateToMxToBottomSheet(it))
         }
     }
 

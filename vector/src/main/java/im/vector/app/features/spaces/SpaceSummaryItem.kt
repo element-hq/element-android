@@ -87,7 +87,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         holder.indentSpace.isVisible = indent > 0
         holder.separator.isVisible = showSeparator
 
-        avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
+        avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.counterBadgeView.render(countState)
     }
 

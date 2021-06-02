@@ -68,16 +68,14 @@ class RoomSettingsController @Inject constructor(
             id("avatar")
             enabled(data.actionPermissions.canChangeAvatar)
             when (val avatarAction = data.avatarAction) {
-                RoomSettingsViewState.AvatarAction.None -> {
+                RoomSettingsViewState.AvatarAction.None            -> {
                     // Use the current value
                     avatarRenderer(host.avatarRenderer)
                     // We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
-                    matrixItem(roomSummary.toMatrixItem().copy(avatarUrl = data.currentRoomAvatarUrl))
+                    matrixItem(roomSummary.toMatrixItem().updateAvatar(data.currentRoomAvatarUrl))
                 }
-                RoomSettingsViewState.AvatarAction.DeleteAvatar ->
-                    imageUri(null)
-                is RoomSettingsViewState.AvatarAction.UpdateAvatar ->
-                    imageUri(avatarAction.newAvatarUri)
+                RoomSettingsViewState.AvatarAction.DeleteAvatar    -> imageUri(null)
+                is RoomSettingsViewState.AvatarAction.UpdateAvatar -> imageUri(avatarAction.newAvatarUri)
             }
             clickListener { host.callback?.onAvatarChange() }
             deleteListener { host.callback?.onAvatarDelete() }
@@ -102,6 +100,7 @@ class RoomSettingsController @Inject constructor(
             id("topic")
             enabled(data.actionPermissions.canChangeTopic)
             value(data.newTopic ?: roomSummary.topic)
+            singleLine(false)
             hint(host.stringProvider.getString(R.string.room_settings_topic_hint))
 
             onTextChange { text ->

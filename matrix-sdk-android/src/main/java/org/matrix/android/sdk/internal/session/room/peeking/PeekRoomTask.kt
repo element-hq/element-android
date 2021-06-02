@@ -23,6 +23,8 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomNameContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
@@ -105,7 +107,8 @@ internal class DefaultPeekRoomTask @Inject constructor(
                     numJoinedMembers = publicRepoResult.numJoinedMembers,
                     viaServers = serverList,
                     roomType = null, // would be nice to get that from directory...
-                    someMembers = null
+                    someMembers = null,
+                    isPublic = true
             )
         }
 
@@ -143,6 +146,11 @@ internal class DefaultPeekRoomTask @Inject constructor(
                 }
             }
 
+            val historyVisibility =
+                    stateEvents
+                            .lastOrNull { it.type == EventType.STATE_ROOM_HISTORY_VISIBILITY && it.stateKey?.isNotEmpty() == true }
+                            ?.let { it.content?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility }
+
             val roomType = stateEvents
                     .lastOrNull { it.type == EventType.STATE_ROOM_CREATE }
                     ?.content
@@ -158,7 +166,8 @@ internal class DefaultPeekRoomTask @Inject constructor(
                     numJoinedMembers = memberCount,
                     roomType = roomType,
                     viaServers = serverList,
-                    someMembers = someMembers
+                    someMembers = someMembers,
+                    isPublic = historyVisibility == RoomHistoryVisibility.WORLD_READABLE
             )
         } catch (failure: Throwable) {
             // Would be M_FORBIDDEN if cannot peek :/

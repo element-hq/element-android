@@ -40,6 +40,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.call.conference.JitsiService
 import im.vector.app.features.call.dialpad.DialPadLookup
+import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
@@ -68,7 +69,6 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.call.PSTNProtocolChecker
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
@@ -121,7 +121,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val jitsiService: JitsiService,
         timelineSettingsFactory: TimelineSettingsFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
-        Timeline.Listener, ChatEffectManager.Delegate, PSTNProtocolChecker.Listener {
+        Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
@@ -185,8 +185,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             tryOrNull { session.onRoomDisplayed(initialState.roomId) }
         }
-        callManager.addPstnSupportListener(this)
-        callManager.checkForPSTNSupportIfNeeded()
+        callManager.addProtocolsCheckerListener(this)
+        callManager.checkForProtocolsSupportIfNeeded()
         chatEffectManager.delegate = this
 
         // Ensure to share the outbound session keys with all members
@@ -330,7 +330,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleStartCallWithPhoneNumber(action: RoomDetailAction.StartCallWithPhoneNumber) {
         viewModelScope.launch {
             try {
-                val result = DialPadLookup(session, directRoomHelper, callManager).lookupPhoneNumber(action.phoneNumber)
+                val result = DialPadLookup(session, callManager, directRoomHelper).lookupPhoneNumber(action.phoneNumber)
                 callManager.startOutgoingCall(result.roomId, result.userId, action.videoCall)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
@@ -391,8 +391,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleStartCall(action: RoomDetailAction.StartCall) {
-        room.roomSummary()?.otherMemberIds?.firstOrNull()?.let {
-            callManager.startOutgoingCall(room.roomId, it, action.isVideo)
+        viewModelScope.launch {
+            room.roomSummary()?.otherMemberIds?.firstOrNull()?.let {
+                callManager.startOutgoingCall(room.roomId, it, action.isVideo)
+            }
         }
     }
 
@@ -891,7 +893,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (sendChatEffect.message.isBlank()) {
             val defaultMessage = stringProvider.getString(when (sendChatEffect.chatEffect) {
                 ChatEffect.CONFETTI -> R.string.default_message_emote_confetti
-                ChatEffect.SNOW     -> R.string.default_message_emote_snow
+                ChatEffect.SNOWFALL -> R.string.default_message_emote_snow
             })
             room.sendTextMessage(defaultMessage, MessageType.MSGTYPE_EMOTE)
         } else {
@@ -1508,7 +1510,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
         chatEffectManager.delegate = null
         chatEffectManager.dispose()
-        callManager.removePstnSupportListener(this)
+        callManager.removeProtocolsCheckerListener(this)
         super.onCleared()
     }
 }

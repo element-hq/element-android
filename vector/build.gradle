@@ -14,7 +14,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 1
-ext.versionPatch = 8
+ext.versionPatch = 9
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -296,13 +296,13 @@ android {
 dependencies {
 
     def epoxy_version = '4.6.1'
-    def fragment_version = '1.3.3'
+    def fragment_version = '1.3.4'
     def arrow_version = "0.8.2"
     def markwon_version = '4.1.2'
     def big_image_viewer_version = '1.8.0'
     def glide_version = '4.12.0'
     def moshi_version = '1.12.0'
-    def daggerVersion = '2.35.1'
+    def daggerVersion = '2.36'
     def autofill_version = "1.1.0"
     def work_version = '2.5.0'
     def arch_version = '2.1.0'
@@ -331,7 +331,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation "androidx.sharetarget:sharetarget:1.1.0"
-    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.core:core-ktx:1.5.0'
     implementation "androidx.media:media:1.3.1"
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
@@ -349,7 +349,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.23'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.24'
 
     // rx
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'

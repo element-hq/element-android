@@ -147,7 +147,8 @@ internal class DefaultSpaceService @Inject constructor(
                                                         parentRoomId = childStateEv.roomId,
                                                         suggested = childStateEvContent.suggested,
                                                         canonicalAlias = childSummary.canonicalAlias,
-                                                        aliases = childSummary.aliases
+                                                        aliases = childSummary.aliases,
+                                                        worldReadable = childSummary.worldReadable
                                                 )
                                             }
                                         }.orEmpty()

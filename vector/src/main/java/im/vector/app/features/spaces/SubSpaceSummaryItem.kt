@@ -81,7 +81,7 @@ abstract class SubSpaceSummaryItem : VectorEpoxyModel<SubSpaceSummaryItem.Holder
             width = indent * 30
         }
 
-        avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
+        avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.counterBadgeView.render(countState)
     }
 

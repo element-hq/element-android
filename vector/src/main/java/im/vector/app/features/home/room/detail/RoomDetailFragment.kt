@@ -417,7 +417,7 @@ class RoomDetailFragment @Inject constructor(
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
         val intent = VectorCallActivity.newIntent(
                 context = vectorBaseActivity,
-                mxCall = event.call.mxCall,
+                call = event.call,
                 mode = VectorCallActivity.INCOMING_ACCEPT
         )
         startActivity(intent)
@@ -438,7 +438,7 @@ class RoomDetailFragment @Inject constructor(
                         .setPosition(-50f, views.viewKonfetti.width + 50f, -50f, -50f)
                         .streamFor(150, 3000L)
             }
-            ChatEffect.SNOW     -> {
+            ChatEffect.SNOWFALL -> {
                 views.viewSnowFall.isVisible = true
                 views.viewSnowFall.restartFalling()
             }
@@ -2042,7 +2042,7 @@ class RoomDetailFragment @Inject constructor(
             VectorCallActivity.newIntent(
                     context = requireContext(),
                     callId = call.callId,
-                    roomId = call.roomId,
+                    signalingRoomId = call.signalingRoomId,
                     otherUserId = call.mxCall.opponentUserId,
                     isIncomingCall = !call.mxCall.isOutgoing,
                     isVideoCall = call.mxCall.isVideoCall,

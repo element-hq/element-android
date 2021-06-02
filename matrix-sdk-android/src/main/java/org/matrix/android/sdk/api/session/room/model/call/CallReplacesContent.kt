@@ -38,30 +38,30 @@ data class CallReplacesContent(
          */
         @Json(name = "replacement_id") val replacementId: String? = null,
         /**
-         *  Optional. If specified, the transferee client waits for an invite to this room and joins it
-         *  (possibly waiting for user confirmation) and then continues the transfer in this room.
-         *  If absent, the transferee contacts the Matrix User ID given in the target_user field in a room of its choosing.
+         * Optional. If specified, the transferee client waits for an invite to this room and joins it
+         * (possibly waiting for user confirmation) and then continues the transfer in this room.
+         * If absent, the transferee contacts the Matrix User ID given in the target_user field in a room of its choosing.
          */
-        @Json(name = "target_room") val targerRoomId: String? = null,
+        @Json(name = "target_room") val targetRoomId: String? = null,
         /**
-         *  An object giving information about the transfer target
+         * An object giving information about the transfer target
          */
         @Json(name = "target_user") val targetUser: TargetUser? = null,
         /**
-         *  If specified, gives the call ID for the transferee's client to use when placing the replacement call.
-         *  Mutually exclusive with await_call
+         * If specified, gives the call ID for the transferee's client to use when placing the replacement call.
+         * Mutually exclusive with await_call
          */
         @Json(name = "create_call") val createCall: String? = null,
         /**
-         *  If specified, gives the call ID that the transferee's client should wait for.
-         *  Mutually exclusive with create_call.
+         * If specified, gives the call ID that the transferee's client should wait for.
+         * Mutually exclusive with create_call.
          */
         @Json(name = "await_call") val awaitCall: String? = null,
         /**
          * Required. The version of the VoIP specification this messages adheres to.
          */
         @Json(name = "version") override val version: String?
-): CallSignallingContent  {
+): CallSignalingContent  {
 
     @JsonClass(generateAdapter = true)
     data class TargetUser(
@@ -77,6 +77,5 @@ data class CallReplacesContent(
              * Optional. The avatar URL of the transfer target.
              */
             @Json(name = "avatar_url") val avatarUrl: String?
-
     )
 }
