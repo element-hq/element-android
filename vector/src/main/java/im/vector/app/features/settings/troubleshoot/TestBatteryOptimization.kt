@@ -22,7 +22,6 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
 import im.vector.app.core.utils.requestDisablingBatteryOptimization
-import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import javax.inject.Inject
 
 class TestBatteryOptimization @Inject constructor(

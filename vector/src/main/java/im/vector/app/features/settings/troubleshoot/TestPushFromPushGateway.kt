@@ -45,7 +45,6 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
     private var action: Job? = null
     private var pushReceived: Boolean = false
 
-
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         pushReceived = false
         UPHelper.getUpEndpoint(context) ?: run {

@@ -357,10 +357,6 @@
             android:name=".features.settings.troubleshoot.TestNotificationReceiver"
             android:exported="false" />
 
-        <receiver
-            android:name=".features.settings.troubleshoot.TestNewEndpoint"
-            android:exported="false" />
-
         <!-- Exported false, should only be accessible from this app!! -->
         <receiver
             android:name=".features.notifications.NotificationBroadcastReceiver"

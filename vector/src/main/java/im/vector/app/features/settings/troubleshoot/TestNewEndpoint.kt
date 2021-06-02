@@ -27,7 +27,8 @@ import javax.inject.Inject
 * Test that app can successfully retrieve a new endpoint
  */
 class TestNewEndpoint @Inject constructor(private val context: AppCompatActivity,
-                                            private val stringProvider: StringProvider) : TroubleshootTest(R.string.settings_troubleshoot_test_endpoint_title) {
+                                          private val stringProvider: StringProvider
+                                          ) : TroubleshootTest(R.string.settings_troubleshoot_test_endpoint_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         status = TestStatus.RUNNING

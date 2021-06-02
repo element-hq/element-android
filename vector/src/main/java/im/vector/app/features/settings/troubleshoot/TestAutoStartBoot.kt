@@ -20,7 +20,6 @@ import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import javax.inject.Inject
 
 /**
