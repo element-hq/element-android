@@ -1,0 +1,7 @@
+- Update codebase to Element v1.1.8
+- Limit picture upscale factor
+- Include upstream PRs for widget caching and Android 11 conversations
+- Auto-play GIFs
+- Re-enable swipe to reply by default
+- Hide quote action in easy mode
+- Bug fixes
