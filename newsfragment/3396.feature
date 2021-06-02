@@ -1,1 +1,0 @@
-Compress thumbnail: change Jpeg quality from 100 to 80

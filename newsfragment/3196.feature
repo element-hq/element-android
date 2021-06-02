@@ -1,1 +1,0 @@
-Add Gitter.im as a default in the Change Network menu
