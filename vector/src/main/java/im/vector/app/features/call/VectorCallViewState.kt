@@ -20,7 +20,6 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.call.audio.CallAudioManager
-import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -54,7 +53,7 @@ data class VectorCallViewState(
 
     data class CallInfo(
             val callId: String,
-            val opponentUserItem: MatrixItem? = null,
+            val opponentUserItem: MatrixItem? = null
     )
 
     constructor(callArgs: CallArgs) : this(

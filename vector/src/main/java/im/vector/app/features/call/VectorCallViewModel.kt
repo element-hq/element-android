@@ -89,7 +89,7 @@ class VectorCallViewModel @AssistedInject constructor(
             }
         }
 
-        override fun assertedIdentityChanged(){
+        override fun assertedIdentityChanged() {
             setState {
                 copy(callInfo = call?.extractCallInfo())
             }
@@ -208,17 +208,17 @@ class VectorCallViewModel @AssistedInject constructor(
         }
     }
 
-    private fun WebRtcCall.extractCallInfo(): VectorCallViewState.CallInfo{
+    private fun WebRtcCall.extractCallInfo(): VectorCallViewState.CallInfo {
         val assertedIdentity = this.remoteAssertedIdentity
-        val matrixItem = if(assertedIdentity != null){
+        val matrixItem = if (assertedIdentity != null) {
             val userId = if (MatrixPatterns.isUserId(assertedIdentity.id)) {
                 assertedIdentity.id!!
             } else {
                 // Need an id starting with @
                 "@${assertedIdentity.displayName}"
             }
-            MatrixItem.UserItem(userId,assertedIdentity.displayName, assertedIdentity.avatarUrl)
-        }else {
+            MatrixItem.UserItem(userId, assertedIdentity.displayName, assertedIdentity.avatarUrl)
+        } else {
             getOpponentAsMatrixItem(session)
         }
         return VectorCallViewState.CallInfo(callId, matrixItem)

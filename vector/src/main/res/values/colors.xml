@@ -127,7 +127,8 @@
     <color name="riotx_positive_accent_alpha12">#1E0DBD8B</color>
     <color name="riotx_button_disabled_alpha12">#1E61708B</color>
 
-    <color name="bg_call_screen">#99000000</color>
+    <color name="bg_call_screen_blur">#99000000</color>
+    <color name="bg_call_screen">#27303A</color>
 
     <color name="riotx_notice">#FFFF4B55</color>
     <color name="riotx_notice_secondary">#FF61708B</color>

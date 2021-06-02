@@ -17,6 +17,7 @@
 package im.vector.app.core.glide
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 
 import com.bumptech.glide.Glide
@@ -39,6 +40,11 @@ class MyAppGlideModule : AppGlideModule() {
                 ImageContentRenderer.Data::class.java,
                 InputStream::class.java,
                 VectorGlideModelLoaderFactory(context)
+        )
+        registry.append(
+                AvatarPlaceholder::class.java,
+                Drawable::class.java,
+                AvatarPlaceholderModelLoaderFactory(context)
         )
     }
 }

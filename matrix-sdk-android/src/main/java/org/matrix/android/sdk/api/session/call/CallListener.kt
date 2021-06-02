@@ -67,6 +67,4 @@ interface CallListener {
      * Called when an asserted identity event is received
      */
     fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent)
-
-
 }

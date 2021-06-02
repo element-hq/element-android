@@ -198,18 +198,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             }
             is CallState.Connected    -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
-                    if (state.transferee !is VectorCallViewState.TransfereeState.NoTransferee) {
-                        val transfereeName = if (state.transferee is VectorCallViewState.TransfereeState.KnownTransferee) {
-                            state.transferee.name
-                        } else {
-                            getString(R.string.call_transfer_unknown_person)
-                        }
-                        views.callActionText.text = getString(R.string.call_transfer_transfer_to_title, transfereeName)
-                        views.callActionText.isVisible = true
-                        views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.TransferCall) }
-                        views.callStatusText.text = state.formattedDuration
-                        configureCallInfo(state)
-                    } else if (state.isLocalOnHold || state.isRemoteOnHold) {
+                    if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
                         views.callVideoGroup.isInvisible = true
                         views.callInfoGroup.isVisible = true
@@ -225,6 +214,17 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                                 views.callStatusText.text = getString(R.string.call_held_by_user, it.getBestName())
                             }
                         }
+                    } else if (state.transferee !is VectorCallViewState.TransfereeState.NoTransferee) {
+                        val transfereeName = if (state.transferee is VectorCallViewState.TransfereeState.KnownTransferee) {
+                            state.transferee.name
+                        } else {
+                            getString(R.string.call_transfer_unknown_person)
+                        }
+                        views.callActionText.text = getString(R.string.call_transfer_transfer_to_title, transfereeName)
+                        views.callActionText.isVisible = true
+                        views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.TransferCall) }
+                        views.callStatusText.text = state.formattedDuration
+                        configureCallInfo(state)
                     } else {
                         views.callStatusText.text = state.formattedDuration
                         configureCallInfo(state)
@@ -256,15 +256,15 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private fun configureCallInfo(state: VectorCallViewState, blurAvatar: Boolean = false) {
         state.callInfo?.opponentUserItem?.let {
-            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
-            avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter)
+            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen_blur)
+            avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter, addPlaceholder = false)
             if (state.transferee is VectorCallViewState.TransfereeState.NoTransferee) {
                 views.participantNameText.text = it.getBestName()
             } else {
                 views.participantNameText.text = getString(R.string.call_transfer_consulting_with, it.getBestName())
             }
             if (blurAvatar) {
-                avatarRenderer.renderBlur(it, views.otherMemberAvatar, sampling = 2, rounded = true, colorFilter = colorFilter)
+                avatarRenderer.renderBlur(it, views.otherMemberAvatar, sampling = 2, rounded = true, colorFilter = colorFilter, addPlaceholder = true)
             } else {
                 avatarRenderer.render(it, views.otherMemberAvatar)
             }
@@ -273,13 +273,14 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             views.otherKnownCallLayout.isVisible = false
         } else {
             val otherCall = callManager.getCallById(state.otherKnownCallInfo.callId)
-            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
+            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen_blur)
             avatarRenderer.renderBlur(
                     matrixItem = state.otherKnownCallInfo.opponentUserItem,
                     imageView = views.otherKnownCallAvatarView,
                     sampling = 20,
-                    rounded = false,
-                    colorFilter = colorFilter
+                    rounded = true,
+                    colorFilter = colorFilter,
+                    addPlaceholder = true
             )
             views.otherKnownCallLayout.isVisible = true
             views.otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold || it.remoteOnHold }.orFalse()
@@ -288,7 +289,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private fun configureCallViews() {
         views.callControlsView.interactionListener = this
-        views.otherKnownCallAvatarView.setOnClickListener {
+        views.otherKnownCallLayout.setOnClickListener {
             withState(callViewModel) {
                 val otherCall = callManager.getCallById(it.otherKnownCallInfo?.callId ?: "") ?: return@withState
                 startActivity(newIntent(this, otherCall, null))

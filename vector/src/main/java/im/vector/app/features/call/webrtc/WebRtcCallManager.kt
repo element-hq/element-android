@@ -424,7 +424,7 @@ class WebRtcCallManager @Inject constructor(
     }
 
     override fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {
-        if(!BuildConfig.handleCallAssertedIdentityEvents){
+        if (!BuildConfig.handleCallAssertedIdentityEvents) {
             return
         }
         val call = callsByCallId[callAssertedIdentityContent.callId]
