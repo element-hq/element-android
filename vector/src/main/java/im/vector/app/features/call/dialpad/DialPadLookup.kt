@@ -17,10 +17,11 @@
 package im.vector.app.features.call.dialpad
 
 import im.vector.app.features.call.lookup.pstnLookup
+import im.vector.app.features.call.lookup.sipNativeLookup
+import im.vector.app.features.call.vectorCallService
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import org.matrix.android.sdk.api.session.Session
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class DialPadLookup @Inject constructor(
@@ -33,8 +34,16 @@ class DialPadLookup @Inject constructor(
     data class Result(val userId: String, val roomId: String)
 
     suspend fun lookupPhoneNumber(phoneNumber: String): Result {
+        session.vectorCallService.protocolChecker.awaitCheckProtocols()
         val thirdPartyUser = session.pstnLookup(phoneNumber, webRtcCallManager.supportedPSTNProtocol).firstOrNull() ?: throw IllegalStateException()
-        val roomId = directRoomHelper.ensureDMExists(thirdPartyUser.userId)
-        return Result(userId = thirdPartyUser.userId, roomId = roomId)
+        // check to see if this is a virtual user, in which case we should find the native user
+        val nativeUserId = if (webRtcCallManager.supportsVirtualRooms) {
+            val nativeLookupResults = session.sipNativeLookup(thirdPartyUser.userId)
+            nativeLookupResults.firstOrNull()?.userId ?: thirdPartyUser.userId
+        } else {
+            thirdPartyUser.userId
+        }
+        val roomId = directRoomHelper.ensureDMExists(nativeUserId)
+        return Result(userId = nativeUserId, roomId = roomId)
     }
 }
