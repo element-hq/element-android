@@ -28,6 +28,11 @@ import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.call.dialpad.DialPadLookup
+import im.vector.app.features.call.lookup.CallProtocolsChecker
+import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.createdirect.DirectRoomHelper
+import im.vector.app.features.home.room.detail.RoomDetailViewEvents
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
@@ -51,8 +56,11 @@ import java.util.concurrent.TimeUnit
 class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
                                                       private val session: Session,
                                                       private val uiStateRepository: UiStateRepository,
+                                                      private val callManager: WebRtcCallManager,
+                                                      private val directRoomHelper: DirectRoomHelper,
                                                       private val appStateHandler: AppStateHandler)
-    : VectorViewModel<HomeDetailViewState, HomeDetailAction, EmptyViewEvents>(initialState) {
+    : VectorViewModel<HomeDetailViewState, HomeDetailAction, EmptyViewEvents>(initialState),
+        CallProtocolsChecker.Listener {
 
     @AssistedFactory
     interface Factory {
@@ -64,7 +72,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState? {
             val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
             return HomeDetailViewState(
-                    displayMode = uiStateRepository.getDisplayMode()
+                    currentTab = HomeTab.RoomList(uiStateRepository.getDisplayMode())
             )
         }
 
@@ -79,7 +87,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         observeSyncState()
         observeRoomGroupingMethod()
         observeRoomSummaries()
-
+        updateShowDialPadTab()
+        callManager.addProtocolsCheckerListener(this)
         session.rx().liveUser(session.myUserId).execute {
             copy(
                     myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
@@ -89,20 +98,49 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
     override fun handle(action: HomeDetailAction) {
         when (action) {
-            is HomeDetailAction.SwitchDisplayMode -> handleSwitchDisplayMode(action)
+            is HomeDetailAction.SwitchTab -> handleSwitchTab(action)
             HomeDetailAction.MarkAllRoomsRead -> handleMarkAllRoomsRead()
+            is HomeDetailAction.StartCallWithPhoneNumber -> handleStartCallWithPhoneNumber(action)
         }
     }
 
-    private fun handleSwitchDisplayMode(action: HomeDetailAction.SwitchDisplayMode) = withState { state ->
-        if (state.displayMode != action.displayMode) {
-            setState {
-                copy(displayMode = action.displayMode)
+    private fun handleStartCallWithPhoneNumber(action: HomeDetailAction.StartCallWithPhoneNumber) {
+        viewModelScope.launch {
+            try {
+                val result = DialPadLookup(session, callManager, directRoomHelper).lookupPhoneNumber(action.phoneNumber)
+                callManager.startOutgoingCall(result.roomId, result.userId, isVideoCall = false)
+            } catch (failure: Throwable) {
+                Timber.v(failure)
             }
-
-            uiStateRepository.storeDisplayMode(action.displayMode)
         }
     }
+
+    private fun handleSwitchTab(action: HomeDetailAction.SwitchTab) = withState { state ->
+        if (state.currentTab != action.tab) {
+            setState {
+                copy(currentTab = action.tab)
+            }
+            if(action.tab is HomeTab.RoomList) {
+                uiStateRepository.storeDisplayMode(action.tab.displayMode)
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        callManager.removeProtocolsCheckerListener(this)
+    }
+
+    override fun onPSTNSupportUpdated() {
+        updateShowDialPadTab()
+    }
+
+    private fun updateShowDialPadTab() {
+        setState {
+            copy(showDialPadTab = callManager.supportsPSTNProtocol)
+        }
+    }
+
 
     // PRIVATE METHODS *****************************************************************************
 
