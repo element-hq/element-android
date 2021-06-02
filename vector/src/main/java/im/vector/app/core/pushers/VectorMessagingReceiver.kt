@@ -35,6 +35,7 @@ import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -152,6 +153,8 @@ val upHandler = object: MessagingReceiverHandler {
             UPHelper.storeUpEndpoint(context, endpoint)
             pusherManager.registerPusher(endpoint, gateway)
         }
+        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
+        vectorPreferences.setFdroidSyncBackgroundMode(mode)
     }
 
     override fun onRegistrationFailed(context: Context?, instance: String) {
@@ -165,6 +168,8 @@ val upHandler = object: MessagingReceiverHandler {
     override fun onUnregistered(context: Context?, instance: String) {
         Timber.d("Unifiedpush: Unregistered")
         initVar(context!!)
+        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
+        vectorPreferences.setFdroidSyncBackgroundMode(mode)
         runBlocking {
             try {
                 pusherManager.unregisterPusher(UPHelper.getUpEndpoint(context)!!)
