@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.thirdparty
+package im.vector.app.features.roomdirectory
 
 /**
- * This class describes a rooms directory server.
+ * This class describes a rooms directory server protocol.
  */
 data class RoomDirectoryData(
-
         /**
          * The server name (might be null)
          * Set null when the server is the current user's home server.
@@ -30,7 +29,12 @@ data class RoomDirectoryData(
         /**
          * The display name (the server description)
          */
-        val displayName: String = DEFAULT_HOME_SERVER_NAME,
+        val displayName: String = MATRIX_PROTOCOL_NAME,
+
+        /**
+         * the avatar url
+         */
+        val avatarUrl: String? = null,
 
         /**
          * The third party server identifier
@@ -40,15 +44,10 @@ data class RoomDirectoryData(
         /**
          * Tell if all the federated servers must be included
          */
-        val includeAllNetworks: Boolean = false,
-
-        /**
-         * the avatar url
-         */
-        val avatarUrl: String? = null
+        val includeAllNetworks: Boolean = false
 ) {
 
     companion object {
-        const val DEFAULT_HOME_SERVER_NAME = "Matrix"
+        const val MATRIX_PROTOCOL_NAME = "Matrix"
     }
 }

@@ -34,18 +34,14 @@ abstract class RoomManageSelectionItem : VectorEpoxyModel<RoomManageSelectionIte
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
-    @EpoxyAttribute var space: Boolean = false
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute var suggested: Boolean = false
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        if (space) {
-            avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
-        } else {
-            avatarRenderer.render(matrixItem, holder.avatarImageView)
-        }
+        avatarRenderer.render(matrixItem, holder.avatarImageView)
+
         holder.titleText.text = matrixItem.getBestName()
 
         if (selected) {

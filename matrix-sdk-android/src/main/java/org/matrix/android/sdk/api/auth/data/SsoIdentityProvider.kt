@@ -51,12 +51,12 @@ data class SsoIdentityProvider(
 ) : Parcelable, Comparable<SsoIdentityProvider> {
 
     companion object {
-        const val BRAND_GOOGLE = "org.matrix.google"
-        const val BRAND_GITHUB = "org.matrix.github"
-        const val BRAND_APPLE = "org.matrix.apple"
-        const val BRAND_FACEBOOK = "org.matrix.facebook"
-        const val BRAND_TWITTER = "org.matrix.twitter"
-        const val BRAND_GITLAB = "org.matrix.gitlab"
+        const val BRAND_GOOGLE = "google"
+        const val BRAND_GITHUB = "github"
+        const val BRAND_APPLE = "apple"
+        const val BRAND_FACEBOOK = "facebook"
+        const val BRAND_TWITTER = "twitter"
+        const val BRAND_GITLAB = "gitlab"
     }
 
     override fun compareTo(other: SsoIdentityProvider): Int {

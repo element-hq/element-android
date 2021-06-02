@@ -32,5 +32,7 @@ data class SpaceChildInfo(
         val parentRoomId: String?,
         val suggested: Boolean?,
         val canonicalAlias: String?,
-        val aliases: List<String>?
+        val aliases: List<String>?,
+        val worldReadable: Boolean
+
 )

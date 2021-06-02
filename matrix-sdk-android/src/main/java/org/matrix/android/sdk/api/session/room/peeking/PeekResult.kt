@@ -28,7 +28,8 @@ sealed class PeekResult {
             val numJoinedMembers: Int?,
             val roomType: String?,
             val viaServers: List<String>,
-            val someMembers: List<MatrixItem.UserItem>?
+            val someMembers: List<MatrixItem.UserItem>?,
+            val isPublic: Boolean
     ) : PeekResult()
 
     data class PeekingNotAllowed(

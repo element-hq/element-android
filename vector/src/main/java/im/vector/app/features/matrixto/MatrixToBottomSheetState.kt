@@ -41,14 +41,15 @@ data class MatrixToBottomSheetState(
 
 sealed class RoomInfoResult {
     data class FullInfo(
-            val roomItem: MatrixItem.RoomItem,
+            val roomItem: MatrixItem,
             val name: String,
             val topic: String,
             val memberCount: Int?,
             val alias: String?,
             val membership: Membership,
             val roomType: String?,
-            val viaServers: List<String>?
+            val viaServers: List<String>?,
+            val isPublic: Boolean
     ) : RoomInfoResult()
 
     data class PartialInfo(

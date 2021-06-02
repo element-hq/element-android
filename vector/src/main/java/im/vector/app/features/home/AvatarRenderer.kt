@@ -66,24 +66,24 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 DrawableImageViewTarget(imageView))
     }
 
-    @UiThread
-    fun renderSpace(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
-        val placeholder = getSpacePlaceholderDrawable(matrixItem)
-        val resolvedUrl = resolvedUrl(matrixItem.avatarUrl)
-        glideRequests
-                .load(resolvedUrl)
-                .transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
-                .placeholder(placeholder)
-                .into(DrawableImageViewTarget(imageView))
-    }
-
-    fun renderSpace(matrixItem: MatrixItem, imageView: ImageView) {
-        renderSpace(
-                matrixItem,
-                imageView,
-                GlideApp.with(imageView)
-        )
-    }
+//    fun renderSpace(matrixItem: MatrixItem, imageView: ImageView) {
+//        renderSpace(
+//                matrixItem,
+//                imageView,
+//                GlideApp.with(imageView)
+//        )
+//    }
+//
+//    @UiThread
+//    private fun renderSpace(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
+//        val placeholder = getSpacePlaceholderDrawable(matrixItem)
+//        val resolvedUrl = resolvedUrl(matrixItem.avatarUrl)
+//        glideRequests
+//                .load(resolvedUrl)
+//                .transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
+//                .placeholder(placeholder)
+//                .into(DrawableImageViewTarget(imageView))
+//    }
 
     fun clear(imageView: ImageView) {
         // It can be called after recycler view is destroyed, just silently catch
@@ -137,7 +137,16 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                target: Target<Drawable>) {
         val placeholder = getPlaceholderDrawable(matrixItem)
         buildGlideRequest(glideRequests, matrixItem.avatarUrl)
-                .apply(RequestOptions.circleCropTransform())
+                .apply {
+                    when (matrixItem) {
+                        is MatrixItem.SpaceItem -> {
+                            transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
+                        }
+                        else                    -> {
+                            apply(RequestOptions.circleCropTransform())
+                        }
+                    }
+                }
                 .placeholder(placeholder)
                 .into(target)
     }
@@ -197,17 +206,16 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 .beginConfig()
                 .bold()
                 .endConfig()
-                .buildRound(matrixItem.firstLetterOfDisplayName(), avatarColor)
-    }
-
-    @AnyThread
-    fun getSpacePlaceholderDrawable(matrixItem: MatrixItem): Drawable {
-        val avatarColor = matrixItemColorProvider.getColor(matrixItem)
-        return TextDrawable.builder()
-                .beginConfig()
-                .bold()
-                .endConfig()
-                .buildRoundRect(matrixItem.firstLetterOfDisplayName(), avatarColor, dimensionConverter.dpToPx(8))
+                .let {
+                    when (matrixItem) {
+                        is MatrixItem.SpaceItem -> {
+                            it.buildRoundRect(matrixItem.firstLetterOfDisplayName(), avatarColor, dimensionConverter.dpToPx(8))
+                        }
+                        else                    -> {
+                            it.buildRound(matrixItem.firstLetterOfDisplayName(), avatarColor)
+                        }
+                    }
+                }
     }
 
     // PRIVATE API *********************************************************************************

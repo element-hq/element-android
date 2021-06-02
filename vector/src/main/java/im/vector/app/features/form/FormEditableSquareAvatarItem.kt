@@ -71,7 +71,7 @@ abstract class FormEditableSquareAvatarItem : EpoxyModelWithHolder<FormEditableS
                         .into(holder.image)
             }
             matrixItem != null -> {
-                avatarRenderer?.renderSpace(matrixItem!!, holder.image)
+                avatarRenderer?.render(matrixItem!!, holder.image)
             }
             else               -> {
                 avatarRenderer?.clear(holder.image)

@@ -52,7 +52,7 @@ internal class ThumbnailExtractor @Inject constructor(
             mediaMetadataRetriever.setDataSource(context, attachment.queryUri)
             mediaMetadataRetriever.frameAtTime?.let { thumbnail ->
                 val outputStream = ByteArrayOutputStream()
-                thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
                 val thumbnailWidth = thumbnail.width
                 val thumbnailHeight = thumbnail.height
                 val thumbnailSize = outputStream.size()
