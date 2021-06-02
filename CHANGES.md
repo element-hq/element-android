@@ -1,3 +1,22 @@
+Changes in Element v1.1.9 (2021-06-02)
+======================================
+
+Features ✨:
+ - Upgrade Olm dependency to 3.2.4
+ - Allow user to add custom "network" in room search (#1458)
+ - Add Gitter.im as a default in the Change Network menu (#3196)
+ - VoIP: support for virtual rooms (#3355)
+ - Compress thumbnail: change Jpeg quality from 100 to 80 (#3396)
+ - Inconsistent usage of the term homeserver in Settings (#3404)
+ - VoIP: support attended transfer (#3420)
+ - /snow -> /snowfall and update wording (iso Element Web) (#3430)
+
+Bugfixes 🐛:
+ - Fix | On Android it seems to be impossible to view the complete description of a Space (without dev tools) (#3401)
+ - Fix | Suggest Rooms, Show a detailed view of the room on click (#3406)
+ - Fix app crashing when signing out (#3424)
+ - Switch to stable endpoint/fields for MSC2858 (#3442)
+
 Changes in Element 1.1.8 (2021-05-25)
 ===================================================
 

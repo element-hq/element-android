@@ -45,6 +45,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.call.CallIdGenerator
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
@@ -85,14 +86,19 @@ private const val AUDIO_TRACK_ID = "ARDAMSa0"
 private const val VIDEO_TRACK_ID = "ARDAMSv0"
 private val DEFAULT_AUDIO_CONSTRAINTS = MediaConstraints()
 
-class WebRtcCall(val mxCall: MxCall,
-                 private val rootEglBase: EglBase?,
-                 private val context: Context,
-                 private val dispatcher: CoroutineContext,
-                 private val sessionProvider: Provider<Session?>,
-                 private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
-                 private val onCallBecomeActive: (WebRtcCall) -> Unit,
-                 private val onCallEnded: (String) -> Unit) : MxCall.StateListener {
+class WebRtcCall(
+        val mxCall: MxCall,
+        // This is where the call is placed from an ui perspective.
+        // In case of virtual room, it can differs from the signalingRoomId.
+        val nativeRoomId: String,
+        private val rootEglBase: EglBase?,
+        private val context: Context,
+        private val dispatcher: CoroutineContext,
+        private val sessionProvider: Provider<Session?>,
+        private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
+        private val onCallBecomeActive: (WebRtcCall) -> Unit,
+        private val onCallEnded: (String) -> Unit
+) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
         fun onCaptureStateChanged() {}
@@ -116,7 +122,9 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     val callId = mxCall.callId
-    val roomId = mxCall.roomId
+
+    // room where call signaling is placed. In case of virtual room it can differs from the nativeRoomId.
+    val signalingRoomId = mxCall.roomId
 
     private var peerConnection: PeerConnection? = null
     private var localAudioSource: AudioSource? = null
@@ -268,7 +276,7 @@ class WebRtcCall(val mxCall: MxCall,
 
         sessionScope?.launch(dispatcher) {
             when (mode) {
-                VectorCallActivity.INCOMING_ACCEPT -> {
+                VectorCallActivity.INCOMING_ACCEPT  -> {
                     internalAcceptIncomingCall()
                 }
                 VectorCallActivity.INCOMING_RINGING -> {
@@ -284,6 +292,40 @@ class WebRtcCall(val mxCall: MxCall,
                 }
             }
         }
+    }
+
+    /**
+     * Without consultation
+     */
+    suspend fun transferToUser(targetUserId: String, targetRoomId: String?) {
+        mxCall.transfer(
+                targetUserId = targetUserId,
+                targetRoomId = targetRoomId,
+                createCallId = CallIdGenerator.generate(),
+                awaitCallId = null
+        )
+        endCall(sendEndSignaling = false)
+    }
+
+    /**
+     * With consultation
+     */
+    suspend fun transferToCall(transferTargetCall: WebRtcCall) {
+        val newCallId = CallIdGenerator.generate()
+        transferTargetCall.mxCall.transfer(
+                targetUserId = mxCall.opponentUserId,
+                targetRoomId = null,
+                createCallId = null,
+                awaitCallId = newCallId
+        )
+        mxCall.transfer(
+                targetUserId = transferTargetCall.mxCall.opponentUserId,
+                targetRoomId = null,
+                createCallId = newCallId,
+                awaitCallId = null
+        )
+        endCall(sendEndSignaling = false)
+        transferTargetCall.endCall(sendEndSignaling = false)
     }
 
     fun acceptIncomingCall() {
@@ -385,6 +427,7 @@ class WebRtcCall(val mxCall: MxCall,
             peerConnection?.awaitSetRemoteDescription(offerSdp)
         } catch (failure: Throwable) {
             Timber.v("Failure putting remote description")
+            endCall(true, CallHangupContent.Reason.UNKWOWN_ERROR)
             return@withContext
         }
         // 2) Access camera + microphone, create local stream
@@ -725,7 +768,7 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
-    fun endCall(originatedByMe: Boolean = true, reason: CallHangupContent.Reason? = null) {
+    fun endCall(sendEndSignaling: Boolean = true, reason: CallHangupContent.Reason? = null) {
         if (mxCall.state == CallState.Terminated) {
             return
         }
@@ -740,9 +783,9 @@ class WebRtcCall(val mxCall: MxCall,
         mxCall.state = CallState.Terminated
         sessionScope?.launch(dispatcher) {
             release()
+            onCallEnded(callId)
         }
-        onCallEnded(callId)
-        if (originatedByMe) {
+        if (sendEndSignaling) {
             if (wasRinging) {
                 mxCall.reject()
             } else {

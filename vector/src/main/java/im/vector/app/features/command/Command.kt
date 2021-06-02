@@ -46,7 +46,7 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     PLAIN("/plain", "<message>", R.string.command_description_plain, false),
     DISCARD_SESSION("/discardsession", "", R.string.command_description_discard_session, false),
     CONFETTI("/confetti", "<message>", R.string.command_confetti, false),
-    SNOW("/snow", "<message>", R.string.command_snow, false),
+    SNOWFALL("/snowfall", "<message>", R.string.command_snow, false),
     CREATE_SPACE("/createspace", "<name> <invitee>*", R.string.command_description_create_space,  true),
     ADD_TO_SPACE("/addToSpace", "spaceId", R.string.command_description_create_space, true),
     JOIN_SPACE("/joinSpace", "spaceId", R.string.command_description_join_space, true),

@@ -37,7 +37,9 @@ data class SpaceDirectoryState(
         val joinedRoomsIds: Set<String> = emptySet(),
         // keys are room alias or roomId
         val changeMembershipStates: Map<String, ChangeMembershipState> = emptyMap(),
-        val canAddRooms: Boolean = false
+        val canAddRooms: Boolean = false,
+        // cached room summaries of known rooms
+        val knownRoomSummaries : List<RoomSummary> = emptyList()
 ) : MvRxState {
     constructor(args: SpaceDirectoryArgs) : this(
             spaceId = args.spaceId

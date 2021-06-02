@@ -139,7 +139,7 @@ class SpaceSettingsFragment @Inject constructor(
                     drawableProvider.getDrawable(R.drawable.ic_beta_pill),
                     null
             )
-            avatarRenderer.renderSpace(it.toMatrixItem(), views.roomSettingsToolbarAvatarImageView)
+            avatarRenderer.render(it.toMatrixItem(), views.roomSettingsToolbarAvatarImageView)
             views.roomSettingsDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
         }
 

@@ -23,33 +23,33 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.sync.UserAccountDataSyncHandler
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.api.session.accountdata.AccountDataEvent
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.awaitCallback
 import javax.inject.Inject
 
-internal class DefaultAccountDataService @Inject constructor(
+internal class UserAccountDataService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
-        private val accountDataDataSource: AccountDataDataSource,
+        private val accountDataDataSource: UserAccountDataDataSource,
         private val taskExecutor: TaskExecutor
 ) : AccountDataService {
 
-    override fun getAccountDataEvent(type: String): UserAccountDataEvent? {
+    override fun getAccountDataEvent(type: String): AccountDataEvent? {
         return accountDataDataSource.getAccountDataEvent(type)
     }
 
-    override fun getLiveAccountDataEvent(type: String): LiveData<Optional<UserAccountDataEvent>> {
+    override fun getLiveAccountDataEvent(type: String): LiveData<Optional<AccountDataEvent>> {
         return accountDataDataSource.getLiveAccountDataEvent(type)
     }
 
-    override fun getAccountDataEvents(types: Set<String>): List<UserAccountDataEvent> {
+    override fun getAccountDataEvents(types: Set<String>): List<AccountDataEvent> {
         return accountDataDataSource.getAccountDataEvents(types)
     }
 
-    override fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<UserAccountDataEvent>> {
+    override fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<AccountDataEvent>> {
         return accountDataDataSource.getLiveAccountDataEvents(types)
     }
 

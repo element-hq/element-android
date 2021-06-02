@@ -93,7 +93,7 @@ import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProces
 import org.matrix.android.sdk.internal.session.room.tombstone.RoomTombstoneEventProcessor
 import org.matrix.android.sdk.internal.session.securestorage.DefaultSecureStorageService
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
-import org.matrix.android.sdk.internal.session.user.accountdata.DefaultAccountDataService
+import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
 import org.matrix.android.sdk.internal.util.md5
 import retrofit2.Retrofit
@@ -364,7 +364,7 @@ internal abstract class SessionModule {
     abstract fun bindHomeServerCapabilitiesService(service: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
 
     @Binds
-    abstract fun bindAccountDataService(service: DefaultAccountDataService): AccountDataService
+    abstract fun bindAccountDataService(service: UserAccountDataService): AccountDataService
 
     @Binds
     abstract fun bindEventService(service: DefaultEventService): EventService

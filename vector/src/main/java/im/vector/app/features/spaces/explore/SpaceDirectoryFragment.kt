@@ -16,6 +16,7 @@
 
 package im.vector.app.features.spaces.explore
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -23,19 +24,33 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.text.toSpannable
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.utils.colorizeMatchingText
+import im.vector.app.core.utils.isValidUrl
+import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentRoomDirectoryPickerBinding
+import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.matrixto.SpaceCardRenderer
+import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.spaces.manage.ManageType
 import im.vector.app.features.spaces.manage.SpaceManageActivity
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
+import java.net.URL
 import javax.inject.Inject
 
 @Parcelize
@@ -44,9 +59,13 @@ data class SpaceDirectoryArgs(
 ) : Parcelable
 
 class SpaceDirectoryFragment @Inject constructor(
-        private val epoxyController: SpaceDirectoryController
+        private val epoxyController: SpaceDirectoryController,
+        private val permalinkHandler: PermalinkHandler,
+        private val spaceCardRenderer: SpaceCardRenderer,
+        private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentRoomDirectoryPickerBinding>(),
         SpaceDirectoryController.InteractionListener,
+        TimelineEventController.UrlClickCallback,
         OnBackPressed {
 
     override fun getMenuRes() = R.menu.menu_space_directory
@@ -71,6 +90,9 @@ class SpaceDirectoryFragment @Inject constructor(
         viewModel.selectSubscribe(this, SpaceDirectoryState::canAddRooms) {
             invalidateOptionsMenu()
         }
+
+        views.spaceCard.matrixToCardMainButton.isVisible = false
+        views.spaceCard.matrixToCardSecondaryButton.isVisible = false
     }
 
     override fun onDestroyView() {
@@ -82,10 +104,21 @@ class SpaceDirectoryFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { state ->
         epoxyController.setData(state)
 
-        val title = state.hierarchyStack.lastOrNull()?.let { currentParent ->
+        val currentParent = state.hierarchyStack.lastOrNull()?.let { currentParent ->
             state.spaceSummaryApiResult.invoke()?.firstOrNull { it.childRoomId == currentParent }
-        }?.name ?: getString(R.string.space_explore_activity_title)
-        views.toolbar.title = title
+        }
+
+        if (currentParent == null) {
+            val title = getString(R.string.space_explore_activity_title)
+            views.toolbar.title = title
+
+            spaceCardRenderer.render(state.spaceSummary.invoke(), emptyList(), this, views.spaceCard)
+        } else {
+            val title = currentParent.name ?: currentParent.canonicalAlias ?: getString(R.string.space_explore_activity_title)
+            views.toolbar.title = title
+
+            spaceCardRenderer.render(currentParent, emptyList(), this, views.spaceCard)
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) = withState(viewModel) { state ->
@@ -96,7 +129,7 @@ class SpaceDirectoryFragment @Inject constructor(
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.spaceAddRoom -> {
+            R.id.spaceAddRoom    -> {
                 withState(viewModel) { state ->
                     addExistingRooms(state.spaceId)
                 }
@@ -137,6 +170,44 @@ class SpaceDirectoryFragment @Inject constructor(
 
     override fun addExistingRooms(spaceId: String) {
         addExistingRoomActivityResult.launch(SpaceManageActivity.newIntent(requireContext(), spaceId, ManageType.AddRooms))
+    }
+
+    override fun onUrlClicked(url: String, title: String): Boolean {
+        permalinkHandler
+                .launch(requireActivity(), url, null)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { managed ->
+                    if (!managed) {
+                        if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
+                            AlertDialog.Builder(requireActivity())
+                                    .setTitle(R.string.external_link_confirmation_title)
+                                    .setMessage(
+                                            getString(R.string.external_link_confirmation_message, title, url)
+                                                    .toSpannable()
+                                                    .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+                                                    .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+                                    )
+                                    .setPositiveButton(R.string._continue) { _, _ ->
+                                        openUrlInExternalBrowser(requireContext(), url)
+                                    }
+                                    .setNegativeButton(R.string.cancel, null)
+                                    .show()
+                                    .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
+                        } else {
+                            // Open in external browser, in a new Tab
+                            openUrlInExternalBrowser(requireContext(), url)
+                        }
+                    }
+                }
+                .disposeOnDestroyView()
+        // In fact it is always managed
+        return true
+    }
+
+    override fun onUrlLongClicked(url: String): Boolean {
+        // nothing?
+        return false
     }
 //    override fun navigateToRoom(roomId: String) {
 //        viewModel.handle(SpaceDirectoryViewAction.NavigateToRoom(roomId))

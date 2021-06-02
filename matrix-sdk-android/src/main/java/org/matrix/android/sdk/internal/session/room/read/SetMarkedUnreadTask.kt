@@ -26,6 +26,7 @@ import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.internal.database.query.isMarkedUnread
 import org.matrix.android.sdk.internal.session.sync.RoomMarkedUnreadHandler
 import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataAPI
@@ -55,7 +56,7 @@ internal class DefaultSetMarkedUnreadTask @Inject constructor(
         if (isMarkedUnread(monarchy.realmConfiguration, params.roomId) != params.markedUnread) {
             updateDatabase(params.roomId, params.markedUnread)
             executeRequest(globalErrorReceiver, canRetry = true) {
-                accountDataApi.setRoomAccountData(userId, params.roomId, EventType.MARKED_UNREAD, params.markedUnreadContent)
+                accountDataApi.setRoomAccountData(userId, params.roomId, RoomAccountDataTypes.MARKED_UNREAD, params.markedUnreadContent)
             }
         }
     }
