@@ -1,1 +1,0 @@
-/snow -> /snowfall and update wording (iso Element Web)
