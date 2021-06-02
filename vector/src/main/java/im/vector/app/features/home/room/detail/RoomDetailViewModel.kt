@@ -176,7 +176,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeMyRoomMember()
         observeActiveRoomWidgets()
         observePowerLevel()
-        updateShowDialerOptionState()
         room.getRoomSummaryLive()
         viewModelScope.launch(Dispatchers.IO) {
             tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
@@ -301,7 +300,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.TapOnFailedToDecrypt             -> handleTapOnFailedToDecrypt(action)
             is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
             is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
-            is RoomDetailAction.StartCallWithPhoneNumber         -> handleStartCallWithPhoneNumber(action)
             is RoomDetailAction.StartCall                        -> handleStartCall(action)
             is RoomDetailAction.AcceptCall                       -> handleAcceptCall(action)
             is RoomDetailAction.EndCall                          -> handleEndCall()
@@ -325,17 +323,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
             RoomDetailAction.ResendAll                           -> handleResendAll()
         }.exhaustive
-    }
-
-    private fun handleStartCallWithPhoneNumber(action: RoomDetailAction.StartCallWithPhoneNumber) {
-        viewModelScope.launch {
-            try {
-                val result = DialPadLookup(session, callManager, directRoomHelper).lookupPhoneNumber(action.phoneNumber)
-                callManager.startOutgoingCall(result.roomId, result.userId, action.videoCall)
-            } catch (failure: Throwable) {
-                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
-            }
-        }
     }
 
     private fun handleAcceptCall(action: RoomDetailAction.AcceptCall) {
@@ -1489,16 +1476,6 @@ class RoomDetailViewModel @AssistedInject constructor(
     override fun onNewTimelineEvents(eventIds: List<String>) {
         Timber.v("On new timeline events: $eventIds")
         _viewEvents.post(RoomDetailViewEvents.OnNewTimelineEvents(eventIds))
-    }
-
-    override fun onPSTNSupportUpdated() {
-        updateShowDialerOptionState()
-    }
-
-    private fun updateShowDialerOptionState() {
-        setState {
-            copy(showDialerOption = callManager.supportsPSTNProtocol)
-        }
     }
 
     override fun onCleared() {

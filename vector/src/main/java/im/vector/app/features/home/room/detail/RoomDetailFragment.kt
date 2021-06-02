@@ -320,7 +320,7 @@ class RoomDetailFragment @Inject constructor(
                 startCallActivityResultLauncher = startCallActivityResultLauncher,
                 showDialogWithMessage = ::showDialogWithMessage,
                 onTapToReturnToCall = ::onTapToReturnToCall
-        ).register()
+        )
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(views.roomToolbar)
         setupRecyclerView()
