@@ -26,13 +26,11 @@ import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.HasScreenInjector
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
-import im.vector.app.features.home.room.detail.RoomDetailViewEvents
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers

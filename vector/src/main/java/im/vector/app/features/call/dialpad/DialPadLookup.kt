@@ -29,7 +29,7 @@ class DialPadLookup @Inject constructor(
         private val webRtcCallManager: WebRtcCallManager,
         private val directRoomHelper: DirectRoomHelper
 ) {
-    sealed class Failure : Throwable(){
+    sealed class Failure : Throwable() {
         object NoResult: Failure()
         object NumberIsYours: Failure()
     }
@@ -46,7 +46,7 @@ class DialPadLookup @Inject constructor(
         } else {
             thirdPartyUser.userId
         }
-        if(nativeUserId == session.myUserId) throw Failure.NumberIsYours
+        if (nativeUserId == session.myUserId) throw Failure.NumberIsYours
         val roomId = directRoomHelper.ensureDMExists(nativeUserId)
         return Result(userId = nativeUserId, roomId = roomId)
     }

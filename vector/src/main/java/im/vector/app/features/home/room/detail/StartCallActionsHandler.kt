@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail
 
-import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -28,7 +27,6 @@ import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-
 
 class StartCallActionsHandler(
         private val roomId: String,
@@ -152,5 +150,4 @@ class StartCallActionsHandler(
             }
         }
     }
-
 }

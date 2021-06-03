@@ -46,4 +46,3 @@ sealed class HomeTab(@StringRes val titleRes: Int) {
     data class RoomList(val displayMode: RoomListDisplayMode) : HomeTab(displayMode.titleRes)
     object DialPad : HomeTab(R.string.call_dial_pad_title)
 }
-
