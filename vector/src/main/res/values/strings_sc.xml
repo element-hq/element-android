@@ -18,7 +18,6 @@
     <string name="settings_simplified_mode_summary">Hide advanced functionality, including public room directories and chat encryption settings</string>
     <string name="prompt_simplified_mode_title">Select user interface</string>
     <string name="prompt_simplified_mode_text">You can change this later in the settings.</string>
-    <!-- simplified mode prompt: start and end with newline to make dialog look better -->
     <string name="prompt_simplified_mode_on">Easy</string>
     <string name="prompt_simplified_mode_on_text">I only plan to chat with people I know, and consider extra options confusing.</string>
     <string name="prompt_simplified_mode_off">Complete</string>
@@ -56,10 +55,7 @@
     <string name="all_list_rooms_empty_body">Chats will be displayed here</string>
 
     <!-- Login screen -->
-    <string name="login_a11y_connect_using_matrix_id_sc">@string/login_connect_using_matrix_id_submit</string>
-    <string name="login_connect_using_matrix_id_title_sc">@string/login_connect_using_matrix_id_submit</string>
     <string name="login_connect_using_matrix_id_text_sc">e.g. @user:domain.com</string>
-    <string name="login_a11y_choose_other_sc">@string/login_a11y_choose_other</string>
     <string name="login_server_other_title_sc">Custom server</string>
     <string name="login_server_other_text_sc">Enter server address to login or register</string>
 

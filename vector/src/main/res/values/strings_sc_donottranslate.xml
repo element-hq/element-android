@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Login screen - these may be translated manually if necessary, but we have them here
+        to avoid weblate warnings, which doesn't handle references properly -->
+    <string name="login_a11y_connect_using_matrix_id_sc">@string/login_connect_using_matrix_id_submit</string>
+    <string name="login_connect_using_matrix_id_title_sc">@string/login_connect_using_matrix_id_submit</string>
+    <string name="login_a11y_choose_other_sc">@string/login_a11y_choose_other</string>
+
+</resources>

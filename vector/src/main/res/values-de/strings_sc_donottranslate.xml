@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Login screen - these may be translated manually if necessary, but we have them here
+        to avoid weblate warnings, which doesn't handle references properly -->
+    <string name="login_a11y_connect_using_matrix_id_sc">Mit Matrix-ID anmelden</string>
+    <string name="login_connect_using_matrix_id_title_sc">Mit Matrix-ID anmelden</string>
+
+</resources>

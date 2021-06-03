@@ -18,7 +18,6 @@
     <string name="settings_simplified_mode_summary">Verstecke erweiterte Funktionalität, einschließlich öffentlichen Raumverzeichnissen und Chat-Verschlüsselungseinstellungen</string>
     <string name="prompt_simplified_mode_title">Benutzeroberfläche festlegen</string>
     <string name="prompt_simplified_mode_text">Dies kann später in den Einstellungen geändert werden.</string>
-    <!-- simplified mode prompt: start and end with newline to make dialog look better -->
     <string name="prompt_simplified_mode_on">Einfach</string>
     <string name="prompt_simplified_mode_on_text">Ich möchte nur mit mir bekannten Leuten kommunizieren, und finde zusätzliche Optionen verwirrend.</string>
     <string name="prompt_simplified_mode_off">Vollständig</string>
@@ -56,10 +55,7 @@
     <string name="all_list_rooms_empty_body">Konversationen werden hier angezeigt</string>
 
     <!-- Login screen -->
-    <string name="login_a11y_connect_using_matrix_id_sc">Mit Matrix-ID anmelden</string>
-    <string name="login_connect_using_matrix_id_title_sc">Mit Matrix-ID anmelden</string>
     <string name="login_connect_using_matrix_id_text_sc">z. B. @user:domain.com</string>
-    <string name="login_a11y_choose_other_sc">@string/login_a11y_choose_other</string>
     <string name="login_server_other_title_sc">Benutzerdefinierter Server</string>
     <string name="login_server_other_text_sc">Serveradresse angeben zum Anmelden oder Registrieren</string>
 
