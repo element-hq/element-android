@@ -1,2 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="show_room_info_sc">Ruumi üksikasjad</string>
+    <string name="login_server_other_title_sc">Kohandatav server</string>
+    <string name="all_list_rooms_empty_body">Vestlused kuvatakse siinkohal</string>
+    <string name="all_list_rooms_empty_title">SchildiChat</string>
+    <string name="bottom_action_all">Ülevaade</string>
+    <string name="login_mobile_device_sc">SchildiChat Android</string>
+    <string name="url_previews_in_encrypted_rooms">URL-i eelvaade krüpteeritud vestlustes</string>
+    <string name="labs_mark_rooms_unread_summary">Luba märkida vestlused lugemata. Teised maatrikskliendid ei pruugi seda funktsiooni veel toetada.</string>
+    <string name="labs_mark_rooms_unread">Märgista vestlused lugemata</string>
+    <string name="settings_unimportant_counter_badge_summary">Kaasa arvatud vestlused ilma teavitusteta kategooria lugemata loendurisse</string>
+    <string name="settings_unimportant_counter_badge">Lugege ebaolulisi vestlussündmusi</string>
+    <string name="bubble_time_location_bottom">Altpoolt</string>
+    <string name="bubble_time_location">Ajatempli asukoht</string>
+    <string name="bubble_style_both">Mõlemad pooled</string>
+    <string name="bubble_style_none">Puudub</string>
+    <string name="bubble_style">Sõnumimullid</string>
+    <string name="settings_system_dark_theme_pre_ten">Jälgi süsteemi tume teema</string>
+    <string name="settings_dark_theme">Tume teema</string>
+    <string name="settings_light_theme">Valgus teema</string>
+    <string name="prompt_simplified_mode_off_text">Otsin täielikku funktsionaalsust, sealhulgas avalike ruumide avastamist ning peeneid ruumi ja krüpteerimise seadeid.</string>
+    <string name="normal_priority_header">Tavaline prioriteet</string>
+    <string name="settings_home_overview">Ülevaade</string>
+    <string name="settings_single_overview">Kombineeritud chat ülevaade</string>
+    <string name="settings_single_overview_summary">Vaata nii otsesõnumeid kui ka ruume ühel lehel</string>
+    <string name="settings_room_unread_kind_dm">Otsene vestluse eelvaate sisu</string>
+    <string name="settings_room_unread_kind_group">Grupivestluse eelvaate sisu</string>
+    <string name="settings_room_unread_kind_content">Peida liikme muudatused</string>
+    <string name="settings_room_unread_kind_original_content">Peida liikme muutused ja reaktsioonid</string>
+    <string name="prompt_simplified_mode_off">Täielik</string>
+    <string name="prompt_simplified_mode_on">Lihtne</string>
+    <string name="prompt_simplified_mode_text">Seda saate hiljem seadetes muuta.</string>
+    <string name="prompt_simplified_mode_title">Valige kasutajaliides</string>
+    <string name="settings_simplified_mode_summary">Täpsemate funktsioonide, sealhulgas avalike ruumide kataloogide ja vestluse krüpteerimisseadete varjamine</string>
+    <string name="settings_simplified_mode">Lihtne režiim</string>
+    <string name="login_connect_using_matrix_id_text_sc">nt @user:domain.com</string>
+    <string name="bubble_time_location_top">Tipp</string>
+    <string name="sc_dark_colored_theme">SC Tume, värvilised mullid</string>
+    <string name="sc_colored_theme">SC Must, värvilised mullid</string>
+    <string name="sc_dark_theme">SC Tume</string>
+    <string name="sc_theme">SC Musta</string>
+    <string name="footer_read_receipt_content_description">Sõnumi staatus</string>
+    <string name="room_list_quick_actions_mark_room_read">Märgista kui loetud</string>
+    <string name="room_list_quick_actions_mark_room_unread">Märgista lugemata</string>
+    <string name="show_participants_sc">Osalejad</string>
+    <string name="sc_light_theme">SC Valgus</string>
+    <string name="login_server_other_text_sc">Sisestage serveri aadress sisselogimiseks või registreerimiseks</string>
+    <string name="url_previews_in_encrypted_rooms_summary">See lekib teie sõnumitest URL-aadressid teie koduserverile!</string>
+    <string name="bubble_style_start">Samal poolel</string>
+    <string name="settings_system_dark_theme_pre_ten_summary">Eraldi teemade seaded heledate ja tumedate teemade jaoks. Teie praegune Androidi versioon ei pruugi toetada heledate ja tumedate teemade vahetamist!</string>
+    <string name="settings_room_unread_kind_default">Näita kõiki sündmusi</string>
+    <string name="prompt_simplified_mode_on_text">Kavatsen vestelda ainult tuttavatega ja pean lisavõimalusi segadusttekitavaks.</string>
+</resources>
