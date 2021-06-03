@@ -151,6 +151,14 @@ class HomeDetailFragment @Inject constructor(
             updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
         }
 
+        viewModel.observeViewEvents { viewEvent ->
+            when (viewEvent) {
+                HomeDetailViewEvents.CallStarted   -> dismissLoadingDialog()
+                is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
+                HomeDetailViewEvents.Loading       -> showLoadingDialog()
+            }
+        }
+
         unknownDeviceDetectorSharedViewModel.subscribe { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
 //                Timber.v("## Detector Triggerred in fragment - ${unknownDevices.firstOrNull()}")
@@ -192,8 +200,6 @@ class HomeDetailFragment @Inject constructor(
         updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
         callManager.checkForProtocolsSupportIfNeeded()
     }
-
-
 
     private fun promptForNewUnknownDevices(uid: String, state: UnknownDevicesState, newest: DeviceInfo) {
         val user = state.myMatrixItem

@@ -59,7 +59,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val callManager: WebRtcCallManager,
                                                       private val directRoomHelper: DirectRoomHelper,
                                                       private val appStateHandler: AppStateHandler)
-    : VectorViewModel<HomeDetailViewState, HomeDetailAction, EmptyViewEvents>(initialState),
+    : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
     @AssistedFactory
@@ -98,8 +98,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
     override fun handle(action: HomeDetailAction) {
         when (action) {
-            is HomeDetailAction.SwitchTab -> handleSwitchTab(action)
-            HomeDetailAction.MarkAllRoomsRead -> handleMarkAllRoomsRead()
+            is HomeDetailAction.SwitchTab                -> handleSwitchTab(action)
+            HomeDetailAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
             is HomeDetailAction.StartCallWithPhoneNumber -> handleStartCallWithPhoneNumber(action)
         }
     }
@@ -107,10 +107,12 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     private fun handleStartCallWithPhoneNumber(action: HomeDetailAction.StartCallWithPhoneNumber) {
         viewModelScope.launch {
             try {
+                _viewEvents.post(HomeDetailViewEvents.Loading)
                 val result = DialPadLookup(session, callManager, directRoomHelper).lookupPhoneNumber(action.phoneNumber)
                 callManager.startOutgoingCall(result.roomId, result.userId, isVideoCall = false)
+                _viewEvents.post(HomeDetailViewEvents.CallStarted)
             } catch (failure: Throwable) {
-                Timber.v(failure)
+                _viewEvents.post(HomeDetailViewEvents.FailToCall(failure))
             }
         }
     }
@@ -120,7 +122,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             setState {
                 copy(currentTab = action.tab)
             }
-            if(action.tab is HomeTab.RoomList) {
+            if (action.tab is HomeTab.RoomList) {
                 uiStateRepository.storeDisplayMode(action.tab.displayMode)
             }
         }
@@ -140,7 +142,6 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             copy(showDialPadTab = callManager.supportsPSTNProtocol)
         }
     }
-
 
     // PRIVATE METHODS *****************************************************************************
 
@@ -176,11 +177,11 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     private fun observeRoomGroupingMethod() {
         appStateHandler.selectedRoomGroupingObservable
                 .subscribe {
-                   setState {
-                       copy(
-                               roomGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
-                       )
-                   }
+                    setState {
+                        copy(
+                                roomGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
+                        )
+                    }
                 }
                 .disposeOnClear()
     }
@@ -203,7 +204,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                         is RoomGroupingMethod.ByLegacyGroup -> {
                             // TODO!!
                         }
-                        is RoomGroupingMethod.BySpace -> {
+                        is RoomGroupingMethod.BySpace       -> {
                             val activeSpaceRoomId = groupingMethod.spaceSummary?.roomId
                             val dmInvites = session.getRoomSummaries(
                                     roomSummaryQueryParams {
