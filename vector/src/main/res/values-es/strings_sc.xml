@@ -1,2 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="settings_single_overview_summary">Mira mensajes directos y salas en la misma pagina</string>
+    <string name="settings_room_unread_kind_default">Mostrar todos los eventos</string>
+    <string name="settings_room_unread_kind_content">Esconder cambios de miembros</string>
+    <string name="settings_simplified_mode">Modo fácil</string>
+    <string name="prompt_simplified_mode_title">Seleccionar interfaz de usuario</string>
+    <string name="prompt_simplified_mode_text">Puedes cambiar esto luego en los ajustes.</string>
+    <string name="prompt_simplified_mode_on">Fácil</string>
+    <string name="prompt_simplified_mode_on_text">Solo planeo hablar con gente que conozco, y considero confusas las opciones extra.</string>
+    <string name="prompt_simplified_mode_off">Completo</string>
+    <string name="prompt_simplified_mode_off_text">Estoy buscando funcionalidad completa, incluyendo el descubrimiento de salas públicas y opciones completas de salas y encriptación.</string>
+    <string name="settings_light_theme">Tema claro</string>
+    <string name="settings_dark_theme">Tema oscuro</string>
+    <string name="settings_system_dark_theme_pre_ten">Seguir el tema oscuro del sistema</string>
+    <string name="sc_light_theme">SC Claro</string>
+    <string name="sc_theme">SC Negro</string>
+    <string name="sc_dark_theme">SC Oscuro</string>
+    <string name="sc_dark_colored_theme">SC Oscuro, burbujas a color</string>
+    <string name="bubble_style">Burbujas de mensaje</string>
+    <string name="bubble_style_none">Ninguna</string>
+    <string name="bubble_style_start">Mismo lado</string>
+    <string name="bubble_style_both">Ambos lados</string>
+    <string name="bubble_time_location_top">Superior</string>
+    <string name="bubble_time_location_bottom">Inferior</string>
+    <string name="all_list_rooms_empty_title">SchildiChat</string>
+    <string name="all_list_rooms_empty_body">Los chats se mostrán aquí</string>
+    <string name="login_connect_using_matrix_id_text_sc">ej: @usuario:dominio.com</string>
+    <string name="login_server_other_title_sc">Servidor personalizado</string>
+    <string name="settings_room_unread_kind_group">Previsualización del contenido del chat grupal</string>
+    <string name="bubble_time_location">Ubicación de la marca de tiempo</string>
+    <string name="url_previews_in_encrypted_rooms_summary">Esto va a filtrar las URLs de tus mensajes al servidor central!</string>
+    <string name="login_mobile_device_sc">SchildiChat para Android</string>
+    <string name="bottom_action_all">General</string>
+    <string name="url_previews_in_encrypted_rooms">Previsualización de URLs en chats encriptados</string>
+    <string name="settings_unimportant_counter_badge">Contar chats de eventos no importantes</string>
+    <string name="settings_unimportant_counter_badge_summary">Incluir chat sin notificaciones en el contador de la categoría de no leídos</string>
+    <string name="settings_home_overview">Vista general</string>
+    <string name="show_participants_sc">Participantes</string>
+    <string name="show_room_info_sc">Detalles de la sala</string>
+    <string name="room_list_quick_actions_mark_room_unread">Marcar como no leído</string>
+    <string name="room_list_quick_actions_mark_room_read">Marcar como leído</string>
+    <string name="footer_read_receipt_content_description">Estado del mensaje</string>
+    <string name="login_server_other_text_sc">Introduzca la dirección del servidor para iniciar sesión o registrarse</string>
+    <string name="normal_priority_header">Prioridad normal</string>
+    <string name="settings_single_overview">Vista general de chats combinada</string>
+    <string name="settings_room_unread_kind_original_content">Esconder cambios de miembros y reacciones</string>
+    <string name="settings_simplified_mode_summary">Esconde funcionalidades avanzadas, incluyendo directorios de salas públicas y ajustes de encriptación</string>
+    <string name="settings_system_dark_theme_pre_ten_summary">Provee un tema separado para el tema oscuro y claro. Tu versión de android podría no soportar el cambio entre el tema oscuro y claro!</string>
+    <string name="sc_colored_theme">SC Negro, burbujas a color</string>
+    <string name="labs_mark_rooms_unread">Marcar chats como no leídos</string>
+    <string name="labs_mark_rooms_unread_summary">Permitir marcar chats como no leídos. Otros clientes de matriz pueden no soportar esta funcionalidad todavía.</string>
+    <string name="settings_room_unread_kind_dm">Previsualización del contenido del chat directo</string>
+</resources>
