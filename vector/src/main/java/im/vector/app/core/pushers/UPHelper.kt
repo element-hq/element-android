@@ -125,6 +125,13 @@ object UPHelper {
     }
 
     fun customOrDefaultGateway(context: Context, endpoint: String?): String {
+        // if we use the embedded distributor,
+        // register app_id type upfcm on sygnal
+        // the pushkey if FCM key
+        val up = Registration()
+        if (up.getDistributor(context) == context.packageName)
+            return context.getString(R.string.pusher_http_url)
+        // else, unifiedpush, and pushkey is an endpoint
         val default = context.getString(R.string.default_push_gateway_http_url)
         endpoint?.let {
             val uri = URI(it)

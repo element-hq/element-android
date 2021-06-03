@@ -1,7 +1,6 @@
 package im.vector.app.push.fcm
 
 import android.content.Context
-import im.vector.app.R
 import org.unifiedpush.android.embedded_fcm_distributor.GetEndpointHandler
 import org.unifiedpush.android.embedded_fcm_distributor.EmbeddedDistributorReceiver
 
@@ -23,8 +22,8 @@ import org.unifiedpush.android.embedded_fcm_distributor.EmbeddedDistributorRecei
 
 val handlerFCM = object: GetEndpointHandler {
     override fun getEndpoint(context: Context?, token: String, instance: String): String {
-        // This returns the endpoint of your FCM Rewrite-Proxy
-        return "${context!!.getString(R.string.pusher_http_url)}/FCM?instance=$instance&token=$token"
+        // Here token is the FCM Token, used by the gateway (sygnal)
+        return token
     }
 }
 
