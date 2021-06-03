@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_home_overview">Áttekintés</string>
+    <string name="settings_single_overview">Kombinált chat áttekintés</string>
+    <string name="settings_room_unread_kind_dm">Közvetlen csevegés előnézeti tartalma</string>
+    <string name="settings_room_unread_kind_group">Csoportos csevegés előnézeti tartalma</string>
+    <string name="settings_room_unread_kind_default">Minden esemény megjelenítése</string>
+    <string name="settings_room_unread_kind_content">Tagváltozások elrejtése</string>
+    <string name="settings_simplified_mode">Könnyű mód</string>
+    <string name="settings_simplified_mode_summary">Speciális funkciók elrejtése, beleértve a nyilvános szoba könyvtárakat és a csevegés titkosítási beállításait is</string>
+    <string name="normal_priority_header">Normál prioritás</string>
+    <string name="settings_single_overview_summary">Közvetlen üzenetek és szobák megtekintése egy oldalon</string>
+    <string name="settings_room_unread_kind_original_content">A tagok változásainak és reakcióinak elrejtése</string>
+</resources>
