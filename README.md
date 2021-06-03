@@ -1,3 +1,6 @@
+[![Translation status](https://weblate.bubu1.eu/widgets/schildichat/-/schildichat-android/svg-badge.svg)](https://weblate.bubu1.eu/projects/schildichat/schildichat-android/)
+[![SchildiChat-Android Matrix room #schildichat-android:matrix.org](https://img.shields.io/matrix/schildichat-android:matrix.org.svg?label=%23schildichat-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#schildichat-android:matrix.org)
+
 # SchildiChat for Android
 
 SchildiChat for Android is a Matrix Client based on [Element Android](https://github.com/vector-im/element-android).
@@ -18,6 +21,11 @@ If you are looking for a version with push notification support, you can get it 
 The latest version should also be available for direct download [here](https://s2.spiritcroc.de/fdroid/SchildiChat.apk).
 
 <a href="https://matrix.to/#/#schildichat-android:matrix.org" target="_blank">Join the discussion on matrix</a>
+
+## Translations
+
+If you want to translate SchildiChat, visit its weblate [here](https://weblate.bubu1.eu/projects/schildichat/schildichat-android/).
+For translations that concern upstream Element code, visit their weblate [here](https://translate.element.io/engage/element-android/).
 
 ## Screenshots
 
