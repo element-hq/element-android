@@ -1,2 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="login_connect_using_matrix_id_text_sc">adibidez, @user:domain.com</string>
+    <string name="url_previews_in_encrypted_rooms_summary">Hau izango da leak Url zure mezuak zure homeserver!</string>
+    <string name="settings_unimportant_counter_badge_summary">Besteak beste, hitzaldian gabe jakinarazpenak kategorian irakurri gabeko counter</string>
+    <string name="normal_priority_header">Normala lehentasuna</string>
+    <string name="settings_system_dark_theme_pre_ten">Jarraitu sistema dark gaia</string>
+    <string name="settings_dark_theme">Dark gaia</string>
+    <string name="settings_light_theme">Argi gaia</string>
+    <string name="prompt_simplified_mode_off_text">Bilatzen ari naiz funtzionalitate osoa, barne aurkikuntza logela publiko eta arte-fintzea komeni izaten da, gela eta enkriptatze-ezarpenak.</string>
+    <string name="prompt_simplified_mode_off">Osoa</string>
+    <string name="prompt_simplified_mode_on_text">Dut bakarrik plan berriketan jendea ezagutzen dut, eta kontuan hartu aparteko aukera nahasia.</string>
+    <string name="prompt_simplified_mode_on">Erraza</string>
+    <string name="prompt_simplified_mode_text">Hau aldatu ahal izango duzu beranduago ezarpenak.</string>
+    <string name="prompt_simplified_mode_title">Aukeratu erabiltzaile-interfazea</string>
+    <string name="settings_simplified_mode">Erraza modua</string>
+    <string name="settings_room_unread_kind_original_content">Ezkutatu kide aldaketak eta erreakzioak</string>
+    <string name="settings_room_unread_kind_content">Ezkutatu kide aldaketak</string>
+    <string name="settings_room_unread_kind_default">Erakutsi ekitaldi guztiak</string>
+    <string name="settings_room_unread_kind_group">Talde berriketa aurreikuspen eduki</string>
+    <string name="settings_room_unread_kind_dm">Zuzeneko txat aurreikuspen eduki</string>
+    <string name="settings_single_overview_summary">Ikusi bai zuzeneko mezuak eta gelak orri bat</string>
+    <string name="settings_single_overview">Konbinatu chat ikuspegi orokorra</string>
+    <string name="settings_home_overview">Ikuspegi orokorra</string>
+    <string name="all_list_rooms_empty_title">SchildiChat</string>
+    <string name="all_list_rooms_empty_body">Hitzaldian agertuko dira hemen</string>
+    <string name="login_mobile_device_sc">SchildiChat Android</string>
+    <string name="bottom_action_all">Ikuspegi orokorra</string>
+    <string name="url_previews_in_encrypted_rooms">URL aurrebistak enkriptatutako hitzaldian</string>
+    <string name="labs_mark_rooms_unread_summary">Baimendu markatzeko hitzaldian bezala irakurri gabe. Beste matrize bezeroei agian ez laguntza funtzionalitate hau oraindik.</string>
+    <string name="labs_mark_rooms_unread">Mark hitzaldian irakurri gabeko gisa</string>
+    <string name="settings_unimportant_counter_badge">Zenbatu garrantzirik chat ekitaldiak</string>
+    <string name="bubble_time_location_bottom">Behean</string>
+    <string name="bubble_time_location">Denbora-marka kokapena</string>
+    <string name="bubble_style_both">Bi aldeetan</string>
+    <string name="bubble_style_start">Alde bera</string>
+    <string name="bubble_style_none">Bat ere ez</string>
+    <string name="bubble_style">Mezu burbuilak</string>
+    <string name="sc_dark_colored_theme">SC Ilun, koloretako burbuilak</string>
+    <string name="sc_dark_theme">SC Ilun</string>
+    <string name="sc_colored_theme">SC Beltza, koloretako burbuilak</string>
+    <string name="sc_theme">SC Beltza</string>
+    <string name="sc_light_theme">SC Argi</string>
+    <string name="bubble_time_location_top">Gora</string>
+    <string name="footer_read_receipt_content_description">Mezu egoera</string>
+    <string name="room_list_quick_actions_mark_room_read">Gisa markatu irakurri</string>
+    <string name="room_list_quick_actions_mark_room_unread">Markatu irakurri gabeko gisa</string>
+    <string name="show_participants_sc">Parte-hartzaile</string>
+    <string name="show_room_info_sc">Gela xehetasunak</string>
+    <string name="login_server_other_text_sc">Idatzi zerbitzariaren helbidea saioa edo erregistratu</string>
+    <string name="login_server_other_title_sc">Ohiko zerbitzari</string>
+    <string name="settings_system_dark_theme_pre_ten_summary">Emateko aparteko gaia ezarpenak argia eta iluna gaiak. Zure egungo Android bertsioa agian ez laguntza aldatzea argia eta iluna gaiak!</string>
+    <string name="settings_simplified_mode_summary">Ezkutatu funtzionalitate aurreratuak, publikoak barne, gela direktorioak eta chat enkriptatze ezarpenak</string>
+</resources>
