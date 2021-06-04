@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="normal_priority_header">Нормальный приоритет</string>
-
     <string name="settings_home_overview">Обзор</string>
-
     <string name="settings_single_overview">Комбинированный обзор чатов</string>
     <string name="settings_single_overview_summary">Просмотр личных сообщений и комнат на одной странице</string>
-
     <string name="settings_room_unread_kind_default">Показать все события</string>
     <string name="settings_room_unread_kind_content">Скрыть изменения участников</string>
     <string name="settings_room_unread_kind_original_content">Скрыть изменения и реакции участников</string>
-
     <string name="settings_light_theme">Светлая тема</string>
     <string name="settings_dark_theme">Тёмная тема</string>
     <string name="sc_light_theme">SC светлая</string>
@@ -19,26 +14,42 @@
     <string name="sc_dark_theme">SC тёмная</string>
     <string name="sc_colored_theme">SC чёрная, цветные пузыри</string>
     <string name="sc_dark_colored_theme">SC тёмная, цветные пузыри</string>
-
     <string name="bubble_style">Пузыри сообщений</string>
     <string name="bubble_style_none">Нет</string>
     <string name="bubble_style_start">На той же стороне</string>
     <string name="bubble_style_both">С обеих сторон</string>
-
     <string name="settings_unimportant_counter_badge">Счётчик неважных событий чата</string>
     <string name="settings_unimportant_counter_badge_summary">Отобразить чаты без уведомлений в счётчике непрочитанных сообщений</string>
-
     <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="bottom_action_all">Обзор</string>
     <string name="all_list_rooms_empty_title">SchildiChat</string>
     <string name="all_list_rooms_empty_body">Здесь будут отображаться чаты</string>
-
     <!-- Login screen -->
     <string name="login_connect_using_matrix_id_text_sc">например @user:domain.com</string>
     <string name="login_server_other_title_sc">Пользовательский сервер</string>
     <string name="login_server_other_text_sc">Введите адрес сервера для входа или регистрации</string>
-
     <string name="show_room_info_sc">Подробности комнаты</string>
     <string name="show_participants_sc">Участники</string>
-
+    <string name="settings_room_unread_kind_dm">Содержание предварительного просмотра прямого чата</string>
+    <string name="settings_room_unread_kind_group">Содержание предварительного просмотра группового чата</string>
+    <string name="settings_simplified_mode">Легкий режим</string>
+    <string name="settings_simplified_mode_summary">Скрыть расширенные функциональные возможности, включая каталоги публичных комнат и настройки шифрования чата</string>
+    <string name="prompt_simplified_mode_text">Вы можете изменить это позже в настройках.</string>
+    <string name="prompt_simplified_mode_on_text">Я планирую общаться только с теми, кого знаю, и считаю лишние варианты путаными.</string>
+    <string name="prompt_simplified_mode_off_text">Мне нужна полная функциональность, включая обнаружение публичных комнат и тонкие настройки комнат и шифрования.</string>
+    <string name="settings_system_dark_theme_pre_ten_summary">Предоставьте отдельные настройки тем для светлых и темных тем. Ваша текущая версия Android может не поддерживать переключение светлых и темных тем!</string>
+    <string name="settings_system_dark_theme_pre_ten">Темная тема системы</string>
+    <string name="prompt_simplified_mode_off">Полный</string>
+    <string name="prompt_simplified_mode_on">Легко</string>
+    <string name="prompt_simplified_mode_title">Выберите пользовательский интерфейс</string>
+    <string name="footer_read_receipt_content_description">Статус сообщения</string>
+    <string name="room_list_quick_actions_mark_room_read">Отметить как прочитанное</string>
+    <string name="room_list_quick_actions_mark_room_unread">Отметить как непрочитанное</string>
+    <string name="url_previews_in_encrypted_rooms_summary">Это приведет к утечке URL из ваших сообщений на ваш домашний сервер!</string>
+    <string name="url_previews_in_encrypted_rooms">Предварительный просмотр URL-адресов в зашифрованных чатах</string>
+    <string name="labs_mark_rooms_unread_summary">Позволяет отмечать чаты как непрочитанные. Другие матричные клиенты могут пока не поддерживать эту функциональность.</string>
+    <string name="labs_mark_rooms_unread">Пометить чат как непрочитанный</string>
+    <string name="bubble_time_location_bottom">Дно</string>
+    <string name="bubble_time_location_top">Наверх</string>
+    <string name="bubble_time_location">Расположение временной метки</string>
 </resources>
