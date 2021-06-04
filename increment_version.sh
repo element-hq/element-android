@@ -140,7 +140,10 @@ git_changelog() {
         | grep -v "Automatic SchildiChat string correction" \
         | grep -v 'merge_helpers\|README\|increment_version' \
         | grep -v "\\.sh" \
-        | grep -v "Update string correction"
+        | grep -v "Update string correction" \
+        | grep -v "Added translation using Weblate" \
+        | grep -v "Translated using Weblate" \
+        | grep -v "weblate/sc"
 }
 
 changelog_dir=fastlane/metadata/android/en-US/changelogs
