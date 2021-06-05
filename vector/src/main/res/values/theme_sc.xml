@@ -149,6 +149,7 @@
         <item name="riotx_toolbar_bg">?riotx_background</item>
         <item name="riotx_unread_unimportant_room_badge">@color/background_floating_sc</item>
         <item name="colorAccentPale">@color/accent_sc_pale</item>
+        <item name="vectorButtonStyleOutlined">@style/VectorButtonStyleOutlined.SC</item>
 
         <item name="android:statusBarColor">@color/background_black_sc</item>
         <item name="android:navigationBarColor">@color/background_black_sc</item>

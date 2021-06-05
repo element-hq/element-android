@@ -44,7 +44,7 @@
     </style>
 
     <style name="VectorButtonStyleOutlined.SC">
-        <item name="strokeColor">@color/accent_sc</item>
+        <item name="strokeColor">@color/button_background_tint_selector_sc</item>
     </style>
 
 </resources>

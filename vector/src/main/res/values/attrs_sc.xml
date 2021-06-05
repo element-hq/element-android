@@ -16,6 +16,11 @@
         <attr name="timestamp_overlay_fg" format="color" />
         <attr name="timestamp_overlay_bg" format="color" />
 
+        <!-- use materialButtonStyle for vectorButtonStyle
+        <attr name="vectorButtonStyle" format="reference" />
+        -->
+        <attr name="vectorButtonStyleOutlined" format="reference" />
+
     </declare-styleable>
 
 </resources>
