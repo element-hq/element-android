@@ -12,7 +12,8 @@
     <item
         android:id="@+id/menu_home_suggestion"
         android:icon="@drawable/ic_material_bug_report"
-        android:title="@string/send_suggestion" />
+        android:title="@string/send_suggestion"
+        android:visible="false" />
 
     <item
         android:id="@+id/menu_home_report_bug"
