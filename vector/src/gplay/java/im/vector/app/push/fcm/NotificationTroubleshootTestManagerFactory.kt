@@ -53,7 +53,7 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
         mgr.addTest(testSystemSettings)
         mgr.addTest(testAccountSettings)
         mgr.addTest(testDeviceSettings)
-        if (UPHelper.DistributorExists(fragment.requireContext())) {
+        if (UPHelper.distributorExists(fragment.requireContext())) {
             mgr.addTest(testBingRulesSettings)
             mgr.addTest(testPlayServices)
             mgr.addTest(testNewEndpoint)

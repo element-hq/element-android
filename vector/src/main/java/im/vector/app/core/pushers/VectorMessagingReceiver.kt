@@ -151,7 +151,7 @@ val upHandler = object: MessagingReceiverHandler {
             val gateway = UPHelper.customOrDefaultGateway(context, endpoint)
             UPHelper.storePushGateway(context, gateway)
             UPHelper.storeUpEndpoint(context, endpoint)
-            pusherManager.registerPusher(endpoint, gateway)
+            pusherManager.registerPusher(context, endpoint, gateway)
         }
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
@@ -172,7 +172,7 @@ val upHandler = object: MessagingReceiverHandler {
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
         runBlocking {
             try {
-                pusherManager.unregisterPusher(UPHelper.getUpEndpoint(context)!!)
+                pusherManager.unregisterPusher(context, UPHelper.getUpEndpoint(context)!!)
             } catch (e: Exception) {
                 Timber.d("Probably unregistering a non existant pusher")
             }

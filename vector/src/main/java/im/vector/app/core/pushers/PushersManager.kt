@@ -39,19 +39,19 @@ class PushersManager @Inject constructor(
 
         currentSession.testPush(
                 UPHelper.getPushGateway(context)!!,
-                stringProvider.getString(R.string.pusher_app_id),
+                getPusherAppId(context),
                 UPHelper.getUpEndpoint(context)!!,
                 TEST_EVENT_ID
         )
     }
 
-    fun registerPusher(pushKey: String, gateway: String): UUID {
+    fun registerPusher(context: Context, pushKey: String, gateway: String): UUID {
         val currentSession = activeSessionHolder.getActiveSession()
         val profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(currentSession.myUserId.hashCode())
 
         return currentSession.addHttpPusher(
                 pushKey, // this is the UnifiedPush endpoint
-                stringProvider.getString(R.string.pusher_app_id),
+                getPusherAppId(context),
                 profileTag,
                 localeProvider.current().language,
                 appNameProvider.getAppName(),
@@ -62,9 +62,17 @@ class PushersManager @Inject constructor(
         )
     }
 
-    suspend fun unregisterPusher(pushKey: String) {
+    suspend fun unregisterPusher(context: Context, pushKey: String) {
         val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
-        currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id))
+        currentSession.removeHttpPusher(pushKey, getPusherAppId(context))
+    }
+
+    private fun getPusherAppId(context: Context) : String {
+        val appId = stringProvider.getString(R.string.pusher_app_id)
+        return if (UPHelper.isEmbeddedDistributor(context)) {
+            "${appId}.fcm"
+        } else
+            "${appId}.up"
     }
 
     companion object {

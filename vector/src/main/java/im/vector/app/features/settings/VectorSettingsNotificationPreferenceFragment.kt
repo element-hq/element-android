@@ -296,7 +296,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 lifecycleScope.launch {
                     runCatching {
                         try {
-                            pushManager.unregisterPusher(it)
+                            pushManager.unregisterPusher(requireContext(), it)
                         } catch (e: Exception) {
                             Timber.d("Probably unregistering a non existant pusher")
                         }

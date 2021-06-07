@@ -153,8 +153,14 @@ object UPHelper {
         return false
     }
 
-    fun DistributorExists(context: Context): Boolean {
+    fun distributorExists(context: Context): Boolean {
         val up = Registration()
         return up.getDistributor(context).isNotEmpty()
     }
+
+    fun isEmbeddedDistributor(context: Context) : Boolean {
+        val up = Registration()
+        return up.getDistributor(context) == context.packageName
+    }
+
 }
