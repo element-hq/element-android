@@ -10,6 +10,7 @@ Features ✨:
 Improvements 🙌:
  - Replace Element references with the actual Tchap information #1
  - Set up Tchap RestClient in element-android-sdk #15
+ - Set up the splash screen #80
 
 
 =======================================================

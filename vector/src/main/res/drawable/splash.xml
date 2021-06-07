@@ -4,14 +4,33 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
 
-    <!-- Background color -->
-    <item android:drawable="@color/riotx_accent" />
+    <!-- Background image -->
+    <item>
+        <bitmap android:src="@drawable/bg_tchap_splashscreen" />
+    </item>
 
     <!-- Centered logo -->
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/riot_splash_white" />
-    </item>
+    <item
+        android:bottom="300dp"
+        android:drawable="@drawable/ic_tchap_logo"
+        android:gravity="center" />
+
+    <!-- Centered title -->
+    <item
+        android:bottom="120dp"
+        android:drawable="@drawable/ic_tchap_title"
+        android:gravity="center" />
+
+    <!-- Centered description -->
+    <item
+        android:bottom="40dp"
+        android:drawable="@drawable/ic_tchap_splashscreen_desc"
+        android:gravity="center" />
+
+    <!-- Bottom icon -->
+    <item
+        android:bottom="90dp"
+        android:drawable="@drawable/ic_tchap_rf"
+        android:gravity="bottom|center" />
 
 </layer-list>
