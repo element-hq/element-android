@@ -43,7 +43,7 @@ internal class DefaultTypingService @AssistedInject constructor(
         fun create(roomId: String): DefaultTypingService
     }
 
-    private var job = Job()
+    private val coroutineScope = CoroutineScope(Job())
     private var currentTask: Job? = null
 
     // What the homeserver knows
@@ -58,7 +58,7 @@ internal class DefaultTypingService @AssistedInject constructor(
     override fun userIsTyping() {
         val now = SystemClock.elapsedRealtime()
         currentTask?.cancel()
-        currentTask = CoroutineScope(job).launch {
+        currentTask = coroutineScope.launch {
             if (userIsTyping && now < lastRequestTimestamp + MIN_DELAY_BETWEEN_TWO_USER_IS_TYPING_REQUESTS_MILLIS) {
                 Timber.d("Typing: Skip start request")
             } else {
@@ -82,7 +82,7 @@ internal class DefaultTypingService @AssistedInject constructor(
         lastRequestTimestamp = 0
 
         currentTask?.cancel()
-        currentTask = CoroutineScope(job).launch {
+        currentTask = coroutineScope.launch {
             sendRequest(false)
         }
     }
