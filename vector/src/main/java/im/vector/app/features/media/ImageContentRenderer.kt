@@ -16,7 +16,6 @@
 
 package im.vector.app.features.media
 
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
@@ -130,16 +129,14 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                     }
 
                     override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        if (data.width == null || data.height == null || data.width == 0 || data.height == 0) {
-                            if (resource is BitmapDrawable) {
-                                val updatedData = data.copy(width = resource.intrinsicWidth, height = resource.intrinsicHeight)
-                                val newSize = processSize(updatedData, mode)
-                                imageView.updateLayoutParams {
-                                    width = newSize.width
-                                    height = newSize.height
-                                }
-                                onImageSizeListener?.onImageSizeUpdated(newSize.width, newSize.height)
+                        if (resource != null && (data.width == null || data.height == null || data.width == 0 || data.height == 0)) {
+                            val updatedData = data.copy(width = resource.intrinsicWidth, height = resource.intrinsicHeight)
+                            val newSize = processSize(updatedData, mode)
+                            imageView.updateLayoutParams {
+                                width = newSize.width
+                                height = newSize.height
                             }
+                            onImageSizeListener?.onImageSizeUpdated(newSize.width, newSize.height)
                         }
                         return false
                     }
