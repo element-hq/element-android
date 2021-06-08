@@ -117,7 +117,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
     }
 
     private suspend fun handleDirectChatCreation(roomId: String, otherUserId: String) {
-        monarchy.awaitTransaction { realm ->
+        monarchy.runTransactionSync { realm ->
             RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
                 this.directUserId = otherUserId
                 this.isDirect = true
