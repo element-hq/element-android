@@ -163,9 +163,9 @@
         <item name="pf_next">@style/PinCodeNextButtonStyle</item>
 
         <!-- Use dark color, to have enough contrast with icons color. windowLightStatusBar is only available in API 23+ -->
-        <item name="android:statusBarColor">@color/riotx_header_panel_background_dark</item>
+        <item name="android:statusBarColor">@color/tchap_primary_color_dark_light</item>
         <!-- Use dark color, to have enough contrast with icons color. windowLightNavigationBar is only available in API 27+ -->
-        <item name="android:navigationBarColor">@color/riotx_header_panel_background_dark</item>
+        <item name="android:navigationBarColor">@color/tchap_primary_color_dark_light</item>
 
         <!-- enable window content transitions -->
         <item name="android:windowContentTransitions">true</item>
