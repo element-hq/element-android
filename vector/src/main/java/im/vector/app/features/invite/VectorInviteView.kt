@@ -23,10 +23,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import im.vector.app.R
 import im.vector.app.core.di.HasScreenInjector
-import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.databinding.VectorInviteViewBinding
 import im.vector.app.features.home.AvatarRenderer
-
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -56,25 +54,8 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
         inflate(context, R.layout.vector_invite_view, this)
         views = VectorInviteViewBinding.bind(this)
-        views.inviteAcceptView.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                callback?.onAcceptInvite()
-            }
-
-            override fun onRetryClicked() {
-                callback?.onAcceptInvite()
-            }
-        }
-
-        views.inviteRejectView.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                callback?.onRejectInvite()
-            }
-
-            override fun onRetryClicked() {
-                callback?.onRejectInvite()
-            }
-        }
+        views.inviteAcceptView.commonClicked = { callback?.onAcceptInvite() }
+        views.inviteRejectView.commonClicked = { callback?.onRejectInvite() }
     }
 
     fun render(sender: RoomMemberSummary, mode: Mode = Mode.LARGE, changeMembershipState: ChangeMembershipState) {

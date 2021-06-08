@@ -16,7 +16,6 @@
 
 package im.vector.app.features.userdirectory
 
-import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -60,9 +59,9 @@ class UserListController @Inject constructor(private val session: Session,
                     id(R.drawable.ic_share)
                     title(host.stringProvider.getString(R.string.invite_friends))
                     actionIconRes(R.drawable.ic_share)
-                    clickAction(View.OnClickListener {
+                    clickAction {
                         host.callback?.onInviteFriendClick()
-                    })
+                    }
                 }
             }
             if (currentState.showContactBookAction) {
@@ -70,9 +69,9 @@ class UserListController @Inject constructor(private val session: Session,
                     id(R.drawable.ic_baseline_perm_contact_calendar_24)
                     title(host.stringProvider.getString(R.string.contacts_book_title))
                     actionIconRes(R.drawable.ic_baseline_perm_contact_calendar_24)
-                    clickAction(View.OnClickListener {
+                    clickAction {
                         host.callback?.onContactBookClick()
-                    })
+                    }
                 }
             }
             if (currentState.showInviteActions()) {
@@ -80,9 +79,9 @@ class UserListController @Inject constructor(private val session: Session,
                     id(R.drawable.ic_qr_code_add)
                     title(host.stringProvider.getString(R.string.qr_code))
                     actionIconRes(R.drawable.ic_qr_code_add)
-                    clickAction(View.OnClickListener {
+                    clickAction {
                         host.callback?.onUseQRCode()
-                    })
+                    }
                 }
             }
         }
@@ -130,7 +129,7 @@ class UserListController @Inject constructor(private val session: Session,
                             selected(isSelected)
                             matrixItem(item.toMatrixItem())
                             avatarRenderer(host.avatarRenderer)
-                            clickListener { _ ->
+                            clickListener {
                                 host.callback?.onItemClick(item)
                             }
                         }
@@ -160,7 +159,7 @@ class UserListController @Inject constructor(private val session: Session,
                     selected(isSelected)
                     matrixItem(user.toMatrixItem())
                     avatarRenderer(host.avatarRenderer)
-                    clickListener { _ ->
+                    clickListener {
                         host.callback?.onItemClick(user)
                     }
                 }

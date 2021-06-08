@@ -36,15 +36,15 @@ class DisplayReadReceiptsController @Inject constructor(private val dateFormatte
     var listener: Listener? = null
 
     override fun buildModels(readReceipts: List<ReadReceiptData>) {
-        readReceipts.forEach {
-            val timestamp = dateFormatter.format(it.timestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
+        readReceipts.forEach { readReceiptData ->
+            val timestamp = dateFormatter.format(readReceiptData.timestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
             DisplayReadReceiptItem_()
-                    .id(it.userId)
-                    .matrixItem(it.toMatrixItem())
+                    .id(readReceiptData.userId)
+                    .matrixItem(readReceiptData.toMatrixItem())
                     .avatarRenderer(avatarRender)
                     .timestamp(timestamp)
-                    .userClicked { listener?.didSelectUser(it.userId) }
-                    .addIf(session.myUserId != it.userId, this)
+                    .userClicked { listener?.didSelectUser(readReceiptData.userId) }
+                    .addIf(session.myUserId != readReceiptData.userId, this)
         }
     }
 

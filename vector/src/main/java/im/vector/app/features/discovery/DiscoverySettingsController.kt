@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.discovery
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -125,7 +124,7 @@ class DiscoverySettingsController @Inject constructor(
                 id("idServerFooter")
                 helperText(host.stringProvider.getString(R.string.settings_agree_to_terms, identityServer))
                 showCompoundDrawable(true)
-                itemClickListener(View.OnClickListener { host.listener?.openIdentityServerTerms() })
+                itemClickListener { host.listener?.openIdentityServerTerms() }
             }
             settingsButtonItem {
                 id("seeTerms")

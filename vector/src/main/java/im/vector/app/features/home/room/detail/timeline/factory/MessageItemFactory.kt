@@ -29,7 +29,6 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -322,10 +321,9 @@ class MessageItemFactory @Inject constructor(
                     if (messageContent.msgType == MessageType.MSGTYPE_STICKER_LOCAL) {
                         mode(ImageContentRenderer.Mode.STICKER)
                     } else {
-                        clickListener(
-                                DebouncedClickListener({ view ->
-                                    callback?.onImageMessageClicked(messageContent, data, view)
-                                }))
+                        clickListener { view ->
+                            callback?.onImageMessageClicked(messageContent, data, view)
+                        }
                     }
                 }
     }

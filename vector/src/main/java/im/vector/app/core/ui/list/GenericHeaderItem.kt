@@ -29,7 +29,7 @@ import im.vector.app.features.themes.ThemeUtils
  * A generic list item header left aligned with notice color.
  */
 @EpoxyModelClass(layout = R.layout.item_generic_header)
-abstract class GenericItemHeader : VectorEpoxyModel<GenericItemHeader.Holder>() {
+abstract class GenericHeaderItem : VectorEpoxyModel<GenericHeaderItem.Holder>() {
 
     @EpoxyAttribute
     var text: String? = null

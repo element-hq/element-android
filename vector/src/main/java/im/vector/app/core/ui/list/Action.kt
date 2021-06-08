@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.epoxy
+package im.vector.app.core.ui.list
 
-import android.view.View
-import im.vector.app.core.utils.DebouncedClickListener
+import im.vector.app.core.epoxy.ClickListener
 
-/**
- * View.OnClickListener lambda
- */
-typealias ClickListener = (View) -> Unit
-
-fun View.onClick(listener: ClickListener?) {
-    if (listener == null) {
-        setOnClickListener(null)
-    } else {
-        setOnClickListener(DebouncedClickListener(listener))
-    }
-}
-
-/**
- * Simple Text listener lambda
- */
-typealias TextListener = (String) -> Unit
+data class Action(
+        val title: String,
+        val listener: ClickListener
+)

@@ -26,8 +26,10 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.platform.CheckableConstraintLayout
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.themes.ThemeUtils
@@ -36,7 +38,7 @@ import im.vector.app.features.themes.ThemeUtils
 abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Holder>() {
 
     @EpoxyAttribute var selected: Boolean = false
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
     @EpoxyAttribute var countState : UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
     @EpoxyAttribute var showSeparator: Boolean = false
 
@@ -47,7 +49,7 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.rootView.setOnClickListener { listener?.invoke() }
+        holder.rootView.onClick(listener)
         holder.groupNameView.text = holder.view.context.getString(R.string.group_details_home)
         holder.rootView.isChecked = selected
         holder.rootView.context.resources

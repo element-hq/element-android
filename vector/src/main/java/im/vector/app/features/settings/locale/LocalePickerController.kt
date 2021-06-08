@@ -74,14 +74,14 @@ class LocalePickerController @Inject constructor(
                 } else {
                     list()
                             .filter { it.toString() != data.currentLocale.toString() }
-                            .forEach {
+                            .forEach { locale ->
                                 localeItem {
-                                    id(it.toString())
-                                    title(VectorLocale.localeToLocalisedString(it).safeCapitalize(it))
+                                    id(locale.toString())
+                                    title(VectorLocale.localeToLocalisedString(locale).safeCapitalize(locale))
                                     if (host.vectorPreferences.developerMode()) {
-                                        subtitle(VectorLocale.localeToLocalisedStringInfo(it))
+                                        subtitle(VectorLocale.localeToLocalisedStringInfo(locale))
                                     }
-                                    clickListener { host.listener?.onLocaleClicked(it) }
+                                    clickListener { host.listener?.onLocaleClicked(locale) }
                                 }
                             }
                 }

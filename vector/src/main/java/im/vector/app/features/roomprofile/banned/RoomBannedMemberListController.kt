@@ -83,7 +83,7 @@ class RoomBannedMemberListController @Inject constructor(
                                         } else {
                                             inProgress(false)
                                             editable(true)
-                                            clickListener { _ ->
+                                            clickListener {
                                                 host.callback?.onUnbanClicked(roomMember)
                                             }
                                         }

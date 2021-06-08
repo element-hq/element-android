@@ -24,7 +24,6 @@ import im.vector.app.core.epoxy.profiles.profileMatrixItemWithPowerLevel
 import im.vector.app.core.extensions.join
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
@@ -115,7 +114,7 @@ class SpacePeopleListController @Inject constructor(
                                                 }
                                             }
 
-                                    clickListener { _ ->
+                                    clickListener {
                                         host.listener?.onSpaceMemberClicked(roomMember)
                                     }
                                 }
@@ -149,11 +148,9 @@ class SpacePeopleListController @Inject constructor(
                             }
                         }
                 )
-                itemClickAction(GenericItem.Action("invite").apply {
-                    perform = Runnable {
-                        host.listener?.onInviteToSpaceSelected()
-                    }
-                })
+                itemClickAction {
+                    host.listener?.onInviteToSpaceSelected()
+                }
             }
         }
     }

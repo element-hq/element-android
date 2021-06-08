@@ -22,7 +22,7 @@ import com.airbnb.mvrx.Success
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.genericItemHeader
+import im.vector.app.core.ui.list.genericHeaderItem
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.AvatarRenderer
 import javax.inject.Inject
@@ -48,7 +48,7 @@ class SpacePreviewController @Inject constructor(
 
         val result = data?.childInfoList?.invoke() ?: return
         if (result.isNotEmpty()) {
-            genericItemHeader {
+            genericHeaderItem {
                 id("header_rooms")
                 text(host.stringProvider.getString(R.string.rooms))
             }

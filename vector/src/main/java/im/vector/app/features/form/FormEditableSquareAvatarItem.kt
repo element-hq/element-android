@@ -49,10 +49,10 @@ abstract class FormEditableSquareAvatarItem : EpoxyModelWithHolder<FormEditableS
     @EpoxyAttribute
     var imageUri: Uri? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var deleteListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
