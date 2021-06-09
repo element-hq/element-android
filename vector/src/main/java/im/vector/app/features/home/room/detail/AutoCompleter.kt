@@ -25,9 +25,8 @@ import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.R
+import dagger.assisted.AssistedInject
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.autocomplete.command.AutocompleteCommandPresenter
@@ -80,7 +79,7 @@ class AutoCompleter @AssistedInject constructor(
     fun setup(editText: EditText) {
         this.editText = editText
         glideRequests = GlideApp.with(editText)
-        val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(editText.context, R.attr.riotx_background))
+        val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(editText.context, android.R.attr.colorBackground))
         setupCommands(backgroundDrawable, editText)
         setupMembers(backgroundDrawable, editText)
         setupGroups(backgroundDrawable, editText)

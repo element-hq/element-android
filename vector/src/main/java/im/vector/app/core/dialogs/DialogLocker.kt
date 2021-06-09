@@ -18,6 +18,7 @@ package im.vector.app.core.dialogs
 
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.core.platform.Restorable
 import timber.log.Timber
 
@@ -38,7 +39,7 @@ class DialogLocker(savedInstanceState: Bundle?) : Restorable {
         isDialogDisplayed = true
     }
 
-    fun displayDialog(builder: () -> AlertDialog.Builder): AlertDialog? {
+    fun displayDialog(builder: () -> MaterialAlertDialogBuilder): AlertDialog? {
         return if (isDialogDisplayed) {
             Timber.w("Filtered dialog request")
             null

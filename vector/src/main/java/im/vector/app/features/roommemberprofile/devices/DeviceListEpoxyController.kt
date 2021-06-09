@@ -111,7 +111,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                         +"\n"
                                         span {
                                             text = "(${device.deviceId})"
-                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                             textSize = host.dimensionConverter.spToPx(14)
                                         }
                                     }
@@ -126,8 +126,8 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                     )
                             )
                             valueColorInt(
-                                    host.colorProvider.getColor(
-                                            if (device.isVerified) R.color.riotx_positive_accent else R.color.riotx_destructive_accent
+                                    host.colorProvider.getColorFromAttribute(
+                                            if (device.isVerified) R.attr.colorPrimary else R.attr.colorError
                                     )
                             )
                             itemClickAction {
@@ -160,7 +160,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                             +"Master Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
                         }
@@ -176,7 +176,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                             +"User Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
                         }
@@ -192,7 +192,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                             +"Self Signed Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
                         }

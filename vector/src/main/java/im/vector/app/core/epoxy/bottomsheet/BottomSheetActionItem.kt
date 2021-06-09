@@ -79,9 +79,9 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         holder.view.onClick(listener)
         holder.startSpace.isVisible = subMenuItem
         val tintColor = if (destructive) {
-            ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
+            ThemeUtils.getColor(holder.view.context, R.attr.colorError)
         } else {
-            ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+            ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
         }
         holder.icon.isVisible = showIcon
         holder.icon.setImageResource(iconRes)
@@ -95,9 +95,9 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         holder.selected.isInvisible = !selected
         if (showExpand) {
             val expandDrawable = if (expanded) {
-                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_less_black)
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_expand_less)
             } else {
-                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_more_black)
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_expand_more)
             }
             expandDrawable?.also {
                 DrawableCompat.setTint(it, tintColor)

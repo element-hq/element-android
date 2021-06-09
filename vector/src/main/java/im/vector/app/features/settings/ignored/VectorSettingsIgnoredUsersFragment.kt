@@ -20,13 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -76,7 +76,7 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
     }
 
     override fun onUserIdClicked(userId: String) {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setMessage(getString(R.string.settings_unignore_user, userId))
                 .setPositiveButton(R.string.yes) { _, _ ->
                     viewModel.handle(IgnoredUsersAction.UnIgnore(userId))

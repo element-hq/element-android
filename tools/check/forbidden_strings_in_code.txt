@@ -136,8 +136,9 @@ android\.R\.id\.home===2
 ### Kotlin conversion tools introduce this, but is can be replace by trim()
 trim \{ it \<\= \' \' \}
 
-### Use AlertDialog form v7 compat lib
+### Use MaterialAlertDialogBuilder
 android\.app\.AlertDialog
+androidx\.appcompat\.app\.AlertDialog===4
 
 ### Put the operator at the beginning of next line
 &&$

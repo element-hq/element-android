@@ -16,7 +16,7 @@
         app:layout_constraintStart_toEndOf="@+id/spaceSummaryMemberCountText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_secondary"
+        app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:layout_marginStart="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="@+id/spaceSummaryMemberCountIcon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/spaceSummaryMemberCountIcon"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:autoLink="all"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

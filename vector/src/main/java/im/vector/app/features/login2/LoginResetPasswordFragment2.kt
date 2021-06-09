@@ -22,8 +22,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AlertDialog
 import androidx.autofill.HintConstants
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
@@ -121,7 +121,7 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
 
         if (showWarning) {
             // Display a warning as Riot-Web does first
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.login_reset_password_warning_title)
                     .setMessage(R.string.login_reset_password_warning_content)
                     .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->

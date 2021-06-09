@@ -44,6 +44,9 @@ Other changes:
  - Add documentation on LoginWizard and RegistrationWizard (#3303)
  - Setup towncrier tool (#3293)
 
+ Security:
+  - Element Android shares name of E2EE files with homeserver (#3387)
+
 Changes in Element 1.1.7 (2021-05-12)
 ===================================================
 

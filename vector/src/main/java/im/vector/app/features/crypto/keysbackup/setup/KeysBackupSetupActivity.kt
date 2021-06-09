@@ -18,10 +18,13 @@ package im.vector.app.features.crypto.keysbackup.setup
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AlertDialog
+import android.net.Uri
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.queryExportKeys
@@ -30,13 +33,21 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.crypto.keys.KeysExporter
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
     override fun getTitleRes() = R.string.title_activity_keys_backup_setup
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
+
+    @Inject lateinit var keysExporter: KeysExporter
+
+    override fun injectWith(injector: ScreenComponent) {
+        super.injectWith(injector)
+        injector.inject(this)
+    }
 
     override fun initUiAndData() {
         super.initUiAndData()
@@ -82,7 +93,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                     finish()
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_PROMPT_REPLACE -> {
-                    AlertDialog.Builder(this)
+                    MaterialAlertDialogBuilder(this)
                             .setTitle(R.string.keys_backup_setup_override_backup_prompt_tile)
                             .setMessage(R.string.keys_backup_setup_override_backup_prompt_description)
                             .setPositiveButton(R.string.keys_backup_setup_override_replace) { _, _ ->
@@ -100,7 +111,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
         viewModel.prepareRecoverFailError.observe(this) { error ->
             if (error != null) {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setTitle(R.string.unknown_error)
                         .setMessage(error.localizedMessage)
                         .setPositiveButton(R.string.ok) { _, _ ->
@@ -113,7 +124,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
         viewModel.creatingBackupError.observe(this) { error ->
             if (error != null) {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setTitle(R.string.unexpected_error)
                         .setMessage(error.localizedMessage)
                         .setPositiveButton(R.string.ok) { _, _ ->
@@ -132,30 +143,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                 ExportKeysDialog().show(this, object : ExportKeysDialog.ExportKeyDialogListener {
                     override fun onPassphrase(passphrase: String) {
                         showWaitingView()
-
-                        KeysExporter(session)
-                                .export(this@KeysBackupSetupActivity,
-                                        passphrase,
-                                        uri,
-                                        object : MatrixCallback<Boolean> {
-                                            override fun onSuccess(data: Boolean) {
-                                                if (data) {
-                                                    toast(getString(R.string.encryption_exported_successfully))
-                                                    Intent().apply {
-                                                        putExtra(MANUAL_EXPORT, true)
-                                                    }.let {
-                                                        setResult(Activity.RESULT_OK, it)
-                                                        finish()
-                                                    }
-                                                }
-                                                hideWaitingView()
-                                            }
-
-                                            override fun onFailure(failure: Throwable) {
-                                                toast(failure.localizedMessage ?: getString(R.string.unexpected_error))
-                                                hideWaitingView()
-                                            }
-                                        })
+                        export(passphrase, uri)
                     }
                 })
             } else {
@@ -165,12 +153,26 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         }
     }
 
+    private fun export(passphrase: String, uri: Uri) {
+        lifecycleScope.launch {
+            try {
+                keysExporter.export(passphrase, uri)
+                toast(getString(R.string.encryption_exported_successfully))
+                setResult(Activity.RESULT_OK, Intent().apply { putExtra(MANUAL_EXPORT, true) })
+                finish()
+            } catch (failure: Throwable) {
+                toast(failure.localizedMessage ?: getString(R.string.unexpected_error))
+            }
+            hideWaitingView()
+        }
+    }
+
     override fun onBackPressed() {
         if (viewModel.shouldPromptOnBack) {
             if (waitingView?.isVisible == true) {
                 return
             }
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.keys_backup_setup_skip_title)
                     .setMessage(R.string.keys_backup_setup_skip_msg)
                     .setNegativeButton(R.string.cancel, null)

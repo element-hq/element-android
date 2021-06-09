@@ -5,7 +5,7 @@
 <!--        <item name="android:background">@color/notification_accent_color</item>-->
     </style>
 
-    <style name="VectorSnackBarButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+    <style name="VectorSnackBarButton" parent="@style/VectorButtonStyleText.OnPrimary">
 <!--        <item name="android:textColor">@color/white</item>-->
     </style>
 

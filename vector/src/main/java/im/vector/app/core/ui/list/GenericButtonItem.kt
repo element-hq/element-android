@@ -50,7 +50,7 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.button.text = text
-        val textColor = textColor ?: ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_primary)
+        val textColor = textColor ?: ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_primary)
         holder.button.setTextColor(textColor)
         if (iconRes != null) {
             holder.button.setIconResource(iconRes!!)

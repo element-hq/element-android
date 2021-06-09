@@ -18,8 +18,8 @@ package im.vector.app.core.dialogs
 
 import android.app.Activity
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.DialogConfirmationWithReasonBinding
 
@@ -46,7 +46,7 @@ object ConfirmationDialogBuilder {
             views.dialogReasonInput.setHint(reasonHintRes)
         }
 
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setTitle(titleRes)
                 .setView(layout)
                 .setPositiveButton(positiveRes) { _, _ ->

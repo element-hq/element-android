@@ -23,11 +23,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import arrow.core.Try
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
@@ -177,7 +177,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
                     .fold(
                             { throwable ->
                                 activity?.let {
-                                    AlertDialog.Builder(it)
+                                    MaterialAlertDialogBuilder(it)
                                             .setTitle(R.string.dialog_title_error)
                                             .setMessage(errorFormatter.toHumanReadable(throwable))
                                 }
@@ -185,7 +185,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
                             {
                                 viewModel.copyHasBeenMade = true
                                 activity?.let {
-                                    AlertDialog.Builder(it)
+                                    MaterialAlertDialogBuilder(it)
                                             .setTitle(R.string.dialog_title_success)
                                             .setMessage(R.string.recovery_key_export_saved)
                                 }

@@ -20,8 +20,8 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.view.KeyEvent
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.databinding.DialogEditPowerLevelBinding
@@ -48,7 +48,7 @@ object EditPowerLevelDialogs {
             else           -> views.powerLevelCustomRadio.isChecked = true
         }
 
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setTitle(titleRes)
                 .setView(dialogLayout)
                 .setPositiveButton(R.string.edit) { _, _ ->
@@ -80,7 +80,7 @@ object EditPowerLevelDialogs {
 
     fun showValidation(activity: Activity, onValidate: () -> Unit) {
         // Ask to the user the confirmation to upgrade.
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setMessage(R.string.room_participants_power_level_prompt)
                 .setPositiveButton(R.string.yes) { _, _ ->
                     onValidate()
@@ -91,7 +91,7 @@ object EditPowerLevelDialogs {
 
     fun showDemoteWarning(activity: Activity, onValidate: () -> Unit) {
         // Ask to the user the confirmation to downgrade his own role.
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.room_participants_power_level_demote_warning_title)
                 .setMessage(R.string.room_participants_power_level_demote_warning_prompt)
                 .setPositiveButton(R.string.room_participants_power_level_demote) { _, _ ->

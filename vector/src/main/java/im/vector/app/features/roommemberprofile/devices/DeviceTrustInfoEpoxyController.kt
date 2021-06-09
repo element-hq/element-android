@@ -60,7 +60,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
             genericFooterItem {
                 id("desc")
                 centered(false)
-                textColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                 apply {
                     if (isVerified) {
                         // TODO FORMAT
@@ -85,7 +85,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                             +(cryptoDeviceInfo.displayName() ?: "")
                             span {
                                 text = " (${cryptoDeviceInfo.deviceId})"
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(14)
                             }
                         }
@@ -96,16 +96,16 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                 genericFooterItem {
                     id("warn")
                     centered(false)
-                    textColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                    textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                     text(host.stringProvider.getString(R.string.verification_profile_device_untrust_info))
                 }
 
                 bottomSheetVerificationActionItem {
                     id("verify")
                     title(host.stringProvider.getString(R.string.cross_signing_verify_by_emoji))
-                    titleColor(host.colorProvider.getColor(R.color.riotx_accent))
+                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     iconRes(R.drawable.ic_arrow_right)
-                    iconColor(host.colorProvider.getColor(R.color.riotx_accent))
+                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     listener {
                         host.interactionListener?.onVerifyManually(cryptoDeviceInfo)
                     }

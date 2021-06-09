@@ -5,11 +5,10 @@
     android:id="@+id/rootConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/roomSettingsToolbar"
-        style="@style/VectorToolbarStyle"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
         android:elevation="4dp"
@@ -51,7 +50,7 @@
                 android:layout_marginEnd="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="?vctr_toolbar_primary_text_color"
+                android:textColor="?vctr_content_primary"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +81,6 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/searchViewAppBarLayout"
-            style="@style/VectorAppBarLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="4dp"

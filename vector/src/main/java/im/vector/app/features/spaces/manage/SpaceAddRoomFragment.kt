@@ -22,12 +22,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
@@ -119,7 +119,7 @@ class SpaceAddRoomFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 SpaceAddRoomsViewEvents.WarnUnsavedChanged -> {
-                    AlertDialog.Builder(requireContext())
+                    MaterialAlertDialogBuilder(requireContext())
                             .setTitle(R.string.dialog_title_warning)
                             .setMessage(R.string.warning_unsaved_change)
                             .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->

@@ -213,15 +213,14 @@ class DiscoverySettingsController @Inject constructor(
                 is Loading ->
                     settingsInformationItem {
                         id("info${pidInfo.threePid.value}")
-                        colorProvider(host.colorProvider)
                         message(host.stringProvider.getString(R.string.settings_discovery_confirm_mail, pidInfo.threePid.value))
+                        textColor(host.colorProvider.getColor(R.color.vector_info_color))
                     }
                 is Fail    ->
                     settingsInformationItem {
                         id("info${pidInfo.threePid.value}")
-                        colorProvider(host.colorProvider)
                         message(host.stringProvider.getString(R.string.settings_discovery_confirm_mail_not_clicked, pidInfo.threePid.value))
-                        textColorId(R.color.riotx_destructive_accent)
+                        textColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                     }
                 is Success -> Unit /* Cannot happen */
             }
@@ -362,9 +361,8 @@ class DiscoverySettingsController @Inject constructor(
         val host = this
         settingsInformationItem {
             id("info${pidInfo.threePid.value}")
-            colorProvider(host.colorProvider)
-            textColorId(R.color.vector_error_color)
             message((pidInfo.isShared as? Fail)?.error?.message ?: "")
+            textColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
         }
     }
 

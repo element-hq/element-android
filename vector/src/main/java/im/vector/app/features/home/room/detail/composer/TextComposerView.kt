@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
+import androidx.core.view.isVisible
 import androidx.transition.ChangeBounds
 import androidx.transition.Fade
 import androidx.transition.Transition
@@ -31,8 +32,6 @@ import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import im.vector.app.R
 import im.vector.app.databinding.ComposerLayoutBinding
-
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 
 /**
  * Encapsulate the timeline composer UX.
@@ -70,6 +69,10 @@ class TextComposerView @JvmOverloads constructor(
             override fun onRichContentSelected(contentUri: Uri): Boolean {
                 return callback?.onRichContentSelected(contentUri) ?: false
             }
+
+            override fun onTextEmptyStateChanged(isEmpty: Boolean) {
+                views.sendButton.isVisible = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isEmpty
+            }
         }
         views.composerRelatedMessageCloseButton.setOnClickListener {
             collapse()
@@ -93,6 +96,7 @@ class TextComposerView @JvmOverloads constructor(
         }
         currentConstraintSetId = R.layout.composer_layout_constraint_set_compact
         applyNewConstraintSet(animate, transitionComplete)
+        views.sendButton.isVisible = !views.composerEditText.text.isNullOrEmpty()
     }
 
     fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
@@ -102,6 +106,7 @@ class TextComposerView @JvmOverloads constructor(
         }
         currentConstraintSetId = R.layout.composer_layout_constraint_set_expanded
         applyNewConstraintSet(animate, transitionComplete)
+        views.sendButton.isVisible = true
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
@@ -110,8 +115,6 @@ class TextComposerView @JvmOverloads constructor(
         }
         ConstraintSet().also {
             it.clone(context, currentConstraintSetId)
-            // in case shield is hidden, we will have glitch without this
-            it.getConstraint(R.id.composerShieldImageView).propertySet.visibility = views.composerShieldImageView.visibility
             it.applyTo(this)
         }
     }
@@ -139,13 +142,11 @@ class TextComposerView @JvmOverloads constructor(
         TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
     }
 
-    fun setRoomEncrypted(isEncrypted: Boolean, roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
+    fun setRoomEncrypted(isEncrypted: Boolean) {
         if (isEncrypted) {
             views.composerEditText.setHint(R.string.room_message_placeholder)
-            views.composerShieldImageView.render(roomEncryptionTrustLevel)
         } else {
             views.composerEditText.setHint(R.string.room_message_placeholder)
-            views.composerShieldImageView.render(null)
         }
     }
 }

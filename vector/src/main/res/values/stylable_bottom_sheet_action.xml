@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="BottomSheetActionButton">
+        <attr name="tint" format="color" />
+        <attr name="titleTextColor" format="color" />
+        <attr name="actionTitle" format="string" />
+        <attr name="actionDescription" format="string" />
+        <attr name="leftIcon" format="reference" />
+        <attr name="rightIcon" format="reference" />
+        <attr name="forceStartPadding" format="boolean" />
+    </declare-styleable>
+
+</resources>

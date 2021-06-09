@@ -21,7 +21,7 @@
             android:id="@+id/vector_settings_page"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?riotx_background" />
+            android:background="?android:colorBackground" />
 
     </LinearLayout>
 
@@ -29,7 +29,7 @@
         android:id="@+id/vector_settings_spinner_views"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/riotx_waiting_background_color"
+        android:background="?vctr_waiting_background_color"
         android:clickable="true"
         android:visibility="gone">
 

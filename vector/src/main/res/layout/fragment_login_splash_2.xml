@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:paddingStart="36dp"
     android:paddingTop="@dimen/layout_vertical_margin"
     android:paddingEnd="36dp"
@@ -47,7 +47,7 @@
             android:layout_marginTop="8dp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/element_logotype"
-            app:tint="?colorAccent"
+            app:tint="?colorSecondary"
             tools:ignore="MissingPrefix" />
 
     </LinearLayout>
@@ -99,7 +99,7 @@
             android:src="@drawable/ic_login_splash_message_circle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/loginSplashText1"
-            app:tint="?riotx_text_secondary"
+            app:tint="?vctr_content_secondary"
             tools:ignore="MissingPrefix" />
 
         <TextView
@@ -123,7 +123,7 @@
             android:src="@drawable/ic_login_splash_lock"
             app:layout_constraintStart_toStartOf="@id/loginSplashPicto1"
             app:layout_constraintTop_toTopOf="@+id/loginSplashText2"
-            app:tint="?riotx_text_secondary"
+            app:tint="?vctr_content_secondary"
             tools:ignore="MissingPrefix" />
 
         <TextView
@@ -147,7 +147,7 @@
             android:src="@drawable/ic_login_splash_sliders"
             app:layout_constraintStart_toStartOf="@+id/loginSplashPicto1"
             app:layout_constraintTop_toTopOf="@+id/loginSplashText3"
-            app:tint="?riotx_text_secondary"
+            app:tint="?vctr_content_secondary"
             tools:ignore="MissingPrefix" />
 
         <TextView
@@ -183,7 +183,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginSplashSpace3">
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/loginSignupSigninSignUp"
             style="@style/Style.Vector.Login.Button"
             android:layout_width="wrap_content"
@@ -191,7 +191,7 @@
             android:layout_gravity="center"
             android:text="@string/login_create_a_new_account" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/loginSignupSigninSignIn"
             style="@style/Style.Vector.Login.Button.Text"
             android:layout_width="wrap_content"
@@ -214,7 +214,7 @@
         android:id="@+id/loginSplashVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

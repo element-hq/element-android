@@ -22,7 +22,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formAdvancedToggleItem
@@ -39,8 +38,7 @@ import javax.inject.Inject
 
 class RoomPermissionsController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val roleFormatter: RoleFormatter,
-        colorProvider: ColorProvider
+        private val roleFormatter: RoleFormatter
 ) : TypedEpoxyController<RoomPermissionsViewState>() {
 
     interface Callback {
@@ -49,8 +47,6 @@ class RoomPermissionsController @Inject constructor(
     }
 
     var callback: Callback? = null
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     // Order is the order applied in the UI
     // Element Web order is not really nice, try to put the settings which are more likely to be updated first
@@ -135,7 +131,6 @@ class RoomPermissionsController @Inject constructor(
                 id = editablePermission.labelResId.toString(),
                 title = stringProvider.getString(editablePermission.labelResId),
                 subtitle = roleFormatter.format(currentRole),
-                dividerColor = dividerColor,
                 divider = true,
                 editable = editable,
                 action = {

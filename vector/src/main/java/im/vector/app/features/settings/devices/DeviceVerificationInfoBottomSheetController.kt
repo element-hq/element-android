@@ -17,7 +17,7 @@ package im.vector.app.features.settings.devices
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -141,15 +141,15 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
 
         if (isMine && !currentSessionIsTrusted && data.canVerifySession) {
             // Add complete security
-            dividerItem {
+            bottomSheetDividerItem {
                 id("completeSecurityDiv")
             }
             bottomSheetVerificationActionItem {
                 id("completeSecurity")
                 title(host.stringProvider.getString(R.string.crosssigning_verify_this_session))
-                titleColor(host.colorProvider.getColor(R.color.riotx_accent))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColor(R.color.riotx_accent))
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 listener {
                     host.callback?.onAction(DevicesAction.CompleteSecurity)
                 }
@@ -200,15 +200,15 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
 
         if (!isMine) {
             // if it's not the current device you can trigger a verification
-            dividerItem {
+            bottomSheetDividerItem {
                 id("d1")
             }
             bottomSheetVerificationActionItem {
                 id("verify${cryptoDeviceInfo.deviceId}")
                 title(host.stringProvider.getString(R.string.verification_verify_device))
-                titleColor(host.colorProvider.getColor(R.color.riotx_accent))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColor(R.color.riotx_accent))
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 listener {
                     host.callback?.onAction(DevicesAction.VerifyMyDevice(cryptoDeviceInfo.deviceId))
                 }
@@ -218,28 +218,28 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
 
     private fun addVerifyActions(cryptoDeviceInfo: CryptoDeviceInfo) {
         val host = this
-        dividerItem {
+        bottomSheetDividerItem {
             id("verifyDiv")
         }
         bottomSheetVerificationActionItem {
             id("verify_text")
             title(host.stringProvider.getString(R.string.cross_signing_verify_by_text))
-            titleColor(host.colorProvider.getColor(R.color.riotx_accent))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(host.colorProvider.getColor(R.color.riotx_accent))
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
             listener {
                 host.callback?.onAction(DevicesAction.VerifyMyDeviceManually(cryptoDeviceInfo.deviceId))
             }
         }
-        dividerItem {
+        bottomSheetDividerItem {
             id("verifyDiv2")
         }
         bottomSheetVerificationActionItem {
             id("verify_emoji")
             title(host.stringProvider.getString(R.string.cross_signing_verify_by_emoji))
-            titleColor(host.colorProvider.getColor(R.color.riotx_accent))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(host.colorProvider.getColor(R.color.riotx_accent))
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
             listener {
                 host.callback?.onAction(DevicesAction.VerifyMyDevice(cryptoDeviceInfo.deviceId))
             }
@@ -251,15 +251,15 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
         // Offer delete session if not me
         if (!data.isMine) {
             // Add the delete option
-            dividerItem {
+            bottomSheetDividerItem {
                 id("manageD1")
             }
             bottomSheetVerificationActionItem {
                 id("delete")
                 title(host.stringProvider.getString(R.string.settings_active_sessions_signout_device))
-                titleColor(host.colorProvider.getColor(R.color.riotx_destructive_accent))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColor(R.color.riotx_destructive_accent))
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 listener {
                     host.callback?.onAction(DevicesAction.Delete(deviceId))
                 }
@@ -267,15 +267,15 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
         }
 
         // Always offer rename
-        dividerItem {
+        bottomSheetDividerItem {
             id("manageD2")
         }
         bottomSheetVerificationActionItem {
             id("rename")
             title(host.stringProvider.getString(R.string.rename))
-            titleColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
             listener {
                 host.callback?.onAction(DevicesAction.PromptRename(deviceId))
             }
