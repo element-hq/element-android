@@ -192,7 +192,6 @@ class RxSession(private val session: Session) {
                 }
     }
 
-
     fun liveRoomWidgets(
             roomId: String,
             widgetId: QueryStringValue,
