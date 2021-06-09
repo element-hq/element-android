@@ -51,6 +51,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
     @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
     @EpoxyAttribute var description: String? = null
     @EpoxyAttribute var showSeparator: Boolean = false
+    @EpoxyAttribute var canDrag: Boolean = true
 
     override fun bind(holder: Holder) {
         super.bind(holder)

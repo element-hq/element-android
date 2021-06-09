@@ -366,6 +366,7 @@ dependencies {
     implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rxbinding_version"
     implementation "com.jakewharton.rxbinding3:rxbinding-material:$rxbinding_version"
 
+//    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation("com.airbnb.android:epoxy:$epoxy_version")
     implementation "com.airbnb.android:epoxy-glide-preloading:$epoxy_version"
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"

@@ -26,8 +26,8 @@ import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataServic
 import org.matrix.android.sdk.api.util.Optional
 
 internal class DefaultRoomAccountDataService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                  private val dataSource: RoomAccountDataDataSource,
-                                                                  private val updateRoomAccountDataTask: UpdateRoomAccountDataTask
+                                                                         private val dataSource: RoomAccountDataDataSource,
+                                                                         private val updateRoomAccountDataTask: UpdateRoomAccountDataTask
 ) : RoomAccountDataService {
 
     @AssistedFactory

@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.epoxy.EpoxyTouchHelper
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -54,6 +55,43 @@ class SpaceListFragment @Inject constructor(
         spaceController.callback = this
         views.stateView.contentView = views.groupListView
         views.groupListView.configureWith(spaceController)
+        EpoxyTouchHelper.initDragging(spaceController)
+                .withRecyclerView(views.groupListView)
+                .forVerticalList()
+                .withTarget(SpaceSummaryItem::class.java)
+                .andCallbacks(object : EpoxyTouchHelper.DragCallbacks<SpaceSummaryItem>() {
+                    var toPositionM: Int? = null
+                    var fromPositionM: Int? = null
+
+                    override fun onDragStarted(model: SpaceSummaryItem?, itemView: View?, adapterPosition: Int) {
+                        super.onDragStarted(model, itemView, adapterPosition)
+                        toPositionM = null
+                        fromPositionM = null
+                        model?.matrixItem?.id?.let {
+                            viewModel.handle(SpaceListAction.OnStartDragging(it, model.expanded))
+                        }
+                    }
+
+                    override fun onDragReleased(model: SpaceSummaryItem?, itemView: View?) {
+//                        Timber.v("VAL: onModelMoved from $fromPositionM to $toPositionM ${model?.matrixItem?.getBestName()}")
+                        if (toPositionM == null || fromPositionM == null) return
+                        val movingSpace = model?.matrixItem?.id ?: return
+                        viewModel.handle(SpaceListAction.MoveSpace(movingSpace,  toPositionM!! - fromPositionM!!))
+                    }
+                    override fun onModelMoved(fromPosition: Int, toPosition: Int, modelBeingMoved: SpaceSummaryItem?, itemView: View?) {
+//                        Timber.v("VAL: onModelMoved incremental from $fromPosition to $toPosition ${modelBeingMoved?.matrixItem?.getBestName()}")
+                        if (fromPositionM == null) {
+                            fromPositionM = fromPosition
+                        }
+                        toPositionM = toPosition
+                    }
+
+                    override fun isDragEnabledForModel(model: SpaceSummaryItem?): Boolean {
+//                        Timber.v("VAL: isDragEnabledForModel ${model?.matrixItem?.getBestName()}")
+                        return model?.canDrag == true
+                    }
+                })
+
         viewModel.observeViewEvents {
             when (it) {
                 is SpaceListViewEvents.OpenSpaceSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpacePreview(it.id))
