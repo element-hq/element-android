@@ -14,37 +14,37 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.accountdata
+package org.matrix.android.sdk.api.session.room.accountdata
 
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.util.Optional
 
 /**
- * This service can be attached globally to the session so it represents user data or attached to a single room.
+ * This service is attached to a single room.
  */
-interface AccountDataService {
+interface RoomAccountDataService {
     /**
      * Retrieve the account data with the provided type or null if not found
      */
-    fun getAccountDataEvent(type: String): AccountDataEvent?
+    fun getAccountDataEvent(type: String): RoomAccountDataEvent?
 
     /**
      * Observe the account data with the provided type
      */
-    fun getLiveAccountDataEvent(type: String): LiveData<Optional<AccountDataEvent>>
+    fun getLiveAccountDataEvent(type: String): LiveData<Optional<RoomAccountDataEvent>>
 
     /**
      * Retrieve the account data with the provided types. The return list can have a different size that
      * the size of the types set, because some AccountData may not exist.
      * If an empty set is provided, all the AccountData are retrieved
      */
-    fun getAccountDataEvents(types: Set<String>): List<AccountDataEvent>
+    fun getAccountDataEvents(types: Set<String>): List<RoomAccountDataEvent>
 
     /**
      * Observe the account data with the provided types. If an empty set is provided, all the AccountData are observed
      */
-    fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<AccountDataEvent>>
+    fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<RoomAccountDataEvent>>
 
     /**
      * Update the account data with the provided type and the provided account data content

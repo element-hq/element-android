@@ -22,10 +22,10 @@ import org.matrix.android.sdk.api.session.events.model.Content
 
 /**
  * This is a simplified Event with just a type and a content.
- * Currently used types are defined in [UserAccountDataTypes].
+ * Currently used types are defined in [UserAccountDataTypes]
  */
 @JsonClass(generateAdapter = true)
-data class AccountDataEvent(
+data class UserAccountDataEvent(
         @Json(name = "type") val type: String,
         @Json(name = "content") val content: Content
 )
