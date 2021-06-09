@@ -42,7 +42,6 @@ import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
-import kotlin.jvm.Throws
 
 interface CryptoService {
 
@@ -82,9 +81,11 @@ interface CryptoService {
 
     fun getDeviceTrackingStatus(userId: String): Int
 
-    fun importRoomKeys(roomKeysAsArray: ByteArray, password: String, progressListener: ProgressListener?, callback: MatrixCallback<ImportRoomKeysResult>)
+    suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
+                               password: String,
+                               progressListener: ProgressListener?): ImportRoomKeysResult
 
-    fun exportRoomKeys(password: String, callback: MatrixCallback<ByteArray>)
+    suspend fun exportRoomKeys(password: String): ByteArray
 
     fun setRoomBlacklistUnverifiedDevices(roomId: String)
 

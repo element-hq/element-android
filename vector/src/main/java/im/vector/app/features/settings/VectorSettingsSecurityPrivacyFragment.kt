@@ -20,6 +20,7 @@ package im.vector.app.features.settings
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -60,11 +61,11 @@ import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.launch
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.rx.SecretsSynchronisationInfo
@@ -75,6 +76,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val activeSessionHolder: ActiveSessionHolder,
         private val pinCodeStore: PinCodeStore,
+        private val keysExporter: KeysExporter,
+        private val keysImporter: KeysImporter,
         private val navigator: Navigator
 ) : VectorSettingsBaseFragment() {
 
@@ -320,26 +323,21 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 override fun onPassphrase(passphrase: String) {
                     displayLoadingView()
 
-                    KeysExporter(session)
-                            .export(requireContext(),
-                                    passphrase,
-                                    uri,
-                                    object : MatrixCallback<Boolean> {
-                                        override fun onSuccess(data: Boolean) {
-                                            if (data) {
-                                                requireActivity().toast(getString(R.string.encryption_exported_successfully))
-                                            } else {
-                                                requireActivity().toast(getString(R.string.unexpected_error))
-                                            }
-                                            hideLoadingView()
-                                        }
-
-                                        override fun onFailure(failure: Throwable) {
-                                            onCommonDone(failure.localizedMessage)
-                                        }
-                                    })
+                    export(passphrase, uri)
                 }
             })
+        }
+    }
+
+    private fun export(passphrase: String, uri: Uri) {
+        lifecycleScope.launch {
+            try {
+                keysExporter.export(passphrase, uri)
+                requireActivity().toast(getString(R.string.encryption_exported_successfully))
+            } catch (failure: Throwable) {
+                requireActivity().toast(errorFormatter.toHumanReadable(failure))
+            }
+            hideLoadingView()
         }
     }
 
@@ -474,34 +472,25 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
                 displayLoadingView()
 
-                KeysImporter(session)
-                        .import(requireContext(),
-                                uri,
-                                mimetype,
-                                password,
-                                object : MatrixCallback<ImportRoomKeysResult> {
-                                    override fun onSuccess(data: ImportRoomKeysResult) {
-                                        if (!isAdded) {
-                                            return
-                                        }
+                lifecycleScope.launch {
+                    val data = try {
+                        keysImporter.import(uri, mimetype, password)
+                    } catch (failure: Throwable) {
+                        appContext.toast(errorFormatter.toHumanReadable(failure))
+                        null
+                    }
+                    hideLoadingView()
 
-                                        hideLoadingView()
-
-                                        MaterialAlertDialogBuilder(thisActivity)
-                                                .setMessage(resources.getQuantityString(R.plurals.encryption_import_room_keys_success,
-                                                        data.successfullyNumberOfImportedKeys,
-                                                        data.successfullyNumberOfImportedKeys,
-                                                        data.totalNumberOfKeys))
-                                                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-                                                .show()
-                                    }
-
-                                    override fun onFailure(failure: Throwable) {
-                                        appContext.toast(failure.localizedMessage ?: getString(R.string.unexpected_error))
-                                        hideLoadingView()
-                                    }
-                                })
-
+                    if (data != null) {
+                        MaterialAlertDialogBuilder(thisActivity)
+                                .setMessage(resources.getQuantityString(R.plurals.encryption_import_room_keys_success,
+                                        data.successfullyNumberOfImportedKeys,
+                                        data.successfullyNumberOfImportedKeys,
+                                        data.totalNumberOfKeys))
+                                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                .show()
+                    }
+                }
                 importDialog.dismiss()
             }
         }
