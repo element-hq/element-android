@@ -17,7 +17,8 @@
 package org.matrix.android.sdk.api.session.room
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.session.accountdata.AccountDataService
+import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataService
 import org.matrix.android.sdk.api.session.room.alias.AliasService
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.api.session.room.crypto.RoomCryptoService
@@ -57,7 +58,7 @@ interface Room :
         RelationService,
         RoomCryptoService,
         RoomPushRuleService,
-        AccountDataService {
+        RoomAccountDataService {
 
     /**
      * The roomId of this room

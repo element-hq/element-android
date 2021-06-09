@@ -57,7 +57,7 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
 
     private fun handleDeleteAccountData(action: AccountDataAction.DeleteAccountData) {
         viewModelScope.launch {
-            session.userAccountDataService().updateAccountData(action.type, emptyMap())
+            session.accountDataService().updateUserAccountData(action.type, emptyMap())
         }
     }
 

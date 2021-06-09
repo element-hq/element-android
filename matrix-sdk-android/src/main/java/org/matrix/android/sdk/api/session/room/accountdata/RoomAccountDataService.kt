@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.accountdata
+package org.matrix.android.sdk.api.session.room.accountdata
 
 import androidx.lifecycle.LiveData
+import org.matrix.android.sdk.api.session.accountdata.AccountDataEvent
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.util.Optional
 
 /**
- * This service can be attached globally to the session so it represents user data or attached to a single room.
+ * This service is attached to a single room.
  */
-interface AccountDataService {
+interface RoomAccountDataService {
     /**
      * Retrieve the account data with the provided type or null if not found
      */

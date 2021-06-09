@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.api.session.account.AccountService
-import org.matrix.android.sdk.api.session.accountdata.AccountDataService
+import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.cache.CacheService
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
@@ -74,7 +74,6 @@ import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
-import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataService
 import org.matrix.android.sdk.internal.util.createUIHandler
 import timber.log.Timber
 import javax.inject.Inject
@@ -118,7 +117,7 @@ internal class DefaultSession @Inject constructor(
         private val contentDownloadStateTracker: ContentDownloadStateTracker,
         private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
-        private val accountDataService: Lazy<UserAccountDataService>,
+        private val accountDataService: Lazy<SessionAccountDataService>,
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
         private val eventService: Lazy<EventService>,
@@ -293,7 +292,7 @@ internal class DefaultSession @Inject constructor(
 
     override fun openIdService(): OpenIdService = openIdService.get()
 
-    override fun userAccountDataService(): AccountDataService = accountDataService.get()
+    override fun accountDataService(): SessionAccountDataService = accountDataService.get()
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()

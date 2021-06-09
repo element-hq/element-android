@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session.user.accountdata
 
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.session.accountdata.AccountDataService
+import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -29,31 +29,31 @@ import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.awaitCallback
 import javax.inject.Inject
 
-internal class UserAccountDataService @Inject constructor(
+internal class DefaultSessionAccountDataService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
         private val accountDataDataSource: UserAccountDataDataSource,
         private val taskExecutor: TaskExecutor
-) : AccountDataService {
+) : SessionAccountDataService {
 
-    override fun getAccountDataEvent(type: String): AccountDataEvent? {
+    override fun getUserAccountDataEvent(type: String): AccountDataEvent? {
         return accountDataDataSource.getAccountDataEvent(type)
     }
 
-    override fun getLiveAccountDataEvent(type: String): LiveData<Optional<AccountDataEvent>> {
+    override fun getLiveUserAccountDataEvent(type: String): LiveData<Optional<AccountDataEvent>> {
         return accountDataDataSource.getLiveAccountDataEvent(type)
     }
 
-    override fun getAccountDataEvents(types: Set<String>): List<AccountDataEvent> {
+    override fun getUserAccountDataEvents(types: Set<String>): List<AccountDataEvent> {
         return accountDataDataSource.getAccountDataEvents(types)
     }
 
-    override fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<AccountDataEvent>> {
+    override fun getLiveUserAccountDataEvents(types: Set<String>): LiveData<List<AccountDataEvent>> {
         return accountDataDataSource.getLiveAccountDataEvents(types)
     }
 
-    override suspend fun updateAccountData(type: String, content: Content) {
+    override suspend fun updateUserAccountData(type: String, content: Content) {
         val params = UpdateUserAccountDataTask.AnyParams(type = type, any = content)
         awaitCallback<Unit> { callback ->
             updateUserAccountDataTask.configureWith(params) {
