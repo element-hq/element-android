@@ -20,13 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -130,7 +130,7 @@ class RoomMemberListFragment @Inject constructor(
         val content = event.content.toModel<RoomThirdPartyInviteContent>() ?: return
         val stateKey = event.stateKey ?: return
         if (withState(viewModel) { it.actionsPermissions.canRevokeThreePidInvite }) {
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.three_pid_revoke_invite_dialog_title)
                     .setMessage(getString(R.string.three_pid_revoke_invite_dialog_content, content.displayName))
                     .setNegativeButton(R.string.cancel, null)

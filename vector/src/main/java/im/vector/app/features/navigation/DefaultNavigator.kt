@@ -23,12 +23,12 @@ import android.os.Build
 import android.view.View
 import android.view.Window
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
@@ -434,7 +434,7 @@ class DefaultNavigator @Inject constructor(
         if (widget.type is WidgetType.Jitsi) {
             // Jitsi SDK is now for API 23+
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                AlertDialog.Builder(context)
+                MaterialAlertDialogBuilder(context)
                         .setTitle(R.string.dialog_title_error)
                         .setMessage(R.string.error_jitsi_not_supported_on_old_device)
                         .setPositiveButton(R.string.ok, null)

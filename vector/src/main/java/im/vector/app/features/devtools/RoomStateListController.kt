@@ -78,13 +78,13 @@ class RoomStateListController @Inject constructor(
                             title(span {
                                 +"Type: "
                                 span {
-                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                     text = "\"${stateEvent.type}\""
                                     textStyle = "normal"
                                 }
                                 +"\nState Key: "
                                 span {
-                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                     text = stateEvent.stateKey.let { "\"$it\"" }
                                     textStyle = "normal"
                                 }

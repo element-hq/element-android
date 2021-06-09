@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/bootstrapRecoveryKeyEnterTil"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +20,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/bootstrapRecoveryKeyEnterTil"
-        style="@style/VectorTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -37,20 +36,16 @@
             android:imeOptions="actionDone"
             android:maxLines="3"
             android:singleLine="false"
-            android:textColor="?android:textColorPrimary"
             tools:hint="@string/keys_backup_restore_key_enter_hint"
             tools:inputType="textPassword" />
 
-
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/bootstrapMigrateUseFile"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/VectorButtonStyleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/use_file"
-            android:textAllCaps="false"
             app:icon="@drawable/ic_file"
-            app:iconTint="@color/button_positive_text_color_selector"
             tools:visibility="visible" />
 
         <TextView
@@ -73,11 +68,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/bootstrapRecoveryKeyEnterTil"
         app:layout_constraintTop_toTopOf="@+id/bootstrapRecoveryKeyEnterTil"
-        app:tint="?colorAccent" />
+        app:tint="?colorSecondary" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/bootstrapMigrateContinueButton"
         style="@style/VectorButtonStyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"
         android:text="@string/_continue"
         app:layout_constraintBottom_toBottomOf="parent"

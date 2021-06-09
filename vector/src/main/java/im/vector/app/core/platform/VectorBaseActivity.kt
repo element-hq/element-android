@@ -27,7 +27,6 @@ import android.view.View
 import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.TextView
-import androidx.annotation.AttrRes
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.annotation.MenuRes
@@ -456,7 +455,6 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
 
         if (menuRes != -1) {
             menuInflater.inflate(menuRes, menu)
-            ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, getMenuTint()))
             return true
         }
 
@@ -583,9 +581,6 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
 
     @MenuRes
     open fun getMenuRes() = -1
-
-    @AttrRes
-    open fun getMenuTint() = R.attr.vctr_icon_tint_on_light_action_bar_color
 
     /**
      * Return a object containing other themes for this activity

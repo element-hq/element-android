@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?vctr_list_header_background_color"
+    android:background="?vctr_header_background"
     android:minHeight="?listPreferredItemHeight">
 
     <TextView
@@ -16,7 +16,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:maxLines="2"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/itemRoomDirectoryServerDescription"
@@ -36,7 +36,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:maxLines="2"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="15sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -60,7 +60,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/vector_error_color"
+        app:tint="?colorError"
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />
 

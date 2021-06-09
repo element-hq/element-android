@@ -18,8 +18,6 @@ package im.vector.app.features.form
 
 import android.graphics.Typeface
 import android.text.Editable
-import android.view.View
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
@@ -40,9 +38,6 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
 
     @EpoxyAttribute
     var value: String? = null
-
-    @EpoxyAttribute
-    var showBottomSeparator: Boolean = true
 
     @EpoxyAttribute
     var errorMessage: String? = null
@@ -83,7 +78,6 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
         holder.textInputEditText.isEnabled = enabled
 
         holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
-        holder.bottomSeparator.isVisible = showBottomSeparator
     }
 
     override fun shouldSaveViewState(): Boolean {
@@ -98,6 +92,5 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
     class Holder : VectorEpoxyHolder() {
         val textInputLayout by bind<TextInputLayout>(R.id.formMultiLineTextInputLayout)
         val textInputEditText by bind<TextInputEditText>(R.id.formMultiLineEditText)
-        val bottomSeparator by bind<View>(R.id.formTextInputDivider)
     }
 }

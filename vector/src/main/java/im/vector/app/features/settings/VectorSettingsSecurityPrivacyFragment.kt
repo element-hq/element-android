@@ -23,7 +23,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +30,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
@@ -269,17 +269,17 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
         secureBackupPreference.icon = activity?.let {
             ThemeUtils.tintDrawable(it,
-                    ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_settings_icon_tint_color)
+                    ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_content_primary)
         }
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.let {
             it.icon = ThemeUtils.tintDrawableWithColor(
                     ContextCompat.getDrawable(requireContext(), R.drawable.ic_notification_privacy_warning)!!,
-                    ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+                    ThemeUtils.getColor(requireContext(), R.attr.colorError)
             )
             it.summary = span {
                 text = getString(R.string.settings_hs_admin_e2e_disabled)
-                textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+                textColor = ThemeUtils.getColor(requireContext(), R.attr.colorError)
             }
         }
     }
@@ -449,7 +449,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 views.dialogE2eKeysPassphraseFilename.text = getString(R.string.import_e2e_keys_from_file, filename)
             }
 
-            val builder = AlertDialog.Builder(thisActivity)
+            val builder = MaterialAlertDialogBuilder(thisActivity)
                     .setTitle(R.string.encryption_import_room_keys)
                     .setView(dialogLayout)
 
@@ -487,7 +487,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
                                         hideLoadingView()
 
-                                        AlertDialog.Builder(thisActivity)
+                                        MaterialAlertDialogBuilder(thisActivity)
                                                 .setMessage(resources.getQuantityString(R.plurals.encryption_import_room_keys_success,
                                                         data.successfullyNumberOfImportedKeys,
                                                         data.successfullyNumberOfImportedKeys,

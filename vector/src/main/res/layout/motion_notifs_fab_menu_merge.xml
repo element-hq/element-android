@@ -13,7 +13,7 @@
         android:id="@+id/createRoomTouchGuard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?riotx_touch_guard_bg"
+        android:background="?vctr_touch_guard_bg"
         android:clickable="true"
         android:contentDescription="@string/a11y_create_menu_close"
         android:focusable="true" />
@@ -30,7 +30,7 @@
         app:backgroundTint="#FFFFFF"
         app:fabCustomSize="48dp"
         app:maxImageSize="26dp"
-        app:tint="@color/black" />
+        app:tint="@android:color/black" />
 
     <TextView
         android:id="@+id/createRoomItemGroupLabel"
@@ -54,7 +54,7 @@
         app:backgroundTint="#FFFFFF"
         app:fabCustomSize="48dp"
         app:maxImageSize="29dp"
-        app:tint="@color/black" />
+        app:tint="@android:color/black" />
 
     <TextView
         android:id="@+id/createRoomItemChatLabel"

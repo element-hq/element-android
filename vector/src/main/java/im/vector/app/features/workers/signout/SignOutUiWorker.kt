@@ -16,8 +16,8 @@
 
 package im.vector.app.features.workers.signout
 
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cannotLogoutSafely
 import im.vector.app.core.extensions.vectorComponent
@@ -37,7 +37,7 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
             signOutDialog.show(activity.supportFragmentManager, "SO")
         } else {
             // Display a simple confirmation dialog
-            AlertDialog.Builder(activity)
+            MaterialAlertDialogBuilder(activity)
                     .setTitle(R.string.action_sign_out)
                     .setMessage(R.string.action_sign_out_confirmation_simple)
                     .setPositiveButton(R.string.action_sign_out) { _, _ ->

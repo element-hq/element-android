@@ -32,7 +32,7 @@ class IncomingCallAlert(uid: String,
 
     override val priority = PopupAlertManager.INCOMING_CALL_PRIORITY
     override val layoutRes = R.layout.alerter_incoming_call_layout
-    override var colorAttribute: Int? = R.attr.riotx_alerter_background
+    override var colorAttribute: Int? = R.attr.colorSurface
     override val dismissOnClick: Boolean = false
     override val isLight: Boolean = true
 

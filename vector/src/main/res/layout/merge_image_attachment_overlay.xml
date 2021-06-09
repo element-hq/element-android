@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="@id/overlayTopBackground"
         app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
         app:srcCompat="@drawable/ic_back_24dp"
-        app:tint="@color/white"
+        app:tint="?colorOnPrimary"
         tools:ignore="MissingPrefix" />
 
     <TextView
@@ -43,7 +43,7 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/white"
+        android:textColor="?colorOnPrimary"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/overlayInfoText"
@@ -60,7 +60,7 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/white"
+        android:textColor="?colorOnPrimary"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
         app:layout_constraintEnd_toStartOf="@id/overlayShareButton"
@@ -82,7 +82,7 @@
         app:layout_constraintEnd_toEndOf="@id/overlayTopBackground"
         app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
         app:srcCompat="@drawable/ic_share"
-        app:tint="@color/white"
+        app:tint="?colorOnPrimary"
         tools:ignore="MissingPrefix" />
 
 
@@ -117,7 +117,7 @@
         app:layout_constraintStart_toStartOf="@id/overlayBottomBackground"
         app:layout_constraintTop_toTopOf="@id/overlayBottomBackground"
         app:srcCompat="@drawable/ic_play_arrow"
-        app:tint="@color/white"
+        app:tint="?colorOnPrimary"
         tools:ignore="MissingPrefix" />
 
     <SeekBar
@@ -126,9 +126,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/white"
-        android:progressBackgroundTint="@color/white"
-        android:thumbTint="@color/white"
+        android:backgroundTint="?colorOnPrimary"
+        android:progressBackgroundTint="?colorOnPrimary"
+        android:thumbTint="?colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="@id/overlayBottomBackground"
         app:layout_constraintEnd_toEndOf="@id/overlayBottomBackground"
         app:layout_constraintStart_toEndOf="@id/overlayPlayPauseButton"

@@ -125,7 +125,7 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
                                 span {
                                     text = "${deviceInfo.deviceId}"
                                     apply {
-                                        colorProvider?.getColorFromAttribute(R.attr.riotx_text_secondary)?.let {
+                                        colorProvider?.getColorFromAttribute(R.attr.vctr_content_secondary)?.let {
                                             textColor = it
                                         }
                                         dimensionConverter?.spToPx(12)?.let {

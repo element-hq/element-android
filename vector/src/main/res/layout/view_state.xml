@@ -30,11 +30,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:textSize="16sp"
             tools:text="Une erreur est survenue" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/errorRetryView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/emptyMessageView"
@@ -96,7 +96,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

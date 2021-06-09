@@ -8,11 +8,11 @@
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
         <item name="subtitleTextAppearance">@style/Vector.Toolbar.SubTitle</item>
-        <item name="android:background">?riotx_background</item>
+        <item name="android:background">?android:colorBackground</item>
     </style>
 
     <style name="ActionModeTheme" parent="Widget.AppCompat.ActionMode">
-        <item name="background">?riotx_background</item>
+        <item name="background">?android:colorBackground</item>
         <item name="titleTextStyle">@style/Vector.Toolbar.Title</item>
         <item name="subtitleTextStyle">@style/Vector.Toolbar.SubTitle</item>
         <item name="actionMenuTextColor">?colorOnPrimary</item>
@@ -33,38 +33,42 @@
     </style>
 
     <style name="Vector.Toolbar.Profile" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">?attr/colorAccent</item>
+        <item name="colorControlNormal">?colorSecondary</item>
     </style>
 
-    <style name="VectorAppBarLayoutStyle" parent="Widget.Design.AppBarLayout">
-        <item name="android:background">?riotx_background</item>
+    <style name="VectorAppBarLayoutStyle" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+        <item name="android:background">?android:colorBackground</item>
     </style>
 
-    <!-- Alert Dialog: Button color are not colorAccent by default -->
-    <style name="VectorAlertDialogStyleLight" parent="Theme.MaterialComponents.Light.Dialog.Alert">
-        <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle</item>
+    <style name="VectorAlertDialogStyleLight" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/palette_element_green</item>
+        <item name="colorSecondary">@color/palette_element_green</item>
+        <item name="colorSurface">@color/element_system_light</item>
+        <item name="colorOnSurface">@color/element_content_primary_light</item>
+        <item name="colorError">@color/element_alert_light</item>
+        <!--item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button</item-->
     </style>
 
-    <style name="VectorAlertDialogStyleDark" parent="Theme.MaterialComponents.Dialog.Alert">
-        <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle</item>
+    <style name="VectorAlertDialogStyleDark" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/palette_element_green</item>
+        <item name="colorSecondary">@color/palette_element_green</item>
+        <item name="colorSurface">@color/element_system_dark</item>
+        <item name="colorOnSurface">@color/element_content_primary_dark</item>
+        <item name="colorError">@color/element_alert_dark</item>
+        <!--item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button</item-->
     </style>
-
-    <style name="VectorAlertDialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/riotx_accent</item>
-    </style>
-
 
     <!-- TextInputLayout -->
     <style name="VectorTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
 
-    <!-- tabbar text color -->
-    <style name="Vector.TabText" parent="Widget.AppCompat.ActionBar.TabText">
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-
     <style name="Vector.PopupMenuBase" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textColor">?vctr_content_primary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:dropDownHorizontalOffset">0dp</item>
         <item name="android:dropDownVerticalOffset">0dp</item>
@@ -72,7 +76,7 @@
 
     <!-- actionbar icons color -->
     <style name="Vector.ActionBarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
-        <item name="colorControlNormal">?android:attr/textColorPrimary</item>
+        <item name="colorControlNormal">?vctr_content_primary</item>
     </style>
 
     <!-- custom action bar -->
@@ -92,14 +96,14 @@
 
     <!-- main text -->
     <style name="ActionBarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
+        <item name="android:textColor">?vctr_content_primary</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <!-- sub text -->
     <style name="ActionBarSubTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
+        <item name="android:textColor">?vctr_content_primary</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">12sp</item>
     </style>
@@ -107,87 +111,6 @@
     <!-- Styles for login screen -->
     <style name="LoginEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textSize">16sp</item>
-    </style>
-
-    <!-- Styles for button -->
-    <!--
-        Widget.AppCompat.Button.Colored, which sets the button color to colorAccent,
-         using colorControlHighlight as an overlay for focused and pressed states.
-    -->
-    <style name="VectorButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/button_background_tint_selector</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:minWidth">94dp</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@color/button_text_color_selector</item>
-    </style>
-
-    <style name="VectorButtonStyleDestructive" parent="Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name="backgroundTint">@color/button_destructive_background_selector</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:minWidth">94dp</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textColor">@color/button_destructive_text_color_selector</item>
-        <item name="drawableTint">@color/riotx_notice</item>
-    </style>
-
-    <style name="VectorButtonStylePositive" parent="VectorButtonStyleDestructive">
-        <item name="backgroundTint">@color/button_positive_background_selector</item>
-        <item name="android:textColor">@color/button_positive_text_color_selector</item>
-        <item name="drawableTint">@color/riotx_accent</item>
-    </style>
-
-    <style name="VectorButtonStyleInlineBot" parent="VectorButtonStyleDestructive">
-        <item name="backgroundTint">@color/button_bot_background_selector</item>
-        <item name="android:textColor">@color/button_bot_enabled_text_color</item>
-    </style>
-
-    <!--Widget.AppCompat.Button.Borderless.Colored, which sets the text color to colorAccent,
-        using colorControlHighlight as an overlay for focused and pressed states.-->
-    <style name="VectorButtonStyleText" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@null</item>
-        <item name="android:textColor">?colorAccent</item>
-        <item name="colorControlHighlight">?colorAccent</item>
-    </style>
-
-    <style name="VectorButtonStyleOutlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@null</item>
-        <item name="android:textColor">?colorAccent</item>
-        <item name="colorControlHighlight">?colorAccent</item>
-        <item name="strokeColor">@color/button_background_tint_selector</item>
-        <item name="strokeWidth">1dp</item>
-    </style>
-
-    <style name="AlerterButton" parent="Widget.AppCompat.Button.Borderless.Colored">
-        <item name="colorAccent">@android:color/white</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="colorControlHighlight">@android:color/white</item>
-    </style>
-
-
-    <style name="Style.Vector.Poll.Button" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="android:minHeight">44dp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="cornerRadius">10dp</item>
     </style>
 
 
@@ -198,22 +121,31 @@
     </style>
 
     <!-- BottomSheet theming -->
-    <style name="Vector.BottomSheet.Dark" parent="Theme.Design.BottomSheetDialog">
-        <item name="android:textColorPrimary">@color/riot_primary_text_color_dark</item>
-        <item name="android:textColorSecondary">@color/riot_secondary_text_color_dark</item>
+    <style name="Vector.BottomSheet.Light" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="colorPrimary">@color/element_accent_light</item>
+        <item name="colorSecondary">@color/palette_element_green</item>
+        <item name="colorSurface">@color/element_background_light</item>
+        <item name="colorOnSurface">@color/element_content_primary_light</item>
+        <item name="colorError">@color/element_alert_light</item>
         <!-- Default color for text View -->
-        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_dark</item>
-        <item name="android:textColorLink">@color/link_color_dark</item>
+        <item name="android:textColorTertiary">@color/element_content_primary_light</item>
+        <item name="android:textColorLink">@color/element_link_light</item>
     </style>
 
-    <style name="Vector.BottomSheet.Light" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="android:textColorPrimary">@color/riot_primary_text_color_light</item>
-        <item name="android:textColorSecondary">@color/riot_secondary_text_color_light</item>
+    <style name="Vector.BottomSheet.Dark" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="colorPrimary">@color/element_accent_dark</item>
+        <item name="colorSecondary">@color/palette_element_green</item>
+        <item name="colorSurface">@color/element_background_dark</item>
+        <item name="colorOnSurface">@color/element_content_primary_dark</item>
+        <item name="colorError">@color/element_alert_dark</item>
         <!-- Default color for text View -->
-        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_light</item>
-        <item name="android:textColorLink">@color/link_color_light</item>
+        <item name="android:textColorTertiary">@color/element_content_primary_dark</item>
+        <item name="android:textColorLink">@color/element_link_dark</item>
     </style>
 
+    <style name="Vector.BottomSheet.Black" parent="Vector.BottomSheet.Dark">
+        <item name="colorSurface">@color/element_background_black</item>
+    </style>
 
     <style name="TimelineContentStubBaseParams">
         <item name="android:layout_width">match_parent</item>
@@ -234,7 +166,7 @@
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">?riotx_fab_label_color</item>
+        <item name="android:textColor">?vctr_fab_label_color</item>
         <item name="android:background">@drawable/vector_label_background</item>
     </style>
 
@@ -245,7 +177,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:lines">1</item>
-        <item name="android:textColor">?riotx_text_primary</item>
+        <item name="android:textColor">?vctr_content_primary</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -256,7 +188,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">2</item>
-        <item name="android:textColor">?riotx_text_secondary</item>
+        <item name="android:textColor">?vctr_content_secondary</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -264,7 +196,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:lines">1</item>
-        <item name="android:textColor">?riotx_text_secondary</item>
+        <item name="android:textColor">?vctr_content_secondary</item>
         <item name="android:textSize">12sp</item>
     </style>
 
@@ -278,7 +210,7 @@
     <style name="AttachmentTypeSelectorLabel">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">?riotx_text_primary</item>
+        <item name="android:textColor">?vctr_content_primary</item>
         <item name="android:textSize">14sp</item>
         <item name="android:layout_marginTop">8dp</item>
     </style>
@@ -298,11 +230,6 @@
         <item name="android:padding">8dp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">?vctr_message_text_color</item>
-    </style>
-
-    <style name="Vector.TabView" parent="Widget.AppCompat.ActionBar.TabView">
-        <item name="android:background">@drawable/vector_tabbar_background</item>
-        <item name="background">@drawable/vector_tabbar_background</item>
     </style>
 
 </resources>

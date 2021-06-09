@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ButtonStateView">
+        <attr name="bsv_use_flat_button" format="boolean" />
+        <attr name="bsv_loaded_image_src" format="reference" />
+        <attr name="bsv_button_text" format="reference|string" />
+    </declare-styleable>
+
+</resources>

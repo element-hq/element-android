@@ -5,7 +5,7 @@
     android:id="@+id/login_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_logo_element_matrix_services"
-                app:tint="?riotx_text_primary"
+                app:tint="?vctr_content_primary"
                 tools:ignore="MissingPrefix" />
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/login_server_modular_learn_more"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                android:textColor="@color/riotx_accent" />
+                android:textColor="?colorPrimary" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginServerUrlFormHomeServerUrlTil"
@@ -78,7 +78,7 @@
                 android:layout_gravity="end"
                 android:text="@string/login_clear_homeserver_history"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
-                android:textColor="@color/riotx_accent"
+                android:textColor="?colorPrimary"
                 android:visibility="invisible"
                 tools:visibility="visible" />
 
@@ -91,7 +91,7 @@
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
                 tools:text="@string/login_server_url_form_common_notice" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginServerUrlFormSubmit"
                 style="@style/Style.Vector.Login.Button"
                 android:layout_width="match_parent"

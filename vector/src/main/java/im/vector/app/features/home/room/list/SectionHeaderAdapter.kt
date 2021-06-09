@@ -80,8 +80,8 @@ class SectionHeaderAdapter constructor(
 
         fun bind(roomsSectionData: RoomsSectionData) {
             binding.roomCategoryTitleView.text = roomsSectionData.name
-            val tintColor = ThemeUtils.getColor(binding.root.context, R.attr.riotx_text_secondary)
-            val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more_white else R.drawable.ic_expand_less_white
+            val tintColor = ThemeUtils.getColor(binding.root.context, R.attr.vctr_content_secondary)
+            val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
             val expandedArrowDrawable = ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
                 DrawableCompat.setTint(it, tintColor)
             }

@@ -13,7 +13,6 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/roomPreviewNoPreviewToolbar"
-            style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:elevation="4dp"
@@ -56,7 +55,7 @@
                     android:layout_marginEnd="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="?vctr_toolbar_primary_text_color"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -75,7 +74,6 @@
             android:layout_width="match_parent"
             android:layout_height="14dp"
             android:layout_gravity="center"
-            android:background="?riotx_header_panel_background"
             android:indeterminate="true" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -96,7 +94,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?list_divider_color" />
+            android:background="?vctr_list_separator" />
 
         <LinearLayout
             android:id="@+id/spacePreviewButtonBar"
@@ -107,18 +105,20 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/spacePreviewDeclineInviteButton"
-                style="@style/VectorButtonStyleDestructive"
+                style="@style/VectorButtonStyle.Destructive"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/decline" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/spacePreviewAcceptInviteButton"
-                style="@style/VectorButtonStylePositive"
+                style="@style/VectorButtonStyle.Positive"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/accept" />
 

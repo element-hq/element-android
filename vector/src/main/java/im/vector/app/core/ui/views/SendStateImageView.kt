@@ -41,13 +41,13 @@ class SendStateImageView @JvmOverloads constructor(
         isVisible = when (sendState) {
             SendStateDecoration.SENDING_NON_MEDIA -> {
                 setImageResource(R.drawable.ic_sending_message)
-                imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.riotx_text_tertiary))
+                imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.vctr_content_tertiary))
                 contentDescription = context.getString(R.string.event_status_a11y_sending)
                 true
             }
             SendStateDecoration.SENT              -> {
                 setImageResource(R.drawable.ic_message_sent)
-                imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.riotx_text_tertiary))
+                imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.vctr_content_tertiary))
                 contentDescription = context.getString(R.string.event_status_a11y_sent)
                 true
             }

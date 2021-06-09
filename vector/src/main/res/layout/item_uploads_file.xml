@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_primary"
+        app:tint="?vctr_content_primary"
         tools:ignore="MissingPrefix" />
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/uploadsFileSubtitle"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:ellipsize="end"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/uploadsFileTitle"
@@ -61,7 +61,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/uploadsFileActionShare"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?colorAccent"
+        app:tint="?colorSecondary"
         tools:ignore="MissingPrefix" />
 
     <ImageView
@@ -75,7 +75,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?colorAccent"
+        app:tint="?colorSecondary"
         tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

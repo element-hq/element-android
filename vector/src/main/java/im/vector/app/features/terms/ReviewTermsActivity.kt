@@ -18,8 +18,8 @@ package im.vector.app.features.terms
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -54,7 +54,7 @@ class ReviewTermsActivity : SimpleFragmentActivity() {
             when (it) {
                 is ReviewTermsViewEvents.Loading -> Unit
                 is ReviewTermsViewEvents.Failure -> {
-                    AlertDialog.Builder(this)
+                    MaterialAlertDialogBuilder(this)
                             .setMessage(errorFormatter.toHumanReadable(it.throwable))
                             .setPositiveButton(R.string.ok) { _, _ ->
                                 if (it.finish) {

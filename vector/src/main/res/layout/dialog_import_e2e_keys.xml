@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="16sp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/importDialogTil"
-        style="@style/VectorTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toStartOf="@+id/importDialogShowPassword"
@@ -38,8 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/passphrase_enter_passphrase"
-            android:inputType="textPassword"
-            android:textColor="?android:textColorPrimary" />
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,11 +51,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/importDialogTil"
         app:layout_constraintTop_toTopOf="@id/importDialogTil"
-        app:tint="?attr/colorAccent" />
+        app:tint="?colorSecondary" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/dialog_e2e_keys_import_button"
-        style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
