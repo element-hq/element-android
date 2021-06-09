@@ -20,9 +20,8 @@ import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.matrix.android.sdk.api.session.accountdata.AccountDataEvent
-import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.events.model.Content
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataEvent
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataService
 import org.matrix.android.sdk.api.util.Optional
 
@@ -36,19 +35,19 @@ internal class DefaultRoomAccountDataService @AssistedInject constructor(@Assist
         fun create(roomId: String): DefaultRoomAccountDataService
     }
 
-    override fun getAccountDataEvent(type: String): AccountDataEvent? {
+    override fun getAccountDataEvent(type: String): RoomAccountDataEvent? {
         return dataSource.getAccountDataEvent(roomId, type)
     }
 
-    override fun getLiveAccountDataEvent(type: String): LiveData<Optional<AccountDataEvent>> {
+    override fun getLiveAccountDataEvent(type: String): LiveData<Optional<RoomAccountDataEvent>> {
         return dataSource.getLiveAccountDataEvent(roomId, type)
     }
 
-    override fun getAccountDataEvents(types: Set<String>): List<AccountDataEvent> {
+    override fun getAccountDataEvents(types: Set<String>): List<RoomAccountDataEvent> {
         return dataSource.getAccountDataEvents(roomId, types)
     }
 
-    override fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<AccountDataEvent>> {
+    override fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<RoomAccountDataEvent>> {
         return dataSource.getLiveAccountDataEvents(roomId, types)
     }
 
