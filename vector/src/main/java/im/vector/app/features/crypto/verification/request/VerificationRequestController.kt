@@ -22,7 +22,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
-import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.colorizeMatchingText
@@ -63,7 +63,7 @@ class VerificationRequestController @Inject constructor(
                     id("waiting")
                 }
 
-                dividerItem {
+                bottomSheetDividerItem {
                     id("sep")
                 }
             }
@@ -77,24 +77,24 @@ class VerificationRequestController @Inject constructor(
                 bottomSheetVerificationActionItem {
                     id("passphrase")
                     title(host.stringProvider.getString(R.string.verification_cannot_access_other_session))
-                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                     subTitle(subtitle)
                     iconRes(R.drawable.ic_arrow_right)
-                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                     listener { host.listener?.onClickRecoverFromPassphrase() }
                 }
             }
 
-            dividerItem {
+            bottomSheetDividerItem {
                 id("sep1")
             }
 
             bottomSheetVerificationActionItem {
                 id("skip")
                 title(host.stringProvider.getString(R.string.skip))
-                titleColor(host.colorProvider.getColor(R.color.riotx_destructive_accent))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColor(R.color.riotx_destructive_accent))
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 listener { host.listener?.onClickSkip() }
             }
         } else {
@@ -114,7 +114,7 @@ class VerificationRequestController @Inject constructor(
                 notice(styledText)
             }
 
-            dividerItem {
+            bottomSheetDividerItem {
                 id("sep")
             }
 
@@ -123,10 +123,10 @@ class VerificationRequestController @Inject constructor(
                     bottomSheetVerificationActionItem {
                         id("start")
                         title(host.stringProvider.getString(R.string.start_verification))
-                        titleColor(host.colorProvider.getColor(R.color.riotx_accent))
+                        titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                         subTitle(host.stringProvider.getString(R.string.verification_request_start_notice))
                         iconRes(R.drawable.ic_arrow_right)
-                        iconColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                        iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                         listener { host.listener?.onClickOnVerificationStart() }
                     }
                 }
@@ -155,17 +155,17 @@ class VerificationRequestController @Inject constructor(
         }
 
         if (state.isMe && state.currentDeviceCanCrossSign && !state.selfVerificationMode) {
-            dividerItem {
+            bottomSheetDividerItem {
                 id("sep_notMe")
             }
 
             bottomSheetVerificationActionItem {
                 id("wasnote")
                 title(host.stringProvider.getString(R.string.verify_new_session_was_not_me))
-                titleColor(host.colorProvider.getColor(R.color.riotx_destructive_accent))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 subTitle(host.stringProvider.getString(R.string.verify_new_session_compromized))
                 iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                 listener { host.listener?.onClickOnWasNotMe() }
             }
         }

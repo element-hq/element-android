@@ -388,7 +388,7 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.close()
     }
 
-    // Aways enabled on RiotX
+    // Always enabled on Matrix Android SDK2
     override fun isCryptoEnabled() = true
 
     /**

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="vctr_social_login_button_google_style" format="reference" />
+    <attr name="vctr_social_login_button_github_style" format="reference" />
+    <attr name="vctr_social_login_button_facebook_style" format="reference" />
+    <attr name="vctr_social_login_button_twitter_style" format="reference" />
+    <attr name="vctr_social_login_button_apple_style" format="reference" />
+    <attr name="vctr_social_login_button_gitlab_style" format="reference" />
+
+</resources>

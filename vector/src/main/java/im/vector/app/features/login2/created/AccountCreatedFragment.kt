@@ -21,10 +21,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
@@ -100,7 +100,7 @@ class AccountCreatedFragment @Inject constructor(
         val views = DialogBaseEditTextBinding.bind(layout)
         views.editText.setText(state.currentUser()?.getBestName().orEmpty())
 
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.settings_display_name)
                 .setView(layout)
                 .setPositiveButton(R.string.ok) { _, _ ->

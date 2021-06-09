@@ -16,9 +16,9 @@
 package im.vector.app.features.roomprofile.alias.detail
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
-import im.vector.app.core.epoxy.dividerItem
-import im.vector.app.core.epoxy.profiles.profileActionItem
+import im.vector.app.core.ui.bottomsheet.bottomSheetTitleItem
 import javax.inject.Inject
 
 /**
@@ -29,15 +29,14 @@ class RoomAliasBottomSheetController @Inject constructor() : TypedEpoxyControlle
     var listener: Listener? = null
 
     override fun buildModels(state: RoomAliasBottomSheetState) {
-        profileActionItem {
+        bottomSheetTitleItem {
             id("alias")
             title(state.alias)
-            subtitle(state.matrixToLink)
-            editable(false)
+            subTitle(state.matrixToLink)
         }
 
         // Notifications
-        dividerItem {
+        bottomSheetDividerItem {
             id("aliasSeparator")
         }
 

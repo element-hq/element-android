@@ -22,12 +22,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -171,7 +171,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
                 finish()
             }
             is CreateRoomFailure.CreatedWithFederationFailure -> {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setMessage(getString(R.string.create_room_federation_error, error.matrixError.message))
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok) { _, _ -> finish() }
@@ -184,7 +184,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
                 } else {
                     errorFormatter.toHumanReadable(error)
                 }
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setMessage(message)
                         .setPositiveButton(R.string.ok, null)
                         .show()

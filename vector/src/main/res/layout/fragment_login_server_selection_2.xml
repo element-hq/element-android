@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -54,7 +54,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
-                    app:tint="?riotx_text_primary"
+                    app:tint="?vctr_content_primary"
                     tools:ignore="MissingPrefix" />
 
                 <TextView
@@ -99,7 +99,7 @@
                     android:gravity="start"
                     android:text="@string/login_element_matrix_server_and_others"
                     android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceOtherText"
                     app:layout_constraintStart_toStartOf="parent"

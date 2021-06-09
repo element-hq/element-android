@@ -26,7 +26,7 @@ To install the template (to be done only once):
 
 To create a new screen:
 - First create a new package in your code.
-- Then right click on the package, and select `New/New Vector/RiotX Feature`.
+- Then right click on the package, and select `New/New Vector/Element Feature`.
 - Follow the Wizard, especially replace `Main` by something more relevant to your feature.
 - Click on `Finish`.
 - Remaining steps are described as TODO in the generated files, or will be pointed out by the compiler, or at runtime :)

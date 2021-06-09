@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -66,7 +66,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
-                    app:tint="?riotx_text_primary"
+                    app:tint="?vctr_content_primary"
                     tools:ignore="MissingPrefix" />
 
                 <TextView
@@ -108,7 +108,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
-                    app:tint="?riotx_text_primary"
+                    app:tint="?vctr_content_primary"
                     tools:ignore="MissingPrefix" />
 
                 <TextView
@@ -131,7 +131,7 @@
                     android:padding="16dp"
                     android:text="@string/login_server_modular_learn_more"
                     android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
-                    android:textColor="@color/riotx_accent"
+                    android:textColor="?colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/loginServerChoiceEmsText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/loginServerChoiceEmsText" />
@@ -159,7 +159,7 @@
                     android:gravity="start"
                     android:text="@string/login_server_other_title"
                     android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceOtherText"
                     app:layout_constraintStart_toStartOf="parent"
@@ -181,7 +181,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginServerIKnowMyIdSubmit"
                 style="@style/Style.Vector.Login.Button.Text"
                 android:layout_width="0dp"

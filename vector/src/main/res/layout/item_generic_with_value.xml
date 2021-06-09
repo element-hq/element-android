@@ -24,7 +24,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="0dp"
         android:layout_weight="1"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="16sp"
         tools:text="Label" />
 
@@ -35,10 +35,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="0dp"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="15sp"
         tools:text="Value"
-        tools:textColor="@color/riotx_positive_accent" />
-
+        tools:textColor="?colorPrimary" />
 
 </LinearLayout>

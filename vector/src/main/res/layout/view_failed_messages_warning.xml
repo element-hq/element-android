@@ -13,7 +13,7 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:background="?attr/vctr_list_divider_color"
+        android:background="?vctr_list_separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:text="@string/event_status_failed_messages_warning"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="14sp"
         app:drawableStartCompat="@drawable/ic_sending_message_failed"
         app:layout_constraintBottom_toBottomOf="@id/failedMessagesRetryButton"
@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toStartOf="@id/failedMessagesRetryButton"
         app:layout_constraintTop_toTopOf="@id/failedMessagesRetryButton" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/failedMessagesRetryButton"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
@@ -56,7 +56,6 @@
         android:text="@string/global_retry"
         android:textSize="14sp"
         app:icon="@drawable/ic_retry_sending_messages"
-        app:iconTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/failedMessagesWarningDivider" />

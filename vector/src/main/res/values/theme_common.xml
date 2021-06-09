@@ -6,10 +6,9 @@
 
     <style name="AppTheme.Launcher.Base" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
-        <item name="android:statusBarColor">@color/riotx_accent</item>
-        <item name="android:navigationBarColor">@color/riotx_accent</item>
-
-        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+        <item name="colorPrimary">@color/element_accent_light</item>
+        <item name="android:statusBarColor">@color/element_accent_light</item>
+        <item name="android:navigationBarColor">@color/element_accent_light</item>
     </style>
 
     <style name="AppTheme.AttachmentsPreview" parent="AppTheme.Base.Black">

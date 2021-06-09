@@ -13,7 +13,6 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/createRoomToolbar"
-            style="@style/VectorToolbarStyle"
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
             android:elevation="4dp"
@@ -45,7 +44,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@string/create_room_title"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"

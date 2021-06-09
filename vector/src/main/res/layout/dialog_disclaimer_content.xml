@@ -28,7 +28,7 @@
             android:layout_margin="32dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_arrow_right"
-            app:tint="?riotx_text_secondary"
+            app:tint="?vctr_content_secondary"
             tools:ignore="MissingPrefix" />
 
         <ImageView
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/disclaimer_title"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,7 @@
         android:gravity="center"
         android:paddingBottom="32dp"
         android:text="@string/disclaimer_content"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

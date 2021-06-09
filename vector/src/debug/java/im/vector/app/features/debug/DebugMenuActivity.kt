@@ -71,10 +71,29 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     private fun setupViews() {
         views.debugTestTextViewLink.setOnClickListener { testTextViewLink() }
+        views.debugOpenButtonStyles.setOnClickListener {
+            startActivity(Intent(this, DebugVectorButtonStylesActivity::class.java))
+        }
         views.debugShowSasEmoji.setOnClickListener { showSasEmoji() }
         views.debugTestNotification.setOnClickListener { testNotification() }
-        views.debugTestMaterialThemeLight.setOnClickListener { testMaterialThemeLight() }
-        views.debugTestMaterialThemeDark.setOnClickListener { testMaterialThemeDark() }
+        views.debugTestMaterialThemeLightDefault.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightDefaultActivity::class.java))
+        }
+        views.debugTestMaterialThemeLightTest.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightTestActivity::class.java))
+        }
+        views.debugTestMaterialThemeLightVector.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightVectorActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkDefault.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkDefaultActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkTest.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkTestActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkVector.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkVectorActivity::class.java))
+        }
         views.debugTestCrash.setOnClickListener { testCrash() }
         views.debugScanQrCode.setOnClickListener { scanQRCode() }
     }
@@ -172,14 +191,6 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                         .setGroup("GroupKey")
                         .build()
         )
-    }
-
-    private fun testMaterialThemeLight() {
-        startActivity(Intent(this, DebugMaterialThemeLightActivity::class.java))
-    }
-
-    private fun testMaterialThemeDark() {
-        startActivity(Intent(this, DebugMaterialThemeDarkActivity::class.java))
     }
 
     private fun testCrash() {

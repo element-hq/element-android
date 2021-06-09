@@ -8,7 +8,6 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/roomToolbar"
-        style="@style/VectorToolbarStyle"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
         android:elevation="4dp"
@@ -51,7 +50,7 @@
                 android:layout_marginEnd="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="?vctr_toolbar_primary_text_color"
+                android:textColor="?vctr_content_primary"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/roomToolbarSubtitleView"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +68,7 @@
                 android:layout_marginBottom="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="?vctr_toolbar_secondary_text_color"
+                android:textColor="?vctr_content_primary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -165,15 +164,15 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/composerLayout"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
     <im.vector.app.features.home.room.detail.composer.TextComposerView
         android:id="@+id/composerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?riotx_background"
+        android:background="?android:colorBackground"
         android:transitionName="composer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -183,7 +182,7 @@
         android:id="@+id/inviteView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?riotx_background"
+        android:background="?android:colorBackground"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -198,7 +197,7 @@
         app:barrierDirection="top"
         app:constraint_referenced_ids="composerLayout,notificationAreaView, failedMessagesWarningView" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/activeCallPiPWrap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -216,7 +215,8 @@
             android:layout_height="120dp"
             android:visibility="gone"
             tools:visibility="visible" />
-    </androidx.cardview.widget.CardView>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <im.vector.app.core.platform.BadgeFloatingActionButton
         android:id="@+id/jumpToBottomView"
@@ -224,16 +224,15 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:contentDescription="@string/a11y_jump_to_bottom"
-        android:src="@drawable/chevron_down"
+        android:src="@drawable/ic_expand_more"
         app:backgroundTint="#FFFFFF"
-        app:badgeBackgroundColor="@color/riotx_accent"
-        app:badgeTextColor="@color/white"
+        app:badgeBackgroundColor="?colorPrimary"
+        app:badgeTextColor="?colorOnPrimary"
         app:badgeTextPadding="2dp"
         app:badgeTextSize="10sp"
         app:layout_constraintBottom_toTopOf="@id/badgeBarrier"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="16dp"
-        app:tint="@color/black" />
+        app:tint="@android:color/black" />
 
     <nl.dionsegijn.konfetti.KonfettiView
         android:id="@+id/viewKonfetti"

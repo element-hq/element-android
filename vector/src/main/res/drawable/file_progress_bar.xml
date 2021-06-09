@@ -4,7 +4,7 @@
     <item android:id="@android:id/background">
         <shape>
             <corners android:radius="8dp" />
-            <solid android:color="?attr/riotx_room_active_widgets_banner_bg" />
+            <solid android:color="?vctr_room_active_widgets_banner_bg" />
         </shape>
     </item>
 
@@ -12,7 +12,7 @@
         <clip>
             <shape>
                 <corners android:radius="8dp" />
-                <solid android:color="@color/riotx_notice_secondary_alpha12" />
+                <solid android:color="@color/vctr_notice_secondary_alpha12" />
             </shape>
         </clip>
     </item>

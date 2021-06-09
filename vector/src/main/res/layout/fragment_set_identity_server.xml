@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,13 +16,13 @@
             android:id="@+id/identityServerSetDefaultNotice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:textSize="16sp"
             android:visibility="gone"
             tools:text="@string/identity_server_set_default_notice"
             tools:visibility="visible" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/identityServerSetDefaultSubmit"
             style="@style/VectorButtonStyleText"
             android:layout_width="wrap_content"
@@ -39,13 +39,12 @@
             android:id="@+id/identityServerSetDefaultAlternative"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:textSize="16sp"
             tools:text="@string/identity_server_set_alternative_notice" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/identityServerSetDefaultAlternativeTil"
-            style="@style/VectorTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -59,11 +58,11 @@
                 android:imeOptions="actionDone"
                 android:inputType="textUri"
                 android:maxLines="1"
-                android:textColor="?riotx_text_primary" />
+                android:textColor="?vctr_content_primary" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/identityServerSetDefaultAlternativeSubmit"
             style="@style/VectorButtonStyleText"
             android:layout_width="wrap_content"

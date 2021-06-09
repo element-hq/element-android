@@ -56,8 +56,6 @@ class RoomDirectoryPickerController @Inject constructor(
     var currentRoomDirectoryData: RoomDirectoryData? = null
     var callback: Callback? = null
 
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
-
     override fun buildModels(data: RoomDirectoryPickerViewState) {
         val host = this
 
@@ -99,7 +97,7 @@ class RoomDirectoryPickerController @Inject constructor(
             settingsInformationItem {
                 id("form_notice")
                 message(host.stringProvider.getString(R.string.directory_add_a_new_server_prompt))
-                colorProvider(host.colorProvider)
+                textColor(host.colorProvider.getColor(R.color.vector_info_color))
             }
             verticalMarginItem {
                 id("form_space_2")
@@ -107,7 +105,6 @@ class RoomDirectoryPickerController @Inject constructor(
             }
             formEditTextItem {
                 id("edit")
-                showBottomSeparator(false)
                 value(data.enteredServer)
                 imeOptions(EditorInfo.IME_ACTION_DONE)
                 editorActionListener(object : TextView.OnEditorActionListener {
@@ -154,7 +151,7 @@ class RoomDirectoryPickerController @Inject constructor(
             genericButtonItem {
                 id("add")
                 text(host.stringProvider.getString(R.string.directory_add_a_new_server))
-                textColor(host.colorProvider.getColor(R.color.riotx_accent))
+                textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 buttonClickAction {
                     host.callback?.onStartEnterServer()
                 }
@@ -172,10 +169,8 @@ class RoomDirectoryPickerController @Inject constructor(
     }
 
     private fun buildDivider(idx: Int) {
-        val host = this
         dividerItem {
             id("divider_$idx")
-            color(host.dividerColor)
         }
     }
 

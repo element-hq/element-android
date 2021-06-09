@@ -3,6 +3,6 @@
     android:id="@+id/bottomSheetFragmentContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_bottom_sheet_background" />
+    android:background="?colorSurface" />
 
 

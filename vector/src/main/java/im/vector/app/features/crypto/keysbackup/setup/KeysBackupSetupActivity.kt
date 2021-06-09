@@ -18,9 +18,9 @@ package im.vector.app.features.crypto.keysbackup.setup
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.observeEvent
@@ -82,7 +82,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                     finish()
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_PROMPT_REPLACE -> {
-                    AlertDialog.Builder(this)
+                    MaterialAlertDialogBuilder(this)
                             .setTitle(R.string.keys_backup_setup_override_backup_prompt_tile)
                             .setMessage(R.string.keys_backup_setup_override_backup_prompt_description)
                             .setPositiveButton(R.string.keys_backup_setup_override_replace) { _, _ ->
@@ -100,7 +100,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
         viewModel.prepareRecoverFailError.observe(this) { error ->
             if (error != null) {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setTitle(R.string.unknown_error)
                         .setMessage(error.localizedMessage)
                         .setPositiveButton(R.string.ok) { _, _ ->
@@ -113,7 +113,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
         viewModel.creatingBackupError.observe(this) { error ->
             if (error != null) {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setTitle(R.string.unexpected_error)
                         .setMessage(error.localizedMessage)
                         .setPositiveButton(R.string.ok) { _, _ ->
@@ -170,7 +170,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
             if (waitingView?.isVisible == true) {
                 return
             }
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.keys_backup_setup_skip_title)
                     .setMessage(R.string.keys_backup_setup_skip_msg)
                     .setNegativeButton(R.string.cancel, null)

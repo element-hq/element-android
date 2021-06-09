@@ -42,7 +42,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
@@ -69,6 +68,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.vanniktech.emoji.EmojiPopup
@@ -568,7 +568,7 @@ class RoomDetailFragment @Inject constructor(
     private fun setupFailedMessagesWarningView() {
         views.failedMessagesWarningView.callback = object : FailedMessagesWarningView.Callback {
             override fun onDeleteAllClicked() {
-                AlertDialog.Builder(requireContext())
+                MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.event_status_delete_all_failed_dialog_title)
                         .setMessage(getString(R.string.event_status_delete_all_failed_dialog_message))
                         .setNegativeButton(R.string.no, null)
@@ -642,7 +642,7 @@ class RoomDetailFragment @Inject constructor(
 
     private fun displayPromptForIntegrationManager() {
         // The Sticker picker widget is not installed yet. Propose the user to install it
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = MaterialAlertDialogBuilder(requireContext())
         val v: View = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_no_sticker_pack, null)
         builder
                 .setView(v)
@@ -808,7 +808,7 @@ class RoomDetailFragment @Inject constructor(
                 val actionView = matrixAppsMenuItem.actionView
                 actionView
                         .findViewById<ImageView>(R.id.action_view_icon_image)
-                        .setColorFilter(ContextCompat.getColor(requireContext(), R.color.riotx_accent))
+                        .setColorFilter(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 actionView.findViewById<TextView>(R.id.cart_badge).setTextOrHide("$widgetsCount")
                 matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             } else {
@@ -816,7 +816,7 @@ class RoomDetailFragment @Inject constructor(
                 val actionView = matrixAppsMenuItem.actionView
                 actionView
                         .findViewById<ImageView>(R.id.action_view_icon_image)
-                        .setColorFilter(ThemeUtils.getColor(requireContext(), R.attr.riotx_text_secondary))
+                        .setColorFilter(ThemeUtils.getColor(requireContext(), R.attr.vctr_content_secondary))
                 actionView.findViewById<TextView>(R.id.cart_badge).isVisible = false
                 matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             }
@@ -870,7 +870,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun displayDisabledIntegrationDialog() {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.disabled_integration_dialog_title)
                 .setMessage(R.string.disabled_integration_dialog_content)
                 .setPositiveButton(R.string.settings) { _, _ ->
@@ -1289,10 +1289,10 @@ class RoomDetailFragment @Inject constructor(
         views.roomToolbarSubtitleView.apply {
             setTextOrHide(subtitle)
             if (typingMessage.isNullOrBlank()) {
-                setTextColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_toolbar_secondary_text_color))
+                setTextColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                 setTypeface(null, Typeface.NORMAL)
             } else {
-                setTextColor(ContextCompat.getColor(requireContext(), R.color.riotx_accent))
+                setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 setTypeface(null, Typeface.BOLD)
             }
         }
@@ -1341,7 +1341,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun displayCommandError(message: String) {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.command_error)
                 .setMessage(message)
                 .setPositiveButton(R.string.ok, null)
@@ -1356,7 +1356,7 @@ class RoomDetailFragment @Inject constructor(
             WithHeldCode.UNAVAILABLE -> R.string.crypto_error_withheld_generic
             else                     -> R.string.notice_crypto_unable_to_decrypt_friendly_desc
         }
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setMessage(msgId)
                 .setPositiveButton(R.string.ok, null)
                 .show()
@@ -1367,7 +1367,7 @@ class RoomDetailFragment @Inject constructor(
         val layout = inflater.inflate(R.layout.dialog_report_content, null)
         val views = DialogReportContentBinding.bind(layout)
 
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.report_content_custom_title)
                 .setView(layout)
                 .setPositiveButton(R.string.report_content_custom_submit) { _, _ ->
@@ -1393,7 +1393,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun displayRoomDetailActionFailure(result: RoomDetailViewEvents.ActionFailure) {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(result.throwable))
                 .setPositiveButton(R.string.ok, null)
@@ -1405,7 +1405,7 @@ class RoomDetailFragment @Inject constructor(
             is RoomDetailAction.ReportContent             -> {
                 when {
                     data.spam          -> {
-                        AlertDialog.Builder(requireActivity())
+                        MaterialAlertDialogBuilder(requireActivity())
                                 .setTitle(R.string.content_reported_as_spam_title)
                                 .setMessage(R.string.content_reported_as_spam_content)
                                 .setPositiveButton(R.string.ok, null)
@@ -1416,7 +1416,7 @@ class RoomDetailFragment @Inject constructor(
                                 .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                     }
                     data.inappropriate -> {
-                        AlertDialog.Builder(requireActivity())
+                        MaterialAlertDialogBuilder(requireActivity())
                                 .setTitle(R.string.content_reported_as_inappropriate_title)
                                 .setMessage(R.string.content_reported_as_inappropriate_content)
                                 .setPositiveButton(R.string.ok, null)
@@ -1427,7 +1427,7 @@ class RoomDetailFragment @Inject constructor(
                                 .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                     }
                     else               -> {
-                        AlertDialog.Builder(requireActivity())
+                        MaterialAlertDialogBuilder(requireActivity())
                                 .setTitle(R.string.content_reported_title)
                                 .setMessage(R.string.content_reported_content)
                                 .setPositiveButton(R.string.ok, null)
@@ -1497,13 +1497,13 @@ class RoomDetailFragment @Inject constructor(
                 .subscribe { managed ->
                     if (!managed) {
                         if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
-                            AlertDialog.Builder(requireActivity())
+                            MaterialAlertDialogBuilder(requireActivity())
                                     .setTitle(R.string.external_link_confirmation_title)
                                     .setMessage(
                                             getString(R.string.external_link_confirmation_message, title, url)
                                                     .toSpannable()
-                                                    .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
-                                                    .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+                                                    .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                                                    .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
                                     )
                                     .setPositiveButton(R.string._continue) { _, _ ->
                                         openUrlInExternalBrowser(requireContext(), url)
@@ -1624,7 +1624,7 @@ class RoomDetailFragment @Inject constructor(
         if (action.force) {
             roomDetailViewModel.handle(RoomDetailAction.CancelSend(action.eventId, true))
         } else {
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.dialog_title_confirmation)
                     .setMessage(getString(R.string.event_status_cancel_sending_dialog_message))
                     .setNegativeButton(R.string.no, null)
@@ -1863,7 +1863,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun askConfirmationToIgnoreUser(senderId: String) {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.room_participants_action_ignore_title)
                 .setMessage(R.string.room_participants_action_ignore_prompt_msg)
                 .setNegativeButton(R.string.cancel, null)
@@ -1936,7 +1936,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun showDialogWithMessage(message: String) {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
                 .setMessage(message)
                 .setPositiveButton(getString(R.string.ok), null)
                 .show()

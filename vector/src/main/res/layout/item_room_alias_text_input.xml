@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:minHeight="@dimen/item_form_min_height">
 
     <TextView
@@ -19,13 +19,12 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/itemRoomAliasTextInputLayout"
-        style="@style/VectorTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         app:errorEnabled="true"
-        app:layout_constraintBottom_toTopOf="@+id/itemRoomAliasDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/itemRoomAliasHomeServer"
         app:layout_constraintStart_toEndOf="@+id/itemRoomAliasHash"
         app:layout_constraintTop_toTopOf="parent">
@@ -51,14 +50,5 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/itemRoomAliasTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text=":matrix.org" />
-
-    <View
-        android:id="@+id/itemRoomAliasDivider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="?riotx_header_panel_border_mobile"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

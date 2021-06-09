@@ -18,7 +18,7 @@ package im.vector.app.features.crypto.verification.conclusion
 
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
@@ -87,16 +87,16 @@ class VerificationConclusionController @Inject constructor(
                     notice(host.stringProvider.getString(R.string.verify_cancelled_notice))
                 }
 
-                dividerItem {
+                bottomSheetDividerItem {
                     id("sep0")
                 }
 
                 bottomSheetVerificationActionItem {
                     id("got_it")
                     title(host.stringProvider.getString(R.string.sas_got_it))
-                    titleColor(host.colorProvider.getColor(R.color.riotx_accent))
+                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     iconRes(R.drawable.ic_arrow_right)
-                    iconColor(host.colorProvider.getColor(R.color.riotx_accent))
+                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     listener { host.listener?.onButtonTapped() }
                 }
             }
@@ -105,16 +105,16 @@ class VerificationConclusionController @Inject constructor(
 
     private fun bottomDone() {
         val host = this
-        dividerItem {
+        bottomSheetDividerItem {
             id("sep0")
         }
 
         bottomSheetVerificationActionItem {
             id("done")
             title(host.stringProvider.getString(R.string.done))
-            titleColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
             listener { host.listener?.onButtonTapped() }
         }
     }

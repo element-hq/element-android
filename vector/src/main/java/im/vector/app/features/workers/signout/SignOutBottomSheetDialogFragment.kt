@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -31,6 +30,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.dialogs.ExportKeysDialog
@@ -89,7 +89,7 @@ class SignOutBottomSheetDialogFragment :
 
         views.exitAnywayButton.action = {
             context?.let {
-                AlertDialog.Builder(it)
+                MaterialAlertDialogBuilder(it)
                         .setTitle(R.string.are_you_sure)
                         .setMessage(R.string.sign_out_bottom_sheet_will_lose_secure_messages)
                         .setPositiveButton(R.string.backup, null)

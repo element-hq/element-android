@@ -5,7 +5,7 @@
     android:id="@+id/memberProfileInfoContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:padding="16dp">
 
     <!-- I cannot do what I want using layer-list, do it manually here-->
@@ -44,7 +44,7 @@
         app:layout_constraintCircle="@+id/itemEditableAvatarImageContainer"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="48dp"
-        app:tint="@color/riotx_destructive_accent"
+        app:tint="?colorError"
         tools:ignore="MissingConstraints,MissingPrefix"
         tools:visibility="visible" />
 
@@ -54,14 +54,13 @@
         android:layout_height="32dp"
         android:layout_gravity="center"
         android:background="@drawable/circle"
-        android:backgroundTint="?riotx_background"
         android:contentDescription="@string/a11y_change_avatar"
         android:padding="8dp"
         android:src="@drawable/ic_camera_plain"
         app:layout_constraintCircle="@+id/itemEditableAvatarImageContainer"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="48dp"
-        app:tint="?riotx_text_secondary"
+        app:tint="?vctr_content_secondary"
         tools:ignore="MissingConstraints,MissingPrefix" />
 
 

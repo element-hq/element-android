@@ -19,34 +19,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/power_level_admin"
-            android:textColor="?riotx_text_primary" />
+            android:textColor="?vctr_content_primary" />
 
         <RadioButton
             android:id="@+id/powerLevelModeratorRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/power_level_moderator"
-            android:textColor="?riotx_text_primary" />
+            android:textColor="?vctr_content_primary" />
 
         <RadioButton
             android:id="@+id/powerLevelDefaultRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/power_level_default"
-            android:textColor="?riotx_text_primary" />
+            android:textColor="?vctr_content_primary" />
 
         <RadioButton
             android:id="@+id/powerLevelCustomRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/power_level_custom_no_value"
-            android:textColor="?riotx_text_primary" />
+            android:textColor="?vctr_content_primary" />
 
     </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/powerLevelCustomEditLayout"
-        style="@style/VectorTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/power_level_custom_no_value">

@@ -13,7 +13,7 @@
         android:id="@+id/related_message_background"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="?riotx_bottom_nav_background_color"
+        android:background="?colorSurface"
         app:layout_constraintBottom_toBottomOf="@id/composer_preview_barrier"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,7 +21,7 @@
         android:id="@+id/related_message_background_top_separator"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?riotx_bottom_nav_background_border_color"
+        android:background="?vctr_list_separator"
         app:layout_constraintEnd_toEndOf="@id/related_message_background"
         app:layout_constraintStart_toStartOf="@+id/related_message_background"
         app:layout_constraintTop_toTopOf="@id/related_message_background" />
@@ -30,7 +30,7 @@
         android:id="@+id/related_message_background_bottom_separator"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?riotx_bottom_nav_background_border_color"
+        android:background="?vctr_list_separator"
         app:layout_constraintBottom_toBottomOf="@id/related_message_background"
         app:layout_constraintEnd_toEndOf="@id/related_message_background"
         app:layout_constraintStart_toStartOf="@+id/related_message_background" />
@@ -99,7 +99,7 @@
         app:layout_constraintEnd_toEndOf="@id/composerRelatedMessageAvatar"
         app:layout_constraintStart_toStartOf="@id/composerRelatedMessageAvatar"
         app:layout_constraintTop_toBottomOf="@id/composerRelatedMessageAvatar"
-        app:tint="?riotx_text_primary"
+        app:tint="?vctr_content_primary"
         tools:ignore="MissingPrefix"
         tools:src="@drawable/ic_edit" />
 
@@ -113,7 +113,7 @@
         app:layout_constraintBottom_toBottomOf="@id/composer_preview_barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/riotx_notice"
+        app:tint="?colorError"
         tools:ignore="MissingPrefix" />
 
     <androidx.constraintlayout.widget.Barrier

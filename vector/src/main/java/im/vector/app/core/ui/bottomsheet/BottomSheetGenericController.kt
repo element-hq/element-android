@@ -42,7 +42,7 @@ abstract class BottomSheetGenericController<State : BottomSheetGenericState, Act
                 subTitle(host.getSubTitle())
             }
 
-//            dividerItem {
+//            bottomSheetDividerItem {
 //                id("title_separator")
 //            }
         }
