@@ -37,11 +37,11 @@ class ComposerEditText @JvmOverloads constructor(context: Context, attrs: Attrib
 
     interface Callback {
         fun onRichContentSelected(contentUri: Uri): Boolean
-        fun onTextBlankStateChanged(isBlank: Boolean)
+        fun onTextEmptyStateChanged(isEmpty: Boolean)
     }
 
     var callback: Callback? = null
-    var isBlankText = true
+    private var isEmptyText = true
 
     override fun onCreateInputConnection(editorInfo: EditorInfo): InputConnection? {
         val ic = super.onCreateInputConnection(editorInfo) ?: return null
@@ -96,9 +96,9 @@ class ComposerEditText @JvmOverloads constructor(context: Context, attrs: Attrib
                             spanToRemove = null
                         }
                         // Report blank status of EditText to be able to arrange other elements of the composer
-                        if (s.isBlank() != isBlankText) {
-                            isBlankText = !isBlankText
-                            callback?.onTextBlankStateChanged(isBlankText)
+                        if (s.isEmpty() != isEmptyText) {
+                            isEmptyText = !isEmptyText
+                            callback?.onTextEmptyStateChanged(isEmptyText)
                         }
                     }
                 }

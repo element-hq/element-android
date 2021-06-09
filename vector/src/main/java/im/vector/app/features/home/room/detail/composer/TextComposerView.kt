@@ -33,8 +33,6 @@ import androidx.transition.TransitionSet
 import im.vector.app.R
 import im.vector.app.databinding.ComposerLayoutBinding
 
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
-
 /**
  * Encapsulate the timeline composer UX.
  *
@@ -72,8 +70,8 @@ class TextComposerView @JvmOverloads constructor(
                 return callback?.onRichContentSelected(contentUri) ?: false
             }
 
-            override fun onTextBlankStateChanged(isBlank: Boolean) {
-                views.sendButton.isVisible = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank
+            override fun onTextEmptyStateChanged(isEmpty: Boolean) {
+                views.sendButton.isVisible = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isEmpty
             }
         }
         views.composerRelatedMessageCloseButton.setOnClickListener {
@@ -98,7 +96,7 @@ class TextComposerView @JvmOverloads constructor(
         }
         currentConstraintSetId = R.layout.composer_layout_constraint_set_compact
         applyNewConstraintSet(animate, transitionComplete)
-        views.sendButton.isVisible = !views.composerEditText.text.isNullOrBlank()
+        views.sendButton.isVisible = !views.composerEditText.text.isNullOrEmpty()
     }
 
     fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
