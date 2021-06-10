@@ -97,7 +97,6 @@
         <!-- remove the shadow under the actionbar -->
         <item name="android:windowContentOverlay">@null</item>
 
-
         <!-- no divider -->
         <item name="android:actionBarDivider">@null</item>
 
