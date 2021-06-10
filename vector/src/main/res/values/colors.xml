@@ -42,6 +42,9 @@
     <color name="android_status_bar_background_dark">@color/element_background_dark</color>
     <color name="android_navigation_bar_background_dark">@color/element_system_dark</color>
 
+    <!-- Used for toolbar background -->
+    <attr name="vctr_toolbar_background" format="color" />
+
     <!-- Used for header background -->
     <attr name="vctr_header_background" format="color" />
 

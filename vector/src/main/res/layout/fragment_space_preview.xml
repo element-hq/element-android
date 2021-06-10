@@ -15,7 +15,6 @@
             android:id="@+id/roomPreviewNoPreviewToolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:elevation="4dp"
             app:navigationIcon="@drawable/ic_x_18dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout

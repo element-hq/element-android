@@ -3,33 +3,11 @@
 
     <!-- ************************ Common items ************************ -->
 
-    <!-- toolbar styles-->
-    <style name="VectorToolbarStyleWithPadding" parent="Widget.MaterialComponents.Toolbar">
-        <!-- main text -->
-        <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
-        <item name="subtitleTextAppearance">@style/Vector.Toolbar.SubTitle</item>
-        <item name="android:background">?android:colorBackground</item>
-    </style>
-
     <style name="ActionModeTheme" parent="Widget.AppCompat.ActionMode">
         <item name="background">?android:colorBackground</item>
         <item name="titleTextStyle">@style/Vector.Toolbar.Title</item>
         <item name="subtitleTextStyle">@style/Vector.Toolbar.SubTitle</item>
         <item name="actionMenuTextColor">?colorOnPrimary</item>
-    </style>
-
-    <style name="VectorToolbarStyle" parent="VectorToolbarStyleWithPadding">
-        <item name="contentInsetStartWithNavigation">0dp</item>
-    </style>
-
-    <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily">"sans-serif-medium"</item>
-    </style>
-
-    <style name="Vector.Toolbar.SubTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
-        <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">"sans-serif"</item>
     </style>
 
     <style name="Vector.Toolbar.Profile" parent="@style/ThemeOverlay.AppCompat.ActionBar">
@@ -72,40 +50,6 @@
         <item name="android:textSize">16sp</item>
         <item name="android:dropDownHorizontalOffset">0dp</item>
         <item name="android:dropDownVerticalOffset">0dp</item>
-    </style>
-
-    <!-- actionbar icons color -->
-    <style name="Vector.ActionBarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
-        <item name="colorControlNormal">?vctr_content_primary</item>
-    </style>
-
-    <!-- custom action bar -->
-    <style name="Vector.Styled.ActionBar" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:background">?colorPrimary</item>
-        <item name="background">?colorPrimary</item>
-
-        <!-- remove shadow under the action bar -->
-        <item name="elevation">0dp</item>
-
-        <!-- main text -->
-        <item name="titleTextStyle">@style/ActionBarTitleText</item>
-
-        <!-- sub text -->
-        <item name="subtitleTextStyle">@style/ActionBarSubTitleText</item>
-    </style>
-
-    <!-- main text -->
-    <style name="ActionBarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">?vctr_content_primary</item>
-        <item name="android:fontFamily">"sans-serif-medium"</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <!-- sub text -->
-    <style name="ActionBarSubTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">?vctr_content_primary</item>
-        <item name="android:fontFamily">"sans-serif-medium"</item>
-        <item name="android:textSize">12sp</item>
     </style>
 
     <!-- Styles for login screen -->

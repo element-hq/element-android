@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,13 +10,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Use VectorToolbarStyleWithPadding on this screen for better alignment with setting items -->
+        <!-- Use VectorToolbarSettings on this screen for better alignment with setting items -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/settingsToolbar"
-            style="@style/VectorToolbarStyleWithPadding"
+            style="@style/VectorToolbarSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="4dp" />
+            tools:navigationIcon="@drawable/ic_back_24dp"
+            tools:title="Title" />
 
         <FrameLayout
             android:id="@+id/vector_settings_page"

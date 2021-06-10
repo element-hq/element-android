@@ -32,6 +32,7 @@
         <item name="vctr_bottom_nav_icon_color">@color/vctr_bottom_nav_icon_color_light</item>
         <item name="vctr_waiting_background_color">@color/vctr_waiting_background_color_light</item>
         <item name="vctr_chat_effect_snow_background">@color/vctr_chat_effect_snow_background_light</item>
+        <item name="vctr_toolbar_background">@color/element_background_light</item>
 
         <!-- room message colors -->
         <item name="vctr_notice_secondary">#61708B</item>
@@ -65,7 +66,7 @@
 
         <!-- Default styles -->
         <item name="materialButtonStyle">@style/VectorButtonStyle</item>
-        <item name="toolbarStyle">@style/VectorToolbarStyle</item>
+        <item name="toolbarStyle">@style/VectorToolbar</item>
         <item name="materialAlertDialogTheme">@style/VectorAlertDialogStyleLight</item>
 
         <!-- Default style for text input -->
@@ -88,13 +89,6 @@
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
-
-        <!-- custom action bar -->
-        <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
-        <item name="actionBarStyle">@style/Vector.Styled.ActionBar</item>
-
-        <!-- actionbar icons color -->
-        <item name="actionBarTheme">@style/Vector.ActionBarTheme</item>
 
         <!-- remove the shadow under the actionbar -->
         <item name="android:windowContentOverlay">@null</item>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="VectorToolbarBase" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">?vctr_toolbar_background</item>
+
+        <item name="android:elevation">4dp</item>
+
+        <!-- main text -->
+        <item name="titleTextStyle">@style/ActionBarTitleText</item>
+
+        <!-- sub text -->
+        <item name="subtitleTextStyle">@style/ActionBarSubTitleText</item>
+    </style>
+
+    <!-- Default toolbar style -->
+    <style name="VectorToolbar" parent="VectorToolbarBase">
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
+
+    <!-- Toolbar for settings Activity (so we keep the default contentInsetStartWithNavigation here) -->
+    <style name="VectorToolbarSettings" parent="VectorToolbarBase" />
+
+    <!-- Toolbar text style -->
+    <!-- main text -->
+    <style name="ActionBarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">?vctr_content_primary</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- sub text -->
+    <style name="ActionBarSubTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">?vctr_content_primary</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- Action mode text style -->
+    <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+    </style>
+
+    <style name="Vector.Toolbar.SubTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">"sans-serif"</item>
+    </style>
+
+</resources>

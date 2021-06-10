@@ -33,6 +33,7 @@
             android:id="@+id/emojiPickerToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:elevation="0dp"
             android:minHeight="0dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways"
             tools:title="@string/reactions" />
