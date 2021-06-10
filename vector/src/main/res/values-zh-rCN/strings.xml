@@ -715,7 +715,7 @@
     <string name="select_room_directory">选择一个聊天室目录</string>
     <string name="directory_server_fail_to_retrieve_server">服务器可能不可用或过载</string>
     <string name="directory_server_type_homeserver">请输入一个要列出公共聊天室的主服务器</string>
-    <string name="directory_server_placeholder">主服务器 URL</string>
+    <string name="directory_server_placeholder">服务器名称</string>
     <string name="directory_server_all_rooms_on_server">%s 服务器上的所有聊天室</string>
     <string name="directory_server_native_rooms">所有本地 %s 聊天室</string>
     <!-- historical -->
@@ -2751,4 +2751,16 @@
     <string name="notice_room_server_acl_updated_was_allowed">• 服务器符合 %s 已从允许列表中移除。</string>
     <string name="notice_room_server_acl_updated_allowed">• 服务器符合 %s 现已被允许。</string>
     <string name="notice_room_server_acl_updated_was_banned">• 服务器符合 %s 已从封禁列表中移除。</string>
+    <string name="unnamed_room">未命名的聊天室</string>
+    <string name="private_space">私有空间</string>
+    <string name="public_space">公开空间</string>
+    <string name="a11y_public_space">此空间为公开空间</string>
+    <string name="call_transfer_unknown_person">陌生人</string>
+    <string name="call_transfer_transfer_to_title">转移给 %1$s</string>
+    <string name="call_transfer_consulting_with">与 %1$s 商量</string>
+    <string name="directory_add_a_new_server_error_already_added">该服务器已经存在于列表中</string>
+    <string name="directory_add_a_new_server_error">找不到此服务器或它的聊天室列表</string>
+    <string name="directory_add_a_new_server_prompt">输入你想要探索的新服务器的名称。</string>
+    <string name="directory_add_a_new_server">添加一个新的服务器</string>
+    <string name="directory_your_server">你的服务器</string>
 </resources>
