@@ -36,4 +36,4 @@ Skutečné end-to-end šifrování (zprávy mohou dešifrovat pouze účastníci
 Zprávy, hlasové a videohovory, sdílení souborů, sdílení obrazovky a celá řada integrací, botů a widgetů. Vytvářejte místnosti, komunity, zůstaňte v kontaktu a spolupracujte.
 
 <b>Navažte tam, kde jste skončili</b>
-Zůstaňte v kontaktu, ať jste kdekoli, díky plně synchronizované historii zpráv ve všech zařízeních a na webu https://app.element.io.
+Zůstaňte v kontaktu, ať jste kdekoli, díky plně synchronizované historii zpráv ve všech zařízeních a na webu https://app.element.io
