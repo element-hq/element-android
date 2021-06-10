@@ -64,7 +64,6 @@ class SpaceDetailEpoxyController @Inject constructor(
             enabled(true)
             value(data?.name)
             hint(host.stringProvider.getString(R.string.create_room_name_hint))
-            showBottomSeparator(false)
             errorMessage(data?.nameInlineError)
 //            onBind { _, view, _ ->
 //                if (shouldForceFocusOnce && data?.name.isNullOrBlank()) {
@@ -85,7 +84,6 @@ class SpaceDetailEpoxyController @Inject constructor(
             enabled(true)
             value(data?.topic)
             hint(host.stringProvider.getString(R.string.create_space_topic_hint))
-            showBottomSeparator(false)
             textSizeSp(16)
             onTextChange { text ->
                 host.listener?.onTopicChange(text)

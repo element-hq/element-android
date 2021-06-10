@@ -20,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="14dp"
             android:layout_gravity="center"
-            android:background="?riotx_header_panel_background"
             android:indeterminate="true" />
 
     </FrameLayout>
@@ -29,10 +28,10 @@
         android:id="@+id/syncStateNoNetwork"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/vector_warning_color"
+        android:background="?colorError"
         android:gravity="center"
         android:text="@string/no_connectivity_to_the_server_indicator"
-        android:textColor="@color/white"
+        android:textColor="?colorOnError"
         android:visibility="gone"
         tools:layout_marginTop="10dp"
         tools:visibility="visible" />
@@ -53,9 +52,9 @@
             android:drawablePadding="4dp"
             android:gravity="center"
             android:text="@string/no_connectivity_to_the_server_indicator_airplane"
-            android:textColor="@color/white"
+            android:textColor="?colorOnPrimary"
             app:drawableStartCompat="@drawable/ic_airplane_16dp"
-            app:drawableTint="@color/white" />
+            app:drawableTint="?colorOnPrimary" />
 
     </FrameLayout>
 

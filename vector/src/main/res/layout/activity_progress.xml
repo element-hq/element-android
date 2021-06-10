@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/riotx_waiting_background_color">
+    android:background="?vctr_waiting_background_color">
 
     <ProgressBar
         android:layout_width="40dp"

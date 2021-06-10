@@ -102,7 +102,7 @@ class NotificationAreaView @JvmOverloads constructor(
             }
         }
         views.roomNotificationMessage.text = message
-        views.roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
+        views.roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
     }
 
     private fun renderResourceLimitExceededError(state: State.ResourceLimitExceededError) {

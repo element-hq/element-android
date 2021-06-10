@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:fadeScrollbars="false"
     android:scrollbars="vertical">
 
@@ -26,7 +26,7 @@
             android:src="@drawable/ic_security_key_24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?riotx_text_primary"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix" />
 
         <TextView
@@ -36,7 +36,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

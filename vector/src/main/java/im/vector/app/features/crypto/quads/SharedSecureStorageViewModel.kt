@@ -218,7 +218,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
                 withContext(Dispatchers.IO) {
                     args.requestedSecrets.forEach {
-                        if (session.userAccountDataService().getAccountDataEvent(it) != null) {
+                        if (session.accountDataService().getUserAccountDataEvent(it) != null) {
                             val res = session.sharedSecretStorageService.getSecret(
                                     name = it,
                                     keyId = keyInfo.id,
@@ -287,7 +287,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
                 withContext(Dispatchers.IO) {
                     args.requestedSecrets.forEach {
-                        if (session.userAccountDataService().getAccountDataEvent(it) != null) {
+                        if (session.accountDataService().getUserAccountDataEvent(it) != null) {
                             val res = session.sharedSecretStorageService.getSecret(
                                     name = it,
                                     keyId = keyInfo.id,

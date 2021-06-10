@@ -18,9 +18,8 @@ package im.vector.app.features.debug
 
 import android.os.Bundle
 import android.view.Menu
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import im.vector.app.R
 import im.vector.app.core.utils.toast
@@ -45,7 +44,8 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
         }
 
         views.debugShowDialog.setOnClickListener {
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
+                    .setTitle("Dialog title")
                     .setMessage("Dialog content")
                     .setIcon(R.drawable.ic_settings_x)
                     .setPositiveButton("Positive", null)
@@ -55,7 +55,7 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
         }
 
         views.debugShowBottomSheet.setOnClickListener {
-            BottomSheetDialogFragment().show(supportFragmentManager, "TAG")
+            DebugBottomSheet().show(supportFragmentManager, "TAG")
         }
     }
 

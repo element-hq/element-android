@@ -22,7 +22,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
@@ -37,6 +36,7 @@ import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.core.ui.views.KnownCallsViewHolder
@@ -66,6 +66,7 @@ class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
         private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
+        private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences
@@ -211,7 +212,7 @@ class HomeDetailFragment @Inject constructor(
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
-                    colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
+                    colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)
                                 ?.navigator
@@ -239,7 +240,7 @@ class HomeDetailFragment @Inject constructor(
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
-                    colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
+                    colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             // mark as ignored to avoid showing it again
@@ -365,11 +366,14 @@ class HomeDetailFragment @Inject constructor(
                         detach(it)
                     }
             if (fragmentToShow == null) {
-                if (tab is HomeTab.RoomList) {
-                    val params = RoomListParams(tab.displayMode)
-                    add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
-                } else {
-                    add(R.id.roomListContainer, createDialPadFragment())
+                when (tab) {
+                    is HomeTab.RoomList -> {
+                        val params = RoomListParams(tab.displayMode)
+                        add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                    }
+                    is HomeTab.DialPad  -> {
+                        add(R.id.roomListContainer, createDialPadFragment())
+                    }
                 }
             } else {
                 if (tab is HomeTab.DialPad) {
@@ -431,11 +435,11 @@ class HomeDetailFragment @Inject constructor(
         isVisible = count > 0
         number = count
         maxCharacterCount = 3
-        badgeTextColor = ContextCompat.getColor(requireContext(), R.color.white)
+        badgeTextColor = ThemeUtils.getColor(requireContext(), R.attr.colorOnPrimary)
         backgroundColor = if (highlight) {
-            ContextCompat.getColor(requireContext(), R.color.riotx_notice)
+            ThemeUtils.getColor(requireContext(), R.attr.colorError)
         } else {
-            ThemeUtils.getColor(requireContext(), R.attr.riotx_unread_room_badge)
+            ThemeUtils.getColor(requireContext(), R.attr.vctr_unread_room_badge)
         }
     }
 

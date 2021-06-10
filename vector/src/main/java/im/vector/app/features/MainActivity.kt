@@ -20,10 +20,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -208,7 +208,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
     private fun displayError(failure: Throwable) {
         if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(errorFormatter.toHumanReadable(failure))
                     .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }

@@ -85,7 +85,6 @@ class RoomAliasController @Inject constructor(
                 formSwitchItem {
                     id("roomVisibility")
                     title(host.stringProvider.getString(R.string.room_alias_publish_to_directory, data.homeServerName))
-                    showDivider(false)
                     switchChecked(data.roomDirectoryVisibility() == RoomDirectoryVisibility.PUBLIC)
                     listener {
                         if (it) {
@@ -171,7 +170,6 @@ class RoomAliasController @Inject constructor(
                 formEditTextItem {
                     id("publishManuallyEdit")
                     value(data.publishManuallyState.value)
-                    showBottomSeparator(false)
                     hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                     inputType(InputType.TYPE_CLASS_TEXT)
                     onTextChange { text ->
@@ -249,7 +247,6 @@ class RoomAliasController @Inject constructor(
                     id("newLocalAlias")
                     value(data.newLocalAliasState.value)
                     homeServer(":" + data.homeServerName)
-                    showBottomSeparator(false)
                     errorMessage(host.roomAliasErrorFormatter.format((data.newLocalAliasState.asyncRequest as? Fail)?.error as? RoomAliasError))
                     onTextChange { value ->
                         host.callback?.setNewLocalAliasLocalPart(value)

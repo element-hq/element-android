@@ -51,19 +51,8 @@ class MatrixToRoomSpaceFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.matrixToCardMainButton.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                mainButtonClicked()
-            }
-
-            override fun onRetryClicked() = onButtonClicked()
-        }
-        views.matrixToCardSecondaryButton.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                secondaryButtonClicked()
-            }
-            override fun onRetryClicked() = onButtonClicked()
-        }
+        views.matrixToCardMainButton.commonClicked = { mainButtonClicked() }
+        views.matrixToCardSecondaryButton.commonClicked = { secondaryButtonClicked() }
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->

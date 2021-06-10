@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <corners android:radius="96dp" />
-    <solid android:color="?riotx_background" />
+    <solid android:color="?android:colorBackground" />
 
 </shape>

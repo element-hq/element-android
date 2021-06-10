@@ -30,13 +30,13 @@ abstract class SettingsContinueCancelItem : EpoxyModelWithHolder<SettingsContinu
     @EpoxyAttribute
     var continueText: String? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var continueOnClick: ClickListener? = null
 
     @EpoxyAttribute
     var canContinue: Boolean = true
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var cancelOnClick: ClickListener? = null
 
     override fun bind(holder: Holder) {

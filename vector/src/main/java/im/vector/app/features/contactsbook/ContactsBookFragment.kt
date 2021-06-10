@@ -20,10 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
@@ -76,7 +76,7 @@ class ContactsBookFragment @Inject constructor(
     private fun setupConsentView() {
         views.phoneBookSearchForMatrixContacts.setOnClickListener {
             withState(contactsBookViewModel) { state ->
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.identity_server_consent_dialog_title)
                         .setMessage(getString(R.string.identity_server_consent_dialog_content, state.identityServerUrl ?: ""))
                         .setPositiveButton(R.string.yes) { _, _ ->

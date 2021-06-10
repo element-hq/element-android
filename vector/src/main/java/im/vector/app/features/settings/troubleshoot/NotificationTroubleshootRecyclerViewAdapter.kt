@@ -54,12 +54,12 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
 
         fun bind(test: TroubleshootTest) {
             val context = itemView.context
-            troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_primary))
-            troubleshootTestDescription.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
+            troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_primary))
+            troubleshootTestDescription.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
 
             when (test.status) {
                 TroubleshootTest.TestStatus.NOT_STARTED      -> {
-                    troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
+                    troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
 
                     troubleshootProgressBar.visibility = View.INVISIBLE
                     troubleshootStatusIcon.visibility = View.VISIBLE
@@ -83,10 +83,8 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                     troubleshootProgressBar.visibility = View.INVISIBLE
                     troubleshootStatusIcon.visibility = View.VISIBLE
                     troubleshootStatusIcon.setImageResource(R.drawable.unit_test_ko)
-
                     troubleshootStatusIcon.imageTintList = null
-
-                    troubleshootTestDescription.setTextColor(ContextCompat.getColor(context, R.color.riotx_notice))
+                    troubleshootTestDescription.setTextColor(ThemeUtils.getColor(context, R.attr.colorError))
                 }
                 TroubleshootTest.TestStatus.SUCCESS          -> {
                     troubleshootProgressBar.visibility = View.INVISIBLE

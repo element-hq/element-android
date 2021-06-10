@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="WizardButtonView">
+        <attr name="icon" format="reference" />
+        <attr name="iconTint"/>
+        <attr name="title" format="string" />
+        <attr name="subTitle" format="string" />
+    </declare-styleable>
+
+</resources>

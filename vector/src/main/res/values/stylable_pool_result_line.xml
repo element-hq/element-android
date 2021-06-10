@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PollResultLineView">
+        <attr name="optionName" format="string" localization="suggested" />
+        <attr name="optionCount" format="string" />
+        <attr name="optionSelected" format="boolean" />
+        <attr name="optionIsWinner" format="boolean" />
+    </declare-styleable>
+
+</resources>

@@ -4,7 +4,7 @@
     android:id="@+id/bottomSheetRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:fadeScrollbars="false"
     android:scrollbars="vertical"
     tools:itemCount="5"

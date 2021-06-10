@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
-import org.matrix.android.sdk.api.session.accountdata.AccountDataService
+import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
@@ -93,7 +93,7 @@ import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProces
 import org.matrix.android.sdk.internal.session.room.tombstone.RoomTombstoneEventProcessor
 import org.matrix.android.sdk.internal.session.securestorage.DefaultSecureStorageService
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
-import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataService
+import org.matrix.android.sdk.internal.session.user.accountdata.DefaultSessionAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
 import org.matrix.android.sdk.internal.util.md5
 import retrofit2.Retrofit
@@ -364,7 +364,7 @@ internal abstract class SessionModule {
     abstract fun bindHomeServerCapabilitiesService(service: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
 
     @Binds
-    abstract fun bindAccountDataService(service: UserAccountDataService): AccountDataService
+    abstract fun bindSessionAccountDataService(service: DefaultSessionAccountDataService): SessionAccountDataService
 
     @Binds
     abstract fun bindEventService(service: DefaultEventService): EventService

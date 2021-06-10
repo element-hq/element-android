@@ -63,8 +63,8 @@ class DeviceVerificationInfoBottomSheet :
         super.onViewCreated(view, savedInstanceState)
         views.bottomSheetRecyclerView.configureWith(
                 controller,
-                showDivider = false,
-                hasFixedSize = false)
+                hasFixedSize = false
+        )
         controller.callback = this
         views.bottomSheetTitle.isVisible = false
     }

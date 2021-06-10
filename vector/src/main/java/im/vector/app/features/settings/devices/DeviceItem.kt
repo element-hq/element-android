@@ -23,8 +23,10 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.core.utils.DimensionConverter
@@ -47,8 +49,8 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
     @EpoxyAttribute
     var currentDevice = false
 
-    @EpoxyAttribute
-    var itemClickAction: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var itemClickAction: ClickListener? = null
 
     @EpoxyAttribute
     var detailedMode = false
@@ -73,7 +75,7 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.root.setOnClickListener { itemClickAction?.invoke() }
+        holder.root.onClick(itemClickAction)
 
         if (e2eCapable) {
             val shield = TrustUtils.shieldForTrust(
@@ -123,7 +125,7 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
                                 span {
                                     text = "${deviceInfo.deviceId}"
                                     apply {
-                                        colorProvider?.getColorFromAttribute(R.attr.riotx_text_secondary)?.let {
+                                        colorProvider?.getColorFromAttribute(R.attr.vctr_content_secondary)?.let {
                                             textColor = it
                                         }
                                         dimensionConverter?.spToPx(12)?.let {

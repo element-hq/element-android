@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -16,7 +16,7 @@
         android:layout_marginBottom="12dp"
         android:gravity="center"
         android:text="@string/invite_people_to_your_space"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:gravity="center"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/joinInfoHelpText"
         app:layout_constraintTop_toBottomOf="@id/headerText"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         app:icon="@drawable/ic_mail"
-        app:iconTint="?riotx_text_secondary"
+        app:iconTint="?vctr_content_secondary"
         app:title="@string/invite_by_email" />
 
     <im.vector.app.features.spaces.create.WizardButtonView
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         app:icon="@drawable/ic_add_people"
-        app:iconTint="?riotx_text_secondary"
+        app:iconTint="?vctr_content_secondary"
         app:title="@string/invite_by_mxid" />
 
     <im.vector.app.features.spaces.create.WizardButtonView
@@ -58,10 +58,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         app:icon="@drawable/ic_share_link"
-        app:iconTint="?riotx_text_secondary"
+        app:iconTint="?vctr_content_secondary"
         app:title="@string/invite_by_link" />
 
-    <!--    <com.google.android.material.button.MaterialButton-->
+    <!--    <Button-->
     <!--        android:id="@+id/skipButton"-->
     <!--        style="@style/VectorButtonStyleOutlined"-->
     <!--        android:layout_width="match_parent"-->
@@ -69,6 +69,6 @@
     <!--        android:layout_marginTop="@dimen/layout_vertical_margin"-->
     <!--        android:text="@string/skip_for_now"-->
     <!--        android:textAllCaps="true"-->
-    <!--        android:textColor="?colorAccent" />-->
+    <!--        android:textColor="?colorSecondary" />-->
 
 </LinearLayout>

@@ -17,12 +17,10 @@
 package im.vector.app.features.roomprofile.members
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.epoxy.profiles.profileMatrixItem
 import im.vector.app.core.extensions.join
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -36,16 +34,13 @@ import javax.inject.Inject
 class RoomMemberListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
-        private val roomMemberSummaryFilter: RoomMemberSummaryFilter,
-        colorProvider: ColorProvider
+        private val roomMemberSummaryFilter: RoomMemberSummaryFilter
 ) : TypedEpoxyController<RoomMemberListViewState>() {
 
     interface Callback {
         fun onRoomMemberClicked(roomMember: RoomMemberSummary)
         fun onThreePidInviteClicked(event: Event)
     }
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var callback: Callback? = null
 
@@ -96,7 +91,7 @@ class RoomMemberListController @Inject constructor(
                             matrixItem(roomMember.toMatrixItem())
                             avatarRenderer(host.avatarRenderer)
                             userEncryptionTrustLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
-                            clickListener { _ ->
+                            clickListener {
                                 host.callback?.onRoomMemberClicked(roomMember)
                             }
                         }
@@ -104,7 +99,6 @@ class RoomMemberListController @Inject constructor(
                     between = { _, roomMemberBefore ->
                         dividerItem {
                             id("divider_${roomMemberBefore.userId}")
-                            color(host.dividerColor)
                         }
                     }
             )
@@ -112,7 +106,6 @@ class RoomMemberListController @Inject constructor(
                 // Display the threepid invite after the regular invite
                 dividerItem {
                     id("divider_threepidinvites")
-                    color(host.dividerColor)
                 }
 
                 buildThreePidInvites(data)
@@ -143,7 +136,7 @@ class RoomMemberListController @Inject constructor(
                                             matrixItem(MatrixItem.UserItem("@", displayName = content.displayName))
                                             avatarRenderer(host.avatarRenderer)
                                             editable(data.actionsPermissions.canRevokeThreePidInvite)
-                                            clickListener { _ ->
+                                            clickListener {
                                                 host.callback?.onThreePidInviteClicked(event)
                                             }
                                         }
@@ -152,7 +145,6 @@ class RoomMemberListController @Inject constructor(
                         between = { idx, _ ->
                             dividerItem {
                                 id("divider3_$idx")
-                                color(host.dividerColor)
                             }
                         }
                 )

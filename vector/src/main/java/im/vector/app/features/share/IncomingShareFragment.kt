@@ -25,11 +25,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.cleanup
@@ -199,7 +199,7 @@ class IncomingShareFragment @Inject constructor(
     }
 
     private fun showConfirmationDialog(roomSummary: RoomSummary, sharedData: SharedData) {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.send_attachment)
                 .setMessage(getString(R.string.share_confirm_room, roomSummary.displayName))
                 .setPositiveButton(R.string.send) { _, _ ->

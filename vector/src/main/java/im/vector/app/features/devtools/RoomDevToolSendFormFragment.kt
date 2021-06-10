@@ -40,7 +40,7 @@ class RoomDevToolSendFormFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.genericRecyclerView.configureWith(epoxyController, showDivider = false)
+        views.genericRecyclerView.configureWith(epoxyController)
         epoxyController.interactionListener = this
     }
 

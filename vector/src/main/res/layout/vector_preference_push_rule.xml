@@ -36,10 +36,10 @@
             android:maxLines="2"
             android:paddingTop="6dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="?vctr_content_secondary"
             android:textSize="14sp"
             tools:text="Summary"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
     </RelativeLayout>
 

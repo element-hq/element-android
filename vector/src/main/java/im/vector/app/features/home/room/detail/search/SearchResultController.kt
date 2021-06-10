@@ -29,7 +29,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItemHeader_
+import im.vector.app.core.ui.list.GenericHeaderItem_
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -111,7 +111,7 @@ class SearchResultController @Inject constructor(
                 timeInMillis = eventAndSender.event.originServerTs ?: System.currentTimeMillis()
             }
             if (lastDate?.get(Calendar.DAY_OF_YEAR) != eventDate.get(Calendar.DAY_OF_YEAR)) {
-                GenericItemHeader_()
+                GenericHeaderItem_()
                         .id(eventDate.hashCode())
                         .text(dateFormatter.format(eventDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
                         .let { result.add(it) }
