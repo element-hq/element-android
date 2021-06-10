@@ -102,7 +102,6 @@ class SpaceDetailEpoxyController @Inject constructor(
                                 (((data.aliasVerificationTask as? Fail)?.error) as? RoomAliasError))
                 )
                 onTextChange(host.aliasTextWatcher)
-                showBottomSeparator(false)
             }
         }
 

@@ -99,11 +99,13 @@ class CreateRoomController @Inject constructor(
         }
         if (viewState.roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Public) {
             // Room alias for public room
-            roomAliasEditItem {
+            formEditTextItem {
                 id("alias")
                 enabled(enableFormElement)
                 value(viewState.roomVisibilityType.aliasLocalPart)
-                homeServer(":" + viewState.homeServerName)
+                inputSuffix(":" + viewState.homeServerName)
+                inputPrefix("#")
+                hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                 errorMessage(
                         host.roomAliasErrorFormatter.format(
                                 (((viewState.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError)

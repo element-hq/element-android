@@ -17,6 +17,7 @@
 package im.vector.app.features.form
 
 import android.text.Editable
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
