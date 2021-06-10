@@ -68,6 +68,7 @@
         <item name="materialButtonStyle">@style/VectorButtonStyle</item>
         <item name="toolbarStyle">@style/VectorToolbar</item>
         <item name="materialAlertDialogTheme">@style/VectorAlertDialogStyleLight</item>
+        <item name="bottomNavigationStyle">@style/VectorBottomNavigation</item>
 
         <!-- Default style for text input -->
         <item name="textInputStyle">@style/VectorTextInputLayout</item>
