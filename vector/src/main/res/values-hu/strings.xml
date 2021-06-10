@@ -2416,7 +2416,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_troubleshoot_test_push_loop_title">Push tesztelése</string>
     <string name="error_threepid_auth_failed">Ellenőrizd, hogy rákattintottál arra a hivatkozásra amit e-mailben küldtünk neked.</string>
     <string name="settings_remove_three_pid_confirmation_content">%s törlése\?</string>
-    <string name="search_is_not_supported_in_e2e_room">Titkosított szobákban való keresés egyenlőre nem támogatott.</string>
+    <string name="search_is_not_supported_in_e2e_room">Titkosított szobákban való keresés egyelőre nem támogatott.</string>
     <string name="search_banned_user_hint">Kitiltott felhasználók szűrése</string>
     <string name="room_permissions_change_topic">Téma megváltoztatása</string>
     <string name="room_permissions_upgrade_the_room">Szoba fejlesztése</string>
@@ -2469,7 +2469,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \nNincs jogosultságod szobák hozzáadásához.</string>
     <string name="this_space_has_no_rooms">Ezen a Téren nincsenek szobák</string>
     <string name="spaces_no_server_support_description">További információért vedd fel a kapcsolatot a matrix szerver adminisztrátorával</string>
-    <string name="spaces_no_server_support_title">Úgy látszik a matrix szervered nem támogatja egyenlőre a Tereket</string>
+    <string name="spaces_no_server_support_title">Úgy látszik a matrix szervered nem támogatja egyelőre a Tereket</string>
     <string name="spaces_feeling_experimental_subspace">Szeretsz kísérletezni\?
 \nTereket adhatsz terekhez.</string>
     <string name="labs_space_show_orphan_in_home">Kísérleti tér - Csak árvák mutatása a Kezdőlapon</string>
@@ -2506,7 +2506,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="join_anyway">Belépés mindenképpen</string>
     <string name="join_space">Belépés a Térbe</string>
     <string name="create_space">Tér készítése</string>
-    <string name="skip_for_now">Kihagy egyenlőre</string>
+    <string name="skip_for_now">Kihagy egyelőre</string>
     <string name="share_space_link_message">Csatlakozz a Teremhez %1$s %2$s</string>
     <string name="invite_just_to_this_room_desc">Nem lesznek a részesei ennek: %s</string>
     <string name="invite_just_to_this_room">Csak ehhez a szobához</string>
@@ -2515,7 +2515,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="invite_by_link">Megosztás hivatkozás</string>
     <string name="invite_by_mxid">Meghívás felhasználónévvel</string>
     <string name="invite_by_email">Meghívás e-maillel</string>
-    <string name="invite_people_to_your_space_desc">Egyenlőre csak te vagy itt, %s még jobb lehet másokkal együtt.</string>
+    <string name="invite_people_to_your_space_desc">Egyelőre csak te vagy itt, %s még jobb lehet másokkal együtt.</string>
     <string name="invite_to_space">Meghívó ide: %s</string>
     <string name="invite_people_to_your_space">Emberek meghívása a teredbe</string>
     <string name="invite_people_menu">Személyek meghívása</string>

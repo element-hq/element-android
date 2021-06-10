@@ -2725,7 +2725,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="jitsi_leave_conf_to_join_another_one_content">Salir de la conferencia actual y cambiar a otra\?</string>
     <string name="error_jitsi_join_conf">Lo siento, un error ha ocurrido cuando se intentaba unir a la conferencia</string>
     <string name="room_settings_room_access_entry_unknown">Configuración de acceso desconocido (%s)</string>
-    <string name="room_alias_publish_to_directory">Publicar esta sala publicamente en el directorio de salas %1$s\?</string>
+    <string name="room_alias_publish_to_directory">Publicar esta sala públicamente en el directorio de salas %1$s\?</string>
     <string name="room_settings_guest_access_title">Permitir que invitados se unan</string>
     <string name="room_alias_action_unpublish">Quitar publicación de esta dirección</string>
     <string name="room_alias_publish_to_directory_error">No se puede recibir la visibilidad actual de esta sala (%1$s).</string>
@@ -2759,7 +2759,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_alias_title">Direcciones de la Sala</string>
     <string name="room_settings_alias_title">Direcciones de la sala</string>
     <string name="room_settings_room_access_title">Acceso a la sala</string>
-    <string name="template_settings_add_3pid_flow_not_supported">No puedes hacer eso desde ${app_name} movil</string>
+    <string name="template_settings_add_3pid_flow_not_supported">No puedes hacer eso desde ${app_name} móvil</string>
     <string name="option_always_ask">Siempre preguntar</string>
     <string name="spaces_header">Espacios</string>
     <string name="settings_room_directory_show_all_rooms_summary">mostrar todas las salas en el directorio de salas, incluyendo salas con contenido explícito.</string>
