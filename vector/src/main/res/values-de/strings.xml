@@ -1530,13 +1530,13 @@
     <string name="quick_reactions">Schnelle Reaktionen</string>
     <string name="settings_general_title">Allgemein</string>
     <string name="settings_preferences">Einstellungen</string>
-    <string name="settings_security_and_privacy">Sicherheit &amp; Privatsphäre</string>
+    <string name="settings_security_and_privacy">Sicherheit und Privatsphäre</string>
     <string name="settings_expert">Experte</string>
     <string name="settings_push_rules">Push-Regeln</string>
     <string name="settings_push_rules_no_rules">Keine Push-Regeln definiert</string>
     <string name="settings_push_gateway_no_pushers">Keine registrierten Push-Gateways</string>
-    <string name="preference_voice_and_video">Sprache &amp; Video</string>
-    <string name="preference_root_help_about">Hilfe &amp; Über</string>
+    <string name="preference_voice_and_video">Sprache und Video</string>
+    <string name="preference_root_help_about">Hilfe und Über</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Token registrieren</string>
     <string name="send_suggestion">Mache einen Vorschlag</string>
     <string name="send_suggestion_content">Bitte schreibe unten deine Anmerkungen.</string>
@@ -2813,8 +2813,8 @@
     <string name="looking_for_someone_not_in_space">Suchst du jemanden außerhalb %s\?</string>
     <string name="create_spaces_room_public_header_desc">Wir erstellen dir für jedes einen Raum. Du kannst jederzeit weitere Räume hinzufügen.</string>
     <string name="space_manage_rooms_and_spaces">Räume und Spaces verwalten</string>
-    <string name="space_mark_as_suggested">Als \"vorgeschlagen\" markieren</string>
-    <string name="space_mark_as_not_suggested">Als \"nicht vorgeschlagen\" markieren</string>
+    <string name="space_mark_as_suggested">Als vorgeschlagen markieren</string>
+    <string name="space_mark_as_not_suggested">Als nicht vorgeschlagen markieren</string>
     <string name="space_suggested">Vorgeschlagen</string>
     <string name="make_this_space_public">Teile deinen öffentlichen Space mit der Welt</string>
     <string name="space_settings_manage_rooms">Räume verwalten</string>
