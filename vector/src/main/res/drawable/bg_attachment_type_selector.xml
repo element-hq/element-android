@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="?riotx_attachment_selector_border" />
+            <solid android:color="?vctr_attachment_selector_border" />
             <corners android:radius="16dp" />
         </shape>
     </item>
@@ -13,7 +13,7 @@
         android:right="1dp"
         android:top="1dp">
         <shape android:shape="rectangle">
-            <solid android:color="?riotx_attachment_selector_background" />
+            <solid android:color="?vctr_attachment_selector_background" />
             <corners android:radius="16dp" />
 
         </shape>

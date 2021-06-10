@@ -63,7 +63,7 @@ class RoomWidgetsBottomSheet :
         views.bottomSheetRecyclerView.configureWith(epoxyController, hasFixedSize = false)
         views.bottomSheetTitle.text = getString(R.string.active_widgets_title)
         views.bottomSheetTitle.textSize = 20f
-        views.bottomSheetTitle.setTextColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+        views.bottomSheetTitle.setTextColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
         epoxyController.listener = this
         roomDetailViewModel.asyncSubscribe(this, RoomDetailViewState::activeRoomWidgets) {
             epoxyController.setData(it)

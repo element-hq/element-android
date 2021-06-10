@@ -16,7 +16,7 @@
 package im.vector.app.core.dialogs
 
 import android.app.Activity
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
@@ -92,7 +92,7 @@ class UnrecognizedCertificateDialog @Inject constructor(
             }
         }
 
-        val builder = AlertDialog.Builder(activity)
+        val builder = MaterialAlertDialogBuilder(activity)
         val inflater = activity.layoutInflater
         val layout = inflater.inflate(R.layout.dialog_ssl_fingerprint, null)
         val views = DialogSslFingerprintBinding.bind(layout)

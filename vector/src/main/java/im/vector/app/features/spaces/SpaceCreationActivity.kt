@@ -19,11 +19,11 @@ package im.vector.app.features.spaces
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.toMvRxBundle
@@ -98,7 +98,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                 }
                 is CreateSpaceEvents.ShowModalError -> {
                     hideWaitingView()
-                    AlertDialog.Builder(this)
+                    MaterialAlertDialogBuilder(this)
                             .setMessage(it.errorMessage)
                             .setPositiveButton(getString(R.string.ok), null)
                             .show()

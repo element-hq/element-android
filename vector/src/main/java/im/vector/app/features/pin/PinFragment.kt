@@ -23,11 +23,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.beautycoder.pflockscreen.PFFLockScreenConfiguration
 import com.beautycoder.pflockscreen.fragments.PFLockScreenFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -156,7 +156,7 @@ class PinFragment @Inject constructor(
     }
 
     private fun displayForgotPinWarningDialog() {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.auth_pin_reset_title))
                 .setMessage(getString(R.string.auth_pin_reset_content))
                 .setPositiveButton(getString(R.string.auth_pin_new_pin_action)) { _, _ ->

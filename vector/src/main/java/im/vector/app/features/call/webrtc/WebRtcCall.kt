@@ -623,7 +623,7 @@ class WebRtcCall(
                 wasLocalOnHold = isLocalOnHold
                 remoteOnHold = true
                 isLocalOnHold = true
-                direction = RtpTransceiver.RtpTransceiverDirection.INACTIVE
+                direction = RtpTransceiver.RtpTransceiverDirection.SEND_ONLY
                 timer.pause()
             } else {
                 remoteOnHold = false

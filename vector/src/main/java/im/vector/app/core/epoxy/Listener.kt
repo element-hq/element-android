@@ -17,12 +17,22 @@
 package im.vector.app.core.epoxy
 
 import android.view.View
+import im.vector.app.core.utils.DebouncedClickListener
 
 /**
- * Generally we do not care about the View parameter in [View.OnClickListener.onClick()], so create facility to remove it.
+ * View.OnClickListener lambda
  */
-typealias ClickListener = () -> Unit
+typealias ClickListener = (View) -> Unit
 
 fun View.onClick(listener: ClickListener?) {
-    setOnClickListener { listener?.invoke() }
+    if (listener == null) {
+        setOnClickListener(null)
+    } else {
+        setOnClickListener(DebouncedClickListener(listener))
+    }
 }
+
+/**
+ * Simple Text listener lambda
+ */
+typealias TextListener = (String) -> Unit

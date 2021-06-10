@@ -21,13 +21,13 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
@@ -121,7 +121,7 @@ class MatrixToBottomSheet :
                     dismiss()
                 }
                 is MatrixToViewEvents.ShowModalError -> {
-                    AlertDialog.Builder(requireContext())
+                    MaterialAlertDialogBuilder(requireContext())
                             .setMessage(it.error)
                             .setPositiveButton(getString(R.string.ok), null)
                             .show()

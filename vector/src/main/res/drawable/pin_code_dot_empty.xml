@@ -4,7 +4,7 @@
     android:shape="oval">
 
     <stroke
-        android:color="?riotx_text_secondary"
+        android:color="?vctr_content_secondary"
         android:width="1px"/>
 
     <size

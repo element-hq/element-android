@@ -57,7 +57,7 @@ class DialPadFragment : Fragment() {
         dialpadView.findViewById<View>(R.id.dialpad_key_voicemail).isVisible = false
         digits = dialpadView.digits as? DigitsEditText
         digits?.isCursorVisible = cursorVisible
-        digits?.setTextColor(ThemeUtils.getColor(requireContext(), im.vector.app.R.attr.riotx_text_primary))
+        digits?.setTextColor(ThemeUtils.getColor(requireContext(), im.vector.app.R.attr.vctr_content_primary))
         dialpadView.findViewById<View>(R.id.zero).setOnClickListener { append('0') }
         if (enablePlus) {
             dialpadView.findViewById<View>(R.id.zero).setOnLongClickListener {
@@ -91,7 +91,7 @@ class DialPadFragment : Fragment() {
                 clear()
                 true
             }
-            val tintColor = ThemeUtils.getColor(requireContext(), im.vector.app.R.attr.riotx_text_secondary)
+            val tintColor = ThemeUtils.getColor(requireContext(), im.vector.app.R.attr.vctr_content_secondary)
             ImageViewCompat.setImageTintList(dialpadView.deleteButton, ColorStateList.valueOf(tintColor))
         } else {
             dialpadView.deleteButton.isVisible = false

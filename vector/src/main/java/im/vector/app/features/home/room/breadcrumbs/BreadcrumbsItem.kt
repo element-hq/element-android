@@ -23,8 +23,10 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -39,22 +41,17 @@ abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.rootView.setOnClickListener(itemClickListener)
+        holder.rootView.onClick(itemClickListener)
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.avatarImageView.contentDescription = matrixItem.getBestName()
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.draftIndentIndicator.isVisible = hasDraft
         holder.typingIndicator.isVisible = hasTypingUsers
-    }
-
-    override fun unbind(holder: Holder) {
-        holder.rootView.setOnClickListener(null)
-        super.unbind(holder)
     }
 
     class Holder : VectorEpoxyHolder() {

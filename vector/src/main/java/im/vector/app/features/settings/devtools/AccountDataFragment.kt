@@ -21,10 +21,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
@@ -35,7 +35,7 @@ import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
-import org.matrix.android.sdk.api.session.accountdata.AccountDataEvent
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import javax.inject.Inject
 
@@ -63,7 +63,7 @@ class AccountDataFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.genericRecyclerView.configureWith(epoxyController, showDivider = true)
+        views.genericRecyclerView.configureWith(epoxyController, dividerDrawable = R.drawable.divider_horizontal)
         epoxyController.interactionListener = this
     }
 
@@ -73,9 +73,9 @@ class AccountDataFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun didTap(data: AccountDataEvent) {
+    override fun didTap(data: UserAccountDataEvent) {
         val jsonString = MoshiProvider.providesMoshi()
-                .adapter(AccountDataEvent::class.java)
+                .adapter(UserAccountDataEvent::class.java)
                 .toJson(data)
         JSonViewerDialog.newInstance(
                 jsonString,
@@ -84,8 +84,8 @@ class AccountDataFragment @Inject constructor(
         ).show(childFragmentManager, "JSON_VIEWER")
     }
 
-    override fun didLongTap(data: AccountDataEvent) {
-        AlertDialog.Builder(requireActivity())
+    override fun didLongTap(data: UserAccountDataEvent) {
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.delete)
                 .setMessage(getString(R.string.delete_account_data_warning, data.type))
                 .setNegativeButton(R.string.cancel, null)

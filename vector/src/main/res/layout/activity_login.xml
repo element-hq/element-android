@@ -27,7 +27,7 @@
             android:id="@+id/loginTouchArea"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="?riotx_waiting_background_color"
+            android:background="?vctr_waiting_background_color"
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

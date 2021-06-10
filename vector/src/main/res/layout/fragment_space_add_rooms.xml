@@ -10,13 +10,12 @@
         android:id="@+id/roomList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?riotx_background"
+        android:background="?android:colorBackground"
         android:overScrollMode="always"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_room_to_add_in_space" />
 
     <com.google.android.material.appbar.AppBarLayout
-        style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp">
@@ -24,7 +23,6 @@
         <!-- minHeight="0dp" is important to collapse on scroll -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/addRoomToSpaceToolbar"
-            style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:elevation="4dp"
@@ -49,7 +47,7 @@
                     android:gravity="start|center"
                     android:maxLines="1"
                     android:text="@string/space_add_existing_rooms"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -61,7 +59,7 @@
                     android:ellipsize="end"
                     android:gravity="start|center"
                     android:maxLines="1"
-                    android:textColor="?riotx_text_secondary"
+                    android:textColor="?vctr_content_secondary"
                     android:textSize="16sp"
                     tools:text="@sample/spaces.json/data/name" />
 
@@ -82,7 +80,7 @@
             app:layout_constraintTop_toBottomOf="@+id/addRoomToSpaceToolbar"
             app:queryHint="@string/search_hint_room_name" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/createNewRoom"
             style="@style/VectorButtonStyleText"
             android:layout_width="wrap_content"
@@ -94,7 +92,7 @@
             android:text="@string/create_new_room"
             app:icon="@drawable/ic_plus_circle"
             app:iconPadding="13dp"
-            app:iconTint="@color/riotx_accent"
+            app:iconTint="?colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addRoomToSpaceToolbar" />
 

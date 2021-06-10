@@ -23,8 +23,10 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
@@ -61,14 +63,14 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     @EpoxyAttribute
     var movementMethod: MovementMethod? = null
 
-    @EpoxyAttribute
-    var userClicked: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var userClicked: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         avatarRenderer.render(matrixItem, holder.avatar)
-        holder.avatar.setOnClickListener { userClicked?.invoke() }
-        holder.sender.setOnClickListener { userClicked?.invoke() }
+        holder.avatar.onClick(userClicked)
+        holder.sender.onClick(userClicked)
         holder.sender.setTextOrHide(matrixItem.displayName)
         data?.let {
             imageContentRenderer?.render(it, ImageContentRenderer.Mode.THUMBNAIL, holder.imagePreview)

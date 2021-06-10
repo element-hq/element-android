@@ -19,7 +19,7 @@ package im.vector.app.features.crypto.verification.cancel
 import androidx.core.text.toSpannable
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.colorizeMatchingText
@@ -70,29 +70,29 @@ class VerificationCancelController @Inject constructor(
             }
         }
 
-        dividerItem {
+        bottomSheetDividerItem {
             id("sep0")
         }
 
         bottomSheetVerificationActionItem {
             id("cancel")
             title(host.stringProvider.getString(R.string.skip))
-            titleColor(host.colorProvider.getColor(R.color.riotx_destructive_accent))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(host.colorProvider.getColor(R.color.riotx_destructive_accent))
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
             listener { host.listener?.onTapCancel() }
         }
 
-        dividerItem {
+        bottomSheetDividerItem {
             id("sep1")
         }
 
         bottomSheetVerificationActionItem {
             id("continue")
             title(host.stringProvider.getString(R.string._continue))
-            titleColor(host.colorProvider.getColor(R.color.riotx_positive_accent))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(host.colorProvider.getColor(R.color.riotx_positive_accent))
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
             listener { host.listener?.onTapContinue() }
         }
     }

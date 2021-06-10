@@ -18,15 +18,15 @@ package im.vector.app.features.form
 
 import android.graphics.Typeface
 import android.text.Editable
-import android.view.View
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.addTextChangedListenerOnce
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
@@ -38,9 +38,6 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
 
     @EpoxyAttribute
     var value: String? = null
-
-    @EpoxyAttribute
-    var showBottomSeparator: Boolean = true
 
     @EpoxyAttribute
     var errorMessage: String? = null
@@ -58,7 +55,7 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
     var typeFace: Typeface = Typeface.DEFAULT
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    var onTextChange: ((String) -> Unit)? = null
+    var onTextChange: TextListener? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
@@ -80,8 +77,7 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
 
         holder.textInputEditText.isEnabled = enabled
 
-        holder.textInputEditText.addTextChangedListener(onTextChangeListener)
-        holder.bottomSeparator.isVisible = showBottomSeparator
+        holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
     }
 
     override fun shouldSaveViewState(): Boolean {
@@ -96,6 +92,5 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
     class Holder : VectorEpoxyHolder() {
         val textInputLayout by bind<TextInputLayout>(R.id.formMultiLineTextInputLayout)
         val textInputEditText by bind<TextInputEditText>(R.id.formMultiLineEditText)
-        val bottomSeparator by bind<View>(R.id.formTextInputDivider)
     }
 }

@@ -37,12 +37,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/otherKnownCallLayout"
         android:layout_width="80dp"
         android:layout_height="144dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
+        android:background="@color/element_background_light"
         android:visibility="gone"
         app:cardCornerRadius="4dp"
         app:cardElevation="4dp"
@@ -69,7 +70,7 @@
             android:importantForAccessibility="no"
             android:src="@drawable/ic_call_small_pause" />
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <ImageView
         android:id="@+id/otherMemberAvatar"
@@ -103,7 +104,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -120,7 +121,7 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +135,7 @@
         android:layout_height="48dp"
         android:layout_margin="8dp"
         android:gravity="center"
-        android:textColor="?attr/colorAccent"
+        android:textColor="?colorSecondary"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

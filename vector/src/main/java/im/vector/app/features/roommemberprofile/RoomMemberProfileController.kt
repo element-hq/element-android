@@ -21,7 +21,6 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import org.matrix.android.sdk.api.session.Session
@@ -32,11 +31,8 @@ import javax.inject.Inject
 
 class RoomMemberProfileController @Inject constructor(
         private val stringProvider: StringProvider,
-        colorProvider: ColorProvider,
         private val session: Session
 ) : TypedEpoxyController<RoomMemberProfileViewState>() {
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var callback: Callback? = null
 
@@ -73,7 +69,6 @@ class RoomMemberProfileController @Inject constructor(
         buildProfileAction(
                 id = "ignore",
                 title = ignoreActionTitle,
-                dividerColor = dividerColor,
                 destructive = true,
                 editable = false,
                 divider = false,
@@ -84,7 +79,6 @@ class RoomMemberProfileController @Inject constructor(
                     id = "direct",
                     editable = false,
                     title = stringProvider.getString(R.string.room_member_open_or_create_dm),
-                    dividerColor = dividerColor,
                     action = { callback?.onOpenDmClicked() }
             )
         }
@@ -121,7 +115,6 @@ class RoomMemberProfileController @Inject constructor(
                     buildProfileAction(
                             id = "learn_more",
                             title = stringProvider.getString(titleRes),
-                            dividerColor = dividerColor,
                             editable = true,
                             icon = icon,
                             tintIcon = false,
@@ -134,7 +127,6 @@ class RoomMemberProfileController @Inject constructor(
                         buildProfileAction(
                                 id = "learn_more",
                                 title = stringProvider.getString(R.string.verification_profile_verify),
-                                dividerColor = dividerColor,
                                 editable = true,
                                 icon = R.drawable.ic_shield_black,
                                 divider = false,
@@ -144,7 +136,6 @@ class RoomMemberProfileController @Inject constructor(
                         buildProfileAction(
                                 id = "learn_more",
                                 title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
-                                dividerColor = dividerColor,
                                 editable = false,
                                 divider = false,
                                 action = { callback?.onShowDeviceListNoCrossSigning() }
@@ -161,7 +152,6 @@ class RoomMemberProfileController @Inject constructor(
                 buildProfileAction(
                         id = "learn_more",
                         title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
-                        dividerColor = dividerColor,
                         editable = false,
                         divider = false,
                         subtitle = stringProvider.getString(R.string.room_profile_encrypted_subtitle),
@@ -188,7 +178,6 @@ class RoomMemberProfileController @Inject constructor(
                     id = "direct",
                     editable = false,
                     title = stringProvider.getString(R.string.room_member_open_or_create_dm),
-                    dividerColor = dividerColor,
                     action = { callback?.onOpenDmClicked() }
             )
 
@@ -197,7 +186,6 @@ class RoomMemberProfileController @Inject constructor(
                         id = "read_receipt",
                         editable = false,
                         title = stringProvider.getString(R.string.room_member_jump_to_read_receipt),
-                        dividerColor = dividerColor,
                         action = { callback?.onJumpToReadReceiptClicked() }
                 )
             }
@@ -207,7 +195,6 @@ class RoomMemberProfileController @Inject constructor(
             buildProfileAction(
                     id = "mention",
                     title = stringProvider.getString(R.string.room_participants_action_mention),
-                    dividerColor = dividerColor,
                     editable = false,
                     divider = ignoreActionTitle != null,
                     action = { callback?.onMentionClicked() }
@@ -218,7 +205,6 @@ class RoomMemberProfileController @Inject constructor(
                 buildProfileAction(
                         id = "invite",
                         title = stringProvider.getString(R.string.room_participants_action_invite),
-                        dividerColor = dividerColor,
                         destructive = false,
                         editable = false,
                         divider = ignoreActionTitle != null,
@@ -229,7 +215,6 @@ class RoomMemberProfileController @Inject constructor(
                 buildProfileAction(
                         id = "ignore",
                         title = ignoreActionTitle,
-                        dividerColor = dividerColor,
                         destructive = true,
                         editable = false,
                         divider = false,
@@ -262,7 +247,6 @@ class RoomMemberProfileController @Inject constructor(
                     title = stringProvider.getString(R.string.power_level_title),
                     subtitle = powerLevelsStr,
                     divider = canKick || canBan,
-                    dividerColor = dividerColor,
                     editableRes = R.drawable.ic_edit,
                     action = { callback?.onEditPowerLevel(userPowerLevel) }
             )
@@ -277,7 +261,6 @@ class RoomMemberProfileController @Inject constructor(
                             divider = canBan,
                             destructive = true,
                             title = stringProvider.getString(R.string.room_participants_action_kick),
-                            dividerColor = dividerColor,
                             action = { callback?.onKickClicked() }
                     )
                 }
@@ -286,7 +269,6 @@ class RoomMemberProfileController @Inject constructor(
                             id = "cancel_invite",
                             title = stringProvider.getString(R.string.room_participants_action_cancel_invite),
                             divider = canBan,
-                            dividerColor = dividerColor,
                             destructive = true,
                             editable = false,
                             action = { callback?.onCancelInviteClicked() }
@@ -306,7 +288,6 @@ class RoomMemberProfileController @Inject constructor(
                     editable = false,
                     destructive = true,
                     title = banActionTitle,
-                    dividerColor = dividerColor,
                     action = { callback?.onBanClicked(membership == Membership.BAN) }
             )
         }

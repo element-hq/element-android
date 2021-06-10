@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:minHeight="68dp"
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="@dimen/layout_vertical_margin"
@@ -17,14 +17,14 @@
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
-        android:textColor="?android:textColorPrimary"
+        android:textColor="?vctr_content_primary"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/settings_item_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:drawableStart="@drawable/ic_notification_privacy_warning"
-        tools:drawableTint="@color/vector_error_color"
+        tools:drawableTint="?colorError"
         tools:text="foo@bar.test" />
 
     <Button

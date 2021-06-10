@@ -21,7 +21,6 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
@@ -109,7 +108,7 @@ class BottomSheetActionButton @JvmOverloads constructor(
             rightIcon = getDrawable(R.styleable.BottomSheetActionButton_rightIcon)
 
             tint = getColor(R.styleable.BottomSheetActionButton_tint, ThemeUtils.getColor(context, android.R.attr.textColor))
-            titleTextColor = getColor(R.styleable.BottomSheetActionButton_titleTextColor, ContextCompat.getColor(context, R.color.riotx_accent))
+            titleTextColor = getColor(R.styleable.BottomSheetActionButton_titleTextColor, ThemeUtils.getColor(context, R.attr.colorPrimary))
         }
     }
 }

@@ -9,7 +9,7 @@
             <item android:left="6dp" android:right="2dp">
                 <shape>
                     <corners android:bottomRightRadius="4dp" android:topRightRadius="4dp" />
-                    <solid android:color="?riotx_header_panel_background" />
+                    <solid android:color="?vctr_header_background" />
                 </shape>
             </item>
 
@@ -17,7 +17,7 @@
                 <shape>
                     <size android:width="4dp" />
                     <corners android:bottomLeftRadius="40dp" android:topLeftRadius="40dp" />
-                    <solid android:color="@color/riotx_accent" />
+                    <solid android:color="?colorPrimary" />
                 </shape>
             </item>
 

@@ -5,19 +5,18 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/roomList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?riotx_background"
+        android:background="?android:colorBackground"
         android:overScrollMode="always"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_profile_matrix_item" />
 
     <com.google.android.material.appbar.AppBarLayout
-        style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp">
@@ -25,7 +24,6 @@
         <!-- minHeight="0dp" is important to collapse on scroll -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/addRoomToSpaceToolbar"
-            style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:elevation="4dp"
@@ -49,7 +47,7 @@
                     android:ellipsize="end"
                     android:gravity="start|center"
                     android:maxLines="1"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     tools:text="@tools:sample/lorem/random" />
@@ -62,7 +60,7 @@
                     android:ellipsize="end"
                     android:gravity="start|center"
                     android:maxLines="1"
-                    android:textColor="?riotx_text_secondary"
+                    android:textColor="?vctr_content_secondary"
                     android:textSize="16sp"
                     tools:text="@tools:sample/lorem/random" />
 

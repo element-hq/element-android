@@ -21,8 +21,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.databinding.FragmentSpaceCreateChooseTypeBinding
 import javax.inject.Inject
 
@@ -36,12 +36,12 @@ class ChooseSpaceTypeFragment @Inject constructor() : VectorBaseFragment<Fragmen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.publicButton.setOnClickListener(DebouncedClickListener({
+        views.publicButton.onClick {
             sharedViewModel.handle(CreateSpaceAction.SetRoomType(SpaceType.Public))
-        }))
+        }
 
-        views.privateButton.setOnClickListener(DebouncedClickListener({
-             sharedViewModel.handle(CreateSpaceAction.SetRoomType(SpaceType.Private))
-        }))
+        views.privateButton.onClick {
+            sharedViewModel.handle(CreateSpaceAction.SetRoomType(SpaceType.Private))
+        }
     }
 }

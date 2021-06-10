@@ -8,7 +8,7 @@
     android:layout_marginStart="8dp"
     android:fontFamily="sans-serif-medium"
     android:padding="8dp"
-    android:textColor="?attr/riotx_text_primary"
+    android:textColor="?vctr_content_primary"
     android:textSize="20sp"
     android:textStyle="normal"
     tools:text="Recents | Contacts" />

@@ -11,7 +11,6 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/userListToolbar"
-            style="@style/VectorToolbarStyle"
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
             android:elevation="4dp"
@@ -46,7 +45,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@string/fab_menu_create_chat"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -103,7 +102,7 @@
             android:id="@+id/userListFilterDivider"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="?attr/vctr_list_divider_color"
+            android:background="?vctr_list_separator"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userListSearch" />
@@ -116,7 +115,7 @@
             android:layout_margin="16dp"
             android:drawablePadding="8dp"
             android:text="@string/settings_hs_admin_e2e_disabled"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             android:textSize="14sp"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/userListFilterDivider"

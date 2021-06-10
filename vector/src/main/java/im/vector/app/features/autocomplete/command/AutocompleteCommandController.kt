@@ -37,9 +37,7 @@ class AutocompleteCommandController @Inject constructor(private val stringProvid
                 name(command.command)
                 parameters(command.parameters)
                 description(host.stringProvider.getString(command.description))
-                clickListener { _ ->
-                    host.listener?.onItemClick(command)
-                }
+                clickListener { host.listener?.onItemClick(command) }
             }
         }
     }

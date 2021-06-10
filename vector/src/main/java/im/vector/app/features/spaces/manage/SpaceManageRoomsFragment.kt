@@ -68,7 +68,7 @@ class SpaceManageRoomsFragment @Inject constructor(
         views.appBarTitle.text = getString(R.string.space_manage_rooms_and_spaces)
         views.createNewRoom.isVisible = false
         epoxyController.listener = this
-        views.roomList.configureWith(epoxyController, hasFixedSize = true, showDivider = true)
+        views.roomList.configureWith(epoxyController, hasFixedSize = true, dividerDrawable = R.drawable.divider_horizontal)
 
         views.publicRoomsFilter.queryTextChanges()
                 .debounce(200, TimeUnit.MILLISECONDS)

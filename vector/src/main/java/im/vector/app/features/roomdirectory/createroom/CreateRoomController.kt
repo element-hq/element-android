@@ -20,6 +20,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import im.vector.app.R
+import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formAdvancedToggleItem
@@ -92,8 +93,6 @@ class CreateRoomController @Inject constructor(
             title(host.stringProvider.getString(R.string.create_room_public_title))
             summary(host.stringProvider.getString(R.string.create_room_public_description))
             switchChecked(viewState.roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Public)
-            showDivider(viewState.roomVisibilityType !is CreateRoomViewState.RoomVisibilityType.Public)
-
             listener { value ->
                 host.listener?.setIsPublic(value)
             }
@@ -114,6 +113,9 @@ class CreateRoomController @Inject constructor(
                 }
             }
         } else {
+            dividerItem {
+                id("divider0")
+            }
             // Room encryption for private room
             formSwitchItem {
                 id("encryption")
@@ -133,6 +135,9 @@ class CreateRoomController @Inject constructor(
                 }
             }
         }
+        dividerItem {
+            id("divider1")
+        }
         formAdvancedToggleItem {
             id("showAdvanced")
             title(host.stringProvider.getString(if (viewState.showAdvanced) R.string.hide_advanced else R.string.show_advanced))
@@ -146,7 +151,6 @@ class CreateRoomController @Inject constructor(
                 title(host.stringProvider.getString(R.string.create_room_disable_federation_title, viewState.homeServerName))
                 summary(host.stringProvider.getString(R.string.create_room_disable_federation_description))
                 switchChecked(viewState.disableFederation)
-                showDivider(false)
                 listener { value -> host.listener?.setDisableFederation(value) }
             }
         }

@@ -29,7 +29,7 @@ import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.genericItemHeader
+import im.vector.app.core.ui.list.genericHeaderItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
@@ -90,7 +90,7 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                 }?.let { fullInfo ->
                     val deviceInfo = fullInfo.deviceInfo
                     // Current device
-                    genericItemHeader {
+                    genericHeaderItem {
                         id("current")
                         text(host.stringProvider.getString(R.string.devices_current_device))
                     }
@@ -126,7 +126,7 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
 
         // Other devices
         if (devices.size > 1) {
-            genericItemHeader {
+            genericHeaderItem {
                 id("others")
                 text(host.stringProvider.getString(R.string.devices_other_devices))
             }

@@ -79,24 +79,16 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.spaceCard.matrixToCardMainButton.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                // quick local echo
-                views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Loading)
-                views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = false
-                viewModel.handle(SpaceInviteBottomSheetAction.DoJoin)
-            }
-
-            override fun onRetryClicked() = onButtonClicked()
+        views.spaceCard.matrixToCardMainButton.commonClicked = {
+            // quick local echo
+            views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Loading)
+            views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = false
+            viewModel.handle(SpaceInviteBottomSheetAction.DoJoin)
         }
-        views.spaceCard.matrixToCardSecondaryButton.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                views.spaceCard.matrixToCardMainButton.button.isEnabled = false
-                views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Loading)
-                viewModel.handle(SpaceInviteBottomSheetAction.DoReject)
-            }
-
-            override fun onRetryClicked() = onButtonClicked()
+        views.spaceCard.matrixToCardSecondaryButton.commonClicked = {
+            views.spaceCard.matrixToCardMainButton.button.isEnabled = false
+            views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Loading)
+            viewModel.handle(SpaceInviteBottomSheetAction.DoReject)
         }
 
         viewModel.observeViewEvents {
@@ -144,15 +136,15 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             Uninitialized -> {
                 views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Button)
             }
-            is Loading -> {
+            is Loading    -> {
                 views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Loading)
                 views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = false
             }
-            is Success -> {
+            is Success    -> {
                 interactionListener?.spaceInviteBottomSheetOnAccept(inviteArgs.spaceId)
                 dismiss()
             }
-            is Fail -> {
+            is Fail       -> {
                 views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Error)
                 views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = true
             }
@@ -162,15 +154,15 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             Uninitialized -> {
                 views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Button)
             }
-            is Loading -> {
+            is Loading    -> {
                 views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Loading)
                 views.spaceCard.matrixToCardMainButton.button.isEnabled = false
             }
-            is Success -> {
+            is Success    -> {
                 interactionListener?.spaceInviteBottomSheetOnDecline(inviteArgs.spaceId)
                 dismiss()
             }
-            is Fail -> {
+            is Fail       -> {
                 views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Error)
                 views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = true
             }

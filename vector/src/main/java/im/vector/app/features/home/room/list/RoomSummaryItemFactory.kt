@@ -23,7 +23,6 @@ import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
@@ -64,8 +63,8 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .buttonLabel(stringProvider.getString(R.string.join))
                 .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
                 .memberCount(spaceChildInfo.activeMemberCount ?: 0)
-                .buttonClickListener(DebouncedClickListener({ listener?.onJoinSuggestedRoom(spaceChildInfo) }))
-                .itemClickListener(DebouncedClickListener({ listener?.onSuggestedRoomClicked(spaceChildInfo) }))
+                .buttonClickListener { listener?.onJoinSuggestedRoom(spaceChildInfo) }
+                .itemClickListener { listener?.onSuggestedRoomClicked(spaceChildInfo) }
     }
 
     private fun createInvitationItem(roomSummary: RoomSummary,
@@ -127,10 +126,6 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .itemLongClickListener { _ ->
                     onLongClick?.invoke(roomSummary) ?: false
                 }
-                .itemClickListener(
-                        DebouncedClickListener({
-                            onClick?.invoke(roomSummary)
-                        })
-                )
+                .itemClickListener { onClick?.invoke(roomSummary) }
     }
 }
