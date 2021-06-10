@@ -29,8 +29,10 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.image
@@ -52,12 +54,12 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
     @EpoxyAttribute var buttonLabel: String? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemLongClickListener: View.OnLongClickListener? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: View.OnClickListener? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var buttonClickListener: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var buttonClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.rootView.setOnClickListener(itemClickListener)
+        holder.rootView.onClick(itemClickListener)
         holder.rootView.setOnLongClickListener {
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             itemLongClickListener?.onLongClick(it) ?: false
@@ -68,7 +70,7 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
         holder.descriptionText.text = span {
             span {
                 apply {
-                    val tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+                    val tintColor = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
                     ContextCompat.getDrawable(holder.view.context, R.drawable.ic_member_small)
                             ?.apply {
                                 ThemeUtils.tintDrawableWithColor(this, tintColor)
@@ -95,11 +97,12 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
             holder.joinButton.isVisible = true
         }
 
-        holder.joinButton.setOnClickListener {
+        holder.joinButton.onClick {
             // local echo
             holder.joinButton.isEnabled = false
+            // FIXME It may lead to crash if the view is gone
             holder.view.postDelayed({ holder.joinButton.isEnabled = true }, 400)
-            buttonClickListener?.onClick(it)
+            buttonClickListener?.invoke(it)
         }
     }
 

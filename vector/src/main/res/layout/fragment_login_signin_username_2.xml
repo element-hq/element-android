@@ -5,7 +5,7 @@
     android:id="@+id/login_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -33,7 +33,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginFieldTil"
-                style="@style/VectorTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -49,7 +48,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginSubmit"
                 style="@style/Style.Vector.Login.Button"
                 android:layout_width="wrap_content"
@@ -67,7 +66,7 @@
                 android:text="@string/login_enter_identifier_help"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginChooseAServer"
                 style="@style/Style.Vector.Login.Button.Text"
                 android:layout_width="wrap_content"

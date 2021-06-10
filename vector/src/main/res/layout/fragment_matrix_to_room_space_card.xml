@@ -48,7 +48,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textAlignment="textStart"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
@@ -62,7 +62,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textAlignment="textStart"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             android:textSize="15sp"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
@@ -80,7 +80,7 @@
             app:layout_constraintBottom_toBottomOf="@id/matrixToAccessText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/matrixToAccessText"
-            app:tint="?riotx_text_secondary"
+            app:tint="?vctr_content_secondary"
             tools:src="@drawable/ic_public_room"
             tools:visibility="visible" />
 
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/pill_receipt"
-            android:backgroundTint="?riotx_reaction_background_off"
+            android:backgroundTint="?vctr_reaction_background_off"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingStart="12dp"
@@ -126,7 +126,7 @@
                 android:layout_marginEnd="4dp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_room_profile_member_list"
-                app:tint="?riotx_text_primary"
+                app:tint="?vctr_content_primary"
                 tools:ignore="MissingPrefix" />
 
             <TextView
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:maxLines="1"
-                android:textColor="?riotx_text_primary"
+                android:textColor="?vctr_content_primary"
                 tools:text="123 members" />
         </LinearLayout>
 
@@ -147,7 +147,7 @@
             android:autoLink="web"
             android:maxLines="4"
             android:textAlignment="textStart"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@id/matrixToMemberPills"
             tools:text="@sample/rooms.json/data/topic" />
@@ -214,7 +214,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/knownMember1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -237,7 +237,7 @@
             app:layout_constraintTop_toBottomOf="@id/knownMember1"
             app:layout_constraintWidth_max="400dp" />
 
-        <!--        <com.google.android.material.button.MaterialButton-->
+        <!--        <Button-->
         <!--            android:id="@+id/matrixToCardMainButton"-->
         <!--            android:layout_width="0dp"-->
         <!--            android:layout_height="wrap_content"-->
@@ -249,7 +249,7 @@
         <!--            app:layout_constraintWidth_max="400dp"-->
         <!--            tools:text="@string/join" />-->
 
-        <!--        <com.google.android.material.button.MaterialButton-->
+        <!--        <Button-->
         <!--            android:id="@+id/matrixToCardSecondaryButton"-->
         <!--            style="@style/VectorButtonStyleOutlined"-->
         <!--            android:layout_width="0dp"-->

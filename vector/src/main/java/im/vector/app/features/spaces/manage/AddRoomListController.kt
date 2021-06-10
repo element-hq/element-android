@@ -21,7 +21,6 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.app.R
 import im.vector.app.core.ui.list.GenericPillItem_
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.RoomCategoryItem_
@@ -155,9 +154,9 @@ class AddRoomListController @Inject constructor(
             matrixItem(item.toMatrixItem())
             avatarRenderer(host.avatarRenderer)
             selected(host.selectedItems[item.roomId] ?: false)
-            itemClickListener(DebouncedClickListener({
+            itemClickListener {
                 host.listener?.onItemSelected(item)
-            }))
+            }
         }
     }
 }

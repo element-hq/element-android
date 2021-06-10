@@ -36,7 +36,7 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
     @EpoxyAttribute var formattedDate: String? = null
     @EpoxyAttribute lateinit var spannable: CharSequence
     @EpoxyAttribute var sender: MatrixItem? = null
-    @EpoxyAttribute var listener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

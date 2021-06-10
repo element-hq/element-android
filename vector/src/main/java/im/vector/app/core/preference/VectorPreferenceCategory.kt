@@ -48,7 +48,7 @@ class VectorPreferenceCategory : PreferenceCategory {
         val titleTextView = holder.findViewById(android.R.id.title) as? TextView
 
         titleTextView?.setTypeface(null, Typeface.BOLD)
-        titleTextView?.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_primary))
+        titleTextView?.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_primary))
 
         // "isIconSpaceReserved = false" does not work for preference category, so remove the padding
         if (!isIconSpaceReserved) {

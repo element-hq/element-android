@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.account.AccountService
-import org.matrix.android.sdk.api.session.accountdata.AccountDataService
+import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.cache.CacheService
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
@@ -239,9 +239,9 @@ interface Session :
     fun openIdService(): OpenIdService
 
     /**
-     * Returns the user account data service associated with the session
+     * Returns the account data service associated with the session
      */
-    fun userAccountDataService(): AccountDataService
+    fun accountDataService(): SessionAccountDataService
 
     /**
      * Add a listener to the session.

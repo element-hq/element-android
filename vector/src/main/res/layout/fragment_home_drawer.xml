@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true">
 
@@ -27,7 +27,7 @@
             android:src="@drawable/ic_settings_x"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/riotx_accent"
+            app:tint="?colorPrimary"
             tools:ignore="MissingPrefix" />
 
         <ImageView
@@ -50,7 +50,7 @@
             android:layout_marginEnd="8dp"
             android:maxLines="1"
             android:singleLine="true"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/homeDrawerQRCodeButton"
             app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
@@ -64,7 +64,7 @@
             android:layout_marginEnd="8dp"
             android:maxLines="1"
             android:singleLine="true"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/homeDrawerInviteFriendButton"
             app:layout_constraintEnd_toStartOf="@+id/homeDrawerQRCodeButton"
@@ -72,14 +72,14 @@
             app:layout_constraintTop_toBottomOf="@+id/homeDrawerUsernameView"
             tools:text="@sample/users.json/data/id" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/homeDrawerQRCodeButton"
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            android:backgroundTint="?riotx_bottom_nav_background_color"
+            android:backgroundTint="?colorSurface"
             android:elevation="0dp"
             android:insetLeft="0dp"
             android:insetTop="0dp"
@@ -92,13 +92,13 @@
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconSize="20dp"
-            app:iconTint="@color/riotx_accent"
+            app:iconTint="?colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/homeDrawerUsernameView" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/homeDrawerInviteFriendButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/VectorButtonStyleText"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -110,13 +110,10 @@
             android:insetBottom="0dp"
             android:padding="0dp"
             android:text="@string/invite_friends"
-            android:textAllCaps="false"
-            android:textColor="?colorAccent"
             android:textSize="13sp"
             app:icon="@drawable/ic_share"
             app:iconGravity="textStart"
             app:iconSize="20dp"
-            app:iconTint="?colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
@@ -139,7 +136,7 @@
         android:id="@+id/homeDrawerBottomSeparator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/vctr_list_divider_color"
+        android:background="?vctr_list_separator_on_surface"
         app:layout_constraintBottom_toTopOf="@+id/homeDrawerHeaderSettingsView" />
 
     <TextView
@@ -154,9 +151,9 @@
         android:padding="16dp"
         android:text="@string/settings"
         android:textSize="14sp"
-        android:tint="?riotx_android_secondary"
+        android:tint="?vctr_content_secondary"
         app:drawableStartCompat="@drawable/ic_settings_18dp"
-        app:drawableTint="?riotx_android_secondary"
+        app:drawableTint="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -172,9 +169,9 @@
         android:padding="16dp"
         android:text="@string/logout"
         android:textSize="14sp"
-        android:tint="?riotx_android_secondary"
+        android:tint="?vctr_content_secondary"
         app:drawableStartCompat="@drawable/ic_signout_18dp"
-        app:drawableTint="?riotx_android_secondary"
+        app:drawableTint="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

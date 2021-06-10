@@ -5,7 +5,7 @@
     android:drawablePadding="8dp"
     android:gravity="center_vertical"
     android:text="@string/event_redacted"
-    android:textColor="?riotx_text_primary_body_contrast"
+    android:textColor="?vctr_content_tertiary"
     android:textSize="14sp"
-    app:drawableTint="?riotx_text_primary_body_contrast"
-    app:drawableStartCompat="@drawable/ic_trash_16" />
+    app:drawableStartCompat="@drawable/ic_trash_16"
+    app:drawableTint="?vctr_content_tertiary" />

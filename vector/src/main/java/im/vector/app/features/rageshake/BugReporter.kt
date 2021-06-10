@@ -317,7 +317,7 @@ class BugReporter @Inject constructor(
                     builder.addFormDataPart("label", BuildConfig.FLAVOR_DESCRIPTION)
                     builder.addFormDataPart("label", context.getString(R.string.git_branch_name))
 
-                    // Special for RiotX
+                    // Special for Element
                     builder.addFormDataPart("label", "[Element]")
 
                     when (reportType) {

@@ -39,7 +39,7 @@ abstract class FormSubmitButtonItem : EpoxyModelWithHolder<FormSubmitButtonItem.
     @StringRes
     var buttonTitleId: Int? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var buttonClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {

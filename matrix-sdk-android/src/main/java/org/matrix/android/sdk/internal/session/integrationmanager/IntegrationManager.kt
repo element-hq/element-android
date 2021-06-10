@@ -33,7 +33,7 @@ import org.matrix.android.sdk.internal.extensions.observeNotNull
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import org.matrix.android.sdk.api.session.accountdata.AccountDataEvent
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import org.matrix.android.sdk.internal.session.widgets.helper.WidgetFactory
@@ -240,7 +240,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
         )
     }
 
-    private fun AccountDataEvent.asIntegrationManagerWidgetContent(): WidgetContent? {
+    private fun UserAccountDataEvent.asIntegrationManagerWidgetContent(): WidgetContent? {
         return extractWidgetSequence(widgetFactory)
                 .filter {
                     WidgetType.IntegrationManager == it.type

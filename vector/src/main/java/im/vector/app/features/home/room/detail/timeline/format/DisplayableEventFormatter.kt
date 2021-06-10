@@ -143,7 +143,7 @@ class DisplayableEventFormatter @Inject constructor(
         return if (appendAuthor) {
             span {
                 text = senderName
-                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_primary)
+                textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
             }
                     .append(": ")
                     .append(body)

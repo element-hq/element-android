@@ -24,6 +24,8 @@ import android.widget.FrameLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.databinding.ViewButtonStateBinding
 
 class ButtonStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
@@ -36,12 +38,9 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
         object Error : State()
     }
 
-    var callback: Callback? = null
-
-    interface Callback {
-        fun onButtonClicked()
-        fun onRetryClicked()
-    }
+    var commonClicked: ClickListener? = null
+    var buttonClicked: ClickListener? = null
+    var retryClicked: ClickListener? = null
 
     // Big or Flat button
     var button: Button
@@ -54,8 +53,9 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
 
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
-        views.buttonStateRetry.setOnClickListener {
-            callback?.onRetryClicked()
+        views.buttonStateRetry.onClick {
+            commonClicked?.invoke(it)
+            retryClicked?.invoke(it)
         }
 
         // Read attributes
@@ -80,8 +80,9 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
                     }
                 }
 
-        button.setOnClickListener {
-            callback?.onButtonClicked()
+        button.onClick {
+            commonClicked?.invoke(it)
+            buttonClicked?.invoke(it)
         }
     }
 

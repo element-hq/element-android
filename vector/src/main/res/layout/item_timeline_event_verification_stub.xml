@@ -14,11 +14,11 @@
         android:layout_gravity="center_horizontal"
         android:drawablePadding="6dp"
         android:gravity="center"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="15sp"
         android:textStyle="bold"
-        tools:text="@string/verification_request"
-        app:drawableStartCompat="@drawable/ic_shield_black" />
+        app:drawableStartCompat="@drawable/ic_shield_black"
+        tools:text="@string/verification_request" />
 
 
     <TextView
@@ -30,7 +30,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="12dp"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="12sp"
         tools:text="Alice (@alice:matrix.org)" />
 
@@ -42,15 +42,19 @@
         android:orientation="horizontal"
         tools:visibility="visible">
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/sas_verification_verified_decline_button"
-            style="@style/VectorButtonStyleDestructive"
+            style="@style/VectorButtonStyle.Destructive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="@string/decline" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/sas_verification_verified_accept_button"
-            style="@style/VectorButtonStylePositive"
+            style="@style/VectorButtonStyle.Positive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/accept" />
 
     </LinearLayout>
@@ -61,9 +65,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/verification_request_you_accepted"
-        android:textColor="?attr/vctr_notice_secondary"
+        android:textColor="?vctr_notice_secondary"
+        android:textSize="13sp"
         android:visibility="gone"
-        tools:visibility="visible"
-        android:textSize="13sp" />
+        tools:visibility="visible" />
 
 </LinearLayout>

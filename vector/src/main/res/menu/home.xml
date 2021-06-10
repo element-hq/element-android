@@ -33,7 +33,7 @@
         android:id="@+id/menu_home_filter"
         android:icon="@drawable/ic_search"
         android:title="@string/home_filter_placeholder_home"
-        app:iconTint="?riotx_text_secondary"
+        app:iconTint="?vctr_content_secondary"
         app:showAsAction="always" />
 
 </menu>

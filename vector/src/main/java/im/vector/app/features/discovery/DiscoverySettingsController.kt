@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.discovery
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -125,7 +124,7 @@ class DiscoverySettingsController @Inject constructor(
                 id("idServerFooter")
                 helperText(host.stringProvider.getString(R.string.settings_agree_to_terms, identityServer))
                 showCompoundDrawable(true)
-                itemClickListener(View.OnClickListener { host.listener?.openIdentityServerTerms() })
+                itemClickListener { host.listener?.openIdentityServerTerms() }
             }
             settingsButtonItem {
                 id("seeTerms")
@@ -214,15 +213,14 @@ class DiscoverySettingsController @Inject constructor(
                 is Loading ->
                     settingsInformationItem {
                         id("info${pidInfo.threePid.value}")
-                        colorProvider(host.colorProvider)
                         message(host.stringProvider.getString(R.string.settings_discovery_confirm_mail, pidInfo.threePid.value))
+                        textColor(host.colorProvider.getColor(R.color.vector_info_color))
                     }
                 is Fail    ->
                     settingsInformationItem {
                         id("info${pidInfo.threePid.value}")
-                        colorProvider(host.colorProvider)
                         message(host.stringProvider.getString(R.string.settings_discovery_confirm_mail_not_clicked, pidInfo.threePid.value))
-                        textColorId(R.color.riotx_destructive_accent)
+                        textColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                     }
                 is Success -> Unit /* Cannot happen */
             }
@@ -363,9 +361,8 @@ class DiscoverySettingsController @Inject constructor(
         val host = this
         settingsInformationItem {
             id("info${pidInfo.threePid.value}")
-            colorProvider(host.colorProvider)
-            textColorId(R.color.vector_error_color)
             message((pidInfo.isShared as? Fail)?.error?.message ?: "")
+            textColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
         }
     }
 

@@ -94,7 +94,7 @@ class SpacePeopleFragment @Inject constructor(
 
         views.addRoomToSpaceToolbar.navigationIcon = drawableProvider.getDrawable(
                 R.drawable.ic_close_24dp,
-                colorProvider.getColorFromAttribute(R.attr.riot_primary_text_color)
+                colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
         )
         views.addRoomToSpaceToolbar.setNavigationOnClickListener {
             sharedActionViewModel.post(SpacePeopleSharedAction.Dismiss)

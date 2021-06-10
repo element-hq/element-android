@@ -19,9 +19,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -72,7 +72,7 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
 
     override fun didSelectDeleteSetupMessageRecovery() {
         activity?.let {
-            AlertDialog.Builder(it)
+            MaterialAlertDialogBuilder(it)
                     .setTitle(R.string.keys_backup_settings_delete_confirm_title)
                     .setMessage(R.string.keys_backup_settings_delete_confirm_message)
                     .setCancelable(false)

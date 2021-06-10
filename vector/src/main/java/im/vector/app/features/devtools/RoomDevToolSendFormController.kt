@@ -43,7 +43,6 @@ class RoomDevToolSendFormController @Inject constructor(
             enabled(true)
             value(data.sendEventDraft?.type)
             hint(host.stringProvider.getString(R.string.dev_tools_form_hint_type))
-            showBottomSeparator(false)
             onTextChange { text ->
                 host.interactionListener?.processAction(RoomDevToolAction.CustomEventTypeChange(text))
             }
@@ -55,7 +54,6 @@ class RoomDevToolSendFormController @Inject constructor(
                 enabled(true)
                 value(data.sendEventDraft?.stateKey)
                 hint(host.stringProvider.getString(R.string.dev_tools_form_hint_state_key))
-                showBottomSeparator(false)
                 onTextChange { text ->
                     host.interactionListener?.processAction(RoomDevToolAction.CustomEventStateKeyChange(text))
                 }
@@ -67,7 +65,6 @@ class RoomDevToolSendFormController @Inject constructor(
             enabled(true)
             value(data.sendEventDraft?.content)
             hint(host.stringProvider.getString(R.string.dev_tools_form_hint_event_content))
-            showBottomSeparator(false)
             onTextChange { text ->
                 host.interactionListener?.processAction(RoomDevToolAction.CustomEventContentChange(text))
             }

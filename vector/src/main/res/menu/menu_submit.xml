@@ -6,7 +6,7 @@
         android:id="@+id/action_submit"
         android:icon="@drawable/ic_material_done"
         android:title="@string/ok"
-        app:iconTint="@color/riotx_accent"
+        app:iconTint="?colorPrimary"
         app:showAsAction="always" />
 
 </menu>

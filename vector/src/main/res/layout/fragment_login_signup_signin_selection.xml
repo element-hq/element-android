@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -26,7 +26,7 @@
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/loginLogo"
-                app:tint="?riotx_text_primary"
+                app:tint="?vctr_content_primary"
                 tools:ignore="MissingPrefix,UnknownId"
                 tools:src="@drawable/ic_logo_matrix_org"
                 tools:visibility="visible" />
@@ -55,7 +55,7 @@
                 tools:text="@string/login_server_matrix_org_text" />
 
             <!-- Sign up or sign in SSO -->
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginSignupSigninSubmit"
                 style="@style/Style.Vector.Login.Button"
                 android:layout_width="0dp"
@@ -67,7 +67,7 @@
                 tools:text="@string/login_signup" />
 
             <!-- Sign in or gone -->
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginSignupSigninSignIn"
                 style="@style/Style.Vector.Login.Button.Outlined"
                 android:layout_width="0dp"

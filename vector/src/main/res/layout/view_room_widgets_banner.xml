@@ -18,7 +18,7 @@
         android:paddingEnd="12dp"
         android:paddingBottom="8dp"
         android:textAppearance="@style/TextAppearance.Vector.Title"
-        android:textColor="?riotx_room_active_widgets_banner_text"
+        android:textColor="?vctr_room_active_widgets_banner_text"
         tools:text="2 active widgets" />
 
     <TextView
@@ -32,6 +32,6 @@
         android:minWidth="48dp"
         android:text="@string/active_widget_view_action"
         android:textAllCaps="true"
-        android:textColor="?attr/colorAccent" />
+        android:textColor="?colorSecondary" />
 
 </merge>

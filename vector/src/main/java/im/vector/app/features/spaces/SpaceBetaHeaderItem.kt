@@ -20,21 +20,20 @@ import android.view.View
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.utils.DebouncedClickListener
+import im.vector.app.core.epoxy.onClick
 
 @EpoxyModelClass(layout = R.layout.item_space_beta_header)
 abstract class SpaceBetaHeaderItem : VectorEpoxyModel<SpaceBetaHeaderItem.Holder>() {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    var clickAction: View.OnClickListener? = null
+    var clickAction: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.feedBackAction.setOnClickListener(DebouncedClickListener({
-            clickAction?.onClick(it)
-        }))
+        holder.feedBackAction.onClick(clickAction)
     }
 
     class Holder : VectorEpoxyHolder() {

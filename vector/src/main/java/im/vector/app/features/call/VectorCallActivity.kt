@@ -26,7 +26,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
@@ -35,6 +34,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
@@ -359,8 +359,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun onErrorTimoutConnect(turn: TurnServerResponse?) {
         Timber.d("## VOIP onErrorTimoutConnect $turn")
         // TODO ask to use default stun, etc...
-        AlertDialog
-                .Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.call_failed_no_connection)
                 .setMessage(getString(R.string.call_failed_no_connection_description))
                 .setNegativeButton(R.string.ok) { _, _ ->

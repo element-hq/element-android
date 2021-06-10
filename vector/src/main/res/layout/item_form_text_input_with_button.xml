@@ -4,17 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:minHeight="@dimen/item_form_min_height">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/formTextInputTextInputLayout"
-        style="@style/VectorTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        app:layout_constraintBottom_toTopOf="@+id/formTextInputDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/formTextInputButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,24 +26,14 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/formTextInputButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:background="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="@id/formTextInputTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/formTextInputTextInputLayout"
         tools:text="Add" />
-
-    <View
-        android:id="@+id/formTextInputDivider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="?riotx_header_panel_border_mobile"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

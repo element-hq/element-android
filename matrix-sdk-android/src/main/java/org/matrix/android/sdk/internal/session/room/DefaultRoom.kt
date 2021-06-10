@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.internal.session.room
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.session.accountdata.AccountDataService
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataService
 import org.matrix.android.sdk.api.session.room.alias.AliasService
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.api.session.room.members.MembershipService
@@ -42,7 +42,6 @@ import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
-import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataService
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.search.SearchTask
@@ -86,7 +85,7 @@ internal class DefaultRoom(override val roomId: String,
         RelationService by relationService,
         MembershipService by roomMembersService,
         RoomPushRuleService by roomPushRuleService,
-        AccountDataService by roomAccountDataService {
+        RoomAccountDataService by roomAccountDataService {
 
     override fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>> {
         return roomSummaryDataSource.getRoomSummaryLive(roomId)

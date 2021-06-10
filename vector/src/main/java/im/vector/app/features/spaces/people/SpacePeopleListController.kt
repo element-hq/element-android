@@ -24,7 +24,6 @@ import im.vector.app.core.epoxy.profiles.profileMatrixItemWithPowerLevel
 import im.vector.app.core.extensions.join
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
@@ -43,8 +42,6 @@ class SpacePeopleListController @Inject constructor(
         private val dimensionConverter: DimensionConverter,
         private val roomMemberSummaryFilter: RoomMemberSummaryFilter
 ) : TypedEpoxyController<RoomMemberListViewState>() {
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     interface InteractionListener {
         fun onSpaceMemberClicked(roomMemberSummary: RoomMemberSummary)
@@ -73,7 +70,6 @@ class SpacePeopleListController @Inject constructor(
             if (filtered.isNotEmpty()) {
                 dividerItem {
                     id("divider_type_${memberEntry.first.titleRes}")
-                    color(host.dividerColor)
                 }
             }
             foundCount += filtered.size
@@ -91,7 +87,7 @@ class SpacePeopleListController @Inject constructor(
                                                     powerLevelLabel(
                                                             span {
                                                                 span(host.stringProvider.getString(R.string.invited)) {
-                                                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                                                     textStyle = "bold"
                                                                     // fontFamily = "monospace"
                                                                 }
@@ -104,7 +100,7 @@ class SpacePeopleListController @Inject constructor(
                                                                     backgroundColor = host.colorProvider.getColor(R.color.notification_accent_color)
                                                                     paddingTop = host.dimensionConverter.dpToPx(2)
                                                                     paddingBottom = host.dimensionConverter.dpToPx(2)
-                                                                    textColor = host.colorProvider.getColor(R.color.white)
+                                                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.colorOnPrimary)
                                                                     textStyle = "bold"
                                                                     // fontFamily = "monospace"
                                                                 }
@@ -115,7 +111,7 @@ class SpacePeopleListController @Inject constructor(
                                                 }
                                             }
 
-                                    clickListener { _ ->
+                                    clickListener {
                                         host.listener?.onSpaceMemberClicked(roomMember)
                                     }
                                 }
@@ -123,7 +119,6 @@ class SpacePeopleListController @Inject constructor(
                             between = { _, roomMemberBefore ->
                                 dividerItem {
                                     id("divider_${roomMemberBefore.userId}")
-                                    color(host.dividerColor)
                                 }
                             }
                     )
@@ -144,16 +139,14 @@ class SpacePeopleListController @Inject constructor(
                             +host.stringProvider.getString(R.string.looking_for_someone_not_in_space, data.roomSummary.invoke()?.displayName ?: "")
                             +"\n"
                             span("Invite them") {
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.colorAccent)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                                 textStyle = "bold"
                             }
                         }
                 )
-                itemClickAction(GenericItem.Action("invite").apply {
-                    perform = Runnable {
-                        host.listener?.onInviteToSpaceSelected()
-                    }
-                })
+                itemClickAction {
+                    host.listener?.onInviteToSpaceSelected()
+                }
             }
         }
     }

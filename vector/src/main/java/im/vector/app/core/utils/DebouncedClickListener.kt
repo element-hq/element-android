@@ -15,24 +15,30 @@
  */
 package im.vector.app.core.utils
 
+import android.os.SystemClock
 import android.view.View
+import timber.log.Timber
 import java.util.WeakHashMap
 
 /**
  * Simple Debounced OnClickListener
  * Safe to use in different views
  */
-class DebouncedClickListener(val original: View.OnClickListener, private val minimumInterval: Long = 400) : View.OnClickListener {
+class DebouncedClickListener(
+        val original: View.OnClickListener,
+        private val minimumInterval: Long = 400
+) : View.OnClickListener {
     private val lastClickMap = WeakHashMap<View, Long>()
 
-    override fun onClick(clickedView: View) {
-        val previousClickTimestamp = lastClickMap[clickedView]
-        val currentTimestamp = System.currentTimeMillis()
+    override fun onClick(v: View) {
+        val previousClickTimestamp = lastClickMap[v] ?: 0
+        val currentTimestamp = SystemClock.elapsedRealtime()
+        lastClickMap[v] = currentTimestamp
 
-        lastClickMap[clickedView] = currentTimestamp
-
-        if (previousClickTimestamp == null || currentTimestamp - previousClickTimestamp.toLong() > minimumInterval) {
-            original.onClick(clickedView)
+        if (currentTimestamp > previousClickTimestamp + minimumInterval) {
+            original.onClick(v)
+        } else {
+            Timber.v("Debounced click!")
         }
     }
 }

@@ -91,7 +91,7 @@
     </plurals>
     <string name="room_displayname_4_members">%1$s, %2$s, %3$s та %4$s</string>
     <string name="room_displayname_3_members">%1$s, %2$s та %3$s</string>
-    <string name="power_level_default">Типово</string>
+    <string name="power_level_default">Типовий</string>
     <string name="power_level_moderator">Модератор</string>
     <string name="power_level_admin">Адміністратор</string>
     <string name="notice_widget_removed_by_you">Ви вилучили %1$s знадіб</string>
@@ -156,8 +156,8 @@
     <string name="initial_sync_start_importing_account">Початкова синхронізація:
 \nІмпортування даних облікового запису…</string>
     <string name="room_displayname_empty_room_was">Порожня кімната (була %s)</string>
-    <string name="power_level_custom_no_value">Власний</string>
-    <string name="power_level_custom">Власний (%1$d)</string>
+    <string name="power_level_custom_no_value">Не типовий</string>
+    <string name="power_level_custom">Не типовий (%1$d)</string>
     <string name="notice_widget_modified_by_you">Ви змінили знадіб %1$s</string>
     <string name="notice_widget_modified">%1$s змінює знадіб %2$s</string>
     <string name="notice_direct_room_update_by_you">Ви оновили кімнату.</string>
@@ -1005,7 +1005,7 @@
     <string name="community_name_hint">Приклад</string>
     <string name="community_id">ID Спільноти</string>
     <string name="community_id_hint">приклад</string>
-    <string name="group_details_home">Початок</string>
+    <string name="group_details_home">Домівка</string>
     <string name="group_details_people">Люди</string>
     <string name="group_details_rooms">Кімнати</string>
     <string name="no_users_placeholder">Немає користувачів</string>
@@ -1111,7 +1111,7 @@
     <string name="room_filtering_footer_create_new_direct_message">Відправити нове пряме повідомлення</string>
     <string name="command_description_shrug">Додає ¯\\_(ツ)_/¯ перед текстовим повідомленням</string>
     <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} не підтримує повідомлення типу \'%1$s\'</string>
-    <string name="command_description_rainbow">Відправляє повідомлення розмальоване веселково</string>
+    <string name="command_description_rainbow">Надсилає повідомлення розмальоване веселково</string>
     <string name="settings_category_composer">Редактор повідомлень</string>
     <string name="command_description_plain">Відправляє повідомлення як текст без інтерпретації його як Markdown</string>
     <string name="room_message_placeholder">Повідомлення…</string>
@@ -1387,7 +1387,7 @@
     <string name="room_no_active_widgets">Немає активних знадобів</string>
     <string name="room_manage_integrations">Керувати інтеграціями</string>
     <string name="integration_manager_not_configured">Менеджер інтеграції не налаштовано.</string>
-    <string name="room_widget_webview_read_protected_media">Читати захищені DRM засоби масової інформації</string>
+    <string name="room_widget_webview_read_protected_media">Читати медіа захищені DRM</string>
     <string name="room_widget_webview_access_microphone">Використовувати мікрофон</string>
     <string name="room_widget_webview_access_camera">Використовувати камеру</string>
     <string name="room_widget_resource_decline_permission">Заблокувати все</string>
@@ -1642,7 +1642,7 @@
     <string name="room_list_quick_actions_notifications_all">Всі повідомлення</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Всі повідомлення (гучно)</string>
     <string name="message_ignore_user">Нехтувати користувача</string>
-    <string name="unignore">Рознехтувати</string>
+    <string name="unignore">Не нехтувати</string>
     <string name="keys_backup_info_title_signature">Підпис</string>
     <string name="keys_backup_info_title_algorithm">Алгоритм</string>
     <string name="keys_backup_info_title_version">Версія</string>
@@ -2058,4 +2058,32 @@
     <string name="login_signin">Увійти</string>
     <string name="login_signin_to">Увійти до %1$s</string>
     <string name="login_social_signin_with">Увійти через %s</string>
+    <string name="create_room_encryption_description">Після увімкнення, шифрування не може бути вимкнено.</string>
+    <string name="create_room_encryption_title">Увімкнути шифрування</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Увімкнути шифрування</string>
+    <string name="room_settings_enable_encryption_dialog_title">Увімкнути шифрування\?</string>
+    <string name="room_settings_enable_encryption_warning">Після увімкнення, шифрування не може бути вимкнено.</string>
+    <string name="command_description_rainbow_emote">Надсилає емоджі розмальоване веселково</string>
+    <string name="room_list_sharing_header_recent_rooms">Недавні кімнати</string>
+    <string name="room_member_open_or_create_dm">Безпосереднє повідомлення</string>
+    <string name="room_member_power_level_custom_in">Не типовий (%1$d) у %2$s</string>
+    <string name="room_member_power_level_custom">Не типовий</string>
+    <string name="notice_power_level_diff">%1$s з %2$s до %3$s</string>
+    <string name="notice_power_level_changed">%1$s змінює рівень доступу %2$s.</string>
+    <string name="notice_widget_jitsi_modified_by_you">Ви змінили відеоконференцію</string>
+    <string name="notice_widget_jitsi_modified">%1$s змінює відеоконференцію</string>
+    <string name="notice_widget_jitsi_removed_by_you">Ви завершили відеоконфернцію</string>
+    <string name="notice_widget_jitsi_added">%1$s розпочинає відеоконференцію</string>
+    <string name="notice_widget_jitsi_removed">%1$s завершує відеоконференцію</string>
+    <string name="notice_widget_jitsi_added_by_you">Ви розпочали відеоконференцію</string>
+    <string name="room_profile_section_admin">Дії адміністратора</string>
+    <string name="room_member_power_level_invites">Запрошення</string>
+    <string name="room_member_power_level_moderators">Модератори</string>
+    <string name="room_member_power_level_admins">Адміністратори</string>
+    <string name="room_profile_leaving_room">Залишення кімнати…</string>
+    <string name="room_member_power_level_default_in">Типово у %1$s</string>
+    <string name="room_member_power_level_moderator_in">Модератор у %1$s</string>
+    <string name="room_member_power_level_admin_in">Адміністратор у %1$s</string>
+    <string name="room_member_power_level_users">Користувачі</string>
+    <string name="spaces_invited_header">Запрошення</string>
 </resources>

@@ -19,7 +19,7 @@ package im.vector.app.core.utils
 import android.content.Context
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
  * Open a web view above the current activity.
@@ -33,7 +33,7 @@ fun Context.displayInWebView(url: String) {
     wv.webViewClient = WebViewClient()
 
     wv.loadUrl(url)
-    AlertDialog.Builder(this)
+    MaterialAlertDialogBuilder(this)
             .setView(wv)
             .setPositiveButton(android.R.string.ok, null)
             .show()

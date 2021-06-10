@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.features.autocomplete.AutocompleteClickListener
-import im.vector.app.features.reactions.ReactionClickListener
 import im.vector.app.features.reactions.data.EmojiItem
 import javax.inject.Inject
 
@@ -51,13 +50,7 @@ class AutocompleteEmojiController @Inject constructor(
                         id(emojiItem.name)
                         emojiItem(emojiItem)
                         emojiTypeFace(host.emojiTypeface)
-                        onClickListener(
-                                object : ReactionClickListener {
-                                    override fun onReactionSelected(reaction: String) {
-                                        host.listener?.onItemClick(reaction)
-                                    }
-                                }
-                        )
+                        onClickListener { host.listener?.onItemClick(emojiItem.emoji) }
                     }
                 }
 

@@ -24,11 +24,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
@@ -180,13 +180,13 @@ class SpaceDirectoryFragment @Inject constructor(
                 .subscribe { managed ->
                     if (!managed) {
                         if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
-                            AlertDialog.Builder(requireActivity())
+                            MaterialAlertDialogBuilder(requireActivity())
                                     .setTitle(R.string.external_link_confirmation_title)
                                     .setMessage(
                                             getString(R.string.external_link_confirmation_message, title, url)
                                                     .toSpannable()
-                                                    .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
-                                                    .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+                                                    .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                                                    .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
                                     )
                                     .setPositiveButton(R.string._continue) { _, _ ->
                                         openUrlInExternalBrowser(requireContext(), url)

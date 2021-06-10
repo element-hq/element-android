@@ -21,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
@@ -45,7 +46,7 @@ class EmojiSearchResultFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         sharedViewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
         epoxyController.listener = this
-        views.genericRecyclerView.configureWith(epoxyController, showDivider = true)
+        views.genericRecyclerView.configureWith(epoxyController, dividerDrawable = R.drawable.divider_horizontal)
     }
 
     override fun onDestroyView() {
