@@ -25,6 +25,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import androidx.transition.AutoTransition
 import androidx.transition.ChangeBounds
 import androidx.transition.Fade
 import androidx.transition.Transition
@@ -35,7 +36,6 @@ import im.vector.app.databinding.ComposerLayoutBinding
 
 /**
  * Encapsulate the timeline composer UX.
- *
  */
 class TextComposerView @JvmOverloads constructor(
         context: Context,
@@ -71,7 +71,15 @@ class TextComposerView @JvmOverloads constructor(
             }
 
             override fun onTextBlankStateChanged(isBlank: Boolean) {
-                views.sendButton.isVisible = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank
+                callback?.onTextBlankStateChanged(isBlank)
+                val shouldBeVisible = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank
+                if (views.sendButton.isVisible != shouldBeVisible) {
+                    TransitionManager.beginDelayedTransition(
+                            this@TextComposerView,
+                            AutoTransition().also { it.duration = 150 }
+                    )
+                    views.sendButton.isVisible = shouldBeVisible
+                }
             }
         }
         views.composerRelatedMessageCloseButton.setOnClickListener {
