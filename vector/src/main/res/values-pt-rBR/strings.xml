@@ -2068,8 +2068,8 @@
 \nA confirmação vai ser salvada localmente e compartilhada numa versão futura do app.</string>
     <string name="room_list_sharing_header_recent_rooms">Salas recentes</string>
     <string name="room_list_sharing_header_other_rooms">Outras salas</string>
-    <string name="command_description_rainbow">Envia a dada mensagem colorida como um arcoíris</string>
-    <string name="command_description_rainbow_emote">Envia o dado emote colorido como um arcoíris</string>
+    <string name="command_description_rainbow">Envia a dada mensagem colorida como um arco-íris</string>
+    <string name="command_description_rainbow_emote">Envia o dado emote colorido como um arco-íris</string>
     <string name="settings_category_timeline">Timeline</string>
     <string name="settings_category_composer">Editor de mensagem</string>
     <string name="room_settings_enable_encryption">Ativar encriptação ponta-a-ponta…</string>
