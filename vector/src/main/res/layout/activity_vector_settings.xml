@@ -10,14 +10,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Use VectorToolbarSettings on this screen for better alignment with setting items -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/settingsToolbar"
-            style="@style/VectorToolbarSettings"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:navigationIcon="@drawable/ic_back_24dp"
-            tools:title="Title" />
+            android:layout_height="wrap_content">
+
+            <!-- Use VectorToolbarSettings on this screen for better alignment with setting items -->
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/settingsToolbar"
+                style="@style/VectorToolbarSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:navigationIcon="@drawable/ic_back_24dp"
+                tools:title="Title" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
             android:id="@+id/vector_settings_page"

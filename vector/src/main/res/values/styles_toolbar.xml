@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="VectorAppBarLayoutStyle" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+        <item name="android:background">?vctr_toolbar_background</item>
+        <item name="elevation">4dp</item>
+    </style>
+
     <style name="VectorToolbarBase" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:background">?vctr_toolbar_background</item>
-
-        <item name="android:elevation">4dp</item>
+        <item name="elevation">0dp</item>
 
         <!-- main text -->
         <item name="titleTextStyle">@style/ActionBarTitleText</item>

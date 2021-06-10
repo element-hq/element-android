@@ -17,17 +17,13 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="4dp">
+        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/publicRoomsToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:minHeight="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways">
 
             <androidx.appcompat.widget.SearchView
@@ -37,7 +33,7 @@
                 android:layout_height="wrap_content"
                 app:queryHint="@string/room_directory_search_hint" />
 
-        </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <Button
             android:id="@+id/publicRoomsCreateNewRoom"
@@ -47,9 +43,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:icon="@drawable/ic_plus_circle"
             android:minHeight="@dimen/layout_touch_size"
             android:text="@string/create_new_room"
-            app:icon="@drawable/ic_plus_circle"
             app:iconPadding="13dp"
             app:iconTint="?colorPrimary"
             app:layout_constraintStart_toStartOf="parent"

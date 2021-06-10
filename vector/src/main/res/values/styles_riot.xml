@@ -14,10 +14,6 @@
         <item name="colorControlNormal">?colorSecondary</item>
     </style>
 
-    <style name="VectorAppBarLayoutStyle" parent="Widget.MaterialComponents.AppBarLayout.Primary">
-        <item name="android:background">?android:colorBackground</item>
-    </style>
-
     <style name="VectorAlertDialogStyleLight" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="colorPrimary">@color/palette_element_green</item>
         <item name="colorSecondary">@color/palette_element_green</item>

@@ -10,14 +10,12 @@
         android:id="@+id/roomUploadsAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp"
         android:transitionName="toolbar">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/roomUploadsToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
             app:layout_collapseMode="pin">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,7 +62,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/roomUploadsTabs"
