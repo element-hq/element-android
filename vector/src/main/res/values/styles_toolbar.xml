@@ -51,4 +51,16 @@
         <item name="android:fontFamily">"sans-serif"</item>
     </style>
 
+    <!-- Action mode style -->
+    <style name="ActionModeTheme" parent="Widget.AppCompat.ActionMode">
+        <item name="background">?android:colorBackground</item>
+        <item name="titleTextStyle">@style/Vector.Toolbar.Title</item>
+        <item name="subtitleTextStyle">@style/Vector.Toolbar.SubTitle</item>
+        <item name="actionMenuTextColor">?colorOnPrimary</item>
+    </style>
+
+    <style name="Vector.Toolbar.Profile" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">?colorSecondary</item>
+    </style>
+
 </resources>
