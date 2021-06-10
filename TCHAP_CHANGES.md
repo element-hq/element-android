@@ -7,6 +7,7 @@ Features ✨:
  - Set up Tchap color and light theme #4
  - [Home screen] Apply the room cells design #48
  - Set up the Home screen - Rooms and Contacts lists #5
+ - Support the room access rules state event #90
 
 Improvements 🙌:
  - Replace Element references with the actual Tchap information #1
