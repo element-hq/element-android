@@ -32,6 +32,8 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import fr.gouv.tchap.features.home.contact.list.TchapContactListViewModel
+import fr.gouv.tchap.features.home.contact.list.TchapContactListViewState
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -44,6 +46,8 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.databinding.ActivityHomeBinding
+import im.vector.app.features.contactsbook.ContactsBookViewModel
+import im.vector.app.features.contactsbook.ContactsBookViewState
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
@@ -63,8 +67,6 @@ import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
-import im.vector.app.features.userdirectory.UserListViewModel
-import im.vector.app.features.userdirectory.UserListViewState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
@@ -87,7 +89,8 @@ class HomeActivity :
         ToolbarConfigurable,
         UnknownDeviceDetectorSharedViewModel.Factory,
         ServerBackupStatusViewModel.Factory,
-        UserListViewModel.Factory,
+        TchapContactListViewModel.Factory,
+        ContactsBookViewModel.Factory,
         UnreadMessagesSharedViewModel.Factory,
         NavigationInterceptor,
         SpaceInviteBottomSheet.InteractionListener {
@@ -111,7 +114,8 @@ class HomeActivity :
     @Inject lateinit var unreadMessagesSharedViewModelFactory: UnreadMessagesSharedViewModel.Factory
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
-    @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory
+    @Inject lateinit var tchapContactViewModelFactory: TchapContactListViewModel.Factory
+    @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
     @Inject lateinit var appStateHandler: AppStateHandler
 
@@ -160,7 +164,9 @@ class HomeActivity :
         return serverBackupviewModelFactory.create(initialState)
     }
 
-    override fun create(initialState: UserListViewState) = userListViewModelFactory.create(initialState)
+    override fun create(initialState: TchapContactListViewState) = tchapContactViewModelFactory.create(initialState)
+
+    override fun create(initialState: ContactsBookViewState): ContactsBookViewModel = contactsBookViewModelFactory.create(initialState)
 
     override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel {
         return unreadMessagesSharedViewModelFactory.create(initialState)

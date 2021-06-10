@@ -480,8 +480,8 @@
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
-    <string name="template_local_address_book_header">Local address book</string>
-    <string name="user_directory_header">User directory</string>
+    <string name="template_local_address_book_header">${app_name} contacts</string>
+    <string name="template_user_directory_header">${app_name} directory</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
@@ -2172,7 +2172,7 @@
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">"Show complete history in encrypted rooms"</string>
 
-    <string name="bottom_action_people_x">Direct Messages</string>
+    <string name="bottom_action_people_x">Contacts</string>
 
     <string name="send_file_step_idle">Waiting…</string>
     <string name="send_file_step_encrypting_thumbnail">Encrypting thumbnail…</string>

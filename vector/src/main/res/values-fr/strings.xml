@@ -757,7 +757,7 @@
     <string name="account_email_not_found_error">Cette adresse e\u2011mail n’a pas été trouvée.</string>
     <string name="account_phone_number_already_used_error">Ce numéro de téléphone est déjà utilisé.</string>
     <string name="offline">Hors ligne</string>
-    <string name="user_directory_header">Répertoire Tchap</string>
+    <string name="template_user_directory_header">Répertoire ${app_name}</string>
     <string name="people_search_user_directory">Répertoire utilisateurs (%s)</string>
     <string name="settings_start_on_boot">Lancer au démarrage</string>
     <string name="settings_clear_media_cache">Vider le cache des médias</string>
@@ -1466,7 +1466,7 @@
     <string name="send_suggestion_sent">Merci, la suggestion a bien été envoyée</string>
     <string name="send_suggestion_failed">Échec d’envoi de la suggestion (%s)</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Afficher les évènements cachés dans l’historique</string>
-    <string name="bottom_action_people_x">Messages directs</string>
+    <string name="bottom_action_people_x">Contacts</string>
     <string name="send_file_step_idle">Attente…</string>
     <string name="send_file_step_encrypting_thumbnail">Chiffrement de la miniature…</string>
     <string name="send_file_step_sending_thumbnail">Envoi de la miniature (%1$s / %2$s)</string>

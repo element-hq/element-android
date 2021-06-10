@@ -28,6 +28,8 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
+import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
+import fr.gouv.tchap.features.home.contact.list.TchapContactListFragmentArgs
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
@@ -50,8 +52,6 @@ import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
 import im.vector.app.features.themes.ThemeUtils
-import im.vector.app.features.userdirectory.UserListFragment
-import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
@@ -360,13 +360,12 @@ class HomeDetailFragment @Inject constructor(
             if (fragmentToShow == null) {
                 when (displayMode) {
                     RoomListDisplayMode.PEOPLE -> {
-                        val params = UserListFragmentArgs(
+                        val params = TchapContactListFragmentArgs(
                                 title = getString(R.string.invite_users_to_room_title),
                                 menuResId = R.menu.vector_invite_users_to_room,
-                                showInviteActions = false,
                                 showToolbar = false
                         )
-                        add(R.id.roomListContainer, UserListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                        add(R.id.roomListContainer, TchapContactListFragment::class.java, params.toMvRxBundle(), fragmentTag)
                     }
                     else                       -> {
                         val params = RoomListParams(displayMode)

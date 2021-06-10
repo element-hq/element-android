@@ -16,11 +16,10 @@
 
 package fr.gouv.tchap.core.utils
 
-import junit.framework.TestCase
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class TchapUtilsTest : TestCase() {
+class TchapUtilsTest {
 
     /**
      * Test getting full name without domain
@@ -35,7 +34,7 @@ class TchapUtilsTest : TestCase() {
         val result = TchapUtils.getNameFromDisplayName(displayNameTest)
 
         // Then
-        Assert.assertEquals(result, "Nom Prenom")
+        assertEquals(result, "Nom Prenom")
     }
 
     @Test
@@ -47,7 +46,7 @@ class TchapUtilsTest : TestCase() {
         val result = TchapUtils.getNameFromDisplayName(displayNameTest)
 
         // Then
-        Assert.assertEquals(result, "Nom Prenom")
+        assertEquals(result, "Nom Prenom")
     }
 
     /**
@@ -63,7 +62,7 @@ class TchapUtilsTest : TestCase() {
         val result = TchapUtils.getDomainFromDisplayName(displayNameTest)
 
         // Then
-        Assert.assertEquals(result, "Modernisation")
+        assertEquals(result, "Modernisation")
     }
 
     @Test
@@ -75,6 +74,32 @@ class TchapUtilsTest : TestCase() {
         val result = TchapUtils.getDomainFromDisplayName(displayNameTest)
 
         // Then
-        Assert.assertEquals(result, "")
+        assertEquals(result, "")
+    }
+
+    @Test
+    fun computeDisplayNameFromUserId_simple() {
+        assertEquals("Jean Martin", TchapUtils.computeDisplayNameFromUserId("@jean.martin-modernisation.fr:matrix.org"))
+    }
+
+    @Test
+    fun computeDisplayNameFromUserId_dash() {
+        assertEquals("Jean-Philippe Martin", TchapUtils.computeDisplayNameFromUserId("@jean-philippe.martin-modernisation.fr:matrix.org"))
+    }
+
+    @Test
+    fun computeDisplayNameFromUserId_dashes() {
+        assertEquals("Jean Martin De-La-Rampe", TchapUtils.computeDisplayNameFromUserId("@jean.martin.de-la-rampe-modernisation.gouv.fr:a.tchap.gouv.fr"))
+    }
+
+    @Test
+    fun computeDisplayNameFromUserId_emptydashes() {
+        assertEquals("Jean Martin De-La-Rampe", TchapUtils.computeDisplayNameFromUserId("@jean..martin..de--la--rampe-modernisation.gouv.fr:a.tchap.gouv.fr"))
+    }
+
+    // It fails for the moment
+    @Test
+    fun computeDisplayNameFromUserId_dash_in_domain() {
+        assertEquals("Jerome Ploquin4", TchapUtils.computeDisplayNameFromUserId("@jerome.ploquin4-developpement-durable.gouv.fr:a.tchap.gouv.fr"))
     }
 }

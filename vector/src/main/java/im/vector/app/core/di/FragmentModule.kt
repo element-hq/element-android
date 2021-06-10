@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import fr.gouv.tchap.features.login.TchapLoginFragment
 import fr.gouv.tchap.features.login.TchapWelcomeFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
@@ -32,11 +33,11 @@ import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragm
 import im.vector.app.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStoragePassphraseFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStorageResetAllFragment
-import im.vector.app.features.crypto.recover.BootstrapReAuthFragment
 import im.vector.app.features.crypto.recover.BootstrapConclusionFragment
 import im.vector.app.features.crypto.recover.BootstrapConfirmPassphraseFragment
 import im.vector.app.features.crypto.recover.BootstrapEnterPassphraseFragment
 import im.vector.app.features.crypto.recover.BootstrapMigrateBackupFragment
+import im.vector.app.features.crypto.recover.BootstrapReAuthFragment
 import im.vector.app.features.crypto.recover.BootstrapSaveRecoveryKeyFragment
 import im.vector.app.features.crypto.recover.BootstrapSetupRecoveryKeyFragment
 import im.vector.app.features.crypto.recover.BootstrapWaitingFragment
@@ -89,11 +90,11 @@ import im.vector.app.features.roommemberprofile.RoomMemberProfileFragment
 import im.vector.app.features.roommemberprofile.devices.DeviceListFragment
 import im.vector.app.features.roommemberprofile.devices.DeviceTrustInfoActionFragment
 import im.vector.app.features.roomprofile.RoomProfileFragment
+import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.app.features.roomprofile.members.RoomMemberListFragment
-import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
-import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
+import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
@@ -658,6 +659,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(TchapRegisterWaitForEmailFragment::class)
     fun bindTchapRegisterWaitForEmailFragment(fragment: TchapRegisterWaitForEmailFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(TchapContactListFragment::class)
+    fun bindTchapContactListFragmentt(fragment: TchapContactListFragment): Fragment
 
     @Binds
     @IntoMap

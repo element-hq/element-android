@@ -9,6 +9,5 @@
     android:fontFamily="sans-serif-medium"
     android:padding="8dp"
     android:textColor="?attr/riotx_text_primary"
-    android:textSize="20sp"
     android:textStyle="normal"
     tools:text="Recents | Contacts" />

@@ -21,8 +21,9 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
@@ -51,8 +52,11 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
     companion object : MvRxViewModelFactory<HomeServerCapabilitiesViewModel, HomeServerCapabilitiesViewState> {
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeServerCapabilitiesViewState): HomeServerCapabilitiesViewModel? {
-            val fragment: UserListFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.homeServerCapabilitiesViewModelFactory.create(state)
+            val context = viewModelContext as FragmentViewModelContext
+            val factory = (context.fragment as? UserListFragment)?.homeServerCapabilitiesViewModelFactory
+                    ?: (context.fragment as? TchapContactListFragment)?.homeServerCapabilitiesViewModelFactory
+
+            return factory?.create(state)
         }
 
         override fun initialState(viewModelContext: ViewModelContext): HomeServerCapabilitiesViewState? {
