@@ -76,14 +76,6 @@
             app:layout_constraintTop_toBottomOf="@+id/addRoomToSpaceToolbar"
             app:queryHint="@string/search_hint_room_name" />
 
-        <!--        <ProgressBar-->
-        <!--            android:id="@+id/listBuildingProgress"-->
-        <!--            android:indeterminate="true"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="8dp"-->
-        <!--            style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
-        <!--            />-->
-
     </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

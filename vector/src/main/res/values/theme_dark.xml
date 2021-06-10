@@ -94,12 +94,6 @@
         <!-- fonts -->
         <item name="android:typeface">sans</item>
 
-        <!-- remove the shadow under the actionbar -->
-        <item name="android:windowContentOverlay">@null</item>
-
-        <!-- no divider -->
-        <item name="android:actionBarDivider">@null</item>
-
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <item name="pf_lock_screen">@style/PinCodeScreenStyle</item>

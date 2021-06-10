@@ -74,7 +74,7 @@
 
             <ProgressBar
                 android:id="@+id/spacePreviewPeekingProgress"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                style="@style/VectorHorizontalProgressBar"
                 android:layout_width="match_parent"
                 android:layout_height="14dp"
                 android:layout_gravity="center"
