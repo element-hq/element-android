@@ -16,11 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room
 
-import arrow.core.Either
-import arrow.core.Right
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
-import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
@@ -49,7 +46,6 @@ internal class DefaultRoomDirectoryService @Inject constructor(
     override suspend fun setRoomDirectoryVisibility(roomId: String, roomDirectoryVisibility: RoomDirectoryVisibility) {
         setRoomDirectoryVisibilityTask.execute(SetRoomDirectoryVisibilityTask.Params(roomId, roomDirectoryVisibility))
     }
-
 
     override suspend fun checkAliasAvailability(aliasLocalPart: String?): Result<Unit> {
         return try {

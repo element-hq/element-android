@@ -39,6 +39,7 @@ import im.vector.app.features.roomdirectory.createroom.RoomAliasErrorFormatter
 import im.vector.app.features.roomdirectory.createroom.roomAliasEditItem
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import javax.inject.Inject
 
 class RoomAliasController @Inject constructor(
@@ -71,7 +72,9 @@ class RoomAliasController @Inject constructor(
         // Published alias
         buildPublishInfo(data)
         // Room directory visibility
-        buildRoomDirectoryVisibility(data)
+        if (data.roomSummary.invoke()?.roomType != RoomType.SPACE) {
+            buildRoomDirectoryVisibility(data)
+        }
         // Local alias
         buildLocalInfo(data)
     }

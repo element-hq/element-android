@@ -52,6 +52,7 @@ class SpaceSettingsController @Inject constructor(
         fun onDevRoomSettings()
         fun onManageRooms()
         fun setIsPublic(public: Boolean)
+        fun onRoomAliasesClicked()
     }
 
     var callback: Callback? = null
@@ -139,6 +140,17 @@ class SpaceSettingsController @Inject constructor(
                     if (data.actionPermissions.canAddChildren) callback?.onManageRooms()
                 }
         )
+        if (roomSummary.isPublic) {
+            buildProfileAction(
+                    id = "alias",
+                    title = stringProvider.getString(R.string.space_settings_alias_title),
+                    subtitle = stringProvider.getString(R.string.space_settings_alias_subtitle),
+                    dividerColor = dividerColor,
+                    divider = true,
+                    editable = true,
+                    action = { callback?.onRoomAliasesClicked() }
+            )
+        }
 
         if (vectorPreferences.developerMode()) {
             buildProfileAction(

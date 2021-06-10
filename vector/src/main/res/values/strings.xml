@@ -1414,6 +1414,8 @@
     <!-- room settings : alias -->
     <string name="room_settings_alias_title">Room addresses</string>
     <string name="room_settings_alias_subtitle">See and managed addresses of this room, and its visibility in the room directory.</string>
+    <string name="space_settings_alias_title">Space addresses</string>
+    <string name="space_settings_alias_subtitle">See and managed addresses of this space.</string>
 
     <string name="room_alias_title">Room Addresses</string>
     <string name="room_alias_published_alias_title">Published Addresses</string>
