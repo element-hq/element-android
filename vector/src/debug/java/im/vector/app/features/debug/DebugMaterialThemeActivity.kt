@@ -33,6 +33,12 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
         val views = ActivityTestMaterialThemeBinding.inflate(layoutInflater)
         setContentView(views.root)
 
+        setSupportActionBar(views.debugToolbar)
+        supportActionBar?.let {
+            it.setDisplayShowHomeEnabled(true)
+            it.setDisplayHomeAsUpEnabled(true)
+        }
+
         views.debugShowSnackbar.setOnClickListener {
             Snackbar.make(views.coordinatorLayout, "Snackbar!", Snackbar.LENGTH_SHORT)
                     .setAction("Action") { }
