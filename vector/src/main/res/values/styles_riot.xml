@@ -14,30 +14,6 @@
         <item name="colorControlNormal">?colorSecondary</item>
     </style>
 
-    <style name="VectorAlertDialogStyleLight" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="colorPrimary">@color/palette_element_green</item>
-        <item name="colorSecondary">@color/palette_element_green</item>
-        <item name="colorSurface">@color/element_system_light</item>
-        <item name="colorOnSurface">@color/element_content_primary_light</item>
-        <item name="colorError">@color/element_alert_light</item>
-        <!--item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
-        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text</item>
-        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>
-        <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button</item-->
-    </style>
-
-    <style name="VectorAlertDialogStyleDark" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="colorPrimary">@color/palette_element_green</item>
-        <item name="colorSecondary">@color/palette_element_green</item>
-        <item name="colorSurface">@color/element_system_dark</item>
-        <item name="colorOnSurface">@color/element_content_primary_dark</item>
-        <item name="colorError">@color/element_alert_dark</item>
-        <!--item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
-        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text</item>
-        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>
-        <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button</item-->
-    </style>
-
     <!-- TextInputLayout -->
     <style name="VectorTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
 
