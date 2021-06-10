@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.database
 
+import fr.gouv.tchap.android.sdk.session.events.model.TchapEventType
+import fr.gouv.tchap.android.sdk.session.room.model.RoomAccessRulesContent
 import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
@@ -268,6 +270,23 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                             }
 
                     obj.setString(RoomSummaryEntityFields.JOIN_RULES_STR, roomJoinRules?.value)
+                }
+
+        val accessRulesContentAdapter = MoshiProvider.providesMoshi().adapter(RoomAccessRulesContent::class.java)
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.ACCESS_RULES_STR, String::class.java)
+                ?.transform { obj ->
+                    val accessRulesEvent = realm.where("CurrentStateEventEntity")
+                            .equalTo(CurrentStateEventEntityFields.ROOM_ID, obj.getString(RoomSummaryEntityFields.ROOM_ID))
+                            .equalTo(CurrentStateEventEntityFields.TYPE, TchapEventType.STATE_ROOM_ACCESS_RULES)
+                            .findFirst()
+
+                    val roomAccessRules = accessRulesEvent?.getObject(CurrentStateEventEntityFields.ROOT.`$`)
+                            ?.getString(EventEntityFields.CONTENT)?.let {
+                                accessRulesContentAdapter.fromJson(it)?.accessRules
+                            }
+
+                    obj.setString(RoomSummaryEntityFields.ACCESS_RULES_STR, roomAccessRules?.value)
                 }
     }
 }

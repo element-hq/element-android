@@ -45,6 +45,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                 topic = roomSummaryEntity.topic ?: "",
                 avatarUrl = roomSummaryEntity.avatarUrl ?: "",
                 joinRules = roomSummaryEntity.joinRules,
+                accessRules = roomSummaryEntity.accessRules,
                 isDirect = roomSummaryEntity.isDirect,
                 directUserId = roomSummaryEntity.directUserId,
                 latestPreviewableEvent = latestEvent,

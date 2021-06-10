@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.summary
 
+import fr.gouv.tchap.android.sdk.session.events.model.TchapEventType
+import fr.gouv.tchap.android.sdk.session.room.model.RoomAccessRulesContent
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -106,6 +108,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         val lastAliasesEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ALIASES, stateKey = "")?.root
         val roomCreateEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CREATE, stateKey = "")?.root
         val joinRulesEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_JOIN_RULES, stateKey = "")?.root
+        val accessRulesEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = TchapEventType.STATE_ROOM_ACCESS_RULES, stateKey = "")?.root
 
         val roomType = ContentMapper.map(roomCreateEvent?.content).toModel<RoomCreateContent>()?.type
         roomSummaryEntity.roomType = roomType
@@ -133,6 +136,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.name = ContentMapper.map(lastNameEvent?.content).toModel<RoomNameContent>()?.name
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
         roomSummaryEntity.joinRules = ContentMapper.map(joinRulesEvent?.content).toModel<RoomJoinRulesContent>()?.joinRules
+        roomSummaryEntity.accessRules = ContentMapper.map(accessRulesEvent?.content).toModel<RoomAccessRulesContent>()?.accessRules
         roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
         roomSummaryEntity.canonicalAlias = ContentMapper.map(lastCanonicalAliasEvent?.content).toModel<RoomCanonicalAliasContent>()
                 ?.canonicalAlias

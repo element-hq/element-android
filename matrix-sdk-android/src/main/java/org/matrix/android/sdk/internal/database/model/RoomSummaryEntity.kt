@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.database.model
 
+import fr.gouv.tchap.android.sdk.session.room.model.RoomAccessRules
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
@@ -254,6 +255,19 @@ internal open class RoomSummaryEntity(
         set(value) {
             if (value?.name != joinRulesStr) {
                 joinRulesStr = value?.name
+            }
+        }
+
+    private var accessRulesStr: String? = null
+    var accessRules: RoomAccessRules?
+        get() {
+            return accessRulesStr?.let {
+                tryOrNull { RoomAccessRules.valueOf(it) }
+            }
+        }
+        set(value) {
+            if (value?.name != accessRulesStr) {
+                accessRulesStr = value?.name
             }
         }
 

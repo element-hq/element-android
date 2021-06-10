@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.model
 
+import fr.gouv.tchap.android.sdk.session.room.model.RoomAccessRules
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.send.UserDraft
@@ -36,6 +37,7 @@ data class RoomSummary(
         val canonicalAlias: String? = null,
         val aliases: List<String> = emptyList(),
         val joinRules: RoomJoinRules? = null,
+        val accessRules: RoomAccessRules? = null,
         val isDirect: Boolean = false,
         val directUserId: String? = null,
         val joinedMembersCount: Int? = 0,
