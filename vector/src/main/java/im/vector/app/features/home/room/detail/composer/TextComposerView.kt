@@ -70,8 +70,8 @@ class TextComposerView @JvmOverloads constructor(
                 return callback?.onRichContentSelected(contentUri) ?: false
             }
 
-            override fun onTextEmptyStateChanged(isEmpty: Boolean) {
-                views.sendButton.isVisible = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isEmpty
+            override fun onTextBlankStateChanged(isBlank: Boolean) {
+                views.sendButton.isVisible = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank
             }
         }
         views.composerRelatedMessageCloseButton.setOnClickListener {
