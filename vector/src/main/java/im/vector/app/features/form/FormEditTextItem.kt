@@ -41,6 +41,9 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     var value: String? = null
 
     @EpoxyAttribute
+    var forceUpdateValue: Boolean = false
+
+    @EpoxyAttribute
     var errorMessage: String? = null
 
     @EpoxyAttribute
@@ -64,11 +67,22 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var editorActionListener: TextView.OnEditorActionListener? = null
 
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onFocusChange: ((Boolean) -> Unit)? = null
+
+    @EpoxyAttribute
+    var inputPrefix: String? = null
+
+    @EpoxyAttribute
+    var inputSuffix: String? = null
+
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
             onTextChange?.invoke(s.toString())
         }
     }
+
+    private val onFocusChangedListener = View.OnFocusChangeListener { _, hasFocus -> onFocusChange?.invoke(hasFocus) }
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -77,7 +91,14 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         holder.textInputLayout.error = errorMessage
         holder.textInputLayout.endIconMode = endIconMode ?: TextInputLayout.END_ICON_NONE
 
-        holder.setValueOnce(holder.textInputEditText, value)
+        holder.textInputLayout.prefixText = inputPrefix
+        holder.textInputLayout.suffixText = inputSuffix
+
+        if (forceUpdateValue) {
+            holder.textInputEditText.setText(value)
+        } else {
+            holder.setValueOnce(holder.textInputEditText, value)
+        }
 
         holder.textInputEditText.isEnabled = enabled
         inputType?.let { holder.textInputEditText.inputType = it }
@@ -86,6 +107,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
 
         holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
         holder.textInputEditText.setOnEditorActionListener(editorActionListener)
+        holder.textInputEditText.onFocusChangeListener = onFocusChangedListener
     }
 
     override fun shouldSaveViewState(): Boolean {

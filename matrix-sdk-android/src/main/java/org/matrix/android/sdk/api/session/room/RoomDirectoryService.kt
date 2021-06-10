@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.session.room
 
+import arrow.core.Either
+import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
@@ -40,4 +42,6 @@ interface RoomDirectoryService {
      * Set the visibility of a room in the directory
      */
     suspend fun setRoomDirectoryVisibility(roomId: String, roomDirectoryVisibility: RoomDirectoryVisibility)
+
+    suspend fun checkAliasAvailability(aliasLocalPart: String?) : Result<Unit>
 }
