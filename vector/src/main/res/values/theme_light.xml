@@ -70,12 +70,14 @@
         <item name="materialAlertDialogTheme">@style/VectorAlertDialogStyleLight</item>
         <item name="bottomNavigationStyle">@style/VectorBottomNavigation</item>
         <item name="searchViewStyle">@style/VectorSearchView</item>
-
-        <!-- Default style for text input -->
         <item name="textInputStyle">@style/VectorTextInputLayout</item>
-
-        <!-- Default style for AppBarLayout -->
         <item name="appBarLayoutStyle">@style/VectorAppBarLayoutStyle</item>
+        <item name="popupMenuStyle">@style/Vector.PopupMenu</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.Light</item>
+        <item name="snackbarStyle">@style/VectorSnackBarStyle</item>
+        <item name="snackbarButtonStyle">@style/VectorSnackBarButton</item>
+        <item name="snackbarTextViewStyle">@style/VectorSnackBarText</item>
+        <item name="actionModeStyle">@style/VectorActionMode</item>
 
         <item name="android:textColorLink">@color/element_link_light</item>
 
@@ -95,23 +97,11 @@
         <!-- remove the shadow under the actionbar -->
         <item name="android:windowContentOverlay">@null</item>
 
-        <item name="popupMenuStyle">@style/Vector.PopupMenu</item>
 
         <!-- no divider -->
         <item name="android:actionBarDivider">@null</item>
 
-        <!-- Preference -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-
-        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.Light</item>
-
-        <!-- SnackBar -->
-        <!-- Style to use for SnackBars in this theme. -->
-        <item name="snackbarStyle">@style/VectorSnackBarStyle</item>
-        <!-- Style to use for action button within a SnackBar in this theme. -->
-        <item name="snackbarButtonStyle">@style/VectorSnackBarButton</item>
-        <!-- Style to use for message text within a SnackBar in this theme. -->
-        <item name="snackbarTextViewStyle">@style/VectorSnackBarText</item>
 
         <item name="pf_lock_screen">@style/PinCodeScreenStyle</item>
         <item name="pf_key_button">@style/PinCodeKeyButtonStyle</item>
@@ -140,8 +130,6 @@
         <item name="vctr_social_login_button_twitter_style">@style/WidgetButtonSocialLogin.Twitter.Light</item>
         <item name="vctr_social_login_button_apple_style">@style/WidgetButtonSocialLogin.Apple.Light</item>
         <item name="vctr_social_login_button_gitlab_style">@style/WidgetButtonSocialLogin.Gitlab.Light</item>
-
-        <item name="actionModeStyle">@style/ActionModeTheme</item>
     </style>
 
     <style name="AppTheme.Light" parent="AppTheme.Base.Light" />

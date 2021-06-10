@@ -52,7 +52,7 @@
     </style>
 
     <!-- Action mode style -->
-    <style name="ActionModeTheme" parent="Widget.AppCompat.ActionMode">
+    <style name="VectorActionMode" parent="Widget.AppCompat.ActionMode">
         <item name="background">?android:colorBackground</item>
         <item name="titleTextStyle">@style/Vector.Toolbar.Title</item>
         <item name="subtitleTextStyle">@style/Vector.Toolbar.SubTitle</item>
