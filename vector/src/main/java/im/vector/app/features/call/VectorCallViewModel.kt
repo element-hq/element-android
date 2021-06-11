@@ -34,11 +34,13 @@ import im.vector.app.features.call.webrtc.getOpponentAsMatrixItem
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.room.model.call.supportCallTransfer
+import org.matrix.android.sdk.api.util.MatrixItem
 
 class VectorCallViewModel @AssistedInject constructor(
         @Assisted initialState: VectorCallViewState,
@@ -84,6 +86,12 @@ class VectorCallViewModel @AssistedInject constructor(
         override fun onTick(formattedDuration: String) {
             setState {
                 copy(formattedDuration = formattedDuration)
+            }
+        }
+
+        override fun assertedIdentityChanged() {
+            setState {
+                copy(callInfo = call?.extractCallInfo())
             }
         }
 
@@ -160,8 +168,7 @@ class VectorCallViewModel @AssistedInject constructor(
             if (otherCall == null) {
                 copy(otherKnownCallInfo = null)
             } else {
-                val otherUserItem = otherCall.getOpponentAsMatrixItem(session)
-                copy(otherKnownCallInfo = VectorCallViewState.CallInfo(otherCall.callId, otherUserItem))
+                copy(otherKnownCallInfo = otherCall.extractCallInfo())
             }
         }
     }
@@ -175,7 +182,6 @@ class VectorCallViewModel @AssistedInject constructor(
         } else {
             call = webRtcCall
             callManager.addCurrentCallListener(currentCallListener)
-            val item = webRtcCall.getOpponentAsMatrixItem(session)
             webRtcCall.addListener(callListener)
             val currentSoundDevice = callManager.audioManager.selectedDevice
             if (currentSoundDevice == CallAudioManager.Device.PHONE) {
@@ -185,7 +191,7 @@ class VectorCallViewModel @AssistedInject constructor(
                 copy(
                         isVideoCall = webRtcCall.mxCall.isVideoCall,
                         callState = Success(webRtcCall.mxCall.state),
-                        callInfo = VectorCallViewState.CallInfo(callId, item),
+                        callInfo = webRtcCall.extractCallInfo(),
                         device = currentSoundDevice ?: CallAudioManager.Device.PHONE,
                         isLocalOnHold = webRtcCall.isLocalOnHold,
                         isRemoteOnHold = webRtcCall.remoteOnHold,
@@ -200,6 +206,22 @@ class VectorCallViewModel @AssistedInject constructor(
             }
             updateOtherKnownCall(webRtcCall)
         }
+    }
+
+    private fun WebRtcCall.extractCallInfo(): VectorCallViewState.CallInfo {
+        val assertedIdentity = this.remoteAssertedIdentity
+        val matrixItem = if (assertedIdentity != null) {
+            val userId = if (MatrixPatterns.isUserId(assertedIdentity.id)) {
+                assertedIdentity.id!!
+            } else {
+                // Need an id starting with @
+                "@${assertedIdentity.displayName}"
+            }
+            MatrixItem.UserItem(userId, assertedIdentity.displayName, assertedIdentity.avatarUrl)
+        } else {
+            getOpponentAsMatrixItem(session)
+        }
+        return VectorCallViewState.CallInfo(callId, matrixItem)
     }
 
     override fun onCleared() {

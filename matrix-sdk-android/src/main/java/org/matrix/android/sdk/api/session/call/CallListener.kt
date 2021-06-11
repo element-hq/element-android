@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.call
 
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
+import org.matrix.android.sdk.api.session.room.model.call.CallAssertedIdentityContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
@@ -61,4 +62,9 @@ interface CallListener {
      * Called when the call has been managed by an other session
      */
     fun onCallManagedByOtherSession(callId: String)
+
+    /**
+     * Called when an asserted identity event is received
+     */
+    fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent)
 }
