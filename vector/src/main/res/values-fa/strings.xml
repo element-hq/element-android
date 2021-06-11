@@ -2676,7 +2676,7 @@
     <string name="labs_use_restricted_join_rule_desc">هشدار به پشتیبانی سرور و نسخه اتاق آزمایشی نیاز دارد</string>
     <string name="labs_use_restricted_join_rule">فضای کاری آزمایشی - اتاق محدود.</string>
     <string name="you_are_invited">شما دعوت شده‌اید</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">فضای‌های کاری روش هایی برای دسته‌بندی اتاق‌ها و افراد برای کار، تفریح یا فقط خودتان است.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">اسپیس ها یک شیوه جدید برای دسته بندی اتاق ها و افراد هستند.</string>
     <string name="spaces_beta_welcome_to_spaces">به فضای‌های کاری خوش‌آمدید!</string>
     <string name="space_add_existing_rooms">اتاق‌ها و فضای کاری موجود را اضافه کنید</string>
     <string name="space_leave_prompt_msg">آیا مطمئن هستید که می خواهید فضای کاری را ترک کنید؟</string>
@@ -2786,4 +2786,15 @@
     <string name="directory_add_a_new_server_prompt">نام کارساز جدیدی که می‌خواهید در آن به جستجو بپردازید را وارد کنید</string>
     <string name="directory_add_a_new_server">اضافه کردن یک کارساز(سرور) جدید</string>
     <string name="directory_your_server">کارساز شما</string>
+    <string name="unnamed_room">اتاق نامگذاری نشده</string>
+    <string name="this_space_has_no_rooms_admin">بعضی اتاق ها ممکن است پنهان باشند زیرا خصوصی هستند و شما به یک دعوتنامه نیاز دارید.</string>
+    <string name="this_space_has_no_rooms_not_admin">بعضی اتاق ها ممکن است پنهان باشند زیرا خصوصی هستند و شما به یک دعوتنامه نیاز دارید.
+\nشما اجازه اضافه کردن اتاق را ندارید.</string>
+    <string name="this_space_has_no_rooms">این اسپیس هیچ اتاقی ندارد</string>
+    <string name="spaces_no_server_support_description">لطفا برای آگاهی بیشتر با مدیر کارساز خود تماس بگیرید</string>
+    <string name="spaces_no_server_support_title">به نظر می رسد کارساز خانگی شما هنوز از اسپیس ها پشتیبانی نمی کند</string>
+    <string name="space_add_rooms">افزودن اتاق ها</string>
+    <string name="space_leave_prompt_msg_as_admin">شما مدیر این اسپیس هستید،مطمئن شوید قبل از خروج، حق مدیریت را به عضوی دیگر منتقل کرده اید.</string>
+    <string name="space_leave_prompt_msg_private">این اسپیس عمومی نیست. شما نمیتوانید بدون یک دعوتنامه دوباره ملحق شوید.</string>
+    <string name="space_leave_prompt_msg_only_you">شما تنها فرد اینجا هستید. اگر خارج شوید، هیچ کس از جمله شما قادر نخواهد بود در آینده ملحق شود.</string>
 </resources>
