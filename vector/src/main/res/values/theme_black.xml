@@ -20,6 +20,7 @@
         <item name="vctr_reaction_background_off">@color/vctr_reaction_background_off_black</item>
         <item name="vctr_reaction_background_on">@color/vctr_reaction_background_on_black</item>
         <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
+        <item name="vctr_toolbar_background">@color/element_background_black</item>
 
         <!-- Material color -->
         <item name="colorSurface">@android:color/black</item>

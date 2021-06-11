@@ -40,7 +40,7 @@
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text" />
 
             <ProgressBar
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                style="@style/VectorHorizontalProgressBar"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

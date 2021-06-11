@@ -29,7 +29,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.BaseMvRxFragment
@@ -224,7 +224,7 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     /**
      * Configure the Toolbar.
      */
-    protected fun setupToolbar(toolbar: Toolbar) {
+    protected fun setupToolbar(toolbar: MaterialToolbar) {
         val parentActivity = vectorBaseActivity
         if (parentActivity is ToolbarConfigurable) {
             parentActivity.configure(toolbar)
