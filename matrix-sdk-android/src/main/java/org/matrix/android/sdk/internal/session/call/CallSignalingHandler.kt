@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
+import org.matrix.android.sdk.api.session.room.model.call.CallAssertedIdentityContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
@@ -53,28 +54,42 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
 
     fun onCallEvent(event: Event) {
         when (event.getClearType()) {
-            EventType.CALL_ANSWER        -> {
+            EventType.CALL_ANSWER                   -> {
                 handleCallAnswerEvent(event)
             }
-            EventType.CALL_INVITE        -> {
+            EventType.CALL_INVITE                   -> {
                 handleCallInviteEvent(event)
             }
-            EventType.CALL_HANGUP        -> {
+            EventType.CALL_HANGUP                   -> {
                 handleCallHangupEvent(event)
             }
-            EventType.CALL_REJECT        -> {
+            EventType.CALL_REJECT                   -> {
                 handleCallRejectEvent(event)
             }
-            EventType.CALL_CANDIDATES    -> {
+            EventType.CALL_CANDIDATES               -> {
                 handleCallCandidatesEvent(event)
             }
-            EventType.CALL_SELECT_ANSWER -> {
+            EventType.CALL_SELECT_ANSWER            -> {
                 handleCallSelectAnswerEvent(event)
             }
-            EventType.CALL_NEGOTIATE     -> {
+            EventType.CALL_NEGOTIATE                -> {
                 handleCallNegotiateEvent(event)
             }
+            EventType.CALL_ASSERTED_IDENTITY,
+            EventType.CALL_ASSERTED_IDENTITY_PREFIX -> {
+                handleCallAssertedIdentityEvent(event)
+            }
         }
+    }
+
+    private fun handleCallAssertedIdentityEvent(event: Event) {
+        val content = event.getClearContent().toModel<CallAssertedIdentityContent>() ?: return
+        val call = content.getCall() ?: return
+        if (call.ourPartyId == content.partyId) {
+            // Ignore remote echo (not that we send asserted identity, but still...)
+            return
+        }
+        callListenersDispatcher.onCallAssertedIdentityReceived(content)
     }
 
     private fun handleCallNegotiateEvent(event: Event) {

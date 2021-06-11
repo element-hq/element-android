@@ -17,10 +17,11 @@
 package im.vector.app.features.call.dialpad
 
 import im.vector.app.features.call.lookup.pstnLookup
+import im.vector.app.features.call.lookup.sipNativeLookup
+import im.vector.app.features.call.vectorCallService
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import org.matrix.android.sdk.api.session.Session
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class DialPadLookup @Inject constructor(
@@ -28,13 +29,25 @@ class DialPadLookup @Inject constructor(
         private val webRtcCallManager: WebRtcCallManager,
         private val directRoomHelper: DirectRoomHelper
 ) {
-    class Failure : Throwable()
+    sealed class Failure : Throwable() {
+        object NoResult: Failure()
+        object NumberIsYours: Failure()
+    }
 
     data class Result(val userId: String, val roomId: String)
 
     suspend fun lookupPhoneNumber(phoneNumber: String): Result {
-        val thirdPartyUser = session.pstnLookup(phoneNumber, webRtcCallManager.supportedPSTNProtocol).firstOrNull() ?: throw IllegalStateException()
-        val roomId = directRoomHelper.ensureDMExists(thirdPartyUser.userId)
-        return Result(userId = thirdPartyUser.userId, roomId = roomId)
+        session.vectorCallService.protocolChecker.awaitCheckProtocols()
+        val thirdPartyUser = session.pstnLookup(phoneNumber, webRtcCallManager.supportedPSTNProtocol).firstOrNull() ?: throw Failure.NoResult
+        // check to see if this is a virtual user, in which case we should find the native user
+        val nativeUserId = if (webRtcCallManager.supportsVirtualRooms) {
+            val nativeLookupResults = session.sipNativeLookup(thirdPartyUser.userId)
+            nativeLookupResults.firstOrNull()?.userId ?: thirdPartyUser.userId
+        } else {
+            thirdPartyUser.userId
+        }
+        if (nativeUserId == session.myUserId) throw Failure.NumberIsYours
+        val roomId = directRoomHelper.ensureDMExists(nativeUserId)
+        return Result(userId = nativeUserId, roomId = roomId)
     }
 }

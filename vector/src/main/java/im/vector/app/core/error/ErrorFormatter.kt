@@ -116,7 +116,9 @@ class DefaultErrorFormatter @Inject constructor(
                         throwable.localizedMessage
                 }
             }
-            is DialPadLookup.Failure    ->
+            is DialPadLookup.Failure.NumberIsYours    ->
+                stringProvider.getString(R.string.cannot_call_yourself)
+            is DialPadLookup.Failure.NoResult    ->
                 stringProvider.getString(R.string.call_dial_pad_lookup_error)
             else                        -> throwable.localizedMessage
         }

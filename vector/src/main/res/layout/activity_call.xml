@@ -9,7 +9,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_call_screen"
+    android:background="@color/bg_call_screen_blur"
     tools:ignore="MergeRootFrame">
 
     <ImageView
@@ -37,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/otherKnownCallLayout"
         android:layout_width="80dp"
         android:layout_height="144dp"
@@ -45,15 +45,19 @@
         android:layout_marginEnd="16dp"
         android:background="@color/element_background_light"
         android:visibility="gone"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/bg_call_screen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible">
 
         <ImageView
             android:id="@+id/otherKnownCallAvatarView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:foreground="?attr/selectableItemBackground"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
             android:importantForAccessibility="no"
             android:scaleType="centerCrop"
             tools:src="@tools:sample/avatars" />
@@ -66,7 +70,7 @@
             android:importantForAccessibility="no"
             android:src="@drawable/ic_call_small_pause" />
 
-    </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <ImageView
         android:id="@+id/otherMemberAvatar"

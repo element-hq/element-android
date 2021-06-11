@@ -19,7 +19,8 @@
 
     <!-- Source: https://zpl.io/aBKw9Mk -->
 
-    <color name="bg_call_screen">#99000000</color>
+    <color name="bg_call_screen_blur">#99000000</color>
+    <color name="bg_call_screen">#27303A</color>
 
     <color name="vctr_notice_secondary">#FF61708B</color>
     <color name="vctr_notice_secondary_alpha12">#1E61708B</color>

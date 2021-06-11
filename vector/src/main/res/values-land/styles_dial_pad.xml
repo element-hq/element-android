@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="DialpadKeyNumberStyle">
-        <item name="android:textColor">?vctr_content_primary</item>
+        <item name="android:textColor">?attr/vctr_content_primary</item>
         <item name="android:textSize">@dimen/dialpad_key_numbers_default_size</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:layout_width">wrap_content</item>
