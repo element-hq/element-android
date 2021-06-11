@@ -1141,7 +1141,7 @@
     <string name="settings_call_category">Chamadas</string>
     <string name="template_settings_call_ringtone_use_app_ringtone">Usar toque default de ${app_name} para chamadas recebendo</string>
     <string name="settings_call_ringtone_title">Toque de chamada recebendo</string>
-    <string name="settings_call_ringtone_dialog_title">Selecione toque para chamadas:</string>
+    <string name="settings_call_ringtone_dialog_title">Selecionar toque para chamadas:</string>
     <string name="reason_hint">Razão</string>
     <string name="room_sliding_menu_version_x">Versão %s</string>
     <string name="settings_notification_troubleshoot">Resolver Problemas de Notificação</string>
@@ -2278,7 +2278,7 @@
     <string name="command_description_discard_session_not_handled">Somente suportado em salas encriptadas</string>
     <string name="enter_secret_storage_passphrase_or_key">Use sua %1$s ou %2$s para continuar.</string>
     <string name="use_recovery_key">Usar Chave de Recuperação</string>
-    <string name="enter_secret_storage_input_key">Selecionar sua Chave de Recuperação, ou faça manualmente input dela ao digitá-la ou colá-la desde seu clipboard</string>
+    <string name="enter_secret_storage_input_key">Selecione sua Chave de Recuperação, ou faça manualmente input dela ao digitá-la ou colá-la desde seu clipboard</string>
     <string name="keys_backup_recovery_key_error_decrypt">Backup não pôde ser decriptado com esta Chave de Recuperação: por favor verifique que você entrou a Chave de Recuperação correta.</string>
     <string name="failed_to_access_secure_storage">Falha para acessar armazenamento seguro</string>
     <string name="unencrypted">Não-encripada</string>
