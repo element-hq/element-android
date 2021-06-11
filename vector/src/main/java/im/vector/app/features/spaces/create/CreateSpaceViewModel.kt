@@ -118,6 +118,9 @@ class CreateSpaceViewModel @AssistedInject constructor(
             is CreateSpaceAction.SetSpaceTopology -> {
                 handleSetTopology(action)
             }
+            CreateSpaceAction.ConfirmBetaWarning        -> {
+                _viewEvents.post(CreateSpaceEvents.OnConfirmBetaWarning)
+            }
         }.exhaustive
     }
 

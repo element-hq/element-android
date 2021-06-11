@@ -46,11 +46,19 @@ class ChoosePrivateSpaceTypeFragment @Inject constructor(
         }
 
         views.teammatesButton.onClick {
-            sharedViewModel.handle(CreateSpaceAction.SetSpaceTopology(SpaceTopology.MeAndTeammates))
+            BetaWarningBottomSheet().show(parentFragmentManager, "warning")
         }
 
         sharedViewModel.subscribe { state ->
             views.accessInfoHelpText.text = stringProvider.getString(R.string.create_spaces_make_sure_access, state.name ?: "")
+        }
+
+        sharedViewModel.observeViewEvents {
+            when (it) {
+                CreateSpaceEvents.OnConfirmBetaWarning -> {
+                    sharedViewModel.handle(CreateSpaceAction.SetSpaceTopology(SpaceTopology.MeAndTeammates))
+                }
+            }
         }
     }
 

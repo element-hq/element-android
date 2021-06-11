@@ -771,6 +771,7 @@
     <string name="yes">YES</string>
     <string name="no">NO</string>
     <string name="_continue">Continue</string>
+    <string name="continue_anyway">Continue Anyway</string>
 
     <!-- Actions -->
     <string name="remove">Remove</string>
@@ -3399,4 +3400,7 @@
     <string name="this_space_has_no_rooms_admin">Some rooms may be hidden because they’re private and you need an invite.</string>
 
     <string name="unnamed_room">Unnamed Room</string>
+
+    <string name="teammate_spaces_arent_quite_ready">"Teammate spaces aren’t quite ready but you can still give them a try"</string>
+    <string name="teammate_spaces_might_not_join">"At the moment people might not be able to join any private rooms you make.\n\nWe’ll be improving this as part of the beta, but just wanted to let you know."</string>
 </resources>
