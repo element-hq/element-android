@@ -23,6 +23,7 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
@@ -155,15 +156,22 @@ class MergedTimelines(
         val mainItr = mainTimelineEvents.toList().listIterator()
         val secondaryItr = secondaryTimelineEvents.toList().listIterator()
         var index = 0
-
+        var correctedSenderInfo: SenderInfo? = mainTimelineEvents.firstOrNull()?.senderInfo
+        if (mainTimelineEvents.isEmpty() && mainTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS)) {
+            return
+        }
+        if (secondaryTimelineEvents.isEmpty() && secondaryTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS)) {
+            return
+        }
         while (merged.size < mainTimelineEvents.size + secondaryTimelineEvents.size) {
             if (mainItr.hasNext()) {
                 val nextMain = mainItr.next()
+                correctedSenderInfo = nextMain.senderInfo
                 if (secondaryItr.hasNext()) {
                     val nextSecondary = secondaryItr.next()
                     if (nextSecondary.root.originServerTs ?: 0 > nextMain.root.originServerTs ?: 0) {
                         positionsMapping[nextSecondary.eventId] = index
-                        merged.add(nextSecondary)
+                        merged.add(nextSecondary.correctBeforeMerging(correctedSenderInfo))
                         mainItr.previous()
                     } else {
                         positionsMapping[nextMain.eventId] = index
@@ -177,18 +185,25 @@ class MergedTimelines(
             } else if (secondaryItr.hasNext()) {
                 val nextSecondary = secondaryItr.next()
                 positionsMapping[nextSecondary.eventId] = index
-                merged.add(nextSecondary)
+                merged.add(nextSecondary.correctBeforeMerging(correctedSenderInfo))
             }
             index++
         }
         mergedEvents.apply {
             clear()
-            addAll(mergedEvents)
+            addAll(merged)
         }
         withContext(Dispatchers.Main) {
             listenersMapping.keys.forEach { listener ->
                 tryOrNull { listener.onTimelineUpdated(merged) }
             }
         }
+    }
+
+    private fun TimelineEvent.correctBeforeMerging(correctedSenderInfo: SenderInfo?): TimelineEvent {
+        return copy(
+                senderInfo = correctedSenderInfo ?: senderInfo,
+                readReceipts = emptyList()
+        )
     }
 }

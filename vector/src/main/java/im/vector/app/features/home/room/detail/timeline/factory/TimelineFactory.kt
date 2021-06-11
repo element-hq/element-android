@@ -35,21 +35,21 @@ private val secondaryTimelineAllowedTypes = listOf(
 
 class TimelineFactory @Inject constructor(private val session: Session, private val timelineSettingsFactory: TimelineSettingsFactory) {
 
-    fun createTimeline(coroutineScope: CoroutineScope, room: Room, eventId: String?): Timeline {
+    fun createTimeline(coroutineScope: CoroutineScope, mainRoom: Room, eventId: String?): Timeline {
         val settings = timelineSettingsFactory.create()
         if (!session.vectorCallService.protocolChecker.supportVirtualRooms) {
-            return room.createTimeline(eventId, settings)
+            return mainRoom.createTimeline(eventId, settings)
         }
-        val virtualRoomId = session.vectorCallService.userMapper.virtualRoomForNativeRoom(room.roomId)
+        val virtualRoomId = session.vectorCallService.userMapper.virtualRoomForNativeRoom(mainRoom.roomId)
         return if (virtualRoomId == null) {
-            room.createTimeline(eventId, settings)
+            mainRoom.createTimeline(eventId, settings)
         } else {
             val virtualRoom = session.getRoom(virtualRoomId)!!
             MergedTimelines(
-                    coroutineScope,
-                    room.createTimeline(eventId, settings),
+                    coroutineScope = coroutineScope,
+                    mainTimeline = mainRoom.createTimeline(eventId, settings),
                     secondaryTimelineParams = MergedTimelines.SecondaryTimelineParams(
-                            virtualRoom.createTimeline(null, settings),
+                            timeline = virtualRoom.createTimeline(null, settings),
                             shouldFilterTypes = true,
                             allowedTypes = secondaryTimelineAllowedTypes
                     )
