@@ -34,7 +34,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -61,6 +60,11 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
 
     //    private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
     private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
+
+    // All users from roomSummaries
+    private var roomSummariesUsers: List<User> = emptyList()
+    // All the contacts on the phone
+    private var localUsers: List<User> = emptyList()
 
     @AssistedFactory
     interface Factory {
@@ -110,7 +114,6 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
             }
 
             performLookup(allContacts)
-            updateFilteredContacts()
         }
     }
 
@@ -138,21 +141,18 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
             }
 
             val unresolvedThreePids = mutableListOf<String>()
-            val users = mutableMapOf<String, User>()
+            val users: MutableMap<String, User> = data.map {
+                var user = session.getUser(it.matrixId)
+                user = if (user == null) {
+                    unresolvedThreePids.add(it.matrixId)
+                    User(it.matrixId, TchapUtils.computeDisplayNameFromUserId(it.matrixId), null)
+                } else {
+                    user
+                }
+                it.matrixId to user
+            }.toMap().toMutableMap()
 
-            data.associateByTo(users,
-                    { it.matrixId },
-                    {
-                        session.getUser(it.matrixId) ?: run {
-                            unresolvedThreePids.add(it.matrixId)
-                            //Create a temporary user
-                            User(it.matrixId, TchapUtils.computeDisplayNameFromUserId(it.matrixId), null)
-                        }
-                    })
-
-            setState {
-                copy(localUsers = users.values.toList())
-            }
+            localUsers = users.values.toList()
 
             updateFilteredContacts()
 
@@ -160,9 +160,10 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                 tryOrNull { session.resolveUser(it) }
             }.forEach { user -> users[user.userId] = user }
 
+            localUsers = users.values.toList()
+
             setState {
                 copy(
-                        localUsers = users.values.toList(),
                         isBoundRetrieved = true
                 )
             }
@@ -172,18 +173,21 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
     }
 
     private fun updateFilteredContacts() = withState { state ->
-        val filteredUsers = state.localUsers
-                .filter { it.getBestName().contains(state.searchTerm, true) }
+        val tchapContactList: MutableList<User> = roomSummariesUsers.toMutableList()
 
-        val filteredRoomSummaries = state.roomSummaries.invoke()
-                ?.filter { it.displayName.contains(state.searchTerm, true) }
-                ?.filter { roomSummary -> roomSummary.directUserId != null }
-                .orEmpty()
+        tchapContactList.addAll(localUsers.filter { user ->
+            !roomSummariesUsers.any { it.userId == user.userId }
+        })
+
+        val filteredUsers = if (state.searchTerm.isNotEmpty()) {
+            tchapContactList.filter { it.getBestName().contains(state.searchTerm, true) }
+        } else {
+            tchapContactList
+        }
 
         setState {
             copy(
                     filteredLocalUsers = filteredUsers,
-                    filteredRoomSummaries = filteredRoomSummaries
             )
         }
     }
@@ -247,13 +251,35 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                     this.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
                 }
         ).asObservable()
-                .observeOn(Schedulers.computation())
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .execute {
-                    copy(
-                            roomSummaries = it,
-                            filteredRoomSummaries = it.invoke().orEmpty()
-                    )
-                }
+                .subscribe { roomSummaries ->
+                    val unresolvedThreePids = mutableListOf<String>()
+                    val users: MutableMap<String, User> = roomSummaries.mapNotNull { roomSummary ->
+                        roomSummary.directUserId?.let {
+                            var user = session.getUser(it)
+                            user = if (user == null) {
+                                unresolvedThreePids.add(it)
+                                User(it, TchapUtils.computeDisplayNameFromUserId(it), null)
+                            } else {
+                                user
+                            }
+
+                            it to user
+                        }
+                    }.toMap().toMutableMap()
+
+                    roomSummariesUsers = users.values.toList()
+
+                    updateFilteredContacts()
+
+                    viewModelScope.launch {
+                        unresolvedThreePids.mapNotNull {
+                            tryOrNull { session.resolveUser(it) }
+                        }.forEach { user -> users[user.userId] = user }
+
+                        roomSummariesUsers = users.values.toList()
+
+                        updateFilteredContacts()
+                    }
+                }.disposeOnClear()
     }
 }

@@ -21,26 +21,17 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.contacts.MappedContact
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.user.model.User
 
 data class TchapContactListViewState(
         val excludedUserIds: Set<String>? = null,
         val directoryUsers: Async<List<User>> = Uninitialized,
 
-        // All roomSummaries
-        val roomSummaries: Async<List<RoomSummary>> = Uninitialized,
-        // All roomSummaries, filtered by searchTerm
-        val filteredRoomSummaries: List<RoomSummary> = emptyList(),
-
         // All the contacts on the phone
         val mappedContacts: Async<List<MappedContact>> = Loading(),
 
-        // All the contacts on the phone
-        val localUsers: List<User> = emptyList(),
         // All contacts, filtered by searchTerm
         val filteredLocalUsers: List<User> = emptyList(),
-
 
         // True when the identity service has return some data
         val isBoundRetrieved: Boolean = false,

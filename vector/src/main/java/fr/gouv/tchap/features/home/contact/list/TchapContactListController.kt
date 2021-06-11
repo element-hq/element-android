@@ -52,12 +52,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
     override fun buildModels() {
         val currentState = state ?: return
 
-        when (currentState.roomSummaries) {
-            is Uninitialized -> renderEmptyState()
-            is Loading -> renderLoading()
-            is Fail -> renderFailure(currentState.roomSummaries.error)
-            is Success -> buildlocalContacts(currentState)
-        }
+        buildlocalContacts(currentState)
 
         when (val asyncUsers = currentState.directoryUsers) {
             is Uninitialized -> {
@@ -73,30 +68,17 @@ class TchapContactListController @Inject constructor(private val session: Sessio
     }
 
     private fun buildlocalContacts(currentState: TchapContactListViewState) {
-        val userList = currentState.filteredRoomSummaries.mapNotNull { item ->
-            item.directUserId?.let {
-                session.getUser(it)
-            }
-        }
-        val tchapContactList: MutableList<User> = userList.toMutableList()
-
-        tchapContactList.addAll(currentState.filteredLocalUsers.filter { user ->
-            !userList.any { it.userId == user.userId }
-        })
-
         userListHeaderItem {
             id("local_header", 1)
             header(stringProvider.getString(R.string.local_address_book_header))
         }
 
-        tchapContactList.sortWith { contact1, contact2 ->
+        currentState.filteredLocalUsers.toMutableList().sortedWith() { contact1, contact2 ->
             val lhs = contact1.getBestName()
             val rhs = contact2.getBestName()
 
             String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs)
-        }
-
-        tchapContactList.forEach { item ->
+        }.forEach { item ->
             userDirectoryUserItem {
                 id(item.userId)
                 selected(false)
