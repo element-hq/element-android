@@ -9,20 +9,22 @@
     tools:foreground="?android:attr/selectableItemBackground"
     tools:style="@style/AlertStyle">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/ivUserAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:contentDescription="@string/avatar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/alerter_texts"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@sample/user_round_avatars" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/ivIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_shield_warning"
         app:layout_constraintCircle="@+id/ivUserAvatar"
         app:layout_constraintCircleAngle="135"
@@ -40,7 +42,7 @@
         app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,7 +55,7 @@
             tools:text="Title"
             tools:visibility="visible" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/tvText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,21 +73,4 @@
 
     </LinearLayout>
 
-    <!--    <FrameLayout-->
-    <!--        android:id="@+id/flRightIconContainer"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="center_vertical">-->
-
-    <!--        <androidx.appcompat.widget.AppCompatImageView-->
-    <!--            android:id="@+id/ivRightIcon"-->
-    <!--            android:layout_width="@dimen/alerter_alert_icn_size"-->
-    <!--            android:layout_height="@dimen/alerter_alert_icn_size"-->
-    <!--            android:maxWidth="@dimen/alerter_alert_icn_size"-->
-    <!--            android:maxHeight="@dimen/alerter_alert_icn_size"-->
-    <!--            android:visibility="gone"-->
-    <!--            app:srcCompat="@drawable/alerter_ic_notifications"-->
-    <!--            app:tint="@color/alert_default_icon_color"-->
-    <!--            tools:visibility="visible" />-->
-    <!--    </FrameLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>
