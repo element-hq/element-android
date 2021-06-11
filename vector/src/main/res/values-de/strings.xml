@@ -280,7 +280,7 @@
     <string name="call_notification_reject">Ablehnen</string>
     <string name="call_notification_hangup">Anruf beenden</string>
     <!-- button names -->
-    <string name="ok">OK</string>
+    <string name="ok">Ok</string>
     <string name="cancel">Abbrechen</string>
     <string name="save">Speichern</string>
     <string name="leave">Verlassen</string>
@@ -298,16 +298,16 @@
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
     <string name="active_call">Aktives Gespräch</string>
-    <string name="ongoing_conference_call">Konferenzgespräch läuft.
+    <string name="ongoing_conference_call">Laufendes Konferenzgespräch
 \nPer %1$s oder %2$s beitreten</string>
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
-    <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte später erneut versuchen</string>
+    <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte versuche es später erneut</string>
     <string name="missing_permissions_warning">Aufgrund fehlender Berechtigungen stehen einige Funktionen eventuell nicht zur Verfügung…</string>
-    <string name="missing_permissions_to_start_conf_call">Ihnen fehlt die Berechtigung, ein Konferenzgespräch in diesem Raum zu starten</string>
+    <string name="missing_permissions_to_start_conf_call">Du kannst in diesem Raum keine Videokonferenz starten</string>
     <string name="missing_permissions_title_to_start_conf_call">Kann Gespräch nicht starten</string>
     <string name="device_information">Sitzungsinformationen</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Konferenzgespräche werden in verschlüsselten Räumen nicht unterstützt</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konferenzgespräche in verschlüsselten Räumen werden nicht unterstützt</string>
     <string name="send_anyway">Trotzdem senden</string>
     <string name="or">oder</string>
     <string name="invite">Einladen</string>
@@ -350,7 +350,7 @@
     <string name="rooms_header">Räume</string>
     <string name="rooms_directory_header">Raumverzeichnis</string>
     <string name="no_room_placeholder">Keine Räume</string>
-    <string name="no_public_room_placeholder">Keine öffentl. Räume verfügbar</string>
+    <string name="no_public_room_placeholder">Keine öffentlichen Räume</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">%d Benutzer</item>
         <item quantity="other">%d Benutzer</item>
@@ -361,12 +361,12 @@
     <string name="send_bug_report">Problem melden</string>
     <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du genau gemacht\? Was sollte passieren\? Was ist tatsächlich passiert\?</string>
     <string name="send_bug_report_placeholder">Problembeschreibung</string>
-    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle dieses Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und der Screenshot, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, die nachfolgenden Haken entsprechend entfernen:</string>
+    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle des Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und der Screenshot, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, die nachfolgenden Haken entsprechend entfernen:</string>
     <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du das Fenster zum Senden eines Fehlerberichts öffnen\?</string>
-    <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich übermittelt</string>
+    <string name="send_bug_report_sent">Dein Fehlerbericht wurde erfolgreich übermittelt</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht übermittelt werden (%s)</string>
     <string name="send_bug_report_progress">Fortschritt (%s%%)</string>
-    <string name="send_bug_report_app_crashed">Die Anwendung ist während der letzten Benutzung abgestürzt. Möchtest du das Fehler-melden-Fenster öffnen?</string>
+    <string name="send_bug_report_app_crashed">Die Anwendung ist während der letzten Benutzung abgestürzt. Möchtest du den Fehler melden\?</string>
     <string name="send_files_in">Sende Datei nach</string>
     <string name="read_receipt">Gelesen</string>
     <string name="join_room">Raum betreten</string>
@@ -853,7 +853,7 @@
     <string name="media_saving_period_1_month">1 Monat</string>
     <string name="media_saving_period_forever">Unbegrenzt</string>
     <string name="offline">Offline</string>
-    <string name="user_directory_header">Nutzer-Verzeichnis</string>
+    <string name="user_directory_header">Nutzerverzeichnis</string>
     <string name="people_search_user_directory">BENUTZER-VERZEICHNIS (%s)</string>
     <string name="settings_data_save_mode">Datensparsamer Modus</string>
     <string name="font_size">Schriftgröße</string>
@@ -913,7 +913,7 @@
     <string name="encrypted_message">Verschlüsselte Nachricht</string>
     <string name="title_activity_group_details">Community-Details</string>
     <string name="loading">Lädt…</string>
-    <string name="action_exit">Schließen</string>
+    <string name="action_exit">Beenden</string>
     <string name="bottom_action_groups">Communities</string>
     <string name="home_filter_placeholder_groups">Community-Namen filtern</string>
     <string name="groups_invite_header">Einladen</string>
@@ -1022,7 +1022,7 @@
     <string name="template_startup_notification_privacy_message">${app_name} kann im Hintergrund laufen um deine Benachrichtigungen sicher und privat zu verwalten. Dies kann den Energieverbrauch beeinflussen.</string>
     <string name="startup_notification_privacy_button_grant">Berechtigung gewähren</string>
     <string name="startup_notification_privacy_button_other">Wähle eine andere Option</string>
-    <string name="title_activity_choose_sticker">Sende einen Sticker</string>
+    <string name="title_activity_choose_sticker">Sticker senden</string>
     <string name="option_send_sticker">Sende Sticker</string>
     <string name="no_sticker_application_dialog_content">Du hast aktuell keine Stickerpakete aktiviert.
 \n
@@ -1050,7 +1050,7 @@
     <string name="download">Download</string>
     <string name="speak">Sprechen</string>
     <string name="clear">Leeren</string>
-    <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Sitzungen erneut anfragen.</string>
+    <string name="e2e_re_request_encryption_key">Schlüssel von deinen anderen Sitzungen erneut anfordern.</string>
     <string name="e2e_re_request_encryption_key_sent">Schlüsselanfrage gesendet.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Anfrage gesendet</string>
     <string name="template_e2e_re_request_encryption_key_dialog_content">Bitte öffne ${app_name} auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es die Schlüssel an diese Sitzung senden kann.</string>
@@ -1240,8 +1240,8 @@
     <string name="account_additional_info">Weitere Information: %s</string>
     <string name="no_valid_google_play_services_apk">Keine validen Google-Play-Dienste gefunden. Benachrichtigungen könnten nicht richtig funktionieren.</string>
     <string name="video_call_in_progress">Videogespräch aktiv…</string>
-    <string name="title_activity_keys_backup_setup">Schlüssel-Sicherung</string>
-    <string name="title_activity_keys_backup_restore">Schlüssel-Sicherung verwenden</string>
+    <string name="title_activity_keys_backup_setup">Schlüsselsicherung</string>
+    <string name="title_activity_keys_backup_restore">Schlüsselsicherung verwenden</string>
     <string name="keys_backup_is_not_finished_please_wait">Schlüsselsicherung ist nicht abgeschlossen. Bitte warten…</string>
     <string name="skip">Überspringen</string>
     <string name="done">Fertig</string>
@@ -1297,7 +1297,7 @@
 \n
 \nWarnung: Diese Datei wird gelöscht, wenn die Anwendung deinstalliert wird.</string>
     <string name="keys_backup_setup_step3_generating_key_status">Wiederherstellungsschlüssel aus Passphrase generieren. Dies kann mehrere Sekunden brauchen.</string>
-    <string name="keys_backup_setup_backup_started_message">Deine Verschlüsselungsschlüssel werden nun im Hintergrund auf deinem Home-Server gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
+    <string name="keys_backup_setup_backup_started_message">Deine Schlüssel werden nun im Hintergrund auf deinem Home-Server gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
     <string name="keys_backup_setup_skip_msg">Du verlierst möglicherweise den Zugang zu deinen Nachrichten, wenn du dich abmeldest oder das Gerät verlierst.</string>
     <string name="keys_backup_restore_is_getting_backup_version">Rufe Backup-Version ab…</string>
     <string name="keys_backup_restore_with_passphrase">Nutze deine Wiederherstellungspassphrase, um deinen verschlüsselten Chatverlauf lesen zu können</string>
@@ -1331,19 +1331,19 @@
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Die Sicherung hat eine ungültige Signatur von der nicht verifizierten Sitzung %s</string>
     <string name="keys_backup_get_trust_error">Abfrage der Vertrauensinformationen für die Sicherung fehlgeschlagen (%s).</string>
     <string name="keys_backup_settings_untrusted_backup">Um die Schlüsselsicherung für diese Sitzung zu verwenden, stelle sie jetzt mit deiner Passphrase oder deinem Wiederherstellungsschlüssel wieder her.</string>
-    <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen\? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen können, um deinen verschlüsselten Chatverlauf zu lesen.</string>
-    <string name="sign_out_bottom_sheet_warning_no_backup">Beim Ausloggen gehen deine verschlüsselten Nachrichten verloren</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">Schlüssel-Sicherung wird durchgeführt. Wenn du dich jetzt ausloggst, gehen deine verschlüsselten Nachrichten verloren.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Schlüssel-Sicherung sollte bei allen Sitzungen aktiviert sein, um den Verlust verschlüsselter Nachrichten zu verhindern.</string>
+    <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Schlüssel vom Server löschen\? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen können, um deinen verschlüsselten Chatverlauf zu lesen.</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Beim Abmelden gehen deine verschlüsselten Nachrichten verloren</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Schlüssel-Sicherung wird durchgeführt. Wenn du dich jetzt abmeldest, gehen deine verschlüsselten Nachrichten verloren.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Schlüsselsicherung sollte bei allen Sitzungen aktiviert sein, um den Verlust verschlüsselter Nachrichten zu verhindern.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ich möchte meine verschlüsselten Nachrichten nicht</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Sichere Schlüssel…</string>
-    <string name="keys_backup_activate">Schlüssel-Sicherung verwenden</string>
+    <string name="keys_backup_activate">Schlüsselsicherung verwenden</string>
     <string name="are_you_sure">Sicher\?</string>
     <string name="backup">Sicherung</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Alle verschlüsselten Nachrichten gehen verloren, wenn Du dich ausloggst ohne eine Sicherung der Schlüssel gemacht zu haben.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Alle verschlüsselten Nachrichten gehen verloren, wenn Du dich abmeldest ohne die Schlüssel gesichert zu haben.</string>
     <string name="stay">Bleiben</string>
     <string name="abort">Abbrechen</string>
-    <string name="action_sign_out_confirmation_simple">Sicher, dass du dich ausloggen möchtest\?</string>
+    <string name="action_sign_out_confirmation_simple">Wirklich abmelden\?</string>
     <string name="encryption_message_recovery">Wiederherstellung verschlüsselter Nachrichten</string>
     <string name="error_empty_field_enter_user_name">Bitte gib einen Benutzernamen ein.</string>
     <string name="settings_data_save_mode_summary">Der datensparsame Modus sorgt dafür, dass die Präsenz- und Tipp-Benachrichtigungen ausgefiltert werden.</string>
@@ -1427,10 +1427,10 @@
     <string name="error_jitsi_not_supported_on_old_device">Entschuldigung, Konferenzanrufe mit Jitsi werden auf älteren Geräten (mit älteren Android-Versionen als 6.0) nicht unterstützt</string>
     <string name="title_activity_verify_device">Sitzung verifizieren</string>
     <string name="encryption_information_unknown_ip">Unbekannte IP-Adresse</string>
-    <string name="you_added_a_new_device_with_info">Eine neue Sitzung fordert Verschlüsselungsschlüssel an. 
-\nSitzungsname: %1$s 
-\nZuletzt gesehen: %2$s 
-\nWenn du dich nicht mit einer anderen Sitzung angemeldet hast, ignoriere diese Anfrage.</string>
+    <string name="you_added_a_new_device_with_info">Eine neue Sitzung fordert Schlüssel an.
+\nSitzungsname: %1$s
+\nZuletzt gesehen: %2$s
+\nWenn du nicht mit einer anderen Sitzung angemeldet bist, ignoriere diese Anfrage.</string>
     <string name="your_unverified_device_requesting_with_info">Eine unverifizierte Sitzung fordert Verschlüsselungs-Schlüssel an. 
 \nSitzungsname: %1$s 
 \nZuletzt gesehen: %2$s 
@@ -1580,7 +1580,7 @@
     <string name="none">Keine</string>
     <string name="revoke">Widerrufen</string>
     <string name="disconnect">Trennen</string>
-    <string name="people_no_identity_server">Kein Integrationsserver konfiguriert.</string>
+    <string name="people_no_identity_server">Kein Identitätsserver konfiguriert.</string>
     <string name="call_failed_no_ice_title">Anruf aufgrund eines falsch konfigurierten Servers fehlgeschlagen</string>
     <string name="call_failed_no_ice_use_alt">Versuche es mit %s</string>
     <string name="call_failed_dont_ask_again">Nicht erneut fragen</string>
@@ -1774,7 +1774,7 @@
     <string name="login_reset_password_email_hint">E-Mail</string>
     <string name="login_reset_password_password_hint">Neues Passwort</string>
     <string name="login_reset_password_warning_title">Achtung!</string>
-    <string name="login_reset_password_warning_content">Eine Änderung deines Passworts wird alle Ende-zu-Ende-Verschlüsselungsschlüssel zurücksetzen. Dein verschlüsselter Chatverlauf wird dadurch unlesbar. Richte eine Schlüsselsicherung ein oder exportiere deine Raumschlüssel von einer anderen Sitzung bevor du dein Passwort zurücksetzt.</string>
+    <string name="login_reset_password_warning_content">Eine Änderung deines Passworts wird alle Ende-zu-Ende-Schlüssek zurücksetzen. Dein verschlüsselter Chatverlauf wird dadurch unlesbar. Richte die Schlüsselsicherung ein oder exportiere deine Raumschlüssel aus einer anderen Sitzung, bevor du dein Passwort zurücksetzt.</string>
     <string name="login_reset_password_warning_submit">Fortfahren</string>
     <string name="login_reset_password_error_not_found">Diese E-Mail-Adresse ist mit keinem Benutzerkonto verknüpft</string>
     <string name="login_reset_password_mail_confirmation_title">Prüfe deinen Posteingang</string>
@@ -1855,18 +1855,18 @@
     <string name="soft_logout_title">Du bist abgemeldet</string>
     <string name="soft_logout_signin_title">Anmelden</string>
     <string name="soft_logout_signin_notice">Dein Home-Server-Administrator (%1$s) hat dich von deinem Konto %2$s (%3$s) abgemeldet.</string>
-    <string name="soft_logout_signin_e2e_warning_notice">Melde dich an, um ausschließlich auf diesem Gerät gespeicherte Verschlüsselungsschlüssel wiederherzustellen. Du benötigst sie, um deine verschlüsselten Nachrichten auf jedem Gerät zu lesen.</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Melde dich an, um ausschließlich auf diesem Gerät gespeicherte Schlüssel wiederherzustellen. Du benötigst sie, um deine verschlüsselten Nachrichten auf jedem Gerät zu lesen.</string>
     <string name="soft_logout_signin_submit">Anmelden</string>
     <string name="soft_logout_signin_password_hint">Passwort</string>
     <string name="soft_logout_clear_data_title">Persönliche Daten löschen</string>
-    <string name="soft_logout_clear_data_notice">Warnung: Persönliche Daten (einschließlich Verschlüsselungsschlüssel) werden weiterhin auf diesem Gerät gespeichert. 
-\n 
+    <string name="soft_logout_clear_data_notice">Warnung: Persönliche Daten (einschließlich Schlüssel) werden weiterhin auf diesem Gerät gespeichert.
+\n
 \nDeaktiviere diese Option, wenn dieses Gerät nicht mehr verwendet wird oder sich bei einem anderen Konto angemeldet werden soll.</string>
     <string name="soft_logout_clear_data_submit">Alle Daten löschen</string>
     <string name="soft_logout_clear_data_dialog_title">Daten löschen</string>
     <string name="soft_logout_clear_data_dialog_content">Alle aktuell auf diesem Gerät gespeicherten Daten löschen\?
 \nMelde dich erneut an, um auf deine Kontodaten und Nachrichten zuzugreifen.</string>
-    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Du verlierst den Zugriff auf verschlüsselte Nachrichten, außer, du meldest dich an, um den Verschlüsselungsschlüssel wiederherzustellen.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Du verlierst den Zugriff auf verschlüsselte Nachrichten, außer, du meldest dich an, um den Schlüssel wiederherzustellen.</string>
     <string name="soft_logout_clear_data_dialog_submit">Daten löschen</string>
     <string name="template_soft_logout_sso_not_same_user_error">Die aktuelle Sitzung gehört dem Benutzer %1$s. Die angegebenen Anmeldeinformationen sind vom Benutzer %2$s. Dies wird nicht von ${app_name} unterstützt.
 \nBitte zuerst die Daten löschen und dann erneut anmelden.</string>
@@ -2347,7 +2347,7 @@
     <string name="notice_crypto_unable_to_decrypt_final">Du kannst auf diese Nachricht nicht zugreifen</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Warte auf diese Nachricht. Das könnte eine Weile dauern</string>
     <string name="crypto_utd">Kann nicht entschlüsselt werden</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Wegen der Ende-zu-Ende-Verschlüsselung könnte es sein, dass du auf jemandes Nachricht warten musst, weil die Verschlüsselungsschlüssel nicht ordnungsgemäß gesendet worden sind.</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Wegen der Ende-zu-Ende-Verschlüsselung könnte es sein, dass du auf jemandes Nachricht warten musst, weil die Schlüssel nicht ordnungsgemäß gesendet worden sind.</string>
     <string name="crypto_error_withheld_blacklisted">Du kannst auf diese Nachricht nicht zugreifen, weil der Sender dich blockiert hat</string>
     <string name="crypto_error_withheld_unverified">Du kannst auf diese Nachricht nicht zugreifen, weil der Sender deiner Sitzung nicht vertraut</string>
     <string name="crypto_error_withheld_generic">Du kannst auf diese Nachricht nicht zugreifen, weil der Sender absichtlich die Schlüssel nicht gesendet hat</string>
