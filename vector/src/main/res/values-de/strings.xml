@@ -375,7 +375,7 @@
     <string name="login">Anmelden</string>
     <string name="logout">Abmelden</string>
     <string name="hs_url">Heimserver-Adresse</string>
-    <string name="identity_url">Identitätsserver-URL</string>
+    <string name="identity_url">Identitätsserver-Adresse</string>
     <string name="search">Suchen</string>
     <string name="start_new_chat">Neuen Chat starten</string>
     <string name="start_voice_call">Sprachanruf starten</string>
@@ -388,7 +388,7 @@
     <string name="auth_submit">Absenden</string>
     <string name="auth_skip">Überspringen</string>
     <string name="auth_send_reset_email">Rücksetz-E-Mail senden</string>
-    <string name="auth_return_to_login">Zur Anmeldemaske zurückkehren</string>
+    <string name="auth_return_to_login">Zum Anmeldebildschirm zurückkehren</string>
     <string name="auth_user_id_placeholder">E-Mail oder Benutzername</string>
     <string name="auth_password_placeholder">Passwort</string>
     <string name="auth_new_password_placeholder">Neues Passwort</string>
@@ -416,11 +416,11 @@
     <string name="auth_email_validation_message">Bitte überprüfe deinen E-Mail-Posteingang, um die Registrierung abzuschließen</string>
     <string name="auth_threepid_warning_message">Registrierung mit E-Mail und Telefonnummer zusammen wird zurzeit nicht unterstützt, da die zugrundeliegende Schnittstelle noch nicht existiert. Nur die Telefonnummer wird in den Account übernommen.\n\nDu kannst aber deine E-Mail-Adresse in den Einstellungen zu deinem Profil hinzufügen.</string>
     <string name="auth_recaptcha_message">Dieser Home-Server möchte sicherstellen, dass du kein Roboter bist</string>
-    <string name="auth_username_in_use">Benutzername wird schon verwendet</string>
+    <string name="auth_username_in_use">Benutzername bereits vergeben</string>
     <string name="auth_home_server">Heimserver:</string>
     <string name="auth_identity_server">Identitätsserver:</string>
     <string name="auth_reset_password_next_step_button">Ich habe meine E-Mail-Adresse verifiziert</string>
-    <string name="auth_reset_password_message">Um dein Passwort zurückzusetzen, gib deine mit deinem Account verknüpfte E-Mail-Adresse ein:</string>
+    <string name="auth_reset_password_message">Um dein Passwort zurückzusetzen, gib die mit deinem Account verknüpfte E-Mail-Adresse ein:</string>
     <string name="auth_reset_password_missing_email">Die E-Mail-Adresse, die mit deinem Account verknüpft ist, muss eingegeben werden.</string>
     <string name="auth_reset_password_missing_password">Ein neues Passwort muss eingegeben werden.</string>
     <string name="auth_reset_password_email_validation_message">Eine E-Mail wurde an %s gesendet. Bitte dem in der E-Mail enthaltenen Link folgen und anschließend unten klicken.</string>
@@ -470,7 +470,7 @@
     <string name="call_ended">Anruf beendet</string>
     <string name="call_ring">Es klingelt…</string>
     <string name="incoming_call">Eingehender Anruf</string>
-    <string name="incoming_video_call">Eingehender Video-Anruf</string>
+    <string name="incoming_video_call">Eingehender Videoanruf</string>
     <string name="incoming_voice_call">Eingehender Sprachanruf</string>
     <string name="call_in_progress">Anruf aktiv…</string>
     <string name="call_error_user_not_responding">Die Gegenseite hat den Anruf nicht angenommen.</string>
@@ -525,8 +525,8 @@
     <string name="room_title_one_member">1 Mitglied</string>
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Raum verlassen</string>
-    <string name="room_participants_leave_prompt_msg">Bist du sicher, dass du den Raum verlassen möchtest?</string>
-    <string name="room_participants_remove_prompt_msg">Bist du sicher, dass du %s aus diesem Chat entfernen möchtest?</string>
+    <string name="room_participants_leave_prompt_msg">Raum wirklich verlassen\?</string>
+    <string name="room_participants_remove_prompt_msg">%s wirklich aus diesem Chat entfernen möchtest\?</string>
     <string name="room_participants_create">Erstellen</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
@@ -548,7 +548,7 @@
     <string name="room_participants_invite_search_another_user">Nutzer-ID, Name oder E-Mail-Adresse</string>
     <string name="room_participants_action_mention">Erwähnen</string>
     <string name="room_participants_action_devices_list">Sitzungsliste anzeigen</string>
-    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der Benutzer dieselbe Berechtigungsstufe wie du erhalten wirst.
+    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der Benutzer dieselbe Berechtigungsstufe wie du erhalten wird.
 \nBist du sicher\?</string>
     <string name="room_participants_invite_prompt_msg">"Bist du sicher, dass du %s in diesen Chat einladen willst?"</string>
     <!-- invitation -->
@@ -1023,7 +1023,7 @@
     <string name="startup_notification_privacy_button_grant">Berechtigung gewähren</string>
     <string name="startup_notification_privacy_button_other">Wähle eine andere Option</string>
     <string name="title_activity_choose_sticker">Sticker senden</string>
-    <string name="option_send_sticker">Sende Sticker</string>
+    <string name="option_send_sticker">Sticker senden</string>
     <string name="no_sticker_application_dialog_content">Du hast aktuell keine Stickerpakete aktiviert.
 \n
 \nMöchtest du welche hinzufügen\?</string>
@@ -1171,7 +1171,7 @@
     <string name="settings_call_ringtone_title">Klingelton für eingehende Anrufe</string>
     <string name="settings_call_ringtone_dialog_title">Wähle Klingelton für Anrufe:</string>
     <string name="accept">Akzeptieren</string>
-    <string name="auth_accept_policies">Bitte prüfe und akzeptiere die Richtlinien dieses Home-Servers:</string>
+    <string name="auth_accept_policies">Bitte lese und akzeptiere die Richtlinien dieses Home-Servers:</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Tests ausführen</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Läuft… (%1$d von %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Einer oder mehrere Tests sind fehlgeschlagen. Versuche vorgeschlagene Lösung(en).</string>
@@ -1542,7 +1542,7 @@
     <string name="send_suggestion_content">Bitte schreibe unten deine Anmerkungen.</string>
     <string name="send_suggestion_report_placeholder">Beschreibe hier deine Anmerkung</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Versteckte Ereignisse in der Zeitleiste anzeigen</string>
-    <string name="bottom_action_people_x">Direkte Nachrichten</string>
+    <string name="bottom_action_people_x">Direktnachrichten</string>
     <string name="send_file_step_idle">Warten…</string>
     <string name="send_file_step_encrypting_thumbnail">Miniaturbild wird verschlüsselt…</string>
     <string name="send_file_step_encrypting_file">Datei wird verschlüsselt…</string>
@@ -1618,13 +1618,13 @@
     <string name="settings_discovery_mail_pending">ausstehend</string>
     <string name="settings_discovery_enter_identity_server">Gib einen neuen Identitätsserver ein</string>
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Home-Server herstellen</string>
-    <string name="call_failed_no_ice_description">Bitte frage den Administrator deines Home-Servers (%1$s) nach der Einrichtung eines TURN-Servers, damit Anrufe zuverlässig funktionieren.
+    <string name="call_failed_no_ice_description">Bitte bitte den Administrator deines Heimservers (%1$s) einen \"TURN-Server\" einzurichten, damit Anrufe zuverlässig funktionieren.
 \n
-\nAlternativ kann ein öffentlicher Server auf %2$s genutzt werden. Dies wird jedoch weniger zuverlässig sein und deine IP-Adresse wird gegenüber diesem Server preisgegeben. Du kannst den Server auch in den Einstellungen anpassen.</string>
+\nAlternativ kann ein öffentlicher Server auf %2$s genutzt werden. Dies wird jedoch weniger zuverlässig sein und deine IP-Adresse gegenüber diesem Server preisgeben. Du kannst den Server auch in den Einstellungen anpassen.</string>
     <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
-    <string name="login_error_homeserver_not_found">Kann Home-Server nicht bei dieser URL erreichen. Bitte überprüfen</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Wir nutzen %s als Assistenten wenn dein Heimserver keinen anbietet (Deine IP-Adresse wird während des Anrufs geteilt)</string>
-    <string name="invite_no_identity_server_error">Führe einen Identitätsserver in deinen Einstellungen hinzu um diese Aktion auszuführen.</string>
+    <string name="login_error_homeserver_not_found">Kann Home-Server nicht unter dieser URL erreichen. Bitte überprüfen</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Wir nutzen %s als Ersatz, wenn dein Heimserver keinen anbietet (Deine IP-Adresse wird während des Anrufs geteilt)</string>
+    <string name="invite_no_identity_server_error">Füge einen Identitätsserver in deinen Einstellungen hinzu, um diese Aktion auszuführen.</string>
     <string name="settings_add_3pid_confirm_password_title">Passwort bestätigen</string>
     <string name="template_settings_add_3pid_flow_not_supported">Du kannst dies nicht auf einem mobilen ${app_name} tun</string>
     <string name="settings_add_3pid_authentication_needed">Authentifizierung benötigt</string>
@@ -2207,21 +2207,21 @@
     <string name="dismiss">Ablehnen</string>
     <string name="dialog_title_success">Erfolg</string>
     <string name="call_failed_no_connection_description">Echtzeitverbindung konnte nicht hergestellt werden.
-\nBitte den Administrator deines Home-Servers, einen TURN-Server so zu konfigurieren, dass Anrufe zuverlässig funktionieren.</string>
-    <string name="call_select_sound_device">Wähle Audiogerät aus</string>
+\nBitte den Administrator deines Home-Servers, einen TURN-Server zu konfigurieren, dass Anrufe zuverlässig funktionieren.</string>
+    <string name="call_select_sound_device">Audiogerät auswählen</string>
     <string name="sound_device_phone">Telefonie</string>
     <string name="sound_device_speaker">Lautsprecher</string>
-    <string name="sound_device_headset">Headset</string>
-    <string name="sound_device_wireless_headset">Drahtloses Headset</string>
-    <string name="call_switch_camera">Wechsle Kamera</string>
+    <string name="sound_device_headset">Kopfhörer</string>
+    <string name="sound_device_wireless_headset">Drahtloser Kopfhörer</string>
+    <string name="call_switch_camera">Kamera wechseln</string>
     <string name="call_camera_front">Frontkamera</string>
     <string name="call_camera_back">Hintere Kamera</string>
-    <string name="call_format_turn_hd_off">Deaktiviere HD-Qualität</string>
-    <string name="call_format_turn_hd_on">Aktiviere HD-Qualität</string>
+    <string name="call_format_turn_hd_off">HD-Qualität deaktivieren</string>
+    <string name="call_format_turn_hd_on">HD-Qualität aktivieren</string>
     <string name="login_error_ssl_peer_unverified">SSL-Fehler: Die Identität des Gegenüber ist noch nicht verifiziert.</string>
     <string name="login_error_ssl_other">SSL Fehler.</string>
     <string name="active_call_with_duration">Aktiver Anruf (%s)</string>
-    <string name="return_to_call">Zum Anruf zurückkehren</string>
+    <string name="return_to_call">Zurück zum Anruf</string>
     <string name="room_participants_action_cancel_invite">Einladung zurückziehen</string>
     <string name="room_participants_power_level_demote_warning_title">Möchtest du dich zurückstufen\?</string>
     <string name="room_participants_power_level_demote_warning_prompt">Du kannst die Zurückstufung nicht rückgängig machen und du wirst die Rechte nur mit einem anderen berechtigten Benutzer im Raum zurückerlangen können.</string>
@@ -2834,7 +2834,7 @@
     <string name="send_file_step_compressing_image">Bild wird komprimiert…</string>
     <string name="use_as_default_and_do_not_ask_again">Als Standard festsetzen und nicht mehr fragen</string>
     <string name="option_always_ask">Jedes Mal fragen</string>
-    <string name="directory_add_a_new_server_prompt">Gebe den Namen eines neuen Servers ein, den du erkunden möchtest</string>
+    <string name="directory_add_a_new_server_prompt">Gib den Namen eines neuen Servers ein, den du erkunden möchtest.</string>
     <string name="directory_add_a_new_server">Neuen Server hinzufügen</string>
     <string name="directory_your_server">Dein Server</string>
 </resources>
