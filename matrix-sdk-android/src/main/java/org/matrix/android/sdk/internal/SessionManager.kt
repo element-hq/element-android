@@ -51,7 +51,7 @@ internal class SessionManager @Inject constructor(private val matrixComponent: M
         }
     }
 
-    private fun getOrCreateSessionComponent(sessionParams: SessionParams): SessionComponent {
+    fun getOrCreateSessionComponent(sessionParams: SessionParams): SessionComponent {
         return sessionComponents.getOrPut(sessionParams.credentials.sessionId()) {
             DaggerSessionComponent
                     .factory()

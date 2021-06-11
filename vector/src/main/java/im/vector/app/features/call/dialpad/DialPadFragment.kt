@@ -26,9 +26,9 @@ import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import com.android.dialer.dialpadview.DialpadView
 import com.android.dialer.dialpadview.DigitsEditText
-import com.android.dialer.dialpadview.R
 import com.google.i18n.phonenumbers.AsYouTypeFormatter
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
 
 class DialPadFragment : Fragment() {
@@ -57,7 +57,7 @@ class DialPadFragment : Fragment() {
         dialpadView.findViewById<View>(R.id.dialpad_key_voicemail).isVisible = false
         digits = dialpadView.digits as? DigitsEditText
         digits?.isCursorVisible = cursorVisible
-        digits?.setTextColor(ThemeUtils.getColor(requireContext(), im.vector.app.R.attr.vctr_content_primary))
+        digits?.setTextColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_content_primary))
         dialpadView.findViewById<View>(R.id.zero).setOnClickListener { append('0') }
         if (enablePlus) {
             dialpadView.findViewById<View>(R.id.zero).setOnLongClickListener {
