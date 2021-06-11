@@ -22,7 +22,7 @@
     <string name="notice_placed_voice_call">%s começou uma chamada de voz.</string>
     <string name="notice_answered_call">%s atendeu a chamada.</string>
     <string name="notice_ended_call">%s terminou a chamada.</string>
-    <string name="notice_made_future_room_visibility">%1$s deixou o histórico da sala futuro visível para %2$s</string>
+    <string name="notice_made_future_room_visibility">%1$s fez histórico da sala futuro visível para %2$s</string>
     <string name="notice_room_visibility_invited">todos os membros da sala, do ponto que foram convidados.</string>
     <string name="notice_room_visibility_joined">todos os mebros da sala, do ponto que se juntaram.</string>
     <string name="notice_room_visibility_shared">todos os membros da sala.</string>
@@ -92,7 +92,7 @@
     <string name="notice_call_candidates_by_you">Você enviou dados para configurar a chamada.</string>
     <string name="notice_answered_call_by_you">Você atendeu a chamada.</string>
     <string name="notice_ended_call_by_you">Você terminou a chamada.</string>
-    <string name="notice_made_future_room_visibility_by_you">Você deixou o histórico da sala futuro visível para %1$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Você fez histórico da sala futuro visível para %1$s</string>
     <string name="notice_end_to_end_by_you">Você ativou a encriptação ponta-a-ponta (%1$s)</string>
     <string name="notice_room_update">%s fez o upgrade desta sala.</string>
     <string name="notice_room_update_by_you">Você fez o upgrade desta sala.</string>
@@ -212,7 +212,7 @@
     <string name="notice_direct_room_update_by_you">Você fez o upgrade aqui.</string>
     <string name="notice_direct_room_update">%s fez o upgrade aqui.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Você deixou mensagens futuras vísiveis para %1$s</string>
-    <string name="notice_made_future_direct_room_visibility">%1$s deixou mensagens futuras visíveis para %2$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s fez mensagens futuras visíveis para %2$s</string>
     <string name="notice_direct_room_leave_by_you">Você saiu da sala</string>
     <string name="notice_direct_room_leave">%1$s saiu da sala</string>
     <string name="notice_direct_room_join_by_you">Você juntou-se</string>
@@ -306,7 +306,7 @@
     <string name="missing_permissions_warning">Devido a permissões faltando, alguns recursos podem estar faltando…</string>
     <string name="missing_permissions_to_start_conf_call">Você precisa de permissão para convidar para começar uma conferência nesta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">Não é possível começar chamada</string>
-    <string name="device_information">Informação da sessão</string>
+    <string name="device_information">Informação de sessão</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Chamadas de conferência não são suportadas em salas encriptadas</string>
     <string name="send_anyway">Enviar Mesmo Assim</string>
     <string name="or">ou</string>
@@ -795,11 +795,11 @@
     <string name="encryption_information_algorithm">Algoritmo</string>
     <string name="encryption_information_session_id">ID de Sessão</string>
     <string name="encryption_information_decryption_error">Erro de decriptação</string>
-    <string name="encryption_information_sender_device_information">Informação de sessão do(a) enviador(a)</string>
+    <string name="encryption_information_sender_device_information">Informação de sessão do/da enviador(a)</string>
     <string name="encryption_information_device_name">Nome público</string>
     <string name="encryption_information_name">Nome público</string>
     <string name="encryption_information_device_id">ID de sessão</string>
-    <string name="encryption_information_device_key">Chave da sessão</string>
+    <string name="encryption_information_device_key">Chave de sessão</string>
     <string name="encryption_information_verification">Verificação</string>
     <string name="encryption_information_ed25519_fingerprint">Impressão digital Ed25519</string>
     <string name="encryption_export_e2e_room_keys">Exportar chaves de sala E2E</string>
@@ -2602,7 +2602,7 @@
     <string name="room_alias_publish">Publicar esta sala ao público no diretório de salas de %1$s\?</string>
     <string name="room_alias_unpublish_confirmation">Despublicar o endereço \"%1$s\"\?</string>
     <string name="room_settings_room_access_title">Acesso a sala</string>
-    <string name="room_settings_room_read_history_dialog_subtitle">Mundaças de quem pode ler o histórico só se vão aplicar a mensagens futuras nesta sala. A visibilidade do histórico existente vai ser inalterada.</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">Mundaças de quem pode ler o histórico só se vão aplicar a mensagens futuras nesta sala. A visibilidade de histórico existente vai ser inalterada.</string>
     <string name="action_unpublish">Despublicar</string>
     <string name="login_social_sso">sign-on único</string>
     <string name="settings_show_emoji_keyboard_summary">Adicionar um botão em compositor de mensagem para abrir teclado de emoji</string>
