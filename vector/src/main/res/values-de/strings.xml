@@ -374,7 +374,7 @@
     <string name="create_account">Konto erstellen</string>
     <string name="login">Anmelden</string>
     <string name="logout">Abmelden</string>
-    <string name="hs_url">Home-Server-URL</string>
+    <string name="hs_url">Heimserver-Adresse</string>
     <string name="identity_url">Identitätsserver-URL</string>
     <string name="search">Suchen</string>
     <string name="start_new_chat">Neuen Chat starten</string>
@@ -417,7 +417,7 @@
     <string name="auth_threepid_warning_message">Registrierung mit E-Mail und Telefonnummer zusammen wird zurzeit nicht unterstützt, da die zugrundeliegende Schnittstelle noch nicht existiert. Nur die Telefonnummer wird in den Account übernommen.\n\nDu kannst aber deine E-Mail-Adresse in den Einstellungen zu deinem Profil hinzufügen.</string>
     <string name="auth_recaptcha_message">Dieser Home-Server möchte sicherstellen, dass du kein Roboter bist</string>
     <string name="auth_username_in_use">Benutzername wird schon verwendet</string>
-    <string name="auth_home_server">Home-Server:</string>
+    <string name="auth_home_server">Heimserver:</string>
     <string name="auth_identity_server">Identitätsserver:</string>
     <string name="auth_reset_password_next_step_button">Ich habe meine E-Mail-Adresse verifiziert</string>
     <string name="auth_reset_password_message">Um dein Passwort zurückzusetzen, gib deine mit deinem Account verknüpfte E-Mail-Adresse ein:</string>
@@ -693,7 +693,7 @@
     <string name="devices_delete_pswd">Passwort:</string>
     <string name="devices_delete_submit_button_label">Absenden</string>
     <string name="settings_logged_in">Angemeldet als</string>
-    <string name="settings_home_server">Home-Server</string>
+    <string name="settings_home_server">Heimserver</string>
     <string name="settings_identity_server">Identitätsserver</string>
     <string name="account_email_validation_title">Verifizierung ausstehend</string>
     <string name="account_email_validation_message">Bitte prüfe deinen E-Mail-Posteingang und klicke auf den in der E-Mail enthaltenen Link. Klicke anschließend auf Fortsetzen.</string>
@@ -836,7 +836,7 @@
     <string name="select_room_directory">Raum-Verzeichnis auswählen</string>
     <string name="directory_server_fail_to_retrieve_server">Der Server kann nicht verfügbar oder überlastet sein</string>
     <string name="directory_server_type_homeserver">Gib einen Home-Server ein, um seine öffentlichen Räume aufzulisten</string>
-    <string name="directory_server_placeholder">Home-Server-URL</string>
+    <string name="directory_server_placeholder">Server-Name</string>
     <string name="directory_server_all_rooms_on_server">Alle Räume auf dem %s-Server</string>
     <string name="directory_server_native_rooms">Alle nativen %s-Räume</string>
     <!-- historical -->
@@ -1623,7 +1623,7 @@
 \nAlternativ kann ein öffentlicher Server auf %2$s genutzt werden. Dies wird jedoch weniger zuverlässig sein und deine IP-Adresse wird gegenüber diesem Server preisgegeben. Du kannst den Server auch in den Einstellungen anpassen.</string>
     <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
     <string name="login_error_homeserver_not_found">Kann Home-Server nicht bei dieser URL erreichen. Bitte überprüfen</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Wir nutzen %s als Assistenten wenn dein Home-Server keinen anbietet (Deine IP-Adresse wird während des Anrufs geteilt)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Wir nutzen %s als Assistenten wenn dein Heimserver keinen anbietet (Deine IP-Adresse wird während des Anrufs geteilt)</string>
     <string name="invite_no_identity_server_error">Führe einen Identitätsserver in deinen Einstellungen hinzu um diese Aktion auszuführen.</string>
     <string name="settings_add_3pid_confirm_password_title">Passwort bestätigen</string>
     <string name="template_settings_add_3pid_flow_not_supported">Du kannst dies nicht auf einem mobilen ${app_name} tun</string>
@@ -2834,4 +2834,7 @@
     <string name="send_file_step_compressing_image">Bild wird komprimiert…</string>
     <string name="use_as_default_and_do_not_ask_again">Als Standard festsetzen und nicht mehr fragen</string>
     <string name="option_always_ask">Jedes Mal fragen</string>
+    <string name="directory_add_a_new_server_prompt">Gebe den Namen eines neuen Servers ein, den du erkunden möchtest</string>
+    <string name="directory_add_a_new_server">Neuen Server hinzufügen</string>
+    <string name="directory_your_server">Dein Server</string>
 </resources>
