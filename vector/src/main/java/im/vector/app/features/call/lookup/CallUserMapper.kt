@@ -32,6 +32,14 @@ class CallUserMapper(private val session: Session, private val protocolsChecker:
         return virtualRoomEvent?.content?.toModel<RoomVirtualContent>()?.nativeRoomId
     }
 
+    fun virtualRoomForNativeRoom(roomId: String): String? {
+        val virtualRoomEvents = session.accountDataService().getRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM))
+        return virtualRoomEvents.firstOrNull {
+            val virtualRoomContent = it.content.toModel<RoomVirtualContent>()
+            virtualRoomContent?.nativeRoomId == roomId
+        }?.roomId
+    }
+
     suspend fun getOrCreateVirtualRoomForRoom(roomId: String, opponentUserId: String): String? {
         protocolsChecker.awaitCheckProtocols()
         if (!protocolsChecker.supportVirtualRooms) return null
