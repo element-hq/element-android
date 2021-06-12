@@ -352,8 +352,8 @@
     <string name="no_room_placeholder">Nenhuma sala</string>
     <string name="no_public_room_placeholder">Nenhuma sala pública disponível</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">%d usuário</item>
-        <item quantity="other">%d usuários</item>
+        <item quantity="one">%d usuária(o)</item>
+        <item quantity="other">%d usuárias(os)</item>
     </plurals>
     <string name="send_bug_report_include_logs">Enviar logs</string>
     <string name="send_bug_report_include_crash_logs">Enviar crash logs</string>
@@ -370,7 +370,7 @@
     <string name="send_files_in">Enviar para</string>
     <string name="read_receipt">Lido</string>
     <string name="join_room">Juntar-se a Sala</string>
-    <string name="username">Nome de Usuário</string>
+    <string name="username">Nome de Usuária(o)</string>
     <string name="create_account">Criar Conta</string>
     <string name="login">Fazer Login</string>
     <string name="logout">Fazer Signout</string>
@@ -389,18 +389,18 @@
     <string name="auth_skip">Pular</string>
     <string name="auth_send_reset_email">Enviar Email de Reset</string>
     <string name="auth_return_to_login">Retornar a tela de login</string>
-    <string name="auth_user_id_placeholder">Email ou nome de usuário</string>
+    <string name="auth_user_id_placeholder">Email ou nome de usuária(o)</string>
     <string name="auth_password_placeholder">Senha</string>
     <string name="auth_new_password_placeholder">Nova senha</string>
-    <string name="auth_user_name_placeholder">Nome de usuário</string>
+    <string name="auth_user_name_placeholder">Nome de usuária(o)</string>
     <string name="auth_email_placeholder">Endereço de email</string>
     <string name="auth_opt_email_placeholder">Endereço de email (opcional)</string>
     <string name="auth_phone_number_placeholder">Número de telefone</string>
     <string name="auth_opt_phone_number_placeholder">Número de telefone (opcional)</string>
     <string name="auth_repeat_password_placeholder">Repetir senha</string>
     <string name="auth_repeat_new_password_placeholder">Confirmar sua nova senha</string>
-    <string name="auth_invalid_login_param">Nome de usuário e/ou senha incorreta(s)</string>
-    <string name="auth_invalid_user_name">Nomes de usuário só podem conter letras, números, pontos, hifens e underscores</string>
+    <string name="auth_invalid_login_param">Nome de usuária(o) e/ou senha incorreta(s)</string>
+    <string name="auth_invalid_user_name">Nomes de usuária(o) só podem conter letras, números, pontos, hifens e underscores</string>
     <string name="auth_invalid_password">Senha curta demais (mín 6)</string>
     <string name="auth_missing_password">Senha faltando</string>
     <string name="auth_invalid_email">Isto não parece com um endereço de email válido</string>
@@ -418,7 +418,7 @@
 \n
 \nVocê pode adicionar seu email a seu perfil em configurações.</string>
     <string name="auth_recaptcha_message">Este servidorcasa gostaria de assegurar que você não é um robô</string>
-    <string name="auth_username_in_use">Nome de usuário em uso</string>
+    <string name="auth_username_in_use">Nome de usuária(o) em uso</string>
     <string name="auth_home_server">Servidorcasa:</string>
     <string name="auth_identity_server">Servidor de Identidade:</string>
     <string name="auth_reset_password_next_step_button">Eu tenho verificado meu endereço de email</string>
@@ -438,12 +438,12 @@
     <string name="login_error_unable_register">Incapaz de registrar</string>
     <string name="login_error_unable_register_mail_ownership">Incapaz de registrar: falha de posse de email</string>
     <string name="login_error_invalid_home_server">Por favor entre um URL válido</string>
-    <string name="login_error_forbidden">Nome de usuário/senha inválida(o)</string>
+    <string name="login_error_forbidden">Nome de usuária(o)/senha inválida(o)</string>
     <string name="login_error_unknown_token">O token de acesso especificado não foi reconhecido</string>
     <string name="login_error_bad_json">JSON malformado</string>
     <string name="login_error_not_json">Não continha JSON válido</string>
     <string name="login_error_limit_exceeded">Requisições demais tem sido enviadas</string>
-    <string name="login_error_user_in_use">Este nome de usuário já é usado</string>
+    <string name="login_error_user_in_use">Este nome de usuária(o) já é usado</string>
     <string name="login_error_login_email_not_yet">O link de email que não tem sido clicado ainda</string>
     <!-- crypto warnings -->
     <!-- read receipts list Screen -->
@@ -549,7 +549,7 @@
     <string name="room_participants_action_set_admin">Tornar admin</string>
     <string name="room_participants_action_ignore">Ignorar</string>
     <string name="room_participants_action_unignore">Designorar</string>
-    <string name="room_participants_invite_search_another_user">ID de usuário, Nome ou email</string>
+    <string name="room_participants_invite_search_another_user">ID de usuária(o), Nome ou email</string>
     <string name="room_participants_action_mention">Mencionar</string>
     <string name="room_participants_action_devices_list">Mostrar Lista de Sessões</string>
     <string name="room_participants_power_level_prompt">Você não vai ser capaz de desfazer esta mudança já que você está promovendo a(o) usuária(o) para ter o mesmo nível de poder que você.
@@ -591,7 +591,7 @@
     <string name="ssl_expected_existing_expl">O certificado tem mudado de um previamente confiado para um que não é confiado. O servidor pode ter renovado seu certificado. Contacte o/a administrador(a) de servidor para a impressão digital esperada.</string>
     <string name="ssl_only_accept">Somente aceite o certificado se o/a administrador(a) de servidor tem publicado uma impressão digital que bate com a acima.</string>
     <!-- Room Details -->
-    <string name="room_details_title">Detalhes da Sala</string>
+    <string name="room_details_title">Detalhes de Sala</string>
     <string name="room_details_people">Pessoas</string>
     <string name="room_details_files">Arquivos</string>
     <string name="room_details_settings">Configurações</string>
@@ -901,7 +901,7 @@
     <string name="room_settings_add_homescreen_shortcut">Adicionar a tela de Início</string>
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_containing_my_display_name">Mnsgns contendo meu nome de exibição</string>
-    <string name="settings_containing_my_user_name">Mnsgns contando meu nome de usuário</string>
+    <string name="settings_containing_my_user_name">Mnsgns contendo meu nome de usuária(o)</string>
     <string name="settings_inline_url_preview">Previsualização de URL emlinha</string>
     <string name="settings_12_24_timestamps">Mostrar timestamps em formato de 12 horas</string>
     <string name="settings_vibrate_on_mention">Vibrar ao mencionar um(a) usuário(a)</string>
@@ -1468,7 +1468,7 @@
     <string name="key_share_request">Requisição de Compartilhamento de Chaves</string>
     <string name="ignore_request_short_label">Ignorar</string>
     <string name="notification_silent">Silenciosa</string>
-    <string name="error_empty_field_enter_user_name">Por favor entre um nome de usuário.</string>
+    <string name="error_empty_field_enter_user_name">Por favor entre um nome de usuária(o).</string>
     <string name="passphrase_empty_error_message">Por favor entre sua frasepasse</string>
     <string name="passphrase_passphrase_too_weak">Frasepasse é fraca demais</string>
     <string name="template_keys_backup_passphrase_not_empty_error_message">Por favor delete a frasepasse se quiser que ${app_name} gere uma chave de recuperação.</string>
@@ -1588,7 +1588,7 @@
     <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} detectou uma configuração de servidor personalizada para seu domínio de userId \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Usar Config</string>
-    <string name="invalid_or_expired_credentials">Foi feito logout de sua conta devido a credenciais inválidas ou expiradas.</string>
+    <string name="invalid_or_expired_credentials">Você tem sido feito logout devido a credenciais inválidas ou expiradas.</string>
     <string name="sas_verify_title">Verificar ao comparar um string de texto curto.</string>
     <string name="sas_security_advise">Para máxima segurança, nós recomendamos que você faça isto em pessoa ou use um outro meio de comunicação confiado.</string>
     <string name="sas_verify_start_button_title">Começar a Verificar</string>
@@ -1726,7 +1726,7 @@
     <string name="creating_direct_room">Criando sala…</string>
     <string name="direct_room_no_known_users">Nenhum resultado encontrado, use Adicionar por ID matrix para pesquisar em servidor.</string>
     <string name="direct_room_start_search">Comece a digitar para obter resultados</string>
-    <string name="direct_room_filter_hint">Filtrar por nome de usuário ou ID…</string>
+    <string name="direct_room_filter_hint">Filtrar por nome de usuária(o) ou ID…</string>
     <string name="joining_room">Juntando-se a sala…</string>
     <string name="message_view_edit_history">Ver Histórico de Edição</string>
     <string name="terms_of_service">Termos de Serviço</string>
@@ -1885,7 +1885,7 @@
     <string name="login_reset_password_mail_confirmation_submit">Eu tenho verificado meu endereço de email</string>
     <string name="login_reset_password_success_title">Sucesso!</string>
     <string name="login_reset_password_success_notice">Sua senha tem sido resettada.</string>
-    <string name="login_reset_password_success_notice_2">Foi feito logout de todas suas sessões e você não vai mais receber notificações push. Para reativar notificações, faça signin de novo em cada dispositivo.</string>
+    <string name="login_reset_password_success_notice_2">Você tem sido feito logout de todas suas sessões e você não vai mais receber notificações push. Para reativar notificações, faça signin de novo em cada dispositivo.</string>
     <string name="login_reset_password_success_submit">Voltar para Fazer Signin</string>
     <string name="login_reset_password_cancel_confirmation_title">Aviso</string>
     <string name="login_reset_password_cancel_confirmation_content">Sua senha ainda não tem sido mudada.
@@ -1910,11 +1910,11 @@
     <string name="login_msisdn_error_not_international">Números de telefone internacionais devem começar com \'+\'</string>
     <string name="login_msisdn_error_other">Número de telefone parece inválido. Por favor cheque-o</string>
     <string name="login_signup_to">Fazer signup a %1$s</string>
-    <string name="login_signin_username_hint">Nome de usuário ou email</string>
-    <string name="login_signup_username_hint">Nome de usuário</string>
+    <string name="login_signin_username_hint">Nome de usuária(o) ou email</string>
+    <string name="login_signup_username_hint">Nome de usuária(o)</string>
     <string name="login_signup_password_hint">Senha</string>
     <string name="login_signup_submit">Próximo</string>
-    <string name="login_signup_error_user_in_use">Esse nome de usuário está tomado</string>
+    <string name="login_signup_error_user_in_use">Esse nome de usuária(o) está tomado</string>
     <string name="login_signup_cancel_confirmation_title">Aviso</string>
     <string name="login_signup_cancel_confirmation_content">Sua conta não foi criada ainda.
 \n
@@ -2242,7 +2242,7 @@
     <string name="settings_when_rooms_are_upgraded">Quando é feito upgrade de salas</string>
     <string name="settings_notification_advanced_summary">Definir importância de notificação por evento</string>
     <string name="command_description_plain">Envia uma mensagem como texto puro, sem interpretá-la como markdown</string>
-    <string name="auth_invalid_login_param_space_in_password">Nome de usuário e/ou senha incorretos. A senha entrada começa ou termina com espaços, por favor cheque-a.</string>
+    <string name="auth_invalid_login_param_space_in_password">Nome de usuária(o) e/ou senha incorretos. A senha entrada começa ou termina com espaços, por favor cheque-a.</string>
     <string name="auth_invalid_login_deactivated_account">Esta conta tem sido desativada.</string>
     <string name="upgrade_security">Upgrade de encriptação disponível</string>
     <string name="setup_cross_signing">Ativar Assinatura Cruzada</string>
@@ -2283,7 +2283,7 @@
     <string name="failed_to_access_secure_storage">Falha para acessar armazenamento seguro</string>
     <string name="unencrypted">Não-encripada</string>
     <string name="encrypted_unverified">Encriptada por um dispositivo não-verificado</string>
-    <string name="review_logins">Revisar onde você está loggado in</string>
+    <string name="review_logins">Revisar onde você está com login feito</string>
     <string name="verify_other_sessions">Verifique todas as suas sessões para assegurar que sua conta &amp; mensagens estão seguras</string>
     <string name="verify_this_session">Verifique o novo login acessando sua conta: %1$s</string>
     <string name="cross_signing_verify_by_text">Verificar Manualmente por Texto</string>
@@ -2418,7 +2418,7 @@
         <item quantity="other">Código errado, %d tentativas restantes</item>
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Aviso! Última tentativa restante antes de logout!</string>
-    <string name="too_many_pin_failures">Erros demais, logout tem sido feito para você</string>
+    <string name="too_many_pin_failures">Erros demais, você tem sido feito logout</string>
     <string name="no_permissions_to_start_webrtc_call">Você não tem permissão para começar uma chamada nesta sala</string>
     <string name="settings_phone_number_empty">Nenhum número de telefone tem sido adicionado a sua conta</string>
     <string name="settings_emails">Endereços de email</string>
@@ -2606,7 +2606,7 @@
     <string name="action_unpublish">Despublicar</string>
     <string name="login_social_sso">sign-on único</string>
     <string name="settings_show_emoji_keyboard_summary">Adicionar um botão em compositor de mensagem para abrir teclado de emoji</string>
-    <string name="room_permissions_notify_everyone">Notificar todo mundo</string>
+    <string name="room_permissions_notify_everyone">Notificar todas as pessoas</string>
     <string name="default_message_emote_snow">envia queda de neve ❄️</string>
     <string name="default_message_emote_confetti">envia confetti 🎉</string>
     <string name="command_snow">Envia a dada mensagem com queda de neve</string>
