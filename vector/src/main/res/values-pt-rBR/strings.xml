@@ -1593,7 +1593,7 @@
     <string name="sas_security_advise">Para máxima segurança, nós recomendamos que você faça isto em pessoa ou use um outro meio de comunicação confiado.</string>
     <string name="sas_verify_start_button_title">Começar a Verificar</string>
     <string name="sas_incoming_request_title">Requisição de Verificação Chegando</string>
-    <string name="sas_incoming_request_description">Verifique esta sessão para marcá-la como confiada. Confiar em sessões de parceiras(os) te dá paz de mente extra quando usando mensagens encriptadas ponta-a-ponta.</string>
+    <string name="sas_incoming_request_description">Verifique esta sessão para marcá-la como confiada. Confiar em sessões de parceiras(os) dá a você paz de mente extra quando usando mensagens encriptadas ponta-a-ponta.</string>
     <string name="sas_incoming_request_description_2">Verificar esta sessão vai marcá-la como confiada, e também marcar sua sessão como confiada para sua/seu parceira(o).</string>
     <string name="sas_emoji_description">Verifique esta sessão ao confirmar que os seguintes emoji aparecem na tela de sua/seu parceira(o)</string>
     <string name="sas_decimal_description">Verifique esta sessão ao confirmar que os seguintes números aparecem na dela de sua/seu parceira(o)</string>
@@ -1745,8 +1745,8 @@
     <string name="settings_discovery_no_msisdn">Opções de descoberta vão aparecer uma vez que você tenha adicionado um número de telefone.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Desconectar-se de seu servidor de identidade vai significar que você não vai ser descobertável por outras(os) usuárias(os) e você não vai ser capaz de convidar outras(os) por email ou telefone.</string>
     <string name="settings_discovery_msisdn_title">Números de telefone descobertáveis</string>
-    <string name="settings_discovery_confirm_mail">Nós te enviamos um email de confirmar para %s, cheque seu email e clique no link de confirmação</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Nós te enviamos um email de confirmar para %s, por favor primeiro cheque seu email e clique no link de confirmação</string>
+    <string name="settings_discovery_confirm_mail">Nós enviamos a você um email de confirmar para %s, cheque seu email e clique no link de confirmação</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Nós enviamos a você um email de confirmar para %s, por favor primeiro cheque seu email e clique no link de confirmação</string>
     <string name="settings_discovery_mail_pending">Pendente</string>
     <string name="settings_discovery_enter_identity_server">Entre um URL de servidor de identidade</string>
     <string name="settings_discovery_bad_identity_server">Não foi possível conectar-se a servidor de identidade</string>
@@ -2222,10 +2222,10 @@
     <string name="enter_backup_passphrase">Entrar %s</string>
     <string name="backup_recovery_passphrase">Frasepasse de Recuperação</string>
     <string name="bootstrap_progress_checking_backup">Checando Chave de backup</string>
-    <string name="bootstrap_skip_text">Definir uma Frasepasse de Recuperação te permite assegurar &amp; destrancar mensagens encriptadas e confiança.
+    <string name="bootstrap_skip_text">Definir uma Frasepasse de Recuperação permite a você assegurar &amp; destrancar mensagens encriptadas e confiança.
 \n
 \nSe você não quer definir uma Senha de Mensagem, gere uma Chave de Mensagem em vez disso.</string>
-    <string name="bootstrap_skip_text_no_gen_key">Definir uma Frasepasse de Recuperação te permite assegurar &amp; destrancar mensagens encriptadas e confiança.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Definir uma Frasepasse de Recuperação permite a você assegurar &amp; destrancar mensagens encriptadas e confiança.</string>
     <string name="bootstrap_cancel_text">Se você cancelar agora, você pode perder mensagens &amp; dados encriptados se você perder acesso a seus logins.
 \n
 \nVocê também pode configurar Backup Seguro &amp; gerenciar suas chaves em Configurações.</string>
