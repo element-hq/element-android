@@ -1,0 +1,4 @@
+- Update codebase to Element v1.1.9
+- Add community translations
+- Fix some GIFs reserving too much space in the timeline during playback
+- Minor fixes concerning suggested rooms in spaces
