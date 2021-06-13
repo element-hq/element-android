@@ -1068,7 +1068,7 @@
     <string name="settings_notification_privacy">Privacidade de notificações</string>
     <string name="settings_notification_privacy_fcm">• Notificações são enviadas via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Notificações somente contêm meta dados</string>
-    <string name="settings_notification_privacy_secure_message_content">• Conteúdo de mensagem da notificação é <b>localizado seguramente direto do servidor de casa de Matrix</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• Conteúdo de mensagem da notificação é <b>localizado seguramente direto do servidorcasa Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Notificações contêm <b>metadados e dados de mensagem</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Notificações <b>não vão mostrar conteúdo de mensagem</b></string>
     <string name="settings_preview_media_before_sending">Previsualizar mídia antes de enviar</string>
@@ -1328,7 +1328,7 @@
     <string name="auth_add_email_phone_message_2">Defina um email para recuperação de conta. Use mais tarde email ou telefone para ser opcionalmente descobertável por pessoas que conhecem você.</string>
     <string name="auth_add_email_and_phone_message_2">Defina um email para recuperação de conta. Use mais tarde email ou telefone para ser opcionalmente descobertável por pessoas que conhecem você.</string>
     <string name="login_error_no_homeserver_found">Isto não é um endereço de servidor Matrix válido</string>
-    <string name="login_error_homeserver_not_found">Não é possível alcançar um servidor de casa neste URL, por favor cheque-o</string>
+    <string name="login_error_homeserver_not_found">Não é possível alcançar um servidorcasa neste URL, por favor cheque-o</string>
     <string name="login_error_ssl_peer_unverified">Erro de SSL: a identidade da(o) peer não tem sido verificada.</string>
     <string name="login_error_ssl_other">Erro de SSL.</string>
     <string name="settings_call_ringtone_use_default_stun">Permitir servidor fallback de assistência de chamadas</string>
@@ -1937,7 +1937,7 @@
     <string name="login_connect_using_matrix_id_notice">Alternativamente, se você já tem uma conta e sabe seu identificador Matrix e sua senha, você pode usar este método:</string>
     <string name="login_connect_using_matrix_id_submit">Fazer signin com ID Matrix</string>
     <string name="login_signin_matrix_id_title">Fazer signin com ID Matrix</string>
-    <string name="login_signin_matrix_id_notice">Se você configurar uma conta em um servidorcasa, use seu ID Matrix (e.g. @usuarix:dominio.com) e senha abaixo.</string>
+    <string name="login_signin_matrix_id_notice">Se você configurar uma conta em um servidorcasa, use sua ID Matrix (e.g. @usuarix:dominio.com) e senha abaixo.</string>
     <string name="login_signin_matrix_id_hint">ID Matrix</string>
     <string name="login_signin_matrix_id_password_notice">Se você não sabe sua senha, volte para resettá-la.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Este não é um identificador de usuária(o) válido. Formato esperado: \'@usuarix:servidorcasa.org\'</string>
