@@ -292,8 +292,8 @@
     <string name="later">Mais Tarde</string>
     <string name="forward">Encaminhar</string>
     <string name="permalink">Permalink</string>
-    <string name="view_source">Ver Fonte</string>
-    <string name="view_decrypted_source">Ver Fonte Decriptada</string>
+    <string name="view_source">Visualizar Fonte</string>
+    <string name="view_decrypted_source">Visualizar Fonte Decriptada</string>
     <string name="delete">Deletar</string>
     <string name="rename">Renomear</string>
     <string name="report_content">Reportar conteúdo</string>
@@ -410,7 +410,7 @@
     <string name="auth_missing_phone">Número de telefone faltando</string>
     <string name="auth_missing_email_or_phone">Endereço de email ou número de telefone faltando</string>
     <string name="auth_invalid_token">Token inválido</string>
-    <string name="auth_password_dont_match">Senhas não batem</string>
+    <string name="auth_password_dont_match">Senhas não correspondem</string>
     <string name="auth_forgot_password">Esqueceu senha\?</string>
     <string name="auth_use_server_options">Usar opções de servidor personalizado (avançado)</string>
     <string name="auth_email_validation_message">Por favor cheque seu email para continuar registro</string>
@@ -589,7 +589,7 @@
     <string name="ssl_cert_new_account_expl">Se o/a administrador(a) de servidor tem dito que isto é esperado, assegure que a impressão digital abaixo corresponde à impressão digital provida por ele(a).</string>
     <string name="ssl_unexpected_existing_expl">O certificado tem mudado de um que era confiado por seu telefone. Isto é ALTAMENTE INCOMUM. É recomendado que você NÃO ACEITE este novo certificado.</string>
     <string name="ssl_expected_existing_expl">O certificado tem mudado de um previamente confiado para um que não é confiado. O servidor pode ter renovado seu certificado. Contacte o/a administrador(a) de servidor para a impressão digital esperada.</string>
-    <string name="ssl_only_accept">Somente aceite o certificado se o/a administrador(a) de servidor tem publicado uma impressão digital que bate com a acima.</string>
+    <string name="ssl_only_accept">Somente aceite o certificado se o/a administrador(a) de servidor tem publicado uma impressão digital que corresponde com a acima.</string>
     <!-- Room Details -->
     <string name="room_details_title">Detalhes de Sala</string>
     <string name="room_details_people">Pessoas</string>
@@ -828,8 +828,8 @@
     <string name="encryption_information_unblock">Retirar da lista negra</string>
     <string name="encryption_information_verify_device">Verificar sessão</string>
     <string name="encryption_information_verify_device_warning">Confirme ao comparar o seguinte com as Configurações de Usuária(o) em sua outra sessão:</string>
-    <string name="encryption_information_verify_device_warning2">Se não baterem, a segurança de sua comunicação pode estar comprometida.</string>
-    <string name="encryption_information_verify_key_match">Eu verifico que as chaves batem</string>
+    <string name="encryption_information_verify_device_warning2">Se não corresponderem, a segurança de sua comunicação pode estar comprometida.</string>
+    <string name="encryption_information_verify_key_match">Eu verifico que as chaves correspondem</string>
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Sala contém sessões desconhecidas</string>
     <string name="unknown_devices_alert_message">Esta sala contém sessões desconhecidas que não têm sido verificadas.
@@ -1127,7 +1127,7 @@
     <string name="room_tombstone_predecessor_link">Clique aqui para ver mensagens mais antigas</string>
     <string name="resource_limit_exceeded_title">Limite de Recurso Excedido</string>
     <string name="resource_limit_contact_action">Contactar Administrador(a)</string>
-    <string name="resource_limit_contact_admin">contacte o(a) administrador(a) de seu serviço</string>
+    <string name="resource_limit_contact_admin">contacte o/a administrador(a) de seu serviço</string>
     <string name="resource_limit_soft_default">Este servidorcasa tem excedido um de seus limites de recurso, então <b>algumas(ns) usuária(os) não vão ser capazes de fazer login</b>.</string>
     <string name="resource_limit_hard_default">Este servidorcasa tem excedido um de seus limites de recurso.</string>
     <string name="resource_limit_soft_mau"> Este servidorcasa tem atingido seu limite de Usuárias(os) Mensalmente Ativos então <b>algumas(ns) usuárias(os) não vão ser capazes de fazer login</b>.</string>
@@ -1137,7 +1137,7 @@
     <string name="encryption_export_notice">Por favor crie uma frasepasse para encriptar as chaves exportadas. Você vai precisar entrar a mesma frasepasse para ser capaz de importar as chaves.</string>
     <string name="accept">Aceitar</string>
     <string name="dialog_title_error">Erro</string>
-    <string name="auth_accept_policies">Por favor revise e aceite as políticas deste servidor de casa:</string>
+    <string name="auth_accept_policies">Por favor revise e aceite as políticas deste servidorcasa:</string>
     <string name="settings_call_category">Chamadas</string>
     <string name="template_settings_call_ringtone_use_app_ringtone">Usar toque default de ${app_name} para chamadas recebendo</string>
     <string name="settings_call_ringtone_title">Toque de chamada recebendo</string>
@@ -1244,7 +1244,7 @@
     <string name="no_valid_google_play_services_apk">Nenhum APK de Google Play Services válido encontrado. Notificações podem não funcionar apropriadamente.</string>
     <string name="settings_troubleshoot_test_battery_failed">Se um(a) usuário(a) deixa um dispositivo despluggado e parado por um período de tempo, com a tela desligada, o aparelho entra em modo Doze. Isto previne apps de acessar a rede e adia seus trabalhos, sincs e alarmes padrões.</string>
     <string name="passphrase_create_passphrase">Criar frasepasse</string>
-    <string name="passphrase_passphrase_does_not_match">Frasepasse não bate</string>
+    <string name="passphrase_passphrase_does_not_match">Frasepasse não corresponde</string>
     <string name="settings_lazy_loading_title">Carregar preguiçoso membros de salas</string>
     <string name="video_call_in_progress">Chamada de Vídeo em Progresso…</string>
     <string name="title_activity_keys_backup_setup">Backup de Chave</string>
@@ -1305,14 +1305,14 @@
     <string name="action_copy">Copiar</string>
     <string name="dialog_title_success">Sucesso</string>
     <string name="bottom_action_notification">Notificações</string>
-    <string name="call_failed_no_ice_description">Por favor peça ao administrador do seu servidor de casa (%1$s) para confugurar um servidor TURN a fim que chamadas funcionem confiavelmente.
+    <string name="call_failed_no_ice_description">Por favor peça ao/à administrador(a) de seu servidorcasa (%1$s) para configurar um servidor TURN a fim que chamadas funcionem confiavelmente.
 \n
-\nAlternativamente, você pode tentar usar o servidor público em %2$s, mas isto não vai set tão confiável, e ele vai compartilhar seu endereço de IP com esse servidor. Você também pode gerir isto em Configurações.</string>
+\nAlternativamente, você pode tentar usar o servidor público em %2$s, mas isto não vai ser tão confiável, e ele vai compartilhar seu endereço de IP com esse servidor. Você também pode gerenciar isto em Configurações.</string>
     <string name="call_failed_no_ice_use_alt">Tente usar %s</string>
     <string name="call_failed_dont_ask_again">Não me pergunte de novo</string>
     <string name="template_call_failed_no_connection">Chamada ${app_name} Falhou</string>
     <string name="call_failed_no_connection_description">Falha para estabelecer conexão em tempo real.
-\nPor favor peça ao administrador do seu servidor de casa para configurar um servidor TURN a fim que chamadas funcionem confiavelmente.</string>
+\nPor favor peça ao/à administrador(a) de seu servidorcasa para configurar um servidor TURN a fim que chamadas funcionem confiavelmente.</string>
     <string name="call_select_sound_device">Selecionar Dispositivo de Som</string>
     <string name="sound_device_phone">Celular</string>
     <string name="sound_device_speaker">Falante</string>
@@ -1395,7 +1395,7 @@
     <string name="disabled_integration_dialog_content">Ative \'Permitir integrações\' em Configurações para fazer isto.</string>
     <string name="settings_change_password_submit">Atualizar Senha</string>
     <string name="settings_fail_to_update_password_invalid_current_password">A senha não é válida</string>
-    <string name="passwords_do_not_match">Senhas não batem</string>
+    <string name="passwords_do_not_match">Senhas não correspondem</string>
     <string name="settings_media">Mídia</string>
     <string name="settings_default_compression">Compressão default</string>
     <string name="compression_opt_list_choose">Escolher</string>
@@ -1950,11 +1950,11 @@
 \n
 \n• Você tem deletado esta sessão de uma outra sessão.
 \n
-\n• O(a) administrador(a) de seu servidor tem invalidado seu acesso por razão de segurança.</string>
+\n• O/a administrador(a) de seu servidor tem invalidado seu acesso por razão de segurança.</string>
     <string name="signed_out_submit">Fazer signin de novo</string>
     <string name="soft_logout_title">Você fez signout</string>
     <string name="soft_logout_signin_title">Fazer signin</string>
-    <string name="soft_logout_signin_notice">O(a) administrador(a) de seu servidorcasa (%1$s) fez seu signin de sua conta %2$s (%3$s).</string>
+    <string name="soft_logout_signin_notice">A/o admin de seu servidorcasa (%1$s) fez seu signout de sua conta %2$s (%3$s).</string>
     <string name="soft_logout_signin_e2e_warning_notice">Faça signin para recuperar chaves de encriptação armazenadas exclusivamente neste dispositivo. Você precisa delas para ler todas suas mensagens seguras em qualquer dispositivo.</string>
     <string name="soft_logout_signin_submit">Fazer signin</string>
     <string name="soft_logout_signin_password_hint">Senha</string>
@@ -2036,7 +2036,7 @@
     <string name="room_profile_not_encrypted_subtitle">Mensagens nesta sala não são encriptadas ponta-a-ponta.</string>
     <string name="room_profile_encrypted_subtitle">Mensagens nesta sala são encriptadas ponta-a-ponta.
 \n
-\nSuas mensagens estão asseguradas com cadeados e somente você e a/o recipente têm as chaves únicas para os destrancar.</string>
+\nSuas mensagens são asseguradas com cadeados e somente você e a/o recipente têm as chaves únicas para os destrancar.</string>
     <string name="room_profile_section_security">Segurança</string>
     <string name="room_profile_section_security_learn_more">Saiba mais</string>
     <string name="room_profile_section_more">Mais</string>
@@ -2092,7 +2092,7 @@
     <string name="encryption_information_dg_xsigning_not_trusted">Assinatura Cruzada está ativada.
 \nChaves não são confiadas</string>
     <string name="encryption_information_dg_xsigning_disabled">Assinatura Cruzada não está ativada</string>
-    <string name="settings_hs_admin_e2e_disabled">O/A administrador(a) de seu servidor tem desativado encriptação ponta-a-ponta por default em salas privadas &amp; Mensagens Diretas.</string>
+    <string name="settings_hs_admin_e2e_disabled">O/a administrador(a) de seu servidor tem desativado encriptação ponta-a-ponta por default em salas privadas &amp; Mensagens Diretas.</string>
     <string name="settings_active_sessions_list">Sessões Ativas</string>
     <string name="settings_active_sessions_show_all">Mostrar Todas as Sessões</string>
     <string name="settings_active_sessions_manage">Gerenciar Sessões</string>
@@ -2156,7 +2156,7 @@
     <string name="delete_event_dialog_reason_checkbox">Incluir uma razão</string>
     <string name="delete_event_dialog_reason_hint">Razão para redigir</string>
     <string name="event_redacted_by_user_reason_with_reason">Evento deletado por usuária(o), razão: %1$s</string>
-    <string name="event_redacted_by_admin_reason_with_reason">Evento moderado por administrador(a) da sala, razão: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Evento moderado por admin de sala, razão: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Chaves já estão atualizadas!</string>
     <string name="template_login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">Requisições de Chave</string>
@@ -2473,7 +2473,7 @@
     <string name="direct_room_encryption_enabled_tile_description">Mensagens nesta sala são encriptadas ponta-a-ponta.</string>
     <string name="direct_room_profile_section_more_leave">Sair</string>
     <string name="direct_room_profile_section_more_settings">Configurações</string>
-    <string name="direct_room_profile_encrypted_subtitle">Mensagens aqui são criptografadas ponta-a-ponta.
+    <string name="direct_room_profile_encrypted_subtitle">Mensagens aqui são encriptadas ponta-a-ponta.
 \n
 \nSuas mensagens são asseguradas com cadeados e somente você e a/o recipiente têm as chaves únicas para os destrancar.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Mensagens aqui não são encriptadas ponta-a-ponta.</string>
