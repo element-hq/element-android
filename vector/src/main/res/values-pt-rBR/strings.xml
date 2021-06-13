@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s enviou um convite para %2$s para se juntar à sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s aceitou o convite para %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Incapaz de decriptar: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">O dispositivo do(a) enviador(a) não nos enviou as chaves para esta mensagem.</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">O dispositivo do/da enviador(a) não nos enviou as chaves para esta mensagem.</string>
     <!-- Room Screen -->
     <string name="could_not_redact">Não foi possível redigir</string>
     <string name="unable_to_send_message">Não foi possível enviar mensagem</string>
@@ -518,9 +518,9 @@
     <string name="room_jump_to_first_unread">Pular para primeira mensagem não-lida.</string>
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Você tem sido convidada(o) a juntar-se a esta sala por %s</string>
-    <string name="room_preview_unlinked_email_warning">Este convite foi enviado a %s, que não está associada(o) com esta conta.
+    <string name="room_preview_unlinked_email_warning">Este convite foi enviado para %s, que não está associada(o) com esta conta.
 \nVocê pode desejar fazer login com uma conta diferente, ou adicionar este email a sua conta.</string>
-    <string name="room_preview_try_join_an_unknown_room">Você está tentando acessar %s. Gostaria de se juntar a fim de participar da discussão\?</string>
+    <string name="room_preview_try_join_an_unknown_room">Você está tentando acessar %s. Gostaria de se juntar a fim de participar na discussão\?</string>
     <string name="room_preview_try_join_an_unknown_room_default">uma sala</string>
     <string name="room_preview_room_interactions_disabled">Esta é uma previsualização desta sala. Interações de sala têm sido desativadas.</string>
     <!-- Chat creation -->
@@ -529,8 +529,8 @@
     <string name="room_title_one_member">1 membro</string>
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Sair de sala</string>
-    <string name="room_participants_leave_prompt_msg">Você tem certeza que quer sair da sala\?</string>
-    <string name="room_participants_remove_prompt_msg">Você tem certeza que quer remover %s deste chat\?</string>
+    <string name="room_participants_leave_prompt_msg">Você tem certeza que você quer sair da sala\?</string>
+    <string name="room_participants_remove_prompt_msg">Você tem certeza que você quer remover %s deste chat\?</string>
     <string name="room_participants_create">Criar</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
@@ -554,7 +554,7 @@
     <string name="room_participants_action_devices_list">Mostrar Lista de Sessões</string>
     <string name="room_participants_power_level_prompt">Você não vai ser capaz de desfazer esta mudança já que você está promovendo a(o) usuária(o) para ter o mesmo nível de poder que você.
 \nVocê tem certeza\?</string>
-    <string name="room_participants_invite_prompt_msg">Você tem certeza que quer convidar %s para este chat\?</string>
+    <string name="room_participants_invite_prompt_msg">Você tem certeza você que quer convidar %s para este chat\?</string>
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Convidar por ID</u></string>
     <string name="people_search_local_contacts">CONTATOS LOCAIS (%d)</string>
@@ -714,8 +714,8 @@
     <string name="settings_unignore_user">Mostrar todas as mensagens de %s\?
 \n
 \nNote que esta ação vai recomeçar o app e pode levar algum tempo.</string>
-    <string name="settings_delete_notification_targets_confirmation">Você tem certeza que quer remover este alvo de notificação\?</string>
-    <string name="settings_delete_threepid_confirmation">Você tem certeza que quer remover o %1$s %2$s\?</string>
+    <string name="settings_delete_notification_targets_confirmation">Você tem certeza que você quer remover este alvo de notificação\?</string>
+    <string name="settings_delete_threepid_confirmation">Você tem certeza que você quer remover o %1$s %2$s\?</string>
     <string name="settings_select_country">Escolha um país</string>
     <string name="settings_phone_number_country_label">País</string>
     <string name="settings_phone_number_country_error">Por favor escolha um país</string>
@@ -833,7 +833,7 @@
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Sala contém sessões desconhecidas</string>
     <string name="unknown_devices_alert_message">Esta sala contém sessões desconhecidas que não têm sido verificadas.
-\nIsto significa que não há nenhuma garantia que as sessões pertencem às(aos) usuárias(os) às(aos) quais elas clamam pertencer.
+\nIsto significa que não há nenhuma garantia que as sessões pertencem às/aos usuárias(os) às/aos quais elas clamam pertencer.
 \nNós recomendamos que você passe pelo processo de verificação para cada sessão antes de continuar, mas você pode reenviar a mensagem sem verificar se você preferir.
 \n
 \nSessões desconhecidas:</string>
@@ -886,9 +886,9 @@
     <string name="groups_invite_header">Convidar</string>
     <string name="groups_header">Comunidades</string>
     <string name="no_group_placeholder">Nenhum grupo</string>
-    <string name="start_new_chat_prompt_msg">Você tem certeza que quer começar um novo chat com %s\?</string>
-    <string name="start_voice_call_prompt_msg">Você tem certeza que quer começar uma chamada de voz\?</string>
-    <string name="start_video_call_prompt_msg">Você tem certeza que quer começar uma chamada de vídeo\?</string>
+    <string name="start_new_chat_prompt_msg">Você tem certeza que você quer começar um novo chat com %s\?</string>
+    <string name="start_voice_call_prompt_msg">Você tem certeza que você quer começar uma chamada de voz\?</string>
+    <string name="start_video_call_prompt_msg">Você tem certeza que você quer começar uma chamada de vídeo\?</string>
     <string name="option_take_photo">Tirar foto</string>
     <string name="option_take_video">Tirar vídeo</string>
     <string name="groups_list">Lista de Grupos</string>
@@ -904,7 +904,7 @@
     <string name="settings_containing_my_user_name">Mnsgns contendo meu nome de usuária(o)</string>
     <string name="settings_inline_url_preview">Previsualização de URL emlinha</string>
     <string name="settings_12_24_timestamps">Mostrar timestamps em formato de 12 horas</string>
-    <string name="settings_vibrate_on_mention">Vibrar ao mencionar um(a) usuário(a)</string>
+    <string name="settings_vibrate_on_mention">Vibrar ao mencionar um/uma usuário(a)</string>
     <string name="settings_analytics">Analítica</string>
     <string name="settings_flair">Flair</string>
     <string name="room_settings_room_notifications_title">Notificações</string>
@@ -915,7 +915,7 @@
     <string name="widget_no_power_to_manage">Você precisa de permissão para gerenciar widgets nesta sala</string>
     <string name="widget_creation_failure">Criação de widget tem falhado</string>
     <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com jitsi</string>
-    <string name="widget_delete_message_confirmation">Você tem certeza que quer deletar o widget desta sala\?</string>
+    <string name="widget_delete_message_confirmation">Você tem certeza que você quer deletar o widget desta sala\?</string>
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Incapaz de criar widget.</string>
     <string name="widget_integration_failed_to_send_request">Falha para enviar requisição.</string>
@@ -1091,7 +1091,7 @@
     <string name="command_description_emote">Exibe ação</string>
     <string name="command_description_ban_user">Bane usuária(o) com id dada</string>
     <string name="command_description_unban_user">Desbane usuária(o) com id dada</string>
-    <string name="command_description_op_user">Define nível de poder de um(a) usuário(a)</string>
+    <string name="command_description_op_user">Define nível de poder de um/uma usuário(a)</string>
     <string name="command_description_deop_user">Desopa usuária(o) com id dada</string>
     <string name="command_description_invite_user">Convida usuária(o) com id dada para esta sala</string>
     <string name="command_description_join_room">Junta-se a sala com alias dado</string>
@@ -1117,7 +1117,7 @@
 \nDesativar sua conta <b>não nos causa por padrão esquecer mensagens que você tem enviado</b>. Se você gostaria que nós esqueçamos suas mensagens, por favor marque a caixa abaixo.
 \n
 \nVisibilidade de mensagem em Matrix é similar a email. Nós esquecermos suas mensagens significa que mensagens que você tem enviado não vão ser compartilhadas com nenhum usuária(o) nova(o) ou não-registrada(o), mas usuárias(os) registradas(os) que já têm acesso a estas mensagens vão ainda ter acesso à cópia delas(es).</string>
-    <string name="deactivate_account_delete_checkbox">Por favor esqueça todas as mensagens que eu tenho enviado quando minha conta for desativada (Aviso: isto vai causar usuárias/os futuras/os terem uma visão incompleta de conversas)</string>
+    <string name="deactivate_account_delete_checkbox">Por favor esqueça todas as mensagens que eu tenho enviado quando minha conta for desativada (Aviso: isto vai causar usuárias/os futuras/os terem uma visualização incompleta de conversas)</string>
     <string name="deactivate_account_prompt_password">Para continuar, por favor entre sua senha:</string>
     <string name="deactivate_account_submit">Desativar Conta</string>
     <string name="error_empty_field_your_password">Por favor entre sua senha.</string>
@@ -1242,7 +1242,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Nenhum APK de Google Play Services válido encontrado. Notificações podem não funcionar apropriadamente.</string>
-    <string name="settings_troubleshoot_test_battery_failed">Se um(a) usuário(a) deixa um dispositivo despluggado e parado por um período de tempo, com a tela desligada, o aparelho entra em modo Doze. Isto previne apps de acessar a rede e adia seus trabalhos, sincs e alarmes padrões.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Se um/uma usuário(a) deixa um dispositivo despluggado e parado por um período de tempo, com a tela desligada, o aparelho entra em modo Doze. Isto previne apps de acessar a rede e adia seus trabalhos, sincs e alarmes padrões.</string>
     <string name="passphrase_create_passphrase">Criar frasepasse</string>
     <string name="passphrase_passphrase_does_not_match">Frasepasse não corresponde</string>
     <string name="settings_lazy_loading_title">Carregar preguiçoso membros de salas</string>
@@ -1256,7 +1256,7 @@
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Eu não quero minhas mensagens encriptadas</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Fazendo backup de chaves…</string>
     <string name="keys_backup_activate">Usar Backup de Chave</string>
-    <string name="are_you_sure">Tem certeza\?</string>
+    <string name="are_you_sure">Você tem certeza\?</string>
     <string name="backup">Fazer backup</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Você vai perder acesso a suas mensagens encriptadas a menos que faça backup de suas chaves antes de fazer signout.</string>
     <string name="keys_backup_info_title_signature">Assinatura</string>
@@ -1264,7 +1264,7 @@
     <string name="skip">Pular</string>
     <string name="done">Feito</string>
     <string name="abort">Abortar</string>
-    <string name="action_sign_out_confirmation_simple">Você tem certeza que quer fazer sign out\?</string>
+    <string name="action_sign_out_confirmation_simple">Você tem certeza que você quer fazer sign out\?</string>
     <string name="settings_notification_advanced">Configurações de Notificações Avançadas</string>
     <string name="settings_notification_by_event">Importância de notificações por evento</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Configurações Personalizadas.</string>
@@ -1329,7 +1329,7 @@
     <string name="auth_add_email_and_phone_message_2">Defina um email para recuperação de conta. Use mais tarde email ou telefone para ser opcionalmente descobertável por pessoas que conhecem você.</string>
     <string name="login_error_no_homeserver_found">Isto não é um endereço de servidor Matrix válido</string>
     <string name="login_error_homeserver_not_found">Não é possível alcançar um servidorcasa neste URL, por favor cheque-o</string>
-    <string name="login_error_ssl_peer_unverified">Erro de SSL: a identidade da(o) peer não tem sido verificada.</string>
+    <string name="login_error_ssl_peer_unverified">Erro de SSL: a identidade da/do peer não tem sido verificada.</string>
     <string name="login_error_ssl_other">Erro de SSL.</string>
     <string name="settings_call_ringtone_use_default_stun">Permitir servidor fallback de assistência de chamadas</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Vai usar %s como assistência quando seu servidorcasa não oferece um (seu endereço de IP vai ser compartilhado durante uma chamada)</string>
@@ -1347,7 +1347,7 @@
     <string name="room_participants_action_unignore_title">Designorar usuária(o)</string>
     <string name="room_participants_action_unignore_prompt_msg">Designorar esta(e) usuária(o) vai mostrar todas as mensagens dela(e) de novo.</string>
     <string name="room_participants_action_cancel_invite_title">Cancelar convite</string>
-    <string name="room_participants_action_cancel_invite_prompt_msg">Você tem certeza que quer cancelar o convite para esta(e) usuária(o)\?</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Você tem certeza que você quer cancelar o convite para esta(e) usuária(o)\?</string>
     <string name="room_participants_kick_title">Expulsar usuária(o)</string>
     <string name="room_participants_kick_reason">Razão de expulsão</string>
     <string name="room_participants_kick_prompt_msg">expulsar usuária(o) vai removê-la(o) desta sala.
@@ -1356,7 +1356,7 @@
     <string name="room_participants_ban_title">Banir usuária(o)</string>
     <string name="room_participants_ban_reason">Razão de ban</string>
     <string name="room_participants_unban_title">Desbanir usuária(o)</string>
-    <string name="room_participants_unban_prompt_msg">Desbanir usuária(o) vai permitir que ela(e) se junte à sala de novo.</string>
+    <string name="room_participants_unban_prompt_msg">Desbanir usuária(o) vai permitir que ela/ele se junte à sala de novo.</string>
     <string name="settings_add_3pid_confirm_password_title">Confirme sua senha</string>
     <string name="template_settings_add_3pid_flow_not_supported">Você não pode fazer isto de ${app_name} celular</string>
     <string name="settings_add_3pid_authentication_needed">Autenticação é requerida</string>
@@ -1428,7 +1428,7 @@
     <string name="notification_inline_reply_failed">** Falha para enviar - por favor abra sala</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
-    <string name="active_widget_view_action">VISTA</string>
+    <string name="active_widget_view_action">VISUALIZAR</string>
     <string name="active_widgets_title">Widgets ativos</string>
     <string name="room_widget_activity_title">Widget</string>
     <string name="room_widget_permission_title">Carregar Widget</string>
@@ -1598,7 +1598,7 @@
     <string name="sas_emoji_description">Verifique esta sessão ao confirmar que os seguintes emoji aparecem na tela de sua/seu parceira(o)</string>
     <string name="sas_decimal_description">Verifique esta sessão ao confirmar que os seguintes números aparecem na dela de sua/seu parceira(o)</string>
     <string name="sas_incoming_verification_request_dialog">Você recebeu uma requisição de verificação entrante.</string>
-    <string name="sas_view_request_action">Ver requisição</string>
+    <string name="sas_view_request_action">Visualizar requisição</string>
     <string name="sas_waiting_for_partner">Esperando por parceira(o) para confirmar…</string>
     <string name="sas_verified">Verificada!</string>
     <string name="sas_verified_successful">Você tem confirmado esta sessão com sucesso.</string>
@@ -1647,7 +1647,7 @@
     <string name="reactions_agree">Concordo</string>
     <string name="reactions_like">Curtir</string>
     <string name="message_add_reaction">Adicionar Reação</string>
-    <string name="message_view_reaction">Ver Reações</string>
+    <string name="message_view_reaction">Visualizar Reações</string>
     <string name="reactions">Reações</string>
     <string name="event_redacted">Mensagem deletada</string>
     <string name="settings_show_redacted">Mostrar mensagens removidas</string>
@@ -1678,7 +1678,7 @@
     <string name="import_e2e_keys_from_file">Importar as chaves e2e de arquivo \"%1$s\".</string>
     <string name="settings_sdk_version">Versão de SDK de Matrix</string>
     <string name="settings_other_third_party_notices">Outras notas de terceiros</string>
-    <string name="navigate_to_room_when_already_in_the_room">Você já está vendo esta sala!</string>
+    <string name="navigate_to_room_when_already_in_the_room">Você já está visualizando esta sala!</string>
     <string name="quick_reactions">Reações Rápidas</string>
     <string name="settings_general_title">Geral</string>
     <string name="settings_preferences">Preferências</string>
@@ -1717,7 +1717,7 @@
     <string name="room_filtering_footer_title">Não consegue encontrar o que você está procurando\?</string>
     <string name="room_filtering_footer_create_new_room">Criar uma nova sala</string>
     <string name="room_filtering_footer_create_new_direct_message">Enviar uma nova mensagem direta</string>
-    <string name="room_filtering_footer_open_room_directory">Ver o diretório de salas</string>
+    <string name="room_filtering_footer_open_room_directory">Visualizar o diretório de salas</string>
     <string name="room_directory_search_hint">Nome ou ID (#exemplo:matrix.org)</string>
     <string name="labs_swipe_to_reply_in_timeline">Ativar deslize para responder em timeline</string>
     <string name="labs_show_unread_notifications_as_tab">Adicionar uma aba dedicada para notificações não-lidas em tela principal.</string>
@@ -1728,7 +1728,7 @@
     <string name="direct_room_start_search">Comece a digitar para obter resultados</string>
     <string name="direct_room_filter_hint">Filtrar por nome de usuária(o) ou ID…</string>
     <string name="joining_room">Juntando-se a sala…</string>
-    <string name="message_view_edit_history">Ver Histórico de Edição</string>
+    <string name="message_view_edit_history">Visualizar Histórico de Edição</string>
     <string name="terms_of_service">Termos de Serviço</string>
     <string name="review_terms">Revisar Termos</string>
     <string name="terms_description_for_identity_server">Seja descobertável por outras(os)</string>
@@ -1752,13 +1752,13 @@
     <string name="settings_discovery_bad_identity_server">Não foi possível conectar-se a servidor de identidade</string>
     <string name="settings_discovery_please_enter_server">Por favor entre o url de servidor de identidade</string>
     <string name="settings_discovery_no_terms_title">Servidor de identidade não tem termos de serviço</string>
-    <string name="settings_discovery_no_terms">O servidor de identidade que você tem escolhido não tem nenhuns termos de serviço. Somente continue se você confia na(o) dona(o) do serviço</string>
+    <string name="settings_discovery_no_terms">O servidor de identidade que você tem escolhido não tem nenhuns termos de serviço. Somente continue se você confia na/do proprietária(o) do serviço</string>
     <string name="settings_text_message_sent">Uma mensagem de texto tem sido enviada para %s. Por favor entre o código de verificação que ela contém.</string>
     <string name="settings_text_message_sent_wrong_code">O código de verificação não está correto.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Você está atualmente compartilhando endereços de email ou números de telefone no servidor de identidade %1$s. Você vai precisar reconectar-se a %2$s para parar de os compartilhar.</string>
     <string name="settings_agree_to_terms">Concorde com os Termos de Serviço do servidor de identidade (%s) para permitir que você mesma(o) seja descobertável por endereço de email ou número de telefone.</string>
     <string name="labs_allow_extended_logging">Ativar verbose logs.</string>
-    <string name="labs_allow_extended_logging_summary">Verbose logs vão ajudar desenvolvedores(as) ao prover mais logs quando você enviar uma RageShake. Mesmo quando ativado, o aplicativo não registra conteúdos de mensagem ou quaisquer outros dados privados.</string>
+    <string name="labs_allow_extended_logging_summary">Verbose logs vão ajudar desenvolvedoras(es) ao prover mais logs quando você enviar uma RageShake. Mesmo quando ativado, o aplicativo não registra conteúdos de mensagem ou quaisquer outros dados privados.</string>
     <string name="error_terms_not_accepted">Por favor retente uma vez que você tenha aceitado os termos e condições de seu servidorcasa.</string>
     <string name="error_network_timeout">Parece que o servidor está demorando muito para responder, isto pode ser causado por ou má conectividade ou um erro com o servidor. Por favor tente de novo daqui a pouco.</string>
     <string name="send_attachment">Enviar anexo</string>
@@ -1996,7 +1996,7 @@
     <string name="verification_sas_do_not_match">Eles não correspondem</string>
     <string name="verify_user_sas_emoji_help_text">Verifique esta(e) usuária(o) ao confirmar que os seguintes emoji únicos aparecem na tela dela(e), na mesma ordem.</string>
     <string name="verify_user_sas_emoji_security_tip">Para máxima segurança, use um outro meio de comunicação confiado ou faça isto em pessoa.</string>
-    <string name="verification_green_shield">Procure pelo escudo verde para assegurar que um(a) usuário(a) é confiado. Confie em todos(as) os/as usuários(as) numa sala para assegurar que a sala é segura.</string>
+    <string name="verification_green_shield">Procure pelo escudo verde para assegurar que um/uma usuário(a) é confiado. Confie em todos(as) os/as usuários(as) numa sala para assegurar que a sala é segura.</string>
     <string name="verification_conclusion_not_secure">Não seguro</string>
     <string name="verification_conclusion_compromised">Um dos seguintes pode estar comprometido:
 \n
@@ -2152,7 +2152,7 @@
         <item quantity="other">Enviar imagens com o tamanho original</item>
     </plurals>
     <string name="delete_event_dialog_title">Confirmar Remoção</string>
-    <string name="delete_event_dialog_content">Tem certeza que você deseja remover (deletar) este evento\? Note que se você deletar um nome de sala ou mudança de tópico, poderia desfazer a mudança.</string>
+    <string name="delete_event_dialog_content">Você tem certeza que você deseja remover (deletar) este evento\? Note que se você deletar um nome de sala ou mudança de tópico, poderia desfazer a mudança.</string>
     <string name="delete_event_dialog_reason_checkbox">Incluir uma razão</string>
     <string name="delete_event_dialog_reason_hint">Razão para redigir</string>
     <string name="event_redacted_by_user_reason_with_reason">Evento deletado por usuária(o), razão: %1$s</string>
@@ -2296,7 +2296,7 @@
     <string name="external_link_confirmation_title">Cheque duplamente este link</string>
     <string name="external_link_confirmation_message">O link %1$s está levando você para um outro site: %2$s.
 \n
-\nTem certeza que você quer continuar\?</string>
+\nVocê tem certeza que você quer continuar\?</string>
     <string name="create_room_dm_failure">Nós não conseguimos criar sua DM. Por favor cheque as/os usuárias(os) que você quer convidar e tente de novo.</string>
     <string name="add_members_to_room">Adicionar membros</string>
     <string name="invite_users_to_room_action_invite">CONVIDAR</string>
@@ -2305,7 +2305,7 @@
     <string name="invitation_sent_to_one_user">Convite enviado para %1$s</string>
     <string name="invitations_sent_to_two_users">Convites enviados para %1$s e %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-        <item quantity="one">Convites enviados para %1$s e mais um(a)</item>
+        <item quantity="one">Convites enviados para %1$s e mais um/uma</item>
         <item quantity="other">Convites enviados para %1$s e mais %2$d</item>
     </plurals>
     <string name="invite_users_to_room_failure">Nós não conseguimos convidar usuárias(os). Por favor cheque as/os usuárias(os) que você quer convidar e tente de novo.</string>
@@ -2591,7 +2591,7 @@
     <string name="settings_security_pin_code_change_pin_title">Mudar PIN</string>
     <string name="room_preview_no_preview_join">Esta sala não pode ser previsualizada. Você quer se judar a ela\?</string>
     <string name="room_preview_not_found">Esta sala não está acessível neste momento.
-\nTente de novo mais tarde, ou peça a um(a) admin da sala para checar se você tem acesso.</string>
+\nTente de novo mais tarde, ou peça a um/uma admin da sala para checar se você tem acesso.</string>
     <string name="room_alias_publish_to_directory_error">Incapaz de recuperar a visibilidade atual de diretório de salas (%1$s).</string>
     <string name="room_alias_publish_to_directory">Publicar esta sala ao público no diretório de salas de %1$s\?</string>
     <string name="room_alias_action_unpublish">Despublicar este endereço</string>
@@ -2704,7 +2704,7 @@
 \nEsperando por resposta de servidor…</string>
     <string name="a11y_trust_level_trusted">Nível de confiança confiado</string>
     <string name="a11y_trust_level_warning">Nível de confiança alerta</string>
-    <string name="event_status_delete_all_failed_dialog_message">Tem certeza que você quer deletar todas as mensagens não-enviadas nesta sala\?</string>
+    <string name="event_status_delete_all_failed_dialog_message">Você tem certeza que você quer deletar todas as mensagens não-enviadas nesta sala\?</string>
     <string name="event_status_delete_all_failed_dialog_title">Deletar mensagens não-enviadas</string>
     <string name="event_status_failed_messages_warning">Mensagens falharam para enviar</string>
     <string name="event_status_cancel_sending_dialog_message">Você quer cancelar enviar mensagem\?</string>
@@ -2728,7 +2728,7 @@
     <string name="dev_tools_send_custom_event">Enviar Evento Personalizado</string>
     <string name="dev_tools_explore_room_state">Explorar Estado de Sala</string>
     <string name="dev_tools_menu_name">Ferramentas Dev</string>
-    <string name="a11y_view_read_receipts">Ver recibos de leitura</string>
+    <string name="a11y_view_read_receipts">Visualizar recibos de leitura</string>
     <string name="a11y_rule_notify_off">Não notificar</string>
     <string name="a11y_rule_notify_silent">Notificar sem som</string>
     <string name="a11y_rule_notify_noisy">Notificar com som</string>
@@ -2816,7 +2816,7 @@
     <string name="space_leave_prompt_msg_as_admin">Você é admin deste espaço, assegure-se que você tem transferido direito de admin a um outro membro antes de sair.</string>
     <string name="space_leave_prompt_msg_private">Este espaço não é público. Você não vai ser capaz de se rejuntar sem um convite.</string>
     <string name="space_leave_prompt_msg_only_you">Você é a única pessoa aqui. Se você sair, ninguém vai ser capaz de se juntar no futuro, incluindo você.</string>
-    <string name="space_leave_prompt_msg">Tem certeza que você quer sair do espaço\?</string>
+    <string name="space_leave_prompt_msg">Você tem certeza que você quer sair do espaço\?</string>
     <string name="leave_space">Sair de Espaço</string>
     <string name="space_add_child_title">Adicionar salas</string>
     <string name="space_explore_activity_title">Explorar salas</string>
