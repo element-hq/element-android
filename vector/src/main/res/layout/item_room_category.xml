@@ -40,8 +40,8 @@
         android:minHeight="16dp"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
+        android:textAppearance="@style/VectorTextAppearanceMicro"
         android:textColor="?colorOnError"
-        android:textSize="10sp"
         tools:background="@drawable/bg_unread_highlight"
         tools:text="24" />
 
