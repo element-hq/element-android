@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:layout_marginEnd="8dp"
         android:gravity="center"
-        android:textSize="12sp"
+        android:textAppearance="@style/VectorTextAppearanceCaption"
+        android:textColor="?vctr_content_primary"
         tools:text="999+" />
 
     <ImageView

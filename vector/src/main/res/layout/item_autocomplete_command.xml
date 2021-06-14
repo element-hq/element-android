@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:maxLines="1"
+        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_primary"
-        android:textSize="12sp"
         android:textStyle="bold"
         tools:text="/invite" />
 
@@ -29,8 +29,8 @@
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/commandName"
         android:maxLines="1"
+        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_secondary"
-        android:textSize="12sp"
         android:textStyle="italic"
         tools:text="&lt;user-id&gt;" />
 
@@ -42,8 +42,8 @@
         android:layout_alignParentStart="true"
         android:layout_gravity="center_vertical"
         android:maxLines="2"
+        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_secondary"
-        android:textSize="12sp"
         tools:text="@string/command_description_invite_user" />
 
 </RelativeLayout>

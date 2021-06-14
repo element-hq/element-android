@@ -55,7 +55,8 @@
             android:drawablePadding="4dp"
             android:gravity="center_vertical"
             android:text="@string/bootstrap_dont_reuse_pwd"
-            android:textSize="12sp"
+            android:textAppearance="@style/VectorTextAppearanceCaption"
+            android:textColor="?vctr_content_primary"
             app:drawableStartCompat="@drawable/ic_alert_triangle"
             app:drawableTint="?colorError" />
 

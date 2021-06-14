@@ -5,5 +5,5 @@
     android:background="?android:colorBackground"
     android:padding="8dp"
     android:text="@string/autocomplete_limited_results"
-    android:textColor="?vctr_content_secondary"
-    android:textSize="12sp" />
+    android:textAppearance="@style/VectorTextAppearanceCaption"
+    android:textColor="?vctr_content_secondary" />

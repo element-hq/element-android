@@ -22,8 +22,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:minHeight="40dp"
+            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
-            android:textSize="16sp"
             tools:text="Riot X" />
 
         <!---
@@ -35,15 +35,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/devices_details_name_title"
-            android:textColor="?vctr_content_secondary"
-            android:textSize="12sp" />
+            android:textAppearance="@style/VectorTextAppearanceCaption"
+            android:textColor="?vctr_content_secondary" />
 
         <TextView
             android:id="@+id/itemDeviceDisplayName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_primary"
-            android:textSize="16sp"
             tools:text="Android phone" />
 
         <TextView
@@ -52,8 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/devices_details_id_title"
-            android:textColor="?vctr_content_secondary"
-            android:textSize="12sp" />
+            android:textAppearance="@style/VectorTextAppearanceCaption"
+            android:textColor="?vctr_content_secondary" />
 
         <TextView
             android:id="@+id/itemDeviceId"
@@ -62,7 +61,6 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="?vctr_content_primary"
-            android:textSize="15sp"
             tools:text="XUIDERFZAA" />
 
         <TextView
@@ -71,15 +69,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/devices_details_last_seen_title"
-            android:textColor="?vctr_content_secondary"
-            android:textSize="12sp" />
+            android:textAppearance="@style/VectorTextAppearanceCaption"
+            android:textColor="?vctr_content_secondary" />
 
         <TextView
             android:id="@+id/itemDeviceLastSeen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_primary"
-            android:textSize="15sp"
             tools:text="x.x.x.x @ 01/01 00:00:00" />
 
     </LinearLayout>

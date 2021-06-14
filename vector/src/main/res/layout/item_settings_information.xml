@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
-        android:textSize="12sp"
+        android:textAppearance="@style/VectorTextAppearanceCaption"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

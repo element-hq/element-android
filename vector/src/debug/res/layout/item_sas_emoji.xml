@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textSize="12sp"
+            android:textAppearance="@style/VectorTextAppearanceCaption"
             tools:text="verification_emoji_spanner" />
 
     </LinearLayout>

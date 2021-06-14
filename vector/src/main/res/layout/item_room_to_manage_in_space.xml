@@ -48,14 +48,14 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:text="@string/space_suggested"
+        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_secondary"
-        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/itemAddRoomRoomCheckBox"
         app:layout_constraintStart_toEndOf="@id/itemAddRoomRoomNameText"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:text="@string/space_suggested" />
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <ImageView
         android:id="@+id/itemAddRoomRoomCheckBox"

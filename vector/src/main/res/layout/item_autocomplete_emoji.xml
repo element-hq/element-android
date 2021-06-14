@@ -31,8 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:maxLines="1"
+            android:textAppearance="@style/VectorTextAppearanceCaption"
             android:textColor="?vctr_content_primary"
-            android:textSize="12sp"
             android:textStyle="bold"
             tools:text="name" />
 
@@ -44,8 +44,8 @@
             android:layout_marginTop="2dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textAppearance="@style/VectorTextAppearanceCaption"
             android:textColor="?vctr_content_secondary"
-            android:textSize="12sp"
             android:visibility="gone"
             tools:text="name"
             tools:visibility="visible" />

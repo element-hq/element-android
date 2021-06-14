@@ -89,8 +89,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
+                    android:textAppearance="@style/VectorTextAppearanceCaption"
                     android:textColor="?vctr_content_secondary"
-                    android:textSize="12sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/loginAccountCreatedMemberName"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:text="@tools:sample/date/hhmm" />

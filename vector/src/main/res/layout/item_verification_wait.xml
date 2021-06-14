@@ -89,8 +89,8 @@
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="@string/or_other_mx_capabale_client"
+        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_secondary"
-        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/labelsBarrier" />

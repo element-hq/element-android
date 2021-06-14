@@ -30,8 +30,8 @@
             android:text="@string/notice_crypto_unable_to_decrypt_merged"
             android:textColor="?vctr_content_secondary"
             android:textSize="15sp"
-            app:drawableTint="?vctr_content_secondary"
-            app:drawableStartCompat="@drawable/ic_clock" />
+            app:drawableStartCompat="@drawable/ic_clock"
+            app:drawableTint="?vctr_content_secondary" />
 
 
         <TextView
@@ -44,8 +44,8 @@
             android:layout_marginBottom="12dp"
             android:gravity="center"
             android:text="@string/notice_crypto_unable_to_decrypt_friendly_desc"
+            android:textAppearance="@style/VectorTextAppearanceCaption"
             android:textColor="?vctr_content_secondary"
-            android:textSize="12sp"
             android:textStyle="italic" />
 
 

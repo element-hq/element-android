@@ -137,8 +137,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_secondary"
-        android:textSize="12sp"
         android:visibility="gone"
         tools:text="12 votes - Final Results"
         tools:visibility="visible" />
