@@ -10,9 +10,6 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
-//        flatDir {
-//            dirs 'libs'
-//        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.1'
