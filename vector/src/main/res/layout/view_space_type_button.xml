@@ -47,7 +47,6 @@
         android:gravity="start"
         android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_secondary"
-        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/rightChevron"
         app:layout_constraintStart_toEndOf="@id/buttonImageView"

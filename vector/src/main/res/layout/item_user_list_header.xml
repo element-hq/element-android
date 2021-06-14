@@ -10,5 +10,4 @@
     android:padding="8dp"
     android:textColor="?vctr_content_primary"
     android:textSize="20sp"
-    android:textStyle="normal"
     tools:text="Recents | Contacts" />
