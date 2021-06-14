@@ -14,6 +14,7 @@ Improvements 🙌:
  - Set up Tchap RestClient in element-android-sdk #15
  - Set up the splash screen #80
  - Resolve matrixId to get Tchap user #91
+ - Update the home bottom bar icons #83
 
 
 =======================================================

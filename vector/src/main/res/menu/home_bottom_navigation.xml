@@ -4,13 +4,13 @@
     <item
         android:id="@+id/bottom_action_rooms"
         android:enabled="true"
-        android:icon="@drawable/ic_home_bottom_group"
+        android:icon="@drawable/ic_tchap_home_bottom_chat"
         android:title="@string/bottom_action_rooms" />
 
     <item
         android:id="@+id/bottom_action_people"
         android:enabled="true"
-        android:icon="@drawable/ic_home_bottom_chat"
+        android:icon="@drawable/ic_tchap_home_bottom_people"
         android:title="@string/bottom_action_people_x" />
 
     <item
