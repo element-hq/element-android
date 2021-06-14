@@ -17,7 +17,7 @@
         android:paddingTop="8dp"
         android:paddingEnd="12dp"
         android:paddingBottom="8dp"
-        android:textAppearance="@style/TextAppearance.Vector.Title"
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_room_active_widgets_banner_text"
         tools:text="2 active widgets" />
 

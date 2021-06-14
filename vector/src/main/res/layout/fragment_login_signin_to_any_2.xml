@@ -20,7 +20,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:textAppearance="@style/VectorTextAppearanceTitle"
+                android:textColor="?vctr_content_primary"
                 tools:text="@string/login_signin_to" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -123,7 +124,8 @@
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:text="@string/login_social_continue"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                    android:textAppearance="@style/VectorTextAppearanceBody"
+                    android:textColor="?vctr_content_secondary"
                     android:textSize="14sp" />
 
                 <im.vector.app.features.login.SocialLoginButtonsView

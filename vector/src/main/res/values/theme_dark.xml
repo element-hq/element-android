@@ -63,7 +63,18 @@
         <item name="android:colorBackground">@color/element_background_dark</item>
         <item name="colorOnBackground">?vctr_content_primary</item>
 
+        <!--Material type attributes-->
+        <item name="textAppearanceButton">@style/VectorTextAppearanceButton</item>
+        <item name="textAppearanceCaption">@style/VectorTextAppearanceCaption</item>
+        <!-- Default Text appearance for TextViews -->
+        <item name="android:textAppearanceSmall">@style/VectorTextAppearanceBody</item>
+        <!-- Text appearance for List item (TODO Check that this is used in Preference Screen -->
+        <item name="textAppearanceListItem">@style/VectorTextAppearanceSubtitle</item>
+        <item name="textAppearanceListItemSecondary">@style/VectorTextAppearanceBody</item>
+        <item name="textAppearanceListItemSmall">@style/VectorTextAppearanceBody</item>
+
         <!-- Default styles -->
+        <item name="android:textViewStyle">@style/VectorTextView</item>
         <item name="materialButtonStyle">@style/VectorButtonStyle</item>
         <item name="toolbarStyle">@style/VectorToolbar</item>
         <item name="materialAlertDialogTheme">@style/VectorAlertDialogStyleDark</item>

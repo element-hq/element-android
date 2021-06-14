@@ -20,14 +20,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_account_created_title"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title" />
+                android:textAppearance="@style/VectorTextAppearanceTitle"
+                android:textColor="?vctr_content_primary" />
 
             <TextView
                 android:id="@+id/loginAccountCreatedSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title.Small"
+                android:textAppearance="@style/VectorTextAppearanceBody"
+                android:textColor="?vctr_content_primary"
                 tools:text="@string/login_account_created_subtitle" />
 
             <TextView
@@ -35,14 +37,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="@string/login_account_created_notice"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text" />
+                android:textAppearance="@style/VectorTextAppearanceBody"
+                android:textColor="?vctr_content_secondary" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_account_created_notice_2"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text" />
+                android:textAppearance="@style/VectorTextAppearanceBody"
+                android:textColor="?vctr_content_secondary" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/loginAccountCreatedMessage"
@@ -108,7 +112,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_account_created_instruction"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text" />
+                android:textAppearance="@style/VectorTextAppearanceBody"
+                android:textColor="?vctr_content_secondary" />
 
             <FrameLayout
                 android:layout_width="match_parent"

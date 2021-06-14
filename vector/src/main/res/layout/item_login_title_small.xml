@@ -8,5 +8,6 @@
     android:layout_marginTop="16dp"
     android:paddingStart="36dp"
     android:paddingEnd="36dp"
-    android:textAppearance="@style/TextAppearance.Vector.Login.Title.Small"
+    android:textAppearance="@style/VectorTextAppearanceSubtitle"
+    android:textColor="?vctr_content_primary"
     tools:text="Login Title" />

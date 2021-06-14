@@ -21,7 +21,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_please_enter_your_matrix_identifier"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title" />
+                android:textAppearance="@style/VectorTextAppearanceTitle"
+                android:textColor="?vctr_content_primary" />
 
             <TextView
                 android:id="@+id/loginSubtitle"
@@ -29,7 +30,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_please_enter_your_matrix_identifier_help"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text" />
+                android:textAppearance="@style/VectorTextAppearanceBody"
+                android:textColor="?vctr_content_secondary" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginFieldTil"
@@ -64,7 +66,8 @@
                 android:layout_marginTop="32dp"
                 android:gravity="start"
                 android:text="@string/login_enter_identifier_help"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small" />
+                android:textAppearance="@style/VectorTextAppearanceCaption"
+                android:textColor="?vctr_content_secondary" />
 
             <Button
                 android:id="@+id/loginChooseAServer"

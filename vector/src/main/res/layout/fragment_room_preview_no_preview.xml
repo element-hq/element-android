@@ -94,7 +94,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="56dp"
                     android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.Vector.Title"
+                    android:textAppearance="@style/VectorTextAppearanceTitle"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     tools:text="@sample/rooms.json/data/name" />
@@ -106,8 +107,8 @@
                     android:layout_marginTop="@dimen/layout_vertical_margin"
                     android:autoLink="web"
                     android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.Vector.Subtitle"
-                    android:textSize="15sp"
+                    android:textAppearance="@style/VectorTextAppearanceSubtitle"
+                    android:textColor="?vctr_content_secondary"
                     tools:text="@sample/rooms.json/data/topic" />
 
                 <TextView
@@ -116,7 +117,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="28dp"
                     android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.Vector.Subtitle2"
+                    android:textAppearance="@style/VectorTextAppearanceSubtitle"
+                    android:textColor="?vctr_content_secondary"
                     android:textSize="14sp"
                     tools:text="@string/room_preview_no_preview" />
 

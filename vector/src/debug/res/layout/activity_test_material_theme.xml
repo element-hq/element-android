@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".features.debug.DebugMaterialThemeActivity"
-    tools:ignore="HardcodedText">
+    tools:ignore="HardcodedText,MissingPrefix">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -440,6 +440,16 @@
                         android:text="TextView in MaterialCardView" />
 
                 </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Text appearance" />
+
+                <include
+                    layout="@layout/debug_text_appearance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:layout_width="wrap_content"

@@ -18,7 +18,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:textAppearance="@style/VectorTextAppearanceTitle"
+                android:textColor="?vctr_content_primary"
                 tools:ignore="UnknownId"
                 tools:text="@string/login_connect_to" />
 

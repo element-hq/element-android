@@ -12,11 +12,18 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Note: Default style is @style/VectorButtonStyle in the theme -->
         <Button
             style="@style/VectorButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Default" />
+
+        <Button
+            style="@style/VectorButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Line1\nLine 2" />
 
         <Button
             style="@style/VectorButtonStyle"

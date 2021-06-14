@@ -30,7 +30,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:textAppearance="@style/VectorTextAppearanceTitle"
+                android:textColor="?vctr_content_primary"
                 tools:text="@string/login_connect_to_modular" />
 
             <TextView
@@ -39,7 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:gravity="start"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                android:textAppearance="@style/VectorTextAppearanceBody"
+                android:textColor="?vctr_content_secondary"
                 tools:text="@string/login_server_url_form_modular_text" />
 
             <TextView
@@ -48,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="@string/login_server_modular_learn_more"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?colorPrimary" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -77,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="@string/login_clear_homeserver_history"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                android:textAppearance="@style/VectorTextAppearanceCaption"
                 android:textColor="?colorPrimary"
                 android:visibility="invisible"
                 tools:visibility="visible" />
@@ -88,7 +90,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:gravity="start"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                android:textAppearance="@style/VectorTextAppearanceCaption"
+                android:textColor="?vctr_content_secondary"
                 tools:text="@string/login_server_url_form_common_notice" />
 
             <Button
