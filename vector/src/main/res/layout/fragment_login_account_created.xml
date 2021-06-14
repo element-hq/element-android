@@ -99,8 +99,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/login_account_created_message"
+                    android:textAppearance="@style/VectorTextAppearanceBody"
                     android:textColor="?vctr_content_primary"
-                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/loginAccountCreatedMemberName"
                     app:layout_constraintTop_toBottomOf="@+id/loginAccountCreatedMemberName" />

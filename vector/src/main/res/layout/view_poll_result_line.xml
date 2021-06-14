@@ -25,8 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
+        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
-        android:textSize="14sp"
         tools:text="Open a Github Issue" />
 
 
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
-        android:textSize="14sp"
         tools:text="47%" />
 </merge>

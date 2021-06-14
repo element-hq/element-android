@@ -17,8 +17,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="@string/bootstrap_cross_signing_success"
+        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
-        android:textSize="14sp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Space

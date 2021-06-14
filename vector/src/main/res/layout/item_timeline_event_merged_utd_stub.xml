@@ -60,8 +60,8 @@
             android:paddingEnd="8dp"
             android:paddingBottom="4dp"
             android:text="@string/merged_events_expand"
+            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?colorSecondary"
-            android:textSize="14sp"
             android:textStyle="italic"
             android:visibility="gone"
             tools:visibility="visible" />

@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/bootstrap_info_text_2"
+        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
-        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/ssss_passphrase_enter_til"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -24,11 +24,11 @@
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
+        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
-        android:textSize="14sp"
         android:textStyle="bold"
         app:drawableTint="?vctr_content_secondary"
-        tools:drawableEnd="@drawable/ic_expand_more_white"
+        tools:drawableEnd="@drawable/ic_expand_more"
         tools:text="@string/show_advanced" />
 
 </LinearLayout>

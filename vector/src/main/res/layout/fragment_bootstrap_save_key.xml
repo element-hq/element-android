@@ -16,8 +16,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="@string/bottom_sheet_save_your_recovery_key_content"
-        android:textColor="?vctr_content_primary"
-        android:textSize="14sp" />
+        android:textAppearance="@style/VectorTextAppearanceBody"
+        android:textColor="?vctr_content_primary" />
 
     <TextView
         android:id="@+id/bootstrapRecoveryKeyText"

@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="monospace"
-            android:textSize="14sp" />
+            android:textAppearance="@style/VectorTextAppearanceBody" />
 
     </HorizontalScrollView>
 

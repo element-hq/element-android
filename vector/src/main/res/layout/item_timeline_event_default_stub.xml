@@ -23,8 +23,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?colorSecondary"
-        android:textSize="14sp"
         android:textStyle="italic"
         tools:text="@string/rendering_event_error_type_of_event_not_handled" />
 

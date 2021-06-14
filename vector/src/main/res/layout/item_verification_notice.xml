@@ -8,6 +8,6 @@
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp"
+    android:textAppearance="@style/VectorTextAppearanceBody"
     android:textColor="?vctr_content_primary"
-    android:textSize="14sp"
     tools:text="todo" />

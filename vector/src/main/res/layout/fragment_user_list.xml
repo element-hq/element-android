@@ -114,8 +114,8 @@
         android:layout_margin="16dp"
         android:drawablePadding="8dp"
         android:text="@string/settings_hs_admin_e2e_disabled"
+        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
-        android:textSize="14sp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/userListFilterDivider"
         tools:visibility="visible" />

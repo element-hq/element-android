@@ -88,8 +88,7 @@
                     android:gravity="center"
                     android:text="@string/login_social_continue"
                     android:textAppearance="@style/VectorTextAppearanceBody"
-                    android:textColor="?vctr_content_secondary"
-                    android:textSize="14sp" />
+                    android:textColor="?vctr_content_secondary" />
 
                 <im.vector.app.features.login.SocialLoginButtonsView
                     android:id="@+id/loginSocialLoginButtons"

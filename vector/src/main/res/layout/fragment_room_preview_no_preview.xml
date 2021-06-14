@@ -117,9 +117,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="28dp"
                     android:gravity="center"
-                    android:textAppearance="@style/VectorTextAppearanceSubtitle"
+                    android:textAppearance="@style/VectorTextAppearanceBody"
                     android:textColor="?vctr_content_secondary"
-                    android:textSize="14sp"
                     tools:text="@string/room_preview_no_preview" />
 
                 <TextView

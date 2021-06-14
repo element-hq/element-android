@@ -10,9 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
-        android:textSize="14sp"
-        android:textStyle="normal"
         tools:text="What would you like to do?" />
 
     <LinearLayout
