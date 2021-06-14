@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/layout_vertical_margin"
     android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="@dimen/layout_vertical_margin"
+    android:textAppearance="@style/VectorTextAppearanceHeadlineM"
     android:textColor="?vctr_content_primary"
-    android:textSize="18sp"
     android:textStyle="bold"
     tools:text="Title" />

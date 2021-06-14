@@ -60,10 +60,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
+                android:textAppearance="@style/VectorTextAppearanceSubtitle"
                 android:textColor="?vctr_content_primary"
-                android:textSize="18sp"
                 android:textStyle="bold"
-                tools:text="User name" />
+                tools:text="@sample/users.json/data/displayName" />
 
             <TextView
                 android:id="@+id/widgetPermissionOwnerId"
@@ -72,8 +72,10 @@
                 android:textAlignment="center"
                 android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?vctr_content_secondary"
-                tools:text="\@foo:matrix.org" />
+                tools:text="@sample/users.json/data/id" />
+
         </LinearLayout>
+
     </LinearLayout>
 
     <TextView

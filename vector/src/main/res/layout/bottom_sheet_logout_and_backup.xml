@@ -17,8 +17,8 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:text="@string/action_sign_out"
+        android:textAppearance="@style/VectorTextAppearanceHeadlineM"
         android:textColor="?vctr_content_primary"
-        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView

@@ -42,8 +42,8 @@
                     android:gravity="start|center"
                     android:maxLines="1"
                     android:text="@string/space_add_existing_rooms"
+                    android:textAppearance="@style/VectorTextAppearanceHeadlineM"
                     android:textColor="?vctr_content_primary"
-                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView

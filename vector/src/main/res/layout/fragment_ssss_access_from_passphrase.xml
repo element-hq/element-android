@@ -102,8 +102,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/or"
+            android:textAppearance="@style/VectorTextAppearanceHeadlineM"
             android:textColor="?vctr_content_primary"
-            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ssss_passphrase_submit" />
@@ -119,7 +119,8 @@
             app:layout_constraintBottom_toTopOf="@+id/ssss_passphrase_reset"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ssss_passphrase_or" />
+            app:layout_constraintTop_toBottomOf="@+id/ssss_passphrase_or"
+            tools:ignore="MissingPrefix" />
 
         <im.vector.app.core.ui.views.BottomSheetActionButton
             android:id="@+id/ssss_passphrase_reset"
