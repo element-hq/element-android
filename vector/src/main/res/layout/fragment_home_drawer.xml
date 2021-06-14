@@ -110,7 +110,6 @@
             android:insetBottom="0dp"
             android:padding="0dp"
             android:text="@string/invite_friends"
-            android:textSize="13sp"
             app:icon="@drawable/ic_share"
             app:iconGravity="textStart"
             app:iconSize="20dp"

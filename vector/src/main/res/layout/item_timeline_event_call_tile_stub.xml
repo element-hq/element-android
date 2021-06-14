@@ -52,8 +52,8 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="12dp"
+        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_notice_secondary"
-        android:textSize="13sp"
         tools:text="@string/video_call_in_progress" />
 
 

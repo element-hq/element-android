@@ -65,8 +65,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/verification_request_you_accepted"
+        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_notice_secondary"
-        android:textSize="13sp"
         android:visibility="gone"
         tools:visibility="visible" />
 
