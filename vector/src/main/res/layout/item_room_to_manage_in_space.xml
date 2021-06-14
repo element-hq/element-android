@@ -24,13 +24,13 @@
 
     <TextView
         android:id="@+id/itemAddRoomRoomNameText"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
         android:layout_marginEnd="4dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,6 +42,7 @@
 
     <TextView
         android:id="@+id/itemManageRoomSuggested"
+        style="@style/VectorTextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -49,7 +50,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/space_suggested"
-        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/itemAddRoomRoomCheckBox"

@@ -74,7 +74,7 @@
         <item name="textAppearanceListItemSmall">@style/VectorTextAppearanceBody</item>
 
         <!-- Default styles -->
-        <item name="android:textViewStyle">@style/VectorTextView</item>
+        <item name="android:textViewStyle">@style/VectorTextView.Body</item>
         <item name="materialButtonStyle">@style/VectorButtonStyle</item>
         <item name="toolbarStyle">@style/VectorToolbar</item>
         <item name="materialAlertDialogTheme">@style/VectorAlertDialogStyleDark</item>

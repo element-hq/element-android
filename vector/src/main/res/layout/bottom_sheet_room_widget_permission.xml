@@ -23,13 +23,13 @@
 
     <TextView
         android:id="@+id/widgetPermissionHeader2"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:text="@string/room_widget_permission_added_by"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_secondary" />
 
     <LinearLayout
@@ -57,20 +57,20 @@
 
             <TextView
                 android:id="@+id/widgetPermissionOwnerDisplayName"
+                style="@style/VectorTextView.Subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textAppearance="@style/VectorTextAppearanceSubtitle"
                 android:textColor="?vctr_content_primary"
                 android:textStyle="bold"
                 tools:text="@sample/users.json/data/displayName" />
 
             <TextView
                 android:id="@+id/widgetPermissionOwnerId"
+                style="@style/VectorTextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?vctr_content_secondary"
                 tools:text="@sample/users.json/data/id" />
 
@@ -80,13 +80,13 @@
 
     <TextView
         android:id="@+id/widgetPermissionSharedInfo"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="@dimen/layout_vertical_margin_big"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_secondary"
         tools:text="@string/room_widget_permission_shared_info_title" />
 

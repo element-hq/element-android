@@ -8,6 +8,7 @@
 
     <TextView
         android:id="@+id/activeWidgetsLabel"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -17,7 +18,6 @@
         android:paddingTop="8dp"
         android:paddingEnd="12dp"
         android:paddingBottom="8dp"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_room_active_widgets_banner_text"
         tools:text="2 active widgets" />
 

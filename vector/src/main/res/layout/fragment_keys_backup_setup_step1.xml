@@ -25,12 +25,12 @@
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_title"
+        style="@style/VectorTextView.HeadlineM"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/keys_backup_setup_step1_title"
         android:textAlignment="center"
-        android:textAppearance="@style/VectorTextAppearanceHeadlineM"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_description"

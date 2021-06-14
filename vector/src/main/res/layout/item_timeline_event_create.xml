@@ -17,7 +17,7 @@
         android:gravity="center|start"
         android:minHeight="80dp"
         android:padding="16dp"
-        tools:text="This room is continuation…"
-        app:drawableStartCompat="@drawable/error" />
+        app:drawableStartCompat="@drawable/error"
+        tools:text="This room is continuation…" />
 
 </FrameLayout>

@@ -12,9 +12,9 @@
 
     <TextView
         android:id="@+id/itemVerificationWaitingTitle"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_secondary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"

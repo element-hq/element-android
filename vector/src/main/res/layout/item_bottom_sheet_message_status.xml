@@ -28,7 +28,7 @@
         android:drawablePadding="4dp"
         android:textColor="?vctr_content_secondary"
         android:textStyle="bold"
-        tools:text="@string/unable_to_send_message"
-        app:drawableStartCompat="@drawable/ic_warning_badge" />
+        app:drawableStartCompat="@drawable/ic_warning_badge"
+        tools:text="@string/unable_to_send_message" />
 
 </LinearLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
+
+    <TextView
+        style="@style/VectorTextView.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VectorTextAppearanceTitle\nline 2" />
+
+    <TextView
+        style="@style/VectorTextView.Title.M"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VectorTextAppearanceTitle.M\nline 2" />
+
+    <TextView
+        style="@style/VectorTextView.HeadlineM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VectorTextAppearanceHeadlineM\nline 2" />
+
+    <TextView
+        style="@style/VectorTextView.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VectorTextAppearanceSubtitle\nline 2" />
+
+    <TextView
+        style="@style/VectorTextView.Subtitle.M"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VectorTextAppearanceSubtitle.M\nline 2" />
+
+    <TextView
+        style="@style/VectorTextView.Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VectorTextAppearanceBody\nline 2" />
+
+    <TextView
+        style="@style/VectorTextView.Body.M"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VectorTextAppearanceBody.M\nline 2" />
+
+    <TextView
+        style="@style/VectorTextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VectorTextAppearanceCaption\nline 2" />
+
+    <TextView
+        style="@style/VectorTextView.Micro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VectorTextAppearanceMicro\nline 2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Default (VectorTextAppearanceBody)\nline 2" />
+
+</LinearLayout>

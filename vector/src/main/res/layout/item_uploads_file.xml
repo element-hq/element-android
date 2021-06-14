@@ -22,12 +22,12 @@
 
     <TextView
         android:id="@+id/uploadsFileTitle"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/uploadsFileSubtitle"
@@ -39,11 +39,11 @@
 
     <TextView
         android:id="@+id/uploadsFileSubtitle"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:ellipsize="end"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/uploadsFileTitle"

@@ -35,6 +35,7 @@
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/groupCounterBadge"
+        style="@style/VectorTextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -44,7 +45,6 @@
         android:minHeight="16dp"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textAppearance="@style/VectorTextAppearanceMicro"
         android:textColor="?colorOnError"
         android:visibility="gone"
         app:layout_constraintCircle="@+id/groupAvatarImageView"
@@ -57,13 +57,13 @@
 
     <TextView
         android:id="@+id/groupNameView"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

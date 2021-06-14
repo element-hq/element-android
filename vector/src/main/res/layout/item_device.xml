@@ -18,11 +18,11 @@
         <!-- In compact mode only this is shown-->
         <TextView
             android:id="@+id/itemDeviceSimpleSummary"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:minHeight="40dp"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
             tools:text="Riot X" />
 
@@ -31,11 +31,11 @@
         -->
         <TextView
             android:id="@+id/itemDeviceDisplayNameLabel"
+            style="@style/VectorTextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/devices_details_name_title"
-            android:textAppearance="@style/VectorTextAppearanceCaption"
             android:textColor="?vctr_content_secondary" />
 
         <TextView
@@ -47,11 +47,11 @@
 
         <TextView
             android:id="@+id/itemDeviceIdLabel"
+            style="@style/VectorTextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/devices_details_id_title"
-            android:textAppearance="@style/VectorTextAppearanceCaption"
             android:textColor="?vctr_content_secondary" />
 
         <TextView
@@ -65,11 +65,11 @@
 
         <TextView
             android:id="@+id/itemDeviceLastSeenLabel"
+            style="@style/VectorTextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/devices_details_last_seen_title"
-            android:textAppearance="@style/VectorTextAppearanceCaption"
             android:textColor="?vctr_content_secondary" />
 
         <TextView

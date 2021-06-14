@@ -14,9 +14,9 @@
 
         <TextView
             android:id="@+id/identityServerSetDefaultNotice"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
             android:visibility="gone"
             tools:text="@string/identity_server_set_default_notice"
@@ -37,9 +37,9 @@
 
         <TextView
             android:id="@+id/identityServerSetDefaultAlternative"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
             tools:text="@string/identity_server_set_alternative_notice" />
 

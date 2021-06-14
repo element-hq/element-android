@@ -55,12 +55,12 @@
 
         <TextView
             android:id="@+id/memberProfileIdView"
+            style="@style/VectorTextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:gravity="center"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/memberProfilePowerLevelView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,11 +70,11 @@
 
         <TextView
             android:id="@+id/memberProfilePowerLevelView"
+            style="@style/VectorTextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center"
-            android:textAppearance="@style/VectorTextAppearanceCaption"
             android:textColor="?vctr_content_primary"
             app:layout_constraintBottom_toTopOf="@+id/memberProfileStatusView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -84,10 +84,10 @@
 
         <TextView
             android:id="@+id/memberProfileStatusView"
+            style="@style/VectorTextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

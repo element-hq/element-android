@@ -12,11 +12,11 @@
 
     <TextView
         android:id="@+id/sas_emoji_index"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="32dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:gravity="center"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         tools:text="63:" />
 
@@ -36,19 +36,19 @@
 
         <TextView
             android:id="@+id/sas_emoji_text"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
             tools:text="@string/verification_emoji_spanner" />
 
         <TextView
             android:id="@+id/sas_emoji_text_id"
+            style="@style/VectorTextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textAppearance="@style/VectorTextAppearanceCaption"
             tools:text="verification_emoji_spanner" />
 
     </LinearLayout>

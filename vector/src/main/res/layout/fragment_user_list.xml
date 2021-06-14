@@ -36,6 +36,7 @@
 
                 <TextView
                     android:id="@+id/userListTitle"
+                    style="@style/VectorTextView.HeadlineM"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -43,7 +44,6 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@string/fab_menu_create_chat"
-                    android:textAppearance="@style/VectorTextAppearanceHeadlineM"
                     android:textColor="?vctr_content_primary"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -109,12 +109,12 @@
 
     <TextView
         android:id="@+id/userListE2EbyDefaultDisabled"
+        style="@style/VectorTextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:drawablePadding="8dp"
         android:text="@string/settings_hs_admin_e2e_disabled"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/userListFilterDivider"

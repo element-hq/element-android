@@ -9,11 +9,11 @@
 
     <TextView
         android:id="@+id/bottomSheetTitle"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="8dp"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         tools:text="@string/reactions" />
 

@@ -27,6 +27,7 @@
 
     <TextView
         android:id="@+id/itemRoomDirectoryName"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -34,7 +35,6 @@
         android:ellipsize="end"
         android:lines="1"
         android:maxLines="2"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/itemRoomDirectoryDescription"
@@ -47,6 +47,7 @@
 
     <TextView
         android:id="@+id/itemRoomDirectoryDescription"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -54,7 +55,6 @@
         android:ellipsize="end"
         android:lines="1"
         android:maxLines="2"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

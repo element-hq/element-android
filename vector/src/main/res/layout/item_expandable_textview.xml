@@ -9,11 +9,11 @@
 
     <im.vector.app.core.ui.views.NonScrollingTextView
         android:id="@+id/expandableContent"
+        style="@style/VectorTextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autoLink="web"
         android:ellipsize="end"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         app:layout_constraintBottom_toTopOf="@+id/expandableArrow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

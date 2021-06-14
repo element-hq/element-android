@@ -40,13 +40,13 @@
 
     <TextView
         android:id="@+id/knownUserName"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="12dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/knownUserID"
@@ -58,11 +58,11 @@
 
     <TextView
         android:id="@+id/knownUserID"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

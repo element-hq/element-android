@@ -18,12 +18,12 @@
 
     <TextView
         android:id="@+id/url_preview_title"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/url_preview_close"
@@ -45,13 +45,13 @@
 
     <TextView
         android:id="@+id/url_preview_description"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="4"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
@@ -60,6 +60,7 @@
 
     <TextView
         android:id="@+id/url_preview_site"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
@@ -67,7 +68,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_tertiary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"

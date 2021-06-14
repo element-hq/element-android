@@ -9,13 +9,13 @@
 
     <TextView
         android:id="@+id/headerText"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:text="@string/invite_people_menu"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent" />

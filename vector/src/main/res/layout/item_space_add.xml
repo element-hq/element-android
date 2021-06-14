@@ -29,6 +29,7 @@
 
     <TextView
         android:id="@+id/groupNameView"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -36,7 +37,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/add_space"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

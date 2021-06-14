@@ -22,13 +22,13 @@
 
     <TextView
         android:id="@+id/actionTitleText"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_secondary"
         tools:text="@string/invite_friends" />
 

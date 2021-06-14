@@ -444,10 +444,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Text appearance" />
+                    android:text="Text views" />
 
                 <include
-                    layout="@layout/debug_text_appearance"
+                    layout="@layout/debug_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

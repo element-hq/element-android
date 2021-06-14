@@ -39,13 +39,13 @@
 
                     <TextView
                         android:id="@+id/roomPreviewNoPreviewToolbarTitle"
+                        style="@style/VectorTextView.HeadlineM"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:textAppearance="@style/VectorTextAppearanceHeadlineM"
                         android:textColor="?vctr_content_primary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -90,43 +90,43 @@
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewName"
+                    style="@style/VectorTextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="56dp"
                     android:gravity="center"
-                    android:textAppearance="@style/VectorTextAppearanceSubtitle"
                     android:textColor="?vctr_content_primary"
                     android:textStyle="bold"
                     tools:text="@sample/rooms.json/data/name" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewTopic"
+                    style="@style/VectorTextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
                     android:autoLink="web"
                     android:gravity="center"
-                    android:textAppearance="@style/VectorTextAppearanceSubtitle"
                     android:textColor="?vctr_content_secondary"
                     tools:text="@sample/rooms.json/data/topic" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewLabel"
+                    style="@style/VectorTextView.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="28dp"
                     android:gravity="center"
-                    android:textAppearance="@style/VectorTextAppearanceBody"
                     android:textColor="?vctr_content_secondary"
                     tools:text="@string/room_preview_no_preview" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewError"
+                    style="@style/VectorTextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
                     android:gravity="center"
-                    android:textAppearance="@style/VectorTextAppearanceSubtitle"
                     android:textColor="?colorError"
                     android:visibility="gone"
                     tools:text="Error"

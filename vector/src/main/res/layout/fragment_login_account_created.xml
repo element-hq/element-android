@@ -16,36 +16,36 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
+                style="@style/VectorTextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_account_created_title"
-                android:textAppearance="@style/VectorTextAppearanceTitle"
                 android:textColor="?vctr_content_primary" />
 
             <TextView
                 android:id="@+id/loginAccountCreatedSubtitle"
+                style="@style/VectorTextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?vctr_content_primary"
                 tools:text="@string/login_account_created_subtitle" />
 
             <TextView
+                style="@style/VectorTextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="@string/login_account_created_notice"
-                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?vctr_content_secondary" />
 
             <TextView
+                style="@style/VectorTextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_account_created_notice_2"
-                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?vctr_content_secondary" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,6 +67,7 @@
 
                 <TextView
                     android:id="@+id/loginAccountCreatedMemberName"
+                    style="@style/VectorTextView.Subtitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -74,7 +75,6 @@
                     android:layout_marginEnd="4dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textAppearance="@style/VectorTextAppearanceSubtitle"
                     android:textColor="?vctr_content_primary"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/loginAccountCreatedTime"
@@ -84,22 +84,22 @@
 
                 <TextView
                     android:id="@+id/loginAccountCreatedTime"
+                    style="@style/VectorTextView.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:textAppearance="@style/VectorTextAppearanceCaption"
                     android:textColor="?vctr_content_secondary"
                     app:layout_constraintBaseline_toBaselineOf="@+id/loginAccountCreatedMemberName"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:text="@tools:sample/date/hhmm" />
 
                 <TextView
+                    style="@style/VectorTextView.Body"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/login_account_created_message"
-                    android:textAppearance="@style/VectorTextAppearanceBody"
                     android:textColor="?vctr_content_primary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/loginAccountCreatedMemberName"
@@ -108,11 +108,11 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
+                style="@style/VectorTextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_account_created_instruction"
-                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?vctr_content_secondary" />
 
             <FrameLayout

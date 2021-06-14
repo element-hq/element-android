@@ -91,12 +91,12 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    style="@style/VectorTextView.Caption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="@string/send_bug_report_description_in_english"
-                    android:textAppearance="@style/VectorTextAppearanceCaption"
                     android:textColor="?vctr_content_secondary" />
 
                 <TextView

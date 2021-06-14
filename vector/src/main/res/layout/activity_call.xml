@@ -114,6 +114,7 @@
 
     <TextView
         android:id="@+id/callStatusText"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -121,7 +122,6 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:gravity="center"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

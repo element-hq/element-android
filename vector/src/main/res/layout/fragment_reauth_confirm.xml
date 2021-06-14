@@ -11,13 +11,13 @@
 
         <TextView
             android:id="@+id/reAuthConfirmText"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:text="@string/re_authentication_default_confirm_text"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
             app:layout_constraintBottom_toTopOf="@id/reAuthConfirmButton"
             app:layout_constraintTop_toTopOf="parent"
@@ -70,7 +70,7 @@
         <!--            android:layout_height="wrap_content"-->
         <!--            android:gravity="start"-->
         <!--            android:text="@string/login_signin_matrix_id_password_notice"-->
-        <!--            android:textAppearance="@style/VectorTextAppearanceCaption"-->
+        <!--            style="@style/VectorTextView.Caption"-->
         <!--            android:visibility="gone"-->
         <!--            app:layout_constraintEnd_toEndOf="parent"-->
         <!--            app:layout_constraintStart_toStartOf="parent"-->
@@ -79,11 +79,11 @@
 
         <TextView
             android:id="@+id/genericErrorText"
+            style="@style/VectorTextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="@string/authentication_error"
-            android:textAppearance="@style/VectorTextAppearanceCaption"
             android:textColor="?colorError"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"

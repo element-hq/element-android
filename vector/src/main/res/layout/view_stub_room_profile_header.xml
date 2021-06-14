@@ -45,13 +45,13 @@
 
     <TextView
         android:id="@+id/roomProfileAliasView"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:singleLine="true"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

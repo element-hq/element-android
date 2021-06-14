@@ -11,9 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:textAllCaps="true"
+        android:textSize="20sp"
+        android:textStyle="bold"
         tools:text="Http Pusher" />
 
     <TextView

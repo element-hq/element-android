@@ -30,9 +30,9 @@
 
         <TextView
             android:id="@+id/item_emoji_name"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             tools:text="Smiley Face" />

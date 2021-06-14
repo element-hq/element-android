@@ -9,10 +9,10 @@
 
     <TextView
         android:id="@+id/bootstrapDescriptionText"
+        style="@style/VectorTextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@id/waitingProgress"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,10 +28,10 @@
 
     <TextView
         android:id="@+id/reAuthFailureText"
+        style="@style/VectorTextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?colorError"
         app:layout_constraintBottom_toTopOf="@id/buttonFlow"
         app:layout_constraintTop_toBottomOf="@id/waitingProgress"

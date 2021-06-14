@@ -46,6 +46,7 @@
 
                     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
                         android:id="@+id/drawerUnreadCounterBadgeView"
+                        style="@style/VectorTextView.Micro"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
@@ -56,7 +57,6 @@
                         android:minHeight="16dp"
                         android:paddingStart="4dp"
                         android:paddingEnd="4dp"
-                        android:textAppearance="@style/VectorTextAppearanceMicro"
                         android:textColor="?colorOnError"
                         android:visibility="gone"
                         tools:background="@drawable/bg_unread_highlight"
@@ -89,12 +89,12 @@
 
                     <TextView
                         android:id="@+id/groupToolbarSpaceTitleView"
+                        style="@style/VectorTextView.Body"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:gravity="start"
                         android:maxLines="1"
-                        android:textAppearance="@style/VectorTextAppearanceBody"
                         android:textColor="?vctr_content_primary"
                         android:visibility="gone"
                         tools:text="@tools:sample/lorem/random"

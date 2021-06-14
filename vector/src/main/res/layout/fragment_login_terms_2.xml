@@ -21,13 +21,13 @@
 
         <TextView
             android:id="@+id/loginTermsTitle"
+            style="@style/VectorTextView.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:layout_marginTop="52dp"
             android:layout_marginEnd="36dp"
             android:text="@string/login_terms_title"
-            android:textAppearance="@style/VectorTextAppearanceTitle"
             android:textColor="?vctr_content_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

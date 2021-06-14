@@ -27,24 +27,24 @@
 
         <TextView
             android:id="@+id/itemAutocompleteEmojiName"
+            style="@style/VectorTextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:maxLines="1"
-            android:textAppearance="@style/VectorTextAppearanceCaption"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             tools:text="name" />
 
         <TextView
             android:id="@+id/itemAutocompleteEmojiSubname"
+            style="@style/VectorTextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="2dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="@style/VectorTextAppearanceCaption"
             android:textColor="?vctr_content_secondary"
             android:visibility="gone"
             tools:text="name"

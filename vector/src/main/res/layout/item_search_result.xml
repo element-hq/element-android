@@ -19,6 +19,7 @@
 
     <TextView
         android:id="@+id/messageMemberNameView"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -27,7 +28,6 @@
         android:layout_marginEnd="4dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/messageTimeView"
@@ -37,12 +37,12 @@
 
     <TextView
         android:id="@+id/messageTimeView"
+        style="@style/VectorTextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/messageMemberNameView"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="@+id/messageMemberNameView"
         app:layout_constraintEnd_toEndOf="parent"

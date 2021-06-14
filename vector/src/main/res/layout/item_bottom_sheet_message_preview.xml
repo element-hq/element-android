@@ -24,6 +24,7 @@
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_sender"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -31,7 +32,6 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-bold"
         android:singleLine="true"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/bottom_sheet_message_preview_timestamp"
@@ -42,10 +42,10 @@
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_timestamp"
+        style="@style/VectorTextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="@id/bottom_sheet_message_preview_sender"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +67,7 @@
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_body"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -74,7 +75,6 @@
         android:layout_marginBottom="4dp"
         android:ellipsize="end"
         android:maxLines="3"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
         android:textIsSelectable="false"
         app:layout_constraintBottom_toTopOf="@+id/bottom_sheet_message_preview_body_details"
@@ -86,12 +86,12 @@
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_body_details"
+        style="@style/VectorTextView.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_tertiary"
         android:textIsSelectable="false"
         android:visibility="gone"

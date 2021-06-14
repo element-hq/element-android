@@ -26,20 +26,20 @@
 
             <TextView
                 android:id="@+id/loginTitle"
+                style="@style/VectorTextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:textAppearance="@style/VectorTextAppearanceTitle"
                 android:textColor="?vctr_content_primary"
                 tools:text="@string/login_signin_to" />
 
             <TextView
                 android:id="@+id/loginNotice"
+                style="@style/VectorTextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:gravity="start"
-                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?vctr_content_secondary"
                 tools:text="@string/login_server_matrix_org_text" />
 
@@ -101,11 +101,11 @@
 
             <TextView
                 android:id="@+id/loginPasswordNotice"
+                style="@style/VectorTextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:text="@string/login_signin_matrix_id_password_notice"
-                android:textAppearance="@style/VectorTextAppearanceCaption"
                 android:textColor="?vctr_content_secondary"
                 android:visibility="gone"
                 tools:visibility="visible" />
@@ -147,12 +147,12 @@
 
                 <TextView
                     android:id="@+id/loginSocialLoginHeader"
+                    style="@style/VectorTextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:text="@string/login_social_continue"
-                    android:textAppearance="@style/VectorTextAppearanceBody"
                     android:textColor="?vctr_content_secondary" />
 
                 <im.vector.app.features.login.SocialLoginButtonsView

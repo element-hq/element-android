@@ -26,12 +26,12 @@
 
         <TextView
             android:id="@+id/keys_restore_with_key"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/keys_backup_restore_with_recovery_key"
             android:textAlignment="center"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

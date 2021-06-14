@@ -9,11 +9,11 @@
 
     <TextView
         android:id="@+id/localeTitle"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/layout_horizontal_margin"
         android:paddingEnd="@dimen/layout_horizontal_margin"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@+id/localeSubtitle"
         app:layout_constraintEnd_toEndOf="parent"

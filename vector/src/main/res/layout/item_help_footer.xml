@@ -23,12 +23,12 @@
 
     <TextView
         android:id="@+id/itemHelpText"
+        style="@style/VectorTextView.HeadlineM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:gravity="start"
         android:maxWidth="240dp"
-        android:textAppearance="@style/VectorTextAppearanceHeadlineM"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

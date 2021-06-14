@@ -12,10 +12,10 @@
 
     <TextView
         android:id="@+id/exportDialogText"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/encryption_export_notice"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         app:layout_constraintTop_toTopOf="parent" />
 

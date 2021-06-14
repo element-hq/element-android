@@ -33,10 +33,10 @@
 
             <TextView
                 android:id="@+id/loginSignupSigninTitle"
+                style="@style/VectorTextView.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp"
-                android:textAppearance="@style/VectorTextAppearanceTitle"
                 android:textColor="?vctr_content_primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninServerIcon"
@@ -45,11 +45,11 @@
 
             <TextView
                 android:id="@+id/loginSignupSigninText"
+                style="@style/VectorTextView.Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp"
                 android:gravity="start"
-                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?vctr_content_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -99,12 +99,12 @@
 
                 <TextView
                     android:id="@+id/loginSignupSigninSocialLoginHeader"
+                    style="@style/VectorTextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="27dp"
                     android:gravity="center"
                     android:text="@string/login_social_continue"
-                    android:textAppearance="@style/VectorTextAppearanceBody"
                     android:textColor="?vctr_content_secondary" />
 
                 <im.vector.app.features.login.SocialLoginButtonsView

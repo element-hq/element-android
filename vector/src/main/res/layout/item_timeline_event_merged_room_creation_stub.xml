@@ -77,11 +77,11 @@
 
         <TextView
             android:id="@+id/roomNameDescriptionText"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,10 +90,10 @@
 
         <TextView
             android:id="@+id/roomNameTopicText"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_secondary"
             android:textColorLink="?colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
@@ -155,6 +155,7 @@
 
         <TextView
             android:id="@+id/itemNoticeTextView"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -164,7 +165,6 @@
             android:layout_marginBottom="8dp"
             android:layout_toStartOf="@id/itemMergedExpandTextView"
             android:layout_toEndOf="@id/itemNoticeAvatarView"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_secondary"
             android:textStyle="italic"
             tools:text="@string/room_created_summary_item" />
@@ -172,6 +172,7 @@
 
         <TextView
             android:id="@+id/itemMergedExpandTextView"
+            style="@style/VectorTextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -181,7 +182,6 @@
             android:paddingEnd="8dp"
             android:paddingBottom="4dp"
             android:text="@string/merged_events_expand"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?colorSecondary"
             android:textStyle="italic" />
 

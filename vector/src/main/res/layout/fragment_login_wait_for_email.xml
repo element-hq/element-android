@@ -16,19 +16,19 @@
 
             <TextView
                 android:id="@+id/loginWaitForEmailTitle"
+                style="@style/VectorTextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login_wait_for_email_title"
-                android:textAppearance="@style/VectorTextAppearanceTitle"
                 android:textColor="?vctr_content_primary" />
 
             <TextView
                 android:id="@+id/loginWaitForEmailNotice"
+                style="@style/VectorTextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:gravity="start"
-                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?vctr_content_secondary"
                 tools:text="@string/login_wait_for_email_notice" />
 

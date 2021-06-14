@@ -8,11 +8,11 @@
 
     <TextView
         android:id="@+id/bootstrapDescriptionText"
+        style="@style/VectorTextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/bootstrap_info_text_2"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@id/ssss_passphrase_enter_til"
         app:layout_constraintTop_toTopOf="parent" />
@@ -48,6 +48,7 @@
 
         <TextView
             android:id="@+id/bootstrapWarningInfo"
+            style="@style/VectorTextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -55,7 +56,6 @@
             android:drawablePadding="4dp"
             android:gravity="center_vertical"
             android:text="@string/bootstrap_dont_reuse_pwd"
-            android:textAppearance="@style/VectorTextAppearanceCaption"
             android:textColor="?vctr_content_primary"
             app:drawableStartCompat="@drawable/ic_alert_triangle"
             app:drawableTint="?colorError" />

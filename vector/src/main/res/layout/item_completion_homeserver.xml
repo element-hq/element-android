@@ -2,6 +2,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@android:id/text1"
+    style="@style/VectorTextView.Body"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
@@ -9,6 +10,5 @@
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
-    android:textAppearance="@style/VectorTextAppearanceBody"
     android:textColor="?android:attr/textColorAlertDialogListItem"
     tools:text="https://matrix.org" />

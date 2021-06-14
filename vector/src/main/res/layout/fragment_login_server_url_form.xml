@@ -27,30 +27,30 @@
 
             <TextView
                 android:id="@+id/loginServerUrlFormTitle"
+                style="@style/VectorTextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp"
-                android:textAppearance="@style/VectorTextAppearanceTitle"
                 android:textColor="?vctr_content_primary"
                 tools:text="@string/login_connect_to_modular" />
 
             <TextView
                 android:id="@+id/loginServerUrlFormText"
+                style="@style/VectorTextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:gravity="start"
-                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?vctr_content_secondary"
                 tools:text="@string/login_server_url_form_modular_text" />
 
             <TextView
                 android:id="@+id/loginServerUrlFormLearnMore"
+                style="@style/VectorTextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="@string/login_server_modular_learn_more"
-                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?colorPrimary" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -75,22 +75,22 @@
 
             <TextView
                 android:id="@+id/loginServerUrlFormClearHistory"
+                style="@style/VectorTextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="@string/login_clear_homeserver_history"
-                android:textAppearance="@style/VectorTextAppearanceCaption"
                 android:textColor="?colorPrimary"
                 android:visibility="invisible"
                 tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/loginServerUrlFormNotice"
+                style="@style/VectorTextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:gravity="start"
-                android:textAppearance="@style/VectorTextAppearanceCaption"
                 android:textColor="?vctr_content_secondary"
                 tools:text="@string/login_server_url_form_common_notice" />
 

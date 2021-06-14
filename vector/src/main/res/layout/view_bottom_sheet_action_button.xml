@@ -38,10 +38,10 @@
 
         <TextView
             android:id="@+id/bottomSheetActionTitle"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?colorPrimary"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@+id/bottomSheetActionSubTitle"
@@ -54,10 +54,10 @@
 
         <TextView
             android:id="@+id/bottomSheetActionSubTitle"
+            style="@style/VectorTextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_secondary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"

@@ -97,6 +97,7 @@
 
     <TextView
         android:id="@+id/roomNameView"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -105,7 +106,6 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
@@ -135,6 +135,7 @@
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomUnreadCounterBadgeView"
+        style="@style/VectorTextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -143,7 +144,6 @@
         android:minHeight="16dp"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textAppearance="@style/VectorTextAppearanceMicro"
         android:textColor="?colorOnError"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
@@ -156,10 +156,10 @@
 
     <TextView
         android:id="@+id/roomLastEventTimeView"
+        style="@style/VectorTextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -168,13 +168,13 @@
 
     <TextView
         android:id="@+id/roomLastEventView"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/roomNameView"
@@ -183,13 +183,13 @@
 
     <TextView
         android:id="@+id/roomTypingView"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?colorPrimary"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

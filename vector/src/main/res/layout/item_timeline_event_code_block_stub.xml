@@ -10,10 +10,10 @@
 
         <TextView
             android:id="@+id/codeBlockTextView"
+            style="@style/VectorTextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:textAppearance="@style/VectorTextAppearanceBody" />
+            android:fontFamily="monospace" />
 
     </HorizontalScrollView>
 

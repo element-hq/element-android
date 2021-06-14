@@ -20,6 +20,7 @@
 
     <TextView
         android:id="@+id/failedMessagesWarningTextView"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -27,7 +28,6 @@
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:text="@string/event_status_failed_messages_warning"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
         app:drawableStartCompat="@drawable/ic_sending_message_failed"
         app:layout_constraintBottom_toBottomOf="@id/failedMessagesRetryButton"
@@ -49,12 +49,12 @@
 
     <Button
         android:id="@+id/failedMessagesRetryButton"
+        style="@style/VectorTextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:text="@string/global_retry"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         app:icon="@drawable/ic_retry_sending_messages"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

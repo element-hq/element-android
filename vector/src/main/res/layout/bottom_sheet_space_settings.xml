@@ -27,13 +27,13 @@
 
         <TextView
             android:id="@+id/spaceNameView"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:duplicateParentState="true"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
@@ -56,6 +56,7 @@
 
         <TextView
             android:id="@+id/spaceDescription"
+            style="@style/VectorTextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -63,7 +64,6 @@
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_secondary"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"

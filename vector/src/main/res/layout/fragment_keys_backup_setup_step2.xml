@@ -32,6 +32,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step2_text_description"
+            style="@style/VectorTextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -40,7 +41,6 @@
             android:layout_marginBottom="16dp"
             android:text="@string/keys_backup_setup_step2_text_description"
             android:textAlignment="center"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

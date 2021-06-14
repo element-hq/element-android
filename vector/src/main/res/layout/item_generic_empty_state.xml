@@ -23,12 +23,12 @@
 
     <TextView
         android:id="@+id/emptyItemTitleView"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/emptyItemMessageView"
@@ -40,6 +40,7 @@
 
     <TextView
         android:id="@+id/emptyItemMessageView"
+        style="@style/VectorTextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -48,7 +49,6 @@
         android:gravity="center"
         android:maxWidth="300dp"
         android:maxLines="10"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toTopOf="@+id/emptyItemButton"
         app:layout_constraintEnd_toEndOf="parent"

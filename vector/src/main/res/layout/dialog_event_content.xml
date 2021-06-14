@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:textSize="12sp"
         android:fontFamily="monospace"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        android:textSize="12sp" />
 </ScrollView>

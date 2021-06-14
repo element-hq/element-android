@@ -12,9 +12,9 @@
 
     <TextView
         android:id="@+id/itemBottomSheetTitleTitle"
+        style="@style/VectorTextView.HeadlineM"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/VectorTextAppearanceHeadlineM"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/itemBottomSheetTitleSubtitle"
@@ -25,10 +25,10 @@
 
     <TextView
         android:id="@+id/itemBottomSheetTitleSubtitle"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

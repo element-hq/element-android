@@ -18,13 +18,13 @@
 
     <TextView
         android:id="@+id/itemFormAdvancedToggleTitleView"
+        style="@style/VectorTextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
         android:textStyle="bold"
         app:drawableTint="?vctr_content_secondary"

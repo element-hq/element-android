@@ -8,9 +8,9 @@
 
     <TextView
         android:id="@+id/messageTextView"
+        style="@style/VectorTextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_primary"
         tools:text="@sample/messages.json/data/message" />
 

@@ -42,13 +42,13 @@
 
         <TextView
             android:id="@+id/matrixToCardNameText"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_vertical_margin"
             android:maxLines="1"
             android:singleLine="true"
             android:textAlignment="textStart"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
@@ -56,13 +56,13 @@
 
         <TextView
             android:id="@+id/matrixToCardAliasText"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:maxLines="1"
             android:singleLine="true"
             android:textAlignment="textStart"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_secondary"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
@@ -141,13 +141,13 @@
 
         <TextView
             android:id="@+id/matrixToCardDescText"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:autoLink="web"
             android:maxLines="4"
             android:textAlignment="textStart"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintTop_toBottomOf="@id/matrixToMemberPills"
             tools:text="@sample/rooms.json/data/topic" />
@@ -211,10 +211,10 @@
         <!-- layout_goneMarginStart: add half the width of the avatar: 15dp -->
         <TextView
             android:id="@+id/peopleYouMayKnowText"
+            style="@style/VectorTextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toBottomOf="@id/knownMember1"
             app:layout_constraintEnd_toEndOf="parent"

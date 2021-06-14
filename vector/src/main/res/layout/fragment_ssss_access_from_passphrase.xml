@@ -41,10 +41,10 @@
 
         <TextView
             android:id="@+id/ssss_restore_with_passphrase_warning_text"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -98,11 +98,11 @@
 
         <TextView
             android:id="@+id/ssss_passphrase_or"
+            style="@style/VectorTextView.HeadlineM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/or"
-            android:textAppearance="@style/VectorTextAppearanceHeadlineM"
             android:textColor="?vctr_content_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

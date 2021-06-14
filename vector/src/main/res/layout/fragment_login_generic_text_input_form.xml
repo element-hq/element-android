@@ -17,29 +17,29 @@
 
             <TextView
                 android:id="@+id/loginGenericTextInputFormTitle"
+                style="@style/VectorTextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/VectorTextAppearanceTitle"
                 android:textColor="?vctr_content_primary"
                 tools:text="@string/login_set_email_title" />
 
             <TextView
                 android:id="@+id/loginGenericTextInputFormNotice"
+                style="@style/VectorTextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:layout_marginBottom="26dp"
                 android:gravity="start"
-                android:textAppearance="@style/VectorTextAppearanceBody"
                 android:textColor="?vctr_content_secondary"
                 tools:text="@string/login_set_email_notice" />
 
             <TextView
                 android:id="@+id/loginGenericTextInputFormNotice2"
+                style="@style/VectorTextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:textAppearance="@style/VectorTextAppearanceCaption"
                 android:textColor="?vctr_content_secondary"
                 android:visibility="gone"
                 tools:text="@string/login_set_msisdn_notice2"

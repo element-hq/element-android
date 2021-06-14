@@ -61,12 +61,12 @@
 
         <TextView
             android:id="@+id/ssss_reset_text3"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/secure_backup_reset_if_you_reset_all"
-            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?colorError"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,6 +74,7 @@
 
         <TextView
             android:id="@+id/ssss_reset_text4"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -81,7 +82,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/secure_backup_reset_no_history"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_primary"
             app:layout_constraintTop_toBottomOf="@id/ssss_reset_text3" />
 

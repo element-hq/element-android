@@ -23,11 +23,11 @@
 
         <TextView
             android:id="@+id/pollLabelText"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="4dp"
-            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             tools:text="What would you like to do?" />
@@ -134,10 +134,10 @@
 
     <TextView
         android:id="@+id/pollInfosText"
+        style="@style/VectorTextView.Caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         tools:text="12 votes - Final Results"

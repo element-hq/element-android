@@ -9,12 +9,12 @@
 
     <TextView
         android:id="@+id/loadingText"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/layout_vertical_margin"
         android:gravity="center"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         tools:text="Waiting message" />
 

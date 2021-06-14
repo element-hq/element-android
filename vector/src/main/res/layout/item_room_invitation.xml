@@ -32,6 +32,7 @@
 
     <TextView
         android:id="@+id/roomInvitationNameView"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -41,7 +42,6 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         app:drawableEndCompat="@drawable/ic_arrow_right"
         app:layout_constrainedWidth="true"
@@ -54,12 +54,12 @@
 
     <TextView
         android:id="@+id/roomInvitationSubTitle"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toEndOf="@+id/roomInvitationNameView"
         app:layout_constraintStart_toStartOf="@+id/roomInvitationNameView"

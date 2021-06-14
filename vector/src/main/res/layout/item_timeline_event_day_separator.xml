@@ -15,13 +15,13 @@
 
     <TextView
         android:id="@+id/itemDayTextView"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="?android:colorBackground"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_tertiary"
         tools:text="@tools:sample/date/day_of_week" />
 

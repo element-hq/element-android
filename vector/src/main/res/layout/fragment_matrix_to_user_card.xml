@@ -21,6 +21,7 @@
 
     <TextView
         android:id="@+id/matrixToCardNameText"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -29,13 +30,13 @@
         android:maxLines="1"
         android:singleLine="true"
         android:textAlignment="center"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
         tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/matrixToCardUserIdText"
+        style="@style/VectorTextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -44,7 +45,6 @@
         android:maxLines="1"
         android:singleLine="true"
         android:textAlignment="center"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
         tools:text="@sample/users.json/data/id" />

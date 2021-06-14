@@ -16,13 +16,13 @@
 
     <TextView
         android:id="@+id/itemCallCreatorNameTextView"
+        style="@style/VectorTextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
         android:drawablePadding="6dp"
         android:gravity="center"
-        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         tools:text="@sample/users.json/data/displayName" />
@@ -30,6 +30,7 @@
 
     <TextView
         android:id="@+id/itemCallKindTextView"
+        style="@style/VectorTextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -39,12 +40,12 @@
         android:layout_marginBottom="12dp"
         android:drawablePadding="4dp"
         android:gravity="center"
-        android:textAppearance="@style/VectorTextAppearanceCaption"
         android:textColor="?vctr_content_primary"
         tools:text="@string/action_video_call" />
 
     <TextView
         android:id="@+id/itemCallStatusTextView"
+        style="@style/VectorTextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -52,7 +53,6 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="12dp"
-        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_notice_secondary"
         tools:text="@string/video_call_in_progress" />
 
