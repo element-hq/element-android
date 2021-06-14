@@ -104,11 +104,6 @@
     <color name="vctr_room_active_widgets_banner_text_dark">#E3E8F0</color>
     <color name="vctr_room_active_widgets_banner_text_black">#E3E8F0</color>
 
-    <attr name="vctr_bottom_nav_icon_color" format="color" />
-    <color name="vctr_bottom_nav_icon_color_light">#C1C6CD</color>
-    <color name="vctr_bottom_nav_icon_color_dark">#8E99A4</color>
-    <color name="vctr_bottom_nav_icon_color_black">#8E99A4</color>
-
     <attr name="vctr_waiting_background_color" format="color" />
     <color name="vctr_waiting_background_color_light">#AAAAAAAA</color>
     <color name="vctr_waiting_background_color_dark">#55555555</color>
