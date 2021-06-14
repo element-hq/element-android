@@ -26,7 +26,12 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import kotlin.reflect.KMutableProperty0
 
+/**
+ * This can be use to merge timeline tiles from 2 different rooms.
+ * Be aware it wont work properly with permalink.
+ */
 class MergedTimelines(
         private val coroutineScope: CoroutineScope,
         private val mainTimeline: Timeline,
@@ -34,10 +39,13 @@ class MergedTimelines(
 
     data class SecondaryTimelineParams(
             val timeline: Timeline,
+            val disableReadReceipts: Boolean = true,
             val shouldFilterTypes: Boolean = false,
             val allowedTypes: List<String> = emptyList()
     )
 
+    private var mainIsInit = false
+    private var secondaryIsInit = false
     private val secondaryTimeline = secondaryTimelineParams.timeline
 
     private val listenersMapping = HashMap<Timeline.Listener, List<ListenerInterceptor>>()
@@ -70,10 +78,10 @@ class MergedTimelines(
 
     override fun addListener(listener: Timeline.Listener): Boolean {
         val mainTimelineListener = ListenerInterceptor(mainTimeline, listener, false, emptyList()) {
-            processTimelineUpdates(mainTimelineEvents, it)
+            processTimelineUpdates(::mainIsInit, mainTimelineEvents, it)
         }
         val secondaryTimelineListener = ListenerInterceptor(secondaryTimeline, listener, secondaryTimelineParams.shouldFilterTypes, secondaryTimelineParams.allowedTypes) {
-            processTimelineUpdates(secondaryTimelineEvents, it)
+            processTimelineUpdates(::secondaryIsInit, secondaryTimelineEvents, it)
         }
         listenersMapping[listener] = listOf(mainTimelineListener, secondaryTimelineListener)
         return mainTimeline.addListener(mainTimelineListener) && secondaryTimeline.addListener(secondaryTimelineListener)
@@ -139,9 +147,10 @@ class MergedTimelines(
         }
     }
 
-    private fun processTimelineUpdates(eventsRef: MutableList<TimelineEvent>, newData: List<TimelineEvent>) {
+    private fun processTimelineUpdates(isInit: KMutableProperty0<Boolean>, eventsRef: MutableList<TimelineEvent>, newData: List<TimelineEvent>) {
         coroutineScope.launch(Dispatchers.Default) {
             processingSemaphore.withPermit {
+                isInit.set(true)
                 eventsRef.apply {
                     clear()
                     addAll(newData)
@@ -157,10 +166,7 @@ class MergedTimelines(
         val secondaryItr = secondaryTimelineEvents.toList().listIterator()
         var index = 0
         var correctedSenderInfo: SenderInfo? = mainTimelineEvents.firstOrNull()?.senderInfo
-        if (mainTimelineEvents.isEmpty() && mainTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS)) {
-            return
-        }
-        if (secondaryTimelineEvents.isEmpty() && secondaryTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS)) {
+        if (!mainIsInit || !secondaryIsInit) {
             return
         }
         while (merged.size < mainTimelineEvents.size + secondaryTimelineEvents.size) {
@@ -203,7 +209,7 @@ class MergedTimelines(
     private fun TimelineEvent.correctBeforeMerging(correctedSenderInfo: SenderInfo?): TimelineEvent {
         return copy(
                 senderInfo = correctedSenderInfo ?: senderInfo,
-                readReceipts = emptyList()
+                readReceipts = if (secondaryTimelineParams.disableReadReceipts) emptyList() else readReceipts
         )
     }
 }
