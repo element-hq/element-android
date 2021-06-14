@@ -28,8 +28,8 @@
         android:fontFamily="monospace"
         android:gravity="center_horizontal"
         android:padding="4dp"
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_notice_secondary"
-        android:textSize="15sp"
         tools:text="HHWJ Y8DK RDR4\nBQEN FQ4V M4F8\nBQEN FQ4V M4A8" />
 
 

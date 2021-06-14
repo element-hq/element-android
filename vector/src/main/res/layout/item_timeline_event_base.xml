@@ -36,8 +36,8 @@
         android:layout_toEndOf="@+id/messageStartGuideline"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         android:textStyle="bold"
         tools:text="@sample/users.json/data/displayName" />
 

@@ -37,7 +37,6 @@
         android:paddingStart="8dp"
         android:paddingEnd="16dp"
         android:text="@string/action_close"
-        android:textSize="15sp"
         android:textStyle="bold" />
 
 </merge>

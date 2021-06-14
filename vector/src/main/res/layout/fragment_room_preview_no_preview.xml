@@ -94,9 +94,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="56dp"
                     android:gravity="center"
-                    android:textAppearance="@style/VectorTextAppearanceTitle"
+                    android:textAppearance="@style/VectorTextAppearanceSubtitle"
                     android:textColor="?vctr_content_primary"
-                    android:textSize="15sp"
                     android:textStyle="bold"
                     tools:text="@sample/rooms.json/data/name" />
 
@@ -127,8 +126,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
                     android:gravity="center"
+                    android:textAppearance="@style/VectorTextAppearanceSubtitle"
                     android:textColor="?colorError"
-                    android:textSize="15sp"
                     android:visibility="gone"
                     tools:text="Error"
                     tools:visibility="visible" />

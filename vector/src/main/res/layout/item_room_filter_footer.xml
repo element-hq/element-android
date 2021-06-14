@@ -11,8 +11,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="56dp"
         android:text="@string/room_filtering_footer_title"
-        android:textColor="?vctr_content_secondary"
-        android:textSize="15sp" />
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
+        android:textColor="?vctr_content_secondary" />
 
     <Button
         android:id="@+id/roomFilterFooterCreateRoom"

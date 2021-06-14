@@ -50,8 +50,8 @@
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:text="@string/keys_backup_setup_step3_text_line1"
             android:textAlignment="center"
-            android:textColor="?vctr_content_primary"
-            android:textSize="15sp" />
+            android:textAppearance="@style/VectorTextAppearanceSubtitle"
+            android:textColor="?vctr_content_primary" />
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_label2"
@@ -61,8 +61,8 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:textAlignment="center"
+            android:textAppearance="@style/VectorTextAppearanceBody"
             android:textColor="?vctr_content_secondary"
-            android:textSize="15sp"
             tools:text="@string/keys_backup_setup_step3_text_line2" />
 
 

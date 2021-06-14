@@ -21,8 +21,8 @@
         android:background="?android:colorBackground"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_tertiary"
-        android:textSize="15sp"
         tools:text="@tools:sample/date/day_of_week" />
 
 </FrameLayout>

@@ -29,8 +29,8 @@
         android:maxLines="1"
         android:singleLine="true"
         android:textAlignment="center"
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
         tools:text="@sample/users.json/data/displayName" />
 
@@ -44,8 +44,8 @@
         android:maxLines="1"
         android:singleLine="true"
         android:textAlignment="center"
+        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="?vctr_content_secondary"
-        android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
         tools:text="@sample/users.json/data/id" />
 

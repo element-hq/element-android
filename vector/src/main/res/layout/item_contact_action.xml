@@ -28,8 +28,8 @@
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_secondary"
-        android:textSize="15sp"
         tools:text="@string/invite_friends" />
 
 </LinearLayout>

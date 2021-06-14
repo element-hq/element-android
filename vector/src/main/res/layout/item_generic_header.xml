@@ -8,7 +8,7 @@
     android:paddingTop="4dp"
     android:paddingEnd="16dp"
     android:paddingBottom="4dp"
+    android:textAppearance="@style/VectorTextAppearanceSubtitle"
     android:textColor="?vctr_notice_text_color"
-    android:textSize="15sp"
     android:textStyle="bold"
     tools:text="Today" />

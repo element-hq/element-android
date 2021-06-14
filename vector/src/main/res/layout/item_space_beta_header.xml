@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/spaces_header"
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         android:textStyle="bold"
         app:drawableEndCompat="@drawable/ic_beta_pill" />
 
@@ -23,8 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/spaces_beta_welcome_to_spaces_desc"
-        android:textColor="?vctr_content_secondary"
-        android:textSize="15sp" />
+        android:textAppearance="@style/VectorTextAppearanceBody"
+        android:textColor="?vctr_content_secondary" />
 
     <TextView
         android:id="@+id/spaceBetaFeedbackAction"
@@ -36,8 +36,8 @@
         android:paddingEnd="16dp"
         android:paddingBottom="8dp"
         android:text="@string/give_feedback"
+        android:textAppearance="@style/VectorTextAppearanceBody"
         android:textColor="@color/vector_info_color"
-        android:textSize="15sp"
         app:drawableStartCompat="@drawable/ic_feedback" />
 
 </LinearLayout>

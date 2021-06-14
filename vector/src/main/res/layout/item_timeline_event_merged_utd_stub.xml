@@ -28,8 +28,8 @@
             android:drawablePadding="2dp"
             android:gravity="start"
             android:text="@string/notice_crypto_unable_to_decrypt_merged"
+            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_secondary"
-            android:textSize="15sp"
             app:drawableStartCompat="@drawable/ic_clock"
             app:drawableTint="?vctr_content_secondary" />
 
