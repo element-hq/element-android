@@ -315,7 +315,7 @@ dependencies {
     def jjwt_version = '0.11.2'
 
     // Tests
-    def kluent_version = '1.65'
+    def kluent_version = '1.66'
     def androidxTest_version = '1.3.0'
     def espresso_version = '3.3.0'
 
