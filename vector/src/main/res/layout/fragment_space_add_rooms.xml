@@ -54,8 +54,8 @@
                     android:ellipsize="end"
                     android:gravity="start|center"
                     android:maxLines="1"
+                    android:textAppearance="@style/VectorTextAppearanceSubtitle"
                     android:textColor="?vctr_content_secondary"
-                    android:textSize="16sp"
                     tools:text="@sample/spaces.json/data/name" />
 
             </LinearLayout>

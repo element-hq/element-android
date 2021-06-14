@@ -29,8 +29,8 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:text="@string/room_widget_permission_added_by"
-        android:textColor="?vctr_content_secondary"
-        android:textSize="16sp" />
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
+        android:textColor="?vctr_content_secondary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -84,8 +84,8 @@
         android:layout_marginTop="@dimen/layout_vertical_margin_big"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_secondary"
-        android:textSize="16sp"
         tools:text="@string/room_widget_permission_shared_info_title" />
 
     <LinearLayout

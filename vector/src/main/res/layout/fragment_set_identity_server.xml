@@ -16,8 +16,8 @@
             android:id="@+id/identityServerSetDefaultNotice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
-            android:textSize="16sp"
             android:visibility="gone"
             tools:text="@string/identity_server_set_default_notice"
             tools:visibility="visible" />
@@ -39,8 +39,8 @@
             android:id="@+id/identityServerSetDefaultAlternative"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
-            android:textSize="16sp"
             tools:text="@string/identity_server_set_alternative_notice" />
 
         <com.google.android.material.textfield.TextInputLayout

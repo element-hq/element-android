@@ -60,8 +60,8 @@
         android:gravity="center"
         android:paddingBottom="32dp"
         android:text="@string/disclaimer_content"
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_secondary"
-        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/disclaimerTextView" />

@@ -32,8 +32,8 @@
             android:id="@+id/item_emoji_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/VectorTextAppearanceSubtitle"
             android:textColor="?vctr_content_primary"
-            android:textSize="16sp"
             android:textStyle="bold"
             tools:text="Smiley Face" />
 
@@ -43,7 +43,6 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:textColor="?vctr_content_secondary"
-            android:textSize="14sp"
             android:visibility="gone"
             tools:text="Smile, foo, bar"
             tools:visibility="visible" />

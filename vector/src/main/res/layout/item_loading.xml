@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="1dp"
     android:background="?android:colorBackground"
+    android:minHeight="1dp"
     android:orientation="vertical">
 
     <TextView
@@ -14,8 +14,8 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/layout_vertical_margin"
         android:gravity="center"
+        android:textAppearance="@style/VectorTextAppearanceSubtitle"
         android:textColor="?vctr_content_primary"
-        android:textSize="16sp"
         tools:text="Waiting message" />
 
     <ProgressBar
