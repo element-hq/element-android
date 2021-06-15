@@ -2812,4 +2812,5 @@
     <string name="directory_add_a_new_server_prompt">Saisissez le nom du nouveau serveur que vous souhaitez explorer.</string>
     <string name="directory_add_a_new_server">Ajouter un nouveau serveur</string>
     <string name="directory_your_server">Votre serveur</string>
+    <string name="call_transfer_consulting_with">Consultation de %1$s</string>
 </resources>
