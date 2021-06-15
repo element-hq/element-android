@@ -23,8 +23,8 @@ data class MultiPickerVideoType(
         override val size: Long,
         override val mimeType: String?,
         override val contentUri: Uri,
-        val width: Int,
-        val height: Int,
-        val orientation: Int,
+        override val width: Int,
+        override val height: Int,
+        override val orientation: Int,
         val duration: Long
-) : MultiPickerBaseType
+) : MultiPickerBaseMediaType

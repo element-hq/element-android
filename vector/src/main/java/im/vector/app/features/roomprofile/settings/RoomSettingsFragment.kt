@@ -23,11 +23,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
@@ -42,11 +42,11 @@ import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
-import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilityBottomSheet
+import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleBottomSheet
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
-
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.UUID
 import javax.inject.Inject
@@ -60,7 +60,8 @@ class RoomSettingsFragment @Inject constructor(
         VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomSettingsController.Callback,
         OnBackPressed,
-        GalleryOrCameraDialogHelper.Listener {
+        GalleryOrCameraDialogHelper.Listener,
+        RoomSettingsViewModel.Factory {
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private lateinit var roomProfileSharedActionViewModel: RoomProfileSharedActionViewModel
@@ -75,6 +76,10 @@ class RoomSettingsFragment @Inject constructor(
     }
 
     override fun getMenuRes() = R.menu.vector_room_settings
+
+    override fun create(initialState: RoomSettingsViewState): RoomSettingsViewModel {
+        return viewModelFactory.create(initialState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -104,7 +109,7 @@ class RoomSettingsFragment @Inject constructor(
         roomJoinRuleSharedActionViewModel
                 .observe()
                 .subscribe { action ->
-                    viewModel.handle(RoomSettingsAction.SetRoomJoinRule(action.roomJoinRule, action.roomGuestAccess))
+                    viewModel.handle(RoomSettingsAction.SetRoomJoinRule(action.roomJoinRule))
                 }
                 .disposeOnDestroyView()
     }
@@ -174,11 +179,16 @@ class RoomSettingsFragment @Inject constructor(
                 .show(childFragmentManager, "RoomHistoryVisibilityBottomSheet")
     }
 
-    override fun onJoinRuleClicked()  = withState(viewModel) { state ->
+    override fun onJoinRuleClicked() = withState(viewModel) { state ->
         val currentJoinRule = state.newRoomJoinRules.newJoinRules ?: state.currentRoomJoinRules
-        val currentGuestAccess = state.newRoomJoinRules.newGuestAccess ?: state.currentGuestAccess
-        RoomJoinRuleBottomSheet.newInstance(currentJoinRule, currentGuestAccess)
+        RoomJoinRuleBottomSheet.newInstance(currentJoinRule)
                 .show(childFragmentManager, "RoomJoinRuleBottomSheet")
+    }
+
+    override fun onToggleGuestAccess() = withState(viewModel) { state ->
+        val currentGuestAccess = state.newRoomJoinRules.newGuestAccess ?: state.currentGuestAccess
+        val toggled = if (currentGuestAccess == GuestAccess.Forbidden) GuestAccess.CanJoin else GuestAccess.Forbidden
+        viewModel.handle(RoomSettingsAction.SetRoomGuestAccess(toggled))
     }
 
     override fun onImageReady(uri: Uri?) {
@@ -220,7 +230,7 @@ class RoomSettingsFragment @Inject constructor(
 
         return withState(viewModel) {
             return@withState if (it.showSaveAction) {
-                AlertDialog.Builder(requireContext())
+                MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.dialog_title_warning)
                         .setMessage(R.string.warning_unsaved_change)
                         .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->

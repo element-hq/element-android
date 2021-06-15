@@ -18,11 +18,12 @@ package im.vector.app.core.dialogs
 
 import android.app.Activity
 import android.net.Uri
-import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import im.vector.app.R
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper.Listener
 import im.vector.app.core.extensions.insertBeforeLast
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.resources.ColorProvider
@@ -101,7 +102,7 @@ class GalleryOrCameraDialogHelper(
     }
 
     fun show() {
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.attachment_type_dialog_title)
                 .setItems(arrayOf(
                         fragment.getString(R.string.attachment_type_camera),

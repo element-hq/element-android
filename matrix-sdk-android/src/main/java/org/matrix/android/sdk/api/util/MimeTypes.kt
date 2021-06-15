@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 object MimeTypes {
     const val Any: String = "*/*"
     const val OctetStream = "application/octet-stream"
+    const val Apk = "application/vnd.android.package-archive"
 
     const val Images = "image/*"
 

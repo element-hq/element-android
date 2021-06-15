@@ -16,7 +16,6 @@
 
 package im.vector.app.features.userdirectory
 
-import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -51,37 +50,38 @@ class UserListController @Inject constructor(private val session: Session,
 
     override fun buildModels() {
         val currentState = state ?: return
+        val host = this
 
         // Build generic items
         if (currentState.searchTerm.isBlank()) {
             if (currentState.showInviteActions()) {
                 actionItem {
                     id(R.drawable.ic_share)
-                    title(stringProvider.getString(R.string.invite_friends))
+                    title(host.stringProvider.getString(R.string.invite_friends))
                     actionIconRes(R.drawable.ic_share)
-                    clickAction(View.OnClickListener {
-                        callback?.onInviteFriendClick()
-                    })
+                    clickAction {
+                        host.callback?.onInviteFriendClick()
+                    }
                 }
             }
             if (currentState.showContactBookAction) {
                 actionItem {
                     id(R.drawable.ic_baseline_perm_contact_calendar_24)
-                    title(stringProvider.getString(R.string.contacts_book_title))
+                    title(host.stringProvider.getString(R.string.contacts_book_title))
                     actionIconRes(R.drawable.ic_baseline_perm_contact_calendar_24)
-                    clickAction(View.OnClickListener {
-                        callback?.onContactBookClick()
-                    })
+                    clickAction {
+                        host.callback?.onContactBookClick()
+                    }
                 }
             }
             if (currentState.showInviteActions()) {
                 actionItem {
                     id(R.drawable.ic_qr_code_add)
-                    title(stringProvider.getString(R.string.qr_code))
+                    title(host.stringProvider.getString(R.string.qr_code))
                     actionIconRes(R.drawable.ic_qr_code_add)
-                    clickAction(View.OnClickListener {
-                        callback?.onUseQRCode()
-                    })
+                    clickAction {
+                        host.callback?.onUseQRCode()
+                    }
                 }
             }
         }
@@ -109,54 +109,58 @@ class UserListController @Inject constructor(private val session: Session,
     }
 
     private fun buildKnownUsers(currentState: UserListViewState, selectedUsers: List<String>) {
-        currentState.knownUsers()?.let { userList ->
-            userListHeaderItem {
-                id("known_header")
-                header(stringProvider.getString(R.string.direct_room_user_list_known_title))
-            }
+        val host = this
+        currentState.knownUsers()
+                ?.filter { it.userId != session.myUserId }
+                ?.let { userList ->
+                    userListHeaderItem {
+                        id("known_header")
+                        header(host.stringProvider.getString(R.string.direct_room_user_list_known_title))
+                    }
 
-            if (userList.isEmpty()) {
-                renderEmptyState()
-                return
-            }
-            userList.forEach { item ->
-                val isSelected = selectedUsers.contains(item.userId)
-                userDirectoryUserItem {
-                    id(item.userId)
-                    selected(isSelected)
-                    matrixItem(item.toMatrixItem())
-                    avatarRenderer(avatarRenderer)
-                    clickListener { _ ->
-                        callback?.onItemClick(item)
+                    if (userList.isEmpty()) {
+                        renderEmptyState()
+                        return
+                    }
+                    userList.forEach { item ->
+                        val isSelected = selectedUsers.contains(item.userId)
+                        userDirectoryUserItem {
+                            id(item.userId)
+                            selected(isSelected)
+                            matrixItem(item.toMatrixItem())
+                            avatarRenderer(host.avatarRenderer)
+                            clickListener {
+                                host.callback?.onItemClick(item)
+                            }
+                        }
                     }
                 }
-            }
-        }
     }
 
     private fun buildDirectoryUsers(directoryUsers: List<User>, selectedUsers: List<String>, searchTerms: String, ignoreIds: List<String>) {
-        val toDisplay = directoryUsers.filter { !ignoreIds.contains(it.userId) }
+        val host = this
+        val toDisplay = directoryUsers
+                .filter { !ignoreIds.contains(it.userId) && it.userId != session.myUserId }
+
         if (toDisplay.isEmpty() && searchTerms.isBlank()) {
             return
         }
         userListHeaderItem {
             id("suggestions")
-            header(stringProvider.getString(R.string.direct_room_user_list_suggestions_title))
+            header(host.stringProvider.getString(R.string.direct_room_user_list_suggestions_title))
         }
         if (toDisplay.isEmpty()) {
             renderEmptyState()
         } else {
             toDisplay.forEach { user ->
-                if (user.userId != session.myUserId) {
-                    val isSelected = selectedUsers.contains(user.userId)
-                    userDirectoryUserItem {
-                        id(user.userId)
-                        selected(isSelected)
-                        matrixItem(user.toMatrixItem())
-                        avatarRenderer(avatarRenderer)
-                        clickListener { _ ->
-                            callback?.onItemClick(user)
-                        }
+                val isSelected = selectedUsers.contains(user.userId)
+                userDirectoryUserItem {
+                    id(user.userId)
+                    selected(isSelected)
+                    matrixItem(user.toMatrixItem())
+                    avatarRenderer(host.avatarRenderer)
+                    clickListener {
+                        host.callback?.onItemClick(user)
                     }
                 }
             }
@@ -170,16 +174,18 @@ class UserListController @Inject constructor(private val session: Session,
     }
 
     private fun renderEmptyState() {
+        val host = this
         noResultItem {
             id("noResult")
-            text(stringProvider.getString(R.string.no_result_placeholder))
+            text(host.stringProvider.getString(R.string.no_result_placeholder))
         }
     }
 
     private fun renderFailure(failure: Throwable) {
+        val host = this
         errorWithRetryItem {
             id("error")
-            text(errorFormatter.toHumanReadable(failure))
+            text(host.errorFormatter.toHumanReadable(failure))
         }
     }
 

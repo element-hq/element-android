@@ -23,7 +23,6 @@ import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.GenericItem_
 import im.vector.app.core.utils.createUIHandler
 import me.gujun.android.span.span
@@ -54,10 +53,11 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
     var interactionListener: InteractionListener? = null
 
     override fun buildItemModel(currentPosition: Int, item: Event?): EpoxyModel<*> {
+        val host = this
         val event = item ?: return GenericItem_().apply { id(currentPosition) }
         return GenericItem_().apply {
             id(event.hashCode())
-            itemClickAction(GenericItem.Action("view").apply { perform = Runnable { interactionListener?.didTap(event) } })
+            itemClickAction { host.interactionListener?.didTap(event) }
             title(
                     if (event.isEncrypted()) {
                         "${event.getClearType()} [encrypted]"
@@ -67,7 +67,7 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
             )
             description(
                     span {
-                        +vectorDateFormatter.format(event.ageLocalTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
+                        +host.vectorDateFormatter.format(event.ageLocalTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
                         span("\nfrom: ") {
                             textStyle = "bold"
                         }
@@ -98,7 +98,7 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
                                 val content = event.getClearContent().toModel<ForwardedRoomKeyContent>()
                                 if (event.mxDecryptionResult == null) {
                                     span("**Failed to Decrypt** ${event.mCryptoError}") {
-                                        textColor = colorProvider.getColor(R.color.vector_error_color)
+                                        textColor = host.colorProvider.getColorFromAttribute(R.attr.colorError)
                                     }
                                 }
                                 span("\nsessionId:") {
@@ -157,7 +157,7 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
                                 +"${content?.requestingDeviceId}"
                             } else if (event.getClearType() == EventType.ENCRYPTED) {
                                 span("**Failed to Decrypt** ${event.mCryptoError}") {
-                                        textColor = colorProvider.getColor(R.color.vector_error_color)
+                                        textColor = host.colorProvider.getColorFromAttribute(R.attr.colorError)
                                     }
                             }
                         }

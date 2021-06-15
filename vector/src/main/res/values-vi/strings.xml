@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="send_bug_report_rage_shake">Lắc điện thoại để báo cáo lỗi</string>
-    <string name="send_bug_report_alert_message">Có vẻ bạn đang lắc điện thoại một cách tức giận. Bạn có muốn báo cáo lỗi không\?</string>
+    <string name="send_bug_report_alert_message">Có vẻ bạn đang lắc điện thoại một cách tức giận. Bạn có muốn mở màn hình báo cáo lỗi không\?</string>
     <string name="send_bug_report_placeholder">Miêu tả vấn đề của bạn ở đây</string>
     <string name="send_bug_report_description_in_english">Nếu có thể, vui lòng viết miêu tả bằng tiếng Anh.</string>
     <string name="send_bug_report_description">Vui lòng miêu tả lỗi. Bạn đã làm gì\? Bạn mong điều gì xảy ra\? Điều gì đã xảy ra\?</string>
@@ -27,7 +27,7 @@
     <string name="matrix_only_filter">Chỉ những liên hệ Matrix</string>
     <string name="user_directory_header">Thư mục người dùng</string>
     <string name="local_address_book_header">Sổ địa chỉ địa phương</string>
-    <string name="direct_chats_header">Các cuộc trò chuyện</string>
+    <string name="direct_chats_header">Cuộc trò chuyện</string>
     <string name="system_alerts_header">Cảnh báo hệ thống</string>
     <string name="low_priority_header">Ưu tiên thấp</string>
     <string name="invitations_header">Lời mời</string>
@@ -35,7 +35,7 @@
     <string name="home_filter_placeholder_rooms">Lọc tên phòng</string>
     <string name="home_filter_placeholder_people">Lọc người</string>
     <string name="dialog_title_confirmation">Xác nhận</string>
-    <string name="disable">Vô hiệu hóa</string>
+    <string name="disable">Tắt</string>
     <string name="home_filter_placeholder_home">Lọc tên phòng</string>
     <string name="bottom_action_groups">Cộng đồng</string>
     <string name="bottom_action_rooms">Phòng</string>
@@ -45,7 +45,7 @@
     <string name="dialog_title_success">Thành công</string>
     <string name="dialog_title_error">Lỗi</string>
     <string name="dialog_title_warning">Cảnh báo</string>
-    <string name="copied_to_clipboard">Sao chép vào bộ nhớ tạm</string>
+    <string name="copied_to_clipboard">Đã sao chép vào bộ nhớ tạm</string>
     <string name="action_add">Thêm</string>
     <string name="action_copy">Sao chép</string>
     <string name="action_close">Đóng</string>
@@ -53,14 +53,14 @@
     <string name="action_mark_room_read">Đánh dấu đã đọc</string>
     <string name="action_quick_reply">Trả lời nhanh</string>
     <string name="action_mark_all_as_read">Đánh dấu tất cả đã đọc</string>
-    <string name="action_global_search">Tìm toàn bộ</string>
+    <string name="action_global_search">Tìm kiếm trong toàn bộ</string>
     <string name="action_video_call">Cuộc gọi bằng video</string>
     <string name="action_voice_call">Cuộc gọi bằng giọng nói</string>
     <string name="action_sign_out_confirmation_simple">Bạn có chắc mình muốn đăng xuất không\?</string>
     <string name="action_sign_out">Đăng xuất</string>
     <string name="actions">Hành động</string>
     <string name="action_exit">Thoát</string>
-    <string name="call_notification_hangup">Chờ</string>
+    <string name="call_notification_hangup">Cúp máy</string>
     <string name="call_notification_reject">Từ chối</string>
     <string name="call_notification_answer">Đồng ý</string>
     <string name="decline">Từ chối</string>
@@ -151,9 +151,9 @@
     <string name="notification_listening_for_events">Theo dõi sự kiện</string>
     <string name="notification_sync_in_progress">Đang đồng bộ hóa…</string>
     <string name="notification_sync_init">Đang khởi tạo dịch vụ</string>
-    <string name="black_theme">Nền đen</string>
-    <string name="dark_theme">Nền tối</string>
-    <string name="light_theme">Nền sáng</string>
+    <string name="black_theme">Chủ đề đen</string>
+    <string name="dark_theme">Chủ đề tối</string>
+    <string name="light_theme">Chủ đề sáng</string>
     <string name="auth_email_validation_message">Vui lòng kiểm tra email của bạn để tiếp tục quá trình đăng ký</string>
     <string name="auth_forgot_password">Quên mật khẩu\?</string>
     <string name="auth_password_dont_match">Mật khẩu không trùng khớp</string>
@@ -195,7 +195,7 @@
     <string name="option_take_photo">Chụp ảnh</string>
     <string name="option_take_photo_video">Chụp ảnh hoặc quay video</string>
     <string name="option_send_sticker">Gửi nhãn dán</string>
-    <string name="option_send_files">Gửi tệp tin</string>
+    <string name="option_send_files">Gửi tệp</string>
     <string name="call_format_turn_hd_on">Bật HD</string>
     <string name="call_format_turn_hd_off">Tắt HD</string>
     <string name="call_camera_back">Sau</string>
@@ -209,9 +209,9 @@
     <string name="template_call_failed_no_connection">Cuộc gọi ${app_name} thất bại</string>
     <string name="call_failed_dont_ask_again">Đừng hỏi lại tôi</string>
     <string name="call_failed_no_ice_use_alt">Hãy thử dùng %s</string>
-    <string name="call_failed_no_ice_description">Vui lòng yêu cầu quản trị viên của máy chủ nhà của bạn (%1$s) thiết lập một máy chủ TURN để các cuộc gọi có thể hoạt động […].
+    <string name="call_failed_no_ice_description">Vui lòng yêu cầu quản trị viên của máy chủ nhà của bạn (%1$s) thiết lập một máy chủ TURN để các cuộc gọi có thể hoạt động một cách đáng tin cậy.
 \n
-\nBạn cũng có thể thử dùng máy chủ công cộng ở %2$s, nhưng cách này sẽ không […] bằng, và địa chỉ IP của bạn cũng sẽ được chia sẻ đến server đó. Bạn có thể quản lý việc này trong mục Cài đặt.</string>
+\nBạn cũng có thể thử dùng máy chủ công cộng ở %2$s, nhưng cách này sẽ không đáng tin cậy bằng, và địa chỉ IP của bạn sẽ được chia sẻ đến máy chủ đó. Bạn cũng có thể quản lý việc này trong Cài đặt.</string>
     <string name="call_failed_no_ice_title">Cuộc gọi thất bại do thiết lập máy chủ sai</string>
     <string name="start_video_call_prompt_msg">Bạn có chắc bạn muốn bắt đầu một cuộc gọi video\?</string>
     <string name="start_voice_call_prompt_msg">Bạn có chắc bạn muốn bắt đầu một cuộc gọi bằng giọng nói\?</string>
@@ -248,7 +248,7 @@
     <string name="auth_home_server">Máy chủ chính:</string>
     <string name="call_failed_no_connection_description">Thiết lập kết nối thời gian thực thất bại.
 \nXin vui lòng yêu cầu quản trị viên máy chủ nhà của bạn thiết lập máy chủ TURN để có thể gọi điện bình thường.</string>
-    <string name="bottom_action_home">Trang đầu</string>
+    <string name="bottom_action_home">Trang chủ</string>
     <string name="call_connecting">Cuộc gọi đang được kết nối…</string>
     <string name="call_connected">Cuộc gọi đã được kết nối</string>
     <string name="call">Gọi</string>
@@ -270,7 +270,521 @@
     <string name="people_no_identity_server">Máy chủ định danh chưa được cài đặt.</string>
     <string name="send_bug_report_app_crashed">Chương trình đã gặp sự cố lần trước. Bạn có muốn mở trang tường thuật sự cố không\?</string>
     <string name="send_bug_report_progress">Tiến độ (%s%%)</string>
-    <string name="send_bug_report_include_crash_logs">Gửi bản tường thuật sự cố</string>
-    <string name="send_bug_report_include_logs">Gửi bản tường thuật</string>
+    <string name="send_bug_report_include_crash_logs">Gửi nhật ký dừng đột ngột</string>
+    <string name="send_bug_report_include_logs">Gửi nhật ký</string>
     <string name="auth_submit">Gửi</string>
+    <string name="startup_notification_fdroid_battery_optim_title">Kết nối trong nền</string>
+    <string name="startup_notification_privacy_button_other">Chọn tuỳ chọn khác</string>
+    <string name="startup_notification_privacy_button_grant">Cấp quyền</string>
+    <string name="settings_discovery_manage">Quản lý cài đặt khám phá của bạn.</string>
+    <string name="settings_discovery_category">Khám phá</string>
+    <string name="settings_deactivate_my_account">Vô hiệu hoá tài khoản của tôi</string>
+    <string name="settings_deactivate_account_section">Vô hiệu hoá tài khoản</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Máy chủ khớp với %s đã bị xoá khỏi danh sách được cho phép.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Máy chủ khớp với %s bây giờ sẽ được cho phép.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Máy chủ khớp với %s đã được xoá khỏi danh sách cấm.</string>
+    <string name="notice_room_server_acl_updated_banned">• Máy chủ khớp với %s bây giờ sẽ bị cấm.</string>
+    <string name="template_re_authentication_default_confirm_text">${app_name} yêu cầu bạn nhập thông tin của bạn để thực hiện hành động này.</string>
+    <string name="re_authentication_activity_title">Cần xác thực lại</string>
+    <string name="call_transfer_users_tab_title">Người dùng</string>
+    <string name="call_transfer_failure">Đã xảy ra lỗi khi đang chuyển cuộc gọi</string>
+    <string name="call_transfer_title">Chuyển</string>
+    <string name="call_transfer_connect_action">Kết nối</string>
+    <string name="a11y_error_some_message_not_sent">Một số tin nhắn chưa được gửi</string>
+    <string name="a11y_unsent_draft">Phòng này có bản nháp chưa được gửi</string>
+    <string name="a11y_delete_avatar">Xoá ảnh đại diện</string>
+    <string name="a11y_change_avatar">Thay đổi ảnh đại diện</string>
+    <string name="a11y_image">Hình ảnh</string>
+    <string name="authentication_error">Xác thực thất bại</string>
+    <string name="a11y_video">Video</string>
+    <string name="a11y_error_message_not_sent">Tin nhắn không được gửi vì có lỗi</string>
+    <string name="a11y_close_emoji_picker">Đóng trình chọn Emoji</string>
+    <string name="a11y_open_emoji_picker">Mở trình chọn Emoji</string>
+    <string name="a11y_trust_level_trusted">Cấp độ tin tưởng đã tin tưởng</string>
+    <string name="a11y_trust_level_warning">Cấp độ tin tưởng cảnh báo</string>
+    <string name="a11y_trust_level_default">Cấp độ tin tưởng mặc định</string>
+    <string name="a11y_selected">Đã chọn</string>
+    <string name="dev_tools_send_custom_event">Gửi sự kiện tuỳ chỉnh</string>
+    <string name="dev_tools_explore_room_state">Khám phá trạng thái phòng</string>
+    <string name="dev_tools_menu_name">Công cụ phát triển</string>
+    <string name="a11y_view_read_receipts">Xem xác nhận đã đọc</string>
+    <string name="a11y_rule_notify_off">Không thông báo</string>
+    <string name="a11y_rule_notify_silent">Thông báo không có âm thanh</string>
+    <string name="a11y_rule_notify_noisy">Thông báo có âm thanh</string>
+    <string name="dev_tools_error_no_content">Không có nội dung</string>
+    <string name="event_status_cancel_sending_dialog_message">Bạn có muốn huỷ việc gửi tin nhắn không\?</string>
+    <string name="event_status_a11y_delete_all">Xoá tất cả tin nhắn bị thất bại</string>
+    <string name="event_status_a11y_failed">Thất bại</string>
+    <string name="event_status_a11y_sent">Đã gửi</string>
+    <string name="event_status_a11y_sending">Đang gửi</string>
+    <string name="medium_phone_number">Số điện thoại</string>
+    <string name="medium_email">Địa chỉ email</string>
+    <string name="room_error_join_failed_empty_room">Hiện tại chưa thể tham gia lại phòng trống.</string>
+    <string name="matrix_error">Lỗi Matrix</string>
+    <string name="notice_power_level_changed">%1$s đã thay đổi cấp độ quyền lực của %2$s.</string>
+    <string name="notice_power_level_changed_by_you">Bạn đã thay đổi cấp độ quyền lực của %1$s.</string>
+    <string name="network_error">Lỗi mạng</string>
+    <string name="message_failed_to_upload">Tải hình ảnh lên thất bại</string>
+    <string name="unable_to_send_message">Không thể gửi tin nhắn</string>
+    <string name="could_not_redact">Không thể rút lại</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Thiết bị của người gửi chưa gửi cho chúng tôi mã khoá cho tin nhắn này.</string>
+    <string name="notice_crypto_unable_to_decrypt">** Không thể giải mã: %s **</string>
+    <string name="notice_power_level_diff">%1$s từ %2$s thành %3$s</string>
+    <string name="power_level_custom_no_value">Tuỳ chỉnh</string>
+    <string name="power_level_custom">Tuỳ chỉnh (%1$d)</string>
+    <string name="power_level_default">Mặc định</string>
+    <string name="power_level_moderator">Người điều hành</string>
+    <string name="power_level_admin">Quản trị viên</string>
+    <string name="notice_widget_jitsi_modified_by_you">Bạn đã sửa đổi buổi hội thảo video</string>
+    <string name="notice_widget_jitsi_modified">Buổi hội thảo video đã được %1$s sửa đổi</string>
+    <string name="notice_widget_jitsi_removed_by_you">Bạn đã kết thúc buổi hội thảo video</string>
+    <string name="notice_widget_jitsi_removed">Buổi hội thảo video đã được %1$s kết thúc</string>
+    <string name="notice_widget_jitsi_added_by_you">Bạn đã bắt đầu buổi hội thảo video</string>
+    <string name="notice_widget_jitsi_added">Buổi hội thảo video đã được %1$s bắt đầu</string>
+    <string name="notice_widget_modified_by_you">Bạn đã sửa đổi %1$s tiện ích</string>
+    <string name="notice_widget_modified">%1$s đã sửa đổi %2$s tiện ích</string>
+    <string name="notice_widget_removed_by_you">Bạn đã xoá %1$s tiện ích</string>
+    <string name="notice_widget_removed">%1$s đã xoá %2$s tiện ích</string>
+    <string name="notice_widget_added_by_you">Bạn đã thêm %1$s tiện ích</string>
+    <string name="notice_widget_added">%1$s đã thêm %2$s tiện ích</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Bạn đã chấp nhận lời mời đến %1$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s đã chấp nhận lời mời đến %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Bạn đã thu hồi lời mời đến %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s đã thu hồi lời mời đến %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Bạn đã thu hồi lời mời đến %1$s để tham gia phòng</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s đã thu hồi lời mời đến %2$s để tham gia phòng</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Bạn đã mời %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s đã mời %2$s</string>
+    <string name="notice_room_third_party_invite_by_you">Bạn đã gửi lời mời đến %1$s để tham gia phòng</string>
+    <string name="notice_room_third_party_invite">%1$s đã gửi lời mời đến %2$s để tham gia phòng</string>
+    <string name="notice_event_redacted_by_with_reason">Tin nhắn đã bị %1$s xoá [lý do: %2$s]</string>
+    <string name="notice_event_redacted_with_reason">Tin nhắn đã bị xoá [lý do: %1$s]</string>
+    <string name="notice_event_redacted_by">Tin nhắn đã bị %1$s xoá</string>
+    <string name="notice_event_redacted">Tin nhắn đã bị xoá</string>
+    <string name="notice_room_avatar_removed_by_you">Bạn đã xoá ảnh đại diện của phòng</string>
+    <string name="notice_room_avatar_removed">%1$s đã xoá ảnh đại diện của phòng</string>
+    <string name="notice_room_topic_removed_by_you">Bạn đã xoá chủ đề của phòng</string>
+    <string name="notice_room_topic_removed">%1$s đã xoá chủ đề của phòng</string>
+    <string name="notice_room_name_removed_by_you">Bạn đã xoá tên phòng</string>
+    <string name="notice_room_name_removed">%1$s đã xoá tên phòng</string>
+    <string name="notice_avatar_changed_too">(ảnh đại diện cũng được thay đổi)</string>
+    <string name="notice_voip_finished">Buổi hội thảo VoIP đã hoàn thành</string>
+    <string name="notice_voip_started">Buổi hội thảo VoIP đã bắt đầu</string>
+    <string name="notice_requested_voip_conference_by_you">Bạn đã yêu cầu một buổi hội thảo VoIP</string>
+    <string name="notice_requested_voip_conference">%1$s đã yêu cầu một buổi hội thảo VoIP</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Tất cả máy chủ bị cấm không được tham gia! Phòng này không thể được sử dụng nữa.</string>
+    <string name="notice_room_server_acl_updated_no_change">Không có thay đổi.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Bạn đã thay đổi ACL máy chủ cho phòng này.</string>
+    <string name="notice_room_server_acl_updated_title">%s đã thay đổi ACL máy chủ cho phòng này.</string>
+    <string name="notice_room_server_acl_set_allowed">• Máy chủ khớp với %s được cho phép.</string>
+    <string name="notice_room_server_acl_set_banned">• Máy chủ khớp với %s bị cấm.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Bạn đã đặt ACL máy chủ cho phòng này.</string>
+    <string name="notice_room_server_acl_set_title">%s đã đặt ACL máy chủ cho phòng này.</string>
+    <string name="notice_direct_room_update_by_you">Bạn đã nâng cấp ở đây.</string>
+    <string name="notice_direct_room_update">%s đã nâng cấp ở đây.</string>
+    <string name="notice_room_update_by_you">Bạn đã nâng cấp phòng này.</string>
+    <string name="notice_room_update">%s đã nâng cấp phòng này.</string>
+    <string name="notice_end_to_end_by_you">Bạn đã bật mã hoá đầu cuối (%1$s)</string>
+    <string name="notice_end_to_end">%1$s đã bật mã hoá đầu cuối (%2$s)</string>
+    <string name="notice_room_visibility_unknown">không xác định (%s).</string>
+    <string name="notice_room_visibility_world_readable">bất kỳ ai.</string>
+    <string name="notice_room_visibility_shared">tất cả thành viên phòng.</string>
+    <string name="notice_room_visibility_joined">tất cả thành viên phòng, từ lúc họ tham gia.</string>
+    <string name="notice_room_visibility_invited">tất cả thành viên phòng, từ lúc họ được mời.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Bạn đã làm các tin nhắn trong tương lai có thể được %1$s nhìn thấy</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s đã làm các tin nhắn trong tương lai có thể được %2$s nhìn thấy</string>
+    <string name="notice_made_future_room_visibility_by_you">Bạn đã làm lịch sử phòng trong tương lai có thể được %1$s nhìn thấy</string>
+    <string name="notice_made_future_room_visibility">%1$s đã làm lịch sử phòng trong tương lai có thể được %2$s nhìn thấy</string>
+    <string name="notice_room_ban_by_you">Bạn đã cấm %1$s</string>
+    <string name="notice_room_ban">%1$s đã cấm %2$s</string>
+    <string name="notice_room_unban_by_you">Bạn đã bỏ cấm %1$s</string>
+    <string name="notice_room_unban">%1$s đã bỏ cấm %2$s</string>
+    <string name="notice_display_name_removed_by_you">Bạn đã xoá tên hiển thị (nó đã là %1$s)</string>
+    <string name="notice_display_name_removed">%1$s đã xoá tên hiển thị (nó đã là %2$s)</string>
+    <string name="notice_display_name_changed_from_by_you">Bạn đã đổi tên hiển thị từ %1$s thành %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s đã đổi tên hiển thị từ %2$s thành %3$s</string>
+    <string name="notice_display_name_set_by_you">Bạn đã đặt tên hiển thị thành %1$s</string>
+    <string name="notice_display_name_set">%1$s đã đặt tên hiển thị thành %2$s</string>
+    <string name="notice_avatar_url_changed_by_you">Bạn đã thay đổi ảnh đại diện</string>
+    <string name="notice_avatar_url_changed">%1$s đã thay đổi ảnh đại diện</string>
+    <string name="notice_room_withdraw_by_you">Bạn đã rút lại lời mời của %1$s</string>
+    <string name="notice_room_withdraw">%1$s đã rút lại lời mời của %2$s</string>
+    <string name="room_widget_permission_theme">Chủ đề của bạn</string>
+    <string name="settings_theme">Chủ đề</string>
+    <string name="notice_ended_call_by_you">Bạn đã kết thúc cuộc gọi.</string>
+    <string name="notice_ended_call">%s đã kết thúc cuộc gọi.</string>
+    <string name="notice_answered_call_by_you">Bạn đã trả lời cuộc gọi.</string>
+    <string name="notice_answered_call">%s đã trả lời cuộc gọi.</string>
+    <string name="notice_call_candidates_by_you">Bạn đã gửi dữ liệu để thiết lập cuộc gọi.</string>
+    <string name="notice_call_candidates">%s đã gửi dữ liệu để thiết lập cuộc gọi.</string>
+    <string name="notice_placed_voice_call_by_you">Bạn đã đặt một cuộc gọi thoại.</string>
+    <string name="notice_placed_voice_call">%s đã đặt một cuộc gọi thoại.</string>
+    <string name="notice_placed_video_call_by_you">Bạn đã đặt một cuộc gọi video.</string>
+    <string name="notice_placed_video_call">%s đã đặt một cuộc gọi video.</string>
+    <string name="notice_room_name_changed_by_you">Bạn đã đổi tên phòng thành: %1$s</string>
+    <string name="notice_room_name_changed">%1$s đã đổi tên phòng thành: %2$s</string>
+    <string name="notice_room_avatar_changed_by_you">Bạn đã thay đổi ảnh đại diện của phòng</string>
+    <string name="notice_room_avatar_changed">%1$s đã thay đổi ảnh đại diện của phòng</string>
+    <string name="notice_room_topic_changed">%1$s đã thay đổi chủ đề thành: %2$s</string>
+    <string name="notice_room_topic_changed_by_you">Bạn đã thay đổi chủ đề thành: %1$s</string>
+    <string name="event_status_delete_all_failed_dialog_title">Xoá các tin nhắn chưa được gửi</string>
+    <string name="event_status_delete_all_failed_dialog_message">Bạn có chắc bạn muốn xoá tất cả tin nhắn chưa được gửi trong phòng này không\?</string>
+    <string name="notice_room_kick_by_you">Bạn đã kick %1$s</string>
+    <string name="notice_room_kick">%1$s đã kick %2$s</string>
+    <string name="notice_room_reject_by_you">Bạn đã từ chối lời mời</string>
+    <string name="notice_room_reject">%1$s đã từ chối lời mời</string>
+    <string name="notice_direct_room_leave_by_you">Bạn đã rời phòng</string>
+    <string name="notice_direct_room_leave">%1$s đã rời phòng</string>
+    <string name="notice_room_leave_by_you">Bạn đã rời phòng</string>
+    <string name="notice_room_leave">%1$s đã rời phòng</string>
+    <string name="notice_direct_room_join_by_you">Bạn đã tham gia</string>
+    <string name="notice_direct_room_join">%1$s đã tham gia</string>
+    <string name="notice_room_join_by_you">Bạn đã tham gia phòng</string>
+    <string name="notice_room_join">%1$s đã tham gia phòng</string>
+    <string name="notice_room_invite_you">%1$s đã mời bạn</string>
+    <string name="notice_room_invite_by_you">Bạn đã mời %1$s</string>
+    <string name="notice_room_invite">%1$s đã mời %2$s</string>
+    <string name="notice_direct_room_created_by_you">Bạn đã tạo cuộc thảo luận</string>
+    <string name="notice_direct_room_created">%1$s đã tạo cuộc thảo luận</string>
+    <string name="notice_room_created_by_you">Bạn đã tạo phòng</string>
+    <string name="notice_room_created">%1$s đã tạo phòng</string>
+    <string name="notice_room_invite_no_invitee_by_you">Lời mời của bạn</string>
+    <string name="notice_room_invite_no_invitee">Lời mời của %s</string>
+    <string name="summary_you_sent_sticker">Bạn đã gửi một sticker.</string>
+    <string name="summary_user_sent_sticker">%1$s đã gửi một sticker.</string>
+    <string name="summary_you_sent_image">Bạn đã gửi một hình ảnh.</string>
+    <string name="summary_user_sent_image">%1$s đã gửi một hình ảnh.</string>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="notice_profile_change_redacted_by_you">Bạn đã cập nhật hồ sơ của bạn %1$s</string>
+    <string name="notice_profile_change_redacted">%1$s đã cập nhật hồ sơ của họ %2$s</string>
+    <string name="invite_just_to_this_room_desc">Họ sẽ không ở trong %s</string>
+    <string name="invite_just_to_this_room">Chỉ vào phòng này</string>
+    <string name="invite_to_space_with_name_desc">Họ sẽ có thể khám phá %s</string>
+    <string name="invite_to_space_with_name">Mời vào %s</string>
+    <string name="invite_by_link">Chia sẻ liên kết</string>
+    <string name="room_alias_preview_not_found">Bí danh này không truy cập được vào lúc này.
+\nHãy thử lại sau, hoặc yêu cầu một quản trị viên của phòng kiểm tra xem bạn có quyền truy cập không.</string>
+    <string name="join_anyway">Vẫn tham gia</string>
+    <string name="disclaimer_positive_button">TÌM HIỂU THÊM</string>
+    <string name="disclaimer_negative_button">HIỂU RỒI</string>
+    <string name="disclaimer_content">Chúng tôi rất háo hức muốn tuyên bố rằng chúng tôi đã đổi tên! Ứng dụng của bạn đã được cập nhật và bạn đã đăng nhập vào tài khoản của bạn.</string>
+    <string name="disclaimer_title">Riot bây giờ là Element!</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Đang đợi lịch sử mã hoá</string>
+    <string name="crypto_error_withheld_generic">Bạn không thể truy cập tin nhắn này vì người gửi đã cố tình không gửi các mã khoá</string>
+    <string name="crypto_error_withheld_unverified">Bạn không thể truy cập tin nhắn này vì phiên làm việc của bạn không được người gửi tin cậy</string>
+    <string name="crypto_error_withheld_blacklisted">Bạn không thể truy cập tin nhắn này vì bạn đã bị người gửi chặn</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Bởi vì mã hoá đầu cuối, bạn có thể sẽ cần đợi tin nhắn của một ai đó đến nơi vì các mã khoá mã hoá đã không được gửi đến bạn một cách đúng.</string>
+    <string name="crypto_utd">Không thể giải mã</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Đang đợi tin nhắn này, việc này có thể mất một lúc</string>
+    <string name="notice_room_leave_with_reason_by_you">Bạn đã rời phòng. Lý do: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s đã rời phòng. Lý do: %2$s</string>
+    <string name="auth_reset_password_email_validation_message">Một email đã được gửi đến %s. Khi bạn đã đi theo liên kết mà email đó chứa, hãy nhấn ở dưới.</string>
+    <string name="auth_reset_password_missing_password">Mật khẩu mới phải được nhập.</string>
+    <string name="auth_reset_password_missing_email">Địa chỉ email được liên kết đến tài khoản của bạn phải được nhập.</string>
+    <string name="auth_reset_password_message">Để đặt lại mật khẩu, hãy nhập địa chỉ email được liên kết đến tài khoản của bạn:</string>
+    <string name="auth_username_in_use">Tên người dùng đã được sử dụng</string>
+    <string name="auth_recaptcha_message">Máy chủ nhà này muốn chắc chắn là bạn không phải rô bốt</string>
+    <string name="auth_threepid_warning_message">Việc đăng ký bằng cả email và số điện thoại ngay một lúc chưa được hỗ trợ cho đến khi api có tồn tại. Chỉ có số điện thoại sẽ được tính đến.
+\n
+\nBạn có thể thêm email vào hồ sơ của bạn trong cài đặt.</string>
+    <string name="auth_use_server_options">Sử dụng tuỳ chọn máy chủ tuỳ chỉnh (nâng cao)</string>
+    <string name="auth_msisdn_already_defined">Số điện thoại này đã được định nghĩa rồi.</string>
+    <string name="auth_email_already_defined">Địa chỉ email này đã được định nghĩa rồi.</string>
+    <string name="auth_login_sso">Đăng nhập bằng đăng nhập một lần</string>
+    <string name="use_as_default_and_do_not_ask_again">Sử dụng làm mặc định và không hỏi lại</string>
+    <string name="option_always_ask">Luôn hỏi</string>
+    <string name="send_files_in">Gửi vào</string>
+    <string name="send_bug_report_logs_description">Để chẩn đoán vấn đề, nhật ký từ ứng dụng này sẽ được gửi cùng với báo cáo lỗi này. Báo cáo lỗi này, bao gồm cả nhật ký và ảnh chụp màn hình, sẽ không thể được nhìn thấy công khai. Nếu bạn muốn chỉ gửi văn bản ở trên, hãy vui lòng bỏ đánh dấu:</string>
+    <string name="spaces_header">Không gian</string>
+    <string name="spaces_invited_header">Lời mời</string>
+    <string name="no_public_room_placeholder">Không có phòng công khai có sẵn</string>
+    <string name="suggested_header">Phòng được đề xuất</string>
+    <string name="dialog_edit_hint">Giá trị mới</string>
+    <string name="action_return">Quay lại</string>
+    <string name="action_unpublish">Huỷ xuất bản</string>
+    <string name="failed_to_remove_widget">Xoá tiện ích thất bại</string>
+    <string name="failed_to_add_widget">Thêm tiện ích thất bại</string>
+    <string name="review">Xem xét</string>
+    <string name="action_switch">Chuyển</string>
+    <string name="encryption_information_blocked">Đã cho vào danh sách đen</string>
+    <string name="encryption_information_verified">Đã xác minh</string>
+    <string name="encryption_information_not_verified">Chưa xác minh</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="other">Nhập %1$d/%2$d mã khoá thành công.</item>
+    </plurals>
+    <string name="encryption_message_recovery">Phục hồi các tin nhắn được mã hoá</string>
+    <string name="encryption_exported_successfully">Xuất các mã khoá thành công</string>
+    <string name="encryption_export_saved_as">Các mã khoá phòng E2E đã được lưu ra \'%s\'.
+\n
+\nCảnh báo: tệp này có thể bị xoá nếu ứng dụng bị gỡ cài đặt.</string>
+    <string name="encryption_export_notice">Vui lòng tạo một mật khẩu để mã hoá các mã khoá được xuất. Bạn sẽ cần nhập mật khẩu đó để có thể nhập các mã khoá đó.</string>
+    <string name="encryption_export_export">Xuất</string>
+    <string name="encryption_export_room_keys_summary">Xuất các mã khoá ra tệp cục bộ</string>
+    <string name="encryption_export_room_keys">Xuất các mã khoá phòng</string>
+    <string name="encryption_export_e2e_room_keys">Xuất các mã khoá phòng E2E</string>
+    <string name="encryption_information_ed25519_fingerprint">Mã kiểm tra Ed25519</string>
+    <string name="encryption_information_verification">Xác minh</string>
+    <string name="encryption_import_import">Nhập</string>
+    <string name="encryption_import_room_keys_summary">Nhập các mã khoá từ tệp cục bộ</string>
+    <string name="encryption_import_room_keys">Nhập các mã khoá phòng</string>
+    <string name="encryption_import_e2e_room_keys">Nhập các mã khoá phòng E2E</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Quản lý bản sao lưu mã khoá</string>
+    <string name="encryption_information_none">không có</string>
+    <string name="encryption_information_unknown_ip">ip không xác định</string>
+    <string name="encryption_information_unknown_device">phiên làm việc không xác định</string>
+    <string name="directory_server_fail_to_retrieve_server">Máy chủ có thể là không có sẵn hoặc bị quá tải</string>
+    <string name="unknown_devices_alert_message">Phòng này chứa các phiên làm việc không xác định chưa được xác minh.
+\nĐiều này có nghĩa là không có bảo đảm rằng các phiên làm việc đó thuộc về những người dùng mà chúng nói rằng chúng thuộc về họ.
+\nChúng tôi khuyên bạn thực hiện quá trình xác minh cho mỗi phiên làm việc trước khi tiếp tục, nhưng bạn có thể gửi lại tin nhắn mà không xác minh nếu bạn muốn.
+\n
+\nCác phiên làm việc không xác định:</string>
+    <string name="unknown_devices_alert_title">Phòng chứa các phiên làm việc không xác định</string>
+    <string name="encryption_information_verify_key_match">Tôi xác minh rằng các mã khoá có trùng khớp</string>
+    <string name="encryption_information_verify_device_warning2">Nếu chúng không khớp, sự bảo mật của việc giao tiếp của bạn có thể bị can thiệp.</string>
+    <string name="encryption_information_verify_device_warning">Xác nhận bằng cách so sánh những điều sau đây với Cài đặt người dùng trong phiên làm việc kia của bạn:</string>
+    <string name="encryption_information_verify_device">Xác minh phiên làm việc</string>
+    <string name="encryption_information_unblock">Xoá khỏi danh sách đen</string>
+    <string name="encryption_information_block">Cho vào danh sách đen</string>
+    <string name="encryption_information_unverify">Huỷ xác minh</string>
+    <string name="encryption_information_verify">Xác minh</string>
+    <string name="hs_url">URL máy chủ nhà</string>
+    <string name="action_historical">Lịch sử</string>
+    <string name="room_participants_leave_prompt_msg">Bạn có chắc bạn muốn rời khỏi phòng không\?</string>
+    <string name="room_participants_leave_prompt_title">Rời khỏi phòng</string>
+    <plurals name="format_time_d">
+        <item quantity="other">%d ngày</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="other">%d tiếng</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="other">%d phút</item>
+    </plurals>
+    <plurals name="format_time_s">
+        <item quantity="other">%d giây</item>
+    </plurals>
+    <string name="room_title_one_member">1 thành viên</string>
+    <plurals name="room_title_members">
+        <item quantity="other">%d thành viên</item>
+    </plurals>
+    <plurals name="room_header_active_members_count">
+        <item quantity="other">%d thành viên hoạt động</item>
+    </plurals>
+    <string name="room_creation_add_member">Thêm thành viên</string>
+    <string name="room_creation_title">Trò chuyện mới</string>
+    <string name="invite_no_identity_server_error">Thêm một máy chủ danh tính trong cài đặt của bạn để thực hiện hành động này.</string>
+    <string name="room_preview_room_interactions_disabled">Đây là một bản xem trước của phòng này. Các sự tương tác phòng đã bị tắt.</string>
+    <string name="room_preview_try_join_an_unknown_room_default">một phòng</string>
+    <string name="room_preview_try_join_an_unknown_room">Bạn đang cố truy cập %s. Bạn có muốn tham gia để tham dự vào cuộc thảo luận không\?</string>
+    <string name="room_preview_unlinked_email_warning">Lời mời này đã được gửi đến %s, nó không được liên kết với tài khoản này.
+\nBạn có thể muốn đăng nhập bằng một tài khoản khác, hoặc thêm email này vào tài khoản của bạn.</string>
+    <string name="room_preview_invitation_format">Bạn đã được %s mời tham gia phòng này</string>
+    <string name="room_jump_to_first_unread">Nhảy đến tin nhắn chưa đọc đầu tiên.</string>
+    <string name="room_sync_in_progress">Đang đồng bộ…</string>
+    <string name="open_chat_header">Mở tiêu đề</string>
+    <string name="list_members">Liệt kê các thành viên</string>
+    <string name="reject">Từ chối</string>
+    <string name="preview">Xem trước</string>
+    <string name="join">Tham gia</string>
+    <string name="remove">Xoá</string>
+    <string name="_continue">Tiếp tục</string>
+    <string name="no">KHÔNG</string>
+    <string name="yes">CÓ</string>
+    <string name="media_slider_saved_message">Lưu vào mục tải xuống\?</string>
+    <string name="media_slider_saved">Đã lưu</string>
+    <string name="permissions_denied_add_contact">Cho phép quyền truy cập danh bạ của bạn.</string>
+    <string name="permissions_denied_qr_code">Để quét mã QR, bạn cần cho phép quyền truy cập máy ảnh.</string>
+    <string name="permissions_action_not_performed_missing_permissions">Xin lỗi. Hành động không được thực hiện do thiếu quyền</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} có thể kiểm tra sổ địa chỉ của bạn để tìm những người dùng Matrix khác dựa trên email và số điện thoại của họ.
+\n
+\nBạn có đồng ý chia sẻ sổ địa chỉ của bạn vì mục đích này không\?</string>
+    <string name="template_permissions_rationale_msg_contacts">${app_name} có thể kiểm tra sổ địa chỉ của bạn để tìm những người dùng Matrix khác dựa trên email và số điện thoại của họ. Nếu bạn đồng ý chia sẻ sổ địa chỉ vì mục đích này, vui lòng cho phép quyền truy cập trên cửa sổ popup tiếp theo.</string>
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} cần quyền truy cập máy ảnh và micro của bạn để thực hiện các cuộc gọi video.
+\n
+\nVui lòng cho phép quyền truy cập trên các cửa sổ popup tiếp theo để có thể thực hiện cuộc gọi.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nVui lòng cho phép quyền truy cập trên cửa sổ popup tiếp theo để có thể thực hiện cuộc gọi."</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} cần quyền truy cập micro của bạn để thực hiện các cuộc gọi âm thanh.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nVui lòng cho phép quyền truy cập trên cửa sổ popup tiếp theo để có thể thực hiện cuộc gọi."</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} cần quyền truy cập máy ảnh để chụp ảnh và thực hiện các cuộc gọi video.</string>
+    <string name="template_permissions_rationale_msg_storage">${app_name} cần quyền truy cập thư viện ảnh và video của bạn để gửi và lưu các tệp đính kèm.
+\n
+\nVui lòng cho phép quyền truy cập trên cửa sổ popup tiếp theo để có thể gửi các tệp từ điện thoại của bạn.</string>
+    <string name="permissions_rationale_popup_title">Thông tin</string>
+    <string name="media_picker_cannot_record_video">Không thể quay video</string>
+    <string name="media_picker_both_capture_title">Chụp ảnh hoặc quay video</string>
+    <string name="call_error_answered_elsewhere">cuộc gọi đã được trả lời ở nơi khác</string>
+    <string name="call_error_camera_init_failed">Không thể khởi tạo máy ảnh</string>
+    <string name="call_error_ice_failed">Kết nối phương tiện thất bại</string>
+    <string name="call_error_user_not_responding">Bên ở xa không thể nhấc máy.</string>
+    <string name="call_hold_action">Giữ máy</string>
+    <string name="call_held_by_you">Bạn đã giữ máy</string>
+    <string name="call_held_by_user">%s đã giữ máy</string>
+    <string name="call_resume_action">Tiếp tục</string>
+    <string name="return_to_call">Quay về cuộc gọi</string>
+    <string name="active_call_with_duration">Cuộc gọi đang hoạt động (%s)</string>
+    <string name="video_call_in_progress">Cuộc gọi video đang diễn ra…</string>
+    <string name="call_in_progress">Cuộc gọi đang diễn ra…</string>
+    <string name="incoming_voice_call">Cuộc gọi thoại đến</string>
+    <string name="incoming_video_call">Cuộc gọi video đến</string>
+    <string name="incoming_call">Cuộc gọi đến</string>
+    <string name="call_ring">Đang gọi…</string>
+    <string name="call_ended">Cuộc gọi đã kết thúc</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Sẽ sử dụng %s làm hỗ trợ khi máy chủ nhà không có một máy chủ (địa chỉ IP của bạn sẽ được chia sẻ trong cuộc gọi)</string>
+    <string name="settings_call_ringtone_use_default_stun">Cho phép máy chủ hỗ trợ cuộc gọi dự phòng</string>
+    <string name="settings_call_category">Cuộc gọi</string>
+    <string name="yesterday">Hôm qua</string>
+    <string name="attachment_remaining_time_minutes">%1$d phút %2$d giây</string>
+    <string name="attachment_remaining_time_seconds">%d giây</string>
+    <string name="attachment_cancel_upload">Huỷ tải lên\?</string>
+    <string name="attachment_cancel_download">Huỷ tải xuống\?</string>
+    <string name="compression_opt_list_small">Nhỏ</string>
+    <string name="compression_opt_list_medium">Trung bình</string>
+    <string name="compression_opt_list_large">Lớn</string>
+    <string name="compression_opt_list_original">Nguyên gốc</string>
+    <string name="compression_options">Gửi dưới dạng</string>
+    <plurals name="membership_changes">
+        <item quantity="other">%d thay đổi thành viên</item>
+    </plurals>
+    <string name="groups_list">Danh sách nhóm</string>
+    <string name="read_receipts_list">Danh sách xác nhận đã đọc</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Vui lòng khởi chạy ${app_name} trên một thiết bị khác mà có thể giải mã tin nhắn để nó có thể gửi các mã khoá vào phiên làm việc này.</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">Đã gửi yêu cầu</string>
+    <string name="e2e_re_request_encryption_key_sent">Đã gửi yêu cầu mã khoá.</string>
+    <string name="e2e_re_request_encryption_key">Yêu cầu lại các mã khoá mã hoá từ các phiên làm việc khác của bạn.</string>
+    <string name="login_error_login_email_not_yet">Liên kết email mà chưa được nhấn vào</string>
+    <string name="login_error_limit_exceeded">Quá nhiều yêu cầu đã được gửi</string>
+    <string name="login_error_not_json">Đã không chứa JSON hợp lệ</string>
+    <string name="login_error_unknown_token">Token truy cập được chỉ định đã không được nhận ra</string>
+    <string name="error_unauthorized">Không được uỷ quyền, thiếu thông tin xác thực hợp lệ</string>
+    <string name="login_error_homeserver_not_found">Không thể kết nối đến máy chủ nhà tại URL này, vui lòng kiểm tra nó</string>
+    <string name="login_error_invalid_home_server">Vui lòng nhập URL hợp lệ</string>
+    <string name="login_error_unable_register_mail_ownership">Không thể đăng ký: lỗi sở hữu email</string>
+    <string name="auth_accept_policies">Vui lòng xem xét và chấp nhận chính sách của máy chủ nhà này:</string>
+    <string name="auth_reset_password_success_message">Mật khẩu của bạn đã được đặt lại.
+\n
+\nBạn đã bị đăng xuất ra khỏi tất cả phiên làm việc và sẽ không nhận thông báo đẩy nữa. Để bật lại thông báo, hãy đăng nhập lại trên mỗi thiết bị.</string>
+    <string name="auth_reset_password_error_unauthorized">Xác minh địa chỉ email thất bại: hãy chắc chắn là bạn đã nhấn vào liên kết trong email</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Hiện tất cả phòng trong thư mục phòng, bao gồm cả các phòng có nội dung phản cảm.</string>
+    <string name="settings_room_directory_show_all_rooms">Hiện các phòng có nội dung phản cảm</string>
+    <string name="settings_category_room_directory">Thư mục phòng</string>
+    <string name="system_theme">Mặc định hệ thống</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Bạn đã bật mã hoá đầu cuối (thuật toán không được nhận ra %1$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s đã bật mã hoá đầu cuối (thuật toán không được nhận ra %2$s).</string>
+    <string name="notice_end_to_end_ok_by_you">Bạn đã bật mã hoá đầu cuối.</string>
+    <string name="notice_end_to_end_ok">%1$s đã bật mã hoá đầu cuối.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Bạn đã ngăn chặn khách tham gia phòng.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s đã ngăn chặn khách tham gia phòng.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Bạn đã ngăn chặn khách tham gia phòng.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s đã ngăn chặn khách tham gia phòng.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Bạn đã cho phép khách tham gia vào đây.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s đã cho phép khách tham gia vào đây.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Bạn đã cho phép khách tham gia phòng.</string>
+    <string name="notice_room_guest_access_can_join">%1$s đã cho phép khách tham gia phòng.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Bạn đã thay đổi các địa chỉ cho phòng này.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s đã thay đổi các địa chỉ cho phòng này.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Bạn đã thay đổi các địa chỉ chính và thay thế cho phòng này.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s đã thay đổi các địa chỉ chính và thay thế cho phòng này.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Bạn đã thay đổi các địa chỉ thay thế cho phòng này.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s đã thay đổi các địa chỉ thay thế cho phòng này.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="other">Bạn đã xoá các địa chỉ thay thế %1$s cho phòng này.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="other">%1$s đã xoá các địa chỉ thay thế %2$s cho phòng này.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="other">Bạn đã thêm các địa chỉ thay thế %1$s cho phòng này.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="other">%1$s đã thêm các địa chỉ thay thế %2$s cho phòng này.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset_by_you">Bạn đã xoá địa chỉ chính cho phòng này.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s đã xoá địa chỉ chính cho phòng này.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Bạn đã đặt địa chỉ chính cho phòng này thành %1$s.</string>
+    <string name="notice_room_canonical_alias_set">%1$s đã đặt địa chỉ chính cho phòng này thành %2$s.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Bạn đã thêm %1$s và xoá %2$s với tư cách là các địa chỉ cho phòng này.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s đã thêm %2$s và xoá %3$s với tư cách là các địa chỉ cho phòng này.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="other">Bạn đã xoá %1$s với tư cách là các địa chỉ cho phòng này.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="other">%1$s đã xoá %2$s với tư cách là các địa chỉ cho phòng này.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="other">Bạn đã thêm %1$s làm các địa chỉ cho phòng này.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="other">%1$s đã thêm %2$s làm các địa chỉ cho phòng này.</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">Bạn đã rút lại lời mời của %1$s. Lý do: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s đã rút lại lời mời của %2$s. Lý do: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Bạn đã chấp nhận lời mời đối với %1$s. Lý do: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s đã chấp nhận lời mời đối với %2$s. Lý do: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Bạn đã thu hồi lời mời để %1$s tham gia phòng. Lý do: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s đã thu hồi lời mời để %2$s tham gia phòng. Lý do: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Bạn đã gửi lời mời đến %1$s để tham gia phòng. Lý do: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s đã gửi lời mời đến %2$s để tham gia phòng. Lý do: %3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Bạn đã cấm %1$s. Lý do: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s đã cấm %2$s. Lý do: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Bạn đã bỏ cấm %1$s. Lý do: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s đã bỏ cấm %2$s. Lý do: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Bạn đã đá %1$s. Lý do: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s đã đá %2$s. Lý do: %3$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Bạn đã từ chối lời mời. Lý do: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s đã từ chối lời mời. Lý do: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Bạn đã rời đi. Lý do: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s đã rời đi. Lý do: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Bạn đã tham gia. Lý do: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s đã tham gia. Lý do: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Bạn đã tham gia phòng. Lý do: %1$s</string>
+    <string name="notice_room_join_with_reason">%1$s đã tham gia phòng. Lý do: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s đã mời bạn. Lý do: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Bạn đã mời %1$s. Lý do: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s đã mời %2$s. Lý do: %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Lời mời của bạn. Lý do: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Lời mời của %1$s. Lý do: %2$s</string>
+    <string name="clear_timeline_send_queue">Xoá hàng chờ gửi</string>
+    <string name="event_status_sending_message">Đang gửi tin nhắn…</string>
+    <string name="event_status_sent_message">Đã gửi tin nhắn</string>
+    <string name="initial_sync_start_importing_account_data">Đồng bộ ban đầu:
+\nĐang nhập dữ liệu tài khoản</string>
+    <string name="initial_sync_start_importing_account_groups">Đồng bộ ban đầu:
+\nĐang nhập các cộng đồng</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Đồng bộ ban đầu:
+\nĐang nhập các phòng đã rời khỏi</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Đồng bộ ban đầu:
+\nĐang nhập các phòng đã mời vào</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Đồng bộ ban đầu:
+\nĐang nhập các phòng đã tham gia</string>
+    <string name="initial_sync_start_importing_account_rooms">Đồng bộ ban đầu:
+\nĐang nhập các phòng</string>
+    <string name="initial_sync_start_importing_account_crypto">Đồng bộ ban đầu:
+\nĐang nhập mã hoá</string>
+    <string name="initial_sync_start_importing_account">Đồng bộ ban đầu:
+\nĐang nhập tài khoản…</string>
+    <string name="initial_sync_start_downloading">Đồng bộ ban đầu:
+\nĐang tải xuống dữ liệu…</string>
+    <string name="initial_sync_start_server_computing">Đồng bộ ban đầu:
+\nĐang đợi phản hồi từ máy chủ…</string>
+    <string name="room_displayname_empty_room_was">Phòng trống (đã là %s)</string>
+    <string name="room_displayname_empty_room">Phòng trống</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="other">%1$s và %2$d người khác</item>
+    </plurals>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="other">%1$s, %2$s, %3$s và %4$d người khác</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s và %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s và %3$s</string>
+    <string name="room_displayname_two_members">%1$s và %2$s</string>
+    <string name="room_displayname_room_invite">Lời mời vào phòng</string>
+    <string name="room_displayname_invite_from">Lời mời từ %s</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Máy chủ khớp với IP bây giờ sẽ bị cấm.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Máy chủ khớp với IP bây giờ sẽ được cho phép.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Máy chủ khớp với IP bị cấm.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Máy chủ khớp với IP được cho phép.</string>
 </resources>

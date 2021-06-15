@@ -29,15 +29,14 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsFilter
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
-import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
@@ -87,7 +86,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
                     val joinedRoomIds = list
                             ?.map { it.roomId }
                             ?.toSet()
-                            ?: emptySet()
+                            .orEmpty()
 
                     setState {
                         copy(joinedRoomsIds = joinedRoomIds)
@@ -183,7 +182,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
                         )
                 )
             } catch (failure: Throwable) {
-                if (failure is Failure.Cancelled) {
+                if (failure is CancellationException) {
                     // Ignore, another request should be already started
                     return@launch
                 }
@@ -230,9 +229,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
         }
-        val viaServers = state.roomDirectoryData.homeServer
-                ?.let { listOf(it) }
-                .orEmpty()
+        val viaServers = listOfNotNull(state.roomDirectoryData.homeServer)
         viewModelScope.launch {
             try {
                 session.joinRoom(action.roomId, viaServers = viaServers)

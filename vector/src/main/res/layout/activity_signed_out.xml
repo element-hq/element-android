@@ -4,7 +4,7 @@
     android:id="@+id/signedOut"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView
         style="@style/LoginFormScrollView"
@@ -30,7 +30,7 @@
                 android:text="@string/signed_out_notice"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/signedOutSubmit"
                 style="@style/Style.Vector.Login.Button"
                 android:layout_width="wrap_content"

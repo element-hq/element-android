@@ -22,18 +22,23 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formAdvancedToggleItem
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.banOrDefault
+import org.matrix.android.sdk.api.session.room.model.eventsDefaultOrDefault
+import org.matrix.android.sdk.api.session.room.model.inviteOrDefault
+import org.matrix.android.sdk.api.session.room.model.kickOrDefault
+import org.matrix.android.sdk.api.session.room.model.redactOrDefault
+import org.matrix.android.sdk.api.session.room.model.stateDefaultOrDefault
+import org.matrix.android.sdk.api.session.room.model.usersDefaultOrDefault
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import javax.inject.Inject
 
 class RoomPermissionsController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val roleFormatter: RoleFormatter,
-        colorProvider: ColorProvider
+        private val roleFormatter: RoleFormatter
 ) : TypedEpoxyController<RoomPermissionsViewState>() {
 
     interface Callback {
@@ -42,8 +47,6 @@ class RoomPermissionsController @Inject constructor(
     }
 
     var callback: Callback? = null
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     // Order is the order applied in the UI
     // Element Web order is not really nice, try to put the settings which are more likely to be updated first
@@ -81,6 +84,7 @@ class RoomPermissionsController @Inject constructor(
     }
 
     override fun buildModels(data: RoomPermissionsViewState?) {
+        val host = this
         buildProfileSection(
                 stringProvider.getString(R.string.room_permissions_title)
         )
@@ -90,17 +94,18 @@ class RoomPermissionsController @Inject constructor(
             else       -> {
                 loadingItem {
                     id("loading")
-                    loadingText(stringProvider.getString(R.string.loading))
+                    loadingText(host.stringProvider.getString(R.string.loading))
                 }
             }
         }
     }
 
     private fun buildPermissions(data: RoomPermissionsViewState, content: PowerLevelsContent) {
+        val host = this
         val editable = data.actionPermissions.canChangePowerLevels
         settingsInfoItem {
             id("notice")
-            helperText(stringProvider.getString(if (editable) R.string.room_permissions_notice else R.string.room_permissions_notice_read_only))
+            helperText(host.stringProvider.getString(if (editable) R.string.room_permissions_notice else R.string.room_permissions_notice_read_only))
         }
 
         // Useful permissions
@@ -109,9 +114,9 @@ class RoomPermissionsController @Inject constructor(
         // Toggle
         formAdvancedToggleItem {
             id("showAdvanced")
-            title(stringProvider.getString(if (data.showAdvancedPermissions) R.string.hide_advanced else R.string.show_advanced))
+            title(host.stringProvider.getString(if (data.showAdvancedPermissions) R.string.hide_advanced else R.string.show_advanced))
             expanded(!data.showAdvancedPermissions)
-            listener { callback?.toggleShowAllPermissions() }
+            listener { host.callback?.toggleShowAllPermissions() }
         }
 
         // Advanced permissions
@@ -126,7 +131,6 @@ class RoomPermissionsController @Inject constructor(
                 id = editablePermission.labelResId.toString(),
                 title = stringProvider.getString(editablePermission.labelResId),
                 subtitle = roleFormatter.format(currentRole),
-                dividerColor = dividerColor,
                 divider = true,
                 editable = editable,
                 action = {
@@ -139,21 +143,21 @@ class RoomPermissionsController @Inject constructor(
 
     private fun getCurrentRole(editablePermission: EditablePermission, content: PowerLevelsContent): Role {
         val value = when (editablePermission) {
-            is EditablePermission.EventTypeEditablePermission -> content.events[editablePermission.eventType] ?: content.stateDefault
-            is EditablePermission.DefaultRole                 -> content.usersDefault
-            is EditablePermission.SendMessages                -> content.eventsDefault
-            is EditablePermission.InviteUsers                 -> content.invite
-            is EditablePermission.ChangeSettings              -> content.stateDefault
-            is EditablePermission.KickUsers                   -> content.kick
-            is EditablePermission.BanUsers                    -> content.ban
-            is EditablePermission.RemoveMessagesSentByOthers  -> content.redact
+            is EditablePermission.EventTypeEditablePermission -> content.events?.get(editablePermission.eventType) ?: content.stateDefaultOrDefault()
+            is EditablePermission.DefaultRole                 -> content.usersDefaultOrDefault()
+            is EditablePermission.SendMessages                -> content.eventsDefaultOrDefault()
+            is EditablePermission.InviteUsers                 -> content.inviteOrDefault()
+            is EditablePermission.ChangeSettings              -> content.stateDefaultOrDefault()
+            is EditablePermission.KickUsers                   -> content.kickOrDefault()
+            is EditablePermission.BanUsers                    -> content.banOrDefault()
+            is EditablePermission.RemoveMessagesSentByOthers  -> content.redactOrDefault()
             is EditablePermission.NotifyEveryone              -> content.notificationLevel(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY)
         }
 
         return Role.fromValue(
                 value,
                 when (editablePermission) {
-                    is EditablePermission.EventTypeEditablePermission -> content.stateDefault
+                    is EditablePermission.EventTypeEditablePermission -> content.stateDefaultOrDefault()
                     is EditablePermission.DefaultRole                 -> Role.Default.value
                     is EditablePermission.SendMessages                -> Role.Default.value
                     is EditablePermission.InviteUsers                 -> Role.Moderator.value

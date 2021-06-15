@@ -24,7 +24,7 @@
         android:icon="@drawable/ic_video"
         android:title="@string/action_video_call"
         android:visible="false"
-        app:iconTint="@color/riotx_accent"
+        app:iconTint="?colorPrimary"
         app:showAsAction="always"
         tools:visible="true" />
 
@@ -33,7 +33,7 @@
         android:icon="@drawable/ic_phone"
         android:title="@string/call"
         android:visible="false"
-        app:iconTint="@color/riotx_accent"
+        app:iconTint="?colorPrimary"
         app:showAsAction="always"
         tools:visible="true" />
 
@@ -42,7 +42,7 @@
         android:icon="@drawable/ic_call_end"
         android:title="@string/call_notification_hangup"
         android:visible="false"
-        app:iconTint="@color/riotx_destructive_accent"
+        app:iconTint="?colorError"
         app:showAsAction="always"
         tools:visible="true" />
 

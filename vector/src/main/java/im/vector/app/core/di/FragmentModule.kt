@@ -28,11 +28,11 @@ import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragm
 import im.vector.app.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStoragePassphraseFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStorageResetAllFragment
-import im.vector.app.features.crypto.recover.BootstrapReAuthFragment
 import im.vector.app.features.crypto.recover.BootstrapConclusionFragment
 import im.vector.app.features.crypto.recover.BootstrapConfirmPassphraseFragment
 import im.vector.app.features.crypto.recover.BootstrapEnterPassphraseFragment
 import im.vector.app.features.crypto.recover.BootstrapMigrateBackupFragment
+import im.vector.app.features.crypto.recover.BootstrapReAuthFragment
 import im.vector.app.features.crypto.recover.BootstrapSaveRecoveryKeyFragment
 import im.vector.app.features.crypto.recover.BootstrapSetupRecoveryKeyFragment
 import im.vector.app.features.crypto.recover.BootstrapWaitingFragment
@@ -51,7 +51,6 @@ import im.vector.app.features.devtools.RoomDevToolSendFormFragment
 import im.vector.app.features.devtools.RoomDevToolStateEventListFragment
 import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
-import im.vector.app.features.grouplist.GroupListFragment
 import im.vector.app.features.home.HomeDetailFragment
 import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
@@ -72,6 +71,26 @@ import im.vector.app.features.login.LoginSplashFragment
 import im.vector.app.features.login.LoginWaitForEmailFragment
 import im.vector.app.features.login.LoginWebFragment
 import im.vector.app.features.login.terms.LoginTermsFragment
+import im.vector.app.features.login2.LoginCaptchaFragment2
+import im.vector.app.features.login2.LoginFragmentSigninPassword2
+import im.vector.app.features.login2.LoginFragmentSigninUsername2
+import im.vector.app.features.login2.LoginFragmentSignupPassword2
+import im.vector.app.features.login2.LoginFragmentSignupUsername2
+import im.vector.app.features.login2.created.AccountCreatedFragment
+import im.vector.app.features.login2.LoginFragmentToAny2
+import im.vector.app.features.login2.LoginGenericTextInputFormFragment2
+import im.vector.app.features.login2.LoginResetPasswordFragment2
+import im.vector.app.features.login2.LoginResetPasswordMailConfirmationFragment2
+import im.vector.app.features.login2.LoginResetPasswordSuccessFragment2
+import im.vector.app.features.login2.LoginServerSelectionFragment2
+import im.vector.app.features.login2.LoginServerUrlFormFragment2
+import im.vector.app.features.login2.LoginSplashSignUpSignInSelectionFragment2
+import im.vector.app.features.login2.LoginSsoOnlyFragment2
+import im.vector.app.features.login2.LoginWaitForEmailFragment2
+import im.vector.app.features.login2.LoginWebFragment2
+import im.vector.app.features.login2.terms.LoginTermsFragment2
+import im.vector.app.features.matrixto.MatrixToRoomSpaceFragment
+import im.vector.app.features.matrixto.MatrixToUserFragment
 import im.vector.app.features.pin.PinFragment
 import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.reactions.EmojiChooserFragment
@@ -84,11 +103,11 @@ import im.vector.app.features.roommemberprofile.RoomMemberProfileFragment
 import im.vector.app.features.roommemberprofile.devices.DeviceListFragment
 import im.vector.app.features.roommemberprofile.devices.DeviceTrustInfoActionFragment
 import im.vector.app.features.roomprofile.RoomProfileFragment
+import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.app.features.roomprofile.members.RoomMemberListFragment
-import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
-import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
+import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
@@ -117,6 +136,17 @@ import im.vector.app.features.settings.push.PushRulesFragment
 import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
 import im.vector.app.features.share.IncomingShareFragment
 import im.vector.app.features.signout.soft.SoftLogoutFragment
+import im.vector.app.features.spaces.SpaceListFragment
+import im.vector.app.features.spaces.create.ChoosePrivateSpaceTypeFragment
+import im.vector.app.features.spaces.create.ChooseSpaceTypeFragment
+import im.vector.app.features.spaces.create.CreateSpaceDefaultRoomsFragment
+import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
+import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
+import im.vector.app.features.spaces.manage.SpaceAddRoomFragment
+import im.vector.app.features.spaces.manage.SpaceManageRoomsFragment
+import im.vector.app.features.spaces.manage.SpaceSettingsFragment
+import im.vector.app.features.spaces.people.SpacePeopleFragment
+import im.vector.app.features.spaces.preview.SpacePreviewFragment
 import im.vector.app.features.terms.ReviewTermsFragment
 import im.vector.app.features.usercode.ShowUserCodeFragment
 import im.vector.app.features.userdirectory.UserListFragment
@@ -142,8 +172,8 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(GroupListFragment::class)
-    fun bindGroupListFragment(fragment: GroupListFragment): Fragment
+    @FragmentKey(SpaceListFragment::class)
+    fun bindSpaceListFragment(fragment: SpaceListFragment): Fragment
 
     @Binds
     @IntoMap
@@ -254,6 +284,96 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LoginWaitForEmailFragment::class)
     fun bindLoginWaitForEmailFragment(fragment: LoginWaitForEmailFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginFragmentSigninUsername2::class)
+    fun bindLoginFragmentSigninUsername2(fragment: LoginFragmentSigninUsername2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(AccountCreatedFragment::class)
+    fun bindAccountCreatedFragment(fragment: AccountCreatedFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginFragmentSignupUsername2::class)
+    fun bindLoginFragmentSignupUsername2(fragment: LoginFragmentSignupUsername2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginFragmentSigninPassword2::class)
+    fun bindLoginFragmentSigninPassword2(fragment: LoginFragmentSigninPassword2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginFragmentSignupPassword2::class)
+    fun bindLoginFragmentSignupPassword2(fragment: LoginFragmentSignupPassword2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginCaptchaFragment2::class)
+    fun bindLoginCaptchaFragment2(fragment: LoginCaptchaFragment2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginFragmentToAny2::class)
+    fun bindLoginFragmentToAny2(fragment: LoginFragmentToAny2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginTermsFragment2::class)
+    fun bindLoginTermsFragment2(fragment: LoginTermsFragment2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginServerUrlFormFragment2::class)
+    fun bindLoginServerUrlFormFragment2(fragment: LoginServerUrlFormFragment2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginResetPasswordMailConfirmationFragment2::class)
+    fun bindLoginResetPasswordMailConfirmationFragment2(fragment: LoginResetPasswordMailConfirmationFragment2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginResetPasswordFragment2::class)
+    fun bindLoginResetPasswordFragment2(fragment: LoginResetPasswordFragment2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginResetPasswordSuccessFragment2::class)
+    fun bindLoginResetPasswordSuccessFragment2(fragment: LoginResetPasswordSuccessFragment2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginServerSelectionFragment2::class)
+    fun bindLoginServerSelectionFragment2(fragment: LoginServerSelectionFragment2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginSsoOnlyFragment2::class)
+    fun bindLoginSsoOnlyFragment2(fragment: LoginSsoOnlyFragment2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginSplashSignUpSignInSelectionFragment2::class)
+    fun bindLoginSplashSignUpSignInSelectionFragment2(fragment: LoginSplashSignUpSignInSelectionFragment2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginWebFragment2::class)
+    fun bindLoginWebFragment2(fragment: LoginWebFragment2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginGenericTextInputFormFragment2::class)
+    fun bindLoginGenericTextInputFormFragment2(fragment: LoginGenericTextInputFormFragment2): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginWaitForEmailFragment2::class)
+    fun bindLoginWaitForEmailFragment2(fragment: LoginWaitForEmailFragment2): Fragment
 
     @Binds
     @IntoMap
@@ -624,4 +744,64 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomDevToolSendFormFragment::class)
     fun bindRoomDevToolSendFormFragment(fragment: RoomDevToolSendFormFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpacePreviewFragment::class)
+    fun bindSpacePreviewFragment(fragment: SpacePreviewFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ChooseSpaceTypeFragment::class)
+    fun bindChooseSpaceTypeFragment(fragment: ChooseSpaceTypeFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CreateSpaceDetailsFragment::class)
+    fun bindCreateSpaceDetailsFragment(fragment: CreateSpaceDetailsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CreateSpaceDefaultRoomsFragment::class)
+    fun bindCreateSpaceDefaultRoomsFragment(fragment: CreateSpaceDefaultRoomsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(MatrixToUserFragment::class)
+    fun bindMatrixToUserFragment(fragment: MatrixToUserFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(MatrixToRoomSpaceFragment::class)
+    fun bindMatrixToRoomSpaceFragment(fragment: MatrixToRoomSpaceFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceDirectoryFragment::class)
+    fun bindSpaceDirectoryFragment(fragment: SpaceDirectoryFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ChoosePrivateSpaceTypeFragment::class)
+    fun bindChoosePrivateSpaceTypeFragment(fragment: ChoosePrivateSpaceTypeFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceAddRoomFragment::class)
+    fun bindSpaceAddRoomFragment(fragment: SpaceAddRoomFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpacePeopleFragment::class)
+    fun bindSpacePeopleFragment(fragment: SpacePeopleFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceSettingsFragment::class)
+    fun bindSpaceSettingsFragment(fragment: SpaceSettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceManageRoomsFragment::class)
+    fun bindSpaceManageRoomsFragment(fragment: SpaceManageRoomsFragment): Fragment
 }

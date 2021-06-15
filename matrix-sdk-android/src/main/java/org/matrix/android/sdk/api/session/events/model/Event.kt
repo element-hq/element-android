@@ -28,6 +28,8 @@ import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.json.JSONObject
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.failure.MatrixError
 import timber.log.Timber
 
 typealias Content = JsonDict
@@ -89,6 +91,16 @@ data class Event(
 
     @Transient
     var sendState: SendState = SendState.UNKNOWN
+
+    @Transient
+    var sendStateDetails: String? = null
+
+    fun sendStateError(): MatrixError? {
+        return sendStateDetails?.let {
+            val matrixErrorAdapter = MoshiProvider.providesMoshi().adapter(MatrixError::class.java)
+            tryOrNull { matrixErrorAdapter.fromJson(it) }
+        }
+    }
 
     /**
      * The `age` value transcoded in a timestamp based on the device clock when the SDK received

@@ -29,12 +29,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.bumptech.glide.util.Util.assertMainThread
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.clicks
 import im.vector.app.R
 import im.vector.app.core.di.DaggerScreenComponent
@@ -224,7 +224,7 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     /**
      * Configure the Toolbar.
      */
-    protected fun setupToolbar(toolbar: Toolbar) {
+    protected fun setupToolbar(toolbar: MaterialToolbar) {
         val parentActivity = vectorBaseActivity
         if (parentActivity is ToolbarConfigurable) {
             parentActivity.configure(toolbar)
@@ -290,7 +290,7 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
      * ========================================================================================== */
 
     protected fun displayErrorDialog(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(throwable))
                 .setPositiveButton(R.string.ok, null)

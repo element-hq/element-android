@@ -87,7 +87,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         }
     }
 
-    fun updateSendState(eventId: String, roomId: String?, sendState: SendState) {
+    fun updateSendState(eventId: String, roomId: String?, sendState: SendState, sendStateDetails: String? = null) {
         Timber.v("## SendEvent: [${System.currentTimeMillis()}] Update local state of $eventId to ${sendState.name}")
         timelineInput.onLocalEchoUpdated(roomId = roomId ?: "", eventId = eventId, sendState = sendState)
         updateEchoAsync(eventId) { realm, sendingEventEntity ->
@@ -96,6 +96,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
             } else {
                 sendingEventEntity.sendState = sendState
             }
+            sendingEventEntity.sendStateDetails = sendStateDetails
             roomSummaryUpdater.updateSendingInformation(realm, sendingEventEntity.roomId)
         }
     }
@@ -161,6 +162,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
             val timelineEvents = TimelineEventEntity.where(realm, roomId, eventIds).findAll()
             timelineEvents.forEach {
                 it.root?.sendState = sendState
+                it.root?.sendStateDetails = null
             }
             roomSummaryUpdater.updateSendingInformation(realm, roomId)
         }

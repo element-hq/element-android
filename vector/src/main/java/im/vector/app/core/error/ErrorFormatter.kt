@@ -78,6 +78,9 @@ class DefaultErrorFormatter @Inject constructor(
                     throwable.error.code == MatrixError.M_LIMIT_EXCEEDED             -> {
                         limitExceededError(throwable.error)
                     }
+                    throwable.error.code == MatrixError.M_TOO_LARGE                  -> {
+                        stringProvider.getString(R.string.error_file_too_big_simple)
+                    }
                     throwable.error.code == MatrixError.M_THREEPID_NOT_FOUND         -> {
                         stringProvider.getString(R.string.login_reset_password_error_not_found)
                     }
@@ -101,7 +104,7 @@ class DefaultErrorFormatter @Inject constructor(
                     }
                 }
             }
-            is Failure.OtherServerError  -> {
+            is Failure.OtherServerError -> {
                 when (throwable.httpCode) {
                     HttpURLConnection.HTTP_NOT_FOUND ->
                         // homeserver not found
@@ -113,9 +116,11 @@ class DefaultErrorFormatter @Inject constructor(
                         throwable.localizedMessage
                 }
             }
-            is DialPadLookup.Failure                                                        ->
+            is DialPadLookup.Failure.NumberIsYours    ->
+                stringProvider.getString(R.string.cannot_call_yourself)
+            is DialPadLookup.Failure.NoResult    ->
                 stringProvider.getString(R.string.call_dial_pad_lookup_error)
-            else                                                                            -> throwable.localizedMessage
+            else                        -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)
     }

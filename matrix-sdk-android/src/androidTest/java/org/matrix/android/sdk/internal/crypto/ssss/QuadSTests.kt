@@ -76,7 +76,7 @@ class QuadSTests : InstrumentedTest {
         var accountData: UserAccountDataEvent? = null
 
         val liveAccountData = runBlocking(Dispatchers.Main) {
-            aliceSession.getLiveAccountDataEvent("${DefaultSharedSecretStorageService.KEY_ID_BASE}.$TEST_KEY_ID")
+            aliceSession.accountDataService().getLiveUserAccountDataEvent("${DefaultSharedSecretStorageService.KEY_ID_BASE}.$TEST_KEY_ID")
         }
         val accountDataObserver = Observer<Optional<UserAccountDataEvent>?> { t ->
             if (t?.getOrNull()?.type == "${DefaultSharedSecretStorageService.KEY_ID_BASE}.$TEST_KEY_ID") {
@@ -104,7 +104,7 @@ class QuadSTests : InstrumentedTest {
         val defaultDataLock = CountDownLatch(1)
 
         val liveDefAccountData = runBlocking(Dispatchers.Main) {
-            aliceSession.getLiveAccountDataEvent(DefaultSharedSecretStorageService.DEFAULT_KEY_ID)
+            aliceSession.accountDataService().getLiveUserAccountDataEvent(DefaultSharedSecretStorageService.DEFAULT_KEY_ID)
         }
         val accountDefDataObserver = Observer<Optional<UserAccountDataEvent>?> { t ->
             if (t?.getOrNull()?.type == DefaultSharedSecretStorageService.DEFAULT_KEY_ID) {
@@ -206,7 +206,7 @@ class QuadSTests : InstrumentedTest {
             )
         }
 
-        val accountDataEvent = aliceSession.getAccountDataEvent("my.secret")
+        val accountDataEvent = aliceSession.accountDataService().getUserAccountDataEvent("my.secret")
         val encryptedContent = accountDataEvent?.content?.get("encrypted") as? Map<*, *>
 
         assertEquals("Content should contains two encryptions", 2, encryptedContent?.keys?.size ?: 0)
@@ -280,7 +280,7 @@ class QuadSTests : InstrumentedTest {
         var accountData: UserAccountDataEvent? = null
 
         val liveAccountData = runBlocking(Dispatchers.Main) {
-            session.getLiveAccountDataEvent(type)
+            session.accountDataService().getLiveUserAccountDataEvent(type)
         }
         val accountDataObserver = Observer<Optional<UserAccountDataEvent>?> { t ->
             if (t?.getOrNull()?.type == type) {

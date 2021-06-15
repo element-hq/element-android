@@ -75,7 +75,6 @@ data class RoomDetailViewState(
         val canInvite: Boolean = true,
         val isAllowedToManageWidgets: Boolean = false,
         val isAllowedToStartWebRTCCall: Boolean = true,
-        val showDialerOption: Boolean = false,
         val hasFailedSending: Boolean = false
 ) : MvRxState {
 

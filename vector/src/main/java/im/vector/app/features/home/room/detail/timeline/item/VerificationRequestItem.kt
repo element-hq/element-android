@@ -29,8 +29,9 @@ import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
@@ -111,46 +112,25 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
             holder.buttonBar.isVisible = false
         }
 
-        holder.callback = callback
-        holder.attributes = attributes
+        holder.acceptButton.onClick {
+            callback?.onTimelineItemAction(RoomDetailAction.AcceptVerificationRequest(attributes.referenceId, attributes.otherUserId))
+        }
+        holder.declineButton.onClick {
+            callback?.onTimelineItemAction(RoomDetailAction.DeclineVerificationRequest(attributes.referenceId, attributes.otherUserId))
+        }
 
         renderSendState(holder.view, null, holder.failedToSendIndicator)
     }
 
-    override fun unbind(holder: Holder) {
-        super.unbind(holder)
-        holder.callback = null
-        holder.attributes = null
-    }
-
     class Holder : AbsBaseMessageItem.Holder(STUB_ID) {
-
-        var callback: TimelineEventController.Callback? = null
-        var attributes: Attributes? = null
-
-        private val _clickListener = DebouncedClickListener(View.OnClickListener {
-            val att = attributes ?: return@OnClickListener
-            if (it == acceptButton) {
-                callback?.onTimelineItemAction(RoomDetailAction.AcceptVerificationRequest(att.referenceId, att.otherUserId))
-            } else if (it == declineButton) {
-                callback?.onTimelineItemAction(RoomDetailAction.DeclineVerificationRequest(att.referenceId, att.otherUserId))
-            }
-        })
-
         val titleView by bind<AppCompatTextView>(R.id.itemVerificationTitleTextView)
         val descriptionView by bind<AppCompatTextView>(R.id.itemVerificationDetailTextView)
         val buttonBar by bind<ViewGroup>(R.id.itemVerificationButtonBar)
         val statusTextView by bind<TextView>(R.id.itemVerificationStatusText)
         val endGuideline by bind<View>(R.id.messageEndGuideline)
-        private val declineButton by bind<Button>(R.id.sas_verification_verified_decline_button)
-        private val acceptButton by bind<Button>(R.id.sas_verification_verified_accept_button)
+        val declineButton by bind<Button>(R.id.sas_verification_verified_decline_button)
+        val acceptButton by bind<Button>(R.id.sas_verification_verified_accept_button)
         val failedToSendIndicator by bind<ImageView>(R.id.messageFailToSendIndicator)
-
-        override fun bindView(itemView: View) {
-            super.bindView(itemView)
-            acceptButton.setOnClickListener(_clickListener)
-            declineButton.setOnClickListener(_clickListener)
-        }
     }
 
     companion object {
@@ -169,8 +149,8 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
             override val avatarRenderer: AvatarRenderer,
             override val messageColorProvider: MessageColorProvider,
             override val itemLongClickListener: View.OnLongClickListener? = null,
-            override val itemClickListener: View.OnClickListener? = null,
-//            val memberClickListener: View.OnClickListener? = null,
+            override val itemClickListener: ClickListener? = null,
+//            val memberClickListener: ClickListener? = null,
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
 //            val avatarCallback: TimelineEventController.AvatarCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,

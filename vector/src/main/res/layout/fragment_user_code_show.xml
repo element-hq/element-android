@@ -9,52 +9,55 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/showUserCodeToolBar"
-            style="@style/VectorToolbarStyle"
-            android:layout_width="0dp"
-            android:layout_height="?actionBarSize"
-            android:elevation="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/showUserCodeToolBar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="?actionBarSize">
 
-                <ImageView
-                    android:id="@+id/showUserCodeClose"
-                    android:layout_width="@dimen/layout_touch_size"
-                    android:layout_height="@dimen/layout_touch_size"
-                    android:contentDescription="@string/action_close"
-                    android:scaleType="center"
-                    android:src="@drawable/ic_x_18dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/showUserCodeTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="@string/add_by_qr_code"
-                    android:textColor="?riotx_text_primary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/showUserCodeClose"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <ImageView
+                        android:id="@+id/showUserCodeClose"
+                        android:layout_width="@dimen/layout_touch_size"
+                        android:layout_height="@dimen/layout_touch_size"
+                        android:contentDescription="@string/action_close"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_x_18dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/showUserCodeTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/add_by_qr_code"
+                        android:textColor="?vctr_content_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/showUserCodeClose"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.appcompat.widget.Toolbar>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
 
         <ImageView
@@ -69,7 +72,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/showUserCodeCardTopBarrier"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/showUserCodeCardTopBarrier"
@@ -78,7 +81,7 @@
             app:barrierDirection="top"
             app:constraint_referenced_ids="showUserCodeCard" />
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/showUserCodeCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -88,7 +91,7 @@
             app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/showUserCodeToolBar"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
             app:layout_constraintWidth_percent="0.8">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -106,10 +109,10 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAlignment="center"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="15sp"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="@sample/matrix.json/data/displayName" />
+                    tools:text="@sample/users.json/data/displayName" />
 
                 <TextView
                     android:id="@+id/showUserCodeCardUserIdText"
@@ -121,10 +124,10 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAlignment="center"
-                    android:textColor="?riotx_text_secondary"
+                    android:textColor="?vctr_content_secondary"
                     android:textSize="15sp"
                     app:layout_constraintTop_toBottomOf="@id/showUserCodeCardNameText"
-                    tools:text="@sample/matrix.json/data/mxid" />
+                    tools:text="@sample/users.json/data/id" />
 
 
                 <!--                android:id="@+id/itemShareQrCodeImage"-->
@@ -132,7 +135,7 @@
                 <!--                android:layout_height="300dp"-->
                 <!--                android:layout_gravity="center_horizontal"-->
                 <!--                android:contentDescription="@string/a11y_qr_code_for_verification"-->
-                <!--                tools:src="@color/riotx_header_panel_background_black" />-->
+                <!--                tools:src="@color/vctr_header_panel_background_black" />-->
 
                 <im.vector.app.core.ui.views.QrCodeImageView
                     android:id="@+id/showUserCodeQRImage"
@@ -149,7 +152,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/showUserCodeInfoText"
@@ -160,13 +163,13 @@
             android:layout_marginEnd="16dp"
             android:text="@string/user_code_info_text"
             android:textAlignment="center"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="@id/showUserCodeCard"
             app:layout_constraintStart_toStartOf="@id/showUserCodeCard"
             app:layout_constraintTop_toBottomOf="@id/showUserCodeCard" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/showUserCodeShareButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -174,16 +177,17 @@
             android:minWidth="130dp"
             android:text="@string/user_code_share"
             app:icon="@drawable/ic_share"
-            app:iconTint="@color/white"
+            app:iconTint="?colorOnPrimary"
             app:layout_constraintBottom_toTopOf="@id/showUserCodeScanButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/showUserCodeInfoText"
-            app:layout_constraintVertical_bias="0" />
+            app:layout_constraintVertical_bias="0"
+            tools:ignore="MissingPrefix" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/showUserCodeScanButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/VectorButtonStyleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_vertical_margin"

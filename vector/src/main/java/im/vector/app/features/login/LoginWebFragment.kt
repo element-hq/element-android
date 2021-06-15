@@ -30,8 +30,8 @@ import android.view.ViewGroup
 import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginWebBinding
@@ -123,7 +123,7 @@ class LoginWebFragment @Inject constructor(
         views.loginWebWebView.webViewClient = object : WebViewClient() {
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler,
                                             error: SslError) {
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                         .setMessage(R.string.ssl_could_not_verify)
                         .setPositiveButton(R.string.ssl_trust) { _, _ -> handler.proceed() }
                         .setNegativeButton(R.string.ssl_do_not_trust) { _, _ -> handler.cancel() }

@@ -17,17 +17,17 @@
 package im.vector.app.features.roomdirectory.createroom
 
 import android.text.Editable
-import android.view.View
 import android.widget.TextView
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.extensions.setTextSafe
+import im.vector.app.core.epoxy.addTextChangedListenerOnce
+import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_room_alias_text_input)
@@ -35,9 +35,6 @@ abstract class RoomAliasEditItem : VectorEpoxyModel<RoomAliasEditItem.Holder>() 
 
     @EpoxyAttribute
     var value: String? = null
-
-    @EpoxyAttribute
-    var showBottomSeparator: Boolean = true
 
     @EpoxyAttribute
     var errorMessage: String? = null
@@ -48,8 +45,8 @@ abstract class RoomAliasEditItem : VectorEpoxyModel<RoomAliasEditItem.Holder>() 
     @EpoxyAttribute
     var enabled: Boolean = true
 
-    @EpoxyAttribute
-    var onTextChange: ((String) -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onTextChange: TextListener? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
@@ -62,12 +59,10 @@ abstract class RoomAliasEditItem : VectorEpoxyModel<RoomAliasEditItem.Holder>() 
         holder.textInputLayout.isEnabled = enabled
         holder.textInputLayout.error = errorMessage
 
-        // Update only if text is different and value is not null
-        holder.textInputEditText.setTextSafe(value)
+        holder.setValueOnce(holder.textInputEditText, value)
         holder.textInputEditText.isEnabled = enabled
-        holder.textInputEditText.addTextChangedListener(onTextChangeListener)
+        holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
         holder.homeServerText.text = homeServer
-        holder.bottomSeparator.isVisible = showBottomSeparator
     }
 
     override fun shouldSaveViewState(): Boolean {
@@ -83,6 +78,5 @@ abstract class RoomAliasEditItem : VectorEpoxyModel<RoomAliasEditItem.Holder>() 
         val textInputLayout by bind<TextInputLayout>(R.id.itemRoomAliasTextInputLayout)
         val textInputEditText by bind<TextInputEditText>(R.id.itemRoomAliasTextInputEditText)
         val homeServerText by bind<TextView>(R.id.itemRoomAliasHomeServer)
-        val bottomSeparator by bind<View>(R.id.itemRoomAliasDivider)
     }
 }

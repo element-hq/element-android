@@ -16,18 +16,20 @@
 
 package im.vector.app.features.home.room.list
 
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Loading
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -48,6 +50,21 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
             }
             else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
         }
+    }
+
+    fun createSuggestion(spaceChildInfo: SpaceChildInfo,
+                         suggestedRoomJoiningStates: Map<String, Async<Unit>>,
+                         listener: RoomListListener?): VectorEpoxyModel<*> {
+        return SpaceChildInfoItem_()
+                .id("sug_${spaceChildInfo.childRoomId}")
+                .matrixItem(spaceChildInfo.toMatrixItem())
+                .avatarRenderer(avatarRenderer)
+                .topic(spaceChildInfo.topic)
+                .buttonLabel(stringProvider.getString(R.string.join))
+                .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
+                .memberCount(spaceChildInfo.activeMemberCount ?: 0)
+                .buttonClickListener { listener?.onJoinSuggestedRoom(spaceChildInfo) }
+                .itemClickListener { listener?.onSuggestedRoomClicked(spaceChildInfo) }
     }
 
     private fun createInvitationItem(roomSummary: RoomSummary,
@@ -94,6 +111,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .avatarRenderer(avatarRenderer)
                 // We do not display shield in the room list anymore
                 // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+                .izPublic(roomSummary.isPublic)
                 .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)
@@ -108,10 +126,6 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .itemLongClickListener { _ ->
                     onLongClick?.invoke(roomSummary) ?: false
                 }
-                .itemClickListener(
-                        DebouncedClickListener({
-                            onClick?.invoke(roomSummary)
-                        })
-                )
+                .itemClickListener { onClick?.invoke(roomSummary) }
     }
 }

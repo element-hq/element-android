@@ -27,5 +27,5 @@ internal data class RoomSyncState(
         /**
          * List of state events (array of Event). The resulting state corresponds to the *start* of the timeline.
          */
-        @Json(name = "events") val events: List<Event> = emptyList()
+        @Json(name = "events") val events: List<Event>? = null
 )

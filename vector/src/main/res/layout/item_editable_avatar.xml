@@ -5,7 +5,7 @@
     android:id="@+id/memberProfileInfoContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:padding="16dp">
 
     <!-- I cannot do what I want using layer-list, do it manually here-->
@@ -13,7 +13,7 @@
         android:id="@+id/itemEditableAvatarImageContainer"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:background="@drawable/header_panel_round_background"
+        android:background="@drawable/placeholder_round_background"
         android:contentDescription="@string/a11y_change_avatar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,7 @@
             android:importantForAccessibility="no"
             android:scaleType="center"
             tools:alpha="0.3"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
     </FrameLayout>
 
@@ -49,7 +49,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/itemEditableAvatarImageContainer"
         app:layout_constraintTop_toTopOf="@+id/itemEditableAvatarImageContainer"
-        app:tint="@color/riotx_destructive_accent"
+        app:tint="?colorError"
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />
 

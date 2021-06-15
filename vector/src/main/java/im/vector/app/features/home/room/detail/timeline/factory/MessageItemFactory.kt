@@ -29,7 +29,6 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -60,6 +59,7 @@ import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.CodeVisitor
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
+import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
@@ -85,6 +85,7 @@ import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_POLL
 import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
@@ -108,6 +109,7 @@ class MessageItemFactory @Inject constructor(
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
+        private val spanUtils: SpanUtils,
         private val session: Session) {
 
     // TODO inject this properly?
@@ -319,10 +321,9 @@ class MessageItemFactory @Inject constructor(
                     if (messageContent.msgType == MessageType.MSGTYPE_STICKER_LOCAL) {
                         mode(ImageContentRenderer.Mode.STICKER)
                     } else {
-                        clickListener(
-                                DebouncedClickListener({ view ->
-                                    callback?.onImageMessageClicked(messageContent, data, view)
-                                }))
+                        clickListener { view ->
+                            callback?.onImageMessageClicked(messageContent, data, view)
+                        }
                     }
                 }
     }
@@ -337,8 +338,7 @@ class MessageItemFactory @Inject constructor(
                 eventId = informationData.eventId,
                 filename = messageContent.body,
                 mimeType = messageContent.mimeType,
-                url = messageContent.videoInfo?.thumbnailFile?.url
-                        ?: messageContent.videoInfo?.thumbnailUrl,
+                url = messageContent.videoInfo?.getThumbnailUrl(),
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
@@ -420,6 +420,7 @@ class MessageItemFactory @Inject constructor(
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
+        val canUseTextFuture = spanUtils.canUseTextFuture(body)
         val linkifiedBody = body.linkify(callback)
 
         return MessageTextItem_().apply {
@@ -431,6 +432,7 @@ class MessageItemFactory @Inject constructor(
             }
         }
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
+                .canUseTextFuture(canUseTextFuture)
                 .searchForPills(isFormatted)
                 .previewUrlRetriever(callback?.getPreviewUrlRetriever())
                 .imageContentRenderer(imageContentRenderer)
@@ -466,7 +468,7 @@ class MessageItemFactory @Inject constructor(
         spannable.append(linkifiedBody)
         val editedSuffix = stringProvider.getString(R.string.edited_suffix)
         spannable.append(" ").append(editedSuffix)
-        val color = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+        val color = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
         val editStart = spannable.lastIndexOf(editedSuffix)
         val editEnd = editStart + editedSuffix.length
         spannable.setSpan(
@@ -503,12 +505,14 @@ class MessageItemFactory @Inject constructor(
                                        highlight: Boolean,
                                        callback: TimelineEventController.Callback?,
                                        attributes: AbsMessageItem.Attributes): MessageTextItem? {
+        val htmlBody = messageContent.getHtmlBody()
         val formattedBody = span {
-            text = messageContent.getHtmlBody()
-            textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+            text = htmlBody
+            textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
             textStyle = "italic"
         }
 
+        val canUseTextFuture = spanUtils.canUseTextFuture(htmlBody)
         val message = formattedBody.linkify(callback)
 
         return MessageTextItem_()
@@ -518,6 +522,7 @@ class MessageItemFactory @Inject constructor(
                 .previewUrlCallback(callback)
                 .attributes(attributes)
                 .message(message)
+                .canUseTextFuture(canUseTextFuture)
                 .highlighted(highlight)
                 .movementMethod(createLinkMovementMethod(callback))
     }

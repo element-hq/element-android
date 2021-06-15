@@ -4,7 +4,7 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:orientation="vertical"
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
@@ -17,7 +17,7 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:text="@string/room_widget_permission_title"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -29,7 +29,7 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:text="@string/room_widget_permission_added_by"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="16sp" />
 
     <LinearLayout
@@ -46,7 +46,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:contentDescription="@string/avatar"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textColor="?riotx_text_primary"
+                android:textColor="?vctr_content_primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="User name" />
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textColor="?riotx_text_secondary"
+                android:textColor="?vctr_content_secondary"
                 android:textSize="14sp"
                 tools:text="\@foo:matrix.org" />
         </LinearLayout>
@@ -84,7 +84,7 @@
         android:layout_marginTop="@dimen/layout_vertical_margin_big"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="16sp"
         tools:text="@string/room_widget_permission_shared_info_title" />
 
@@ -95,16 +95,20 @@
         android:gravity="end"
         android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/widgetPermissionDecline"
-            style="@style/VectorButtonStyleDestructive"
+            style="@style/VectorButtonStyle.Destructive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/layout_vertical_margin"
             android:text="@string/decline"
             android:textAllCaps="true" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/widgetPermissionContinue"
-            style="@style/VectorButtonStylePositive"
+            style="@style/VectorButtonStyle.Positive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/layout_vertical_margin"
             android:minWidth="160dp"
             android:text="@string/_continue"

@@ -19,7 +19,7 @@ package im.vector.app.features.crypto.verification.cancel
 import androidx.core.text.toSpannable
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.colorizeMatchingText
@@ -44,17 +44,17 @@ class VerificationCancelController @Inject constructor(
 
     override fun buildModels() {
         val state = viewState ?: return
-
+        val host = this
         if (state.isMe) {
             if (state.currentDeviceCanCrossSign) {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(stringProvider.getString(R.string.verify_cancel_self_verification_from_trusted))
+                    notice(host.stringProvider.getString(R.string.verify_cancel_self_verification_from_trusted))
                 }
             } else {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(stringProvider.getString(R.string.verify_cancel_self_verification_from_untrusted))
+                    notice(host.stringProvider.getString(R.string.verify_cancel_self_verification_from_untrusted))
                 }
             }
         } else {
@@ -63,37 +63,37 @@ class VerificationCancelController @Inject constructor(
             bottomSheetVerificationNoticeItem {
                 id("notice")
                 notice(
-                        stringProvider.getString(R.string.verify_cancel_other, otherDisplayName, otherUserID)
+                        host.stringProvider.getString(R.string.verify_cancel_other, otherDisplayName, otherUserID)
                                 .toSpannable()
-                                .colorizeMatchingText(otherUserID, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
+                                .colorizeMatchingText(otherUserID, host.colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
                 )
             }
         }
 
-        dividerItem {
+        bottomSheetDividerItem {
             id("sep0")
         }
 
         bottomSheetVerificationActionItem {
             id("cancel")
-            title(stringProvider.getString(R.string.skip))
-            titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+            title(host.stringProvider.getString(R.string.skip))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-            listener { listener?.onTapCancel() }
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+            listener { host.listener?.onTapCancel() }
         }
 
-        dividerItem {
+        bottomSheetDividerItem {
             id("sep1")
         }
 
         bottomSheetVerificationActionItem {
             id("continue")
-            title(stringProvider.getString(R.string._continue))
-            titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
+            title(host.stringProvider.getString(R.string._continue))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(colorProvider.getColor(R.color.riotx_positive_accent))
-            listener { listener?.onTapContinue() }
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+            listener { host.listener?.onTapContinue() }
         }
     }
 

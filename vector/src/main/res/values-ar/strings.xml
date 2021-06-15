@@ -11,9 +11,9 @@
     <string name="notice_room_unban">رفعَ ⁨%1$s⁩ المنع عن ⁨%2$s⁩</string>
     <string name="notice_room_ban">منعَ ⁨%1$s⁩ ⁨%2$s⁩</string>
     <string name="notice_avatar_url_changed">غيّر ⁨%1$s⁩ صورته الشخصية</string>
-    <string name="notice_display_name_changed_from">إنَّ %1$s قد غيَّرَ اسمه الظاهر من %2$s إلى %3$s</string>
-    <string name="notice_display_name_removed">إنَّ %1$s قد أزالَ اسمه الظاهر (لقد كان %2$s)</string>
-    <string name="notice_room_topic_changed">إنَّ %1$s قد غيَّرَ الموضوع إلى: %2$s</string>
+    <string name="notice_display_name_changed_from">غيّر %1$s اسمه الظاهر من %2$s إلى %3$s</string>
+    <string name="notice_display_name_removed">أزال %1$s اسمه الظاهر (كان %2$s)</string>
+    <string name="notice_room_topic_changed">غيّر %1$s الموضوع إلى: %2$s</string>
     <string name="notice_room_name_changed">إنَّ %1$s قد غيَّرَ اسم الغُرفة إلى: %2$s</string>
     <string name="notice_answered_call">إنَّ %s قد أجابَ على المُكالمة.</string>
     <string name="notice_ended_call">إنَّ %s قد أنهى المُكالمة.</string>
@@ -62,7 +62,7 @@
     </plurals>
     <string name="summary_you_sent_image">أرسلتَ صورةً.</string>
     <string name="summary_you_sent_sticker">أرسلتَ ملصقًا.</string>
-    <string name="notice_room_invite_no_invitee_by_you">دعوة منك</string>
+    <string name="notice_room_invite_no_invitee_by_you">دعوتك</string>
     <string name="notice_room_created">أنشأ ⁨%1$s⁩ الغرفة</string>
     <string name="notice_room_created_by_you">أنشأتَ الغرفة</string>
     <string name="notice_room_invite_by_you">دعوتَ ⁨%1$s⁩</string>
@@ -74,10 +74,10 @@
     <string name="notice_room_ban_by_you">منعتَ ⁨%1$s⁩</string>
     <string name="notice_room_withdraw_by_you">سحبتَ الدعوة الموجّهة إلى ⁨%1$s⁩</string>
     <string name="notice_avatar_url_changed_by_you">غيّرتَ صورتك الشخصية</string>
-    <string name="notice_display_name_set_by_you">أنتَ قد عيَّنتَ اسمك الظاهر إلى %1$s</string>
-    <string name="notice_display_name_changed_from_by_you">أنتَ قد غيّرتَ اسمك الظاهر من ⁨%1$s⁩ إلى ⁨%2$s⁩</string>
-    <string name="notice_display_name_removed_by_you">أنتَ قد أزلتَ اسمك الظاهر (لقد كان ⁨%1$s⁩)</string>
-    <string name="notice_room_topic_changed_by_you">أنتَ قد غيَّرتَ الموضوع إلى: ⁨%1$s⁩</string>
+    <string name="notice_display_name_set_by_you">عيَّنتَ اسمك الظاهر إلى %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">غيّرتَ اسمك الظاهر من ⁨%1$s⁩ إلى ⁨%2$s⁩</string>
+    <string name="notice_display_name_removed_by_you">أزلتَ اسمك الظاهر (كان ⁨%1$s⁩)</string>
+    <string name="notice_room_topic_changed_by_you">غيَّرتَ الموضوع إلى: ⁨%1$s⁩</string>
     <string name="notice_room_avatar_changed">إنَّ %1$s قد غيَّرَ صورة الغُرفة</string>
     <string name="notice_room_avatar_changed_by_you">أنتَ قد غيَّرتَ صورة الغُرفة</string>
     <string name="notice_room_name_changed_by_you">أنتَ قد غيَّرتَ اسم الغُرفة إلى: %1$s</string>
@@ -1128,4 +1128,106 @@
     <string name="title_activity_keys_backup_setup">نسخ إحتياطي للمفتاح</string>
     <string name="notification_sync_init">جاري إعداد الخدمة</string>
     <string name="system_theme">إفتراضي النظام</string>
+    <string name="notice_room_canonical_alias_set">غير %1$s عنوان الغرفة الى %2$s.</string>
+    <string name="event_status_sent_message">أُرسلت الرسالة</string>
+    <string name="initial_sync_start_downloading">المزامنة الأولية:
+\nينزل البيانات…</string>
+    <string name="initial_sync_start_server_computing">المزامنة الأولية:
+\nينتظر رد الخادم…</string>
+    <string name="notice_display_name_set">غير %1$s اسمه الى %2$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="zero">%1$s أضاف %2$s كعنوان لهذه الغرفة.</item>
+        <item quantity="one">%1$s أضاف %2$s كعنوان لهذه الغرفة.</item>
+        <item quantity="two">%1$s أضاف %2$s كعنوانين لهذه الغرفة.</item>
+        <item quantity="few">%1$s أضاف %2$s كعناوين لهذه الغرفة.</item>
+        <item quantity="many">%1$s أضاف %2$s كعناوين لهذه الغرفة.</item>
+        <item quantity="other">%1$s أضاف %2$s كعناوين لهذه الغرفة.</item>
+    </plurals>
+    <string name="invite_just_to_this_room">فقط في هذه الغُرفة</string>
+    <string name="invite_just_to_this_room_desc">لن يكونوا جزءًا من %s</string>
+    <string name="share_space_link_message">إنضم إلى مساحتي %1$s %2$s</string>
+    <string name="skip_for_now">تخطي في الوقت الراهن</string>
+    <string name="create_space">إنشاء مساحة</string>
+    <string name="join_space">انضم إلى المساحة</string>
+    <string name="join_anyway">الانضمام على أي حال</string>
+    <string name="room_alias_preview_not_found">هذا الاسم المستعار غير متوفر في الوقت الحالي.
+\nحاول مرة أخرى لاحقًا، أو اطلب من مسؤول الغرفة التحقق مما إذا كان لديك وصول.</string>
+    <string name="suggested_rooms_pills_on_empty_text">أنت لست في أي غرفة حتى الآن. فيما يلي بعض الغرف المقترحة، ولكن يمكنك رؤية المزيد بالزر الأخضر أسفل اليمين.</string>
+    <string name="suggested_rooms_pills_on_empty_header">مرحبًا بك في %1$s، %2$s.</string>
+    <plurals name="space_people_you_know">
+        <item quantity="zero">%d شخص تعرفه قد انضم بالفعل</item>
+        <item quantity="one">%d شخص تعرفه قد انضم بالفعل</item>
+        <item quantity="two">%d شخصان تعرفهم قد انضموا بالفعل</item>
+        <item quantity="few">%d أشخاص تعرفهم قد انضموا بالفعل</item>
+        <item quantity="many">%d أشخاص تعرفهم قد انضموا بالفعل</item>
+        <item quantity="other">%d أشخاص تعرفهم قد انضموا بالفعل</item>
+    </plurals>
+    <string name="space_explore_activity_title">استكشِف الغُرف</string>
+    <string name="space_add_child_title">أضف غُرف</string>
+    <string name="leave_space">غادر المساحة</string>
+    <string name="space_leave_prompt_msg">هل أنت متأكد أنك تريد مغادرة المساحة؟</string>
+    <string name="space_leave_prompt_msg_only_you">انت الشخص الوحيد هنا إذا غادرت، فلن يتمكن أي شخص من الانضمام في المستقبل، بما في ذلك أنت.</string>
+    <string name="space_leave_prompt_msg_private">هذه المساحة ليست عامة. لن تتمكن من الانضمام مرة أخرى بدون دعوة.</string>
+    <string name="space_leave_prompt_msg_as_admin">أنت المسؤول عن هذه المساحة، تأكد من أنك قمت بنقل حق المسؤول إلى عضو آخر قبل المغادرة.</string>
+    <string name="space_add_existing_rooms">أضف الغُرف الموجودة ومساحة</string>
+    <string name="space_add_rooms">أضف غُرف</string>
+    <string name="spaces_beta_welcome_to_spaces">مرحبًا بك في المساحات!</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">تعد المساحات طريقة جديدة لتجميع الغرف والأشخاص.</string>
+    <string name="you_are_invited">أنت مدعو</string>
+    <string name="labs_use_restricted_join_rule">مساحة تجريبية - غُرفة مقيدة.</string>
+    <string name="space_mark_as_suggested">علم كمقترحة</string>
+    <string name="space_mark_as_not_suggested">علم كغير مقترحة</string>
+    <string name="space_manage_rooms_and_spaces">إدارة الغُرف والمساحات</string>
+    <string name="labs_space_show_orphan_in_home">مساحة تجريبية - فقط أعرض المُيتِّمة في الصفحة الرئيسية</string>
+    <string name="spaces_feeling_experimental_subspace">تشعر بالتجربة؟
+\nيمكنك إضافة مساحات موجودة إلى مساحة.</string>
+    <string name="spaces_no_server_support_description">يرجى الاتصال بمسؤول الخادم الخاص بك للحصول على مزيد من المعلومات</string>
+    <string name="spaces_no_server_support_title">يبدو أن خادمك لا يدعم المساحات بعد</string>
+    <string name="this_space_has_no_rooms">هذه المساحة لا تحتوي على غُرف</string>
+    <string name="this_space_has_no_rooms_not_admin">قد تكون بعض الغُرف مخفية لأنها خاصة وأنك بحاجة إلى دعوة.
+\nليس لديك إذن لإضافة غُرف.</string>
+    <string name="this_space_has_no_rooms_admin">قد تكون بعض الغُرف مخفية لأنها خاصة وأنك بحاجة إلى دعوة.</string>
+    <string name="labs_use_restricted_join_rule_desc">يتطلب التحذير دعم الخادم وإصدار الغرفة التجريبية</string>
+    <string name="user_invites_you">%s يدعوك</string>
+    <string name="looking_for_someone_not_in_space">تبحث عن شخص ما ليس في %s؟</string>
+    <string name="space_settings_manage_rooms">إدارة الغُرف</string>
+    <string name="make_this_space_public">إجعل هَذِهِ المساحة عَامَّة</string>
+    <string name="space_suggested">مقترح</string>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="zero">%1$s أضاف العنوان البديل %2$s لهذه الغرفة.</item>
+        <item quantity="one">%1$s أضاف العنوان البديل %2$s لهذه الغرفة.</item>
+        <item quantity="two">%1$s أضاف العنوانين البديل %2$s لهذه الغرفة.</item>
+        <item quantity="few">%1$s أضاف العناوين البديل %2$s لهذه الغرفة.</item>
+        <item quantity="many">%1$s أضاف العناوين البديل %2$s لهذه الغرفة.</item>
+        <item quantity="other">%1$s أضاف العناوين البديل %2$s لهذه الغرفة.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset_by_you">أنت أزلت العنوان الرئيسي لهذه الغرفة.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s أزال العنوان الرئيسي لهذه الغُرفة.</string>
+    <string name="notice_room_canonical_alias_set_by_you">أنت غيرت العنوان الرئيسي لهذه الغرفة إلى %1$s.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">أنت أضفت %1$s وحذفت %2$s كعنوان لهذه الغرفة.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s أضاف %2$s وحذف %3$s كعناوين لهذه الغرفة.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="zero">أنت أزلت %1$s كعنوان لهذه الغرفة.</item>
+        <item quantity="one">أنت أزلت %1$s كعنوان لهذه الغرفة.</item>
+        <item quantity="two">أنت أزلت %1$s كعنوانين لهذه الغرفة.</item>
+        <item quantity="few">أنت أزلت %1$s كعناوين لهذه الغرفة.</item>
+        <item quantity="many">أنت أزلت %1$s كعناوين لهذه الغرفة.</item>
+        <item quantity="other">أنت أزلت %1$s كعناوين لهذه الغرفة.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="zero">%1$s أزال %2$s كعنوان لهذه الغرفة.</item>
+        <item quantity="one">%1$s أزال %2$s كعنوان لهذه الغرفة.</item>
+        <item quantity="two">%1$s أزال %2$s كعنوانين لهذه الغرفة.</item>
+        <item quantity="few">%1$s أزال %2$s كعناوين لهذه الغرفة.</item>
+        <item quantity="many">%1$s أزال %2$s كعناوين لهذه الغرفة.</item>
+        <item quantity="other">%1$s أزال %2$s كعناوين لهذه الغرفة.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="zero">أنت أضفت %1$s كعنوان لهذه الغرفة.</item>
+        <item quantity="one">أنت أضفت %1$s كعنوان لهذه الغرفة.</item>
+        <item quantity="two">أنت أضفت %1$s كعنوانين لهذه الغرفة.</item>
+        <item quantity="few">أنت أضفت %1$s كعناوين لهذه الغرفة.</item>
+        <item quantity="many">أنت أضفت %1$s كعناوين لهذه الغرفة.</item>
+        <item quantity="other">أنت أضفت %1$s كعناوين لهذه الغرفة.</item>
+    </plurals>
 </resources>

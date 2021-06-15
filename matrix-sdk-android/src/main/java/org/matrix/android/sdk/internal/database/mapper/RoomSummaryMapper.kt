@@ -16,7 +16,10 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
+import org.matrix.android.sdk.api.session.room.model.SpaceParentInfo
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
@@ -42,7 +45,9 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                 name = roomSummaryEntity.name ?: "",
                 topic = roomSummaryEntity.topic ?: "",
                 avatarUrl = roomSummaryEntity.avatarUrl ?: "",
+                joinRules = roomSummaryEntity.joinRules,
                 isDirect = roomSummaryEntity.isDirect,
+                directUserId = roomSummaryEntity.directUserId,
                 latestPreviewableEvent = latestEvent,
                 joinedMembersCount = roomSummaryEntity.joinedMembersCount,
                 invitedMembersCount = roomSummaryEntity.invitedMembersCount,
@@ -63,7 +68,36 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                 breadcrumbsIndex = roomSummaryEntity.breadcrumbsIndex,
                 roomEncryptionTrustLevel = roomSummaryEntity.roomEncryptionTrustLevel,
                 inviterId = roomSummaryEntity.inviterId,
-                hasFailedSending = roomSummaryEntity.hasFailedSending
+                hasFailedSending = roomSummaryEntity.hasFailedSending,
+                roomType = roomSummaryEntity.roomType,
+                spaceParents = roomSummaryEntity.parents.map { relationInfoEntity ->
+                    SpaceParentInfo(
+                            parentId = relationInfoEntity.parentRoomId,
+                            roomSummary = relationInfoEntity.parentSummaryEntity?.let { map(it) },
+                            canonical = relationInfoEntity.canonical ?: false,
+                            viaServers = relationInfoEntity.viaServers.toList()
+                    )
+                },
+                spaceChildren = roomSummaryEntity.children.map {
+                    SpaceChildInfo(
+                            childRoomId = it.childRoomId ?: "",
+                            isKnown = it.childSummaryEntity != null,
+                            roomType = it.childSummaryEntity?.roomType,
+                            name = it.childSummaryEntity?.name,
+                            topic = it.childSummaryEntity?.topic,
+                            avatarUrl = it.childSummaryEntity?.avatarUrl,
+                            activeMemberCount = it.childSummaryEntity?.joinedMembersCount,
+                            order = it.order,
+                            autoJoin = it.autoJoin ?: false,
+                            viaServers = it.viaServers.toList(),
+                            parentRoomId = roomSummaryEntity.roomId,
+                            suggested = it.suggested,
+                            canonicalAlias = it.childSummaryEntity?.canonicalAlias,
+                            aliases = it.childSummaryEntity?.aliases?.toList(),
+                            worldReadable = it.childSummaryEntity?.joinRules == RoomJoinRules.PUBLIC
+                    )
+                },
+                flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList()
         )
     }
 }

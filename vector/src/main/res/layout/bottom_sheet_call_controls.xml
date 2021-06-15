@@ -2,10 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/callControlsWrapper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:orientation="vertical">
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
@@ -14,8 +13,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/call_select_sound_device"
         app:leftIcon="@drawable/ic_call_speaker_default"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="Speaker" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
@@ -24,8 +23,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/call_switch_camera"
         app:leftIcon="@drawable/ic_video_flip"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="Front" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
@@ -34,8 +33,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/call_dial_pad_title"
         app:leftIcon="@drawable/ic_call_dial_pad"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
@@ -44,8 +43,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/call_format_turn_hd_on"
         app:leftIcon="@drawable/ic_hd"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="Front" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
@@ -54,8 +53,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="Hold/resume"
         app:leftIcon="@drawable/ic_call_hold_action"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
@@ -64,8 +63,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/call_transfer_title"
         app:leftIcon="@drawable/ic_call_transfer"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="" />
 
 </LinearLayout>

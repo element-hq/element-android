@@ -32,6 +32,7 @@ import im.vector.app.features.call.conference.VectorJitsiActivity
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
+import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
@@ -53,6 +54,7 @@ import im.vector.app.features.invite.InviteUsersToRoomActivity
 import im.vector.app.features.invite.VectorInviteView
 import im.vector.app.features.link.LinkHandlerActivity
 import im.vector.app.features.login.LoginActivity
+import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
@@ -77,6 +79,13 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.app.features.share.IncomingShareActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
+import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
+import im.vector.app.features.spaces.SpaceCreationActivity
+import im.vector.app.features.spaces.SpaceExploreActivity
+import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
+import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
+import im.vector.app.features.spaces.manage.SpaceManageActivity
+import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.ui.UiStateRepository
 import im.vector.app.features.usercode.UserCodeActivity
@@ -126,9 +135,11 @@ interface ScreenComponent {
     fun inject(activity: KeysBackupManageActivity)
     fun inject(activity: EmojiReactionPickerActivity)
     fun inject(activity: LoginActivity)
+    fun inject(activity: LoginActivity2)
     fun inject(activity: LinkHandlerActivity)
     fun inject(activity: MainActivity)
     fun inject(activity: RoomDirectoryActivity)
+    fun inject(activity: KeysBackupSetupActivity)
     fun inject(activity: BugReportActivity)
     fun inject(activity: FilteredRoomsActivity)
     fun inject(activity: CreateRoomActivity)
@@ -151,6 +162,9 @@ interface ScreenComponent {
     fun inject(activity: CallTransferActivity)
     fun inject(activity: ReAuthActivity)
     fun inject(activity: RoomDevToolActivity)
+    fun inject(activity: SpaceCreationActivity)
+    fun inject(activity: SpaceExploreActivity)
+    fun inject(activity: SpaceManageActivity)
 
     /* ==========================================================================================
      * BottomSheets
@@ -173,6 +187,10 @@ interface ScreenComponent {
     fun inject(bottomSheet: CallControlsBottomSheet)
     fun inject(bottomSheet: SignOutBottomSheetDialogFragment)
     fun inject(bottomSheet: MatrixToBottomSheet)
+    fun inject(bottomSheet: ShareSpaceBottomSheet)
+    fun inject(bottomSheet: SpaceSettingsMenuBottomSheet)
+    fun inject(bottomSheet: InviteRoomSpaceChooserBottomSheet)
+    fun inject(bottomSheet: SpaceInviteBottomSheet)
 
     /* ==========================================================================================
      * Others

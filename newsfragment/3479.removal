@@ -1,0 +1,1 @@
+Splits SessionAccountDataService and RoomAccountDataService and offers to query RoomAccountDataEvent at the session level.

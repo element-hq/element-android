@@ -23,7 +23,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/room_round_avatars" />
 
     <TextView
         android:id="@+id/bottomSheetRoomPreviewName"
@@ -34,14 +34,15 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-bold"
         android:singleLine="true"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewLowPriority"
         app:layout_constraintStart_toEndOf="@id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
-        tools:text="@tools:sample/full_names" />
+        tools:fontFamily="sans-serif"
+        tools:text="@sample/rooms.json/data/name" />
 
     <ImageView
         android:id="@+id/bottomSheetRoomPreviewLowPriority"
@@ -55,7 +56,7 @@
         app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewFavorite"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
         tools:contentDescription="@string/room_list_quick_actions_low_priority_add"
-        tools:tint="?riotx_text_secondary" />
+        tools:tint="?vctr_content_secondary" />
 
     <ImageView
         android:id="@+id/bottomSheetRoomPreviewFavorite"
@@ -68,7 +69,7 @@
         app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewSettings"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
         tools:src="@drawable/ic_star_24dp"
-        tools:tint="?riotx_text_secondary" />
+        tools:tint="?vctr_content_secondary" />
 
     <ImageView
         android:id="@+id/bottomSheetRoomPreviewSettings"
@@ -81,7 +82,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
-        app:tint="?riotx_text_secondary"
+        app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,13 +22,13 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
@@ -47,7 +47,8 @@ import javax.inject.Inject
 
 @Parcelize
 data class CreateRoomArgs(
-        val initialName: String
+        val initialName: String,
+        val parentSpaceId: String? = null
 ) : Parcelable
 
 class CreateRoomFragment @Inject constructor(
@@ -156,7 +157,7 @@ class CreateRoomFragment @Inject constructor(
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return withState(viewModel) {
             return@withState if (!it.isEmpty()) {
-                AlertDialog.Builder(requireContext())
+                MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.dialog_title_warning)
                         .setMessage(R.string.warning_room_not_created_yet)
                         .setPositiveButton(R.string.yes) { _, _ ->

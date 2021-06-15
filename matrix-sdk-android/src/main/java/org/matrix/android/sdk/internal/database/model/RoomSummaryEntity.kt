@@ -21,13 +21,18 @@ import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 
 internal open class RoomSummaryEntity(
-        @PrimaryKey var roomId: String = ""
+        @PrimaryKey var roomId: String = "",
+        var roomType: String? = null,
+        var parents: RealmList<SpaceParentSummaryEntity> = RealmList(),
+        var children: RealmList<SpaceChildSummaryEntity> = RealmList()
 ) : RealmObject() {
 
     var displayName: String? = ""
@@ -204,6 +209,16 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
+    var flattenParentIds: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var groupIds: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
     @Index
     private var membershipStr: String = Membership.NONE.name
 
@@ -218,6 +233,12 @@ internal open class RoomSummaryEntity(
         }
 
     @Index
+    var isHiddenFromUser: Boolean = false
+        set(value) {
+            if (value != field) field = value
+        }
+
+    @Index
     private var versioningStateStr: String = VersioningState.NONE.name
     var versioningState: VersioningState
         get() {
@@ -226,6 +247,19 @@ internal open class RoomSummaryEntity(
         set(value) {
             if (value.name != versioningStateStr) {
                 versioningStateStr = value.name
+            }
+        }
+
+    private var joinRulesStr: String? = null
+    var joinRules: RoomJoinRules?
+        get() {
+            return joinRulesStr?.let {
+                tryOrNull { RoomJoinRules.valueOf(it) }
+            }
+        }
+        set(value) {
+            if (value?.name != joinRulesStr) {
+                joinRulesStr = value?.name
             }
         }
 
@@ -244,6 +278,5 @@ internal open class RoomSummaryEntity(
                 roomEncryptionTrustLevelStr = value?.name
             }
         }
-
     companion object
 }

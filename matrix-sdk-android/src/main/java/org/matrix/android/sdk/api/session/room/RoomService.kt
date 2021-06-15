@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -177,13 +178,15 @@ interface RoomService {
      * TODO Doc
      */
     fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                  pagedListConfig: PagedList.Config = defaultPagedListConfig): LiveData<PagedList<RoomSummary>>
+                                  pagedListConfig: PagedList.Config = defaultPagedListConfig,
+                                  sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): LiveData<PagedList<RoomSummary>>
 
     /**
      * TODO Doc
      */
     fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                          pagedListConfig: PagedList.Config = defaultPagedListConfig): UpdatableFilterLivePageResult
+                                          pagedListConfig: PagedList.Config = defaultPagedListConfig,
+                                          sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): UpdatableLivePageResult
 
     /**
      * TODO Doc
@@ -197,4 +200,12 @@ interface RoomService {
                 .setEnablePlaceholders(false)
                 .setPrefetchDistance(10)
                 .build()
+
+    fun getFlattenRoomSummaryChildrenOf(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()) : List<RoomSummary>
+
+    /**
+     * Returns all the children of this space, as LiveData
+     */
+    fun getFlattenRoomSummaryChildrenOfLive(spaceId: String?,
+                                            memberships: List<Membership> = Membership.activeMemberships()): LiveData<List<RoomSummary>>
 }

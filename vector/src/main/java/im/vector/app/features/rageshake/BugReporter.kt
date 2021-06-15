@@ -18,7 +18,6 @@ package im.vector.app.features.rageshake
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Build
@@ -149,7 +148,7 @@ class BugReporter @Inject constructor(
      * Send a bug report.
      *
      * @param context           the application context
-     * @param forSuggestion     true to send a suggestion
+     * @param reportType        The report type (bug, suggestion, feedback)
      * @param withDevicesLogs   true to include the device log
      * @param withCrashLogs     true to include the crash logs
      * @param withKeyRequestHistory true to include the crash logs
@@ -159,13 +158,14 @@ class BugReporter @Inject constructor(
      */
     @SuppressLint("StaticFieldLeak")
     fun sendBugReport(context: Context,
-                      forSuggestion: Boolean,
+                      reportType: ReportType,
                       withDevicesLogs: Boolean,
                       withCrashLogs: Boolean,
                       withKeyRequestHistory: Boolean,
                       withScreenshot: Boolean,
                       theBugDescription: String,
                       serverVersion: String,
+                      canContact: Boolean = false,
                       listener: IMXBugReportListener?) {
         // enumerate files to delete
         val mBugReportFiles: MutableList<File> = ArrayList()
@@ -246,13 +246,11 @@ class BugReporter @Inject constructor(
                 }
 
                 if (!mIsCancelled) {
-                    val text = "[Element] " +
-                            if (forSuggestion) {
-                                "[Suggestion] "
-                            } else {
-                                ""
-                            } +
-                            bugDescription
+                    val text = when (reportType) {
+                        ReportType.BUG_REPORT -> "[Element] $bugDescription"
+                        ReportType.SUGGESTION -> "[Element] [Suggestion] $bugDescription"
+                        ReportType.SPACE_BETA_FEEDBACK -> "[Element] [spaces-feedback] $bugDescription"
+                    }
 
                     // build the multi part request
                     val builder = BugReporterMultipartBody.Builder()
@@ -260,6 +258,7 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("app", "riot-android")
                             .addFormDataPart("user_agent", Matrix.getInstance(context).getUserAgent())
                             .addFormDataPart("user_id", userId)
+                            .addFormDataPart("can_contact", canContact.toString())
                             .addFormDataPart("device_id", deviceId)
                             .addFormDataPart("version", versionProvider.getVersion(longFormat = true, useBuildNumber = false))
                             .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
@@ -318,12 +317,15 @@ class BugReporter @Inject constructor(
                     builder.addFormDataPart("label", BuildConfig.FLAVOR_DESCRIPTION)
                     builder.addFormDataPart("label", context.getString(R.string.git_branch_name))
 
-                    // Special for RiotX
+                    // Special for Element
                     builder.addFormDataPart("label", "[Element]")
 
-                    // Suggestion
-                    if (forSuggestion) {
-                        builder.addFormDataPart("label", "[Suggestion]")
+                    when (reportType) {
+                        ReportType.BUG_REPORT -> {
+                            /* nop */
+                        }
+                        ReportType.SUGGESTION -> builder.addFormDataPart("label", "[Suggestion]")
+                        ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
                     }
 
                     if (getCrashFile(context).exists()) {
@@ -447,16 +449,14 @@ class BugReporter @Inject constructor(
     /**
      * Send a bug report either with email or with Vector.
      */
-    fun openBugReportScreen(activity: FragmentActivity, forSuggestion: Boolean = false) {
+    fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT) {
         screenshot = takeScreenshot(activity)
         activeSessionHolder.getSafeActiveSession()?.let {
             it.logDbUsageInfo()
             it.cryptoService().logDbUsageInfo()
         }
 
-        val intent = Intent(activity, BugReportActivity::class.java)
-        intent.putExtra("FOR_SUGGESTION", forSuggestion)
-        activity.startActivity(intent)
+        activity.startActivity(BugReportActivity.intent(activity, reportType))
     }
 
 // ==============================================================================================================

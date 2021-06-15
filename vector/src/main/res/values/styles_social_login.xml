@@ -30,7 +30,7 @@
 
     <style name="WidgetButtonSocialLogin.Google.Dark">
         <item name="android:backgroundTint">@color/button_social_google_background_selector_dark</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="WidgetButtonSocialLogin.Github" parent="WidgetButtonSocialLogin">
@@ -39,14 +39,14 @@
 
     <style name="WidgetButtonSocialLogin.Github.Light">
         <item name="iconTint">@android:color/black</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:backgroundTint">@android:color/white</item>
     </style>
 
     <style name="WidgetButtonSocialLogin.Github.Dark">
         <item name="iconTint">@android:color/white</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:backgroundTint">@android:color/black</item>
     </style>
 
 
@@ -59,12 +59,12 @@
         <item name="strokeWidth">1dp</item>
         <item name="iconTint">#3877EA</item>
         <item name="android:textColor">#3877EA</item>
-        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:backgroundTint">@android:color/white</item>
     </style>
 
     <style name="WidgetButtonSocialLogin.Facebook.Dark">
         <item name="iconTint">@android:color/white</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:backgroundTint">#3877EA</item>
     </style>
 
@@ -76,12 +76,12 @@
     <style name="WidgetButtonSocialLogin.Twitter.Light">
         <item name="iconTint">#5D9EC9</item>
         <item name="android:textColor">#5D9EC9</item>
-        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:backgroundTint">@android:color/white</item>
     </style>
 
     <style name="WidgetButtonSocialLogin.Twitter.Dark">
-        <item name="iconTint">@color/white</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="iconTint">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:backgroundTint">#5D9EC9</item>
     </style>
 
@@ -91,15 +91,15 @@
     </style>
 
     <style name="WidgetButtonSocialLogin.Apple.Light">
-        <item name="iconTint">@color/white</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:backgroundTint">@color/black</item>
+        <item name="iconTint">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:backgroundTint">@android:color/black</item>
     </style>
 
     <style name="WidgetButtonSocialLogin.Apple.Dark">
-        <item name="iconTint">@color/black</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:backgroundTint">@color/white</item>
+        <item name="iconTint">@android:color/black</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:backgroundTint">@android:color/white</item>
     </style>
 
     <style name="WidgetButtonSocialLogin.Gitlab" parent="WidgetButtonSocialLogin">
@@ -109,13 +109,13 @@
     </style>
 
     <style name="WidgetButtonSocialLogin.Gitlab.Light">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:backgroundTint">@android:color/white</item>
     </style>
 
     <style name="WidgetButtonSocialLogin.Gitlab.Dark">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:backgroundTint">@android:color/black</item>
     </style>
 
 

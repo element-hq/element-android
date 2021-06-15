@@ -22,12 +22,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.app.R
-import im.vector.app.core.utils.DebouncedClickListener
+import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.databinding.ItemRoomCategoryBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class SectionHeaderAdapter constructor(
-        private val onClickAction: (() -> Unit)
+        private val onClickAction: ClickListener
 ) : RecyclerView.Adapter<SectionHeaderAdapter.VH>() {
 
     data class RoomsSectionData(
@@ -35,7 +36,9 @@ class SectionHeaderAdapter constructor(
             val isExpanded: Boolean = true,
             val notificationCount: Int = 0,
             val isHighlighted: Boolean = false,
-            val isHidden: Boolean = true
+            val isHidden: Boolean = true,
+            // This will be false until real data has been submitted once
+            val isLoading: Boolean = true
     )
 
     lateinit var roomsSectionData: RoomsSectionData
@@ -57,7 +60,7 @@ class SectionHeaderAdapter constructor(
     override fun getItemViewType(position: Int) = R.layout.item_room_category
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        return VH.create(parent, this.onClickAction)
+        return VH.create(parent, onClickAction)
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
@@ -68,19 +71,17 @@ class SectionHeaderAdapter constructor(
 
     class VH constructor(
             private val binding: ItemRoomCategoryBinding,
-            onClickAction: (() -> Unit)
+            onClickAction: ClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.root.setOnClickListener(DebouncedClickListener({
-                onClickAction.invoke()
-            }))
+            binding.root.onClick(onClickAction)
         }
 
         fun bind(roomsSectionData: RoomsSectionData) {
             binding.roomCategoryTitleView.text = roomsSectionData.name
-            val tintColor = ThemeUtils.getColor(binding.root.context, R.attr.riotx_text_secondary)
-            val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more_white else R.drawable.ic_expand_less_white
+            val tintColor = ThemeUtils.getColor(binding.root.context, R.attr.vctr_content_secondary)
+            val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
             val expandedArrowDrawable = ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
                 DrawableCompat.setTint(it, tintColor)
             }
@@ -89,7 +90,7 @@ class SectionHeaderAdapter constructor(
         }
 
         companion object {
-            fun create(parent: ViewGroup, onClickAction: () -> Unit): VH {
+            fun create(parent: ViewGroup, onClickAction: ClickListener): VH {
                 val view = LayoutInflater.from(parent.context)
                         .inflate(R.layout.item_room_category, parent, false)
                 val binding = ItemRoomCategoryBinding.bind(view)

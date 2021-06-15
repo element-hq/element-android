@@ -20,6 +20,8 @@ import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.RoomType
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.user.model.User
@@ -37,6 +39,8 @@ sealed class MatrixItem(
         init {
             if (BuildConfig.DEBUG) checkId()
         }
+
+        override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
     data class EventItem(override val id: String,
@@ -46,6 +50,8 @@ sealed class MatrixItem(
         init {
             if (BuildConfig.DEBUG) checkId()
         }
+
+        override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
     data class RoomItem(override val id: String,
@@ -55,6 +61,19 @@ sealed class MatrixItem(
         init {
             if (BuildConfig.DEBUG) checkId()
         }
+
+        override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
+    }
+
+    data class SpaceItem(override val id: String,
+                         override val displayName: String? = null,
+                         override val avatarUrl: String? = null)
+        : MatrixItem(id, displayName, avatarUrl) {
+        init {
+            if (BuildConfig.DEBUG) checkId()
+        }
+
+        override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
     data class RoomAliasItem(override val id: String,
@@ -67,6 +86,8 @@ sealed class MatrixItem(
 
         // Best name is the id, and we keep the displayName of the room for the case we need the first letter
         override fun getBestName() = id
+
+        override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
     data class GroupItem(override val id: String,
@@ -79,6 +100,8 @@ sealed class MatrixItem(
 
         // Best name is the id, and we keep the displayName of the room for the case we need the first letter
         override fun getBestName() = id
+
+        override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
     open fun getBestName(): String {
@@ -91,12 +114,15 @@ sealed class MatrixItem(
         }
     }
 
+    abstract fun updateAvatar(newAvatar: String?): MatrixItem
+
     /**
      * Return the prefix as defined in the matrix spec (and not extracted from the id)
      */
     fun getIdPrefix() = when (this) {
         is UserItem      -> '@'
         is EventItem     -> '$'
+        is SpaceItem,
         is RoomItem      -> '!'
         is RoomAliasItem -> '#'
         is GroupItem     -> '+'
@@ -116,22 +142,22 @@ sealed class MatrixItem(
                     var first = dn[startIndex]
 
                     // LEFT-TO-RIGHT MARK
-                    if (dn.length >= 2 && 0x200e == first.toInt()) {
+                    if (dn.length >= 2 && 0x200e == first.code) {
                         startIndex++
                         first = dn[startIndex]
                     }
 
                     // check if it’s the start of a surrogate pair
-                    if (first.toInt() in 0xD800..0xDBFF && dn.length > startIndex + 1) {
+                    if (first.code in 0xD800..0xDBFF && dn.length > startIndex + 1) {
                         val second = dn[startIndex + 1]
-                        if (second.toInt() in 0xDC00..0xDFFF) {
+                        if (second.code in 0xDC00..0xDFFF) {
                             length++
                         }
                     }
 
                     dn.substring(startIndex, startIndex + length)
                 }
-                .toUpperCase(Locale.ROOT)
+                .uppercase(Locale.ROOT)
     }
 
     companion object {
@@ -147,7 +173,11 @@ fun User.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
 
 fun GroupSummary.toMatrixItem() = MatrixItem.GroupItem(groupId, displayName, avatarUrl)
 
-fun RoomSummary.toMatrixItem() = MatrixItem.RoomItem(roomId, displayName, avatarUrl)
+fun RoomSummary.toMatrixItem() = if (roomType == RoomType.SPACE) {
+    MatrixItem.SpaceItem(roomId, displayName, avatarUrl)
+} else {
+    MatrixItem.RoomItem(roomId, displayName, avatarUrl)
+}
 
 fun RoomSummary.toRoomAliasMatrixItem() = MatrixItem.RoomAliasItem(canonicalAlias ?: roomId, displayName, avatarUrl)
 
@@ -157,3 +187,9 @@ fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name ?: getPrimaryAl
 fun RoomMemberSummary.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
 
 fun SenderInfo.toMatrixItem() = MatrixItem.UserItem(userId, disambiguatedDisplayName, avatarUrl)
+
+fun SpaceChildInfo.toMatrixItem() = if (roomType == RoomType.SPACE) {
+    MatrixItem.SpaceItem(childRoomId, name ?: canonicalAlias, avatarUrl)
+} else {
+    MatrixItem.RoomItem(childRoomId, name ?: canonicalAlias, avatarUrl)
+}

@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.features.autocomplete.AutocompleteClickListener
-import im.vector.app.features.reactions.ReactionClickListener
 import im.vector.app.features.reactions.data.EmojiItem
 import javax.inject.Inject
 
@@ -43,20 +42,15 @@ class AutocompleteEmojiController @Inject constructor(
         if (data.isNullOrEmpty()) {
             return
         }
+        val host = this
         data
                 .take(MAX)
                 .forEach { emojiItem ->
                     autocompleteEmojiItem {
                         id(emojiItem.name)
                         emojiItem(emojiItem)
-                        emojiTypeFace(emojiTypeface)
-                        onClickListener(
-                                object : ReactionClickListener {
-                                    override fun onReactionSelected(reaction: String) {
-                                        listener?.onItemClick(reaction)
-                                    }
-                                }
-                        )
+                        emojiTypeFace(host.emojiTypeface)
+                        onClickListener { host.listener?.onItemClick(emojiItem.emoji) }
                     }
                 }
 

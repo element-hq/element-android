@@ -6,7 +6,7 @@
     android:id="@+id/itemPublicRoomLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/room_round_avatars" />
 
     <TextView
         android:id="@+id/itemPublicRoomName"
@@ -31,7 +31,7 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomTopic"
@@ -39,7 +39,7 @@
         app:layout_constraintStart_toEndOf="@id/itemPublicRoomAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="@sample/matrix.json/data/roomName" />
+        tools:text="@sample/rooms.json/data/name" />
 
     <TextView
         android:id="@+id/itemPublicRoomTopic"
@@ -50,14 +50,14 @@
         android:gravity="center_vertical"
         android:maxLines="1"
         android:singleLine="true"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="15sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomMembersCount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
         app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomName"
-        tools:text="@sample/matrix.json/data/roomTopic"
+        tools:text="@sample/rooms.json/data/topic"
         tools:visibility="visible" />
 
     <TextView
@@ -69,10 +69,10 @@
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:minWidth="56dp"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="15sp"
         app:drawableStartCompat="@drawable/ic_user"
-        app:drawableTint="?riotx_text_secondary"
+        app:drawableTint="?vctr_content_secondary"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
         app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomTopic"
@@ -88,12 +88,12 @@
         android:maxLines="1"
         android:minWidth="40dp"
         android:singleLine="true"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="15sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/itemPublicRoomMembersCount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/itemPublicRoomMembersCount"
-        tools:text="@sample/matrix.json/data/roomAlias" />
+        tools:text="@sample/rooms.json/data/alias" />
 
     <im.vector.app.core.platform.ButtonStateView
         android:id="@+id/itemPublicRoomButtonState"
@@ -111,7 +111,7 @@
         android:id="@+id/itemPublicRoomBottomSeparator"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?riotx_header_panel_border_mobile"
+        android:background="?vctr_list_separator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

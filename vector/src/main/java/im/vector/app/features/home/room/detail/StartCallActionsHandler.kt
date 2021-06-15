@@ -16,25 +16,17 @@
 
 package im.vector.app.features.home.room.detail
 
-import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.platform.Restorable
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.checkPermissions
-import im.vector.app.features.call.DialerChoiceBottomSheet
-import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
-import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-
-private const val DIALER_OPTION_TAG = "DIALER_OPTION_TAG"
-private const val DIAL_PAD_TAG = "DIAL_PAD_TAG"
 
 class StartCallActionsHandler(
         private val roomId: String,
@@ -44,52 +36,20 @@ class StartCallActionsHandler(
         private val roomDetailViewModel: RoomDetailViewModel,
         private val startCallActivityResultLauncher: ActivityResultLauncher<Array<String>>,
         private val showDialogWithMessage: (String) -> Unit,
-        private val onTapToReturnToCall: () -> Unit): Restorable {
+        private val onTapToReturnToCall: () -> Unit)  {
 
     fun onVideoCallClicked() {
         handleCallRequest(true)
     }
 
-    fun onVoiceCallClicked() = withState(roomDetailViewModel) {
-        if (it.showDialerOption) {
-            displayDialerChoiceBottomSheet()
-        } else {
-            handleCallRequest(false)
-        }
-    }
-
-    private fun DialerChoiceBottomSheet.applyListeners(): DialerChoiceBottomSheet {
-        onDialPadClicked = ::displayDialPadBottomSheet
-        onVoiceCallClicked = { handleCallRequest(false) }
-        return this
-    }
-
-    private fun CallDialPadBottomSheet.applyCallback(): CallDialPadBottomSheet {
-        callback = object : DialPadFragment.Callback {
-            override fun onOkClicked(formatted: String?, raw: String?) {
-                if (raw.isNullOrEmpty()) return
-                roomDetailViewModel.handle(RoomDetailAction.StartCallWithPhoneNumber(raw, false))
-            }
-        }
-        return this
-    }
-
-    private fun displayDialerChoiceBottomSheet() {
-        DialerChoiceBottomSheet()
-                .applyListeners()
-                .show(fragment.parentFragmentManager, DIALER_OPTION_TAG)
-    }
-
-    private fun displayDialPadBottomSheet() {
-        CallDialPadBottomSheet.newInstance(true)
-                .applyCallback()
-                .show(fragment.parentFragmentManager, DIAL_PAD_TAG)
+    fun onVoiceCallClicked() {
+        handleCallRequest(false)
     }
 
     private fun handleCallRequest(isVideoCall: Boolean) = withState(roomDetailViewModel) { state ->
         val roomSummary = state.asyncRoomSummary.invoke() ?: return@withState
         when (roomSummary.joinedMembersCount) {
-            1 -> {
+            1    -> {
                 val pendingInvite = roomSummary.invitedMembersCount ?: 0 > 0
                 if (pendingInvite) {
                     // wait for other to join
@@ -99,11 +59,11 @@ class StartCallActionsHandler(
                     showDialogWithMessage(fragment.getString(R.string.cannot_call_yourself))
                 }
             }
-            2 -> {
+            2    -> {
                 val currentCall = callManager.getCurrentCall()
                 if (currentCall != null) {
                     // resume existing if same room, if not prompt to kill and then restart new call?
-                    if (currentCall.roomId == roomId) {
+                    if (currentCall.signalingRoomId == roomId) {
                         onTapToReturnToCall()
                     }
                     //                        else {
@@ -140,7 +100,7 @@ class StartCallActionsHandler(
                         // A conference is already in progress!
                         showDialogWithMessage(fragment.getString(R.string.conference_call_in_progress))
                     } else {
-                        AlertDialog.Builder(fragment.requireContext())
+                        MaterialAlertDialogBuilder(fragment.requireContext())
                                 .setTitle(if (isVideoCall) R.string.video_meeting else R.string.audio_meeting)
                                 .setMessage(R.string.audio_video_meeting_description)
                                 .setPositiveButton(fragment.getString(R.string.create)) { _, _ ->
@@ -157,7 +117,7 @@ class StartCallActionsHandler(
 
     private fun safeStartCall(isVideoCall: Boolean) {
         if (vectorPreferences.preventAccidentalCall()) {
-            AlertDialog.Builder(fragment.requireActivity())
+            MaterialAlertDialogBuilder(fragment.requireActivity())
                     .setMessage(if (isVideoCall) R.string.start_video_call_prompt_msg else R.string.start_voice_call_prompt_msg)
                     .setPositiveButton(if (isVideoCall) R.string.start_video_call else R.string.start_voice_call) { _, _ ->
                         safeStartCall2(isVideoCall)
@@ -188,15 +148,6 @@ class StartCallActionsHandler(
                 roomDetailViewModel.pendingAction = null
                 roomDetailViewModel.handle(startCallAction)
             }
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) = Unit
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        if (savedInstanceState != null) {
-            (fragment.parentFragmentManager.findFragmentByTag(DIALER_OPTION_TAG) as? DialerChoiceBottomSheet)?.applyListeners()
-            (fragment.parentFragmentManager.findFragmentByTag(DIAL_PAD_TAG) as? CallDialPadBottomSheet)?.applyCallback()
         }
     }
 }

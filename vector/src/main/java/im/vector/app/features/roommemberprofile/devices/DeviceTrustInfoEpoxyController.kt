@@ -20,10 +20,10 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
+import im.vector.app.core.ui.list.ItemStyle
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
-import im.vector.app.core.ui.list.genericItemWithValue
+import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.settings.VectorPreferences
@@ -44,14 +44,15 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
     var interactionListener: InteractionListener? = null
 
     override fun buildModels(data: DeviceListViewState?) {
-        data?.selectedDevice?.let {
-            val isVerified = it.trustLevel?.isVerified() == true
+        val host = this
+        data?.selectedDevice?.let { cryptoDeviceInfo ->
+            val isVerified = cryptoDeviceInfo.trustLevel?.isVerified() == true
             genericItem {
                 id("title")
-                style(GenericItem.STYLE.BIG_TEXT)
+                style(ItemStyle.BIG_TEXT)
                 titleIconResourceId(if (isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                 title(
-                        stringProvider.getString(
+                        host.stringProvider.getString(
                                 if (isVerified) R.string.verification_profile_verified else R.string.verification_profile_warning
                         )
                 )
@@ -59,16 +60,16 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
             genericFooterItem {
                 id("desc")
                 centered(false)
-                textColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                 apply {
                     if (isVerified) {
                         // TODO FORMAT
-                        text(stringProvider.getString(R.string.verification_profile_device_verified_because,
+                        text(host.stringProvider.getString(R.string.verification_profile_device_verified_because,
                                 data.userItem?.displayName ?: "",
                                 data.userItem?.id ?: ""))
                     } else {
                         // TODO what if mine
-                        text(stringProvider.getString(R.string.verification_profile_device_new_signing,
+                        text(host.stringProvider.getString(R.string.verification_profile_device_new_signing,
                                 data.userItem?.displayName ?: "",
                                 data.userItem?.id ?: ""))
                     }
@@ -76,16 +77,16 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
 //                    text(stringProvider.getString(R.string.verification_profile_device_untrust_info))
             }
 
-            genericItemWithValue {
-                id(it.deviceId)
+            genericWithValueItem {
+                id(cryptoDeviceInfo.deviceId)
                 titleIconResourceId(if (isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                 title(
                         span {
-                            +(it.displayName() ?: "")
+                            +(cryptoDeviceInfo.displayName() ?: "")
                             span {
-                                text = " (${it.deviceId})"
-                                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
-                                textSize = dimensionConverter.spToPx(14)
+                                text = " (${cryptoDeviceInfo.deviceId})"
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                                textSize = host.dimensionConverter.spToPx(14)
                             }
                         }
                 )
@@ -95,18 +96,18 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                 genericFooterItem {
                     id("warn")
                     centered(false)
-                    textColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                    text(stringProvider.getString(R.string.verification_profile_device_untrust_info))
+                    textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                    text(host.stringProvider.getString(R.string.verification_profile_device_untrust_info))
                 }
 
                 bottomSheetVerificationActionItem {
                     id("verify")
-                    title(stringProvider.getString(R.string.cross_signing_verify_by_emoji))
-                    titleColor(colorProvider.getColor(R.color.riotx_accent))
+                    title(host.stringProvider.getString(R.string.cross_signing_verify_by_emoji))
+                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     iconRes(R.drawable.ic_arrow_right)
-                    iconColor(colorProvider.getColor(R.color.riotx_accent))
+                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     listener {
-                        interactionListener?.onVerifyManually(it)
+                        host.interactionListener?.onVerifyManually(cryptoDeviceInfo)
                     }
                 }
             }

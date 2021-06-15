@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:fadeScrollbars="false"
     android:scrollbars="vertical">
 
@@ -26,7 +25,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
         <im.vector.app.core.ui.views.ShieldImageView
             android:id="@+id/otherUserShield"
@@ -45,7 +44,7 @@
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.login.terms
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 import javax.inject.Inject
@@ -28,16 +27,16 @@ class PolicyController @Inject constructor() : TypedEpoxyController<List<Localiz
     var homeServer: String? = null
 
     override fun buildModels(data: List<LocalizedFlowDataLoginTermsChecked>) {
+        val host = this
         data.forEach { entry ->
             policyItem {
                 id(entry.localizedFlowDataLoginTerms.policyName)
                 checked(entry.checked)
                 title(entry.localizedFlowDataLoginTerms.localizedName)
-                subtitle(homeServer)
-
-                clickListener(View.OnClickListener { listener?.openPolicy(entry.localizedFlowDataLoginTerms) })
+                subtitle(host.homeServer)
+                clickListener { host.listener?.openPolicy(entry.localizedFlowDataLoginTerms) }
                 checkChangeListener { _, isChecked ->
-                    listener?.setChecked(entry.localizedFlowDataLoginTerms, isChecked)
+                    host.listener?.setChecked(entry.localizedFlowDataLoginTerms, isChecked)
                 }
             }
         }

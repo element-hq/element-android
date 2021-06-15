@@ -219,7 +219,7 @@ internal class DefaultFileService @Inject constructor(
                                fileName: String,
                                mimeType: String?,
                                elementToDecrypt: ElementToDecrypt?): Boolean {
-        return fileState(mxcUrl, fileName, mimeType, elementToDecrypt) == FileService.FileState.IN_CACHE
+        return fileState(mxcUrl, fileName, mimeType, elementToDecrypt) is FileService.FileState.InCache
     }
 
     internal data class CachedFiles(
@@ -256,12 +256,17 @@ internal class DefaultFileService @Inject constructor(
                            fileName: String,
                            mimeType: String?,
                            elementToDecrypt: ElementToDecrypt?): FileService.FileState {
-        mxcUrl ?: return FileService.FileState.UNKNOWN
-        if (getFiles(mxcUrl, fileName, mimeType, elementToDecrypt != null).file.exists()) return FileService.FileState.IN_CACHE
+        mxcUrl ?: return FileService.FileState.Unknown
+        val files = getFiles(mxcUrl, fileName, mimeType, elementToDecrypt != null)
+        if (files.file.exists()) {
+            return FileService.FileState.InCache(
+                    decryptedFileInCache = files.getClearFile().exists()
+            )
+        }
         val isDownloading = synchronized(ongoing) {
             ongoing[mxcUrl] != null
         }
-        return if (isDownloading) FileService.FileState.DOWNLOADING else FileService.FileState.UNKNOWN
+        return if (isDownloading) FileService.FileState.Downloading else FileService.FileState.Unknown
     }
 
     /**
@@ -286,7 +291,7 @@ internal class DefaultFileService @Inject constructor(
                     Timber.v("Get size of ${it.absolutePath}")
                     true
                 }
-                .sumBy { it.length().toInt() }
+                .sumOf { it.length().toInt() }
     }
 
     override fun clearCache() {

@@ -73,7 +73,7 @@ class KeyRequestHandler @Inject constructor(
     }
 
     override fun onSecretShareRequest(request: IncomingSecretShareRequest): Boolean {
-        // By default riotX will not prompt if the SDK has decided that the request should not be fulfilled
+        // By default Element will not prompt if the SDK has decided that the request should not be fulfilled
         Timber.v("## onSecretShareRequest() : Ignoring $request")
         request.ignore?.run()
         return true

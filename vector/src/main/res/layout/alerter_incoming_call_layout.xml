@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <TextView
         android:id="@+id/incomingCallNameView"
@@ -28,13 +28,13 @@
         android:layout_marginEnd="12dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/incomingCallRejectView"
         app:layout_constraintStart_toEndOf="@id/incomingCallAvatar"
         app:layout_constraintTop_toTopOf="@id/incomingCallAvatar"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/incomingCallKindView"
@@ -45,9 +45,9 @@
         android:drawablePadding="4dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="15sp"
-        app:drawableTint="?riotx_text_secondary"
+        app:drawableTint="?vctr_content_secondary"
         app:layout_constraintEnd_toStartOf="@+id/incomingCallRejectView"
         app:layout_constraintStart_toStartOf="@id/incomingCallNameView"
         app:layout_constraintTop_toBottomOf="@id/incomingCallNameView"
@@ -59,7 +59,7 @@
         android:layout_height="40dp"
         android:layout_marginEnd="12dp"
         android:background="@drawable/bg_rounded_button"
-        android:backgroundTint="@color/riotx_accent"
+        android:backgroundTint="?colorPrimary"
         android:clickable="true"
         android:contentDescription="@string/call_notification_answer"
         android:focusable="true"
@@ -67,8 +67,7 @@
         android:src="@drawable/ic_call_answer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@android:color/white" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/incomingCallRejectView"
@@ -76,7 +75,7 @@
         android:layout_height="40dp"
         android:layout_marginEnd="12dp"
         android:background="@drawable/bg_rounded_button"
-        android:backgroundTint="@color/riotx_destructive_accent"
+        android:backgroundTint="?colorError"
         android:clickable="true"
         android:contentDescription="@string/call_notification_reject"
         android:focusable="true"

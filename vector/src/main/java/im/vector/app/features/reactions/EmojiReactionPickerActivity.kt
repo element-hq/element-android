@@ -24,7 +24,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayout
@@ -150,13 +149,13 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
                     searchView.isIconified = false
                     searchView.requestFocusFromTouch()
                     // we want to force the tool bar as visible even if hidden with scroll flags
-                    findViewById<Toolbar>(R.id.toolbar)?.minimumHeight = getActionBarSize()
+                    views.emojiPickerToolbar.minimumHeight = getActionBarSize()
                     return true
                 }
 
                 override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
                     // when back, clear all search
-                    findViewById<Toolbar>(R.id.toolbar)?.minimumHeight = 0
+                    views.emojiPickerToolbar.minimumHeight = 0
                     searchView.setQuery("", true)
                     return true
                 }

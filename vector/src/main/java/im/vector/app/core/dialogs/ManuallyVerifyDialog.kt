@@ -17,7 +17,7 @@
 package im.vector.app.core.dialogs
 
 import android.app.Activity
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.DialogDeviceVerifyBinding
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
@@ -28,7 +28,7 @@ object ManuallyVerifyDialog {
     fun show(activity: Activity, cryptoDeviceInfo: CryptoDeviceInfo, onVerified: (() -> Unit)) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_device_verify, null)
         val views = DialogDeviceVerifyBinding.bind(dialogLayout)
-        val builder = AlertDialog.Builder(activity)
+        val builder = MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.cross_signing_verify_by_text)
                 .setView(dialogLayout)
                 .setPositiveButton(R.string.encryption_information_verify) { _, _ ->

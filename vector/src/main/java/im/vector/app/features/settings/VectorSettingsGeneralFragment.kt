@@ -33,6 +33,7 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
@@ -52,7 +53,6 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.workers.signout.SignOutUiWorker
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.failure.isInvalidPassword
@@ -224,7 +224,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
             it.summary = TextUtils.formatFileSize(requireContext(), size.toLong())
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                GlobalScope.launch(Dispatchers.Main) {
+                lifecycleScope.launch(Dispatchers.Main) {
                     // On UI Thread
                     displayLoadingView()
 
@@ -359,7 +359,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 views.changePasswordShowPasswords.render(passwordShown)
             }
 
-            val dialog = AlertDialog.Builder(activity)
+            val dialog = MaterialAlertDialogBuilder(activity)
                     .setView(view)
                     .setCancelable(false)
                     .setPositiveButton(R.string.settings_change_password, null)

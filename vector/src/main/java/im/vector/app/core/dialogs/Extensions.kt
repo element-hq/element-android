@@ -16,12 +16,12 @@
 
 package im.vector.app.core.dialogs
 
-import androidx.annotation.ColorRes
+import androidx.annotation.AttrRes
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import im.vector.app.R
+import im.vector.app.features.themes.ThemeUtils
 
-fun AlertDialog.withColoredButton(whichButton: Int, @ColorRes color: Int = R.color.vector_error_color): AlertDialog {
-    getButton(whichButton)?.setTextColor(ContextCompat.getColor(context, color))
+fun AlertDialog.withColoredButton(whichButton: Int, @AttrRes color: Int = R.attr.colorError): AlertDialog {
+    getButton(whichButton)?.setTextColor(ThemeUtils.getColor(context, color))
     return this
 }

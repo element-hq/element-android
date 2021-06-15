@@ -15,12 +15,15 @@
  */
 package im.vector.app.features.attachments
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
+import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.platform.Restorable
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.multipicker.MultiPicker
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -77,10 +80,10 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     }
 
     /**
-     * Starts the process for handling image picking
+     * Starts the process for handling image/video picking
      */
     fun selectGallery(activityResultLauncher: ActivityResultLauncher<Intent>) {
-        MultiPicker.get(MultiPicker.IMAGE).startWith(activityResultLauncher)
+        MultiPicker.get(MultiPicker.MEDIA).startWith(activityResultLauncher)
     }
 
     /**
@@ -91,10 +94,21 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     }
 
     /**
-     * Starts the process for handling capture image picking
+     * Starts the process for handling image/video capture. Can open a dialog
      */
-    fun openCamera(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
-        captureUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(context, activityResultLauncher)
+    fun openCamera(activity: Activity,
+                   vectorPreferences: VectorPreferences,
+                   cameraActivityResultLauncher: ActivityResultLauncher<Intent>,
+                   cameraVideoActivityResultLauncher: ActivityResultLauncher<Intent>) {
+        PhotoOrVideoDialog(activity, vectorPreferences).show(object : PhotoOrVideoDialog.PhotoOrVideoDialogListener {
+            override fun takePhoto() {
+                captureUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(context, cameraActivityResultLauncher)
+            }
+
+            override fun takeVideo() {
+                captureUri = MultiPicker.get(MultiPicker.CAMERA_VIDEO).startWithExpectingFile(context, cameraVideoActivityResultLauncher)
+            }
+        })
     }
 
     /**
@@ -133,18 +147,30 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                 }
     }
 
-    fun onImageResult(data: Intent?) {
+    fun onMediaResult(data: Intent?) {
         callback.onContentAttachmentsReady(
-                MultiPicker.get(MultiPicker.IMAGE)
+                MultiPicker.get(MultiPicker.MEDIA)
                         .getSelectedFiles(context, data)
                         .map { it.toContentAttachmentData() }
         )
     }
 
-    fun onPhotoResult() {
+    fun onCameraResult() {
         captureUri?.let { captureUri ->
             MultiPicker.get(MultiPicker.CAMERA)
                     .getTakenPhoto(context, captureUri)
+                    ?.let {
+                        callback.onContentAttachmentsReady(
+                                listOf(it).map { it.toContentAttachmentData() }
+                        )
+                    }
+        }
+    }
+
+    fun onCameraVideoResult() {
+        captureUri?.let { captureUri ->
+            MultiPicker.get(MultiPicker.CAMERA_VIDEO)
+                    .getTakenVideo(context, captureUri)
                     ?.let {
                         callback.onContentAttachmentsReady(
                                 listOf(it).map { it.toContentAttachmentData() }

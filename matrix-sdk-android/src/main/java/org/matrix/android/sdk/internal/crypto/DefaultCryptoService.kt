@@ -348,7 +348,7 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.close()
     }
 
-    // Aways enabled on RiotX
+    // Always enabled on Matrix Android SDK2
     override fun isCryptoEnabled() = true
 
     /**
@@ -440,7 +440,7 @@ internal class DefaultCryptoService @Inject constructor(
         val existingAlgorithm = cryptoStore.getRoomAlgorithm(roomId)
 
         if (!existingAlgorithm.isNullOrEmpty() && existingAlgorithm != algorithm) {
-            Timber.e("## CRYPTO | setEncryptionInRoom() : Ignoring m.room.encryption event which requests a change of config in $roomId")
+            Timber.e("## CRYPTO | setEncryptionInRoom() : Ignoring m.room.encryption event which requests a change of config in $roomId")
             return false
         }
 
@@ -522,7 +522,7 @@ internal class DefaultCryptoService @Inject constructor(
             if (algorithm != null) {
                 val userIds = getRoomUserIds(roomId)
                 val t0 = System.currentTimeMillis()
-                Timber.v("## CRYPTO | encryptEventContent() starts")
+                Timber.v("## CRYPTO | encryptEventContent() starts")
                 runCatching {
                     preshareRoomKey(roomId, userIds)
                     val content = encrypt(roomId, eventType, eventContent)
@@ -818,15 +818,11 @@ internal class DefaultCryptoService @Inject constructor(
      * Export the crypto keys
      *
      * @param password the password
-     * @param callback the exported keys
+     * @return the exported keys
      */
-    override fun exportRoomKeys(password: String, callback: MatrixCallback<ByteArray>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            runCatching {
-                val iterationCount = max(10000, MXMegolmExportEncryption.DEFAULT_ITERATION_COUNT)
-                olmMachine!!.exportKeys(password, iterationCount)
-            }.foldToCallback(callback)
-        }
+    override suspend fun exportRoomKeys(password: String): ByteArray {
+        val iterationCount = max(10000, MXMegolmExportEncryption.DEFAULT_ITERATION_COUNT)
+        return olmMachine!!.exportKeys(password, iterationCount)
     }
 
     /**
@@ -835,19 +831,12 @@ internal class DefaultCryptoService @Inject constructor(
      * @param roomKeysAsArray  the room keys as array.
      * @param password         the password
      * @param progressListener the progress listener
-     * @param callback         the asynchronous callback.
+     * @return the result ImportRoomKeysResult
      */
-    override fun importRoomKeys(roomKeysAsArray: ByteArray,
+    override suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
                                 password: String,
-                                progressListener: ProgressListener?,
-                                callback: MatrixCallback<ImportRoomKeysResult>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            runCatching {
-                withContext(coroutineDispatchers.crypto) {
-                    olmMachine!!.importKeys(roomKeysAsArray, password, progressListener)
-                }
-            }.foldToCallback(callback)
-        }
+                                progressListener: ProgressListener?): ImportRoomKeysResult {
+        return olmMachine!!.importKeys(roomKeysAsArray, password, progressListener)
     }
 
     /**
@@ -1045,12 +1034,12 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            Timber.d("## CRYPTO | prepareToEncrypt() : Check room members up to date")
+            Timber.d("## CRYPTO | prepareToEncrypt() : Check room members up to date")
             // Ensure to load all room members
             try {
                 loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
             } catch (failure: Throwable) {
-                Timber.e("## CRYPTO | prepareToEncrypt() : Failed to load room members")
+                Timber.e("## CRYPTO | prepareToEncrypt() : Failed to load room members")
                 callback.onFailure(failure)
                 return@launch
             }
@@ -1061,7 +1050,7 @@ internal class DefaultCryptoService @Inject constructor(
 
             if (algorithm == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
-                Timber.e("## CRYPTO | prepareToEncrypt() : $reason")
+                Timber.e("## CRYPTO | prepareToEncrypt() : $reason")
                 callback.onFailure(IllegalArgumentException("Missing algorithm"))
                 return@launch
             }
@@ -1071,7 +1060,7 @@ internal class DefaultCryptoService @Inject constructor(
             }.fold(
                     { callback.onSuccess(Unit) },
                     {
-                        Timber.e("## CRYPTO | prepareToEncrypt() failed.")
+                        Timber.e("## CRYPTO | prepareToEncrypt() failed.")
                         callback.onFailure(it)
                     }
             )

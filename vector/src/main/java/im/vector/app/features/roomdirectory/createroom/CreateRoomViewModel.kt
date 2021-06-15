@@ -26,8 +26,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -37,11 +37,14 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
+import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
+import timber.log.Timber
 
-class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
+class CreateRoomViewModel @AssistedInject constructor(@Assisted private val initialState: CreateRoomViewState,
                                                       private val session: Session,
                                                       private val rawService: RawService
 ) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
@@ -76,7 +79,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
             setState {
                 copy(
-                        isEncrypted = roomType is CreateRoomViewState.RoomType.Private && adminE2EByDefault,
+                        isEncrypted = roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Private && adminE2EByDefault,
                         hsAdminHasDisabledE2E = !adminE2EByDefault
                 )
             }
@@ -131,7 +134,8 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
             CreateRoomViewState(
                     isEncrypted = adminE2EByDefault,
-                    hsAdminHasDisabledE2E = !adminE2EByDefault
+                    hsAdminHasDisabledE2E = !adminE2EByDefault,
+                    parentSpaceId = initialState.parentSpaceId
             )
         }
 
@@ -147,14 +151,14 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
     private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState {
         if (action.isPublic) {
             copy(
-                    roomType = CreateRoomViewState.RoomType.Public(""),
+                    roomVisibilityType = CreateRoomViewState.RoomVisibilityType.Public(""),
                     // Reset any error in the form about alias
                     asyncCreateRoomRequest = Uninitialized,
                     isEncrypted = false
             )
         } else {
             copy(
-                    roomType = CreateRoomViewState.RoomType.Private,
+                    roomVisibilityType = CreateRoomViewState.RoomVisibilityType.Private,
                     isEncrypted = adminE2EByDefault
             )
         }
@@ -162,10 +166,10 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
     private fun setRoomAliasLocalPart(action: CreateRoomAction.SetRoomAliasLocalPart) {
         withState { state ->
-            if (state.roomType is CreateRoomViewState.RoomType.Public) {
+            if (state.roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Public) {
                 setState {
                     copy(
-                            roomType = CreateRoomViewState.RoomType.Public(action.aliasLocalPart),
+                            roomVisibilityType = CreateRoomViewState.RoomVisibilityType.Public(action.aliasLocalPart),
                             // Reset any error in the form about alias
                             asyncCreateRoomRequest = Uninitialized
                     )
@@ -182,6 +186,15 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             return@withState
         }
 
+        if (state.roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Public
+                && state.roomVisibilityType.aliasLocalPart.isBlank()) {
+            // we require an alias for public rooms
+            setState {
+                copy(asyncCreateRoomRequest = Fail(CreateRoomFailure.AliasError(RoomAliasError.AliasIsBlank)))
+            }
+            return@withState
+        }
+
         setState {
             copy(asyncCreateRoomRequest = Loading())
         }
@@ -191,15 +204,15 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
                     name = state.roomName.takeIf { it.isNotBlank() }
                     topic = state.roomTopic.takeIf { it.isNotBlank() }
                     avatarUri = state.avatarUri
-                    when (state.roomType) {
-                        is CreateRoomViewState.RoomType.Public  -> {
+                    when (state.roomVisibilityType) {
+                        is CreateRoomViewState.RoomVisibilityType.Public  -> {
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PUBLIC
                             // Preset
                             preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                            roomAliasName = state.roomType.aliasLocalPart
+                            roomAliasName = state.roomVisibilityType.aliasLocalPart
                         }
-                        is CreateRoomViewState.RoomType.Private -> {
+                        is CreateRoomViewState.RoomVisibilityType.Private -> {
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PRIVATE
                             // Preset
@@ -217,9 +230,20 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
         // TODO: Should this be non-cancellable?
         viewModelScope.launch {
-            val result = runCatching { session.createRoom(createRoomParams) }
-            result.fold(
+            runCatching { session.createRoom(createRoomParams) }.fold(
                     { roomId ->
+
+                        if (initialState.parentSpaceId != null) {
+                            // add it as a child
+                            try {
+                                session.spaceService()
+                                        .getSpace(initialState.parentSpaceId)
+                                        ?.addChildren(roomId, viaServers = null, order = null)
+                            } catch (failure: Throwable) {
+                                Timber.w(failure, "Failed to add as a child")
+                            }
+                        }
+
                         setState {
                             copy(asyncCreateRoomRequest = Success(roomId))
                         }

@@ -20,8 +20,9 @@ import android.os.Looper
 import androidx.annotation.MainThread
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
 import kotlin.concurrent.getOrSet
@@ -44,14 +45,14 @@ internal class RealmSessionProvider @Inject constructor(@SessionDatabase private
     }
 
     @MainThread
-    override fun onSessionStarted() {
+    override fun onSessionStarted(session: Session) {
         realmThreadLocal.getOrSet {
             Realm.getInstance(monarchy.realmConfiguration)
         }
     }
 
     @MainThread
-    override fun onSessionStopped() {
+    override fun onSessionStopped(session: Session) {
         realmThreadLocal.get()?.close()
         realmThreadLocal.remove()
     }

@@ -21,22 +21,24 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
+import androidx.fragment.app.Fragment
+import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetMatrixToCardBinding
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import java.lang.ref.WeakReference
 import javax.inject.Inject
+import kotlin.reflect.KClass
 
 class MatrixToBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetMatrixToCardBinding>() {
@@ -55,7 +57,13 @@ class MatrixToBottomSheet :
         injector.inject(this)
     }
 
-    private var interactionListener: InteractionListener? = null
+    private var weakReference = WeakReference<InteractionListener>(null)
+
+    var interactionListener: InteractionListener?
+        set(value) {
+            weakReference = WeakReference(value)
+        }
+        get() = weakReference.get()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetMatrixToCardBinding {
         return BottomSheetMatrixToCardBinding.inflate(inflater, container, false)
@@ -65,63 +73,41 @@ class MatrixToBottomSheet :
 
     interface InteractionListener {
         fun navigateToRoom(roomId: String)
+        fun switchToSpace(spaceId: String) {}
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
-        when (val item = state.matrixItem) {
-            Uninitialized -> {
-                views.matrixToCardContentLoading.isVisible = false
-                views.matrixToCardUserContentVisibility.isVisible = false
+        when (state.linkType) {
+            is PermalinkData.RoomLink -> {
+                views.matrixToCardContentLoading.isVisible = state.roomPeekResult is Incomplete
+                showFragment(MatrixToRoomSpaceFragment::class, Bundle())
             }
-            is Loading -> {
-                views.matrixToCardContentLoading.isVisible = true
-                views.matrixToCardUserContentVisibility.isVisible = false
+            is PermalinkData.UserLink -> {
+                views.matrixToCardContentLoading.isVisible = state.matrixItem is Incomplete
+                showFragment(MatrixToUserFragment::class, Bundle())
             }
-            is Success -> {
-                views.matrixToCardContentLoading.isVisible = false
-                views.matrixToCardUserContentVisibility.isVisible = true
-                views.matrixToCardNameText.setTextOrHide(item.invoke().displayName)
-                views.matrixToCardUserIdText.setTextOrHide(item.invoke().id)
-                avatarRenderer.render(item.invoke(), views.matrixToCardAvatar)
+            is PermalinkData.GroupLink -> {
             }
-            is Fail -> {
-                // TODO display some error copy?
-                dismiss()
+            is PermalinkData.FallbackLink -> {
             }
         }
+    }
 
-        when (state.startChattingState) {
-            Uninitialized -> {
-                views.matrixToCardButtonLoading.isVisible = false
-                views.matrixToCardSendMessageButton.isVisible = false
-            }
-            is Success -> {
-                views.matrixToCardButtonLoading.isVisible = false
-                views.matrixToCardSendMessageButton.isVisible = true
-            }
-            is Fail -> {
-                views.matrixToCardButtonLoading.isVisible = false
-                views.matrixToCardSendMessageButton.isVisible = true
-                // TODO display some error copy?
-                dismiss()
-            }
-            is Loading -> {
-                views.matrixToCardButtonLoading.isVisible = true
-                views.matrixToCardSendMessageButton.isInvisible = true
+    private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
+        if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
+            childFragmentManager.commitTransaction {
+                replace(views.matrixToCardFragmentContainer.id,
+                        fragmentClass.java,
+                        bundle,
+                        fragmentClass.simpleName
+                )
             }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.matrixToCardSendMessageButton.debouncedClicks {
-            withState(viewModel) {
-                it.matrixItem.invoke()?.let { item ->
-                    viewModel.handle(MatrixToAction.StartChattingWithUser(item))
-                }
-            }
-        }
 
         viewModel.observeViewEvents {
             when (it) {
@@ -130,6 +116,16 @@ class MatrixToBottomSheet :
                     dismiss()
                 }
                 MatrixToViewEvents.Dismiss -> dismiss()
+                is MatrixToViewEvents.NavigateToSpace -> {
+                    interactionListener?.switchToSpace(it.spaceId)
+                    dismiss()
+                }
+                is MatrixToViewEvents.ShowModalError -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setMessage(it.error)
+                            .setPositiveButton(getString(R.string.ok), null)
+                            .show()
+                }
             }
         }
     }

@@ -99,7 +99,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
         keysBackupState.value = session.cryptoService().keysBackupService().state
 
         Observable.combineLatest<List<UserAccountDataEvent>, Optional<MXCrossSigningInfo>, KeysBackupState, Optional<PrivateKeysInfo>, BannerState>(
-                session.rx().liveAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME)),
+                session.rx().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME)),
                 session.rx().liveCrossSigningInfo(session.myUserId),
                 keyBackupPublishSubject,
                 session.rx().liveCrossSigningPrivateKeys(),

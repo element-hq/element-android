@@ -1,0 +1,2 @@
+Hauptänderungen in dieser Version: Wichtige Fehlerbehebungen für 1.1.4!
+Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases/tag/v1.1.5

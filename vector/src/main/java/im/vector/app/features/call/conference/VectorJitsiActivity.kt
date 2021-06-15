@@ -25,7 +25,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
 import android.widget.FrameLayout
-import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.airbnb.mvrx.Fail
@@ -33,6 +33,7 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.facebook.react.modules.core.PermissionListener
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
@@ -67,7 +68,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     private val jitsiViewModel: JitsiCallViewModel by viewModel()
 
     override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
         injector.inject(this)
     }
 
@@ -87,8 +87,9 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
         jitsiViewModel.observeViewEvents {
             when (it) {
-                is JitsiCallViewEvents.StartConference            -> configureJitsiView(it)
+                is JitsiCallViewEvents.JoinConference             -> configureJitsiView(it)
                 is JitsiCallViewEvents.ConfirmSwitchingConference -> handleConfirmSwitching(it)
+                JitsiCallViewEvents.FailJoiningConference         -> handleFailJoining()
                 JitsiCallViewEvents.Finish                        -> finish()
                 JitsiCallViewEvents.LeaveConference               -> handleLeaveConference()
             }.exhaustive
@@ -102,7 +103,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     }
 
     private fun handleConfirmSwitching(action: JitsiCallViewEvents.ConfirmSwitchingConference) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dialog_title_warning)
                 .setMessage(R.string.jitsi_leave_conf_to_join_another_one_content)
                 .setPositiveButton(R.string.action_switch) { _, _ ->
@@ -139,12 +140,18 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         }
     }
 
-    private fun configureJitsiView(startConference: JitsiCallViewEvents.StartConference) {
+    private fun handleFailJoining() {
+        Toast.makeText(this, getString(R.string.error_jitsi_join_conf), Toast.LENGTH_LONG).show()
+        finish()
+    }
+
+    private fun configureJitsiView(joinConference: JitsiCallViewEvents.JoinConference) {
         val jitsiMeetConferenceOptions = JitsiMeetConferenceOptions.Builder()
-                .setVideoMuted(!startConference.enableVideo)
-                .setUserInfo(startConference.userInfo)
+                .setVideoMuted(!joinConference.enableVideo)
+                .setUserInfo(joinConference.userInfo)
+                .setToken(joinConference.token)
                 .apply {
-                    tryOrNull { URL(startConference.jitsiUrl) }?.let {
+                    tryOrNull { URL(joinConference.jitsiUrl) }?.let {
                         setServerURL(it)
                     }
                 }
@@ -154,8 +161,8 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
                 .setFeatureFlag("add-people.enabled", false)
                 .setFeatureFlag("video-share.enabled", false)
                 .setFeatureFlag("call-integration.enabled", false)
-                .setRoom(startConference.confId)
-                .setSubject(startConference.subject)
+                .setRoom(joinConference.confId)
+                .setSubject(joinConference.subject)
                 .build()
         jitsiMeetView?.join(jitsiMeetConferenceOptions)
     }

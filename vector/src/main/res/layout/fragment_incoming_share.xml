@@ -10,25 +10,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/incomingShareToolbar"
-            style="@style/VectorToolbarStyle"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            app:contentInsetStart="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/incomingShareSearchView"
-                style="@style/VectorSearchView"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/incomingShareToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:queryHint="@string/room_filtering_filter_hint"
-                app:searchIcon="@drawable/ic_filter" />
+                android:layout_height="?attr/actionBarSize"
+                app:contentInsetStart="0dp">
 
-        </androidx.appcompat.widget.Toolbar>
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/incomingShareSearchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:queryHint="@string/room_filtering_filter_hint"
+                    app:searchIcon="@drawable/ic_filter" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/incomingShareRoomList"
@@ -37,7 +40,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/incomingShareToolbar"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
             tools:listitem="@layout/item_room" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

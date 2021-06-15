@@ -29,7 +29,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItemHeader_
+import im.vector.app.core.ui.list.GenericHeaderItem_
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -61,15 +61,16 @@ class SearchResultController @Inject constructor(
     override fun buildModels(data: SearchViewState?) {
         data ?: return
 
+        val host = this
         val searchItems = buildSearchResultItems(data)
 
         if (data.hasMoreResult) {
             loadingItem {
                 // Always use a different id, because we can be notified several times of visibility state changed
-                id("loadMore${idx++}")
+                id("loadMore${host.idx++}")
                 onVisibilityStateChanged { _, _, visibilityState ->
                     if (visibilityState == VisibilityState.VISIBLE) {
-                        listener?.loadMore()
+                        host.listener?.loadMore()
                     }
                 }
             }
@@ -78,12 +79,12 @@ class SearchResultController @Inject constructor(
                 // All returned results by the server has been filtered out and there is no more result
                 noResultItem {
                     id("noResult")
-                    text(stringProvider.getString(R.string.no_result_placeholder))
+                    text(host.stringProvider.getString(R.string.no_result_placeholder))
                 }
             } else {
                 noResultItem {
                     id("noMoreResult")
-                    text(stringProvider.getString(R.string.no_more_results))
+                    text(host.stringProvider.getString(R.string.no_more_results))
                 }
             }
         }
@@ -110,7 +111,7 @@ class SearchResultController @Inject constructor(
                 timeInMillis = eventAndSender.event.originServerTs ?: System.currentTimeMillis()
             }
             if (lastDate?.get(Calendar.DAY_OF_YEAR) != eventDate.get(Calendar.DAY_OF_YEAR)) {
-                GenericItemHeader_()
+                GenericHeaderItem_()
                         .id(eventDate.hashCode())
                         .text(dateFormatter.format(eventDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
                         .let { result.add(it) }

@@ -25,18 +25,18 @@ class SupportedVerificationMethodsProvider @Inject constructor(
         private val hardwareInfo: HardwareInfo
 ) {
     /**
-     * Provide the list of supported method by RiotX, with or without the QR_CODE_SCAN, depending if a back camera
+     * Provide the list of supported method by Element, with or without the QR_CODE_SCAN, depending if a back camera
      * is available
      */
     fun provide(): List<VerificationMethod> {
         return mutableListOf(
-                // RiotX supports SAS verification
+                // Element supports SAS verification
                 VerificationMethod.SAS,
-                // RiotX is able to show QR codes
+                // Element is able to show QR codes
                 VerificationMethod.QR_CODE_SHOW)
                 .apply {
                     if (hardwareInfo.hasBackCamera()) {
-                        // RiotX is able to scan QR codes, and a Camera is available
+                        // Element is able to scan QR codes, and a Camera is available
                         add(VerificationMethod.QR_CODE_SCAN)
                     } else {
                         // This quite uncommon

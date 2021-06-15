@@ -18,13 +18,13 @@ package org.matrix.android.sdk.internal.session.room.typing
 
 import android.os.SystemClock
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import org.matrix.android.sdk.api.MatrixCallback
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.room.typing.TypingService
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import timber.log.Timber
 
 /**
@@ -35,7 +35,6 @@ import timber.log.Timber
  */
 internal class DefaultTypingService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        private val taskExecutor: TaskExecutor,
         private val sendTypingTask: SendTypingTask
 ) : TypingService {
 
@@ -44,8 +43,8 @@ internal class DefaultTypingService @AssistedInject constructor(
         fun create(roomId: String): DefaultTypingService
     }
 
-    private var currentTask: Cancelable? = null
-    private var currentAutoStopTask: Cancelable? = null
+    private val coroutineScope = CoroutineScope(Job())
+    private var currentTask: Job? = null
 
     // What the homeserver knows
     private var userIsTyping = false
@@ -53,26 +52,24 @@ internal class DefaultTypingService @AssistedInject constructor(
     // Last time the user is typing event has been sent
     private var lastRequestTimestamp: Long = 0
 
+    /**
+     * Notify to the server that the user is typing and schedule the auto typing off
+     */
     override fun userIsTyping() {
-        scheduleAutoStop()
-
         val now = SystemClock.elapsedRealtime()
-
-        if (userIsTyping && now < lastRequestTimestamp + MIN_DELAY_BETWEEN_TWO_USER_IS_TYPING_REQUESTS_MILLIS) {
-            Timber.d("Typing: Skip start request")
-            return
-        }
-
-        Timber.d("Typing: Send start request")
-        userIsTyping = true
-        lastRequestTimestamp = now
-
         currentTask?.cancel()
-
-        val params = SendTypingTask.Params(roomId, true)
-        currentTask = sendTypingTask
-                .configureWith(params)
-                .executeBy(taskExecutor)
+        currentTask = coroutineScope.launch {
+            if (userIsTyping && now < lastRequestTimestamp + MIN_DELAY_BETWEEN_TWO_USER_IS_TYPING_REQUESTS_MILLIS) {
+                Timber.d("Typing: Skip start request")
+            } else {
+                Timber.d("Typing: Send start request")
+                lastRequestTimestamp = now
+                sendRequest(true)
+            }
+            delay(MIN_DELAY_TO_SEND_STOP_TYPING_REQUEST_WHEN_NO_USER_ACTIVITY_MILLIS)
+            Timber.d("Typing: auto stop")
+            sendRequest(false)
+        }
     }
 
     override fun userStopsTyping() {
@@ -82,35 +79,22 @@ internal class DefaultTypingService @AssistedInject constructor(
         }
 
         Timber.d("Typing: Send stop request")
-        userIsTyping = false
         lastRequestTimestamp = 0
 
-        currentAutoStopTask?.cancel()
         currentTask?.cancel()
-
-        val params = SendTypingTask.Params(roomId, false)
-        currentTask = sendTypingTask
-                .configureWith(params)
-                .executeBy(taskExecutor)
+        currentTask = coroutineScope.launch {
+            sendRequest(false)
+        }
     }
 
-    private fun scheduleAutoStop() {
-        Timber.d("Typing: Schedule auto stop")
-        currentAutoStopTask?.cancel()
-
-        val params = SendTypingTask.Params(
-                roomId,
-                false,
-                delay = MIN_DELAY_TO_SEND_STOP_TYPING_REQUEST_WHEN_NO_USER_ACTIVITY_MILLIS)
-        currentAutoStopTask = sendTypingTask
-                .configureWith(params) {
-                    callback = object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            userIsTyping = false
-                        }
-                    }
-                }
-                .executeBy(taskExecutor)
+    private suspend fun sendRequest(isTyping: Boolean) {
+        try {
+            sendTypingTask.execute(SendTypingTask.Params(roomId, isTyping))
+            userIsTyping = isTyping
+        } catch (failure: Throwable) {
+            // Ignore network error, etc...
+            Timber.w(failure, "Unable to send typing request")
+        }
     }
 
     companion object {
