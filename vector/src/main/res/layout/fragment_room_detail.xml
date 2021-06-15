@@ -46,7 +46,7 @@
 
                 <TextView
                     android:id="@+id/roomToolbarTitleView"
-                    style="@style/VectorTextView.HeadlineM"
+                    style="@style/TextView.Vector.HeadlineM"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -63,7 +63,7 @@
 
                 <TextView
                     android:id="@+id/roomToolbarSubtitleView"
-                    style="@style/VectorTextView.Body"
+                    style="@style/TextView.Vector.Body"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"

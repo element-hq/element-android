@@ -20,7 +20,7 @@
 
         <TextView
             android:id="@+id/loginTermsTitle"
-            style="@style/VectorTextAppearanceTitle"
+            style="@style/TextAppearance.Vector.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/loginTermsNotice"
-            style="@style/VectorTextAppearanceBody"
+            style="@style/TextAppearance.Vector.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -54,7 +54,7 @@
 
         <Button
             android:id="@+id/loginTermsSubmit"
-            style="@style/Style.Vector.Login.Button"
+            style="@style/Button.Vector.Style.Login"
             android:layout_marginEnd="36dp"
             android:text="@string/accept"
             app:layout_constraintBottom_toBottomOf="parent"

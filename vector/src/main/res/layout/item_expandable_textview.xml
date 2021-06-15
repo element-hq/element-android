@@ -9,7 +9,7 @@
 
     <im.vector.app.core.ui.views.NonScrollingTextView
         android:id="@+id/expandableContent"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autoLink="web"

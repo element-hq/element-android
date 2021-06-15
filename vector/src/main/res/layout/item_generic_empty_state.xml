@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/emptyItemTitleView"
-        style="@style/VectorTextView.Subtitle"
+        style="@style/TextView.Vector.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -40,7 +40,7 @@
 
     <TextView
         android:id="@+id/emptyItemMessageView"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

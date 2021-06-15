@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="VectorTextView" parent="Widget.MaterialComponents.TextView" />
+    <style name="TextView.Vector" parent="Widget.MaterialComponents.TextView" />
 
     <!-- Note: lineHeight attribute cannot be added in textAppearance style -->
-    <style name="VectorTextView.Title">
-        <item name="android:textAppearance">@style/VectorTextAppearanceTitle</item>
+    <style name="TextView.Vector.Title">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Title</item>
         <item name="lineHeight">32sp</item>
     </style>
 
-    <style name="VectorTextView.Title.M">
-        <item name="android:textAppearance">@style/VectorTextAppearanceTitle.M</item>
+    <style name="TextView.Vector.Title.M">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Title.M</item>
     </style>
 
-    <style name="VectorTextView.HeadlineM">
-        <item name="android:textAppearance">@style/VectorTextAppearanceHeadlineM</item>
+    <style name="TextView.Vector.HeadlineM">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Headline.Medium</item>
     </style>
 
-    <style name="VectorTextView.Subtitle">
-        <item name="android:textAppearance">@style/VectorTextAppearanceSubtitle</item>
+    <style name="TextView.Vector.Subtitle">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Subtitle</item>
     </style>
 
-    <style name="VectorTextView.Subtitle.M">
-        <item name="android:textAppearance">@style/VectorTextAppearanceSubtitle.M</item>
+    <style name="TextView.Vector.Subtitle.M">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Subtitle.M</item>
     </style>
 
-    <style name="VectorTextView.Body">
-        <item name="android:textAppearance">@style/VectorTextAppearanceBody</item>
+    <style name="TextView.Vector.Body">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Body</item>
         <item name="lineHeight">20sp</item>
     </style>
 
-    <style name="VectorTextView.Body.M">
-        <item name="android:textAppearance">@style/VectorTextAppearanceBody.M</item>
+    <style name="TextView.Vector.Body.M">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Body.M</item>
     </style>
 
-    <style name="VectorTextView.Caption">
-        <item name="android:textAppearance">@style/VectorTextAppearanceCaption</item>
+    <style name="TextView.Vector.Caption">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Caption</item>
         <item name="lineHeight">16sp</item>
     </style>
 
-    <style name="VectorTextView.Micro">
-        <item name="android:textAppearance">@style/VectorTextAppearanceMicro</item>
+    <style name="TextView.Vector.Micro">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Micro</item>
         <item name="lineHeight">16sp</item>
     </style>
 

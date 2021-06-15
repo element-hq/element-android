@@ -17,7 +17,7 @@
 
             <TextView
                 android:id="@+id/loginTitle"
-                style="@style/VectorTextView.Title"
+                style="@style/TextView.Vector.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -26,7 +26,7 @@
 
             <TextView
                 android:id="@+id/loginSubtitle"
-                style="@style/VectorTextView.Body"
+                style="@style/TextView.Vector.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -52,7 +52,7 @@
 
             <TextView
                 android:id="@+id/loginChooseHelp"
-                style="@style/VectorTextView.Caption"
+                style="@style/TextView.Vector.Caption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/login_please_choose_a_user_name_help_2"
@@ -61,7 +61,7 @@
 
             <Button
                 android:id="@+id/loginSubmit"
-                style="@style/Style.Vector.Login.Button"
+                style="@style/Button.Vector.Style.Login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -82,7 +82,7 @@
 
                 <TextView
                     android:id="@+id/loginSocialLoginHeader"
-                    style="@style/VectorTextView.Body"
+                    style="@style/TextView.Vector.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"

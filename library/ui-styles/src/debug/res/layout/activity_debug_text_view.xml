@@ -7,62 +7,62 @@
     tools:ignore="HardcodedText">
 
     <TextView
-        style="@style/VectorTextView.Title"
+        style="@style/TextView.Vector.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VectorTextAppearanceTitle\nline 2" />
+        android:text="TextAppearance.Vector.Title\nline 2" />
 
     <TextView
-        style="@style/VectorTextView.Title.M"
+        style="@style/TextView.Vector.Title.M"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VectorTextAppearanceTitle.M\nline 2" />
+        android:text="TextAppearance.Vector.Title.M\nline 2" />
 
     <TextView
-        style="@style/VectorTextView.HeadlineM"
+        style="@style/TextView.Vector.HeadlineM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VectorTextAppearanceHeadlineM\nline 2" />
+        android:text="TextAppearance.Vector.Headline.Medium\nline 2" />
 
     <TextView
-        style="@style/VectorTextView.Subtitle"
+        style="@style/TextView.Vector.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VectorTextAppearanceSubtitle\nline 2" />
+        android:text="TextAppearance.Vector.Subtitle\nline 2" />
 
     <TextView
-        style="@style/VectorTextView.Subtitle.M"
+        style="@style/TextView.Vector.Subtitle.M"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VectorTextAppearanceSubtitle.M\nline 2" />
+        android:text="TextAppearance.Vector.Subtitle.M\nline 2" />
 
     <TextView
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VectorTextAppearanceBody\nline 2" />
+        android:text="TextAppearance.Vector.Body\nline 2" />
 
     <TextView
-        style="@style/VectorTextView.Body.M"
+        style="@style/TextView.Vector.Body.M"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VectorTextAppearanceBody.M\nline 2" />
+        android:text="TextAppearance.Vector.Body.M\nline 2" />
 
     <TextView
-        style="@style/VectorTextView.Caption"
+        style="@style/TextView.Vector.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VectorTextAppearanceCaption\nline 2" />
+        android:text="TextAppearance.Vector.Caption\nline 2" />
 
     <TextView
-        style="@style/VectorTextView.Micro"
+        style="@style/TextView.Vector.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VectorTextAppearanceMicro\nline 2" />
+        android:text="TextAppearance.Vector.Micro\nline 2" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Default (VectorTextAppearanceBody)\nline 2" />
+        android:text="Default (TextAppearance.Vector.Body)\nline 2" />
 
 </LinearLayout>

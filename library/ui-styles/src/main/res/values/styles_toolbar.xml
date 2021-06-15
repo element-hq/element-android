@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="VectorAppBarLayoutStyle" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+    <style name="AppBarLayout.Vector.Style" parent="Widget.MaterialComponents.AppBarLayout.Primary">
         <item name="android:background">?vctr_toolbar_background</item>
         <item name="elevation">4dp</item>
     </style>
 
-    <style name="VectorToolbarBase" parent="Widget.MaterialComponents.Toolbar">
+    <style name="Toolbar.Vector.Base" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:background">?vctr_toolbar_background</item>
         <item name="elevation">0dp</item>
 
         <!-- main text -->
-        <item name="titleTextStyle">@style/ActionBarTitleText</item>
+        <item name="titleTextStyle">@style/TextView.Vector.ActrionBarTitle</item>
 
         <!-- sub text -->
-        <item name="subtitleTextStyle">@style/ActionBarSubTitleText</item>
+        <item name="subtitleTextStyle">@style/TextView.Vector.ActrionBarSubTitle</item>
     </style>
 
     <!-- Default toolbar style -->
-    <style name="VectorToolbar" parent="VectorToolbarBase">
+    <style name="Toolbar.Vector" parent="Toolbar.Vector.Base">
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
 
     <!-- Toolbar for settings Activity (so we keep the default contentInsetStartWithNavigation here) -->
-    <style name="VectorToolbarSettings" parent="VectorToolbarBase" />
+    <style name="Toolbar.Vector.Settings" parent="Toolbar.Vector.Base" />
 
     <!-- Toolbar text style -->
     <!-- main text -->
-    <style name="ActionBarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="TextView.Vector.ActrionBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">?vctr_content_primary</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <!-- sub text -->
-    <style name="ActionBarSubTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+    <style name="TextView.Vector.ActrionBarSubTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
         <item name="android:textColor">?vctr_content_primary</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <!-- Action mode style -->
-    <style name="VectorActionMode" parent="Widget.AppCompat.ActionMode">
+    <style name="ActionMode.Vector.Style" parent="Widget.AppCompat.ActionMode">
         <item name="background">?android:colorBackground</item>
-        <item name="titleTextStyle">@style/VectorTextView.Title</item>
-        <item name="subtitleTextStyle">@style/VectorTextView.Subtitle</item>
+        <item name="titleTextStyle">@style/TextView.Vector.Title</item>
+        <item name="subtitleTextStyle">@style/TextView.Vector.Subtitle</item>
         <item name="actionMenuTextColor">?colorOnPrimary</item>
     </style>
 

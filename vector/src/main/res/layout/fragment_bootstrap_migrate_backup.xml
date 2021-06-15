@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/bootstrapDescriptionText"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -41,7 +41,7 @@
 
         <Button
             android:id="@+id/bootstrapMigrateUseFile"
-            style="@style/VectorButtonStyleText"
+            style="@style/Button.Vector.Style.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/use_file"
@@ -51,7 +51,7 @@
 
         <TextView
             android:id="@+id/bootstrapMigrateForgotPassphrase"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -74,7 +74,7 @@
 
     <Button
         android:id="@+id/bootstrapMigrateContinueButton"
-        style="@style/VectorButtonStyleText"
+        style="@style/Button.Vector.Style.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"

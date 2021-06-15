@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/activeWidgetsLabel"
-        style="@style/VectorTextView.Subtitle"
+        style="@style/TextView.Vector.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/activeWidgetsViewAction"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

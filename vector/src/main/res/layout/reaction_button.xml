@@ -36,7 +36,7 @@
 
     <TextView
         android:id="@+id/reactionText"
-        style="@style/VectorTextView.Caption"
+        style="@style/TextView.Vector.Caption"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginStart="6dp"
@@ -55,7 +55,7 @@
 
     <TextView
         android:id="@+id/reactionCount"
-        style="@style/VectorTextView.Micro"
+        style="@style/TextView.Vector.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"

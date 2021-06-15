@@ -12,7 +12,7 @@
 
     <TextView
         android:id="@+id/sas_emoji_index"
-        style="@style/VectorTextView.Subtitle"
+        style="@style/TextView.Vector.Subtitle"
         android:layout_width="32dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/sas_emoji"
-        style="@style/VectorTextView.Title"
+        style="@style/TextView.Vector.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -36,7 +36,7 @@
 
         <TextView
             android:id="@+id/sas_emoji_text"
-            style="@style/VectorTextView.Subtitle"
+            style="@style/TextView.Vector.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -45,7 +45,7 @@
 
         <TextView
             android:id="@+id/sas_emoji_text_id"
-            style="@style/VectorTextView.Caption"
+            style="@style/TextView.Vector.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

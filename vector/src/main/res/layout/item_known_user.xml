@@ -40,7 +40,7 @@
 
     <TextView
         android:id="@+id/knownUserName"
-        style="@style/VectorTextView.Subtitle"
+        style="@style/TextView.Vector.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -58,7 +58,7 @@
 
     <TextView
         android:id="@+id/knownUserID"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"

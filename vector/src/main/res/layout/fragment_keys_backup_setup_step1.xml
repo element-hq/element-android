@@ -25,7 +25,7 @@
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_title"
-        style="@style/VectorTextView.HeadlineM"
+        style="@style/TextView.Vector.HeadlineM"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -39,7 +39,7 @@
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_description"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -66,7 +66,7 @@
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_advanced_option_text"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -83,7 +83,7 @@
 
     <Button
         android:id="@+id/keys_backup_setup_step1_manual_export_button"
-        style="@style/VectorButtonStyleText"
+        style="@style/Button.Vector.Style.Text"
         android:layout_margin="16dp"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"

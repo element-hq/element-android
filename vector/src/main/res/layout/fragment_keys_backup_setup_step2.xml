@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step2_text_title"
-            style="@style/VectorTextView.HeadlineM"
+            style="@style/TextView.Vector.HeadlineM"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step2_text_description"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -120,7 +120,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step2_recovery_key_alternative"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -133,7 +133,7 @@
 
         <Button
             android:id="@+id/keys_backup_setup_step2_skip_button"
-            style="@style/VectorButtonStyleText"
+            style="@style/Button.Vector.Style.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

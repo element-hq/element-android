@@ -16,7 +16,7 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
-                style="@style/VectorTextView.Title"
+                style="@style/TextView.Vector.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -25,7 +25,7 @@
 
             <TextView
                 android:id="@+id/loginAccountCreatedSubtitle"
-                style="@style/VectorTextView.Body"
+                style="@style/TextView.Vector.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -33,7 +33,7 @@
                 tools:text="@string/login_account_created_subtitle" />
 
             <TextView
-                style="@style/VectorTextView.Body"
+                style="@style/TextView.Vector.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -41,7 +41,7 @@
                 android:textColor="?vctr_content_secondary" />
 
             <TextView
-                style="@style/VectorTextView.Body"
+                style="@style/TextView.Vector.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -67,7 +67,7 @@
 
                 <TextView
                     android:id="@+id/loginAccountCreatedMemberName"
-                    style="@style/VectorTextView.Subtitle"
+                    style="@style/TextView.Vector.Subtitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -84,7 +84,7 @@
 
                 <TextView
                     android:id="@+id/loginAccountCreatedTime"
-                    style="@style/VectorTextView.Caption"
+                    style="@style/TextView.Vector.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -96,7 +96,7 @@
                     tools:text="@tools:sample/date/hhmm" />
 
                 <TextView
-                    style="@style/VectorTextView.Body"
+                    style="@style/TextView.Vector.Body"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/login_account_created_message"
@@ -108,7 +108,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                style="@style/VectorTextView.Body"
+                style="@style/TextView.Vector.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -122,7 +122,7 @@
 
                 <Button
                     android:id="@+id/loginAccountCreatedLater"
-                    style="@style/Style.Vector.Login.Button.Text"
+                    style="@style/Button.Vector.Style.Login.Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -130,7 +130,7 @@
 
                 <Button
                     android:id="@+id/loginAccountCreatedDone"
-                    style="@style/Style.Vector.Login.Button"
+                    style="@style/Button.Vector.Style.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"

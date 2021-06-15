@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/spaceNameView"
-            style="@style/VectorTextView.Subtitle"
+            style="@style/TextView.Vector.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -56,7 +56,7 @@
 
         <TextView
             android:id="@+id/spaceDescription"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"

@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/itemLoginErrorRetryText"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="WidgetButtonSocialLogin" parent="Widget.MaterialComponents.Button.OutlinedButton">
+    <style name="Button.Vector.SocialLogin" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textAllCaps">false</item>
         <item name="fontFamily">sans-serif-medium</item>
         <item name="android:layout_width">wrap_content</item>
@@ -17,44 +17,44 @@
         <item name="strokeColor">@color/black_54</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Google">
+    <style name="Button.Vector.SocialLogin.Google">
         <item name="icon">@drawable/ic_social_google</item>
         <item name="iconTint">@android:color/transparent</item>
         <item name="iconTintMode">add</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Google.Light">
+    <style name="Button.Vector.SocialLogin.Google.Light">
         <item name="android:backgroundTint">@color/button_social_google_background_selector_light</item>
         <item name="android:textColor">@color/black_54</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Google.Dark">
+    <style name="Button.Vector.SocialLogin.Google.Dark">
         <item name="android:backgroundTint">@color/button_social_google_background_selector_dark</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Github" parent="WidgetButtonSocialLogin">
+    <style name="Button.Vector.SocialLogin.Github">
         <item name="icon">@drawable/ic_social_github</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Github.Light">
+    <style name="Button.Vector.SocialLogin.Github.Light">
         <item name="iconTint">@android:color/black</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="android:backgroundTint">@android:color/white</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Github.Dark">
+    <style name="Button.Vector.SocialLogin.Github.Dark">
         <item name="iconTint">@android:color/white</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:backgroundTint">@android:color/black</item>
     </style>
 
 
-    <style name="WidgetButtonSocialLogin.Facebook" parent="WidgetButtonSocialLogin">
+    <style name="Button.Vector.SocialLogin.Facebook">
         <item name="icon">@drawable/ic_social_facebook</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Facebook.Light">
+    <style name="Button.Vector.SocialLogin.Facebook.Light">
         <item name="strokeColor">#3877EA</item>
         <item name="strokeWidth">1dp</item>
         <item name="iconTint">#3877EA</item>
@@ -62,58 +62,58 @@
         <item name="android:backgroundTint">@android:color/white</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Facebook.Dark">
+    <style name="Button.Vector.SocialLogin.Facebook.Dark">
         <item name="iconTint">@android:color/white</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:backgroundTint">#3877EA</item>
     </style>
 
 
-    <style name="WidgetButtonSocialLogin.Twitter" parent="WidgetButtonSocialLogin">
+    <style name="Button.Vector.SocialLogin.Twitter">
         <item name="icon">@drawable/ic_social_twitter</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Twitter.Light">
+    <style name="Button.Vector.SocialLogin.Twitter.Light">
         <item name="iconTint">#5D9EC9</item>
         <item name="android:textColor">#5D9EC9</item>
         <item name="android:backgroundTint">@android:color/white</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Twitter.Dark">
+    <style name="Button.Vector.SocialLogin.Twitter.Dark">
         <item name="iconTint">@android:color/white</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:backgroundTint">#5D9EC9</item>
     </style>
 
 
-    <style name="WidgetButtonSocialLogin.Apple" parent="WidgetButtonSocialLogin">
+    <style name="Button.Vector.SocialLogin.Apple">
         <item name="icon">@drawable/ic_social_apple</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Apple.Light">
+    <style name="Button.Vector.SocialLogin.Apple.Light">
         <item name="iconTint">@android:color/white</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:backgroundTint">@android:color/black</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Apple.Dark">
+    <style name="Button.Vector.SocialLogin.Apple.Dark">
         <item name="iconTint">@android:color/black</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="android:backgroundTint">@android:color/white</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Gitlab" parent="WidgetButtonSocialLogin">
+    <style name="Button.Vector.SocialLogin.Gitlab">
         <item name="icon">@drawable/ic_social_gitlab</item>
         <item name="iconTint">@android:color/transparent</item>
         <item name="iconTintMode">add</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Gitlab.Light">
+    <style name="Button.Vector.SocialLogin.Gitlab.Light">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:backgroundTint">@android:color/white</item>
     </style>
 
-    <style name="WidgetButtonSocialLogin.Gitlab.Dark">
+    <style name="Button.Vector.SocialLogin.Gitlab.Dark">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:backgroundTint">@android:color/black</item>
     </style>

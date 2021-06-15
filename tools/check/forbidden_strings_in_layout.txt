@@ -23,5 +23,5 @@
 
 # Extension:xml
 
-### Use style="@style/VectorTextView.*" instead of textSize attribute
+### Use style="@style/TextView.Vector.*" instead of textSize attribute
 android:textSize===9

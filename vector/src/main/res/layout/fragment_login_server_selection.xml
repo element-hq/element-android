@@ -19,7 +19,7 @@
 
             <TextView
                 android:id="@+id/loginServerTitle"
-                style="@style/VectorTextView.Title"
+                style="@style/TextView.Vector.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
@@ -32,7 +32,7 @@
 
             <TextView
                 android:id="@+id/loginServerText"
-                style="@style/VectorTextView.Body"
+                style="@style/TextView.Vector.Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -73,7 +73,7 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceMatrixOrgText"
-                    style="@style/VectorTextView.Caption"
+                    style="@style/TextView.Vector.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -116,7 +116,7 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceEmsText"
-                    style="@style/VectorTextView.Caption"
+                    style="@style/TextView.Vector.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
@@ -130,7 +130,7 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceEmsLearnMore"
-                    style="@style/VectorTextView.Caption"
+                    style="@style/TextView.Vector.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
@@ -158,7 +158,7 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceOtherTitle"
-                    style="@style/VectorTextView.Subtitle"
+                    style="@style/TextView.Vector.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -171,7 +171,7 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceOtherText"
-                    style="@style/VectorTextView.Caption"
+                    style="@style/TextView.Vector.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -187,7 +187,7 @@
 
             <Button
                 android:id="@+id/loginServerIKnowMyIdSubmit"
-                style="@style/Style.Vector.Login.Button.Text"
+                style="@style/Button.Vector.Style.Login.Text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"

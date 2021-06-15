@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/itemRoomAliasHash"
-        style="@style/VectorTextView.HeadlineM"
+        style="@style/TextView.Vector.HeadlineM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -42,7 +42,7 @@
 
     <TextView
         android:id="@+id/itemRoomAliasHomeServer"
-        style="@style/VectorTextView.HeadlineM"
+        style="@style/TextView.Vector.HeadlineM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"

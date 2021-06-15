@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/itemAddRoomRoomNameText"
-        style="@style/VectorTextView.Subtitle"
+        style="@style/TextView.Vector.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
@@ -42,7 +42,7 @@
 
     <TextView
         android:id="@+id/itemManageRoomSuggested"
-        style="@style/VectorTextView.Caption"
+        style="@style/TextView.Vector.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"

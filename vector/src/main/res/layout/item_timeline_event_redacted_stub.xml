@@ -1,6 +1,6 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/VectorTextView.Body"
+    style="@style/TextView.Vector.Body"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:drawablePadding="8dp"

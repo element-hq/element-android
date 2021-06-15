@@ -12,100 +12,100 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Note: Default style is @style/VectorButtonStyle in the theme -->
+        <!-- Note: Default style is @style/Button.Vector.Style in the theme -->
         <Button
-            style="@style/VectorButtonStyle"
+            style="@style/Button.Vector.Style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Default" />
 
         <Button
-            style="@style/VectorButtonStyle"
+            style="@style/Button.Vector.Style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Line1\nLine 2" />
 
         <Button
-            style="@style/VectorButtonStyle"
+            style="@style/Button.Vector.Style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:text="Default disabled" />
 
         <Button
-            style="@style/VectorButtonStyleText"
+            style="@style/Button.Vector.Style.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text" />
 
         <Button
-            style="@style/VectorButtonStyleText"
+            style="@style/Button.Vector.Style.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:text="Text disabled" />
 
         <Button
-            style="@style/VectorButtonStyle.Positive"
+            style="@style/Button.Vector.Style.Positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Positive" />
 
         <Button
-            style="@style/VectorButtonStyle.Positive"
+            style="@style/Button.Vector.Style.Positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:text="Positive disabled" />
 
         <Button
-            style="@style/VectorButtonStyle.Destructive"
+            style="@style/Button.Vector.Style.Destructive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Destructive" />
 
         <Button
-            style="@style/VectorButtonStyle.Destructive"
+            style="@style/Button.Vector.Style.Destructive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:text="Destructive disabled" />
 
         <Button
-            style="@style/VectorButtonStyleUnelevated.Bot"
+            style="@style/Button.Vector.Style.Unelevated.Bot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bot" />
 
         <Button
-            style="@style/VectorButtonStyleUnelevated.Bot"
+            style="@style/Button.Vector.Style.Unelevated.Bot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:text="Bot disabled" />
 
         <Button
-            style="@style/VectorButtonStyleOutlined"
+            style="@style/Button.Vector.Style.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="Outline" />
 
         <Button
-            style="@style/VectorButtonStyleOutlined"
+            style="@style/Button.Vector.Style.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:text="Outline disabled" />
 
         <Button
-            style="@style/VectorButtonStyleOutlined.Poll"
+            style="@style/Button.Vector.Style.Outlined.Poll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Poll " />
 
         <Button
-            style="@style/VectorButtonStyleOutlined.Poll"
+            style="@style/Button.Vector.Style.Outlined.Poll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
@@ -119,14 +119,14 @@
             android:padding="8dp">
 
             <Button
-                style="@style/AlerterButton"
+                style="@style/Button.Vector.Style.Text.Alerter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="Alerter" />
 
             <Button
-                style="@style/AlerterButton"
+                style="@style/Button.Vector.Style.Text.Alerter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:enabled="false"

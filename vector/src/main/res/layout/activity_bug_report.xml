@@ -26,7 +26,7 @@
 
         <TextView
             android:id="@+id/bug_report_progress_text_view"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -64,7 +64,7 @@
 
                 <TextView
                     android:id="@+id/bug_report_first_text"
-                    style="@style/VectorTextView.Body"
+                    style="@style/TextView.Vector.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -93,7 +93,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    style="@style/VectorTextView.Caption"
+                    style="@style/TextView.Vector.Caption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -103,7 +103,7 @@
 
                 <TextView
                     android:id="@+id/bug_report_logs_description"
-                    style="@style/VectorTextView.Body"
+                    style="@style/TextView.Vector.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"

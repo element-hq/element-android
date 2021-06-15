@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/itemVerificationTitleTextView"
-        style="@style/VectorTextView.Subtitle"
+        style="@style/TextView.Vector.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/itemVerificationDetailTextView"
-        style="@style/VectorTextView.Caption"
+        style="@style/TextView.Vector.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -44,7 +44,7 @@
 
         <Button
             android:id="@+id/sas_verification_verified_decline_button"
-            style="@style/VectorButtonStyle.Destructive"
+            style="@style/Button.Vector.Style.Destructive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -52,7 +52,7 @@
 
         <Button
             android:id="@+id/sas_verification_verified_accept_button"
-            style="@style/VectorButtonStyle.Positive"
+            style="@style/Button.Vector.Style.Positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/accept" />
@@ -61,7 +61,7 @@
 
     <TextView
         android:id="@+id/itemVerificationStatusText"
-        style="@style/VectorTextView.Caption"
+        style="@style/TextView.Vector.Caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"

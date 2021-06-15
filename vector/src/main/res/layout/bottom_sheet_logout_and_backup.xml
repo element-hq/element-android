@@ -11,7 +11,7 @@
     android:paddingBottom="8dp">
 
     <TextView
-        style="@style/VectorTextView.HeadlineM"
+        style="@style/TextView.Vector.HeadlineM"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/bottom_sheet_signout_warning_text"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -63,7 +63,7 @@
 
         <TextView
             android:id="@+id/backupStatusText"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

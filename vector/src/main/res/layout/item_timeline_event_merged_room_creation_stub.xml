@@ -63,7 +63,7 @@
 
         <TextView
             android:id="@+id/roomNameTileText"
-            style="@style/VectorTextView.Title"
+            style="@style/TextView.Vector.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -77,7 +77,7 @@
 
         <TextView
             android:id="@+id/roomNameDescriptionText"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -90,7 +90,7 @@
 
         <TextView
             android:id="@+id/roomNameTopicText"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -126,7 +126,7 @@
                 android:src="@drawable/ic_add_people" />
 
             <TextView
-                style="@style/VectorTextView.Body"
+                style="@style/TextView.Vector.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -156,7 +156,7 @@
 
         <TextView
             android:id="@+id/itemNoticeTextView"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -173,7 +173,7 @@
 
         <TextView
             android:id="@+id/itemMergedExpandTextView"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

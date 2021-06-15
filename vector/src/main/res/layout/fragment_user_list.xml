@@ -38,7 +38,7 @@
 
                 <TextView
                     android:id="@+id/userListTitle"
-                    style="@style/VectorTextView.HeadlineM"
+                    style="@style/TextView.Vector.HeadlineM"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -111,7 +111,7 @@
 
     <TextView
         android:id="@+id/userListE2EbyDefaultDisabled"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

@@ -37,7 +37,7 @@
 
                 <TextView
                     android:id="@+id/appBarTitle"
-                    style="@style/VectorTextView.HeadlineM"
+                    style="@style/TextView.Vector.HeadlineM"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -50,7 +50,7 @@
 
                 <TextView
                     android:id="@+id/appBarSpaceInfo"
-                    style="@style/VectorTextView.Subtitle"
+                    style="@style/TextView.Vector.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"

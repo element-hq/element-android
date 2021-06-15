@@ -39,7 +39,7 @@
 
                     <TextView
                         android:id="@+id/showUserCodeTitle"
-                        style="@style/VectorTextView.HeadlineM"
+                        style="@style/TextView.Vector.HeadlineM"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -104,7 +104,7 @@
 
                 <TextView
                     android:id="@+id/showUserCodeCardNameText"
-                    style="@style/VectorTextView.Subtitle"
+                    style="@style/TextView.Vector.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -118,7 +118,7 @@
 
                 <TextView
                     android:id="@+id/showUserCodeCardUserIdText"
-                    style="@style/VectorTextView.Body"
+                    style="@style/TextView.Vector.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -158,7 +158,7 @@
 
         <TextView
             android:id="@+id/showUserCodeInfoText"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -189,7 +189,7 @@
 
         <Button
             android:id="@+id/showUserCodeScanButton"
-            style="@style/VectorButtonStyleText"
+            style="@style/Button.Vector.Style.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_vertical_margin"

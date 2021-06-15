@@ -25,7 +25,7 @@
 
         <TextView
             android:id="@+id/ssss_restore_with_key"
-            style="@style/VectorTextView.HeadlineM"
+            style="@style/TextView.Vector.HeadlineM"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -41,7 +41,7 @@
 
         <TextView
             android:id="@+id/ssss_restore_with_key_text"
-            style="@style/VectorTextView.Subtitle"
+            style="@style/TextView.Vector.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -81,7 +81,7 @@
 
         <Button
             android:id="@+id/ssss_key_use_file"
-            style="@style/VectorButtonStyleText"
+            style="@style/Button.Vector.Style.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/use_file"
@@ -90,7 +90,7 @@
 
         <Button
             android:id="@+id/ssss_key_submit"
-            style="@style/VectorButtonStyleText"
+            style="@style/Button.Vector.Style.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_continue"

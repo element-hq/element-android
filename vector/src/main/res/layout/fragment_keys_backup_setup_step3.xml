@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_success_title"
-            style="@style/VectorTextView.HeadlineM"
+            style="@style/TextView.Vector.HeadlineM"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_line1_text"
-            style="@style/VectorTextView.Subtitle"
+            style="@style/TextView.Vector.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -55,7 +55,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_label2"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -68,7 +68,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_recovery_key_text"
-            style="@style/VectorTextView.Title"
+            style="@style/TextView.Vector.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/layout_horizontal_margin"
@@ -82,7 +82,7 @@
 
         <Button
             android:id="@+id/keys_backup_setup_step3_copy_button"
-            style="@style/VectorButtonStyleText"
+            style="@style/Button.Vector.Style.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

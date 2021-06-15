@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/itemGenericItemButton"
-        style="@style/VectorButtonStyleText"
+        style="@style/Button.Vector.Style.Text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAllCaps="false"

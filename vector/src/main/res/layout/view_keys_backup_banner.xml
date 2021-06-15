@@ -31,7 +31,7 @@
 
     <TextView
         android:id="@+id/view_keys_backup_banner_text_1"
-        style="@style/VectorTextView.HeadlineM"
+        style="@style/TextView.Vector.HeadlineM"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
@@ -44,7 +44,7 @@
 
     <TextView
         android:id="@+id/view_keys_backup_banner_text_2"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"

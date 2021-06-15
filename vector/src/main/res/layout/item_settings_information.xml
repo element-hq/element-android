@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/settings_item_information"
-        style="@style/VectorTextView.Caption"
+        style="@style/TextView.Vector.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"

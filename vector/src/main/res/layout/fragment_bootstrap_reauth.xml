@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/bootstrapDescriptionText"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -28,7 +28,7 @@
 
     <TextView
         android:id="@+id/reAuthFailureText"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -40,7 +40,7 @@
 
     <Button
         android:id="@+id/bootstrapCancelButton"
-        style="@style/VectorButtonStyleText"
+        style="@style/Button.Vector.Style.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -49,7 +49,7 @@
 
     <Button
         android:id="@+id/bootstrapRetryButton"
-        style="@style/VectorButtonStyleText"
+        style="@style/Button.Vector.Style.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"

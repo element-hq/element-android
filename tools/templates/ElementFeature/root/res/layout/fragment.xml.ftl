@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/message"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="${fragmentClass}"

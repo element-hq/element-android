@@ -16,7 +16,7 @@
 
             <TextView
                 android:id="@+id/loginWaitForEmailTitle"
-                style="@style/VectorTextView.Title"
+                style="@style/TextView.Vector.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login_wait_for_email_title"
@@ -24,7 +24,7 @@
 
             <TextView
                 android:id="@+id/loginWaitForEmailNotice"
-                style="@style/VectorTextView.Body"
+                style="@style/TextView.Vector.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"

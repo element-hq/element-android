@@ -21,7 +21,7 @@
 
         <TextView
             android:id="@+id/itemMergedExpandTextView"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -45,7 +45,7 @@
 
     <TextView
         android:id="@+id/itemMergedSummaryTextView"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

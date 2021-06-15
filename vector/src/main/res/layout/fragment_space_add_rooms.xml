@@ -35,7 +35,7 @@
 
                 <TextView
                     android:id="@+id/appBarTitle"
-                    style="@style/VectorTextView.HeadlineM"
+                    style="@style/TextView.Vector.HeadlineM"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -48,7 +48,7 @@
 
                 <TextView
                     android:id="@+id/appBarSpaceInfo"
-                    style="@style/VectorTextView.Subtitle"
+                    style="@style/TextView.Vector.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -76,7 +76,7 @@
 
         <Button
             android:id="@+id/createNewRoom"
-            style="@style/VectorButtonStyleText"
+            style="@style/Button.Vector.Style.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

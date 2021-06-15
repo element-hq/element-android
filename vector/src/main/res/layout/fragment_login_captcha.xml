@@ -22,7 +22,7 @@
 
         <TextView
             android:id="@+id/loginCaptchaNotice"
-            style="@style/VectorTextAppearanceCaption"
+            style="@style/TextAppearance.Vector.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

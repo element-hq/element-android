@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/cart_badge"
-        style="@style/VectorTextView.Micro"
+        style="@style/TextView.Vector.Micro"
         android:layout_width="14dp"
         android:layout_height="14dp"
         android:background="@drawable/bg_unread_highlight"

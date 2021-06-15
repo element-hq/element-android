@@ -62,7 +62,7 @@
 
     <TextView
         android:id="@+id/loginSplashTitle"
-        style="@style/VectorTextView.Title"
+        style="@style/TextView.Vector.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -105,7 +105,7 @@
 
         <TextView
             android:id="@+id/loginSplashText1"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -130,7 +130,7 @@
 
         <TextView
             android:id="@+id/loginSplashText2"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -155,7 +155,7 @@
 
         <TextView
             android:id="@+id/loginSplashText3"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -189,7 +189,7 @@
 
         <Button
             android:id="@+id/loginSignupSigninSignUp"
-            style="@style/Style.Vector.Login.Button"
+            style="@style/Button.Vector.Style.Login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -197,7 +197,7 @@
 
         <Button
             android:id="@+id/loginSignupSigninSignIn"
-            style="@style/Style.Vector.Login.Button.Text"
+            style="@style/Button.Vector.Style.Login.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -216,7 +216,7 @@
 
     <TextView
         android:id="@+id/loginSplashVersion"
-        style="@style/VectorTextView.Caption"
+        style="@style/TextView.Vector.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?vctr_content_secondary"

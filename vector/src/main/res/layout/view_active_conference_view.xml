@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/activeConferenceInfo"
-        style="@style/VectorTextView.Body"
+        style="@style/TextView.Vector.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/deleteWidgetButton"
@@ -27,7 +27,7 @@
 
     <Button
         android:id="@+id/deleteWidgetButton"
-        style="@style/VectorButtonStyleText.OnPrimary"
+        style="@style/Button.Vector.Style.Text.OnPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/activeConferenceInfo"

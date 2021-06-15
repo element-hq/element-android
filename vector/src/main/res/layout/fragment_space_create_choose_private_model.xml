@@ -13,7 +13,7 @@
 
         <TextView
             android:id="@+id/headerText"
-            style="@style/VectorTextView.HeadlineM"
+            style="@style/TextView.Vector.HeadlineM"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/accessInfoHelpText"
-            style="@style/VectorTextView.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

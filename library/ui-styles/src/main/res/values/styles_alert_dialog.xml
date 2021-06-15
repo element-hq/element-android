@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="VectorAlertDialogStyleLight" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <style name="AlertDialog.Vector.Light" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="colorPrimary">@color/palette_element_green</item>
         <item name="colorSecondary">@color/palette_element_green</item>
         <item name="colorSurface">@color/element_system_light</item>
@@ -13,7 +13,7 @@
         <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button</item-->
     </style>
 
-    <style name="VectorAlertDialogStyleDark" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <style name="AlertDialog.Vector.Dark" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="colorPrimary">@color/palette_element_green</item>
         <item name="colorSecondary">@color/palette_element_green</item>
         <item name="colorSurface">@color/element_system_dark</item>

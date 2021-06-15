@@ -11,7 +11,7 @@
 
         <TextView
             android:id="@+id/reAuthConfirmText"
-            style="@style/VectorTextView.Subtitle"
+            style="@style/TextView.Vector.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -70,7 +70,7 @@
         <!--            android:layout_height="wrap_content"-->
         <!--            android:gravity="start"-->
         <!--            android:text="@string/login_signin_matrix_id_password_notice"-->
-        <!--            style="@style/VectorTextView.Caption"-->
+        <!--            style="@style/TextView.Vector.Caption"-->
         <!--            android:visibility="gone"-->
         <!--            app:layout_constraintEnd_toEndOf="parent"-->
         <!--            app:layout_constraintStart_toStartOf="parent"-->
@@ -79,7 +79,7 @@
 
         <TextView
             android:id="@+id/genericErrorText"
-            style="@style/VectorTextView.Caption"
+            style="@style/TextView.Vector.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"

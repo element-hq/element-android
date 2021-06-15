@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/headerText"
-        style="@style/VectorTextView.Subtitle"
+        style="@style/TextView.Vector.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/descriptionText"
-        style="@style/VectorTextView.Subtitle"
+        style="@style/TextView.Vector.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -63,7 +63,7 @@
 
     <!--    <Button-->
     <!--        android:id="@+id/skipButton"-->
-    <!--        style="@style/VectorButtonStyleOutlined"-->
+    <!--        style="@style/Button.Vector.Style.Outlined"-->
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="wrap_content"-->
     <!--        android:layout_marginTop="@dimen/layout_vertical_margin"-->

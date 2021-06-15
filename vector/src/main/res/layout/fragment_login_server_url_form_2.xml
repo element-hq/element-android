@@ -17,7 +17,7 @@
 
             <TextView
                 android:id="@+id/loginServerUrlFormTitle"
-                style="@style/VectorTextView.Title"
+                style="@style/TextView.Vector.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -46,7 +46,7 @@
 
             <TextView
                 android:id="@+id/loginServerUrlFormClearHistory"
-                style="@style/VectorTextView.Caption"
+                style="@style/TextView.Vector.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -60,7 +60,7 @@
 
             <Button
                 android:id="@+id/loginServerUrlFormSubmit"
-                style="@style/Style.Vector.Login.Button"
+                style="@style/Button.Vector.Style.Login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

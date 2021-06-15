@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/event_content_text_view"
-        style="@style/VectorTextView.Caption"
+        style="@style/TextView.Vector.Caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"

@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/identityServerSetDefaultNotice"
-            style="@style/VectorTextView.Subtitle"
+            style="@style/TextView.Vector.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_primary"
@@ -24,7 +24,7 @@
 
         <Button
             android:id="@+id/identityServerSetDefaultSubmit"
-            style="@style/VectorButtonStyleText"
+            style="@style/Button.Vector.Style.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -37,7 +37,7 @@
 
         <TextView
             android:id="@+id/identityServerSetDefaultAlternative"
-            style="@style/VectorTextView.Subtitle"
+            style="@style/TextView.Vector.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_primary"
@@ -64,7 +64,7 @@
 
         <Button
             android:id="@+id/identityServerSetDefaultAlternativeSubmit"
-            style="@style/VectorButtonStyleText"
+            style="@style/Button.Vector.Style.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"

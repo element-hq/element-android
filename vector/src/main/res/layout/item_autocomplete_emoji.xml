@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/itemAutocompleteEmoji"
-        style="@style/VectorTextView.Title"
+        style="@style/TextView.Vector.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/itemAutocompleteEmojiName"
-            style="@style/VectorTextView.Caption"
+            style="@style/TextView.Vector.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -38,7 +38,7 @@
 
         <TextView
             android:id="@+id/itemAutocompleteEmojiSubname"
-            style="@style/VectorTextView.Caption"
+            style="@style/TextView.Vector.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

@@ -13,7 +13,7 @@
 
     <TextView
         android:id="@+id/settings_item_text"
-        style="@style/VectorTextView.Subtitle"
+        style="@style/TextView.Vector.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
@@ -29,7 +29,7 @@
 
     <Button
         android:id="@+id/settings_item_button"
-        style="@style/VectorButtonStyleText"
+        style="@style/Button.Vector.Style.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

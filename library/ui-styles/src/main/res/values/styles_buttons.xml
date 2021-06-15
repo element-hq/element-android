@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="VectorButtonStyle" parent="Widget.MaterialComponents.Button">
+    <style name="Button.Vector.Style" parent="Widget.MaterialComponents.Button">
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:minWidth">94dp</item>
-        <item name="android:textAppearance">@style/VectorTextAppearanceButton</item>
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
         <item name="lineHeight">24sp</item>
     </style>
 
-    <style name="VectorButtonStyle.Destructive">
+    <style name="Button.Vector.Style.Destructive">
         <item name="android:minWidth">94dp</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayDestructive</item>
     </style>
@@ -18,7 +18,7 @@
         <item name="colorPrimary">?colorError</item>
     </style>
 
-    <style name="VectorButtonStyle.Positive">
+    <style name="Button.Vector.Style.Positive">
         <item name="android:minWidth">94dp</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
     </style>
@@ -27,15 +27,15 @@
         <!-- Keep default colors from the theme -->
     </style>
 
-    <style name="VectorButtonStyleUnelevated" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+    <style name="Button.Vector.Style.Unelevated" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:minWidth">94dp</item>
-        <item name="android:textAppearance">@style/VectorTextAppearanceButton</item>
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
         <item name="lineHeight">24sp</item>
     </style>
 
-    <style name="VectorButtonStyleUnelevated.Bot">
+    <style name="Button.Vector.Style.Unelevated.Bot">
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayBot</item>
     </style>
 
@@ -44,27 +44,27 @@
         <item name="colorOnPrimary">@color/button_bot_enabled_text_color</item>
     </style>
 
-    <style name="VectorButtonStyleText" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="Button.Vector.Style.Text" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="colorControlHighlight">?colorSecondary</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
-        <item name="android:textAppearance">@style/VectorTextAppearanceButton</item>
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
         <item name="lineHeight">24sp</item>
     </style>
 
-    <style name="VectorButtonStyleText.OnPrimary">
+    <style name="Button.Vector.Style.Text.OnPrimary">
         <item name="colorControlHighlight">?colorOnPrimary</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayOnPrimary</item>
     </style>
 
-    <style name="VectorButtonStyleOutlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+    <style name="Button.Vector.Style.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textAllCaps">false</item>
         <item name="strokeColor">@color/button_background_tint_selector</item>
         <item name="strokeWidth">1dp</item>
-        <item name="android:textAppearance">@style/VectorTextAppearanceButton</item>
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
         <item name="lineHeight">24sp</item>
     </style>
 
-    <style name="AlerterButton" parent="VectorButtonStyleText">
+    <style name="Button.Vector.Style.Text.Alerter">
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">false</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayOnPrimary</item>
@@ -74,7 +74,7 @@
         <item name="colorPrimary">?colorOnPrimary</item>
     </style>
 
-    <style name="VectorButtonStyleOutlined.Poll">
+    <style name="Button.Vector.Style.Outlined.Poll">
         <item name="android:minHeight">44dp</item>
         <item name="cornerRadius">10dp</item>
     </style>

@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/bottomSheetTitle"
-        style="@style/VectorTextView.Subtitle"
+        style="@style/TextView.Vector.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
