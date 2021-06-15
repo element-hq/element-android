@@ -48,8 +48,4 @@
         <item name="actionMenuTextColor">?colorOnPrimary</item>
     </style>
 
-    <style name="Vector.Toolbar.Profile" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">?colorSecondary</item>
-    </style>
-
 </resources>

@@ -15,7 +15,6 @@
             android:id="@+id/spaceExploreCollapsingToolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:theme="@style/Vector.Toolbar.Profile"
             app:contentScrim="?android:colorBackground"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:scrimAnimationDuration="250"
