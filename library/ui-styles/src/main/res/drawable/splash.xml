@@ -10,7 +10,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/riot_splash_white" />
+            android:src="@drawable/element_splash_white" />
     </item>
 
 </layer-list>
