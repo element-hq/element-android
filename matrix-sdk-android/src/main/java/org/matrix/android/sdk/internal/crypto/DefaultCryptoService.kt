@@ -933,17 +933,20 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             val requestPair = olmMachine!!.requestRoomKey(event)
 
-            if (requestPair.cancellation != null) {
-                when (requestPair.cancellation) {
+            val cancellation = requestPair.cancellation
+            val request = requestPair.keyRequest
+
+            if (cancellation != null) {
+                when (cancellation) {
                     is Request.ToDevice -> {
-                        sendToDevice(requestPair.cancellation)
+                        sendToDevice(cancellation)
                     }
                 }
             }
 
-            when(requestPair.keyRequest) {
+            when(request) {
                 is Request.ToDevice -> {
-                    sendToDevice(requestPair.keyRequest)
+                    sendToDevice(request)
                 }
             }
         }

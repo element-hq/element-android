@@ -4,31 +4,33 @@ use std::{
     io::Cursor,
 };
 
-use serde::{Deserialize, Serialize};
-use serde_json::value::RawValue;
-use tokio::runtime::Runtime;
-
-use matrix_sdk_common::{
-    api::r0::{
-        keys::{
-            claim_keys::Response as KeysClaimResponse, get_keys::Response as KeysQueryResponse,
-            upload_keys::Response as KeysUploadResponse,
+use js_int::UInt;
+use ruma::{
+    api::{
+        client::r0::{
+            keys::{
+                claim_keys::Response as KeysClaimResponse, get_keys::Response as KeysQueryResponse,
+                upload_keys::Response as KeysUploadResponse,
+            },
+            sync::sync_events::{DeviceLists as RumaDeviceLists, ToDevice},
+            to_device::send_event_to_device::Response as ToDeviceResponse,
         },
-        sync::sync_events::{DeviceLists as RumaDeviceLists, ToDevice},
-        to_device::send_event_to_device::Response as ToDeviceResponse,
+        IncomingResponse,
     },
-    deserialized_responses::AlgorithmInfo,
     events::{
         room::encrypted::EncryptedEventContent, AnyMessageEventContent, EventContent,
         SyncMessageEvent,
     },
-    identifiers::{DeviceKeyAlgorithm, RoomId, UserId},
-    uuid::Uuid,
-    IncomingResponse, UInt,
+    DeviceKeyAlgorithm, RoomId, UserId,
 };
+use serde::{Deserialize, Serialize};
+use serde_json::value::RawValue;
+use tokio::runtime::Runtime;
 
+use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
 use matrix_sdk_crypto::{
     decrypt_key_export, encrypt_key_export, EncryptionSettings, OlmMachine as InnerMachine,
+    OutgoingVerificationRequest, Sas as InnerSas,
 };
 
 use crate::{
@@ -48,7 +50,24 @@ pub struct Sas {
     pub other_user_id: String,
     pub other_device_id: String,
     pub flow_id: String,
-    pub request: Request,
+    pub is_cancelled: bool,
+    pub is_done: bool,
+    pub can_be_presented: bool,
+    pub timed_out: bool,
+}
+
+impl From<InnerSas> for Sas {
+    fn from(sas: InnerSas) -> Self {
+        Self {
+            other_user_id: sas.other_user_id().to_string(),
+            other_device_id: sas.other_device_id().to_string(),
+            flow_id: sas.flow_id().as_str().to_owned(),
+            is_cancelled: sas.is_cancelled(),
+            is_done: sas.is_done(),
+            can_be_presented: sas.can_be_presented(),
+            timed_out: sas.timed_out(),
+        }
+    }
 }
 
 /// A pair of outgoing room key requests, both of those are sendToDevice
@@ -207,7 +226,7 @@ impl OlmMachine {
     /// # Arguments
     ///
     /// * `events` - A serialized array of to-device events we received in the
-    ///     current sync resposne.
+    ///     current sync response.
     ///
     /// * `device_changes` - The list of devices that have changed in some way
     /// since the previous sync.
@@ -350,7 +369,7 @@ impl OlmMachine {
     /// **Note**: A room key needs to be shared with the group of users that are
     /// members in the given room. If this is not done this method will panic.
     ///
-    /// The usual flow to encrypt an evnet using this state machine is as
+    /// The usual flow to encrypt an event using this state machine is as
     /// follows:
     ///
     /// 1. Get the one-time key claim request to establish 1:1 Olm sessions for
@@ -539,6 +558,15 @@ impl OlmMachine {
         Ok(())
     }
 
+    pub fn get_verification(&self, flow_id: &str) -> Option<Sas> {
+        todo!()
+        // self.inner.get_verification(flow_id).map(|s| s.into())
+    }
+
+    pub fn request_verification(&self) {
+        todo!()
+    }
+
     pub fn start_verification(&self, device: &Device) -> Result<Sas, CryptoStoreError> {
         let user_id = UserId::try_from(device.user_id.clone())?;
         let device_id = device.device_id.as_str().into();
@@ -547,13 +575,54 @@ impl OlmMachine {
             .block_on(self.inner.get_device(&user_id, device_id))?
             .unwrap();
 
-        let (sas, request) = self.runtime.block_on(device.start_verification())?;
+        // TODO we need to return the request as well.
+        let (sas, _) = self.runtime.block_on(device.start_verification())?;
 
-        Ok(Sas {
-            other_user_id: sas.other_user_id().to_string(),
-            other_device_id: sas.other_device_id().to_string(),
-            flow_id: sas.flow_id().as_str().to_owned(),
-            request: request.into(),
-        })
+        Ok(sas.into())
+    }
+
+    pub fn accept_verification(&self, flow_id: &str) -> Option<OutgoingVerificationRequest> {
+        todo!()
+        // self.inner
+        //     .get_verification(flow_id)
+        //     .and_then(|s| s.accept().map(|r| r.into()))
+    }
+
+    pub fn cancel_verification(&self, flow_id: &str) -> Option<OutgoingVerificationRequest> {
+        todo!()
+        // self.inner
+        //     .get_verification(flow_id)
+        //     .and_then(|s| s.cancel().map(|r| r.into()))
+    }
+
+    pub fn confirm_verification(
+        &self,
+        flow_id: &str,
+    ) -> Result<Option<OutgoingVerificationRequest>, CryptoStoreError> {
+        todo!()
+        // let sas = self.inner.get_verification(flow_id);
+
+        // if let Some(sas) = sas {
+        //     let (request, _) = self.runtime.block_on(sas.confirm())?;
+        //     Ok(request.map(|r| r.into()))
+        // } else {
+        //     Ok(None)
+        // }
+    }
+
+    pub fn get_emoji_index(&self, flow_id: &str) -> Option<Vec<i32>> {
+        todo!()
+        // self.inner.get_verification(flow_id).and_then(|s| {
+        //     s.emoji_index()
+        //         .map(|v| v.iter().map(|i| (*i).into()).collect())
+        // })
+    }
+
+    pub fn get_decimals(&self, flow_id: &str) -> Option<Vec<i32>> {
+        todo!()
+        // self.inner.get_verification(flow_id).and_then(|s| {
+        //     s.decimals()
+        //         .map(|v| [v.0.into(), v.1.into(), v.2.into()].to_vec())
+        // })
     }
 }

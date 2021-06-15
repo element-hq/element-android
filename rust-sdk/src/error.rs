@@ -1,4 +1,4 @@
-use matrix_sdk_common::identifiers::Error as RumaIdentifierError;
+use ruma::identifiers::Error as RumaIdentifierError;
 use matrix_sdk_crypto::{
     store::CryptoStoreError as InnerStoreError, KeyExportError, MegolmError, OlmError,
 };

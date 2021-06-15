@@ -67,7 +67,10 @@ dictionary Sas {
     string other_user_id;
     string other_device_id;
     string flow_id;
-    Request request;
+    boolean is_done;
+    boolean is_cancelled;
+    boolean can_be_presented;
+    boolean timed_out;
 };
 
 dictionary KeyRequestPair {
@@ -90,7 +93,6 @@ enum RequestType {
     "ToDevice",
 };
 
-[Threadsafe]
 interface OlmMachine {
     [Throws=MachineCreationError]
     constructor([ByRef] string user_id, [ByRef] string device_id, [ByRef] string path);

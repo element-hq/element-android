@@ -3,8 +3,8 @@ use std::{collections::HashMap, convert::TryFrom};
 use http::Response;
 use serde_json::json;
 
-use matrix_sdk_common::{
-    api::r0::{
+use ruma::{
+    api::client::r0::{
         keys::{
             claim_keys::Response as KeysClaimResponse, get_keys::Response as KeysQueryResponse,
             upload_keys::Response as KeysUploadResponse,
