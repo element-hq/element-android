@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.debug
+package im.vector.lib.ui.styles.debug
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import im.vector.app.databinding.ActivityTestMaterialThemeBinding
+import androidx.appcompat.app.AppCompatActivity
+import im.vector.lib.ui.styles.databinding.ActivityDebugButtonStylesBinding
 
-class DebugBottomSheet : BottomSheetDialogFragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        // Reuse tha Activity layout
-        val binding = ActivityTestMaterialThemeBinding.inflate(inflater, container, false)
-        return binding.root
+class DebugVectorButtonStylesActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val views = ActivityDebugButtonStylesBinding.inflate(layoutInflater)
+        setContentView(views.root)
     }
 }

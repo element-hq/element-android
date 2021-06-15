@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.debug
+package im.vector.lib.ui.styles.debug
 
-import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.databinding.ActivityDebugButtonStylesBinding
-
-class DebugVectorButtonStylesActivity : VectorBaseActivity<ActivityDebugButtonStylesBinding>() {
-    override fun getBinding() = ActivityDebugButtonStylesBinding.inflate(layoutInflater)
-}
+class DebugMaterialThemeLightDefaultActivity : DebugMaterialThemeActivity()

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="im.vector.lib.ui.styles">
+
+    <application>
+        <activity
+            android:name=".debug.DebugMaterialThemeLightDefaultActivity"
+            android:theme="@style/VectorMaterialThemeDebugLight" />
+        <activity
+            android:name=".debug.DebugMaterialThemeLightTestActivity"
+            android:theme="@style/VectorMaterialThemeDebugLight.Test" />
+        <activity
+            android:name=".debug.DebugMaterialThemeLightVectorActivity"
+            android:theme="@style/AppTheme.Light" />
+        <activity
+            android:name=".debug.DebugMaterialThemeDarkDefaultActivity"
+            android:theme="@style/VectorMaterialThemeDebugDark" />
+        <activity
+            android:name=".debug.DebugMaterialThemeDarkTestActivity"
+            android:theme="@style/VectorMaterialThemeDebugDark.Test" />
+        <activity
+            android:name=".debug.DebugMaterialThemeDarkVectorActivity"
+            android:theme="@style/AppTheme.Dark" />
+        <activity
+            android:name=".debug.DebugVectorButtonStylesActivity"
+            android:theme="@style/AppTheme.Light" />
+    </application>
+
+</manifest>

@@ -37,6 +37,13 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityDebugMenuBinding
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
 import im.vector.app.features.qrcode.QrCodeScannerActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkDefaultActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkTestActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkVectorActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightDefaultActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightTestActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightVectorActivity
+import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesActivity
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
 
 import timber.log.Timber

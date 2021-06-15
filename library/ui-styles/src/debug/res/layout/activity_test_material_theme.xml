@@ -330,7 +330,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Classic"
-                    app:icon="@drawable/ic_settings_x" />
+                    app:icon="@drawable/ic_debug_icon" />
 
                 <Button
                     style="@style/Widget.MaterialComponents.Button"
@@ -338,14 +338,14 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:text="Classic Disabled"
-                    app:icon="@drawable/ic_settings_x" />
+                    app:icon="@drawable/ic_debug_icon" />
 
                 <Button
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="OutlinedButton"
-                    app:icon="@drawable/ic_settings_x" />
+                    app:icon="@drawable/ic_debug_icon" />
 
                 <Button
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -353,14 +353,14 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:text="OutlinedButton Disabled"
-                    app:icon="@drawable/ic_settings_x" />
+                    app:icon="@drawable/ic_debug_icon" />
 
                 <Button
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TextButton"
-                    app:icon="@drawable/ic_settings_x" />
+                    app:icon="@drawable/ic_debug_icon" />
 
                 <Button
                     style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -368,14 +368,14 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:text="TextButton Disabled"
-                    app:icon="@drawable/ic_settings_x" />
+                    app:icon="@drawable/ic_debug_icon" />
 
                 <Button
                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="UnelevatedButton"
-                    app:icon="@drawable/ic_settings_x" />
+                    app:icon="@drawable/ic_debug_icon" />
 
                 <Button
                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
@@ -383,7 +383,7 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:text="UnelevatedButton Disabled"
-                    app:icon="@drawable/ic_settings_x" />
+                    app:icon="@drawable/ic_debug_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -457,12 +457,12 @@
                     android:layout_gravity="end"
                     android:layout_margin="16dp"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_settings_x" />
+                    android:src="@drawable/ic_debug_icon" />
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:menu="@menu/home_bottom_navigation" />
+                    app:menu="@menu/menu_debug" />
 
             </LinearLayout>
 
