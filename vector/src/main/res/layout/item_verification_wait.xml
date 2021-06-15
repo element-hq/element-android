@@ -12,6 +12,7 @@
 
     <TextView
         android:id="@+id/use_latest_riot"
+        style="@style/VectorTextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
@@ -53,6 +54,7 @@
 
     <TextView
         android:id="@+id/app_desktop_web"
+        style="@style/VectorTextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -65,6 +67,7 @@
 
     <TextView
         android:id="@+id/app_ios_android"
+        style="@style/VectorTextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

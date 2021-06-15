@@ -39,6 +39,7 @@
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_description"
+        style="@style/VectorTextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -65,6 +66,7 @@
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_advanced_option_text"
+        style="@style/VectorTextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"

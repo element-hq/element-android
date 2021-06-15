@@ -13,12 +13,14 @@
         android:paddingEnd="?dialogPreferredPadding">
 
         <TextView
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/encryption_information_verify_device_warning" />
 
         <TextView
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -27,11 +29,13 @@
 
         <TextView
             android:id="@+id/encrypted_device_info_device_name"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="a device name" />
 
         <TextView
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -40,11 +44,13 @@
 
         <TextView
             android:id="@+id/encrypted_device_info_device_id"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="a device id" />
 
         <TextView
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -53,11 +59,13 @@
 
         <TextView
             android:id="@+id/encrypted_device_info_device_key"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="a device key" />
 
         <TextView
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"

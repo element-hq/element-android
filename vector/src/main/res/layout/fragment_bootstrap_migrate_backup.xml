@@ -46,10 +46,12 @@
             android:layout_height="wrap_content"
             android:text="@string/use_file"
             app:icon="@drawable/ic_file"
+            tools:ignore="MissingPrefix"
             tools:visibility="visible" />
 
         <TextView
             android:id="@+id/bootstrapMigrateForgotPassphrase"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"

@@ -40,6 +40,7 @@
 
         <TextView
             android:id="@+id/itemDeviceDisplayName"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_primary"
@@ -56,6 +57,7 @@
 
         <TextView
             android:id="@+id/itemDeviceId"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -74,6 +76,7 @@
 
         <TextView
             android:id="@+id/itemDeviceLastSeen"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_primary"

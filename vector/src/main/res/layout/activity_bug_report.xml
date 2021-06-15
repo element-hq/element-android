@@ -26,6 +26,7 @@
 
         <TextView
             android:id="@+id/bug_report_progress_text_view"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -63,6 +64,7 @@
 
                 <TextView
                     android:id="@+id/bug_report_first_text"
+                    style="@style/VectorTextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -101,6 +103,7 @@
 
                 <TextView
                     android:id="@+id/bug_report_logs_description"
+                    style="@style/VectorTextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"

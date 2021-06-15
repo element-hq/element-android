@@ -42,6 +42,7 @@
 
     <TextView
         android:id="@+id/composerRelatedMessageTitle"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -67,6 +68,7 @@
 
     <TextView
         android:id="@+id/composerRelatedMessageContent"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"

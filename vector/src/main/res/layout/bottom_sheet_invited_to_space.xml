@@ -36,6 +36,7 @@
 
             <TextView
                 android:id="@+id/inviterText"
+                style="@style/VectorTextView.Subtitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -48,6 +49,7 @@
 
             <TextView
                 android:id="@+id/inviterMxid"
+                style="@style/VectorTextView.Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

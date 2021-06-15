@@ -23,6 +23,7 @@
 
     <TextView
         android:id="@+id/bottom_sheet_signout_warning_text"
+        style="@style/VectorTextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -62,6 +63,7 @@
 
         <TextView
             android:id="@+id/backupStatusText"
+            style="@style/VectorTextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

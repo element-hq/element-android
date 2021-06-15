@@ -11,6 +11,7 @@
 
         <TextView
             android:id="@+id/deactivateAccountContent"
+            style="@style/VectorTextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/deactivate_account_content"

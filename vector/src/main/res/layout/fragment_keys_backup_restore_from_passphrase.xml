@@ -74,6 +74,7 @@
 
         <TextView
             android:id="@+id/helperTextWithLink"
+            style="@style/VectorTextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
