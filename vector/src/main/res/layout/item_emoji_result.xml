@@ -11,14 +11,13 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingEnd="@dimen/layout_horizontal_margin">
 
-    <!-- size in dp, because we do not want the display to be impacted by font size setting -->
     <TextView
         android:id="@+id/item_emoji_tv"
+        style="@style/VectorTextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:textColor="@color/emoji_color"
-        android:textSize="25dp"
         tools:ignore="SpUsage"
         tools:text="@sample/reactions.json/data/reaction" />
 

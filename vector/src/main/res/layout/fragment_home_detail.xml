@@ -77,19 +77,19 @@
 
                     <TextView
                         android:id="@+id/groupToolbarTitleView"
+                        style="@style/VectorTextView.HeadlineM"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:gravity="start"
                         android:maxLines="1"
                         android:textColor="?vctr_content_primary"
-                        android:textSize="20sp"
                         android:textStyle="bold"
                         tools:text="@tools:sample/lorem/random" />
 
                     <TextView
                         android:id="@+id/groupToolbarSpaceTitleView"
-                        style="@style/VectorTextView.Body"
+                        style="@style/VectorTextView.Subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"

@@ -43,6 +43,7 @@
 
     <TextView
         android:id="@+id/itemPublicRoomTopic"
+        style="@style/VectorTextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -51,7 +52,6 @@
         android:maxLines="1"
         android:singleLine="true"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomMembersCount"
         app:layout_constraintEnd_toEndOf="parent"

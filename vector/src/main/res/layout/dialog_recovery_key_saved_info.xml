@@ -34,6 +34,7 @@
 
             <TextView
                 android:id="@+id/bootstrapTitleText"
+                style="@style/VectorTextView.HeadlineM"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -42,7 +43,6 @@
                 android:maxLines="2"
                 android:text="@string/keep_it_safe"
                 android:textColor="?vctr_content_primary"
-                android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
 

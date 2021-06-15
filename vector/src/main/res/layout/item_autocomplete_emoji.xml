@@ -10,11 +10,11 @@
 
     <TextView
         android:id="@+id/itemAutocompleteEmoji"
+        style="@style/VectorTextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:textColor="@color/emoji_color"
-        android:textSize="20dp"
         tools:ignore="SpUsage"
         tools:text="@sample/reactions.json/data/reaction" />
 

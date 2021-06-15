@@ -12,6 +12,7 @@
 
         <TextView
             android:id="@+id/reset_title"
+            style="@style/VectorTextView.HeadlineM"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -19,7 +20,6 @@
             android:drawablePadding="8dp"
             android:text="@string/secure_backup_reset_all"
             android:textColor="?vctr_content_primary"
-            android:textSize="20sp"
             android:textStyle="bold"
             android:tint="?vctr_content_primary"
             app:drawableStartCompat="@drawable/ic_alert_triangle"
@@ -43,6 +43,7 @@
 
         <TextView
             android:id="@+id/ssss_reset_other_devices"
+            style="@style/VectorTextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
@@ -51,7 +52,6 @@
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
             android:textColor="?vctr_content_secondary"
-            android:textSize="17sp"
             android:visibility="gone"
             app:drawableStartCompat="@drawable/ic_smartphone"
             app:drawableTint="?vctr_content_secondary"

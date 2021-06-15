@@ -11,6 +11,7 @@
 
 
     <TextView
+        style="@style/VectorTextView.HeadlineM"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -18,7 +19,6 @@
         android:layout_marginBottom="8dp"
         android:text="@string/room_widget_permission_title"
         android:textColor="?vctr_content_primary"
-        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView

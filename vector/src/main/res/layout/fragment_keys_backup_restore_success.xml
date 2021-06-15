@@ -21,12 +21,12 @@
 
     <TextView
         android:id="@+id/success_text"
+        style="@style/VectorTextView.HeadlineM"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:textAlignment="center"
         android:textColor="?vctr_content_primary"
-        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
