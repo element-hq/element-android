@@ -58,8 +58,13 @@ class CreateSpaceViewModelTask @Inject constructor(
 
     override suspend fun execute(params: CreateSpaceTaskParams): CreateSpaceTaskResult {
         val spaceID = try {
-            session.spaceService().createSpace(params.spaceName, params.spaceTopic, params.spaceAvatar,
-                    params.isPublic, params.spaceAlias)
+            session.spaceService().createSpace(
+                    params.spaceName,
+                    params.spaceTopic,
+                    params.spaceAvatar,
+                    params.isPublic,
+                    params.spaceAlias
+            )
         } catch (failure: Throwable) {
             return CreateSpaceTaskResult.FailedToCreateSpace(failure)
         }
