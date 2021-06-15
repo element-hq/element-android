@@ -92,16 +92,24 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 _viewEvents.post(CreateSpaceEvents.NavigateToDetails)
             }
             is CreateSpaceAction.NameChanged            -> {
-                val tentativeAlias =
-                        getAliasFromName(action.name)
 
                 setState {
-                    copy(
-                            nameInlineError = null,
-                            name = action.name,
-                            aliasLocalPart = tentativeAlias,
-                            aliasVerificationTask = Uninitialized
-                    )
+                    if (aliasManuallyModified) {
+                        copy(
+                                nameInlineError = null,
+                                name = action.name,
+                                aliasVerificationTask = Uninitialized
+                        )
+                    } else {
+                        val tentativeAlias =
+                                getAliasFromName(action.name)
+                        copy(
+                                nameInlineError = null,
+                                name = action.name,
+                                aliasLocalPart = tentativeAlias,
+                                aliasVerificationTask = Uninitialized
+                        )
+                    }
                 }
             }
             is CreateSpaceAction.TopicChanged           -> {
@@ -112,6 +120,8 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 }
             }
             is CreateSpaceAction.SpaceAliasChanged      -> {
+                // This called only when the alias is change manually
+                // not when programmatically changed via a change on name
                 setState {
                     copy(
                             aliasManuallyModified = true,
@@ -237,7 +247,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 _viewEvents.post(CreateSpaceEvents.NavigateToChoosePrivateType)
             } else {
                 // it'a public space, let's check alias
-                val aliasLocalPart = if (state.aliasManuallyModified) state.aliasLocalPart else getAliasFromName(state.name)
+                val aliasLocalPart = state.aliasLocalPart
                 _viewEvents.post(CreateSpaceEvents.ShowModalLoading(null))
                 setState {
                     copy(aliasVerificationTask = Loading())
@@ -280,7 +290,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val alias = if (state.spaceType == SpaceType.Public) {
-                    if (state.aliasManuallyModified) state.aliasLocalPart else getAliasFromName(state.name)
+                    state.aliasLocalPart
                 } else null
                 val result = createSpaceViewModelTask.execute(
                         CreateSpaceTaskParams(
