@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room
 
+import org.matrix.android.sdk.api.session.room.AliasAvailabilityResult
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
@@ -47,12 +48,12 @@ internal class DefaultRoomDirectoryService @Inject constructor(
         setRoomDirectoryVisibilityTask.execute(SetRoomDirectoryVisibilityTask.Params(roomId, roomDirectoryVisibility))
     }
 
-    override suspend fun checkAliasAvailability(aliasLocalPart: String?): Result<Unit> {
+    override suspend fun checkAliasAvailability(aliasLocalPart: String?): AliasAvailabilityResult {
         return try {
             roomAliasAvailabilityChecker.check(aliasLocalPart)
-            Result.success(Unit)
+            AliasAvailabilityResult.Available
         } catch (failure: RoomAliasError) {
-            Result.failure(failure)
+            AliasAvailabilityResult.NotAvailable(failure)
         }
     }
 }

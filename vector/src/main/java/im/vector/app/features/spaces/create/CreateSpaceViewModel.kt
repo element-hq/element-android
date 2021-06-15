@@ -36,6 +36,7 @@ import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.AliasAvailabilityResult
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 
 class CreateSpaceViewModel @AssistedInject constructor(
@@ -242,8 +243,9 @@ class CreateSpaceViewModel @AssistedInject constructor(
                     copy(aliasVerificationTask = Loading())
                 }
                 viewModelScope.launch {
-                    session.checkAliasAvailability(aliasLocalPart).fold(
-                            {
+                    try {
+                        when (val result = session.checkAliasAvailability(aliasLocalPart)) {
+                            AliasAvailabilityResult.Available       -> {
                                 setState {
                                     copy(
                                             step = CreateSpaceState.Step.AddRooms
@@ -251,14 +253,20 @@ class CreateSpaceViewModel @AssistedInject constructor(
                                 }
                                 _viewEvents.post(CreateSpaceEvents.HideModalLoading)
                                 _viewEvents.post(CreateSpaceEvents.NavigateToAddRooms)
-                            },
-                            {
+                            }
+                            is AliasAvailabilityResult.NotAvailable -> {
                                 setState {
-                                    copy(aliasVerificationTask = Fail(it))
+                                    copy(aliasVerificationTask = Fail(result.roomAliasError))
                                 }
                                 _viewEvents.post(CreateSpaceEvents.HideModalLoading)
                             }
-                    )
+                        }
+                    } catch (failure: Throwable) {
+                        setState {
+                            copy(aliasVerificationTask = Fail(failure))
+                        }
+                        _viewEvents.post(CreateSpaceEvents.HideModalLoading)
+                    }
                 }
             }
         }
