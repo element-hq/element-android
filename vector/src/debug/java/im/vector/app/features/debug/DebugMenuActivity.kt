@@ -43,7 +43,10 @@ import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkVectorActivity
 import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightDefaultActivity
 import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightTestActivity
 import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightVectorActivity
-import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesActivity
+import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesDarkActivity
+import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesLightActivity
+import im.vector.lib.ui.styles.debug.DebugVectorTextViewDarkActivity
+import im.vector.lib.ui.styles.debug.DebugVectorTextViewLightActivity
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
 
 import timber.log.Timber
@@ -78,8 +81,17 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     private fun setupViews() {
         views.debugTestTextViewLink.setOnClickListener { testTextViewLink() }
-        views.debugOpenButtonStyles.setOnClickListener {
-            startActivity(Intent(this, DebugVectorButtonStylesActivity::class.java))
+        views.debugOpenButtonStylesLight.setOnClickListener {
+            startActivity(Intent(this, DebugVectorButtonStylesLightActivity::class.java))
+        }
+        views.debugOpenButtonStylesDark.setOnClickListener {
+            startActivity(Intent(this, DebugVectorButtonStylesDarkActivity::class.java))
+        }
+        views.debugTestTextViewLight.setOnClickListener {
+            startActivity(Intent(this, DebugVectorTextViewLightActivity::class.java))
+        }
+        views.debugTestTextViewDark.setOnClickListener {
+            startActivity(Intent(this, DebugVectorTextViewDarkActivity::class.java))
         }
         views.debugShowSasEmoji.setOnClickListener { showSasEmoji() }
         views.debugTestNotification.setOnClickListener { testNotification() }

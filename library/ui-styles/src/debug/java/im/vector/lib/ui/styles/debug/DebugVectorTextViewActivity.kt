@@ -18,13 +18,14 @@ package im.vector.lib.ui.styles.debug
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import im.vector.lib.ui.styles.databinding.ActivityDebugButtonStylesBinding
+import im.vector.lib.ui.styles.databinding.ActivityDebugTextViewBinding
 
-abstract class DebugVectorButtonStylesActivity : AppCompatActivity() {
+// Rendering is not the same with VectorBaseActivity
+abstract class DebugVectorTextViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val views = ActivityDebugButtonStylesBinding.inflate(layoutInflater)
+        val views = ActivityDebugTextViewBinding.inflate(layoutInflater)
         setContentView(views.root)
     }
 }

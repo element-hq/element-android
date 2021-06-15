@@ -441,16 +441,6 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Text views" />
-
-                <include
-                    layout="@layout/debug_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

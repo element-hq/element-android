@@ -21,9 +21,20 @@
         <activity
             android:name=".debug.DebugMaterialThemeDarkVectorActivity"
             android:theme="@style/AppTheme.Dark" />
+
         <activity
-            android:name=".debug.DebugVectorButtonStylesActivity"
+            android:name=".debug.DebugVectorButtonStylesLightActivity"
             android:theme="@style/AppTheme.Light" />
+        <activity
+            android:name=".debug.DebugVectorButtonStylesDarkActivity"
+            android:theme="@style/AppTheme.Dark" />
+
+        <activity
+            android:name=".debug.DebugVectorTextViewLightActivity"
+            android:theme="@style/AppTheme.Light" />
+        <activity
+            android:name=".debug.DebugVectorTextViewDarkActivity"
+            android:theme="@style/AppTheme.Dark" />
     </application>
 
 </manifest>
