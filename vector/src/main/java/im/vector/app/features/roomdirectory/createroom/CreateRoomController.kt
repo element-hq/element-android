@@ -103,8 +103,8 @@ class CreateRoomController @Inject constructor(
                 id("alias")
                 enabled(enableFormElement)
                 value(viewState.roomVisibilityType.aliasLocalPart)
-                inputSuffix(":" + viewState.homeServerName)
-                inputPrefix("#")
+                suffixText(":" + viewState.homeServerName)
+                prefixText("#")
                 hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                 errorMessage(
                         host.roomAliasErrorFormatter.format(

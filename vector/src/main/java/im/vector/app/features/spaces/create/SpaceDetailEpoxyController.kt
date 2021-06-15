@@ -92,8 +92,8 @@ class SpaceDetailEpoxyController @Inject constructor(
                 forceUpdateValue(!data.aliasManuallyModified)
                 value(data.aliasLocalPart)
                 hint(host.stringProvider.getString(R.string.create_space_alias_hint))
-                inputSuffix(":" + data.homeServerName)
-                inputPrefix("#")
+                suffixText(":" + data.homeServerName)
+                prefixText("#")
                 onFocusChange { hasFocus ->
                     host.aliasTextIsFocused = hasFocus
                 }

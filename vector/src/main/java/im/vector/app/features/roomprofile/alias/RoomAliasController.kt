@@ -248,8 +248,8 @@ class RoomAliasController @Inject constructor(
                 formEditTextItem {
                     id("newLocalAlias")
                     value(data.newLocalAliasState.value)
-                    inputSuffix(":" + data.homeServerName)
-                    inputPrefix("#")
+                    suffixText(":" + data.homeServerName)
+                    prefixText("#")
                     hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                     errorMessage(host.roomAliasErrorFormatter.format((data.newLocalAliasState.asyncRequest as? Fail)?.error as? RoomAliasError))
                     onTextChange { value ->

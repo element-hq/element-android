@@ -72,10 +72,10 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     var onFocusChange: ((Boolean) -> Unit)? = null
 
     @EpoxyAttribute
-    var inputPrefix: String? = null
+    var prefixText: String? = null
 
     @EpoxyAttribute
-    var inputSuffix: String? = null
+    var suffixText: String? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
@@ -92,8 +92,8 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         holder.textInputLayout.error = errorMessage
         holder.textInputLayout.endIconMode = endIconMode ?: TextInputLayout.END_ICON_NONE
 
-        holder.textInputLayout.prefixText = inputPrefix
-        holder.textInputLayout.suffixText = inputSuffix
+        holder.textInputLayout.prefixText = prefixText
+        holder.textInputLayout.suffixText = suffixText
 
         if (forceUpdateValue) {
             holder.textInputEditText.setText(value)
