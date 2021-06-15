@@ -20,33 +20,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.setFragmentResult
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetSpaceCreatePrivateWarningBinding
 
 class BetaWarningBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceCreatePrivateWarningBinding>() {
-
-    interface InteractionListener {
-        fun betaWarningOnContinueAnyway()
-    }
-
-    var interactionListener: InteractionListener? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             BottomSheetSpaceCreatePrivateWarningBinding.inflate(inflater, container, false)
 
     override val showExpanded = true
 
-    override fun onDetach() {
-        interactionListener = null
-        super.onDetach()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         views.continueButton.debouncedClicks {
-            interactionListener?.betaWarningOnContinueAnyway()
+            setFragmentResult(REQUEST_KEY, Bundle.EMPTY)
             dismiss()
         }
+    }
+
+    companion object {
+        const val REQUEST_KEY = "BetaWarningBottomSheet"
     }
 }

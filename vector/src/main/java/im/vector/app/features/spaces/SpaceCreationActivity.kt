@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
@@ -29,7 +28,6 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.SimpleFragmentActivity
-import im.vector.app.features.spaces.create.BetaWarningBottomSheet
 import im.vector.app.features.spaces.create.ChoosePrivateSpaceTypeFragment
 import im.vector.app.features.spaces.create.ChooseSpaceTypeFragment
 import im.vector.app.features.spaces.create.CreateSpaceAction
@@ -42,7 +40,7 @@ import im.vector.app.features.spaces.create.SpaceTopology
 import im.vector.app.features.spaces.create.SpaceType
 import javax.inject.Inject
 
-class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Factory, BetaWarningBottomSheet.InteractionListener {
+class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Factory {
 
     @Inject lateinit var viewModelFactory: CreateSpaceViewModel.Factory
 
@@ -53,29 +51,8 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
 
     val viewModel: CreateSpaceViewModel by viewModel()
 
-    private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
-        override fun onFragmentAttached(fm: FragmentManager, f: Fragment, context: Context) {
-            when (f) {
-                is BetaWarningBottomSheet -> {
-                    f.interactionListener = this@SpaceCreationActivity
-                }
-            }
-            super.onFragmentAttached(fm, f, context)
-        }
-
-        override fun onFragmentDetached(fm: FragmentManager, f: Fragment) {
-            when (f) {
-                is BetaWarningBottomSheet -> {
-                    f.interactionListener = null
-                }
-            }
-            super.onFragmentDetached(fm, f)
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         if (isFirstCreation()) {
             when (withState(viewModel) { it.step }) {
                 CreateSpaceState.Step.ChooseType        -> {
@@ -92,11 +69,6 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
-        super.onDestroy()
     }
 
     override fun initUiAndData() {
@@ -206,8 +178,4 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
     }
 
     override fun create(initialState: CreateSpaceState): CreateSpaceViewModel = viewModelFactory.create(initialState)
-
-    override fun betaWarningOnContinueAnyway() {
-        viewModel.handle(CreateSpaceAction.ConfirmBetaWarning)
-    }
 }
