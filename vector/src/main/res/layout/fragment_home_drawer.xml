@@ -12,30 +12,16 @@
         android:id="@+id/homeDrawerHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?vctr_home_drawer_header_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/homeDrawerHeaderDebugView"
-            style="@style/VectorDebug"
-            android:layout_width="@dimen/layout_touch_size"
-            android:layout_height="@dimen/layout_touch_size"
-            android:importantForAccessibility="no"
-            android:scaleType="center"
-            android:src="@drawable/ic_settings_x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?colorPrimary"
-            tools:ignore="MissingPrefix" />
-
-        <ImageView
             android:id="@+id/homeDrawerHeaderAvatarView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/layout_vertical_margin"
             android:contentDescription="@string/avatar"
             android:transitionName="profile"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,66 +30,58 @@
 
         <TextView
             android:id="@+id/homeDrawerUsernameView"
-            style="@style/VectorTextView.Subtitle"
+            style="@style/VectorTextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="?vctr_content_primary"
+            app:layout_constraintBottom_toTopOf="@+id/homeDrawerUserIdView"
             app:layout_constraintEnd_toStartOf="@+id/homeDrawerQRCodeButton"
-            app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
-            app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeaderAvatarView"
+            app:layout_constraintStart_toEndOf="@+id/homeDrawerHeaderAvatarView"
+            app:layout_constraintTop_toTopOf="@+id/homeDrawerHeaderAvatarView"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="@sample/users.json/data/displayName" />
 
         <TextView
             android:id="@+id/homeDrawerUserIdView"
-            style="@style/VectorTextView.Body"
+            style="@style/VectorTextView.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="?vctr_content_secondary"
-            app:layout_constraintBottom_toTopOf="@+id/homeDrawerInviteFriendButton"
+            app:layout_constraintBottom_toBottomOf="@+id/homeDrawerHeaderAvatarView"
             app:layout_constraintEnd_toStartOf="@+id/homeDrawerQRCodeButton"
-            app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
+            app:layout_constraintStart_toStartOf="@+id/homeDrawerUsernameView"
             app:layout_constraintTop_toBottomOf="@+id/homeDrawerUsernameView"
             tools:text="@sample/users.json/data/id" />
 
-        <Button
+        <ImageView
             android:id="@+id/homeDrawerQRCodeButton"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:layout_marginTop="2dp"
+            android:layout_width="@dimen/layout_touch_size"
+            android:layout_height="@dimen/layout_touch_size"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            android:backgroundTint="?colorSurface"
-            android:elevation="0dp"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            android:padding="0dp"
+            android:contentDescription="@string/qr_code"
             android:rotationY="@integer/rtl_mirror_flip"
-            app:cornerRadius="17dp"
-            app:icon="@drawable/ic_qr_code_add"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:iconSize="20dp"
-            app:iconTint="?colorPrimary"
+            android:scaleType="center"
+            android:src="@drawable/ic_qr_code_add"
+            app:layout_constraintBottom_toBottomOf="@id/homeDrawerHeaderAvatarView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/homeDrawerUsernameView" />
+            app:layout_constraintTop_toTopOf="@id/homeDrawerHeaderAvatarView"
+            app:tint="?vctr_content_tertiary"
+            tools:ignore="MissingPrefix" />
 
         <Button
             android:id="@+id/homeDrawerInviteFriendButton"
             style="@style/VectorButtonStyleText"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
-            android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:layout_marginBottom="8dp"
             android:gravity="center"
             android:insetTop="0dp"
@@ -114,10 +92,22 @@
             app:iconGravity="textStart"
             app:iconSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
+            app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeaderAvatarView"
+            tools:ignore="MissingPrefix" />
+
+        <ImageView
+            android:id="@+id/homeDrawerHeaderDebugView"
+            style="@style/VectorDebug"
+            android:layout_width="@dimen/layout_touch_size"
+            android:layout_height="@dimen/layout_touch_size"
+            android:importantForAccessibility="no"
+            android:scaleType="center"
+            android:src="@drawable/ic_settings_x"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homeDrawerUserIdView" />
+            app:tint="?colorPrimary"
+            tools:ignore="MissingPrefix" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -135,7 +125,7 @@
         android:id="@+id/homeDrawerBottomSeparator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?vctr_list_separator_on_surface"
+        android:background="?vctr_list_separator"
         app:layout_constraintBottom_toTopOf="@+id/homeDrawerHeaderSettingsView" />
 
     <TextView

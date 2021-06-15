@@ -32,11 +32,6 @@
     <color name="black_alpha">#55000000</color>
     <color name="black_54">#8A000000</color>
 
-    <attr name="vctr_home_drawer_header_background" format="color" />
-    <color name="vctr_home_drawer_header_background_light">#FFF5F7FA</color>
-    <color name="vctr_home_drawer_header_background_dark">#FF22282F</color>
-    <color name="vctr_home_drawer_header_background_black">#FF000000</color>
-
     <!-- For Android status bar and navigation bar -->
     <color name="android_status_bar_background_light">@color/element_system_light</color>
     <color name="android_navigation_bar_background_light">@color/element_system_light</color>
