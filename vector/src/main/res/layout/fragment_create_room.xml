@@ -34,7 +34,9 @@
                         android:src="@drawable/ic_x_18dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?vctr_content_secondary"
+                        tools:ignore="MissingPrefix" />
 
                     <TextView
                         android:id="@+id/createRoomTitle"

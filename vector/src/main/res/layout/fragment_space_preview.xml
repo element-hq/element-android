@@ -20,24 +20,12 @@
                 android:id="@+id/roomPreviewNoPreviewToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:navigationIcon="@drawable/ic_x_18dp">
+                app:navigationIcon="@drawable/ic_x_18dp"
+                app:navigationIconTint="?vctr_content_secondary">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
-                    <!--                <ImageView-->
-                    <!--                    android:id="@+id/spacePreviewClose"-->
-                    <!--                    android:layout_width="@dimen/layout_touch_size"-->
-                    <!--                    android:layout_height="@dimen/layout_touch_size"-->
-                    <!--                    android:clickable="true"-->
-                    <!--                    android:focusable="true"-->
-                    <!--                    android:foreground="?attr/selectableItemBackground"-->
-                    <!--                    android:scaleType="center"-->
-                    <!--                    android:src="@drawable/ic_x_18dp"-->
-                    <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
                     <ImageView
                         android:id="@+id/spacePreviewToolbarAvatar"

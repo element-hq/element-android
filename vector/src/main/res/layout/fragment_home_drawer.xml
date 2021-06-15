@@ -150,11 +150,12 @@
         android:minHeight="52dp"
         android:padding="16dp"
         android:text="@string/settings"
-        android:tint="?vctr_content_secondary"
         app:drawableStartCompat="@drawable/ic_settings_18dp"
         app:drawableTint="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="?vctr_content_secondary"
+        tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/homeDrawerHeaderSignoutView"
@@ -168,10 +169,11 @@
         android:minHeight="52dp"
         android:padding="16dp"
         android:text="@string/logout"
-        android:tint="?vctr_content_secondary"
         app:drawableStartCompat="@drawable/ic_signout_18dp"
         app:drawableTint="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="?vctr_content_secondary"
+        tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

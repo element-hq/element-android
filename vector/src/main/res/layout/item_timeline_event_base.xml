@@ -159,8 +159,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:indeterminateTint="?vctr_content_secondary"
-        android:tint="?vctr_content_tertiary"
         android:visibility="gone"
+        app:tint="?vctr_content_tertiary"
+        tools:ignore="MissingPrefix"
         tools:visibility="visible" />
 
     <LinearLayout
