@@ -31,11 +31,10 @@
 
     <TextView
         android:id="@+id/roomProfileNameView"
-        style="@style/VectorTextView.HeadlineM"
+        style="@style/VectorTextView.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textAppearance="@style/Vector.Toolbar.Title"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/roomProfileAliasView"
         app:layout_constraintEnd_toEndOf="parent"
