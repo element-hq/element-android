@@ -16,6 +16,7 @@ Improvements 🙌:
  - Set up the splash screen #80
  - Resolve matrixId to get Tchap user #91
  - Update the home bottom bar icons #83
+ - Simplify the notifications modes #77
 
 
 =======================================================

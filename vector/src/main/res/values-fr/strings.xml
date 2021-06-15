@@ -1646,9 +1646,9 @@
     <string name="login_error_no_homeserver_found">Ce n’est pas une adresse de serveur Matrix valide</string>
     <string name="message_ignore_user">Bloquer l’utilisateur</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Tous les messages (sonore)</string>
-    <string name="room_list_quick_actions_notifications_all">Tous les messages</string>
+    <string name="room_list_quick_actions_notifications_all">Notification pour chaque message</string>
     <string name="room_list_quick_actions_notifications_mentions">Seulement les mentions</string>
-    <string name="room_list_quick_actions_notifications_mute">Sourdine</string>
+    <string name="room_list_quick_actions_notifications_mute">Pas de notification</string>
     <string name="room_list_quick_actions_settings">Paramètres</string>
     <string name="room_list_quick_actions_leave">Quitter le salon</string>
     <string name="notice_member_no_changes">%1$s n’a effectué aucun changement</string>

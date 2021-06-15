@@ -2348,9 +2348,9 @@
     <string name="message_ignore_user">Ignore user</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">"All messages (noisy)"</string>
-    <string name="room_list_quick_actions_notifications_all">"All messages"</string>
+    <string name="room_list_quick_actions_notifications_all">"Notification for each message"</string>
     <string name="room_list_quick_actions_notifications_mentions">"Mentions only"</string>
-    <string name="room_list_quick_actions_notifications_mute">"Mute"</string>
+    <string name="room_list_quick_actions_notifications_mute">"No notification"</string>
     <string name="room_list_quick_actions_settings">"Settings"</string>
     <string name="room_list_quick_actions_favorite_add">"Add to favorites"</string>
     <string name="room_list_quick_actions_favorite_remove">"Remove from favorites"</string>

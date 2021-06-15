@@ -17,11 +17,14 @@ package im.vector.app.features.home.room.list.actions
 
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.R
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
 import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.resources.BooleanProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -31,7 +34,8 @@ import javax.inject.Inject
  */
 class RoomListQuickActionsEpoxyController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val booleanProvider: BooleanProvider
 ) : TypedEpoxyController<RoomListQuickActionsState>() {
 
     var listener: Listener? = null
@@ -60,10 +64,22 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
             }
         }
 
-        val selectedRoomState = state.roomNotificationState()
+        val selectedRoomState = when (val notificationState = state.roomNotificationState()) {
+            RoomNotificationState.ALL_MESSAGES,
+            RoomNotificationState.ALL_MESSAGES_NOISY -> RoomNotificationState.ALL_MESSAGES_NOISY
+            RoomNotificationState.MENTIONS_ONLY      -> {
+                if (roomSummary.allowMentionsOnlyNotifications()) notificationState else RoomNotificationState.MUTE
+            }
+            else                                     -> notificationState
+        }
+
+
         RoomListQuickActionsSharedAction.NotificationsAllNoisy(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
-        RoomListQuickActionsSharedAction.NotificationsAll(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
-        RoomListQuickActionsSharedAction.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
+
+        if (roomSummary.allowMentionsOnlyNotifications()) {
+            RoomListQuickActionsSharedAction.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
+        }
+
         RoomListQuickActionsSharedAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
 
         if (showAll) {
@@ -73,8 +89,9 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
 
     private fun RoomListQuickActionsSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
         val selected = when (this) {
-            is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY
-            is RoomListQuickActionsSharedAction.NotificationsAll          -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
+            is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> {
+                roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY || roomNotificationState == RoomNotificationState.ALL_MESSAGES
+            }
             is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> roomNotificationState == RoomNotificationState.MENTIONS_ONLY
             is RoomListQuickActionsSharedAction.NotificationsMute         -> roomNotificationState == RoomNotificationState.MUTE
             else                                                          -> false
@@ -87,6 +104,11 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
             destructive(this@toBottomSheetItem.destructive)
             listener(View.OnClickListener { listener?.didSelectMenuAction(this@toBottomSheetItem) })
         }
+    }
+
+    private fun RoomSummary.allowMentionsOnlyNotifications(): Boolean {
+        val isGplayEncrypted = booleanProvider.getBoolean(R.bool.isGplay) && isEncrypted
+        return !isDirect && !isGplayEncrypted
     }
 
     interface Listener {
