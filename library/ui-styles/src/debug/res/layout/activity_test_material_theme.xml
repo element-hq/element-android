@@ -5,7 +5,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.debug.DebugMaterialThemeActivity"
+    tools:context=".debug.DebugMaterialThemeActivity"
     tools:ignore="HardcodedText,MissingPrefix">
 
     <androidx.constraintlayout.widget.ConstraintLayout
