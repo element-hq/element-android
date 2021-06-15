@@ -19,6 +19,8 @@
     <color name="tchap_jade_green">#27ae60</color>
     <color name="tchap_jade_green_alpha70">#b227ae60</color>
     <color name="tchap_greyish_brown">#4f4f4f</color>
+    <color name="tchap_white_alpha15">#26ffffff</color>
+    <color name="tchap_white_alpha24">#3Dffffff</color>
 
     <!-- Default/Android Status Bar -->
     <color name="tchap_primary_color_dark_light">@color/tchap_dark_blue</color>
@@ -32,31 +34,29 @@
     <color name="tchap_text_color_dark">@color/tchap_dark_blue</color>
     <color name="tchap_text_color_dark_grey">@color/tchap_warm_grey</color>
 
-<!--    <color name="vector_tchap_text_color_light_grey">#949494</color>-->
-<!--    <color name="vector_tchap_hexagon_color_dark_grey">#979797</color>-->
-<!--    <color name="vector_tchap_hexagon_background_color_dark_grey">#ECECEC</color>-->
-<!--    <color name="vector_tchap_search_background_color">#90dee5f1</color>-->
-<!--    <color name="tchap_search_bar">#90dee5f1</color>-->
-<!--    <color name="tchap_search_bar_text">#7d7d7d</color>-->
-<!--    <color name="tchap_general_search_bar">#12ffffff</color>-->
-<!--    <color name="tchap_general_search_bar_border">#3bffffff</color>-->
+    <!--    <color name="vector_tchap_text_color_light_grey">#949494</color>-->
+    <!--    <color name="vector_tchap_hexagon_color_dark_grey">#979797</color>-->
+    <!--    <color name="vector_tchap_hexagon_background_color_dark_grey">#ECECEC</color>-->
+    <!--    <color name="vector_tchap_search_background_color">#90dee5f1</color>-->
+    <!--    <color name="tchap_search_bar">#90dee5f1</color>-->
+    <!--    <color name="tchap_search_bar_text">#7d7d7d</color>-->
 
     <!-- Action bar text colors -->
     <color name="tchap_action_bar_text_color">@color/white</color>
     <color name="tchap_action_bar_text_color_with_alpha">#9fffffff</color>
 
-<!--    <color name="tchap_primary_text_color">#000000</color>-->
-<!--    <color name="tchap_secondary_text_color">#aeaeae</color>-->
-<!--    <color name="tchap_third_text_color">@color/tchap_text_color_dark_grey</color>-->
-<!--    <color name="tchap_navigation_menu_text_color">#9b9b9b</color>-->
-<!--    <color name="tchap_presence_status_color">#60ad0d</color>-->
-<!--    <color name="tchap_incoming_msg_phylact_background_color">#FFFFFF</color>-->
-<!--    <color name="tchap_outgoing_msg_phylact_background_color">#374c72</color>-->
-<!--    <color name="tchap_incoming_msg_markdown_block_background_color">#FFEEEEEE</color>-->
-<!--    <color name="tchap_outgoing_msg_markdown_block_background_color">#FF4D4D4D</color>-->
-<!--    <color name="tchap_unsent_msg_color">#FFF56679</color>-->
-<!--    <color name="tchap_dark_red">#FF7f0d15</color>-->
-<!--    <color name="tchap_light_background">#FFecf0f7</color>-->
+    <!--    <color name="tchap_primary_text_color">#000000</color>-->
+    <!--    <color name="tchap_secondary_text_color">#aeaeae</color>-->
+    <!--    <color name="tchap_third_text_color">@color/tchap_text_color_dark_grey</color>-->
+    <!--    <color name="tchap_navigation_menu_text_color">#9b9b9b</color>-->
+    <!--    <color name="tchap_presence_status_color">#60ad0d</color>-->
+    <!--    <color name="tchap_incoming_msg_phylact_background_color">#FFFFFF</color>-->
+    <!--    <color name="tchap_outgoing_msg_phylact_background_color">#374c72</color>-->
+    <!--    <color name="tchap_incoming_msg_markdown_block_background_color">#FFEEEEEE</color>-->
+    <!--    <color name="tchap_outgoing_msg_markdown_block_background_color">#FF4D4D4D</color>-->
+    <!--    <color name="tchap_unsent_msg_color">#FFF56679</color>-->
+    <!--    <color name="tchap_dark_red">#FF7f0d15</color>-->
+    <!--    <color name="tchap_light_background">#FFecf0f7</color>-->
     <color name="tchap_coral_border_color">@color/tchap_coral_alpha70</color>
     <color name="tchap_pumpkin_orange_border_color">@color/tchap_pumpkin_orange_alpha70</color>
     <color name="tchap_jade_green_border_color">@color/tchap_jade_green_alpha70</color>
@@ -73,6 +73,9 @@
     <attr name="bar_title_color" format="color" />
     <attr name="bar_subtitle_color" format="color" />
     <attr name="bar_action_color" format="color" />
+    <attr name="bar_hint_color" format="color" />
+    <attr name="bar_search_bg_color" format="color" />
+    <attr name="bar_search_stroke_color" format="color" />
 
     <!-- Button color attributes -->
     <attr name="button_bordered_title_color" format="color" />

@@ -9,6 +9,11 @@
         <item name="bar_title_color">@color/black</item>
         <item name="bar_subtitle_color">@color/tchap_dark_blue</item>
         <item name="bar_action_color">@color/tchap_light_navy</item>
+        <item name="bar_hint_color">@color/tchap_warm_grey</item>
+        <item name="bar_search_bg_color">@color/tchap_light_grey_alpha50</item>
+        <item name="bar_search_stroke_color">@android:color/transparent</item>
+
+        <item name="actionMenuTextColor">?bar_title_color</item>
 
         <!-- Button -->
         <item name="button_bordered_title_color">@color/white</item>

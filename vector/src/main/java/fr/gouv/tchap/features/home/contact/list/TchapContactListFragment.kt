@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
-import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
@@ -35,37 +34,24 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
-import im.vector.app.databinding.FragmentUserListBinding
-import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
+import im.vector.app.databinding.FragmentTchapContactListBinding
 import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
 
 class TchapContactListFragment @Inject constructor(
         private val tchapContactListController: TchapContactListController,
-        val homeServerCapabilitiesViewModelFactory: HomeServerCapabilitiesViewModel.Factory
-) : VectorBaseFragment<FragmentUserListBinding>(),
+) : VectorBaseFragment<FragmentTchapContactListBinding>(),
         TchapContactListController.Callback {
 
     private val args: TchapContactListFragmentArgs by args()
     private val viewModel: TchapContactListViewModel by activityViewModel()
-    private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentUserListBinding {
-        return FragmentUserListBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapContactListBinding {
+        return FragmentTchapContactListBinding.inflate(inflater, container, false)
     }
-
-    override fun getMenuRes() = args.menuResId
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (args.showToolbar) {
-            views.userListTitle.text = args.title
-            vectorBaseActivity.setSupportActionBar(views.userListToolbar)
-            setupCloseView()
-            views.userListToolbar.isVisible = true
-        } else {
-            views.userListToolbar.isVisible = false
-        }
         setupRecyclerView()
         setupSearchView()
 
@@ -86,31 +72,25 @@ class TchapContactListFragment @Inject constructor(
     }
 
     private fun setupSearchView() {
-        withState(viewModel) {
-            views.userListSearch.hint = getString(R.string.user_directory_search_hint)
-        }
+        views.userListFilterGroup.isVisible = args.showFilter
         views.userListSearch
                 .textChanges()
                 .startWith(views.userListSearch.text)
                 .subscribe { text ->
-                    val searchValue = text.trim()
-                    val action = if (searchValue.isBlank()) {
-                        TchapContactListAction.ClearSearchUsers
-                    } else {
-                        TchapContactListAction.SearchUsers(searchValue.toString())
-                    }
-                    viewModel.handle(action)
+                    searchContactsWith(text.trim().toString())
                 }
                 .disposeOnDestroyView()
 
         views.userListSearch.setupAsSearch()
-        views.userListSearch.requestFocus()
     }
 
-    private fun setupCloseView() {
-        views.userListClose.debouncedClicks {
-            requireActivity().finish()
+    fun searchContactsWith(value: String) {
+        val action = if (value.isBlank()) {
+            TchapContactListAction.ClearSearchUsers
+        } else {
+            TchapContactListAction.SearchUsers(value)
         }
+        viewModel.handle(action)
     }
 
     override fun invalidate() = withState(viewModel) {

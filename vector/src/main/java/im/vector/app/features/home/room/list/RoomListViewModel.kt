@@ -56,7 +56,7 @@ class RoomListViewModel @Inject constructor(
         fun create(initialState: RoomListViewState): RoomListViewModel
     }
 
-    private var updatableQuery: UpdatableLivePageResult? = null
+    private var updatableQueries = mutableListOf<UpdatableLivePageResult>()
 
     private val suggestedRoomJoiningState: MutableLiveData<Map<String, Async<Unit>>> = MutableLiveData(emptyMap())
 
@@ -130,7 +130,7 @@ class RoomListViewModel @Inject constructor(
                         it.disposeOnClear()
                     },
                     {
-                        updatableQuery = it
+                        updatableQueries.add(it)
                     }
             ).buildSections(initialState.displayMode)
         } else {
@@ -143,7 +143,7 @@ class RoomListViewModel @Inject constructor(
                         it.disposeOnClear()
                     },
                     {
-                        updatableQuery = it
+                        updatableQueries.add(it)
                     }
             ).buildSections(initialState.displayMode)
         }
@@ -189,10 +189,13 @@ class RoomListViewModel @Inject constructor(
                     roomFilter = action.filter
             )
         }
-        updatableQuery?.updateQuery {
-            it.copy(
-                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
-            )
+        // filter query for each section
+        updatableQueries.forEach { updatableQuery ->
+            updatableQuery.updateQuery {
+                it.copy(
+                        displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
+                )
+            }
         }
     }
 

@@ -58,13 +58,13 @@ class SpaceRoomListSectionBuilder(
         val sections = mutableListOf<RoomsSection>()
         val activeSpaceAwareQueries = mutableListOf<RoomListViewModel.ActiveSpaceQueryUpdater>()
         when (mode) {
-            RoomListDisplayMode.PEOPLE -> {
+            RoomListDisplayMode.PEOPLE        -> {
                 buildDmSections(sections, activeSpaceAwareQueries)
             }
-            RoomListDisplayMode.ROOMS -> {
+            RoomListDisplayMode.ROOMS         -> {
                 buildRoomsSections(sections, activeSpaceAwareQueries)
             }
-            RoomListDisplayMode.FILTERED -> {
+            RoomListDisplayMode.FILTERED      -> {
                 withQueryParams(
                         {
                             it.memberships = Membership.activeMemberships()
@@ -270,6 +270,7 @@ class SpaceRoomListSectionBuilder(
                             roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
                             pagedListConfig
                     ).also {
+                        onUdpatable(it)
                         when (spaceFilterStrategy) {
                             RoomListViewModel.SpaceFilterStrategy.NORMAL     -> {
                                 activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
@@ -343,7 +344,7 @@ class SpaceRoomListSectionBuilder(
 
     internal fun RoomSummaryQueryParams.process(spaceFilter: RoomListViewModel.SpaceFilterStrategy, currentSpace: String?): RoomSummaryQueryParams {
         return when (spaceFilter) {
-            RoomListViewModel.SpaceFilterStrategy.NORMAL -> {
+            RoomListViewModel.SpaceFilterStrategy.NORMAL     -> {
                 copy(
                         activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(currentSpace)
                 )
@@ -357,7 +358,7 @@ class SpaceRoomListSectionBuilder(
                     )
                 }
             }
-            RoomListViewModel.SpaceFilterStrategy.NONE -> this
+            RoomListViewModel.SpaceFilterStrategy.NONE       -> this
         }
     }
 }

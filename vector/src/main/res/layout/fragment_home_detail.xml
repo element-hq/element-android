@@ -34,13 +34,14 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:id="@+id/toolbarAvatarImageView"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="4dp"
+                    android:contentDescription="@string/avatar"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_space_icons"
-                    app:tint="?riotx_text_secondary" />
+                    android:transitionName="profile"
+                    tools:src="@tools:sample/avatars" />
 
                 <im.vector.app.features.home.room.list.UnreadCounterBadgeView
                     android:id="@+id/drawerUnreadCounterBadgeView"
@@ -61,6 +62,16 @@
                     tools:text="4"
                     tools:visibility="visible" />
             </RelativeLayout>
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/homeSearchView"
+                style="@style/TchapSearchView.Toolbar"
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/homeToolbarContent"

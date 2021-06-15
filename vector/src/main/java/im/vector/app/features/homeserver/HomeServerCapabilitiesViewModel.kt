@@ -23,7 +23,6 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
@@ -54,12 +53,11 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
         override fun create(viewModelContext: ViewModelContext, state: HomeServerCapabilitiesViewState): HomeServerCapabilitiesViewModel? {
             val context = viewModelContext as FragmentViewModelContext
             val factory = (context.fragment as? UserListFragment)?.homeServerCapabilitiesViewModelFactory
-                    ?: (context.fragment as? TchapContactListFragment)?.homeServerCapabilitiesViewModelFactory
 
             return factory?.create(state)
         }
 
-        override fun initialState(viewModelContext: ViewModelContext): HomeServerCapabilitiesViewState? {
+        override fun initialState(viewModelContext: ViewModelContext): HomeServerCapabilitiesViewState {
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getSafeActiveSession()
             return HomeServerCapabilitiesViewState(
                     capabilities = session?.getHomeServerCapabilities() ?: HomeServerCapabilities()

@@ -29,4 +29,25 @@
     <style name="AppTheme.Widget.ActionButton" parent="@style/Widget.AppCompat.ActionButton">
         <item name="android:textAllCaps">false</item>
     </style>
+
+    <style name="TchapSearchView" parent="@style/VectorSearchView">
+        <item name="android:textSize">14sp</item>
+        <item name="closeIcon">@drawable/ic_tchap_clear_search</item>
+        <item name="defaultQueryHint">@string/search</item>
+        <item name="searchHintIcon">@drawable/ic_tchap_search_input</item>
+        <item name="searchIcon">@drawable/ic_tchap_search_input</item>
+    </style>
+
+    <style name="TchapSearchView.Toolbar">
+        <item name="android:background">@drawable/bg_tchap_bar_search_field</item>
+        <item name="android:theme">@style/AppTheme.Toolbar.SearchView</item>
+    </style>
+
+    <style name="AppTheme.Toolbar.SearchView" parent="AppTheme.Light">
+        <item name="android:colorControlActivated">?bar_title_color</item>
+        <item name="android:textColorPrimary">?bar_title_color</item>
+        <item name="android:textColorHint">?bar_hint_color</item>
+        <item name="android:tint">?bar_hint_color</item>
+    </style>
+
 </resources>

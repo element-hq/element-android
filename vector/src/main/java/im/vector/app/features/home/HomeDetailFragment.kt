@@ -18,22 +18,24 @@ package im.vector.app.features.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
+import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragmentArgs
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
+import im.vector.app.core.extensions.withoutLeftMargin
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
@@ -88,23 +90,7 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-    override fun getMenuRes() = R.menu.room_list
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_home_mark_all_as_read -> {
-                viewModel.handle(HomeDetailAction.MarkAllRoomsRead)
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = hasUnreadRooms
-        super.onPrepareOptionsMenu(menu)
-    }
+    override fun getMenuRes() = R.menu.tchap_menu_home
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
@@ -140,6 +126,10 @@ class HomeDetailFragment @Inject constructor(
 
         viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
             switchDisplayMode(displayMode)
+        }
+
+        viewModel.selectSubscribe(this, HomeDetailViewState::myMatrixItem) { matrixItem ->
+            matrixItem?.let { avatarRenderer.render(it, views.toolbarAvatarImageView) }
         }
 
         unknownDeviceDetectorSharedViewModel.subscribe { state ->
@@ -181,6 +171,38 @@ class HomeDetailFragment @Inject constructor(
         super.onResume()
         // update notification tab if needed
         checkNotificationTabStatus()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_home_search_action -> {
+                toggleSearchView()
+                true
+            }
+            else                         -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+    private fun toggleSearchView() {
+        val searchItem = views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)
+        val isSearchMode = views.homeSearchView.isVisible
+        if (!isSearchMode) {
+            searchItem?.setIcon(0)
+            views.homeToolbarContent.isVisible = false
+            views.groupToolbarAvatarImageView.isVisible = false
+            views.homeSearchView.apply {
+                isVisible = true
+                isIconified = false
+            }
+        } else {
+            searchItem?.setIcon(R.drawable.ic_tchap_search)
+            views.homeSearchView.isVisible = false
+            views.homeToolbarContent.isVisible = true
+            views.groupToolbarAvatarImageView.isVisible = true
+            views.homeSearchView.takeUnless { it.isEmpty() }?.setQuery("", false)
+        }
     }
 
     private fun checkNotificationTabStatus() {
@@ -317,6 +339,13 @@ class HomeDetailFragment @Inject constructor(
                 }
             }
         }
+
+        views.homeSearchView.withoutLeftMargin()
+        views.homeSearchView.queryTextChanges()
+                .skipInitialValue()
+                .map { it.trim().toString() }
+                .subscribe { searchWith(it) }
+                .disposeOnDestroyView()
     }
 
     private fun setupBottomNavigationView() {
@@ -327,6 +356,8 @@ class HomeDetailFragment @Inject constructor(
                 R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
                 else                      -> RoomListDisplayMode.NOTIFICATIONS
             }
+            // close search view before changing display mode
+            if (views.homeSearchView.isVisible) toggleSearchView()
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
             true
         }
@@ -349,7 +380,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun updateSelectedFragment(displayMode: RoomListDisplayMode) {
-        val fragmentTag = "FRAGMENT_TAG_${displayMode.name}"
+        val fragmentTag = "$FRAGMENT_TAG_PREFIX${displayMode.name}"
         val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
         childFragmentManager.commitTransaction {
             childFragmentManager.fragments
@@ -360,11 +391,7 @@ class HomeDetailFragment @Inject constructor(
             if (fragmentToShow == null) {
                 when (displayMode) {
                     RoomListDisplayMode.PEOPLE -> {
-                        val params = TchapContactListFragmentArgs(
-                                title = getString(R.string.invite_users_to_room_title),
-                                menuResId = R.menu.vector_invite_users_to_room,
-                                showToolbar = false
-                        )
+                        val params = TchapContactListFragmentArgs(title = getString(R.string.invite_users_to_room_title))
                         add(R.id.roomListContainer, TchapContactListFragment::class.java, params.toMvRxBundle(), fragmentTag)
                     }
                     else                       -> {
@@ -374,6 +401,19 @@ class HomeDetailFragment @Inject constructor(
                 }
             } else {
                 attach(fragmentToShow)
+            }
+        }
+    }
+
+    private fun searchWith(value: String) {
+        withState(viewModel) {
+            val displayMode = it.displayMode
+            val fragmentTag = "$FRAGMENT_TAG_PREFIX${displayMode.name}"
+            val fragment = childFragmentManager.findFragmentByTag(fragmentTag)
+            when (displayMode) {
+                RoomListDisplayMode.PEOPLE -> (fragment as? TchapContactListFragment)?.searchContactsWith(value)
+                RoomListDisplayMode.ROOMS  -> (fragment as? RoomListFragment)?.filterRoomsWith(value)
+                else                       -> Unit // nothing to do
             }
         }
     }
@@ -435,5 +475,9 @@ class HomeDetailFragment @Inject constructor(
 
     override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
         return serverBackupStatusViewModelFactory.create(initialState)
+    }
+
+    companion object {
+        private const val FRAGMENT_TAG_PREFIX = "FRAGMENT_TAG_"
     }
 }
