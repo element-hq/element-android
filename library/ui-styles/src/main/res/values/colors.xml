@@ -29,6 +29,8 @@
     <!-- Emoji text has to use a black text color -->
     <color name="emoji_color">@android:color/black</color>
 
+    <color name="half_transparent_status_bar">#80000000</color>
+
     <color name="black_alpha">#55000000</color>
     <color name="black_54">#8A000000</color>
 
