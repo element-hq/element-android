@@ -33,14 +33,11 @@ class VerificationVectorAlert(uid: String,
                                * Alert are displayed by default, but let this lambda return false to prevent displaying
                                */
                               override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
-) : DefaultVectorAlert(
-        uid, title, description, iconId, shouldBeDisplayedIn
-) {
+) : DefaultVectorAlert(uid, title, description, iconId, shouldBeDisplayedIn) {
     override val layoutRes = R.layout.alerter_verification_layout
 
     class ViewBinder(private val matrixItem: MatrixItem?,
-                     private val avatarRenderer: AvatarRenderer)
-        : VectorAlert.ViewBinder {
+                     private val avatarRenderer: AvatarRenderer) : VectorAlert.ViewBinder {
 
         override fun bind(view: View) {
             view.findViewById<ImageView>(R.id.ivUserAvatar)?.let { imageView ->

@@ -40,8 +40,7 @@ class IncomingCallAlert(uid: String,
                      private val avatarRenderer: AvatarRenderer,
                      private val isVideoCall: Boolean,
                      private val onAccept: () -> Unit,
-                     private val onReject: () -> Unit)
-        : VectorAlert.ViewBinder {
+                     private val onReject: () -> Unit) : VectorAlert.ViewBinder {
 
         override fun bind(view: View) {
             val (callKindText, callKindIcon) = if (isVideoCall) {
