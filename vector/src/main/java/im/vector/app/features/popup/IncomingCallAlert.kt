@@ -43,10 +43,10 @@ class IncomingCallAlert(uid: String,
                      private val onReject: () -> Unit) : VectorAlert.ViewBinder {
 
         override fun bind(view: View) {
-            val (callKindText, callKindIcon) = if (isVideoCall) {
-                Pair(R.string.action_video_call, R.drawable.ic_call_video_small)
+            val (callKindText, callKindIcon, callKindActionIcon) = if (isVideoCall) {
+                Triple(R.string.action_video_call, R.drawable.ic_call_video_small, R.drawable.ic_call_answer_video)
             } else {
-                Pair(R.string.action_voice_call, R.drawable.ic_call_audio_small)
+                Triple(R.string.action_voice_call, R.drawable.ic_call_audio_small, R.drawable.ic_call_answer)
             }
             view.findViewById<TextView>(R.id.incomingCallKindView).apply {
                 setText(callKindText)
@@ -60,7 +60,7 @@ class IncomingCallAlert(uid: String,
                 setOnClickListener {
                     onAccept()
                 }
-                setImageResource(callKindIcon)
+                setImageResource(callKindActionIcon)
             }
             view.findViewById<ImageView>(R.id.incomingCallRejectView).setOnClickListener {
                 onReject()
