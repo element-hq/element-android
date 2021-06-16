@@ -894,7 +894,7 @@
     <string name="groups_list">Lista de Grupos</string>
     <string name="call">Chamar</string>
     <string name="room_participants_ban_prompt_msg">Banir usuária(o) vai expulsá-la(o) desta sala e preveni-la(o) de se juntar de novo.</string>
-    <string name="room_settings_all_messages_noisy">Todas as mensagens (barulhento)</string>
+    <string name="room_settings_all_messages_noisy">Todas as mensagens (barulhentas)</string>
     <string name="room_settings_all_messages">Todas as mensagens</string>
     <string name="room_settings_mention_only">Menções somente</string>
     <string name="room_settings_mute">Mudo</string>
@@ -1816,7 +1816,7 @@
 \nPor favor permita acesso no próximo pop-up para ser capaz de exportar suas chaves manualmente.</string>
     <string name="no_network_indicator">Não há nenhuma conexão de rede no momento</string>
     <string name="message_ignore_user">Ignorar usuária(o)</string>
-    <string name="room_list_quick_actions_notifications_all_noisy">Todas as mensagens (barulhendo)</string>
+    <string name="room_list_quick_actions_notifications_all_noisy">Todas as mensagens (barulhentas)</string>
     <string name="room_list_quick_actions_notifications_all">Todas as mensagens</string>
     <string name="room_list_quick_actions_notifications_mentions">Menções somente</string>
     <string name="room_list_quick_actions_notifications_mute">Mutar</string>
