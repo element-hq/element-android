@@ -18,11 +18,10 @@ package im.vector.app.features.popup
 
 import android.app.Activity
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import im.vector.app.R
 import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.glide.GlideApp
+import im.vector.app.databinding.AlerterIncomingCallLayoutBinding
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -43,26 +42,21 @@ class IncomingCallAlert(uid: String,
                      private val onReject: () -> Unit) : VectorAlert.ViewBinder {
 
         override fun bind(view: View) {
+            val views = AlerterIncomingCallLayoutBinding.bind(view)
             val (callKindText, callKindIcon, callKindActionIcon) = if (isVideoCall) {
                 Triple(R.string.action_video_call, R.drawable.ic_call_video_small, R.drawable.ic_call_answer_video)
             } else {
                 Triple(R.string.action_voice_call, R.drawable.ic_call_audio_small, R.drawable.ic_call_answer)
             }
-            view.findViewById<TextView>(R.id.incomingCallKindView).apply {
-                setText(callKindText)
-                setLeftDrawable(callKindIcon)
+            views.incomingCallKindView.setText(callKindText)
+            views.incomingCallKindView.setLeftDrawable(callKindIcon)
+            views.incomingCallNameView.text = matrixItem?.getBestName()
+            matrixItem?.let { avatarRenderer.render(it, views.incomingCallAvatar, GlideApp.with(view.context.applicationContext)) }
+            views.incomingCallAcceptView.setOnClickListener {
+                onAccept()
             }
-            view.findViewById<TextView>(R.id.incomingCallNameView).text = matrixItem?.getBestName()
-            view.findViewById<ImageView>(R.id.incomingCallAvatar)?.let { imageView ->
-                matrixItem?.let { avatarRenderer.render(it, imageView, GlideApp.with(view.context.applicationContext)) }
-            }
-            view.findViewById<ImageView>(R.id.incomingCallAcceptView).apply {
-                setOnClickListener {
-                    onAccept()
-                }
-                setImageResource(callKindActionIcon)
-            }
-            view.findViewById<ImageView>(R.id.incomingCallRejectView).setOnClickListener {
+            views.incomingCallAcceptView.setImageResource(callKindActionIcon)
+            views.incomingCallRejectView.setOnClickListener {
                 onReject()
             }
         }
