@@ -518,7 +518,7 @@
     <string name="room_jump_to_first_unread">Pular para primeira mensagem não-lida.</string>
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Você tem sido convidada(o) a juntar-se a esta sala por %s</string>
-    <string name="room_preview_unlinked_email_warning">Este convite foi enviado para %s, que não está associada(o) com esta conta.
+    <string name="room_preview_unlinked_email_warning">Este convite foi enviado para %s, que não está associada(o) a esta conta.
 \nVocê pode desejar fazer login com uma conta diferente, ou adicionar este email a sua conta.</string>
     <string name="room_preview_try_join_an_unknown_room">Você está tentando acessar %s. Gostaria de se juntar a fim de participar na discussão\?</string>
     <string name="room_preview_try_join_an_unknown_room_default">uma sala</string>
@@ -1266,7 +1266,7 @@
     <string name="abort">Abortar</string>
     <string name="action_sign_out_confirmation_simple">Você tem certeza que você quer fazer sign out\?</string>
     <string name="settings_notification_advanced">Configurações de Notificações Avançadas</string>
-    <string name="settings_notification_by_event">Importância de notificações por evento</string>
+    <string name="settings_notification_by_event">Importância de notificação por evento</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Configurações Personalizadas.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Observe que alguns tipos de mensagens estão definidos para serem silenciosos (vão produzir uma notificação sem nenhum som).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Algumas notificações estão desativadas em suas configurações personalizadas.</string>
@@ -1732,7 +1732,7 @@
     <string name="terms_of_service">Termos de Serviço</string>
     <string name="review_terms">Revisar Termos</string>
     <string name="terms_description_for_identity_server">Seja descobertável por outras(os)</string>
-    <string name="terms_description_for_integration_manager">Use Bots, bridges, widgets e pacotes de stickers</string>
+    <string name="terms_description_for_integration_manager">Usar Bots, bridges, widgets e pacotes de stickers</string>
     <string name="read_at">Lido a</string>
     <string name="identity_server">Servidor de identidade</string>
     <string name="disconnect_identity_server">Desconectar servidor de identidade</string>
