@@ -1307,8 +1307,8 @@
     <string name="bottom_action_notification">Notificações</string>
     <string name="call_failed_no_ice_description">Por favor peça ao/à administrador(a) de seu servidorcasa (%1$s) para configurar um servidor TURN a fim que chamadas funcionem confiavelmente.
 \n
-\nAlternativamente, você pode tentar usar o servidor público em %2$s, mas isto não vai ser tão confiável, e ele vai compartilhar seu endereço de IP com esse servidor. Você também pode gerenciar isto em Configurações.</string>
-    <string name="call_failed_no_ice_use_alt">Tente usar %s</string>
+\nAlternativamente, você pode tentar usar o servidor público em %2$s, mas isto não vai ser tão confiável, e vai compartilhar seu endereço de IP com esse servidor. Você também pode gerenciar isto em Configurações.</string>
+    <string name="call_failed_no_ice_use_alt">Tentar usar %s</string>
     <string name="call_failed_dont_ask_again">Não me pergunte de novo</string>
     <string name="template_call_failed_no_connection">Chamada ${app_name} Falhou</string>
     <string name="call_failed_no_connection_description">Falha para estabelecer conexão em tempo real.
