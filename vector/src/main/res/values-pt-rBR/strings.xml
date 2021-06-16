@@ -752,8 +752,8 @@
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Para linkar a uma sala ela deve ter um endereço.</string>
     <string name="room_settings_room_access_entry_only_invited">Somente pessoas que têm sido convidadas</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Qualquer pessoa que saiba o link da sala, a parte de visitantes</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Qualquer pessoa que saiba o link da sala, incluindo visitantes</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Qualquer pessoa que sabe o link da sala, a parte de visitantes</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Qualquer pessoa que sabe o link da sala, incluindo visitantes</string>
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Usuárias(os) banidas(os)</string>
     <!-- advanced -->
@@ -781,7 +781,7 @@
     <string name="room_settings_addresses_e2e_enabled">Encriptação está ativada nesta sala.</string>
     <string name="room_settings_addresses_e2e_disabled">Encriptação está desativada nesta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Ativar encriptação
-\n(atenção: não pode ser desativado de novo!)</string>
+\n(aviso: não pode ser desativada de novo!)</string>
     <!-- Directory -->
     <string name="directory_title">Diretório</string>
     <!-- matrix error -->
@@ -1831,8 +1831,8 @@
     <string name="reaction_search_type_hint">Digite palavrachaves para encontrar uma reação.</string>
     <string name="no_ignored_users">Você não está ignorando nenhum(a) usuário(a)</string>
     <string name="help_long_click_on_room_for_more_options">Clique longo numa sala para ver mais opções</string>
-    <string name="room_join_rules_public">%1$s fez a sala pública para quem quer que saiba o link.</string>
-    <string name="room_join_rules_public_by_you">Você fez a sala pública para quem quer que saiba o link.</string>
+    <string name="room_join_rules_public">%1$s fez a sala pública para qualquer pessoa que sabe o link.</string>
+    <string name="room_join_rules_public_by_you">Você fez a sala pública para qualquer pessoa que sabe o link.</string>
     <string name="room_join_rules_invite">%1$s fez a sala somente convite.</string>
     <string name="room_join_rules_invite_by_you">Você fez a sala somente convite.</string>
     <string name="timeline_unread_messages">Mensagens não-lidas</string>
@@ -2749,7 +2749,7 @@
     <string name="room_settings_room_access_private_description">Somente pessoas convidadas podem encontrar e juntar-se</string>
     <string name="room_settings_room_access_private_title">Privada</string>
     <string name="room_settings_room_access_entry_unknown">Configuração de acesso desconhecida (%s)</string>
-    <string name="room_settings_room_access_entry_knock">Qualquer pessoa que possa tocar na sala, membros pdem então aceitar ou rejeitar</string>
+    <string name="room_settings_room_access_entry_knock">Qualquer pessoa pode tocar na sala, membros podem então aceitar ou rejeitar</string>
     <string name="room_settings_guest_access_title">Permitir visitantes se juntarem</string>
     <string name="use_as_default_and_do_not_ask_again">Usar como default e não perguntar de novo</string>
     <string name="option_always_ask">Sempre perguntar</string>
