@@ -3,7 +3,7 @@
 
     <!-- BLACK THEME COLORS -->
 
-    <style name="AppTheme.Base.Black" parent="AppTheme.Base.Dark">
+    <style name="Base.Theme.Vector.Black" parent="Base.Theme.Vector.Dark">
         <!-- Only setting the items we need to override to get the background to be pure black, otherwise inheriting -->
 
         <!-- other colors -->
@@ -31,6 +31,6 @@
         <item name="android:navigationBarColor">@android:color/black</item>
     </style>
 
-    <style name="AppTheme.Black" parent="AppTheme.Base.Black" />
+    <style name="Theme.Vector.Black" parent="Base.Theme.Vector.Black" />
 
 </resources>

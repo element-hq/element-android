@@ -3,7 +3,7 @@
 
     <!-- DARK THEME COLORS -->
 
-    <style name="AppTheme.Base.Dark" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Base.Theme.Vector.Dark" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Element attribute for palette -->
         <!-- content colors -->
         <item name="vctr_content_primary">@color/element_content_primary_dark</item>
@@ -132,6 +132,6 @@
         <item name="vctr_social_login_button_gitlab_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Gitlab.Dark</item>
     </style>
 
-    <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />
+    <style name="Theme.Vector.Dark" parent="Base.Theme.Vector.Dark" />
 
 </resources>

@@ -6,11 +6,11 @@
     </style>
 
 
-    <style name="VectorMaterialThemeDebugLight" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Debug.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Keep all default value -->
     </style>
 
-    <style name="VectorMaterialThemeDebugLight.Test">
+    <style name="Theme.Debug.Light.Test">
         <item name="colorPrimary">#7F7F00</item>
         <item name="colorPrimaryVariant">#00FF00</item>
         <item name="colorOnPrimary">#0000FF</item>
@@ -34,11 +34,11 @@
         <item name="android:textColorLink">#000FFF</item>
     </style>
 
-    <style name="VectorMaterialThemeDebugDark" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.Debug.Dark" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Keep all default value -->
     </style>
 
-    <style name="VectorMaterialThemeDebugDark.Test">
+    <style name="Theme.Debug.Dark.Test">
         <item name="colorPrimary">#7F7F00</item>
         <item name="colorPrimaryVariant">#00FF00</item>
         <item name="colorOnPrimary">#0000FF</item>
