@@ -727,7 +727,7 @@
     <string name="room_recents_join_room_prompt">输入聊天室 ID 或者聊天室别名</string>
     <string name="room_jump_to_first_unread">跳到第一条未读消息。</string>
     <string name="settings_home_display">主页显示</string>
-    <string name="settings_pin_missed_notifications">置顶含有错过的通知的聊天室</string>
+    <string name="settings_pin_missed_notifications">固定含错过通知的聊天室</string>
     <string name="settings_pin_unread_messages">置顶含有未读消息的聊天室</string>
     <string name="settings_user_interface">用户界面</string>
     <string name="settings_interface_language">语言</string>
@@ -1355,7 +1355,7 @@
     <string name="quick_reactions">快捷响应</string>
     <string name="settings_general_title">通用</string>
     <string name="settings_preferences">选项</string>
-    <string name="settings_security_and_privacy">安全与隐私</string>
+    <string name="settings_security_and_privacy">隐私安全</string>
     <string name="settings_expert">高级</string>
     <string name="settings_push_rules">推送规则</string>
     <string name="settings_push_rules_no_rules">尚未定义任何推送规则</string>
