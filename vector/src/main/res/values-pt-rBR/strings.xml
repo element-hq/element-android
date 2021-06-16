@@ -1112,9 +1112,9 @@
     <string name="dialog_user_consent_content">Para continuar usando o servidorcasa %1$s você deve revisar e aceitar os termos e condições.</string>
     <string name="dialog_user_consent_submit">Revisar agora</string>
     <string name="deactivate_account_title">Desativar Conta</string>
-    <string name="deactivate_account_content">Isto vai fazer sua conta permanentemente inusável. Você não vai ser capaz de fazer login, e ninguém vai poder re-registrar o mesmo ID de usuária(o). Isto vai causar sua conta sair de todas as salas em que ela está participando, e vai remover detalhes de sua conta de seu servidor de identidade. <b>Esta ação é irreversível</b>.
+    <string name="deactivate_account_content">Isto vai fazer sua conta permanentemente inusável. Você não vai ser capaz de fazer login, e ninguém vai ser capaz de re-registrar a mesma ID de usuária(o). Isto vai causar sua conta sair de todas as salas em que ela está participando, e vai remover detalhes de sua conta de seu servidor de identidade. <b>Esta ação é irreversível</b>.
 \n
-\nDesativar sua conta <b>não nos causa por padrão esquecer mensagens que você tem enviado</b>. Se você gostaria que nós esqueçamos suas mensagens, por favor marque a caixa abaixo.
+\nDesativar sua conta <b>não nos causa por default esquecer mensagens que você tem enviado</b>. Se você gostaria que nós esqueçamos suas mensagens, por favor marque a caixa abaixo.
 \n
 \nVisibilidade de mensagem em Matrix é similar a email. Nós esquecermos suas mensagens significa que mensagens que você tem enviado não vão ser compartilhadas com nenhum usuária(o) nova(o) ou não-registrada(o), mas usuárias(os) registradas(os) que já têm acesso a estas mensagens vão ainda ter acesso à cópia delas(es).</string>
     <string name="deactivate_account_delete_checkbox">Por favor esqueça todas as mensagens que eu tenho enviado quando minha conta for desativada (Aviso: isto vai causar usuárias/os futuras/os terem uma visualização incompleta de conversas)</string>
