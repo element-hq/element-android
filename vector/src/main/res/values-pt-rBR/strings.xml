@@ -1642,7 +1642,7 @@
     <string name="room_list_people_empty_title">Conversas</string>
     <string name="room_list_people_empty_body">Suas conversas de mensagem direta vai ser exibidas aqui. Toque no + à direita fundo para começar algumas.</string>
     <string name="room_list_rooms_empty_title">Salas</string>
-    <string name="room_list_rooms_empty_body">Suas salas vão ser exibidas aqui. Toque no + à direita fundo para achar algumas existentes ou começar algumas propriamente suas.</string>
+    <string name="room_list_rooms_empty_body">Suas salas vão ser exibidas aqui. Toque no + à direita fundo para encontrar umas existentes ou começar algumas propriamente suas.</string>
     <string name="title_activity_emoji_reaction_picker">Reações</string>
     <string name="reactions_agree">Concordo</string>
     <string name="reactions_like">Curtir</string>
@@ -1738,8 +1738,8 @@
     <string name="disconnect_identity_server">Desconectar servidor de identidade</string>
     <string name="add_identity_server">Configurar servidor de identidade</string>
     <string name="change_identity_server">Mudar servidor de identidade</string>
-    <string name="settings_discovery_identity_server_info">Você está atualmente usando %1$s para descobrir e ser descobertável por contatos que você conhece.</string>
-    <string name="settings_discovery_identity_server_info_none">Você não está atualmente usando um servidor de identidade. Para descobrir e ser descobertável por contatos que você conhece, configure um abaixo.</string>
+    <string name="settings_discovery_identity_server_info">Você está atualmente usando %1$s para descobrir e ser descobertável por contatos existentes que você conhece.</string>
+    <string name="settings_discovery_identity_server_info_none">Você não está atualmente usando um servidor de identidade. Para descobrir e ser descobertável por contatos existentes que você conhece, configure um abaixo.</string>
     <string name="settings_discovery_emails_title">Endereços de email descobertáveis</string>
     <string name="settings_discovery_no_mails">Opções de descoberta vão aparecer uma vez que você tenha adicionado um email.</string>
     <string name="settings_discovery_no_msisdn">Opções de descoberta vão aparecer uma vez que você tenha adicionado um número de telefone.</string>
@@ -2553,7 +2553,7 @@
     <string name="attachment_viewer_item_x_of_y">%1$d de %2$d</string>
     <string name="a11y_create_direct_message_by_qr_code">Criar uma nova conversa direta ao scannar um QR code</string>
     <string name="a11y_create_direct_message_by_mxid">Criar uma nova conversa direta por ID Matrix</string>
-    <string name="identity_server_consent_dialog_content">A fim de descobrir contatos existente que você conhece, você aceita enviar seus dados de contato (números de telefone e/ou e-mails) para o Servidor de Identidade configurado (%1$s)\?
+    <string name="identity_server_consent_dialog_content">A fim de descobrir contatos existentes que você conhece, você aceita enviar seus dados de contato (números de telefone e/ou emails) para o Servidor de Identidade configurado (%1$s)\?
 \n
 \nPara mais privacidade, os dados enviados serão hashados antes de serem enviados.</string>
     <string name="identity_server_consent_dialog_title">Enviar emails e números de telefone</string>
