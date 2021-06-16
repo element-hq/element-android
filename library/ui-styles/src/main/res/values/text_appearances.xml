@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Doc: https://medium.com/androiddevelopers/whats-your-text-s-appearance-f3a1729192d
-      List of supported attributes for a TextAppearance:
-      https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/res/values/attrs.xml#4723-->
+    <!--
+    Source: https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1336%3A17796
+
+    Doc: https://medium.com/androiddevelopers/whats-your-text-s-appearance-f3a1729192d
+    List of supported attributes for a TextAppearance:
+    https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/res/values/attrs.xml#4723
+
+    Do not use TextAppearance style directly, use TextView.Vector style instead
+    -->
 
     <style name="TextAppearance.Vector.Title" parent="TextAppearance.MaterialComponents.Headline3">
         <item name="fontFamily">sans-serif</item>

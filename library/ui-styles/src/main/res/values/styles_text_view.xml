@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--
+        Source: https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1336%3A17796
+    -->
+
     <style name="TextView.Vector" parent="Widget.MaterialComponents.TextView" />
 
     <!-- Note: lineHeight attribute cannot be added in textAppearance style -->

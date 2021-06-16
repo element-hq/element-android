@@ -36,7 +36,7 @@
 
         <TextView
             android:id="@+id/loginTermsNotice"
-            style="@style/TextAppearance.Vector.Body"
+            style="@style/TextView.Vector.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
