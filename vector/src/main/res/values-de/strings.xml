@@ -292,8 +292,8 @@
     <string name="later">Später</string>
     <string name="forward">Weiterleiten</string>
     <string name="permalink">Permalink</string>
-    <string name="view_source">Quellcode anzeigen</string>
-    <string name="view_decrypted_source">Entschlüsselten Quellcode anzeigen</string>
+    <string name="view_source">Rohdaten anzeigen</string>
+    <string name="view_decrypted_source">Entschlüsselte Rohdaten anzeigen</string>
     <string name="delete">Löschen</string>
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
@@ -387,7 +387,7 @@
     <string name="auth_register">Konto erstellen</string>
     <string name="auth_submit">Absenden</string>
     <string name="auth_skip">Überspringen</string>
-    <string name="auth_send_reset_email">Rücksetz-E-Mail senden</string>
+    <string name="auth_send_reset_email">Reset-E-Mail senden</string>
     <string name="auth_return_to_login">Zum Anmeldebildschirm zurückkehren</string>
     <string name="auth_user_id_placeholder">E-Mail oder Benutzername</string>
     <string name="auth_password_placeholder">Passwort</string>
@@ -415,7 +415,7 @@
     <string name="auth_use_server_options">Benutzerdefinierte Server-Optionen (erweitert)</string>
     <string name="auth_email_validation_message">Bitte überprüfe deinen E-Mail-Posteingang, um die Registrierung abzuschließen</string>
     <string name="auth_threepid_warning_message">Registrierung mit E-Mail und Telefonnummer zusammen wird zurzeit nicht unterstützt, da die zugrundeliegende Schnittstelle noch nicht existiert. Nur die Telefonnummer wird in den Account übernommen.\n\nDu kannst aber deine E-Mail-Adresse in den Einstellungen zu deinem Profil hinzufügen.</string>
-    <string name="auth_recaptcha_message">Dieser Home-Server möchte sicherstellen, dass du kein Roboter bist</string>
+    <string name="auth_recaptcha_message">Dieser Homeserver möchte sicherstellen, dass du kein Roboter bist</string>
     <string name="auth_username_in_use">Benutzername bereits vergeben</string>
     <string name="auth_home_server">Heimserver:</string>
     <string name="auth_identity_server">Identitätsserver:</string>
@@ -893,7 +893,7 @@
     <string name="start_verification">Verifizierung beginnen</string>
     <string name="call">Anruf</string>
     <string name="notification_noisy_notifications">Laute Benachrichtigungen</string>
-    <string name="notification_silent_notifications">Lautlose Benachrichtigungen</string>
+    <string name="notification_silent_notifications">Stumme Benachrichtigungen</string>
     <string name="option_take_photo">Foto aufnehmen</string>
     <string name="option_take_video">Video aufnehmen</string>
     <string name="settings_labs_native_camera">Systemeigene Kamera verwenden</string>
@@ -1006,7 +1006,7 @@
         <item quantity="other">%d Mitgliedsänderungen</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
-    <string name="open_chat_header">Öffne Header</string>
+    <string name="open_chat_header">Header öffnen</string>
     <string name="receipt_avatar">Profilbild für Lesebestätigungen</string>
     <string name="notice_avatar">Profilbild für Bemerkungen</string>
     <string name="settings_notification_privacy">Datenschutz für Benachrichtigungen</string>
@@ -2619,7 +2619,7 @@
     <string name="login_social_continue">Oder</string>
     <string name="default_message_emote_snow">Sendet Schnee ❄️</string>
     <string name="default_message_emote_confetti">Sendet Konfetti 🎉</string>
-    <string name="command_snow">Sendet die nachfolgende Nachricht mit Schnee</string>
+    <string name="command_snow">Nachricht mit Schnee senden</string>
     <string name="command_confetti">Sendet die nachfolgende Nachricht mit Konfetti</string>
     <string name="login_clear_homeserver_history">Nachrichtenverlauf bereinigen</string>
     <string name="login_social_sso">Einmalanmeldung</string>
@@ -2757,7 +2757,7 @@
     <string name="suggested_rooms_pills_on_empty_header">Willkommen zu %1$s, %2$s.</string>
     <string name="labs_use_restricted_join_rule_desc">Warnung benötigt Server Unterstützung und eine experimentelle Raumversion</string>
     <string name="labs_use_restricted_join_rule">Experimenteller Space - Zugangsbeschränkter Raum.</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Mit Spaces hast du die Möglichkeit Personen und Räume für die Arbeit, zum Spaß oder nur für dich selbst zu gruppieren.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Mit Spaces hast du die Möglichkeit Personen und Räume zu gruppieren.</string>
     <string name="spaces_beta_welcome_to_spaces">Sag hallo zu Spaces!</string>
     <string name="space_add_existing_rooms">Füge bereits existierende Räume und Spaces hinzu</string>
     <string name="skip_for_now">Vorübergehend überspringen</string>
@@ -2837,4 +2837,33 @@
     <string name="directory_add_a_new_server_prompt">Gib den Namen eines neuen Servers ein, den du erkunden möchtest.</string>
     <string name="directory_add_a_new_server">Neuen Server hinzufügen</string>
     <string name="directory_your_server">Dein Server</string>
+    <string name="send_feedback_space_info">Du verwendest die Betaversion von Spaces. Mit Feedback hilfst du uns, die nächsten Versionen zu verbessern. Dabei wird uns deine Platform übermittelt, damit wir deine Rückmeldung optimal nutzen können.</string>
+    <string name="this_space_has_no_rooms_admin">Möglicherweise musst du extra eingeladen werden, damit du die Räume siehst.</string>
+    <string name="this_space_has_no_rooms_not_admin">Möglicherweise musst du extra eingeladen werden, damit du die Räume siehst.
+\nDie fehlt die Berechtigung, Räume hinzuzufügen.</string>
+    <string name="spaces_feeling_experimental_subspace">Du kannst Unterspaces zu einem Space hinzufügen.</string>
+    <string name="labs_space_show_orphan_in_home">Experimentelle Spaces - Nur verweiste Räume auf Startseite</string>
+    <string name="error_jitsi_join_conf">Leider ist ein Fehler beim Betreten der Konferenz aufgetreten</string>
+    <string name="unnamed_room">Unbenannter Raum</string>
+    <string name="this_space_has_no_rooms">Dieser Space hat noch keine Räume</string>
+    <string name="spaces_no_server_support_description">Für weitere Infos kontaktiere bitte die Administration des Homeservers</string>
+    <string name="spaces_no_server_support_title">Dein Homeserver scheint Spaces noch nicht zu unterstützen</string>
+    <string name="space_add_rooms">Räume hinzufügen</string>
+    <string name="space_leave_prompt_msg_as_admin">Du bist der Admin von diesem Space. Stelle vor dem Verlassen sicher, dass du die Adminrechte an jemand anderen übergibst.</string>
+    <string name="space_leave_prompt_msg_private">Dieser Raum ist nicht öffentlich. Du wirst ihn ohne Einladung nicht wieder betreten können.</string>
+    <string name="space_leave_prompt_msg_only_you">Du bist die einzige Person hier. Wenn du den Space verlässt, ist er für immer verloren (eine lange Zeit).</string>
+    <string name="invite_to_space">Einladen in %s</string>
+    <string name="private_space">Privater Space</string>
+    <string name="public_space">Öffentlicher Space</string>
+    <string name="a11y_public_space">Dieser Space ist öffentlich</string>
+    <string name="call_transfer_unknown_person">Unbekannte Person</string>
+    <string name="a11y_beta">Dieses Feature ist in der Beta</string>
+    <string name="give_feedback">Feedback geben</string>
+    <string name="feedback_failed">Fehler beim Senden vom Feedback (%s)</string>
+    <string name="feedback_sent">Dein Feedback wurde erfolgreich versandt. Danke!</string>
+    <string name="you_may_contact_me">Mich bei Fragen kontaktieren</string>
+    <string name="feedback">Feedback</string>
+    <string name="send_feedback_space_title">Spaces Feedback</string>
+    <string name="directory_add_a_new_server_error_already_added">Dieser Server ist schon in der Liste vorhanden</string>
+    <string name="directory_add_a_new_server_error">Server oder Raumliste kann nicht gefunden werden</string>
 </resources>
