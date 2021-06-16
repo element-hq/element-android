@@ -1654,7 +1654,7 @@
     <string name="settings_show_redacted_summary">Mostrar um placeholder para mensagens removidas</string>
     <string name="event_redacted_by_user_reason">Evento deletado por usuária(o)</string>
     <string name="event_redacted_by_admin_reason">Evento moderado por admin da sala</string>
-    <string name="last_edited_info_message">Último editado por %1$s a %2$s</string>
+    <string name="last_edited_info_message">Último editada por %1$s a %2$s</string>
     <string name="malformed_message">Evento malformado, não dá para exibir</string>
     <string name="create_new_room">Criar Nova Sala</string>
     <string name="error_no_network">Sem rede. Por favor cheque sua conexão de Internet.</string>
@@ -1710,7 +1710,7 @@
     <string name="send_file_step_sending_file">Enviando arquivo (%1$s / %2$s)</string>
     <string name="downloading_file">Fazendo download de arquivo %1$s…</string>
     <string name="downloaded_file">Download de arquivo %1$s foi feito!</string>
-    <string name="edited_suffix">(editado)</string>
+    <string name="edited_suffix">(editada)</string>
     <string name="message_edits">Edições de Mensagem</string>
     <string name="no_message_edits_found">Nenhuma edição encontrada</string>
     <string name="room_filtering_filter_hint">Filtrar conversas…</string>
