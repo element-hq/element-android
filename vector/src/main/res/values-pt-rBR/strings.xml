@@ -368,7 +368,7 @@
     <string name="send_bug_report_progress">Progresso (%s%%)</string>
     <string name="send_bug_report_app_crashed">O aplicativo crashou da última vez. Gostaria de abrir a tela de reporte de crash\?</string>
     <string name="send_files_in">Enviar para</string>
-    <string name="read_receipt">Lido</string>
+    <string name="read_receipt">Lida</string>
     <string name="join_room">Juntar-se a Sala</string>
     <string name="username">Nome de Usuária(o)</string>
     <string name="create_account">Criar Conta</string>
@@ -465,7 +465,7 @@
     <string name="today">Hoje</string>
     <!-- room info dialog Screen -->
     <string name="room_info_room_name">Nome de sala</string>
-    <string name="room_info_room_topic">Tópico da sala</string>
+    <string name="room_info_room_topic">Tópico de sala</string>
     <!-- call string -->
     <string name="call_connected">Chamada conectada</string>
     <string name="call_connecting">Chamada conectando…</string>
