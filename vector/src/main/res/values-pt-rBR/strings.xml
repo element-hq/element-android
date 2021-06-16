@@ -1731,7 +1731,7 @@
     <string name="message_view_edit_history">Visualizar Histórico de Edição</string>
     <string name="terms_of_service">Termos de Serviço</string>
     <string name="review_terms">Revisar Termos</string>
-    <string name="terms_description_for_identity_server">Seja descobertável por outras(os)</string>
+    <string name="terms_description_for_identity_server">Ser descobertável por outras(os)</string>
     <string name="terms_description_for_integration_manager">Usar Bots, bridges, widgets e pacotes de stickers</string>
     <string name="read_at">Lido a</string>
     <string name="identity_server">Servidor de identidade</string>
