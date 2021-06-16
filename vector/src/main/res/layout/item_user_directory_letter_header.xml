@@ -2,7 +2,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/userDirectoryLetterView"
-    style="@style/TextView.Vector.HeadlineM"
+    style="@style/TextView.Vector.HeadlineMedium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"

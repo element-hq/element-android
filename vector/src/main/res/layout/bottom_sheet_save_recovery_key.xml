@@ -10,7 +10,7 @@
     android:paddingBottom="8dp">
 
     <TextView
-        style="@style/TextView.Vector.HeadlineM"
+        style="@style/TextView.Vector.HeadlineMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/keys_backup_setup_step3_copy_button_title"

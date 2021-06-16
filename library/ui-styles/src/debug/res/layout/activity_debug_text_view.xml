@@ -13,13 +13,13 @@
         android:text="TextAppearance.Vector.Title\nline 2" />
 
     <TextView
-        style="@style/TextView.Vector.Title.M"
+        style="@style/TextView.Vector.Title.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextAppearance.Vector.Title.M\nline 2" />
+        android:text="TextAppearance.Vector.Title.Medium\nline 2" />
 
     <TextView
-        style="@style/TextView.Vector.HeadlineM"
+        style="@style/TextView.Vector.HeadlineMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextAppearance.Vector.Headline.Medium\nline 2" />
@@ -31,10 +31,10 @@
         android:text="TextAppearance.Vector.Subtitle\nline 2" />
 
     <TextView
-        style="@style/TextView.Vector.Subtitle.M"
+        style="@style/TextView.Vector.Subtitle.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextAppearance.Vector.Subtitle.M\nline 2" />
+        android:text="TextAppearance.Vector.Subtitle.Medium\nline 2" />
 
     <TextView
         style="@style/TextView.Vector.Body"
@@ -43,10 +43,10 @@
         android:text="TextAppearance.Vector.Body\nline 2" />
 
     <TextView
-        style="@style/TextView.Vector.Body.M"
+        style="@style/TextView.Vector.Body.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextAppearance.Vector.Body.M\nline 2" />
+        android:text="TextAppearance.Vector.Body.Medium\nline 2" />
 
     <TextView
         style="@style/TextView.Vector.Caption"

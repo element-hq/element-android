@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/ssss_restore_with_passphrase"
-            style="@style/TextView.Vector.HeadlineM"
+            style="@style/TextView.Vector.HeadlineMedium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -98,7 +98,7 @@
 
         <TextView
             android:id="@+id/ssss_passphrase_or"
-            style="@style/TextView.Vector.HeadlineM"
+            style="@style/TextView.Vector.HeadlineMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

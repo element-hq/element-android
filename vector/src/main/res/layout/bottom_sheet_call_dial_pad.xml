@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/callDialPadTitle"
-            style="@style/TextView.Vector.HeadlineM"
+            style="@style/TextView.Vector.HeadlineMedium"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

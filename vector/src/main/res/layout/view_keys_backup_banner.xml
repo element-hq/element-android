@@ -31,7 +31,7 @@
 
     <TextView
         android:id="@+id/view_keys_backup_banner_text_1"
-        style="@style/TextView.Vector.HeadlineM"
+        style="@style/TextView.Vector.HeadlineMedium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"

@@ -11,7 +11,7 @@
 
 
     <TextView
-        style="@style/TextView.Vector.HeadlineM"
+        style="@style/TextView.Vector.HeadlineMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"

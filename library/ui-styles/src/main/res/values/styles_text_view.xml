@@ -9,11 +9,11 @@
         <item name="lineHeight">32sp</item>
     </style>
 
-    <style name="TextView.Vector.Title.M">
-        <item name="android:textAppearance">@style/TextAppearance.Vector.Title.M</item>
+    <style name="TextView.Vector.Title.Medium">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Title.Medium</item>
     </style>
 
-    <style name="TextView.Vector.HeadlineM">
+    <style name="TextView.Vector.HeadlineMedium">
         <item name="android:textAppearance">@style/TextAppearance.Vector.Headline.Medium</item>
     </style>
 
@@ -21,8 +21,8 @@
         <item name="android:textAppearance">@style/TextAppearance.Vector.Subtitle</item>
     </style>
 
-    <style name="TextView.Vector.Subtitle.M">
-        <item name="android:textAppearance">@style/TextAppearance.Vector.Subtitle.M</item>
+    <style name="TextView.Vector.Subtitle.Medium">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Subtitle.Medium</item>
     </style>
 
     <style name="TextView.Vector.Body">
@@ -30,8 +30,8 @@
         <item name="lineHeight">20sp</item>
     </style>
 
-    <style name="TextView.Vector.Body.M">
-        <item name="android:textAppearance">@style/TextAppearance.Vector.Body.M</item>
+    <style name="TextView.Vector.Body.Medium">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Body.Medium</item>
     </style>
 
     <style name="TextView.Vector.Caption">
