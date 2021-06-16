@@ -545,8 +545,8 @@
     <string name="room_participants_action_ban">Banir</string>
     <string name="room_participants_action_unban">Desbanir</string>
     <string name="room_participants_action_set_default_power_level">Resettar a usuária(o) normal</string>
-    <string name="room_participants_action_set_moderator">Tornar moderador(a)</string>
-    <string name="room_participants_action_set_admin">Tornar admin</string>
+    <string name="room_participants_action_set_moderator">Fazer moderador(a)</string>
+    <string name="room_participants_action_set_admin">Fazer admin</string>
     <string name="room_participants_action_ignore">Ignorar</string>
     <string name="room_participants_action_unignore">Designorar</string>
     <string name="room_participants_invite_search_another_user">ID de usuária(o), Nome ou email</string>
@@ -1130,7 +1130,7 @@
     <string name="resource_limit_contact_admin">contacte o/a administrador(a) de seu serviço</string>
     <string name="resource_limit_soft_default">Este servidorcasa tem excedido um de seus limites de recurso, então <b>algumas(ns) usuária(os) não vão ser capazes de fazer login</b>.</string>
     <string name="resource_limit_hard_default">Este servidorcasa tem excedido um de seus limites de recurso.</string>
-    <string name="resource_limit_soft_mau"> Este servidorcasa tem atingido seu limite de Usuárias(os) Mensalmente Ativos então <b>algumas(ns) usuárias(os) não vão ser capazes de fazer login</b>.</string>
+    <string name="resource_limit_soft_mau"> Este servidorcasa tem atingido seu limite de Usuárias(os) Mensalmente Ativas(os) então <b>algumas(ns) usuárias(os) não vão ser capazes de fazer login</b>.</string>
     <string name="resource_limit_hard_mau">Este servidorcasa tem atingido seu limite de Usuárias(os) Mensalmente Ativas(os).</string>
     <string name="resource_limit_soft_contact">Por favor %s para ter este limite aumentado.</string>
     <string name="resource_limit_hard_contact">Por favor %s para continuar usando este serviço.</string>
