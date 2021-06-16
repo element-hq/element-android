@@ -53,16 +53,15 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         if (isFirstCreation()) {
             when (withState(viewModel) { it.step }) {
-                CreateSpaceState.Step.ChooseType -> {
+                CreateSpaceState.Step.ChooseType        -> {
                     navigateToFragment(ChooseSpaceTypeFragment::class.java)
                 }
-                CreateSpaceState.Step.SetDetails -> {
+                CreateSpaceState.Step.SetDetails        -> {
                     navigateToFragment(ChooseSpaceTypeFragment::class.java)
                 }
-                CreateSpaceState.Step.AddRooms -> {
+                CreateSpaceState.Step.AddRooms          -> {
                     navigateToFragment(CreateSpaceDefaultRoomsFragment::class.java)
                 }
                 CreateSpaceState.Step.ChoosePrivateType -> {
@@ -81,29 +80,29 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
 
         viewModel.observeViewEvents {
             when (it) {
-                CreateSpaceEvents.NavigateToDetails -> {
+                CreateSpaceEvents.NavigateToDetails           -> {
                     navigateToFragment(CreateSpaceDetailsFragment::class.java)
                 }
-                CreateSpaceEvents.NavigateToChooseType -> {
+                CreateSpaceEvents.NavigateToChooseType        -> {
                     navigateToFragment(ChooseSpaceTypeFragment::class.java)
                 }
-                CreateSpaceEvents.Dismiss -> {
+                CreateSpaceEvents.Dismiss                     -> {
                     finish()
                 }
-                CreateSpaceEvents.NavigateToAddRooms -> {
+                CreateSpaceEvents.NavigateToAddRooms          -> {
                     navigateToFragment(CreateSpaceDefaultRoomsFragment::class.java)
                 }
                 CreateSpaceEvents.NavigateToChoosePrivateType -> {
                     navigateToFragment(ChoosePrivateSpaceTypeFragment::class.java)
                 }
-                is CreateSpaceEvents.ShowModalError -> {
+                is CreateSpaceEvents.ShowModalError           -> {
                     hideWaitingView()
                     MaterialAlertDialogBuilder(this)
                             .setMessage(it.errorMessage)
                             .setPositiveButton(getString(R.string.ok), null)
                             .show()
                 }
-                is CreateSpaceEvents.FinishSuccess -> {
+                is CreateSpaceEvents.FinishSuccess            -> {
                     setResult(RESULT_OK, Intent().apply {
                         putExtra(RESULT_DATA_CREATED_SPACE_ID, it.spaceId)
                         putExtra(RESULT_DATA_DEFAULT_ROOM_ID, it.defaultRoomId)
@@ -111,7 +110,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                     })
                     finish()
                 }
-                CreateSpaceEvents.HideModalLoading -> {
+                CreateSpaceEvents.HideModalLoading            -> {
                     hideWaitingView()
                 }
             }
@@ -135,9 +134,9 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
 
     private fun renderState(state: CreateSpaceState) {
         val titleRes = when (state.step) {
-            CreateSpaceState.Step.ChooseType -> R.string.activity_create_space_title
+            CreateSpaceState.Step.ChooseType        -> R.string.activity_create_space_title
             CreateSpaceState.Step.SetDetails,
-            CreateSpaceState.Step.AddRooms -> {
+            CreateSpaceState.Step.AddRooms          -> {
                 if (state.spaceType == SpaceType.Public) R.string.your_public_space
                 else R.string.your_private_space
             }
