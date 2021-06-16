@@ -16,6 +16,7 @@
         android:src="@drawable/ic_beta_pill" />
 
     <TextView
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -23,17 +24,16 @@
         android:gravity="center"
         android:text="@string/teammate_spaces_arent_quite_ready"
         android:textColor="?vctr_content_primary"
-        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:gravity="center"
         android:text="@string/teammate_spaces_might_not_join"
-        android:textColor="?vctr_content_secondary"
-        android:textSize="16sp" />
+        android:textColor="?vctr_content_secondary" />
 
     <Button
         android:id="@+id/continueButton"
