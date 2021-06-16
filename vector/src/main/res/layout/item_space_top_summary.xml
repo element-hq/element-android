@@ -21,6 +21,7 @@
 
     <TextView
         android:id="@+id/spaceSummaryMemberCountText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -35,12 +36,12 @@
 
     <TextView
         android:id="@+id/spaceSummaryTopic"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:autoLink="all"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spaceSummaryMemberCountIcon"

@@ -10,6 +10,7 @@
 
     <TextView
         android:id="@+id/currentCallsInfo"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/returnToCallButton"
@@ -21,13 +22,12 @@
         android:paddingBottom="12dp"
         android:text="@string/call_only_active"
         android:textColor="?colorOnPrimary"
-        android:textSize="14sp"
         app:drawableStartCompat="@drawable/ic_call_answer"
         app:drawableTint="?colorOnPrimary" />
 
     <Button
         android:id="@+id/returnToCallButton"
-        style="@style/VectorButtonStyleText.OnPrimary"
+        style="@style/Widget.Vector.Button.Text.OnPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/currentCallsInfo"
@@ -39,7 +39,6 @@
         android:paddingStart="8dp"
         android:paddingEnd="16dp"
         android:text="@string/action_return"
-        android:textSize="14sp"
         android:textStyle="bold" />
 
 </merge>

@@ -19,10 +19,11 @@
 
     <TextView
         android:id="@+id/adapter_item_policy_title"
-        style="@style/TextAppearance.Vector.Login.Text"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@+id/adapter_item_policy_subtitle"
         app:layout_constraintEnd_toStartOf="@+id/adapter_item_policy_arrow"
         app:layout_constraintStart_toEndOf="@+id/adapter_item_policy_checkbox"
@@ -32,11 +33,12 @@
 
     <TextView
         android:id="@+id/adapter_item_policy_subtitle"
-        style="@style/TextAppearance.Vector.Login.Text.Small"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:drawablePadding="8dp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/adapter_item_policy_arrow"
         app:layout_constraintStart_toEndOf="@+id/adapter_item_policy_checkbox"

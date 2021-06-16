@@ -32,10 +32,13 @@
                     android:src="@drawable/ic_x_18dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="?vctr_content_secondary"
+                    tools:ignore="MissingPrefix" />
 
                 <TextView
                     android:id="@+id/userListTitle"
+                    style="@style/Widget.Vector.TextView.HeadlineMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -44,7 +47,6 @@
                     android:maxLines="1"
                     android:text="@string/fab_menu_create_chat"
                     android:textColor="?vctr_content_primary"
-                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -93,7 +95,6 @@
         android:maxHeight="80dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chipGroupScrollView" />
@@ -110,13 +111,13 @@
 
     <TextView
         android:id="@+id/userListE2EbyDefaultDisabled"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:drawablePadding="8dp"
         android:text="@string/settings_hs_admin_e2e_disabled"
         android:textColor="?vctr_content_secondary"
-        android:textSize="14sp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/userListFilterDivider"
         tools:visibility="visible" />

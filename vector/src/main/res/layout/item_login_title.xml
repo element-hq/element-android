@@ -2,11 +2,12 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemLoginTitleText"
+    style="@style/Widget.Vector.TextView.Title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:layout_marginTop="32dp"
     android:paddingStart="36dp"
     android:paddingEnd="36dp"
-    android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+    android:textColor="?vctr_content_primary"
     tools:text="Login Title" />

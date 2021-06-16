@@ -44,19 +44,21 @@
 
         <TextView
             android:id="@+id/tvTitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/alerter_padding_half"
             android:layout_marginEnd="@dimen/alerter_padding_half"
             android:paddingStart="@dimen/alerter_padding_small"
             android:paddingEnd="@dimen/alerter_padding_small"
-            android:textAppearance="@style/AlertTextAppearance.Title"
+            android:textColor="@android:color/white"
             android:visibility="gone"
             tools:text="Title"
             tools:visibility="visible" />
 
         <TextView
             android:id="@+id/tvText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/alerter_padding_half"
@@ -66,7 +68,7 @@
             android:paddingTop="@dimen/alerter_padding_small"
             android:paddingEnd="@dimen/alerter_padding_small"
             android:paddingBottom="@dimen/alerter_padding_small"
-            android:textAppearance="@style/AlertTextAppearance.Text"
+            android:textColor="@android:color/white"
             android:visibility="gone"
             tools:text="Text"
             tools:visibility="visible" />

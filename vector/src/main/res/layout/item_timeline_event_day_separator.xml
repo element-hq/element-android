@@ -15,6 +15,7 @@
 
     <TextView
         android:id="@+id/itemDayTextView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -22,7 +23,6 @@
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:textColor="?vctr_content_tertiary"
-        android:textSize="15sp"
         tools:text="@tools:sample/date/day_of_week" />
 
 </FrameLayout>

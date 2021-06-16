@@ -42,6 +42,7 @@
 
     <TextView
         android:id="@+id/composerRelatedMessageTitle"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -67,6 +68,7 @@
 
     <TextView
         android:id="@+id/composerRelatedMessageContent"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -145,7 +147,7 @@
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
-        style="@style/ComposerEditTextStyle"
+        style="@style/Widget.Vector.EditText.Composer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:nextFocusLeft="@id/composerEditText"

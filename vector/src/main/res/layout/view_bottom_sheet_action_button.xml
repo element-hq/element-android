@@ -38,11 +38,11 @@
 
         <TextView
             android:id="@+id/bottomSheetActionTitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textColor="?colorPrimary"
-            android:textSize="16sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@+id/bottomSheetActionSubTitle"
             app:layout_constraintEnd_toStartOf="@+id/bottomSheetActionIcon"
@@ -54,11 +54,11 @@
 
         <TextView
             android:id="@+id/bottomSheetActionSubTitle"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textColor="?vctr_content_secondary"
-            android:textSize="12sp"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"

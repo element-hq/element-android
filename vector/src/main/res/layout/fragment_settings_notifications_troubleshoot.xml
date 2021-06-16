@@ -30,6 +30,7 @@
 
         <TextView
             android:id="@+id/troubleshoot_summ_title"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -41,6 +42,7 @@
 
         <TextView
             android:id="@+id/toubleshoot_summ_description"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

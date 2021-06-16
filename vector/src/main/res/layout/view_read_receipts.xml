@@ -8,6 +8,7 @@
 
     <TextView
         android:id="@+id/receiptMore"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/item_event_message_state_size"
         android:background="@drawable/pill_receipt"
@@ -15,7 +16,7 @@
         android:importantForAccessibility="no"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_primary"
         tools:text="999+" />
 
     <ImageView

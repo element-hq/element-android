@@ -24,12 +24,12 @@
 
     <TextView
         android:id="@+id/cart_badge"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        style="@style/Widget.Vector.TextView.Micro"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:background="@drawable/bg_unread_highlight"
         android:gravity="center"
         android:textColor="?colorOnError"
-        android:textSize="8sp"
         app:layout_constraintCircle="@+id/action_view_icon_image"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="12dp"

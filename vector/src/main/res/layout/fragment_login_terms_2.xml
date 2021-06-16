@@ -21,13 +21,14 @@
 
         <TextView
             android:id="@+id/loginTermsTitle"
+            style="@style/Widget.Vector.TextView.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:layout_marginTop="52dp"
             android:layout_marginEnd="36dp"
             android:text="@string/login_terms_title"
-            android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+            android:textColor="?vctr_content_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginLogo"
@@ -35,13 +36,14 @@
 
         <TextView
             android:id="@+id/loginTermsNotice"
-            style="@style/TextAppearance.Vector.Login.Text.Small"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:paddingStart="36dp"
             android:paddingEnd="36dp"
             android:text="@string/auth_accept_policies"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintTop_toBottomOf="@+id/loginTermsTitle" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -56,7 +58,7 @@
 
         <Button
             android:id="@+id/loginTermsSubmit"
-            style="@style/Style.Vector.Login.Button"
+            style="@style/Widget.Vector.Button.Login"
             android:layout_marginEnd="36dp"
             android:text="@string/accept"
             app:layout_constraintBottom_toBottomOf="parent"

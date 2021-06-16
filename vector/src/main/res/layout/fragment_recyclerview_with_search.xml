@@ -37,6 +37,7 @@
 
                 <TextView
                     android:id="@+id/appBarTitle"
+                    style="@style/Widget.Vector.TextView.HeadlineMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -44,12 +45,12 @@
                     android:gravity="start|center"
                     android:maxLines="1"
                     android:textColor="?vctr_content_primary"
-                    android:textSize="18sp"
                     android:textStyle="bold"
                     tools:text="@tools:sample/lorem/random" />
 
                 <TextView
                     android:id="@+id/appBarSpaceInfo"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -57,7 +58,6 @@
                     android:gravity="start|center"
                     android:maxLines="1"
                     android:textColor="?vctr_content_secondary"
-                    android:textSize="16sp"
                     tools:text="@tools:sample/lorem/random" />
 
             </LinearLayout>

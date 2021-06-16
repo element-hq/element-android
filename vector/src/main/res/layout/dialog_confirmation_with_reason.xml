@@ -12,6 +12,7 @@
 
     <TextView
         android:id="@+id/dialogConfirmationText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"

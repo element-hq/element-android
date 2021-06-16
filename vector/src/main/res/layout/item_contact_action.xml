@@ -22,6 +22,7 @@
 
     <TextView
         android:id="@+id/actionTitleText"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -29,7 +30,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_secondary"
-        android:textSize="15sp"
         tools:text="@string/invite_friends" />
 
 </LinearLayout>

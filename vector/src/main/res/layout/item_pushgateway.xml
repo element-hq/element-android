@@ -8,16 +8,17 @@
 
     <TextView
         android:id="@+id/pushGatewayKind"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:textAllCaps="true"
+        android:textStyle="bold"
         tools:text="Http Pusher" />
 
     <TextView
         android:id="@+id/pushGatewayAppId"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -27,6 +28,7 @@
 
     <TextView
         android:id="@+id/pushGatewayAppIdValue"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -35,6 +37,7 @@
 
     <TextView
         android:id="@+id/pushGatewayKey"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -44,6 +47,7 @@
 
     <TextView
         android:id="@+id/pushGatewayKeyValue"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -52,6 +56,7 @@
 
     <TextView
         android:id="@+id/pushGatewayAppName"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -61,6 +66,7 @@
 
     <TextView
         android:id="@+id/pushGatewayAppNameValue"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -69,6 +75,7 @@
 
     <TextView
         android:id="@+id/pushGatewayDeviceName"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -78,6 +85,7 @@
 
     <TextView
         android:id="@+id/pushGatewayDeviceNameValue"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -87,6 +95,7 @@
 
     <TextView
         android:id="@+id/pushGatewayURL"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -95,6 +104,7 @@
 
     <TextView
         android:id="@+id/pushGatewayURLValue"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -103,6 +113,7 @@
 
     <TextView
         android:id="@+id/pushGatewayFormat"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -112,6 +123,7 @@
 
     <TextView
         android:id="@+id/pushGatewayFormatValue"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"

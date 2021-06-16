@@ -8,5 +8,6 @@
         android:id="@+id/ic_action_send_bug_report"
         android:icon="@drawable/ic_send"
         android:title="@string/send_bug_report"
+        app:iconTint="?colorPrimary"
         app:showAsAction="always" />
 </menu>

@@ -13,12 +13,12 @@
 
     <TextView
         android:id="@+id/settings_item_text"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/settings_item_button"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,7 @@
 
     <Button
         android:id="@+id/settings_item_button"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

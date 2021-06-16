@@ -75,7 +75,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.Light"
+        android:theme="@style/Theme.Vector.Light"
         tools:replace="android:allowBackup">
 
         <!-- No limit for screen ratio: avoid black strips -->
@@ -85,7 +85,7 @@
 
         <activity
             android:name=".features.MainActivity"
-            android:theme="@style/AppTheme.Launcher" />
+            android:theme="@style/Theme.Vector.Launcher" />
 
         <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->
         <activity-alias
@@ -141,7 +141,7 @@
         <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
         <activity
             android:name=".features.media.VectorAttachmentViewerActivity"
-            android:theme="@style/AppTheme.Transparent"
+            android:theme="@style/Theme.Vector.Black.Transparent"
             tools:ignore="Instantiatable" />
 
         <activity android:name=".features.media.BigImageViewerActivity" />
@@ -268,7 +268,7 @@
 
         <activity
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
-            android:theme="@style/AppTheme.AttachmentsPreview" />
+            android:theme="@style/Theme.Vector.Black.AttachmentsPreview" />
         <activity
             android:name=".features.call.VectorCallActivity"
             android:excludeFromRecents="true" />

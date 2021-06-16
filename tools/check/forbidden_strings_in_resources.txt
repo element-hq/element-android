@@ -107,3 +107,6 @@ colorAccent
 
 ### Use MaterialCardView
 <androidx\.cardview\.widget\.CardView
+
+### Useless attribute, please remove
+android:textStyle=\"normal\"

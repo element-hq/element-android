@@ -21,6 +21,7 @@
 
     <TextView
         android:id="@+id/troubleshootTestTitle"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -28,7 +29,6 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:textColor="?vctr_content_primary"
-        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/troubleshootTestDescription"
         app:layout_constraintEnd_toStartOf="@+id/troubleshootStatusIcon"
@@ -41,6 +41,7 @@
 
     <TextView
         android:id="@+id/troubleshootTestDescription"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
