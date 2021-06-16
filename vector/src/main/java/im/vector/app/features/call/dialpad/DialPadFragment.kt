@@ -17,7 +17,6 @@
 package im.vector.app.features.call.dialpad
 
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
@@ -31,6 +30,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
@@ -59,6 +59,7 @@ class DialPadFragment : Fragment(), TextWatcher {
             savedInstanceState: Bundle?): View {
         initArgs(savedInstanceState)
         val view = inflater.inflate(R.layout.dialpad_fragment, container, false)
+        view.setBackgroundColor(ThemeUtils.getColor(requireContext(), R.attr.backgroundColor))
         val dialpadView = view.findViewById<View>(R.id.dialpad_view) as DialpadView
         dialpadView.findViewById<View>(R.id.dialpad_key_voicemail).isVisible = false
         digits = dialpadView.digits as DigitsEditText
@@ -69,22 +70,22 @@ class DialPadFragment : Fragment(), TextWatcher {
         digits.addTextChangedListener(PhoneNumberFormattingTextWatcher(if (formatAsYouType) regionCode else ""))
         digits.addTextChangedListener(this)
         dialpadView.findViewById<View>(R.id.zero).setOnClickListener { keyPressed(KeyEvent.KEYCODE_0, "0") }
-        dialpadView.findViewById<View>(R.id.one).setOnClickListener { keyPressed(KeyEvent.KEYCODE_1,"1") }
-        dialpadView.findViewById<View>(R.id.two).setOnClickListener { keyPressed(KeyEvent.KEYCODE_2,"2") }
-        dialpadView.findViewById<View>(R.id.three).setOnClickListener { keyPressed(KeyEvent.KEYCODE_3,"3") }
-        dialpadView.findViewById<View>(R.id.four).setOnClickListener { keyPressed(KeyEvent.KEYCODE_4,"4") }
-        dialpadView.findViewById<View>(R.id.five).setOnClickListener { keyPressed(KeyEvent.KEYCODE_5,"5") }
-        dialpadView.findViewById<View>(R.id.six).setOnClickListener { keyPressed(KeyEvent.KEYCODE_6,"6") }
-        dialpadView.findViewById<View>(R.id.seven).setOnClickListener { keyPressed(KeyEvent.KEYCODE_7,"7") }
-        dialpadView.findViewById<View>(R.id.eight).setOnClickListener { keyPressed(KeyEvent.KEYCODE_8,"8") }
-        dialpadView.findViewById<View>(R.id.nine).setOnClickListener { keyPressed(KeyEvent.KEYCODE_9,"9") }
+        dialpadView.findViewById<View>(R.id.one).setOnClickListener { keyPressed(KeyEvent.KEYCODE_1, "1") }
+        dialpadView.findViewById<View>(R.id.two).setOnClickListener { keyPressed(KeyEvent.KEYCODE_2, "2") }
+        dialpadView.findViewById<View>(R.id.three).setOnClickListener { keyPressed(KeyEvent.KEYCODE_3, "3") }
+        dialpadView.findViewById<View>(R.id.four).setOnClickListener { keyPressed(KeyEvent.KEYCODE_4, "4") }
+        dialpadView.findViewById<View>(R.id.five).setOnClickListener { keyPressed(KeyEvent.KEYCODE_5, "5") }
+        dialpadView.findViewById<View>(R.id.six).setOnClickListener { keyPressed(KeyEvent.KEYCODE_6, "6") }
+        dialpadView.findViewById<View>(R.id.seven).setOnClickListener { keyPressed(KeyEvent.KEYCODE_7, "7") }
+        dialpadView.findViewById<View>(R.id.eight).setOnClickListener { keyPressed(KeyEvent.KEYCODE_8, "8") }
+        dialpadView.findViewById<View>(R.id.nine).setOnClickListener { keyPressed(KeyEvent.KEYCODE_9, "9") }
         if (enableStar) {
-            dialpadView.findViewById<View>(R.id.star).setOnClickListener { keyPressed(KeyEvent.KEYCODE_STAR,"*") }
+            dialpadView.findViewById<View>(R.id.star).setOnClickListener { keyPressed(KeyEvent.KEYCODE_STAR, "*") }
         } else {
             dialpadView.findViewById<View>(R.id.star).isVisible = false
         }
         if (enablePound) {
-            dialpadView.findViewById<View>(R.id.pound).setOnClickListener { keyPressed(KeyEvent.KEYCODE_POUND,"#") }
+            dialpadView.findViewById<View>(R.id.pound).setOnClickListener { keyPressed(KeyEvent.KEYCODE_POUND, "#") }
         } else {
             dialpadView.findViewById<View>(R.id.pound).isVisible = false
         }
@@ -117,7 +118,7 @@ class DialPadFragment : Fragment(), TextWatcher {
     private fun onOkClicked() {
         val rawInput = getRawInput()
         if (rawInput.isEmpty()) {
-            val clipboard = (requireContext().getSystemService(Context.CLIPBOARD_SERVICE)) as? ClipboardManager
+            val clipboard = requireContext().getSystemService<ClipboardManager>()
             val textToPaste = clipboard?.primaryClip?.getItemAt(0)?.text ?: return
             val formatted = formatNumber(textToPaste.toString())
             digits.setText(formatted)
@@ -174,19 +175,14 @@ class DialPadFragment : Fragment(), TextWatcher {
     }
 
     private fun formatNumber(dialString: String): String {
-        var number = PhoneNumberUtils.extractNetworkPortion(dialString)
-        // Also retrieve the post dial portion of the provided data, so that the entire dial
-        // string can be reconstituted later.
-        val postDial = PhoneNumberUtils.extractPostDialPortion(dialString)
-        if (TextUtils.isEmpty(number)) {
+        val networkPortion = PhoneNumberUtils.extractNetworkPortion(dialString)
+        if (TextUtils.isEmpty(networkPortion)) {
             return ""
         }
-        number = PhoneNumberUtils.formatNumber(number, null, regionCode) ?: number
-        return if (TextUtils.isEmpty(postDial)) {
-            number
-        } else {
-            number + postDial
-        }
+        val number = PhoneNumberUtils.formatNumber(networkPortion, null, regionCode) ?: networkPortion
+        // Also retrieve the post dial portion of the provided data, so that the entire dial string can be reconstituted
+        val postDial = PhoneNumberUtils.extractPostDialPortion(dialString)
+        return number + postDial
     }
 
     interface Callback {
@@ -210,11 +206,11 @@ class DialPadFragment : Fragment(), TextWatcher {
     // Text watcher
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-        //Noop
+        // Noop
     }
 
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        //Noop
+        // Noop
     }
 
     override fun afterTextChanged(s: Editable) {
@@ -222,5 +218,4 @@ class DialPadFragment : Fragment(), TextWatcher {
             digits.clearFocus()
         }
     }
-
 }

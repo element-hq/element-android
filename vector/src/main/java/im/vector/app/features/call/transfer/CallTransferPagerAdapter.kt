@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.platform.Restorable
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.userdirectory.UserListFragment
@@ -71,6 +70,4 @@ class CallTransferPagerAdapter(
     private fun findFragmentAtPosition(position: Int): Fragment? {
         return fragmentActivity.supportFragmentManager.findFragmentByTag("f$position")
     }
-
-
 }
