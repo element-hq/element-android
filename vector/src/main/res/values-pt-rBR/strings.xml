@@ -43,7 +43,7 @@
     <!-- Room Screen -->
     <string name="could_not_redact">Não foi possível redigir</string>
     <string name="unable_to_send_message">Não foi possível enviar mensagem</string>
-    <string name="message_failed_to_upload">Falha para fazer ppload de imagem</string>
+    <string name="message_failed_to_upload">Falha para fazer upload de imagem</string>
     <!-- general errors -->
     <string name="network_error">Erro de rede</string>
     <string name="matrix_error">Erro de Matrix</string>
@@ -51,7 +51,7 @@
     <!-- Last seen time -->
     <!-- call events -->
     <!-- room error messages -->
-    <string name="room_error_join_failed_empty_room">Não é atualmente possível se rejuntar a uma sala vazia.</string>
+    <string name="room_error_join_failed_empty_room">Não é atualmente possível se re-juntar a uma sala vazia.</string>
     <!-- medium friendly name -->
     <string name="medium_email">Endereço de email</string>
     <string name="medium_phone_number">Número de telefone</string>
@@ -595,7 +595,7 @@
     <string name="room_details_people">Pessoas</string>
     <string name="room_details_files">Arquivos</string>
     <string name="room_details_settings">Configurações</string>
-    <string name="malformed_id">ID malformado. Devia ser um endereço de email ou um ID Matrix como \'@partlocal:dominio\'</string>
+    <string name="malformed_id">ID malformada. Devia ser um endereço de email ou uma ID Matrix como \'@partlocal:dominio\'</string>
     <string name="room_details_people_invited_group_name">CONVIDADAS(OS)</string>
     <string name="room_details_people_present_group_name">SE JUNTARAM</string>
     <!-- Room events -->
@@ -878,7 +878,7 @@
     <string name="notification_noisy_notifications">Notificações barulhentas</string>
     <string name="notification_silent_notifications">Notificações silenciosas</string>
     <string name="title_activity_bug_report">Reporte de bug</string>
-    <string name="title_activity_group_details">Detalhes de Comunidade</string>
+    <string name="title_activity_group_details">Detalhes de comunidade</string>
     <string name="loading">Carregando…</string>
     <string name="action_exit">Sair</string>
     <string name="bottom_action_groups">Comunidades</string>
