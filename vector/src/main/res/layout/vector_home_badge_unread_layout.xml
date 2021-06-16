@@ -7,7 +7,7 @@
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/actionUnreadCounterBadgeView"
-        style="@style/TextView.Vector.Micro"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"

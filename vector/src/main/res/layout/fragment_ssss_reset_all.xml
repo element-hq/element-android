@@ -12,7 +12,7 @@
 
         <TextView
             android:id="@+id/reset_title"
-            style="@style/TextView.Vector.HeadlineMedium"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/ssss_reset_all_description"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -45,7 +45,7 @@
 
         <TextView
             android:id="@+id/ssss_reset_other_devices"
-            style="@style/TextView.Vector.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
@@ -63,7 +63,7 @@
 
         <TextView
             android:id="@+id/ssss_reset_text3"
-            style="@style/TextView.Vector.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -76,7 +76,7 @@
 
         <TextView
             android:id="@+id/ssss_reset_text4"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -89,7 +89,7 @@
 
         <Button
             android:id="@+id/ssss_reset_button_cancel"
-            style="@style/Button.Vector.Style.Text"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel"
@@ -97,7 +97,7 @@
 
         <Button
             android:id="@+id/ssss_reset_button_reset"
-            style="@style/Button.Vector.Style.Text"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/reset"

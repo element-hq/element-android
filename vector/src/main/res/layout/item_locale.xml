@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/localeTitle"
-        style="@style/TextView.Vector.Subtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/layout_horizontal_margin"
@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/localeSubtitle"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/layout_horizontal_margin"

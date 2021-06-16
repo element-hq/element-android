@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/homeDrawerUsernameView"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -47,7 +47,7 @@
 
         <TextView
             android:id="@+id/homeDrawerUserIdView"
-            style="@style/TextView.Vector.Caption"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -78,7 +78,7 @@
 
         <Button
             android:id="@+id/homeDrawerInviteFriendButton"
-            style="@style/Button.Vector.Style.Text"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginTop="8dp"
@@ -131,7 +131,7 @@
 
     <TextView
         android:id="@+id/homeDrawerHeaderSettingsView"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -150,7 +150,7 @@
 
     <TextView
         android:id="@+id/homeDrawerHeaderSignoutView"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"

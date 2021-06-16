@@ -98,7 +98,7 @@
 
     <TextView
         android:id="@+id/participantNameText"
-        style="@style/TextView.Vector.Title"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -114,7 +114,7 @@
 
     <TextView
         android:id="@+id/callStatusText"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -130,7 +130,7 @@
 
     <Button
         android:id="@+id/callActionText"
-        style="@style/Button.Vector.Style.Text"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_margin="8dp"

@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/adapter_item_policy_title"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/adapter_item_policy_subtitle"
-        style="@style/TextView.Vector.Caption"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"

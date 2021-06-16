@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/ssss_restore_with_passphrase"
-            style="@style/TextView.Vector.HeadlineMedium"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -41,7 +41,7 @@
 
         <TextView
             android:id="@+id/ssss_restore_with_passphrase_warning_text"
-            style="@style/TextView.Vector.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -88,7 +88,7 @@
 
         <Button
             android:id="@+id/ssss_passphrase_submit"
-            style="@style/Button.Vector.Style.Text"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
@@ -98,7 +98,7 @@
 
         <TextView
             android:id="@+id/ssss_passphrase_or"
-            style="@style/TextView.Vector.HeadlineMedium"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -110,7 +110,7 @@
 
         <Button
             android:id="@+id/ssss_passphrase_use_key"
-            style="@style/Button.Vector.Style.Text"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

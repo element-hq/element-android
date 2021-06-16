@@ -97,7 +97,7 @@
 
     <TextView
         android:id="@+id/roomNameView"
-        style="@style/TextView.Vector.Subtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -135,7 +135,7 @@
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomUnreadCounterBadgeView"
-        style="@style/TextView.Vector.Micro"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -156,7 +156,7 @@
 
     <TextView
         android:id="@+id/roomLastEventTimeView"
-        style="@style/TextView.Vector.Caption"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -168,7 +168,7 @@
 
     <TextView
         android:id="@+id/roomLastEventView"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
@@ -183,7 +183,7 @@
 
     <TextView
         android:id="@+id/roomTypingView"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"

@@ -41,7 +41,7 @@
 
         <TextView
             android:id="@+id/childRoomName"
-            style="@style/TextView.Vector.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -61,7 +61,7 @@
 
         <TextView
             android:id="@+id/childRoomTopic"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -87,7 +87,7 @@
 
         <TextView
             android:id="@+id/spaceChildMemberCountText"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

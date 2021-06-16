@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/quickReaction0"
-        style="@style/TextView.Vector.Title"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/quickReaction1"
-        style="@style/TextView.Vector.Title"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
@@ -26,7 +26,7 @@
 
     <TextView
         android:id="@+id/quickReaction2"
-        style="@style/TextView.Vector.Title"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
@@ -36,7 +36,7 @@
 
     <TextView
         android:id="@+id/quickReaction3"
-        style="@style/TextView.Vector.Title"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
@@ -45,7 +45,7 @@
 
     <TextView
         android:id="@+id/quickReaction4"
-        style="@style/TextView.Vector.Title"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
@@ -54,7 +54,7 @@
 
     <TextView
         android:id="@+id/quickReaction5"
-        style="@style/TextView.Vector.Title"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
@@ -63,7 +63,7 @@
 
     <TextView
         android:id="@+id/quickReaction6"
-        style="@style/TextView.Vector.Title"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
@@ -72,7 +72,7 @@
 
     <TextView
         android:id="@+id/quickReaction7"
-        style="@style/TextView.Vector.Title"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"

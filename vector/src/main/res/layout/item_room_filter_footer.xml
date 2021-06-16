@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        style="@style/TextView.Vector.Subtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -16,7 +16,7 @@
 
     <Button
         android:id="@+id/roomFilterFooterCreateRoom"
-        style="@style/Button.Vector.Style.Text"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -25,7 +25,7 @@
 
     <Button
         android:id="@+id/roomFilterFooterCreateDirect"
-        style="@style/Button.Vector.Style.Text"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -33,7 +33,7 @@
 
     <Button
         android:id="@+id/roomFilterFooterOpenRoomDirectory"
-        style="@style/Button.Vector.Style.Text"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

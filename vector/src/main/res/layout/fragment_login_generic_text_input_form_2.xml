@@ -17,7 +17,7 @@
 
             <TextView
                 android:id="@+id/loginGenericTextInputFormTitle"
-                style="@style/TextView.Vector.Title"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -26,7 +26,7 @@
 
             <TextView
                 android:id="@+id/loginGenericTextInputFormNotice"
-                style="@style/TextView.Vector.Body"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -37,7 +37,7 @@
 
             <TextView
                 android:id="@+id/loginGenericTextInputFormMandatoryNotice"
-                style="@style/TextView.Vector.Caption"
+                style="@style/Widget.Vector.TextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="26dp"
@@ -49,7 +49,7 @@
 
             <TextView
                 android:id="@+id/loginGenericTextInputFormNotice2"
-                style="@style/TextView.Vector.Caption"
+                style="@style/Widget.Vector.TextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
@@ -82,7 +82,7 @@
 
                 <Button
                     android:id="@+id/loginGenericTextInputFormOtherButton"
-                    style="@style/Button.Vector.Style.Login.Text"
+                    style="@style/Widget.Vector.Button.Text.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -92,7 +92,7 @@
 
                 <Button
                     android:id="@+id/loginGenericTextInputFormLater"
-                    style="@style/Button.Vector.Style.Login.Text"
+                    style="@style/Widget.Vector.Button.Text.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -103,7 +103,7 @@
 
                 <Button
                     android:id="@+id/loginGenericTextInputFormSubmit"
-                    style="@style/Button.Vector.Style.Login"
+                    style="@style/Widget.Vector.Button.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"

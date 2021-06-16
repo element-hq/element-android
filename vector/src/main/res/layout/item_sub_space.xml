@@ -35,7 +35,7 @@
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/groupCounterBadge"
-        style="@style/TextView.Vector.Micro"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -57,7 +57,7 @@
 
     <TextView
         android:id="@+id/groupNameView"
-        style="@style/TextView.Vector.Subtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"

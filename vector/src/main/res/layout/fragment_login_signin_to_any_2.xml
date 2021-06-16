@@ -17,7 +17,7 @@
 
             <TextView
                 android:id="@+id/loginTitle"
-                style="@style/TextView.Vector.Title"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -87,7 +87,7 @@
 
                 <Button
                     android:id="@+id/forgetPasswordButton"
-                    style="@style/Button.Vector.Style.Login.Text"
+                    style="@style/Widget.Vector.Button.Text.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -97,7 +97,7 @@
 
                 <Button
                     android:id="@+id/loginSubmit"
-                    style="@style/Button.Vector.Style.Login"
+                    style="@style/Widget.Vector.Button.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -119,7 +119,7 @@
 
                 <TextView
                     android:id="@+id/loginSocialLoginHeader"
-                    style="@style/TextView.Vector.Body"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"

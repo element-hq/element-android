@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_success_title"
-            style="@style/TextView.Vector.HeadlineMedium"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_line1_text"
-            style="@style/TextView.Vector.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -55,7 +55,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_label2"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -68,7 +68,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_recovery_key_text"
-            style="@style/TextView.Vector.Title"
+            style="@style/Widget.Vector.TextView.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/layout_horizontal_margin"
@@ -82,7 +82,7 @@
 
         <Button
             android:id="@+id/keys_backup_setup_step3_copy_button"
-            style="@style/Button.Vector.Style.Text"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

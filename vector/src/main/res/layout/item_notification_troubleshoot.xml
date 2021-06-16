@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/troubleshootTestTitle"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -41,7 +41,7 @@
 
     <TextView
         android:id="@+id/troubleshootTestDescription"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

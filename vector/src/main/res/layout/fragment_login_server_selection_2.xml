@@ -16,7 +16,7 @@
 
             <TextView
                 android:id="@+id/loginServerTitle"
-                style="@style/TextView.Vector.Title"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -26,7 +26,7 @@
 
             <TextView
                 android:id="@+id/loginServerText"
-                style="@style/TextView.Vector.Body"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -61,7 +61,7 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceMatrixOrgText"
-                    style="@style/TextView.Vector.Caption"
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -77,7 +77,7 @@
 
             <TextView
                 android:id="@+id/loginServerText2"
-                style="@style/TextView.Vector.Caption"
+                style="@style/Widget.Vector.TextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -98,7 +98,7 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceOtherTitle"
-                    style="@style/TextView.Vector.Subtitle"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -111,7 +111,7 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceOtherText"
-                    style="@style/TextView.Vector.Caption"
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -127,7 +127,7 @@
 
             <TextView
                 android:id="@+id/loginServerChoiceEmsLearnMore"
-                style="@style/TextView.Vector.Caption"
+                style="@style/Widget.Vector.TextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"

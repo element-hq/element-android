@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/itemVerificationActionTitle"
-        style="@style/TextView.Vector.Subtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -49,7 +49,7 @@
 
     <TextView
         android:id="@+id/itemVerificationActionSubTitle"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

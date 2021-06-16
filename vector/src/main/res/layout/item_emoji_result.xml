@@ -13,7 +13,7 @@
 
     <TextView
         android:id="@+id/item_emoji_tv"
-        style="@style/TextView.Vector.Title"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -29,7 +29,7 @@
 
         <TextView
             android:id="@+id/item_emoji_name"
-            style="@style/TextView.Vector.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_primary"
@@ -38,7 +38,7 @@
 
         <TextView
             android:id="@+id/item_emoji_keyword"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"

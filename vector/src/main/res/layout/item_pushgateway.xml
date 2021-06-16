@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/pushGatewayKind"
-        style="@style/TextView.Vector.HeadlineMedium"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/pushGatewayAppId"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -28,7 +28,7 @@
 
     <TextView
         android:id="@+id/pushGatewayAppIdValue"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -37,7 +37,7 @@
 
     <TextView
         android:id="@+id/pushGatewayKey"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -47,7 +47,7 @@
 
     <TextView
         android:id="@+id/pushGatewayKeyValue"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -56,7 +56,7 @@
 
     <TextView
         android:id="@+id/pushGatewayAppName"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -66,7 +66,7 @@
 
     <TextView
         android:id="@+id/pushGatewayAppNameValue"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -75,7 +75,7 @@
 
     <TextView
         android:id="@+id/pushGatewayDeviceName"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -85,7 +85,7 @@
 
     <TextView
         android:id="@+id/pushGatewayDeviceNameValue"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -95,7 +95,7 @@
 
     <TextView
         android:id="@+id/pushGatewayURL"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -104,7 +104,7 @@
 
     <TextView
         android:id="@+id/pushGatewayURLValue"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -113,7 +113,7 @@
 
     <TextView
         android:id="@+id/pushGatewayFormat"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -123,7 +123,7 @@
 
     <TextView
         android:id="@+id/pushGatewayFormatValue"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"

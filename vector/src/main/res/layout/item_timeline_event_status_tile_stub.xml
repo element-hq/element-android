@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/itemVerificationDoneTitleTextView"
-        style="@style/TextView.Vector.Subtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/itemVerificationDoneDetailTextView"
-        style="@style/TextView.Vector.Caption"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

@@ -27,7 +27,7 @@
 
             <TextView
                 android:id="@+id/loginServerUrlFormTitle"
-                style="@style/TextView.Vector.Title"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp"
@@ -36,7 +36,7 @@
 
             <TextView
                 android:id="@+id/loginServerUrlFormText"
-                style="@style/TextView.Vector.Body"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -46,7 +46,7 @@
 
             <TextView
                 android:id="@+id/loginServerUrlFormLearnMore"
-                style="@style/TextView.Vector.Body"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -75,7 +75,7 @@
 
             <TextView
                 android:id="@+id/loginServerUrlFormClearHistory"
-                style="@style/TextView.Vector.Caption"
+                style="@style/Widget.Vector.TextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -86,7 +86,7 @@
 
             <TextView
                 android:id="@+id/loginServerUrlFormNotice"
-                style="@style/TextView.Vector.Caption"
+                style="@style/Widget.Vector.TextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
@@ -96,7 +96,7 @@
 
             <Button
                 android:id="@+id/loginServerUrlFormSubmit"
-                style="@style/Button.Vector.Style.Login"
+                style="@style/Widget.Vector.Button.Login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

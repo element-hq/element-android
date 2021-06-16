@@ -31,7 +31,7 @@
 
     <TextView
         android:id="@+id/roomProfileNameView"
-        style="@style/TextView.Vector.Title"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -44,7 +44,7 @@
 
     <TextView
         android:id="@+id/roomProfileAliasView"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

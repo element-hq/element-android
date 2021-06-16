@@ -41,7 +41,7 @@
 
         <TextView
             android:id="@+id/memberProfileNameView"
-            style="@style/TextView.Vector.Title"
+            style="@style/Widget.Vector.TextView.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -54,7 +54,7 @@
 
         <TextView
             android:id="@+id/memberProfileIdView"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -69,7 +69,7 @@
 
         <TextView
             android:id="@+id/memberProfilePowerLevelView"
-            style="@style/TextView.Vector.Caption"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -83,7 +83,7 @@
 
         <TextView
             android:id="@+id/memberProfileStatusView"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

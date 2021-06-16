@@ -41,7 +41,7 @@
 
     <TextView
         android:id="@+id/createDirectRoomUserName"
-        style="@style/TextView.Vector.Subtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -59,7 +59,7 @@
 
     <TextView
         android:id="@+id/createDirectRoomUserID"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"

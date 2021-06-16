@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/currentCallsInfo"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/returnToCallButton"
@@ -27,7 +27,7 @@
 
     <Button
         android:id="@+id/returnToCallButton"
-        style="@style/Button.Vector.Style.Text.OnPrimary"
+        style="@style/Widget.Vector.Button.Text.OnPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/currentCallsInfo"

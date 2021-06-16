@@ -35,17 +35,17 @@
         <item name="android:paddingBottom">32dp</item>
     </style>
 
-    <style name="Button.Vector.Style.Login">
+    <style name="Widget.Vector.Button.Login">
         <item name="android:minHeight">52dp</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="Button.Vector.Style.Login.Outlined" parent="Button.Vector.Style.Outlined">
+    <style name="Widget.Vector.Button.Outlined.Login">
         <item name="android:minHeight">52dp</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="Button.Vector.Style.Login.Text" parent="Button.Vector.Style.Text">
+    <style name="Widget.Vector.Button.Text.Login">
         <item name="android:minHeight">52dp</item>
         <item name="android:textAllCaps">false</item>
     </style>

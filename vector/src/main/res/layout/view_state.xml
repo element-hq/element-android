@@ -26,7 +26,7 @@
 
         <TextView
             android:id="@+id/errorMessageView"
-            style="@style/TextView.Vector.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -75,7 +75,7 @@
 
         <TextView
             android:id="@+id/emptyTitleView"
-            style="@style/TextView.Vector.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -91,7 +91,7 @@
 
         <TextView
             android:id="@+id/emptyMessageView"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

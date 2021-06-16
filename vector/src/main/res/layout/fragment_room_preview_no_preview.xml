@@ -39,7 +39,7 @@
 
                     <TextView
                         android:id="@+id/roomPreviewNoPreviewToolbarTitle"
-                        style="@style/TextView.Vector.HeadlineMedium"
+                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -60,7 +60,7 @@
 
             <ProgressBar
                 android:id="@+id/roomPreviewPeekingProgress"
-                style="@style/ProgressBar.Vector.Horizontal"
+                style="@style/Widget.Vector.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="14dp"
                 android:layout_gravity="center"
@@ -90,7 +90,7 @@
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewName"
-                    style="@style/TextView.Vector.Subtitle"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="56dp"
@@ -101,7 +101,7 @@
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewTopic"
-                    style="@style/TextView.Vector.Subtitle"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -112,7 +112,7 @@
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewLabel"
-                    style="@style/TextView.Vector.Body"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="28dp"
@@ -122,7 +122,7 @@
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewError"
-                    style="@style/TextView.Vector.Subtitle"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"

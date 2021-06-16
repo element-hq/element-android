@@ -8,7 +8,7 @@
     List of supported attributes for a TextAppearance:
     https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/res/values/attrs.xml#4723
 
-    Do not use TextAppearance style directly, use TextView.Vector style instead
+    Do not use TextAppearance directly, use Widget.Vector.TextView style instead
     -->
 
     <style name="TextAppearance.Vector.Title" parent="TextAppearance.MaterialComponents.Headline3">

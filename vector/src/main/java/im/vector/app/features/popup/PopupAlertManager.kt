@@ -231,7 +231,7 @@ class PopupAlertManager @Inject constructor() {
                         setIcon(it)
                     }
                     alert.actions.forEach { action ->
-                        addButton(action.title, R.style.Button_Vector_Style_Text_Alerter) {
+                        addButton(action.title, R.style.Widget_Vector_Button_Text_Alerter) {
                             if (action.autoClose) {
                                 currentIsDismissed()
                                 Alerter.hide()

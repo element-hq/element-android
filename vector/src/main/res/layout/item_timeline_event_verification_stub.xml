@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/itemVerificationTitleTextView"
-        style="@style/TextView.Vector.Subtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/itemVerificationDetailTextView"
-        style="@style/TextView.Vector.Caption"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -44,7 +44,7 @@
 
         <Button
             android:id="@+id/sas_verification_verified_decline_button"
-            style="@style/Button.Vector.Style.Destructive"
+            style="@style/Widget.Vector.Button.Destructive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -52,7 +52,7 @@
 
         <Button
             android:id="@+id/sas_verification_verified_accept_button"
-            style="@style/Button.Vector.Style.Positive"
+            style="@style/Widget.Vector.Button.Positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/accept" />
@@ -61,7 +61,7 @@
 
     <TextView
         android:id="@+id/itemVerificationStatusText"
-        style="@style/TextView.Vector.Caption"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"

@@ -11,7 +11,7 @@
 
 
     <TextView
-        style="@style/TextView.Vector.HeadlineMedium"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/widgetPermissionHeader2"
-        style="@style/TextView.Vector.Subtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -57,7 +57,7 @@
 
             <TextView
                 android:id="@+id/widgetPermissionOwnerDisplayName"
-                style="@style/TextView.Vector.Subtitle"
+                style="@style/Widget.Vector.TextView.Subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -67,7 +67,7 @@
 
             <TextView
                 android:id="@+id/widgetPermissionOwnerId"
-                style="@style/TextView.Vector.Body"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -80,7 +80,7 @@
 
     <TextView
         android:id="@+id/widgetPermissionSharedInfo"
-        style="@style/TextView.Vector.Subtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -99,7 +99,7 @@
 
         <Button
             android:id="@+id/widgetPermissionDecline"
-            style="@style/Button.Vector.Style.Destructive"
+            style="@style/Widget.Vector.Button.Destructive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/layout_vertical_margin"
@@ -108,7 +108,7 @@
 
         <Button
             android:id="@+id/widgetPermissionContinue"
-            style="@style/Button.Vector.Style.Positive"
+            style="@style/Widget.Vector.Button.Positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/layout_vertical_margin"

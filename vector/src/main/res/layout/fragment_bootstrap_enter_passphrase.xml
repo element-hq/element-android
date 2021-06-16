@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/bootstrapDescriptionText"
-        style="@style/TextView.Vector.Body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -48,7 +48,7 @@
 
         <TextView
             android:id="@+id/bootstrapWarningInfo"
-            style="@style/TextView.Vector.Caption"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -76,7 +76,7 @@
 
     <Button
         android:id="@+id/bootstrapSubmit"
-        style="@style/Button.Vector.Style.Text"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_continue"

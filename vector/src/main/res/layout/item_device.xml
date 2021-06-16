@@ -18,7 +18,7 @@
         <!-- In compact mode only this is shown-->
         <TextView
             android:id="@+id/itemDeviceSimpleSummary"
-            style="@style/TextView.Vector.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -31,7 +31,7 @@
         -->
         <TextView
             android:id="@+id/itemDeviceDisplayNameLabel"
-            style="@style/TextView.Vector.Caption"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -40,7 +40,7 @@
 
         <TextView
             android:id="@+id/itemDeviceDisplayName"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_primary"
@@ -48,7 +48,7 @@
 
         <TextView
             android:id="@+id/itemDeviceIdLabel"
-            style="@style/TextView.Vector.Caption"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -57,7 +57,7 @@
 
         <TextView
             android:id="@+id/itemDeviceId"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -67,7 +67,7 @@
 
         <TextView
             android:id="@+id/itemDeviceLastSeenLabel"
-            style="@style/TextView.Vector.Caption"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -76,7 +76,7 @@
 
         <TextView
             android:id="@+id/itemDeviceLastSeen"
-            style="@style/TextView.Vector.Body"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_primary"
