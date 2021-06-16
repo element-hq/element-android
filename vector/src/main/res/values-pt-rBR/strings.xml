@@ -189,18 +189,18 @@
     <string name="notice_room_canonical_alias_set_by_you">Você definiu o endereço principal para esta sala para %1$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s removeu o endereço principal para esta sala.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Você removeu o endereço principal para esta sala.</string>
-    <string name="notice_room_guest_access_can_join">%1$s tem permitido que visitas se juntem à sala.</string>
-    <string name="notice_room_guest_access_can_join_by_you">Você tem permitido que visitas se juntem à sala.</string>
-    <string name="notice_room_guest_access_forbidden">%1$s tem prevenido visitas de se juntarem à sala.</string>
-    <string name="notice_room_guest_access_forbidden_by_you">Você tem prevenido visitas de se juntarem à sala.</string>
+    <string name="notice_room_guest_access_can_join">%1$s tem permitido visitantes se juntarem à sala.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Você tem permitido visitantes se juntarem à sala.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s tem prevenido visitantes de se juntarem à sala.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Você tem prevenido visitantes de se juntarem à sala.</string>
     <string name="notice_end_to_end_ok">%1$s ativou encriptação ponta-a-ponta.</string>
     <string name="notice_end_to_end_ok_by_you">Você ativou encriptação ponta-a-ponta.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s ativou encriptação ponta-a-ponta (algoritmo irreconhecido %2$s).</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Você ativou encriptação ponta-a-ponta (algoritmo irreconhecido %1$s).</string>
-    <string name="notice_direct_room_guest_access_forbidden_by_you">Você tem prevenido visitas de se juntarem à sala.</string>
-    <string name="notice_direct_room_guest_access_forbidden">%1$s tem prevenido visitas de se juntarem à sala.</string>
-    <string name="notice_direct_room_guest_access_can_join_by_you">Você tem permitido que visitas se juntem aqui.</string>
-    <string name="notice_direct_room_guest_access_can_join">%1$s tem permitido que visitas se juntem aqui.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Você tem prevenido visitantes de se juntarem à sala.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s tem prevenido visitantes de se juntarem à sala.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Você tem permitido visitantes se juntarem aqui.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s tem permitido visitantes se juntarem aqui.</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Você saiu. Razão: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s saiu. Razão: %2$s</string>
     <string name="notice_direct_room_join_with_reason_by_you">Você juntou-se. Razão: %1$s</string>
@@ -752,7 +752,7 @@
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Para linkar a uma sala ela deve ter um endereço.</string>
     <string name="room_settings_room_access_entry_only_invited">Somente pessoas que têm sido convidadas</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Qualquer pessoa que saiba o link da sala, exceto visitantes</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Qualquer pessoa que saiba o link da sala, a parte de visitantes</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Qualquer pessoa que saiba o link da sala, incluindo visitantes</string>
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Usuárias(os) banidas(os)</string>
@@ -1210,7 +1210,7 @@
     <string name="settings_show_avatar_display_name_changes_messages_summary">Inclui mudanças de avatar e nome de exibição.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Conexão no Background</string>
     <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} precisa manter uma conexão no background de baixo impacto a fim de ter notificações confiáveis.
-\nNa próxima tela você vai ser instigado a permitir que o ${app_name} rode sempre em background, por favor aceite.</string>
+\nNa próxima tela você vai ser instigado a permitir ${app_name} sempre rodar em background, por favor aceite.</string>
     <string name="template_settings_troubleshoot_test_bg_restricted_success">Restrições de background estão desativadas para ${app_name}. Este teste devia ser rodado usando dados móveis (sem Wi-Fi).
 \n%1$s</string>
     <string name="template_settings_troubleshoot_test_bg_restricted_failed">Restrições de background estão ativadas para ${app_name}.
@@ -1356,7 +1356,7 @@
     <string name="room_participants_ban_title">Banir usuária(o)</string>
     <string name="room_participants_ban_reason">Razão de ban</string>
     <string name="room_participants_unban_title">Desbanir usuária(o)</string>
-    <string name="room_participants_unban_prompt_msg">Desbanir usuária(o) vai permitir que ela/ele se junte à sala de novo.</string>
+    <string name="room_participants_unban_prompt_msg">Desbanir usuária(o) vai permitir-lhe se juntar à sala de novo.</string>
     <string name="settings_add_3pid_confirm_password_title">Confirme sua senha</string>
     <string name="template_settings_add_3pid_flow_not_supported">Você não pode fazer isto de ${app_name} celular</string>
     <string name="settings_add_3pid_authentication_needed">Autenticação é requerida</string>
@@ -1547,7 +1547,7 @@
     <string name="keys_backup_settings_delete_backup_button">Deletar Backup</string>
     <string name="keys_backup_settings_status_ok">Backup de Chave tem sido corretamente configurado para esta sessão.</string>
     <string name="keys_backup_settings_status_ko">Backup de Chave não está ativo nesta sessão.</string>
-    <string name="keys_backup_settings_status_not_setup">Backup de suas chaves não está sendo feito desde esta sessão.</string>
+    <string name="keys_backup_settings_status_not_setup">Backup de suas chaves não está sendo feito desta sessão.</string>
     <string name="keys_backup_settings_signature_from_unknown_device">Backup tem uma assinatura de sessão desconhecida com ID %s.</string>
     <string name="keys_backup_settings_valid_signature_from_this_device">Backup tem uma assinatura válida desta sessão.</string>
     <string name="keys_backup_settings_valid_signature_from_verified_device">Backup tem uma assinatura válida de sessão verificada %s.</string>
@@ -1752,11 +1752,11 @@
     <string name="settings_discovery_bad_identity_server">Não foi possível conectar-se a servidor de identidade</string>
     <string name="settings_discovery_please_enter_server">Por favor entre o url de servidor de identidade</string>
     <string name="settings_discovery_no_terms_title">Servidor de identidade não tem termos de serviço</string>
-    <string name="settings_discovery_no_terms">O servidor de identidade que você tem escolhido não tem nenhuns termos de serviço. Somente continue se você confia na/do proprietária(o) do serviço</string>
+    <string name="settings_discovery_no_terms">O servidor de identidade que você tem escolhido não tem quaisquer termos de serviço. Somente continue se você confia na/do proprietária(o) do serviço</string>
     <string name="settings_text_message_sent">Uma mensagem de texto tem sido enviada para %s. Por favor entre o código de verificação que ela contém.</string>
     <string name="settings_text_message_sent_wrong_code">O código de verificação não está correto.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Você está atualmente compartilhando endereços de email ou números de telefone no servidor de identidade %1$s. Você vai precisar reconectar-se a %2$s para parar de os compartilhar.</string>
-    <string name="settings_agree_to_terms">Concorde com os Termos de Serviço do servidor de identidade (%s) para permitir que você mesma(o) seja descobertável por endereço de email ou número de telefone.</string>
+    <string name="settings_agree_to_terms">Concorde com os Termos de Serviço do servidor de identidade (%s) para permitir você mesma(o) ser descobertável por endereço de email ou número de telefone.</string>
     <string name="labs_allow_extended_logging">Ativar verbose logs.</string>
     <string name="labs_allow_extended_logging_summary">Verbose logs vão ajudar desenvolvedoras(es) ao prover mais logs quando você enviar uma RageShake. Mesmo quando ativado, o aplicativo não registra conteúdos de mensagem ou quaisquer outros dados privados.</string>
     <string name="error_terms_not_accepted">Por favor retente uma vez que você tenha aceitado os termos e condições de seu servidorcasa.</string>
@@ -1892,7 +1892,7 @@
 \n
 \nPara o processo de mudança de senha\?</string>
     <string name="login_set_email_title">Definir endereço de email</string>
-    <string name="login_set_email_notice">Defina um email para recuperar sua conta. Mais tarde, você pode opcionalmente permitir que pessoas que você conhece descubram você por seu email.</string>
+    <string name="login_set_email_notice">Defina um email para recuperar sua conta. Mais tarde, você pode opcionalmente permitir pessoas que você conhece descobrirem você por seu email.</string>
     <string name="login_set_email_mandatory_hint">Email</string>
     <string name="login_set_email_optional_hint">Email (opcional)</string>
     <string name="login_set_email_submit">Próximo</string>
@@ -2516,7 +2516,7 @@
     <string name="no_more_results">Mais nenhum resultado</string>
     <string name="settings_export_trail">Exportar Auditoria</string>
     <string name="room_member_open_or_create_dm">Mensagem direta</string>
-    <string name="show_advanced">Mostrar avaçadas</string>
+    <string name="show_advanced">Mostrar avançadas</string>
     <string name="hide_advanced">Esconder avançadas</string>
     <string name="matrix_to_card_title">Link Matrix</string>
     <string name="room_created_summary_no_topic_creation_text">%s para deixar pessoas sabendo do que esta sala se trata.</string>
@@ -2568,7 +2568,7 @@
     <string name="qr_code">QR code</string>
     <string name="add_by_qr_code">Adicionar por QR code</string>
     <string name="user_directory_search_hint">Pesquisar por nome ou ID</string>
-    <string name="permissions_denied_add_contact">Aceite permissão para acessar seus contatos.</string>
+    <string name="permissions_denied_add_contact">Aceitar permissão para acessar seus contatos.</string>
     <string name="permissions_denied_qr_code">Para scannear um QR code, você precisa permitir acesso a câmera.</string>
     <string name="start_chatting">Começar a Conversar</string>
     <string name="room_alias_action_publish">Publicar este endereço</string>
