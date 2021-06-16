@@ -67,7 +67,9 @@
         android:src="@drawable/ic_call_answer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorOnPrimary"
+        tools:ignore="MissingPrefix" />
 
     <ImageView
         android:id="@+id/incomingCallRejectView"
@@ -83,6 +85,8 @@
         android:src="@drawable/ic_call_hangup"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/incomingCallAcceptView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorOnPrimary"
+        tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
