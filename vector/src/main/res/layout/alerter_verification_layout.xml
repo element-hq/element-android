@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    tools:background="@android:color/darker_gray"
-    tools:foreground="?android:attr/selectableItemBackground"
+    tools:background="?colorPrimary"
     tools:style="@style/AlertStyle">
 
     <ImageView
@@ -20,7 +19,8 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@sample/user_round_avatars" />
 
-    <ImageView
+    <!-- Note: this is handled by the Alerter library, it has to be a AppCompatImageView -->
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -42,7 +42,8 @@
         app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <!-- Note: this is handled by the Alerter library, it has to be a AppCompatTextView -->
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvTitle"
             style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
@@ -56,7 +57,8 @@
             tools:text="Title"
             tools:visibility="visible" />
 
-        <TextView
+        <!-- Note: this is handled by the Alerter library, it has to be a AppCompatTextView -->
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvText"
             style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
