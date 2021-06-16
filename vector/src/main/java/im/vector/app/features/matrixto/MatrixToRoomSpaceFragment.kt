@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -31,6 +30,7 @@ import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentMatrixToRoomSpaceCardBinding
 import im.vector.app.features.home.AvatarRenderer
@@ -39,7 +39,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import javax.inject.Inject
 
 class MatrixToRoomSpaceFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val spaceCardRenderer: SpaceCardRenderer
 ) : VectorBaseFragment<FragmentMatrixToRoomSpaceCardBinding>() {
 
     private val sharedViewModel: MatrixToBottomSheetViewModel by parentFragmentViewModel()
@@ -50,11 +51,18 @@ class MatrixToRoomSpaceFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.matrixToCardMainButton.debouncedClicks {
-            mainButtonClicked()
+        views.matrixToCardMainButton.callback = object : ButtonStateView.Callback {
+            override fun onButtonClicked() {
+                mainButtonClicked()
+            }
+
+            override fun onRetryClicked() = onButtonClicked()
         }
-        views.matrixToCardSecondaryButton.debouncedClicks {
-            secondaryButtonClicked()
+        views.matrixToCardSecondaryButton.callback = object : ButtonStateView.Callback {
+            override fun onButtonClicked() {
+                secondaryButtonClicked()
+            }
+            override fun onRetryClicked() = onButtonClicked()
         }
     }
 
@@ -71,12 +79,19 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                 when (val peek = item.invoke()) {
                     is RoomInfoResult.FullInfo     -> {
                         val matrixItem = peek.roomItem
+                        avatarRenderer.render(matrixItem, views.matrixToCardAvatar)
                         if (peek.roomType == RoomType.SPACE) {
                             views.matrixToBetaTag.isVisible = true
-                            avatarRenderer.renderSpace(matrixItem, views.matrixToCardAvatar)
+                            views.matrixToAccessImage.isVisible = true
+                            if (peek.isPublic) {
+                                views.matrixToAccessText.setTextOrHide(context?.getString(R.string.public_space))
+                                views.matrixToAccessImage.setImageResource(R.drawable.ic_public_room)
+                            } else {
+                                views.matrixToAccessText.setTextOrHide(context?.getString(R.string.private_space))
+                                views.matrixToAccessImage.setImageResource(R.drawable.ic_room_private)
+                            }
                         } else {
                             views.matrixToBetaTag.isVisible = false
-                            avatarRenderer.render(matrixItem, views.matrixToCardAvatar)
                         }
                         views.matrixToCardNameText.setTextOrHide(peek.name)
                         views.matrixToCardAliasText.setTextOrHide(peek.alias)
@@ -159,21 +174,12 @@ class MatrixToRoomSpaceFragment @Inject constructor(
             }
         }
 
-        val images = listOf(views.knownMember1, views.knownMember2, views.knownMember3, views.knownMember4, views.knownMember5)
+        listOf(views.knownMember1, views.knownMember2, views.knownMember3, views.knownMember4, views.knownMember5)
                 .onEach { it.isGone = true }
         when (state.peopleYouKnow) {
             is Success -> {
                 val someYouKnow = state.peopleYouKnow.invoke()
-                someYouKnow.forEachIndexed { index, item ->
-                    images[index].isVisible = true
-                    avatarRenderer.render(item, images[index])
-                }
-                views.peopleYouMayKnowText.setTextOrHide(
-                        resources.getQuantityString(R.plurals.space_people_you_know,
-                                someYouKnow.count(),
-                                someYouKnow.count()
-                        )
-                )
+                spaceCardRenderer.renderPeopleYouKnow(views, someYouKnow)
             }
             else       -> {
                 views.peopleYouMayKnowText.isVisible = false
@@ -182,21 +188,17 @@ class MatrixToRoomSpaceFragment @Inject constructor(
 
         when (state.startChattingState) {
             Uninitialized -> {
-                views.matrixToCardButtonLoading.isVisible = false
-//                views.matrixToCardMainButton.isVisible = false
+                views.matrixToCardMainButton.render(ButtonStateView.State.Button)
             }
             is Success -> {
-                views.matrixToCardButtonLoading.isVisible = false
-                views.matrixToCardMainButton.isVisible = true
+                views.matrixToCardMainButton.render(ButtonStateView.State.Button)
             }
             is Fail -> {
-                views.matrixToCardButtonLoading.isVisible = false
-                views.matrixToCardMainButton.isVisible = true
+                views.matrixToCardMainButton.render(ButtonStateView.State.Error)
                 // TODO display some error copy?
             }
             is Loading -> {
-                views.matrixToCardButtonLoading.isVisible = true
-                views.matrixToCardMainButton.isInvisible = true
+                views.matrixToCardMainButton.render(ButtonStateView.State.Loading)
             }
         }
     }

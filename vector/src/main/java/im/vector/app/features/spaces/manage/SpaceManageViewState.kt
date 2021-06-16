@@ -18,10 +18,17 @@ package im.vector.app.features.spaces.manage
 
 import com.airbnb.mvrx.MvRxState
 
+enum class ManageType {
+    AddRooms,
+    Settings,
+    ManageRooms
+}
 data class SpaceManageViewState(
-        val spaceId: String = ""
+        val spaceId: String = "",
+        val manageType: ManageType
 ) : MvRxState {
     constructor(args: SpaceManageArgs) : this(
-            spaceId = args.spaceId
+            spaceId = args.spaceId,
+            manageType = args.manageType
     )
 }

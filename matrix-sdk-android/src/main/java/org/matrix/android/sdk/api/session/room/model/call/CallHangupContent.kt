@@ -44,7 +44,7 @@ data class CallHangupContent(
          * One of: ["ice_failed", "invite_timeout"]
          */
         @Json(name = "reason") val reason: Reason? = null
-) : CallSignallingContent {
+) : CallSignalingContent {
     @JsonClass(generateAdapter = false)
     enum class Reason {
         @Json(name = "ice_failed")
@@ -55,6 +55,9 @@ data class CallHangupContent(
 
         @Json(name = "user_hangup")
         USER_HANGUP,
+
+        @Json(name = "replaced")
+        REPLACED,
 
         @Json(name = "user_media_failed")
         USER_MEDIA_FAILED,

@@ -41,6 +41,7 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import jp.wasabeef.glide.transformations.BlurTransformation
 import jp.wasabeef.glide.transformations.ColorFilterTransformation
+import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -65,24 +66,24 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 DrawableImageViewTarget(imageView))
     }
 
-    @UiThread
-    fun renderSpace(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
-        val placeholder = getSpacePlaceholderDrawable(matrixItem)
-        val resolvedUrl = resolvedUrl(matrixItem.avatarUrl)
-        glideRequests
-                .load(resolvedUrl)
-                .transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
-                .placeholder(placeholder)
-                .into(DrawableImageViewTarget(imageView))
-    }
-
-    fun renderSpace(matrixItem: MatrixItem, imageView: ImageView) {
-        renderSpace(
-                matrixItem,
-                imageView,
-                GlideApp.with(imageView)
-        )
-    }
+//    fun renderSpace(matrixItem: MatrixItem, imageView: ImageView) {
+//        renderSpace(
+//                matrixItem,
+//                imageView,
+//                GlideApp.with(imageView)
+//        )
+//    }
+//
+//    @UiThread
+//    private fun renderSpace(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
+//        val placeholder = getSpacePlaceholderDrawable(matrixItem)
+//        val resolvedUrl = resolvedUrl(matrixItem.avatarUrl)
+//        glideRequests
+//                .load(resolvedUrl)
+//                .transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
+//                .placeholder(placeholder)
+//                .into(DrawableImageViewTarget(imageView))
+//    }
 
     fun clear(imageView: ImageView) {
         // It can be called after recycler view is destroyed, just silently catch
@@ -114,12 +115,38 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @UiThread
+    fun render(profileInfo: LoginProfileInfo, imageView: ImageView) {
+        // Create a Fake MatrixItem, for the placeholder
+        val matrixItem = MatrixItem.UserItem(
+                // Need an id starting with @
+                id = profileInfo.matrixId,
+                displayName = profileInfo.displayName
+        )
+
+        val placeholder = getPlaceholderDrawable(matrixItem)
+        GlideApp.with(imageView)
+                .load(profileInfo.fullAvatarUrl)
+                .apply(RequestOptions.circleCropTransform())
+                .placeholder(placeholder)
+                .into(imageView)
+    }
+
+    @UiThread
     fun render(glideRequests: GlideRequests,
                matrixItem: MatrixItem,
                target: Target<Drawable>) {
         val placeholder = getPlaceholderDrawable(matrixItem)
         buildGlideRequest(glideRequests, matrixItem.avatarUrl)
-                .apply(RequestOptions.circleCropTransform())
+                .apply {
+                    when (matrixItem) {
+                        is MatrixItem.SpaceItem -> {
+                            transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
+                        }
+                        else                    -> {
+                            apply(RequestOptions.circleCropTransform())
+                        }
+                    }
+                }
                 .placeholder(placeholder)
                 .into(target)
     }
@@ -179,7 +206,16 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 .beginConfig()
                 .bold()
                 .endConfig()
-                .buildRound(matrixItem.firstLetterOfDisplayName(), avatarColor)
+                .let {
+                    when (matrixItem) {
+                        is MatrixItem.SpaceItem -> {
+                            it.buildRoundRect(matrixItem.firstLetterOfDisplayName(), avatarColor, dimensionConverter.dpToPx(8))
+                        }
+                        else                    -> {
+                            it.buildRound(matrixItem.firstLetterOfDisplayName(), avatarColor)
+                        }
+                    }
+                }
     }
 
     @AnyThread

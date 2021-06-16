@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:maxLines="2"
-        tools:text="@sample/matrix.json/data/roomTopic" />
+        tools:text="@sample/rooms.json/data/topic" />
 
     <ImageView
         android:id="@+id/expandableArrow"

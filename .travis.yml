@@ -1,4 +1,4 @@
-# FTR: Configuration on https://travis-ci.org/vector-im/riotX-android/settings
+# FTR: Configuration on https://travis-ci.org/github/vector-im/element-android/settings
 #
 # - Build only if .travis.yml is present -> On
 # - Limit concurrent jobs                -> Off
@@ -8,53 +8,11 @@
 # - Auto cancel branch builds            -> On
 # - Auto cancel pull request builds      -> On
 
-language: android
-jdk: oraclejdk8
 sudo: false
 
 notifications:
   email: false
 
-android:
-  components:
-    # Uncomment the lines below if you want to
-    # use the latest revision of Android SDK Tools
-    - tools
-    - platform-tools
-
-    # The BuildTools version used by your project
-    - build-tools-29.0.3
-
-    # The SDK version used to compile your project
-    - android-29
-
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-
-cache:
-  directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-    - $HOME/.android/build-cache
-
-# Build with the development SDK
-before_script:
-  # Not necessary for the moment
-  # - /bin/sh ./set_debug_env.sh
-
-# Just build the project for now
+# Just run a simple script here
 script:
-  # Build app (assembleGplayRelease assembleFdroidRelease)
-  # Build Android test (assembleAndroidTest) (disabled for now)
-  # Code quality (lintGplayRelease lintFdroidRelease)
-  # Split into two steps because if a task contain Fdroid, PlayService will be disabled
-  # Done by Buildkite now: - ./gradlew clean assembleGplayRelease lintGplayRelease --stacktrace
-  # Done by Buildkite now: - ./gradlew clean assembleFdroidRelease lintFdroidRelease --stacktrace
-  # Run unitary test (Disable for now, see https://travis-ci.org/vector-im/riot-android/builds/502504370)
-  # - ./gradlew testGplayReleaseUnitTest --stacktrace
-  # Other code quality check
-  # Done by Buildkite now: - ./tools/check/check_code_quality.sh
   - ./tools/travis/check_pr.sh
-  # Check that indonesians file are identical. Due to Android issue, the resource folder must be value-in/, and Weblate export data into value-id/.
-  # Done by Buildkite now: - diff ./vector/src/main/res/values-id/strings.xml ./vector/src/main/res/values-in/strings.xml

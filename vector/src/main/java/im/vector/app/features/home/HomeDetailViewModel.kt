@@ -202,7 +202,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                             setState {
                                 copy(
                                         notificationCountCatchup = dmRooms.totalCount + otherRooms.totalCount + roomsInvite + dmInvites,
-                                        notificationHighlightCatchup = dmRooms.isHighlight || otherRooms.isHighlight,
+                                        notificationHighlightCatchup = dmRooms.isHighlight || otherRooms.isHighlight || (dmInvites + roomsInvite) > 0,
                                         notificationCountPeople = dmRooms.totalCount + dmInvites,
                                         notificationHighlightPeople = dmRooms.isHighlight || dmInvites > 0,
                                         notificationCountRooms = otherRooms.totalCount + roomsInvite,

@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/room_round_avatars" />
 
     <TextView
         android:id="@+id/itemPublicRoomName"
@@ -39,7 +39,7 @@
         app:layout_constraintStart_toEndOf="@id/itemPublicRoomAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="@sample/matrix.json/data/roomName" />
+        tools:text="@sample/rooms.json/data/name" />
 
     <TextView
         android:id="@+id/itemPublicRoomTopic"
@@ -57,7 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
         app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomName"
-        tools:text="@sample/matrix.json/data/roomTopic"
+        tools:text="@sample/rooms.json/data/topic"
         tools:visibility="visible" />
 
     <TextView
@@ -93,7 +93,7 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/itemPublicRoomMembersCount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/itemPublicRoomMembersCount"
-        tools:text="@sample/matrix.json/data/roomAlias" />
+        tools:text="@sample/rooms.json/data/alias" />
 
     <im.vector.app.core.platform.ButtonStateView
         android:id="@+id/itemPublicRoomButtonState"

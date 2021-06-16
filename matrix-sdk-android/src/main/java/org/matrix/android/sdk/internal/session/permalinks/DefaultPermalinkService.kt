@@ -33,8 +33,8 @@ internal class DefaultPermalinkService @Inject constructor(
         return permalinkFactory.createPermalink(id)
     }
 
-    override fun createRoomPermalink(roomId: String): String? {
-        return permalinkFactory.createRoomPermalink(roomId)
+    override fun createRoomPermalink(roomId: String, viaServers: List<String>?): String? {
+        return permalinkFactory.createRoomPermalink(roomId, viaServers)
     }
 
     override fun createPermalink(roomId: String, eventId: String): String {

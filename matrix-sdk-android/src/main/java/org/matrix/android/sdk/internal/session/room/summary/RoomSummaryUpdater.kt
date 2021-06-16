@@ -23,6 +23,7 @@ import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomAliasesContent
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
@@ -30,6 +31,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.RoomNameContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
 import org.matrix.android.sdk.api.session.room.model.RoomType
+import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
@@ -57,10 +59,10 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.session.room.RoomAvatarResolver
+import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.relationship.RoomChildRelationInfo
-import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncUnreadNotifications
 import timber.log.Timber
@@ -73,7 +75,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomAvatarResolver: RoomAvatarResolver,
         private val eventDecryptor: EventDecryptor,
         private val crossSigningService: DefaultCrossSigningService,
-        private val stateEventDataSource: StateEventDataSource) {
+        private val roomAccountDataDataSource: RoomAccountDataDataSource) {
 
     fun update(realm: Realm,
                roomId: String,
@@ -101,6 +103,10 @@ internal class RoomSummaryUpdater @Inject constructor(
         if (membership != null) {
             roomSummaryEntity.membership = membership
         }
+
+        // Hard to filter from the app now we use PagedList...
+        roomSummaryEntity.isHiddenFromUser = roomSummaryEntity.versioningState == VersioningState.UPGRADED_ROOM_JOINED
+                || roomAccountDataDataSource.getAccountDataEvent(roomId, RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM) != null
 
         val lastNameEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")?.root
         val lastTopicEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_TOPIC, stateKey = "")?.root
@@ -301,7 +307,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 //            Timber.v("## SPACES: lookup map ${lookupMap.map { it.key.name to it.value.map { it.name } }.toMap()}")
 
             lookupMap.entries
-                    .filter { it.key.roomType == RoomType.SPACE && it.key.membership == Membership.JOIN  }
+                    .filter { it.key.roomType == RoomType.SPACE && it.key.membership == Membership.JOIN }
                     .forEach { entry ->
                         val parent = RoomSummaryEntity.where(realm, entry.key.roomId).findFirst()
                         if (parent != null) {
@@ -348,10 +354,9 @@ internal class RoomSummaryUpdater @Inject constructor(
                                 if (it != null) addAll(it)
                             }
                         }.distinct()
-                        if (flattenRelated.isEmpty()) {
-                            dmRoom.flattenParentIds = null
-                        } else {
-                            dmRoom.flattenParentIds = "|${flattenRelated.joinToString("|")}|"
+                        if (flattenRelated.isNotEmpty()) {
+                            // we keep real m.child/m.parent relations and add the one for common memberships
+                            dmRoom.flattenParentIds += "|${flattenRelated.joinToString("|")}|"
                         }
 //                        Timber.v("## SPACES: flatten of ${dmRoom.otherMemberIds.joinToString(",")} is ${dmRoom.flattenParentIds}")
                     }
@@ -368,6 +373,8 @@ internal class RoomSummaryUpdater @Inject constructor(
                         realm.where(RoomSummaryEntity::class.java)
                                 .process(RoomSummaryEntityFields.MEMBERSHIP_STR, listOf(Membership.JOIN))
                                 .notEqualTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
+                                // also we do not count DM in here, because home space will already show them
+                                .equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                                 .contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, space.roomId)
                                 .findAll().forEach {
                                     highlightCount += it.highlightCount

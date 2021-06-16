@@ -24,18 +24,15 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
-import org.matrix.android.sdk.api.session.room.model.call.CallCapabilities
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
-import org.matrix.android.sdk.api.session.room.model.call.CallSignallingContent
-import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.session.room.model.call.CallSignalingContent
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
-import java.math.BigDecimal
 import javax.inject.Inject
 
 @SessionScope
@@ -192,6 +189,9 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
             // Ignore remote echo
             return
         }
+        if (event.roomId == null || event.senderId == null) {
+            return
+        }
         if (event.senderId == userId) {
             // discard current call, it's answered by another of my session
             activeCallHandler.removeCall(call.callId)
@@ -201,20 +201,16 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
                 Timber.v("Ignoring answer from party ID ${content.partyId} we already have an answer from ${call.opponentPartyId}")
                 return
             }
-            call.apply {
-                opponentPartyId = Optional.from(content.partyId)
-                opponentVersion = content.version?.let { BigDecimal(it).intValueExact() } ?: MxCall.VOIP_PROTO_VERSION
-                capabilities = content.capabilities ?: CallCapabilities()
-            }
+            mxCallFactory.updateOutgoingCallWithOpponentData(call, event.senderId, content, content.capabilities)
             callListenersDispatcher.onCallAnswerReceived(content)
         }
     }
 
-    private fun MxCall.partyIdsMatches(contentSignallingContent: CallSignallingContent): Boolean {
-        return opponentPartyId?.getOrNull() == contentSignallingContent.partyId
+    private fun MxCall.partyIdsMatches(contentSignalingContent: CallSignalingContent): Boolean {
+        return opponentPartyId?.getOrNull() == contentSignalingContent.partyId
     }
 
-    private fun CallSignallingContent.getCall(): MxCall? {
+    private fun CallSignalingContent.getCall(): MxCall? {
         val currentCall = callId?.let {
             activeCallHandler.getCallWithId(it)
         }

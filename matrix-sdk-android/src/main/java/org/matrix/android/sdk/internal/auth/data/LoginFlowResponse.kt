@@ -42,7 +42,7 @@ internal data class LoginFlow(
          * the client can show a button for each of the supported providers
          * See MSC #2858
          */
-        @Json(name = "org.matrix.msc2858.identity_providers")
+        @Json(name = "identity_providers")
         val ssoIdentityProvider: List<SsoIdentityProvider>? = null
 
 )

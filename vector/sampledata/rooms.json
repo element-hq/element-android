@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "name": "Matrix HQ",
+      "alias": "#matrix:matrix.org",
+      "topic": "Welcome to Matrix HQ! Here is the rest of the room topic, with a https://www.example.org url and a phone number: 0102030405 which should not be clickable."
+    },
+    {
+      "name": "Room name very loooooooong with some details",
+      "alias": "#matrix:matrix.org",
+      "topic": "Room topic very loooooooong with some details"
+    }
+  ]
+}

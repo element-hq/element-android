@@ -16,7 +16,6 @@
 
 package fr.gouv.tchap.features.home.room.list
 
-import android.view.View
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import fr.gouv.tchap.core.utils.RoomUtils
@@ -60,7 +59,7 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
 
     fun createSuggestion(spaceChildInfo: SpaceChildInfo,
                          suggestedRoomJoiningStates: Map<String, Async<Unit>>,
-                         onJoinClick: View.OnClickListener): VectorEpoxyModel<*> {
+                         listener: RoomListListener?): VectorEpoxyModel<*> {
         return SpaceChildInfoItem_()
                 .id("sug_${spaceChildInfo.childRoomId}")
                 .matrixItem(spaceChildInfo.toMatrixItem())
@@ -69,7 +68,8 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 .buttonLabel(stringProvider.getString(R.string.join))
                 .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
                 .memberCount(spaceChildInfo.activeMemberCount ?: 0)
-                .buttonClickListener(onJoinClick)
+                .buttonClickListener(DebouncedClickListener({ listener?.onJoinSuggestedRoom(spaceChildInfo) }))
+                .itemClickListener(DebouncedClickListener({ listener?.onSuggestedRoomClicked(spaceChildInfo) }))
     }
 
     private fun createInvitationItem(roomSummary: RoomSummary,

@@ -81,7 +81,6 @@ internal class DefaultSpaceService @Inject constructor(
             } else {
                 this.preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
                 visibility = RoomDirectoryVisibility.PRIVATE
-                enableEncryption()
             }
         })
     }
@@ -127,24 +126,34 @@ internal class DefaultSpaceService @Inject constructor(
                     ),
                     second = response.rooms
                             ?.filter { it.roomId != spaceId }
-                            ?.map { childSummary ->
-                                val childStateEv = response.events
-                                        ?.firstOrNull { it.stateKey == childSummary.roomId && it.type == EventType.STATE_SPACE_CHILD }
-                                val childStateEvContent = childStateEv?.content.toModel<SpaceChildContent>()
-                                SpaceChildInfo(
-                                        childRoomId = childSummary.roomId,
-                                        isKnown = true,
-                                        roomType = childSummary.roomType,
-                                        name = childSummary.name,
-                                        topic = childSummary.topic,
-                                        avatarUrl = childSummary.avatarUrl,
-                                        order = childStateEvContent?.order,
-                                        autoJoin = childStateEvContent?.autoJoin ?: false,
-                                        viaServers = childStateEvContent?.via ?: emptyList(),
-                                        activeMemberCount = childSummary.numJoinedMembers,
-                                        parentRoomId = childStateEv?.roomId
-                                )
-                            }.orEmpty()
+                            ?.flatMap { childSummary ->
+                                response.events
+                                        ?.filter { it.stateKey == childSummary.roomId && it.type == EventType.STATE_SPACE_CHILD }
+                                        ?.mapNotNull { childStateEv ->
+                                            // create a child entry for everytime this room is the child of a space
+                                            // beware that a room could appear then twice in this list
+                                            childStateEv.content.toModel<SpaceChildContent>()?.let { childStateEvContent ->
+                                                SpaceChildInfo(
+                                                        childRoomId = childSummary.roomId,
+                                                        isKnown = true,
+                                                        roomType = childSummary.roomType,
+                                                        name = childSummary.name,
+                                                        topic = childSummary.topic,
+                                                        avatarUrl = childSummary.avatarUrl,
+                                                        order = childStateEvContent.order,
+                                                        autoJoin = childStateEvContent.autoJoin ?: false,
+                                                        viaServers = childStateEvContent.via.orEmpty(),
+                                                        activeMemberCount = childSummary.numJoinedMembers,
+                                                        parentRoomId = childStateEv.roomId,
+                                                        suggested = childStateEvContent.suggested,
+                                                        canonicalAlias = childSummary.canonicalAlias,
+                                                        aliases = childSummary.aliases,
+                                                        worldReadable = childSummary.worldReadable
+                                                )
+                                            }
+                                        }.orEmpty()
+                            }
+                            .orEmpty()
             )
         }
     }

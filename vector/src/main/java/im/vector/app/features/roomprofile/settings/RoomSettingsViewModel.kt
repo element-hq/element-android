@@ -17,6 +17,7 @@
 package im.vector.app.features.roomprofile.settings
 
 import androidx.core.net.toFile
+import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -55,8 +56,11 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomSettingsViewState): RoomSettingsViewModel? {
-            val fragment: RoomSettingsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
+            val factory = when (viewModelContext) {
+                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
+                is ActivityViewModelContext -> viewModelContext.activity as? Factory
+            }
+            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 
@@ -123,7 +127,9 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canChangeJoinRule = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_ROOM_JOIN_RULES)
                                     && powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_GUEST_ACCESS)
+                                    EventType.STATE_ROOM_GUEST_ACCESS),
+                            canAddChildren = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
+                                    EventType.STATE_SPACE_CHILD)
                     )
                     setState { copy(actionPermissions = permissions) }
                 }

@@ -17,12 +17,12 @@
         android:layout_height="32dp"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/avatar"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <TextView
         android:id="@+id/readReceiptName"
         style="@style/BottomSheetItemTextMain"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/readReceiptDate"
