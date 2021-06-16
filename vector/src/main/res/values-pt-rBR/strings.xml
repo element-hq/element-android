@@ -362,11 +362,11 @@
     <string name="send_bug_report_description">Por favor descreva o bug. O que você fez\? O que você esperava que acontecese\? O que aconteceu na verdade\?</string>
     <string name="send_bug_report_placeholder">Descreva seu problema aqui</string>
     <string name="send_bug_report_logs_description">A fim de diagnosticar problemas, logs deste cliente serão enviados com este reporte de bug. Este reporte de bug, incluindo os logs e o screenshot, não será visível publicamente. Se você prefere somente enviar o texto acima, por favor desmarque:</string>
-    <string name="send_bug_report_alert_message">Você parece estar agitando o celular em frustração. Gostaria de abrir a tela de reporte de bug\?</string>
+    <string name="send_bug_report_alert_message">Você parece estar agitando o telefone em frustração. Você gostaria de abrir a tela de reporte de bug\?</string>
     <string name="send_bug_report_sent">O reporte de bug tem sido enviado com sucesso</string>
     <string name="send_bug_report_failed">O reporte de bug falhou para ser enviado (%s)</string>
     <string name="send_bug_report_progress">Progresso (%s%%)</string>
-    <string name="send_bug_report_app_crashed">O aplicativo crashou da última vez. Gostaria de abrir a tela de reporte de crash\?</string>
+    <string name="send_bug_report_app_crashed">O aplicativo tem crashado da última vez. Você gostaria de abrir a tela de reporte de crash\?</string>
     <string name="send_files_in">Enviar para</string>
     <string name="read_receipt">Lida</string>
     <string name="join_room">Juntar-se a Sala</string>
@@ -520,7 +520,7 @@
     <string name="room_preview_invitation_format">Você tem sido convidada(o) a juntar-se a esta sala por %s</string>
     <string name="room_preview_unlinked_email_warning">Este convite foi enviado para %s, que não está associada(o) a esta conta.
 \nVocê pode desejar fazer login com uma conta diferente, ou adicionar este email a sua conta.</string>
-    <string name="room_preview_try_join_an_unknown_room">Você está tentando acessar %s. Gostaria de se juntar a fim de participar na discussão\?</string>
+    <string name="room_preview_try_join_an_unknown_room">Você está tentando acessar %s. Você gostaria de se juntar a fim de participar na discussão\?</string>
     <string name="room_preview_try_join_an_unknown_room_default">uma sala</string>
     <string name="room_preview_room_interactions_disabled">Esta é uma previsualização desta sala. Interações de sala têm sido desativadas.</string>
     <!-- Chat creation -->
