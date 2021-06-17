@@ -49,6 +49,7 @@ import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -86,7 +87,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
-import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
+import org.matrix.android.sdk.internal.crypto.verification.RustVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
@@ -131,9 +132,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val mxCryptoConfig: MXCryptoConfig,
         // The key backup service.
         private val keysBackupService: DefaultKeysBackupService,
-        // The verification service.
-        private val verificationService: DefaultVerificationService,
-
         private val crossSigningService: DefaultCrossSigningService,
         // Actions
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
@@ -156,6 +154,9 @@ internal class DefaultCryptoService @Inject constructor(
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
     private var olmMachine: OlmMachine? = null
+    // The verification service.
+    private var verificationService: RustVerificationService? = null
+
     private val deviceObserver: DeviceUpdateObserver = DeviceUpdateObserver()
 
     // Locks for some of our operations
@@ -179,6 +180,7 @@ internal class DefaultCryptoService @Inject constructor(
             EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+            else -> this.verificationService?.onEvent(event)
         }
     }
 
@@ -315,7 +317,10 @@ internal class DefaultCryptoService @Inject constructor(
 
         try {
             setRustLogger()
-            this.olmMachine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver)
+            val machine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver)
+            this.olmMachine = machine
+            this.verificationService =
+            RustVerificationService(this.taskExecutor, machine, this.sendToDeviceTask)
             Timber.v(
                 "## CRYPTO | Successfully started up an Olm machine for " +
                 "${userId}, ${deviceId}, identity keys: ${this.olmMachine?.identityKeys()}")
@@ -359,7 +364,32 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * @return the VerificationService
      */
-    override fun verificationService() = verificationService
+    override fun verificationService(): VerificationService {
+        // TODO yet another problem because the CryptoService is started in the
+        // sync loop
+        //
+        // The `KeyRequestHandler` and `IncomingVerificationHandler` want to add
+        // listeners to the verification service, they are initialized in the
+        // `ActiveSessionHolder` class in the `setActiveSession()` method. In
+        // the `setActiveSession()` method we call the `start()` method of the
+        // handlers without first calling the `start()` method of the
+        // `DefaultCrytpoService`.
+        //
+        // The start method of the crypto service isn't part of the
+        // `CryptoService` interface so it currently can't be called there. I'm
+        // inclined to believe that it should be, and that it should be
+        // initialized before anything else tries to do something with it.
+        //
+        // Let's initialize here as a workaround until we figure out if the
+        // above conclusion is correct.
+        if (verificationService == null) {
+            runBlocking {
+                internalStart()
+            }
+        }
+
+        return verificationService!!
+    }
 
     override fun crossSigningService() = crossSigningService
 
@@ -677,6 +707,8 @@ internal class DefaultCryptoService @Inject constructor(
                         val sessionId = content.sessionId
 
                         notifyRoomKeyReceival(roomId, sessionId)
+                    } else {
+                        this.verificationService?.onEvent(event)
                     }
                 }
             }

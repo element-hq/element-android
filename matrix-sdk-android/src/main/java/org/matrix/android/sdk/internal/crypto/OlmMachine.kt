@@ -26,33 +26,44 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
+import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
+import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
+import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
+import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
+import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
+import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import org.matrix.android.sdk.internal.crypto.verification.getEmojiForCode
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
+import uniffi.olm.CancelCode as RustCancelCode
 import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.DecryptionErrorException
-import uniffi.olm.Sas as InnerSas
-import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Device
 import uniffi.olm.DeviceLists
 import uniffi.olm.KeyRequestPair
 import uniffi.olm.Logger
 import uniffi.olm.OlmMachine as InnerMachine
+import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
+import uniffi.olm.Sas as InnerSas
+import uniffi.olm.VerificationRequest as InnerRequest
 import uniffi.olm.setLogger
 
 class CryptoLogger : Logger {
@@ -89,13 +100,9 @@ fun setRustLogger() {
     setLogger(CryptoLogger() as Logger)
 }
 
-/**
- * Convert a Rust Device into a Kotlin CryptoDeviceInfo
- */
+/** Convert a Rust Device into a Kotlin CryptoDeviceInfo */
 private fun toCryptoDeviceInfo(device: Device): CryptoDeviceInfo {
-    val keys = device.keys.map { (keyId, key) ->
-        "$keyId:$device.deviceId" to key
-    }.toMap()
+    val keys = device.keys.map { (keyId, key) -> "$keyId:$device.deviceId" to key }.toMap()
 
     return CryptoDeviceInfo(
             device.deviceId,
@@ -110,8 +117,7 @@ private fun toCryptoDeviceInfo(device: Device): CryptoDeviceInfo {
             DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false),
             device.isBlocked,
             // TODO
-            null
-        )
+            null)
 }
 
 internal class DeviceUpdateObserver {
@@ -126,27 +132,171 @@ internal class DeviceUpdateObserver {
     }
 }
 
-internal class Sas(private val machine: InnerMachine, private var inner: InnerSas) {
+internal class VerificationRequest(
+        private val machine: InnerMachine,
+        private var inner: InnerRequest
+) {
     private fun refreshData() {
-        val sas = this.machine.getVerification(this.inner.flowId)
+        val request = this.machine.getVerificationRequest(this.inner.otherUserId, this.inner.flowId)
 
-         if (sas != null) {
-             this.inner = sas
-         }
+        if (request != null) {
+            this.inner = request
+        }
 
-         return
+        return
+    }
+
+    fun accept_with_methods(methods: List<VerificationMethod>): OutgoingVerificationRequest? {
+        val stringMethods: MutableList<String> =
+                methods.map {
+                    when (it) {
+                        VerificationMethod.QR_CODE_SCAN -> VERIFICATION_METHOD_QR_CODE_SCAN
+                        VerificationMethod.QR_CODE_SHOW -> VERIFICATION_METHOD_QR_CODE_SHOW
+                        VerificationMethod.SAS -> VERIFICATION_METHOD_SAS
+                    }
+                }.toMutableList()
+
+        if (stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SHOW) ||
+                stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SCAN)) {
+            stringMethods.add(VERIFICATION_METHOD_RECIPROCATE)
+        }
+
+        return this.machine.acceptVerificationRequest(
+                this.inner.otherUserId, this.inner.flowId, stringMethods)
     }
 
     fun isCanceled(): Boolean {
         refreshData()
-        return this.inner.isCanceled
+        return this.inner.isCancelled
     }
 
     fun isDone(): Boolean {
         refreshData()
         return this.inner.isDone
     }
-    
+
+    fun isReady(): Boolean {
+        refreshData()
+        return this.inner.isReady
+    }
+
+    fun toPendingVerificationRequest(): PendingVerificationRequest {
+        refreshData()
+        val code = this.inner.cancelCode
+
+        val cancelCode =
+                if (code != null) {
+                    toCancelCode(code)
+                } else {
+                    null
+                }
+
+        val ourMethods = this.inner.ourMethods
+        val theirMethods = this.inner.theirMethods
+        val otherDeviceId = this.inner.otherDeviceId
+
+        var requestInfo: ValidVerificationInfoRequest? = null
+        var readyInfo: ValidVerificationInfoReady? = null
+
+        if (this.inner.weStarted && ourMethods != null) {
+            requestInfo =
+                    ValidVerificationInfoRequest(
+                            this.inner.flowId,
+                            this.machine.deviceId(),
+                            ourMethods,
+                            null,
+                    )
+        } else if (!this.inner.weStarted && ourMethods != null) {
+            readyInfo =
+                    ValidVerificationInfoReady(
+                            this.inner.flowId,
+                            this.machine.deviceId(),
+                            ourMethods,
+                    )
+        }
+
+        if (this.inner.weStarted && theirMethods != null && otherDeviceId != null) {
+            readyInfo =
+                    ValidVerificationInfoReady(
+                            this.inner.flowId,
+                            otherDeviceId,
+                            theirMethods,
+                    )
+        } else if (!this.inner.weStarted && theirMethods != null && otherDeviceId != null) {
+            requestInfo =
+                    ValidVerificationInfoRequest(
+                            this.inner.flowId,
+                            otherDeviceId,
+                            theirMethods,
+                            System.currentTimeMillis(),
+                    )
+        }
+
+        return PendingVerificationRequest(
+                // Creation time
+                System.currentTimeMillis(),
+                // Who initiated the request
+                !this.inner.weStarted,
+                // Local echo id, what to do here?
+                this.inner.flowId,
+                // other user
+                this.inner.otherUserId,
+                // room id
+                this.inner.roomId,
+                // transaction id
+                this.inner.flowId,
+                // val requestInfo: ValidVerificationInfoRequest? = null,
+                requestInfo,
+                // val readyInfo: ValidVerificationInfoReady? = null,
+                readyInfo,
+                // cancel code if there is one
+                cancelCode,
+                // are we done/successful
+                this.inner.isDone,
+                // did another device answer the request
+                this.inner.isPassive,
+                // devices that should receive the events we send out
+                null,
+        )
+    }
+}
+
+private fun toCancelCode(cancelCode: RustCancelCode): CancelCode {
+    return when (cancelCode) {
+        RustCancelCode.USER -> CancelCode.User
+        RustCancelCode.TIMEOUT -> CancelCode.Timeout
+        RustCancelCode.UNKNOWN_TRANSACTION -> CancelCode.UnknownTransaction
+        RustCancelCode.UNKNOWN_METHOD -> CancelCode.UnknownMethod
+        RustCancelCode.UNEXPECTED_MESSAGE -> CancelCode.UnexpectedMessage
+        RustCancelCode.KEY_MISMATCH -> CancelCode.MismatchedKeys
+        RustCancelCode.USER_MISMATCH -> CancelCode.MismatchedKeys
+        RustCancelCode.INVALID_MESSAGE -> CancelCode.InvalidMessage
+        // TODO why don't the ruma codes match what's in EA?
+        RustCancelCode.ACCEPTED -> CancelCode.User
+    }
+}
+
+internal class Sas(private val machine: InnerMachine, private var inner: InnerSas) {
+    private fun refreshData() {
+        val sas = this.machine.getVerification(this.inner.flowId)
+
+        if (sas != null) {
+            this.inner = sas
+        }
+
+        return
+    }
+
+    fun isCanceled(): Boolean {
+        refreshData()
+        return this.inner.isCancelled
+    }
+
+    fun isDone(): Boolean {
+        refreshData()
+        return this.inner.isDone
+    }
+
     fun timedOut(): Boolean {
         refreshData()
         return this.inner.timedOut
@@ -162,9 +312,8 @@ internal class Sas(private val machine: InnerMachine, private var inner: InnerSa
     }
 
     @Throws(CryptoStoreErrorException::class)
-    suspend fun confirm(): OutgoingVerificationRequest? = withContext(Dispatchers.IO) {
-        machine.confirmVerification(inner.flowId)
-    }
+    suspend fun confirm(): OutgoingVerificationRequest? =
+            withContext(Dispatchers.IO) { machine.confirmVerification(inner.flowId) }
 
     fun cancel(): OutgoingVerificationRequest? {
         return this.machine.cancelVerification(inner.flowId)
@@ -185,27 +334,26 @@ internal class Sas(private val machine: InnerMachine, private var inner: InnerSa
     }
 }
 
-internal class OlmMachine(user_id: String, device_id: String, path: File, deviceObserver: DeviceUpdateObserver) {
+internal class OlmMachine(
+        user_id: String,
+        device_id: String,
+        path: File,
+        deviceObserver: DeviceUpdateObserver
+) {
     private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
     private val deviceUpdateObserver = deviceObserver
 
-    /**
-     * Get our own user ID.
-     */
+    /** Get our own user ID. */
     fun userId(): String {
         return this.inner.userId()
     }
 
-    /**
-     * Get our own device ID.
-     */
+    /** Get our own device ID. */
     fun deviceId(): String {
         return this.inner.deviceId()
     }
 
-    /**
-     * Get our own public identity keys ID.
-     */
+    /** Get our own public identity keys ID. */
     fun identityKeys(): Map<String, String> {
         return this.inner.identityKeys()
     }
@@ -213,36 +361,31 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
     fun ownDevice(): CryptoDeviceInfo {
         val deviceId = this.deviceId()
 
-        val keys = this.identityKeys().map { (keyId, key) ->
-            "$keyId:$deviceId" to key
-        }.toMap()
+        val keys = this.identityKeys().map { (keyId, key) -> "$keyId:$deviceId" to key }.toMap()
 
         return CryptoDeviceInfo(
-            this.deviceId(),
-            this.userId(),
-            // TODO pass the algorithms here.
-            listOf(),
-            keys,
-            mapOf(),
-            UnsignedDeviceInfo(),
-            DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
-            false,
-            null
-        )
+                this.deviceId(),
+                this.userId(),
+                // TODO pass the algorithms here.
+                listOf(),
+                keys,
+                mapOf(),
+                UnsignedDeviceInfo(),
+                DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
+                false,
+                null)
     }
 
     /**
      * Get the list of outgoing requests that need to be sent to the homeserver.
      *
-     * After the request was sent out and a successful response was received
-     * the response body should be passed back to the state machine using the
-     * markRequestAsSent() method.
+     * After the request was sent out and a successful response was received the response body
+     * should be passed back to the state machine using the markRequestAsSent() method.
      *
      * @return the list of requests that needs to be sent to the homeserver
      */
-    suspend fun outgoingRequests(): List<Request> = withContext(Dispatchers.IO) {
-        inner.outgoingRequests()
-    }
+    suspend fun outgoingRequests(): List<Request> =
+            withContext(Dispatchers.IO) { inner.outgoingRequests() }
 
     /**
      * Mark a request that was sent to the server as sent.
@@ -255,135 +398,127 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      */
     @Throws(CryptoStoreErrorException::class)
     suspend fun markRequestAsSent(
-        requestId: String,
-        requestType: RequestType,
-        responseBody: String
-    ) = withContext(Dispatchers.IO) {
-        inner.markRequestAsSent(requestId, requestType, responseBody)
+            requestId: String,
+            requestType: RequestType,
+            responseBody: String
+    ) =
+            withContext(Dispatchers.IO) {
+                inner.markRequestAsSent(requestId, requestType, responseBody)
 
-        if (requestType == RequestType.KEYS_QUERY) {
-            updateLiveDevices()
-        }
-    }
+                if (requestType == RequestType.KEYS_QUERY) {
+                    updateLiveDevices()
+                }
+            }
 
     /**
-     * Let the state machine know about E2EE related sync changes that we
-     * received from the server.
+     * Let the state machine know about E2EE related sync changes that we received from the server.
      *
-     * This needs to be called after every sync, ideally before processing
-     * any other sync changes.
+     * This needs to be called after every sync, ideally before processing any other sync changes.
      *
-     * @param toDevice A serialized array of to-device events we received in the
-     * current sync resposne.
+     * @param toDevice A serialized array of to-device events we received in the current sync
+     * resposne.
      *
-     * @param deviceChanges The list of devices that have changed in some way
-     * since the previous sync.
+     * @param deviceChanges The list of devices that have changed in some way since the previous
+     * sync.
      *
      * @param keyCounts The map of uploaded one-time key types and counts.
      */
     @Throws(CryptoStoreErrorException::class)
     suspend fun receiveSyncChanges(
-        toDevice: ToDeviceSyncResponse?,
-        deviceChanges: DeviceListResponse?,
-        keyCounts: DeviceOneTimeKeysCountSyncResponse?
-    ): ToDeviceSyncResponse = withContext(Dispatchers.IO) {
-            val counts: MutableMap<String, Int> = mutableMapOf()
+            toDevice: ToDeviceSyncResponse?,
+            deviceChanges: DeviceListResponse?,
+            keyCounts: DeviceOneTimeKeysCountSyncResponse?
+    ): ToDeviceSyncResponse =
+            withContext(Dispatchers.IO) {
+                val counts: MutableMap<String, Int> = mutableMapOf()
 
-            if (keyCounts?.signedCurve25519 != null) {
-                counts["signed_curve25519"] = keyCounts.signedCurve25519
+                if (keyCounts?.signedCurve25519 != null) {
+                    counts["signed_curve25519"] = keyCounts.signedCurve25519
+                }
+
+                val devices =
+                        DeviceLists(
+                                deviceChanges?.changed ?: listOf(), deviceChanges?.left ?: listOf())
+                val adapter =
+                        MoshiProvider.providesMoshi().adapter(ToDeviceSyncResponse::class.java)
+                val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
+
+                adapter.fromJson(inner.receiveSyncChanges(events, devices, counts))!!
             }
 
-            val devices = DeviceLists(deviceChanges?.changed ?: listOf(), deviceChanges?.left ?: listOf())
-            val adapter = MoshiProvider.providesMoshi().adapter(ToDeviceSyncResponse::class.java)
-            val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
-
-            adapter.fromJson(inner.receiveSyncChanges(events, devices, counts))!!
-    }
-
     /**
-     * Mark the given list of users to be tracked, triggering a key query request
-     * for them.
+     * Mark the given list of users to be tracked, triggering a key query request for them.
      *
-     * *Note*: Only users that aren't already tracked will be considered for an
-     * update. It's safe to call this with already tracked users, it won't
-     * result in excessive keys query requests.
+     * *Note*: Only users that aren't already tracked will be considered for an update. It's safe to
+     * call this with already tracked users, it won't result in excessive keys query requests.
      *
      * @param users The users that should be queued up for a key query.
      */
-    suspend fun updateTrackedUsers(users: List<String>) = withContext(Dispatchers.IO) {
-        inner.updateTrackedUsers(users)
-    }
+    suspend fun updateTrackedUsers(users: List<String>) =
+            withContext(Dispatchers.IO) { inner.updateTrackedUsers(users) }
 
     /**
-     * Generate one-time key claiming requests for all the users we are missing
-     * sessions for.
+     * Generate one-time key claiming requests for all the users we are missing sessions for.
      *
-     * After the request was sent out and a successful response was received
-     * the response body should be passed back to the state machine using the
-     * markRequestAsSent() method.
+     * After the request was sent out and a successful response was received the response body
+     * should be passed back to the state machine using the markRequestAsSent() method.
      *
-     * This method should be called every time before a call to
-     * shareRoomKey() is made.
+     * This method should be called every time before a call to shareRoomKey() is made.
      *
-     * @param users The list of users for which we would like to establish 1:1
-     * Olm sessions for.
+     * @param users The list of users for which we would like to establish 1:1 Olm sessions for.
      *
      * @return A keys claim request that needs to be sent out to the server.
      */
     @Throws(CryptoStoreErrorException::class)
-    suspend fun getMissingSessions(users: List<String>): Request? = withContext(Dispatchers.IO) {
-        inner.getMissingSessions(users)
-    }
+    suspend fun getMissingSessions(users: List<String>): Request? =
+            withContext(Dispatchers.IO) { inner.getMissingSessions(users) }
 
     /**
      * Share a room key with the given list of users for the given room.
      *
-     * After the request was sent out and a successful response was received
-     * the response body should be passed back to the state machine using the
-     * markRequestAsSent() method.
+     * After the request was sent out and a successful response was received the response body
+     * should be passed back to the state machine using the markRequestAsSent() method.
      *
-     * This method should be called every time before a call to
-     * `encrypt()` with the given `room_id` is made.
+     * This method should be called every time before a call to `encrypt()` with the given `room_id`
+     * is made.
      *
-     * @param roomId The unique id of the room, note that this doesn't strictly
-     * need to be a Matrix room, it just needs to be an unique identifier for
-     * the group that will participate in the conversation.
+     * @param roomId The unique id of the room, note that this doesn't strictly need to be a Matrix
+     * room, it just needs to be an unique identifier for the group that will participate in the
+     * conversation.
      *
-     * @param users The list of users which are considered to be members of the
-     * room and should receive the room key.
+     * @param users The list of users which are considered to be members of the room and should
+     * receive the room key.
      *
      * @return The list of requests that need to be sent out.
      */
     @Throws(CryptoStoreErrorException::class)
-    suspend fun shareRoomKey(roomId: String, users: List<String>): List<Request> = withContext(Dispatchers.IO) {
-        inner.shareRoomKey(roomId, users)
-    }
+    suspend fun shareRoomKey(roomId: String, users: List<String>): List<Request> =
+            withContext(Dispatchers.IO) { inner.shareRoomKey(roomId, users) }
 
     /**
-     * Encrypt the given event with the given type and content for the given
-     * room.
+     * Encrypt the given event with the given type and content for the given room.
      *
-     * **Note**: A room key needs to be shared with the group of users that are
-     * members in the given room. If this is not done this method will panic.
+     * **Note**: A room key needs to be shared with the group of users that are members in the given
+     * room. If this is not done this method will panic.
      *
-     * The usual flow to encrypt an evnet using this state machine is as
-     * follows:
+     * The usual flow to encrypt an evnet using this state machine is as follows:
      *
      * 1. Get the one-time key claim request to establish 1:1 Olm sessions for
+     * ```
      *    the room members of the room we wish to participate in. This is done
      *    using the [`get_missing_sessions()`](#method.get_missing_sessions)
      *    method. This method call should be locked per call.
-     *
+     * ```
      * 2. Share a room key with all the room members using the shareRoomKey().
+     * ```
      *    This method call should be locked per room.
-     *
+     * ```
      * 3. Encrypt the event using this method.
      *
      * 4. Send the encrypted event to the server.
      *
-     * After the room key is shared steps 1 and 2 will become noops, unless
-     * there's some changes in the room membership or in the list of devices a
-     * member has.
+     * After the room key is shared steps 1 and 2 will become noops, unless there's some changes in
+     * the room membership or in the list of devices a member has.
      *
      * @param roomId the ID of the room where the encrypted event will be sent to
      *
@@ -394,12 +529,13 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      * @return The encrypted version of the content
      */
     @Throws(CryptoStoreErrorException::class)
-    suspend fun encrypt(roomId: String, eventType: String, content: Content): Content = withContext(Dispatchers.IO) {
-        val adapter = MoshiProvider.providesMoshi().adapter<Content>(Map::class.java)
-        val contentString = adapter.toJson(content)
-        val encrypted = inner.encrypt(roomId, eventType, contentString)
-        adapter.fromJson(encrypted)!!
-    }
+    suspend fun encrypt(roomId: String, eventType: String, content: Content): Content =
+            withContext(Dispatchers.IO) {
+                val adapter = MoshiProvider.providesMoshi().adapter<Content>(Map::class.java)
+                val contentString = adapter.toJson(content)
+                val encrypted = inner.encrypt(roomId, eventType, contentString)
+                adapter.fromJson(encrypted)!!
+            }
 
     /**
      * Decrypt the given event that was sent in the given room.
@@ -411,62 +547,64 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      * @return the decrypted version of the event.
      */
     @Throws(MXCryptoError::class)
-    suspend fun decryptRoomEvent(event: Event): MXEventDecryptionResult = withContext(Dispatchers.IO) {
-        val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
-        val serializedEvent = adapter.toJson(event)
+    suspend fun decryptRoomEvent(event: Event): MXEventDecryptionResult =
+            withContext(Dispatchers.IO) {
+                val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
+                val serializedEvent = adapter.toJson(event)
 
-        try {
-            val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId!!)
+                try {
+                    val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId!!)
 
-            val deserializationAdapter = MoshiProvider.providesMoshi().adapter<JsonDict>(Map::class.java)
-            val clearEvent = deserializationAdapter.fromJson(decrypted.clearEvent)!!
+                    val deserializationAdapter =
+                            MoshiProvider.providesMoshi().adapter<JsonDict>(Map::class.java)
+                    val clearEvent = deserializationAdapter.fromJson(decrypted.clearEvent)!!
 
-            MXEventDecryptionResult(
-                clearEvent,
-                decrypted.senderCurve25519Key,
-                decrypted.claimedEd25519Key,
-                decrypted.forwardingCurve25519Chain
-            )
-        } catch (throwable: Throwable) {
-            val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, throwable.message, "m.megolm.v1.aes-sha2")
-            throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
-        }
-    }
+                    MXEventDecryptionResult(
+                            clearEvent,
+                            decrypted.senderCurve25519Key,
+                            decrypted.claimedEd25519Key,
+                            decrypted.forwardingCurve25519Chain)
+                } catch (throwable: Throwable) {
+                    val reason =
+                            String.format(
+                                    MXCryptoError.UNABLE_TO_DECRYPT_REASON,
+                                    throwable.message,
+                                    "m.megolm.v1.aes-sha2")
+                    throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
+                }
+            }
 
     /**
-     * Request the room key that was used to encrypt the given undecrypted
-     * event.
+     * Request the room key that was used to encrypt the given undecrypted event.
      *
-     * @param event The that we're not able to decrypt and want to request a
-     * room key for.
+     * @param event The that we're not able to decrypt and want to request a room key for.
      *
-     * @return a key request pair, consisting of an optional key request
-     * cancellation and the key request itself. The cancellation *must* be sent
-     * out before the request, otherwise devices will ignore the key request.
+     * @return a key request pair, consisting of an optional key request cancellation and the key
+     * request itself. The cancellation *must* be sent out before the request, otherwise devices
+     * will ignore the key request.
      */
     @Throws(DecryptionErrorException::class)
-    suspend fun requestRoomKey(event: Event): KeyRequestPair = withContext(Dispatchers.IO) {
-        val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
-        val serializedEvent = adapter.toJson(event)
+    suspend fun requestRoomKey(event: Event): KeyRequestPair =
+            withContext(Dispatchers.IO) {
+                val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
+                val serializedEvent = adapter.toJson(event)
 
-        inner.requestRoomKey(serializedEvent, event.roomId!!)
-    }
+                inner.requestRoomKey(serializedEvent, event.roomId!!)
+            }
 
     /**
      * Export all of our room keys.
      *
-     * @param passphrase The passphrase that should be used to encrypt the key
-     * export.
+     * @param passphrase The passphrase that should be used to encrypt the key export.
      *
-     * @param rounds The number of rounds that should be used when expanding the
-     * passphrase into an key.
+     * @param rounds The number of rounds that should be used when expanding the passphrase into an
+     * key.
      *
      * @return the encrypted key export as a bytearray.
      */
     @Throws(CryptoStoreErrorException::class)
-    suspend fun exportKeys(passphrase: String, rounds: Int): ByteArray = withContext(Dispatchers.IO) {
-        inner.exportKeys(passphrase, rounds).toByteArray()
-    }
+    suspend fun exportKeys(passphrase: String, rounds: Int): ByteArray =
+            withContext(Dispatchers.IO) { inner.exportKeys(passphrase, rounds).toByteArray() }
 
     /**
      * Import room keys from the given serialized key export.
@@ -475,19 +613,23 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      *
      * @param passphrase The passphrase that was used to encrypt the key export.
      *
-     * @param listener A callback that can be used to introspect the
-     * progress of the key import.
+     * @param listener A callback that can be used to introspect the progress of the key import.
      */
     @Throws(CryptoStoreErrorException::class)
-    suspend fun importKeys(keys: ByteArray, passphrase: String, listener: ProgressListener?): ImportRoomKeysResult = withContext(Dispatchers.IO) {
-        val decodedKeys = String(keys, Charset.defaultCharset())
+    suspend fun importKeys(
+            keys: ByteArray,
+            passphrase: String,
+            listener: ProgressListener?
+    ): ImportRoomKeysResult =
+            withContext(Dispatchers.IO) {
+                val decodedKeys = String(keys, Charset.defaultCharset())
 
-        val rustListener = CryptoProgressListener(listener)
+                val rustListener = CryptoProgressListener(listener)
 
-        val result = inner.importKeys(decodedKeys, passphrase, rustListener)
+                val result = inner.importKeys(decodedKeys, passphrase, rustListener)
 
-        ImportRoomKeysResult(result.total, result.imported)
-    }
+                ImportRoomKeysResult(result.total, result.imported)
+            }
 
     /**
      * Get a `Device` from the store.
@@ -499,16 +641,17 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
      * @return The Device if it found one.
      */
     @Throws(CryptoStoreErrorException::class)
-    suspend fun getDevice(userId: String, deviceId: String): CryptoDeviceInfo? = withContext(Dispatchers.IO) {
-        // Our own device isn't part of our store on the rust side, return it
-        // using our ownDevice method
-        if (userId == userId() && deviceId == deviceId()) {
-            ownDevice()
-        } else {
-            val device = inner.getDevice(userId, deviceId)
-            if (device != null) toCryptoDeviceInfo(device) else null
-        }
-    }
+    suspend fun getDevice(userId: String, deviceId: String): CryptoDeviceInfo? =
+            withContext(Dispatchers.IO) {
+                // Our own device isn't part of our store on the rust side, return it
+                // using our ownDevice method
+                if (userId == userId() && deviceId == deviceId()) {
+                    ownDevice()
+                } else {
+                    val device = inner.getDevice(userId, deviceId)
+                    if (device != null) toCryptoDeviceInfo(device) else null
+                }
+            }
 
     /**
      * Get all devices of an user.
@@ -561,9 +704,7 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
         return plainDevices
     }
 
-    /**
-     * Update all of our live device listeners.
-     */
+    /** Update all of our live device listeners. */
     private suspend fun updateLiveDevices() {
         for ((liveDevice, users) in deviceUpdateObserver.listeners) {
             val devices = getUserDevices(users)
@@ -574,8 +715,8 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
     /**
      * Get all the devices of multiple users as a live version.
      *
-     * The live version will update the list of devices if some of the data
-     * changes, or if new devices arrive for a certain user.
+     * The live version will update the list of devices if some of the data changes, or if new
+     * devices arrive for a certain user.
      *
      * @param userIds The ids of the device owners.
      *
@@ -589,24 +730,36 @@ internal class OlmMachine(user_id: String, device_id: String, path: File, device
         return devices
     }
 
-    /**
-     * Discard the currently active room key for the given room if there is one.
-     */
+    /** Discard the currently active room key for the given room if there is one. */
     @Throws(CryptoStoreErrorException::class)
     fun discardRoomKey(roomId: String) {
         runBlocking { inner.discardRoomKey(roomId) }
     }
 
-    /**
-     * Get an active verification
-     */
-     fun getVerification(flowId: String): Sas? {
-         val sas = this.inner.getVerification(flowId)
+    fun getVerificationRequests(userId: String): List<VerificationRequest> {
+        return this.inner.getVerificationRequests(userId).map {
+            VerificationRequest(this.inner, it)
+        }
+    }
 
-         return if (sas == null) {
-             null
-         } else {
-             Sas(this.inner, sas)
-         }
-     }
+    fun getVerificationRequest(userId: String, flowId: String): VerificationRequest? {
+        val request = this.inner.getVerificationRequest(userId, flowId)
+
+        return if (request == null) {
+            null
+        } else {
+            VerificationRequest(this.inner, request)
+        }
+    }
+
+    /** Get an active verification */
+    fun getVerification(flowId: String): Sas? {
+        val sas = this.inner.getVerification(flowId)
+
+        return if (sas == null) {
+            null
+        } else {
+            Sas(this.inner, sas)
+        }
+    }
 }
