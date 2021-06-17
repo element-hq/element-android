@@ -115,16 +115,6 @@ class GroupRoomListSectionBuilder(
     private fun buildRoomsSections(sections: MutableList<RoomsSection>,
                                    activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
                                    actualGroupId: String?) {
-        addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.invitations_header,
-                true
-        ) {
-            it.memberships = listOf(Membership.INVITE)
-            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            it.activeGroupId = actualGroupId
-        }
 
         addSection(
                 sections,
@@ -180,15 +170,6 @@ class GroupRoomListSectionBuilder(
             activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
             actualGroupId: String?
     ) {
-        addSection(sections,
-                activeSpaceAwareQueries,
-                R.string.invitations_header,
-                true
-        ) {
-            it.memberships = listOf(Membership.INVITE)
-            it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-            it.activeGroupId = actualGroupId
-        }
 
         addSection(
                 sections,

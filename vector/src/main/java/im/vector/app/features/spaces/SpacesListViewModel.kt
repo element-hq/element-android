@@ -119,10 +119,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.computation())
                 .subscribe {
-                    val inviteCount = session.getRoomSummaries(
-                            roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
-                    ).size
-
+                    val inviteCount = 0
                     val totalCount = session.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)

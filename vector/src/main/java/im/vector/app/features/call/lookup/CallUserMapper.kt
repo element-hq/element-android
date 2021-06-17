@@ -57,10 +57,6 @@ class CallUserMapper(private val session: Session, private val protocolsChecker:
                 // will make sure we know where how to map calls and also allow us know not to display
                 // it in the future.
                 invitedRoom.markVirtual(nativeRoomId)
-                // also auto-join the virtual room if we have a matching native room
-                // (possibly we should only join if we've also joined the native room, then we'd also have
-                // to make sure we joined virtual rooms on joining a native one)
-                session.joinRoom(invitedRoomId)
             }
         }
     }

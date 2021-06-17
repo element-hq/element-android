@@ -204,21 +204,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                         }
                         is RoomGroupingMethod.BySpace       -> {
                             val activeSpaceRoomId = groupingMethod.spaceSummary?.roomId
-                            val dmInvites = session.getRoomSummaries(
-                                    roomSummaryQueryParams {
-                                        memberships = listOf(Membership.INVITE)
-                                        roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                        activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
-                                    }
-                            ).size
-
-                            val roomsInvite = session.getRoomSummaries(
-                                    roomSummaryQueryParams {
-                                        memberships = listOf(Membership.INVITE)
-                                        roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
-                                    }
-                            ).size
+                            val dmInvites = 0
+                            val roomsInvite = 0
 
                             val dmRooms = session.getNotificationCountForRooms(
                                     roomSummaryQueryParams {

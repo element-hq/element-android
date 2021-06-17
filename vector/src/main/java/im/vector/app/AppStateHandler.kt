@@ -24,13 +24,20 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.BehaviorDataSource
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.ui.UiStateRepository
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.rx.rx
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -49,18 +56,21 @@ fun RoomGroupingMethod.group() = (this as? RoomGroupingMethod.ByLegacyGroup)?.gr
 // TODO Keep this class for now, will maybe be used fro Space
 @Singleton
 class AppStateHandler @Inject constructor(
-        sessionDataSource: ActiveSessionDataSource,
+        private val sessionDataSource: ActiveSessionDataSource,
         private val uiStateRepository: UiStateRepository,
         private val activeSessionHolder: ActiveSessionHolder
 ) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
-
     private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
 
     val selectedRoomGroupingObservable = selectedSpaceDataSource.observe()
 
     fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? = selectedSpaceDataSource.currentValue?.orNull()
+
+    init {
+        observeActiveSession()
+    }
 
     fun setCurrentSpace(spaceId: String?, session: Session? = null) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
@@ -92,12 +102,13 @@ class AppStateHandler @Inject constructor(
         }
     }
 
-    init {
+    private fun observeActiveSession(){
         sessionDataSource.observe()
                 .distinctUntilChanged()
                 .subscribe {
-                    // sessionDataSource could already return a session while acitveSession holder still returns null
+                    // sessionDataSource could already return a session while activeSession holder still returns null
                     it.orNull()?.let { session ->
+                        observeInvitesForAutoAccept(session)
                         if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
                             setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
                         } else {
@@ -105,6 +116,41 @@ class AppStateHandler @Inject constructor(
                         }
                     }
                 }.also {
+                    compositeDisposable.add(it)
+                }
+    }
+
+    private fun observeInvitesForAutoAccept(session: Session?) {
+        if (session == null) return
+        val roomQueryParams = roomSummaryQueryParams {
+            this.memberships = listOf(Membership.INVITE)
+        }
+        val rxSession = session.rx()
+        Observable
+                .combineLatest(
+                        rxSession.liveRoomSummaries(roomQueryParams).debounce(1, TimeUnit.SECONDS),
+                        rxSession.liveRoomChangeMembershipState().debounce(1, TimeUnit.SECONDS),
+                        { invitedRooms, membershipsChanged ->
+                            val roomIdsToJoin = mutableListOf<String>()
+                            for (room in invitedRooms) {
+                                val roomMembershipChanged = membershipsChanged[room.roomId] ?: ChangeMembershipState.Unknown
+                                if (roomMembershipChanged != ChangeMembershipState.Joined && !roomMembershipChanged.isInProgress()) {
+                                    roomIdsToJoin.add(room.roomId)
+                                }
+                            }
+                            roomIdsToJoin
+                        }
+                )
+                .doOnNext { roomIdsToJoin ->
+                    session.coroutineScope.launch {
+                        for (roomId in roomIdsToJoin) {
+                            Timber.v("Auto accept invite for room: $roomId")
+                            tryOrNull { session.joinRoom(roomId) }
+                        }
+                    }
+                }
+                .subscribe()
+                .also {
                     compositeDisposable.add(it)
                 }
     }
@@ -117,16 +163,11 @@ class AppStateHandler @Inject constructor(
         return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun entersForeground() {
-    }
-
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun entersBackground() {
-        compositeDisposable.clear()
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
-            is RoomGroupingMethod.BySpace -> {
+            is RoomGroupingMethod.BySpace       -> {
                 uiStateRepository.storeGroupingMethod(true, session.sessionId)
                 uiStateRepository.storeSelectedSpace(currentMethod.spaceSummary?.roomId, session.sessionId)
             }
