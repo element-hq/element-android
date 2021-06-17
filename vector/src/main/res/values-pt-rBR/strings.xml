@@ -1077,7 +1077,7 @@
     <string name="startup_notification_privacy_title">Privacidade de Notificação</string>
     <string name="template_startup_notification_privacy_message">${app_name} pode rodar no background para gerenciar suas notificações seguramente e privadamente. Isto pode afetar uso de bateria.</string>
     <string name="startup_notification_privacy_button_grant">Conceder permissão</string>
-    <string name="startup_notification_privacy_button_other">Escolha um outra opção</string>
+    <string name="startup_notification_privacy_button_other">Escolher uma outra opção</string>
     <string name="settings_opt_in_of_analytics">Enviar dados de analítica</string>
     <string name="template_settings_opt_in_of_analytics_summary">${app_name} coleta analítica anônima para nos permitir melhorar o aplicativo.</string>
     <string name="template_settings_opt_in_of_analytics_prompt">Por favor ative analítica para nos ajudar a melhorar ${app_name}.</string>
@@ -1846,7 +1846,7 @@
     <string name="login_server_matrix_org_text">Junte-se a milhões de graça no maior servidor público</string>
     <string name="login_server_modular_text">Hospedagem premium para organizações</string>
     <string name="login_server_modular_learn_more">Saiba mais</string>
-    <string name="login_server_other_title">Outros</string>
+    <string name="login_server_other_title">Outro</string>
     <string name="login_server_other_text">Configurações personalizadas &amp; avançadas</string>
     <string name="login_continue">Continuar</string>
     <string name="login_connect_to">Conectar-se a %1$s</string>
@@ -2010,7 +2010,7 @@
     <string name="sent_a_file">Arquivo</string>
     <string name="send_a_sticker">Sticker</string>
     <string name="verification_request_waiting">Esperando…</string>
-    <string name="verification_request_other_cancelled">%s cancelado</string>
+    <string name="verification_request_other_cancelled">%s cancelou</string>
     <string name="verification_request_you_cancelled">Você cancelou</string>
     <string name="verification_request_other_accepted">%s aceitou</string>
     <string name="verification_request_you_accepted">Você aceitou</string>
