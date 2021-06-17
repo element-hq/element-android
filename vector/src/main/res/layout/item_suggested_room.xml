@@ -104,11 +104,12 @@
 
     <TextView
         android:id="@+id/inlineErrorText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
         android:padding="8dp"
-        android:textColor="@color/design_default_color_error"
+        android:textColor="?colorError"
         app:drawableStartCompat="@drawable/ic_warning_badge"
         app:layout_constraintTop_toBottomOf="@+id/roomBottomBarrier"
         tools:text="An error occured while joining" />
