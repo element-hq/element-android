@@ -2361,7 +2361,7 @@
     <string name="crypto_error_withheld_generic">Você não pode acessar esta mensagem porque o/a enviador(a) propositalmente não enviou as chaves</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Esperando por histórico de encriptação</string>
     <string name="disclaimer_title">Riot agora é Element!</string>
-    <string name="disclaimer_content">Nós estamos animados em anunciar que nós mudamos de nome! Seu app está atualizado e você está com signin feito a sua conta.</string>
+    <string name="disclaimer_content">Nós estamos animados em anunciar que nós temos mudado de nome! Seu app está atualizado e você está com signin feito a sua conta.</string>
     <string name="disclaimer_negative_button">ENTENDI</string>
     <string name="disclaimer_positive_button">SABER MAIS</string>
     <string name="save_recovery_key_chooser_hint">Salvar chave de recuperação em</string>
