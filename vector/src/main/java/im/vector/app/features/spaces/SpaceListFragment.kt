@@ -17,6 +17,7 @@
 package im.vector.app.features.spaces
 
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,28 +63,38 @@ class SpaceListFragment @Inject constructor(
                 .andCallbacks(object : EpoxyTouchHelper.DragCallbacks<SpaceSummaryItem>() {
                     var toPositionM: Int? = null
                     var fromPositionM: Int? = null
+                    var initialElevation: Float? = null
 
                     override fun onDragStarted(model: SpaceSummaryItem?, itemView: View?, adapterPosition: Int) {
-                        super.onDragStarted(model, itemView, adapterPosition)
                         toPositionM = null
                         fromPositionM = null
                         model?.matrixItem?.id?.let {
                             viewModel.handle(SpaceListAction.OnStartDragging(it, model.expanded))
                         }
+                        itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                        initialElevation = itemView?.elevation
+                        itemView?.elevation = 6f
                     }
 
                     override fun onDragReleased(model: SpaceSummaryItem?, itemView: View?) {
 //                        Timber.v("VAL: onModelMoved from $fromPositionM to $toPositionM ${model?.matrixItem?.getBestName()}")
                         if (toPositionM == null || fromPositionM == null) return
                         val movingSpace = model?.matrixItem?.id ?: return
-                        viewModel.handle(SpaceListAction.MoveSpace(movingSpace,  toPositionM!! - fromPositionM!!))
+                        viewModel.handle(SpaceListAction.MoveSpace(movingSpace, toPositionM!! - fromPositionM!!))
                     }
+
+                    override fun clearView(model: SpaceSummaryItem?, itemView: View?) {
+//                        Timber.v("VAL: clearView ${model?.matrixItem?.getBestName()}")
+                        itemView?.elevation = initialElevation ?: 0f
+                    }
+
                     override fun onModelMoved(fromPosition: Int, toPosition: Int, modelBeingMoved: SpaceSummaryItem?, itemView: View?) {
 //                        Timber.v("VAL: onModelMoved incremental from $fromPosition to $toPosition ${modelBeingMoved?.matrixItem?.getBestName()}")
                         if (fromPositionM == null) {
                             fromPositionM = fromPosition
                         }
                         toPositionM = toPosition
+                        itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                     }
 
                     override fun isDragEnabledForModel(model: SpaceSummaryItem?): Boolean {
@@ -112,7 +123,7 @@ class SpaceListFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { state ->
         when (state.asyncSpaces) {
             is Incomplete -> views.stateView.state = StateView.State.Loading
-            is Success -> views.stateView.state = StateView.State.Content
+            is Success    -> views.stateView.state = StateView.State.Content
         }
         spaceController.update(state)
     }
@@ -124,6 +135,7 @@ class SpaceListFragment @Inject constructor(
     override fun onSpaceInviteSelected(spaceSummary: RoomSummary) {
         viewModel.handle(SpaceListAction.OpenSpaceInvite(spaceSummary))
     }
+
     override fun onSpaceSettings(spaceSummary: RoomSummary) {
         sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(spaceSummary.roomId))
     }

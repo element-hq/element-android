@@ -241,7 +241,7 @@ class SpaceOrderTest {
                 "roomId2" to "a",
                 "roomId1" to "b",
                 "roomId3" to null,
-                "roomId4" to null,
+                "roomId4" to null
         ).assertSpaceOrdered()
     }
 
