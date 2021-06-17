@@ -50,7 +50,6 @@ import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
-import im.vector.app.features.home.room.detail.timeline.helper.TimelineSettingsFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
@@ -119,7 +118,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val chatEffectManager: ChatEffectManager,
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
-        private val timelineFactory: TimelineFactory,
+        timelineFactory: TimelineFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
 

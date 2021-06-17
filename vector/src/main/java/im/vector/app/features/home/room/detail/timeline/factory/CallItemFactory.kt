@@ -135,7 +135,7 @@ class CallItemFactory @Inject constructor(
             isStillActive: Boolean,
             callback: TimelineEventController.Callback?
     ): CallTileTimelineItem? {
-        val correctedRoomId = session.vectorCallService.userMapper.nativeRoomForVirtualRoom(roomId) ?:roomId
+        val correctedRoomId = session.vectorCallService.userMapper.nativeRoomForVirtualRoom(roomId) ?: roomId
         val userOfInterest = roomSummariesHolder.get(correctedRoomId)?.toMatrixItem() ?: return null
         val attributes = messageItemAttributesFactory.create(null, informationData, callback).let {
             CallTileTimelineItem.Attributes(

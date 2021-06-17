@@ -27,14 +27,14 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 class CallUserMapper(private val session: Session, private val protocolsChecker: CallProtocolsChecker) {
 
     fun nativeRoomForVirtualRoom(roomId: String): String? {
-        if(!protocolsChecker.supportVirtualRooms) return null
+        if (!protocolsChecker.supportVirtualRooms) return null
         val virtualRoom = session.getRoom(roomId) ?: return null
         val virtualRoomEvent = virtualRoom.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM)
         return virtualRoomEvent?.content?.toModel<RoomVirtualContent>()?.nativeRoomId
     }
 
     fun virtualRoomForNativeRoom(roomId: String): String? {
-        if(!protocolsChecker.supportVirtualRooms) return null
+        if (!protocolsChecker.supportVirtualRooms) return null
         val virtualRoomEvents = session.accountDataService().getRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM))
         return virtualRoomEvents.firstOrNull {
             val virtualRoomContent = it.content.toModel<RoomVirtualContent>()
