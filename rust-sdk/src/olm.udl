@@ -73,6 +73,34 @@ dictionary Sas {
     boolean timed_out;
 };
 
+dictionary VerificationRequest {
+    string other_user_id;
+    string? other_device_id;
+    string flow_id;
+    boolean is_cancelled;
+    boolean is_done;
+    boolean is_ready;
+    boolean we_started;
+    boolean is_passive;
+    string? room_id;
+    CancelCode? cancel_code;
+    sequence<string>? their_methods;
+    sequence<string>? our_methods;
+
+};
+
+enum CancelCode {
+    "User",
+    "Timeout",
+    "UnknownTransaction",
+    "UnknownMethod",
+    "UnexpectedMessage",
+    "KeyMismatch",
+    "UserMismatch",
+    "InvalidMessage",
+    "Accepted",
+};
+
 dictionary KeyRequestPair {
     Request? cancellation;
     Request key_request;
@@ -136,7 +164,15 @@ interface OlmMachine {
     [Throws=CryptoStoreError]
     sequence<Request> share_room_key([ByRef] string room_id, sequence<string> users);
 
+    sequence<VerificationRequest> get_verification_requests([ByRef] string user_id);
+    VerificationRequest? get_verification_request([ByRef] string user_id, [ByRef] string flow_id);
     Sas? get_verification([ByRef] string flow_id);
+
+    OutgoingVerificationRequest? accept_verification_request(
+        [ByRef] string user_id,
+        [ByRef] string flow_id,
+        sequence<string> methods
+    );
 
     [Throws=CryptoStoreError]
     Sas start_verification([ByRef] Device device);

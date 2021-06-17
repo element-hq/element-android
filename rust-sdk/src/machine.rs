@@ -18,8 +18,8 @@ use ruma::{
         IncomingResponse,
     },
     events::{
-        room::encrypted::EncryptedEventContent, AnyMessageEventContent, EventContent,
-        SyncMessageEvent,
+        key::verification::VerificationMethod, room::encrypted::EncryptedEventContent,
+        AnyMessageEventContent, EventContent, SyncMessageEvent,
     },
     DeviceKeyAlgorithm, RoomId, UserId,
 };
@@ -30,14 +30,14 @@ use tokio::runtime::Runtime;
 use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
 use matrix_sdk_crypto::{
     decrypt_key_export, encrypt_key_export, EncryptionSettings, OlmMachine as InnerMachine,
-    Sas as InnerSas,
+    Sas as InnerSas, VerificationRequest as InnerVerificationRequest,
 };
 
 use crate::{
     error::{CryptoStoreError, DecryptionError, MachineCreationError},
     responses::{response_from_string, OutgoingVerificationRequest, OwnedResponse},
-    DecryptedEvent, Device, DeviceLists, KeyImportError, KeysImportResult, ProgressListener,
-    Request, RequestType,
+    CancelCode, DecryptedEvent, Device, DeviceLists, KeyImportError, KeysImportResult,
+    ProgressListener, Request, RequestType,
 };
 
 /// A high level state machine that handles E2EE for Matrix.
@@ -66,6 +66,44 @@ impl From<InnerSas> for Sas {
             is_done: sas.is_done(),
             can_be_presented: sas.can_be_presented(),
             timed_out: sas.timed_out(),
+        }
+    }
+}
+
+pub struct VerificationRequest {
+    pub other_user_id: String,
+    pub other_device_id: Option<String>,
+    pub flow_id: String,
+    pub is_cancelled: bool,
+    pub is_done: bool,
+    pub is_ready: bool,
+    pub room_id: Option<String>,
+    pub cancel_code: Option<CancelCode>,
+    pub we_started: bool,
+    pub is_passive: bool,
+    pub their_methods: Option<Vec<String>>,
+    pub our_methods: Option<Vec<String>>,
+}
+
+impl From<InnerVerificationRequest> for VerificationRequest {
+    fn from(v: InnerVerificationRequest) -> Self {
+        Self {
+            other_user_id: v.other_user().to_string(),
+            other_device_id: v.other_device_id().map(|d| d.to_string()),
+            flow_id: v.flow_id().as_str().to_owned(),
+            is_cancelled: v.is_cancelled(),
+            is_done: v.is_done(),
+            is_ready: v.is_ready(),
+            room_id: v.room_id().map(|r| r.to_string()),
+            cancel_code: v.cancel_code().map(|c| c.clone().into()),
+            we_started: v.we_started(),
+            is_passive: v.is_passive(),
+            their_methods: v
+                .their_supported_methods()
+                .map(|v| v.into_iter().map(|m| m.to_string()).collect()),
+            our_methods: v
+                .our_supported_methods()
+                .map(|v| v.into_iter().map(|m| m.to_string()).collect()),
         }
     }
 }
@@ -554,6 +592,51 @@ impl OlmMachine {
             .block_on(self.inner.invalidate_group_session(&room_id))?;
 
         Ok(())
+    }
+
+    pub fn get_verification_requests(&self, user_id: &str) -> Vec<VerificationRequest> {
+        let user_id = if let Ok(user_id) = UserId::try_from(user_id) {
+            user_id
+        } else {
+            return vec![];
+        };
+
+        self.inner
+            .get_verification_requests(&user_id)
+            .into_iter()
+            .map(|v| v.into())
+            .collect()
+    }
+
+    pub fn get_verification_request(
+        &self,
+        user_id: &str,
+        flow_id: &str,
+    ) -> Option<VerificationRequest> {
+        let user_id = UserId::try_from(user_id).ok()?;
+
+        self.inner
+            .get_verification_request(&user_id, flow_id)
+            .map(|v| v.into())
+    }
+
+    pub fn accept_verification_request(
+        &self,
+        user_id: &str,
+        flow_id: &str,
+        methods: Vec<String>,
+    ) -> Option<OutgoingVerificationRequest> {
+        let user_id = UserId::try_from(user_id).ok()?;
+        let methods = methods
+            .into_iter()
+            .map(|m| VerificationMethod::from(m))
+            .collect();
+
+        if let Some(verification) = self.inner.get_verification_request(&user_id, flow_id) {
+            verification.accept_with_methods(methods).map(|r| r.into())
+        } else {
+            None
+        }
     }
 
     pub fn get_verification(&self, flow_id: &str) -> Option<Sas> {
