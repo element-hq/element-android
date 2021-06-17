@@ -2519,7 +2519,7 @@
     <string name="show_advanced">Mostrar avançadas</string>
     <string name="hide_advanced">Esconder avançadas</string>
     <string name="matrix_to_card_title">Link Matrix</string>
-    <string name="room_created_summary_no_topic_creation_text">%s para deixar pessoas sabendo do que esta sala se trata.</string>
+    <string name="room_created_summary_no_topic_creation_text">%s para deixar pessoas saberem do que esta sala se trata.</string>
     <string name="create_room_alias_empty">Por favor proveja um endereço de sala</string>
     <string name="direct_room_user_list_recent_title">Recente</string>
     <string name="qr_code_not_scanned">QR code não scannado!</string>
