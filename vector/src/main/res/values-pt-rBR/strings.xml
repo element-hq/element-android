@@ -2510,7 +2510,7 @@
     <string name="rotate_and_crop_screen_title">Rotar e recortar</string>
     <string name="create_room_settings_section">Configurações de sala</string>
     <string name="create_room_topic_hint">Tópico</string>
-    <string name="create_room_topic_section">Tópico da sala (opcional)</string>
+    <string name="create_room_topic_section">Tópico de sala (opcional)</string>
     <string name="create_room_name_section">Nome de sala</string>
     <string name="send_bug_report_include_key_share_history">Enviar histórico de requisições de compartilhamento de chaves</string>
     <string name="no_more_results">Mais nenhum resultado</string>
