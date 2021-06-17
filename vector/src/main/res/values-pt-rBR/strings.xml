@@ -1943,7 +1943,7 @@
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Este não é um identificador de usuária(o) válido. Formato esperado: \'@usuarix:servidorcasa.org\'</string>
     <string name="autodiscover_well_known_error">Incapaz de encontrar um servidorcasa válido. Por favor cheque seu identificador</string>
     <string name="seen_by">Vista por</string>
-    <string name="signed_out_title">Você fez signout</string>
+    <string name="signed_out_title">Você está com signout feito</string>
     <string name="signed_out_notice">Pode ser devido a várias razões:
 \n
 \n• Você tem mudado sua senha numa outra sessão.
@@ -1952,7 +1952,7 @@
 \n
 \n• O/a administrador(a) de seu servidor tem invalidado seu acesso por razão de segurança.</string>
     <string name="signed_out_submit">Fazer signin de novo</string>
-    <string name="soft_logout_title">Você fez signout</string>
+    <string name="soft_logout_title">Você está com signout feito</string>
     <string name="soft_logout_signin_title">Fazer signin</string>
     <string name="soft_logout_signin_notice">A/o admin de seu servidorcasa (%1$s) fez seu signout de sua conta %2$s (%3$s).</string>
     <string name="soft_logout_signin_e2e_warning_notice">Faça signin para recuperar chaves de encriptação armazenadas exclusivamente neste dispositivo. Você precisa delas para ler todas suas mensagens seguras em qualquer dispositivo.</string>
@@ -2361,7 +2361,7 @@
     <string name="crypto_error_withheld_generic">Você não pode acessar esta mensagem porque o/a enviador(a) propositalmente não enviou as chaves</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Esperando por histórico de encriptação</string>
     <string name="disclaimer_title">Riot agora é Element!</string>
-    <string name="disclaimer_content">Nós estamos animados em anunciar que nós mudamos de nome! Seu app está atualizado e o signin está feito a sua conta.</string>
+    <string name="disclaimer_content">Nós estamos animados em anunciar que nós mudamos de nome! Seu app está atualizado e você está com signin feito a sua conta.</string>
     <string name="disclaimer_negative_button">ENTENDI</string>
     <string name="disclaimer_positive_button">SABER MAIS</string>
     <string name="save_recovery_key_chooser_hint">Salvar chave de recuperação em</string>
