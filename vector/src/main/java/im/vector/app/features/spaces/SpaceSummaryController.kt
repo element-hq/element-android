@@ -64,8 +64,7 @@ class SpaceSummaryController @Inject constructor(
                 nonNullViewState.selectedGroupingMethod,
                 nonNullViewState.rootSpacesOrdered,
                 nonNullViewState.expandedStates,
-                nonNullViewState.homeAggregateCount,
-                nonNullViewState.spaceOrderInfo)
+                nonNullViewState.homeAggregateCount)
 
         if (!nonNullViewState.legacyGroups.isNullOrEmpty()) {
             genericFooterItem {
@@ -108,8 +107,7 @@ class SpaceSummaryController @Inject constructor(
                                  selected: RoomGroupingMethod,
                                  rootSpaces: List<RoomSummary>?,
                                  expandedStates: Map<String, Boolean>,
-                                 homeCount: RoomAggregateNotificationCount,
-                                 spaceOrderInfo: Map<String, String?>?) {
+                                 homeCount: RoomAggregateNotificationCount) {
         val host = this
         spaceBetaHeaderItem {
             id("beta_header")

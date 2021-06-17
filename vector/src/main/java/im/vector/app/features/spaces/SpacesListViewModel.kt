@@ -159,15 +159,15 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
             is SpaceListAction.OpenSpaceInvite   -> handleSelectSpaceInvite(action)
             is SpaceListAction.SelectLegacyGroup -> handleSelectGroup(action)
             is SpaceListAction.MoveSpace         -> handleMoveSpace(action)
-            is SpaceListAction.OnEndDragging     -> handleEndDragging(action)
-            is SpaceListAction.OnStartDragging   -> handleStartDragging(action)
+            is SpaceListAction.OnEndDragging     -> handleEndDragging()
+            is SpaceListAction.OnStartDragging   -> handleStartDragging()
         }
     }
 
 // PRIVATE METHODS *****************************************************************************
 
     var preDragExpandedState: Map<String, Boolean>? = null
-    private fun handleStartDragging(action: SpaceListAction.OnStartDragging) = withState { state ->
+    private fun handleStartDragging() = withState { state ->
         preDragExpandedState = state.expandedStates.toMap()
         setState {
             copy(
@@ -178,7 +178,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
         }
     }
 
-    private fun handleEndDragging(action: SpaceListAction.OnEndDragging) = withState { state ->
+    private fun handleEndDragging() {
         // restore expanded state
         setState {
             copy(
