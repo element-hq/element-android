@@ -1242,7 +1242,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Nenhum APK de Google Play Services válido encontrado. Notificações podem não funcionar apropriadamente.</string>
-    <string name="settings_troubleshoot_test_battery_failed">Se um/uma usuário(a) deixa um dispositivo despluggado e parado por um período de tempo, com a tela desligada, o aparelho entra em modo Doze. Isto previne apps de acessar a rede e adia seus trabalhos, sincs e alarmes padrões.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Se um/uma usuário(a) deixa um dispositivo despluggado e parado por um período de tempo, com a tela desligada, o dispositivo entra em modo Doze. Isto previne apps de acessar a rede e adia seus trabalhos, sincs e alarmes padrões.</string>
     <string name="passphrase_create_passphrase">Criar frasepasse</string>
     <string name="passphrase_passphrase_does_not_match">Frasepasse não corresponde</string>
     <string name="settings_lazy_loading_title">Carregar preguiçoso membros de salas</string>
