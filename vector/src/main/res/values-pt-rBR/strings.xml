@@ -429,7 +429,7 @@
     <string name="auth_reset_password_error_unauthorized">Falha para verificar endereço de email: assegure-se que clicou no link no email</string>
     <string name="auth_reset_password_success_message">Sua senha tem sido resettada.
 \n
-\nVocê tem sido feito logout de todas as sessões e não vai mais receber notificações push. Para reativar notificações, faça re-login em cada dispositivo.</string>
+\nVocê tem sido feito logout de todas as sessões e não vai mais receber notificações push. Para re-ativar notificações, re-faça login em cada dispositivo.</string>
     <!-- Login Screen -->
     <string name="login_error_must_start_http">URL deve começar com http[s]://</string>
     <string name="login_error_network_error">Incapaz de fazer login: Erro de rede</string>
