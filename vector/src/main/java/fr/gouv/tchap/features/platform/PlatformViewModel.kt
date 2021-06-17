@@ -43,7 +43,7 @@ class PlatformViewModel @AssistedInject constructor(
         @Assisted initialState: PlatformViewState,
         private val context: Context,
         private val activeSessionHolder: ActiveSessionHolder,
-        private val matrix: Matrix,
+        private val matrix: Matrix
 ) : VectorViewModel<PlatformViewState, PlatformAction, PlatformViewEvents>(initialState) {
 
     @AssistedFactory

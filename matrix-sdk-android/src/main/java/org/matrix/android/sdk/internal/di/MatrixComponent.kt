@@ -37,6 +37,7 @@ import org.matrix.android.sdk.internal.session.TestInterceptor
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.system.SystemModule
 import org.matrix.olm.OlmManager
 import java.io.File
 
@@ -45,6 +46,7 @@ import java.io.File
     NetworkModule::class,
     AuthModule::class,
     RawModule::class,
+    SystemModule::class,
     NoOpTestModule::class
 ])
 @MatrixScope

@@ -37,16 +37,13 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.login.HomeServerConnectionConfigFactory
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
-import im.vector.app.features.login.LoginViewEvents
 import im.vector.app.features.login.LoginViewState
 import im.vector.app.features.login.ReAuthHelper
-import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
-import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.FlowResult
@@ -325,11 +322,9 @@ class TchapLoginViewModel @AssistedInject constructor(
     }
 
     private fun handleResetPassword() {
-
     }
 
     private fun handleResetPasswordMailConfirmed() {
-
     }
 
     private fun handleLoginOrRegister(action: TchapLoginAction.LoginOrRegister) = withState { state ->

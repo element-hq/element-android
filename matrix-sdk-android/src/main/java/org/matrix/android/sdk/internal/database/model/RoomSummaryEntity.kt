@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import fr.gouv.tchap.android.sdk.session.room.model.RoomAccessRules
+import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
@@ -231,6 +231,12 @@ internal open class RoomSummaryEntity(
             if (value.name != membershipStr) {
                 membershipStr = value.name
             }
+        }
+
+    @Index
+    var isHiddenFromUser: Boolean = false
+        set(value) {
+            if (value != field) field = value
         }
 
     @Index

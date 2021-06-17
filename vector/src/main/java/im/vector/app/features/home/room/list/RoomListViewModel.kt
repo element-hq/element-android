@@ -69,12 +69,12 @@ class RoomListViewModel @Inject constructor(
          * Filter the rooms if they are part of the current space (children and grand children).
          * If current space is null, will return orphan rooms only
          */
-        NORMAL,
+        ORPHANS_IF_SPACE_NULL,
         /**
          * Special case when we don't want to discriminate rooms when current space is null.
          * In this case return all.
          */
-        NOT_IF_ALL,
+        ALL_IF_SPACE_NULL,
         /** Do not filter based on space*/
         NONE
     }
@@ -131,7 +131,8 @@ class RoomListViewModel @Inject constructor(
                     },
                     {
                         updatableQueries.add(it)
-                    }
+                    },
+                    vectorPreferences.labsSpacesOnlyOrphansInHome()
             ).buildSections(initialState.displayMode)
         } else {
             GroupRoomListSectionBuilder(
@@ -160,6 +161,7 @@ class RoomListViewModel @Inject constructor(
             is RoomListAction.ToggleTag                   -> handleToggleTag(action)
             is RoomListAction.ToggleSection               -> handleToggleSection(action.section)
             is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
+            is RoomListAction.ShowRoomDetails             -> handleShowRoomDetails(action)
         }.exhaustive
     }
 
@@ -288,6 +290,12 @@ class RoomListViewModel @Inject constructor(
                     this[action.roomId] = Fail(failure)
                 }.toMap())
             }
+        }
+    }
+
+    private fun handleShowRoomDetails(action: RoomListAction.ShowRoomDetails) {
+        session.permalinkService().createRoomPermalink(action.roomId, action.viaServers)?.let {
+            _viewEvents.post(RoomListViewEvents.NavigateToMxToBottomSheet(it))
         }
     }
 

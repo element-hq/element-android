@@ -55,14 +55,15 @@ import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.popup.DefaultVectorAlert
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
+import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
-import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
+import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
@@ -205,10 +206,10 @@ class HomeActivity :
                             // we might want to delay that to avoid having the drawer animation lagging
                             // would be probably better to let the drawer do that? in the on closed callback?
                         }
-                        is HomeActivitySharedAction.OpenSpacePreview  -> {
+                        is HomeActivitySharedAction.OpenSpacePreview -> {
                             startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
                         }
-                        is HomeActivitySharedAction.AddSpace          -> {
+                        is HomeActivitySharedAction.AddSpace -> {
                             createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
                         }
                         is HomeActivitySharedAction.ShowSpaceSettings -> {
@@ -221,9 +222,12 @@ class HomeActivity :
                                     })
                                     .show(supportFragmentManager, "SPACE_SETTINGS")
                         }
-                        is HomeActivitySharedAction.OpenSpaceInvite   -> {
+                        is HomeActivitySharedAction.OpenSpaceInvite -> {
                             SpaceInviteBottomSheet.newInstance(sharedAction.spaceId)
                                     .show(supportFragmentManager, "SPACE_INVITE")
+                        }
+                        HomeActivitySharedAction.SendSpaceFeedBack -> {
+                            bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
                         }
                     }.exhaustive
                 }
@@ -446,6 +450,51 @@ class HomeActivity :
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar, false)
     }
+
+//    override fun getMenuRes() = R.menu.home
+//
+//    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+//        menu.findItem(R.id.menu_home_init_sync_legacy)?.isVisible = vectorPreferences.developerMode()
+//        menu.findItem(R.id.menu_home_init_sync_optimized)?.isVisible = vectorPreferences.developerMode()
+//        return super.onPrepareOptionsMenu(menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            R.id.menu_home_suggestion -> {
+//                bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
+//                return true
+//            }
+//            R.id.menu_home_report_bug -> {
+//                bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
+//                return true
+//            }
+//            R.id.menu_home_init_sync_legacy -> {
+//                // Configure the SDK
+//                initialSyncStrategy = InitialSyncStrategy.Legacy
+//                // And clear cache
+//                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+//                return true
+//            }
+//            R.id.menu_home_init_sync_optimized -> {
+//                // Configure the SDK
+//                initialSyncStrategy = InitialSyncStrategy.Optimized()
+//                // And clear cache
+//                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+//                return true
+//            }
+//            R.id.menu_home_filter -> {
+//                navigator.openRoomsFiltering(this)
+//                return true
+//            }
+//            R.id.menu_home_setting -> {
+//                navigator.openSettings(this)
+//                return true
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
+//    }
 
     override fun onBackPressed() {
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {

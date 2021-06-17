@@ -46,6 +46,7 @@ import im.vector.app.databinding.ActivityCallBinding
 import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.utils.EglUtils
+import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
@@ -54,7 +55,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.call.CallState
-import org.matrix.android.sdk.api.session.call.MxCallDetail
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.webrtc.EglBase
@@ -64,7 +64,7 @@ import javax.inject.Inject
 
 @Parcelize
 data class CallArgs(
-        val roomId: String,
+        val signalingRoomId: String,
         val callId: String,
         val participantUserId: String,
         val isIncomingCall: Boolean,
@@ -175,7 +175,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         when (callState) {
             is CallState.Idle,
             is CallState.CreateOffer,
-            is CallState.Dialing     -> {
+            is CallState.Dialing      -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
                 views.callStatusText.setText(R.string.call_ring)
@@ -189,16 +189,27 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 configureCallInfo(state)
             }
 
-            is CallState.Answering -> {
+            is CallState.Answering    -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
                 views.callStatusText.setText(R.string.call_connecting)
                 views.callConnectingProgress.isVisible = true
                 configureCallInfo(state)
             }
-            is CallState.Connected -> {
+            is CallState.Connected    -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
-                    if (state.isLocalOnHold || state.isRemoteOnHold) {
+                    if (state.transferee !is VectorCallViewState.TransfereeState.NoTransferee) {
+                        val transfereeName = if (state.transferee is VectorCallViewState.TransfereeState.KnownTransferee) {
+                            state.transferee.name
+                        } else {
+                            getString(R.string.call_transfer_unknown_person)
+                        }
+                        views.callActionText.text = getString(R.string.call_transfer_transfer_to_title, transfereeName)
+                        views.callActionText.isVisible = true
+                        views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.TransferCall) }
+                        views.callStatusText.text = state.formattedDuration
+                        configureCallInfo(state)
+                    } else if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
                         views.callVideoGroup.isInvisible = true
                         views.callInfoGroup.isVisible = true
@@ -220,7 +231,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                         if (callArgs.isVideoCall) {
                             views.callVideoGroup.isVisible = true
                             views.callInfoGroup.isVisible = false
-                            views.pipRenderer.isVisible =  !state.isVideoCaptureInError && state.otherKnownCallInfo == null
+                            views.pipRenderer.isVisible = !state.isVideoCaptureInError && state.otherKnownCallInfo == null
                         } else {
                             views.callVideoGroup.isInvisible = true
                             views.callInfoGroup.isVisible = true
@@ -235,10 +246,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callConnectingProgress.isVisible = true
                 }
             }
-            is CallState.Terminated -> {
+            is CallState.Terminated   -> {
                 finish()
             }
-            null -> {
+            null                      -> {
             }
         }
     }
@@ -247,7 +258,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         state.callInfo.otherUserItem?.let {
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
             avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter)
-            views.participantNameText.text = it.getBestName()
+            if (state.transferee is VectorCallViewState.TransfereeState.NoTransferee) {
+                views.participantNameText.text = it.getBestName()
+            } else {
+                views.participantNameText.text = getString(R.string.call_transfer_consulting_with, it.getBestName())
+            }
             if (blurAvatar) {
                 avatarRenderer.renderBlur(it, views.otherMemberAvatar, sampling = 2, rounded = true, colorFilter = colorFilter)
             } else {
@@ -276,7 +291,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         views.otherKnownCallAvatarView.setOnClickListener {
             withState(callViewModel) {
                 val otherCall = callManager.getCallById(it.otherKnownCallInfo?.callId ?: "") ?: return@withState
-                startActivity(newIntent(this, otherCall.mxCall, null))
+                startActivity(newIntent(this, otherCall, null))
                 finish()
             }
         }
@@ -322,13 +337,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.v("## VOIP handleViewEvents $event")
         when (event) {
-            VectorCallViewEvents.DismissNoCall -> {
+            VectorCallViewEvents.DismissNoCall             -> {
                 finish()
             }
-            is VectorCallViewEvents.ConnectionTimeout -> {
+            is VectorCallViewEvents.ConnectionTimeout      -> {
                 onErrorTimoutConnect(event.turn)
             }
-            is VectorCallViewEvents.ShowDialPad -> {
+            is VectorCallViewEvents.ShowDialPad            -> {
                 CallDialPadBottomSheet.newInstance(false).apply {
                     callback = dialPadCallback
                 }.show(supportFragmentManager, FRAGMENT_DIAL_PAD_TAG)
@@ -336,7 +351,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is VectorCallViewEvents.ShowCallTransferScreen -> {
                 navigator.openCallTransfer(this, callArgs.callId)
             }
-            null -> {
+            null                                           -> {
             }
         }
     }
@@ -364,18 +379,18 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         const val INCOMING_RINGING = "INCOMING_RINGING"
         const val INCOMING_ACCEPT = "INCOMING_ACCEPT"
 
-        fun newIntent(context: Context, mxCall: MxCallDetail, mode: String?): Intent {
+        fun newIntent(context: Context, call: WebRtcCall, mode: String?): Intent {
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                putExtra(MvRx.KEY_ARG, CallArgs(mxCall.roomId, mxCall.callId, mxCall.opponentUserId, !mxCall.isOutgoing, mxCall.isVideoCall))
+                putExtra(MvRx.KEY_ARG, CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall))
                 putExtra(EXTRA_MODE, mode)
             }
         }
 
         fun newIntent(context: Context,
                       callId: String,
-                      roomId: String,
+                      signalingRoomId: String,
                       otherUserId: String,
                       isIncomingCall: Boolean,
                       isVideoCall: Boolean,
@@ -383,7 +398,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = FLAG_ACTIVITY_CLEAR_TOP
-                putExtra(MvRx.KEY_ARG, CallArgs(roomId, callId, otherUserId, isIncomingCall, isVideoCall))
+                putExtra(MvRx.KEY_ARG, CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall))
                 putExtra(EXTRA_MODE, mode)
             }
         }
@@ -410,7 +425,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     override fun returnToChat() {
-        val args = RoomDetailArgs(callArgs.roomId)
+        val args = RoomDetailArgs(callArgs.signalingRoomId)
         val intent = RoomDetailActivity.newIntent(this, args).apply {
             flags = FLAG_ACTIVITY_CLEAR_TOP
         }

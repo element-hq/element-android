@@ -18,6 +18,7 @@
 package im.vector.app.features.grouplist
 
 import android.content.res.ColorStateList
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -35,8 +36,9 @@ import im.vector.app.features.themes.ThemeUtils
 abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Holder>() {
 
     @EpoxyAttribute var selected: Boolean = false
-    @EpoxyAttribute var listener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: (() -> Unit)? = null
     @EpoxyAttribute var countState : UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
+    @EpoxyAttribute var showSeparator: Boolean = false
 
     override fun getViewType(): Int {
         // mm.. it's reusing the same layout for basic space item
@@ -56,6 +58,7 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
         holder.leaveView.isVisible = false
 
         holder.counterBadgeView.render(countState)
+        holder.bottomSeparator.isVisible = showSeparator
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -64,5 +67,6 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
         val rootView by bind<CheckableConstraintLayout>(R.id.itemGroupLayout)
         val leaveView by bind<ImageView>(R.id.groupTmpLeave)
         val counterBadgeView by bind<UnreadCounterBadgeView>(R.id.groupCounterBadge)
+        val bottomSeparator by bind<View>(R.id.groupBottomSeparator)
     }
 }

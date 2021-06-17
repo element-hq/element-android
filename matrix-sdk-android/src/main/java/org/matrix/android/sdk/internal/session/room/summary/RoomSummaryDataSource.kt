@@ -36,7 +36,6 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
-import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
@@ -244,31 +243,30 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         query.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
         query.process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
         query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
-        query.notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
+        query.equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
 
-        queryParams.roomCategoryFilter?.let {
-            when (it) {
-                RoomCategoryFilter.ONLY_DM -> {
-                    query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                    query.beginsWith(RoomSummaryEntityFields.DIRECT_USER_ID, "@")
-                }
-                RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-                RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-                RoomCategoryFilter.ALL -> {
-                    //Tchap: we ignore DMs with directUserId different from a matrix id.
-                    //directUserId could be an email if the user has no account and he was invited by email.
-                    query.beginGroup()
-                    query.beginGroup()
-                    query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                    query.and()
-                    query.beginsWith(RoomSummaryEntityFields.DIRECT_USER_ID, "@")
-                    query.endGroup()
-                    query.or()
-                    query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-                    query.endGroup()
-                }
+        when (queryParams.roomCategoryFilter) {
+            RoomCategoryFilter.ONLY_DM                 -> {
+                query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                query.beginsWith(RoomSummaryEntityFields.DIRECT_USER_ID, "@")
+            }
+            RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+            RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
+            RoomCategoryFilter.ALL                     -> {
+                // Tchap: we ignore DMs with directUserId different from a matrix id.
+                // directUserId could be an email if the user has no account and he was invited by email.
+                query.beginGroup()
+                query.beginGroup()
+                query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                query.and()
+                query.beginsWith(RoomSummaryEntityFields.DIRECT_USER_ID, "@")
+                query.endGroup()
+                query.or()
+                query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                query.endGroup()
             }
         }
+
         queryParams.roomTagQueryFilter?.let {
             it.isFavorite?.let { fav ->
                 query.equalTo(RoomSummaryEntityFields.IS_FAVOURITE, fav)

@@ -21,6 +21,6 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 
-data class  PlatformViewState (
+data class  PlatformViewState(
         val platformState: Async<Platform> = Uninitialized
 ) : MvRxState

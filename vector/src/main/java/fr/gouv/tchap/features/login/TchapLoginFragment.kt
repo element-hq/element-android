@@ -74,7 +74,8 @@ class TchapLoginFragment @Inject constructor(
 
         loginViewModel.observeViewEvents {
             when (it) {
-                TchapLoginViewEvents.OnLoginFlowRetrieved -> loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                TchapLoginViewEvents.OnLoginFlowRetrieved ->
+                    loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
                 else                                      ->
                     // This is handled by the Activity
                     Unit

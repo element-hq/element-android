@@ -68,9 +68,10 @@ class TchapContactListController @Inject constructor(private val session: Sessio
     }
 
     private fun buildlocalContacts(currentState: TchapContactListViewState) {
+        val host = this
         userListHeaderItem {
             id("local_header", 1)
-            header(stringProvider.getString(R.string.local_address_book_header))
+            header(host.stringProvider.getString(R.string.local_address_book_header))
         }
 
         currentState.filteredLocalUsers.toMutableList().sortedWith() { contact1, contact2 ->
@@ -83,9 +84,9 @@ class TchapContactListController @Inject constructor(private val session: Sessio
                 id(item.userId)
                 selected(false)
                 matrixItem(item.toMatrixItem())
-                avatarRenderer(avatarRenderer)
+                avatarRenderer(host.avatarRenderer)
                 clickListener { _ ->
-                    callback?.onItemClick(item)
+                    host.callback?.onItemClick(item)
                 }
             }
         }
@@ -120,6 +121,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
 //    }
 
     private fun buildDirectoryUsers(directoryUsers: List<User>, searchTerms: String, ignoreIds: List<String>) {
+        val host = this
         val toDisplay = directoryUsers
                 .filterNot { ignoreIds.contains(it.userId) || it.userId == session.myUserId }
 
@@ -128,7 +130,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
         }
         userListHeaderItem {
             id("directory_header")
-            header(stringProvider.getString(R.string.user_directory_header))
+            header(host.stringProvider.getString(R.string.user_directory_header))
         }
         if (toDisplay.isEmpty()) {
             renderEmptyState()
@@ -138,9 +140,9 @@ class TchapContactListController @Inject constructor(private val session: Sessio
                     id(user.userId)
                     selected(false)
                     matrixItem(user.toMatrixItem())
-                    avatarRenderer(avatarRenderer)
+                    avatarRenderer(host.avatarRenderer)
                     clickListener { _ ->
-                        callback?.onItemClick(user)
+                        host.callback?.onItemClick(user)
                     }
                 }
             }
@@ -154,16 +156,18 @@ class TchapContactListController @Inject constructor(private val session: Sessio
     }
 
     private fun renderEmptyState() {
+        val host = this
         noResultItem {
             id("noResult")
-            text(stringProvider.getString(R.string.no_result_placeholder))
+            text(host.stringProvider.getString(R.string.no_result_placeholder))
         }
     }
 
     private fun renderFailure(failure: Throwable) {
+        val host = this
         errorWithRetryItem {
             id("error")
-            text(errorFormatter.toHumanReadable(failure))
+            text(host.errorFormatter.toHumanReadable(failure))
         }
     }
 

@@ -26,4 +26,5 @@ interface RoomListListener : FilteredRoomFooterItem.FilteredRoomFooterItemListen
     fun onRejectRoomInvitation(room: RoomSummary)
     fun onAcceptRoomInvitation(room: RoomSummary)
     fun onJoinSuggestedRoom(room: SpaceChildInfo)
+    fun onSuggestedRoomClicked(room: SpaceChildInfo)
 }

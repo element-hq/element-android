@@ -11,7 +11,7 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/avatar"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <ProgressBar
         android:id="@+id/avatar_update_progress_bar"

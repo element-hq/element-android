@@ -34,7 +34,7 @@
             android:importantForAccessibility="no"
             android:scaleType="center"
             tools:alpha="0.3"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
     </FrameLayout>
 

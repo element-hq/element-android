@@ -55,7 +55,7 @@
     <!--    <color name="tchap_incoming_msg_markdown_block_background_color">#FFEEEEEE</color>-->
     <!--    <color name="tchap_outgoing_msg_markdown_block_background_color">#FF4D4D4D</color>-->
     <!--    <color name="tchap_unsent_msg_color">#FFF56679</color>-->
-    <!--    <color name="tchap_dark_red">#FF7f0d15</color>-->
+    <color name="tchap_dark_red">#ff7f0d15</color>
     <!--    <color name="tchap_light_background">#FFecf0f7</color>-->
     <color name="tchap_coral_border_color">@color/tchap_coral_alpha70</color>
     <color name="tchap_pumpkin_orange_border_color">@color/tchap_pumpkin_orange_alpha70</color>

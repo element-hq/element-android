@@ -51,7 +51,7 @@ if [[ -f ${searchForbiddenStringsScript} ]]; then
 else
   mkdir tmp
   echo "Get the script"
-  wget https://raw.githubusercontent.com/matrix-org/matrix-dev-tools/develop/bin/search_forbidden_strings.pl -O ${searchForbiddenStringsScript}
+  curl -o ${searchForbiddenStringsScript} https://raw.githubusercontent.com/matrix-org/matrix-dev-tools/develop/bin/search_forbidden_strings.pl
 fi
 
 if [[ -x ${searchForbiddenStringsScript} ]]; then
@@ -79,10 +79,20 @@ echo
 echo "Search for forbidden patterns specific for SDK code..."
 
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code_sdk.txt \
-    ./matrix-sdk-android/src \
+    ./matrix-sdk-android/src/androidTest \
+    ./matrix-sdk-android/src/debug \
+    ./matrix-sdk-android/src/main/java/org/matrix \
+    ./matrix-sdk-android/src/release \
+    ./matrix-sdk-android/src/sharedTest \
+    ./matrix-sdk-android/src/test \
     ./matrix-sdk-android-rx/src
 
 resultForbiddenStringInCodeSdk=$?
+
+${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code_sdk_tchap.txt \
+    ./matrix-sdk-android/src/main/java/fr/gouv/tchap
+
+resultForbiddenStringInCodeSdkTchap=$?
 
 echo
 echo "Search for forbidden patterns in resources..."
@@ -106,7 +116,7 @@ if [[ -f ${checkLongFilesScript} ]]; then
 else
   mkdir tmp
   echo "Get the script"
-  wget https://raw.githubusercontent.com/matrix-org/matrix-dev-tools/develop/bin/check_long_files.pl -O ${checkLongFilesScript}
+  curl -o ${checkLongFilesScript} https://raw.githubusercontent.com/matrix-org/matrix-dev-tools/develop/bin/check_long_files.pl
 fi
 
 if [[ -x ${checkLongFilesScript} ]]; then
@@ -156,7 +166,7 @@ fi
 
 echo
 
-if [[ ${resultNbOfDrawable} -eq 0 ]] && [[ ${resultForbiddenStringInCode} -eq 0 ]] && [[ ${resultForbiddenStringInCodeSdk} -eq 0 ]] && [[ ${resultForbiddenStringInResource} -eq 0 ]] && [[ ${resultLongFiles} -eq 0 ]] && [[ ${resultPngInDrawable} -eq 0 ]]; then
+if [[ ${resultNbOfDrawable} -eq 0 ]] && [[ ${resultForbiddenStringInCode} -eq 0 ]] && [[ ${resultForbiddenStringInCodeSdk} -eq 0 ]] && [[ ${resultForbiddenStringInCodeSdkTchap} -eq 0 ]] && [[ ${resultForbiddenStringInResource} -eq 0 ]] && [[ ${resultLongFiles} -eq 0 ]] && [[ ${resultPngInDrawable} -eq 0 ]]; then
    echo "MAIN OK"
 else
    echo "❌ MAIN ERROR"

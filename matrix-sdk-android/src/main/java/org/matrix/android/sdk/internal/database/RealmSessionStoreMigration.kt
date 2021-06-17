@@ -16,13 +16,14 @@
 
 package org.matrix.android.sdk.internal.database
 
-import fr.gouv.tchap.android.sdk.session.events.model.TchapEventType
-import fr.gouv.tchap.android.sdk.session.room.model.RoomAccessRulesContent
+import fr.gouv.tchap.android.sdk.api.session.events.model.TchapEventType
+import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRulesContent
 import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
+import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
@@ -32,6 +33,7 @@ import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
@@ -46,7 +48,7 @@ import javax.inject.Inject
 class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 12L
+        const val SESSION_STORE_SCHEMA_VERSION = 14L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -64,6 +66,11 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 9) migrateTo10(realm)
         if (oldVersion <= 10) migrateTo11(realm)
         if (oldVersion <= 11) migrateTo12(realm)
+        if (oldVersion <= 12) {
+            migrateTo13(realm)
+            tchapMigrateTo13(realm)
+        }
+        if (oldVersion <= 13) migrateTo14(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -148,10 +155,6 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         Timber.d("Step 7 -> 8")
 
         val editionOfEventSchema = realm.schema.create("EditionOfEvent")
-                .apply {
-                    // setEmbedded does not return `this`...
-                    isEmbedded = true
-                }
                 .addField(EditionOfEventFields.CONTENT, String::class.java)
                 .addField(EditionOfEventFields.EVENT_ID, String::class.java)
                 .setRequired(EditionOfEventFields.EVENT_ID, true)
@@ -166,6 +169,10 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 ?.removeField("lastEditTs")
                 ?.removeField("sourceLocalEchoEvents")
                 ?.addRealmListField(EditAggregatedSummaryEntityFields.EDITIONS.`$`, editionOfEventSchema)
+
+        // This has to be done once a parent use the model as a child
+        // See https://github.com/realm/realm-java/issues/7402
+        editionOfEventSchema.isEmbedded = true
     }
 
     private fun migrateTo9(realm: DynamicRealm) {
@@ -269,9 +276,44 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                                 joinRulesContentAdapter.fromJson(it)?.joinRules
                             }
 
-                    obj.setString(RoomSummaryEntityFields.JOIN_RULES_STR, roomJoinRules?.value)
+                    obj.setString(RoomSummaryEntityFields.JOIN_RULES_STR, roomJoinRules?.name)
                 }
 
+        realm.schema.get("SpaceChildSummaryEntity")
+                ?.addField(SpaceChildSummaryEntityFields.SUGGESTED, Boolean::class.java)
+                ?.setNullable(SpaceChildSummaryEntityFields.SUGGESTED, true)
+    }
+
+    private fun migrateTo13(realm: DynamicRealm) {
+        Timber.d("Step 12 -> 13")
+        // Fix issue with the nightly build. Eventually play again the migration which has been included in migrateTo12()
+        realm.schema.get("SpaceChildSummaryEntity")
+                ?.takeIf { !it.hasField(SpaceChildSummaryEntityFields.SUGGESTED) }
+                ?.addField(SpaceChildSummaryEntityFields.SUGGESTED, Boolean::class.java)
+                ?.setNullable(SpaceChildSummaryEntityFields.SUGGESTED, true)
+    }
+
+    private fun migrateTo14(realm: DynamicRealm) {
+        Timber.d("Step 13 -> 14")
+        val roomAccountDataSchema = realm.schema.create("RoomAccountDataEntity")
+                .addField(RoomAccountDataEntityFields.CONTENT_STR, String::class.java)
+                .addField(RoomAccountDataEntityFields.TYPE, String::class.java,  FieldAttribute.INDEXED)
+
+        realm.schema.get("RoomEntity")
+                ?.addRealmListField(RoomEntityFields.ACCOUNT_DATA.`$`, roomAccountDataSchema)
+
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, Boolean::class.java, FieldAttribute.INDEXED)
+                ?.transform {
+                    val isHiddenFromUser = it.getString(RoomSummaryEntityFields.VERSIONING_STATE_STR) == VersioningState.UPGRADED_ROOM_JOINED.name
+                    it.setBoolean(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, isHiddenFromUser)
+                }
+
+        roomAccountDataSchema.isEmbedded = true
+    }
+
+    // Tchap migrations
+    private fun tchapMigrateTo13(realm: DynamicRealm) {
         val accessRulesContentAdapter = MoshiProvider.providesMoshi().adapter(RoomAccessRulesContent::class.java)
         realm.schema.get("RoomSummaryEntity")
                 ?.addField(RoomSummaryEntityFields.ACCESS_RULES_STR, String::class.java)
@@ -286,7 +328,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                                 accessRulesContentAdapter.fromJson(it)?.accessRules
                             }
 
-                    obj.setString(RoomSummaryEntityFields.ACCESS_RULES_STR, roomAccessRules?.value)
+                    obj.setString(RoomSummaryEntityFields.ACCESS_RULES_STR, roomAccessRules?.name)
                 }
     }
 }

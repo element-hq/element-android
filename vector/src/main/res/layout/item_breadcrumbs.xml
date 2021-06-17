@@ -34,7 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/room_round_avatars" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/breadcrumbsUnreadCounterBadgeView"

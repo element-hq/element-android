@@ -28,8 +28,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.ui.UiStateRepository
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.group
 import im.vector.app.space
 import io.reactivex.Observable
@@ -45,6 +44,7 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
@@ -54,8 +54,7 @@ import java.util.concurrent.TimeUnit
 class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
                                                       private val appStateHandler: AppStateHandler,
                                                       private val session: Session,
-                                                      private val stringProvider: StringProvider,
-                                                      private val uiStateRepository: UiStateRepository
+                                                      private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -108,20 +107,33 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                     }
                 }.disposeOnClear()
 
+        // XXX there should be a way to refactor this and share it
         session.getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
-                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
+                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                        vectorPreferences.labsSpacesOnlyOrphansInHome()
+                    } ?: ActiveSpaceFilter.None
                 }, sortOrder = RoomSortOrder.NONE
         ).asObservable()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.computation())
                 .subscribe {
-                    val counts = session.getNotificationCountForRooms(
+                    val inviteCount = session.getRoomSummaries(
+                            roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
+                    ).size
+
+                    val totalCount = session.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
+                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                                    vectorPreferences.labsSpacesOnlyOrphansInHome()
+                                } ?: ActiveSpaceFilter.None
                             }
+                    )
+                    val counts = RoomAggregateNotificationCount(
+                            totalCount.notificationCount + inviteCount,
+                            totalCount.highlightCount + inviteCount
                     )
                     setState {
                         copy(
@@ -217,7 +229,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                         .rx()
                         .liveUser(session.myUserId)
                         .map {
-                             it.getOrNull()
+                            it.getOrNull()
                         },
                 session
                         .rx()

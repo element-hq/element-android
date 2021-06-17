@@ -42,19 +42,20 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
 
     override fun buildModels(state: RoomListQuickActionsState) {
         val roomSummary = state.roomSummary() ?: return
+        val host = this
         val showAll = state.mode == RoomListActionsArgs.Mode.FULL
 
         if (showAll) {
             // Preview, favorite, settings
             bottomSheetRoomPreviewItem {
                 id("room_preview")
-                avatarRenderer(avatarRenderer)
+                avatarRenderer(host.avatarRenderer)
                 matrixItem(roomSummary.toMatrixItem())
-                stringProvider(stringProvider)
+                stringProvider(host.stringProvider)
                 izLowPriority(roomSummary.isLowPriority)
                 izFavorite(roomSummary.isFavorite)
-                settingsClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) }
-                favoriteClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Favorite(roomSummary.roomId)) }
+                settingsClickListener { host.listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) }
+                favoriteClickListener { host.listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Favorite(roomSummary.roomId)) }
             }
 
             // Notifications
@@ -72,7 +73,6 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
             else                                     -> notificationState
         }
 
-
         RoomListQuickActionsSharedAction.NotificationsAllNoisy(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
 
         if (roomSummary.allowMentionsOnlyNotifications()) {
@@ -87,6 +87,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
     }
 
     private fun RoomListQuickActionsSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
+        val host = this@RoomListQuickActionsEpoxyController
         val selected = when (this) {
             is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> {
                 roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY || roomNotificationState == RoomNotificationState.ALL_MESSAGES
@@ -101,7 +102,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
             iconRes(iconResId)
             textRes(titleRes)
             destructive(this@toBottomSheetItem.destructive)
-            listener(View.OnClickListener { listener?.didSelectMenuAction(this@toBottomSheetItem) })
+            listener(View.OnClickListener { host.listener?.didSelectMenuAction(this@toBottomSheetItem) })
         }
     }
 

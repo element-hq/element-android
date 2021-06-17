@@ -16,7 +16,7 @@
 
 package fr.gouv.tchap.core.utils
 
-import fr.gouv.tchap.android.sdk.session.room.model.RoomAccessRules
+import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 enum class TchapRoomType {

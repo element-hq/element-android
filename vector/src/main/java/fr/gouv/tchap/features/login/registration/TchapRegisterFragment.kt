@@ -79,7 +79,8 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
 
         loginViewModel.observeViewEvents { loginViewEvents ->
             when (loginViewEvents) {
-                TchapLoginViewEvents.OnLoginFlowRetrieved       -> loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                TchapLoginViewEvents.OnLoginFlowRetrieved       ->
+                    loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
                 is TchapLoginViewEvents.RegistrationFlowResult  -> {
                     // Result from registration request when the account password is set.
                     // Email stage is mandatory at this time and another stage should not happen.

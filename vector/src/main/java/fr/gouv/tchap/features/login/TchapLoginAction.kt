@@ -18,12 +18,9 @@ package fr.gouv.tchap.features.login
 
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.login.LoginConfig
-import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
-import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
-import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
 sealed class TchapLoginAction : VectorViewModelAction {
     data class UpdateHomeServer(val homeServerUrl: String) : TchapLoginAction()

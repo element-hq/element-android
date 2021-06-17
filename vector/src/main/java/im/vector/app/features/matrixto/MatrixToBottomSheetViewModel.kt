@@ -118,10 +118,9 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     session.getRoom(permalinkData.roomIdOrAlias)
                 }
                         ?.roomSummary()
-                        // don't take if not active, as it could be outdated
-                        ?.takeIf { it.membership.isActive() }
-                val forceRefresh = true
-                if (!forceRefresh && knownRoom != null) {
+                        // don't take if not Join, as it could be outdated
+                        ?.takeIf { it.membership == Membership.JOIN }
+                if (knownRoom != null) {
                     setState {
                         copy(
                                 roomPeekResult = Success(
@@ -133,7 +132,8 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                                                 alias = knownRoom.canonicalAlias,
                                                 membership = knownRoom.membership,
                                                 roomType = knownRoom.roomType,
-                                                viaServers = null
+                                                viaServers = null,
+                                                isPublic = knownRoom.isPublic
                                         )
                                 )
                         )
@@ -147,9 +147,10 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                                     topic = peekResult.topic ?: "",
                                     memberCount = peekResult.numJoinedMembers,
                                     alias = peekResult.alias,
-                                    membership = Membership.NONE,
+                                    membership = knownRoom?.membership ?: Membership.NONE,
                                     roomType = peekResult.roomType,
-                                    viaServers = peekResult.viaServers.takeIf { it.isNotEmpty() } ?: permalinkData.viaParameters
+                                    viaServers = peekResult.viaServers.takeIf { it.isNotEmpty() } ?: permalinkData.viaParameters,
+                                    isPublic = peekResult.isPublic
                             ).also {
                                 peekResult.someMembers?.let { checkForKnownMembers(it) }
                             }

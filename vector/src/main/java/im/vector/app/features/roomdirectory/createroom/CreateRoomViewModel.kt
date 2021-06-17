@@ -236,10 +236,9 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                         if (initialState.parentSpaceId != null) {
                             // add it as a child
                             try {
-                                val via = session.sessionParams.homeServerHost?.let { listOf(it) }.orEmpty()
                                 session.spaceService()
                                         .getSpace(initialState.parentSpaceId)
-                                        ?.addChildren(roomId, viaServers = via, order = null)
+                                        ?.addChildren(roomId, viaServers = null, order = null)
                             } catch (failure: Throwable) {
                                 Timber.w(failure, "Failed to add as a child")
                             }

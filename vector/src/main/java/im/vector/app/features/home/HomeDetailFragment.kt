@@ -92,6 +92,18 @@ class HomeDetailFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.tchap_menu_home
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_home_search_action -> {
+                toggleSearchView()
+                true
+            }
+            else                         -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
     }
@@ -118,7 +130,7 @@ class HomeDetailFragment @Inject constructor(
                 is RoomGroupingMethod.ByLegacyGroup -> {
                     onGroupChange(roomGroupingMethod.groupSummary)
                 }
-                is RoomGroupingMethod.BySpace       -> {
+                is RoomGroupingMethod.BySpace -> {
                     onSpaceChange(roomGroupingMethod.spaceSummary)
                 }
             }
@@ -171,18 +183,6 @@ class HomeDetailFragment @Inject constructor(
         super.onResume()
         // update notification tab if needed
         checkNotificationTabStatus()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_home_search_action -> {
-                toggleSearchView()
-                true
-            }
-            else                         -> {
-                super.onOptionsItemSelected(item)
-            }
-        }
     }
 
     private fun toggleSearchView() {
@@ -297,10 +297,10 @@ class HomeDetailFragment @Inject constructor(
         serverBackupStatusViewModel
                 .subscribe(this) {
                     when (val banState = it.bannerState.invoke()) {
-                        is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                        is BannerState.Setup -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
                         null,
-                        BannerState.Hidden    -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                        BannerState.Hidden -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
                     }
                 }
         views.homeKeysBackupBanner.delegate = this
@@ -331,7 +331,7 @@ class HomeDetailFragment @Inject constructor(
                     is RoomGroupingMethod.ByLegacyGroup -> {
                         // nothing do far
                     }
-                    is RoomGroupingMethod.BySpace       -> {
+                    is RoomGroupingMethod.BySpace -> {
                         it.roomGroupingMethod.spaceSummary?.let {
                             sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(it.roomId))
                         }
@@ -353,7 +353,7 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
-                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
+                R.id.bottom_action_rooms -> RoomListDisplayMode.ROOMS
                 else                      -> RoomListDisplayMode.NOTIFICATIONS
             }
             // close search view before changing display mode
@@ -453,7 +453,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun RoomListDisplayMode.toMenuId() = when (this) {
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
+        RoomListDisplayMode.ROOMS -> R.id.bottom_action_rooms
         else                       -> R.id.bottom_action_notification
     }
 
@@ -462,7 +462,7 @@ class HomeDetailFragment @Inject constructor(
             VectorCallActivity.newIntent(
                     context = requireContext(),
                     callId = call.callId,
-                    roomId = call.mxCall.roomId,
+                    signalingRoomId = call.signalingRoomId,
                     otherUserId = call.mxCall.opponentUserId,
                     isIncomingCall = !call.mxCall.isOutgoing,
                     isVideoCall = call.mxCall.isVideoCall,

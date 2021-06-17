@@ -31,5 +31,4 @@ interface ThreePidPlatformDiscoverService {
      * @param threePid 3rd party id
      */
     suspend fun getPlatform(url: String, threePid: ThreePid): Platform
-
 }

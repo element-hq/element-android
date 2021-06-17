@@ -119,15 +119,16 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
 
         avatarRenderer.render(
                 matrixItem,
-                if (isDirect)
+                if (isDirect) {
                     holder.avatarImageView
-                else
+                } else {
                     holder.avatarHexagonImageView.apply {
                         setBorderSettings(
                                 ThemeUtils.getColor(holder.view.context, R.attr.avatar_border_color),
                                 1
                         )
                     }
+                }
         )
     }
 

@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: kiirparandused versioon 1.1.5 jaoks.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.1.6

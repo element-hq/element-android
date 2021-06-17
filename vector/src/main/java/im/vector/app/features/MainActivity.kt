@@ -24,7 +24,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import fr.gouv.tchap.features.login.TchapLoginActivity
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -43,6 +42,7 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
+import im.vector.app.features.signout.soft.SoftLogoutActivity2
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.parcelize.Parcelize
@@ -222,12 +222,14 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         val intent = when {
             args.clearCredentials
                     && !ignoreClearCredentials
-                    && (!args.isUserLoggedOut || args.isAccountDeactivated) ->
+                    && (!args.isUserLoggedOut || args.isAccountDeactivated) -> {
                 // User has explicitly asked to log out or deactivated his account
-                TchapLoginActivity.newIntent(this, null)
+                navigator.openLogin(this, null)
+                null
+            }
             args.isSoftLogout                                               ->
                 // The homeserver has invalidated the token, with a soft logout
-                SoftLogoutActivity.newIntent(this)
+                getSoftLogoutActivityIntent()
             args.isUserLoggedOut                                            ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
@@ -238,13 +240,23 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     HomeActivity.newIntent(this)
                 } else {
                     // The token is still invalid
-                    SoftLogoutActivity.newIntent(this)
+                    getSoftLogoutActivityIntent()
                 }
-            else                                                            ->
+            else                                                            -> {
                 // First start, or no active session
-                TchapLoginActivity.newIntent(this, null)
+                navigator.openLogin(this, null)
+                null
+            }
         }
-        startActivity(intent)
+        intent?.let { startActivity(it) }
         finish()
+    }
+
+    private fun getSoftLogoutActivityIntent(): Intent {
+        return if (resources.getBoolean(R.bool.useLoginV2)) {
+            SoftLogoutActivity2.newIntent(this)
+        } else {
+            SoftLogoutActivity.newIntent(this)
+        }
     }
 }

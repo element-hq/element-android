@@ -1,0 +1,2 @@
+Haadferoaring yn disse ferzje: Stipe foar sosjaal ynlogge!
+Folsleine feroaringslist: https://github.com/vector-im/element-android/releases/tag/v1.0.15

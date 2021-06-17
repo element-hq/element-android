@@ -148,8 +148,8 @@ class SpacePreviewFragment @Inject constructor(
 //                val roomPeekResult = preview.summary.roomPeekResult
         val spaceName = spacePreviewState.spaceInfo.invoke()?.name ?: spacePreviewState.name ?: ""
         val spaceAvatarUrl = spacePreviewState.spaceInfo.invoke()?.avatarUrl ?: spacePreviewState.avatarUrl
-        val mxItem = MatrixItem.RoomItem(spacePreviewState.idOrAlias, spaceName, spaceAvatarUrl)
-        avatarRenderer.renderSpace(mxItem, views.spacePreviewToolbarAvatar)
+        val mxItem = MatrixItem.SpaceItem(spacePreviewState.idOrAlias, spaceName, spaceAvatarUrl)
+        avatarRenderer.render(mxItem, views.spacePreviewToolbarAvatar)
         views.roomPreviewNoPreviewToolbarTitle.text = spaceName
 //            }
 //            is SpacePeekResult.SpacePeekError,
