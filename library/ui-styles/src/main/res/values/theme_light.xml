@@ -82,11 +82,13 @@
         <item name="textInputStyle">@style/Widget.Vector.TextInputLayout</item>
         <item name="appBarLayoutStyle">@style/Widget.Vector.AppBarLayout</item>
         <item name="popupMenuStyle">@style/Widget.Vector.PopupMenu</item>
-        <item name="bottomSheetDialogTheme">@style/BottomSheet.Vector.Light</item>
         <item name="snackbarStyle">@style/Widget.Vector.SnackBar</item>
         <item name="snackbarButtonStyle">@style/Widget.Vector.SnackBar.Button</item>
         <item name="snackbarTextViewStyle">@style/Widget.Vector.SnackBar.TextView</item>
         <item name="actionModeStyle">@style/Widget.Vector.ActionMode</item>
+
+        <!-- Default theme -->
+        <item name="bottomSheetDialogTheme">@style/Theme.Vector.BottomSheetDialog.Light</item>
 
         <item name="android:textColorLink">@color/element_link_light</item>
 
