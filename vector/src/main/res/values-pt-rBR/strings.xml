@@ -1358,7 +1358,7 @@
     <string name="room_participants_unban_title">Desbanir usuária(o)</string>
     <string name="room_participants_unban_prompt_msg">Desbanir usuária(o) vai permitir-lhe se juntar à sala de novo.</string>
     <string name="settings_add_3pid_confirm_password_title">Confirme sua senha</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Você não pode fazer isto de ${app_name} celular</string>
+    <string name="template_settings_add_3pid_flow_not_supported">Você não pode fazer isto desde ${app_name} mobile</string>
     <string name="settings_add_3pid_authentication_needed">Autenticação é requerida</string>
     <string name="settings_notification_privacy_no_background_sync">O app <b>não</b> precisa de se conectar ao ServidorCasa no background, isto deveria reduzir uso de bateria</string>
     <string name="settings_background_fdroid_sync_mode">Modo Sinc no Background</string>
