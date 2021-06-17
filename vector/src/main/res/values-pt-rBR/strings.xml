@@ -2876,4 +2876,9 @@
         <item quantity="one">Enviar vídeo com o tamanho original</item>
         <item quantity="other">Enviar vídeos com o tamanho original</item>
     </plurals>
+    <string name="teammate_spaces_might_not_join">No momento pessoas podem não ser capaz de se juntar a quaisquer salas privadas que você fizer.
+\n
+\nNós vamos melhorar isto como parte da beta, mas só queríamos deixar você saber.</string>
+    <string name="teammate_spaces_arent_quite_ready">Espaços de colegas de trabalho não estão bem prontos mas você ainda pode dar-lhes uma tentativa</string>
+    <string name="continue_anyway">Continuar Mesmo Assim</string>
 </resources>
