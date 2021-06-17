@@ -788,7 +788,7 @@
     <string name="failed_to_load_timeline_position">%s estava tentando carregar um ponto específico na timeline desta sala mas foi incapaz de encontrá-lo.</string>
     <!-- encryption dialog -->
     <string name="encryption_information_title">Informação de encriptação ponta-a-ponta</string>
-    <string name="encryption_information_device_info">Informação do evento</string>
+    <string name="encryption_information_device_info">Informação de evento</string>
     <string name="encryption_information_user_id">Id de usuária(o)</string>
     <string name="encryption_information_curve25519_identity_key">Chave de identidade Curve25519</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Chave de impressão digital Ed25519 clamada</string>
