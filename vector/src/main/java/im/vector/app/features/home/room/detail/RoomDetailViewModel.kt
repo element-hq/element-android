@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -38,6 +39,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.call.conference.JitsiService
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.lookup.CallProtocolsChecker
@@ -47,6 +49,7 @@ import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
+import im.vector.app.features.home.room.detail.composer.VoiceMessageRecordingHelper
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
@@ -56,6 +59,7 @@ import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -119,6 +123,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val chatEffectManager: ChatEffectManager,
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
+        private val voiceMessageRecordingHelper: VoiceMessageRecordingHelper,
         timelineSettingsFactory: TimelineSettingsFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
@@ -324,6 +329,8 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
             RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
             RoomDetailAction.ResendAll                           -> handleResendAll()
+            RoomDetailAction.StartRecordingVoiceMessage          -> handleStartRecordingVoiceMessage()
+            is RoomDetailAction.EndRecordingVoiceMessage         -> handleEndRecordingVoiceMessage(action.recordTime)
         }.exhaustive
     }
 
@@ -608,6 +615,22 @@ class RoomDetailViewModel @AssistedInject constructor(
                     copy(tombstoneEventHandling = result)
                 }
             }
+        }
+    }
+
+    private fun handleStartRecordingVoiceMessage() {
+        voiceMessageRecordingHelper.startRecording()
+    }
+
+    private fun handleEndRecordingVoiceMessage(recordTime: Long) {
+        if (recordTime == 0L) {
+            voiceMessageRecordingHelper.deleteRecording()
+            return
+        }
+        voiceMessageRecordingHelper.stopRecording(recordTime)?.let { audioType ->
+            room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
+            room
+            //voiceMessageRecordingHelper.deleteRecording()
         }
     }
 

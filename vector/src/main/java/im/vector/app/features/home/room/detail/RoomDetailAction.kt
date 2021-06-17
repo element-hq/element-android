@@ -109,4 +109,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     // Failed messages
     object RemoveAllFailedMessages : RoomDetailAction()
+
+    // Voice Message
+    object StartRecordingVoiceMessage : RoomDetailAction()
+    data class EndRecordingVoiceMessage(val recordTime: Long) : RoomDetailAction()
 }

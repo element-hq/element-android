@@ -131,4 +131,10 @@
         android:src="@drawable/ic_send"
         tools:ignore="MissingConstraints" />
 
+    <im.vector.app.features.home.room.detail.composer.VoiceMessageRecorderView
+        android:id="@+id/voiceMessageRecorderView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints" />
+
 </merge>

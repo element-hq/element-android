@@ -3399,4 +3399,8 @@
     <string name="this_space_has_no_rooms_admin">Some rooms may be hidden because they’re private and you need an invite.</string>
 
     <string name="unnamed_room">Unnamed Room</string>
+    
+    <string name="a11y_start_voice_message">Start Voice Message</string>
+    <string name="voice_message_slide_to_cancel">Slide to cancel</string>
+    <string name="a11y_lock_voice_message">Voice Message Lock</string>
 </resources>

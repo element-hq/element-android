@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="2dp">
+
+    <View
+        android:id="@+id/voiceMessageLockBackground"
+        android:layout_width="56dp"
+        android:layout_height="160dp"
+        android:background="@drawable/bg_voice_message_lock"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <com.devlomi.record_view.RecordView
+        android:id="@+id/voiceMessageRecordView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:counter_time_color="@color/palette_gray_200"
+        app:layout_constraintBottom_toBottomOf="@+id/voiceMessageButton"
+        app:layout_constraintEnd_toStartOf="@+id/voiceMessageButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:slide_to_cancel_arrow="@drawable/ic_voice_slide_to_cancel_arrow"
+        app:slide_to_cancel_arrow_color="@color/palette_gray_300"
+        app:slide_to_cancel_text="@string/voice_message_slide_to_cancel" />
+
+    <com.devlomi.record_view.RecordButton
+        android:id="@+id/voiceMessageButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/a11y_start_voice_message"
+        android:scaleType="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:mic_icon="@drawable/ic_voice_mic"
+        tools:ignore="MissingPrefix" />
+
+    <ImageView
+        android:id="@+id/voiceMessageLockArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_voice_lock_arrow"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/voiceMessageButton"
+        app:layout_constraintEnd_toEndOf="@id/voiceMessageLockBackground"
+        app:layout_constraintStart_toStartOf="@id/voiceMessageLockBackground"
+        android:layout_marginBottom="24dp"
+        tools:ignore="ContentDescription"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/voiceMessageLockImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:contentDescription="@string/a11y_lock_voice_message"
+        android:src="@drawable/ic_voice_message_unlocked"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/voiceMessageLockBackground"
+        app:layout_constraintStart_toStartOf="@id/voiceMessageLockBackground"
+        app:layout_constraintTop_toTopOf="@id/voiceMessageLockBackground"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

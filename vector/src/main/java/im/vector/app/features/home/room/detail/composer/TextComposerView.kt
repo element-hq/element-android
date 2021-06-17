@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.transition.ChangeBounds
 import androidx.transition.Fade
@@ -32,6 +33,7 @@ import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import im.vector.app.R
 import im.vector.app.databinding.ComposerLayoutBinding
+import org.matrix.android.sdk.api.extensions.orFalse
 
 /**
  * Encapsulate the timeline composer UX.
@@ -46,6 +48,9 @@ class TextComposerView @JvmOverloads constructor(
         fun onCloseRelatedMessage()
         fun onSendMessage(text: CharSequence)
         fun onAddAttachment()
+        fun onVoiceRecordingStarted()
+        fun onVoiceRecordingEnded(recordTime: Long)
+        fun checkVoiceRecordingPermission(): Boolean
     }
 
     val views: ComposerLayoutBinding
@@ -71,7 +76,9 @@ class TextComposerView @JvmOverloads constructor(
             }
 
             override fun onTextEmptyStateChanged(isEmpty: Boolean) {
-                views.sendButton.isVisible = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isEmpty
+                val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isEmpty
+                views.sendButton.isInvisible = !shouldShowSendButton
+                views.voiceMessageRecorderView.isVisible = !shouldShowSendButton
             }
         }
         views.composerRelatedMessageCloseButton.setOnClickListener {
@@ -87,6 +94,28 @@ class TextComposerView @JvmOverloads constructor(
         views.attachmentButton.setOnClickListener {
             callback?.onAddAttachment()
         }
+
+        views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
+            override fun onVoiceRecordingStarted() {
+                views.attachmentButton.isVisible = false
+                views.composerEditText.isVisible = false
+                views.composerEmojiButton.isVisible = false
+                views.composerEditTextOuterBorder.isVisible = false
+                callback?.onVoiceRecordingStarted()
+            }
+
+            override fun onVoiceRecordingEnded(recordTime: Long) {
+                views.attachmentButton.isVisible = true
+                views.composerEditText.isVisible = true
+                views.composerEmojiButton.isVisible = true
+                views.composerEditTextOuterBorder.isVisible = true
+                callback?.onVoiceRecordingEnded(recordTime)
+            }
+
+            override fun checkVoiceRecordingPermission(): Boolean {
+                return callback?.checkVoiceRecordingPermission().orFalse()
+            }
+        }
     }
 
     fun collapse(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
@@ -96,7 +125,10 @@ class TextComposerView @JvmOverloads constructor(
         }
         currentConstraintSetId = R.layout.composer_layout_constraint_set_compact
         applyNewConstraintSet(animate, transitionComplete)
-        views.sendButton.isVisible = !views.composerEditText.text.isNullOrEmpty()
+
+        val shouldShowSendButton = !views.composerEditText.text.isNullOrEmpty()
+        views.sendButton.isInvisible = !shouldShowSendButton
+        views.voiceMessageRecorderView.isVisible = !shouldShowSendButton
     }
 
     fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
@@ -106,7 +138,8 @@ class TextComposerView @JvmOverloads constructor(
         }
         currentConstraintSetId = R.layout.composer_layout_constraint_set_expanded
         applyNewConstraintSet(animate, transitionComplete)
-        views.sendButton.isVisible = true
+        views.sendButton.isInvisible = false
+        views.voiceMessageRecorderView.isVisible = false
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {

@@ -100,6 +100,7 @@ import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.KeyboardStateUtils
+import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.colorizeMatchingText
@@ -1191,6 +1192,18 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onTextEmptyStateChanged(isEmpty: Boolean) {
                 // No op
+            }
+
+            override fun onVoiceRecordingStarted() {
+                roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
+            }
+
+            override fun onVoiceRecordingEnded(recordTime: Long) {
+                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(recordTime))
+            }
+
+            override fun checkVoiceRecordingPermission(): Boolean {
+                return checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, requireActivity(), 0)
             }
         }
     }

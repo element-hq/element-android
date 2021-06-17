@@ -48,6 +48,9 @@ allprojects {
                 // Chat effects
                 includeGroupByRegex 'com\\.github\\.jetradarmobile'
                 includeGroupByRegex 'nl\\.dionsegijn'
+
+                // Voice RecordView
+                includeGroupByRegex 'com\\.github\\.3llomi'
             }
         }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
