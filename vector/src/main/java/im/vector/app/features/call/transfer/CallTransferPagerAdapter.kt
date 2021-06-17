@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.platform.Restorable
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.userdirectory.UserListFragment
@@ -29,14 +28,17 @@ import im.vector.app.features.userdirectory.UserListFragmentArgs
 
 class CallTransferPagerAdapter(
         private val fragmentActivity: FragmentActivity
-) : FragmentStateAdapter(fragmentActivity), Restorable {
+) : FragmentStateAdapter(fragmentActivity) {
+
+    companion object {
+        const val USER_LIST_INDEX = 0
+        const val DIAL_PAD_INDEX = 1
+    }
 
     val userListFragment: UserListFragment?
-        get() = findFragmentAtPosition(0) as? UserListFragment
+        get() = findFragmentAtPosition(USER_LIST_INDEX) as? UserListFragment
     val dialPadFragment: DialPadFragment?
-        get() = findFragmentAtPosition(1) as? DialPadFragment
-
-    var onDialPadOkClicked: ((String) -> Unit)? = null
+        get() = findFragmentAtPosition(DIAL_PAD_INDEX) as? DialPadFragment
 
     override fun getItemCount() = 2
 
@@ -57,10 +59,9 @@ class CallTransferPagerAdapter(
             (fragment as DialPadFragment).apply {
                 arguments = Bundle().apply {
                     putBoolean(DialPadFragment.EXTRA_ENABLE_DELETE, true)
-                    putBoolean(DialPadFragment.EXTRA_ENABLE_OK, true)
+                    putBoolean(DialPadFragment.EXTRA_ENABLE_OK, false)
                     putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
                 }
-                applyCallback()
             }
         }
         return fragment
@@ -68,21 +69,5 @@ class CallTransferPagerAdapter(
 
     private fun findFragmentAtPosition(position: Int): Fragment? {
         return fragmentActivity.supportFragmentManager.findFragmentByTag("f$position")
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) = Unit
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        dialPadFragment?.applyCallback()
-    }
-
-    private fun DialPadFragment.applyCallback(): DialPadFragment {
-        callback = object : DialPadFragment.Callback {
-            override fun onOkClicked(formatted: String?, raw: String?) {
-                if (raw.isNullOrEmpty()) return
-                onDialPadOkClicked?.invoke(raw)
-            }
-        }
-        return this
     }
 }

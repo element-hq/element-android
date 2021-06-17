@@ -22,6 +22,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
@@ -122,7 +123,6 @@ class HomeDetailFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         sharedCallActionViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
-
         setupBottomNavigationView()
         setupToolbar()
         setupKeysBackupBanner()
@@ -351,6 +351,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun updateUIForTab(tab: HomeTab) {
+        views.bottomNavigationView.menu.findItem(tab.toMenuId()).isChecked = true
         views.groupToolbarTitleView.setText(tab.titleRes)
         updateSelectedFragment(tab)
         invalidateOptionsMenu()
