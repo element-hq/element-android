@@ -1712,7 +1712,7 @@
     <string name="encryption_information_verify_device_warning2">Om de inte matchar så kan kommunikationens säkerhet vara äventyrad.</string>
     <string name="encryption_information_verify_key_match">Jag verifierar att nycklarna matchar</string>
     <string name="directory_server_fail_to_retrieve_server">Servern kan vara otillgänglig eller överbelastad</string>
-    <string name="directory_server_placeholder">Hemserver-URL</string>
+    <string name="directory_server_placeholder">Servernamn</string>
     <string name="lock_screen_hint">Skriv här…</string>
     <string name="notification_unread_notified_messages_in_room">%1$s i %2$s</string>
     <string name="notification_unknown_new_event">Ny händelse</string>
@@ -2534,9 +2534,9 @@
     <string name="room_settings_alias_title">Rumsadresser</string>
     <string name="room_settings_room_access_title">Rumsåtkomst</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Ändringar av vilka som kan läsa historik kommer bara gälla för framtida meddelanden i det här rummet. Synligheten för existerande historik kommer att vara oförändrad.</string>
-    <string name="default_message_emote_snow">skickar snö ❄️</string>
+    <string name="default_message_emote_snow">skickar snöfall ❄️</string>
     <string name="default_message_emote_confetti">skickar konfetti 🎉</string>
-    <string name="command_snow">Skickar det givna meddelandet med snö</string>
+    <string name="command_snow">Skickar det givna meddelandet med snöfall</string>
     <string name="command_confetti">Skickar de givna meddelandet med konfetti</string>
     <string name="login_clear_homeserver_history">Rensa historik</string>
     <string name="login_social_sso">externt konto</string>
@@ -2794,4 +2794,16 @@
     <string name="feedback">Återkoppling</string>
     <string name="send_feedback_space_title">Utrymmesåterkoppling</string>
     <string name="error_jitsi_join_conf">Tyvärr så inträffade ett fel vid försök att gå med i gruppsamtalet</string>
+    <string name="unnamed_room">Namnlöst rum</string>
+    <string name="private_space">Privat utrymme</string>
+    <string name="public_space">Offentligt utrymme</string>
+    <string name="a11y_public_space">Det här utrymmet är offentligt</string>
+    <string name="call_transfer_unknown_person">Ökänd person</string>
+    <string name="call_transfer_transfer_to_title">Överför till %1$s</string>
+    <string name="call_transfer_consulting_with">Rådfrågar %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">Den här servern finns redan i listan</string>
+    <string name="directory_add_a_new_server_error">Kan inte hitta den här servern eller dess rumslista</string>
+    <string name="directory_add_a_new_server_prompt">Ange namnet för en ny server du vill utforska.</string>
+    <string name="directory_add_a_new_server">Lägg till en ny server</string>
+    <string name="directory_your_server">Din server</string>
 </resources>

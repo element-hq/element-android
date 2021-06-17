@@ -704,7 +704,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="select_room_directory">Válassz egy szoba könyvtárat</string>
     <string name="directory_server_fail_to_retrieve_server">A szerver lehet nem elérhető vagy túltöltött</string>
     <string name="directory_server_type_homeserver">Írj be egy Matrix szervert, az ott található nyilvános szobák listázásához</string>
-    <string name="directory_server_placeholder">Matrix szerver URL</string>
+    <string name="directory_server_placeholder">Szerver neve</string>
     <string name="directory_server_all_rooms_on_server">Összes szoba a %s szerveren</string>
     <string name="directory_server_native_rooms">Összes anyanyelvi %s szoba</string>
     <string name="historical_placeholder">Előzmények keresése</string>
@@ -2799,4 +2799,16 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     </plurals>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Az értesítésre kattintottak!</string>
     <string name="settings_troubleshoot_test_notification_notice">Kattints az értesítésre. Ha nem látsz értesítést, ellenőrizd a rendszerbeállításokat.</string>
+    <string name="call_transfer_transfer_to_title">Hívásátirányítás ide: %1$s</string>
+    <string name="unnamed_room">Névtelen szoba</string>
+    <string name="private_space">Privát tér</string>
+    <string name="public_space">Nyilvános tér</string>
+    <string name="a11y_public_space">Ez a Tér nyilvános</string>
+    <string name="call_transfer_unknown_person">Ismeretlen személy</string>
+    <string name="call_transfer_consulting_with">Konzultáció vele: %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">Ez a szerver már szerepel a listában</string>
+    <string name="directory_add_a_new_server_error">A szerver vagy a szoba listája nem található</string>
+    <string name="directory_add_a_new_server_prompt">Add meg a felfedezni kívánt új szerver nevét.</string>
+    <string name="directory_add_a_new_server">Új szerver hozzáadása</string>
+    <string name="directory_your_server">Matrix szervered</string>
 </resources>

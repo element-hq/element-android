@@ -1514,7 +1514,7 @@
     <string name="select_room_directory">Vali jututubade loend</string>
     <string name="directory_server_fail_to_retrieve_server">Server kas pole kättesaadav või on ülekoormatud</string>
     <string name="directory_server_type_homeserver">Sisesta koduserveri nimi, mille avalike jututubade loendit soovid näha</string>
-    <string name="directory_server_placeholder">Koduserveri aadress</string>
+    <string name="directory_server_placeholder">Serveri aadress</string>
     <string name="directory_server_all_rooms_on_server">Kõik jututoad %s serveris</string>
     <string name="directory_server_native_rooms">Kõik %s jututoad</string>
     <string name="lock_screen_hint">Kirjuta siia…</string>
@@ -2794,4 +2794,16 @@
     <string name="feedback">Tagasiside</string>
     <string name="send_feedback_space_title">Tagasiside kogukonnakeskuste kohta</string>
     <string name="error_jitsi_join_conf">Vabandust, rühmakõnega liitumisel tekkis viga</string>
+    <string name="unnamed_room">Nimetu jututuba</string>
+    <string name="private_space">Privaatne kogukonnakeskus</string>
+    <string name="public_space">Avalik kogukonnakeskus</string>
+    <string name="a11y_public_space">See kogukonnakeskus on avalik</string>
+    <string name="call_transfer_unknown_person">Tundmatu isik</string>
+    <string name="call_transfer_transfer_to_title">Suuna kasutajale %1$s</string>
+    <string name="call_transfer_consulting_with">Pean nõu kasutajaga %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">See server on juba loendis olemas</string>
+    <string name="directory_add_a_new_server_error">Seda serverit kas ei leidu või seal puudub jututubade loend</string>
+    <string name="directory_add_a_new_server_prompt">Sisesta serveri nimi, mille sisu sa soovid uurida.</string>
+    <string name="directory_add_a_new_server">Lisa uus server</string>
+    <string name="directory_your_server">Sinu server</string>
 </resources>

@@ -394,7 +394,7 @@
     <string name="auth_forgot_password">Harruat fjalëkalimin?</string>
     <string name="auth_use_server_options">Përdor mundësi vetjake shërbyesi (e përparuar)</string>
     <string name="auth_email_validation_message">Ju lutemi, që të vazhdojë regjistrimi, kontrolloni email-in tuaj</string>
-    <string name="auth_recaptcha_message">Ky Shërbyes Home do të donte të sigurohej se s’jeni robot</string>
+    <string name="auth_recaptcha_message">Ky shërbyes Home do të donte të sigurohej se s’jeni robot</string>
     <string name="auth_username_in_use">Emër përdoruesi në përdorim</string>
     <string name="auth_home_server">Shërbyes Home:</string>
     <string name="auth_identity_server">Shërbyes Identitetesh:</string>
@@ -1022,7 +1022,7 @@
     <string name="encryption_information_unblock">Hiqe nga listë e zezë</string>
     <string name="encryption_information_verify_device_warning">Ripohojeni duke krahasuar sa vijon me Rregullimet e Përdoruesit te sesioni juaj tjetër:</string>
     <string name="encryption_information_verify_device_warning2">Nëse s’përputhen, siguria e komunikimeve tuaja mund të jetë komprometuar.</string>
-    <string name="directory_server_placeholder">URL Shërbyesi Home</string>
+    <string name="directory_server_placeholder">Emër shërbyesi</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d dhomë</item>
         <item quantity="other">%d dhoma</item>
@@ -2120,7 +2120,7 @@
     <string name="invitations_sent_to_two_users">Ftesa u dërgua te %1$s dhe %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="one">U dërguan ftesa te %1$s dhe një tjetër</item>
-        <item quantity="other">U dërguan ftesa te %1$s dhe %2$s të tjerë</item>
+        <item quantity="other">U dërguan ftesa te %1$s dhe %2$d të tjerë</item>
     </plurals>
     <string name="invite_users_to_room_failure">S’ftuam dot përdorues. Ju lutemi, kontrolloni përdoruesit që doni të ftoni dhe riprovoni.</string>
     <string name="event_redacted">Mesazhi u fshi</string>
@@ -2747,7 +2747,7 @@
     <string name="make_this_space_public">Bëje publike këtë hapësirë</string>
     <string name="space_settings_manage_rooms">Administroni dhoma</string>
     <string name="looking_for_someone_not_in_space">Po kërkoni për dikë jo në %s\?</string>
-    <string name="user_invites_you">%1$s ju fton</string>
+    <string name="user_invites_you">%s ju fton</string>
     <string name="a11y_public_room">Kjo dhomë është publike</string>
     <string name="a11y_unchecked">E pakontrolluar</string>
     <string name="a11y_checked">U kontrollua</string>
@@ -2784,4 +2784,16 @@
     <string name="feedback">Përshtypje</string>
     <string name="send_feedback_space_title">Përshtypje për hapësirat</string>
     <string name="error_jitsi_join_conf">Na ndjeni, ndodhi një gabim teksa provohej të hyhej te konferenca</string>
+    <string name="unnamed_room">Dhomë e Paemërtuar</string>
+    <string name="private_space">Hapësirë private</string>
+    <string name="public_space">Hapësirë publike</string>
+    <string name="a11y_public_space">Kjo Hapësirë është publike</string>
+    <string name="call_transfer_unknown_person">Person i panjohur</string>
+    <string name="call_transfer_transfer_to_title">Shpërngule te %1$s</string>
+    <string name="call_transfer_consulting_with">Po konsultohet me %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">Ky shërbyes është tashmë i pranishëm te lista</string>
+    <string name="directory_add_a_new_server_error">S’gjendet dot ky shërbyes ose lista e dhomave të tij</string>
+    <string name="directory_add_a_new_server_prompt">Jepni emrin e e një shërbyesi të ri që doni të eksploroni.</string>
+    <string name="directory_add_a_new_server">Shtoni shërbyes të ri</string>
+    <string name="directory_your_server">Shërbyesi juaj</string>
 </resources>
