@@ -1602,7 +1602,7 @@
     <string name="sas_waiting_for_partner">Esperando por parceira(o) confirmar…</string>
     <string name="sas_verified">Verificada!</string>
     <string name="sas_verified_successful">Você tem confirmado esta sessão com sucesso.</string>
-    <string name="sas_verified_successful_description">Mensagens seguras com esta(e) usuária(o) estão encriptadas ponta-a-ponta e não são capazes de ser lidas por terceiros.</string>
+    <string name="sas_verified_successful_description">Mensagens seguras com esta(e) usuária(o) são encriptadas ponta-a-ponta e não são capazes de ser lidas por terceiros.</string>
     <string name="sas_got_it">Entendido</string>
     <string name="sas_verifying_keys">Nada aparecendo\? Não todos os clientes suportam verificação interativa ainda. Use verificação legado.</string>
     <string name="sas_legacy_verification_button_title">Usar verificação legado.</string>
