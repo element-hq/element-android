@@ -9,11 +9,11 @@
 
     <TextView
         android:id="@+id/itemRoomAliasHash"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:text="@string/matrix_room_alias_prefix"
-        android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/itemRoomAliasTextInputLayout"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -42,11 +42,11 @@
 
     <TextView
         android:id="@+id/itemRoomAliasHomeServer"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:maxWidth="200dp"
-        android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/itemRoomAliasTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text=":matrix.org" />

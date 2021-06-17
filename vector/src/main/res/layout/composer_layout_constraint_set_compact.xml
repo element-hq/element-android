@@ -135,7 +135,7 @@
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
-        style="@style/ComposerEditTextStyle"
+        style="@style/Widget.Vector.EditText.Composer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/room_message_placeholder_not_encrypted"

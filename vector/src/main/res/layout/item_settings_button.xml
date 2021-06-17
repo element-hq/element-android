@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/settings_item_button"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

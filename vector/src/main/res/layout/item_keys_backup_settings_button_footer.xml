@@ -18,7 +18,7 @@
 
     <Button
         android:id="@+id/keys_backup_settings_footer_button2"
-        style="@style/VectorButtonStyle"
+        style="@style/Widget.Vector.Button"
         android:layout_width="@dimen/button_max_width"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

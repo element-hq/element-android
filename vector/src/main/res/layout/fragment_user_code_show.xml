@@ -33,10 +33,13 @@
                         android:src="@drawable/ic_x_18dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?vctr_content_secondary"
+                        tools:ignore="MissingPrefix" />
 
                     <TextView
                         android:id="@+id/showUserCodeTitle"
+                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -45,7 +48,6 @@
                         android:maxLines="1"
                         android:text="@string/add_by_qr_code"
                         android:textColor="?vctr_content_primary"
-                        android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -102,6 +104,7 @@
 
                 <TextView
                     android:id="@+id/showUserCodeCardNameText"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -110,12 +113,12 @@
                     android:singleLine="true"
                     android:textAlignment="center"
                     android:textColor="?vctr_content_primary"
-                    android:textSize="15sp"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@sample/users.json/data/displayName" />
 
                 <TextView
                     android:id="@+id/showUserCodeCardUserIdText"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -125,7 +128,6 @@
                     android:singleLine="true"
                     android:textAlignment="center"
                     android:textColor="?vctr_content_secondary"
-                    android:textSize="15sp"
                     app:layout_constraintTop_toBottomOf="@id/showUserCodeCardNameText"
                     tools:text="@sample/users.json/data/id" />
 
@@ -156,6 +158,7 @@
 
         <TextView
             android:id="@+id/showUserCodeInfoText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -164,7 +167,6 @@
             android:text="@string/user_code_info_text"
             android:textAlignment="center"
             android:textColor="?vctr_content_secondary"
-            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="@id/showUserCodeCard"
             app:layout_constraintStart_toStartOf="@id/showUserCodeCard"
             app:layout_constraintTop_toBottomOf="@id/showUserCodeCard" />
@@ -187,7 +189,7 @@
 
         <Button
             android:id="@+id/showUserCodeScanButton"
-            style="@style/VectorButtonStyleText"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_vertical_margin"

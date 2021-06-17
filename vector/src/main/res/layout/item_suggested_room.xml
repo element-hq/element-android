@@ -38,6 +38,7 @@
 
     <TextView
         android:id="@+id/roomNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -47,7 +48,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@+id/joinSuggestedRoomButton"
@@ -59,6 +59,7 @@
 
     <TextView
         android:id="@+id/suggestedRoomDescription"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
@@ -66,7 +67,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_secondary"
-        android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@id/joinSuggestedRoomButton"
         app:layout_constraintStart_toStartOf="@+id/roomNameView"
         app:layout_constraintTop_toBottomOf="@+id/roomNameView"
@@ -74,7 +74,7 @@
 
     <Button
         android:id="@+id/joinSuggestedRoomButton"
-        style="@style/VectorButtonStyleOutlined"
+        style="@style/Widget.Vector.Button.Outlined"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

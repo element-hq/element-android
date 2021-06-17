@@ -16,13 +16,13 @@
 
         <TextView
             android:id="@+id/callDialPadTitle"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/call_dial_pad_title"
-            android:textColor="?vctr_content_primary"
-            android:textSize="20sp" />
+            android:textColor="?vctr_content_primary" />
 
         <ImageView
             android:id="@+id/callDialPadClose"

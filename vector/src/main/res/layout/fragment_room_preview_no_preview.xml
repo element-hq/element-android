@@ -39,6 +39,7 @@
 
                     <TextView
                         android:id="@+id/roomPreviewNoPreviewToolbarTitle"
+                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -46,7 +47,6 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:textColor="?vctr_content_primary"
-                        android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -60,7 +60,7 @@
 
             <ProgressBar
                 android:id="@+id/roomPreviewPeekingProgress"
-                style="@style/VectorHorizontalProgressBar"
+                style="@style/Widget.Vector.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="14dp"
                 android:layout_gravity="center"
@@ -90,44 +90,44 @@
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewName"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="56dp"
                     android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.Vector.Title"
-                    android:textSize="15sp"
+                    android:textColor="?vctr_content_primary"
                     android:textStyle="bold"
                     tools:text="@sample/rooms.json/data/name" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewTopic"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
                     android:autoLink="web"
                     android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.Vector.Subtitle"
-                    android:textSize="15sp"
+                    android:textColor="?vctr_content_secondary"
                     tools:text="@sample/rooms.json/data/topic" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewLabel"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="28dp"
                     android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.Vector.Subtitle2"
-                    android:textSize="14sp"
+                    android:textColor="?vctr_content_secondary"
                     tools:text="@string/room_preview_no_preview" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewError"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
                     android:gravity="center"
                     android:textColor="?colorError"
-                    android:textSize="15sp"
                     android:visibility="gone"
                     tools:text="Error"
                     tools:visibility="visible" />

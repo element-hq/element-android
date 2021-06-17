@@ -23,6 +23,7 @@
 
     <TextView
         android:id="@+id/itemUserId"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -30,7 +31,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/itemUserName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,13 +41,13 @@
 
     <TextView
         android:id="@+id/itemUserName"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_secondary"
-        android:textSize="15sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

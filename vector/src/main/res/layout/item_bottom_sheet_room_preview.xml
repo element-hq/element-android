@@ -27,6 +27,7 @@
 
     <TextView
         android:id="@+id/bottomSheetRoomPreviewName"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -35,7 +36,6 @@
         android:fontFamily="sans-serif-bold"
         android:singleLine="true"
         android:textColor="?vctr_content_primary"
-        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewLowPriority"

@@ -47,6 +47,8 @@ android {
 }
 
 dependencies {
+    implementation project(":library:ui-styles")
+
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'

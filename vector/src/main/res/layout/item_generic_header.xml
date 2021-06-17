@@ -2,6 +2,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemGenericHeaderText"
+    style="@style/Widget.Vector.TextView.Subtitle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="16dp"
@@ -9,6 +10,5 @@
     android:paddingEnd="16dp"
     android:paddingBottom="4dp"
     android:textColor="?vctr_notice_text_color"
-    android:textSize="15sp"
     android:textStyle="bold"
     tools:text="Today" />

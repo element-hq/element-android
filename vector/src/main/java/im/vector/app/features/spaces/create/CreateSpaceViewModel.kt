@@ -70,7 +70,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
 
     override fun handle(action: CreateSpaceAction) {
         when (action) {
-            is CreateSpaceAction.SetRoomType -> {
+            is CreateSpaceAction.SetRoomType            -> {
                 setState {
                     copy(
                             step = CreateSpaceState.Step.SetDetails,
@@ -79,7 +79,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToDetails)
             }
-            is CreateSpaceAction.NameChanged -> {
+            is CreateSpaceAction.NameChanged            -> {
                 setState {
                     copy(
                             nameInlineError = null,
@@ -87,20 +87,20 @@ class CreateSpaceViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is CreateSpaceAction.TopicChanged -> {
+            is CreateSpaceAction.TopicChanged           -> {
                 setState {
                     copy(
                             topic = action.topic
                     )
                 }
             }
-            CreateSpaceAction.OnBackPressed -> {
+            CreateSpaceAction.OnBackPressed             -> {
                 handleBackNavigation()
             }
-            CreateSpaceAction.NextFromDetails -> {
+            CreateSpaceAction.NextFromDetails           -> {
                 handleNextFromDetails()
             }
-            CreateSpaceAction.NextFromDefaultRooms -> {
+            CreateSpaceAction.NextFromDefaultRooms      -> {
                 handleNextFromDefaultRooms()
             }
             is CreateSpaceAction.DefaultRoomNameChanged -> {
@@ -112,10 +112,10 @@ class CreateSpaceViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is CreateSpaceAction.SetAvatar -> {
+            is CreateSpaceAction.SetAvatar              -> {
                 setState { copy(avatarUri = action.uri) }
             }
-            is CreateSpaceAction.SetSpaceTopology -> {
+            is CreateSpaceAction.SetSpaceTopology       -> {
                 handleSetTopology(action)
             }
         }.exhaustive
@@ -123,7 +123,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
 
     private fun handleSetTopology(action: CreateSpaceAction.SetSpaceTopology) {
         when (action.topology) {
-            SpaceTopology.JustMe -> {
+            SpaceTopology.JustMe         -> {
                 setState {
                     copy(
                             spaceTopology = SpaceTopology.JustMe,
@@ -146,10 +146,10 @@ class CreateSpaceViewModel @AssistedInject constructor(
 
     private fun handleBackNavigation() = withState { state ->
         when (state.step) {
-            CreateSpaceState.Step.ChooseType -> {
+            CreateSpaceState.Step.ChooseType        -> {
                 _viewEvents.post(CreateSpaceEvents.Dismiss)
             }
-            CreateSpaceState.Step.SetDetails -> {
+            CreateSpaceState.Step.SetDetails        -> {
                 setState {
                     copy(
                             step = CreateSpaceState.Step.ChooseType,
@@ -159,7 +159,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToChooseType)
             }
-            CreateSpaceState.Step.AddRooms -> {
+            CreateSpaceState.Step.AddRooms          -> {
                 if (state.spaceType == SpaceType.Private && state.spaceTopology == SpaceTopology.MeAndTeammates) {
                     setState {
                         copy(
@@ -234,7 +234,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                         )
                 )
                 when (result) {
-                    is CreateSpaceTaskResult.Success -> {
+                    is CreateSpaceTaskResult.Success             -> {
                         setState {
                             copy(creationResult = Success(result.spaceId))
                         }
@@ -246,7 +246,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                                 )
                         )
                     }
-                    is CreateSpaceTaskResult.PartialSuccess -> {
+                    is CreateSpaceTaskResult.PartialSuccess      -> {
                         // XXX what can we do here?
                         setState {
                             copy(creationResult = Success(result.spaceId))

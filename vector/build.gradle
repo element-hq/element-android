@@ -299,7 +299,7 @@ android {
 
 dependencies {
 
-    def epoxy_version = '4.6.1'
+    def epoxy_version = '4.6.2'
     def fragment_version = '1.3.4'
     def arrow_version = "0.8.2"
     def markwon_version = '4.1.2'
@@ -324,6 +324,7 @@ dependencies {
     implementation project(":diff-match-patch")
     implementation project(":multipicker")
     implementation project(":attachment-viewer")
+    implementation project(":library:ui-styles")
     implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

@@ -37,10 +37,13 @@
                         android:src="@drawable/ic_x_18dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?vctr_content_secondary"
+                        tools:ignore="MissingPrefix" />
 
                     <TextView
                         android:id="@+id/phoneBookTitle"
+                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -49,7 +52,6 @@
                         android:maxLines="1"
                         android:text="@string/contacts_book_title"
                         android:textColor="?vctr_content_primary"
-                        android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -90,7 +92,7 @@
 
             <Button
                 android:id="@+id/phoneBookSearchForMatrixContacts"
-                style="@style/VectorButtonStyleText"
+                style="@style/Widget.Vector.Button.Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/layout_horizontal_margin"

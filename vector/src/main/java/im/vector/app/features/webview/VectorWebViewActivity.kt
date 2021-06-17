@@ -21,11 +21,9 @@ import android.content.Intent
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.annotation.CallSuper
-import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityVectorWebViewBinding
-
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
@@ -48,7 +46,7 @@ class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>()
 
     override fun initUiAndData() {
         configureToolbar(views.webviewToolbar)
-        waitingView = findViewById(R.id.simple_webview_loader)
+        waitingView = views.simpleWebviewLoader
 
         views.simpleWebview.settings.apply {
             // Enable Javascript

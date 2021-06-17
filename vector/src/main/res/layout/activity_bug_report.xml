@@ -26,6 +26,7 @@
 
         <TextView
             android:id="@+id/bug_report_progress_text_view"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -63,6 +64,7 @@
 
                 <TextView
                     android:id="@+id/bug_report_first_text"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -91,16 +93,17 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="@string/send_bug_report_description_in_english"
-                    android:textColor="?vctr_content_secondary"
-                    android:textSize="12sp" />
+                    android:textColor="?vctr_content_secondary" />
 
                 <TextView
                     android:id="@+id/bug_report_logs_description"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"

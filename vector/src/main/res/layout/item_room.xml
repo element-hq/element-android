@@ -97,6 +97,7 @@
 
     <TextView
         android:id="@+id/roomNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -106,7 +107,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@+id/roomDraftBadge"
@@ -135,6 +135,7 @@
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomUnreadCounterBadgeView"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -144,7 +145,6 @@
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
         android:textColor="?colorOnError"
-        android:textSize="10sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
         app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
@@ -156,11 +156,11 @@
 
     <TextView
         android:id="@+id/roomLastEventTimeView"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:textColor="?vctr_content_secondary"
-        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/roomNameView"
@@ -168,6 +168,7 @@
 
     <TextView
         android:id="@+id/roomLastEventView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
@@ -175,7 +176,6 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="?vctr_content_secondary"
-        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/roomNameView"
         app:layout_constraintTop_toBottomOf="@+id/roomNameView"
@@ -183,6 +183,7 @@
 
     <TextView
         android:id="@+id/roomTypingView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
@@ -190,7 +191,6 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="?colorPrimary"
-        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/roomNameView"

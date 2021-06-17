@@ -11,6 +11,7 @@
 
 
     <TextView
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -18,19 +19,18 @@
         android:layout_marginBottom="8dp"
         android:text="@string/room_widget_permission_title"
         android:textColor="?vctr_content_primary"
-        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/widgetPermissionHeader2"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:text="@string/room_widget_permission_added_by"
-        android:textColor="?vctr_content_secondary"
-        android:textSize="16sp" />
+        android:textColor="?vctr_content_secondary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,27 +57,30 @@
 
             <TextView
                 android:id="@+id/widgetPermissionOwnerDisplayName"
+                style="@style/Widget.Vector.TextView.Subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="?vctr_content_primary"
-                android:textSize="18sp"
                 android:textStyle="bold"
-                tools:text="User name" />
+                tools:text="@sample/users.json/data/displayName" />
 
             <TextView
                 android:id="@+id/widgetPermissionOwnerId"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="?vctr_content_secondary"
-                android:textSize="14sp"
-                tools:text="\@foo:matrix.org" />
+                tools:text="@sample/users.json/data/id" />
+
         </LinearLayout>
+
     </LinearLayout>
 
     <TextView
         android:id="@+id/widgetPermissionSharedInfo"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -85,7 +88,6 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:textColor="?vctr_content_secondary"
-        android:textSize="16sp"
         tools:text="@string/room_widget_permission_shared_info_title" />
 
     <LinearLayout
@@ -97,7 +99,7 @@
 
         <Button
             android:id="@+id/widgetPermissionDecline"
-            style="@style/VectorButtonStyle.Destructive"
+            style="@style/Widget.Vector.Button.Destructive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/layout_vertical_margin"
@@ -106,7 +108,7 @@
 
         <Button
             android:id="@+id/widgetPermissionContinue"
-            style="@style/VectorButtonStyle.Positive"
+            style="@style/Widget.Vector.Button.Positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/layout_vertical_margin"

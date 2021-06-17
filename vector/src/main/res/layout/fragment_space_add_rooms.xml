@@ -35,6 +35,7 @@
 
                 <TextView
                     android:id="@+id/appBarTitle"
+                    style="@style/Widget.Vector.TextView.HeadlineMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -43,11 +44,11 @@
                     android:maxLines="1"
                     android:text="@string/space_add_existing_rooms"
                     android:textColor="?vctr_content_primary"
-                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/appBarSpaceInfo"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -55,7 +56,6 @@
                     android:gravity="start|center"
                     android:maxLines="1"
                     android:textColor="?vctr_content_secondary"
-                    android:textSize="16sp"
                     tools:text="@sample/spaces.json/data/name" />
 
             </LinearLayout>
@@ -76,7 +76,7 @@
 
         <Button
             android:id="@+id/createNewRoom"
-            style="@style/VectorButtonStyleText"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

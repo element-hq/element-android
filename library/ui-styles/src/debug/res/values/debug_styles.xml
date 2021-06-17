@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="VectorDebug">
+        <item name="android:visibility">visible</item>
+    </style>
+
+
+    <style name="Theme.Debug.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Keep all default value -->
+    </style>
+
+    <style name="Theme.Debug.Light.Test">
+        <item name="colorPrimary">#7F7F00</item>
+        <item name="colorPrimaryVariant">#00FF00</item>
+        <item name="colorOnPrimary">#0000FF</item>
+
+        <item name="colorSecondary">#FF00FF</item>
+        <item name="colorSecondaryVariant">#00FFFF</item>
+        <item name="colorOnSecondary">#FFF000</item>
+
+        <item name="colorError">#FF0000</item>
+        <item name="colorOnError">#330033</item>
+
+        <item name="colorSurface">#003333</item>
+        <item name="colorOnSurface">#777777</item>
+
+        <item name="android:colorBackground">#FF7777</item>
+        <item name="colorOnBackground">#077700</item>
+
+        <item name="android:statusBarColor">#1188FF</item>
+        <item name="android:navigationBarColor">#FF8811</item>
+
+        <item name="android:textColorLink">#000FFF</item>
+    </style>
+
+    <style name="Theme.Debug.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Keep all default value -->
+    </style>
+
+    <style name="Theme.Debug.Dark.Test">
+        <item name="colorPrimary">#7F7F00</item>
+        <item name="colorPrimaryVariant">#00FF00</item>
+        <item name="colorOnPrimary">#0000FF</item>
+
+        <item name="colorSecondary">#FF00FF</item>
+        <item name="colorSecondaryVariant">#00FFFF</item>
+        <item name="colorOnSecondary">#FFF000</item>
+
+        <item name="colorError">#FF0000</item>
+        <item name="colorOnError">#330033</item>
+
+        <item name="colorSurface">#003333</item>
+        <item name="colorOnSurface">#777777</item>
+
+        <item name="android:colorBackground">#FF7777</item>
+        <item name="colorOnBackground">#077700</item>
+
+        <item name="android:statusBarColor">#1188FF</item>
+        <item name="android:navigationBarColor">#FF8811</item>
+
+        <item name="android:textColorLink">#000FFF</item>
+    </style>
+
+    <style name="DebugTextColorDemo">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="DebugTextColorDemo.White">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="DebugTextColorDemo.Black">
+        <item name="android:textColor">#000000</item>
+    </style>
+
+</resources>
