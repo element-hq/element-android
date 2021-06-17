@@ -15,17 +15,26 @@
  *
  */
 
-package fr.gouv.tchap.android.sdk.session.room.model
+package fr.gouv.tchap.android.sdk.api.session.room.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import timber.log.Timber
 
 /**
- * Enum for [RoomJoinRulesContent]
+ * Class representing the TchapEventType.STATE_ROOM_ACCESS_RULES state event content
  */
-@JsonClass(generateAdapter = false)
-enum class RoomAccessRules(val value: String) {
-    @Json(name = "direct") DIRECT("direct"),
-    @Json(name = "restricted") RESTRICTED("restricted"),
-    @Json(name = "unrestricted") UNRESTRICTED("unrestricted")
+@JsonClass(generateAdapter = true)
+data class RoomAccessRulesContent(
+        @Json(name = "rule") val rule: String? = null
+) {
+    val accessRules: RoomAccessRules? = when (rule) {
+        "direct" -> RoomAccessRules.DIRECT
+        "restricted" -> RoomAccessRules.RESTRICTED
+        "unrestricted" -> RoomAccessRules.UNRESTRICTED
+        else         -> {
+            Timber.w("Invalid value for RoomAccessRules: `$rule`")
+            null
+        }
+    }
 }

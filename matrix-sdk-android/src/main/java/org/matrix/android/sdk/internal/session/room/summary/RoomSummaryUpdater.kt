@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.summary
 
-import fr.gouv.tchap.android.sdk.session.events.model.TchapEventType
-import fr.gouv.tchap.android.sdk.session.room.model.RoomAccessRulesContent
+import fr.gouv.tchap.android.sdk.api.session.events.model.TchapEventType
+import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRulesContent
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.extensions.tryOrNull

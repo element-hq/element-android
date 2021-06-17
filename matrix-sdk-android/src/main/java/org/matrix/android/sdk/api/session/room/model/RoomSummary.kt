@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.model
 
-import fr.gouv.tchap.android.sdk.session.room.model.RoomAccessRules
+import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.send.UserDraft

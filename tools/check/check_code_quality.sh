@@ -89,6 +89,11 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code_sdk.txt 
 
 resultForbiddenStringInCodeSdk=$?
 
+${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code_sdk_tchap.txt \
+    ./matrix-sdk-android/src/main/java/fr/gouv/tchap
+
+resultForbiddenStringInCodeSdkTchap=$?
+
 echo
 echo "Search for forbidden patterns in resources..."
 
@@ -161,7 +166,7 @@ fi
 
 echo
 
-if [[ ${resultNbOfDrawable} -eq 0 ]] && [[ ${resultForbiddenStringInCode} -eq 0 ]] && [[ ${resultForbiddenStringInCodeSdk} -eq 0 ]] && [[ ${resultForbiddenStringInResource} -eq 0 ]] && [[ ${resultLongFiles} -eq 0 ]] && [[ ${resultPngInDrawable} -eq 0 ]]; then
+if [[ ${resultNbOfDrawable} -eq 0 ]] && [[ ${resultForbiddenStringInCode} -eq 0 ]] && [[ ${resultForbiddenStringInCodeSdk} -eq 0 ]] && [[ ${resultForbiddenStringInCodeSdkTchap} -eq 0 ]] && [[ ${resultForbiddenStringInResource} -eq 0 ]] && [[ ${resultLongFiles} -eq 0 ]] && [[ ${resultPngInDrawable} -eq 0 ]]; then
    echo "MAIN OK"
 else
    echo "❌ MAIN ERROR"
