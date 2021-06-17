@@ -18,6 +18,16 @@ package org.matrix.android.sdk.api.session.space
 
 import org.matrix.android.sdk.api.util.StringOrderUtils
 
+/**
+ * Adds some utilities to compute correct string orders when ordering spaces.
+ * After moving a space (e.g via DnD), client should limit the number of room account data update.
+ * For example if the space is moved between two other spaces with orders, just update the moved space order by computing
+ * a mid point between the surrounding orders.
+ * If the space is moved after a space with no order, all the previous spaces should be then ordered,
+ * and the computed orders should be chosen so that there is enough gaps in between them to facilitate future re-order.
+ * Re numbering (i.e change all spaces m.space.order account data) should be avoided as much as possible,
+ * as the updates might not be atomic for other clients and would makes spaces jump around.
+ */
 object SpaceOrderUtils {
 
     data class SpaceReOrderCommand(
@@ -25,6 +35,9 @@ object SpaceOrderUtils {
             val order: String
     )
 
+    /**
+     * Returns a minimal list of order change in order to re order the space list as per given move.
+     */
     fun orderCommandsForMove(orderedSpacesToOrderMap: List<Pair<String, String?>>, movedSpaceId: String, delta: Int): List<SpaceReOrderCommand> {
         val movedIndex = orderedSpacesToOrderMap.indexOfFirst { it.first == movedSpaceId }
         if (movedIndex == -1) return emptyList()
@@ -34,8 +47,6 @@ object SpaceOrderUtils {
 
         val nodesToReNumber = mutableListOf<String>()
         var lowerBondOrder: String? = null
-        var afterSpace: Pair<String, String?>? = null
-//        if (delta > 0) {
         var index = targetIndex
         while (index >= 0 && lowerBondOrder == null) {
             val node = orderedSpacesToOrderMap.getOrNull(index)
@@ -51,7 +62,9 @@ object SpaceOrderUtils {
             index--
         }
         nodesToReNumber.add(movedSpaceId)
-        afterSpace = if (orderedSpacesToOrderMap.indices.contains(targetIndex + 1)) orderedSpacesToOrderMap[targetIndex + 1] else null
+        val afterSpace: Pair<String, String?>? = if (orderedSpacesToOrderMap.indices.contains(targetIndex + 1)) {
+            orderedSpacesToOrderMap[targetIndex + 1]
+        } else null
 
         val defaultMaxOrder = CharArray(4) { StringOrderUtils.DEFAULT_ALPHABET.last() }
                 .joinToString("")
@@ -81,10 +94,10 @@ object SpaceOrderUtils {
                 }
             } ?: emptyList()
         } else {
-            return nodesToReNumber.mapIndexed { index, s ->
+            return nodesToReNumber.mapIndexed { i, s ->
                 SpaceReOrderCommand(
                         s,
-                        newOrder[index]
+                        newOrder[i]
                 )
             }
         }

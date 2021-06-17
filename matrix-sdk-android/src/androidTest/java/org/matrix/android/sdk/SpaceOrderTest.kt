@@ -235,35 +235,26 @@ class SpaceOrderTest {
         Assert.assertEquals("roomId6", reOrdered[5].first)
     }
 
+    @Test
+    fun testComparator() {
+        listOf(
+                "roomId2" to "a",
+                "roomId1" to "b",
+                "roomId3" to null,
+                "roomId4" to null,
+        ).assertSpaceOrdered()
+    }
+
     private fun reOrderWithCommands(orderedSpaces: List<Pair<String, String?>>, orderCommand: List<SpaceOrderUtils.SpaceReOrderCommand>) =
             orderedSpaces.map { orderInfo ->
                 orderInfo.first to (orderCommand.find { it.spaceId == orderInfo.first }?.order ?: orderInfo.second)
             }
-                    .sortedWith(TestSpaceComparator())
+                    .sortedWith(testSpaceComparator)
 
-    private fun List<Pair<String, String?>>.assertSpaceOrdered() : List<Pair<String, String?>> {
-        assertEquals(this, this.sortedWith(TestSpaceComparator()))
+    private fun List<Pair<String, String?>>.assertSpaceOrdered(): List<Pair<String, String?>> {
+        assertEquals(this, this.sortedWith(testSpaceComparator))
         return this
     }
 
-    class TestSpaceComparator : Comparator<Pair<String, String?>> {
-
-        override fun compare(left: Pair<String, String?>?, right: Pair<String, String?>?): Int {
-            val leftOrder = left?.second
-            val rightOrder = right?.second
-            return if (leftOrder != null && rightOrder != null) {
-                leftOrder.compareTo(rightOrder)
-            } else {
-                if (leftOrder == null) {
-                    if (rightOrder == null) {
-                        compareValues(left?.first, right?.first)
-                    } else {
-                        1
-                    }
-                } else {
-                    -1
-                }
-            }
-        }
-    }
+    private val testSpaceComparator = compareBy<Pair<String, String?>, String?>(nullsLast()) { it.second }.thenBy { it.first }
 }
