@@ -1599,7 +1599,7 @@
     <string name="sas_decimal_description">Verifique esta sessão ao confirmar que os seguintes números aparecem na tela da/do parceira(o)</string>
     <string name="sas_incoming_verification_request_dialog">Você recebeu uma requisição de verificação entrante.</string>
     <string name="sas_view_request_action">Visualizar requisição</string>
-    <string name="sas_waiting_for_partner">Esperando por parceira(o) para confirmar…</string>
+    <string name="sas_waiting_for_partner">Esperando por parceira(o) confirmar…</string>
     <string name="sas_verified">Verificada!</string>
     <string name="sas_verified_successful">Você tem confirmado esta sessão com sucesso.</string>
     <string name="sas_verified_successful_description">Mensagens seguras com esta(e) usuária(o) estão encriptadas ponta-a-ponta e não são capazes de ser lidas por terceiros.</string>
