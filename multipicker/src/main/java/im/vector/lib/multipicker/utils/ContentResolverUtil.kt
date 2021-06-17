@@ -111,7 +111,7 @@ internal fun Uri.toMultiPickerVideoType(context: Context): MultiPickerVideoType?
     }
 }
 
-internal fun Uri.toMultiPickerAudioType(context: Context): MultiPickerAudioType? {
+fun Uri.toMultiPickerAudioType(context: Context): MultiPickerAudioType? {
     val projection = arrayOf(
             MediaStore.Audio.Media.DISPLAY_NAME,
             MediaStore.Audio.Media.SIZE
