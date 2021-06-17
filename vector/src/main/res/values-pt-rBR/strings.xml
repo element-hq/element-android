@@ -412,7 +412,7 @@
     <string name="auth_invalid_token">Token inválido</string>
     <string name="auth_password_dont_match">Senhas não correspondem</string>
     <string name="auth_forgot_password">Esqueceu senha\?</string>
-    <string name="auth_use_server_options">Usar opções de servidor personalizado (avançado)</string>
+    <string name="auth_use_server_options">Usar opções de servidor personalizadas (avançada)</string>
     <string name="auth_email_validation_message">Por favor cheque seu email para continuar registro</string>
     <string name="auth_threepid_warning_message">Registro com email e número de telefone de vez não é suportado ainda até que a api exista. Somente o número de telefone será levado em consideração.
 \n
@@ -1478,7 +1478,7 @@
 \n
 \nFaça seguramente backup de suas chaves para evitar perdê-las.</string>
     <string name="keys_backup_setup">Começar a usar Backup de Chave</string>
-    <string name="keys_backup_setup_step1_advanced">(Avançado)</string>
+    <string name="keys_backup_setup_step1_advanced">(Avançada)</string>
     <string name="keys_backup_setup_step1_manual_export">Exportar chaves manualmente</string>
     <string name="keys_backup_setup_step2_text_title">Assegure seu backup com uma Frasepasse.</string>
     <string name="keys_backup_setup_step2_text_description">Nós vamos armazenar uma cópia encriptada de suas chaves em seu servidorcasa. Proteja seu backup com uma frasepasse para mantê-lo seguro.
@@ -1487,7 +1487,7 @@
     <string name="keys_backup_setup_step2_button_title">Definir Frasepasse</string>
     <string name="keys_backup_setup_creating_backup">Criando Backup</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Ou, assegure seu backup com uma Chave de Recuperação, salvando-a em algum lugar seguro.</string>
-    <string name="keys_backup_setup_step2_skip_button_title">(Avançado) Configurar com Chave de Recuperação</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Avançada) Configurar com Chave de Recuperação</string>
     <string name="keys_backup_setup_step3_success_title">Sucesso !</string>
     <string name="keys_backup_setup_step3_text_line1">Backup de suas chaves está sendo feito.</string>
     <string name="keys_backup_setup_step3_text_line2">Sua chave de recuperação é uma rede de segurança - você pode usá-la para restaurar acesso a suas mensagens encriptadas se você esquecer sua frasepasse.
