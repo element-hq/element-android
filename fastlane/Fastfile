@@ -38,6 +38,22 @@ platform :android do
 
   desc "Deploy Google Play metadata"
   lane :deployMeta do
-    upload_to_play_store skip_upload_apk:true skip_upload_images:true skip_upload_screenshots:true validate_only:true
+    # Doc: https://docs.fastlane.tools/actions/upload_to_play_store/
+    upload_to_play_store(
+        skip_upload_apk: true,
+        skip_upload_aab: true,
+        skip_upload_images: true,
+        skip_upload_screenshots: true,
+        skip_upload_changelogs: true,
+        validate_only: true
+    )
+  end
+
+  desc "Get version code"
+  lane :getVersionCode do
+    versions = google_play_track_version_codes(track: "production")
+    puts(versions)
+    version_code = versions[0]
+    puts(version_code)
   end
 end
