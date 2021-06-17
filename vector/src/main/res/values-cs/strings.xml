@@ -790,7 +790,7 @@
     <string name="login_error_homeserver_not_found">Domovský server není dostupný na této adrese, zkontrolujte ji prosím</string>
     <string name="login_error_ssl_handshake">Vaše zařízení používá zastaralý bezpečnostní protokol TLS, zranitelný útokem, pro Vaše bezpečí se nebudete moci spojit</string>
     <string name="settings_call_ringtone_use_default_stun">Povolit server fallback call assist</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Použiiji %s jako nápomoc, pokud Váš homeserver žádnou nenabízí (Vaše IP adresa bude sdělena během hovoru)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Použiiji %s jako nápomoc, pokud Váš domovský server žádnou nenabízí (Vaše IP adresa bude sdělena během hovoru)</string>
     <string name="invite_no_identity_server_error">Pro provedení této akce přidat server identit v nastavení.</string>
     <string name="settings_add_3pid_confirm_password_title">Potvrďte své heslo</string>
     <string name="template_settings_add_3pid_flow_not_supported">Nelze provést z ${app_name} mobile</string>
@@ -2847,4 +2847,16 @@
     <string name="feedback">Zpětná vazba</string>
     <string name="send_feedback_space_title">Zpětná vazba prostorů</string>
     <string name="error_jitsi_join_conf">Omlouváme se, při pokusu o připojení ke konferenci došlo k chybě</string>
+    <string name="unnamed_room">Nepojmenovaná místnost</string>
+    <string name="private_space">Soukromý prostor</string>
+    <string name="public_space">Veřejný prostor</string>
+    <string name="a11y_public_space">Tento Prostor je veřejný</string>
+    <string name="call_transfer_unknown_person">Neznámá osoba</string>
+    <string name="call_transfer_transfer_to_title">Převod na %1$s</string>
+    <string name="call_transfer_consulting_with">Konzultace s %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">Tento server je již uveden v seznamu</string>
+    <string name="directory_add_a_new_server_error">Nelze najít tento server nebo jeho seznam místností</string>
+    <string name="directory_add_a_new_server_prompt">Zadejte název nového serveru, který chcete prozkoumat.</string>
+    <string name="directory_add_a_new_server">Přidat nový server</string>
+    <string name="directory_your_server">Váš server</string>
 </resources>

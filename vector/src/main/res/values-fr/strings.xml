@@ -591,7 +591,7 @@
     <string name="encryption_information_unblock">Supprimer de la liste noire</string>
     <string name="encryption_information_verify_device">Vérifier la session</string>
     <string name="select_room_directory">Sélectionner un répertoire de salons</string>
-    <string name="directory_server_placeholder">URL du serveur d’accueil</string>
+    <string name="directory_server_placeholder">Nom du serveur d’accueil</string>
     <string name="directory_server_all_rooms_on_server">Tous les salons sur le serveur %s</string>
     <string name="directory_server_native_rooms">Tous les salons natifs sur %s</string>
     <string name="historical_placeholder">Rechercher dans l’historique</string>
@@ -2801,4 +2801,16 @@
     <string name="feedback_sent">Merci, vos remarques ont bien été envoyées</string>
     <string name="feedback">Remarques</string>
     <string name="error_jitsi_join_conf">Désolé, une erreur s’est produite en essayant d’entrer dans la conférence</string>
+    <string name="unnamed_room">Salon sans nom</string>
+    <string name="private_space">Espace privé</string>
+    <string name="public_space">Espace public</string>
+    <string name="a11y_public_space">Cet espace est public</string>
+    <string name="call_transfer_unknown_person">Personne inconnue</string>
+    <string name="call_transfer_transfer_to_title">Transférer à %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">Ce serveur fait déjà partie de la liste</string>
+    <string name="directory_add_a_new_server_error">Impossible de trouver ce serveur ou la liste de ses salons</string>
+    <string name="directory_add_a_new_server_prompt">Saisissez le nom du nouveau serveur que vous souhaitez explorer.</string>
+    <string name="directory_add_a_new_server">Ajouter un nouveau serveur</string>
+    <string name="directory_your_server">Votre serveur</string>
+    <string name="call_transfer_consulting_with">Consultation de %1$s</string>
 </resources>

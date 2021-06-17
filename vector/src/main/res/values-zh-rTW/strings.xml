@@ -885,7 +885,7 @@
     <string name="select_room_directory">選擇一個聊天室目錄</string>
     <string name="directory_server_fail_to_retrieve_server">伺服器可能不可用或超載</string>
     <string name="directory_server_type_homeserver">輸入一個主伺服器來列出所有公開聊天室</string>
-    <string name="directory_server_placeholder">家伺服器 URL</string>
+    <string name="directory_server_placeholder">伺服器名稱</string>
     <string name="directory_server_all_rooms_on_server">在 %s 伺服器上的所有聊天室</string>
     <string name="directory_server_native_rooms">所有本地 %s 聊天室</string>
     <string name="lock_screen_hint">在此輸入…</string>
@@ -2486,9 +2486,9 @@
     <string name="room_settings_room_read_history_dialog_subtitle">對可讀取歷史紀錄的人的變更將僅試用於此聊天室中的未來訊息。現有歷史紀錄的可見性將保持不便。</string>
     <string name="action_unpublish">取消發佈</string>
     <string name="action_add">新增</string>
-    <string name="default_message_emote_snow">傳送雪 ❄️</string>
+    <string name="default_message_emote_snow">傳送下雪特效 ❄️</string>
     <string name="default_message_emote_confetti">傳送五彩紙屑 🎉</string>
-    <string name="command_snow">與雪一同傳送指定的訊息</string>
+    <string name="command_snow">與下雪特效一同傳送指定的訊息</string>
     <string name="command_confetti">與五彩紙屑一同傳送指定的訊息</string>
     <string name="login_clear_homeserver_history">清除歷史紀錄</string>
     <string name="login_social_sso">單一登入</string>
@@ -2741,4 +2741,16 @@
     <string name="feedback">回饋</string>
     <string name="send_feedback_space_title">空間回饋</string>
     <string name="error_jitsi_join_conf">抱歉，嘗試加入會議時發生錯誤</string>
+    <string name="unnamed_room">未命名聊天室</string>
+    <string name="private_space">私人空間</string>
+    <string name="public_space">公開空間</string>
+    <string name="a11y_public_space">此空間是公開的</string>
+    <string name="call_transfer_unknown_person">未知的人</string>
+    <string name="call_transfer_transfer_to_title">轉移至 %1$s</string>
+    <string name="call_transfer_consulting_with">與 %1$s 進行諮詢</string>
+    <string name="directory_add_a_new_server_error_already_added">此伺服器已在清單中</string>
+    <string name="directory_add_a_new_server_error">找不到此伺服器或其聊天室清單</string>
+    <string name="directory_add_a_new_server_prompt">輸入您想要探索的新伺服器名稱。</string>
+    <string name="directory_add_a_new_server">加入新的伺服器</string>
+    <string name="directory_your_server">您的伺服器</string>
 </resources>

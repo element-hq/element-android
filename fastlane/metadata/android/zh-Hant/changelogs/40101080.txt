@@ -1,0 +1,2 @@
+此版本中的主要變動：改善「空間」的功能。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.1.8

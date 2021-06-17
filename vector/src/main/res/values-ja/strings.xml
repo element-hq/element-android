@@ -1406,7 +1406,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="notice_room_invite_no_invitee_with_reason">%1$sの招待です。理由: %2$s</string>
     <string name="clear_timeline_send_queue">送信キューのクリア</string>
     <string name="event_status_sending_message">メッセージを送っています…</string>
-    <string name="event_status_sent_message">メッセージを送る</string>
+    <string name="event_status_sent_message">メッセージを送りました</string>
     <string name="initial_sync_start_importing_account_data">初期同期:
 \nアカウントデータをインポート</string>
     <string name="initial_sync_start_importing_account_groups">初期同期:

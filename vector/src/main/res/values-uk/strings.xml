@@ -284,7 +284,7 @@
     <string name="create_account">Зареєструватися</string>
     <string name="login">Увійти</string>
     <string name="logout">Вийти</string>
-    <string name="hs_url">URL сервера</string>
+    <string name="hs_url">URL-адреса домашнього сервера</string>
     <string name="identity_url">URL сервера ідентифікації</string>
     <string name="search">Пошук</string>
     <string name="start_new_chat">Почати новий чат</string>
@@ -325,9 +325,9 @@
     <string name="auth_use_server_options">Використовувати особливі налаштування сервера</string>
     <string name="auth_email_validation_message">Перевірте email для продовження реєстрації</string>
     <string name="auth_threepid_warning_message">Реєстрація за допомогою Email та номеру телефона водночас поки не підтримується. Лише номер телефону буде додано до облікового запису.\n\nВи можете додати email в налаштуваннях.</string>
-    <string name="auth_recaptcha_message">Цей сервер хоче переконатися, що ви не робот</string>
+    <string name="auth_recaptcha_message">Цей домашній сервер хоче переконатися, що ви не робот</string>
     <string name="auth_username_in_use">Логін вже використовується</string>
-    <string name="auth_home_server">Сервер:</string>
+    <string name="auth_home_server">Домашній сервер:</string>
     <string name="auth_identity_server">Сервер ідентифікації:</string>
     <string name="auth_reset_password_next_step_button">Я перевірив(ла) свою email адресу</string>
     <string name="auth_reset_password_message">Для скидання паролю введіть email прив\'язаний до облікового запису:</string>
@@ -603,7 +603,7 @@
     <string name="devices_delete_pswd">Пароль:</string>
     <string name="devices_delete_submit_button_label">Надіслати</string>
     <string name="settings_logged_in">Залоговано як</string>
-    <string name="settings_home_server">Cервер</string>
+    <string name="settings_home_server">Домашній сервер</string>
     <string name="settings_identity_server">Сервер ідентифікації</string>
     <string name="settings_user_interface">Інтерфейс користувача</string>
     <string name="settings_interface_language">Мова</string>
@@ -756,7 +756,7 @@
     <string name="select_room_directory">Вибір каталогу кімнат</string>
     <string name="directory_server_fail_to_retrieve_server">Можливо сервер недоступний чи перевантажений</string>
     <string name="directory_server_type_homeserver">Введіть сервер для показу каталогу публічних кімнат</string>
-    <string name="directory_server_placeholder">URL сервера</string>
+    <string name="directory_server_placeholder">Ім\'я сервера</string>
     <string name="directory_server_all_rooms_on_server">Всі кімнати на сервері %s</string>
     <string name="directory_server_native_rooms">Всі місцеві кімнати %s</string>
     <!-- historical -->
@@ -1627,7 +1627,7 @@
     <string name="permissions_denied_qr_code">Щоб сканувати QR-код необхідно дозволити доступ до камери.</string>
     <string name="return_to_call">Повернутися до виклику</string>
     <string name="video_call_in_progress">Триває відеовиклик…</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Використовуватиме %s допоміжним, коли ваш домашній сервер не пропонує такого (вашу IP-адресу буде надана під час виклику)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Застосовуватиме %s допоміжним, коли ваш домашній сервер не пропонує такого (вашу IP-адресу буде надано під час виклику)</string>
     <string name="settings_call_ringtone_use_default_stun">Дозволити допоміжний сервер викликів</string>
     <string name="login_error_ssl_handshake">Ваш пристрій використовує застарілий протокол безпеки TLS, вразливий до атак, для вашої безпеки ви не зможете під\'єднатися</string>
     <string name="login_error_ssl_peer_unverified">Помилка SSL: особу співрозмовника не підтверджено.</string>
@@ -1817,9 +1817,9 @@
     <string name="content_reported_as_inappropriate_title">Надіслано скаргу, як на неприйнятне</string>
     <string name="too_many_pin_failures">Забагато помилок, вам довелось вийти</string>
     <string name="unencrypted">Незашифроване</string>
-    <string name="default_message_emote_snow">надсилає сніг ❄️</string>
+    <string name="default_message_emote_snow">надсилає снігопад ❄️</string>
     <string name="default_message_emote_confetti">надсилає конфетті 🎉</string>
-    <string name="command_snow">Надсилає вказане повідомлення зі снігом</string>
+    <string name="command_snow">Надсилає вказане повідомлення зі снігопадом</string>
     <string name="command_confetti">Надсилає вказане повідомлення з конфетті</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
         <item quantity="one">Показати пристрій, з якого ви можете звірити цей сеанс просто зараз</item>
