@@ -1594,9 +1594,9 @@
     <string name="sas_verify_start_button_title">Começar a Verificar</string>
     <string name="sas_incoming_request_title">Requisição de Verificação Chegando</string>
     <string name="sas_incoming_request_description">Verifique esta sessão para marcá-la como confiada. Confiar em sessões de parceiras(os) dá a você paz de mente extra quando usando mensagens encriptadas ponta-a-ponta.</string>
-    <string name="sas_incoming_request_description_2">Verificar esta sessão vai marcá-la como confiada, e também marcar sua sessão como confiada para sua/seu parceira(o).</string>
-    <string name="sas_emoji_description">Verifique esta sessão ao confirmar que os seguintes emoji aparecem na tela de sua/seu parceira(o)</string>
-    <string name="sas_decimal_description">Verifique esta sessão ao confirmar que os seguintes números aparecem na dela de sua/seu parceira(o)</string>
+    <string name="sas_incoming_request_description_2">Verificar esta sessão vai marcá-la como confiada, e também marcar sua sessão como confiada para a/o parceira(o).</string>
+    <string name="sas_emoji_description">Verifique esta sessão ao confirmar que os seguintes emoji aparecem na tela da/do parceira(o)</string>
+    <string name="sas_decimal_description">Verifique esta sessão ao confirmar que os seguintes números aparecem na tela da/do parceira(o)</string>
     <string name="sas_incoming_verification_request_dialog">Você recebeu uma requisição de verificação entrante.</string>
     <string name="sas_view_request_action">Visualizar requisição</string>
     <string name="sas_waiting_for_partner">Esperando por parceira(o) para confirmar…</string>
