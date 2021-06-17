@@ -117,7 +117,8 @@ internal class DefaultRegistrationWizard(
         // Tchap: add a specific nextLink requires by Tchap registration process.
         val hsUri = pendingSessionData.homeServerConnectionConfig.homeServerUri
         val isUri = pendingSessionData.homeServerConnectionConfig.identityServerUri
-        val nextLink = "${hsUri}#/register?client_secret=${pendingSessionData.clientSecret}&hs_url=$hsUri${if (isUri != null) "&is_url=${isUri}" else ""}&session_id=${pendingSessionData.currentSession}"
+        val nextLink = "$hsUri#/register?client_secret=${pendingSessionData.clientSecret}" +
+                "&hs_url=$hsUri${if (isUri != null) "&is_url=$isUri" else ""}&session_id=${pendingSessionData.currentSession}"
 
         val response = registerAddThreePidTask.execute(
                 RegisterAddThreePidTask.Params(

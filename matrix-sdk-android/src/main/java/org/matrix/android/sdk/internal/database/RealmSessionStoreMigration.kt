@@ -21,9 +21,9 @@ import fr.gouv.tchap.android.sdk.session.room.model.RoomAccessRulesContent
 import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
-import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
+import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
@@ -66,7 +66,10 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 9) migrateTo10(realm)
         if (oldVersion <= 10) migrateTo11(realm)
         if (oldVersion <= 11) migrateTo12(realm)
-        if (oldVersion <= 12) migrateTo13(realm)
+        if (oldVersion <= 12) {
+            migrateTo13(realm)
+            tchapMigrateTo13(realm)
+        }
         if (oldVersion <= 13) migrateTo14(realm)
     }
 
@@ -307,5 +310,25 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 }
 
         roomAccountDataSchema.isEmbedded = true
+    }
+
+    // Tchap migrations
+    private fun tchapMigrateTo13(realm: DynamicRealm) {
+        val accessRulesContentAdapter = MoshiProvider.providesMoshi().adapter(RoomAccessRulesContent::class.java)
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.ACCESS_RULES_STR, String::class.java)
+                ?.transform { obj ->
+                    val accessRulesEvent = realm.where("CurrentStateEventEntity")
+                            .equalTo(CurrentStateEventEntityFields.ROOM_ID, obj.getString(RoomSummaryEntityFields.ROOM_ID))
+                            .equalTo(CurrentStateEventEntityFields.TYPE, TchapEventType.STATE_ROOM_ACCESS_RULES)
+                            .findFirst()
+
+                    val roomAccessRules = accessRulesEvent?.getObject(CurrentStateEventEntityFields.ROOT.`$`)
+                            ?.getString(EventEntityFields.CONTENT)?.let {
+                                accessRulesContentAdapter.fromJson(it)?.accessRules
+                            }
+
+                    obj.setString(RoomSummaryEntityFields.ACCESS_RULES_STR, roomAccessRules?.name)
+                }
     }
 }

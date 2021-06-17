@@ -74,7 +74,6 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
             else                                     -> notificationState
         }
 
-
         RoomListQuickActionsSharedAction.NotificationsAllNoisy(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
 
         if (roomSummary.allowMentionsOnlyNotifications()) {

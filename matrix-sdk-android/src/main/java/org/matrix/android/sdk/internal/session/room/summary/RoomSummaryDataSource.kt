@@ -253,8 +253,8 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
             RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
             RoomCategoryFilter.ALL                     -> {
-                //Tchap: we ignore DMs with directUserId different from a matrix id.
-                //directUserId could be an email if the user has no account and he was invited by email.
+                // Tchap: we ignore DMs with directUserId different from a matrix id.
+                // directUserId could be an email if the user has no account and he was invited by email.
                 query.beginGroup()
                 query.beginGroup()
                 query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)

@@ -39,7 +39,7 @@ import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
 
 class TchapContactListFragment @Inject constructor(
-        private val tchapContactListController: TchapContactListController,
+        private val tchapContactListController: TchapContactListController
 ) : VectorBaseFragment<FragmentTchapContactListBinding>(),
         TchapContactListController.Callback {
 
@@ -55,7 +55,8 @@ class TchapContactListFragment @Inject constructor(
         setupRecyclerView()
         setupSearchView()
 
-        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher, R.string.permissions_rationale_msg_contacts)) {
+        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher,
+                        R.string.permissions_rationale_msg_contacts)) {
             viewModel.handle(TchapContactListAction.LoadContacts)
         }
     }

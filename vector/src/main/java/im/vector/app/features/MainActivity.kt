@@ -24,7 +24,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import fr.gouv.tchap.features.login.TchapLoginActivity
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent

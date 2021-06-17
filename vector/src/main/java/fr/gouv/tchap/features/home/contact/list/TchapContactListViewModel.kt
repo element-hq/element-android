@@ -50,7 +50,7 @@ import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-//private typealias KnownUsersSearch = String
+// private typealias KnownUsersSearch = String
 private typealias DirectoryUsersSearch = String
 
 class TchapContactListViewModel @AssistedInject constructor(@Assisted initialState: TchapContactListViewState,
@@ -187,7 +187,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
 
         setState {
             copy(
-                    filteredLocalUsers = filteredUsers,
+                    filteredLocalUsers = filteredUsers
             )
         }
     }

@@ -97,9 +97,8 @@ class TchapUtilsTest {
         assertEquals("Jean Martin De-La-Rampe", TchapUtils.computeDisplayNameFromUserId("@jean..martin..de--la--rampe-modernisation.gouv.fr:a.tchap.gouv.fr"))
     }
 
-    // It fails for the moment
     @Test
     fun computeDisplayNameFromUserId_dash_in_domain() {
-        assertEquals("Jerome Ploquin4", TchapUtils.computeDisplayNameFromUserId("@jerome.ploquin4-developpement-durable.gouv.fr:a.tchap.gouv.fr"))
+        assertEquals("Jerome Ploquin4-Developpement", TchapUtils.computeDisplayNameFromUserId("@jerome.ploquin4-developpement-durable.gouv.fr:a.tchap.gouv.fr"))
     }
 }

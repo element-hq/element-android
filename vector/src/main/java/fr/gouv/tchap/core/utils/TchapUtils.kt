@@ -93,7 +93,7 @@ object TchapUtils {
             val identifier = tchapUserId.substringAfter('@').substringBefore(':')
             if (isExternalTchapUser(tchapUserId)) {
                 // Replace the hyphen character if there is only one
-                displayName = if (identifier.filter {it == '-' }.count() == 1) {
+                displayName = if (identifier.filter { it == '-' }.count() == 1) {
                     identifier.replace('-', '@')
                 } else {
                     identifier

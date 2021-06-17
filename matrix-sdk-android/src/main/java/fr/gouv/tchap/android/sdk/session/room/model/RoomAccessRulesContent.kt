@@ -26,7 +26,7 @@ import timber.log.Timber
  */
 @JsonClass(generateAdapter = true)
 data class RoomAccessRulesContent(
-        @Json(name = "rule") val rule: String? = null,
+        @Json(name = "rule") val rule: String? = null
 ) {
     val accessRules: RoomAccessRules? = when (rule) {
         "direct" -> RoomAccessRules.DIRECT
