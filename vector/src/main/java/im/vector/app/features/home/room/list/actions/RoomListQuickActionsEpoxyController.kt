@@ -55,7 +55,6 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
                 izFavorite(roomSummary.isFavorite)
                 settingsClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) }
                 favoriteClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Favorite(roomSummary.roomId)) }
-                lowPriorityClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.LowPriority(roomSummary.roomId)) }
             }
 
             // Notifications

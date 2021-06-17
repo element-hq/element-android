@@ -17,6 +17,7 @@ Improvements 🙌:
  - Resolve matrixId to get Tchap user #91
  - Update the home bottom bar icons #83
  - Simplify the notifications modes #77
+ - Update the selected room menu #78
 
 
 =======================================================
