@@ -1637,7 +1637,7 @@
     <string name="invited_by">Convidada(o) por %s</string>
     <string name="room_list_catchup_empty_title">Você está em dia!</string>
     <string name="room_list_catchup_empty_body">Você não tem mais nenhuma mensagem não-lida</string>
-    <string name="room_list_catchup_welcome_title">Boas-vindas!</string>
+    <string name="room_list_catchup_welcome_title">Boas vindas a casa!</string>
     <string name="room_list_catchup_welcome_body">Fique em dia com suas mensagens não-lidas aqui</string>
     <string name="room_list_people_empty_title">Conversas</string>
     <string name="room_list_people_empty_body">Suas conversas de mensagem direta vai ser exibidas aqui. Toque no + à direita fundo para começar algumas.</string>
@@ -2790,7 +2790,7 @@
     <string name="invite_by_mxid">Convidar por nome de usuária(o)</string>
     <string name="invite_by_email">Convidar por email</string>
     <string name="invite_people_menu">Convidar pessoas</string>
-    <string name="suggested_rooms_pills_on_empty_header">Boas-vindas a %1$s, %2$s.</string>
+    <string name="suggested_rooms_pills_on_empty_header">Boas vindas a %1$s, %2$s.</string>
     <string name="you_are_invited">Você está convidada(o)</string>
     <string name="labs_use_restricted_join_rule_desc">Aviso requer suporte de servidor e versão de sala experimental</string>
     <string name="user_invites_you">%s convida você</string>
@@ -2810,7 +2810,7 @@
     <string name="looking_for_someone_not_in_space">Procurando por alguém que não está em %s\?</string>
     <string name="labs_use_restricted_join_rule">Espaço Experimental - Sala Restringida.</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Espaços são uma nova forma de agrupar salas e pessoas.</string>
-    <string name="spaces_beta_welcome_to_spaces">Boas-vindas a Espaços!</string>
+    <string name="spaces_beta_welcome_to_spaces">Boas vindas a Espaços!</string>
     <string name="space_add_rooms">Adicionar salas</string>
     <string name="space_add_existing_rooms">Adicionar salas e espaços existentes</string>
     <string name="space_leave_prompt_msg_as_admin">Você é admin deste espaço, assegure-se que você tem transferido direito de admin a um outro membro antes de sair.</string>
