@@ -311,16 +311,6 @@ internal class MXMegolmEncryption(
                     WithHeldCode.NO_OLM
             )
         }
-
-        if (noOlmToNotify.isNotEmpty()) {
-            // XXX offload?, as they won't read the message anyhow?
-            notifyKeyWithHeld(
-                    noOlmToNotify,
-                    session.sessionId,
-                    olmDevice.deviceCurve25519Key,
-                    WithHeldCode.NO_OLM
-            )
-        }
     }
 
     private suspend fun notifyKeyWithHeld(targets: List<UserDevice>,
