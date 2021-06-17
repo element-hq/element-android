@@ -45,7 +45,8 @@ platform :android do
         skip_upload_images: true,
         skip_upload_screenshots: true,
         skip_upload_changelogs: true,
-        validate_only: true
+        # Set to true to not update the PlayStore
+        validate_only: false
     )
   end
 
