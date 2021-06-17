@@ -1995,7 +1995,7 @@
     <string name="verification_sas_match">Eles correspondem</string>
     <string name="verification_sas_do_not_match">Eles não correspondem</string>
     <string name="verify_user_sas_emoji_help_text">Verifique esta(e) usuária(o) ao confirmar que os seguintes emoji únicos aparecem na tela dela(e), na mesma ordem.</string>
-    <string name="verify_user_sas_emoji_security_tip">Para máxima segurança, use um outro meio de comunicação confiado ou faça isto em pessoa.</string>
+    <string name="verify_user_sas_emoji_security_tip">Para segurança ótima, use um outro meio de comunicação confiado ou faça isto em pessoa.</string>
     <string name="verification_green_shield">Procure pelo escudo verde para assegurar que um/uma usuário(a) é confiado. Confie em todos(as) os/as usuários(as) numa sala para assegurar que a sala é segura.</string>
     <string name="verification_conclusion_not_secure">Não seguro</string>
     <string name="verification_conclusion_compromised">Um dos seguintes pode estar comprometido:
