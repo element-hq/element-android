@@ -18,6 +18,7 @@ Improvements 🙌:
  - Update the home bottom bar icons #83
  - Simplify the notifications modes #77
  - Update the selected room menu #78
+ - Design Tchap invite cells #79
 
 
 =======================================================

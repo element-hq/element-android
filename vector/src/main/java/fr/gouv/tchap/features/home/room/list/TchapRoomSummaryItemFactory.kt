@@ -88,10 +88,10 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 .avatarRenderer(avatarRenderer)
                 .matrixItem(roomSummary.toMatrixItem())
                 .secondLine(secondLine)
+                .isDirect(roomSummary.isDirect)
                 .changeMembershipState(changeMembershipState)
                 .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
-                .listener { listener?.onRoomClicked(roomSummary) }
     }
 
     fun createRoomItem(

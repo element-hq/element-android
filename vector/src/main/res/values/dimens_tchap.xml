@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Room summary item -->
+    <dimen name="tchap_item_room_avatar_size">56dp</dimen>
+    <dimen name="tchap_item_room_circle_avatar_size">50dp</dimen>
+    <dimen name="tchap_item_room_hexagon_avatar_size">56dp</dimen>
+</resources>
