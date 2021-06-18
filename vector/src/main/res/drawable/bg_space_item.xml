@@ -20,7 +20,7 @@
 
     <item>
         <shape>
-            <solid android:color="@android:color/transparent" />
+            <solid android:color="?android:colorBackground" />
         </shape>
     </item>
 
