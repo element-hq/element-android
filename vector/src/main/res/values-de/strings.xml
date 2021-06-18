@@ -2866,4 +2866,9 @@
     <string name="send_feedback_space_title">Spaces Feedback</string>
     <string name="directory_add_a_new_server_error_already_added">Dieser Server ist schon in der Liste vorhanden</string>
     <string name="directory_add_a_new_server_error">Server oder Raumliste kann nicht gefunden werden</string>
+    <string name="teammate_spaces_might_not_join">Momentan kann es sein, dass einige Leute deinen privaten Räumen nicht beitreten können.
+\n
+\nDies werden wir demnächst als Teil der Beta verbessern, wir wollten aber sicherstellen, dass du bescheid weißt.</string>
+    <string name="teammate_spaces_arent_quite_ready">Team-Spaces sind noch nicht fertig entwickelt, du kannst sie aber schon testen</string>
+    <string name="continue_anyway">Trotzdem fortfahren</string>
 </resources>
