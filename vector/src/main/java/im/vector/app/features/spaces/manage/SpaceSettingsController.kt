@@ -52,6 +52,7 @@ class SpaceSettingsController @Inject constructor(
         fun onDevRoomSettings()
         fun onManageRooms()
         fun setIsPublic(public: Boolean)
+        fun onRoomAliasesClicked()
     }
 
     var callback: Callback? = null
@@ -103,6 +104,7 @@ class SpaceSettingsController @Inject constructor(
             }
         }
 
+        val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
         if (vectorPreferences.labsUseExperimentalRestricted()) {
             buildProfileAction(
                     id = "joinRule",
@@ -113,7 +115,6 @@ class SpaceSettingsController @Inject constructor(
                     action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
             )
         } else {
-            val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
             formSwitchItem {
                 id("isPublic")
                 enabled(data.actionPermissions.canChangeJoinRule)
@@ -133,12 +134,23 @@ class SpaceSettingsController @Inject constructor(
                 id = "manage_rooms",
                 title = stringProvider.getString(R.string.space_settings_manage_rooms),
                 // subtitle = data.getJoinRuleWording(stringProvider),
-                divider = vectorPreferences.developerMode(),
+                divider = vectorPreferences.developerMode() || isPublic,
                 editable = data.actionPermissions.canAddChildren,
                 action = {
                     if (data.actionPermissions.canAddChildren) callback?.onManageRooms()
                 }
         )
+
+        if (isPublic) {
+            buildProfileAction(
+                    id = "alias",
+                    title = stringProvider.getString(R.string.space_settings_alias_title),
+                    subtitle = stringProvider.getString(R.string.space_settings_alias_subtitle),
+                    divider = vectorPreferences.developerMode(),
+                    editable = true,
+                    action = { callback?.onRoomAliasesClicked() }
+            )
+        }
 
         if (vectorPreferences.developerMode()) {
             buildProfileAction(

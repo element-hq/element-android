@@ -53,6 +53,7 @@
             android:paddingStart="@dimen/alerter_padding_small"
             android:paddingEnd="@dimen/alerter_padding_small"
             android:textColor="@android:color/white"
+            android:textStyle="bold"
             android:visibility="gone"
             tools:text="Title"
             tools:visibility="visible" />

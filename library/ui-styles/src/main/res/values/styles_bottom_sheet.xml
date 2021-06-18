@@ -2,7 +2,7 @@
 <resources>
 
     <!-- BottomSheet theming -->
-    <style name="BottomSheet.Vector.Light" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+    <style name="Theme.Vector.BottomSheetDialog.Light" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="colorPrimary">@color/element_accent_light</item>
         <item name="colorSecondary">@color/palette_element_green</item>
         <item name="colorSurface">@color/element_background_light</item>
@@ -13,7 +13,7 @@
         <item name="android:textColorLink">@color/element_link_light</item>
     </style>
 
-    <style name="BottomSheet.Vector.Dark" parent="Theme.MaterialComponents.BottomSheetDialog">
+    <style name="Theme.Vector.BottomSheetDialog.Dark" parent="Theme.MaterialComponents.BottomSheetDialog">
         <item name="colorPrimary">@color/element_accent_dark</item>
         <item name="colorSecondary">@color/palette_element_green</item>
         <item name="colorSurface">@color/element_background_dark</item>
@@ -24,7 +24,7 @@
         <item name="android:textColorLink">@color/element_link_dark</item>
     </style>
 
-    <style name="BottomSheet.Vector.Black" parent="BottomSheet.Vector.Dark">
+    <style name="Theme.Vector.BottomSheetDialog.Black" parent="Theme.Vector.BottomSheetDialog.Dark">
         <item name="colorSurface">@color/element_background_black</item>
     </style>
 

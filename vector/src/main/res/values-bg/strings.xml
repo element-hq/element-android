@@ -2402,4 +2402,38 @@
     <string name="room_member_open_or_create_dm">Директно съобщение</string>
     <string name="send_bug_report_include_key_share_history">Изпрати историята на заявките за споделяне на ключове</string>
     <string name="no_more_results">Няма повече резултати</string>
+    <string name="event_status_sent_message">Съобщението беше изпратено</string>
+    <string name="initial_sync_start_downloading">Начална синхронизация:
+\nИзтегляне на данни…</string>
+    <string name="initial_sync_start_server_computing">Начална синхронизация:
+\nИзчакване на отговор от сървъра…</string>
+    <string name="room_displayname_empty_room_was">Празна стая (беше %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s и %4$d друг</item>
+        <item quantity="other">%1$s, %2$s, %3$s и %4$d други</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s и %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s и %3$s</string>
+    <string name="notice_widget_jitsi_modified_by_you">Променихте видео конференцията</string>
+    <string name="notice_widget_jitsi_modified">Видео конференцията беше променена от %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">Прекратихте видео конференцията</string>
+    <string name="notice_widget_jitsi_removed">Видео конференцията беше прекратена от %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">Стартирахте видео конференция</string>
+    <string name="notice_widget_jitsi_added">Беше стартирана видео конференция от %1$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Забранено е участието на всякакви сървъри! Тази стая вече е неизползваема.</string>
+    <string name="notice_room_server_acl_updated_no_change">Няма промени.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Сървърите съдържащи IP адреси ще бъдат блокирани.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Сървърите съдържащи IP адреси ще бъдат разрешени.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Сървърите съдържащи %s бяха премахнати от списъка с разрешени.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Сървърите съдържащи %s ще бъдат разрешени.</string>
+    <string name="notice_room_server_acl_updated_was_banned">"• Сървърите съдържащи  %s бяха премахнати от списъка с блокирани."</string>
+    <string name="notice_room_server_acl_updated_banned">"• Сървърите съдържащи  %s ще бъдат блокирани."</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Променихте сървърните разрешения (ACL) за тази стая.</string>
+    <string name="notice_room_server_acl_updated_title">%s промени разрешенията (ACL) за тази стая.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Сървърите съдържащи IP адрес са блокирани.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Сървърите съдържащи IP адрес са разрешени.</string>
+    <string name="notice_room_server_acl_set_allowed">• Сървърите съдържащи %s са разрешени.</string>
+    <string name="notice_room_server_acl_set_banned">• Сървърите съдържащи %s са блокирани.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Настроихте сървърните разрешения (ACL) за тази стая.</string>
+    <string name="notice_room_server_acl_set_title">%s настрой разрешенията (ACL) за тази стая.</string>
 </resources>
