@@ -386,7 +386,4 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindEventSenderProcessor(processor: EventSenderProcessorCoroutine): EventSenderProcessor
-
-
-
 }

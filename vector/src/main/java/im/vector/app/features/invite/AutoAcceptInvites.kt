@@ -24,6 +24,6 @@ interface AutoAcceptInvites {
 }
 
 class CompileTimeAutoAcceptInvites @Inject constructor() : AutoAcceptInvites {
-    override val isEnabled = true
-    override val hideInvites = false
+    override val isEnabled = false
+    override val hideInvites = isEnabled
 }

@@ -256,10 +256,10 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         }
                     }
                     is InviteNotifiableEvent  -> {
-                        if(autoAcceptInvites.hideInvites){
+                        if (autoAcceptInvites.hideInvites) {
                             // Forget this event
                            eventIterator.remove()
-                        }else {
+                        } else {
                             invitationEvents.add(event)
                         }
                     }

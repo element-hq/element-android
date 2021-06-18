@@ -208,7 +208,7 @@ private val autoAcceptInvites: AutoAcceptInvites)
                             val activeSpaceRoomId = groupingMethod.spaceSummary?.roomId
                             var dmInvites = 0
                             var roomsInvite = 0
-                            if(!autoAcceptInvites.hideInvites) {
+                            if (!autoAcceptInvites.hideInvites) {
                                 dmInvites = session.getRoomSummaries(
                                         roomSummaryQueryParams {
                                             memberships = listOf(Membership.INVITE)
