@@ -15,19 +15,8 @@
 
 {% if sections[section] %}
 {% for category, val in definitions.items() if category in sections[section]%}
-{% if definitions[category]['name'] == "Features" %}
-Features ✨:
-{% elif definitions[category]['name'] == "Bugfixes" %}
-Bugfixes 🐛:
-{% elif definitions[category]['name'] == "Deprecations and Removals" %}
-SDK API changes ⚠️:
-{% elif definitions[category]['name'] == "Improved Documentation" %}
-Improved Documentation 📚:
-{% elif definitions[category]['name'] == "Misc" %}
-Other changes:
-{% else %}
 {{ definitions[category]['name'] }}
-{% endif %}
+{{ underline * definitions[category]['name']|length }}
 {% if definitions[category]['showcontent'] %}
 {% for text, values in sections[section][category].items() %}
  - {{ text }} ({{ values|join(', ') }})
