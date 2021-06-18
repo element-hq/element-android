@@ -35,6 +35,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.AliasAvailabilityResult
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
@@ -92,7 +93,6 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 _viewEvents.post(CreateSpaceEvents.NavigateToDetails)
             }
             is CreateSpaceAction.NameChanged            -> {
-
                 setState {
                     if (aliasManuallyModified) {
                         copy(
@@ -102,7 +102,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                         )
                     } else {
                         val tentativeAlias =
-                                getAliasFromName(action.name)
+                                MatrixPatterns.candidateAliasFromRoomName(action.name)
                         copy(
                                 nameInlineError = null,
                                 name = action.name,
@@ -155,12 +155,6 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 handleSetTopology(action)
             }
         }.exhaustive
-    }
-
-    private fun getAliasFromName(name: String): String {
-        return Regex("\\s").replace(name.lowercase(), "_").let {
-            "[^a-z0-9._%#@=+-]".toRegex().replace(it, "")
-        }
     }
 
     private fun handleSetTopology(action: CreateSpaceAction.SetSpaceTopology) {

@@ -134,7 +134,7 @@ class SpaceSettingsController @Inject constructor(
                 id = "manage_rooms",
                 title = stringProvider.getString(R.string.space_settings_manage_rooms),
                 // subtitle = data.getJoinRuleWording(stringProvider),
-                divider = true,
+                divider = vectorPreferences.developerMode() || isPublic,
                 editable = data.actionPermissions.canAddChildren,
                 action = {
                     if (data.actionPermissions.canAddChildren) callback?.onManageRooms()
@@ -146,7 +146,7 @@ class SpaceSettingsController @Inject constructor(
                     id = "alias",
                     title = stringProvider.getString(R.string.space_settings_alias_title),
                     subtitle = stringProvider.getString(R.string.space_settings_alias_subtitle),
-                    divider = true,
+                    divider = vectorPreferences.developerMode(),
                     editable = true,
                     action = { callback?.onRoomAliasesClicked() }
             )
