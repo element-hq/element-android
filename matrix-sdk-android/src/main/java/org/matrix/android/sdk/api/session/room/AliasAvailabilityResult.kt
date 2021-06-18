@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.spaces.manage
+package org.matrix.android.sdk.api.session.room
 
-import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 
-sealed class SpaceManagedSharedAction : VectorViewModelAction {
-    object HandleBack : SpaceManagedSharedAction()
-    object ShowLoading : SpaceManagedSharedAction()
-    object HideLoading : SpaceManagedSharedAction()
-    object CreateRoom : SpaceManagedSharedAction()
-    object ManageRooms : SpaceManagedSharedAction()
-    object OpenSpaceAliasesSettings : SpaceManagedSharedAction()
+sealed class AliasAvailabilityResult {
+    object Available: AliasAvailabilityResult()
+    data class NotAvailable(val roomAliasError: RoomAliasError) : AliasAvailabilityResult()
 }

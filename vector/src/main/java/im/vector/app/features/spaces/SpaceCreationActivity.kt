@@ -113,6 +113,9 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                 CreateSpaceEvents.HideModalLoading            -> {
                     hideWaitingView()
                 }
+                is CreateSpaceEvents.ShowModalLoading         -> {
+                    showWaitingView(it.message)
+                }
             }
         }
     }

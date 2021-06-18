@@ -45,6 +45,7 @@ data class CreateSpaceTaskParams(
         val spaceName: String,
         val spaceTopic: String?,
         val spaceAvatar: Uri? = null,
+        val spaceAlias: String? = null,
         val isPublic: Boolean,
         val defaultRooms: List<String> = emptyList()
 )
@@ -57,7 +58,13 @@ class CreateSpaceViewModelTask @Inject constructor(
 
     override suspend fun execute(params: CreateSpaceTaskParams): CreateSpaceTaskResult {
         val spaceID = try {
-            session.spaceService().createSpace(params.spaceName, params.spaceTopic, params.spaceAvatar, params.isPublic)
+            session.spaceService().createSpace(
+                    params.spaceName,
+                    params.spaceTopic,
+                    params.spaceAvatar,
+                    params.isPublic,
+                    params.spaceAlias
+            )
         } catch (failure: Throwable) {
             return CreateSpaceTaskResult.FailedToCreateSpace(failure)
         }

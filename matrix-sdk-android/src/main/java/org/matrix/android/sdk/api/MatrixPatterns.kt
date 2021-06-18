@@ -157,4 +157,10 @@ object MatrixPatterns {
     fun isValidOrderString(order: String?) : Boolean {
         return order != null && order.length < 50 && order matches ORDER_STRING_REGEX
     }
+
+    fun candidateAliasFromRoomName(name: String): String {
+        return Regex("\\s").replace(name.lowercase(), "_").let {
+            "[^a-z0-9._%#@=+-]".toRegex().replace(it, "")
+        }
+    }
 }

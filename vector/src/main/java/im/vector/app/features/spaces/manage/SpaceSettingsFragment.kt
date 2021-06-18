@@ -233,6 +233,10 @@ class SpaceSettingsFragment @Inject constructor(
         }
     }
 
+    override fun onRoomAliasesClicked() {
+        sharedViewModel.handle(SpaceManagedSharedAction.OpenSpaceAliasesSettings)
+    }
+
     override fun onImageReady(uri: Uri?) {
         uri ?: return
         viewModel.handle(

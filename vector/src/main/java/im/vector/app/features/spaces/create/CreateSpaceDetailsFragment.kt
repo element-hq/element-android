@@ -84,6 +84,10 @@ class CreateSpaceDetailsFragment @Inject constructor(
         sharedViewModel.handle(CreateSpaceAction.TopicChanged(newTopic))
     }
 
+    override fun setAliasLocalPart(aliasLocalPart: String) {
+        sharedViewModel.handle(CreateSpaceAction.SpaceAliasChanged(aliasLocalPart))
+    }
+
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         sharedViewModel.handle(CreateSpaceAction.OnBackPressed)
         return true
