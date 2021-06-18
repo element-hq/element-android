@@ -1,1 +1,0 @@
-Add option to set aliases for public spaces

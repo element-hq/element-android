@@ -1,1 +1,0 @@
-Update Message Composer design
