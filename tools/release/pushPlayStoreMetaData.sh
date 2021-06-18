@@ -19,6 +19,7 @@
 set +e
 
 # Fastlane / PlayStore is not happy if the folder name for local is not supported by the PlayStore. So temporary move them before running fast lane
+# List of supported languages: https://support.google.com/googleplay/android-developer/answer/9844778?hl=en#zippy=%2Cview-list-of-available-languages
 
 echo "Ignoring some languages not supported by the PlayStore"
 mkdir ./fastlane_tmp
