@@ -53,7 +53,7 @@ This project is full Kotlin. Please do not write Java classes.
 
 ### Changelog
 
-Please create at least one file under ./newsfragment containing details about your change. Towncrier will be used when preparing the release.
+Please create at least one file under ./changelog.d containing details about your change. Towncrier will be used when preparing the release.
 
 Towncrier says to use the PR number for the filename, but the issue number is also fine.
 
