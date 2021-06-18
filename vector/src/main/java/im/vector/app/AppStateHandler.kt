@@ -22,22 +22,16 @@ import androidx.lifecycle.OnLifecycleEvent
 import arrow.core.Option
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.BehaviorDataSource
+import im.vector.app.features.invite.InvitesAcceptor
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.ui.UiStateRepository
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
-import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
-import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.rx.rx
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -58,7 +52,8 @@ fun RoomGroupingMethod.group() = (this as? RoomGroupingMethod.ByLegacyGroup)?.gr
 class AppStateHandler @Inject constructor(
         private val sessionDataSource: ActiveSessionDataSource,
         private val uiStateRepository: UiStateRepository,
-        private val activeSessionHolder: ActiveSessionHolder
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val invitesAcceptor: InvitesAcceptor
 ) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
@@ -102,13 +97,13 @@ class AppStateHandler @Inject constructor(
         }
     }
 
-    private fun observeActiveSession(){
+    private fun observeActiveSession() {
         sessionDataSource.observe()
                 .distinctUntilChanged()
                 .subscribe {
                     // sessionDataSource could already return a session while activeSession holder still returns null
                     it.orNull()?.let { session ->
-                        observeInvitesForAutoAccept(session)
+                        invitesAcceptor.onSessionActive(session)
                         if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
                             setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
                         } else {
@@ -116,41 +111,6 @@ class AppStateHandler @Inject constructor(
                         }
                     }
                 }.also {
-                    compositeDisposable.add(it)
-                }
-    }
-
-    private fun observeInvitesForAutoAccept(session: Session?) {
-        if (session == null) return
-        val roomQueryParams = roomSummaryQueryParams {
-            this.memberships = listOf(Membership.INVITE)
-        }
-        val rxSession = session.rx()
-        Observable
-                .combineLatest(
-                        rxSession.liveRoomSummaries(roomQueryParams).debounce(1, TimeUnit.SECONDS),
-                        rxSession.liveRoomChangeMembershipState().debounce(1, TimeUnit.SECONDS),
-                        { invitedRooms, membershipsChanged ->
-                            val roomIdsToJoin = mutableListOf<String>()
-                            for (room in invitedRooms) {
-                                val roomMembershipChanged = membershipsChanged[room.roomId] ?: ChangeMembershipState.Unknown
-                                if (roomMembershipChanged != ChangeMembershipState.Joined && !roomMembershipChanged.isInProgress()) {
-                                    roomIdsToJoin.add(room.roomId)
-                                }
-                            }
-                            roomIdsToJoin
-                        }
-                )
-                .doOnNext { roomIdsToJoin ->
-                    session.coroutineScope.launch {
-                        for (roomId in roomIdsToJoin) {
-                            Timber.v("Auto accept invite for room: $roomId")
-                            tryOrNull { session.joinRoom(roomId) }
-                        }
-                    }
-                }
-                .subscribe()
-                .also {
                     compositeDisposable.add(it)
                 }
     }

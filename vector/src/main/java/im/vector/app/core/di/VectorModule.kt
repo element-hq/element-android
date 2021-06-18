@@ -25,6 +25,8 @@ import dagger.Module
 import dagger.Provides
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.features.invite.AutoAcceptInvites
+import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinCodeStore
@@ -105,4 +107,7 @@ abstract class VectorModule {
 
     @Binds
     abstract fun bindPinCodeStore(store: SharedPrefPinCodeStore): PinCodeStore
+
+    @Binds
+    abstract fun bindAutoAcceptInvites(autoAcceptInvites: CompileTimeAutoAcceptInvites): AutoAcceptInvites
 }
