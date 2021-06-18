@@ -247,6 +247,9 @@ android {
     productFlavors {
         gplay {
             apply plugin: 'com.google.gms.google-services'
+            afterEvaluate {
+                tasks.matching { it.name.contains("GoogleServices") && !it.name.contains("Gplay") }*.enabled = false
+            }
 
             dimension "store"
             isDefault = true
