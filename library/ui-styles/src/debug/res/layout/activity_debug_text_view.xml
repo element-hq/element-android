@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:ignore="HardcodedText">
 
     <TextView
@@ -64,5 +65,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Default (TextAppearance.Vector.Body)\nline 2" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Vector.TextInputLayout.Password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Password">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>
