@@ -23,14 +23,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import im.vector.lib.ui.styles.R
-import im.vector.lib.ui.styles.databinding.ActivityTestMaterialThemeBinding
+import im.vector.lib.ui.styles.databinding.ActivityDebugMaterialThemeBinding
 
 // Rendering is not the same with VectorBaseActivity
 abstract class DebugMaterialThemeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val views = ActivityTestMaterialThemeBinding.inflate(layoutInflater)
+        val views = ActivityDebugMaterialThemeBinding.inflate(layoutInflater)
         setContentView(views.root)
 
         setSupportActionBar(views.debugToolbar)
