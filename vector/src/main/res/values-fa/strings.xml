@@ -366,7 +366,7 @@
     <string name="send_bug_report_failed">امکان ارسال گزارش اشکال وجود نداشت، دوباره تلاش کنید (%s)</string>
     <string name="send_bug_report_progress">پیشرفت (%s%%)</string>
     <string name="send_files_in">ارسال در</string>
-    <string name="hs_url">نشانی کارساز خانگی</string>
+    <string name="hs_url">نشانی کارساز(سرور) خانگی</string>
     <string name="identity_url">نشانی کارساز هویت</string>
     <string name="option_send_voice">ارسال صدا</string>
     <string name="start_new_chat_prompt_msg">آیا مطمئنید می‌خواهید با %s یک گپ جدید را آغاز کنید؟</string>
@@ -386,7 +386,7 @@
     <string name="auth_invalid_token">توکن نامعتبر است</string>
     <string name="auth_missing_email_or_phone">نشانی رایانامه یا شماره تلفن وارد نشده</string>
     <string name="auth_email_already_defined">این نشانی رایانامه قبلاً ثبت شده.</string>
-    <string name="auth_home_server">کارساز خانگی:</string>
+    <string name="auth_home_server">کارساز(سرور) خانگی:</string>
     <string name="auth_identity_server">کارساز هویت:</string>
     <string name="login_error_unable_login">امکان ورود وجود ندارد</string>
     <string name="attachment_remaining_time_minutes">%1$dد %2$dث</string>
@@ -602,7 +602,7 @@
     <string name="devices_delete_pswd">گذرواژه:</string>
     <string name="devices_delete_submit_button_label">ثبت</string>
     <string name="settings_logged_in">واردشده به عنوان</string>
-    <string name="settings_home_server">کارساز خانگی</string>
+    <string name="settings_home_server">کارساز(سرور) خانگی</string>
     <string name="settings_identity_server">کارساز هویت</string>
     <string name="settings_integration_allow">اجازهٔ یک‌پارچگی‌ها</string>
     <string name="settings_integration_manager">مدیر یکپارچگی</string>
@@ -2290,7 +2290,7 @@
         <item quantity="one">%d دعوت</item>
         <item quantity="other">%d دعوت</item>
     </plurals>
-    <string name="directory_server_placeholder">نشانی کارساز خانگی</string>
+    <string name="directory_server_placeholder">نام کارساز</string>
     <string name="unknown_devices_alert_message">این اتاق شامل نشست‌های تایید نشده هستند.
 \nهیچ تضمینی وجود ندارد این نشست‌های تائیدنشده متعلق به کاربرانی باشد که فکر می‌کنید.
 \nتوضیه می‌شود افراد نشست‌های خود را تائید کنند. هر چند در صورتی که تمایلی به این کار ندارید، همچنان می‌توانید پیام ارسال کنید.
@@ -2525,7 +2525,7 @@
     <string name="login_social_sso">ورود یک‌پارچه</string>
     <string name="login_clear_homeserver_history">پاک‌سازی تاریخچه</string>
     <string name="command_confetti">فرستادن پیام داده با کاغذ رنگی</string>
-    <string name="command_snow">فرستادن پیام داده با برف</string>
+    <string name="command_snow">فرستادن پیام داده شده با بارش برف</string>
     <string name="default_message_emote_confetti">فرستادن کاغذ رنگی 🎉</string>
     <string name="default_message_emote_snow">فرستادن برف ❄️</string>
     <string name="authentication_error">احراز هویت انجام نشد</string>
@@ -2676,7 +2676,7 @@
     <string name="labs_use_restricted_join_rule_desc">هشدار به پشتیبانی سرور و نسخه اتاق آزمایشی نیاز دارد</string>
     <string name="labs_use_restricted_join_rule">فضای کاری آزمایشی - اتاق محدود.</string>
     <string name="you_are_invited">شما دعوت شده‌اید</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">فضای‌های کاری روش هایی برای دسته‌بندی اتاق‌ها و افراد برای کار، تفریح یا فقط خودتان است.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">اسپیس ها یک شیوه جدید برای دسته بندی اتاق ها و افراد هستند.</string>
     <string name="spaces_beta_welcome_to_spaces">به فضای‌های کاری خوش‌آمدید!</string>
     <string name="space_add_existing_rooms">اتاق‌ها و فضای کاری موجود را اضافه کنید</string>
     <string name="space_leave_prompt_msg">آیا مطمئن هستید که می خواهید فضای کاری را ترک کنید؟</string>
@@ -2771,4 +2771,30 @@
     <string name="send_file_step_compressing_image">فشرده‌سازی تصویر…</string>
     <string name="use_as_default_and_do_not_ask_again">به عنوان پیش فرض استفاده کن و دیگر سوال نپرس</string>
     <string name="option_always_ask">همواره بپرس</string>
+    <string name="invite_to_space">دعوت به %s</string>
+    <string name="call_transfer_unknown_person">شخص ناشناس</string>
+    <string name="call_transfer_transfer_to_title">انتقال به %1$s</string>
+    <string name="a11y_beta">این قابلیت در وضعیت بتا است</string>
+    <string name="give_feedback">به ما بازخورد دهید</string>
+    <string name="feedback_failed">ارسال بازخورد با شکست مواجه شد(%s)</string>
+    <string name="feedback_sent">سپاس! بازخورد شما با موفقیت ارسال شد</string>
+    <string name="send_feedback_space_info">شما در حال استفاده از نسخه بتای اسپیس هستید. بازخورد شما به آگاه کردن نسخه های بعدی کمک خواهد کرد. سکو و نام کاربری شما ثبت خواهد شد تا به ما در استفاده هرچه بیشتر از بازخورد شما کمک کند.</string>
+    <string name="feedback">بازخورد</string>
+    <string name="error_jitsi_join_conf">متاسفم، یک خطا زمانی که در تلاش برای اضافه شدن به کنفرانس بود ، اتفاق افتاد</string>
+    <string name="directory_add_a_new_server_error_already_added">این کارساز در حال حاضر در فهرست موجود است</string>
+    <string name="directory_add_a_new_server_error">نمی‌توانم این کارساز یا فهرست اتاقش را بیابم</string>
+    <string name="directory_add_a_new_server_prompt">نام کارساز جدیدی که می‌خواهید در آن به جستجو بپردازید را وارد کنید</string>
+    <string name="directory_add_a_new_server">اضافه کردن یک کارساز(سرور) جدید</string>
+    <string name="directory_your_server">کارساز شما</string>
+    <string name="unnamed_room">اتاق نامگذاری نشده</string>
+    <string name="this_space_has_no_rooms_admin">بعضی اتاق ها ممکن است پنهان باشند زیرا خصوصی هستند و شما به یک دعوتنامه نیاز دارید.</string>
+    <string name="this_space_has_no_rooms_not_admin">بعضی اتاق ها ممکن است پنهان باشند زیرا خصوصی هستند و شما به یک دعوتنامه نیاز دارید.
+\nشما اجازه اضافه کردن اتاق را ندارید.</string>
+    <string name="this_space_has_no_rooms">این اسپیس هیچ اتاقی ندارد</string>
+    <string name="spaces_no_server_support_description">لطفا برای آگاهی بیشتر با مدیر کارساز خود تماس بگیرید</string>
+    <string name="spaces_no_server_support_title">به نظر می رسد کارساز خانگی شما هنوز از اسپیس ها پشتیبانی نمی کند</string>
+    <string name="space_add_rooms">افزودن اتاق ها</string>
+    <string name="space_leave_prompt_msg_as_admin">شما مدیر این اسپیس هستید،مطمئن شوید قبل از خروج، حق مدیریت را به عضوی دیگر منتقل کرده اید.</string>
+    <string name="space_leave_prompt_msg_private">این اسپیس عمومی نیست. شما نمیتوانید بدون یک دعوتنامه دوباره ملحق شوید.</string>
+    <string name="space_leave_prompt_msg_only_you">شما تنها فرد اینجا هستید. اگر خارج شوید، هیچ کس از جمله شما قادر نخواهد بود در آینده ملحق شود.</string>
 </resources>

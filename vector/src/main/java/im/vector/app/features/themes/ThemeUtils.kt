@@ -22,7 +22,6 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
-import android.view.Menu
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -115,10 +114,10 @@ object ThemeUtils {
         currentTheme.set(aTheme)
         context.setTheme(
                 when (aTheme) {
-                    SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(context.resources)) R.style.AppTheme_Dark else R.style.AppTheme_Light
-                    THEME_DARK_VALUE   -> R.style.AppTheme_Dark
-                    THEME_BLACK_VALUE  -> R.style.AppTheme_Black
-                    else               -> R.style.AppTheme_Light
+                    SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(context.resources)) R.style.Theme_Vector_Dark else R.style.Theme_Vector_Light
+                    THEME_DARK_VALUE   -> R.style.Theme_Vector_Dark
+                    THEME_BLACK_VALUE  -> R.style.Theme_Vector_Black
+                    else               -> R.style.Theme_Vector_Light
                 }
         )
 
@@ -171,25 +170,6 @@ object ThemeUtils {
             Timber.e(e, "Unable to get color")
         }
         return null
-    }
-
-    /**
-     * Update the menu icons colors
-     *
-     * @param menu  the menu
-     * @param color the color
-     */
-    fun tintMenuIcons(menu: Menu, color: Int) {
-        for (i in 0 until menu.size()) {
-            val item = menu.getItem(i)
-            val drawable = item.icon
-            if (drawable != null) {
-                val wrapped = DrawableCompat.wrap(drawable)
-                drawable.mutate()
-                DrawableCompat.setTint(wrapped, color)
-                item.icon = drawable
-            }
-        }
     }
 
     /**

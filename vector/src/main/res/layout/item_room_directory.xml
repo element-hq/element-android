@@ -5,7 +5,7 @@
     android:id="@+id/itemRoomDirectoryLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
@@ -27,6 +27,7 @@
 
     <TextView
         android:id="@+id/itemRoomDirectoryName"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -34,8 +35,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:maxLines="2"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/itemRoomDirectoryDescription"
         app:layout_constraintEnd_toStartOf="@+id/itemRoomDirectoryChecked"
@@ -47,6 +47,7 @@
 
     <TextView
         android:id="@+id/itemRoomDirectoryDescription"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -54,8 +55,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:maxLines="2"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_primary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/itemRoomDirectoryChecked"

@@ -3,19 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
     android:minHeight="1dp"
-    android:background="?riotx_background"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/loadingText"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/layout_vertical_margin"
         android:gravity="center"
-        android:textColor="?riotx_text_primary"
-        android:textSize="16sp"
+        android:textColor="?vctr_content_primary"
         tools:text="Waiting message" />
 
     <ProgressBar

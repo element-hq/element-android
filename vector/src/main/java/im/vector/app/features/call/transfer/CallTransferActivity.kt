@@ -79,24 +79,20 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
         waitingView = views.waitingView.waitingView
 
         callTransferViewModel.observeViewEvents {
-            when (it)  {
+            when (it) {
                 is CallTransferViewEvents.Dismiss        -> finish()
                 CallTransferViewEvents.Loading           -> showWaitingView()
                 is CallTransferViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
             }
         }
 
-        sectionsPagerAdapter = CallTransferPagerAdapter(this).register()
+        sectionsPagerAdapter = CallTransferPagerAdapter(this)
         views.callTransferViewPager.adapter = sectionsPagerAdapter
-        sectionsPagerAdapter.onDialPadOkClicked = { phoneNumber ->
-            val action = CallTransferAction.ConnectWithPhoneNumber(views.callTransferConsultCheckBox.isChecked, phoneNumber)
-            callTransferViewModel.handle(action)
-        }
 
         TabLayoutMediator(views.callTransferTabLayout, views.callTransferViewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = getString(R.string.call_transfer_users_tab_title)
-                1 -> tab.text = getString(R.string.call_dial_pad_title)
+                CallTransferPagerAdapter.USER_LIST_INDEX -> tab.text = getString(R.string.call_transfer_users_tab_title)
+                CallTransferPagerAdapter.DIAL_PAD_INDEX  -> tab.text = getString(R.string.call_dial_pad_title)
             }
         }.attach()
         configureToolbar(views.callTransferToolbar)
@@ -106,10 +102,17 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
 
     private fun setupConnectAction() {
         views.callTransferConnectAction.debouncedClicks {
-            val selectedUser = sectionsPagerAdapter.userListFragment?.getCurrentState()?.getSelectedMatrixId()?.firstOrNull()
-            if (selectedUser != null) {
-                val action = CallTransferAction.ConnectWithUserId(views.callTransferConsultCheckBox.isChecked, selectedUser)
-                callTransferViewModel.handle(action)
+            when (views.callTransferTabLayout.selectedTabPosition) {
+                CallTransferPagerAdapter.USER_LIST_INDEX -> {
+                    val selectedUser = sectionsPagerAdapter.userListFragment?.getCurrentState()?.getSelectedMatrixId()?.firstOrNull() ?: return@debouncedClicks
+                    val action = CallTransferAction.ConnectWithUserId(views.callTransferConsultCheckBox.isChecked, selectedUser)
+                    callTransferViewModel.handle(action)
+                }
+                CallTransferPagerAdapter.DIAL_PAD_INDEX  -> {
+                    val phoneNumber = sectionsPagerAdapter.dialPadFragment?.getRawInput() ?: return@debouncedClicks
+                    val action = CallTransferAction.ConnectWithPhoneNumber(views.callTransferConsultCheckBox.isChecked, phoneNumber)
+                    callTransferViewModel.handle(action)
+                }
             }
         }
     }

@@ -29,7 +29,6 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -322,10 +321,9 @@ class MessageItemFactory @Inject constructor(
                     if (messageContent.msgType == MessageType.MSGTYPE_STICKER_LOCAL) {
                         mode(ImageContentRenderer.Mode.STICKER)
                     } else {
-                        clickListener(
-                                DebouncedClickListener({ view ->
-                                    callback?.onImageMessageClicked(messageContent, data, view)
-                                }))
+                        clickListener { view ->
+                            callback?.onImageMessageClicked(messageContent, data, view)
+                        }
                     }
                 }
     }
@@ -470,7 +468,7 @@ class MessageItemFactory @Inject constructor(
         spannable.append(linkifiedBody)
         val editedSuffix = stringProvider.getString(R.string.edited_suffix)
         spannable.append(" ").append(editedSuffix)
-        val color = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+        val color = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
         val editStart = spannable.lastIndexOf(editedSuffix)
         val editEnd = editStart + editedSuffix.length
         spannable.setSpan(
@@ -510,7 +508,7 @@ class MessageItemFactory @Inject constructor(
         val htmlBody = messageContent.getHtmlBody()
         val formattedBody = span {
             text = htmlBody
-            textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+            textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
             textStyle = "italic"
         }
 

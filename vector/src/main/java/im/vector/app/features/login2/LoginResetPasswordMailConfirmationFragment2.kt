@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginResetPasswordMailConfirmation2Binding
 import org.matrix.android.sdk.api.failure.is401
@@ -61,7 +61,7 @@ class LoginResetPasswordMailConfirmationFragment2 @Inject constructor() : Abstra
             errorFormatter.toHumanReadable(throwable)
         }
 
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(message)
                 .setPositiveButton(R.string.ok, null)

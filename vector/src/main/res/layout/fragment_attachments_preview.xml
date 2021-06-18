@@ -15,17 +15,24 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/item_attachment_big_preview" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/attachmentPreviewerToolbar"
-        style="@style/VectorToolbarStyle"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="#40000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:title="Title"
-        tools:titleTextColor="@color/white" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/attachmentPreviewerToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:titleTextColor="@android:color/white"
+            tools:title="Title" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/attachmentPreviewerBottomContainer"
@@ -48,12 +55,12 @@
             tools:itemCount="1"
             tools:listitem="@layout/item_attachment_miniature_preview" />
 
-        <com.google.android.material.checkbox.MaterialCheckBox
+        <CheckBox
             android:id="@+id/attachmentPreviewerSendImageOriginalSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -320,4 +320,14 @@
     <string name="room_permissions_ban_users">ห้ามผู้ใช้</string>
     <string name="ssl_fingerprint_hash">ลายนิ้วมือ (%s):</string>
     <string name="room_participants_action_ignore_title">เพิกเฉยผู้ใช้</string>
+    <string name="settings_fail_to_update_password">ไม่สามารถอัปเดตรหัสผ่าน</string>
+    <string name="settings_change_password_submit">อัปเดตรหัสผ่าน</string>
+    <string name="settings_confirm_password">ยืนยันรหัสผ่านใหม่</string>
+    <string name="settings_new_password">รหัสผ่านใหม่</string>
+    <string name="settings_old_password">รหัสผ่านปัจจุบัน</string>
+    <string name="settings_select_language">เลือกภาษา</string>
+    <string name="settings_interface_language">ภาษา</string>
+    <string name="dialog_edit_hint">ค่าใหม่</string>
+    <string name="action_switch">สลับ</string>
+    <string name="settings_category_room_directory">ไดเรกทอรีห้อง</string>
 </resources>

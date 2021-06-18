@@ -19,13 +19,13 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/bg_rounded_button"
-            android:backgroundTint="@color/riotx_accent"
+            android:backgroundTint="?colorPrimary"
             android:clickable="true"
             android:contentDescription="@string/call_notification_answer"
             android:focusable="true"
             android:padding="12dp"
             android:src="@drawable/ic_call_answer"
-            app:tint="@color/white"
+            app:tint="?colorOnPrimary"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
@@ -33,13 +33,13 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/bg_rounded_button"
-            android:backgroundTint="@color/riotx_destructive_accent"
+            android:backgroundTint="?colorError"
             android:clickable="true"
             android:contentDescription="@string/call_notification_reject"
             android:focusable="true"
             android:padding="12dp"
             android:src="@drawable/ic_call_hangup"
-            app:tint="@color/white"
+            app:tint="?colorOnPrimary"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <androidx.constraintlayout.helper.widget.Flow
@@ -75,7 +75,6 @@
             android:focusable="true"
             android:scaleType="center"
             android:src="@drawable/ic_call_pip"
-            app:tint="@android:color/white"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
@@ -88,8 +87,8 @@
             android:focusable="true"
             android:padding="16dp"
             android:src="@drawable/ic_microphone_off"
-            app:backgroundTint="?attr/riotx_background"
-            app:tint="?attr/riotx_text_primary"
+            app:backgroundTint="?android:colorBackground"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
@@ -97,13 +96,13 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/bg_rounded_button"
-            android:backgroundTint="@color/riotx_destructive_accent"
+            android:backgroundTint="?colorError"
             android:clickable="true"
             android:contentDescription="@string/call_notification_hangup"
             android:focusable="true"
             android:padding="12dp"
             android:src="@drawable/ic_call_hangup"
-            app:tint="@color/white"
+            app:tint="?colorOnPrimary"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
@@ -116,8 +115,8 @@
             android:focusable="true"
             android:padding="16dp"
             android:src="@drawable/ic_call_videocam_off_default"
-            app:backgroundTint="?attr/riotx_background"
-            app:tint="?attr/riotx_text_primary"
+            app:backgroundTint="?android:colorBackground"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView

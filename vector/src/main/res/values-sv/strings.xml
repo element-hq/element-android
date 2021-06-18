@@ -662,7 +662,7 @@
     <string name="failed_to_load_timeline_position">%s försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den.</string>
     <string name="directory_server_type_homeserver">Skriv en hemserver att visa listan över offentliga rum från</string>
     <string name="directory_server_all_rooms_on_server">Alla rum på %s-servern</string>
-    <string name="directory_server_native_rooms">Alla %s-rum på Matrix</string>
+    <string name="directory_server_native_rooms">Alla nativa %srum</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d rum</item>
         <item quantity="other">%d rum</item>
@@ -1712,7 +1712,7 @@
     <string name="encryption_information_verify_device_warning2">Om de inte matchar så kan kommunikationens säkerhet vara äventyrad.</string>
     <string name="encryption_information_verify_key_match">Jag verifierar att nycklarna matchar</string>
     <string name="directory_server_fail_to_retrieve_server">Servern kan vara otillgänglig eller överbelastad</string>
-    <string name="directory_server_placeholder">Hemserver-URL</string>
+    <string name="directory_server_placeholder">Servernamn</string>
     <string name="lock_screen_hint">Skriv här…</string>
     <string name="notification_unread_notified_messages_in_room">%1$s i %2$s</string>
     <string name="notification_unknown_new_event">Ny händelse</string>
@@ -2534,9 +2534,9 @@
     <string name="room_settings_alias_title">Rumsadresser</string>
     <string name="room_settings_room_access_title">Rumsåtkomst</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Ändringar av vilka som kan läsa historik kommer bara gälla för framtida meddelanden i det här rummet. Synligheten för existerande historik kommer att vara oförändrad.</string>
-    <string name="default_message_emote_snow">skickar snö ❄️</string>
+    <string name="default_message_emote_snow">skickar snöfall ❄️</string>
     <string name="default_message_emote_confetti">skickar konfetti 🎉</string>
-    <string name="command_snow">Skickar det givna meddelandet med snö</string>
+    <string name="command_snow">Skickar det givna meddelandet med snöfall</string>
     <string name="command_confetti">Skickar de givna meddelandet med konfetti</string>
     <string name="login_clear_homeserver_history">Rensa historik</string>
     <string name="login_social_sso">externt konto</string>
@@ -2734,7 +2734,7 @@
     <string name="labs_use_restricted_join_rule_desc">Varning kräver serverstöd och experimentell rumsversion</string>
     <string name="labs_use_restricted_join_rule">Experimentellt utrymme - Begränsat rum.</string>
     <string name="you_are_invited">Du är inbjuden</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Utrymmen är nya sätt att gruppera rum och personer för arbete, skoj eller bara för dig själv.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Utrymmen är ett nytt sätt att gruppera rum och personer.</string>
     <string name="spaces_beta_welcome_to_spaces">Välkommen till utrymmen!</string>
     <string name="space_add_existing_rooms">Lägg till existerande rum och utrymme</string>
     <string name="space_leave_prompt_msg">Är du säker på att du vill lämna utrymmet\?</string>
@@ -2771,4 +2771,39 @@
     <string name="send_file_step_compressing_image">Komprimerar bild…</string>
     <string name="use_as_default_and_do_not_ask_again">Använd som förval och fråga inte igen</string>
     <string name="option_always_ask">Fråga alltid</string>
+    <string name="this_space_has_no_rooms_admin">Vissa rum kan vara dolda för att de är privata och du behöver en inbjudan.</string>
+    <string name="this_space_has_no_rooms_not_admin">Vissa rum kan vara dolda för att de är privata och du behöver en inbjudan.
+\nDu har inte behörighet att lägga till rum.</string>
+    <string name="this_space_has_no_rooms">Det här utrymmet har inga rum</string>
+    <string name="spaces_no_server_support_description">Vänligen kontakta din hemserveradmin för vidare information</string>
+    <string name="spaces_no_server_support_title">Det verkar som att din hemserver inte stöder utrymmen än</string>
+    <string name="spaces_feeling_experimental_subspace">Känner du dig äventyrlig\?
+\nDu kan lägga till existerande utrymmen till ett utrymme.</string>
+    <string name="labs_space_show_orphan_in_home">Experimentellt utrymme - Visa bara övergivna i Hem</string>
+    <string name="space_add_rooms">Lägg till rum</string>
+    <string name="space_leave_prompt_msg_as_admin">Du är administratör för det här utrymmet, se till att du har överfört administratörsrättigheter till en annan medlem innan du lämnar.</string>
+    <string name="space_leave_prompt_msg_private">Det här utrymmet är inte offentligt. Du kommer inte att kunna gå med igen utan en inbjudan.</string>
+    <string name="space_leave_prompt_msg_only_you">Du är den enda personen här. Om du lämnar så kommer ingen kunna gå med i framtiden, inklusive du.</string>
+    <string name="invite_to_space">Bjud in till %s</string>
+    <string name="a11y_beta">Den här funktionen är i beta</string>
+    <string name="give_feedback">Ge återkoppling</string>
+    <string name="feedback_failed">Din återkoppling misslyckades att skickas (%s)</string>
+    <string name="feedback_sent">Tack, din återkoppling har skickats framgångsrikt</string>
+    <string name="you_may_contact_me">Ni kan kontakta mig om ni har några fler frågor</string>
+    <string name="send_feedback_space_info">Du använder en betaversion av utrymmen. Din återkoppling kommer att hjälpa till att utveckla nästa version. Din plattform och ditt användarnamn kommer att noteras för att hjälpa oss att få så mycket användning för din återkoppling som vi kan.</string>
+    <string name="feedback">Återkoppling</string>
+    <string name="send_feedback_space_title">Utrymmesåterkoppling</string>
+    <string name="error_jitsi_join_conf">Tyvärr så inträffade ett fel vid försök att gå med i gruppsamtalet</string>
+    <string name="unnamed_room">Namnlöst rum</string>
+    <string name="private_space">Privat utrymme</string>
+    <string name="public_space">Offentligt utrymme</string>
+    <string name="a11y_public_space">Det här utrymmet är offentligt</string>
+    <string name="call_transfer_unknown_person">Ökänd person</string>
+    <string name="call_transfer_transfer_to_title">Överför till %1$s</string>
+    <string name="call_transfer_consulting_with">Rådfrågar %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">Den här servern finns redan i listan</string>
+    <string name="directory_add_a_new_server_error">Kan inte hitta den här servern eller dess rumslista</string>
+    <string name="directory_add_a_new_server_prompt">Ange namnet för en ny server du vill utforska.</string>
+    <string name="directory_add_a_new_server">Lägg till en ny server</string>
+    <string name="directory_your_server">Din server</string>
 </resources>

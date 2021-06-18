@@ -13,13 +13,14 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:background="?attr/vctr_list_divider_color"
+        android:background="?vctr_list_separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/failedMessagesWarningTextView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -27,8 +28,7 @@
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:text="@string/event_status_failed_messages_warning"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_primary"
         app:drawableStartCompat="@drawable/ic_sending_message_failed"
         app:layout_constraintBottom_toBottomOf="@id/failedMessagesRetryButton"
         app:layout_constraintEnd_toStartOf="@+id/failedMessagesDeleteAllButton"
@@ -47,16 +47,15 @@
         app:layout_constraintEnd_toStartOf="@id/failedMessagesRetryButton"
         app:layout_constraintTop_toTopOf="@id/failedMessagesRetryButton" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/failedMessagesRetryButton"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:text="@string/global_retry"
-        android:textSize="14sp"
         app:icon="@drawable/ic_retry_sending_messages"
-        app:iconTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/failedMessagesWarningDivider" />

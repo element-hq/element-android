@@ -21,9 +21,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
@@ -107,9 +107,9 @@ class SoftLogoutFragment @Inject constructor(
         softLogoutViewModel.handle(SoftLogoutAction.PasswordChanged(password))
     }
 
-    override fun signinSubmit(password: String) {
+    override fun submit() = withState(softLogoutViewModel) { state ->
         cleanupUi()
-        softLogoutViewModel.handle(SoftLogoutAction.SignInAgain(password))
+        softLogoutViewModel.handle(SoftLogoutAction.SignInAgain(state.enteredPassword))
     }
 
     override fun signinFallbackSubmit() = withState(loginViewModel) { state ->
@@ -127,7 +127,7 @@ class SoftLogoutFragment @Inject constructor(
                 R.string.soft_logout_clear_data_dialog_content
             }
 
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.soft_logout_clear_data_dialog_title)
                     .setMessage(messageResId)
                     .setNegativeButton(R.string.cancel, null)

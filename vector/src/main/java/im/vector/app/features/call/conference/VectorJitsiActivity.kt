@@ -26,7 +26,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.airbnb.mvrx.Fail
@@ -34,6 +33,7 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.facebook.react.modules.core.PermissionListener
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
@@ -103,7 +103,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     }
 
     private fun handleConfirmSwitching(action: JitsiCallViewEvents.ConfirmSwitchingConference) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dialog_title_warning)
                 .setMessage(R.string.jitsi_leave_conf_to_join_another_one_content)
                 .setPositiveButton(R.string.action_switch) { _, _ ->

@@ -10,51 +10,43 @@
         android:id="@+id/publicRoomsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?riotx_header_panel_background"
+        android:background="?colorSurface"
         android:overScrollMode="always"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_public_room" />
 
     <com.google.android.material.appbar.AppBarLayout
-        style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="4dp">
+        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/publicRoomsToolbar"
-            style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:elevation="4dp"
             android:minHeight="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways">
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/publicRoomsFilter"
-                style="@style/VectorSearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:queryHint="@string/room_directory_search_hint" />
 
-        </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.MaterialToolbar>
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/publicRoomsCreateNewRoom"
-            style="@style/VectorButtonStyleText"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:icon="@drawable/ic_plus_circle"
             android:minHeight="@dimen/layout_touch_size"
             android:text="@string/create_new_room"
-            app:icon="@drawable/ic_plus_circle"
             app:iconPadding="13dp"
-            app:iconTint="@color/riotx_accent"
+            app:iconTint="?colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/publicRoomsToolbar" />
 

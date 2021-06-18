@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,14 +27,14 @@
 
         <TextView
             android:id="@+id/spaceNameView"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:duplicateParentState="true"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="?riotx_text_primary"
-            android:textSize="15sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@+id/spaceDescription"
@@ -56,6 +56,7 @@
 
         <TextView
             android:id="@+id/spaceDescription"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -63,8 +64,7 @@
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="15sp"
+            android:textColor="?vctr_content_secondary"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +78,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?vctr_list_divider_color" />
+        android:background="?vctr_list_separator_on_surface" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/invitePeople"
@@ -86,8 +86,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/invite_people_menu"
         app:leftIcon="@drawable/ic_invite_people"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary" />
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/showMemberList"
@@ -95,8 +95,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/list_members"
         app:leftIcon="@drawable/ic_room_profile_member_list"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary" />
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary" />
 
     <!-- Only visible when in developer mode -->
     <im.vector.app.core.ui.views.BottomSheetActionButton
@@ -105,8 +105,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/settings"
         app:leftIcon="@drawable/ic_settings_root_general"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary" />
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/exploreRooms"
@@ -114,8 +114,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/space_explore_activity_title"
         app:leftIcon="@drawable/ic_explore"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="" />
 
 
@@ -124,9 +124,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:actionTitle="@string/space_add_child_title"
-        app:leftIcon="@drawable/ic_add_black"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary"
+        app:leftIcon="@drawable/ic_fab_add"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="" />
 
 
@@ -136,7 +136,7 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/leave_space"
         app:leftIcon="@drawable/ic_room_actions_leave"
-        app:tint="@color/riotx_destructive_accent"
-        app:titleTextColor="@color/riotx_destructive_accent" />
+        app:tint="?colorError"
+        app:titleTextColor="?colorError" />
 
 </LinearLayout>

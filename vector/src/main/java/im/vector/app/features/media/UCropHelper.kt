@@ -40,15 +40,13 @@ fun createUCropWithDefaultSettings(colorProvider: ColorProvider,
                                 // Disable freestyle crop, usability was not easy
                                 // setFreeStyleCropEnabled(true)
                                 // Color used for toolbar icon and text
-                                setToolbarColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
-                                setToolbarWidgetColor(colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_primary_text_color))
+                                setToolbarColor(colorProvider.getColorFromAttribute(android.R.attr.colorBackground))
+                                setToolbarWidgetColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                                 // Background
-                                setRootViewBackgroundColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
+                                setRootViewBackgroundColor(colorProvider.getColorFromAttribute(android.R.attr.colorBackground))
                                 // Status bar color (pb in dark mode, icon of the status bar are dark)
-                                setStatusBarColor(colorProvider.getColorFromAttribute(R.attr.riotx_header_panel_background))
-                                // Known issue: there is still orange color used by the lib
-                                // https://github.com/Yalantis/uCrop/issues/602
-                                setActiveControlsWidgetColor(colorProvider.getColor(R.color.riotx_accent))
+                                setStatusBarColor(colorProvider.getColor(R.color.android_status_bar_background_light))
+                                setActiveControlsWidgetColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                                 // Hide the logo (does not work)
                                 setLogoColor(Color.TRANSPARENT)
                             }

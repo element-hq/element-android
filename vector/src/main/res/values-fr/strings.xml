@@ -591,7 +591,7 @@
     <string name="encryption_information_unblock">Supprimer de la liste noire</string>
     <string name="encryption_information_verify_device">Vérifier la session</string>
     <string name="select_room_directory">Sélectionner un répertoire de salons</string>
-    <string name="directory_server_placeholder">URL du serveur d’accueil</string>
+    <string name="directory_server_placeholder">Nom du serveur d’accueil</string>
     <string name="directory_server_all_rooms_on_server">Tous les salons sur le serveur %s</string>
     <string name="directory_server_native_rooms">Tous les salons natifs sur %s</string>
     <string name="historical_placeholder">Rechercher dans l’historique</string>
@@ -1444,7 +1444,7 @@
     <string name="quick_reactions">Réactions rapides</string>
     <string name="settings_general_title">Général</string>
     <string name="settings_preferences">Préférences</string>
-    <string name="settings_security_and_privacy">Sécurité &amp; vie privée</string>
+    <string name="settings_security_and_privacy">Sécurité et vie privée</string>
     <string name="settings_expert">Expert</string>
     <string name="settings_push_rules">Règles de notification</string>
     <string name="settings_push_rules_no_rules">Aucune règle de notification définie</string>
@@ -1455,8 +1455,8 @@
     <string name="push_gateway_item_device_name">session_name :</string>
     <string name="push_gateway_item_url">URL :</string>
     <string name="push_gateway_item_format">Format :</string>
-    <string name="preference_voice_and_video">Voix &amp; vidéo</string>
-    <string name="preference_root_help_about">Aide &amp; à propos</string>
+    <string name="preference_voice_and_video">Voix et vidéo</string>
+    <string name="preference_root_help_about">Aide et à propos</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Inscrire le jeton</string>
     <string name="send_suggestion">Faire une suggestion</string>
     <string name="send_suggestion_content">Saisissez votre suggestion ci-dessous.</string>
@@ -2358,7 +2358,7 @@
     <string name="room_participants_power_level_demote">Rétrograder</string>
     <string name="reset_secure_backup_warning">Ceci remplacera votre clé ou phrase actuelle.</string>
     <string name="reset_secure_backup_title">Générer une nouvelle clé de sécurité ou définir une nouvelle phrase de sécurité pour votre sauvegarde existante.</string>
-    <string name="settings_secure_backup_section_info">Protection contre la perte d\'accès aux messages et données chiffrées en sauvegardant les clés de chiffrage sur votre serveur.</string>
+    <string name="settings_secure_backup_section_info">Protection contre la perte d’accès aux messages et données chiffrées en sauvegardant les clés de chiffrage sur votre serveur.</string>
     <string name="settings_secure_backup_enter_to_setup">Activer sur cet appareil</string>
     <string name="settings_secure_backup_manage">Gérer</string>
     <string name="settings_show_room_member_state_events_summary">Inclure les événement d’invitation/ajout/départ/expulsion/exclusion ainsi que les changements d’avatar et de nom d’affichage.</string>
@@ -2705,7 +2705,7 @@
     <string name="suggested_header">Salons recommandés</string>
     <string name="labs_use_restricted_join_rule">Espace expérimental – salon restreint.</string>
     <string name="you_are_invited">Vous êtes invité</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Les espaces sont un moyen de regrouper les salons et personnes pour travailler, s’amuser, ou juste pour vous-même.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Les espaces sont une nouvelle manière de regrouper les salons et les gens.</string>
     <string name="spaces_beta_welcome_to_spaces">Bienvenue dans les espaces !</string>
     <string name="space_add_existing_rooms">Ajouter des salons et espaces existants</string>
     <string name="space_leave_prompt_msg">Voulez-vous vraiment quitter l’espace \?</string>
@@ -2778,4 +2778,39 @@
         <item quantity="one">Envoyer la vidéo en taille originale</item>
         <item quantity="other">Envoyer les vidéos en taille originale</item>
     </plurals>
+    <string name="labs_space_show_orphan_in_home">Espace expérimental – afficher seulement les orphelins dans Accueil</string>
+    <string name="space_leave_prompt_msg_as_admin">Vous êtes administrateur de cet espace, assurez-vous d’avoir transféré les droits d’administration à un autre membre avant de partir.</string>
+    <string name="send_feedback_space_info">Vous utilisez une version bêta des espaces. Vos remarques aideront à concevoir les prochaines versions. Votre plateforme et votre nom d’utilisateur seront marqués pour nous aider à utiliser vos remarques autant que possible.</string>
+    <string name="this_space_has_no_rooms_admin">Il se peut que certains salons soient masqués parce qu’ils sont privés et vous avez besoin d’une invitation.</string>
+    <string name="this_space_has_no_rooms_not_admin">Il se peut que certains salons soient masqués parce qu’ils sont privés et vous avez besoin d’une invitation.
+\nVous n’avez pas l’autorisation d’ajouter des salons.</string>
+    <string name="this_space_has_no_rooms">Cet espace n’a pas de salons</string>
+    <string name="spaces_no_server_support_description">Veuillez contacter l’administrateur de votre serveur d’accueil pour plus d’informations</string>
+    <string name="spaces_no_server_support_title">Il semble que votre serveur d’accueil ne prend pas encore en charge les espaces</string>
+    <string name="spaces_feeling_experimental_subspace">Envie d’expérimenter \?
+\nVous pouvez ajouter des espaces existants à un espace.</string>
+    <string name="space_add_rooms">Ajouter des salons</string>
+    <string name="space_leave_prompt_msg_private">Cet espace n’est pas public. Vous ne pourrez pas le rejoindre sans invitation.</string>
+    <string name="space_leave_prompt_msg_only_you">Vous êtes la seule personne ici. Si vous partez, personne ne pourra entrer à l’avenir, même pas vous.</string>
+    <string name="invite_to_space">Inviter à %s</string>
+    <string name="a11y_beta">Cette fonctionnalité est en bêta</string>
+    <string name="send_feedback_space_title">Remarques sur les espaces</string>
+    <string name="you_may_contact_me">Vous pouvez me contacter si vous avez des questions</string>
+    <string name="give_feedback">Envoyer des remarques</string>
+    <string name="feedback_failed">L’envoi des remarques a échoué (%s)</string>
+    <string name="feedback_sent">Merci, vos remarques ont bien été envoyées</string>
+    <string name="feedback">Remarques</string>
+    <string name="error_jitsi_join_conf">Désolé, une erreur s’est produite en essayant d’entrer dans la conférence</string>
+    <string name="unnamed_room">Salon sans nom</string>
+    <string name="private_space">Espace privé</string>
+    <string name="public_space">Espace public</string>
+    <string name="a11y_public_space">Cet espace est public</string>
+    <string name="call_transfer_unknown_person">Personne inconnue</string>
+    <string name="call_transfer_transfer_to_title">Transférer à %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">Ce serveur fait déjà partie de la liste</string>
+    <string name="directory_add_a_new_server_error">Impossible de trouver ce serveur ou la liste de ses salons</string>
+    <string name="directory_add_a_new_server_prompt">Saisissez le nom du nouveau serveur que vous souhaitez explorer.</string>
+    <string name="directory_add_a_new_server">Ajouter un nouveau serveur</string>
+    <string name="directory_your_server">Votre serveur</string>
+    <string name="call_transfer_consulting_with">Consultation de %1$s</string>
 </resources>

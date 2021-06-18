@@ -985,4 +985,6 @@
     <string name="encryption_information_unblock">കരിമ്പട്ടികയിൽ നിന്നും നീക്കുക</string>
     <string name="encryption_import_import">ഇമ്പോർട്ട്</string>
     <string name="encryption_export_export">എക്സ്പോർട്ട്</string>
+    <string name="spaces_invited_header">ക്ഷണങ്ങൾ</string>
+    <string name="settings_flair">ഫ്ലെയർ</string>
 </resources>

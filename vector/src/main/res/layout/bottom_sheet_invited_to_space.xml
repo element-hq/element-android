@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:fadeScrollbars="false"
     android:scrollbars="vertical">
 
@@ -17,9 +17,9 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:padding="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
             <ImageView
                 android:id="@+id/inviterAvatarImage"
@@ -36,10 +36,11 @@
 
             <TextView
                 android:id="@+id/inviterText"
+                style="@style/Widget.Vector.TextView.Subtitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:textColor="?riotx_text_primary"
+                android:textColor="?vctr_content_primary"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/inviterAvatarImage"
@@ -48,12 +49,13 @@
 
             <TextView
                 android:id="@+id/inviterMxid"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="?riotx_text_secondary"
+                android:textColor="?vctr_content_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/inviterAvatarImage"
                 app:layout_constraintTop_toBottomOf="@id/inviterText"
@@ -65,7 +67,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?attr/vctr_list_divider_color" />
+            android:background="?vctr_list_separator" />
 
         <include
             android:id="@+id/spaceCard"

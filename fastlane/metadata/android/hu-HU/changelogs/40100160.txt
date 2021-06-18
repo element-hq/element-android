@@ -1,0 +1,2 @@
+Fő változás ebben a verzióban: Közösségi hálózatos bejelentkezés
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.0.15 and https://github.com/vector-im/element-android/releases/tag/v1.0.16

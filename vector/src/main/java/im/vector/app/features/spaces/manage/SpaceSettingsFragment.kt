@@ -23,12 +23,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
@@ -168,7 +168,7 @@ class SpaceSettingsFragment @Inject constructor(
 
         return withState(viewModel) {
             return@withState if (it.showSaveAction) {
-                AlertDialog.Builder(requireContext())
+                MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.dialog_title_warning)
                         .setMessage(R.string.warning_unsaved_change)
                         .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
@@ -231,6 +231,10 @@ class SpaceSettingsFragment @Inject constructor(
             viewModel.handle(RoomSettingsAction.SetRoomJoinRule(RoomJoinRules.INVITE))
             viewModel.handle(RoomSettingsAction.SetRoomHistoryVisibility(RoomHistoryVisibility.INVITED))
         }
+    }
+
+    override fun onRoomAliasesClicked() {
+        sharedViewModel.handle(SpaceManagedSharedAction.OpenSpaceAliasesSettings)
     }
 
     override fun onImageReady(uri: Uri?) {

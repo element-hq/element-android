@@ -16,13 +16,14 @@
 
 package im.vector.app.features.autocomplete.command
 
-import android.view.View
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 
 @EpoxyModelClass(layout = R.layout.item_autocomplete_command)
 abstract class AutocompleteCommandItem : VectorEpoxyModel<AutocompleteCommandItem.Holder>() {
@@ -36,13 +37,12 @@ abstract class AutocompleteCommandItem : VectorEpoxyModel<AutocompleteCommandIte
     @EpoxyAttribute
     var description: CharSequence? = null
 
-    @EpoxyAttribute
-    var clickListener: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var clickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener(clickListener)
-
+        holder.view.onClick(clickListener)
         holder.nameView.text = name
         holder.parametersView.text = parameters
         holder.descriptionView.text = description

@@ -13,6 +13,7 @@
         android:paddingEnd="?dialogPreferredPadding">
 
         <TextView
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp"
@@ -20,6 +21,7 @@
 
         <TextView
             android:id="@+id/ssl_explanation"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp"
@@ -27,6 +29,7 @@
 
         <TextView
             android:id="@+id/ssl_user_id"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="6dp"
@@ -34,6 +37,7 @@
 
         <TextView
             android:id="@+id/ssl_fingerprint_title"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp"
@@ -41,12 +45,14 @@
 
         <TextView
             android:id="@+id/ssl_fingerprint"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="12dp"
             tools:text="07 89 7A A0 30 82 99 95 E6 17 5D 1F 34 5D 8D 0C 67 82 63 1C 1F 57 20 75 42 91 F7 8B 28 03 54 A2" />
 
         <TextView
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp"

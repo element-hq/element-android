@@ -5,7 +5,7 @@
     android:id="@+id/memberProfileStateView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:padding="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,11 +41,10 @@
 
         <TextView
             android:id="@+id/memberProfileNameView"
+            style="@style/Widget.Vector.TextView.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textAppearance="@style/Vector.Toolbar.Title"
-            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/memberProfileIdView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,13 +54,12 @@
 
         <TextView
             android:id="@+id/memberProfileIdView"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:gravity="center"
-            android:textAppearance="@style/Vector.Toolbar.Title"
-            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/memberProfilePowerLevelView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -71,11 +69,12 @@
 
         <TextView
             android:id="@+id/memberProfilePowerLevelView"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center"
-            android:textSize="12sp"
+            android:textColor="?vctr_content_primary"
             app:layout_constraintBottom_toTopOf="@+id/memberProfileStatusView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,10 +83,10 @@
 
         <TextView
             android:id="@+id/memberProfileStatusView"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="14sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

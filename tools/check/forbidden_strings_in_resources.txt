@@ -84,3 +84,29 @@ layout_constraintLeft_
 
 ### Use androidx.recyclerview.widget.RecyclerView because EpoxyRecyclerViews add behavior we do not want to
 <com\.airbnb\.epoxy\.EpoxyRecyclerView
+
+### Use Button instead of MaterialButton, the inflater will automatically inflate MaterialButton.
+<com\.google\.android\.material\.button\.MaterialButton
+<androidx\.appcompat\.widget\.AppCompatButton
+
+### Use CheckBox instead of MaterialCheckBox, the inflater will automatically inflate MaterialCheckBox.
+<com\.google\.android\.material\.checkbox\.MaterialCheckBox
+
+### Use RadioButton instead of MaterialRadioButton, the inflater will automatically inflate Material Views.
+<com\.google\.android\.material\.radiobutton\.MaterialRadioButton
+
+### Use com.google.android.material.switchmaterial.SwitchMaterial instead of Switch, the inflater will not automatically inflate Material Views for Switch.
+<Switch
+
+### Use com.google.android.material.appbar.MaterialToolbar instead of Toolbar, the inflater will not automatically inflate Material Views for Toolbar.
+<Toolbar
+<androidx\.appcompat\.widget\.Toolbar
+
+### Use colorSecondary
+colorAccent
+
+### Use MaterialCardView
+<androidx\.cardview\.widget\.CardView
+
+### Useless attribute, please remove
+android:textStyle=\"normal\"

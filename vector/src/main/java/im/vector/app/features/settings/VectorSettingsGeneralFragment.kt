@@ -33,6 +33,7 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
@@ -358,7 +359,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 views.changePasswordShowPasswords.render(passwordShown)
             }
 
-            val dialog = AlertDialog.Builder(activity)
+            val dialog = MaterialAlertDialogBuilder(activity)
                     .setView(view)
                     .setCancelable(false)
                     .setPositiveButton(R.string.settings_change_password, null)

@@ -15,11 +15,11 @@
  */
 package im.vector.app.features.home.room.list.actions
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
-import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
@@ -31,6 +31,7 @@ import javax.inject.Inject
  */
 class RoomListQuickActionsEpoxyController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
+        private val colorProvider: ColorProvider,
         private val stringProvider: StringProvider
 ) : TypedEpoxyController<RoomListQuickActionsState>() {
 
@@ -48,6 +49,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
                 avatarRenderer(host.avatarRenderer)
                 matrixItem(roomSummary.toMatrixItem())
                 stringProvider(host.stringProvider)
+                colorProvider(host.colorProvider)
                 izLowPriority(roomSummary.isLowPriority)
                 izFavorite(roomSummary.isFavorite)
                 settingsClickListener { host.listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) }
@@ -56,7 +58,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
             }
 
             // Notifications
-            dividerItem {
+            bottomSheetDividerItem {
                 id("notifications_separator")
             }
         }
@@ -87,7 +89,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
             iconRes(iconResId)
             textRes(titleRes)
             destructive(this@toBottomSheetItem.destructive)
-            listener(View.OnClickListener { host.listener?.didSelectMenuAction(this@toBottomSheetItem) })
+            listener { host.listener?.didSelectMenuAction(this@toBottomSheetItem) }
         }
     }
 

@@ -18,8 +18,8 @@ package im.vector.app.features.link
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -137,7 +137,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
      * Propose to disconnect from a previous HS, when clicking on an auto config link
      */
     private fun displayAlreadyLoginPopup(uri: Uri) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dialog_title_warning)
                 .setMessage(R.string.error_user_already_logged_in)
                 .setCancelable(false)
@@ -166,7 +166,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     }
 
     private fun displayError(failure: Throwable) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(failure))
                 .setCancelable(false)

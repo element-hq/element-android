@@ -9,7 +9,7 @@
     <item
         android:id="@+id/spaceCreateRoom"
         android:title="@string/create_new_room"
-        app:iconTint="?attr/colorAccent"
+        app:iconTint="?colorSecondary"
         app:showAsAction="never" />
 
 </menu>

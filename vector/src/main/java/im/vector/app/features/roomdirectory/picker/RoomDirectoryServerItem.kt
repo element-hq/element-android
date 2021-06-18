@@ -40,7 +40,7 @@ abstract class RoomDirectoryServerItem : VectorEpoxyModel<RoomDirectoryServerIte
     @EpoxyAttribute
     var canRemove: Boolean = false
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var removeListener: ClickListener? = null
 
     override fun bind(holder: Holder) {

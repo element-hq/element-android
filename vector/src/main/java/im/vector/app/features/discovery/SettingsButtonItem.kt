@@ -44,7 +44,7 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
     @EpoxyAttribute
     var buttonStyle: ButtonStyle = ButtonStyle.POSITIVE
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var buttonClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
@@ -57,10 +57,10 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
 
         when (buttonStyle) {
             ButtonStyle.POSITIVE    -> {
-                holder.button.setTextColor(colorProvider.getColor(R.color.riotx_accent))
+                holder.button.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
             }
             ButtonStyle.DESTRUCTIVE -> {
-                holder.button.setTextColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                holder.button.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorError))
             }
         }
 

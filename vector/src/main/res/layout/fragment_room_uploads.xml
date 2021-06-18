@@ -8,18 +8,14 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/roomUploadsAppBar"
-        style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp"
         android:transitionName="toolbar">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/roomUploadsToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:elevation="4dp"
             app:layout_collapseMode="pin">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,14 +46,14 @@
 
                 <TextView
                     android:id="@+id/roomUploadsToolbarTitleView"
+                    style="@style/Widget.Vector.TextView.HeadlineMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="?vctr_toolbar_primary_text_color"
-                    android:textSize="18sp"
+                    android:textColor="?vctr_content_primary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/roomUploadsToolbarAvatarImageView"
@@ -66,7 +62,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/roomUploadsTabs"

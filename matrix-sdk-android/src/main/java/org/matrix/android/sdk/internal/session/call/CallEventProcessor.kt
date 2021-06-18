@@ -37,7 +37,9 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
             EventType.CALL_CANDIDATES,
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
-            EventType.ENCRYPTED
+            EventType.ENCRYPTED,
+            EventType.CALL_ASSERTED_IDENTITY,
+            EventType.CALL_ASSERTED_IDENTITY_PREFIX
     )
 
     private val eventsToPostProcess = mutableListOf<Event>()

@@ -17,7 +17,6 @@
 package im.vector.app.features.settings.threepids
 
 import android.text.InputType
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -130,8 +129,8 @@ class ThreePidsSettingsController @Inject constructor(
                 genericButtonItem {
                     id("addEmail")
                     text(host.stringProvider.getString(R.string.settings_add_email_address))
-                    textColor(host.colorProvider.getColor(R.color.riotx_accent))
-                    buttonClickAction(View.OnClickListener { host.interactionListener?.addEmail() })
+                    textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                    buttonClickAction { host.interactionListener?.addEmail() }
                 }
             is ThreePidsSettingsUiState.AddingEmail       -> {
                 settingsEditTextItem {
@@ -189,8 +188,8 @@ class ThreePidsSettingsController @Inject constructor(
                 genericButtonItem {
                     id("addMsisdn")
                     text(host.stringProvider.getString(R.string.settings_add_phone_number))
-                    textColor(host.colorProvider.getColor(R.color.riotx_accent))
-                    buttonClickAction(View.OnClickListener { host.interactionListener?.addMsisdn() })
+                    textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                    buttonClickAction { host.interactionListener?.addMsisdn() }
                 }
             is ThreePidsSettingsUiState.AddingEmail       -> Unit
             is ThreePidsSettingsUiState.AddingPhoneNumber -> {
@@ -251,7 +250,7 @@ class ThreePidsSettingsController @Inject constructor(
                 settingsInformationItem {
                     id("info" + idPrefix + threePid.value)
                     message(host.stringProvider.getString(R.string.account_email_validation_message))
-                    colorProvider(host.colorProvider)
+                    textColor(host.colorProvider.getColor(R.color.vector_info_color))
                 }
                 settingsContinueCancelItem {
                     id("cont" + idPrefix + threePid.value)
@@ -263,7 +262,7 @@ class ThreePidsSettingsController @Inject constructor(
                 settingsInformationItem {
                     id("info" + idPrefix + threePid.value)
                     message(host.stringProvider.getString(R.string.settings_text_message_sent, threePid.getFormattedValue()))
-                    colorProvider(host.colorProvider)
+                    textColor(host.colorProvider.getColor(R.color.vector_info_color))
                 }
                 settingsEditTextItem {
                     id("msisdnVerification${threePid.value}")

@@ -26,13 +26,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
@@ -96,7 +96,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
                     dismiss()
                 }
                 is BootstrapViewEvents.ModalError    -> {
-                    AlertDialog.Builder(requireActivity())
+                    MaterialAlertDialogBuilder(requireActivity())
                             .setTitle(R.string.dialog_title_error)
                             .setMessage(event.error)
                             .setPositiveButton(R.string.ok, null)
@@ -121,7 +121,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
     }
 
     private fun promptSkip() {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.are_you_sure)
                 .setMessage(R.string.bootstrap_cancel_text)
                 .setPositiveButton(R.string._continue, null)

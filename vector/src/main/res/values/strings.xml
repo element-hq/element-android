@@ -771,6 +771,7 @@
     <string name="yes">YES</string>
     <string name="no">NO</string>
     <string name="_continue">Continue</string>
+    <string name="continue_anyway">Continue Anyway</string>
 
     <!-- Actions -->
     <string name="remove">Remove</string>
@@ -1413,6 +1414,8 @@
     <!-- room settings : alias -->
     <string name="room_settings_alias_title">Room addresses</string>
     <string name="room_settings_alias_subtitle">See and managed addresses of this room, and its visibility in the room directory.</string>
+    <string name="space_settings_alias_title">Space addresses</string>
+    <string name="space_settings_alias_subtitle">See and managed addresses of this space.</string>
 
     <string name="room_alias_title">Room Addresses</string>
     <string name="room_alias_published_alias_title">Published Addresses</string>
@@ -2584,6 +2587,7 @@
     <string name="create_room_disable_federation_description">You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.</string>
 
     <string name="create_room_alias_hint">Room address</string>
+    <string name="create_space_alias_hint">Space address</string>
     <string name="create_room_alias_already_in_use">This address is already in use</string>
     <string name="create_room_alias_empty">Please provide a room address</string>
     <string name="create_room_alias_invalid">Some characters are not allowed</string>
@@ -3399,4 +3403,7 @@
     <string name="this_space_has_no_rooms_admin">Some rooms may be hidden because they’re private and you need an invite.</string>
 
     <string name="unnamed_room">Unnamed Room</string>
+
+    <string name="teammate_spaces_arent_quite_ready">"Teammate spaces aren’t quite ready but you can still give them a try"</string>
+    <string name="teammate_spaces_might_not_join">"At the moment people might not be able to join any private rooms you make.\n\nWe’ll be improving this as part of the beta, but just wanted to let you know."</string>
 </resources>

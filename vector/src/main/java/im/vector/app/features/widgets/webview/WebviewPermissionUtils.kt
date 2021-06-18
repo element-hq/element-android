@@ -19,7 +19,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.webkit.PermissionRequest
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 
 object WebviewPermissionUtils {
@@ -29,7 +29,7 @@ object WebviewPermissionUtils {
         val allowedPermissions = request.resources.map {
             it to false
         }.toMutableList()
-        AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder(context)
                 .setTitle(title)
                 .setMultiChoiceItems(
                         request.resources.map { webPermissionToHumanReadable(it, context) }.toTypedArray(), null

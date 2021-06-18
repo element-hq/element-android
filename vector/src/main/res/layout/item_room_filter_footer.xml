@@ -2,38 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:orientation="vertical">
 
     <TextView
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="56dp"
         android:text="@string/room_filtering_footer_title"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="15sp" />
+        android:textColor="?vctr_content_secondary" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/roomFilterFooterCreateRoom"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/layout_vertical_margin"
         android:text="@string/room_filtering_footer_create_new_room" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/roomFilterFooterCreateDirect"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/room_filtering_footer_create_new_direct_message" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/roomFilterFooterOpenRoomDirectory"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

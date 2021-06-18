@@ -16,7 +16,6 @@
 
 package im.vector.app.features.login.terms
 
-import android.view.View
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.TextView
@@ -24,7 +23,9 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.onClick
 
 @EpoxyModelClass(layout = R.layout.item_policy)
 abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
@@ -41,7 +42,7 @@ abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
     var checkChangeListener: CompoundButton.OnCheckedChangeListener? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    var clickListener: View.OnClickListener? = null
+    var clickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -50,7 +51,7 @@ abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
             it.checkbox.setOnCheckedChangeListener(checkChangeListener)
             it.title.text = title
             it.subtitle.text = subtitle
-            it.view.setOnClickListener(clickListener)
+            it.view.onClick(clickListener)
         }
     }
 

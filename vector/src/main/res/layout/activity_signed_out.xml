@@ -4,7 +4,7 @@
     android:id="@+id/signedOut"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView
         style="@style/LoginFormScrollView"
@@ -17,22 +17,24 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/signed_out_title"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title" />
+                android:textColor="?vctr_content_primary" />
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:gravity="start"
                 android:text="@string/signed_out_notice"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text" />
+                android:textColor="?vctr_content_secondary" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/signedOutSubmit"
-                style="@style/Style.Vector.Login.Button"
+                style="@style/Widget.Vector.Button.Login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

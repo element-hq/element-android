@@ -22,7 +22,9 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.onClick
 
 /**
  * Item displaying an emoji reaction (single line with emoji, author, time)
@@ -39,8 +41,8 @@ abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleI
     @EpoxyAttribute
     var timeStamp: CharSequence? = null
 
-    @EpoxyAttribute
-    var userClicked: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var userClicked: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -52,7 +54,7 @@ abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleI
         } ?: run {
             holder.timeStampView.isVisible = false
         }
-        holder.view.setOnClickListener { userClicked?.invoke() }
+        holder.view.onClick(userClicked)
     }
 
     class Holder : VectorEpoxyHolder() {

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
@@ -42,8 +41,8 @@ class ReadReceiptsItemFactory @Inject constructor(private val avatarRenderer: Av
                 .eventId(eventId)
                 .readReceipts(readReceiptsData)
                 .avatarRenderer(avatarRenderer)
-                .clickListener(DebouncedClickListener({ _ ->
+                .clickListener {
                     callback?.onReadReceiptsClicked(readReceiptsData)
-                }))
+                }
     }
 }

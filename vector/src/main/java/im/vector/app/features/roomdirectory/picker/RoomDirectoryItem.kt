@@ -25,8 +25,10 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.glide.GlideApp
 
@@ -48,12 +50,12 @@ abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() 
     @EpoxyAttribute
     var checked: Boolean = false
 
-    @EpoxyAttribute
-    var globalListener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var globalListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.rootView.setOnClickListener { globalListener?.invoke() }
+        holder.rootView.onClick(globalListener)
 
         // Avatar
         GlideApp.with(holder.avatarView)

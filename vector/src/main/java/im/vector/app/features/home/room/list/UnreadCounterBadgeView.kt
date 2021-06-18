@@ -18,10 +18,10 @@ package im.vector.app.features.home.room.list
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.appcompat.widget.AppCompatTextView
+import com.google.android.material.textview.MaterialTextView
 import im.vector.app.R
 
-class UnreadCounterBadgeView : AppCompatTextView {
+class UnreadCounterBadgeView : MaterialTextView {
 
     constructor(context: Context) : super(context)
 

@@ -9,6 +9,7 @@
 
     <TextView
         android:id="@+id/jumpToReadMarkerLabelView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toStartOf="@+id/closeJumpToReadMarkerView"
@@ -20,7 +21,7 @@
         android:paddingEnd="16dp"
         android:paddingBottom="12dp"
         android:text="@string/room_jump_to_first_unread"
-        android:textColor="@color/white"
+        android:textColor="?colorOnPrimary"
         app:drawableStartCompat="@drawable/arrow_up_circle" />
 
     <ImageView
@@ -34,6 +35,7 @@
         android:contentDescription="@string/action_close"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:src="@drawable/ic_clear_white" />
+        android:src="@drawable/ic_close_24dp"
+        app:tint="?colorOnPrimary" />
 
 </merge>

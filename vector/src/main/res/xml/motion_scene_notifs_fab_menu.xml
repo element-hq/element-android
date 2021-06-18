@@ -48,7 +48,7 @@
             android:id="@+id/createRoomTouchGuard"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?riotx_touch_guard_bg"
+            android:background="?vctr_touch_guard_bg"
             android:visibility="invisible" />
 
         <!-- Sub menu item 2 -->
@@ -66,7 +66,7 @@
             motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
             motion:layout_constraintTop_toTopOf="@+id/createRoomButton"
             motion:maxImageSize="26dp"
-            motion:tint="@color/black" />
+            motion:tint="@android:color/black" />
 
         <Constraint
             android:id="@+id/createRoomItemGroupLabel"
@@ -94,7 +94,7 @@
             motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
             motion:layout_constraintTop_toTopOf="@+id/createRoomButton"
             motion:maxImageSize="29dp"
-            motion:tint="@color/black" />
+            motion:tint="@android:color/black" />
 
         <Constraint
             android:id="@+id/createRoomItemChatLabel"
@@ -127,7 +127,7 @@
             android:id="@+id/createRoomTouchGuard"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?riotx_touch_guard_bg" />
+            android:background="?vctr_touch_guard_bg" />
 
         <!-- Sub menu item 2 -->
         <Constraint
@@ -143,7 +143,7 @@
             motion:layout_constraintEnd_toEndOf="@+id/createRoomButton"
             motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
             motion:maxImageSize="26dp"
-            motion:tint="@color/black" />
+            motion:tint="@android:color/black" />
 
         <Constraint
             android:id="@+id/createRoomItemGroupLabel"
@@ -169,7 +169,7 @@
             motion:layout_constraintEnd_toEndOf="@+id/createRoomButton"
             motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
             motion:maxImageSize="29dp"
-            motion:tint="@color/black" />
+            motion:tint="@android:color/black" />
 
         <Constraint
             android:id="@+id/createRoomItemChatLabel"

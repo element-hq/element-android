@@ -4,5 +4,5 @@
 
     <corners android:radius="40dp" />
 
-    <solid android:color="@color/riotx_notice" />
+    <solid android:color="?colorError" />
 </shape>

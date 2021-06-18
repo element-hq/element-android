@@ -29,6 +29,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
 /**
@@ -36,10 +37,6 @@ import im.vector.app.core.extensions.setTextOrHide
  */
 @EpoxyModelClass(layout = R.layout.item_generic_empty_state)
 abstract class GenericEmptyWithActionItem : VectorEpoxyModel<GenericEmptyWithActionItem.Holder>() {
-
-    class Action(var title: String) {
-        var perform: Runnable? = null
-    }
 
     @EpoxyAttribute
     var title: CharSequence? = null
@@ -77,9 +74,7 @@ abstract class GenericEmptyWithActionItem : VectorEpoxyModel<GenericEmptyWithAct
         }
 
         holder.actionButton.setTextOrHide(buttonAction?.title)
-        holder.actionButton.setOnClickListener {
-            buttonAction?.perform?.run()
-        }
+        holder.actionButton.onClick(buttonAction?.listener)
     }
 
     class Holder : VectorEpoxyHolder() {

@@ -25,8 +25,10 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
 /**
@@ -51,15 +53,12 @@ abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetV
     @EpoxyAttribute
     var iconColor: Int = -1
 
-    @EpoxyAttribute
-    lateinit var listener: () -> Unit
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    lateinit var listener: ClickListener
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener {
-            listener.invoke()
-        }
-
+        holder.view.onClick(listener)
         holder.title.text = title
         holder.title.setTextColor(titleColor)
 

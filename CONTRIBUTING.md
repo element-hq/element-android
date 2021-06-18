@@ -26,7 +26,7 @@ To install the template (to be done only once):
 
 To create a new screen:
 - First create a new package in your code.
-- Then right click on the package, and select `New/New Vector/RiotX Feature`.
+- Then right click on the package, and select `New/New Vector/Element Feature`.
 - Follow the Wizard, especially replace `Main` by something more relevant to your feature.
 - Click on `Finish`.
 - Remaining steps are described as TODO in the generated files, or will be pointed out by the compiler, or at runtime :)
@@ -53,7 +53,7 @@ This project is full Kotlin. Please do not write Java classes.
 
 ### Changelog
 
-Please create at least one file under ./newsfragment containing details about your change. Towncrier will be used when preparing the release.
+Please create at least one file under ./changelog.d containing details about your change. Towncrier will be used when preparing the release.
 
 Towncrier says to use the PR number for the filename, but the issue number is also fine.
 

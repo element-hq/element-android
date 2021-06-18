@@ -18,35 +18,24 @@ package im.vector.app.features.crypto.keys
 
 import android.content.Context
 import android.net.Uri
-import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.extensions.foldToCallback
-import org.matrix.android.sdk.internal.util.awaitCallback
+import javax.inject.Inject
 
-class KeysExporter(private val session: Session) {
-
+class KeysExporter @Inject constructor(
+        private val session: Session,
+        private val context: Context
+) {
     /**
-     * Export keys and return the file path with the callback
+     * Export keys and write them to the provided uri
      */
-    fun export(context: Context, password: String, uri: Uri, callback: MatrixCallback<Boolean>) {
-        session.coroutineScope.launch(Dispatchers.Main) {
-            runCatching {
-                withContext(Dispatchers.IO) {
-                    val data = awaitCallback<ByteArray> { session.cryptoService().exportRoomKeys(password, it) }
-                    val os = context.contentResolver?.openOutputStream(uri)
-                    if (os == null) {
-                        false
-                    } else {
-                        os.write(data)
-                        os.flush()
-                        true
-                    }
-                }
-            }.foldToCallback(callback)
+    suspend fun export(password: String, uri: Uri) {
+        return withContext(Dispatchers.IO) {
+            val data = session.cryptoService().exportRoomKeys(password)
+            context.contentResolver.openOutputStream(uri)
+                    ?.use { it.write(data) }
+                    ?: throw IllegalStateException("Unable to open file for writting")
         }
     }
 }

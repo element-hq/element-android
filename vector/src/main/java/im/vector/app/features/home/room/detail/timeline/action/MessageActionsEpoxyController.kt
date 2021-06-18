@@ -15,19 +15,18 @@
  */
 package im.vector.app.features.home.room.detail.timeline.action
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.epoxy.bottomsheet.BottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetMessagePreviewItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetSendStateItem
-import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
@@ -107,7 +106,7 @@ class MessageActionsEpoxyController @Inject constructor(
         }
 
         when (state.informationData.e2eDecoration) {
-            E2EDecoration.WARN_IN_CLEAR -> {
+            E2EDecoration.WARN_IN_CLEAR        -> {
                 bottomSheetSendStateItem {
                     id("e2e_clear")
                     showProgress(false)
@@ -132,7 +131,7 @@ class MessageActionsEpoxyController @Inject constructor(
         // Quick reactions
         if (state.canReact() && state.quickStates is Success) {
             // Separator
-            dividerItem {
+            bottomSheetDividerItem {
                 id("reaction_separator")
             }
 
@@ -151,7 +150,7 @@ class MessageActionsEpoxyController @Inject constructor(
 
         if (state.actions.isNotEmpty()) {
             // Separator
-            dividerItem {
+            bottomSheetDividerItem {
                 id("actions_separator")
             }
         }
@@ -159,7 +158,7 @@ class MessageActionsEpoxyController @Inject constructor(
         // Action
         state.actions.forEachIndexed { index, action ->
             if (action is EventSharedAction.Separator) {
-                dividerItem {
+                bottomSheetDividerItem {
                     id("separator_$index")
                 }
             } else {
@@ -169,7 +168,7 @@ class MessageActionsEpoxyController @Inject constructor(
                     textRes(action.titleRes)
                     showExpand(action is EventSharedAction.ReportContent)
                     expanded(state.expendedReportContentMenu)
-                    listener(View.OnClickListener { host.listener?.didSelectMenuAction(action) })
+                    listener { host.listener?.didSelectMenuAction(action) }
                     destructive(action.destructive)
                 }
 
@@ -185,7 +184,7 @@ class MessageActionsEpoxyController @Inject constructor(
                             subMenuItem(true)
                             iconRes(actionReport.iconResId)
                             textRes(actionReport.titleRes)
-                            listener(View.OnClickListener { host.listener?.didSelectMenuAction(actionReport) })
+                            listener { host.listener?.didSelectMenuAction(actionReport) }
                         }
                     }
                 }
