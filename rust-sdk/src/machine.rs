@@ -30,7 +30,7 @@ use tokio::runtime::Runtime;
 use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
 use matrix_sdk_crypto::{
     decrypt_key_export, encrypt_key_export, EncryptionSettings, OlmMachine as InnerMachine,
-    Sas as InnerSas, VerificationRequest as InnerVerificationRequest,
+    Sas as InnerSas, Verification, VerificationRequest as InnerVerificationRequest,
 };
 
 use crate::{
@@ -54,6 +54,11 @@ pub struct Sas {
     pub is_done: bool,
     pub can_be_presented: bool,
     pub timed_out: bool,
+}
+
+pub struct StartSasResult {
+    pub sas: Sas,
+    pub request: OutgoingVerificationRequest,
 }
 
 impl From<InnerSas> for Sas {
@@ -639,72 +644,110 @@ impl OlmMachine {
         }
     }
 
-    pub fn get_verification(&self, flow_id: &str) -> Option<Sas> {
-        todo!()
-        // self.inner.get_verification(flow_id).map(|s| s.into())
-    }
-
-    pub fn request_verification(&self) {
+    pub fn request_verification(&self, user_id: &str) {
+        let _user_id = UserId::try_from(user_id).unwrap();
         todo!()
     }
 
-    pub fn start_verification(&self, device: &Device) -> Result<Sas, CryptoStoreError> {
-        let user_id = UserId::try_from(device.user_id.clone())?;
-        let device_id = device.device_id.as_str().into();
-        // TODO remove the unwrap
-        let device = self
-            .runtime
-            .block_on(self.inner.get_device(&user_id, device_id))?
-            .unwrap();
-
-        // TODO we need to return the request as well.
-        let (sas, _) = self.runtime.block_on(device.start_verification())?;
-
-        Ok(sas.into())
+    pub fn get_verification(&self, user_id: &str, _flow_id: &str) -> Option<Sas> {
+        let _user_id = UserId::try_from(user_id).ok()?;
+        todo!()
     }
 
-    pub fn accept_verification(&self, flow_id: &str) -> Option<OutgoingVerificationRequest> {
-        todo!()
-        // self.inner
-        //     .get_verification(flow_id)
-        //     .and_then(|s| s.accept().map(|r| r.into()))
+    pub fn start_sas_verification(
+        &self,
+        user_id: &str,
+        flow_id: &str,
+    ) -> Result<Option<StartSasResult>, CryptoStoreError> {
+        let user_id = UserId::try_from(user_id)?;
+
+        Ok(
+            if let Some(verification) = self.inner.get_verification_request(&user_id, flow_id) {
+                self.runtime
+                    .block_on(verification.start_sas())?
+                    .map(|(sas, r)| StartSasResult {
+                        sas: sas.into(),
+                        request: r.into(),
+                    })
+            } else {
+                None
+            },
+        )
     }
 
-    pub fn cancel_verification(&self, flow_id: &str) -> Option<OutgoingVerificationRequest> {
-        todo!()
-        // self.inner
-        //     .get_verification(flow_id)
-        //     .and_then(|s| s.cancel().map(|r| r.into()))
+    pub fn accept_sas_verification(
+        &self,
+        user_id: &str,
+        flow_id: &str,
+    ) -> Option<OutgoingVerificationRequest> {
+        let user_id = UserId::try_from(user_id).ok()?;
+        self.inner
+            .get_verification(&user_id, flow_id)
+            .and_then(|s| s.sas_v1())
+            .and_then(|s| s.accept().map(|r| r.into()))
+    }
+
+    pub fn cancel_verification(
+        &self,
+        user_id: &str,
+        flow_id: &str,
+    ) -> Option<OutgoingVerificationRequest> {
+        let user_id = UserId::try_from(user_id).ok()?;
+
+        if let Some(verification) = self.inner.get_verification(&user_id, flow_id) {
+            match verification {
+                Verification::SasV1(v) => v.cancel().map(|r| r.into()),
+                Verification::QrV1(v) => v.cancel().map(|r| r.into()),
+            }
+        } else {
+            None
+        }
     }
 
     pub fn confirm_verification(
         &self,
+        user_id: &str,
         flow_id: &str,
     ) -> Result<Option<OutgoingVerificationRequest>, CryptoStoreError> {
-        todo!()
-        // let sas = self.inner.get_verification(flow_id);
+        let user_id = UserId::try_from(user_id)?;
 
-        // if let Some(sas) = sas {
-        //     let (request, _) = self.runtime.block_on(sas.confirm())?;
-        //     Ok(request.map(|r| r.into()))
-        // } else {
-        //     Ok(None)
-        // }
+        Ok(
+            if let Some(verification) = self.inner.get_verification(&user_id, flow_id) {
+                match verification {
+                    Verification::SasV1(v) => {
+                        self.runtime.block_on(v.confirm())?.0.map(|r| r.into())
+                    }
+                    Verification::QrV1(v) => v.confirm_scanning().map(|r| r.into()),
+                }
+            } else {
+                None
+            },
+        )
     }
 
-    pub fn get_emoji_index(&self, flow_id: &str) -> Option<Vec<i32>> {
-        todo!()
-        // self.inner.get_verification(flow_id).and_then(|s| {
-        //     s.emoji_index()
-        //         .map(|v| v.iter().map(|i| (*i).into()).collect())
-        // })
+    pub fn get_emoji_index(&self, user_id: &str, flow_id: &str) -> Option<Vec<i32>> {
+        let user_id = UserId::try_from(user_id).ok()?;
+
+        self.inner
+            .get_verification(&user_id, flow_id)
+            .and_then(|s| {
+                s.sas_v1().and_then(|s| {
+                    s.emoji_index()
+                        .map(|v| v.iter().map(|i| (*i).into()).collect())
+                })
+            })
     }
 
-    pub fn get_decimals(&self, flow_id: &str) -> Option<Vec<i32>> {
-        todo!()
-        // self.inner.get_verification(flow_id).and_then(|s| {
-        //     s.decimals()
-        //         .map(|v| [v.0.into(), v.1.into(), v.2.into()].to_vec())
-        // })
+    pub fn get_decimals(&self, user_id: &str, flow_id: &str) -> Option<Vec<i32>> {
+        let user_id = UserId::try_from(user_id).ok()?;
+
+        self.inner
+            .get_verification(&user_id, flow_id)
+            .and_then(|s| {
+                s.sas_v1().and_then(|s| {
+                    s.decimals()
+                        .map(|v| [v.0.into(), v.1.into(), v.2.into()].to_vec())
+                })
+            })
     }
 }

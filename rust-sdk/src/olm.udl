@@ -63,6 +63,11 @@ dictionary Device {
     boolean is_blocked;
 };
 
+dictionary StartSasResult {
+    Sas sas;
+    OutgoingVerificationRequest request;
+};
+
 dictionary Sas {
     string other_user_id;
     string other_device_id;
@@ -166,7 +171,7 @@ interface OlmMachine {
 
     sequence<VerificationRequest> get_verification_requests([ByRef] string user_id);
     VerificationRequest? get_verification_request([ByRef] string user_id, [ByRef] string flow_id);
-    Sas? get_verification([ByRef] string flow_id);
+    Sas? get_verification([ByRef] string user_id, [ByRef] string flow_id);
 
     OutgoingVerificationRequest? accept_verification_request(
         [ByRef] string user_id,
@@ -175,14 +180,14 @@ interface OlmMachine {
     );
 
     [Throws=CryptoStoreError]
-    Sas start_verification([ByRef] Device device);
+    StartSasResult? start_sas_verification([ByRef] string user_id, [ByRef] string flow_id);
     [Throws=CryptoStoreError]
-    OutgoingVerificationRequest? confirm_verification([ByRef] string flow_id);
-    OutgoingVerificationRequest? cancel_verification([ByRef] string flow_id);
-    OutgoingVerificationRequest? accept_verification([ByRef] string flow_id);
+    OutgoingVerificationRequest? confirm_verification([ByRef] string user_id, [ByRef] string flow_id);
+    OutgoingVerificationRequest? cancel_verification([ByRef] string user_id, [ByRef] string flow_id);
+    OutgoingVerificationRequest? accept_sas_verification([ByRef] string user_id, [ByRef] string flow_id);
 
-    sequence<i32>? get_emoji_index([ByRef] string flow_id);
-    sequence<i32>? get_decimals([ByRef] string flow_id);
+    sequence<i32>? get_emoji_index([ByRef] string user_id, [ByRef] string flow_id);
+    sequence<i32>? get_decimals([ByRef] string user_id, [ByRef] string flow_id);
 
     [Throws=DecryptionError]
     KeyRequestPair request_room_key([ByRef] string event, [ByRef] string room_id);
