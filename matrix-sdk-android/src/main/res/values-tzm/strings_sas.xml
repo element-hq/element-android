@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Generated file, do not edit -->
+    <string name="verification_emoji_dog">Aydi</string>
+    <string name="verification_emoji_cat">Amuc</string>
+    <string name="verification_emoji_lion">Izem</string>
+    <string name="verification_emoji_horse">Ayyis</string>
+    <string name="verification_emoji_pig">Ilef</string>
+    <string name="verification_emoji_elephant">Ilu</string>
+    <string name="verification_emoji_rabbit">Agnin</string>
+    <string name="verification_emoji_rooster">Ayaẓiḍ</string>
+    <string name="verification_emoji_turtle">Ifker</string>
+    <string name="verification_emoji_fish">Aselm</string>
+    <string name="verification_emoji_tree">Aseklu</string>
+    <string name="verification_emoji_mushroom">Agursel</string>
+    <string name="verification_emoji_moon">Ayyur</string>
+    <string name="verification_emoji_fire">Timessi</string>
+    <string name="verification_emoji_banana">Tabanant</string>
+    <string name="verification_emoji_apple">Tadeffuyt</string>
+    <string name="verification_emoji_heart">Ul</string>
+    <string name="verification_emoji_robot">Aṛubu</string>
+    <string name="verification_emoji_hat">Taraza</string>
+    <string name="verification_emoji_book">Adlis</string>
+    <string name="verification_emoji_key">Tasarut</string>
+    <string name="verification_emoji_telephone">Atilifun</string>
+    <string name="verification_emoji_flag">Acenyal</string>
+    <string name="verification_emoji_ball">Tcama</string>
+    <string name="verification_emoji_guitar">Agiṭaṛ</string>
+    <string name="verification_emoji_folder">Asdaw</string>
+</resources>
