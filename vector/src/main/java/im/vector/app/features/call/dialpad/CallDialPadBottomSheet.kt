@@ -71,7 +71,7 @@ class CallDialPadBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCa
         } else {
             setCallbackToFragment(callback)
         }
-        views.callDialPadClose.setOnClickListener {
+        views.callDialPadClose.debouncedClicks {
             dismiss()
         }
     }

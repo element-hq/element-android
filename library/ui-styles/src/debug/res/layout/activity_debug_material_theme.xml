@@ -263,9 +263,50 @@
                             style="@style/DebugTextColorDemo.Black"
                             android:background="?android:textColorLink"
                             android:text="android:textColorLink" />
+
                     </LinearLayout>
 
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:colorBackground"
+                    android:padding="8dp"
+                    android:text="Background"
+                    android:textColor="?colorOnBackground" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?colorPrimary"
+                    android:padding="8dp"
+                    android:text="Primary"
+                    android:textColor="?colorOnPrimary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?colorSecondary"
+                    android:padding="8dp"
+                    android:text="Secondary"
+                    android:textColor="?colorOnSecondary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?colorError"
+                    android:padding="8dp"
+                    android:text="Error"
+                    android:textColor="?colorOnError" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?colorSurface"
+                    android:padding="8dp"
+                    android:text="Surface"
+                    android:textColor="?colorOnSurface" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

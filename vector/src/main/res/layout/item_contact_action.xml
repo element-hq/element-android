@@ -18,7 +18,7 @@
         android:importantForAccessibility="no"
         android:padding="10dp"
         app:tint="?vctr_content_secondary"
-        tools:src="@drawable/ic_invite_people" />
+        tools:src="@drawable/ic_baseline_perm_contact_calendar_24" />
 
     <TextView
         android:id="@+id/actionTitleText"
