@@ -359,7 +359,7 @@
     <string name="send_bug_report_include_crash_logs">Enviar crash logs</string>
     <string name="send_bug_report_include_screenshot">Enviar screenshot</string>
     <string name="send_bug_report">Reportar bug</string>
-    <string name="send_bug_report_description">Por favor descreva o bug. O que você fez\? O que você esperava que acontecese\? O que aconteceu na verdade\?</string>
+    <string name="send_bug_report_description">Por favor descreva o bug. O que você fez\? O que você esperava que acontecesse\? O que na verdade aconteceu\?</string>
     <string name="send_bug_report_placeholder">Descreva seu problema aqui</string>
     <string name="send_bug_report_logs_description">A fim de diagnosticar problemas, logs deste cliente vão ser enviados com este reporte de bug. Este reporte de bug, incluindo os logs e o screenshot, não será visível publicamente. Se você prefere somente enviar o texto acima, por favor desmarque:</string>
     <string name="send_bug_report_alert_message">Você parece estar agitando o telefone em frustração. Você gostaria de abrir a tela de reporte de bug\?</string>
