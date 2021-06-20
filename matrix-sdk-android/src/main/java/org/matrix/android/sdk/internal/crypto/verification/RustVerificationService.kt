@@ -300,6 +300,9 @@ constructor(
         }
     }
 
+    // TODO create a class that handles this, the DefaultCryptoService has
+    // similar needs so we could share code there, beware that local echo seems
+    // to be handled here
     suspend fun sendRequest(request: OutgoingVerificationRequest) {
         when (request) {
             is OutgoingVerificationRequest.ToDevice -> {

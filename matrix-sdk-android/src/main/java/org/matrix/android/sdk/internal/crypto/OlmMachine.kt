@@ -29,9 +29,11 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.JsonDict
@@ -63,6 +65,7 @@ import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
 import uniffi.olm.Sas as InnerSas
+import uniffi.olm.StartSasResult
 import uniffi.olm.VerificationRequest as InnerRequest
 import uniffi.olm.setLogger
 
@@ -148,13 +151,15 @@ internal class VerificationRequest(
 
     fun accept_with_methods(methods: List<VerificationMethod>): OutgoingVerificationRequest? {
         val stringMethods: MutableList<String> =
-                methods.map {
-                    when (it) {
-                        VerificationMethod.QR_CODE_SCAN -> VERIFICATION_METHOD_QR_CODE_SCAN
-                        VerificationMethod.QR_CODE_SHOW -> VERIFICATION_METHOD_QR_CODE_SHOW
-                        VerificationMethod.SAS -> VERIFICATION_METHOD_SAS
-                    }
-                }.toMutableList()
+                methods
+                        .map {
+                            when (it) {
+                                VerificationMethod.QR_CODE_SCAN -> VERIFICATION_METHOD_QR_CODE_SCAN
+                                VerificationMethod.QR_CODE_SHOW -> VERIFICATION_METHOD_QR_CODE_SHOW
+                                VerificationMethod.SAS -> VERIFICATION_METHOD_SAS
+                            }
+                        }
+                        .toMutableList()
 
         if (stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SHOW) ||
                 stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SCAN)) {
@@ -178,6 +183,14 @@ internal class VerificationRequest(
     fun isReady(): Boolean {
         refreshData()
         return this.inner.isReady
+    }
+
+    suspend fun startSasVerification(): StartSasResult? {
+        refreshData()
+
+        return withContext(Dispatchers.IO) {
+            machine.startSasVerification(inner.otherUserId, inner.flowId)
+        }
     }
 
     fun toPendingVerificationRequest(): PendingVerificationRequest {
@@ -276,15 +289,80 @@ private fun toCancelCode(cancelCode: RustCancelCode): CancelCode {
     }
 }
 
-internal class Sas(private val machine: InnerMachine, private var inner: InnerSas) {
+public class SasVerification(private val machine: InnerMachine, private var inner: InnerSas) :
+        SasVerificationTransaction {
+    private var stateField: VerificationTxState = VerificationTxState.OnStarted
+
     private fun refreshData() {
-        val sas = this.machine.getVerification(this.inner.flowId)
+        val sas = this.machine.getVerification(this.inner.otherUserId, this.inner.flowId)
 
         if (sas != null) {
             this.inner = sas
         }
 
         return
+    }
+
+    override val isIncoming: Boolean
+        get() {
+            return false
+        }
+
+    override var otherDeviceId: String?
+        get() {
+            return this.inner.otherDeviceId
+        }
+        set(value) {
+            if (value != null) {
+                this.inner.otherDeviceId = value
+            }
+        }
+
+    override val otherUserId: String
+        get() {
+            return this.inner.otherUserId
+        }
+
+    override var state: VerificationTxState
+        get() {
+            TODO()
+        }
+        set(v) {
+            this.stateField = v
+        }
+
+    override val transactionId: String
+        get() {
+            return this.inner.flowId
+        }
+
+    override fun cancel() {
+        TODO()
+    }
+
+    override fun cancel(code: CancelCode) {
+        TODO()
+    }
+
+    override fun shortCodeDoesNotMatch() {
+        TODO()
+    }
+
+    override fun isToDeviceTransport(): Boolean {
+        return false
+    }
+
+    override fun supportsDecimal(): Boolean {
+        return false
+    }
+
+    override fun supportsEmoji(): Boolean {
+        return false
+    }
+
+    override fun userHasVerifiedShortCode() {
+        // This is confirm
+        TODO()
     }
 
     fun isCanceled(): Boolean {
@@ -308,19 +386,21 @@ internal class Sas(private val machine: InnerMachine, private var inner: InnerSa
     }
 
     fun accept(): OutgoingVerificationRequest? {
-        return this.machine.acceptVerification(inner.flowId)
+        return this.machine.acceptSasVerification(this.inner.otherUserId, inner.flowId)
     }
 
     @Throws(CryptoStoreErrorException::class)
     suspend fun confirm(): OutgoingVerificationRequest? =
-            withContext(Dispatchers.IO) { machine.confirmVerification(inner.flowId) }
+            withContext(Dispatchers.IO) {
+                machine.confirmVerification(inner.otherUserId, inner.flowId)
+            }
 
-    fun cancel(): OutgoingVerificationRequest? {
-        return this.machine.cancelVerification(inner.flowId)
+    fun cancelHelper(): OutgoingVerificationRequest? {
+        return this.machine.cancelVerification(this.inner.otherUserId, inner.flowId)
     }
 
-    fun emoji(): List<EmojiRepresentation> {
-        val emojiIndex = this.machine.getEmojiIndex(this.inner.flowId)
+    override fun getEmojiCodeRepresentation(): List<EmojiRepresentation> {
+        val emojiIndex = this.machine.getEmojiIndex(this.inner.otherUserId, this.inner.flowId)
 
         return if (emojiIndex != null) {
             emojiIndex.map { getEmojiForCode(it) }
@@ -329,8 +409,14 @@ internal class Sas(private val machine: InnerMachine, private var inner: InnerSa
         }
     }
 
-    fun decimals(): List<Int>? {
-        return this.machine.getDecimals(this.inner.flowId)
+    override fun getDecimalCodeRepresentation(): String {
+        val decimals = this.machine.getDecimals(this.inner.otherUserId, this.inner.flowId)
+
+        return if (decimals != null) {
+            decimals.joinToString(" ")
+        } else {
+            ""
+        }
     }
 }
 
@@ -753,13 +839,13 @@ internal class OlmMachine(
     }
 
     /** Get an active verification */
-    fun getVerification(flowId: String): Sas? {
-        val sas = this.inner.getVerification(flowId)
+    fun getVerification(userId: String, flowId: String): SasVerification? {
+        val sas = this.inner.getVerification(userId, flowId)
 
         return if (sas == null) {
             null
         } else {
-            Sas(this.inner, sas)
+            SasVerification(this.inner, sas)
         }
     }
 }
