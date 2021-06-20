@@ -36,8 +36,9 @@ import com.airbnb.epoxy.EpoxyAttribute
 import kotlin.math.max
 import kotlin.math.round
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.ui.views.SendStateImageView
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -57,12 +58,17 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    private val _avatarClickListener = DebouncedClickListener({
-        attributes.avatarCallback?.onAvatarClicked(attributes.informationData)
-    })
-    private val _memberNameClickListener = DebouncedClickListener({
-        attributes.avatarCallback?.onMemberNameClicked(attributes.informationData)
-    })
+    private val _avatarClickListener = object : ClickListener {
+        override fun invoke(p1: View) {
+            attributes.avatarCallback?.onAvatarClicked(attributes.informationData)
+        }
+    }
+
+    private val _memberNameClickListener = object : ClickListener {
+        override fun invoke(p1: View) {
+            attributes.avatarCallback?.onMemberNameClicked(attributes.informationData)
+        }
+    }
 
     override fun bind(holder: H) {
         super.bind(holder)
@@ -162,9 +168,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             width = attributes.avatarSize
         }
         avatarImageView?.visibility = View.VISIBLE
-        avatarImageView?.setOnClickListener(_avatarClickListener)
+        avatarImageView?.onClick(_avatarClickListener)
         memberNameView?.visibility = View.VISIBLE
-        memberNameView?.setOnClickListener(_memberNameClickListener)
+        memberNameView?.onClick(_memberNameClickListener)
         timeView?.visibility = View.VISIBLE
         timeView?.text = attributes.informationData.time
         memberNameView?.text = attributes.informationData.memberName
@@ -242,8 +248,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             override val avatarRenderer: AvatarRenderer,
             override val messageColorProvider: MessageColorProvider,
             override val itemLongClickListener: View.OnLongClickListener? = null,
-            override val itemClickListener: View.OnClickListener? = null,
-            val memberClickListener: View.OnClickListener? = null,
+            override val itemClickListener: ClickListener? = null,
+            val memberClickListener: ClickListener? = null,
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
             val avatarCallback: TimelineEventController.AvatarCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,

@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.crypto.keysbackup.settings
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -166,13 +165,13 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
 
             if (isBackupAlreadySetup) {
                 textButton1(host.stringProvider.getString(R.string.keys_backup_settings_restore_backup_button))
-                clickOnButton1(View.OnClickListener { host.listener?.didSelectRestoreMessageRecovery() })
+                clickOnButton1 { host.listener?.didSelectRestoreMessageRecovery() }
 
                 textButton2(host.stringProvider.getString(R.string.keys_backup_settings_delete_backup_button))
-                clickOnButton2(View.OnClickListener { host.listener?.didSelectDeleteSetupMessageRecovery() })
+                clickOnButton2 { host.listener?.didSelectDeleteSetupMessageRecovery() }
             } else {
                 textButton1(host.stringProvider.getString(R.string.keys_backup_setup))
-                clickOnButton1(View.OnClickListener { host.listener?.didSelectSetupMessageRecovery() })
+                clickOnButton1 { host.listener?.didSelectSetupMessageRecovery() }
             }
         }
     }

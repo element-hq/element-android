@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.home.room.detail.timeline.action
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
 import im.vector.app.EmojiCompatFontProvider
@@ -107,7 +106,7 @@ class MessageActionsEpoxyController @Inject constructor(
         }
 
         when (state.informationData.e2eDecoration) {
-            E2EDecoration.WARN_IN_CLEAR -> {
+            E2EDecoration.WARN_IN_CLEAR        -> {
                 bottomSheetSendStateItem {
                     id("e2e_clear")
                     showProgress(false)
@@ -169,7 +168,7 @@ class MessageActionsEpoxyController @Inject constructor(
                     textRes(action.titleRes)
                     showExpand(action is EventSharedAction.ReportContent)
                     expanded(state.expendedReportContentMenu)
-                    listener(View.OnClickListener { host.listener?.didSelectMenuAction(action) })
+                    listener { host.listener?.didSelectMenuAction(action) }
                     destructive(action.destructive)
                 }
 
@@ -185,7 +184,7 @@ class MessageActionsEpoxyController @Inject constructor(
                             subMenuItem(true)
                             iconRes(actionReport.iconResId)
                             textRes(actionReport.titleRes)
-                            listener(View.OnClickListener { host.listener?.didSelectMenuAction(actionReport) })
+                            listener { host.listener?.didSelectMenuAction(actionReport) }
                         }
                     }
                 }

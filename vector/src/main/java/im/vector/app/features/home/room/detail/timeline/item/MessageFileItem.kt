@@ -28,6 +28,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import kotlin.math.max
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.themes.BubbleThemeUtils
@@ -47,7 +48,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     var iconRes: Int = 0
 
 //    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-//    var clickListener: View.OnClickListener? = null
+//    var clickListener: ClickListener? = null
 
     @EpoxyAttribute
     var izLocalFile = false
@@ -85,9 +86,9 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         }
 //        holder.view.setOnClickListener(clickListener)
 
-        holder.filenameView.setOnClickListener(attributes.itemClickListener)
+        holder.filenameView.onClick(attributes.itemClickListener)
         holder.filenameView.setOnLongClickListener(attributes.itemLongClickListener)
-        holder.fileImageWrapper.setOnClickListener(attributes.itemClickListener)
+        holder.fileImageWrapper.onClick(attributes.itemClickListener)
         holder.fileImageWrapper.setOnLongClickListener(attributes.itemLongClickListener)
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
     }

@@ -49,7 +49,9 @@ abstract class AbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<VB>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        context?.let {
+            sharedElementEnterTransition = TransitionInflater.from(it).inflateTransition(android.R.transition.move)
+        }
     }
 
     @CallSuper

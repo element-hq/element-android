@@ -18,10 +18,10 @@ package im.vector.app.core.ui.views
 
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
-import im.vector.app.core.utils.DebouncedClickListener
-import org.matrix.android.sdk.api.session.call.CallState
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.webrtc.WebRtcCall
+import org.matrix.android.sdk.api.session.call.CallState
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
 
@@ -88,11 +88,9 @@ class KnownCallsViewHolder {
         this.currentCallsView = activeCallView
         this.pipWrapper = pipWrapper
         this.currentCallsView?.callback = interactionListener
-        pipWrapper.setOnClickListener(
-                DebouncedClickListener({
-                    interactionListener.onTapToReturnToCall()
-                })
-        )
+        pipWrapper.onClick {
+            interactionListener.onTapToReturnToCall()
+        }
         this.currentCall?.addListener(tickListener)
     }
 

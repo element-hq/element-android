@@ -107,9 +107,9 @@ class SoftLogoutFragment @Inject constructor(
         softLogoutViewModel.handle(SoftLogoutAction.PasswordChanged(password))
     }
 
-    override fun signinSubmit(password: String) {
+    override fun submit() = withState(softLogoutViewModel) { state ->
         cleanupUi()
-        softLogoutViewModel.handle(SoftLogoutAction.SignInAgain(password))
+        softLogoutViewModel.handle(SoftLogoutAction.SignInAgain(state.enteredPassword))
     }
 
     override fun signinFallbackSubmit() = withState(loginViewModel) { state ->

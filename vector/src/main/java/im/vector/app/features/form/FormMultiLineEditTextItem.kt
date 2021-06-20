@@ -25,8 +25,10 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.addTextChangedListenerOnce
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
@@ -58,7 +60,7 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
     var typeFace: Typeface = Typeface.DEFAULT
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    var onTextChange: ((String) -> Unit)? = null
+    var onTextChange: TextListener? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
@@ -80,7 +82,7 @@ abstract class FormMultiLineEditTextItem : VectorEpoxyModel<FormMultiLineEditTex
 
         holder.textInputEditText.isEnabled = enabled
 
-        holder.textInputEditText.addTextChangedListener(onTextChangeListener)
+        holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
         holder.bottomSeparator.isVisible = showBottomSeparator
     }
 

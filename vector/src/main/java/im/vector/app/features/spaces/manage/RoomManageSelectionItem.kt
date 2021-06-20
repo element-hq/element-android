@@ -16,7 +16,6 @@
 
 package im.vector.app.features.spaces.manage
 
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -24,8 +23,10 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -36,7 +37,7 @@ abstract class RoomManageSelectionItem : VectorEpoxyModel<RoomManageSelectionIte
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute var suggested: Boolean = false
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -54,9 +55,7 @@ abstract class RoomManageSelectionItem : VectorEpoxyModel<RoomManageSelectionIte
 
         holder.suggestedText.isVisible = suggested
 
-        holder.view.setOnClickListener {
-            itemClickListener?.onClick(it)
-        }
+        holder.view.onClick(itemClickListener)
     }
 
     class Holder : VectorEpoxyHolder() {

@@ -25,8 +25,10 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.addTextChangedListenerOnce
 import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
@@ -48,8 +50,8 @@ abstract class RoomAliasEditItem : VectorEpoxyModel<RoomAliasEditItem.Holder>() 
     @EpoxyAttribute
     var enabled: Boolean = true
 
-    @EpoxyAttribute
-    var onTextChange: ((String) -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onTextChange: TextListener? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
@@ -64,7 +66,7 @@ abstract class RoomAliasEditItem : VectorEpoxyModel<RoomAliasEditItem.Holder>() 
 
         holder.setValueOnce(holder.textInputEditText, value)
         holder.textInputEditText.isEnabled = enabled
-        holder.textInputEditText.addTextChangedListener(onTextChangeListener)
+        holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
         holder.homeServerText.text = homeServer
         holder.bottomSeparator.isVisible = showBottomSeparator
     }

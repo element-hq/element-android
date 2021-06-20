@@ -24,10 +24,11 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.themes.ThemeUtils
 
 /**
@@ -37,7 +38,7 @@ import im.vector.app.features.themes.ThemeUtils
  * If provided with an action, will display a button at the bottom of the list item.
  */
 @EpoxyModelClass(layout = R.layout.item_generic_with_value)
-abstract class GenericItemWithValue : VectorEpoxyModel<GenericItemWithValue.Holder>() {
+abstract class GenericWithValueItem : VectorEpoxyModel<GenericWithValueItem.Holder>() {
 
     @EpoxyAttribute
     var title: CharSequence? = null
@@ -53,10 +54,10 @@ abstract class GenericItemWithValue : VectorEpoxyModel<GenericItemWithValue.Hold
     @DrawableRes
     var titleIconResourceId: Int = -1
 
-    @EpoxyAttribute
-    var itemClickAction: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var itemClickAction: ClickListener? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemLongClickAction: View.OnLongClickListener? = null
 
     override fun bind(holder: Holder) {
@@ -78,7 +79,7 @@ abstract class GenericItemWithValue : VectorEpoxyModel<GenericItemWithValue.Hold
             holder.valueText.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_primary))
         }
 
-        holder.view.setOnClickListener(itemClickAction?.let { DebouncedClickListener(it) })
+        holder.view.onClick(itemClickAction)
         holder.view.setOnLongClickListener(itemLongClickAction)
     }
 

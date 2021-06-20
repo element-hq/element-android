@@ -87,11 +87,9 @@ class UploadsMediaController @Inject constructor(
                         id(uploadEvent.eventId)
                         imageContentRenderer(host.imageContentRenderer)
                         data(data)
-                        listener(object : UploadsImageItem.Listener {
-                            override fun onItemClicked(view: View, data: ImageContentRenderer.Data) {
-                                host.listener?.onOpenImageClicked(view, data)
-                            }
-                        })
+                        listener {
+                            host.listener?.onOpenImageClicked(it, data)
+                        }
                     }
                 }
                 MessageType.MSGTYPE_VIDEO -> {
@@ -100,11 +98,9 @@ class UploadsMediaController @Inject constructor(
                         id(uploadEvent.eventId)
                         imageContentRenderer(host.imageContentRenderer)
                         data(data)
-                        listener(object : UploadsVideoItem.Listener {
-                            override fun onItemClicked(view: View, data: VideoContentRenderer.Data) {
-                                host.listener?.onOpenVideoClicked(view, data)
-                            }
-                        })
+                        listener {
+                            host.listener?.onOpenVideoClicked(it, data)
+                        }
                     }
                 }
             }

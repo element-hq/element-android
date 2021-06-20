@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.roomprofile.alias.detail
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.dividerItem
@@ -79,7 +78,7 @@ class RoomAliasBottomSheetController @Inject constructor() : TypedEpoxyControlle
             iconRes(iconResId)
             textRes(titleRes)
             destructive(this@toBottomSheetItem.destructive)
-            listener(View.OnClickListener { host.listener?.didSelectMenuAction(this@toBottomSheetItem) })
+            listener { host.listener?.didSelectMenuAction(this@toBottomSheetItem) }
         }
     }
 

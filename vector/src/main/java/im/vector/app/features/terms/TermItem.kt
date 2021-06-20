@@ -16,7 +16,6 @@
 
 package im.vector.app.features.terms
 
-import android.view.View
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.TextView
@@ -24,7 +23,9 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.onClick
 
 @EpoxyModelClass(layout = R.layout.item_tos)
 abstract class TermItem : EpoxyModelWithHolder<TermItem.Holder>() {
@@ -42,7 +43,7 @@ abstract class TermItem : EpoxyModelWithHolder<TermItem.Holder>() {
     var checkChangeListener: CompoundButton.OnCheckedChangeListener? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    var clickListener: View.OnClickListener? = null
+    var clickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -50,7 +51,7 @@ abstract class TermItem : EpoxyModelWithHolder<TermItem.Holder>() {
         holder.title.text = name
         holder.description.text = description
         holder.checkbox.setOnCheckedChangeListener(checkChangeListener)
-        holder.view.setOnClickListener(clickListener)
+        holder.view.onClick(clickListener)
     }
 
     class Holder : VectorEpoxyHolder() {

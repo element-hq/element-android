@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.breadcrumbs
 
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.core.epoxy.zeroItem
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.ScSdkPreferences
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -55,22 +54,20 @@ class BreadcrumbsController @Inject constructor(
         // An empty breadcrumbs list can only be temporary because when entering in a room,
         // this one is added to the breadcrumbs
         safeViewState.asyncBreadcrumbs.invoke()
-                ?.forEach {
+                ?.forEach { roomSummary ->
                     breadcrumbsItem {
-                        id(it.roomId)
-                        hasTypingUsers(it.typingUsers.isNotEmpty())
+                        id(roomSummary.roomId)
+                        hasTypingUsers(roomSummary.typingUsers.isNotEmpty())
                         avatarRenderer(host.avatarRenderer)
-                        matrixItem(it.toMatrixItem())
-                        unreadNotificationCount(it.notificationCount)
-                        markedUnread(it.markedUnread)
-                        showHighlighted(it.highlightCount > 0)
-                        hasUnreadMessage(it.scIsUnread(host.scSdkPreferences))
-                        hasDraft(it.userDrafts.isNotEmpty())
-                        itemClickListener(
-                                DebouncedClickListener({ _ ->
-                                    host.listener?.onBreadcrumbClicked(it.roomId)
-                                })
-                        )
+                        matrixItem(roomSummary.toMatrixItem())
+                        unreadNotificationCount(roomSummary.notificationCount)
+                        markedUnread(roomSummary.markedUnread)
+                        showHighlighted(roomSummary.highlightCount > 0)
+                        hasUnreadMessage(roomSummary.scIsUnread(host.scSdkPreferences))
+                        hasDraft(roomSummary.userDrafts.isNotEmpty())
+                        itemClickListener {
+                            host.listener?.onBreadcrumbClicked(roomSummary.roomId)
+                        }
                     }
                 }
     }

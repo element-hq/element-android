@@ -16,7 +16,9 @@
 
 package im.vector.app.core.epoxy
 
+import android.text.TextWatcher
 import android.widget.CompoundButton
+import android.widget.TextView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
 
@@ -38,4 +40,10 @@ fun VectorEpoxyHolder.setValueOnce(switchView: SwitchMaterial, switchChecked: Bo
         switchView.isChecked = switchChecked
         switchView.setOnCheckedChangeListener(listener)
     }
+}
+
+fun TextView.addTextChangedListenerOnce(textWatcher: TextWatcher) {
+    // Ensure the watcher is not added multiple times
+    removeTextChangedListener(textWatcher)
+    addTextChangedListener(textWatcher)
 }

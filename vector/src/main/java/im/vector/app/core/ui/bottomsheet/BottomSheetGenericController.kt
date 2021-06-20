@@ -15,7 +15,6 @@
  */
 package im.vector.app.core.ui.bottomsheet
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 
 /**
@@ -51,7 +50,7 @@ abstract class BottomSheetGenericController<State : BottomSheetGenericState, Act
         val actions = getActions(state)
         actions.forEach { action ->
             action.toRadioBottomSheetItem()
-                    .listener(View.OnClickListener { listener?.didSelectAction(action) })
+                    .listener { listener?.didSelectAction(action) }
                     .addTo(this)
         }
     }

@@ -28,8 +28,10 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.ShieldImageView
@@ -59,12 +61,12 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var hasFailedSending: Boolean = false
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemLongClickListener: View.OnLongClickListener? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: ClickListener? = null
     @EpoxyAttribute var showSelected: Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.rootView.setOnClickListener(itemClickListener)
+        holder.rootView.onClick(itemClickListener)
         holder.rootView.setOnLongClickListener {
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             itemLongClickListener?.onLongClick(it) ?: false

@@ -26,6 +26,7 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.ui.views.FooteredTextView
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
@@ -115,7 +116,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         holder.messageView.movementMethod = movementMethod
 
         renderSendState(holder.messageView, holder.messageView)
-        holder.messageView.setOnClickListener(attributes.itemClickListener)
+        holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
 
         if (canUseTextFuture) {

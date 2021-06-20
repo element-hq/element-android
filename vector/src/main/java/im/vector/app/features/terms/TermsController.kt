@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.terms
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -68,7 +67,7 @@ class TermsController @Inject constructor(
                 description(host.description)
                 checked(term.accepted)
 
-                clickListener(View.OnClickListener { host.listener?.review(term) })
+                clickListener  { host.listener?.review(term) }
                 checkChangeListener { _, isChecked ->
                     host.listener?.setChecked(term, isChecked)
                 }

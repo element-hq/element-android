@@ -19,22 +19,19 @@ package im.vector.app.features.spaces
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.utils.DebouncedClickListener
+import im.vector.app.core.epoxy.onClick
 
 @EpoxyModelClass(layout = R.layout.item_space_add)
 abstract class SpaceAddItem : VectorEpoxyModel<SpaceAddItem.Holder>() {
 
-    @EpoxyAttribute var listener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener(
-                DebouncedClickListener({
-                    listener?.invoke()
-                })
-        )
+        holder.view.onClick(listener)
     }
 
     class Holder : VectorEpoxyHolder()

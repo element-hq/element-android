@@ -25,7 +25,9 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.ui.views.BubbleDependentView
 import im.vector.app.core.ui.views.ReadReceiptsView
 import im.vector.app.features.home.AvatarRenderer
@@ -38,7 +40,7 @@ abstract class ReadReceiptsItem : EpoxyModelWithHolder<ReadReceiptsItem.Holder>(
     @EpoxyAttribute lateinit var eventId: String
     @EpoxyAttribute lateinit var readReceipts: List<ReadReceiptData>
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var clickListener: View.OnClickListener
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var clickListener: ClickListener
 
     override fun canAppendReadMarker(): Boolean = false
 
@@ -46,7 +48,8 @@ abstract class ReadReceiptsItem : EpoxyModelWithHolder<ReadReceiptsItem.Holder>(
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.readReceiptsView.render(readReceipts, avatarRenderer, clickListener)
+        holder.readReceiptsView.onClick(clickListener)
+        holder.readReceiptsView.render(readReceipts, avatarRenderer)
 
         updateMessageBubble(holder.readReceiptsView.context, holder)
     }

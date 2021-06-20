@@ -23,8 +23,10 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_room_category)
@@ -36,7 +38,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
     @EpoxyAttribute var unreadMessages: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var markedUnread: Boolean = false
-    @EpoxyAttribute var listener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -48,7 +50,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted, unreadMessages, markedUnread))
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
         holder.titleView.text = title
-        holder.rootView.setOnClickListener { listener?.invoke() }
+        holder.rootView.onClick(listener)
     }
 
     class Holder : VectorEpoxyHolder() {

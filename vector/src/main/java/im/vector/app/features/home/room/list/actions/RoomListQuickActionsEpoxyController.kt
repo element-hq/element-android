@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.home.room.list.actions
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
@@ -103,7 +102,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
             iconRes(iconResId)
             textRes(titleRes)
             destructive(this@toBottomSheetItem.destructive)
-            listener(View.OnClickListener { host.listener?.didSelectMenuAction(this@toBottomSheetItem) })
+            listener { host.listener?.didSelectMenuAction(this@toBottomSheetItem) }
         }
     }
 
