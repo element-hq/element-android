@@ -72,12 +72,6 @@ class ThreePidsSettingsFragment @Inject constructor(
         }
     }
 
-    //    private fun askUserPassword() {
-//        PromptPasswordDialog().show(requireActivity()) { password ->
-//            viewModel.handle(ThreePidsSettingsAction.AccountPassword(password))
-//        }
-//    }
-
     private fun askAuthentication(event: ThreePidsSettingsViewEvents.RequestReAuth) {
         ReAuthActivity.newIntent(requireContext(),
                 event.registrationFlowResponse,
