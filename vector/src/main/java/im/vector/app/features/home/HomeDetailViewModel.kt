@@ -32,6 +32,7 @@ import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.invite.AutoAcceptInvites
+import im.vector.app.features.invite.showInvites
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
@@ -208,7 +209,7 @@ private val autoAcceptInvites: AutoAcceptInvites)
                             val activeSpaceRoomId = groupingMethod.spaceSummary?.roomId
                             var dmInvites = 0
                             var roomsInvite = 0
-                            if (!autoAcceptInvites.hideInvites) {
+                            if (autoAcceptInvites.showInvites()) {
                                 dmInvites = session.getRoomSummaries(
                                         roomSummaryQueryParams {
                                             memberships = listOf(Membership.INVITE)

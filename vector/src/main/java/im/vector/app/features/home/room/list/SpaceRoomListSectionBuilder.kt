@@ -27,6 +27,7 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.invite.AutoAcceptInvites
+import im.vector.app.features.invite.showInvites
 import im.vector.app.space
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -90,7 +91,7 @@ class SpaceRoomListSectionBuilder(
                 )
             }
             RoomListDisplayMode.NOTIFICATIONS -> {
-                if (!autoAcceptInvites.hideInvites) {
+                if (autoAcceptInvites.showInvites()) {
                     addSection(
                             sections = sections,
                             activeSpaceUpdaters = activeSpaceAwareQueries,
@@ -140,7 +141,7 @@ class SpaceRoomListSectionBuilder(
     }
 
     private fun buildRoomsSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
-        if (!autoAcceptInvites.hideInvites) {
+        if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections = sections,
                     activeSpaceUpdaters = activeSpaceAwareQueries,
@@ -259,7 +260,7 @@ class SpaceRoomListSectionBuilder(
     }
 
     private fun buildDmSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
-        if (!autoAcceptInvites.hideInvites) {
+        if (autoAcceptInvites.showInvites()) {
             addSection(sections = sections,
                     activeSpaceUpdaters = activeSpaceAwareQueries,
                     nameRes = R.string.invitations_header,

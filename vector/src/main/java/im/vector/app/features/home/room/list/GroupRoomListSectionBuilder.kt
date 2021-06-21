@@ -23,6 +23,7 @@ import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.invite.AutoAcceptInvites
+import im.vector.app.features.invite.showInvites
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -75,7 +76,7 @@ class GroupRoomListSectionBuilder(
                 )
             }
             RoomListDisplayMode.NOTIFICATIONS -> {
-                if (!autoAcceptInvites.hideInvites) {
+                if (autoAcceptInvites.showInvites()) {
                     addSection(
                             sections,
                             activeGroupAwareQueries,
@@ -118,7 +119,7 @@ class GroupRoomListSectionBuilder(
     private fun buildRoomsSections(sections: MutableList<RoomsSection>,
                                    activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
                                    actualGroupId: String?) {
-        if (!autoAcceptInvites.hideInvites) {
+        if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections,
                     activeSpaceAwareQueries,
@@ -185,7 +186,7 @@ class GroupRoomListSectionBuilder(
             activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
             actualGroupId: String?
     ) {
-        if (!autoAcceptInvites.hideInvites) {
+        if (autoAcceptInvites.showInvites()) {
             addSection(sections,
                     activeSpaceAwareQueries,
                     R.string.invitations_header,

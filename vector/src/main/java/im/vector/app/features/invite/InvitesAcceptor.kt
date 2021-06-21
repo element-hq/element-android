@@ -16,6 +16,7 @@
 
 package im.vector.app.features.invite
 
+import im.vector.app.ActiveSessionDataSource
 import im.vector.app.features.session.coroutineScope
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -23,7 +24,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -39,16 +43,35 @@ import javax.inject.Singleton
  * This mechanism will be on only if AutoAcceptInvites.isEnabled is true.
  */
 @Singleton
-class InvitesAcceptor @Inject constructor(private val autoAcceptInvites: AutoAcceptInvites) : Session.Listener {
+class InvitesAcceptor @Inject constructor(
+        private val sessionDataSource: ActiveSessionDataSource,
+        private val autoAcceptInvites: AutoAcceptInvites
+) : Session.Listener {
 
-    private val disposables = HashMap<String, Disposable>()
+    private lateinit var activeSessionDisposable: Disposable
+    private val shouldRejectRoomIds = mutableSetOf<String>()
+    private val invitedRoomDisposables = HashMap<String, Disposable>()
     private val semaphore = Semaphore(1)
 
-    fun onSessionActive(session: Session) {
+    fun initialize() {
+        observeActiveSession()
+    }
+
+    private fun observeActiveSession() {
+        activeSessionDisposable = sessionDataSource.observe()
+                .distinctUntilChanged()
+                .subscribe {
+                    it.orNull()?.let { session ->
+                        onSessionActive(session)
+                    }
+                }
+    }
+
+    private fun onSessionActive(session: Session) {
         if (!autoAcceptInvites.isEnabled) {
             return
         }
-        if (disposables.containsKey(session.sessionId)) {
+        if (invitedRoomDisposables.containsKey(session.sessionId)) {
             return
         }
         session.addListener(this)
@@ -74,11 +97,15 @@ class InvitesAcceptor @Inject constructor(private val autoAcceptInvites: AutoAcc
                     }
                 }
                 .also {
-                    disposables[session.sessionId] = it
+                    invitedRoomDisposables[session.sessionId] = it
                 }
     }
 
     private suspend fun Session.joinRoomSafely(roomId: String) {
+        if (shouldRejectRoomIds.contains(roomId)) {
+            getRoom(roomId)?.rejectInviteSafely()
+            return
+        }
         val roomMembershipChanged = getChangeMemberships(roomId)
         if (roomMembershipChanged != ChangeMembershipState.Joined && !roomMembershipChanged.isInProgress()) {
             try {
@@ -86,12 +113,31 @@ class InvitesAcceptor @Inject constructor(private val autoAcceptInvites: AutoAcc
                 joinRoom(roomId)
             } catch (failure: Throwable) {
                 Timber.v("Failed auto join room: $roomId")
+                // if we got 404 on invites, the inviting user have left or the hs is off.
+                if (failure is Failure.ServerError && failure.httpCode == 404) {
+                    val room = getRoom(roomId) ?: return
+                    val inviterId = room.roomSummary()?.inviterId
+                    // if the inviting user is on the same HS, there can only be one cause: they left, so we try to reject the invite.
+                    if (inviterId?.endsWith(sessionParams.credentials.homeServer.orEmpty()).orFalse()) {
+                        shouldRejectRoomIds.add(roomId)
+                        room.rejectInviteSafely()
+                    }
+                }
             }
+        }
+    }
+
+    private suspend fun Room.rejectInviteSafely() {
+        try {
+            leave(null)
+            shouldRejectRoomIds.remove(roomId)
+        } catch (failure: Throwable) {
+            Timber.v("Fail rejecting invite for room: $roomId")
         }
     }
 
     override fun onSessionStopped(session: Session) {
         session.removeListener(this)
-        disposables.remove(session.sessionId)?.dispose()
+        invitedRoomDisposables.remove(session.sessionId)?.dispose()
     }
 }

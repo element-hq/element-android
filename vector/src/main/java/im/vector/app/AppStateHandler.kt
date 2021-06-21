@@ -22,7 +22,6 @@ import androidx.lifecycle.OnLifecycleEvent
 import arrow.core.Option
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.BehaviorDataSource
-import im.vector.app.features.invite.InvitesAcceptor
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.disposables.CompositeDisposable
@@ -52,8 +51,7 @@ fun RoomGroupingMethod.group() = (this as? RoomGroupingMethod.ByLegacyGroup)?.gr
 class AppStateHandler @Inject constructor(
         private val sessionDataSource: ActiveSessionDataSource,
         private val uiStateRepository: UiStateRepository,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val invitesAcceptor: InvitesAcceptor
+        private val activeSessionHolder: ActiveSessionHolder
 ) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
@@ -62,10 +60,6 @@ class AppStateHandler @Inject constructor(
     val selectedRoomGroupingObservable = selectedSpaceDataSource.observe()
 
     fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? = selectedSpaceDataSource.currentValue?.orNull()
-
-    init {
-        observeActiveSession()
-    }
 
     fun setCurrentSpace(spaceId: String?, session: Session? = null) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
@@ -103,7 +97,6 @@ class AppStateHandler @Inject constructor(
                 .subscribe {
                     // sessionDataSource could already return a session while activeSession holder still returns null
                     it.orNull()?.let { session ->
-                        invitesAcceptor.onSessionActive(session)
                         if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
                             setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
                         } else {
@@ -123,8 +116,14 @@ class AppStateHandler @Inject constructor(
         return (selectedSpaceDataSource.currentValue?.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun entersForeground() {
+        observeActiveSession()
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun entersBackground() {
+        compositeDisposable.clear()
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
             is RoomGroupingMethod.BySpace       -> {
