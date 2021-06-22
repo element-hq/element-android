@@ -46,7 +46,7 @@ import javax.inject.Inject
 class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 14L
+        const val SESSION_STORE_SCHEMA_VERSION = 15L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -66,6 +66,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 11) migrateTo12(realm)
         if (oldVersion <= 12) migrateTo13(realm)
         if (oldVersion <= 13) migrateTo14(realm)
+        if (oldVersion <= 14) migrateTo15(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -305,5 +306,11 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 }
 
         roomAccountDataSchema.isEmbedded = true
+    }
+
+    private fun migrateTo15(realm: DynamicRealm) {
+        Timber.d("Step 14 -> 15")
+        realm.schema.get("HomeServerCapabilitiesEntity")
+                ?.addField(HomeServerCapabilitiesEntityFields.ROOM_VERSION_JSON, String::class.java)
     }
 }

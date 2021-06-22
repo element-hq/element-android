@@ -21,7 +21,7 @@ import android.graphics.Color
 import android.text.method.LinkMovementMethod
 import android.util.AttributeSet
 import android.view.View
-import android.widget.RelativeLayout
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.text.italic
 import im.vector.app.R
@@ -44,7 +44,7 @@ class NotificationAreaView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     var delegate: Delegate? = null
     private var state: State = State.Initial
@@ -127,7 +127,7 @@ class NotificationAreaView @JvmOverloads constructor(
 
     private fun renderTombstone(state: State.Tombstone) {
         visibility = View.VISIBLE
-        views.roomNotificationIcon.setImageResource(R.drawable.error)
+        views.roomNotificationIcon.setImageResource(R.drawable.ic_warning_badge)
         val message = span {
             +resources.getString(R.string.room_tombstone_versioned_description)
             +"\n"

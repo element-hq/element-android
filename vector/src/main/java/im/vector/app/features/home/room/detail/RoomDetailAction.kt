@@ -108,4 +108,5 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     // Failed messages
     object RemoveAllFailedMessages : RoomDetailAction()
+    data class RoomUpgradeSuccess(val replacementRoom: String): RoomDetailAction()
 }

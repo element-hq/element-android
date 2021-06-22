@@ -16,8 +16,15 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.homeserver.RoomVersionCapabilities
+import org.matrix.android.sdk.api.session.homeserver.RoomVersionInfo
+import org.matrix.android.sdk.api.session.homeserver.RoomVersionStatus
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntity
+import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.session.homeserver.RoomVersions
+import org.matrix.android.sdk.internal.session.room.version.DefaultRoomVersionService
 
 /**
  * HomeServerCapabilitiesEntity -> HomeSeverCapabilities
@@ -29,7 +36,21 @@ internal object HomeServerCapabilitiesMapper {
                 canChangePassword = entity.canChangePassword,
                 maxUploadFileSize = entity.maxUploadFileSize,
                 lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
-                defaultIdentityServerUrl = entity.defaultIdentityServerUrl
+                defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
+                roomVersions = entity.roomVersionJson?.let {
+                    tryOrNull {
+                        MoshiProvider.providesMoshi().adapter(RoomVersions::class.java).fromJson(it)?.let {
+                            RoomVersionCapabilities(
+                                    defaultRoomVersion = it.default ?: DefaultRoomVersionService.DEFAULT_ROOM_VERSION,
+                                    supportedVersion = it.available.entries.map { entry ->
+                                        RoomVersionInfo(entry.key, RoomVersionStatus.STABLE
+                                                .takeIf { entry.value == "stable" }
+                                                ?: RoomVersionStatus.UNSTABLE)
+                                    }
+                            )
+                        }
+                    }
+                }
         )
     }
 }

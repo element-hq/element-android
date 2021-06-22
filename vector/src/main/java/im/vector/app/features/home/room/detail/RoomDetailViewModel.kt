@@ -321,6 +321,11 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
             RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
             RoomDetailAction.ResendAll                           -> handleResendAll()
+            is RoomDetailAction.RoomUpgradeSuccess               -> {
+                setState {
+                    copy(tombstoneEventHandling = Success(action.replacementRoom))
+                }
+            }
         }.exhaustive
     }
 
@@ -585,6 +590,11 @@ class RoomDetailViewModel @AssistedInject constructor(
             val viaServers = MatrixPatterns.extractServerNameFromId(action.event.senderId)
                     ?.let { listOf(it) }
                     .orEmpty()
+            // need to provide feedback as joining could take some time
+            _viewEvents.post(RoomDetailViewEvents.RoomReplacementStarted)
+            setState {
+                copy(tombstoneEventHandling = Loading())
+            }
             viewModelScope.launch {
                 val result = runCatchingToAsync {
                     session.joinRoom(roomId, viaServers = viaServers)
@@ -814,6 +824,23 @@ class RoomDetailViewModel @AssistedInject constructor(
                                     _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
                                 }
                             }
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.UpgradeRoom              -> {
+                            _viewEvents.post(
+                                    RoomDetailViewEvents.ShowRoomUpgradeDialog(
+                                            slashCommandResult.newVersion,
+                                            room.roomSummary()?.isPublic ?: false
+                                    )
+                            )
+//                            session.coroutineScope.launch {
+//                                try {
+//                                    room.upgradeToVersion(slashCommandResult.newVersion)
+//                                } catch (failure: Throwable) {
+//                                    _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+//                                }
+//                            }
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }

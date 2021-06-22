@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.session.homeserver
 
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities.Companion.MAX_UPLOAD_FILE_SIZE_UNKNOWN
+
 data class HomeServerCapabilities(
         /**
          * True if it is possible to change the password of the account.
@@ -32,7 +34,9 @@ data class HomeServerCapabilities(
         /**
          * Default identity server url, provided in Wellknown
          */
-        val defaultIdentityServerUrl: String? = null
+        val defaultIdentityServerUrl: String? = null,
+
+        val roomVersions: RoomVersionCapabilities? = null
 ) {
     companion object {
         const val MAX_UPLOAD_FILE_SIZE_UNKNOWN = -1L
