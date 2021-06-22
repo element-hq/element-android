@@ -73,6 +73,7 @@ class TextComposerView @JvmOverloads constructor(
             override fun onTextBlankStateChanged(isBlank: Boolean) {
                 callback?.onTextBlankStateChanged(isBlank)
                 val shouldBeVisible = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank
+                TransitionManager.endTransitions(this@TextComposerView)
                 if (views.sendButton.isVisible != shouldBeVisible) {
                     TransitionManager.beginDelayedTransition(
                             this@TextComposerView,
