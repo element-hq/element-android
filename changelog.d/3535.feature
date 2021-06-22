@@ -1,1 +1,0 @@
-Send button does not show up half of the time
