@@ -20,6 +20,7 @@ Improvements 🙌:
  - Update the selected room menu #78
  - Design Tchap invite cells #79
  - Change the invite description #104
+ - Be able to select the best direct chat related to a user id #88
 
 
 =======================================================

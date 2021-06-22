@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import fr.gouv.tchap.android.sdk.internal.session.room.TchapRoomGetter
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.session.file.FileService
@@ -134,7 +135,7 @@ internal abstract class RoomModule {
     abstract fun bindRoomFactory(factory: DefaultRoomFactory): RoomFactory
 
     @Binds
-    abstract fun bindRoomGetter(getter: DefaultRoomGetter): RoomGetter
+    abstract fun bindRoomGetter(getter: TchapRoomGetter): RoomGetter
 
     @Binds
     abstract fun bindRoomService(service: DefaultRoomService): RoomService

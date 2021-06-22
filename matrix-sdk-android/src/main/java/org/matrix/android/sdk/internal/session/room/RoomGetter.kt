@@ -34,7 +34,7 @@ internal interface RoomGetter {
 }
 
 @SessionScope
-internal class DefaultRoomGetter @Inject constructor(
+internal open class DefaultRoomGetter @Inject constructor(
         private val realmSessionProvider: RealmSessionProvider,
         private val roomFactory: RoomFactory
 ) : RoomGetter {
