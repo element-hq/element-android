@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 New Vector Ltd
  *
@@ -353,6 +352,10 @@ class RoomDetailFragment @Inject constructor(
 
         roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
             renderTombstoneEventHandling(it)
+        }
+
+        roomDetailViewModel.selectSubscribe(RoomDetailViewState::canShowJumpToReadMarker, RoomDetailViewState::unreadState) { _, _ ->
+            updateJumpToReadMarkerViewVisibility()
         }
 
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode, RoomDetailViewState::canSendMessage) { mode, canSend ->
@@ -728,8 +731,7 @@ class RoomDetailFragment @Inject constructor(
             onJumpToReadMarkerClicked()
         }
         views.jumpToReadMarkerView.setOnCloseIconClickListener {
-            views.jumpToReadMarkerView.isVisible = false
-            onClearReadMarkerClicked()
+            roomDetailViewModel.handle(RoomDetailAction.MarkAllAsRead)
         }
     }
 
@@ -1059,7 +1061,13 @@ class RoomDetailFragment @Inject constructor(
         timelineEventController.timeline = roomDetailViewModel.timeline
 
         views.timelineRecyclerView.trackItemsVisibilityChange()
-        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
+        layoutManager = object : LinearLayoutManager(context, RecyclerView.VERTICAL, true) {
+            override fun onLayoutCompleted(state: RecyclerView.State?) {
+                super.onLayoutCompleted(state)
+                updateJumpToReadMarkerViewVisibility()
+                jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
+            }
+        }
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)
         scrollOnHighlightedEventCallback = ScrollOnHighlightedEventCallback(views.timelineRecyclerView, layoutManager, timelineEventController)
@@ -1070,8 +1078,6 @@ class RoomDetailFragment @Inject constructor(
             it.dispatchTo(stateRestorer)
             it.dispatchTo(scrollOnNewMessageCallback)
             it.dispatchTo(scrollOnHighlightedEventCallback)
-            updateJumpToReadMarkerViewVisibility()
-            jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
         }
         timelineEventController.addModelBuildListener(modelBuildListener)
         views.timelineRecyclerView.adapter = timelineEventController.adapter
@@ -1127,7 +1133,7 @@ class RoomDetailFragment @Inject constructor(
                     is UnreadState.ReadMarkerNotLoaded -> true
                     is UnreadState.HasUnread           -> {
                         if (it.canShowJumpToReadMarker) {
-                            val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                            val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
                             val positionOfReadMarker = timelineEventController.getPositionOfReadMarker()
                             if (positionOfReadMarker == null) {
                                 false
@@ -1704,7 +1710,6 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onReadMarkerVisible() {
-        updateJumpToReadMarkerViewVisibility()
         roomDetailViewModel.handle(RoomDetailAction.EnterTrackingUnreadMessagesState)
     }
 
@@ -1972,10 +1977,6 @@ class RoomDetailFragment @Inject constructor(
         if (it.unreadState is UnreadState.ReadMarkerNotLoaded) {
             roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.readMarkerId, false))
         }
-    }
-
-    private fun onClearReadMarkerClicked() {
-        roomDetailViewModel.handle(RoomDetailAction.MarkAllAsRead)
     }
 
 // AttachmentTypeSelectorView.Callback
