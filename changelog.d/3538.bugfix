@@ -1,1 +1,0 @@
-Fix crash on signout: release session at the end of clean up.
