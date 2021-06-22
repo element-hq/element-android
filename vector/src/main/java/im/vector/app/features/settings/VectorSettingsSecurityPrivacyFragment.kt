@@ -37,7 +37,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.intent.ExternalIntentData
 import im.vector.app.core.intent.analyseIntent
 import im.vector.app.core.intent.getFilenameFromUri
@@ -450,14 +449,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             val builder = MaterialAlertDialogBuilder(thisActivity)
                     .setTitle(R.string.encryption_import_room_keys)
                     .setView(dialogLayout)
-
-            var passwordVisible = false
-
-            views.importDialogShowPassword.setOnClickListener {
-                passwordVisible = !passwordVisible
-                views.dialogE2eKeysPassphraseEditText.showPassword(passwordVisible)
-                views.importDialogShowPassword.render(passwordVisible)
-            }
 
             views.dialogE2eKeysPassphraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {

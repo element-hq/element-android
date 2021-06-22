@@ -147,10 +147,6 @@ class SoftLogoutFragment @Inject constructor(
         loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnForgetPasswordClicked))
     }
 
-    override fun revealPasswordClicked() {
-        softLogoutViewModel.handle(SoftLogoutAction.TogglePassword)
-    }
-
     override fun resetViewModel() {
         // No op
     }

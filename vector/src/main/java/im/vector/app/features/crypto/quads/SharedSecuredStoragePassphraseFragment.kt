@@ -23,11 +23,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.text.toSpannable
 import com.airbnb.mvrx.activityViewModel
-import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentSsssAccessFromPassphraseBinding
@@ -92,7 +90,6 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
 
         views.ssssPassphraseSubmit.debouncedClicks { submit() }
         views.ssssPassphraseUseKey.debouncedClicks { sharedViewModel.handle(SharedSecureStorageAction.UseKey) }
-        views.ssssViewShowPassword.debouncedClicks { sharedViewModel.handle(SharedSecureStorageAction.TogglePasswordVisibility) }
     }
 
     fun submit() {
@@ -100,11 +97,5 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
         if (text.isBlank()) return // Should not reach this point as button disabled
         views.ssssPassphraseSubmit.isEnabled = false
         sharedViewModel.handle(SharedSecureStorageAction.SubmitPassphrase(text))
-    }
-
-    override fun invalidate() = withState(sharedViewModel) { state ->
-        val shouldBeVisible = state.passphraseVisible
-        views.ssssPassphraseEnterEdittext.showPassword(shouldBeVisible)
-        views.ssssViewShowPassword.render(shouldBeVisible)
     }
 }
