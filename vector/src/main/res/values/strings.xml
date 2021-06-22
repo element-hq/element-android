@@ -783,7 +783,7 @@
     <string name="list_members">List members</string>
     <string name="open_chat_header">Open header</string>
     <string name="room_sync_in_progress">Syncing…</string>
-    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+    <string name="room_jump_to_first_unread">Jump to unread</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">You have been invited to join this room by %s</string>

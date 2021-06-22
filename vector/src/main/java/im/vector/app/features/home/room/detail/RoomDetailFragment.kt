@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2019 New Vector Ltd
  *
@@ -94,7 +95,6 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.ActiveConferenceView
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.FailedMessagesWarningView
-import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
@@ -239,7 +239,6 @@ class RoomDetailFragment @Inject constructor(
         VectorBaseFragment<FragmentRoomDetailBinding>(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
-        JumpToReadMarkerView.Callback,
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
         GalleryOrCameraDialogHelper.Listener,
@@ -725,7 +724,13 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupJumpToReadMarkerView() {
-        views.jumpToReadMarkerView.callback = this
+        views.jumpToReadMarkerView.setOnClickListener {
+            onJumpToReadMarkerClicked()
+        }
+        views.jumpToReadMarkerView.setOnCloseIconClickListener {
+            views.jumpToReadMarkerView.isVisible = false
+            onClearReadMarkerClicked()
+        }
     }
 
     private fun setupActiveCallView() {
@@ -1959,9 +1964,7 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.RejectInvite)
     }
 
-// JumpToReadMarkerView.Callback
-
-    override fun onJumpToReadMarkerClicked() = withState(roomDetailViewModel) {
+    private fun onJumpToReadMarkerClicked() = withState(roomDetailViewModel) {
         views.jumpToReadMarkerView.isVisible = false
         if (it.unreadState is UnreadState.HasUnread) {
             roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.firstUnreadEventId, false))
@@ -1971,7 +1974,7 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    override fun onClearReadMarkerClicked() {
+    private fun onClearReadMarkerClicked() {
         roomDetailViewModel.handle(RoomDetailAction.MarkAllAsRead)
     }
 

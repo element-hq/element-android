@@ -86,6 +86,7 @@
         <item name="snackbarButtonStyle">@style/Widget.Vector.SnackBar.Button</item>
         <item name="snackbarTextViewStyle">@style/Widget.Vector.SnackBar.TextView</item>
         <item name="actionModeStyle">@style/Widget.Vector.ActionMode</item>
+        <item name="jumpToUnreadStyle">@style/Widget.Vector.JumpToUnread.Dark</item>
 
         <!-- Default theme -->
         <item name="bottomSheetDialogTheme">@style/Theme.Vector.BottomSheetDialog.Dark</item>
