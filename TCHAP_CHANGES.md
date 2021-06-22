@@ -19,6 +19,7 @@ Improvements 🙌:
  - Simplify the notifications modes #77
  - Update the selected room menu #78
  - Design Tchap invite cells #79
+ - Change the invite description #104
 
 
 =======================================================

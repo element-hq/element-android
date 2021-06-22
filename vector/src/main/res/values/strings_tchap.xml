@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
@@ -73,6 +73,7 @@
         <item quantity="one">History limited to %d day</item>
         <item quantity="other">History limited to %d days</item>
     </plurals>
+    <string name="tchap_room_invited_you">%s invited you</string>
 
     <!-- tchap scan media -->
     <string name="tchap_scan_media_unavailable">Scan Unavailable</string>
