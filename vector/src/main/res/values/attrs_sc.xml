@@ -7,8 +7,6 @@
         <attr name="sc_message_bg_outgoing" format="color" />
 
         <attr name="colorAccentPale" format="color" />
-        <attr name="riotx_positive_accent" format="color" />
-        <attr name="riotx_positive_accent_alpha12" format="color" />
         <attr name="riotx_toolbar_bg" format="color" />
 
         <attr name="riotx_unread_unimportant_room_badge" format="color" />

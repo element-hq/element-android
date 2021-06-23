@@ -3,133 +3,81 @@
 
     <!-- SC THEME COLORS -->
     <style name="AppTheme.Base.SC" parent="AppTheme.Base.Black">
-        <!-- Riotx attribute for palette -->
-        <item name="riotx_background">@color/background_black_sc</item>
-        <item name="vctr_home_drawer_header_background">?riotx_background</item>
-        <item name="riotx_header_panel_background">@color/background_black_sc</item>
-        <item name="riotx_header_panel_border_mobile">#20ffffff</item>
-        <item name="riotx_header_panel_text_secondary">@color/text_color_secondary_sc</item>
-        <item name="riotx_text_primary">@color/text_color_primary_sc</item>
-        <item name="riotx_text_secondary">@color/text_color_secondary_sc</item>
-        <item name="riotx_text_tertiary">@color/text_color_tertiary_sc</item>
-        <item name="riotx_text_primary_body_contrast">@color/text_color_primary_sc</item>
-        <item name="riotx_android_secondary">@color/text_color_secondary_sc</item>
-        <item name="riotx_unread_room_indent">@color/background_dark_sc</item>
-        <item name="riotx_unread_room_badge">?colorAccent</item>
-        <item name="riotx_fab_label_bg">@color/background_floating_sc</item>
-        <item name="riotx_fab_label_stroke">@color/black</item>
-        <item name="riotx_fab_label_color">#ffffff</item>
-        <item name="riotx_touch_guard_bg">@color/background_touch_guard_sc</item>
-        <item name="riotx_attachment_selector_background">?riotx_background</item>
-        <item name="riotx_attachment_selector_border">@color/background_dark_sc</item>
+        <!-- Element attribute for palette -->
+        <!-- content colors -->
+        <item name="vctr_content_primary">@color/text_color_primary_sc</item>
+        <item name="vctr_content_secondary">@color/text_color_secondary_sc</item>
+        <item name="vctr_content_tertiary">@color/text_color_tertiary_sc</item>
+        <item name="vctr_content_quaternary">@color/text_color_disabled_sc</item>
+        <item name="vctr_content_quinary">@color/text_color_disabled_sc</item>
 
-        <item name="riotx_keys_backup_banner_accent_color">@color/background_floating_sc</item>
+        <!-- system colors -->
+        <item name="vctr_system">@color/background_dark_sc</item>
 
-        <item name="riotx_bottom_nav_icon_color">#ff808080</item>
-
-        <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
-        <item name="colorPrimary">@color/accent_sc</item>
-        <item name="colorPrimaryVariant">@color/background_dark_sc</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- We do not use color secondary, default will be colorPrimary values: It does not work so declare again the value -->
-        <item name="colorSecondary">@color/accent_sc</item>
-        <item name="colorSecondaryVariant">@color/background_black_sc</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="colorError">@color/riotx_notice</item>
-        <item name="colorOnError">#FFFFFF</item>
-        <!--item name="colorSurface">#FFFFFF</item>
-        <item name="colorOnSurface">#212121</item-->
-        <item name="android:colorBackground">?riotx_background</item>
-        <item name="colorOnBackground">?riotx_text_primary</item>
-
-        <item name="riotx_bottom_sheet_background">@color/background_dark_sc</item>
-
-        <!-- Keep color accent for legacy widget-->
-        <item name="colorAccent">@color/accent_sc</item>
-        <item name="android:colorAccent">@color/accent_sc</item>
-
-        <item name="materialButtonStyle">@style/VectorButtonStyle.SC</item>
-        <item name="toolbarStyle">@style/VectorToolbarStyle</item>
-        <item name="alertDialogTheme">@style/VectorAlertDialogStyleDark.SC</item>
-
-        <!-- Menu text color -->
-        <item name="android:actionMenuTextColor">?colorAccent</item>
-
-        <!-- default background color -->
-        <item name="riotx_bottom_nav_background_color">@color/background_dark_sc</item>
-        <item name="riotx_bottom_nav_background_border_color">@color/background_black_sc</item>
-
-        <!-- waiting view background -->
-        <item name="riotx_waiting_background_color">#55555555</item>
-
-
-        <!-- application bar text color -->
-        <item name="vctr_toolbar_primary_text_color">@color/text_color_primary_sc</item>
-        <item name="vctr_toolbar_secondary_text_color">@color/text_color_secondary_sc</item>
-        <item name="vctr_toolbar_link_text_color">@color/link_color_dark</item>
+        <!-- other colors -->
+        <item name="vctr_home_drawer_header_background">?android:colorBackground</item>
+        <item name="vctr_unread_room_badge">?colorAccent</item>
+        <item name="vctr_fab_label_bg">@color/background_floating_sc</item>
+        <item name="vctr_fab_label_stroke">@android:color/black</item>
+        <item name="vctr_fab_label_color">@android:color/white</item>
+        <item name="vctr_touch_guard_bg">@color/background_touch_guard_sc</item>
+        <item name="vctr_keys_backup_banner_accent_color">@color/background_floating_sc</item>
+        <item name="vctr_attachment_selector_background">?colorBackgroundFloating</item>
+        <item name="vctr_attachment_selector_border">@color/background_dark_sc</item>
+        <item name="vctr_room_active_widgets_banner_bg">@color/background_floating_sc</item>
+        <item name="vctr_room_active_widgets_banner_text">?vctr_content_secondary</item>
+        <item name="vctr_reaction_background_off">@color/background_sc</item>
+        <item name="vctr_reaction_background_on">@color/sc_reaction_background_on_dark</item>
+        <item name="vctr_bottom_nav_icon_color">#ff808080</item>
+        <item name="vctr_waiting_background_color">#555555</item>
+        <item name="vctr_chat_effect_snow_background">@android:color/transparent</item>
 
         <!-- room message colors -->
-        <!--Unread Room Indent-->
-        <item name="vctr_notice_secondary">@color/text_color_secondary_sc</item>
-        <item name="vctr_unsent_message_text_color">@color/vector_fuchsia_color</item>
-        <item name="vctr_message_text_color">@android:color/white</item>
-        <item name="vctr_notice_text_color">@color/text_color_primary_sc</item>
+        <item name="vctr_notice_secondary">?vctr_content_secondary</item>
+        <item name="vctr_unsent_message_text_color">?colorError</item>
+        <item name="vctr_message_text_color">?vctr_content_primary</item>
+        <item name="vctr_notice_text_color">?vctr_content_primary</item>
         <item name="vctr_encrypting_message_text_color">@color/accent_sc</item>
-        <item name="vctr_sending_message_text_color">@color/text_color_secondary_sc</item>
+        <item name="vctr_sending_message_text_color">?vctr_content_secondary</item>
         <item name="vctr_markdown_block_background_color">@android:color/black</item>
         <item name="vctr_spoiler_background_color">#FFFFFFFF</item>
 
-        <item name="riot_primary_text_color">@color/text_color_primary_sc</item>
-        <item name="riot_primary_text_color_disabled">@color/text_color_disabled_sc</item>
+        <!-- Some alias -->
+        <item name="vctr_header_background">?vctr_content_quinary</item>
+        <item name="vctr_list_separator">@color/background_black_sc</item>
+        <item name="vctr_list_separator_system">?vctr_system</item>
+        <item name="vctr_list_separator_on_surface">?vctr_system</item>
 
-        <!-- list colors -->
-        <!--Header/Panel Background-->
-        <item name="vctr_list_header_background_color">@color/background_dark_sc</item>
+        <!-- Material color -->
+        <item name="colorPrimary">?colorAccent</item>
+        <item name="colorPrimaryVariant">?colorAccent</item>
+        <item name="colorOnPrimary">?vctr_content_primary</item>
+        <item name="colorSecondary">?colorAccent</item>
+        <item name="colorSecondaryVariant">?colorAccent</item>
+        <item name="colorOnSecondary">?vctr_content_primary</item>
+        <item name="colorError">@color/element_alert_dark</item>
+        <item name="colorOnError">?vctr_content_primary</item>
+        <item name="colorSurface">@color/element_system_dark</item>
+        <item name="colorOnSurface">?vctr_content_primary</item>
+        <item name="android:colorBackground">@color/background_dark_sc</item>
+        <item name="colorOnBackground">?vctr_content_primary</item>
 
-        <item name="riotx_list_bottom_sheet_divider_color">#1fffffff</item>
-        <item name="vctr_list_divider_color">@color/background_dark_sc</item>
+        <!-- TODO styles? -->
 
-        <!-- room notification text color (typing, unsent...) -->
-        <!--Notice (secondary)-->
-        <item name="vctr_room_notification_text_color">@color/text_color_secondary_sc</item>
+        <item name="android:textColorLink">@color/element_link_dark</item>
 
-        <!-- icon colors -->
-        <item name="vctr_settings_icon_tint_color">@android:color/white</item>
-        <item name="vctr_icon_tint_on_light_action_bar_color">@color/accent_sc</item>
+        <!-- Menu text color -->
+        <item name="android:actionMenuTextColor">?colorSecondary</item>
 
-        <item name="list_divider_color">@color/list_divider_color_sc</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">?vctr_content_tertiary</item>
 
-        <!-- activities background -->
-        <item name="android:windowBackground">?riotx_background</item>
+        <!-- TODO styles? -->
+        <item name="alertDialogTheme">@style/VectorAlertDialogStyleDark.SC</item>
 
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar.SC</item>
         <item name="actionBarStyle">@style/Vector.Styled.ActionBar.SC</item>
-
-        <!-- actionbar icons color -->
-        <item name="actionBarTheme">@style/Vector.ActionBarTheme</item>
-
-        <!-- remove the shadow under the actionbar -->
-        <item name="android:windowContentOverlay">@null</item>
-
-        <item name="android:popupMenuStyle">@style/Vector.PopupMenu</item>
-
-        <!-- no divider -->
-        <item name="android:actionBarDivider">@null</item>
-
-        <!-- tabbar background -->
-        <item name="android:actionBarTabStyle">@style/Vector.TabView</item>
-        <item name="actionBarTabStyle">@style/Vector.TabView</item>
-
-        <!-- tabbar text color -->
-        <item name="android:actionBarTabTextStyle">@style/Vector.TabText</item>
-        <item name="actionBarTabTextStyle">@style/Vector.TabText</item>
-
-        <item name="tab_bar_selected_background_color">@color/background_dark_sc</item>
-        <item name="tab_bar_unselected_background_color">@color/background_dark_sc</item>
-
-        <!-- Preference -->
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC</item>
 
@@ -142,34 +90,23 @@
         <item name="snackbarTextViewStyle">@style/VectorSnackBarText</item>
 
         <!-- SC additions -->
+        <item name="colorAccent">@color/accent_sc</item>
+        <item name="android:colorAccent">@color/accent_sc</item>
         <item name="sc_message_bg_incoming">@color/background_floating_sc</item>
         <item name="sc_message_bg_outgoing">@color/background_sc</item>
-        <item name="riotx_positive_accent">@color/accent_sc</item>
-        <item name="riotx_positive_accent_alpha12">@color/accent_sc_alpha12</item>
-        <item name="riotx_toolbar_bg">?riotx_background</item>
+        <item name="riotx_toolbar_bg">?android:colorBackground</item>
         <item name="riotx_unread_unimportant_room_badge">@color/background_floating_sc</item>
         <item name="colorAccentPale">@color/accent_sc_pale</item>
-        <item name="vectorButtonStyleOutlined">@style/VectorButtonStyleOutlined.SC</item>
 
         <item name="android:statusBarColor">@color/background_black_sc</item>
         <item name="android:navigationBarColor">@color/background_black_sc</item>
-
-        <!-- enable window content transitions -->
-        <item name="android:windowContentTransitions">true</item>
-
-        <!-- specify shared element enter and exit transitions -->
-        <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
-        <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
-
-        <item name="riotx_reaction_background_off">@color/background_sc</item>
-        <item name="riotx_reaction_background_on">@color/sc_reaction_background_on_dark</item>
     </style>
 
     <style name="AppTheme.Base.SC.Dark">
         <item name="riotx_toolbar_bg">@color/background_sc</item>
-        <item name="riotx_background">@color/background_dark_sc</item>
+        <item name="android:colorBackground">@color/background_dark_sc</item>
         <item name="vctr_home_drawer_header_background">@color/background_sc</item>
-        <item name="riotx_header_panel_background">@color/background_sc</item>
+        <item name="vctr_header_background">@color/background_sc</item>
 
         <item name="android:statusBarColor">@color/background_dark_sc</item>
         <item name="android:navigationBarColor">@color/background_black_sc</item>

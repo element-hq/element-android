@@ -129,10 +129,8 @@
         <!-- SC additions -->
         <item name="sc_message_bg_incoming">#FF465561</item>
         <item name="sc_message_bg_outgoing">#ff343b47</item>
-        <item name="riotx_positive_accent">@color/riotx_positive_accent</item>
-        <item name="riotx_positive_accent_alpha12">@color/riotx_positive_accent_alpha12</item>
-        <item name="riotx_toolbar_bg">?riotx_background</item>
-        <item name="riotx_unread_unimportant_room_badge">@color/riotx_unread_room_badge_dark</item>
+        <item name="riotx_toolbar_bg">?android:colorBackground</item>
+        <item name="riotx_unread_unimportant_room_badge">@color/vctr_unread_room_badge_dark</item>
         <item name="timestamp_overlay_fg">@color/timestamp_overlay_fg</item>
         <item name="timestamp_overlay_bg">@color/timestamp_overlay_bg</item>
         <item name="colorAccentPale">@color/element_accent_pale</item>

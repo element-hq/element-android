@@ -63,7 +63,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
 
             if (vectorPreferences.labAllowMarkUnread()) {
                 // Mark read/unread
-                dividerItem {
+                bottomSheetDividerItem {
                     id("mark_unread_separator")
                 }
                 if (roomSummary.scIsUnread(scSdkPreferences)) {

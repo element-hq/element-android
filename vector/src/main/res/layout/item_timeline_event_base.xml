@@ -110,7 +110,7 @@
                 android:layout_toStartOf="@id/bubbleMessageTimeView"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="?riotx_text_primary"
+                android:textColor="?vctr_content_primary"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 tools:text="@sample/matrix.json/data/displayName" />
@@ -123,7 +123,7 @@
                 android:layout_alignEnd="@id/viewStubContainer"
                 android:layout_marginBottom="4dp"
                 android:maxLines="1"
-                android:textColor="?riotx_text_secondary"
+                android:textColor="?vctr_content_secondary"
                 android:textSize="12sp"
                 tools:text="@tools:sample/date/hhmm" />
 
@@ -198,7 +198,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="0dp"
                 android:maxLines="1"
-                android:textColor="?riotx_text_secondary"
+                android:textColor="?vctr_content_secondary"
                 android:textSize="12sp"
                 tools:text="@tools:sample/date/hhmm" />
                 -->
@@ -222,7 +222,7 @@
                     android:paddingStart="4dp"
                     android:paddingEnd="0dp"
                     android:maxLines="1"
-                    tools:textColor="?riotx_text_secondary"
+                    tools:textColor="?vctr_content_secondary"
                     android:textSize="12sp"
                     android:layout_gravity="bottom"
                     tools:text="@tools:sample/date/hhmm" />
@@ -236,7 +236,7 @@
                     android:paddingStart="4dp"
                     android:paddingEnd="0dp"
                     android:layout_gravity="bottom"
-                    tools:tint="?riotx_text_secondary"
+                    tools:tint="?vctr_content_secondary"
                     tools:src="@drawable/ic_processing_msg"
                     android:contentDescription="@string/footer_read_receipt_content_description" />
             </LinearLayout>

@@ -648,7 +648,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
     private fun removeFooterOverlayStyle(holder: H, density: Float) {
         holder.bubbleFootView.background = null
-        tintFooter(holder, ThemeUtils.getColor(holder.bubbleFootView.context, R.attr.riotx_text_secondary))
+        tintFooter(holder, ThemeUtils.getColor(holder.bubbleFootView.context, R.attr.vctr_content_secondary))
         holder.bubbleFootView.setPaddingRelative(
                 0,
                 round(4*density).toInt(),

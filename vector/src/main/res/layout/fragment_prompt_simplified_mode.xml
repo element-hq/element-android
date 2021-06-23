@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -65,7 +65,7 @@
                     android:gravity="start"
                     android:text="@string/prompt_simplified_mode_on"
                     android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/promptSimplifiedModeOnText"
                     app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +109,7 @@
                     android:gravity="start"
                     android:text="@string/prompt_simplified_mode_off"
                     android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/promptSimplifiedModeOffText"
                     app:layout_constraintStart_toStartOf="parent"
