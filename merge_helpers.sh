@@ -23,7 +23,7 @@ require_clean_git() {
 }
 
 upstream_latest_tag() {
-    git describe --abbrev=0 upstream/master --tags
+    git describe --abbrev=0 upstream/main --tags
 }
 upstream_previous_tag() {
     #git describe --abbrev=0 `upstream_latest_tag`~1 --tags
