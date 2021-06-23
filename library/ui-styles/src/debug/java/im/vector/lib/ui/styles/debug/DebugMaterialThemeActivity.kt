@@ -50,19 +50,27 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
         }
 
         views.debugShowDialog.setOnClickListener {
-            MaterialAlertDialogBuilder(this)
-                    .setTitle("Dialog title")
-                    .setMessage("Dialog content")
-                    .setIcon(R.drawable.ic_debug_icon)
-                    .setPositiveButton("Positive", null)
-                    .setNegativeButton("Negative", null)
-                    .setNeutralButton("Neutral", null)
-                    .show()
+            showTestDialog(false)
+        }
+
+        views.debugShowDialogDestructive.setOnClickListener {
+            showTestDialog(true)
         }
 
         views.debugShowBottomSheet.setOnClickListener {
             DebugBottomSheet().show(supportFragmentManager, "TAG")
         }
+    }
+
+    private fun showTestDialog(destructive: Boolean) {
+        MaterialAlertDialogBuilder(this, if (destructive) R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive else 0)
+                .setTitle("Dialog title")
+                .setMessage("Dialog content")
+                .setIcon(R.drawable.ic_debug_icon)
+                .setPositiveButton("Positive", null)
+                .setNegativeButton("Negative", null)
+                .setNeutralButton("Neutral", null)
+                .show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
