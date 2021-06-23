@@ -76,7 +76,6 @@
         <item name="android:textViewStyle">@style/Widget.Vector.TextView.Body</item>
         <item name="materialButtonStyle">@style/Widget.Vector.Button</item>
         <item name="toolbarStyle">@style/Widget.Vector.Toolbar</item>
-        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Vector.MaterialAlertDialog</item>
         <item name="bottomNavigationStyle">@style/BottomNavigation.Vector</item>
         <item name="searchViewStyle">@style/Widget.Vector.SearchView</item>
         <item name="textInputStyle">@style/Widget.Vector.TextInputLayout</item>
@@ -89,6 +88,7 @@
 
         <!-- Default theme -->
         <item name="bottomSheetDialogTheme">@style/Theme.Vector.BottomSheetDialog.Dark</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Vector.MaterialAlertDialog</item>
 
         <item name="android:textColorLink">@color/element_link_dark</item>
 
