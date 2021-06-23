@@ -20,7 +20,7 @@ package im.vector.app.features.roomprofile
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import im.vector.app.R
@@ -166,7 +166,7 @@ open class RoomProfileActivity :
         addFragmentToBackstack(R.id.simpleFragmentContainer, RoomBannedMemberListFragment::class.java, roomProfileArgs)
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 }

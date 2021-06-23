@@ -42,9 +42,7 @@ import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
-import timber.log.Timber
 import javax.inject.Inject
 
 // TODO this needs to be refactored to current standard and remove legacy
@@ -112,31 +110,6 @@ class SignOutBottomSheetDialogFragment :
 
         views.setupMegolmBackupButton.action = {
             setupBackupActivityResultLauncher.launch(KeysBackupSetupActivity.intent(requireContext(), true))
-        }
-
-        viewModel.observeViewEvents {
-            when (it) {
-                is SignoutCheckViewModel.ViewEvents.ExportKeys -> {
-                    it.exporter
-                            .export(requireContext(),
-                                    it.passphrase,
-                                    it.uri,
-                                    object : MatrixCallback<Boolean> {
-                                        override fun onSuccess(data: Boolean) {
-                                            if (data) {
-                                                viewModel.handle(SignoutCheckViewModel.Actions.KeySuccessfullyManuallyExported)
-                                            } else {
-                                                viewModel.handle(SignoutCheckViewModel.Actions.KeyExportFailed)
-                                            }
-                                        }
-
-                                        override fun onFailure(failure: Throwable) {
-                                            Timber.e("## Failed to export manually keys ${failure.localizedMessage}")
-                                            viewModel.handle(SignoutCheckViewModel.Actions.KeyExportFailed)
-                                        }
-                                    })
-                }
-            }
         }
     }
 

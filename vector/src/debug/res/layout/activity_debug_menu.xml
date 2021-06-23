@@ -66,6 +66,20 @@
                     android:text="Vector" />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/debug_open_button_styles_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="See button light" />
+
+            <Button
+                android:id="@+id/debug_test_text_view_light"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:text="Text Views Light" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,10 +115,18 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/debug_open_button_styles"
+                android:id="@+id/debug_test_text_view_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:text="Text Views Dark" />
+
+            <Button
+                android:id="@+id/debug_open_button_styles_dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="See button styles" />
+                android:text="See button dark" />
 
             <Button
                 android:id="@+id/debug_show_sas_emoji"

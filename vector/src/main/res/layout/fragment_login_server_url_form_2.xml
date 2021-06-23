@@ -17,11 +17,12 @@
 
             <TextView
                 android:id="@+id/loginServerUrlFormTitle"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_server_url_form_common_notice"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title" />
+                android:textColor="?vctr_content_primary" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginServerUrlFormHomeServerUrlTil"
@@ -45,6 +46,7 @@
 
             <TextView
                 android:id="@+id/loginServerUrlFormClearHistory"
+                style="@style/Widget.Vector.TextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -52,14 +54,13 @@
                 android:paddingEnd="0dp"
                 android:paddingBottom="16dp"
                 android:text="@string/login_clear_homeserver_history"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
                 android:textColor="?colorPrimary"
                 android:visibility="invisible"
                 tools:visibility="visible" />
 
             <Button
                 android:id="@+id/loginServerUrlFormSubmit"
-                style="@style/Style.Vector.Login.Button"
+                style="@style/Widget.Vector.Button.Login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

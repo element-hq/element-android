@@ -16,33 +16,37 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_account_created_title"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title" />
+                android:textColor="?vctr_content_primary" />
 
             <TextView
                 android:id="@+id/loginAccountCreatedSubtitle"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title.Small"
+                android:textColor="?vctr_content_primary"
                 tools:text="@string/login_account_created_subtitle" />
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="@string/login_account_created_notice"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text" />
+                android:textColor="?vctr_content_secondary" />
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_account_created_notice_2"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text" />
+                android:textColor="?vctr_content_secondary" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/loginAccountCreatedMessage"
@@ -63,6 +67,7 @@
 
                 <TextView
                     android:id="@+id/loginAccountCreatedMemberName"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -71,7 +76,6 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textColor="?vctr_content_primary"
-                    android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/loginAccountCreatedTime"
                     app:layout_constraintStart_toEndOf="@+id/loginAccountCreatedAvatar"
@@ -80,23 +84,23 @@
 
                 <TextView
                     android:id="@+id/loginAccountCreatedTime"
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:textColor="?vctr_content_secondary"
-                    android:textSize="12sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/loginAccountCreatedMemberName"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:text="@tools:sample/date/hhmm" />
 
                 <TextView
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/login_account_created_message"
                     android:textColor="?vctr_content_primary"
-                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/loginAccountCreatedMemberName"
                     app:layout_constraintTop_toBottomOf="@+id/loginAccountCreatedMemberName" />
@@ -104,11 +108,12 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_account_created_instruction"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text" />
+                android:textColor="?vctr_content_secondary" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -117,7 +122,7 @@
 
                 <Button
                     android:id="@+id/loginAccountCreatedLater"
-                    style="@style/Style.Vector.Login.Button.Text"
+                    style="@style/Widget.Vector.Button.Text.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -125,7 +130,7 @@
 
                 <Button
                     android:id="@+id/loginAccountCreatedDone"
-                    style="@style/Style.Vector.Login.Button"
+                    style="@style/Widget.Vector.Button.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"

@@ -129,7 +129,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                 }.disposeOnDestroyView()
 
         /*
-        views.spaceBetaTag.setOnClickListener {
+        views.spaceBetaTag.debouncedClicks {
             bugReporter.openBugReportScreen(requireActivity(), ReportType.SPACE_BETA_FEEDBACK)
         }
          */

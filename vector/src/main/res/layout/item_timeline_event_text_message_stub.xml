@@ -15,10 +15,10 @@
     -->
     <im.vector.app.core.ui.views.FooteredTextView
         android:id="@+id/messageTextView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?vctr_content_primary"
-        android:textSize="14sp"
         android:layout_gravity="left"
         tools:text="@sample/messages.json/data/message"
         tools:ignore="RtlHardcoded" />

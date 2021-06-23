@@ -21,4 +21,5 @@ object RoomAccountDataTypes {
     const val EVENT_TYPE_TAG = "m.tag"
     const val EVENT_TYPE_FULLY_READ = "m.fully_read"
     const val MARKED_UNREAD = "com.famedly.marked_unread"
+    const val EVENT_TYPE_SPACE_ORDER = "org.matrix.msc3230.space_order" // m.space_order
 }

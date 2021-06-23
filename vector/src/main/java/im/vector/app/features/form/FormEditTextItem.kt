@@ -17,6 +17,7 @@
 package im.vector.app.features.form
 
 import android.text.Editable
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -39,6 +40,9 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
 
     @EpoxyAttribute
     var value: String? = null
+
+    @EpoxyAttribute
+    var forceUpdateValue: Boolean = false
 
     @EpoxyAttribute
     var errorMessage: String? = null
@@ -64,11 +68,22 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var editorActionListener: TextView.OnEditorActionListener? = null
 
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onFocusChange: ((Boolean) -> Unit)? = null
+
+    @EpoxyAttribute
+    var prefixText: String? = null
+
+    @EpoxyAttribute
+    var suffixText: String? = null
+
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
             onTextChange?.invoke(s.toString())
         }
     }
+
+    private val onFocusChangedListener = View.OnFocusChangeListener { _, hasFocus -> onFocusChange?.invoke(hasFocus) }
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -77,7 +92,14 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         holder.textInputLayout.error = errorMessage
         holder.textInputLayout.endIconMode = endIconMode ?: TextInputLayout.END_ICON_NONE
 
-        holder.setValueOnce(holder.textInputEditText, value)
+        holder.textInputLayout.prefixText = prefixText
+        holder.textInputLayout.suffixText = suffixText
+
+        if (forceUpdateValue) {
+            holder.textInputEditText.setText(value)
+        } else {
+            holder.setValueOnce(holder.textInputEditText, value)
+        }
 
         holder.textInputEditText.isEnabled = enabled
         inputType?.let { holder.textInputEditText.inputType = it }
@@ -86,6 +108,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
 
         holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
         holder.textInputEditText.setOnEditorActionListener(editorActionListener)
+        holder.textInputEditText.onFocusChangeListener = onFocusChangedListener
     }
 
     override fun shouldSaveViewState(): Boolean {

@@ -23,13 +23,13 @@
 
     <TextView
         android:id="@+id/emptyItemTitleView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:gravity="center"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/emptyItemMessageView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +40,7 @@
 
     <TextView
         android:id="@+id/emptyItemMessageView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -49,7 +50,6 @@
         android:maxWidth="300dp"
         android:maxLines="10"
         android:textColor="?vctr_content_secondary"
-        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/emptyItemButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

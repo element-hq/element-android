@@ -24,6 +24,7 @@
 
     <TextView
         android:id="@+id/item_generic_title_text"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -46,6 +47,7 @@
 
     <TextView
         android:id="@+id/item_generic_description_text"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -113,7 +115,7 @@
 
     <Button
         android:id="@+id/item_generic_destructive_action_button"
-        style="@style/VectorButtonStyle.Destructive"
+        style="@style/Widget.Vector.Button.Destructive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

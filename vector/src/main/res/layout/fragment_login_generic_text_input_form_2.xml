@@ -17,39 +17,43 @@
 
             <TextView
                 android:id="@+id/loginGenericTextInputFormTitle"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:textColor="?vctr_content_primary"
                 tools:text="@string/login_set_email_title_2" />
 
             <TextView
                 android:id="@+id/loginGenericTextInputFormNotice"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:layout_marginBottom="@dimen/layout_vertical_margin"
                 android:gravity="start"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                android:textColor="?vctr_content_secondary"
                 tools:text="@string/login_set_email_notice_2" />
 
             <TextView
                 android:id="@+id/loginGenericTextInputFormMandatoryNotice"
+                style="@style/Widget.Vector.TextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="26dp"
                 android:gravity="start"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                android:textColor="?vctr_content_secondary"
                 android:visibility="gone"
                 tools:text="@string/login_set_email_mandatory_notice_2"
                 tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/loginGenericTextInputFormNotice2"
+                style="@style/Widget.Vector.TextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                android:textColor="?vctr_content_secondary"
                 android:visibility="gone"
                 tools:text="@string/login_set_msisdn_notice2"
                 tools:visibility="visible" />
@@ -78,7 +82,7 @@
 
                 <Button
                     android:id="@+id/loginGenericTextInputFormOtherButton"
-                    style="@style/Style.Vector.Login.Button.Text"
+                    style="@style/Widget.Vector.Button.Text.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -88,7 +92,7 @@
 
                 <Button
                     android:id="@+id/loginGenericTextInputFormLater"
-                    style="@style/Style.Vector.Login.Button.Text"
+                    style="@style/Widget.Vector.Button.Text.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -99,7 +103,7 @@
 
                 <Button
                     android:id="@+id/loginGenericTextInputFormSubmit"
-                    style="@style/Style.Vector.Login.Button"
+                    style="@style/Widget.Vector.Button.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"

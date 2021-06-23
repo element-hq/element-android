@@ -1,0 +1,27 @@
+#
+# Copyright 2021 New Vector Ltd
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# This file list String which are not allowed in source code.
+# Use Perl regex to write forbidden strings
+# Note: line cannot start with a space. Use \s instead.
+# It is possible to specify an authorized number of occurrence with === suffix. Default is 0
+# Example:
+# AuthorizedStringThreeTimes===3
+
+# Extension:xml
+
+### Use style="@style/Widget.Vector.TextView.*" instead of textSize attribute
+android:textSize===9

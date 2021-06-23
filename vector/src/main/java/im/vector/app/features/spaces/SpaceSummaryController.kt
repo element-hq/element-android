@@ -65,7 +65,7 @@ class SpaceSummaryController @Inject constructor(
         buildGroupModels(
                 nonNullViewState.asyncSpaces(),
                 nonNullViewState.selectedGroupingMethod,
-                nonNullViewState.rootSpaces,
+                nonNullViewState.rootSpacesOrdered,
                 nonNullViewState.expandedStates,
                 nonNullViewState.homeAggregateCount)
 
@@ -130,6 +130,7 @@ class SpaceSummaryController @Inject constructor(
                         countState(UnreadCounterBadgeView.State(1, true, 0, false))
                         selected(false)
                         description(host.stringProvider.getString(R.string.you_are_invited))
+                        canDrag(false)
                         listener { host.callback?.onSpaceInviteSelected(roomSummary) }
                     }
                 }
@@ -142,7 +143,6 @@ class SpaceSummaryController @Inject constructor(
         }
 
         rootSpaces
-                ?.sortedBy { it.displayName.lowercase(Locale.getDefault()) }
                 ?.forEach { groupSummary ->
                     val isSelected = selected is RoomGroupingMethod.BySpace && groupSummary.roomId == selected.space()?.roomId
                     // does it have children?
@@ -157,8 +157,12 @@ class SpaceSummaryController @Inject constructor(
                         id(groupSummary.roomId)
                         hasChildren(hasChildren)
                         expanded(expanded)
+                        // to debug order
+                        // matrixItem(groupSummary.copy(displayName = "${groupSummary.displayName} / ${spaceOrderInfo?.get(groupSummary.roomId)}")
+                        // .toMatrixItem())
                         matrixItem(groupSummary.toMatrixItem())
                         selected(isSelected)
+                        canDrag(true)
                         onMore { host.callback?.onSpaceSettings(groupSummary) }
                         listener { host.callback?.onSpaceSelected(groupSummary) }
                         toggleExpand { host.callback?.onToggleExpand(groupSummary) }

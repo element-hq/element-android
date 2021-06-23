@@ -17,9 +17,9 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:padding="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
             <ImageView
                 android:id="@+id/inviterAvatarImage"
@@ -36,6 +36,7 @@
 
             <TextView
                 android:id="@+id/inviterText"
+                style="@style/Widget.Vector.TextView.Subtitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -48,6 +49,7 @@
 
             <TextView
                 android:id="@+id/inviterMxid"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

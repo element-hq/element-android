@@ -384,7 +384,7 @@
     <string name="create_account">Založit účet</string>
     <string name="login">Přihlásit se</string>
     <string name="logout">Odhlásit se</string>
-    <string name="hs_url">Adresa URL domácího serveru</string>
+    <string name="hs_url">Adresa domovského serveru</string>
     <string name="identity_url">Adresa URL serveru identit</string>
     <string name="search">Hledat</string>
     <string name="start_new_chat">Začít novou konverzaci</string>
@@ -430,7 +430,7 @@
     <string name="auth_email_validation_message">Prosím, zkontrolujte své e-maily, abyste mohli pokračovat v registraci</string>
     <string name="auth_recaptcha_message">Tento domovský server by se rád přesvědčil, že nejste robot</string>
     <string name="auth_username_in_use">Uživatelské jméno již použito</string>
-    <string name="auth_home_server">Domácí server:</string>
+    <string name="auth_home_server">Domovský server:</string>
     <string name="auth_identity_server">Server identity:</string>
     <string name="auth_reset_password_next_step_button">Ověřil/a jsem svoji e-mailovou adresu</string>
     <string name="auth_reset_password_message">K resetování hesla zadejte e-mailovou adresu spojenou s vaším účtem:</string>
@@ -775,7 +775,7 @@
     <string name="review">Přehled</string>
     <string name="people_no_identity_server">Není konfigurován žádný ověřovací server.</string>
     <string name="call_failed_no_ice_title">Volání se nezdařilo kvůli chybné konfiguraci serveru</string>
-    <string name="call_failed_no_ice_description">Prosím, požádejte administrátora homeserveru (%1$s) o konfiguraci TURN serveru, aby hovory fungovaly spolehlivě.
+    <string name="call_failed_no_ice_description">Prosím, požádejte administrátora domovského serveru (%1$s) o konfiguraci TURN serveru, aby hovory fungovaly spolehlivě.
 \n
 \nPřípadně můžete zkusit použít veřejný server %2$s, ale nebude tak spolehlivý a budu sdílet Vaši IP adresu s tímto serverem. V nastavení lze toto změnit.</string>
     <string name="call_failed_no_ice_use_alt">Zkuste použít %s</string>
@@ -787,10 +787,10 @@
     <string name="auth_add_email_and_phone_message_2">Nastavte e-mail pro obnovení účtu. Použijte e-mail nebo telefonní číslo volitelně později, aby je našli lidé, kteří vás znají.</string>
     <string name="login_error_unknown_host">Toto URL není dostupné, prosím, prověřte</string>
     <string name="login_error_no_homeserver_found">To není platná adresa Matrix serveru</string>
-    <string name="login_error_homeserver_not_found">Homeserver není dostupný na tomto URL, prosím, prověřte</string>
+    <string name="login_error_homeserver_not_found">Domovský server není dostupný na této adrese, zkontrolujte ji prosím</string>
     <string name="login_error_ssl_handshake">Vaše zařízení používá zastaralý bezpečnostní protokol TLS, zranitelný útokem, pro Vaše bezpečí se nebudete moci spojit</string>
     <string name="settings_call_ringtone_use_default_stun">Povolit server fallback call assist</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Použiiji %s jako nápomoc, pokud Váš homeserver žádnou nenabízí (Vaše IP adresa bude sdělena během hovoru)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Použiiji %s jako nápomoc, pokud Váš domovský server žádnou nenabízí (Vaše IP adresa bude sdělena během hovoru)</string>
     <string name="invite_no_identity_server_error">Pro provedení této akce přidat server identit v nastavení.</string>
     <string name="settings_add_3pid_confirm_password_title">Potvrďte své heslo</string>
     <string name="template_settings_add_3pid_flow_not_supported">Nelze provést z ${app_name} mobile</string>
@@ -841,8 +841,8 @@
 \nTato chyba je mimo kontrolu ${app_name}u. V telefonu není žádný účet Google. Prosím, spusťte správce účtů a doplňte účet Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Přidat účet</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registrace tokenu</string>
-    <string name="settings_troubleshoot_test_token_registration_success">FCM token se podařilo úspěšné registrovat na homeserveru.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Registrace FCM tokenu na homeserveru se nezdařila:
+    <string name="settings_troubleshoot_test_token_registration_success">FCM token se podařilo úspěšné registrovat na domovském serveru.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Registrace FCM tokenu na domovském serveru se nezdařila:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Služba oznámení</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Služba oznámení je v chodu.</string>
@@ -870,10 +870,10 @@
     <string name="settings_notification_privacy_normal">Normální</string>
     <string name="settings_notification_privacy_reduced">Snížené soukromí</string>
     <string name="settings_notification_privacy_need_permission">Aplikaci potřebuje svolení k chodu na pozadí</string>
-    <string name="settings_notification_privacy_no_background_sync">Aplikace na pozadí opravdu <b>nepotřebuje</b> spojení k homeserveru, to by mělo snížit spotřebu</string>
+    <string name="settings_notification_privacy_no_background_sync">Aplikace na pozadí opravdu <b>nepotřebuje</b> spojení k domovskému serveru, to by mělo snížit spotřebu</string>
     <string name="settings_notification_privacy_fcm">• Oznámení se posílají pomocí Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Oznámení pouze obsahují metadata</string>
-    <string name="settings_notification_privacy_secure_message_content">• Obsah oznámení je <b>bezpečně uložen přímo na homeserveru Matrixu</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• Obsah oznámení je <b>bezpečně uložen přímo na domovském serveru Matrixu</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Oznámení obsahují <b>metadata a data zprávy</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Oznámení <b>neukážou obsah zprávy</b></string>
     <string name="settings_notification_ringtone">Zvuk oznámení</string>
@@ -937,7 +937,7 @@
     <string name="settings_pin_unread_messages">Připnout místnosti s nepřečtenými zprávami</string>
     <string name="settings_devices_list">Relace</string>
     <string name="settings_inline_url_preview">Interní náhled URL</string>
-    <string name="settings_inline_url_preview_summary">Náhled odkazů v chatu, pokud Váš homeserver podporuje tuto funkci.</string>
+    <string name="settings_inline_url_preview_summary">Náhled odkazů v chatu, pokud Váš domovský server podporuje tuto funkci.</string>
     <string name="settings_send_typing_notifs">Poslat oznámení o psaní</string>
     <string name="settings_send_typing_notifs_summary">Dejte ostatním vědět, že právě píšete.</string>
     <string name="settings_send_markdown">Formát markdown</string>
@@ -956,8 +956,8 @@
     <string name="settings_send_message_with_enter_summary">Tlačítko enter na dotykové klávesnici odešle zprávu místo nového řádku</string>
     <string name="settings_deactivate_account_section">Deaktivace účtu</string>
     <string name="settings_deactivate_my_account">Deaktivovat můj účet</string>
-    <string name="settings_discovery_category">Odhalení</string>
-    <string name="settings_discovery_manage">Správa Vašich nastaveni pro odhalení.</string>
+    <string name="settings_discovery_category">Objevování</string>
+    <string name="settings_discovery_manage">Správa Vašich nastavení pro objevování.</string>
     <string name="startup_notification_privacy_title">Soukromí ohledně oznámení</string>
     <string name="template_startup_notification_privacy_message">${app_name} může běžet na pozadí, aby spravoval Vaše oznámení bezpečně a v soukromí. To může mít vliv na baterii.</string>
     <string name="startup_notification_privacy_button_grant">Udělit oprávnění</string>
@@ -985,7 +985,7 @@
     <string name="devices_delete_pswd">Heslo:</string>
     <string name="devices_delete_submit_button_label">Odeslat</string>
     <string name="settings_logged_in">Přihlášen jako</string>
-    <string name="settings_home_server">Home server</string>
+    <string name="settings_home_server">Domovský server</string>
     <string name="settings_identity_server">Server identit</string>
     <string name="settings_integration_allow">Povolit integrace</string>
     <string name="settings_integration_manager">Správce integrací</string>
@@ -1183,8 +1183,8 @@
 \nNeznámé relace:</string>
     <string name="select_room_directory">Vybrat adresář místností</string>
     <string name="directory_server_fail_to_retrieve_server">Server je partně nedostupný nebo přetížený</string>
-    <string name="directory_server_type_homeserver">Zadejte homeserver, z něhož si žádáte seznam veřejných místností</string>
-    <string name="directory_server_placeholder">URL homeserveru</string>
+    <string name="directory_server_type_homeserver">Zadejte domovský server, z něhož si žádáte seznam veřejných místností</string>
+    <string name="directory_server_placeholder">Adresa domovského serveru</string>
     <string name="directory_server_all_rooms_on_server">Všechny místnosti na serveru %s</string>
     <string name="directory_server_native_rooms">Všech %s vlastních místností</string>
     <string name="lock_screen_hint">Zadat zde…</string>
@@ -1343,7 +1343,7 @@
     <string name="receipt_avatar">Avatar přijetí</string>
     <string name="notice_avatar">Avatar vypovězení</string>
     <string name="avatar">Avatar</string>
-    <string name="dialog_user_consent_content">Abyste mohli dále používat homeserver %1$s, musíte prohlédnout všeobecné podmínky a souhlasit s nimi.</string>
+    <string name="dialog_user_consent_content">Abyste mohli dále používat domovský server %1$s, musíte prohlédnout všeobecné podmínky a souhlasit s nimi.</string>
     <string name="dialog_user_consent_submit">Prohlédnout nyní</string>
     <string name="deactivate_account_title">Deaktivovat účet</string>
     <string name="deactivate_account_content">To učiní Váš účet trvale nepoužitelným. Nebudete se moci přihlásit a nikdo nebude moci registrovat stejné uživatelské ID. Způsobí odchod Vašeho účtu ze všech místností, jichž se účastní a odstraní podrobnosti Vašeho účtu z ověřovacího serveru. <b>Tato akce je nevratná</b>.
@@ -1363,15 +1363,15 @@
     <string name="resource_limit_exceeded_title">Mez zdrojů překročena</string>
     <string name="resource_limit_contact_action">Kontaktovat správce</string>
     <string name="resource_limit_contact_admin">kontaktovat Vašeho správce služby</string>
-    <string name="resource_limit_soft_default">Tento homeserver překročil jednu ze svých mezí zdrojů, a tak <b>se někteří uživatelé nebudou moci přihlásit</b>.</string>
-    <string name="resource_limit_hard_default">Tento homeserver překročil jednu ze svých mezí zdrojů.</string>
-    <string name="resource_limit_soft_mau"> Tent homeserver narazil na svoji měsíční mez aktivních uživatelů, a tak <b>se někteří uživatelé nebudou moci přihlásit</b>.</string>
-    <string name="resource_limit_hard_mau">Tento homeserver narazil na svoji měsíční mez aktivních uživatelů.</string>
+    <string name="resource_limit_soft_default">Tento domovský server překročil jednu ze svých mezí zdrojů, a tak <b>se někteří uživatelé nebudou moci přihlásit</b>.</string>
+    <string name="resource_limit_hard_default">Tento domovský server překročil jednu ze svých mezí zdrojů.</string>
+    <string name="resource_limit_soft_mau"> Tent domovský server narazil na svoji měsíční mez aktivních uživatelů, a tak <b>se někteří uživatelé nebudou moci přihlásit</b>.</string>
+    <string name="resource_limit_hard_mau">Tento domovský server narazil na svoji měsíční mez aktivních uživatelů.</string>
     <string name="resource_limit_soft_contact">Prosím, %s, aby zvýšili mez.</string>
     <string name="resource_limit_hard_contact">Prosím, %s, abyste mohli službu dále používate.</string>
     <string name="settings_lazy_loading_title">Pomalé načítání členů místností</string>
     <string name="settings_lazy_loading_description">Zvýší výkon tím, že načte členy místnosti při prvním náhledu.</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">Váš homeserver dosud nepodporuje pomalé načtení členů místností. Zkuste později.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Váš domovský server dosud nepodporuje pomalé načtení členů místností. Zkuste později.</string>
     <string name="unknown_error">Omlouváme se, došlo k chybě</string>
     <string name="merged_events_expand">rozbalit</string>
     <string name="merged_events_collapse">sbalit</string>
@@ -1399,7 +1399,7 @@
     <string name="keys_backup_setup">Začít používat zálohu klíčů</string>
     <string name="keys_backup_setup_step1_advanced">(Pokročilé)</string>
     <string name="keys_backup_setup_step2_text_title">Zabezpečit zálohu přístupovou frází.</string>
-    <string name="keys_backup_setup_step2_text_description">Uložíme zašifrovanou kopii Vašich klíčů na Vašem homeserveru. Chraňte svoji zálohu přístupovou frází, abyste ji udrželi v bezpečí.
+    <string name="keys_backup_setup_step2_text_description">Uložíme zašifrovanou kopii Vašich klíčů na Vašem domovském serveru. Chraňte svoji zálohu přístupovou frází, abyste ji udrželi v bezpečí.
 \n
 \nZ důvodu nejvyšší bezpečnosti by se měla lišit od hesla účtu.</string>
     <string name="keys_backup_setup_step2_button_title">Nastavit přístupovou frází</string>
@@ -1418,7 +1418,7 @@
     <string name="recovery_key_export_saved_as_warning">Klíč obnovy byl uložen do %s\'.
 \n
 \nVarování: může dojít ke smazání tohoto souboru, pokud odstraníte aplikaci.</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">Záloha již existuje na Vašem homeserveru</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Záloha již existuje na Vašem domovském serveru</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Vypadá to, že jste již nastavili zálohu klíče z jiné relace. Chcete ji nahradit zálohou, již právě provádíte\?</string>
     <string name="keys_backup_setup_override_replace">Nahradit</string>
     <string name="keys_backup_setup_override_stop">Zastavit</string>
@@ -1480,7 +1480,7 @@
     <string name="keys_backup_info_title_version">Verze</string>
     <string name="keys_backup_info_title_algorithm">Algoritmus</string>
     <string name="keys_backup_info_title_signature">Podpis</string>
-    <string name="autodiscover_invalid_response">Neplatná odpověď z hledání homeserverů</string>
+    <string name="autodiscover_invalid_response">Neplatná odpověď z hledání domovských serverů</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Volby serveru automaticky</string>
     <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} nalezl vlastní konfiguraci serveru pro doménu Vašeho uživatelského Id \"%1$s\":
 \n%2$s</string>
@@ -1525,7 +1525,7 @@
     <string name="sas_error_unknown">Neznámá chyba</string>
     <string name="identity_server_not_defined">Nepoužíváte žádný server pro identity</string>
     <string name="identity_server_not_defined_for_password_reset">Není konfigurován žádný server pro identity, musíte přenastavit heslo.</string>
-    <string name="error_user_already_logged_in">Vypadá to, že se chcete připojit k jinému homeserveru. Chcete se odhlásit\?</string>
+    <string name="error_user_already_logged_in">Vypadá to, že se chcete připojit k jinému domovskému serveru. Chcete se odhlásit\?</string>
     <string name="edit">Upravit</string>
     <string name="reply">Odpovědět</string>
     <string name="global_retry">Opakovat</string>
@@ -1606,7 +1606,7 @@
     <string name="edited_suffix">(upraveno)</string>
     <string name="message_edits">Úpravy zpráv</string>
     <string name="no_message_edits_found">Úpravy nenalezeny</string>
-    <string name="room_filtering_filter_hint">Vytřídit konverzace…</string>
+    <string name="room_filtering_filter_hint">Filtrovat konverzace…</string>
     <string name="room_filtering_footer_title">Nemůžete najít, co hledáte\?</string>
     <string name="room_filtering_footer_create_new_room">Založit novou místnost</string>
     <string name="room_filtering_footer_create_new_direct_message">Poslat novou přímou zprávu</string>
@@ -1649,7 +1649,7 @@
     <string name="settings_agree_to_terms">Souhlaste se všeobecnými podmínkami serveru identit (%s), abyste byli k nalezení podle emailové adresy nebo telefonního čísla.</string>
     <string name="labs_allow_extended_logging">Zapnout podrobné záznamy.</string>
     <string name="labs_allow_extended_logging_summary">Podrobné záznamy pomohou vývojářům mnoha podrobnostmi, odešlete-li RageShake. I když jsou zapnuty, aplikace nezaznamenává obsah zpráv nebo jakákoli soukromá data.</string>
-    <string name="error_terms_not_accepted">Prosím, opakujte, jakmile jste přijali všeobecné podmínky svého homeserveru.</string>
+    <string name="error_terms_not_accepted">Prosím, opakujte, jakmile jste přijali všeobecné podmínky svého domovského serveru.</string>
     <string name="error_network_timeout">Vypadá to, že serveru dlouho trvá odpovědět, to může být způsobeno buď slabým spojením nebo chybou na serveru. Prosím, opakujte za chvíli.</string>
     <string name="send_attachment">Poslat přílohu</string>
     <string name="a11y_open_drawer">Otevřít navigační zásuvku</string>
@@ -1746,7 +1746,7 @@
 \n
 \nChcete se přihlásit webovým klientem\?</string>
     <string name="login_registration_disabled">Omlouváme se, tento server již nepřijímá nové účty.</string>
-    <string name="login_registration_not_supported">Aplikace nemůže založit účet na tomto homeserveru.
+    <string name="login_registration_not_supported">Aplikace nemůže založit účet na tomto domovském serveru.
 \n
 \nChcete se přihlásit webovým klientem\?</string>
     <string name="login_login_with_email_error">Tato emailová adresa se nevztahuje k žádnému účtu.</string>
@@ -1799,15 +1799,15 @@
 \nZastavit registrační proces\?</string>
     <string name="login_a11y_choose_matrix_org">Vybrat matrix.org</string>
     <string name="login_a11y_choose_modular">Vybrat Element Matrix Services</string>
-    <string name="login_a11y_choose_other">Vybrat upravený homeserver</string>
+    <string name="login_a11y_choose_other">Vybrat vlastní domovský server</string>
     <string name="login_a11y_captcha_container">Prosím, proveďte vybídnutí captcha</string>
     <string name="login_terms_title">Přijmout všeobecné podmínky a pokračovat</string>
     <string name="login_wait_for_email_title">Prosím, nahlédněte do svého emailu</string>
     <string name="login_wait_for_email_notice">Právě jsme odeslali email na %1$s.
 \nNež budete pokračovat se založením účtu, prosím, klikněte na odkaz v něm obsažený.</string>
     <string name="login_validation_code_is_not_correct">Zadaný kód není správný. Prosím, zkontrolujte.</string>
-    <string name="login_error_outdated_homeserver_title">Zastaralý homeserver</string>
-    <string name="login_error_outdated_homeserver_content">Tento homeserver používá za účelem spojení příliš starou verzi. Požádejte správce, aby provedl aktualizaci.</string>
+    <string name="login_error_outdated_homeserver_title">Zastaralý domovský server</string>
+    <string name="login_error_outdated_homeserver_content">Tento domovský server používá za účelem spojení příliš starou verzi. Požádejte správce, aby provedl aktualizaci.</string>
     <plurals name="login_error_limit_exceeded_retry_after">
         <item quantity="one">Bylo odesláno příliš mnoho požadavků. Můžete opakovat za %1$d vteřinu…</item>
         <item quantity="few">Bylo odesláno příliš mnoho požadavků. Můžete opakovat za %1$d vteřiny…</item>
@@ -1825,7 +1825,7 @@
     <string name="signed_out_submit">Znovu se přihlásit</string>
     <string name="soft_logout_title">Právě jste se odhlásili</string>
     <string name="soft_logout_signin_title">Přihlásit se</string>
-    <string name="soft_logout_signin_notice">Správce Vašeho homeserveru (%1$s) Vás odhlásil z Vašeho účtu %2$s (%3$s).</string>
+    <string name="soft_logout_signin_notice">Správce Vašeho domovského serveru (%1$s) Vás odhlásil z Vašeho účtu %2$s (%3$s).</string>
     <string name="soft_logout_signin_e2e_warning_notice">Přihlašte se, abyste získali přístup k šifrovacím klíčům uloženým výlučně v tomto zařízení. Potřebujete je ke čtení všech svých zpráv na jakémkoli zařízení.</string>
     <string name="soft_logout_signin_submit">Přihlásit</string>
     <string name="soft_logout_clear_data_title">Vyčistit osobní údaje</string>
@@ -1870,8 +1870,8 @@
     <string name="verification_conclusion_not_secure">Nezabezpečené</string>
     <string name="verification_conclusion_compromised">Něco z následujích je patrně narušeno:
 \n
-\n- Váš homeserver
-\n- Homeserver uživatele, jejž právě ověřujete
+\n- Váš domovský server
+\n- Domovský server uživatele, jejž právě ověřujete
 \n- Spojení do internetu Vaše či dalších uživatelů
 \n- Zařízení Vaše či dalších uživatelů</string>
     <string name="sent_a_video">Video.</string>
@@ -2043,7 +2043,7 @@
     <string name="verify_not_me_self_verification">Jedno z následujících může být ohroženo:
 \n
 \n- Vaše heslo
-\n- Váš homeserver
+\n- Váš domovský server
 \n- Toto zařízení nebo to druhé
 \n- Spojení do internetu obou zařízení
 \n
@@ -2144,7 +2144,7 @@
     <string name="login_connect_using_matrix_id_notice">Jinak, máte-li již účet a znáte-li svůj identifikátor a heslo, můžete použít tuto metodu:</string>
     <string name="login_connect_using_matrix_id_submit">Přihlásit se s mým identifikátorem Matrixu</string>
     <string name="login_signin_matrix_id_title">Přihlásit se</string>
-    <string name="login_signin_matrix_id_notice">Pokud založíte účet na homeserveru, použijte své Matrix ID (např. @user:domain.com) a heslo níže.</string>
+    <string name="login_signin_matrix_id_notice">Pokud založíte účet na domovském serveru, použijte své Matrix ID (např. @user:domain.com) a heslo níže.</string>
     <string name="login_signin_matrix_id_hint">Identifikátor uživatele</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">To není platný identifikátor uživatele. Platný formát: \'@uživatel:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Nemohu najít platný domovský server. Prosím, zkontrolujte svůj identifikátor</string>
@@ -2229,7 +2229,7 @@
     <string name="bottom_action_notification">Oznámení</string>
     <string name="template_call_failed_no_connection">Volání ${app_name}u se nezdařilo</string>
     <string name="call_failed_no_connection_description">Založit spojení v reálném čase se nezdařilo.
-\nProsím, požádejte správce svého homeserveru o konfiguraci TURN serveru, aby volání fungovala spolehlivě.</string>
+\nProsím, požádejte správce svého domovského serveru o konfiguraci TURN serveru, aby volání fungovala spolehlivě.</string>
     <string name="call_select_sound_device">Vybrat zvukové zařízení</string>
     <string name="sound_device_phone">Telefon</string>
     <string name="sound_device_speaker">Reproduktor</string>
@@ -2458,7 +2458,7 @@
 \n
 \nVaše zprávy jsou zabezpečeny zámky a pouze Vy a příjemce máte jedinečné klíče k jejich odemknutí.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Zprávy zde nejsou e2e šifrovány.</string>
-    <string name="login_error_outdated_homeserver_warning_content">Tento homeserver používá starou verzi. Požádejte správce svého homeserveru o aktualizaci. Můžete pokračovat, ale některé funkce možná nebudou správně pracovat.</string>
+    <string name="login_error_outdated_homeserver_warning_content">Tento domovský server používá starou verzi. Požádejte správce svého domovského serveru o aktualizaci. Můžete pokračovat, ale některé funkce možná nebudou správně pracovat.</string>
     <string name="direct_room_join_rules_invite_by_you">Omezili jste na pouze pro pozvané.</string>
     <string name="direct_room_join_rules_invite">%1$s omezili na pouze pro pozvané.</string>
     <string name="room_list_quick_actions_low_priority_remove">Odebrat z nízké priority</string>
@@ -2521,7 +2521,7 @@
     <string name="create_room_alias_empty">Prosím, zadejte adresu místnosti</string>
     <string name="create_room_alias_already_in_use">Tato adresa je již obsazena</string>
     <string name="create_room_alias_hint">Adresa místnosti</string>
-    <string name="create_room_disable_federation_description">Můžete zapnout, pokud bude tato místnost využita pro spolupráci interních týmů na Vašem homeserveru. Později nelze změnit.</string>
+    <string name="create_room_disable_federation_description">Můžete zapnout, pokud bude tato místnost využita pro spolupráci interních týmů na Vašem domovském serveru. Později nelze změnit.</string>
     <string name="create_room_disable_federation_title">Trvale blokovat vstup do této místnosti všem, kdo nejsou členy %s</string>
     <string name="hide_advanced">Skrýt pokročilé</string>
     <string name="show_advanced">Ukázat pokročilé</string>
@@ -2571,7 +2571,7 @@
     <string name="room_alias_action_publish">Zveřejnit tuto adresu</string>
     <string name="room_alias_local_address_add">Přidat lokální adresu</string>
     <string name="room_alias_local_address_empty">Tato místnost nemá žádné lokální adresy</string>
-    <string name="room_alias_local_address_subtitle">Nastavte adresy pro tuto místnost, aby uživatelé mohli tuto místnost nalézt přes Váš homeserver (%1$s)</string>
+    <string name="room_alias_local_address_subtitle">Nastavte adresy pro tuto místnost, aby uživatelé mohli tuto místnost nalézt přes Váš domovský server (%1$s)</string>
     <string name="room_alias_local_address_title">Lokální adresa</string>
     <string name="room_alias_address_hint">Nová zveřejněná adresa (např. #alias:server)</string>
     <string name="room_alias_address_empty">Zatím žádné zveřejněné adresy.</string>
@@ -2726,7 +2726,7 @@
     <string name="event_status_sent_message">Zpráva odeslána</string>
     <string name="a11y_unchecked">Neoznačeno</string>
     <string name="labs_use_restricted_join_rule">Experimentální, prostor - omezená místnost.</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Prostory jsou způsob organizace místností a lidí k práci, zábavě anebo jen pro Vás.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Prostory představují nový způsob seskupování místností a osob.</string>
     <string name="create_spaces_room_private_header_desc">Založme pro každé místnost. Později můžete přidat i další, včetně již existujících.</string>
     <string name="create_spaces_room_private_header">Na jakých tématech pracujete\?</string>
     <string name="create_spaces_room_public_header_desc">Založíme pro ně místnosti. Můžete přidat další později.</string>
@@ -2824,4 +2824,39 @@
     <string name="send_file_step_compressing_image">Komprimuji obrázek…</string>
     <string name="use_as_default_and_do_not_ask_again">Použít výchozí a dále se neptat</string>
     <string name="option_always_ask">Vždy se dotázat</string>
+    <string name="this_space_has_no_rooms_admin">Některé místnosti mohou být skryté, protože jsou soukromé a potřebujete pozvánku.</string>
+    <string name="this_space_has_no_rooms_not_admin">Některé místnosti mohou být skryté, protože jsou soukromé a potřebujete pozvánku.
+\nK přidávání místností nemáte oprávnění.</string>
+    <string name="this_space_has_no_rooms">Tento prostor nemá žádné místnosti</string>
+    <string name="spaces_no_server_support_description">Další informace získáte od správce domovského serveru</string>
+    <string name="spaces_no_server_support_title">Vypadá to, že váš domovský server zatím Prostory nepodporuje</string>
+    <string name="spaces_feeling_experimental_subspace">Chcete experimentovat\?
+\nDo prostoru můžete přidat existující prostory.</string>
+    <string name="labs_space_show_orphan_in_home">Experimentální prostor - Zobrazit pouze sirotky v Domově</string>
+    <string name="space_add_rooms">Přidat místnosti</string>
+    <string name="space_leave_prompt_msg_as_admin">Jste administrátorem tohoto prostoru, ujistěte se, že jste před odchodem převedli administrátorská práva na jiného člena.</string>
+    <string name="space_leave_prompt_msg_private">Tento prostor není veřejný. Bez pozvánky se do něj nebudete moci znovu připojit.</string>
+    <string name="space_leave_prompt_msg_only_you">Jste tu jediný člověk. Pokud odejdete, nikdo se k vám v budoucnu nebude moci připojit, včetně vás.</string>
+    <string name="invite_to_space">Pozvat do %s</string>
+    <string name="a11y_beta">Tato funkce je ve fázi beta</string>
+    <string name="give_feedback">Poskytněte zpětnou vazbu</string>
+    <string name="feedback_failed">Zpětnou vazbu se nepodařilo odeslat (%s)</string>
+    <string name="feedback_sent">Děkujeme, vaše zpětná vazba byla úspěšně odeslána</string>
+    <string name="you_may_contact_me">V případě dalších dotazů se na mě můžete obrátit</string>
+    <string name="send_feedback_space_info">Používáte beta verzi prostorů. Vaše zpětná vazba pomůže při tvorbě dalších verzí. Vaše platforma a uživatelské jméno budou zaznamenány, abychom mohli vaši zpětnou vazbu co nejlépe využít.</string>
+    <string name="feedback">Zpětná vazba</string>
+    <string name="send_feedback_space_title">Zpětná vazba prostorů</string>
+    <string name="error_jitsi_join_conf">Omlouváme se, při pokusu o připojení ke konferenci došlo k chybě</string>
+    <string name="unnamed_room">Nepojmenovaná místnost</string>
+    <string name="private_space">Soukromý prostor</string>
+    <string name="public_space">Veřejný prostor</string>
+    <string name="a11y_public_space">Tento Prostor je veřejný</string>
+    <string name="call_transfer_unknown_person">Neznámá osoba</string>
+    <string name="call_transfer_transfer_to_title">Převod na %1$s</string>
+    <string name="call_transfer_consulting_with">Konzultace s %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">Tento server je již uveden v seznamu</string>
+    <string name="directory_add_a_new_server_error">Nelze najít tento server nebo jeho seznam místností</string>
+    <string name="directory_add_a_new_server_prompt">Zadejte název nového serveru, který chcete prozkoumat.</string>
+    <string name="directory_add_a_new_server">Přidat nový server</string>
+    <string name="directory_your_server">Váš server</string>
 </resources>

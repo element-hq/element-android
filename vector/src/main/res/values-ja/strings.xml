@@ -332,11 +332,11 @@
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' は正しくない形式の住所表記です</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">この部屋の本住所表記が設定されていません.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">本住所表記の警告</string>
-    <string name="room_settings_set_main_address">本住所表記を設定</string>
-    <string name="room_settings_unset_main_address">本住所表記を設定解除</string>
+    <string name="room_settings_set_main_address">メインアドレスとして設定</string>
+    <string name="room_settings_unset_main_address">メインアドレスとして設定を解除</string>
     <string name="room_settings_copy_room_id">部屋固有IDをコピー</string>
     <string name="room_settings_copy_room_address">部屋の住所表記をコピー</string>
-    <string name="encryption_information_device_id">装置固有ID</string>
+    <string name="encryption_information_device_id">セッションID</string>
     <string name="font_size">文字の大きさ</string>
     <string name="tiny">とても小さい</string>
     <string name="small">小さい</string>
@@ -487,8 +487,7 @@
     <string name="room_settings_room_access_warning">この部屋へのリンクを作成するには、部屋の住所表記が必要です。</string>
     <string name="room_settings_addresses_e2e_enabled">この部屋は暗号化されています。</string>
     <string name="room_settings_addresses_e2e_disabled">この部屋は暗号化されていません。</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">暗号化を開始
-(警告: 部屋の暗号を中止することはできません！)</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">暗号化を有効化 (警告: 部屋の暗号を再度無効することはできません！)</string>
     <string name="directory_title">部屋一覧</string>
     <string name="settings_theme">外観</string>
     <string name="encryption_information_title">エンドツーエンド暗号化についての情報</string>
@@ -1407,7 +1406,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="notice_room_invite_no_invitee_with_reason">%1$sの招待です。理由: %2$s</string>
     <string name="clear_timeline_send_queue">送信キューのクリア</string>
     <string name="event_status_sending_message">メッセージを送っています…</string>
-    <string name="event_status_sent_message">メッセージを送る</string>
+    <string name="event_status_sent_message">メッセージを送りました</string>
     <string name="initial_sync_start_importing_account_data">初期同期:
 \nアカウントデータをインポート</string>
     <string name="initial_sync_start_importing_account_groups">初期同期:
@@ -1556,4 +1555,59 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     </plurals>
     <string name="three_users_read">%1$sや %2$sそれに%3$sが読みました</string>
     <string name="command_description_plain">メッセージをマークダウンとして解釈せずにプレーンテキストとして送信する</string>
+    <string name="keys_backup_setup_step3_save_button_title">ファイルとして保存</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">共有</string>
+    <string name="keys_backup_setup_step3_button_title">完了</string>
+    <string name="keys_backup_setup_step3_success_title">成功！</string>
+    <string name="keys_backup_setup_creating_backup">バックアップを作成中</string>
+    <string name="keys_backup_setup_step2_button_title">パスフレーズを設定</string>
+    <string name="keys_backup_setup_step1_manual_export">手動でキーをエクスポート</string>
+    <string name="keys_backup_setup">キーバックアップを使って開始する</string>
+    <string name="passphrase_passphrase_too_weak">パスフレーズが弱すぎます</string>
+    <string name="passphrase_empty_error_message">パスフレーズを入力してください</string>
+    <string name="no_valid_google_play_services_apk">Google PlayサービスのAPKが見つかりませんでした。通知がうまく機能しない場合があります。</string>
+    <string name="error_empty_field_enter_user_name">ユーザー名を入力してください。</string>
+    <string name="ignore_request_short_label">無視</string>
+    <string name="share_without_verifying_short_label">共有</string>
+    <string name="widget_integration_review_terms">続けるには利用規約に同意する必要があります。</string>
+    <string name="room_widget_resource_decline_permission">全てブロック</string>
+    <string name="room_widget_resource_grant_permission">許可</string>
+    <string name="room_widget_permission_room_id">部屋ID</string>
+    <string name="room_widget_permission_widget_id">ウィジェットID</string>
+    <string name="room_widget_permission_theme">あなたのテーマ</string>
+    <string name="room_widget_permission_user_id">あなたのユーザーID</string>
+    <string name="room_widget_permission_avatar_url">あなたのアバターURL</string>
+    <string name="room_widget_open_in_browser">ブラウザで開く</string>
+    <string name="room_widget_permission_title">ウィジェットをロードする</string>
+    <string name="room_widget_activity_title">ウィジェット</string>
+    <string name="active_widgets_title">アクティブなウィジェット</string>
+    <string name="notification_sender_me">自分</string>
+    <string name="notification_new_messages">新しいメッセージ</string>
+    <string name="notification_unknown_room_name">部屋</string>
+    <string name="notification_unknown_new_event">新しいイベント</string>
+    <string name="encryption_information_unknown_ip">不明なIP</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="other">キー %1$dと%2$dのインポートに成功。</item>
+    </plurals>
+    <string name="encryption_settings_manage_message_recovery_summary">キーバックアップを管理</string>
+    <string name="encryption_exported_successfully">キーのエクスポートに成功しました</string>
+    <string name="media_source_choose">選択</string>
+    <string name="compression_opt_list_choose">選択</string>
+    <string name="account_additional_info">詳細情報: %s</string>
+    <string name="room_alias_local_address_add">ローカルアドレスを追加する</string>
+    <string name="room_alias_local_address_empty">この部屋はローカルアドレスがありません</string>
+    <string name="room_alias_delete_confirmation">アドレス \"%1$s\" を削除しますか？</string>
+    <string name="room_alias_main_address_hint">メインアドレス</string>
+    <string name="room_alias_published_alias_main">これがメインアドレスです</string>
+    <string name="account_phone_number_error">電話番号の認証中にエラーが発生しました。</string>
+    <string name="invite_by_link">リンクを共有</string>
+    <string name="invite_to_space_with_name">%s に招待する</string>
+    <string name="invite_by_email">Eメールで招待</string>
+    <string name="create_space_topic_hint">説明</string>
+    <string name="invite_people_menu">人を招待する</string>
+    <string name="join_anyway">とにかく参加する</string>
+    <string name="space_add_child_title">部屋を追加する</string>
+    <string name="user_invites_you">%s はあなたを招待しています</string>
+    <string name="no_permissions_to_start_conf_call">この部屋で電話会議をする権利がありません</string>
+    <string name="audio_meeting">オーディオミーティングを開始する</string>
 </resources>

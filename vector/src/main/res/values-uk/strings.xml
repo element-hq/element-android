@@ -91,7 +91,7 @@
     </plurals>
     <string name="room_displayname_4_members">%1$s, %2$s, %3$s та %4$s</string>
     <string name="room_displayname_3_members">%1$s, %2$s та %3$s</string>
-    <string name="power_level_default">Типово</string>
+    <string name="power_level_default">Типовий</string>
     <string name="power_level_moderator">Модератор</string>
     <string name="power_level_admin">Адміністратор</string>
     <string name="notice_widget_removed_by_you">Ви вилучили %1$s знадіб</string>
@@ -156,8 +156,8 @@
     <string name="initial_sync_start_importing_account">Початкова синхронізація:
 \nІмпортування даних облікового запису…</string>
     <string name="room_displayname_empty_room_was">Порожня кімната (була %s)</string>
-    <string name="power_level_custom_no_value">Власний</string>
-    <string name="power_level_custom">Власний (%1$d)</string>
+    <string name="power_level_custom_no_value">Не типовий</string>
+    <string name="power_level_custom">Не типовий (%1$d)</string>
     <string name="notice_widget_modified_by_you">Ви змінили знадіб %1$s</string>
     <string name="notice_widget_modified">%1$s змінює знадіб %2$s</string>
     <string name="notice_direct_room_update_by_you">Ви оновили кімнату.</string>
@@ -284,7 +284,7 @@
     <string name="create_account">Зареєструватися</string>
     <string name="login">Увійти</string>
     <string name="logout">Вийти</string>
-    <string name="hs_url">URL сервера</string>
+    <string name="hs_url">URL-адреса домашнього сервера</string>
     <string name="identity_url">URL сервера ідентифікації</string>
     <string name="search">Пошук</string>
     <string name="start_new_chat">Почати новий чат</string>
@@ -325,9 +325,9 @@
     <string name="auth_use_server_options">Використовувати особливі налаштування сервера</string>
     <string name="auth_email_validation_message">Перевірте email для продовження реєстрації</string>
     <string name="auth_threepid_warning_message">Реєстрація за допомогою Email та номеру телефона водночас поки не підтримується. Лише номер телефону буде додано до облікового запису.\n\nВи можете додати email в налаштуваннях.</string>
-    <string name="auth_recaptcha_message">Цей сервер хоче переконатися, що ви не робот</string>
+    <string name="auth_recaptcha_message">Цей домашній сервер хоче переконатися, що ви не робот</string>
     <string name="auth_username_in_use">Логін вже використовується</string>
-    <string name="auth_home_server">Сервер:</string>
+    <string name="auth_home_server">Домашній сервер:</string>
     <string name="auth_identity_server">Сервер ідентифікації:</string>
     <string name="auth_reset_password_next_step_button">Я перевірив(ла) свою email адресу</string>
     <string name="auth_reset_password_message">Для скидання паролю введіть email прив\'язаний до облікового запису:</string>
@@ -603,7 +603,7 @@
     <string name="devices_delete_pswd">Пароль:</string>
     <string name="devices_delete_submit_button_label">Надіслати</string>
     <string name="settings_logged_in">Залоговано як</string>
-    <string name="settings_home_server">Cервер</string>
+    <string name="settings_home_server">Домашній сервер</string>
     <string name="settings_identity_server">Сервер ідентифікації</string>
     <string name="settings_user_interface">Інтерфейс користувача</string>
     <string name="settings_interface_language">Мова</string>
@@ -756,7 +756,7 @@
     <string name="select_room_directory">Вибір каталогу кімнат</string>
     <string name="directory_server_fail_to_retrieve_server">Можливо сервер недоступний чи перевантажений</string>
     <string name="directory_server_type_homeserver">Введіть сервер для показу каталогу публічних кімнат</string>
-    <string name="directory_server_placeholder">URL сервера</string>
+    <string name="directory_server_placeholder">Ім\'я сервера</string>
     <string name="directory_server_all_rooms_on_server">Всі кімнати на сервері %s</string>
     <string name="directory_server_native_rooms">Всі місцеві кімнати %s</string>
     <!-- historical -->
@@ -1005,7 +1005,7 @@
     <string name="community_name_hint">Приклад</string>
     <string name="community_id">ID Спільноти</string>
     <string name="community_id_hint">приклад</string>
-    <string name="group_details_home">Початок</string>
+    <string name="group_details_home">Домівка</string>
     <string name="group_details_people">Люди</string>
     <string name="group_details_rooms">Кімнати</string>
     <string name="no_users_placeholder">Немає користувачів</string>
@@ -1111,7 +1111,7 @@
     <string name="room_filtering_footer_create_new_direct_message">Відправити нове пряме повідомлення</string>
     <string name="command_description_shrug">Додає ¯\\_(ツ)_/¯ перед текстовим повідомленням</string>
     <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} не підтримує повідомлення типу \'%1$s\'</string>
-    <string name="command_description_rainbow">Відправляє повідомлення розмальоване веселково</string>
+    <string name="command_description_rainbow">Надсилає повідомлення розмальоване веселково</string>
     <string name="settings_category_composer">Редактор повідомлень</string>
     <string name="command_description_plain">Відправляє повідомлення як текст без інтерпретації його як Markdown</string>
     <string name="room_message_placeholder">Повідомлення…</string>
@@ -1387,7 +1387,7 @@
     <string name="room_no_active_widgets">Немає активних знадобів</string>
     <string name="room_manage_integrations">Керувати інтеграціями</string>
     <string name="integration_manager_not_configured">Менеджер інтеграції не налаштовано.</string>
-    <string name="room_widget_webview_read_protected_media">Читати захищені DRM засоби масової інформації</string>
+    <string name="room_widget_webview_read_protected_media">Читати медіа захищені DRM</string>
     <string name="room_widget_webview_access_microphone">Використовувати мікрофон</string>
     <string name="room_widget_webview_access_camera">Використовувати камеру</string>
     <string name="room_widget_resource_decline_permission">Заблокувати все</string>
@@ -1627,7 +1627,7 @@
     <string name="permissions_denied_qr_code">Щоб сканувати QR-код необхідно дозволити доступ до камери.</string>
     <string name="return_to_call">Повернутися до виклику</string>
     <string name="video_call_in_progress">Триває відеовиклик…</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Використовуватиме %s допоміжним, коли ваш домашній сервер не пропонує такого (вашу IP-адресу буде надана під час виклику)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Застосовуватиме %s допоміжним, коли ваш домашній сервер не пропонує такого (вашу IP-адресу буде надано під час виклику)</string>
     <string name="settings_call_ringtone_use_default_stun">Дозволити допоміжний сервер викликів</string>
     <string name="login_error_ssl_handshake">Ваш пристрій використовує застарілий протокол безпеки TLS, вразливий до атак, для вашої безпеки ви не зможете під\'єднатися</string>
     <string name="login_error_ssl_peer_unverified">Помилка SSL: особу співрозмовника не підтверджено.</string>
@@ -1642,7 +1642,7 @@
     <string name="room_list_quick_actions_notifications_all">Всі повідомлення</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Всі повідомлення (гучно)</string>
     <string name="message_ignore_user">Нехтувати користувача</string>
-    <string name="unignore">Рознехтувати</string>
+    <string name="unignore">Не нехтувати</string>
     <string name="keys_backup_info_title_signature">Підпис</string>
     <string name="keys_backup_info_title_algorithm">Алгоритм</string>
     <string name="keys_backup_info_title_version">Версія</string>
@@ -1817,9 +1817,9 @@
     <string name="content_reported_as_inappropriate_title">Надіслано скаргу, як на неприйнятне</string>
     <string name="too_many_pin_failures">Забагато помилок, вам довелось вийти</string>
     <string name="unencrypted">Незашифроване</string>
-    <string name="default_message_emote_snow">надсилає сніг ❄️</string>
+    <string name="default_message_emote_snow">надсилає снігопад ❄️</string>
     <string name="default_message_emote_confetti">надсилає конфетті 🎉</string>
-    <string name="command_snow">Надсилає вказане повідомлення зі снігом</string>
+    <string name="command_snow">Надсилає вказане повідомлення зі снігопадом</string>
     <string name="command_confetti">Надсилає вказане повідомлення з конфетті</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
         <item quantity="one">Показати пристрій, з якого ви можете звірити цей сеанс просто зараз</item>
@@ -2058,4 +2058,32 @@
     <string name="login_signin">Увійти</string>
     <string name="login_signin_to">Увійти до %1$s</string>
     <string name="login_social_signin_with">Увійти через %s</string>
+    <string name="create_room_encryption_description">Після увімкнення, шифрування не може бути вимкнено.</string>
+    <string name="create_room_encryption_title">Увімкнути шифрування</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Увімкнути шифрування</string>
+    <string name="room_settings_enable_encryption_dialog_title">Увімкнути шифрування\?</string>
+    <string name="room_settings_enable_encryption_warning">Після увімкнення, шифрування не може бути вимкнено.</string>
+    <string name="command_description_rainbow_emote">Надсилає емоджі розмальоване веселково</string>
+    <string name="room_list_sharing_header_recent_rooms">Недавні кімнати</string>
+    <string name="room_member_open_or_create_dm">Безпосереднє повідомлення</string>
+    <string name="room_member_power_level_custom_in">Не типовий (%1$d) у %2$s</string>
+    <string name="room_member_power_level_custom">Не типовий</string>
+    <string name="notice_power_level_diff">%1$s з %2$s до %3$s</string>
+    <string name="notice_power_level_changed">%1$s змінює рівень доступу %2$s.</string>
+    <string name="notice_widget_jitsi_modified_by_you">Ви змінили відеоконференцію</string>
+    <string name="notice_widget_jitsi_modified">%1$s змінює відеоконференцію</string>
+    <string name="notice_widget_jitsi_removed_by_you">Ви завершили відеоконфернцію</string>
+    <string name="notice_widget_jitsi_added">%1$s розпочинає відеоконференцію</string>
+    <string name="notice_widget_jitsi_removed">%1$s завершує відеоконференцію</string>
+    <string name="notice_widget_jitsi_added_by_you">Ви розпочали відеоконференцію</string>
+    <string name="room_profile_section_admin">Дії адміністратора</string>
+    <string name="room_member_power_level_invites">Запрошення</string>
+    <string name="room_member_power_level_moderators">Модератори</string>
+    <string name="room_member_power_level_admins">Адміністратори</string>
+    <string name="room_profile_leaving_room">Залишення кімнати…</string>
+    <string name="room_member_power_level_default_in">Типово у %1$s</string>
+    <string name="room_member_power_level_moderator_in">Модератор у %1$s</string>
+    <string name="room_member_power_level_admin_in">Адміністратор у %1$s</string>
+    <string name="room_member_power_level_users">Користувачі</string>
+    <string name="spaces_invited_header">Запрошення</string>
 </resources>

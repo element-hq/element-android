@@ -322,7 +322,7 @@ class RoomDetailFragment @Inject constructor(
                 startCallActivityResultLauncher = startCallActivityResultLauncher,
                 showDialogWithMessage = ::showDialogWithMessage,
                 onTapToReturnToCall = ::onTapToReturnToCall
-        ).register()
+        )
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(views.roomToolbar)
         setupRecyclerView()
@@ -549,15 +549,15 @@ class RoomDetailFragment @Inject constructor(
                 .fromRootView(views.rootConstraintLayout)
                 .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
                 .setOnEmojiPopupShownListener {
-                    views.composerLayout.views.composerEmojiButton.let {
-                        it.setImageResource(R.drawable.ic_keyboard)
-                        it.contentDescription = getString(R.string.a11y_close_emoji_picker)
+                    views.composerLayout.views.composerEmojiButton.apply {
+                        contentDescription = getString(R.string.a11y_close_emoji_picker)
+                        setImageResource(R.drawable.ic_keyboard)
                     }
                 }
                 .setOnEmojiPopupDismissListener {
-                    views.composerLayout.views.composerEmojiButton.let {
-                        it.setImageResource(R.drawable.ic_insert_emoji)
-                        it.contentDescription = getString(R.string.a11y_open_emoji_picker)
+                    views.composerLayout.views.composerEmojiButton.apply {
+                        contentDescription = getString(R.string.a11y_open_emoji_picker)
+                        setImageResource(R.drawable.ic_insert_emoji)
                     }
                 }
                 .build(views.composerLayout.views.composerEditText)
@@ -1198,6 +1198,10 @@ class RoomDetailFragment @Inject constructor(
             override fun onRichContentSelected(contentUri: Uri): Boolean {
                 return sendUri(contentUri)
             }
+
+            override fun onTextBlankStateChanged(isBlank: Boolean) {
+                // No op
+            }
         }
     }
 
@@ -1211,6 +1215,7 @@ class RoomDetailFragment @Inject constructor(
             views.composerLayout.collapse(true)
             lockSendButton = true
             roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
+            emojiPopup.dismiss()
         }
     }
 
@@ -1260,7 +1265,7 @@ class RoomDetailFragment @Inject constructor(
             if (state.tombstoneEvent == null) {
                 if (state.canSendMessage) {
                     views.composerLayout.visibility = View.VISIBLE
-                    views.composerLayout.setRoomEncrypted(summary.isEncrypted, summary.roomEncryptionTrustLevel)
+                    views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                     views.notificationAreaView.render(NotificationAreaView.State.Hidden)
                 } else {
                     views.composerLayout.visibility = View.GONE

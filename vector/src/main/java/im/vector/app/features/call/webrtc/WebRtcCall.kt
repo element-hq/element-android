@@ -27,6 +27,7 @@ import im.vector.app.features.call.CameraProxy
 import im.vector.app.features.call.CameraType
 import im.vector.app.features.call.CaptureFormat
 import im.vector.app.features.call.VectorCallActivity
+import im.vector.app.features.call.lookup.sipNativeLookup
 import im.vector.app.features.call.utils.asWebRTC
 import im.vector.app.features.call.utils.awaitCreateAnswer
 import im.vector.app.features.call.utils.awaitCreateOffer
@@ -51,6 +52,7 @@ import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
+import org.matrix.android.sdk.api.session.room.model.call.CallAssertedIdentityContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
@@ -104,6 +106,7 @@ class WebRtcCall(
         fun onCaptureStateChanged() {}
         fun onCameraChanged() {}
         fun onHoldUnhold() {}
+        fun assertedIdentityChanged() {}
         fun onTick(formattedDuration: String) {}
         override fun onStateUpdate(call: MxCall) {}
     }
@@ -168,6 +171,8 @@ class WebRtcCall(
 
     // This value is used to track localOnHold when changing remoteOnHold value
     private var wasLocalOnHold = false
+    var remoteAssertedIdentity: CallAssertedIdentityContent.AssertedIdentity? = null
+        private set
 
     var offerSdp: CallInviteContent.Offer? = null
 
@@ -618,7 +623,7 @@ class WebRtcCall(
                 wasLocalOnHold = isLocalOnHold
                 remoteOnHold = true
                 isLocalOnHold = true
-                direction = RtpTransceiver.RtpTransceiverDirection.INACTIVE
+                direction = RtpTransceiver.RtpTransceiverDirection.SEND_ONLY
                 timer.pause()
             } else {
                 remoteOnHold = false
@@ -873,6 +878,38 @@ class WebRtcCall(
                 listeners.forEach {
                     tryOrNull { it.onHoldUnhold() }
                 }
+            }
+        }
+    }
+
+    fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {
+        sessionScope?.launch(dispatcher) {
+            val session = sessionProvider.get() ?: return@launch
+            val newAssertedIdentity = callAssertedIdentityContent.assertedIdentity ?: return@launch
+            if (newAssertedIdentity.id == null && newAssertedIdentity.displayName == null) {
+                Timber.v("Asserted identity received with no relevant information, skip")
+                return@launch
+            }
+            remoteAssertedIdentity = newAssertedIdentity
+            if (newAssertedIdentity.id != null) {
+                val nativeUserId = session.sipNativeLookup(newAssertedIdentity.id!!).firstOrNull()?.userId
+                if (nativeUserId != null) {
+                    val resolvedUser = tryOrNull {
+                        session.resolveUser(nativeUserId)
+                    }
+                    if (resolvedUser != null) {
+                        remoteAssertedIdentity = newAssertedIdentity.copy(
+                                id = nativeUserId,
+                                avatarUrl = resolvedUser.avatarUrl,
+                                displayName = resolvedUser.displayName
+                        )
+                    } else {
+                        remoteAssertedIdentity = newAssertedIdentity.copy(id = nativeUserId)
+                    }
+                }
+            }
+            listeners.forEach {
+                tryOrNull { it.assertedIdentityChanged() }
             }
         }
     }

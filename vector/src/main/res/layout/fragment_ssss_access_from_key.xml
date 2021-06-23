@@ -25,6 +25,7 @@
 
         <TextView
             android:id="@+id/ssss_restore_with_key"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -32,7 +33,6 @@
             android:layout_marginEnd="16dp"
             android:text="@string/recovery_key"
             android:textColor="?vctr_content_primary"
-            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ssss_shield"
@@ -41,11 +41,11 @@
 
         <TextView
             android:id="@+id/ssss_restore_with_key_text"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:textColor="?vctr_content_primary"
-            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ssss_restore_with_key"
@@ -81,7 +81,7 @@
 
         <Button
             android:id="@+id/ssss_key_use_file"
-            style="@style/VectorButtonStyleText"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/use_file"
@@ -90,7 +90,7 @@
 
         <Button
             android:id="@+id/ssss_key_submit"
-            style="@style/VectorButtonStyleText"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_continue"

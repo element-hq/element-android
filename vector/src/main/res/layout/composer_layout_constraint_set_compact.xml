@@ -28,16 +28,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <View
-        android:id="@+id/related_message_background_bottom_separator"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="?vctr_list_separator"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <ImageView
         android:id="@+id/composerRelatedMessageAvatar"
         android:layout_width="40dp"
@@ -129,22 +119,24 @@
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
         app:layout_constraintStart_toEndOf="@id/composerEditText"
         app:layout_constraintTop_toTopOf="@id/sendButton"
+        app:layout_goneMarginBottom="57dp"
         tools:ignore="MissingPrefix" />
 
-    <im.vector.app.core.ui.views.ShieldImageView
-        android:id="@+id/composerShieldImageView"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        app:layout_constraintBottom_toBottomOf="@id/sendButton"
-        app:layout_constraintEnd_toStartOf="@+id/composerEditText"
-        app:layout_constraintStart_toEndOf="@+id/composerEmojiButton"
-        app:layout_constraintTop_toTopOf="@id/sendButton"
-        app:layout_goneMarginStart="12dp"
-        tools:visibility="visible" />
+    <FrameLayout
+        android:id="@+id/composerEditTextOuterBorder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/sendButton"
+        app:layout_constraintStart_toEndOf="@id/attachmentButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="12dp" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
-        style="@style/ComposerEditTextStyle"
+        style="@style/Widget.Vector.EditText.Composer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/room_message_placeholder_not_encrypted"
@@ -152,7 +144,7 @@
         android:nextFocusUp="@id/composerEditText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/attachmentButton"
-        app:layout_constraintStart_toEndOf="@+id/composerShieldImageView"
+        app:layout_constraintStart_toEndOf="@+id/composerEmojiButton"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginStart="8dp"
         tools:text="@tools:sample/lorem/random" />
@@ -165,11 +157,12 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/a11y_open_emoji_picker"
         android:src="@drawable/ic_insert_emoji"
-        android:tint="?android:textColorHint"
+        android:tint="?vctr_content_quaternary"
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
-        app:layout_constraintEnd_toStartOf="@+id/composerShieldImageView"
+        app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/sendButton" />
+        app:layout_constraintTop_toTopOf="@id/sendButton"
+        tools:ignore="MissingPrefix" />
 
     <ImageButton
         android:id="@+id/sendButton"
@@ -179,9 +172,11 @@
         android:contentDescription="@string/send"
         android:scaleType="center"
         android:src="@drawable/ic_send"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/attachmentButton"
-        tools:ignore="MissingPrefix" />
+        tools:ignore="MissingPrefix"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

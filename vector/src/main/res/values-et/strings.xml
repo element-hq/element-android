@@ -1514,7 +1514,7 @@
     <string name="select_room_directory">Vali jututubade loend</string>
     <string name="directory_server_fail_to_retrieve_server">Server kas pole kättesaadav või on ülekoormatud</string>
     <string name="directory_server_type_homeserver">Sisesta koduserveri nimi, mille avalike jututubade loendit soovid näha</string>
-    <string name="directory_server_placeholder">Koduserveri aadress</string>
+    <string name="directory_server_placeholder">Serveri aadress</string>
     <string name="directory_server_all_rooms_on_server">Kõik jututoad %s serveris</string>
     <string name="directory_server_native_rooms">Kõik %s jututoad</string>
     <string name="lock_screen_hint">Kirjuta siia…</string>
@@ -2676,7 +2676,7 @@
     <string name="labs_use_restricted_join_rule_desc">Hoiatus: eeldab serveripoolset tuge ning katselise jututoa versiooni kasutamist</string>
     <string name="labs_use_restricted_join_rule">Katseline kogukonnakeskus - ligipääs on piiratud.</string>
     <string name="you_are_invited">Sa oled saanud kutse</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on võimalus siduda jututubasid ja inimesi nii tööks, meelelahutuseks kui lihtsalt sinu jaoks.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.</string>
     <string name="spaces_beta_welcome_to_spaces">Tere tulemast kasutama kogukonnakeskuseid!</string>
     <string name="space_add_existing_rooms">Lisa olemasolevaid jututubasid ja kogukonnakeskuseid</string>
     <string name="space_leave_prompt_msg">Kas oled kindel, et soovid lahkuda kogukonnakeskusest\?</string>
@@ -2771,4 +2771,39 @@
     <string name="send_file_step_compressing_image">Teen pildi väiksemaks…</string>
     <string name="use_as_default_and_do_not_ask_again">Kasuta vaikeseadistusena ja ära küsi uuesti</string>
     <string name="option_always_ask">Alati küsi</string>
+    <string name="this_space_has_no_rooms_admin">Mõned mitteavalikud jututoad võivad olla peidetud. Nendega liitumiseks vajad kutset.</string>
+    <string name="this_space_has_no_rooms_not_admin">Mõned mitteavalikud jututoad võivad olla peidetud. Nendega liitumiseks vajad kutset.
+\nUue jututubade lisamiseks sul õigused puuduvad.</string>
+    <string name="this_space_has_no_rooms">Selles kogukonnakeskuses pole jututube</string>
+    <string name="spaces_no_server_support_description">Lisateavet saad oma koduserveri haldajalt</string>
+    <string name="spaces_no_server_support_title">Tundub, et sinu koduserver veel ei võimalda kogukonnakeskuste kasutamist</string>
+    <string name="spaces_feeling_experimental_subspace">Kas sa tahad katsetada\?
+\nSa võid kogukonnakeskusele lisada ka teisi kogukonnakeskuseid.</string>
+    <string name="labs_space_show_orphan_in_home">Katseline kogukonnakeskus, mis näitab avalehel vaid hüljatud jututube</string>
+    <string name="space_add_rooms">Lisa jututube</string>
+    <string name="space_leave_prompt_msg_as_admin">Sa oled selle kogukonnakeskuse haldaja. Enne oma lahkumist palun lisa siia veel vähemalt üks uus haldaja.</string>
+    <string name="space_leave_prompt_msg_private">See ei ole avalik kogukonnakeskus. Ilma kutseta sa ei saa uuesti liituda.</string>
+    <string name="space_leave_prompt_msg_only_you">Sa oled siin viimane osaleja. Kui sa nüüd lahkud, siis mitte keegi, kaasa arvatud sa ise, ei saa hiljem enam liituda.</string>
+    <string name="invite_to_space">Kutse kogukonnakeskusesse %s</string>
+    <string name="a11y_beta">Tegemist on beeta-taseme funktsionaalsusega</string>
+    <string name="give_feedback">Jaga tagasisidet</string>
+    <string name="feedback_failed">Tagasiside saatmine ei õnnestunud (%s)</string>
+    <string name="feedback_sent">Tänud, sinu tagasiside saatmine õnnestus</string>
+    <string name="you_may_contact_me">Kui sul on lisaküsimusi, siis vastan neile hea meelega</string>
+    <string name="send_feedback_space_info">Sa kasutad kogukonnakeskuste beetaversiooni. Sinu saadetud teabe alusel saame teha parandusi selle järgmistes versioonides. Saadetud info parimaks kasutamiseks lisame sinna ka sinu kasutatava operatsioonisüsteemi nime ja sinu kasutajanime.</string>
+    <string name="feedback">Tagasiside</string>
+    <string name="send_feedback_space_title">Tagasiside kogukonnakeskuste kohta</string>
+    <string name="error_jitsi_join_conf">Vabandust, rühmakõnega liitumisel tekkis viga</string>
+    <string name="unnamed_room">Nimetu jututuba</string>
+    <string name="private_space">Privaatne kogukonnakeskus</string>
+    <string name="public_space">Avalik kogukonnakeskus</string>
+    <string name="a11y_public_space">See kogukonnakeskus on avalik</string>
+    <string name="call_transfer_unknown_person">Tundmatu isik</string>
+    <string name="call_transfer_transfer_to_title">Suuna kasutajale %1$s</string>
+    <string name="call_transfer_consulting_with">Pean nõu kasutajaga %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">See server on juba loendis olemas</string>
+    <string name="directory_add_a_new_server_error">Seda serverit kas ei leidu või seal puudub jututubade loend</string>
+    <string name="directory_add_a_new_server_prompt">Sisesta serveri nimi, mille sisu sa soovid uurida.</string>
+    <string name="directory_add_a_new_server">Lisa uus server</string>
+    <string name="directory_your_server">Sinu server</string>
 </resources>

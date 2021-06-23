@@ -25,13 +25,6 @@
         android:background="?vctr_list_separator"
         tools:ignore="MissingConstraints" />
 
-    <View
-        android:id="@+id/related_message_background_bottom_separator"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?vctr_list_separator"
-        tools:ignore="MissingConstraints" />
-
     <ImageView
         android:id="@+id/composerRelatedMessageAvatar"
         android:layout_width="0dp"
@@ -104,15 +97,15 @@
         android:tint="?android:textColorHint"
         tools:ignore="MissingConstraints" />
 
-    <im.vector.app.core.ui.views.ShieldImageView
-        android:id="@+id/composerShieldImageView"
+    <FrameLayout
+        android:id="@+id/composerEditTextOuterBorder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:ignore="MissingConstraints" />
+        android:background="@drawable/bg_composer_edit_text" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
-        style="@style/ComposerEditTextStyle"
+        style="@style/Widget.Vector.EditText.Composer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:nextFocusLeft="@id/composerEditText"
@@ -127,8 +120,8 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/a11y_open_emoji_picker"
         android:src="@drawable/ic_insert_emoji"
-        android:tint="?android:textColorHint"
-        tools:ignore="MissingConstraints" />
+        app:tint="?vctr_content_tertiary"
+        tools:ignore="MissingConstraints,MissingPrefix" />
 
     <ImageButton
         android:id="@+id/sendButton"

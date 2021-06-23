@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".debug.DebugVectorButtonStylesActivity"
+    tools:ignore="HardcodedText">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Note: Default style is @style/Widget.Vector.Button in the theme -->
+        <Button
+            style="@style/Widget.Vector.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Default" />
+
+        <Button
+            style="@style/Widget.Vector.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Line1\nLine 2" />
+
+        <Button
+            style="@style/Widget.Vector.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Default disabled" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Text disabled" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Positive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Positive" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Positive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Positive disabled" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Destructive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Destructive" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Destructive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Destructive disabled" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Unelevated.Bot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bot" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Unelevated.Bot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Bot disabled" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Outline" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Outline disabled" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.Poll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Poll " />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.Poll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Poll disabled" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/palette_azure"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <Button
+                style="@style/Widget.Vector.Button.Text.Alerter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Alerter" />
+
+            <Button
+                style="@style/Widget.Vector.Button.Text.Alerter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="Alerter disabled" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

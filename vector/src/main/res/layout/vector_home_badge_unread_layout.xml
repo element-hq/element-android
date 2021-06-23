@@ -7,6 +7,7 @@
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/actionUnreadCounterBadgeView"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
@@ -18,7 +19,6 @@
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
         android:textColor="?colorOnError"
-        android:textSize="10sp"
         tools:background="@drawable/bg_unread_highlight"
         tools:text="4" />
 

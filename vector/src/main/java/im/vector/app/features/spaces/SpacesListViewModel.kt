@@ -29,23 +29,30 @@ import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.ScSdkPreferences
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.group
 import im.vector.app.space
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.group.groupSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataEvent
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
+import org.matrix.android.sdk.api.session.space.SpaceOrderUtils
+import org.matrix.android.sdk.api.session.space.model.SpaceOrderContent
+import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
@@ -148,36 +155,85 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 }.disposeOnClear()
     }
 
-//    private fun observeSelectionState() {
-//        selectSubscribe(SpaceListViewState::selectedSpace) { spaceSummary ->
-//            if (spaceSummary != null) {
-//                // We only want to open group if the updated selectedGroup is a different one.
-//                if (currentGroupId != spaceSummary.roomId) {
-//                    currentGroupId = spaceSummary.roomId
-//                    _viewEvents.post(SpaceListViewEvents.OpenSpace)
-//                }
-//                appStateHandler.setCurrentSpace(spaceSummary.roomId)
-//            } else {
-//                // If selected group is null we force to default. It can happens when leaving the selected group.
-//                setState {
-//                    copy(selectedSpace = this.asyncSpaces()?.find { it.roomId == ALL_COMMUNITIES_GROUP_ID })
-//                }
-//            }
-//        }
-//    }
-
     override fun handle(action: SpaceListAction) {
         when (action) {
-            is SpaceListAction.SelectSpace -> handleSelectSpace(action)
-            is SpaceListAction.LeaveSpace -> handleLeaveSpace(action)
-            SpaceListAction.AddSpace -> handleAddSpace()
-            is SpaceListAction.ToggleExpand -> handleToggleExpand(action)
-            is SpaceListAction.OpenSpaceInvite -> handleSelectSpaceInvite(action)
+            is SpaceListAction.SelectSpace       -> handleSelectSpace(action)
+            is SpaceListAction.LeaveSpace        -> handleLeaveSpace(action)
+            SpaceListAction.AddSpace             -> handleAddSpace()
+            is SpaceListAction.ToggleExpand      -> handleToggleExpand(action)
+            is SpaceListAction.OpenSpaceInvite   -> handleSelectSpaceInvite(action)
             is SpaceListAction.SelectLegacyGroup -> handleSelectGroup(action)
+            is SpaceListAction.MoveSpace         -> handleMoveSpace(action)
+            is SpaceListAction.OnEndDragging     -> handleEndDragging()
+            is SpaceListAction.OnStartDragging   -> handleStartDragging()
         }
     }
 
 // PRIVATE METHODS *****************************************************************************
+
+    var preDragExpandedState: Map<String, Boolean>? = null
+    private fun handleStartDragging() = withState { state ->
+        preDragExpandedState = state.expandedStates.toMap()
+        setState {
+            copy(
+                    expandedStates = expandedStates.map {
+                        it.key to false
+                    }.toMap()
+            )
+        }
+    }
+
+    private fun handleEndDragging() {
+        // restore expanded state
+        setState {
+            copy(
+                    expandedStates = preDragExpandedState.orEmpty()
+            )
+        }
+    }
+
+    private fun handleMoveSpace(action: SpaceListAction.MoveSpace) = withState { state ->
+        state.rootSpacesOrdered ?: return@withState
+        val orderCommands = SpaceOrderUtils.orderCommandsForMove(
+                state.rootSpacesOrdered.map {
+                    it.roomId to (state.spaceOrderLocalEchos?.get(it.roomId) ?: state.spaceOrderInfo?.get(it.roomId))
+                },
+                action.spaceId,
+                action.delta
+        )
+
+        // local echo
+        val updatedLocalEchos = state.spaceOrderLocalEchos.orEmpty().toMutableMap().apply {
+            orderCommands.forEach {
+                this[it.spaceId] = it.order
+            }
+        }.toMap()
+
+        setState {
+            copy(
+                    rootSpacesOrdered = state.rootSpacesOrdered.toMutableList().apply {
+                        val index = indexOfFirst { it.roomId == action.spaceId }
+                        val moved = removeAt(index)
+                        add(index + action.delta, moved)
+                    },
+                    spaceOrderLocalEchos = updatedLocalEchos
+            )
+        }
+        session.coroutineScope.launch {
+            orderCommands.forEach {
+                session.getRoom(it.spaceId)?.updateAccountData(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER,
+                        SpaceOrderContent(order = it.order).toContent()
+                )
+            }
+        }
+
+        // restore expanded state
+        setState {
+            copy(
+                    expandedStates = preDragExpandedState.orEmpty()
+            )
+        }
+    }
 
     private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
         val groupingMethod = state.selectedGroupingMethod
@@ -229,24 +285,43 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
             excludeType = listOf(/**RoomType.MESSAGING,$*/
                     null)
         }
-        Observable.combineLatest<User?, List<RoomSummary>, List<RoomSummary>>(
-                session
-                        .rx()
+
+        val rxSession = session.rx()
+
+        Observable.combineLatest<User?, List<RoomSummary>, List<RoomAccountDataEvent>, List<RoomSummary>>(
+                rxSession
                         .liveUser(session.myUserId)
                         .map {
                             it.getOrNull()
                         },
-                session
-                        .rx()
+                rxSession
                         .liveSpaceSummaries(spaceSummaryQueryParams),
-                BiFunction { _, communityGroups ->
+                session.accountDataService().getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)).asObservable(),
+                { _, communityGroups, _ ->
                     communityGroups
                 }
         )
                 .execute { async ->
+                    val rootSpaces = session.spaceService().getRootSpaceSummaries()
+                    val orders = rootSpaces.map {
+                        it.roomId to session.getRoom(it.roomId)
+                                ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
+                                ?.content.toModel<SpaceOrderContent>()
+                                ?.safeOrder()
+                    }.toMap()
                     copy(
                             asyncSpaces = async,
-                            rootSpaces = session.spaceService().getRootSpaceSummaries()
+                            rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),
+                            spaceOrderInfo = orders
+                    )
+                }
+
+        // clear local echos on update
+        session.accountDataService()
+                .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
+                .asObservable().execute {
+                    copy(
+                            spaceOrderLocalEchos = emptyMap()
                     )
                 }
     }

@@ -62,7 +62,6 @@ internal class RoomSyncAccountDataHandler @Inject constructor(private val roomTa
     private fun handleGeneric(roomEntity: RoomEntity, content: JsonDict?, eventType: String) {
         val existing = roomEntity.accountData.where().equalTo(RoomAccountDataEntityFields.TYPE, eventType).findFirst()
         if (existing != null) {
-            // Update current value
             existing.contentStr = ContentMapper.map(content)
         } else {
             val roomAccountData = RoomAccountDataEntity(

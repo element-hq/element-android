@@ -12,6 +12,8 @@
 .externalNativeBuild
 
 /tmp
+/fastlane/private
+/fastlane/report.xml
 
 ktlint
 

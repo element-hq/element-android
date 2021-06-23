@@ -10,14 +10,14 @@
 
     <TextView
         android:id="@+id/bootstrapSetupSecureText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="@string/bottom_sheet_setup_secure_backup_subtitle"
-        android:textColor="?vctr_content_primary"
-        android:textSize="14sp" />
+        android:textColor="?vctr_content_primary" />
 
     <View
         android:layout_width="match_parent"
@@ -43,8 +43,8 @@
         app:actionDescription="@string/bottom_sheet_setup_secure_backup_security_key_subtitle"
         app:actionTitle="@string/bottom_sheet_setup_secure_backup_security_key_title"
         app:leftIcon="@drawable/ic_security_key_24dp"
-        app:tint="?vctr_content_primary"
         app:rightIcon="@drawable/ic_arrow_right"
+        app:tint="?vctr_content_primary"
         tools:visibility="visible" />
 
     <View
@@ -64,8 +64,8 @@
         app:actionDescription="@string/bottom_sheet_setup_secure_backup_security_phrase_subtitle"
         app:actionTitle="@string/bottom_sheet_setup_secure_backup_security_phrase_title"
         app:leftIcon="@drawable/ic_security_phrase_24dp"
-        app:tint="?vctr_content_primary"
         app:rightIcon="@drawable/ic_arrow_right"
+        app:tint="?vctr_content_primary"
         tools:visibility="visible" />
 
     <View
@@ -75,16 +75,16 @@
 
     <TextView
         android:id="@+id/bootstrapSetupWarningTextView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:drawablePadding="4dp"
         android:text="@string/reset_secure_backup_warning"
         android:textColor="?colorError"
-        android:drawablePadding="4dp"
-        android:textSize="14sp"
         app:drawableStartCompat="@drawable/ic_warning_badge" />
 
 </LinearLayout>

@@ -28,6 +28,10 @@ data class CreateSpaceState(
         val step: Step = Step.ChooseType,
         val spaceType: SpaceType? = null,
         val spaceTopology: SpaceTopology? = null,
+        val homeServerName: String? = null,
+        val aliasLocalPart: String? = null,
+        val aliasManuallyModified: Boolean = false,
+        val aliasVerificationTask: Async<Boolean> = Uninitialized,
         val nameInlineError: String? = null,
         val defaultRooms: Map<Int /** position in form */, String?>? = null,
         val creationResult: Async<String> = Uninitialized

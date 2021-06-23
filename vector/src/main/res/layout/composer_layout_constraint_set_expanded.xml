@@ -26,15 +26,6 @@
         app:layout_constraintStart_toStartOf="@+id/related_message_background"
         app:layout_constraintTop_toTopOf="@id/related_message_background" />
 
-    <View
-        android:id="@+id/related_message_background_bottom_separator"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="?vctr_list_separator"
-        app:layout_constraintBottom_toBottomOf="@id/related_message_background"
-        app:layout_constraintEnd_toEndOf="@id/related_message_background"
-        app:layout_constraintStart_toStartOf="@+id/related_message_background" />
-
     <ImageView
         android:id="@+id/composerRelatedMessageAvatar"
         android:layout_width="40dp"
@@ -51,6 +42,7 @@
 
     <TextView
         android:id="@+id/composerRelatedMessageTitle"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -76,6 +68,7 @@
 
     <TextView
         android:id="@+id/composerRelatedMessageContent"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -139,26 +132,29 @@
         app:layout_constraintTop_toBottomOf="parent"
         tools:ignore="MissingPrefix" />
 
-    <im.vector.app.core.ui.views.ShieldImageView
-        android:id="@+id/composerShieldImageView"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/sendButton"
-        app:layout_constraintEnd_toStartOf="@+id/composerEditText"
-        app:layout_constraintStart_toEndOf="@+id/composerEmojiButton"
-        app:layout_constraintTop_toTopOf="@+id/sendButton"
-        app:layout_goneMarginStart="12dp" />
+    <FrameLayout
+        android:id="@+id/composerEditTextOuterBorder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/sendButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
+        app:layout_goneMarginEnd="12dp" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
-        style="@style/ComposerEditTextStyle"
+        style="@style/Widget.Vector.EditText.Composer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintStart_toEndOf="@+id/composerShieldImageView"
+        app:layout_constraintStart_toEndOf="@+id/composerEmojiButton"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
         app:layout_goneMarginStart="8dp"
         tools:text="@tools:sample/lorem/random" />
@@ -171,11 +167,12 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/a11y_open_emoji_picker"
         android:src="@drawable/ic_insert_emoji"
-        android:tint="?android:textColorHint"
         app:layout_constraintTop_toTopOf="@+id/sendButton"
         app:layout_constraintBottom_toBottomOf="@+id/sendButton"
-        app:layout_constraintEnd_toStartOf="@+id/composerShieldImageView"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/composerEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="?vctr_content_quaternary"
+        tools:ignore="MissingPrefix" />
 
     <ImageButton
         android:id="@+id/sendButton"
@@ -185,10 +182,12 @@
         android:contentDescription="@string/send"
         android:scaleType="center"
         android:src="@drawable/ic_send"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
         app:layout_constraintVertical_bias="1"
-        tools:ignore="MissingPrefix" />
+        tools:ignore="MissingPrefix"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

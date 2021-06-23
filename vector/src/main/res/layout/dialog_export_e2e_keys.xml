@@ -12,11 +12,11 @@
 
     <TextView
         android:id="@+id/exportDialogText"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/encryption_export_notice"
         android:textColor="?vctr_content_primary"
-        android:textSize="16sp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <im.vector.app.core.ui.views.RevealPasswordImageView

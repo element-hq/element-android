@@ -17,10 +17,11 @@
 
             <TextView
                 android:id="@+id/loginTitle"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:textColor="?vctr_content_primary"
                 tools:text="@string/login_signin_to" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -86,7 +87,7 @@
 
                 <Button
                     android:id="@+id/forgetPasswordButton"
-                    style="@style/Style.Vector.Login.Button.Text"
+                    style="@style/Widget.Vector.Button.Text.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -96,7 +97,7 @@
 
                 <Button
                     android:id="@+id/loginSubmit"
-                    style="@style/Style.Vector.Login.Button"
+                    style="@style/Widget.Vector.Button.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -118,13 +119,13 @@
 
                 <TextView
                     android:id="@+id/loginSocialLoginHeader"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:text="@string/login_social_continue"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                    android:textSize="14sp" />
+                    android:textColor="?vctr_content_secondary" />
 
                 <im.vector.app.features.login.SocialLoginButtonsView
                     android:id="@+id/loginSocialLoginButtons"

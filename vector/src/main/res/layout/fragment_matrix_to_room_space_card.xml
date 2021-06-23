@@ -42,6 +42,7 @@
 
         <TextView
             android:id="@+id/matrixToCardNameText"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -49,13 +50,13 @@
             android:singleLine="true"
             android:textAlignment="textStart"
             android:textColor="?vctr_content_primary"
-            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
             tools:text="@sample/rooms.json/data/name" />
 
         <TextView
             android:id="@+id/matrixToCardAliasText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -63,7 +64,6 @@
             android:singleLine="true"
             android:textAlignment="textStart"
             android:textColor="?vctr_content_secondary"
-            android:textSize="15sp"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
             app:layout_goneMarginTop="0dp"
@@ -81,11 +81,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/matrixToAccessText"
             app:tint="?vctr_content_secondary"
+            tools:ignore="MissingPrefix"
             tools:src="@drawable/ic_public_room"
             tools:visibility="visible" />
 
         <TextView
             android:id="@+id/matrixToAccessText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -131,6 +133,7 @@
 
             <TextView
                 android:id="@+id/spaceChildMemberCountText"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -141,6 +144,7 @@
 
         <TextView
             android:id="@+id/matrixToCardDescText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -148,7 +152,6 @@
             android:maxLines="4"
             android:textAlignment="textStart"
             android:textColor="?vctr_content_secondary"
-            android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@id/matrixToMemberPills"
             tools:text="@sample/rooms.json/data/topic" />
 
@@ -211,11 +214,11 @@
         <!-- layout_goneMarginStart: add half the width of the avatar: 15dp -->
         <TextView
             android:id="@+id/peopleYouMayKnowText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:textColor="?vctr_content_secondary"
-            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/knownMember1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/knownMember5"
@@ -251,7 +254,7 @@
 
         <!--        <Button-->
         <!--            android:id="@+id/matrixToCardSecondaryButton"-->
-        <!--            style="@style/VectorButtonStyleOutlined"-->
+        <!--            style="@style/Widget.Vector.Button.Outlined"-->
         <!--            android:layout_width="0dp"-->
         <!--            android:layout_height="wrap_content"-->
         <!--            android:layout_marginTop="8dp"-->

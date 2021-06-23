@@ -33,9 +33,9 @@ sealed class ActivityOtherThemes(@StyleRes val light: Int,
                                  @StyleRes val sc_dark_colored: Int) {
 
     object Default : ActivityOtherThemes(
-            R.style.AppTheme_Light,
-            R.style.AppTheme_Dark,
-            R.style.AppTheme_Black,
+            R.style.Theme_Vector_Light,
+            R.style.Theme_Vector_Dark,
+            R.style.Theme_Vector_Black,
             R.style.AppTheme_SC_Light,
             R.style.AppTheme_SC,
             R.style.AppTheme_SC_Dark,
@@ -44,9 +44,9 @@ sealed class ActivityOtherThemes(@StyleRes val light: Int,
     )
 
     object Launcher : ActivityOtherThemes(
-            R.style.AppTheme_Launcher,
-            R.style.AppTheme_Launcher,
-            R.style.AppTheme_Launcher,
+            R.style.Theme_Vector_Launcher,
+            R.style.Theme_Vector_Launcher,
+            R.style.Theme_Vector_Launcher,
             R.style.AppTheme_Launcher_SC,
             R.style.AppTheme_Launcher_SC,
             R.style.AppTheme_Launcher_SC,
@@ -55,9 +55,9 @@ sealed class ActivityOtherThemes(@StyleRes val light: Int,
     )
 
     object AttachmentsPreview : ActivityOtherThemes(
-            R.style.AppTheme_AttachmentsPreview,
-            R.style.AppTheme_AttachmentsPreview,
-            R.style.AppTheme_AttachmentsPreview,
+            R.style.Theme_Vector_Black_AttachmentsPreview,
+            R.style.Theme_Vector_Black_AttachmentsPreview,
+            R.style.Theme_Vector_Black_AttachmentsPreview,
             R.style.AppTheme_AttachmentsPreview_SC,
             R.style.AppTheme_AttachmentsPreview_SC,
             R.style.AppTheme_AttachmentsPreview_SC,
@@ -66,9 +66,9 @@ sealed class ActivityOtherThemes(@StyleRes val light: Int,
     )
 
     object VectorAttachmentsPreview : ActivityOtherThemes(
-            R.style.AppTheme_Transparent,
-            R.style.AppTheme_Transparent,
-            R.style.AppTheme_Transparent,
+            R.style.Theme_Vector_Black_Transparent,
+            R.style.Theme_Vector_Black_Transparent,
+            R.style.Theme_Vector_Black_Transparent,
             R.style.AppTheme_Transparent_SC,
             R.style.AppTheme_Transparent_SC,
             R.style.AppTheme_Transparent_SC,

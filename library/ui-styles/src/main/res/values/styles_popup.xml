@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Vector.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">?vctr_content_primary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:dropDownHorizontalOffset">0dp</item>
+        <item name="android:dropDownVerticalOffset">0dp</item>
+    </style>
+
+</resources>

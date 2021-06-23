@@ -37,6 +37,7 @@
 
     <TextView
         android:id="@+id/matrixItemTitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -44,7 +45,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
-        android:textSize="16sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/matrixItemSubtitle"
         app:layout_constraintEnd_toStartOf="@+id/matrixItemPowerLevelLabel"
@@ -55,6 +55,7 @@
 
     <TextView
         android:id="@+id/matrixItemSubtitle"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -62,7 +63,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_secondary"
-        android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/matrixItemPowerLevelLabel"
@@ -73,10 +73,11 @@
 
     <TextView
         android:id="@+id/matrixItemPowerLevelLabel"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_primary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/matrixItemEditable"

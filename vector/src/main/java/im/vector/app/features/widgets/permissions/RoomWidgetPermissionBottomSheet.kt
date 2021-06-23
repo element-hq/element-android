@@ -64,8 +64,8 @@ class RoomWidgetPermissionBottomSheet :
     }
 
     private fun setupViews() {
-        views.widgetPermissionDecline.setOnClickListener { doDecline() }
-        views.widgetPermissionContinue.setOnClickListener { doAccept() }
+        views.widgetPermissionDecline.debouncedClicks { doDecline() }
+        views.widgetPermissionContinue.debouncedClicks { doAccept() }
     }
 
     override fun invalidate() = withState(viewModel) { state ->

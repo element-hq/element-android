@@ -38,6 +38,7 @@
 
         <TextView
             android:id="@+id/otherUserNameText"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -45,8 +46,8 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:textColor="?vctr_content_primary"
-            android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/otherUserAvatarImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/otherUserAvatarImageView"
             app:layout_constraintTop_toTopOf="@+id/otherUserAvatarImageView"
