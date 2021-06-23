@@ -69,7 +69,7 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
     private fun showTestDialog(theme: Int) {
         MaterialAlertDialogBuilder(this, theme)
                 .setTitle("Dialog title")
-                .setMessage("Dialog content")
+                .setMessage("Dialog content\nLine 2")
                 .setIcon(R.drawable.ic_debug_icon)
                 .setPositiveButton("Positive", null)
                 .setNegativeButton("Negative", null)
