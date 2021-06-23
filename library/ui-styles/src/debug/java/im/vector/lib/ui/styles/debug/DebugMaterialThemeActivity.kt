@@ -50,11 +50,15 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
         }
 
         views.debugShowDialog.setOnClickListener {
-            showTestDialog(false)
+            showTestDialog(0)
         }
 
         views.debugShowDialogDestructive.setOnClickListener {
-            showTestDialog(true)
+            showTestDialog(R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
+        }
+
+        views.debugShowDialogNegativeDestructive.setOnClickListener {
+            showTestDialog(R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
         }
 
         views.debugShowBottomSheet.setOnClickListener {
@@ -62,8 +66,8 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
         }
     }
 
-    private fun showTestDialog(destructive: Boolean) {
-        MaterialAlertDialogBuilder(this, if (destructive) R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive else 0)
+    private fun showTestDialog(theme: Int) {
+        MaterialAlertDialogBuilder(this, theme)
                 .setTitle("Dialog title")
                 .setMessage("Dialog content")
                 .setIcon(R.drawable.ic_debug_icon)

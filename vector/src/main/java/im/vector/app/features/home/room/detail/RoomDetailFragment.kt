@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.detail
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
@@ -75,7 +74,6 @@ import com.vanniktech.emoji.EmojiPopup
 import im.vector.app.R
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.exhaustive
@@ -1410,7 +1408,7 @@ class RoomDetailFragment @Inject constructor(
             is RoomDetailAction.ReportContent             -> {
                 when {
                     data.spam          -> {
-                        MaterialAlertDialogBuilder(requireActivity())
+                        MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
                                 .setTitle(R.string.content_reported_as_spam_title)
                                 .setMessage(R.string.content_reported_as_spam_content)
                                 .setPositiveButton(R.string.ok, null)
@@ -1418,10 +1416,9 @@ class RoomDetailFragment @Inject constructor(
                                     roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
                                 }
                                 .show()
-                                .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                     }
                     data.inappropriate -> {
-                        MaterialAlertDialogBuilder(requireActivity())
+                        MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
                                 .setTitle(R.string.content_reported_as_inappropriate_title)
                                 .setMessage(R.string.content_reported_as_inappropriate_content)
                                 .setPositiveButton(R.string.ok, null)
@@ -1429,10 +1426,9 @@ class RoomDetailFragment @Inject constructor(
                                     roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
                                 }
                                 .show()
-                                .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                     }
                     else               -> {
-                        MaterialAlertDialogBuilder(requireActivity())
+                        MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
                                 .setTitle(R.string.content_reported_title)
                                 .setMessage(R.string.content_reported_content)
                                 .setPositiveButton(R.string.ok, null)
@@ -1440,7 +1436,6 @@ class RoomDetailFragment @Inject constructor(
                                     roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
                                 }
                                 .show()
-                                .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                     }
                 }
             }
@@ -1502,7 +1497,7 @@ class RoomDetailFragment @Inject constructor(
                 .subscribe { managed ->
                     if (!managed) {
                         if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
-                            MaterialAlertDialogBuilder(requireActivity())
+                            MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
                                     .setTitle(R.string.external_link_confirmation_title)
                                     .setMessage(
                                             getString(R.string.external_link_confirmation_message, title, url)
@@ -1515,7 +1510,6 @@ class RoomDetailFragment @Inject constructor(
                                     }
                                     .setNegativeButton(R.string.cancel, null)
                                     .show()
-                                    .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                         } else {
                             // Open in external browser, in a new Tab
                             openUrlInExternalBrowser(requireContext(), url)
@@ -1868,7 +1862,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun askConfirmationToIgnoreUser(senderId: String) {
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.room_participants_action_ignore_title)
                 .setMessage(R.string.room_participants_action_ignore_prompt_msg)
                 .setNegativeButton(R.string.cancel, null)
@@ -1876,7 +1870,6 @@ class RoomDetailFragment @Inject constructor(
                     roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(senderId))
                 }
                 .show()
-                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 
     /**

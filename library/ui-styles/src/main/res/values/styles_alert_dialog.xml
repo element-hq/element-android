@@ -7,6 +7,10 @@
         <item name="buttonBarPositiveButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog.Destructive</item>
     </style>
 
+    <style name="ThemeOverlay.Vector.MaterialAlertDialog.NegativeDestructive">
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog.Destructive</item>
+    </style>
+
     <style name="Widget.Vector.Button.TextButton.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog" />
 
     <style name="Widget.Vector.Button.TextButton.Dialog.Destructive">
