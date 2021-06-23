@@ -5,7 +5,7 @@
     android:id="@+id/login_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAccessibility="no"
-                app:tint="?riotx_text_primary"
+                app:tint="?vctr_content_primary"
                 tools:ignore="MissingPrefix"
                 tools:src="@drawable/ic_logo_matrix_org" />
 
@@ -43,7 +43,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginFieldTil"
-                style="@style/VectorTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -67,7 +66,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/passwordFieldTil"
-                    style="@style/VectorTextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/login_signup_password_hint"
@@ -95,7 +93,7 @@
                     android:layout_marginTop="8dp"
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="center"
-                    app:tint="?attr/colorAccent" />
+                    app:tint="?colorSecondary" />
 
             </FrameLayout>
 
@@ -114,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp">
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/forgetPasswordButton"
                     style="@style/Style.Vector.Login.Button.Text"
                     android:layout_width="wrap_content"
@@ -122,7 +120,7 @@
                     android:layout_gravity="start"
                     android:text="@string/auth_forgot_password" />
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/loginSubmit"
                     style="@style/Style.Vector.Login.Button"
                     android:layout_width="wrap_content"

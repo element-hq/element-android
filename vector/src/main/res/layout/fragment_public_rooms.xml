@@ -10,20 +10,18 @@
         android:id="@+id/publicRoomsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?riotx_header_panel_background"
+        android:background="?colorSurface"
         android:overScrollMode="always"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_public_room" />
 
     <com.google.android.material.appbar.AppBarLayout
-        style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/publicRoomsToolbar"
-            style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:elevation="4dp"
@@ -42,7 +40,7 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/publicRoomsCreateNewRoom"
             style="@style/VectorButtonStyleText"
             android:layout_width="wrap_content"
@@ -54,7 +52,7 @@
             android:text="@string/create_new_room"
             app:icon="@drawable/ic_plus_circle"
             app:iconPadding="13dp"
-            app:iconTint="?colorAccent"
+            app:iconTint="?colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/publicRoomsToolbar" />
 

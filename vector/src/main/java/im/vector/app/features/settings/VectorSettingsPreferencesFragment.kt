@@ -19,9 +19,9 @@ package im.vector.app.features.settings
 import android.app.Activity
 import android.content.Context
 import android.widget.CheckedTextView
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.children
 import androidx.preference.Preference
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.extensions.restart
@@ -167,7 +167,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 context?.let { context: Context ->
-                    AlertDialog.Builder(context)
+                    MaterialAlertDialogBuilder(context)
                             .setSingleChoiceItems(R.array.media_saving_choice,
                                     vectorPreferences.getSelectedMediasSavingPeriod()) { d, n ->
                                 vectorPreferences.setSelectedMediasSavingPeriod(n)
@@ -226,7 +226,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         val layout = layoutInflater.inflate(R.layout.dialog_select_text_size, null)
         val views = DialogSelectTextSizeBinding.bind(layout)
 
-        val dialog = AlertDialog.Builder(activity)
+        val dialog = MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.font_size)
                 .setView(layout)
                 .setPositiveButton(R.string.ok, null)

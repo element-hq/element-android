@@ -155,7 +155,7 @@ internal class MXMegolmDecryption(private val userId: String,
                                                 withHeldInfo.code?.value ?: "",
                                                 withHeldInfo.reason)
                                     } else {
-                                        // This is un-used in riotX SDK, not sure if needed
+                                        // This is un-used in Matrix Android SDK2, not sure if needed
                                         // addEventToPendingList(event, timeline)
                                         if (requestKeysOnFail) {
                                             requestKeysForEvent(event, false)

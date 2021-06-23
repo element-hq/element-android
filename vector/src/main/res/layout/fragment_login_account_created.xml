@@ -5,7 +5,7 @@
     android:id="@+id/login_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -70,7 +70,7 @@
                     android:layout_marginEnd="4dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/loginAccountCreatedTime"
@@ -85,7 +85,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:textColor="?riotx_text_secondary"
+                    android:textColor="?vctr_content_secondary"
                     android:textSize="12sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/loginAccountCreatedMemberName"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +95,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/login_account_created_message"
-                    android:textColor="?riotx_text_primary"
+                    android:textColor="?vctr_content_primary"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/loginAccountCreatedMemberName"
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp">
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/loginAccountCreatedLater"
                     style="@style/Style.Vector.Login.Button.Text"
                     android:layout_width="wrap_content"
@@ -123,7 +123,7 @@
                     android:layout_gravity="end"
                     android:text="@string/later" />
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/loginAccountCreatedDone"
                     style="@style/Style.Vector.Login.Button"
                     android:layout_width="wrap_content"

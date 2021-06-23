@@ -22,7 +22,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -63,6 +62,7 @@ class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
         private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
+        private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences
@@ -128,7 +128,7 @@ class HomeDetailFragment @Inject constructor(
                 is RoomGroupingMethod.ByLegacyGroup -> {
                     onGroupChange(roomGroupingMethod.groupSummary)
                 }
-                is RoomGroupingMethod.BySpace -> {
+                is RoomGroupingMethod.BySpace       -> {
                     onSpaceChange(roomGroupingMethod.spaceSummary)
                 }
             }
@@ -244,7 +244,7 @@ class HomeDetailFragment @Inject constructor(
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
-                    colorInt = ColorProvider(requireActivity()).getColor(R.color.riotx_accent)
+                    colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)
                                 ?.navigator
@@ -272,7 +272,7 @@ class HomeDetailFragment @Inject constructor(
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
-                    colorInt = ColorProvider(requireActivity()).getColor(R.color.riotx_accent)
+                    colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             // mark as ignored to avoid showing it again
@@ -313,10 +313,10 @@ class HomeDetailFragment @Inject constructor(
         serverBackupStatusViewModel
                 .subscribe(this) {
                     when (val banState = it.bannerState.invoke()) {
-                        is BannerState.Setup -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                        is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
                         null,
-                        BannerState.Hidden -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                        BannerState.Hidden    -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
                     }
                 }
         views.homeKeysBackupBanner.delegate = this
@@ -347,7 +347,7 @@ class HomeDetailFragment @Inject constructor(
                     is RoomGroupingMethod.ByLegacyGroup -> {
                         // nothing do far
                     }
-                    is RoomGroupingMethod.BySpace -> {
+                    is RoomGroupingMethod.BySpace       -> {
                         it.roomGroupingMethod.spaceSummary?.let {
                             sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(it.roomId))
                         }
@@ -366,7 +366,7 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
-                R.id.bottom_action_rooms -> RoomListDisplayMode.ROOMS
+                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
                 R.id.bottom_action_notification -> RoomListDisplayMode.NOTIFICATIONS
                 else                      -> RoomListDisplayMode.ALL
             }
@@ -436,17 +436,17 @@ class HomeDetailFragment @Inject constructor(
         isVisible = count > 0
         number = count
         maxCharacterCount = 3
-        badgeTextColor = ContextCompat.getColor(requireContext(), R.color.white)
+        badgeTextColor = ThemeUtils.getColor(requireContext(), R.attr.colorOnPrimary)
         backgroundColor = if (highlight) {
-            ContextCompat.getColor(requireContext(), R.color.riotx_notice)
+            ThemeUtils.getColor(requireContext(), R.attr.colorError)
         } else {
-            ThemeUtils.getColor(requireContext(), R.attr.riotx_unread_room_badge)
+            ThemeUtils.getColor(requireContext(), R.attr.vctr_unread_room_badge)
         }
     }
 
     private fun RoomListDisplayMode.toMenuId() = when (this) {
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-        RoomListDisplayMode.ROOMS -> R.id.bottom_action_rooms
+        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
         RoomListDisplayMode.ALL    -> R.id.bottom_action_all
         else                       -> R.id.bottom_action_notification
     }

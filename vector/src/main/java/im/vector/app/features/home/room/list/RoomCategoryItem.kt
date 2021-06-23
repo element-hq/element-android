@@ -42,8 +42,8 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        val tintColor = ThemeUtils.getColor(holder.rootView.context, R.attr.riotx_text_secondary)
-        val expandedArrowDrawableRes = if (expanded) R.drawable.ic_expand_more_white else R.drawable.ic_expand_less_white
+        val tintColor = ThemeUtils.getColor(holder.rootView.context, R.attr.vctr_content_secondary)
+        val expandedArrowDrawableRes = if (expanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
         val expandedArrowDrawable = ContextCompat.getDrawable(holder.rootView.context, expandedArrowDrawableRes)?.also {
             DrawableCompat.setTint(it, tintColor)
         }

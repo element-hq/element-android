@@ -11,7 +11,7 @@
         android:id="@+id/url_preview_left_border"
         android:layout_width="2dp"
         android:layout_height="0dp"
-        android:background="?riotx_text_tertiary"
+        android:background="?vctr_content_tertiary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +23,7 @@
         android:layout_marginStart="7dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/url_preview_close"
@@ -51,7 +51,7 @@
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="4"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
@@ -67,7 +67,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:textColor="?riotx_text_tertiary"
+        android:textColor="?vctr_content_tertiary"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
@@ -83,7 +83,7 @@
         android:src="@drawable/ic_close_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_secondary"
+        app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix" />
 
 </merge>

@@ -8,7 +8,6 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/bugReportToolbar"
-        style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp" />
@@ -28,7 +27,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:text="@string/send_bug_report_progress"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -64,11 +63,10 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="@string/send_bug_report_description"
-                    android:textColor="?riotx_text_primary" />
+                    android:textColor="?vctr_content_primary" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/bug_report_text_input_layout"
-                    style="@style/VectorTextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -83,7 +81,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="40dp"
-                        android:textColor="?riotx_text_primary" />
+                        android:textColor="?vctr_content_primary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,7 +91,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="@string/send_bug_report_description_in_english"
-                    android:textColor="?riotx_text_secondary"
+                    android:textColor="?vctr_content_secondary"
                     android:textSize="12sp" />
 
                 <TextView
@@ -104,7 +102,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="@string/send_bug_report_logs_description"
-                    android:textColor="?riotx_text_primary" />
+                    android:textColor="?vctr_content_primary" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/bug_report_button_include_logs"

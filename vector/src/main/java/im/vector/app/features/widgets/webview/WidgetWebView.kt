@@ -31,7 +31,7 @@ import im.vector.app.features.webview.WebViewEventListener
 @SuppressLint("NewApi")
 fun WebView.setupForWidget(webViewEventListener: WebViewEventListener) {
     // xml value seems ignored
-    setBackgroundColor(ThemeUtils.getColor(context, R.attr.riotx_bottom_nav_background_color))
+    setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorSurface))
 
     // clear caches
     clearHistory()

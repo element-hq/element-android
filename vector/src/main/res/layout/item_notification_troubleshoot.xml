@@ -27,7 +27,7 @@
         android:layout_marginEnd="16dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/troubleshootTestDescription"
@@ -47,7 +47,7 @@
         android:layout_marginEnd="16dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/troubleshootTestButton"
         app:layout_constraintEnd_toStartOf="@+id/troubleshootStatusIcon"
@@ -57,17 +57,14 @@
         tools:text="@string/settings_troubleshoot_test_device_settings_failed"
         tools:visibility="visible" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/troubleshootTestButton"
-        style="?materialButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:background="?attr/colorAccent"
         android:padding="8dp"
-        android:textColor="@android:color/white"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/troubleshootProgressBar"

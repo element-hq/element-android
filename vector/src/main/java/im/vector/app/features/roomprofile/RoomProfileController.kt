@@ -22,7 +22,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.expandableTextItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.ShortcutCreator
@@ -36,11 +35,8 @@ import javax.inject.Inject
 class RoomProfileController @Inject constructor(
         private val stringProvider: StringProvider,
         private val vectorPreferences: VectorPreferences,
-        private val shortcutCreator: ShortcutCreator,
-        colorProvider: ColorProvider
+        private val shortcutCreator: ShortcutCreator
 ) : TypedEpoxyController<RoomProfileViewState>() {
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var callback: Callback? = null
 
@@ -115,14 +111,12 @@ class RoomProfileController @Inject constructor(
                 } else {
                     R.string.room_profile_section_more_settings
                 }),
-                dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_settings,
                 action = { callback?.onSettingsClicked() }
         )
         buildProfileAction(
                 id = "notifications",
                 title = stringProvider.getString(R.string.room_profile_section_more_notifications),
-                dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_notification,
                 action = { callback?.onNotificationsClicked() }
         )
@@ -131,7 +125,6 @@ class RoomProfileController @Inject constructor(
         buildProfileAction(
                 id = "member_list",
                 title = stringProvider.getQuantityString(R.plurals.room_profile_section_more_member_list, numberOfMembers, numberOfMembers),
-                dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_member_list,
                 accessory = R.drawable.ic_shield_warning.takeIf { hasWarning } ?: 0,
                 action = { callback?.onMemberListClicked() }
@@ -141,7 +134,6 @@ class RoomProfileController @Inject constructor(
             buildProfileAction(
                     id = "banned_list",
                     title = stringProvider.getString(R.string.room_settings_banned_users_title),
-                    dividerColor = dividerColor,
                     icon = R.drawable.ic_settings_root_labs,
                     action = { callback?.onBannedMemberListClicked() }
             )
@@ -149,7 +141,6 @@ class RoomProfileController @Inject constructor(
         buildProfileAction(
                 id = "uploads",
                 title = stringProvider.getString(R.string.room_profile_section_more_uploads),
-                dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_uploads,
                 action = { callback?.onUploadsClicked() }
         )
@@ -157,7 +148,6 @@ class RoomProfileController @Inject constructor(
             buildProfileAction(
                     id = "shortcut",
                     title = stringProvider.getString(R.string.room_settings_add_homescreen_shortcut),
-                    dividerColor = dividerColor,
                     editable = false,
                     icon = R.drawable.ic_add_to_home_screen_24dp,
                     action = { callback?.createShortcut() }
@@ -173,7 +163,6 @@ class RoomProfileController @Inject constructor(
                 } else {
                     R.string.room_profile_section_more_leave
                 }),
-                dividerColor = dividerColor,
                 divider = false,
                 destructive = true,
                 icon = R.drawable.ic_room_actions_leave,
@@ -191,7 +180,6 @@ class RoomProfileController @Inject constructor(
                     id = "alias",
                     title = stringProvider.getString(R.string.room_settings_alias_title),
                     subtitle = stringProvider.getString(R.string.room_settings_alias_subtitle),
-                    dividerColor = dividerColor,
                     divider = true,
                     editable = true,
                     action = { callback?.onRoomAliasesClicked() }
@@ -201,8 +189,7 @@ class RoomProfileController @Inject constructor(
                     id = "permissions",
                     title = stringProvider.getString(R.string.room_settings_permissions_title),
                     subtitle = stringProvider.getString(R.string.room_settings_permissions_subtitle),
-                    dividerColor = dividerColor,
-                    divider = false,
+                    divider = vectorPreferences.developerMode(),
                     editable = true,
                     action = { callback?.onRoomPermissionsClicked() }
             )
@@ -213,7 +200,6 @@ class RoomProfileController @Inject constructor(
                     id = "roomId",
                     title = stringProvider.getString(R.string.room_settings_room_internal_id),
                     subtitle = roomSummary.roomId,
-                    dividerColor = dividerColor,
                     divider = true,
                     editable = false,
                     action = { callback?.onRoomIdClicked() }
@@ -223,7 +209,6 @@ class RoomProfileController @Inject constructor(
                         id = "roomVersion",
                         title = stringProvider.getString(R.string.room_settings_room_version_title),
                         subtitle = it,
-                        dividerColor = dividerColor,
                         divider = true,
                         editable = false
                 )
@@ -231,7 +216,6 @@ class RoomProfileController @Inject constructor(
             buildProfileAction(
                     id = "devTools",
                     title = stringProvider.getString(R.string.dev_tools_menu_name),
-                    dividerColor = dividerColor,
                     divider = false,
                     editable = true,
                     action = { callback?.onRoomDevToolsClicked() }
@@ -245,7 +229,6 @@ class RoomProfileController @Inject constructor(
                 buildProfileAction(
                         id = "enableEncryption",
                         title = stringProvider.getString(R.string.room_settings_enable_encryption),
-                        dividerColor = dividerColor,
                         icon = R.drawable.ic_shield_black,
                         divider = true,
                         editable = false,
@@ -256,7 +239,6 @@ class RoomProfileController @Inject constructor(
                 buildProfileAction(
                         id = "enableEncryption",
                         title = stringProvider.getString(R.string.room_settings_enable_encryption_no_permission),
-                        dividerColor = dividerColor,
                         icon = R.drawable.ic_shield_black,
                         divider = false,
                         editable = false

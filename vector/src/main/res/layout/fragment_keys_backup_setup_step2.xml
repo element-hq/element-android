@@ -5,7 +5,7 @@
     android:id="@+id/keys_backup_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     tools:context=".features.crypto.keysbackup.setup.KeysBackupSetupStep2Fragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,7 @@
             android:layout_marginBottom="16dp"
             android:text="@string/keys_backup_setup_step2_text_title"
             android:textAlignment="center"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
             android:layout_marginBottom="16dp"
             android:text="@string/keys_backup_setup_step2_text_description"
             android:textAlignment="center"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +48,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/keys_backup_setup_step2_passphrase_enter_til"
-            style="@style/VectorTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -63,8 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/passphrase_create_passphrase"
-                android:maxLines="3"
-                android:textColor="?android:textColorPrimary" />
+                android:maxLines="3" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,7 +76,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/keys_backup_setup_step2_passphrase_enter_til"
             app:layout_constraintTop_toTopOf="@id/keys_backup_setup_step2_passphrase_enter_til"
-            app:tint="?attr/colorAccent" />
+            app:tint="?colorSecondary" />
 
         <im.vector.app.core.ui.views.PasswordStrengthBar
             android:id="@+id/keys_backup_setup_step2_passphrase_strength_level"
@@ -91,7 +89,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/keys_backup_setup_step2_passphrase_confirm_til"
-            style="@style/VectorTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -107,21 +104,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/passphrase_confirm_passphrase"
-                android:maxLines="3"
-                android:textColor="?android:textColorPrimary" />
+                android:maxLines="3" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/keys_backup_setup_step2_button"
-            style="?materialButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="@string/keys_backup_setup_step2_button_title"
-            android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step2_passphrase_confirm_til" />
-
 
         <TextView
             android:id="@+id/keys_backup_setup_step2_recovery_key_alternative"
@@ -132,13 +127,14 @@
             android:layout_marginEnd="16dp"
             android:text="@string/keys_backup_setup_step1_recovery_key_alternative"
             android:textAlignment="center"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             app:layout_constraintTop_toBottomOf="@+id/keys_backup_setup_step2_button" />
 
-
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/keys_backup_setup_step2_skip_button"
             style="@style/VectorButtonStyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="@dimen/layout_vertical_margin"

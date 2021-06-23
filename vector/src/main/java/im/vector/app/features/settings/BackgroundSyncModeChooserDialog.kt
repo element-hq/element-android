@@ -18,8 +18,8 @@ package im.vector.app.features.settings
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.DialogBackgroundSyncModeBinding
 
@@ -32,7 +32,7 @@ class BackgroundSyncModeChooserDialog : DialogFragment() {
 
         val view = requireActivity().layoutInflater.inflate(R.layout.dialog_background_sync_mode, null)
         val views = DialogBackgroundSyncModeBinding.bind(view)
-        val dialog = AlertDialog.Builder(requireActivity())
+        val dialog = MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.settings_background_fdroid_sync_mode)
                 .setView(view)
                 .setPositiveButton(R.string.cancel, null)

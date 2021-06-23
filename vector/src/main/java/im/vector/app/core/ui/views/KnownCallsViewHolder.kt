@@ -16,8 +16,8 @@
 
 package im.vector.app.core.ui.views
 
-import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
+import com.google.android.material.card.MaterialCardView
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.webrtc.WebRtcCall
@@ -29,7 +29,7 @@ class KnownCallsViewHolder {
 
     private var activeCallPiP: SurfaceViewRenderer? = null
     private var currentCallsView: CurrentCallsView? = null
-    private var pipWrapper: CardView? = null
+    private var pipWrapper: MaterialCardView? = null
     private var currentCall: WebRtcCall? = null
     private var calls: List<WebRtcCall> = emptyList()
 
@@ -83,7 +83,10 @@ class KnownCallsViewHolder {
         }
     }
 
-    fun bind(activeCallPiP: SurfaceViewRenderer, activeCallView: CurrentCallsView, pipWrapper: CardView, interactionListener: CurrentCallsView.Callback) {
+    fun bind(activeCallPiP: SurfaceViewRenderer,
+             activeCallView: CurrentCallsView,
+             pipWrapper: MaterialCardView,
+             interactionListener: CurrentCallsView.Callback) {
         this.activeCallPiP = activeCallPiP
         this.currentCallsView = activeCallView
         this.pipWrapper = pipWrapper

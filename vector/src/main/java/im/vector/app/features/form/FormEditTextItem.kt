@@ -17,10 +17,8 @@
 package im.vector.app.features.form
 
 import android.text.Editable
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
@@ -41,9 +39,6 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
 
     @EpoxyAttribute
     var value: String? = null
-
-    @EpoxyAttribute
-    var showBottomSeparator: Boolean = true
 
     @EpoxyAttribute
     var errorMessage: String? = null
@@ -91,7 +86,6 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
 
         holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
         holder.textInputEditText.setOnEditorActionListener(editorActionListener)
-        holder.bottomSeparator.isVisible = showBottomSeparator
     }
 
     override fun shouldSaveViewState(): Boolean {
@@ -106,6 +100,5 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     class Holder : VectorEpoxyHolder() {
         val textInputLayout by bind<TextInputLayout>(R.id.formTextInputTextInputLayout)
         val textInputEditText by bind<TextInputEditText>(R.id.formTextInputTextInputEditText)
-        val bottomSeparator by bind<View>(R.id.formTextInputDivider)
     }
 }

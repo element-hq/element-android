@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemProfileSectionView"
@@ -11,7 +10,7 @@
     android:paddingEnd="16dp"
     android:textSize="20sp"
     android:textStyle="bold"
-    android:textColor="?riotx_text_primary"
-    android:background="?riotx_header_panel_background"
+    android:textColor="?vctr_content_primary"
+    android:background="?vctr_list_separator_system"
     android:layout_height="56dp"/>
 

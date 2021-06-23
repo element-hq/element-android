@@ -98,7 +98,7 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
                                 val content = event.getClearContent().toModel<ForwardedRoomKeyContent>()
                                 if (event.mxDecryptionResult == null) {
                                     span("**Failed to Decrypt** ${event.mCryptoError}") {
-                                        textColor = host.colorProvider.getColor(R.color.vector_error_color)
+                                        textColor = host.colorProvider.getColorFromAttribute(R.attr.colorError)
                                     }
                                 }
                                 span("\nsessionId:") {
@@ -157,7 +157,7 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
                                 +"${content?.requestingDeviceId}"
                             } else if (event.getClearType() == EventType.ENCRYPTED) {
                                 span("**Failed to Decrypt** ${event.mCryptoError}") {
-                                        textColor = host.colorProvider.getColor(R.color.vector_error_color)
+                                        textColor = host.colorProvider.getColorFromAttribute(R.attr.colorError)
                                     }
                             }
                         }

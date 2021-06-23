@@ -5,10 +5,9 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
-        style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp">
@@ -18,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:theme="@style/Vector.Toolbar.Profile"
-            app:contentScrim="?riotx_background"
+            app:contentScrim="?android:colorBackground"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:scrimAnimationDuration="250"
             app:scrimVisibleHeightTrigger="120dp"
@@ -53,7 +52,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/roomDirectoryPickerList"
-        android:background="?riotx_background"
+        android:background="?android:colorBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

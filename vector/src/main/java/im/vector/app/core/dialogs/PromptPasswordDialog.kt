@@ -21,6 +21,7 @@ import android.content.DialogInterface
 import android.text.Editable
 import android.view.KeyEvent
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
@@ -47,7 +48,7 @@ class PromptPasswordDialog {
             views.promptPasswordPasswordReveal.render(passwordVisible)
         }
 
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle(R.string.devices_delete_dialog_title)
                 .setView(dialogLayout)

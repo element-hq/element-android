@@ -62,7 +62,7 @@ class RoomMessageTouchHelperCallback(private val context: Context,
     init {
         DrawableCompat.setTint(
                 imageDrawable,
-                ThemeUtils.getColor(context, R.attr.riotx_text_primary)
+                ThemeUtils.getColor(context, R.attr.vctr_content_primary)
         )
     }
 

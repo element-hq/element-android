@@ -2,11 +2,11 @@
 <resources>
 
     <style name="PinCodeScreenStyle" >
-        <item name="android:background">?riotx_background</item>
+        <item name="android:background">?android:colorBackground</item>
     </style>
 
     <style name="PinCodeKeyButtonStyle">
-        <item name="android:textColor">?riotx_text_primary</item>
+        <item name="android:textColor">?vctr_content_primary</item>
         <item name="android:textSize">18sp</item>
         <item name="android:background">@drawable/bg_pin_key</item>
     </style>
@@ -15,7 +15,7 @@
         <item name="android:button">@drawable/pin_code_dots</item>
     </style>
 
-    <style name="PinCodeNextButtonStyle" parent="VectorButtonStylePositive">
+    <style name="PinCodeNextButtonStyle" parent="VectorButtonStyle">
         <item name="android:textSize">18sp</item>
         <item name="android:backgroundTint">@android:color/transparent</item>
         <item name="android:layout_marginBottom">24dp</item>
@@ -23,22 +23,22 @@
 
     <style name="PinCodeDeleteButtonStyle">
         <item name="android:src">@drawable/delete_lockscreen_pf</item>
-        <item name="android:tint">?riotx_text_primary</item>
+        <item name="android:tint">?vctr_content_primary</item>
         <item name="background">@drawable/bg_pin_key</item>
     </style>
 
     <style name="PinCodeFingerprintButtonStyle">
         <item name="android:src">@drawable/fingerprint_lockscreen_pf</item>
-        <item name="android:tint">?riotx_text_primary</item>
+        <item name="android:tint">?vctr_content_primary</item>
         <item name="background">@drawable/bg_pin_key</item>
     </style>
 
     <style name="PinCodeTitleStyle">
-        <item name="android:textColor">?riotx_text_primary</item>
+        <item name="android:textColor">?vctr_content_primary</item>
     </style>
 
     <style name="PinCodeHintStyle">
-        <item name="android:textColor">?riotx_text_primary</item>
+        <item name="android:textColor">?vctr_content_primary</item>
     </style>
 
 </resources>

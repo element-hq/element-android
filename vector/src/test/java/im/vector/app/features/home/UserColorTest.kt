@@ -25,19 +25,19 @@ class UserColorTest {
 
     @Test
     fun testNull() {
-        assertEquals(R.color.riotx_username_1, getColorFromUserId(null))
+        assertEquals(R.color.element_name_01, getColorFromUserId(null))
     }
 
     @Test
     fun testEmpty() {
-        assertEquals(R.color.riotx_username_1, getColorFromUserId(""))
+        assertEquals(R.color.element_name_01, getColorFromUserId(""))
     }
 
     @Test
     fun testName() {
-        assertEquals(R.color.riotx_username_1, getColorFromUserId("@ganfra:matrix.org"))
-        assertEquals(R.color.riotx_username_4, getColorFromUserId("@benoit0816:matrix.org"))
-        assertEquals(R.color.riotx_username_5, getColorFromUserId("@hubert:uhoreg.ca"))
-        assertEquals(R.color.riotx_username_7, getColorFromUserId("@nadonomy:matrix.org"))
+        assertEquals(R.color.element_name_01, getColorFromUserId("@ganfra:matrix.org"))
+        assertEquals(R.color.element_name_04, getColorFromUserId("@benoit0816:matrix.org"))
+        assertEquals(R.color.element_name_05, getColorFromUserId("@hubert:uhoreg.ca"))
+        assertEquals(R.color.element_name_07, getColorFromUserId("@nadonomy:matrix.org"))
     }
 }

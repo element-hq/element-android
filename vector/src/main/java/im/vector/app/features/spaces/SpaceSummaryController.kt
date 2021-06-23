@@ -78,7 +78,7 @@ class SpaceSummaryController @Inject constructor(
             genericHeaderItem {
                 id("legacy_groups")
                 text(host.stringProvider.getString(R.string.groups_header))
-                textColor(host.colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
             }
 
             // add home for communities

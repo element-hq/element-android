@@ -17,7 +17,7 @@
         android:id="@+id/messageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="14sp"
         android:layout_gravity="left"
         tools:text="@sample/messages.json/data/message"

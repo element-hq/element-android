@@ -19,15 +19,16 @@
         android:id="@+id/buttonBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?riotx_background"
+        android:background="?android:colorBackground"
         android:elevation="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/nextButton"
-            style="?materialButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginStart="14dp"
             android:layout_marginEnd="14dp"

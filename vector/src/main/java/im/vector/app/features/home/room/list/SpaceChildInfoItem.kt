@@ -70,7 +70,7 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
         holder.descriptionText.text = span {
             span {
                 apply {
-                    val tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+                    val tintColor = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
                     ContextCompat.getDrawable(holder.view.context, R.drawable.ic_member_small)
                             ?.apply {
                                 ThemeUtils.tintDrawableWithColor(this, tintColor)

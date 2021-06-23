@@ -321,7 +321,7 @@ class BugReporter @Inject constructor(
                         builder.addFormDataPart("label", "can contact")
                     }
 
-                    // Special for RiotX
+                    // Special for Element
                     //builder.addFormDataPart("label", "[SchildiChat]")
 
                     when (reportType) {

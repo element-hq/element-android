@@ -5,7 +5,7 @@
     android:id="@+id/login_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -53,11 +53,11 @@
                 android:paddingBottom="16dp"
                 android:text="@string/login_clear_homeserver_history"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
-                android:textColor="?colorAccent"
+                android:textColor="?colorPrimary"
                 android:visibility="invisible"
                 tools:visibility="visible" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginServerUrlFormSubmit"
                 style="@style/Style.Vector.Login.Button"
                 android:layout_width="wrap_content"

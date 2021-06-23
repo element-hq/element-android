@@ -5,7 +5,7 @@
     android:id="@+id/itemRoomInvitationLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
@@ -41,7 +41,7 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="15sp"
         app:drawableEndCompat="@drawable/ic_arrow_right"
         app:layout_constrainedWidth="true"
@@ -59,7 +59,7 @@
         android:layout_marginTop="3dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="@+id/roomInvitationNameView"
         app:layout_constraintStart_toStartOf="@+id/roomInvitationNameView"
@@ -99,12 +99,13 @@
         app:layout_constraintEnd_toStartOf="@+id/roomInvitationAccept"
         app:layout_constraintTop_toTopOf="@+id/roomInvitationAccept" />
 
+    <!-- We use vctr_list_separator_system here for a better rendering -->
     <View
         android:id="@+id/roomInvitationDividerView"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="5dp"
-        android:background="?riotx_header_panel_border_mobile"
+        android:background="?vctr_list_separator_system"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

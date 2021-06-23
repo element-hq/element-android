@@ -24,14 +24,13 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -277,7 +276,7 @@ class HomeActivity :
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { isHandled ->
                         if (!isHandled) {
-                            AlertDialog.Builder(this)
+                            MaterialAlertDialogBuilder(this)
                                     .setTitle(R.string.dialog_title_error)
                                     .setMessage(R.string.permalink_malformed)
                                     .setPositiveButton(R.string.ok, null)
@@ -396,7 +395,7 @@ class HomeActivity :
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(userItem, avatarRenderer)
-                    colorInt = ColorProvider(this@HomeActivity).getColor(R.color.riotx_positive_accent)
+                    colorInt = ThemeUtils.getColor(this@HomeActivity, R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             action(it)
@@ -427,7 +426,7 @@ class HomeActivity :
             vectorUncaughtExceptionHandler.clearAppCrashStatus(this)
 
 /*
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.send_bug_report_app_crashed)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }

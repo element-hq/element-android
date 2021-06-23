@@ -129,7 +129,7 @@ class ThreePidsSettingsController @Inject constructor(
                 genericButtonItem {
                     id("addEmail")
                     text(host.stringProvider.getString(R.string.settings_add_email_address))
-                    textColor(host.colorProvider.getColor(R.color.riotx_accent))
+                    textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     buttonClickAction { host.interactionListener?.addEmail() }
                 }
             is ThreePidsSettingsUiState.AddingEmail       -> {
@@ -188,7 +188,7 @@ class ThreePidsSettingsController @Inject constructor(
                 genericButtonItem {
                     id("addMsisdn")
                     text(host.stringProvider.getString(R.string.settings_add_phone_number))
-                    textColor(host.colorProvider.getColor(R.color.riotx_accent))
+                    textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     buttonClickAction { host.interactionListener?.addMsisdn() }
                 }
             is ThreePidsSettingsUiState.AddingEmail       -> Unit
@@ -250,7 +250,7 @@ class ThreePidsSettingsController @Inject constructor(
                 settingsInformationItem {
                     id("info" + idPrefix + threePid.value)
                     message(host.stringProvider.getString(R.string.account_email_validation_message))
-                    colorProvider(host.colorProvider)
+                    textColor(host.colorProvider.getColor(R.color.vector_info_color))
                 }
                 settingsContinueCancelItem {
                     id("cont" + idPrefix + threePid.value)
@@ -262,7 +262,7 @@ class ThreePidsSettingsController @Inject constructor(
                 settingsInformationItem {
                     id("info" + idPrefix + threePid.value)
                     message(host.stringProvider.getString(R.string.settings_text_message_sent, threePid.getFormattedValue()))
-                    colorProvider(host.colorProvider)
+                    textColor(host.colorProvider.getColor(R.color.vector_info_color))
                 }
                 settingsEditTextItem {
                     id("msisdnVerification${threePid.value}")
