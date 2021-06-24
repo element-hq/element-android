@@ -50,8 +50,10 @@ pub struct Sas {
     pub other_user_id: String,
     pub other_device_id: String,
     pub flow_id: String,
+    pub have_we_confirmed: bool,
     pub is_cancelled: bool,
     pub is_done: bool,
+    pub cancel_code: Option<CancelCode>,
     pub can_be_presented: bool,
     pub supports_emoji: bool,
     pub timed_out: bool,
@@ -73,6 +75,8 @@ impl From<InnerSas> for Sas {
             can_be_presented: sas.can_be_presented(),
             timed_out: sas.timed_out(),
             supports_emoji: sas.supports_emoji(),
+            have_we_confirmed: sas.have_we_confirmed(),
+            cancel_code: sas.cancel_code().map(|c| c.into()),
         }
     }
 }
@@ -102,7 +106,7 @@ impl From<InnerVerificationRequest> for VerificationRequest {
             is_done: v.is_done(),
             is_ready: v.is_ready(),
             room_id: v.room_id().map(|r| r.to_string()),
-            cancel_code: v.cancel_code().map(|c| c.clone().into()),
+            cancel_code: v.cancel_code().map(|c| c.into()),
             we_started: v.we_started(),
             is_passive: v.is_passive(),
             their_methods: v

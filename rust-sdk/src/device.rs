@@ -19,6 +19,11 @@ pub struct Device {
     /// A flag indicating if the device has been blocked, blocked devices don't
     /// receive any room keys from us.
     pub is_blocked: bool,
+    /// Is the device locally trusted
+    pub locally_trusted: bool,
+    /// Is our cross signing identity trusted and does the identity trust the
+    /// device.
+    pub cross_signing_trusted: bool,
 }
 
 impl From<InnerDevice> for Device {
@@ -34,6 +39,8 @@ impl From<InnerDevice> for Device {
             algorithms: d.algorithms().iter().map(|a| a.to_string()).collect(),
             display_name: d.display_name().clone(),
             is_blocked: d.is_blacklisted(),
+            locally_trusted: d.is_locally_trusted(),
+            cross_signing_trusted: d.is_cross_signing_trusted(),
         }
     }
 }

@@ -61,6 +61,8 @@ dictionary Device {
     sequence<string> algorithms;
     string? display_name;
     boolean is_blocked;
+    boolean locally_trusted;
+    boolean cross_signing_trusted;
 };
 
 dictionary StartSasResult {
@@ -72,6 +74,8 @@ dictionary Sas {
     string other_user_id;
     string other_device_id;
     string flow_id;
+    CancelCode? cancel_code;
+    boolean have_we_confirmed;
     boolean is_done;
     boolean is_cancelled;
     boolean can_be_presented;

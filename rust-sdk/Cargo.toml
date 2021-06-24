@@ -23,10 +23,12 @@ version = "0.2.0"
 features = ["lax_deserialize"]
 
 [dependencies.matrix-sdk-common]
-version = "0.3.0"
+git = "https://github.com/matrix-org/matrix-rust-sdk/"
+rev = "43583c292644e0e9bdaa6c83b2af35721416a263"
 
 [dependencies.matrix-sdk-crypto]
-version = "0.3.0"
+git = "https://github.com/matrix-org/matrix-rust-sdk/"
+rev = "43583c292644e0e9bdaa6c83b2af35721416a263"
 features = ["sled_cryptostore"]
 
 [dependencies.tokio]
