@@ -3406,4 +3406,5 @@
 
     <string name="teammate_spaces_arent_quite_ready">"Teammate spaces aren’t quite ready but you can still give them a try"</string>
     <string name="teammate_spaces_might_not_join">"At the moment people might not be able to join any private rooms you make.\n\nWe’ll be improving this as part of the beta, but just wanted to let you know."</string>
+    <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
 </resources>
