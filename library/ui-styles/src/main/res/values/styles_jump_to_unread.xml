@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="jumpToUnreadStyle" format="reference" />
+    <attr name="vctr_jump_to_unread_style" format="reference" />
 
     <style name="Widget.Vector.JumpToUnread.Base" parent="Widget.MaterialComponents.Chip.Action">
         <item name="android:textAppearance">@style/TextAppearance.Vector.Body.Medium</item>
