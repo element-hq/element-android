@@ -1970,7 +1970,6 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun onJumpToReadMarkerClicked() = withState(roomDetailViewModel) {
-        views.jumpToReadMarkerView.isVisible = false
         if (it.unreadState is UnreadState.HasUnread) {
             roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.firstUnreadEventId, false))
         }
