@@ -41,6 +41,7 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
                                                         private val mxCallFactory: MxCallFactory,
                                                         @UserId private val userId: String) {
 
+    private val invitedCallIds = mutableSetOf<String>()
     private val callListeners = mutableSetOf<CallListener>()
     private val callListenersDispatcher = CallListenersDispatcher(callListeners)
 
@@ -182,17 +183,17 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
         val content = event.getClearContent().toModel<CallInviteContent>() ?: return
 
         content.callId ?: return
-        if (activeCallHandler.getCallWithId(content.callId) != null) {
+        if (invitedCallIds.contains(content.callId)) {
             // Call is already known, maybe due to fast lane. Ignore
             Timber.d("Ignoring already known call invite")
             return
         }
-
         val incomingCall = mxCallFactory.createIncomingCall(
                 roomId = event.roomId,
                 opponentUserId = event.senderId,
                 content = content
         ) ?: return
+        invitedCallIds.add(content.callId)
         activeCallHandler.addCall(incomingCall)
         callListenersDispatcher.onCallInviteReceived(incomingCall, content)
     }
