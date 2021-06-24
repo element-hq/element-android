@@ -1,0 +1,2 @@
+Principaux changements pour cette version : amélioration des espaces.
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.1.8
