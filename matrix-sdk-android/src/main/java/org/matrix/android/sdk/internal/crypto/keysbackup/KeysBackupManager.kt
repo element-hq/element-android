@@ -99,7 +99,7 @@ import kotlin.random.Random
  * to the user's homeserver.
  */
 @SessionScope
-internal class DefaultKeysBackupService @Inject constructor(
+internal class KeysBackupManager @Inject constructor(
         @UserId private val userId: String,
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,

@@ -90,7 +90,7 @@ import javax.inject.Inject
 import kotlin.collections.set
 
 @SessionScope
-internal class DefaultVerificationService @Inject constructor(
+internal class VerificationManager @Inject constructor(
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,

@@ -111,7 +111,7 @@ import kotlin.math.max
  * Specially, it tracks all room membership changes events in order to do keys updates.
  */
 @SessionScope
-internal class DefaultCryptoService @Inject constructor(
+internal class CryptoManager @Inject constructor(
         // Olm Manager
         private val olmManager: OlmManager,
         @UserId

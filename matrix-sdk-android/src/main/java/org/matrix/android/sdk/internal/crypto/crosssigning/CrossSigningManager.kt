@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @SessionScope
-internal class DefaultCrossSigningService @Inject constructor(
+internal class CrossSigningManager @Inject constructor(
         @UserId private val userId: String,
         @SessionId private val sessionId: String,
         private val cryptoStore: IMXCryptoStore,
