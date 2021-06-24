@@ -20,25 +20,16 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import com.squareup.moshi.Types
-import dagger.Lazy
-import java.io.File
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Inject
-import kotlin.jvm.Throws
-import kotlin.math.max
-import kotlinx.coroutines.async
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -59,14 +50,11 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.OlmMachine
-import org.matrix.android.sdk.internal.crypto.setRustLogger
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
@@ -74,19 +62,19 @@ import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
-import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
+import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
-import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
-import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
+import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
+import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.verification.RustVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -95,7 +83,6 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
-import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
@@ -107,6 +94,30 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import timber.log.Timber
 import uniffi.olm.Request
 import uniffi.olm.RequestType
+import java.io.File
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicBoolean
+import javax.inject.Inject
+import kotlin.math.max
+
+internal class RequestSender(
+        private val sendToDeviceTask: SendToDeviceTask,
+) {
+    suspend fun sendToDevice(eventType: String, body: String) {
+        // TODO this produces floats for the Olm type fields, which
+        // are integers originally.
+        val adapter = MoshiProvider
+                .providesMoshi()
+                .adapter<Map<String, HashMap<String, Any>>>(Map::class.java)
+        val jsonBody = adapter.fromJson(body)!!
+
+        val userMap = MXUsersDevicesMap<Any>()
+        userMap.join(jsonBody)
+
+        val sendToDeviceParams = SendToDeviceTask.Params(eventType, userMap)
+        sendToDeviceTask.execute(sendToDeviceParams)
+    }
+}
 
 /**
  * A `CryptoService` class instance manages the end-to-end crypto for a session.
@@ -153,6 +164,8 @@ internal class DefaultCryptoService @Inject constructor(
 
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
+    private val sender = RequestSender(this.sendToDeviceTask)
+
     private var olmMachine: OlmMachine? = null
     // The verification service.
     private var verificationService: RustVerificationService? = null
@@ -320,7 +333,7 @@ internal class DefaultCryptoService @Inject constructor(
             val machine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver)
             this.olmMachine = machine
             this.verificationService =
-            RustVerificationService(this.taskExecutor, machine, this.sendToDeviceTask)
+            RustVerificationService(machine, this.sender)
             Timber.v(
                 "## CRYPTO | Successfully started up an Olm machine for " +
                 "${userId}, ${deviceId}, identity keys: ${this.olmMachine?.identityKeys()}")
@@ -373,7 +386,7 @@ internal class DefaultCryptoService @Inject constructor(
         // `ActiveSessionHolder` class in the `setActiveSession()` method. In
         // the `setActiveSession()` method we call the `start()` method of the
         // handlers without first calling the `start()` method of the
-        // `DefaultCrytpoService`.
+        // `DefaultCryptoService`.
         //
         // The start method of the crypto service isn't part of the
         // `CryptoService` interface so it currently can't be called there. I'm
@@ -666,7 +679,7 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    private fun notifyRoomKeyReceival(
+    private fun notifyRoomKeyReceived(
         roomId: String,
         sessionId: String,
     ) {
@@ -791,18 +804,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private suspend fun sendToDevice(request: Request.ToDevice) {
-        // TODO this produces floats for the Olm type fields, which
-        // are integers originally.
-        val adapter = MoshiProvider
-            .providesMoshi()
-            .adapter<Map<String, HashMap<String, Any>>>(Map::class.java)
-        val body = adapter.fromJson(request.body)!!
-
-        val userMap = MXUsersDevicesMap<Any>()
-        userMap.join(body)
-
-        val sendToDeviceParams = SendToDeviceTask.Params(request.eventType, userMap)
-        sendToDeviceTask.execute(sendToDeviceParams)
+        this.sender.sendToDevice(request.eventType, request.body)
         olmMachine!!.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}")
     }
 

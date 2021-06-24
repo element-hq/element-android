@@ -18,9 +18,7 @@ package org.matrix.android.sdk.internal.crypto.verification
 
 import android.os.Handler
 import android.os.Looper
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-import kotlin.collections.set
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
@@ -31,14 +29,12 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.internal.crypto.OlmMachine
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.internal.crypto.RequestSender
+import org.matrix.android.sdk.internal.crypto.SasVerification
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationDone
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationKey
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationRequest
-import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.task.TaskExecutor
 import timber.log.Timber
 import uniffi.olm.OutgoingVerificationRequest
 
@@ -46,9 +42,8 @@ import uniffi.olm.OutgoingVerificationRequest
 internal class RustVerificationService
 @Inject
 constructor(
-        private val taskExecutor: TaskExecutor,
         private val olmMachine: OlmMachine,
-        private val sendToDeviceTask: SendToDeviceTask,
+        private val requestSender: RequestSender,
 ) : DefaultVerificationTransaction.Listener, VerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -91,7 +86,7 @@ constructor(
     }
 
     private fun dispatchRequestAdded(tx: PendingVerificationRequest) {
-        Timber.v("## SAS dispatchRequestAdded txId:${tx.transactionId} ${tx}")
+        Timber.v("## SAS dispatchRequestAdded txId:${tx.transactionId} $tx")
         uiHandler.post {
             listeners.forEach {
                 try {
@@ -188,7 +183,9 @@ constructor(
             otherUserId: String,
             tid: String,
     ): VerificationTransaction? {
-        return this.olmMachine.getVerification(otherUserId, tid)
+        val verification = this.olmMachine.getVerification(otherUserId, tid) ?: return null
+
+        return SasVerification(this.olmMachine.inner(), verification, this.requestSender, this.listeners)
     }
 
     override fun getExistingVerificationRequests(
@@ -204,13 +201,7 @@ constructor(
             tid: String?
     ): PendingVerificationRequest? {
         return if (tid != null) {
-            val request = this.olmMachine.getVerificationRequest(otherUserId, tid)
-
-            if (request != null) {
-                request.toPendingVerificationRequest()
-            } else {
-                null
-            }
+            olmMachine.getVerificationRequest(otherUserId, tid)?.toPendingVerificationRequest()
         } else {
             null
         }
@@ -236,9 +227,10 @@ constructor(
             runBlocking {
                 val response = request?.startSasVerification()
                 if (response != null) {
-                    sendRequest(response.first)
-                    dispatchTxAdded(response.second)
-                    response.second.transactionId
+                    sendRequest(response.request)
+                    val sas = SasVerification(olmMachine.inner(), response.sas, requestSender, listeners)
+                    dispatchTxAdded(sas)
+                    sas.transactionId
                 } else {
                     null
                 }
@@ -315,7 +307,7 @@ constructor(
         val request = this.olmMachine.getVerificationRequest(otherUserId, transactionId)
 
         return if (request != null) {
-            val outgoingRequest = request.accept_with_methods(methods)
+            val outgoingRequest = request.acceptWithMethods(methods)
 
             if (outgoingRequest != null) {
                 runBlocking { sendRequest(outgoingRequest) }
@@ -335,16 +327,7 @@ constructor(
     suspend fun sendRequest(request: OutgoingVerificationRequest) {
         when (request) {
             is OutgoingVerificationRequest.ToDevice -> {
-                val adapter =
-                        MoshiProvider.providesMoshi()
-                                .adapter<Map<String, HashMap<String, Any>>>(Map::class.java)
-                val body = adapter.fromJson(request.body)!!
-
-                val userMap = MXUsersDevicesMap<Any>()
-                userMap.join(body)
-
-                val sendToDeviceParams = SendToDeviceTask.Params(request.eventType, userMap)
-                sendToDeviceTask.execute(sendToDeviceParams)
+                this.requestSender.sendToDevice(request.eventType, request.body)
             }
             else -> {}
         }

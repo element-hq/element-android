@@ -27,13 +27,10 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
-import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
-import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.JsonDict
@@ -46,7 +43,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
-import org.matrix.android.sdk.internal.crypto.verification.getEmojiForCode
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
@@ -64,7 +60,7 @@ import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
-import uniffi.olm.Sas as InnerSas
+import uniffi.olm.Sas
 import uniffi.olm.StartSasResult
 import uniffi.olm.VerificationRequest as InnerRequest
 import uniffi.olm.setLogger
@@ -149,7 +145,7 @@ internal class VerificationRequest(
         return
     }
 
-    fun accept_with_methods(methods: List<VerificationMethod>): OutgoingVerificationRequest? {
+    fun acceptWithMethods(methods: List<VerificationMethod>): OutgoingVerificationRequest? {
         val stringMethods: MutableList<String> =
                 methods
                         .map {
@@ -185,17 +181,11 @@ internal class VerificationRequest(
         return this.inner.isReady
     }
 
-    suspend fun startSasVerification(): Pair<OutgoingVerificationRequest, SasVerification>? {
+    suspend fun startSasVerification(): StartSasResult? {
         refreshData()
 
         return withContext(Dispatchers.IO) {
-            val response = machine.startSasVerification(inner.otherUserId, inner.flowId)
-
-            if (response != null) {
-                Pair(response.request, SasVerification(machine, response.sas))
-            } else {
-                null
-            }
+            machine.startSasVerification(inner.otherUserId, inner.flowId)
         }
     }
 
@@ -280,7 +270,7 @@ internal class VerificationRequest(
     }
 }
 
-private fun toCancelCode(cancelCode: RustCancelCode): CancelCode {
+internal fun toCancelCode(cancelCode: RustCancelCode): CancelCode {
     return when (cancelCode) {
         RustCancelCode.USER -> CancelCode.User
         RustCancelCode.TIMEOUT -> CancelCode.Timeout
@@ -290,159 +280,8 @@ private fun toCancelCode(cancelCode: RustCancelCode): CancelCode {
         RustCancelCode.KEY_MISMATCH -> CancelCode.MismatchedKeys
         RustCancelCode.USER_MISMATCH -> CancelCode.MismatchedKeys
         RustCancelCode.INVALID_MESSAGE -> CancelCode.InvalidMessage
-        // TODO why don't the ruma codes match what's in EA?
+        // TODO why don't the Ruma codes match what's in EA?
         RustCancelCode.ACCEPTED -> CancelCode.User
-    }
-}
-
-public class SasVerification(private val machine: InnerMachine, private var inner: InnerSas) :
-        SasVerificationTransaction {
-    private var stateField: VerificationTxState = VerificationTxState.OnStarted
-
-    private fun refreshData() {
-        val sas = this.machine.getVerification(this.inner.otherUserId, this.inner.flowId)
-
-        if (sas != null) {
-            this.inner = sas
-        }
-
-        return
-    }
-
-    override val isIncoming: Boolean
-        get() {
-            return false
-        }
-
-    override var otherDeviceId: String?
-        get() {
-            return this.inner.otherDeviceId
-        }
-        set(value) {
-            if (value != null) {
-                this.inner.otherDeviceId = value
-            }
-        }
-
-    override val otherUserId: String
-        get() {
-            return this.inner.otherUserId
-        }
-
-    override var state: VerificationTxState
-        get() {
-            refreshData()
-            return when {
-                this.inner.canBePresented -> {
-                    VerificationTxState.ShortCodeReady
-                }
-                this.inner.isCancelled    -> {
-                    // TODO fetch the cancel code from the rust side
-                    VerificationTxState.Cancelled(CancelCode.User, false)
-                }
-                this.inner.isDone         -> {
-                    VerificationTxState.Verified
-                }
-                else                      -> {
-                    VerificationTxState.Started
-                }
-            }
-        }
-        set(v) {
-            this.stateField = v
-        }
-
-    override val transactionId: String
-        get() {
-            return this.inner.flowId
-        }
-
-    override fun cancel() {
-        TODO()
-    }
-
-    override fun cancel(code: CancelCode) {
-        TODO()
-    }
-
-    override fun shortCodeDoesNotMatch() {
-        TODO()
-    }
-
-    override fun isToDeviceTransport(): Boolean {
-        return false
-    }
-
-    override fun supportsDecimal(): Boolean {
-        // This is ignored anyways, throw it away?
-        // The spec also mandates that devices support
-        // at least decimal and the rust-sdk cancels if
-        // devices don't support it
-        return true
-    }
-
-    override fun supportsEmoji(): Boolean {
-        refreshData()
-        return this.inner.supportsEmoji
-    }
-
-    override fun userHasVerifiedShortCode() {
-        // This is confirm
-        TODO()
-    }
-
-    fun isCanceled(): Boolean {
-        refreshData()
-        return this.inner.isCancelled
-    }
-
-    fun isDone(): Boolean {
-        refreshData()
-        return this.inner.isDone
-    }
-
-    fun timedOut(): Boolean {
-        refreshData()
-        return this.inner.timedOut
-    }
-
-    fun canBePresented(): Boolean {
-        refreshData()
-        return this.inner.canBePresented
-    }
-
-    fun accept(): OutgoingVerificationRequest? {
-        return this.machine.acceptSasVerification(this.inner.otherUserId, inner.flowId)
-    }
-
-    @Throws(CryptoStoreErrorException::class)
-    suspend fun confirm(): OutgoingVerificationRequest? =
-            withContext(Dispatchers.IO) {
-                machine.confirmVerification(inner.otherUserId, inner.flowId)
-            }
-
-    fun cancelHelper(): OutgoingVerificationRequest? {
-        return this.machine.cancelVerification(this.inner.otherUserId, inner.flowId)
-    }
-
-    override fun getEmojiCodeRepresentation(): List<EmojiRepresentation> {
-        val emojiIndex = this.machine.getEmojiIndex(this.inner.otherUserId, this.inner.flowId)
-
-        return if (emojiIndex != null) {
-            emojiIndex.map { getEmojiForCode(it) }
-        } else {
-            listOf()
-        }
-    }
-
-    override fun getDecimalCodeRepresentation(): String {
-        val decimals = this.machine.getDecimals(this.inner.otherUserId, this.inner.flowId)
-
-        return if (decimals != null) {
-            decimals.joinToString(" ")
-        } else {
-            ""
-        }
     }
 }
 
@@ -468,6 +307,10 @@ internal class OlmMachine(
     /** Get our own public identity keys ID. */
     fun identityKeys(): Map<String, String> {
         return this.inner.identityKeys()
+    }
+
+    fun inner(): InnerMachine {
+        return this.inner
     }
 
     fun ownDevice(): CryptoDeviceInfo {
@@ -528,7 +371,7 @@ internal class OlmMachine(
      * This needs to be called after every sync, ideally before processing any other sync changes.
      *
      * @param toDevice A serialized array of to-device events we received in the current sync
-     * resposne.
+     * response.
      *
      * @param deviceChanges The list of devices that have changed in some way since the previous
      * sync.
@@ -613,7 +456,7 @@ internal class OlmMachine(
      * **Note**: A room key needs to be shared with the group of users that are members in the given
      * room. If this is not done this method will panic.
      *
-     * The usual flow to encrypt an evnet using this state machine is as follows:
+     * The usual flow to encrypt an event using this state machine is as follows:
      *
      * 1. Get the one-time key claim request to establish 1:1 Olm sessions for
      * ```
@@ -629,7 +472,7 @@ internal class OlmMachine(
      *
      * 4. Send the encrypted event to the server.
      *
-     * After the room key is shared steps 1 and 2 will become noops, unless there's some changes in
+     * After the room key is shared steps 1 and 2 will become no-ops, unless there's some changes in
      * the room membership or in the list of devices a member has.
      *
      * @param roomId the ID of the room where the encrypted event will be sent to
@@ -865,13 +708,7 @@ internal class OlmMachine(
     }
 
     /** Get an active verification */
-    fun getVerification(userId: String, flowId: String): SasVerification? {
-        val sas = this.inner.getVerification(userId, flowId)
-
-        return if (sas == null) {
-            null
-        } else {
-            SasVerification(this.inner, sas)
-        }
+    fun getVerification(userId: String, flowId: String): Sas? {
+        return this.inner.getVerification(userId, flowId)
     }
 }
