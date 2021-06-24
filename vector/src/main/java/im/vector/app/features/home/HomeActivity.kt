@@ -47,6 +47,9 @@ import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.contactsbook.ContactsBookViewState
 import im.vector.app.features.disclaimer.showDisclaimerDialog
+import im.vector.app.features.home.room.list.RoomListViewModel
+import im.vector.app.features.home.room.list.RoomListViewModelFactory
+import im.vector.app.features.home.room.list.RoomListViewState
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -89,6 +92,7 @@ class HomeActivity :
         UnknownDeviceDetectorSharedViewModel.Factory,
         ServerBackupStatusViewModel.Factory,
         TchapContactListViewModel.Factory,
+        RoomListViewModel.Factory,
         ContactsBookViewModel.Factory,
         UnreadMessagesSharedViewModel.Factory,
         NavigationInterceptor,
@@ -115,6 +119,7 @@ class HomeActivity :
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var tchapContactViewModelFactory: TchapContactListViewModel.Factory
     @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
+    @Inject lateinit var roomListViewModelFactory: RoomListViewModelFactory
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
     @Inject lateinit var appStateHandler: AppStateHandler
 
@@ -166,6 +171,8 @@ class HomeActivity :
     override fun create(initialState: TchapContactListViewState) = tchapContactViewModelFactory.create(initialState)
 
     override fun create(initialState: ContactsBookViewState): ContactsBookViewModel = contactsBookViewModelFactory.create(initialState)
+
+    override fun create(initialState: RoomListViewState): RoomListViewModel = roomListViewModelFactory.create(initialState)
 
     override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel {
         return unreadMessagesSharedViewModelFactory.create(initialState)

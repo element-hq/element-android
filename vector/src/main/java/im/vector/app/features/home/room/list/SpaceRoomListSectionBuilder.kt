@@ -297,6 +297,7 @@ class SpaceRoomListSectionBuilder(
                             roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
                             pagedListConfig
                     ).also {
+                        onUdpatable(it)
                         when (spaceFilterStrategy) {
                             RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                                 activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {

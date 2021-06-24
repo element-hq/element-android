@@ -16,20 +16,23 @@
 
 package im.vector.app.features.home.room.list
 
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
+import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,11 +73,13 @@ class RoomListViewModel @Inject constructor(
          * If current space is null, will return orphan rooms only
          */
         ORPHANS_IF_SPACE_NULL,
+
         /**
          * Special case when we don't want to discriminate rooms when current space is null.
          * In this case return all.
          */
         ALL_IF_SPACE_NULL,
+
         /** Do not filter based on space*/
         NONE
     }
@@ -111,10 +116,19 @@ class RoomListViewModel @Inject constructor(
 
     companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
 
+        override fun initialState(viewModelContext: ViewModelContext): RoomListViewState? {
+            val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
+            return RoomListViewState(
+                    displayMode = uiStateRepository.getDisplayMode()
+            )
+        }
+
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel? {
-            val fragment: RoomListFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.roomListViewModelFactory.create(state)
+            return when (val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()) {
+                is HomeActivity -> activity.create(state)
+                else            -> error("You should let your activity/fragment implements Factory interface")
+            }
         }
     }
 
@@ -162,6 +176,9 @@ class RoomListViewModel @Inject constructor(
             is RoomListAction.ToggleSection               -> handleToggleSection(action.section)
             is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
             is RoomListAction.ShowRoomDetails             -> handleShowRoomDetails(action)
+            RoomListAction.CreateDirectChat               -> handleCreateDirectChat()
+            is RoomListAction.OpenRoomDirectory           -> handleOpenRoomDirectory(action)
+            RoomListAction.CancelSearch                   -> handleCancelSearch()
         }.exhaustive
     }
 
@@ -325,7 +342,7 @@ class RoomListViewModel @Inject constructor(
 
     private fun String.otherTag(): String? {
         return when (this) {
-            RoomTag.ROOM_TAG_FAVOURITE -> RoomTag.ROOM_TAG_LOW_PRIORITY
+            RoomTag.ROOM_TAG_FAVOURITE    -> RoomTag.ROOM_TAG_LOW_PRIORITY
             RoomTag.ROOM_TAG_LOW_PRIORITY -> RoomTag.ROOM_TAG_FAVOURITE
             else                          -> null
         }
@@ -339,5 +356,17 @@ class RoomListViewModel @Inject constructor(
                     .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
             _viewEvents.post(value)
         }
+    }
+
+    private fun handleCreateDirectChat() {
+        _viewEvents.post(RoomListViewEvents.CreateDirectChat)
+    }
+
+    private fun handleOpenRoomDirectory(action: RoomListAction.OpenRoomDirectory) {
+        _viewEvents.post(RoomListViewEvents.OpenRoomDirectory(action.filter))
+    }
+
+    private fun handleCancelSearch() {
+        _viewEvents.post(RoomListViewEvents.CancelSearch)
     }
 }

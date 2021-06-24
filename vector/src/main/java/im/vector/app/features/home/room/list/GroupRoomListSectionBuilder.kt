@@ -227,6 +227,7 @@ class GroupRoomListSectionBuilder(
                     val name = stringProvider.getString(nameRes)
                     session.getFilteredPagedRoomSummariesLive(roomQueryParams)
                             .also {
+                                onUdpatable(it)
                                 activeSpaceUpdaters.add(it)
                             }.livePagedList
                             .let { livePagedList ->

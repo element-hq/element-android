@@ -30,8 +30,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.OnModelBuildFinishedListener
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
-import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.dialogs.withColoredButton
@@ -65,7 +65,6 @@ data class RoomListParams(
 
 class RoomListFragment @Inject constructor(
         private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
-        val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
         private val footerController: RoomListFooterController,
         private val userPreferencesProvider: UserPreferencesProvider
@@ -77,7 +76,7 @@ class RoomListFragment @Inject constructor(
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
-    private val roomListViewModel: RoomListViewModel by fragmentViewModel()
+    private val roomListViewModel: RoomListViewModel by activityViewModel()
     private lateinit var stateRestorer: LayoutManagerStateRestorer
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
@@ -113,6 +112,9 @@ class RoomListFragment @Inject constructor(
                 is RoomListViewEvents.SelectRoom                -> handleSelectRoom(it)
                 is RoomListViewEvents.Done                      -> Unit
                 is RoomListViewEvents.NavigateToMxToBottomSheet -> handleShowMxToLink(it.link)
+                RoomListViewEvents.CreateDirectChat             -> handleCreateDirectChat()
+                is RoomListViewEvents.OpenRoomDirectory         -> handleOpenRoomDirectory(it.filter)
+                RoomListViewEvents.CancelSearch                 -> Unit
             }.exhaustive
         }
 
@@ -175,13 +177,24 @@ class RoomListFragment @Inject constructor(
 
     private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom) {
         navigator.openRoom(requireActivity(), event.roomSummary.roomId)
+        roomListViewModel.handle(RoomListAction.CancelSearch)
+    }
+
+    private fun handleCreateDirectChat() {
+        navigator.openCreateDirectRoom(requireActivity())
+        roomListViewModel.handle(RoomListAction.CancelSearch)
+    }
+
+    private fun handleOpenRoomDirectory(filter: String) {
+        navigator.openRoomDirectory(requireActivity(), filter)
+        roomListViewModel.handle(RoomListAction.CancelSearch)
     }
 
     private fun setupCreateRoomButton() {
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = true
-            RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = true
-            RoomListDisplayMode.ROOMS -> views.createGroupRoomButton.isVisible = true
+            RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.isVisible = true
+            RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.isVisible = true
             else                              -> Unit // No button in this mode
         }
 
@@ -224,11 +237,11 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun openRoomDirectory(initialFilter: String) {
-        navigator.openRoomDirectory(requireActivity(), initialFilter)
+        roomListViewModel.handle(RoomListAction.OpenRoomDirectory(initialFilter))
     }
 
     override fun createDirectChat() {
-        navigator.openCreateDirectRoom(requireActivity())
+        roomListViewModel.handle(RoomListAction.CreateDirectChat)
     }
 
     private fun setupRecyclerView() {
@@ -341,8 +354,8 @@ class RoomListFragment @Inject constructor(
         if (isAdded) {
             when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
-                RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.show()
-                RoomListDisplayMode.ROOMS -> views.createGroupRoomButton.show()
+                RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.show()
+                RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.show()
                 else                              -> Unit
             }
         }
@@ -410,14 +423,14 @@ class RoomListFragment @Inject constructor(
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
                             message = getString(R.string.room_list_catchup_empty_body))
                 }
-                RoomListDisplayMode.PEOPLE ->
+                RoomListDisplayMode.PEOPLE        ->
                     StateView.State.Empty(
                             title = getString(R.string.room_list_people_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_dm),
                             isBigImage = true,
                             message = getString(R.string.room_list_people_empty_body)
                     )
-                RoomListDisplayMode.ROOMS ->
+                RoomListDisplayMode.ROOMS         ->
                     StateView.State.Empty(
                             title = getString(R.string.room_list_rooms_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_room),

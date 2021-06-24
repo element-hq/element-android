@@ -22,6 +22,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnNextLayout
 import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
@@ -48,6 +49,8 @@ import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
+import im.vector.app.features.home.room.list.RoomListViewEvents
+import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
@@ -78,6 +81,7 @@ class HomeDetailFragment @Inject constructor(
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
     private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
+    private val roomListViewModel: RoomListViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
@@ -130,7 +134,7 @@ class HomeDetailFragment @Inject constructor(
                 is RoomGroupingMethod.ByLegacyGroup -> {
                     onGroupChange(roomGroupingMethod.groupSummary)
                 }
-                is RoomGroupingMethod.BySpace -> {
+                is RoomGroupingMethod.BySpace       -> {
                     onSpaceChange(roomGroupingMethod.spaceSummary)
                 }
             }
@@ -177,6 +181,13 @@ class HomeDetailFragment @Inject constructor(
                     activeCallViewHolder.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 })
+
+        roomListViewModel.observeViewEvents {
+            if (it is RoomListViewEvents.CancelSearch) {
+                // prevent glitch caused by search refresh during activity transition
+                view.doOnNextLayout { closeSearchView() }
+            }
+        }
     }
 
     override fun onResume() {
@@ -186,10 +197,9 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun toggleSearchView() {
-        val searchItem = views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)
         val isSearchMode = views.homeSearchView.isVisible
         if (!isSearchMode) {
-            searchItem?.setIcon(0)
+            views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(0)
             views.homeToolbarContent.isVisible = false
             views.groupToolbarAvatarImageView.isVisible = false
             views.homeSearchView.apply {
@@ -197,12 +207,16 @@ class HomeDetailFragment @Inject constructor(
                 isIconified = false
             }
         } else {
-            searchItem?.setIcon(R.drawable.ic_tchap_search)
-            views.homeSearchView.isVisible = false
-            views.homeToolbarContent.isVisible = true
-            views.groupToolbarAvatarImageView.isVisible = true
-            views.homeSearchView.takeUnless { it.isEmpty() }?.setQuery("", false)
+            closeSearchView()
         }
+    }
+
+    private fun closeSearchView() {
+        views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(R.drawable.ic_tchap_search)
+        views.homeSearchView.isVisible = false
+        views.homeToolbarContent.isVisible = true
+        views.groupToolbarAvatarImageView.isVisible = true
+        views.homeSearchView.takeUnless { it.isEmpty() }?.setQuery("", false)
     }
 
     private fun checkNotificationTabStatus() {
@@ -297,10 +311,10 @@ class HomeDetailFragment @Inject constructor(
         serverBackupStatusViewModel
                 .subscribe(this) {
                     when (val banState = it.bannerState.invoke()) {
-                        is BannerState.Setup -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                        is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
                         null,
-                        BannerState.Hidden -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                        BannerState.Hidden    -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
                     }
                 }
         views.homeKeysBackupBanner.delegate = this
@@ -331,7 +345,7 @@ class HomeDetailFragment @Inject constructor(
                     is RoomGroupingMethod.ByLegacyGroup -> {
                         // nothing do far
                     }
-                    is RoomGroupingMethod.BySpace -> {
+                    is RoomGroupingMethod.BySpace       -> {
                         it.roomGroupingMethod.spaceSummary?.let {
                             sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(it.roomId))
                         }
@@ -353,11 +367,10 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
-                R.id.bottom_action_rooms -> RoomListDisplayMode.ROOMS
+                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
                 else                      -> RoomListDisplayMode.NOTIFICATIONS
             }
-            // close search view before changing display mode
-            if (views.homeSearchView.isVisible) toggleSearchView()
+            closeSearchView()
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
             true
         }
@@ -453,7 +466,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun RoomListDisplayMode.toMenuId() = when (this) {
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-        RoomListDisplayMode.ROOMS -> R.id.bottom_action_rooms
+        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
         else                       -> R.id.bottom_action_notification
     }
 

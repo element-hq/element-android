@@ -21,6 +21,7 @@ Improvements 🙌:
  - Design Tchap invite cells #79
  - Change the invite description #104
  - Be able to select the best direct chat related to a user id #88
+ - [Home screen] cancel the search when the user selects an item from the search result #107
 
 
 =======================================================
