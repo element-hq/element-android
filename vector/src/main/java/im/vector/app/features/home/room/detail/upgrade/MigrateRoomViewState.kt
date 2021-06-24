@@ -26,7 +26,7 @@ data class MigrateRoomViewState(
         val currentVersion: String? = null,
         val isPublic: Boolean = false,
         val shouldIssueInvites: Boolean = false,
-        val shouldUpdateKnownParents: Boolean = false,
+        val shouldUpdateKnownParents: Boolean = true,
         val otherMemberCount: Int = 0,
         val knownParents: List<String> = emptyList(),
         val upgradingStatus: Async<UpgradeRoomViewModelTask.Result> = Uninitialized,

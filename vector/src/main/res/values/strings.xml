@@ -3427,4 +3427,7 @@
     <string name="upgrade_room_update_parent">Automatically update parent space</string>
     <string name="upgrade_room_no_power_to_manage">You need permission to upgrade a room</string>
 
+
+    <string name="room_using_unstable_room_version">This room is running room version %s, which this homeserver has marked as unstable.</string>
+    <string name="room_upgrade_to_recommened_version">Upgrade to the recommended room version</string>
  </resources>

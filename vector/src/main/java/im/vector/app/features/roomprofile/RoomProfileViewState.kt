@@ -30,7 +30,11 @@ data class RoomProfileViewState(
         val roomCreateContent: Async<RoomCreateContent> = Uninitialized,
         val bannedMembership: Async<List<RoomMemberSummary>> = Uninitialized,
         val actionPermissions: ActionPermissions = ActionPermissions(),
-        val isLoading: Boolean = false
+        val isLoading: Boolean = false,
+        val isUsingUnstableRoomVersion: Boolean = false,
+        val recommendedRoomVersion: String? = null,
+        val canUpgradeRoom: Boolean = false,
+        val isTombstoned: Boolean = false
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import io.realm.Realm
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.homeserver.RoomVersionStatus
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -63,12 +64,24 @@ internal class DefaultRoomVersionService @AssistedInject constructor(
         )
     }
 
-    override suspend fun getRecommendedVersion(): String {
+    override fun getRecommendedVersion(): String {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             HomeServerCapabilitiesEntity.get(realm)?.let {
                 HomeServerCapabilitiesMapper.map(it)
             }?.roomVersions?.defaultRoomVersion ?: DEFAULT_ROOM_VERSION
         }
+    }
+
+    override fun isUsingUnstableRoomVersion(): Boolean {
+        var isUsingUnstable: Boolean
+        Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+            val versionCaps = HomeServerCapabilitiesEntity.get(realm)?.let {
+                HomeServerCapabilitiesMapper.map(it)
+            }?.roomVersions
+            val currentVersion = getRoomVersion()
+            isUsingUnstable = versionCaps?.supportedVersion?.firstOrNull { it.version == currentVersion }?.status == RoomVersionStatus.UNSTABLE
+        }
+        return isUsingUnstable
     }
 
     override fun userMayUpgradeRoom(userId: String): Boolean {

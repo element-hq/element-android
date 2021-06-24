@@ -332,7 +332,11 @@ object CommandParser {
                 }
                 Command.UPGRADE_ROOM.command           -> {
                     val newVersion = textMessage.substring(Command.UPGRADE_ROOM.command.length).trim()
-                    ParsedCommand.UpgradeRoom(newVersion)
+                    if (newVersion.isEmpty()) {
+                        ParsedCommand.ErrorSyntax(Command.UPGRADE_ROOM)
+                    } else {
+                        ParsedCommand.UpgradeRoom(newVersion)
+                    }
                 }
                 else                                   -> {
                     // Unknown command

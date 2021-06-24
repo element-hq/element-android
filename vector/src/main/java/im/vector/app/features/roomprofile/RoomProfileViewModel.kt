@@ -22,8 +22,8 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -81,8 +81,14 @@ class RoomProfileViewModel @AssistedInject constructor(
         rxRoom.liveStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomCreateContent>() }
                 .unwrap()
-                .execute {
-                    copy(roomCreateContent = it)
+                .execute { async ->
+                    copy(
+                            roomCreateContent = async,
+                            recommendedRoomVersion = room.getRecommendedVersion(),
+                            isUsingUnstableRoomVersion = room.isUsingUnstableRoomVersion(),
+                            canUpgradeRoom = room.userMayUpgradeRoom(session.myUserId),
+                            isTombstoned = room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE) != null
+                    )
                 }
     }
 

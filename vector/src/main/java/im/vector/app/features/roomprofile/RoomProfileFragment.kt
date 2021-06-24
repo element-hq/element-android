@@ -45,6 +45,7 @@ import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomProfileHeaderBinding
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
@@ -301,6 +302,11 @@ class RoomProfileFragment @Inject constructor(
 
     override fun onUrlInTopicLongClicked(url: String) {
         copyToClipboard(requireContext(), url, true)
+    }
+
+    override fun doMigrateToVersion(newVersion: String) {
+        MigrateRoomBottomSheet.newInstance(roomProfileArgs.roomId, newVersion)
+                .show(parentFragmentManager, "migrate")
     }
 
     private fun onShareRoomProfile(permalink: String) {
