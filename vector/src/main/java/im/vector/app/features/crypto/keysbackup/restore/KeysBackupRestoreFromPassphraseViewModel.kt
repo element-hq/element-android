@@ -30,12 +30,10 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor(
 
     var passphrase: MutableLiveData<String> = MutableLiveData()
     var passphraseErrorText: MutableLiveData<String> = MutableLiveData()
-    var showPasswordMode: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         passphrase.value = null
         passphraseErrorText.value = null
-        showPasswordMode.value = false
     }
 
     // ========= Actions =========

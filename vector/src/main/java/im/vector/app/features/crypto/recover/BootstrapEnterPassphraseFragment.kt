@@ -26,7 +26,6 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
 import im.vector.app.features.settings.VectorLocale
@@ -80,7 +79,6 @@ class BootstrapEnterPassphraseFragment @Inject constructor()
 //            }
         }
 
-        views.ssssViewShowPassword.debouncedClicks { sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility) }
         views.bootstrapSubmit.debouncedClicks { submit() }
     }
 
@@ -101,10 +99,6 @@ class BootstrapEnterPassphraseFragment @Inject constructor()
 
     override fun invalidate() = withState(sharedViewModel) { state ->
         if (state.step is BootstrapStep.SetupPassphrase) {
-            val isPasswordVisible = state.step.isPasswordVisible
-            views.ssssPassphraseEnterEdittext.showPassword(isPasswordVisible, updateCursor = false)
-            views.ssssViewShowPassword.render(isPasswordVisible)
-
             state.passphraseStrength.invoke()?.let { strength ->
                 val score = strength.score
                 views.ssssPassphraseSecurityProgress.strength = score

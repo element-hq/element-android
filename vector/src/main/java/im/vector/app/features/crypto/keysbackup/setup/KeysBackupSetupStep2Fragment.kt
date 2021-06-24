@@ -25,7 +25,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.transition.TransitionManager
 import com.nulabinc.zxcvbn.Zxcvbn
 import im.vector.app.R
-import im.vector.app.core.extensions.showPassword
+import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupSetupStep2Binding
 import im.vector.app.features.settings.VectorLocale
@@ -113,13 +113,6 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<Fr
 
         views.keysBackupSetupStep2PassphraseConfirmEditText.setText(viewModel.confirmPassphrase.value)
 
-        viewModel.showPasswordMode.observe(viewLifecycleOwner) {
-            val shouldBeVisible = it ?: false
-            views.keysBackupSetupStep2PassphraseEnterEdittext.showPassword(shouldBeVisible)
-            views.keysBackupSetupStep2PassphraseConfirmEditText.showPassword(shouldBeVisible)
-            views.keysBackupSetupStep2ShowPassword.render(shouldBeVisible)
-        }
-
         viewModel.confirmPassphraseError.observe(viewLifecycleOwner) {
             TransitionManager.beginDelayedTransition(views.keysBackupRoot)
             views.keysBackupSetupStep2PassphraseConfirmTil.error = it
@@ -135,16 +128,11 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<Fr
     }
 
     private fun setupViews() {
-        views.keysBackupSetupStep2ShowPassword.setOnClickListener { toggleVisibilityMode() }
         views.keysBackupSetupStep2Button.setOnClickListener { doNext() }
         views.keysBackupSetupStep2SkipButton.setOnClickListener { skipPassphrase() }
 
         views.keysBackupSetupStep2PassphraseEnterEdittext.doOnTextChanged { _, _, _, _ -> onPassphraseChanged() }
         views.keysBackupSetupStep2PassphraseConfirmEditText.doOnTextChanged { _, _, _, _ -> onConfirmPassphraseChanged() }
-    }
-
-    private fun toggleVisibilityMode() {
-        viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
     }
 
     private fun doNext() {
@@ -161,6 +149,9 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<Fr
             else                                                            -> {
                 viewModel.megolmBackupCreationInfo = null
 
+                // Ensure passphrase is hidden during the process
+                views.keysBackupSetupStep2PassphraseEnterEdittext.hidePassword()
+                views.keysBackupSetupStep2PassphraseConfirmEditText.hidePassword()
                 viewModel.prepareRecoveryKey(requireActivity(), viewModel.passphrase.value)
             }
         }
@@ -172,6 +163,9 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<Fr
                 // Generate a recovery key for the user
                 viewModel.megolmBackupCreationInfo = null
 
+                // Ensure passphrase is hidden during the process
+                views.keysBackupSetupStep2PassphraseEnterEdittext.hidePassword()
+                views.keysBackupSetupStep2PassphraseConfirmEditText.hidePassword()
                 viewModel.prepareRecoveryKey(requireActivity(), null)
             }
             else                                       -> {

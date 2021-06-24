@@ -28,21 +28,18 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
-import im.vector.app.core.extensions.showPassword
+import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.utils.autoResetTextInputLayoutErrors
 import im.vector.app.databinding.FragmentLoginResetPassword2Binding
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
-
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked for email and new password to reset his password
  */
 class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginResetPassword2Binding>() {
-
-    private var passwordShown = false
 
     // Show warning only once
     private var showWarning = true
@@ -55,7 +52,6 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
         super.onViewCreated(view, savedInstanceState)
 
         setupSubmitButton()
-        setupPasswordReveal()
         setupAutoFill()
 
         autoResetTextInputLayoutErrors(listOf(views.resetPasswordEmailTil, views.passwordFieldTil))
@@ -148,23 +144,6 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
         views.passwordFieldTil.error = null
     }
 
-    private fun setupPasswordReveal() {
-        passwordShown = false
-
-        views.passwordReveal.setOnClickListener {
-            passwordShown = !passwordShown
-
-            renderPasswordField()
-        }
-
-        renderPasswordField()
-    }
-
-    private fun renderPasswordField() {
-        views.passwordField.showPassword(passwordShown)
-        views.passwordReveal.render(passwordShown)
-    }
-
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction2.ResetResetPassword)
     }
@@ -178,8 +157,7 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
 
         if (state.isLoading) {
             // Ensure new password is hidden
-            passwordShown = false
-            renderPasswordField()
+            views.passwordField.hidePassword()
         }
     }
 }
