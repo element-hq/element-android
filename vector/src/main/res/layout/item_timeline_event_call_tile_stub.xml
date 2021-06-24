@@ -53,7 +53,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="12dp"
-        android:textColor="?vctr_notice_secondary"
+        android:textColor="?vctr_content_secondary"
         tools:text="@string/video_call_in_progress" />
 
 
