@@ -79,7 +79,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
                 }
             }
             MigrateRoomAction.UpgradeRoom                  -> {
-                handleUpgradeRoom(action)
+                handleUpgradeRoom()
             }
         }
     }
@@ -94,7 +94,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleUpgradeRoom(action: MigrateRoomAction) = withState { state ->
+    private fun handleUpgradeRoom() = withState { state ->
         val summary = session.getRoomSummary(state.roomId)
         setState {
             copy(upgradingStatus = Loading())
