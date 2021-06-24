@@ -57,9 +57,10 @@ import org.matrix.android.sdk.internal.crypto.algorithms.IMXGroupEncryption
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXWithHeldExtension
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
-import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
+import org.matrix.android.sdk.internal.crypto.crosssigning.CrossSigningManagerInput
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
+import org.matrix.android.sdk.internal.crypto.keysbackup.KeysBackupManager
+import org.matrix.android.sdk.internal.crypto.keysbackup.KeysBackupManagerInput
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
@@ -80,7 +81,6 @@ import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
-import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
@@ -101,14 +101,7 @@ import javax.inject.Inject
 import kotlin.math.max
 
 /**
- * A `CryptoService` class instance manages the end-to-end crypto for a session.
  *
- *
- * Messages posted by the user are automatically redirected to CryptoService in order to be encrypted
- * before sending.
- * In the other hand, received events goes through CryptoService for decrypting.
- * CryptoService maintains all necessary keys and their sharing with other devices required for the crypto.
- * Specially, it tracks all room membership changes events in order to do keys updates.
  */
 @SessionScope
 internal class CryptoManager @Inject constructor(
@@ -129,18 +122,15 @@ internal class CryptoManager @Inject constructor(
         private val mxCryptoConfig: MXCryptoConfig,
         // Device list manager
         private val deviceListManager: DeviceListManager,
-        // The key backup service.
-        private val keysBackupService: DefaultKeysBackupService,
+        private val keysBackupManager: KeysBackupManager,
+        private val keysBackupManagerInput: KeysBackupManagerInput,
         //
         private val objectSigner: ObjectSigner,
         //
         private val oneTimeKeysUploader: OneTimeKeysUploader,
         //
         private val roomDecryptorProvider: RoomDecryptorProvider,
-        // The verification service.
-        private val verificationService: DefaultVerificationService,
-
-        private val crossSigningService: DefaultCrossSigningService,
+        private val crossSigningManagerInput: CrossSigningManagerInput,
         //
         private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
         //
@@ -164,12 +154,15 @@ internal class CryptoManager @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope,
         private val eventDecryptor: EventDecryptor
-) : CryptoService {
+) : CryptoService,
+        CryptoManagerInput,
+        CryptoDecryptor,
+        CryptoSyncInput {
 
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
 
-    fun onStateEvent(roomId: String, event: Event) {
+    override fun onStateEvent(roomId: String, event: Event) {
         when (event.getClearType()) {
             EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
@@ -177,7 +170,7 @@ internal class CryptoManager @Inject constructor(
         }
     }
 
-    fun onLiveEvent(roomId: String, event: Event) {
+    override fun onLiveEvent(roomId: String, event: Event) {
         when (event.getClearType()) {
             EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
@@ -185,7 +178,7 @@ internal class CryptoManager @Inject constructor(
         }
     }
 
-    val gossipingBuffer = mutableListOf<Event>()
+    private val gossipingBuffer = mutableListOf<Event>()
 
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
         setDeviceNameTask
@@ -322,12 +315,12 @@ internal class CryptoManager @Inject constructor(
             oneTimeKeysUploader.maybeUploadOneTimeKeys()
             // this can throw if no backup
             tryOrNull {
-                keysBackupService.checkAndStartKeysBackup()
+                keysBackupManager.checkAndStartKeysBackup()
             }
         }
     }
 
-    fun onSyncWillProcess(isInitialSync: Boolean) {
+    override fun onSyncWillProcess(isInitialSync: Boolean) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             if (isInitialSync) {
                 try {
@@ -391,24 +384,18 @@ internal class CryptoManager @Inject constructor(
     // Always enabled on Matrix Android SDK2
     override fun isCryptoEnabled() = true
 
-    /**
-     * @return the Keys backup Service
-     */
-    override fun keysBackupService() = keysBackupService
+    override fun keysBackupService() = error("Dev error")
 
-    /**
-     * @return the VerificationService
-     */
-    override fun verificationService() = verificationService
+    override fun verificationService() = error("Dev error")
 
-    override fun crossSigningService() = crossSigningService
+    override fun crossSigningService() = error("Dev error")
 
     /**
      * A sync response has been received
      *
      * @param syncResponse the syncResponse
      */
-    fun onSyncCompleted(syncResponse: SyncResponse) {
+    override fun onSyncCompleted(syncResponse: SyncResponse) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
                 if (syncResponse.deviceLists != null) {
@@ -685,7 +672,7 @@ internal class CryptoManager @Inject constructor(
      */
     @Throws(MXCryptoError::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-        return internalDecryptEvent(event, timeline)
+        return eventDecryptor.decryptEvent(event, timeline)
     }
 
     /**
@@ -697,18 +684,6 @@ internal class CryptoManager @Inject constructor(
      */
     override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>) {
         eventDecryptor.decryptEventAsync(event, timeline, callback)
-    }
-
-    /**
-     * Decrypt an event
-     *
-     * @param event    the raw event.
-     * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
-     * @return the MXEventDecryptionResult data, or null in case of error
-     */
-    @Throws(MXCryptoError::class)
-    private fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-        return eventDecryptor.decryptEvent(event, timeline)
     }
 
     /**
@@ -725,7 +700,7 @@ internal class CryptoManager @Inject constructor(
      *
      * @param event the event
      */
-    fun onToDeviceEvent(event: Event) {
+    override fun onToDeviceEvent(event: Event) {
         // event have already been decrypted
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
@@ -772,7 +747,10 @@ internal class CryptoManager @Inject constructor(
             Timber.e("## CRYPTO | GOSSIP onRoomKeyEvent() : Unable to handle keys for ${roomKeyContent.algorithm}")
             return
         }
-        alg.onRoomKeyEvent(event, keysBackupService)
+        val doKeyBackup = alg.onRoomKeyEvent(event)
+        if (doKeyBackup) {
+            keysBackupManager.maybeBackupKeys()
+        }
     }
 
     private fun onKeyWithHeldReceived(event: Event) {
@@ -825,19 +803,19 @@ internal class CryptoManager @Inject constructor(
     private fun handleSDKLevelGossip(secretName: String?, secretValue: String): Boolean {
         return when (secretName) {
             MASTER_KEY_SSSS_NAME       -> {
-                crossSigningService.onSecretMSKGossip(secretValue)
+                crossSigningManagerInput.onSecretMSKGossip(secretValue)
                 true
             }
             SELF_SIGNING_KEY_SSSS_NAME -> {
-                crossSigningService.onSecretSSKGossip(secretValue)
+                crossSigningManagerInput.onSecretSSKGossip(secretValue)
                 true
             }
             USER_SIGNING_KEY_SSSS_NAME -> {
-                crossSigningService.onSecretUSKGossip(secretValue)
+                crossSigningManagerInput.onSecretUSKGossip(secretValue)
                 true
             }
             KEYBACKUP_SECRET_SSSS_NAME -> {
-                keysBackupService.onSecretKeyGossip(secretValue)
+                keysBackupManagerInput.onSecretKeyGossip(secretValue)
                 true
             }
             else                       -> false

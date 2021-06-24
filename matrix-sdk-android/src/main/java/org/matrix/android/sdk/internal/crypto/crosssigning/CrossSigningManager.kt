@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningServic
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
+import org.matrix.android.sdk.internal.crypto.UserDevicesUpdateListener
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSignatureQueryBuilder
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -65,7 +66,8 @@ internal class CrossSigningManager @Inject constructor(
         private val workManagerProvider: WorkManagerProvider,
         private val updateTrustWorkerDataRepository: UpdateTrustWorkerDataRepository
 ) : CrossSigningService,
-        DeviceListManager.UserDevicesUpdateListener {
+        CrossSigningManagerInput,
+        UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
 

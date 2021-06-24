@@ -84,6 +84,8 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.internal.crypto.CryptoSyncInput
+import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -105,7 +107,10 @@ internal class VerificationManager @Inject constructor(
         private val crossSigningService: CrossSigningService,
         private val cryptoCoroutineScope: CoroutineScope,
         private val taskExecutor: TaskExecutor
-) : DefaultVerificationTransaction.Listener, VerificationService {
+) : VerificationService,
+        CryptoSyncInput,
+        VerificationManagerInput,
+        DefaultVerificationTransaction.Listener {
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -123,7 +128,7 @@ internal class VerificationManager @Inject constructor(
     private val pendingRequests = HashMap<String, MutableList<PendingVerificationRequest>>()
 
     // Event received from the sync
-    fun onToDeviceEvent(event: Event) {
+    override fun onToDeviceEvent(event: Event) {
         Timber.d("## SAS onToDeviceEvent ${event.getClearType()}")
         cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
@@ -158,7 +163,11 @@ internal class VerificationManager @Inject constructor(
         }
     }
 
-    fun onRoomEvent(event: Event) {
+    override fun onSyncCompleted(syncResponse: SyncResponse) {
+        // No-op
+    }
+
+    override fun onRoomEvent(event: Event) {
         cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START  -> {
@@ -274,7 +283,7 @@ internal class VerificationManager @Inject constructor(
         }
     }
 
-    fun onRoomRequestHandledByOtherDevice(event: Event) {
+    override fun onRoomRequestHandledByOtherDevice(event: Event) {
         val requestInfo = event.content.toModel<MessageRelationContent>()
                 ?: return
         val requestId = requestInfo.relatesTo?.eventId ?: return
@@ -325,7 +334,7 @@ internal class VerificationManager @Inject constructor(
         dispatchRequestAdded(pendingVerificationRequest)
     }
 
-    suspend fun onRoomRequestReceived(event: Event) {
+    override suspend fun onRoomRequestReceived(event: Event) {
         Timber.v("## SAS Verification request from ${event.senderId} in room ${event.roomId}")
         val requestInfo = event.getClearContent().toModel<MessageVerificationRequestContent>() ?: return
         val validRequestInfo = requestInfo
