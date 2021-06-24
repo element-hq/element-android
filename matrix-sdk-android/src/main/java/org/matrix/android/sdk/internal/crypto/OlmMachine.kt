@@ -112,8 +112,7 @@ private fun toCryptoDeviceInfo(device: Device): CryptoDeviceInfo {
             // Kotlin side care about signatures?
             mapOf(),
             UnsignedDeviceInfo(device.displayName),
-            // TODO pass trust levels here
-            DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false),
+            DeviceTrustLevel(crossSigningVerified = device.verified, locallyVerified = device.locallyVerified),
             device.isBlocked,
             // TODO
             null)
