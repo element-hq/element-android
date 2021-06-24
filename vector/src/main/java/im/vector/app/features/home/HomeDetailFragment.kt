@@ -215,7 +215,7 @@ class HomeDetailFragment @Inject constructor(
         callManager.checkForProtocolsSupportIfNeeded()
     }
 
-    private fun checkNotificationTwbStatus() {
+    private fun checkNotificationTabStatus() {
         val wasVisible = views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible
         val combinedOverview = vectorPreferences.combinedOverview()
         val combinedOverviewWasVisible = views.bottomNavigationView.menu.findItem(R.id.bottom_action_all).isVisible
@@ -229,11 +229,11 @@ class HomeDetailFragment @Inject constructor(
                 val menuId = it.currentTab.toMenuId()
                 if (combinedOverview) {
                     if (menuId == R.id.bottom_action_people || menuId == R.id.bottom_action_rooms) {
-                        viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.ALL))
+                        viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.ALL)))
                     }
                 } else {
                     if (menuId == R.id.bottom_action_all) {
-                        viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.PEOPLE))
+                        viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.PEOPLE)))
                     }
                 }
             }
@@ -243,16 +243,22 @@ class HomeDetailFragment @Inject constructor(
             withState(viewModel) {
                 if (it.currentTab.toMenuId() == R.id.bottom_action_notification) {
                     if (combinedOverview) {
-                        viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.ALL))
+                        viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.ALL)))
                     } else {
-                        viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.PEOPLE))
+                        viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.PEOPLE)))
                     }
                 }
             }
         }
         val wasBottomBarVisible = views.bottomNavigationView.isVisible
-        if (wasBottomBarVisible != vectorPreferences.enableOverviewTabs()) {
-            loadNavigationView()
+        viewModel.selectSubscribe(this, HomeDetailViewState::showDialPadTab) { showDialPadTab ->
+            updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
+        }
+        withState(viewModel) {
+            val showTabBar = vectorPreferences.enableOverviewTabs() || it.showDialPadTab
+            if (wasBottomBarVisible != showTabBar) {
+                loadNavigationView()
+            }
         }
     }
 

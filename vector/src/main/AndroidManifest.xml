@@ -75,7 +75,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.SC.Light"
-        tools:replace="android:allowBackup">
+        tools:replace="android:allowBackup,android:theme">
 
         <!-- No limit for screen ratio: avoid black strips -->
         <meta-data

@@ -61,11 +61,11 @@
 
                 <TextView
                     android:id="@+id/loginServerIKnowMyIdSubmitTitle"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="@string/login_connect_using_matrix_id_title_sc"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
                     android:textColor="?vctr_content_primary"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/loginServerIKnowMyIdSubmitText"
@@ -75,12 +75,12 @@
 
                 <TextView
                     android:id="@+id/loginServerIKnowMyIdSubmitText"
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:gravity="start"
                     android:text="@string/login_connect_using_matrix_id_text_sc"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -104,11 +104,11 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceOtherTitle"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="@string/login_server_other_title_sc"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
                     android:textColor="?vctr_content_primary"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceOtherText"
@@ -118,12 +118,12 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceOtherText"
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:gravity="start"
                     android:text="@string/login_server_other_text_sc"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

@@ -2,7 +2,7 @@
 <resources>
 
     <!-- SC THEME COLORS -->
-    <style name="AppTheme.Base.SC" parent="AppTheme.Base.Black">
+    <style name="AppTheme.Base.SC" parent="Base.Theme.Vector.Black">
         <!-- Element attribute for palette -->
         <!-- content colors -->
         <item name="vctr_content_primary">@color/text_color_primary_sc</item>
@@ -15,7 +15,6 @@
         <item name="vctr_system">@color/background_dark_sc</item>
 
         <!-- other colors -->
-        <item name="vctr_home_drawer_header_background">?android:colorBackground</item>
         <item name="vctr_unread_room_badge">?colorAccent</item>
         <item name="vctr_fab_label_bg">@color/background_floating_sc</item>
         <item name="vctr_fab_label_stroke">@android:color/black</item>
@@ -28,9 +27,9 @@
         <item name="vctr_room_active_widgets_banner_text">?vctr_content_secondary</item>
         <item name="vctr_reaction_background_off">@color/background_sc</item>
         <item name="vctr_reaction_background_on">@color/sc_reaction_background_on_dark</item>
-        <item name="vctr_bottom_nav_icon_color">#ff808080</item>
         <item name="vctr_waiting_background_color">#555555</item>
         <item name="vctr_chat_effect_snow_background">@android:color/transparent</item>
+        <item name="vctr_toolbar_background">@color/background_dark_sc</item>
 
         <!-- room message colors -->
         <item name="vctr_notice_secondary">?vctr_content_secondary</item>
@@ -43,7 +42,7 @@
         <item name="vctr_spoiler_background_color">#FFFFFFFF</item>
 
         <!-- Some alias -->
-        <item name="vctr_header_background">?vctr_content_quinary</item>
+        <item name="vctr_header_background">?vctr_system</item>
         <item name="vctr_list_separator">@color/background_black_sc</item>
         <item name="vctr_list_separator_system">?vctr_system</item>
         <item name="vctr_list_separator_on_surface">?vctr_system</item>
@@ -81,14 +80,6 @@
 
         <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC</item>
 
-        <!-- SnackBar -->
-        <!-- Style to use for SnackBars in this theme. -->
-        <item name="snackbarStyle">@style/VectorSnackBarStyle</item>
-        <!-- Style to use for action button within a SnackBar in this theme. -->
-        <item name="snackbarButtonStyle">@style/VectorSnackBarButton</item>
-        <!-- Style to use for message text within a SnackBar in this theme. -->
-        <item name="snackbarTextViewStyle">@style/VectorSnackBarText</item>
-
         <!-- SC additions -->
         <item name="colorAccent">@color/accent_sc</item>
         <item name="android:colorAccent">@color/accent_sc</item>
@@ -105,7 +96,6 @@
     <style name="AppTheme.Base.SC.Dark">
         <item name="riotx_toolbar_bg">@color/background_sc</item>
         <item name="android:colorBackground">@color/background_dark_sc</item>
-        <item name="vctr_home_drawer_header_background">@color/background_sc</item>
         <item name="vctr_header_background">@color/background_sc</item>
 
         <item name="android:statusBarColor">@color/background_dark_sc</item>

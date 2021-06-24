@@ -11,8 +11,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout style="@style/LoginFormContainer">
 
             <ImageView
-                style="@style/LoginLogo"
                 android:id="@+id/loginLogo"
+                style="@style/LoginLogo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -20,11 +20,12 @@
 
             <TextView
                 android:id="@+id/promptSimplifiedModeTitle"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:text="@string/prompt_simplified_mode_title"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:textColor="?vctr_content_primary"
                 android:transitionName="loginTitleTransition"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -32,12 +33,13 @@
 
             <TextView
                 android:id="@+id/promptSimplifiedModeText"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:gravity="start"
                 android:text="@string/prompt_simplified_mode_text"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                android:textColor="?vctr_content_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/promptSimplifiedModeTitle" />
@@ -60,11 +62,11 @@
 
                 <TextView
                     android:id="@+id/promptSimplifiedModeOnTitle"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="@string/prompt_simplified_mode_on"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
                     android:textColor="?vctr_content_primary"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/promptSimplifiedModeOnText"
@@ -74,12 +76,12 @@
 
                 <TextView
                     android:id="@+id/promptSimplifiedModeOnText"
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:gravity="start"
                     android:text="@string/prompt_simplified_mode_on_text"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -104,11 +106,11 @@
 
                 <TextView
                     android:id="@+id/promptSimplifiedModeOffTitle"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="@string/prompt_simplified_mode_off"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
                     android:textColor="?vctr_content_primary"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/promptSimplifiedModeOffText"
@@ -118,12 +120,12 @@
 
                 <TextView
                     android:id="@+id/promptSimplifiedModeOffText"
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:gravity="start"
                     android:text="@string/prompt_simplified_mode_off_text"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

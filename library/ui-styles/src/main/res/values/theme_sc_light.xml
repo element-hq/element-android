@@ -2,7 +2,7 @@
 <resources>
 
     <!-- SC THEME COLORS -->
-    <style name="AppTheme.Base.SC.Light" parent="AppTheme.Base.Light">
+    <style name="AppTheme.Base.SC.Light" parent="Base.Theme.Vector.Light">
         <item name="colorPrimary">@color/accent_sc</item>
         <item name="colorPrimaryVariant">@color/accent_sc</item>
         <item name="colorSecondary">@color/accent_sc</item>

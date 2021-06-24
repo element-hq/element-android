@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="VectorAlertDialogStyleDark.SC">
+    <style name="VectorAlertDialogStyleDark.SC" parent="AlertDialog.Vector.Dark">
         <item name="colorPrimary">@color/accent_sc</item>
         <item name="colorSecondary">@color/accent_sc</item>
         <item name="colorSurface">@color/background_sc</item>
@@ -9,19 +9,19 @@
         <item name="colorError">@color/element_alert_dark</item>
     </style>
 
-    <style name="VectorAlertDialogStyleLight.SC">
+    <style name="VectorAlertDialogStyleLight.SC" parent="AlertDialog.Vector.Light">
         <item name="colorPrimary">@color/accent_sc</item>
         <item name="colorSecondary">@color/accent_sc</item>
     </style>
 
     <!-- custom action bar -->
-    <style name="Vector.Styled.ActionBar.SC">
+    <style name="Vector.Styled.ActionBar.SC" parent="Widget.Vector.Toolbar.Base">
         <item name="android:background">@color/background_dark_sc</item>
         <item name="background">@color/background_dark_sc</item>
     </style>
 
     <!-- BottomSheet theming -->
-    <style name="Vector.BottomSheet.SC" parent="Vector.BottomSheet.Dark">
+    <style name="Vector.BottomSheet.SC" parent="Theme.Vector.BottomSheetDialog.Dark">
         <item name="colorPrimary">@color/text_color_primary_sc</item>
         <item name="colorSecondary">@color/text_color_secondary_sc</item>
         <item name="colorSurface">@color/background_floating_sc</item>
@@ -37,7 +37,7 @@
         <item name="colorAccent">@color/accent_sc</item>
     </style>
 
-    <style name="Vector.BottomSheet.SC.Light" parent="Vector.BottomSheet.Light">
+    <style name="Vector.BottomSheet.SC.Light" parent="Theme.Vector.BottomSheetDialog.Light">
         <!-- Accent color -->
         <item name="android:colorAccent">@color/accent_sc</item>
         <item name="colorAccent">@color/accent_sc</item>

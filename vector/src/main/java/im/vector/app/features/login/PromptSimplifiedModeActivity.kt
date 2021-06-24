@@ -18,7 +18,7 @@ package im.vector.app.features.login
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
@@ -46,7 +46,7 @@ open class PromptSimplifiedModeActivity : VectorBaseActivity<ActivityLoginBindin
         }
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 
