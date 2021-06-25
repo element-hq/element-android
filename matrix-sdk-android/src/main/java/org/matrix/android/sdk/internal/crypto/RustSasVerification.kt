@@ -68,7 +68,7 @@ internal class SasVerification(
 
     override val isIncoming: Boolean
         get() {
-            return false
+            return !this.inner.weStarted
         }
 
     override var otherDeviceId: String?
@@ -113,19 +113,19 @@ internal class SasVerification(
         }
 
     override fun cancel() {
-        TODO()
+        this.cancelHelper(CancelCode.User)
     }
 
     override fun cancel(code: CancelCode) {
-        TODO()
+        this.cancelHelper(code)
     }
 
     override fun shortCodeDoesNotMatch() {
-        TODO()
+        this.cancelHelper(CancelCode.MismatchedSas)
     }
 
     override fun isToDeviceTransport(): Boolean {
-        return false
+        return this.inner.roomId == null
     }
 
     override fun supportsDecimal(): Boolean {
@@ -142,41 +142,23 @@ internal class SasVerification(
     }
 
     override fun userHasVerifiedShortCode() {
-        runBlocking {
-            when (val request = confirm()) {
+        val request = runBlocking { confirm() } ?: return
+        sendRequest(request)
+    }
+
+    suspend fun accept() {
+        val request = this.machine.acceptSasVerification(this.inner.otherUserId, inner.flowId)
+
+        if (request != null) {
+            when (request) {
                 is OutgoingVerificationRequest.ToDevice -> {
                     sender.sendToDevice(request.eventType, request.body)
+                }
+                is OutgoingVerificationRequest.InRoom -> TODO()
             }
-
-                else                                    -> {}
-            }
+            refreshData()
+            dispatchTxUpdated()
         }
-        refreshData()
-        dispatchTxUpdated()
-    }
-
-    fun isCanceled(): Boolean {
-        refreshData()
-        return this.inner.isCancelled
-    }
-
-    fun isDone(): Boolean {
-        refreshData()
-        return this.inner.isDone
-    }
-
-    fun timedOut(): Boolean {
-        refreshData()
-        return this.inner.timedOut
-    }
-
-    fun canBePresented(): Boolean {
-        refreshData()
-        return this.inner.canBePresented
-    }
-
-    fun accept(): OutgoingVerificationRequest? {
-        return this.machine.acceptSasVerification(this.inner.otherUserId, inner.flowId)
     }
 
     @Throws(CryptoStoreErrorException::class)
@@ -185,8 +167,12 @@ internal class SasVerification(
                 machine.confirmVerification(inner.otherUserId, inner.flowId)
             }
 
-    fun cancelHelper(): OutgoingVerificationRequest? {
-        return this.machine.cancelVerification(this.inner.otherUserId, inner.flowId)
+    fun cancelHelper(code: CancelCode) {
+        val request = this.machine.cancelVerification(this.inner.otherUserId, inner.flowId, code.value)
+
+        if (request != null) {
+            sendRequest(request)
+        }
     }
 
     override fun getEmojiCodeRepresentation(): List<EmojiRepresentation> {
@@ -199,5 +185,19 @@ internal class SasVerification(
         val decimals = this.machine.getDecimals(this.inner.otherUserId, this.inner.flowId)
 
         return decimals?.joinToString(" ") ?: ""
+    }
+
+    fun sendRequest(request: OutgoingVerificationRequest) {
+        runBlocking {
+            when (request) {
+                is OutgoingVerificationRequest.ToDevice -> {
+                    sender.sendToDevice(request.eventType, request.body)
+                }
+                is OutgoingVerificationRequest.InRoom   -> TODO()
+            }
+        }
+
+        refreshData()
+        dispatchTxUpdated()
     }
 }
