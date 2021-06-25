@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.io.File
@@ -26,10 +28,16 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
+import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
@@ -45,11 +53,14 @@ import uniffi.olm.Device
 import uniffi.olm.DeviceLists
 import uniffi.olm.KeyRequestPair
 import uniffi.olm.Logger
+import uniffi.olm.OutgoingVerificationRequest
+import uniffi.olm.QrCode
 import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
-import uniffi.olm.Sas
+import uniffi.olm.Verification
+import uniffi.olm.VerificationRequest
 import uniffi.olm.setLogger
 
 class CryptoLogger : Logger {
@@ -114,6 +125,136 @@ internal class DeviceUpdateObserver {
 
     fun removeDeviceUpdateListener(device: LiveDevice) {
         listeners.remove(device)
+    }
+}
+
+internal class QrCodeVerification(
+        private val machine: uniffi.olm.OlmMachine,
+        private var inner: QrCode,
+        private val sender: RequestSender,
+        private val listeners: ArrayList<VerificationService.Listener>,
+) : QrCodeVerificationTransaction {
+    private val uiHandler = Handler(Looper.getMainLooper())
+    private var stateField: VerificationTxState = VerificationTxState.OnStarted
+
+    private fun dispatchTxUpdated() {
+        uiHandler.post {
+            listeners.forEach {
+                try {
+                    it.transactionUpdated(this)
+                } catch (e: Throwable) {
+                    Timber.e(e, "## Error while notifying listeners")
+                }
+            }
+        }
+    }
+
+    override val qrCodeText: String?
+        get() {
+            val data = this.machine.generateQrCode(this.inner.otherUserId, this.inner.flowId)
+
+            // TODO Why are we encoding this to ISO_8859_1? If we're going to encode, why not base64?
+            return data?.fromBase64()?.toString(Charsets.ISO_8859_1)
+        }
+
+    override fun userHasScannedOtherQrCode(otherQrCodeText: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun otherUserScannedMyQrCode() {
+        val request = runBlocking { confirm() } ?: return
+        sendRequest(request)
+    }
+
+    override fun otherUserDidNotScannedMyQrCode() {
+        // TODO Is this code correct here? The old code seems to do this
+        cancelHelper(CancelCode.MismatchedKeys)
+    }
+
+    override var state: VerificationTxState
+        get() {
+            refreshData()
+            val state = when {
+                this.inner.isDone         -> VerificationTxState.Verified
+                this.inner.otherSideScanned -> VerificationTxState.QrScannedByOther
+                this.inner.isCancelled    -> {
+                    val cancelCode = safeValueOf(this.inner.cancelCode)
+                    val byMe = this.inner.cancelledByUs ?: false
+                    VerificationTxState.Cancelled(cancelCode, byMe)
+                }
+                else                      -> {
+                    VerificationTxState.None
+                }
+            }
+
+            return state
+        }
+        @Suppress("UNUSED_PARAMETER")
+        set(value) {}
+
+    override val transactionId: String
+        get() = this.inner.flowId
+
+    override val otherUserId: String
+        get() = this.inner.otherUserId
+
+    override var otherDeviceId: String?
+        get() = this.inner.otherDeviceId
+        @Suppress("UNUSED_PARAMETER")
+        set(value) {}
+
+    override val isIncoming: Boolean
+        get() = !this.inner.weStarted
+
+    override fun cancel() {
+        cancelHelper(CancelCode.User)
+    }
+
+    override fun cancel(code: CancelCode) {
+        cancelHelper(code)
+    }
+
+    override fun isToDeviceTransport(): Boolean {
+        return this.inner.roomId == null
+    }
+
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun confirm(): OutgoingVerificationRequest? =
+            withContext(Dispatchers.IO) {
+                machine.confirmVerification(inner.otherUserId, inner.flowId)
+            }
+
+    private fun sendRequest(request: OutgoingVerificationRequest) {
+        runBlocking {
+            when (request) {
+                is OutgoingVerificationRequest.ToDevice -> {
+                    sender.sendToDevice(request.eventType, request.body)
+                }
+                is OutgoingVerificationRequest.InRoom   -> TODO()
+            }
+        }
+
+        refreshData()
+        dispatchTxUpdated()
+    }
+
+    private fun cancelHelper(code: CancelCode) {
+        val request = this.machine.cancelVerification(this.inner.otherUserId, inner.flowId, code.value)
+
+        if (request != null) {
+            sendRequest(request)
+        }
+    }
+
+    private fun refreshData() {
+        when (val verification = this.machine.getVerification(this.inner.otherUserId, this.inner.flowId)) {
+            is Verification.QrCodeV1    -> {
+                this.inner = verification.qrcode
+            }
+            else                     -> {}
+        }
+
+        return
     }
 }
 
@@ -523,24 +664,16 @@ internal class OlmMachine(
         runBlocking { inner.discardRoomKey(roomId) }
     }
 
-    fun getVerificationRequests(userId: String): List<VerificationRequest> {
-        return this.inner.getVerificationRequests(userId).map {
-            VerificationRequest(this.inner, it)
-        }
+    fun getVerificationRequests(userId: String): List<uniffi.olm.VerificationRequest> {
+        return this.inner.getVerificationRequests(userId)
     }
 
     fun getVerificationRequest(userId: String, flowId: String): VerificationRequest? {
-        val request = this.inner.getVerificationRequest(userId, flowId)
-
-        return if (request == null) {
-            null
-        } else {
-            VerificationRequest(this.inner, request)
-        }
+        return this.inner.getVerificationRequest(userId, flowId)
     }
 
     /** Get an active verification */
-    fun getVerification(userId: String, flowId: String): Sas? {
+    fun getVerification(userId: String, flowId: String): Verification? {
         return this.inner.getVerification(userId, flowId)
     }
 }

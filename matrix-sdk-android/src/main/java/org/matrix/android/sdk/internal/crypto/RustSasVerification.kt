@@ -33,6 +33,7 @@ import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.OlmMachine
 import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Sas
+import uniffi.olm.Verification
 
 internal class SasVerification(
         private val machine: OlmMachine,
@@ -57,10 +58,11 @@ internal class SasVerification(
     }
 
     private fun refreshData() {
-        val sas = this.machine.getVerification(this.inner.otherUserId, this.inner.flowId)
-
-        if (sas != null) {
-            this.inner = sas
+        when (val verification = this.machine.getVerification(this.inner.otherUserId, this.inner.flowId)) {
+            is Verification.SasV1    -> {
+                this.inner = verification.sas
+            }
+            else                     -> {}
         }
 
         return

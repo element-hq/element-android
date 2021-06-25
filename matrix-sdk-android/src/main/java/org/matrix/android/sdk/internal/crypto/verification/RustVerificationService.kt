@@ -29,14 +29,17 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.internal.crypto.OlmMachine
+import org.matrix.android.sdk.internal.crypto.QrCodeVerification
 import org.matrix.android.sdk.internal.crypto.RequestSender
 import org.matrix.android.sdk.internal.crypto.SasVerification
+import org.matrix.android.sdk.internal.crypto.VerificationRequest
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationDone
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationKey
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationRequest
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import uniffi.olm.OutgoingVerificationRequest
+import uniffi.olm.Verification
 
 @SessionScope
 internal class RustVerificationService
@@ -183,13 +186,16 @@ constructor(
             tid: String,
     ): VerificationTransaction? {
         val verification = this.olmMachine.getVerification(otherUserId, tid) ?: return null
-        return SasVerification(this.olmMachine.inner(), verification, this.requestSender, this.listeners)
+        return when (verification) {
+            is Verification.QrCodeV1 -> QrCodeVerification(this.olmMachine.inner(), verification.qrcode, this.requestSender, this.listeners)
+            is Verification.SasV1    -> SasVerification(this.olmMachine.inner(), verification.sas, this.requestSender, this.listeners)
+        }
     }
 
     override fun getExistingVerificationRequests(
             otherUserId: String
     ): List<PendingVerificationRequest> {
-        return this.olmMachine.getVerificationRequests(otherUserId).map {
+        return this.getVerificationRequests(otherUserId).map {
             it.toPendingVerificationRequest()
         }
     }
@@ -199,7 +205,7 @@ constructor(
             tid: String?
     ): PendingVerificationRequest? {
         return if (tid != null) {
-            olmMachine.getVerificationRequest(otherUserId, tid)?.toPendingVerificationRequest()
+            this.getVerificationRequest(otherUserId, tid)?.toPendingVerificationRequest()
         } else {
             null
         }
@@ -221,7 +227,7 @@ constructor(
         // should check if already one (and cancel it)
         return if (method == VerificationMethod.SAS) {
             val flowId = transactionId ?: return null
-            val request = this.olmMachine.getVerificationRequest(otherUserId, flowId)
+            val request = this.getVerificationRequest(otherUserId, flowId)
             runBlocking {
                 val response = request?.startSasVerification()
                 if (response != null) {
@@ -297,12 +303,38 @@ constructor(
         return true
     }
 
+    private fun getVerificationRequest(otherUserId: String, transactionId: String): VerificationRequest? {
+        val request = this.olmMachine.getVerificationRequest(otherUserId, transactionId)
+
+        return if (request != null) {
+            VerificationRequest(
+                    this.olmMachine.inner(),
+                    request,
+                    requestSender,
+                    listeners,
+            )
+        } else {
+            null
+        }
+    }
+
+    private fun getVerificationRequests(userId: String): List<VerificationRequest> {
+        return this.olmMachine.getVerificationRequests(userId).map {
+            VerificationRequest(
+                    this.olmMachine.inner(),
+                    it,
+                    this.requestSender,
+                    this.listeners,
+            )
+        }
+    }
+
     override fun readyPendingVerification(
             methods: List<VerificationMethod>,
             otherUserId: String,
             transactionId: String
     ): Boolean {
-        val request = this.olmMachine.getVerificationRequest(otherUserId, transactionId)
+        val request = this.getVerificationRequest(otherUserId, transactionId)
 
         return if (request != null) {
             val outgoingRequest = request.acceptWithMethods(methods)
@@ -310,6 +342,10 @@ constructor(
             if (outgoingRequest != null) {
                 runBlocking { sendRequest(outgoingRequest) }
                 dispatchRequestUpdated(request.toPendingVerificationRequest())
+                val qrcode = request.startQrVerification()
+                if (qrcode != null) {
+                    dispatchTxAdded(qrcode)
+                }
                 true
             } else {
                 false

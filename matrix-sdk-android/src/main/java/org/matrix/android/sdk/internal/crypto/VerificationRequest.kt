@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificatio
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
@@ -34,7 +35,9 @@ import uniffi.olm.VerificationRequest
 
 internal class VerificationRequest(
         private val machine: OlmMachine,
-        private var inner: VerificationRequest
+        private var inner: VerificationRequest,
+        private val sender: RequestSender,
+        private val listeners: ArrayList<VerificationService.Listener>,
 ) {
     private fun refreshData() {
         val request = this.machine.getVerificationRequest(this.inner.otherUserId, this.inner.flowId)
@@ -44,6 +47,21 @@ internal class VerificationRequest(
         }
 
         return
+    }
+
+    internal fun startQrVerification(): QrCodeVerification? {
+        val qrcode = this.machine.startQrVerification(this.inner.otherUserId, this.inner.flowId)
+
+        return if (qrcode != null) {
+            QrCodeVerification(
+                    this.machine,
+                    qrcode,
+                    this.sender,
+                    this.listeners,
+            )
+        } else {
+            null
+        }
     }
 
     fun acceptWithMethods(methods: List<VerificationMethod>): OutgoingVerificationRequest? {
