@@ -7,7 +7,7 @@ mod responses;
 pub use device::Device;
 pub use error::{CryptoStoreError, DecryptionError, KeyImportError, MachineCreationError};
 pub use logger::{set_logger, Logger};
-pub use machine::{KeyRequestPair, OlmMachine, Sas, VerificationRequest, StartSasResult};
+pub use machine::{KeyRequestPair, OlmMachine, Sas, StartSasResult, VerificationRequest};
 pub use responses::{
     DeviceLists, KeysImportResult, OutgoingVerificationRequest, Request, RequestType,
 };
@@ -28,37 +28,6 @@ pub struct DecryptedEvent {
     /// key to us. Is empty if the key came directly from the sender of the
     /// event.
     pub forwarding_curve25519_chain: Vec<String>,
-}
-
-pub enum CancelCode {
-    User,
-    Timeout,
-    UnknownTransaction,
-    UnknownMethod,
-    UnexpectedMessage,
-    KeyMismatch,
-    UserMismatch,
-    InvalidMessage,
-    Accepted,
-}
-
-impl From<ruma::events::key::verification::cancel::CancelCode> for CancelCode {
-    fn from(c: ruma::events::key::verification::cancel::CancelCode) -> Self {
-        use ruma::events::key::verification::cancel::CancelCode as RumaCancelCode;
-
-        match c {
-            RumaCancelCode::User => Self::User,
-            RumaCancelCode::Timeout => Self::Timeout,
-            RumaCancelCode::UnknownTransaction => Self::UnknownTransaction,
-            RumaCancelCode::UnknownMethod => Self::UnknownMethod,
-            RumaCancelCode::UnexpectedMessage => Self::UnexpectedMessage,
-            RumaCancelCode::KeyMismatch => Self::KeyMismatch,
-            RumaCancelCode::UserMismatch => Self::UserMismatch,
-            RumaCancelCode::InvalidMessage => Self::InvalidMessage,
-            RumaCancelCode::Accepted => Self::Accepted,
-            RumaCancelCode::_Custom(_) => Self::User,
-        }
-    }
 }
 
 include!(concat!(env!("OUT_DIR"), "/olm.uniffi.rs"));

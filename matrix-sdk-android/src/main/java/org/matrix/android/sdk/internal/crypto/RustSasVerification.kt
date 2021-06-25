@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentatio
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.internal.crypto.verification.getEmojiForCode
 import timber.log.Timber
 import uniffi.olm.CryptoStoreErrorException
@@ -93,15 +94,9 @@ internal class SasVerification(
                 this.inner.haveWeConfirmed -> VerificationTxState.ShortCodeAccepted
                 this.inner.canBePresented -> VerificationTxState.ShortCodeReady
                 this.inner.isCancelled    -> {
-                    val rustCancelCode = this.inner.cancelCode
-                    val cancelCode =
-                            if (rustCancelCode != null) {
-                                toCancelCode(rustCancelCode)
-                            } else {
-                                CancelCode.UnexpectedMessage
-                            }
-                    // TODO get byMe from the rust side
-                    VerificationTxState.Cancelled(cancelCode, false)
+                    val cancelCode = safeValueOf(this.inner.cancelCode)
+                    val byMe = this.inner.cancelledByUs ?: false
+                    VerificationTxState.Cancelled(cancelCode, byMe)
                 }
                 else                      -> {
                     VerificationTxState.Started

@@ -36,8 +36,8 @@ use matrix_sdk_crypto::{
 use crate::{
     error::{CryptoStoreError, DecryptionError, MachineCreationError},
     responses::{response_from_string, OutgoingVerificationRequest, OwnedResponse},
-    CancelCode, DecryptedEvent, Device, DeviceLists, KeyImportError, KeysImportResult,
-    ProgressListener, Request, RequestType,
+    DecryptedEvent, Device, DeviceLists, KeyImportError, KeysImportResult, ProgressListener,
+    Request, RequestType,
 };
 
 /// A high level state machine that handles E2EE for Matrix.
@@ -50,10 +50,13 @@ pub struct Sas {
     pub other_user_id: String,
     pub other_device_id: String,
     pub flow_id: String,
+    pub room_id: Option<String>,
     pub have_we_confirmed: bool,
     pub is_cancelled: bool,
     pub is_done: bool,
-    pub cancel_code: Option<CancelCode>,
+    pub cancel_code: Option<String>,
+    pub cancelled_by_us: Option<bool>,
+    pub we_started: bool,
     pub can_be_presented: bool,
     pub supports_emoji: bool,
     pub timed_out: bool,
@@ -76,7 +79,10 @@ impl From<InnerSas> for Sas {
             timed_out: sas.timed_out(),
             supports_emoji: sas.supports_emoji(),
             have_we_confirmed: sas.have_we_confirmed(),
-            cancel_code: sas.cancel_code().map(|c| c.into()),
+            cancel_code: sas.cancel_code().map(|c| c.as_str().to_owned()),
+            we_started: sas.we_started(),
+            room_id: sas.room_id().map(|r| r.to_string()),
+            cancelled_by_us: sas.cancelled_by_us(),
         }
     }
 }
@@ -89,7 +95,7 @@ pub struct VerificationRequest {
     pub is_done: bool,
     pub is_ready: bool,
     pub room_id: Option<String>,
-    pub cancel_code: Option<CancelCode>,
+    pub cancel_code: Option<String>,
     pub we_started: bool,
     pub is_passive: bool,
     pub their_methods: Option<Vec<String>>,
@@ -106,7 +112,7 @@ impl From<InnerVerificationRequest> for VerificationRequest {
             is_done: v.is_done(),
             is_ready: v.is_ready(),
             room_id: v.room_id().map(|r| r.to_string()),
-            cancel_code: v.cancel_code().map(|c| c.into()),
+            cancel_code: v.cancel_code().map(|c| c.as_str().to_owned()),
             we_started: v.we_started(),
             is_passive: v.is_passive(),
             their_methods: v
@@ -699,12 +705,13 @@ impl OlmMachine {
         &self,
         user_id: &str,
         flow_id: &str,
+        cancel_code: &str,
     ) -> Option<OutgoingVerificationRequest> {
         let user_id = UserId::try_from(user_id).ok()?;
 
         if let Some(verification) = self.inner.get_verification(&user_id, flow_id) {
             match verification {
-                Verification::SasV1(v) => v.cancel().map(|r| r.into()),
+                Verification::SasV1(v) => v.cancel_with_code(cancel_code.into()).map(|r| r.into()),
                 Verification::QrV1(v) => v.cancel().map(|r| r.into()),
             }
         } else {

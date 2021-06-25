@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificatio
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.JsonDict
@@ -48,7 +49,6 @@ import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
-import uniffi.olm.CancelCode as RustCancelCode
 import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.DecryptionErrorException
 import uniffi.olm.Device
@@ -194,7 +194,7 @@ internal class VerificationRequest(
 
         val cancelCode =
                 if (code != null) {
-                    toCancelCode(code)
+                   safeValueOf(code)
                 } else {
                     null
                 }
@@ -266,21 +266,6 @@ internal class VerificationRequest(
                 // devices that should receive the events we send out
                 null,
         )
-    }
-}
-
-internal fun toCancelCode(cancelCode: RustCancelCode): CancelCode {
-    return when (cancelCode) {
-        RustCancelCode.USER -> CancelCode.User
-        RustCancelCode.TIMEOUT -> CancelCode.Timeout
-        RustCancelCode.UNKNOWN_TRANSACTION -> CancelCode.UnknownTransaction
-        RustCancelCode.UNKNOWN_METHOD -> CancelCode.UnknownMethod
-        RustCancelCode.UNEXPECTED_MESSAGE -> CancelCode.UnexpectedMessage
-        RustCancelCode.KEY_MISMATCH -> CancelCode.MismatchedKeys
-        RustCancelCode.USER_MISMATCH -> CancelCode.MismatchedKeys
-        RustCancelCode.INVALID_MESSAGE -> CancelCode.InvalidMessage
-        // TODO why don't the Ruma codes match what's in EA?
-        RustCancelCode.ACCEPTED -> CancelCode.User
     }
 }
 

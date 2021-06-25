@@ -74,7 +74,10 @@ dictionary Sas {
     string other_user_id;
     string other_device_id;
     string flow_id;
-    CancelCode? cancel_code;
+    string? cancel_code;
+    string? room_id;
+    boolean we_started;
+    boolean? cancelled_by_us;
     boolean have_we_confirmed;
     boolean is_done;
     boolean is_cancelled;
@@ -93,22 +96,10 @@ dictionary VerificationRequest {
     boolean we_started;
     boolean is_passive;
     string? room_id;
-    CancelCode? cancel_code;
+    string? cancel_code;
     sequence<string>? their_methods;
     sequence<string>? our_methods;
 
-};
-
-enum CancelCode {
-    "User",
-    "Timeout",
-    "UnknownTransaction",
-    "UnknownMethod",
-    "UnexpectedMessage",
-    "KeyMismatch",
-    "UserMismatch",
-    "InvalidMessage",
-    "Accepted",
 };
 
 dictionary KeyRequestPair {
@@ -188,7 +179,11 @@ interface OlmMachine {
     StartSasResult? start_sas_verification([ByRef] string user_id, [ByRef] string flow_id);
     [Throws=CryptoStoreError]
     OutgoingVerificationRequest? confirm_verification([ByRef] string user_id, [ByRef] string flow_id);
-    OutgoingVerificationRequest? cancel_verification([ByRef] string user_id, [ByRef] string flow_id);
+    OutgoingVerificationRequest? cancel_verification(
+        [ByRef] string user_id,
+        [ByRef] string flow_id,
+        [ByRef] string cancel_code
+    );
     OutgoingVerificationRequest? accept_sas_verification([ByRef] string user_id, [ByRef] string flow_id);
 
     sequence<i32>? get_emoji_index([ByRef] string user_id, [ByRef] string flow_id);
