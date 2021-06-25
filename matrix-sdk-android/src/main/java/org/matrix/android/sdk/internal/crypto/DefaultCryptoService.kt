@@ -706,22 +706,26 @@ internal class DefaultCryptoService @Inject constructor(
             // Notify the our listeners about room keys so decryption is retried.
             if (toDeviceEvents.events != null) {
                 toDeviceEvents.events.forEach { event ->
-                    if (event.type == EventType.ROOM_KEY) {
-                        val content = event.getClearContent().toModel<RoomKeyContent>() ?: return@forEach
+                    when (event.type) {
+                        EventType.ROOM_KEY           -> {
+                            val content = event.getClearContent().toModel<RoomKeyContent>() ?: return@forEach
 
-                        val roomId = content.sessionId ?: return@forEach
-                        val sessionId = content.sessionId
+                            val roomId = content.sessionId ?: return@forEach
+                            val sessionId = content.sessionId
 
-                        notifyRoomKeyReceival(roomId, sessionId)
-                    } else if (event.type == EventType.FORWARDED_ROOM_KEY) {
-                        val content = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: return@forEach
+                            notifyRoomKeyReceived(roomId, sessionId)
+                        }
+                        EventType.FORWARDED_ROOM_KEY -> {
+                            val content = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: return@forEach
 
-                        val roomId = content.sessionId ?: return@forEach
-                        val sessionId = content.sessionId
+                            val roomId = content.sessionId ?: return@forEach
+                            val sessionId = content.sessionId
 
-                        notifyRoomKeyReceival(roomId, sessionId)
-                    } else {
-                        this.verificationService?.onEvent(event)
+                            notifyRoomKeyReceived(roomId, sessionId)
+                        }
+                        else                         -> {
+                            this.verificationService?.onEvent(event)
+                        }
                     }
                 }
             }
