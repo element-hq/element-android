@@ -5,6 +5,7 @@ use std::{
 };
 
 use js_int::UInt;
+use base64::encode;
 use ruma::{
     api::{
         client::r0::{
@@ -30,7 +31,8 @@ use tokio::runtime::Runtime;
 use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
 use matrix_sdk_crypto::{
     decrypt_key_export, encrypt_key_export, EncryptionSettings, OlmMachine as InnerMachine,
-    Sas as InnerSas, Verification, VerificationRequest as InnerVerificationRequest,
+    QrVerification as InnerQr, Sas as InnerSas, Verification as RustVerification,
+    VerificationRequest as InnerVerificationRequest,
 };
 
 use crate::{
@@ -44,6 +46,11 @@ use crate::{
 pub struct OlmMachine {
     inner: InnerMachine,
     runtime: Runtime,
+}
+
+pub enum Verification {
+    SasV1 { sas: Sas },
+    QrCodeV1 { qrcode: QrCode },
 }
 
 pub struct Sas {
@@ -60,6 +67,36 @@ pub struct Sas {
     pub can_be_presented: bool,
     pub supports_emoji: bool,
     pub timed_out: bool,
+}
+
+pub struct QrCode {
+    pub other_user_id: String,
+    pub flow_id: String,
+    pub other_device_id: String,
+    pub room_id: Option<String>,
+    pub is_cancelled: bool,
+    pub is_done: bool,
+    pub we_started: bool,
+    pub other_side_scanned: bool,
+    pub cancel_code: Option<String>,
+    pub cancelled_by_us: Option<bool>,
+}
+
+impl From<InnerQr> for QrCode {
+    fn from(qr: InnerQr) -> Self {
+        Self {
+            other_user_id: qr.other_user_id().to_string(),
+            flow_id: qr.flow_id().as_str().to_owned(),
+            is_cancelled: qr.is_cancelled(),
+            is_done: qr.is_done(),
+            cancel_code: qr.cancel_code().map(|c| c.to_string()),
+            cancelled_by_us: qr.cancelled_by_us(),
+            we_started: qr.we_started(),
+            other_side_scanned: qr.is_scanned(),
+            other_device_id: qr.other_device_id().to_string(),
+            room_id: qr.room_id().map(|r| r.to_string()),
+        }
+    }
 }
 
 pub struct StartSasResult {
@@ -661,11 +698,38 @@ impl OlmMachine {
         todo!()
     }
 
-    pub fn get_verification(&self, user_id: &str, flow_id: &str) -> Option<Sas> {
+    pub fn get_verification(&self, user_id: &str, flow_id: &str) -> Option<Verification> {
         let user_id = UserId::try_from(user_id).ok()?;
         self.inner
             .get_verification(&user_id, flow_id)
-            .and_then(|v| v.sas_v1().map(|s| s.into()))
+            .map(|v| match v {
+                RustVerification::SasV1(s) => Verification::SasV1 { sas: s.into() },
+                RustVerification::QrV1(qr) => Verification::QrCodeV1 { qrcode: qr.into() },
+            })
+    }
+
+    pub fn start_qr_verification(
+        &self,
+        user_id: &str,
+        flow_id: &str,
+    ) -> Result<Option<QrCode>, CryptoStoreError> {
+        let user_id = UserId::try_from(user_id)?;
+
+        if let Some(verification) = self.inner.get_verification_request(&user_id, flow_id) {
+            Ok(self
+                .runtime
+                .block_on(verification.generate_qr_code())?
+                .map(|qr| qr.into()))
+        } else {
+            Ok(None)
+        }
+    }
+
+    pub fn generate_qr_code(&self, user_id: &str, flow_id: &str) -> Option<String> {
+        let user_id = UserId::try_from(user_id).ok()?;
+        self.inner
+            .get_verification(&user_id, flow_id)
+            .and_then(|v| v.qr_v1().and_then(|qr| qr.to_bytes().map(|b| encode(b)).ok()))
     }
 
     pub fn start_sas_verification(
@@ -711,8 +775,10 @@ impl OlmMachine {
 
         if let Some(verification) = self.inner.get_verification(&user_id, flow_id) {
             match verification {
-                Verification::SasV1(v) => v.cancel_with_code(cancel_code.into()).map(|r| r.into()),
-                Verification::QrV1(v) => v.cancel().map(|r| r.into()),
+                RustVerification::SasV1(v) => {
+                    v.cancel_with_code(cancel_code.into()).map(|r| r.into())
+                }
+                RustVerification::QrV1(v) => v.cancel().map(|r| r.into()),
             }
         } else {
             None
@@ -729,10 +795,10 @@ impl OlmMachine {
         Ok(
             if let Some(verification) = self.inner.get_verification(&user_id, flow_id) {
                 match verification {
-                    Verification::SasV1(v) => {
+                    RustVerification::SasV1(v) => {
                         self.runtime.block_on(v.confirm())?.0.map(|r| r.into())
                     }
-                    Verification::QrV1(v) => v.confirm_scanning().map(|r| r.into()),
+                    RustVerification::QrV1(v) => v.confirm_scanning().map(|r| r.into()),
                 }
             } else {
                 None

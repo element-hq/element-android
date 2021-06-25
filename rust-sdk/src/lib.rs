@@ -7,7 +7,7 @@ mod responses;
 pub use device::Device;
 pub use error::{CryptoStoreError, DecryptionError, KeyImportError, MachineCreationError};
 pub use logger::{set_logger, Logger};
-pub use machine::{KeyRequestPair, OlmMachine, Sas, StartSasResult, VerificationRequest};
+pub use machine::{KeyRequestPair, OlmMachine, Sas, StartSasResult, VerificationRequest, QrCode, Verification};
 pub use responses::{
     DeviceLists, KeysImportResult, OutgoingVerificationRequest, Request, RequestType,
 };

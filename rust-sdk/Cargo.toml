@@ -12,6 +12,7 @@ name = "matrix_crypto"
 serde = "1.0.126"
 serde_json = "1.0.64"
 http = "0.2.4"
+base64 = "0.13.0"
 
 thiserror = "1.0.25"
 tracing = "0.1.26"
@@ -19,20 +20,20 @@ tracing-subscriber = "0.2.18"
 uniffi = "0.12.0"
 
 [dependencies.js_int]
-version = "0.2.0"
+version = "0.2.1"
 features = ["lax_deserialize"]
 
 [dependencies.matrix-sdk-common]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "710b519c110278a0857f26a86a0f8329609c1a5f"
+rev = "b62f725bead1f44b2038784e5321909f71a4af4a"
 
 [dependencies.matrix-sdk-crypto]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "710b519c110278a0857f26a86a0f8329609c1a5f"
+rev = "b62f725bead1f44b2038784e5321909f71a4af4a"
 features = ["sled_cryptostore"]
 
 [dependencies.tokio]
-version = "1.6.0"
+version = "1.7.1"
 default_features = false
 features = ["rt-multi-thread"]
 

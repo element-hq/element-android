@@ -86,6 +86,19 @@ dictionary Sas {
     boolean supports_emoji;
 };
 
+dictionary QrCode {
+    string other_user_id;
+    string other_device_id;
+    string flow_id;
+    string? cancel_code;
+    string? room_id;
+    boolean we_started;
+    boolean? cancelled_by_us;
+    boolean is_done;
+    boolean is_cancelled;
+    boolean other_side_scanned;
+};
+
 dictionary VerificationRequest {
     string other_user_id;
     string? other_device_id;
@@ -100,6 +113,12 @@ dictionary VerificationRequest {
     sequence<string>? their_methods;
     sequence<string>? our_methods;
 
+};
+
+[Enum]
+interface Verification {
+    SasV1(Sas sas);
+    QrCodeV1(QrCode qrcode);
 };
 
 dictionary KeyRequestPair {
@@ -167,7 +186,7 @@ interface OlmMachine {
 
     sequence<VerificationRequest> get_verification_requests([ByRef] string user_id);
     VerificationRequest? get_verification_request([ByRef] string user_id, [ByRef] string flow_id);
-    Sas? get_verification([ByRef] string user_id, [ByRef] string flow_id);
+    Verification? get_verification([ByRef] string user_id, [ByRef] string flow_id);
 
     OutgoingVerificationRequest? accept_verification_request(
         [ByRef] string user_id,
@@ -185,6 +204,9 @@ interface OlmMachine {
         [ByRef] string cancel_code
     );
     OutgoingVerificationRequest? accept_sas_verification([ByRef] string user_id, [ByRef] string flow_id);
+    [Throws=CryptoStoreError]
+    QrCode? start_qr_verification([ByRef] string user_id, [ByRef] string flow_id);
+    string? generate_qr_code([ByRef] string user_id, [ByRef] string flow_id);
 
     sequence<i32>? get_emoji_index([ByRef] string user_id, [ByRef] string flow_id);
     sequence<i32>? get_decimals([ByRef] string user_id, [ByRef] string flow_id);
