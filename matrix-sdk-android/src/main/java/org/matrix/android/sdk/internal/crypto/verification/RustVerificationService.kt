@@ -178,13 +178,11 @@ constructor(
         // TODO This should be handled inside the rust-sdk decryption method
     }
 
-    // TODO All this methods should be delegated to a TransactionStore
     override fun getExistingTransaction(
             otherUserId: String,
             tid: String,
     ): VerificationTransaction? {
         val verification = this.olmMachine.getVerification(otherUserId, tid) ?: return null
-
         return SasVerification(this.olmMachine.inner(), verification, this.requestSender, this.listeners)
     }
 

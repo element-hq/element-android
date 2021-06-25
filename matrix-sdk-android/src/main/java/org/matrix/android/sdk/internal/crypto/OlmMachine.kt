@@ -26,12 +26,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
-import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
-import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
-import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.JsonDict
@@ -40,10 +34,6 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
-import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
-import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
-import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
@@ -56,13 +46,10 @@ import uniffi.olm.DeviceLists
 import uniffi.olm.KeyRequestPair
 import uniffi.olm.Logger
 import uniffi.olm.OlmMachine as InnerMachine
-import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
 import uniffi.olm.Sas
-import uniffi.olm.StartSasResult
-import uniffi.olm.VerificationRequest as InnerRequest
 import uniffi.olm.setLogger
 
 class CryptoLogger : Logger {
@@ -127,145 +114,6 @@ internal class DeviceUpdateObserver {
 
     fun removeDeviceUpdateListener(device: LiveDevice) {
         listeners.remove(device)
-    }
-}
-
-internal class VerificationRequest(
-        private val machine: InnerMachine,
-        private var inner: InnerRequest
-) {
-    private fun refreshData() {
-        val request = this.machine.getVerificationRequest(this.inner.otherUserId, this.inner.flowId)
-
-        if (request != null) {
-            this.inner = request
-        }
-
-        return
-    }
-
-    fun acceptWithMethods(methods: List<VerificationMethod>): OutgoingVerificationRequest? {
-        val stringMethods: MutableList<String> =
-                methods
-                        .map {
-                            when (it) {
-                                VerificationMethod.QR_CODE_SCAN -> VERIFICATION_METHOD_QR_CODE_SCAN
-                                VerificationMethod.QR_CODE_SHOW -> VERIFICATION_METHOD_QR_CODE_SHOW
-                                VerificationMethod.SAS -> VERIFICATION_METHOD_SAS
-                            }
-                        }
-                        .toMutableList()
-
-        if (stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SHOW) ||
-                stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SCAN)) {
-            stringMethods.add(VERIFICATION_METHOD_RECIPROCATE)
-        }
-
-        return this.machine.acceptVerificationRequest(
-                this.inner.otherUserId, this.inner.flowId, stringMethods)
-    }
-
-    fun isCanceled(): Boolean {
-        refreshData()
-        return this.inner.isCancelled
-    }
-
-    fun isDone(): Boolean {
-        refreshData()
-        return this.inner.isDone
-    }
-
-    fun isReady(): Boolean {
-        refreshData()
-        return this.inner.isReady
-    }
-
-    suspend fun startSasVerification(): StartSasResult? {
-        refreshData()
-
-        return withContext(Dispatchers.IO) {
-            machine.startSasVerification(inner.otherUserId, inner.flowId)
-        }
-    }
-
-    fun toPendingVerificationRequest(): PendingVerificationRequest {
-        refreshData()
-        val code = this.inner.cancelCode
-
-        val cancelCode =
-                if (code != null) {
-                   safeValueOf(code)
-                } else {
-                    null
-                }
-
-        val ourMethods = this.inner.ourMethods
-        val theirMethods = this.inner.theirMethods
-        val otherDeviceId = this.inner.otherDeviceId
-
-        var requestInfo: ValidVerificationInfoRequest? = null
-        var readyInfo: ValidVerificationInfoReady? = null
-
-        if (this.inner.weStarted && ourMethods != null) {
-            requestInfo =
-                    ValidVerificationInfoRequest(
-                            this.inner.flowId,
-                            this.machine.deviceId(),
-                            ourMethods,
-                            null,
-                    )
-        } else if (!this.inner.weStarted && ourMethods != null) {
-            readyInfo =
-                    ValidVerificationInfoReady(
-                            this.inner.flowId,
-                            this.machine.deviceId(),
-                            ourMethods,
-                    )
-        }
-
-        if (this.inner.weStarted && theirMethods != null && otherDeviceId != null) {
-            readyInfo =
-                    ValidVerificationInfoReady(
-                            this.inner.flowId,
-                            otherDeviceId,
-                            theirMethods,
-                    )
-        } else if (!this.inner.weStarted && theirMethods != null && otherDeviceId != null) {
-            requestInfo =
-                    ValidVerificationInfoRequest(
-                            this.inner.flowId,
-                            otherDeviceId,
-                            theirMethods,
-                            System.currentTimeMillis(),
-                    )
-        }
-
-        return PendingVerificationRequest(
-                // Creation time
-                System.currentTimeMillis(),
-                // Who initiated the request
-                !this.inner.weStarted,
-                // Local echo id, what to do here?
-                this.inner.flowId,
-                // other user
-                this.inner.otherUserId,
-                // room id
-                this.inner.roomId,
-                // transaction id
-                this.inner.flowId,
-                // val requestInfo: ValidVerificationInfoRequest? = null,
-                requestInfo,
-                // val readyInfo: ValidVerificationInfoReady? = null,
-                readyInfo,
-                // cancel code if there is one
-                cancelCode,
-                // are we done/successful
-                this.inner.isDone,
-                // did another device answer the request
-                this.inner.isPassive,
-                // devices that should receive the events we send out
-                null,
-        )
     }
 }
 
