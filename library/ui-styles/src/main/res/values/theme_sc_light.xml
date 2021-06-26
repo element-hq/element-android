@@ -11,7 +11,7 @@
         <!-- Keep color accent for legacy widget-->
         <item name="colorAccent">@color/accent_sc</item>
 
-        <item name="alertDialogTheme">@style/VectorAlertDialogStyleLight.SC</item>
+        <item name="materialAlertDialogTheme">@style/VectorAlertDialogStyleLight.SC</item>
 
         <item name="vctr_encrypting_message_text_color">@color/accent_sc</item>
 
@@ -22,8 +22,7 @@
         <!-- SC additions -->
         <item name="sc_message_bg_incoming">#FFEEEEEE</item>
         <item name="sc_message_bg_outgoing">@color/accent_sc_alpha12</item>
-        <item name="riotx_toolbar_bg">?android:colorBackground</item>
-        <item name="riotx_unread_unimportant_room_badge">@color/vctr_unread_room_badge_light</item>
+        <item name="riotx_unread_unimportant_room_badge">?vctr_content_tertiary</item>
         <item name="colorAccentPale">@color/accent_sc_pale</item>
 
         <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light</item>
@@ -44,6 +43,11 @@
 
         <item name="vctr_reaction_background_off">@color/vctr_reaction_background_off_light</item>
         <item name="vctr_reaction_background_on">@color/sc_reaction_background_on_light</item>
+
+        <!-- Some alias -->
+        <item name="vctr_list_separator">@color/list_divider_color_sc_light</item>
+        <item name="vctr_list_separator_system">?vctr_list_separator</item>
+        <item name="vctr_list_separator_on_surface">?vctr_list_separator</item>
     </style>
 
     <!-- Default AppTheme for usage where settings don't apply -->

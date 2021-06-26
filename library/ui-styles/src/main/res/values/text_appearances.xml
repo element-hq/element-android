@@ -47,8 +47,10 @@
 
     <!-- Note: this is the default text appearance for all the TextViews -->
     <style name="TextAppearance.Vector.Body" parent="TextAppearance.MaterialComponents.Body1">
+        <!--
         <item name="fontFamily">sans-serif</item>
         <item name="android:fontFamily">sans-serif</item>
+        -->
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:textColor">?vctr_content_primary</item>

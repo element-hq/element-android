@@ -127,7 +127,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/option_send_files"
         android:src="@drawable/ic_attachment"
-        android:tint="?android:textColorHint"
+        app:tint="?android:textColorHint"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
         app:layout_constraintTop_toBottomOf="parent"
         tools:ignore="MissingPrefix" />
@@ -136,12 +136,12 @@
         android:id="@+id/composerEditTextOuterBorder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/composerEmojiButton"
         app:layout_constraintEnd_toStartOf="@id/sendButton"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
         app:layout_goneMarginEnd="12dp" />
 
@@ -171,7 +171,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/sendButton"
         app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:tint="?vctr_content_quaternary"
+        app:tint="?android:textColorHint"
         tools:ignore="MissingPrefix" />
 
     <ImageButton
@@ -182,7 +182,6 @@
         android:contentDescription="@string/send"
         android:scaleType="center"
         android:src="@drawable/ic_send"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"

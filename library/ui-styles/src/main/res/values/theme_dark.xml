@@ -16,7 +16,7 @@
         <item name="vctr_system">@color/element_system_dark</item>
 
         <!-- other colors -->
-        <item name="vctr_unread_room_badge">@color/vctr_unread_room_badge_dark</item>
+        <item name="vctr_unread_room_badge">?colorPrimary</item>
         <item name="vctr_fab_label_bg">@color/vctr_fab_label_bg_dark</item>
         <item name="vctr_fab_label_stroke">@color/vctr_fab_label_stroke_dark</item>
         <item name="vctr_fab_label_color">@color/vctr_fab_label_color_dark</item>
@@ -119,11 +119,11 @@
         <!-- SC additions -->
         <item name="sc_message_bg_incoming">#FF465561</item>
         <item name="sc_message_bg_outgoing">#ff343b47</item>
-        <item name="riotx_toolbar_bg">?android:colorBackground</item>
         <item name="riotx_unread_unimportant_room_badge">@color/vctr_unread_room_badge_dark</item>
         <item name="timestamp_overlay_fg">@color/timestamp_overlay_fg</item>
         <item name="timestamp_overlay_bg">@color/timestamp_overlay_bg</item>
         <item name="colorAccentPale">@color/element_accent_pale</item>
+        <item name="dense_dropdown_text_input">@style/Widget.Vector.TextInputLayout.Dense.ExposedDropdownMenu.Dark.SC</item>
 
         <item name="android:statusBarColor">@color/android_status_bar_background_dark</item>
         <item name="android:navigationBarColor">@color/android_navigation_bar_background_dark</item>

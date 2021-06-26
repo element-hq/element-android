@@ -18,6 +18,7 @@
         style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="0dp"
         android:textColor="?vctr_content_primary"
         android:layout_gravity="left"
         tools:text="@sample/messages.json/data/message"

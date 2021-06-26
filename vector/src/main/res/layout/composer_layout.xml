@@ -94,7 +94,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/option_send_files"
         android:src="@drawable/ic_attachment"
-        android:tint="?android:textColorHint"
+        app:tint="?android:textColorHint"
         tools:ignore="MissingConstraints" />
 
     <FrameLayout
@@ -120,7 +120,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/a11y_open_emoji_picker"
         android:src="@drawable/ic_insert_emoji"
-        app:tint="?vctr_content_tertiary"
+        app:tint="?android:textColorHint"
         tools:ignore="MissingConstraints,MissingPrefix" />
 
     <ImageButton
@@ -130,6 +130,7 @@
         android:background="@drawable/bg_send"
         android:contentDescription="@string/send"
         android:src="@drawable/ic_send"
+        app:tint="?vctr_content_tertiary"
         tools:ignore="MissingConstraints" />
 
 </merge>

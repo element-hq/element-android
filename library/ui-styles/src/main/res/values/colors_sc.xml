@@ -27,7 +27,8 @@
     <color name="background_floating_sc">#ff424242</color>
     <color name="background_touch_guard_sc">#bf000000</color>
 
-    <color name="list_divider_color_sc">#80ffffff</color>
+    <color name="list_divider_color_sc">#1fffffff</color>
+    <color name="list_divider_color_sc_light">#1f000000</color>
 
     <color name="timestamp_overlay_fg">#ffffff</color>
     <color name="timestamp_overlay_bg">#80000000</color>
