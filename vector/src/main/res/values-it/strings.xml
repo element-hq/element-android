@@ -2868,4 +2868,9 @@
     <string name="directory_add_a_new_server_prompt">Inserisci il nome di un nuovo server che vuoi esplorare.</string>
     <string name="directory_add_a_new_server">Aggiungi un nuovo server</string>
     <string name="directory_your_server">Il tuo server</string>
+    <string name="teammate_spaces_might_not_join">Al momento le persone potrebbero non poter entrare nelle stanze private che crei.
+\n
+\nMiglioreremo questa cosa come parte della beta, ma volevamo almeno fartelo sapere.</string>
+    <string name="teammate_spaces_arent_quite_ready">Gli spazi dei compagni non sono ancora pronti del tutto, ma puoi comunque provarli</string>
+    <string name="continue_anyway">Continua comunque</string>
 </resources>
