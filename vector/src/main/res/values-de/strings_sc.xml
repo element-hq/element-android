@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="normal_priority_header">Normale Priorität</string>
-
     <string name="settings_home_overview">Übersicht</string>
-
     <string name="settings_single_overview">Vereinte Chat-Übersicht</string>
     <string name="settings_single_overview_summary">Zeige sowohl Direktnachrichten als auch Gruppenchats in einer gemeinsamen Übersicht</string>
-
     <string name="settings_room_unread_kind_dm">Direktchat-Vorschau</string>
     <string name="settings_room_unread_kind_group">Gruppenchat-Vorschau</string>
     <string name="settings_room_unread_kind_default">Alle Ereignisse</string>
     <string name="settings_room_unread_kind_content">Verstecke Teilnehmerveränderungen</string>
     <string name="settings_room_unread_kind_original_content">Verstecke Teilnehmerveränderungen und Reaktionen</string>
-
     <string name="settings_simplified_mode">Einfacher Modus</string>
     <string name="settings_simplified_mode_summary">Verstecke erweiterte Funktionalität, einschließlich öffentlichen Raumverzeichnissen und Chat-Verschlüsselungseinstellungen</string>
     <string name="prompt_simplified_mode_title">Benutzeroberfläche festlegen</string>
@@ -22,7 +17,6 @@
     <string name="prompt_simplified_mode_on_text">Ich möchte nur mit mir bekannten Leuten kommunizieren, und finde zusätzliche Optionen verwirrend.</string>
     <string name="prompt_simplified_mode_off">Vollständig</string>
     <string name="prompt_simplified_mode_off_text">Ich bevorzuge einen vollen Funktionsumfang, einschließlich den Zugriff auf öffentliche Raumverzeichnisse und erweiterte Raum- und Verschlüsselungseinstellungen.</string>
-
     <string name="settings_light_theme">Helles Design</string>
     <string name="settings_dark_theme">Dunkles Design</string>
     <string name="settings_system_dark_theme_pre_ten">Folge dem Systemdesign</string>
@@ -32,7 +26,6 @@
     <string name="sc_dark_theme">SC Dunkel</string>
     <string name="sc_colored_theme">SC Schwarz, bunte Blasen</string>
     <string name="sc_dark_colored_theme">SC Dunkel, bunte Blasen</string>
-
     <string name="bubble_style">Sprechblasen</string>
     <string name="bubble_style_none">Keine</string>
     <string name="bubble_style_start">Selbe Seite</string>
@@ -40,30 +33,26 @@
     <string name="bubble_time_location">Zeitstempel-Platzierung</string>
     <string name="bubble_time_location_top">Oben</string>
     <string name="bubble_time_location_bottom">Unten</string>
-
     <string name="settings_unimportant_counter_badge">Zähle unwichtige Chat-Ereignisse</string>
     <string name="settings_unimportant_counter_badge_summary">Betrachte auch Chats ohne Benachrichtigung beim Zählen der ungelesenen Nachrichten pro Kategorie</string>
-
     <string name="labs_mark_rooms_unread">Chats als ungelesen markieren</string>
     <string name="labs_mark_rooms_unread_summary">Erlaube, Chats als ungelesen zu markieren. Andere Matrix-Clients unterstützen diese Funktionalität möglicherweise noch nicht.</string>
     <string name="url_previews_in_encrypted_rooms">URL-Vorschau in verschlüsselten Chats</string>
     <string name="url_previews_in_encrypted_rooms_summary">Dies offenbart in Nachrichten enthaltene URLs gegenüber dem Homeserver!</string>
-
     <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="bottom_action_all">Übersicht</string>
     <string name="all_list_rooms_empty_title">SchildiChat</string>
     <string name="all_list_rooms_empty_body">Konversationen werden hier angezeigt</string>
-
     <!-- Login screen -->
     <string name="login_connect_using_matrix_id_text_sc">z. B. @user:domain.com</string>
     <string name="login_server_other_title_sc">Benutzerdefinierter Server</string>
     <string name="login_server_other_text_sc">Serveradresse angeben zum Anmelden oder Registrieren</string>
-
     <string name="show_room_info_sc">Rauminfo</string>
     <string name="show_participants_sc">Teilnehmer</string>
     <string name="room_list_quick_actions_mark_room_unread">Als ungelesen markieren</string>
     <string name="room_list_quick_actions_mark_room_read">Als gelesen markieren</string>
-
     <string name="footer_read_receipt_content_description">Status der Nachricht</string>
-
+    <string name="element_dark_theme">Element Dunkel</string>
+    <string name="element_black_theme">Element Schwarz</string>
+    <string name="element_light_theme">Element Hell</string>
 </resources>
