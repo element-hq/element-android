@@ -128,7 +128,7 @@ class HomeDetailFragment @Inject constructor(
         setupKeysBackupBanner()
         setupActiveCallView()
 
-        loadNavigationView()
+        checkNotificationTabStatus()
 
         viewModel.selectSubscribe(this, HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
             when (roomGroupingMethod) {
@@ -147,6 +147,7 @@ class HomeDetailFragment @Inject constructor(
 
         viewModel.selectSubscribe(this, HomeDetailViewState::showDialPadTab) { showDialPadTab ->
             updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
+            checkNotificationTabStatus(showDialPadTab)
         }
 
         viewModel.observeViewEvents { viewEvent ->
@@ -194,18 +195,6 @@ class HomeDetailFragment @Inject constructor(
                 })
     }
 
-    private fun loadNavigationView() {
-        withState(viewModel) {
-            // Update the navigation view if needed (for when we restore the tabs)
-            if (!vectorPreferences.enableOverviewTabs()) {
-                views.bottomNavigationView.isVisible = false
-            } else {
-                views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
-                views.bottomNavigationView.isVisible = true
-            }
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         // update notification tab if needed
@@ -215,7 +204,7 @@ class HomeDetailFragment @Inject constructor(
         callManager.checkForProtocolsSupportIfNeeded()
     }
 
-    private fun checkNotificationTabStatus() {
+    private fun checkNotificationTabStatus(enableDialPad: Boolean? = null) {
         val wasVisible = views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible
         val combinedOverview = vectorPreferences.combinedOverview()
         val combinedOverviewWasVisible = views.bottomNavigationView.menu.findItem(R.id.bottom_action_all).isVisible
@@ -251,13 +240,18 @@ class HomeDetailFragment @Inject constructor(
             }
         }
         val wasBottomBarVisible = views.bottomNavigationView.isVisible
-        viewModel.selectSubscribe(this, HomeDetailViewState::showDialPadTab) { showDialPadTab ->
-            updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
-        }
-        withState(viewModel) {
-            val showTabBar = vectorPreferences.enableOverviewTabs() || it.showDialPadTab
-            if (wasBottomBarVisible != showTabBar) {
-                loadNavigationView()
+        val showDialPad = enableDialPad ?: withState(viewModel) { it.showDialPadTab }
+        val showTabBar = vectorPreferences.enableOverviewTabs() || showDialPad
+        if (wasBottomBarVisible != showTabBar) {
+            withState(viewModel) {
+                // Update the navigation view if needed (for when we restore the tabs)
+                if (showTabBar) {
+                    views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
+                    views.bottomNavigationView.isVisible = true
+                } else {
+                    views.bottomNavigationView.isVisible = false
+                }
+
             }
         }
     }
@@ -469,7 +463,12 @@ class HomeDetailFragment @Inject constructor(
             // As we hide it check if it's not the current item!
             withState(viewModel) {
                 if (it.currentTab.toMenuId() == tabId) {
-                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.PEOPLE)))
+                    val combinedOverview = vectorPreferences.combinedOverview()
+                    if (combinedOverview) {
+                        viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.PEOPLE)))
+                    } else {
+                        viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.ALL)))
+                    }
                 }
             }
         }
