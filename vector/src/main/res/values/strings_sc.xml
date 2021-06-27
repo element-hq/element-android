@@ -32,6 +32,9 @@
     <string name="sc_dark_theme">SC Dark</string>
     <string name="sc_colored_theme">SC Black, colored bubbles</string>
     <string name="sc_dark_colored_theme">SC Dark, colored bubbles</string>
+    <string name="element_light_theme">Element Light</string>
+    <string name="element_dark_theme">Element Dark</string>
+    <string name="element_black_theme">Element Black</string>
 
     <string name="bubble_style">Message bubbles</string>
     <string name="bubble_style_none">None</string>

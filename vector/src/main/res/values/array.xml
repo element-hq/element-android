@@ -40,28 +40,28 @@
         <!-- SC has a different approach
         <item>@string/system_theme</item>
         -->
-        <item>@string/light_theme</item>
-        <item>@string/dark_theme</item>
-        <item>@string/black_theme</item>
         <item>@string/sc_light_theme</item>
         <item>@string/sc_theme</item>
         <item>@string/sc_dark_theme</item>
         <item>@string/sc_colored_theme</item>
         <item>@string/sc_dark_colored_theme</item>
+        <item>@string/element_light_theme</item>
+        <item>@string/element_dark_theme</item>
+        <item>@string/element_black_theme</item>
     </string-array>
 
     <string-array name="theme_values">
         <!-- SC has a different approach
         <item>system</item>
         -->
-        <item>light</item>
-        <item>dark</item>
-        <item>black</item>
         <item>sc_light</item>
         <item>sc</item>
         <item>sc_dark</item>
         <item>sc_colored</item>
         <item>sc_dark_colored</item>
+        <item>light</item>
+        <item>dark</item>
+        <item>black</item>
     </string-array>
 
     <!-- media saving choice list -->
