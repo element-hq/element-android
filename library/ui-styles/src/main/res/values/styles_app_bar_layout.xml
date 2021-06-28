@@ -3,7 +3,9 @@
 
     <style name="Widget.Vector.AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout.Primary">
         <item name="android:background">?vctr_toolbar_background</item>
+        <!-- Defining this here actually breaks elevation...?
         <item name="elevation">4dp</item>
+        -->
     </style>
 
 </resources>

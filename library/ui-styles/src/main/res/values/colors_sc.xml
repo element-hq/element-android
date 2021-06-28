@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Accent colors -->
     <color name="accent_sc">#8BC34A</color>
     <color name="accent_sc_alpha25">#3F8BC34A</color>
     <color name="accent_sc_alpha12">#1E8BC34A</color>
@@ -13,29 +14,52 @@
     <color name="accent_sc_pale">@color/accent_sc_300</color>
     <color name="direct_chat_ring_color_sc">@color/accent_sc_dark</color>
 
+    <!-- Username/avatar colors -->
     <color name="avatar_fill_sc_1">@color/accent_sc</color>
     <color name="username_sc_1">@color/accent_sc</color>
 
+    <!-- Dark theme text/foreground colors -->
     <color name="text_color_primary_sc">#ffffff</color>
     <color name="text_color_secondary_sc">#b3ffffff</color>
     <color name="text_color_tertiary_sc">#80ffffff</color>
     <color name="text_color_disabled_sc">#80ffffff</color>
 
+    <!-- Dark theme background colors -->
     <color name="background_sc">#ff303030</color>
     <color name="background_dark_sc">#ff212121</color>
     <color name="background_black_sc">#ff000000</color>
     <color name="background_floating_sc">#ff424242</color>
     <color name="background_touch_guard_sc">#bf000000</color>
 
+    <!-- Light theme text/foreground colors -->
+    <color name="text_color_primary_sc_light">#de000000</color>
+    <color name="text_color_secondary_sc_light">#8a000000</color>
+    <color name="text_color_tertiary_sc_light">#4c000000</color>
+    <color name="text_color_disabled_sc_light">#4c000000</color>
+
+    <!-- Light theme background colors -->
+    <color name="background_sc_light_bright">#ffffffff</color>
+    <color name="background_sc_light">#fffafafa</color>
+    <color name="background_sc_light_secondary">#ffeeeeee</color>
+    <color name="background_sc_light_toolbar">#fff5f5f5</color>
+    <color name="background_sc_light_statusbar">#ffe0e0e0</color>
+    <color name="background_floating_sc_light">#ffffffff</color>
+    <color name="background_touch_guard_sc_light">#61000000</color>
+
+    <!-- List divider colors -->
     <color name="list_divider_color_sc">#1fffffff</color>
     <color name="list_divider_color_sc_light">#1f000000</color>
 
+    <!-- Timestamp colors -->
     <color name="timestamp_overlay_fg">#ffffff</color>
     <color name="timestamp_overlay_bg">#80000000</color>
 
+    <!-- Reaction colors -->
     <color name="sc_reaction_background_on_light">@color/accent_sc_50</color>
     <color name="sc_reaction_background_on_dark">@color/accent_sc_900</color>
 
+    <!-- Exposed Element colors -->
     <!-- This is actually not an SC color, but the one found in element for ic_material_play_circle PNGs -->
     <color name="element_accent_pale">#76cfa6</color>
+
 </resources>

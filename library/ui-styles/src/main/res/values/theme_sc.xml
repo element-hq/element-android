@@ -27,7 +27,7 @@
         <item name="vctr_room_active_widgets_banner_text">?vctr_content_secondary</item>
         <item name="vctr_reaction_background_off">@color/background_sc</item>
         <item name="vctr_reaction_background_on">@color/sc_reaction_background_on_dark</item>
-        <item name="vctr_waiting_background_color">#555555</item>
+        <item name="vctr_waiting_background_color">#55555555</item>
         <item name="vctr_chat_effect_snow_background">@android:color/transparent</item>
         <item name="vctr_toolbar_background">?android:colorBackground</item>
 

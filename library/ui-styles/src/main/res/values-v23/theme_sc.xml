@@ -18,7 +18,7 @@
     </style>
 
     <style name="AppTheme.SC.Light.v23" parent="AppTheme.Base.SC.Light">
-        <item name="android:statusBarColor">@color/android_status_bar_background_light</item>
+        <item name="android:statusBarColor">@color/background_sc_light_statusbar</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 

@@ -16,6 +16,7 @@
 package im.vector.app.core.ui.list
 
 import android.view.Gravity
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import com.airbnb.epoxy.EpoxyAttribute
@@ -53,6 +54,10 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
     @ColorInt
     var textColor: Int? = null
 
+    @EpoxyAttribute
+    @ColorInt
+    var backgroundColor: Int? = null
+
     override fun bind(holder: Holder) {
         super.bind(holder)
 
@@ -67,10 +72,17 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
             holder.text.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary))
         }
 
+        if (backgroundColor != null) {
+            holder.layout.setBackgroundColor(backgroundColor!!)
+        } else  {
+            holder.layout.background = null
+        }
+
         holder.view.onClick(itemClickAction)
     }
 
     class Holder : VectorEpoxyHolder() {
         val text by bind<TextView>(R.id.itemGenericFooterText)
+        val layout by bind<LinearLayout>(R.id.itemGenericFooterLayout)
     }
 }

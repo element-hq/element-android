@@ -22,6 +22,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.expandableTextItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.ShortcutCreator
@@ -34,6 +35,7 @@ import javax.inject.Inject
 
 class RoomProfileController @Inject constructor(
         private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider,
         private val vectorPreferences: VectorPreferences,
         private val shortcutCreator: ShortcutCreator
 ) : TypedEpoxyController<RoomProfileViewState>() {
@@ -98,6 +100,7 @@ class RoomProfileController @Inject constructor(
             id("e2e info")
             centered(false)
             text(host.stringProvider.getString(learnMoreSubtitle))
+            backgroundColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_header_background))
         }
         // SC: Move down in the list, this one-time action is not important to enough to show this prevalent at the top
         //buildEncryptionAction(data.actionPermissions, roomSummary)
