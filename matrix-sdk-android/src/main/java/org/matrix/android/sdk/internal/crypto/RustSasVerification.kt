@@ -43,7 +43,6 @@ internal class SasVerification(
         ) :
         SasVerificationTransaction {
     private val uiHandler = Handler(Looper.getMainLooper())
-    private var stateField: VerificationTxState = VerificationTxState.OnStarted
 
     private fun dispatchTxUpdated() {
         uiHandler.post {
@@ -69,24 +68,14 @@ internal class SasVerification(
     }
 
     override val isIncoming: Boolean
-        get() {
-            return !this.inner.weStarted
-        }
+        get() = !this.inner.weStarted
 
     override var otherDeviceId: String?
-        get() {
-            return this.inner.otherDeviceId
-        }
-        set(value) {
-            if (value != null) {
-                this.inner.otherDeviceId = value
-            }
-        }
+        get() = this.inner.otherDeviceId
+        @Suppress("UNUSED_PARAMETER")
+        set(value) {}
 
-    override val otherUserId: String
-        get() {
-            return this.inner.otherUserId
-        }
+    override val otherUserId: String = this.inner.otherUserId
 
     override var state: VerificationTxState
         get() {
@@ -105,14 +94,11 @@ internal class SasVerification(
                 }
             }
         }
-        set(v) {
-            this.stateField = v
-        }
+        @Suppress("UNUSED_PARAMETER")
+        set(v) {}
 
     override val transactionId: String
-        get() {
-            return this.inner.flowId
-        }
+        get() = this.inner.flowId
 
     override fun cancel() {
         this.cancelHelper(CancelCode.User)
@@ -126,9 +112,7 @@ internal class SasVerification(
         this.cancelHelper(CancelCode.MismatchedSas)
     }
 
-    override fun isToDeviceTransport(): Boolean {
-        return this.inner.roomId == null
-    }
+    override fun isToDeviceTransport(): Boolean = this.inner.roomId == null
 
     override fun supportsDecimal(): Boolean {
         // This is ignored anyways, throw it away?
