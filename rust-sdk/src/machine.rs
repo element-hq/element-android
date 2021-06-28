@@ -4,8 +4,8 @@ use std::{
     io::Cursor,
 };
 
-use js_int::UInt;
 use base64::encode;
+use js_int::UInt;
 use ruma::{
     api::{
         client::r0::{
@@ -30,9 +30,9 @@ use tokio::runtime::Runtime;
 
 use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
 use matrix_sdk_crypto::{
-    decrypt_key_export, encrypt_key_export, EncryptionSettings, OlmMachine as InnerMachine,
-    QrVerification as InnerQr, Sas as InnerSas, Verification as RustVerification,
-    VerificationRequest as InnerVerificationRequest,
+    decrypt_key_export, encrypt_key_export, EncryptionSettings, LocalTrust,
+    OlmMachine as InnerMachine, QrVerification as InnerQr, Sas as InnerSas,
+    Verification as RustVerification, VerificationRequest as InnerVerificationRequest,
 };
 
 use crate::{
@@ -225,6 +225,25 @@ impl OlmMachine {
             .runtime
             .block_on(self.inner.get_device(&user_id, device_id.into()))?
             .map(|d| d.into()))
+    }
+
+    pub fn mark_device_as_trusted(
+        &self,
+        user_id: &str,
+        device_id: &str,
+    ) -> Result<(), CryptoStoreError> {
+        let user_id = UserId::try_from(user_id)?;
+
+        let device = self
+            .runtime
+            .block_on(self.inner.get_device(&user_id, device_id.into()))?;
+
+        if let Some(device) = device {
+            self.runtime
+                .block_on(device.set_local_trust(LocalTrust::Verified))?;
+        }
+
+        Ok(())
     }
 
     /// Get all devices of an user.
@@ -731,7 +750,10 @@ impl OlmMachine {
         let user_id = UserId::try_from(user_id).ok()?;
         self.inner
             .get_verification(&user_id, flow_id)
-            .and_then(|v| v.qr_v1().and_then(|qr| qr.to_bytes().map(|b| encode(b)).ok()))
+            .and_then(|v| {
+                v.qr_v1()
+                    .and_then(|qr| qr.to_bytes().map(|b| encode(b)).ok())
+            })
     }
 
     pub fn start_sas_verification(

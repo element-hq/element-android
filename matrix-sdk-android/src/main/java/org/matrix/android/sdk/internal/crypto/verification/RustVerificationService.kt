@@ -102,18 +102,7 @@ constructor(
     }
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
-        TODO()
-        // setDeviceVerificationAction.handle(DeviceTrustLevel(false, true),
-        //         userId,
-        //         deviceID)
-
-        // listeners.forEach {
-        //     try {
-        //         it.markedAsManuallyVerified(userId, deviceID)
-        //     } catch (e: Throwable) {
-        //         Timber.e(e, "## Error while notifying listeners")
-        //     }
-        // }
+        runBlocking { olmMachine.markDeviceAsTrusted(userId, deviceID) }
     }
 
     fun onEvent(event: Event) = when (event.getClearType()) {

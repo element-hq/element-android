@@ -177,6 +177,8 @@ interface OlmMachine {
     [Throws=CryptoStoreError]
     Device? get_device([ByRef] string user_id, [ByRef] string device_id);
     [Throws=CryptoStoreError]
+    void mark_device_as_trusted([ByRef] string user_id, [ByRef] string device_id);
+    [Throws=CryptoStoreError]
     sequence<Device> get_user_devices([ByRef] string user_id);
 
     void update_tracked_users(sequence<string> users);

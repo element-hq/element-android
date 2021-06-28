@@ -632,6 +632,12 @@ internal class OlmMachine(
         return plainDevices
     }
 
+    @Throws(CryptoStoreErrorException::class)
+    internal suspend fun markDeviceAsTrusted(userId: String, deviceId: String) =
+        withContext(Dispatchers.IO) {
+            inner.markDeviceAsTrusted(userId, deviceId)
+        }
+
     /** Update all of our live device listeners. */
     private suspend fun updateLiveDevices() {
         for ((liveDevice, users) in deviceUpdateObserver.listeners) {
