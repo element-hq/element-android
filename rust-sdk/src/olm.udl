@@ -93,6 +93,7 @@ dictionary QrCode {
     string? cancel_code;
     string? room_id;
     boolean we_started;
+    boolean has_been_confirmed;
     boolean? cancelled_by_us;
     boolean is_done;
     boolean is_cancelled;

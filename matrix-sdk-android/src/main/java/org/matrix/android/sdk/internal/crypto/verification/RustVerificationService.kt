@@ -116,26 +116,25 @@ constructor(
         // }
     }
 
-    suspend fun onEvent(event: Event) {
-        when (event.getClearType()) {
-            EventType.KEY_VERIFICATION_START -> {}
-            EventType.KEY_VERIFICATION_CANCEL -> {}
-            EventType.KEY_VERIFICATION_ACCEPT -> {}
-            EventType.KEY_VERIFICATION_KEY -> {
-                onKeyReceived(event)
-            }
-            EventType.KEY_VERIFICATION_MAC -> {}
-            EventType.KEY_VERIFICATION_READY -> {}
-            EventType.KEY_VERIFICATION_DONE -> {
-                onDone(event)
-            }
-            MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
-                onRequestReceived(event)
-            }
-            else -> {
-                // ignore
-            }
-        }
+    fun onEvent(event: Event) = when (event.getClearType()) {
+        EventType.KEY_VERIFICATION_START -> onStart(event)
+        EventType.KEY_VERIFICATION_CANCEL -> {}
+        EventType.KEY_VERIFICATION_ACCEPT -> {}
+        EventType.KEY_VERIFICATION_KEY -> onKey(event)
+        EventType.KEY_VERIFICATION_MAC -> {}
+        EventType.KEY_VERIFICATION_READY -> {}
+        EventType.KEY_VERIFICATION_DONE -> onDone(event)
+        MessageType.MSGTYPE_VERIFICATION_REQUEST -> onRequest(event)
+        else -> {}
+    }
+
+    private fun onStart(event: Event) {
+        val content = event.getClearContent().toModel<KeyVerificationStart>() ?: return
+        val flowId = content.transactionId ?: return
+        val sender = event.senderId ?: return
+
+        val verification = this.getExistingTransaction(sender, flowId) ?: return
+        dispatchTxUpdated(verification)
     }
 
     private fun onDone(event: Event) {
@@ -146,7 +145,8 @@ constructor(
         val verification = this.getExistingTransaction(sender, flowId) ?: return
         dispatchTxUpdated(verification)
     }
-    private fun onKeyReceived(event: Event) {
+
+    private fun onKey(event: Event) {
         val content = event.getClearContent().toModel<KeyVerificationKey>() ?: return
         val flowId = content.transactionId ?: return
         val sender = event.senderId ?: return
@@ -155,7 +155,7 @@ constructor(
         dispatchTxUpdated(verification)
     }
 
-    private fun onRequestReceived(event: Event) {
+    private fun onRequest(event: Event) {
         val content = event.getClearContent().toModel<KeyVerificationRequest>() ?: return
         val flowId = content.transactionId
         val sender = event.senderId ?: return

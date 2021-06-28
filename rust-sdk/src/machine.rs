@@ -78,6 +78,7 @@ pub struct QrCode {
     pub is_done: bool,
     pub we_started: bool,
     pub other_side_scanned: bool,
+    pub has_been_confirmed: bool,
     pub cancel_code: Option<String>,
     pub cancelled_by_us: Option<bool>,
 }
@@ -92,7 +93,8 @@ impl From<InnerQr> for QrCode {
             cancel_code: qr.cancel_code().map(|c| c.to_string()),
             cancelled_by_us: qr.cancelled_by_us(),
             we_started: qr.we_started(),
-            other_side_scanned: qr.is_scanned(),
+            other_side_scanned: qr.has_been_scanned(),
+            has_been_confirmed: qr.has_been_confirmed(),
             other_device_id: qr.other_device_id().to_string(),
             room_id: qr.room_id().map(|r| r.to_string()),
         }
