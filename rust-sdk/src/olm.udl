@@ -76,6 +76,7 @@ dictionary Sas {
     boolean is_cancelled;
     boolean can_be_presented;
     boolean timed_out;
+    boolean supports_emoji;
 };
 
 dictionary VerificationRequest {

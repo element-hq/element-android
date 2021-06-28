@@ -185,11 +185,17 @@ internal class VerificationRequest(
         return this.inner.isReady
     }
 
-    suspend fun startSasVerification(): StartSasResult? {
+    suspend fun startSasVerification(): Pair<OutgoingVerificationRequest, SasVerification>? {
         refreshData()
 
         return withContext(Dispatchers.IO) {
-            machine.startSasVerification(inner.otherUserId, inner.flowId)
+            val response = machine.startSasVerification(inner.otherUserId, inner.flowId)
+
+            if (response != null) {
+                Pair(response.request, SasVerification(machine, response.sas))
+            } else {
+                null
+            }
         }
     }
 
@@ -325,7 +331,22 @@ public class SasVerification(private val machine: InnerMachine, private var inne
 
     override var state: VerificationTxState
         get() {
-            TODO()
+            refreshData()
+            return when {
+                this.inner.canBePresented -> {
+                    VerificationTxState.ShortCodeReady
+                }
+                this.inner.isCancelled    -> {
+                    // TODO fetch the cancel code from the rust side
+                    VerificationTxState.Cancelled(CancelCode.User, false)
+                }
+                this.inner.isDone         -> {
+                    VerificationTxState.Verified
+                }
+                else                      -> {
+                    VerificationTxState.Started
+                }
+            }
         }
         set(v) {
             this.stateField = v
@@ -353,11 +374,16 @@ public class SasVerification(private val machine: InnerMachine, private var inne
     }
 
     override fun supportsDecimal(): Boolean {
-        return false
+        // This is ignored anyways, throw it away?
+        // The spec also mandates that devices support
+        // at least decimal and the rust-sdk cancels if
+        // devices don't support it
+        return true
     }
 
     override fun supportsEmoji(): Boolean {
-        return false
+        refreshData()
+        return this.inner.supportsEmoji
     }
 
     override fun userHasVerifiedShortCode() {

@@ -53,6 +53,7 @@ pub struct Sas {
     pub is_cancelled: bool,
     pub is_done: bool,
     pub can_be_presented: bool,
+    pub supports_emoji: bool,
     pub timed_out: bool,
 }
 
@@ -71,6 +72,7 @@ impl From<InnerSas> for Sas {
             is_done: sas.is_done(),
             can_be_presented: sas.can_be_presented(),
             timed_out: sas.timed_out(),
+            supports_emoji: sas.supports_emoji(),
         }
     }
 }
@@ -649,9 +651,11 @@ impl OlmMachine {
         todo!()
     }
 
-    pub fn get_verification(&self, user_id: &str, _flow_id: &str) -> Option<Sas> {
-        let _user_id = UserId::try_from(user_id).ok()?;
-        todo!()
+    pub fn get_verification(&self, user_id: &str, flow_id: &str) -> Option<Sas> {
+        let user_id = UserId::try_from(user_id).ok()?;
+        self.inner
+            .get_verification(&user_id, flow_id)
+            .and_then(|v| v.sas_v1().map(|s| s.into()))
     }
 
     pub fn start_sas_verification(

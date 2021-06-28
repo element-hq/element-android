@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.verification
 
 import android.os.Handler
 import android.os.Looper
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import kotlin.collections.set
 import kotlinx.coroutines.runBlocking
@@ -31,6 +32,8 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationDone
+import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationKey
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationRequest
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -132,10 +135,14 @@ constructor(
             EventType.KEY_VERIFICATION_START -> {}
             EventType.KEY_VERIFICATION_CANCEL -> {}
             EventType.KEY_VERIFICATION_ACCEPT -> {}
-            EventType.KEY_VERIFICATION_KEY -> {}
+            EventType.KEY_VERIFICATION_KEY -> {
+                onKeyReceived(event)
+            }
             EventType.KEY_VERIFICATION_MAC -> {}
             EventType.KEY_VERIFICATION_READY -> {}
-            EventType.KEY_VERIFICATION_DONE -> {}
+            EventType.KEY_VERIFICATION_DONE -> {
+                onDone(event)
+            }
             MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
                 onRequestReceived(event)
             }
@@ -143,10 +150,23 @@ constructor(
                 // ignore
             }
         }
-        event == event
-        // TODO get the sender and flow id out of the event and depending on the
-        // event type either get the verification request or verification and
-        // dispatch updates here
+    }
+
+    private fun onDone(event: Event) {
+        val content = event.getClearContent().toModel<KeyVerificationDone>() ?: return
+        val flowId = content.transactionId ?: return
+        val sender = event.senderId ?: return
+
+        val verification = this.getExistingTransaction(sender, flowId) ?: return
+        dispatchTxUpdated(verification)
+    }
+    private fun onKeyReceived(event: Event) {
+        val content = event.getClearContent().toModel<KeyVerificationKey>() ?: return
+        val flowId = content.transactionId ?: return
+        val sender = event.senderId ?: return
+
+        val verification = this.getExistingTransaction(sender, flowId) ?: return
+        dispatchTxUpdated(verification)
     }
 
     private fun onRequestReceived(event: Event) {
@@ -166,9 +186,9 @@ constructor(
     // TODO All this methods should be delegated to a TransactionStore
     override fun getExistingTransaction(
             otherUserId: String,
-            tid: String
+            tid: String,
     ): VerificationTransaction? {
-        return null
+        return this.olmMachine.getVerification(otherUserId, tid)
     }
 
     override fun getExistingVerificationRequests(
@@ -210,10 +230,19 @@ constructor(
             transactionId: String?
     ): String? {
         // should check if already one (and cancel it)
-        if (method == VerificationMethod.SAS) {
-            // TODO start SAS verification here, don't we need to see if there's
-            // a request?
-            TODO()
+        return if (method == VerificationMethod.SAS) {
+            val flowId = transactionId ?: return null
+            val request = this.olmMachine.getVerificationRequest(otherUserId, flowId)
+            runBlocking {
+                val response = request?.startSasVerification()
+                if (response != null) {
+                    sendRequest(response.first)
+                    dispatchTxAdded(response.second)
+                    response.second.transactionId
+                } else {
+                    null
+                }
+            }
         } else {
             throw IllegalArgumentException("Unknown verification method")
         }
