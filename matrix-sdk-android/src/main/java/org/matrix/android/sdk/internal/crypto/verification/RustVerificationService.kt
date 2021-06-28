@@ -130,6 +130,7 @@ constructor(
         val flowId = content.transactionId ?: return
         val sender = event.senderId ?: return
 
+        this.getVerificationRequest(sender, flowId)?.dispatchRequestUpdated()
         getAndDispatch(sender, flowId)
     }
     private fun onStart(event: Event) {

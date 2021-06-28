@@ -56,7 +56,7 @@ internal class VerificationRequest(
         return
     }
 
-    private fun dispatchRequestUpdated() {
+    internal fun dispatchRequestUpdated() {
         uiHandler.post {
             listeners.forEach {
                 try {
