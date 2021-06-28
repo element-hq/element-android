@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.list
 
 import im.vector.app.AppStateHandler
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
@@ -26,16 +27,18 @@ import javax.inject.Provider
 class RoomListViewModelFactory @Inject constructor(private val session: Provider<Session>,
                                                    private val appStateHandler: AppStateHandler,
                                                    private val stringProvider: StringProvider,
-                                                   private val vectorPreferences: VectorPreferences)
+                                                   private val vectorPreferences: VectorPreferences,
+                                                   private val autoAcceptInvites: AutoAcceptInvites)
     : RoomListViewModel.Factory {
 
     override fun create(initialState: RoomListViewState): RoomListViewModel {
         return RoomListViewModel(
-                initialState,
-                session.get(),
-                stringProvider,
-                appStateHandler,
-                vectorPreferences
+                initialState = initialState,
+                session = session.get(),
+                stringProvider = stringProvider,
+                appStateHandler = appStateHandler,
+                vectorPreferences = vectorPreferences,
+                autoAcceptInvites = autoAcceptInvites
         )
     }
 }

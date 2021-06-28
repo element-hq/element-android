@@ -50,6 +50,7 @@ import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.home.room.list.RoomListModule
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.InviteUsersToRoomActivity
 import im.vector.app.features.invite.VectorInviteView
 import im.vector.app.features.link.LinkHandlerActivity
@@ -122,6 +123,7 @@ interface ScreenComponent {
     fun errorFormatter(): ErrorFormatter
     fun uiStateRepository(): UiStateRepository
     fun unrecognizedCertificateDialog(): UnrecognizedCertificateDialog
+    fun autoAcceptInvites(): AutoAcceptInvites
 
     /* ==========================================================================================
      * Activities
