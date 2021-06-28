@@ -741,7 +741,7 @@
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Wer kann den Chatverlauf lesen?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Wer kann auf diesen Raum zugreifen?</string>
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
-    <string name="room_settings_read_history_entry_anyone">Jede*r</string>
+    <string name="room_settings_read_history_entry_anyone">Alle</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Nur Mitglieder (ab dem Zeitpunkt, an dem diese Option ausgewählt wurde)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Nur Mitglieder (ab dem Zeitpunkt, an dem sie eingeladen wurden)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Nur Mitglieder (ab dem Zeitpunkt, an dem sie beigetreten sind)</string>
@@ -805,7 +805,7 @@
     <string name="passphrase_confirm_passphrase">Passphrase bestätigen</string>
     <string name="encryption_export_saved_as">Die Ende-zu-Ende-Raumschlüssel wurden in \'%s\' gespeichert.
 \n
-\nAchtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.</string>
+\nWarnung: Diese Datei wird möglicherweise gelöscht, wenn die App deinstalliert wird.</string>
     <string name="encryption_import_e2e_room_keys">Ende-zu-Ende-Raumschlüssel importieren</string>
     <string name="encryption_import_room_keys">Raumschlüssel importieren</string>
     <string name="encryption_import_room_keys_summary">Schlüssel aus lokaler Datei importieren</string>
@@ -1153,7 +1153,7 @@
     <string name="settings_send_typing_notifs">Schreibbenachrichtigungen senden</string>
     <string name="settings_send_typing_notifs_summary">Lasse andere Benutzer wissen, dass du tippst.</string>
     <string name="settings_send_markdown">Markdown-Formatierung</string>
-    <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax, bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen, etwa Sternchen (*) um kursiven Text anzuzeigen.</string>
+    <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax, bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen wie Sternchen (*), um kursiven Text anzuzeigen.</string>
     <string name="settings_show_read_receipts">Lesebestätigungen zeigen</string>
     <string name="settings_show_read_receipts_summary">Klicke auf die Lesebestätigungen für eine detailliertere Liste.</string>
     <string name="settings_show_join_leave_messages_summary">Einladungen, Kicks und Banns bleiben unberührt.</string>
@@ -1989,7 +1989,7 @@
 \nSchlüssel sind nicht vertrauenswürdig</string>
     <string name="encryption_information_dg_xsigning_disabled">Cross-Signing ist nicht aktiviert</string>
     <string name="settings_active_sessions_list">Aktive Sitzungen</string>
-    <string name="settings_active_sessions_show_all">Zeige alle Sitzungen</string>
+    <string name="settings_active_sessions_show_all">Alle Sitzungen anzeigen</string>
     <string name="settings_active_sessions_manage">Sitzungen verwalten</string>
     <string name="settings_active_sessions_signout_device">Diese Sitzung abmelden</string>
     <string name="settings_failed_to_get_crypto_device_info">Keine kryptografischen Informationen verfügbar</string>
@@ -2579,7 +2579,7 @@
     <string name="room_preview_not_found">Der Raum ist gerade nicht zugänglich.
 \nVersuche es später nochmal, oder bitte einen Raum-Admin um Hilfe.</string>
     <string name="room_alias_published_alias_add_manually">Eine neue Adresse veröffentlichen</string>
-    <string name="room_alias_published_alias_subtitle">Mit einer öffentlichen Adresse kann jede*r mit jedem Server deinem Raum beitreten. Um eine Adresse zu veröffentlichen, muss sie zuerst als lokale Adresse gesetzt sein.</string>
+    <string name="room_alias_published_alias_subtitle">Mit einer öffentlichen Adresse kann jeder den Raum betreten. Um eine Adresse zu veröffentlichen, muss sie zuerst als lokale Adresse gesetzt sein.</string>
     <string name="room_alias_publish_to_directory">Diesen Raum im Verzeichnis von %1$s veröffentlichen\?</string>
     <string name="room_alias_unpublish_confirmation">Die Adresse \"%1$s\" nicht mehr veröffentlichen\?</string>
     <string name="room_alias_action_unpublish">Diese Adresse nicht mehr veröffentlichen</string>
