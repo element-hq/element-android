@@ -27,22 +27,22 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
                                  @StyleRes val black: Int) {
 
     object Default : ActivityOtherThemes(
-            R.style.AppTheme_Dark,
-            R.style.AppTheme_Black
+            R.style.Theme_Vector_Dark,
+            R.style.Theme_Vector_Black
     )
 
     object Launcher : ActivityOtherThemes(
-            R.style.AppTheme_Launcher,
-            R.style.AppTheme_Launcher
+            R.style.Theme_Vector_Launcher,
+            R.style.Theme_Vector_Launcher
     )
 
     object AttachmentsPreview : ActivityOtherThemes(
-            R.style.AppTheme_AttachmentsPreview,
-            R.style.AppTheme_AttachmentsPreview
+            R.style.Theme_Vector_Black_AttachmentsPreview,
+            R.style.Theme_Vector_Black_AttachmentsPreview
     )
 
     object VectorAttachmentsPreview : ActivityOtherThemes(
-            R.style.AppTheme_Transparent,
-            R.style.AppTheme_Transparent
+            R.style.Theme_Vector_Black_Transparent,
+            R.style.Theme_Vector_Black_Transparent
     )
 }

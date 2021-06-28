@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AlertDialog.Vector.Light" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/palette_element_green</item>
+        <item name="colorSecondary">@color/palette_element_green</item>
+        <item name="colorSurface">@color/element_system_light</item>
+        <item name="colorOnSurface">@color/element_content_primary_light</item>
+        <item name="colorError">@color/element_alert_light</item>
+        <!--item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button</item-->
+    </style>
+
+    <style name="AlertDialog.Vector.Dark" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/palette_element_green</item>
+        <item name="colorSecondary">@color/palette_element_green</item>
+        <item name="colorSurface">@color/element_system_dark</item>
+        <item name="colorOnSurface">@color/element_content_primary_dark</item>
+        <item name="colorError">@color/element_alert_dark</item>
+        <!--item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button</item-->
+    </style>
+
+</resources>

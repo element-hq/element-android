@@ -26,12 +26,12 @@
 
         <TextView
             android:id="@+id/errorMessageView"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="?vctr_content_primary"
-            android:textSize="16sp"
             tools:text="Une erreur est survenue" />
 
         <Button
@@ -75,12 +75,12 @@
 
         <TextView
             android:id="@+id/emptyTitleView"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:textColor="?vctr_content_primary"
-            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/emptyMessageView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,13 +91,13 @@
 
         <TextView
             android:id="@+id/emptyMessageView"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:textColor="?vctr_content_secondary"
-            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

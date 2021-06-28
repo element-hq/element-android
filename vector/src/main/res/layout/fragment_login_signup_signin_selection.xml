@@ -33,10 +33,11 @@
 
             <TextView
                 android:id="@+id/loginSignupSigninTitle"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:textColor="?vctr_content_primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninServerIcon"
                 app:layout_goneMarginTop="0dp"
@@ -44,11 +45,12 @@
 
             <TextView
                 android:id="@+id/loginSignupSigninText"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp"
                 android:gravity="start"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                android:textColor="?vctr_content_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninTitle"
@@ -57,7 +59,7 @@
             <!-- Sign up or sign in SSO -->
             <Button
                 android:id="@+id/loginSignupSigninSubmit"
-                style="@style/Style.Vector.Login.Button"
+                style="@style/Widget.Vector.Button.Login"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="38dp"
@@ -69,7 +71,7 @@
             <!-- Sign in or gone -->
             <Button
                 android:id="@+id/loginSignupSigninSignIn"
-                style="@style/Style.Vector.Login.Button.Outlined"
+                style="@style/Widget.Vector.Button.Outlined.Login"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
@@ -97,13 +99,13 @@
 
                 <TextView
                     android:id="@+id/loginSignupSigninSocialLoginHeader"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="27dp"
                     android:gravity="center"
                     android:text="@string/login_social_continue"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                    android:textSize="14sp" />
+                    android:textColor="?vctr_content_secondary" />
 
                 <im.vector.app.features.login.SocialLoginButtonsView
                     android:id="@+id/loginSignupSigninSocialLoginButtons"

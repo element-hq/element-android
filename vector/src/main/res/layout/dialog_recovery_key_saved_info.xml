@@ -34,6 +34,7 @@
 
             <TextView
                 android:id="@+id/bootstrapTitleText"
+                style="@style/Widget.Vector.TextView.HeadlineMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -42,16 +43,15 @@
                 android:maxLines="2"
                 android:text="@string/keep_it_safe"
                 android:textColor="?vctr_content_primary"
-                android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/keepItSafeText"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_secondary"
-            android:textSize="16sp"
             tools:text="@string/bootstrap_crosssigning_save_usb" />
 
     </LinearLayout>

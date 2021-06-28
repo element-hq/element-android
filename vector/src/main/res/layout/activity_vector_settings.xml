@@ -15,10 +15,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Use VectorToolbarSettings on this screen for better alignment with setting items -->
+            <!-- Use Widget.Vector.Toolbar.Settings on this screen for better alignment with setting items -->
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/settingsToolbar"
-                style="@style/VectorToolbarSettings"
+                style="@style/Widget.Vector.Toolbar.Settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:navigationIcon="@drawable/ic_back_24dp"

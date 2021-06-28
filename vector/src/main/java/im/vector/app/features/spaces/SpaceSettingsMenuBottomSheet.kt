@@ -128,7 +128,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     isLastAdmin = isAdmin && otherAdminCount == 0
                 }.disposeOnDestroyView()
 
-        views.spaceBetaTag.setOnClickListener {
+        views.spaceBetaTag.debouncedClicks {
             bugReporter.openBugReportScreen(requireActivity(), ReportType.SPACE_BETA_FEEDBACK)
         }
 

@@ -12,6 +12,7 @@
 
     <TextView
         android:id="@+id/use_latest_riot"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
@@ -53,6 +54,7 @@
 
     <TextView
         android:id="@+id/app_desktop_web"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -65,6 +67,7 @@
 
     <TextView
         android:id="@+id/app_ios_android"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -84,13 +87,13 @@
 
 
     <TextView
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="@string/or_other_mx_capabale_client"
         android:textColor="?vctr_content_secondary"
-        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/labelsBarrier" />

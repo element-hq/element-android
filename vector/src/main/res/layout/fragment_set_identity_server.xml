@@ -14,17 +14,17 @@
 
         <TextView
             android:id="@+id/identityServerSetDefaultNotice"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_primary"
-            android:textSize="16sp"
             android:visibility="gone"
             tools:text="@string/identity_server_set_default_notice"
             tools:visibility="visible" />
 
         <Button
             android:id="@+id/identityServerSetDefaultSubmit"
-            style="@style/VectorButtonStyleText"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -37,10 +37,10 @@
 
         <TextView
             android:id="@+id/identityServerSetDefaultAlternative"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_primary"
-            android:textSize="16sp"
             tools:text="@string/identity_server_set_alternative_notice" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -64,7 +64,7 @@
 
         <Button
             android:id="@+id/identityServerSetDefaultAlternativeSubmit"
-            style="@style/VectorButtonStyleText"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"

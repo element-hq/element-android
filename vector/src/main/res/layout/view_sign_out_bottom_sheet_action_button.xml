@@ -32,12 +32,12 @@
 
         <TextView
             android:id="@+id/actionTitleText"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/secure_backup_setup"
-            android:textColor="?vctr_content_secondary"
-            android:textSize="17sp" />
+            android:textColor="?vctr_content_primary" />
 
     </LinearLayout>
 

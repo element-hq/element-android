@@ -63,12 +63,12 @@
 
         <TextView
             android:id="@+id/roomNameTileText"
+            style="@style/Widget.Vector.TextView.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:textColor="?vctr_content_primary"
-            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,13 +77,12 @@
 
         <TextView
             android:id="@+id/roomNameDescriptionText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:textColor="?vctr_content_secondary"
-            android:textSize="15sp"
-            android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/roomNameTileText"
@@ -91,13 +90,12 @@
 
         <TextView
             android:id="@+id/roomNameTopicText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:textColor="?vctr_content_secondary"
             android:textColorLink="?colorPrimary"
-            android:textSize="15sp"
-            android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/roomNameDescriptionText"
@@ -128,6 +126,7 @@
                 android:src="@drawable/ic_add_people" />
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -157,6 +156,7 @@
 
         <TextView
             android:id="@+id/itemNoticeTextView"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -167,13 +167,13 @@
             android:layout_toStartOf="@id/itemMergedExpandTextView"
             android:layout_toEndOf="@id/itemNoticeAvatarView"
             android:textColor="?vctr_content_secondary"
-            android:textSize="14sp"
             android:textStyle="italic"
             tools:text="@string/room_created_summary_item" />
 
 
         <TextView
             android:id="@+id/itemMergedExpandTextView"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -184,7 +184,6 @@
             android:paddingBottom="4dp"
             android:text="@string/merged_events_expand"
             android:textColor="?colorSecondary"
-            android:textSize="14sp"
             android:textStyle="italic" />
 
     </RelativeLayout>

@@ -9,6 +9,7 @@
 
     <TextView
         android:id="@+id/headerText"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -16,7 +17,6 @@
         android:gravity="center"
         android:text="@string/invite_people_menu"
         android:textColor="?vctr_content_primary"
-        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent" />
 

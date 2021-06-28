@@ -39,6 +39,7 @@ import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.app.features.roomdirectory.createroom.CreateRoomArgs
 import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -152,6 +153,15 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                                 R.id.simpleFragmentContainer,
                                 SpaceManageRoomsFragment::class.java,
                                 SpaceManageArgs(spaceId, ManageType.ManageRooms)
+                        )
+                    }
+                }
+                SpaceManagedSharedViewEvents.NavigateToAliasSettings -> {
+                    args?.spaceId?.let { spaceId ->
+                        addFragmentToBackstack(
+                                R.id.simpleFragmentContainer,
+                                RoomAliasFragment::class.java,
+                                RoomProfileArgs(spaceId)
                         )
                     }
                 }

@@ -14,7 +14,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 1
-ext.versionPatch = 10
+ext.versionPatch = 12
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -324,6 +324,7 @@ dependencies {
     implementation project(":diff-match-patch")
     implementation project(":multipicker")
     implementation project(":attachment-viewer")
+    implementation project(":library:ui-styles")
     implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

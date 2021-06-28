@@ -48,6 +48,7 @@
 
                 <TextView
                     android:id="@+id/roomSettingsToolbarTitleView"
+                    style="@style/Widget.Vector.TextView.HeadlineMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -55,7 +56,6 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textColor="?vctr_content_primary"
-                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/roomSettingsToolbarAvatarImageView"

@@ -37,6 +37,7 @@
 
     <TextView
         android:id="@+id/overlayCounterText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -44,7 +45,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?colorOnPrimary"
-        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/overlayInfoText"
         app:layout_constraintEnd_toStartOf="@id/overlayShareButton"
@@ -55,13 +55,13 @@
 
     <TextView
         android:id="@+id/overlayInfoText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?colorOnPrimary"
-        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
         app:layout_constraintEnd_toStartOf="@id/overlayShareButton"
         app:layout_constraintStart_toStartOf="@id/overlayCounterText"

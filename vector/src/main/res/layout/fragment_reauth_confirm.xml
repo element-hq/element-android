@@ -11,6 +11,7 @@
 
         <TextView
             android:id="@+id/reAuthConfirmText"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -18,7 +19,6 @@
             android:layout_marginEnd="16dp"
             android:text="@string/re_authentication_default_confirm_text"
             android:textColor="?vctr_content_primary"
-            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/reAuthConfirmButton"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0"
@@ -70,7 +70,7 @@
         <!--            android:layout_height="wrap_content"-->
         <!--            android:gravity="start"-->
         <!--            android:text="@string/login_signin_matrix_id_password_notice"-->
-        <!--            android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"-->
+        <!--            style="@style/Widget.Vector.TextView.Caption"-->
         <!--            android:visibility="gone"-->
         <!--            app:layout_constraintEnd_toEndOf="parent"-->
         <!--            app:layout_constraintStart_toStartOf="parent"-->
@@ -79,11 +79,11 @@
 
         <TextView
             android:id="@+id/genericErrorText"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="@string/authentication_error"
-            android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
             android:textColor="?colorError"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"

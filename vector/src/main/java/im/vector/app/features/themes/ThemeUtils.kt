@@ -114,10 +114,10 @@ object ThemeUtils {
         currentTheme.set(aTheme)
         context.setTheme(
                 when (aTheme) {
-                    SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(context.resources)) R.style.AppTheme_Dark else R.style.AppTheme_Light
-                    THEME_DARK_VALUE   -> R.style.AppTheme_Dark
-                    THEME_BLACK_VALUE  -> R.style.AppTheme_Black
-                    else               -> R.style.AppTheme_Light
+                    SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(context.resources)) R.style.Theme_Vector_Dark else R.style.Theme_Vector_Light
+                    THEME_DARK_VALUE   -> R.style.Theme_Vector_Dark
+                    THEME_BLACK_VALUE  -> R.style.Theme_Vector_Black
+                    else               -> R.style.Theme_Vector_Light
                 }
         )
 

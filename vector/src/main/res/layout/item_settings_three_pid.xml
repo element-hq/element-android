@@ -26,11 +26,11 @@
 
     <TextView
         android:id="@+id/item_settings_three_pid_title"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:textColor="?vctr_content_primary"
-        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/item_settings_three_pid_delete"
         app:layout_constraintStart_toEndOf="@+id/item_settings_three_pid_icon"

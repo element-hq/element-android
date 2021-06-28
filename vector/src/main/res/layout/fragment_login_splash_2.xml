@@ -62,11 +62,12 @@
 
     <TextView
         android:id="@+id/loginSplashTitle"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/login_splash_title"
-        android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+        android:textColor="?vctr_content_primary"
         android:transitionName="loginTitleTransition"
         app:layout_constraintBottom_toTopOf="@+id/loginSplashSpace25"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,12 +105,13 @@
 
         <TextView
             android:id="@+id/loginSplashText1"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:gravity="start"
             android:text="@string/login_splash_text1"
-            android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@+id/loginSplashText2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/loginSplashPicto1"
@@ -128,12 +130,13 @@
 
         <TextView
             android:id="@+id/loginSplashText2"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="start"
             android:text="@string/login_splash_text2"
-            android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/loginSplashText3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/loginSplashText1"
@@ -152,12 +155,13 @@
 
         <TextView
             android:id="@+id/loginSplashText3"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="start"
             android:text="@string/login_splash_text3"
-            android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/loginSplashText1"
@@ -185,7 +189,7 @@
 
         <Button
             android:id="@+id/loginSignupSigninSignUp"
-            style="@style/Style.Vector.Login.Button"
+            style="@style/Widget.Vector.Button.Login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -193,7 +197,7 @@
 
         <Button
             android:id="@+id/loginSignupSigninSignIn"
-            style="@style/Style.Vector.Login.Button.Text"
+            style="@style/Widget.Vector.Button.Text.Login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -212,6 +216,7 @@
 
     <TextView
         android:id="@+id/loginSplashVersion"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?vctr_content_secondary"

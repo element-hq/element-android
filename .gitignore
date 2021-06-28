@@ -15,5 +15,7 @@ rust-sdk/src/uniffi/*
 Cargo.lock
 
 /tmp
+/fastlane/private
+/fastlane/report.xml
 
 ktlint

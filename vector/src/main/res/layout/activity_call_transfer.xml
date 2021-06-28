@@ -60,6 +60,7 @@
 
             <TextView
                 android:id="@+id/callTransferConsultTitle"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -71,7 +72,7 @@
 
             <Button
                 android:id="@+id/callTransferConnectAction"
-                style="@style/VectorButtonStyleText"
+                style="@style/Widget.Vector.Button.Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

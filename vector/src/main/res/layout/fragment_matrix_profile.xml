@@ -16,7 +16,6 @@
             android:id="@+id/matrixProfileCollapsingToolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:theme="@style/Vector.Toolbar.Profile"
             app:contentScrim="?android:colorBackground"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:scrimAnimationDuration="250"
@@ -72,6 +71,7 @@
 
                     <TextView
                         android:id="@+id/matrixProfileToolbarTitleView"
+                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -80,7 +80,6 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:textColor="?vctr_content_primary"
-                        android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/matrixProfileToolbarAvatarImageView"

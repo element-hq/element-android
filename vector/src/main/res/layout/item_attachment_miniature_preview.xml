@@ -23,6 +23,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center"
+        android:alpha="0.75"
         android:contentDescription="@string/a11y_video"
         app:srcCompat="@drawable/ic_play_arrow"
         app:tint="@android:color/white"

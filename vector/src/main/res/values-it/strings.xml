@@ -366,7 +366,7 @@
     <string name="create_account">Crea account</string>
     <string name="login">Accedi</string>
     <string name="logout">Disconnetti</string>
-    <string name="hs_url">URL dell\'Home Server</string>
+    <string name="hs_url">URL dell\'homeserver</string>
     <string name="identity_url">URL dell\'Identity Server</string>
     <string name="search">Cerca</string>
     <string name="start_new_chat">Avvia una nuova chat diretta</string>
@@ -412,9 +412,9 @@
     <string name="auth_threepid_warning_message">La registrazione con email e numero di telefono in una volta sola non è ancora supportata. Sarà utilizzato solo il numero di telefono.
 \n
 \nPotrai aggiungere l\'indirizzo email al tuo profilo dalle impostazioni.</string>
-    <string name="auth_recaptcha_message">Questo Home Server vorrebbe assicurarsi che tu non sia un robot</string>
+    <string name="auth_recaptcha_message">Questo homeserver vuole assicurarsi che tu non sia un robot</string>
     <string name="auth_username_in_use">Nome utente già in uso</string>
-    <string name="auth_home_server">Home Server:</string>
+    <string name="auth_home_server">Homeserver:</string>
     <string name="auth_identity_server">Server identità:</string>
     <string name="auth_reset_password_next_step_button">Ho verificato il mio indirizzo email</string>
     <string name="auth_reset_password_message">Per reimpostare la password, inserisci l\'indirizzo email associato al tuo account:</string>
@@ -696,7 +696,7 @@
     <string name="devices_delete_pswd">Password:</string>
     <string name="devices_delete_submit_button_label">Invia</string>
     <string name="settings_logged_in">Autenticato come</string>
-    <string name="settings_home_server">Home Server</string>
+    <string name="settings_home_server">Homeserver</string>
     <string name="settings_identity_server">Server di identità</string>
     <string name="settings_user_interface">Interfaccia utente</string>
     <string name="settings_interface_language">Lingua</string>
@@ -849,7 +849,7 @@
     <string name="select_room_directory">Scegli un elenco di stanze</string>
     <string name="directory_server_fail_to_retrieve_server">Il server potrebbe essere non disponibile o sovraccarico</string>
     <string name="directory_server_type_homeserver">Inserisci un Home Server per vedere le sue stanze pubbliche</string>
-    <string name="directory_server_placeholder">URL dell\'Home Server</string>
+    <string name="directory_server_placeholder">Nome del server</string>
     <string name="directory_server_all_rooms_on_server">Tutte le stanze sull\'Home Server %s</string>
     <string name="directory_server_native_rooms">Tutte le stanze native %s</string>
     <!-- historical -->
@@ -1603,7 +1603,7 @@
     <string name="auth_add_email_and_phone_message_2">Imposta un\'email per il ripristino dell\'account in caso di problemi. Email e numero di telefono potranno essere usati, se lo vorrai, anche per permettere a chi li conosce di trovarti.</string>
     <string name="login_error_homeserver_not_found">Non è stato trovato alcun Home Server seguendo questo URL. Per favore, controllalo</string>
     <string name="settings_call_ringtone_use_default_stun">Permetti chiamate dal Server di appoggio</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Se il tuo Home Server non ne ha un proprio Server d\'appoggio verrà usato %s (il Server d\'appoggio verrà a conoscenza del tuo indirizzo IP durante le chiamate)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Verrà usato %s come server d\'appoggio quando il tuo homeserver non ha uno proprio (il tuo indirizzo IP verrà esposto durante una chiamata)</string>
     <string name="invite_no_identity_server_error">Per poterlo fare, aggiungi un Identity Server nelle Impostazioni.</string>
     <string name="settings_background_fdroid_sync_mode">Modalità sync in background</string>
     <string name="settings_background_fdroid_sync_mode_battery">Ottimizzato per la batteria</string>
@@ -2856,4 +2856,16 @@
     <string name="spaces_feeling_experimental_subspace">Ti piace sperimentare\?
 \nProva ad inserire uno Spazio all\'interno di un altro Spazio.</string>
     <string name="space_leave_prompt_msg_private">Questo non è uno Spazio pubblico. Senza un invito non potrai più rientrare.</string>
+    <string name="unnamed_room">Stanza senza nome</string>
+    <string name="private_space">Spazio privato</string>
+    <string name="public_space">Spazio pubblico</string>
+    <string name="a11y_public_space">Questo spazio è pubblico</string>
+    <string name="call_transfer_unknown_person">Persona sconosciuta</string>
+    <string name="call_transfer_transfer_to_title">Trasferisci a %1$s</string>
+    <string name="call_transfer_consulting_with">Consultazione con %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">Questo server è già presente nell\'elenco</string>
+    <string name="directory_add_a_new_server_error">Impossibile trovare questo server o il suo elenco di stanze</string>
+    <string name="directory_add_a_new_server_prompt">Inserisci il nome di un nuovo server che vuoi esplorare.</string>
+    <string name="directory_add_a_new_server">Aggiungi un nuovo server</string>
+    <string name="directory_your_server">Il tuo server</string>
 </resources>
