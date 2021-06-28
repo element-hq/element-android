@@ -42,10 +42,7 @@
         <item name="vctr_spoiler_background_color">#FF000000</item>
 
         <!-- Some alias -->
-        <item name="vctr_header_background">@color/background_sc_light_bright</item>
-        <!--
-        <item name="vctr_header_background">?android:colorBackground</item>
-        -->
+        <item name="vctr_header_background">@color/background_sc_light_secondary</item>
         <item name="vctr_list_separator">@color/list_divider_color_sc_light</item>
         <item name="vctr_list_separator_system">?vctr_list_separator</item>
         <item name="vctr_list_separator_on_surface">?vctr_list_separator</item>
@@ -89,9 +86,6 @@
         <item name="sc_message_bg_outgoing">@color/accent_sc_alpha12</item>
         <item name="riotx_unread_unimportant_room_badge">#737373</item><!-- like text_color_secondary_sc_light, but without transparency -->
         <item name="colorAccentPale">@color/accent_sc_pale</item>
-        <!-- OptionsMenu background -->
-        <item name="itemBackground">@color/background_sc_light_bright</item>
-        <item name="android:itemBackground">@color/background_sc_light_bright</item>
 
         <item name="android:statusBarColor">@color/background_black_sc</item>
         <item name="android:navigationBarColor">@color/background_black_sc</item>

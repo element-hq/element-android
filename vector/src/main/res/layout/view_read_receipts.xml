@@ -17,6 +17,7 @@
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
         android:textColor="?vctr_content_primary"
+        android:layout_marginHorizontal="4dp"
         tools:text="999+" />
 
     <ImageView
