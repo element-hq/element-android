@@ -354,7 +354,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                             // we keep real m.child/m.parent relations and add the one for common memberships
                             dmRoom.flattenParentIds += "|${flattenRelated.joinToString("|")}|"
                         }
-                        Timber.v("## SPACES: flatten of ${dmRoom.otherMemberIds.joinToString(",")} is ${dmRoom.flattenParentIds}")
+//                        Timber.v("## SPACES: flatten of ${dmRoom.otherMemberIds.joinToString(",")} is ${dmRoom.flattenParentIds}")
                     }
 
             // Maybe a good place to count the number of notifications for spaces?

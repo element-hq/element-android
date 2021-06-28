@@ -834,13 +834,6 @@ class RoomDetailViewModel @AssistedInject constructor(
                                             room.roomSummary()?.isPublic ?: false
                                     )
                             )
-//                            session.coroutineScope.launch {
-//                                try {
-//                                    room.upgradeToVersion(slashCommandResult.newVersion)
-//                                } catch (failure: Throwable) {
-//                                    _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
-//                                }
-//                            }
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }

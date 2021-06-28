@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.api.session.homeserver
 
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities.Companion.MAX_UPLOAD_FILE_SIZE_UNKNOWN
-
 data class HomeServerCapabilities(
         /**
          * True if it is possible to change the password of the account.
