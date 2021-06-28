@@ -36,9 +36,9 @@ import org.matrix.android.sdk.internal.crypto.VerificationRequest
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationDone
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationKey
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationRequest
+import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationStart
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
-import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Verification
 
 @SessionScope
@@ -94,18 +94,6 @@ constructor(
             listeners.forEach {
                 try {
                     it.verificationRequestCreated(tx)
-                } catch (e: Throwable) {
-                    Timber.e(e, "## Error while notifying listeners")
-                }
-            }
-        }
-    }
-
-    private fun dispatchRequestUpdated(tx: PendingVerificationRequest) {
-        uiHandler.post {
-            listeners.forEach {
-                try {
-                    it.verificationRequestUpdated(tx)
                 } catch (e: Throwable) {
                     Timber.e(e, "## Error while notifying listeners")
                 }
@@ -224,17 +212,19 @@ constructor(
             otherDeviceId: String,
             transactionId: String?
     ): String? {
+        val flowId = transactionId ?: return null
+
         // should check if already one (and cancel it)
         return if (method == VerificationMethod.SAS) {
-            val flowId = transactionId ?: return null
             val request = this.getVerificationRequest(otherUserId, flowId)
+
             runBlocking {
-                val response = request?.startSasVerification()
-                if (response != null) {
-                    sendRequest(response.request)
-                    val sas = SasVerification(olmMachine.inner(), response.sas, requestSender, listeners)
-                    dispatchTxAdded(sas)
-                    sas.transactionId
+                val sas = request?.startSasVerification()
+
+                if (sas != null) {
+                    val sasTransaction = SasVerification(olmMachine.inner(), sas, requestSender, listeners)
+                    dispatchTxAdded(sasTransaction)
+                    sasTransaction.transactionId
                 } else {
                     null
                 }
@@ -337,15 +327,15 @@ constructor(
         val request = this.getVerificationRequest(otherUserId, transactionId)
 
         return if (request != null) {
-            val outgoingRequest = request.acceptWithMethods(methods)
+            runBlocking { request.acceptWithMethods(methods) }
 
-            if (outgoingRequest != null) {
-                runBlocking { sendRequest(outgoingRequest) }
-                dispatchRequestUpdated(request.toPendingVerificationRequest())
+            if (request.isReady()) {
                 val qrcode = request.startQrVerification()
+
                 if (qrcode != null) {
                     dispatchTxAdded(qrcode)
                 }
+
                 true
             } else {
                 false
@@ -353,20 +343,6 @@ constructor(
         } else {
             false
         }
-    }
-
-    // TODO create a class that handles this, the DefaultCryptoService has
-    // similar needs so we could share code there, beware that local echo seems
-    // to be handled here
-    suspend fun sendRequest(request: OutgoingVerificationRequest) {
-        when (request) {
-            is OutgoingVerificationRequest.ToDevice -> {
-                this.requestSender.sendToDevice(request.eventType, request.body)
-            }
-            else -> {}
-        }
-
-        // TODO move this into the VerificationRequest and Verification classes?
     }
 
     override fun transactionUpdated(tx: VerificationTransaction) {

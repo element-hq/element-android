@@ -135,7 +135,6 @@ internal class QrCodeVerification(
         private val listeners: ArrayList<VerificationService.Listener>,
 ) : QrCodeVerificationTransaction {
     private val uiHandler = Handler(Looper.getMainLooper())
-    private var stateField: VerificationTxState = VerificationTxState.OnStarted
 
     private fun dispatchTxUpdated() {
         uiHandler.post {

@@ -92,6 +92,7 @@ import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import timber.log.Timber
+import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Request
 import uniffi.olm.RequestType
 import java.io.File
@@ -103,6 +104,21 @@ import kotlin.math.max
 internal class RequestSender(
         private val sendToDeviceTask: SendToDeviceTask,
 ) {
+    suspend fun sendVerificationRequest(request: OutgoingVerificationRequest) {
+        when (request) {
+            is OutgoingVerificationRequest.InRoom   -> TODO()
+            is OutgoingVerificationRequest.ToDevice -> sendToDevice(request)
+        }
+    }
+
+    suspend fun sendToDevice(request: Request.ToDevice) {
+        sendToDevice(request.eventType, request.body)
+    }
+
+    suspend fun sendToDevice(request: OutgoingVerificationRequest.ToDevice) {
+        sendToDevice(request.eventType, request.body)
+    }
+
     suspend fun sendToDevice(eventType: String, body: String) {
         // TODO this produces floats for the Olm type fields, which
         // are integers originally.
@@ -808,7 +824,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private suspend fun sendToDevice(request: Request.ToDevice) {
-        this.sender.sendToDevice(request.eventType, request.body)
+        this.sender.sendToDevice(request)
         olmMachine!!.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}")
     }
 

@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import android.os.Handler
+import android.os.Looper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
@@ -28,8 +30,10 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
+import timber.log.Timber
 import uniffi.olm.OlmMachine
 import uniffi.olm.OutgoingVerificationRequest
+import uniffi.olm.Sas
 import uniffi.olm.StartSasResult
 import uniffi.olm.VerificationRequest
 
@@ -39,6 +43,8 @@ internal class VerificationRequest(
         private val sender: RequestSender,
         private val listeners: ArrayList<VerificationService.Listener>,
 ) {
+    private val uiHandler = Handler(Looper.getMainLooper())
+
     private fun refreshData() {
         val request = this.machine.getVerificationRequest(this.inner.otherUserId, this.inner.flowId)
 
@@ -47,6 +53,18 @@ internal class VerificationRequest(
         }
 
         return
+    }
+
+    private fun dispatchRequestUpdated() {
+        uiHandler.post {
+            listeners.forEach {
+                try {
+                    it.verificationRequestUpdated(this.toPendingVerificationRequest())
+                } catch (e: Throwable) {
+                    Timber.e(e, "## Error while notifying listeners")
+                }
+            }
+        }
     }
 
     internal fun startQrVerification(): QrCodeVerification? {
@@ -64,7 +82,7 @@ internal class VerificationRequest(
         }
     }
 
-    fun acceptWithMethods(methods: List<VerificationMethod>): OutgoingVerificationRequest? {
+    suspend fun acceptWithMethods(methods: List<VerificationMethod>) {
         val stringMethods: MutableList<String> =
                 methods
                         .map {
@@ -81,8 +99,13 @@ internal class VerificationRequest(
             stringMethods.add(VERIFICATION_METHOD_RECIPROCATE)
         }
 
-        return this.machine.acceptVerificationRequest(
+        val request = this.machine.acceptVerificationRequest(
                 this.inner.otherUserId, this.inner.flowId, stringMethods)
+
+        if (request != null) {
+            this.sender.sendVerificationRequest(request)
+            this.dispatchRequestUpdated()
+        }
     }
 
     fun isCanceled(): Boolean {
@@ -100,11 +123,17 @@ internal class VerificationRequest(
         return this.inner.isReady
     }
 
-    suspend fun startSasVerification(): StartSasResult? {
+    suspend fun startSasVerification(): Sas? {
         refreshData()
 
         return withContext(Dispatchers.IO) {
-            machine.startSasVerification(inner.otherUserId, inner.flowId)
+            val result = machine.startSasVerification(inner.otherUserId, inner.flowId)
+            if (result != null) {
+                sender.sendVerificationRequest(result.request)
+                result.sas
+            } else {
+                null
+            }
         }
     }
 

@@ -152,12 +152,7 @@ internal class SasVerification(
         val request = this.machine.acceptSasVerification(this.inner.otherUserId, inner.flowId)
 
         if (request != null) {
-            when (request) {
-                is OutgoingVerificationRequest.ToDevice -> {
-                    sender.sendToDevice(request.eventType, request.body)
-                }
-                is OutgoingVerificationRequest.InRoom -> TODO()
-            }
+            this.sender.sendVerificationRequest(request)
             refreshData()
             dispatchTxUpdated()
         }
@@ -191,12 +186,7 @@ internal class SasVerification(
 
     fun sendRequest(request: OutgoingVerificationRequest) {
         runBlocking {
-            when (request) {
-                is OutgoingVerificationRequest.ToDevice -> {
-                    sender.sendToDevice(request.eventType, request.body)
-                }
-                is OutgoingVerificationRequest.InRoom   -> TODO()
-            }
+            sender.sendVerificationRequest(request)
         }
 
         refreshData()
