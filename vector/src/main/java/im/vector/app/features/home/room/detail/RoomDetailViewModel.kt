@@ -1243,6 +1243,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleMarkAllAsRead() {
+        setState { copy(unreadState = UnreadState.HasNoUnread) }
         viewModelScope.launch {
             tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.BOTH) }
         }
@@ -1379,7 +1380,6 @@ class RoomDetailViewModel @AssistedInject constructor(
                     }
                 }
                 .subscribe {
-                    Timber.v("Unread state: $it")
                     setState { copy(unreadState = it) }
                 }
                 .disposeOnClear()

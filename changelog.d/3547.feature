@@ -1,0 +1,1 @@
+Implements new design for Jump to unread and quick fix visibility issues.
