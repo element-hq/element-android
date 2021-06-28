@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.crypto.QrCodeVerification
 import org.matrix.android.sdk.internal.crypto.RequestSender
 import org.matrix.android.sdk.internal.crypto.SasVerification
 import org.matrix.android.sdk.internal.crypto.VerificationRequest
+import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationCancel
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationDone
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationKey
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationRequest
@@ -106,8 +107,10 @@ constructor(
     }
 
     fun onEvent(event: Event) = when (event.getClearType()) {
+        // TODO most of those methods do the same, we just need to get the
+        //  flow id and the sender from the event, can we add a generic method for this?
         EventType.KEY_VERIFICATION_START -> onStart(event)
-        EventType.KEY_VERIFICATION_CANCEL -> {}
+        EventType.KEY_VERIFICATION_CANCEL -> onCancel(event)
         EventType.KEY_VERIFICATION_ACCEPT -> {}
         EventType.KEY_VERIFICATION_KEY -> onKey(event)
         EventType.KEY_VERIFICATION_MAC -> {}
@@ -117,13 +120,24 @@ constructor(
         else -> {}
     }
 
+    private fun getAndDispatch(sender: String, flowId: String) {
+        val verification = this.getExistingTransaction(sender, flowId) ?: return
+        dispatchTxUpdated(verification)
+    }
+
+    private fun onCancel(event: Event) {
+        val content = event.getClearContent().toModel<KeyVerificationCancel>() ?: return
+        val flowId = content.transactionId ?: return
+        val sender = event.senderId ?: return
+
+        getAndDispatch(sender, flowId)
+    }
     private fun onStart(event: Event) {
         val content = event.getClearContent().toModel<KeyVerificationStart>() ?: return
         val flowId = content.transactionId ?: return
         val sender = event.senderId ?: return
 
-        val verification = this.getExistingTransaction(sender, flowId) ?: return
-        dispatchTxUpdated(verification)
+        getAndDispatch(sender, flowId)
     }
 
     private fun onDone(event: Event) {
@@ -131,8 +145,7 @@ constructor(
         val flowId = content.transactionId ?: return
         val sender = event.senderId ?: return
 
-        val verification = this.getExistingTransaction(sender, flowId) ?: return
-        dispatchTxUpdated(verification)
+        getAndDispatch(sender, flowId)
     }
 
     private fun onKey(event: Event) {
@@ -140,8 +153,7 @@ constructor(
         val flowId = content.transactionId ?: return
         val sender = event.senderId ?: return
 
-        val verification = this.getExistingTransaction(sender, flowId) ?: return
-        dispatchTxUpdated(verification)
+        getAndDispatch(sender, flowId)
     }
 
     private fun onRequest(event: Event) {
@@ -246,8 +258,8 @@ constructor(
     }
 
     override fun cancelVerificationRequest(request: PendingVerificationRequest) {
-        // TODO get the request out of the olm machine and cancel here
-        TODO()
+        val verificationRequest = request.transactionId?.let { this.getVerificationRequest(request.otherUserId, it) }
+        runBlocking { verificationRequest?.cancel() }
     }
 
     override fun declineVerificationRequestInDMs(

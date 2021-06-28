@@ -797,7 +797,9 @@ impl OlmMachine {
     ) -> Option<OutgoingVerificationRequest> {
         let user_id = UserId::try_from(user_id).ok()?;
 
-        if let Some(verification) = self.inner.get_verification(&user_id, flow_id) {
+        if let Some(request) = self.inner.get_verification_request(&user_id, flow_id) {
+            request.cancel().map(|r| r.into())
+        } else if let Some(verification) = self.inner.get_verification(&user_id, flow_id) {
             match verification {
                 RustVerification::SasV1(v) => {
                     v.cancel_with_code(cancel_code.into()).map(|r| r.into())

@@ -20,6 +20,7 @@ import android.os.Handler
 import android.os.Looper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
@@ -101,6 +102,15 @@ internal class VerificationRequest(
 
         val request = this.machine.acceptVerificationRequest(
                 this.inner.otherUserId, this.inner.flowId, stringMethods)
+
+        if (request != null) {
+            this.sender.sendVerificationRequest(request)
+            this.dispatchRequestUpdated()
+        }
+    }
+
+    suspend fun cancel() {
+        val request = this.machine.cancelVerification(this.inner.otherUserId, this.inner.flowId, CancelCode.User.value)
 
         if (request != null) {
             this.sender.sendVerificationRequest(request)
