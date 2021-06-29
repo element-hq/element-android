@@ -36,6 +36,7 @@ import org.matrix.android.sdk.internal.crypto.VerificationRequest
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationCancel
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationDone
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationKey
+import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationMac
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationRequest
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationStart
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -114,7 +115,7 @@ constructor(
         EventType.KEY_VERIFICATION_CANCEL -> onCancel(event)
         EventType.KEY_VERIFICATION_ACCEPT -> {}
         EventType.KEY_VERIFICATION_KEY -> onKey(event)
-        EventType.KEY_VERIFICATION_MAC -> {}
+        EventType.KEY_VERIFICATION_MAC -> onMac(event)
         EventType.KEY_VERIFICATION_READY -> {}
         EventType.KEY_VERIFICATION_DONE -> onDone(event)
         MessageType.MSGTYPE_VERIFICATION_REQUEST -> onRequest(event)
@@ -176,6 +177,14 @@ constructor(
 
     private fun onKey(event: Event) {
         val content = event.getClearContent().toModel<KeyVerificationKey>() ?: return
+        val flowId = content.transactionId ?: return
+        val sender = event.senderId ?: return
+
+        getAndDispatch(sender, flowId)
+    }
+
+    private fun onMac(event: Event) {
+        val content = event.getClearContent().toModel<KeyVerificationMac>() ?: return
         val flowId = content.transactionId ?: return
         val sender = event.senderId ?: return
 
