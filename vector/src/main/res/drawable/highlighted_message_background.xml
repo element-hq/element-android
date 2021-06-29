@@ -9,7 +9,7 @@
             <item android:left="6dp" android:right="2dp">
                 <shape>
                     <corners android:bottomRightRadius="4dp" android:topRightRadius="4dp" />
-                    <solid android:color="?vctr_header_background" />
+                    <solid android:color="?message_highlight_bg_color" />
                 </shape>
             </item>
 

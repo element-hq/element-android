@@ -124,6 +124,7 @@
         <item name="timestamp_overlay_bg">@color/timestamp_overlay_bg</item>
         <item name="colorAccentPale">@color/element_accent_pale</item>
         <item name="dense_dropdown_text_input">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu</item>
+        <item name="message_highlight_bg_color">?vctr_header_background</item>
 
         <!-- Use dark color, to have enough contrast with icons color. windowLightStatusBar is only available in API 23+ -->
         <item name="android:statusBarColor">@color/android_status_bar_background_dark</item>

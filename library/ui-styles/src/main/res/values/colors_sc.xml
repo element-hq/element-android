@@ -5,6 +5,7 @@
     <color name="accent_sc">#8BC34A</color>
     <color name="accent_sc_alpha25">#3F8BC34A</color>
     <color name="accent_sc_alpha12">#1E8BC34A</color>
+    <color name="accent_sc_noalpha12">#edf4e6</color> <!-- same as accent_sc_alpha12 when displayed on #fafafa -->
     <color name="accent_sc_dark">#689F38</color>
     <color name="accent_sc_50">#F1F8E9</color>
     <color name="accent_sc_100">#DCEDC8</color>
@@ -29,6 +30,7 @@
     <color name="background_dark_sc">#ff212121</color>
     <color name="background_black_sc">#ff000000</color>
     <color name="background_floating_sc">#ff424242</color>
+    <color name="background_sc_bright">#ff616161</color>
     <color name="background_touch_guard_sc">#bf000000</color>
 
     <!-- Light theme text/foreground colors -->

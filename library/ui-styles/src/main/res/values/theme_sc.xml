@@ -86,6 +86,7 @@
         <item name="sc_message_bg_outgoing">@color/background_sc</item>
         <item name="riotx_unread_unimportant_room_badge">@color/background_floating_sc</item>
         <item name="colorAccentPale">@color/accent_sc_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_alpha25</item>
 
         <item name="android:statusBarColor">@color/background_black_sc</item>
         <item name="android:navigationBarColor">@color/background_black_sc</item>
@@ -107,11 +108,13 @@
     <style name="AppTheme.Base.SC.Colored">
         <item name="sc_message_bg_incoming">@color/background_floating_sc</item>
         <item name="sc_message_bg_outgoing">@color/accent_sc_alpha25</item>
+        <item name="message_highlight_bg_color">@color/background_sc_bright</item>
     </style>
 
     <style name="AppTheme.Base.SC.Dark.Colored">
         <item name="sc_message_bg_incoming">@color/background_floating_sc</item>
         <item name="sc_message_bg_outgoing">@color/accent_sc_alpha25</item>
+        <item name="message_highlight_bg_color">@color/background_sc_bright</item>
     </style>
 
 
