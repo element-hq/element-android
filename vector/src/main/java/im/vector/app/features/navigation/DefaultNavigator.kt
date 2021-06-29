@@ -85,7 +85,7 @@ import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
 import im.vector.app.space
-import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -159,7 +159,10 @@ class DefaultNavigator @Inject constructor(
         val session = sessionHolder.getSafeActiveSession() ?: return
         val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId)
                 ?: return
-        (tx as? IncomingSasVerificationTransaction)?.performAccept()
+        if (tx is SasVerificationTransaction && tx.isIncoming) {
+            tx.acceptVerification()
+        }
+
         if (context is AppCompatActivity) {
             VerificationBottomSheet.withArgs(
                     roomId = null,

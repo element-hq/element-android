@@ -103,10 +103,11 @@ constructor(
     }
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
+        // TODO this doesn't seem to be used anymore?
         runBlocking { olmMachine.markDeviceAsTrusted(userId, deviceID) }
     }
 
-    fun onEvent(event: Event) = when (event.getClearType()) {
+    suspend fun onEvent(event: Event) = when (event.getClearType()) {
         // TODO most of those methods do the same, we just need to get the
         //  flow id and the sender from the event, can we add a generic method for this?
         EventType.KEY_VERIFICATION_START -> onStart(event)
@@ -133,12 +134,36 @@ constructor(
         this.getVerificationRequest(sender, flowId)?.dispatchRequestUpdated()
         getAndDispatch(sender, flowId)
     }
-    private fun onStart(event: Event) {
+
+    private suspend fun onStart(event: Event) {
         val content = event.getClearContent().toModel<KeyVerificationStart>() ?: return
         val flowId = content.transactionId ?: return
         val sender = event.senderId ?: return
 
-        getAndDispatch(sender, flowId)
+        val verification = this.getExistingTransaction(sender, flowId) ?: return
+        val request = this.getVerificationRequest(sender, flowId)
+
+        if (request != null && request.isReady()) {
+            // If this is a SAS verification originating from a `m.key.verification.request`
+            // event we auto-accept here considering that we either initiated the request or
+            // accepted the request, otherwise it's a QR code verification, just dispatch an update.
+            if (verification is SasVerification) {
+                // Accept dispatches an update, no need to do it twice.
+                verification.accept()
+            } else {
+                dispatchTxUpdated(verification)
+            }
+        } else {
+            Timber.d("HELLOOOOO DISPATCHING NEW VERIFICATIONO $verification")
+            // This didn't originate from a request, so tell our listeners that
+            // this is a new verification.
+            dispatchTxAdded(verification)
+            // The IncomingVerificationRequestHandler seems to only listen to updates
+            // so let's trigger an update after the addition as well.
+            dispatchTxUpdated(verification)
+        }
+
+
     }
 
     private fun onDone(event: Event) {
@@ -292,7 +317,7 @@ constructor(
     ): Boolean {
         Timber.e("## TRYING TO READY PENDING ROOM VERIFICATION")
         // TODO do the same as readyPendingVerification
-        return true
+        TODO()
     }
 
     private fun getVerificationRequest(otherUserId: String, transactionId: String): VerificationRequest? {

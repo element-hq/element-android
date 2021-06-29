@@ -33,9 +33,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_REC
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import timber.log.Timber
 import uniffi.olm.OlmMachine
-import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Sas
-import uniffi.olm.StartSasResult
 import uniffi.olm.VerificationRequest
 
 internal class VerificationRequest(

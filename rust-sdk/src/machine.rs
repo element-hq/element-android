@@ -63,6 +63,7 @@ pub struct Sas {
     pub is_done: bool,
     pub cancel_code: Option<String>,
     pub cancelled_by_us: Option<bool>,
+    pub has_been_accepted: bool,
     pub we_started: bool,
     pub can_be_presented: bool,
     pub supports_emoji: bool,
@@ -122,6 +123,7 @@ impl From<InnerSas> for Sas {
             we_started: sas.we_started(),
             room_id: sas.room_id().map(|r| r.to_string()),
             cancelled_by_us: sas.cancelled_by_us(),
+            has_been_accepted: sas.has_been_accepted(),
         }
     }
 }

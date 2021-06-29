@@ -78,6 +78,7 @@ dictionary Sas {
     string? room_id;
     boolean we_started;
     boolean? cancelled_by_us;
+    boolean has_been_accepted;
     boolean have_we_confirmed;
     boolean is_done;
     boolean is_cancelled;

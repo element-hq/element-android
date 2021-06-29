@@ -85,6 +85,10 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         cancel(CancelCode.UnexpectedMessage)
     }
 
+    override fun acceptVerification() {
+        return
+    }
+
     fun start() {
         if (state != VerificationTxState.None) {
             Timber.e("## SAS O: start verification from invalid state")

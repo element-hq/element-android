@@ -82,6 +82,10 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
             }
         }
 
+    override fun acceptVerification() {
+        this.performAccept()
+    }
+
     override fun onVerificationStart(startReq: ValidVerificationInfoStart.SasVerificationInfoStart) {
         Timber.v("## SAS I: received verification request from state $state")
         if (state != VerificationTxState.None) {

@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NA
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
-import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
@@ -466,11 +465,18 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             // is this an incoming with that user
             if (tx.isIncoming && tx.otherUserId == state.otherUserMxItem?.id) {
                 // Also auto accept incoming if needed!
+                // TODO is state.transactionId ever null for self verifications, doesn't seem
+                // like this will ever trigger
+                if (tx is SasVerificationTransaction && tx.state == VerificationTxState.OnStarted) {
+                    tx.acceptVerification()
+                }
+                /*
                 if (tx is IncomingSasVerificationTransaction) {
                     if (tx.uxState == IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
                         tx.performAccept()
                     }
                 }
+                */
                 // Use this one!
                 setState {
                     copy(

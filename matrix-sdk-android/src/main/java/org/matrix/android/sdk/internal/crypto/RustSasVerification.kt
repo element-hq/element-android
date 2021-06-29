@@ -40,7 +40,7 @@ internal class SasVerification(
         private var inner: Sas,
         private val sender: RequestSender,
         private val listeners: ArrayList<VerificationService.Listener>,
-        ) :
+) :
         SasVerificationTransaction {
     private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -58,10 +58,11 @@ internal class SasVerification(
 
     private fun refreshData() {
         when (val verification = this.machine.getVerification(this.inner.otherUserId, this.inner.flowId)) {
-            is Verification.SasV1    -> {
+            is Verification.SasV1 -> {
                 this.inner = verification.sas
             }
-            else                     -> {}
+            else                  -> {
+            }
         }
 
         return
@@ -73,7 +74,8 @@ internal class SasVerification(
     override var otherDeviceId: String?
         get() = this.inner.otherDeviceId
         @Suppress("UNUSED_PARAMETER")
-        set(value) {}
+        set(value) {
+        }
 
     override val otherUserId: String = this.inner.otherUserId
 
@@ -81,21 +83,21 @@ internal class SasVerification(
         get() {
             refreshData()
             return when {
-                this.inner.isDone         -> VerificationTxState.Verified
-                this.inner.haveWeConfirmed -> VerificationTxState.ShortCodeAccepted
-                this.inner.canBePresented -> VerificationTxState.ShortCodeReady
-                this.inner.isCancelled    -> {
+                this.inner.isCancelled     -> {
                     val cancelCode = safeValueOf(this.inner.cancelCode)
                     val byMe = this.inner.cancelledByUs ?: false
                     VerificationTxState.Cancelled(cancelCode, byMe)
                 }
-                else                      -> {
-                    VerificationTxState.Started
-                }
+                this.inner.isDone          -> VerificationTxState.Verified
+                this.inner.haveWeConfirmed -> VerificationTxState.ShortCodeAccepted
+                this.inner.canBePresented  -> VerificationTxState.ShortCodeReady
+                this.inner.hasBeenAccepted -> VerificationTxState.Accepted
+                else                       -> VerificationTxState.OnStarted
             }
         }
         @Suppress("UNUSED_PARAMETER")
-        set(v) {}
+        set(v) {
+        }
 
     override val transactionId: String
         get() = this.inner.flowId
@@ -130,6 +132,10 @@ internal class SasVerification(
     override fun userHasVerifiedShortCode() {
         val request = runBlocking { confirm() } ?: return
         sendRequest(request)
+    }
+
+    override fun acceptVerification() {
+        runBlocking { accept() }
     }
 
     suspend fun accept() {
