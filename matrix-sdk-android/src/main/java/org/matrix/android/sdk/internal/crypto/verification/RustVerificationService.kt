@@ -248,22 +248,29 @@ constructor(
             otherDeviceId: String,
             transactionId: String?
     ): String? {
-        val flowId = transactionId ?: return null
-
         // should check if already one (and cancel it)
         return if (method == VerificationMethod.SAS) {
-            val request = this.getVerificationRequest(otherUserId, flowId)
+            val request = transactionId?.let { this.getVerificationRequest(otherUserId, it) }
 
-            runBlocking {
-                val sas = request?.startSasVerification()
+            if (request != null) {
+                runBlocking {
+                    val sas = request.startSasVerification()
 
-                if (sas != null) {
-                    val sasTransaction = SasVerification(olmMachine.inner(), sas, requestSender, listeners)
-                    dispatchTxAdded(sasTransaction)
-                    sasTransaction.transactionId
-                } else {
-                    null
+                    if (sas != null) {
+                        val sasTransaction = SasVerification(olmMachine.inner(), sas, requestSender, listeners)
+                        dispatchTxAdded(sasTransaction)
+                        sasTransaction.transactionId
+                    } else {
+                        null
+                    }
                 }
+            } else {
+                // This should start the short SAS flow, the one that doesn't start with
+                // a `m.key.verification.request`, Element web stopped doing this, might
+                // be wise do do so as well
+                // DeviceListBottomSheetViewModel triggers this, interestingly the method that
+                // triggers this is called `manuallyVerify()`
+                TODO()
             }
         } else {
             throw IllegalArgumentException("Unknown verification method")
