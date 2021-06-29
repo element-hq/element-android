@@ -31,8 +31,8 @@ class MessageColorProvider @Inject constructor(
         private val vectorPreferences: VectorPreferences) {
 
     @ColorInt
-    fun getMemberNameTextColor(matrixItem: MatrixItem): Int {
-        return matrixItemColorProvider.getColor(matrixItem)
+    fun getMemberNameTextColor(matrixItem: MatrixItem, userInRoomInformation: MatrixItemColorProvider.UserInRoomInformation? = null): Int {
+        return matrixItemColorProvider.getColor(matrixItem, userInRoomInformation)
     }
 
     @ColorInt

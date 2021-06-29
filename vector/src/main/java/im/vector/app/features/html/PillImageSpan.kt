@@ -31,6 +31,7 @@ import com.google.android.material.chip.ChipDrawable
 import im.vector.app.R
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
@@ -43,7 +44,8 @@ import java.lang.ref.WeakReference
 class PillImageSpan(private val glideRequests: GlideRequests,
                     private val avatarRenderer: AvatarRenderer,
                     private val context: Context,
-                    override val matrixItem: MatrixItem
+                    override val matrixItem: MatrixItem,
+                    val userInRoomInformation: MatrixItemColorProvider.UserInRoomInformation? = null
 ) : ReplacementSpan(), MatrixItemSpan {
 
     private val pillDrawable = createChipDrawable()

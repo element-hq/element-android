@@ -87,6 +87,9 @@
         <item name="riotx_unread_unimportant_room_badge">#737373</item><!-- like text_color_secondary_sc_light, but without transparency -->
         <item name="colorAccentPale">@color/accent_sc_pale</item>
         <item name="message_highlight_bg_color">#ffe0e0e0</item>
+        <item name="user_color_pl_0">@color/user_color_sc_pl_0</item>
+        <item name="user_color_pl_50">@color/user_color_sc_pl_50</item>
+        <item name="user_color_pl_100">@color/user_color_sc_pl_100</item>
 
         <item name="android:statusBarColor">@color/background_black_sc</item>
         <item name="android:navigationBarColor">@color/background_black_sc</item>

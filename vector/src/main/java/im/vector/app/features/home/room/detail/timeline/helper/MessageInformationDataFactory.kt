@@ -55,6 +55,7 @@ import javax.inject.Inject
  */
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
                                                         private val roomSummariesHolder: RoomSummariesHolder,
+                                                        private val powerLevelsHolder: PowerLevelsHolder,
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val vectorPreferences: VectorPreferences,
                                                         private val context: Context) {
@@ -123,6 +124,13 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
             SendStateDecoration.NONE
         }
 
+        // Sender power level
+        /*
+        val powerLevelsHelper = session.getRoom(event.roomId)?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)?.content.toModel<PowerLevelsContent>()?.let { PowerLevelsHelper(it) }
+        val senderPowerLevel = powerLevelsHelper?.getUserPowerLevelValue(event.senderInfo.userId)
+         */
+        val senderPowerLevel = powerLevelsHolder.get(event.roomId)?.getUserPowerLevelValue(event.senderInfo.userId)
+
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",
@@ -165,7 +173,9 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 } else {
                     AnonymousReadReceipt.PROCESSING
                 },
+                senderPowerLevel = senderPowerLevel,
                 isDirect = isEffectivelyDirect,
+                isPublic = roomSummary?.isPublic ?: false,
                 dmChatPartnerId = dmOtherMemberId,
                 e2eDecoration = e2eDecoration,
                 sendStateDecoration = sendStateDecoration

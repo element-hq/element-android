@@ -207,26 +207,6 @@ object ThemeUtils {
     }
 
     /**
-     * Whether this is SC theme.
-     *
-     * @param context the context
-     * @return true if SC theme is active, false otherwise
-     */
-    fun isScTheme(context: Context?): Boolean {
-        if (context != null) {
-            mIsScTheme = when (getApplicationTheme(context)) {
-                THEME_SC_LIGHT_VALUE,
-                THEME_SC_VALUE,
-                THEME_SC_DARK_VALUE,
-                THEME_SC_COLORED_VALUE,
-                THEME_SC_DARK_COLORED_VALUE -> true
-                else -> false
-            }
-        }
-        return mIsScTheme;
-    }
-
-    /**
      * @return true if system theme is dark
      */
     /* SC: this is from upstream, we do it differently

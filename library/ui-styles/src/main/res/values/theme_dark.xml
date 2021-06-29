@@ -125,6 +125,9 @@
         <item name="colorAccentPale">@color/element_accent_pale</item>
         <item name="dense_dropdown_text_input">@style/Widget.Vector.TextInputLayout.Dense.ExposedDropdownMenu.Dark.SC</item>
         <item name="message_highlight_bg_color">?vctr_header_background</item>
+        <item name="user_color_pl_0">@color/user_color_element_pl_0</item>
+        <item name="user_color_pl_50">@color/user_color_element_pl_50</item>
+        <item name="user_color_pl_100">@color/user_color_element_pl_100</item>
 
         <item name="android:statusBarColor">@color/android_status_bar_background_dark</item>
         <item name="android:navigationBarColor">@color/android_navigation_bar_background_dark</item>

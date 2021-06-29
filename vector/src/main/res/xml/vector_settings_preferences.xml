@@ -64,6 +64,10 @@
             android:persistent="false"
             android:title="@string/font_size" />
 
+        <im.vector.app.core.preference.VectorPreference
+            android:title="@string/settings_advanced_theme_settings"
+            app:fragment="im.vector.app.features.settings.VectorSettingsAdvancedThemeFragment" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory

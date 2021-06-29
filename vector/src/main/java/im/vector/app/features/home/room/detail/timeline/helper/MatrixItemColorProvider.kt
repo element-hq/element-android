@@ -21,6 +21,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.VisibleForTesting
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -29,27 +30,38 @@ import kotlin.math.abs
 
 @Singleton
 class MatrixItemColorProvider @Inject constructor(
+        private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider
 ) {
     private val cache = mutableMapOf<String, Int>()
 
     @ColorInt
-    fun getColor(matrixItem: MatrixItem): Int {
-        if (ThemeUtils.isScTheme(colorProvider.context)) {
-            return colorProvider.getColor(
-                when (matrixItem) {
-                    is MatrixItem.UserItem -> R.color.username_sc_1
-                    else                   -> R.color.avatar_fill_sc_1
+    @Suppress("UNUSED_PARAMETER")
+    fun getColor(matrixItem: MatrixItem, userInRoomInformation: UserInRoomInformation? = null): Int {
+        val coloringMode = vectorPreferences.userColorMode(userInRoomInformation?.isDm ?: false, userInRoomInformation?.isPublicRoom ?: false)
+        return when (coloringMode) {
+            USER_COLORING_FROM_PL -> {
+                if (userInRoomInformation?.userPowerLevel == null || userInRoomInformation.userPowerLevel < 30) {
+                    colorProvider.getColorFromAttribute(R.attr.user_color_pl_0)
+                } else if (userInRoomInformation.userPowerLevel < 80) {
+                    colorProvider.getColorFromAttribute(R.attr.user_color_pl_50)
+                } else {
+                    colorProvider.getColorFromAttribute(R.attr.user_color_pl_100)
                 }
-            )
-        }
-        return cache.getOrPut(matrixItem.id) {
-            colorProvider.getColor(
-                    when (matrixItem) {
-                        is MatrixItem.UserItem -> getColorFromUserId(matrixItem.id)
-                        else                   -> getColorFromRoomId(matrixItem.id)
-                    }
-            )
+            }
+            USER_COLORING_FROM_ID -> {
+                return cache.getOrPut(matrixItem.id) {
+                    colorProvider.getColor(
+                            when (matrixItem) {
+                                is MatrixItem.UserItem -> getColorFromUserId(matrixItem.id)
+                                else                   -> getColorFromRoomId(matrixItem.id)
+                            }
+                    )
+                }
+            }
+            else -> {
+                colorProvider.getColorFromAttribute(android.R.attr.colorAccent)
+            }
         }
     }
 
@@ -81,5 +93,13 @@ class MatrixItemColorProvider @Inject constructor(
                 else -> R.color.element_room_01
             }
         }
+
+        // Same values as in R.array.user_color_mode_values
+        private const val USER_COLORING_UNIFORM = "uniform"
+        private const val USER_COLORING_FROM_ID = "from-id"
+        private const val USER_COLORING_FROM_PL = "from-pl"
+        const val USER_COLORING_DEFAULT = USER_COLORING_UNIFORM
     }
+
+    data class UserInRoomInformation(val isDm: Boolean? = null, val isPublicRoom: Boolean? = null, val userPowerLevel: Int? = null)
 }

@@ -48,6 +48,7 @@ import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrate
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
+import im.vector.app.features.home.room.detail.timeline.helper.PowerLevelsHolder
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineSettingsFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
@@ -114,6 +115,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
         private val roomSummariesHolder: RoomSummariesHolder,
+        private val powerLevelsHolder: PowerLevelsHolder,
         private val typingHelper: TypingHelper,
         private val callManager: WebRtcCallManager,
         private val chatEffectManager: ChatEffectManager,
@@ -163,6 +165,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     init {
+        powerLevelsHolder.clear(room.roomId)
         timeline.start()
         timeline.addListener(this)
         observeRoomSummary()
@@ -213,10 +216,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun observePowerLevel() {
         PowerLevelsObservableFactory(room).createObservable()
                 .subscribe {
-                    val canSendMessage = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
-                    val canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId)
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    powerLevelsHolder.set(room.roomId, powerLevelsHelper)
+                    val canSendMessage = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+                    val canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
                     val isAllowedToManageWidgets = session.widgetService().hasPermissionsToHandleWidgets(room.roomId)
-                    val isAllowedToStartWebRTCCall = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.CALL_INVITE)
+                    val isAllowedToStartWebRTCCall = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.CALL_INVITE)
                     setState {
                         copy(
                                 canSendMessage = canSendMessage,

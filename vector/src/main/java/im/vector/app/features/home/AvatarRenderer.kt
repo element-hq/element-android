@@ -218,8 +218,8 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @AnyThread
-    fun getPlaceholderDrawable(matrixItem: MatrixItem): Drawable {
-        val avatarColor = matrixItemColorProvider.getColor(matrixItem)
+    fun getPlaceholderDrawable(matrixItem: MatrixItem, userInRoomInformation: MatrixItemColorProvider.UserInRoomInformation? = null): Drawable {
+        val avatarColor = matrixItemColorProvider.getColor(matrixItem, userInRoomInformation)
         return TextDrawable.builder()
                 .beginConfig()
                 .bold()

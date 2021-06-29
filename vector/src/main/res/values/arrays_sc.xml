@@ -37,4 +37,16 @@
         <item>@string/prompt_simplified_mode_off</item>
     </string-array>
 
+    <string-array name="user_color_mode_entries" translatable="false">
+        <item>@string/user_colors_uniform</item>
+        <item>@string/user_colors_from_pl</item>
+        <item>@string/user_colors_from_id</item>
+    </string-array>
+
+    <string-array name="user_color_mode_values" translatable="false">
+        <item>uniform</item>
+        <item>from-pl</item>
+        <item>from-id</item>
+    </string-array>
+
 </resources>

@@ -60,8 +60,16 @@
     <color name="sc_reaction_background_on_light">@color/accent_sc_50</color>
     <color name="sc_reaction_background_on_dark">@color/accent_sc_900</color>
 
+    <!-- Power-level based username colors -->
+    <color name="user_color_sc_pl_100">#F44336</color>
+    <color name="user_color_sc_pl_50">#2196F3</color>
+    <color name="user_color_sc_pl_0">@color/accent_sc</color>
+
     <!-- Exposed Element colors -->
     <!-- This is actually not an SC color, but the one found in element for ic_material_play_circle PNGs -->
     <color name="element_accent_pale">#76cfa6</color>
+    <color name="user_color_element_pl_100">@color/palette_polly</color>
+    <color name="user_color_element_pl_50">@color/palette_azure</color>
+    <color name="user_color_element_pl_0">@color/palette_element_green</color>
 
 </resources>

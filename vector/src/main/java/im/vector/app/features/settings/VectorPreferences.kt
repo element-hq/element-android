@@ -25,6 +25,7 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -196,6 +197,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_SIMPLIFIED_MODE = "SETTINGS_SIMPLIFIED_MODE"
         private const val SETTINGS_LABS_ALLOW_MARK_UNREAD = "SETTINGS_LABS_ALLOW_MARK_UNREAD"
         const val SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY = "SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY"
+        private const val SETTINGS_USER_COLOR_MODE_DM = "SETTINGS_USER_COLOR_MODE_DM"
+        private const val SETTINGS_USER_COLOR_MODE_DEFAULT = "SETTINGS_USER_COLOR_MODE_DEFAULT"
+        private const val SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM = "SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
@@ -966,6 +970,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                     .remove(SETTINGS_ROOM_UNREAD_KIND)
                     .apply()
         }
+    }
+
+    // SC addition
+    fun userColorMode(isDirect: Boolean, isPublic: Boolean): String {
+        return defaultPrefs.getString(when {
+            isPublic -> SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM
+            isDirect -> SETTINGS_USER_COLOR_MODE_DM
+            else -> SETTINGS_USER_COLOR_MODE_DEFAULT
+        }, MatrixItemColorProvider.USER_COLORING_DEFAULT) ?: MatrixItemColorProvider.USER_COLORING_DEFAULT
     }
 
     /**

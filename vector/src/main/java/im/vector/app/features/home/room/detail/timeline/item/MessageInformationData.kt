@@ -42,6 +42,8 @@ data class MessageInformationData(
         val sentByMe : Boolean,
         val readReceiptAnonymous: AnonymousReadReceipt,
         val isDirect: Boolean,
+        val isPublic: Boolean,
+        val senderPowerLevel: Int?,
         val dmChatPartnerId: String?,
         val e2eDecoration: E2EDecoration = E2EDecoration.NONE,
         val sendStateDecoration: SendStateDecoration = SendStateDecoration.NONE

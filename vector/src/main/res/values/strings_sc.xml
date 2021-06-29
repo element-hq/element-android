@@ -69,4 +69,15 @@
 
     <string name="footer_read_receipt_content_description">Message status</string>
 
+    <!-- Username colors -->
+    <string name="settings_user_colors_in_dm">User colors in direct chats</string>
+    <string name="settings_user_colors_in_default">User colors in group chats</string>
+    <string name="settings_user_colors_in_public_rooms">User colors in public rooms</string>
+    <string name="user_colors_uniform">Uniform</string>
+    <string name="user_colors_from_pl">Based on power level</string>
+    <string name="user_colors_from_id">Based on Matrix ID</string>
+
+    <string name="settings_advanced_theme_settings">Advanced theme settings</string>
+    <string name="settings_user_colors">User colors</string>
+
 </resources>

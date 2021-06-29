@@ -42,6 +42,7 @@ import im.vector.app.core.ui.views.SendStateImageView
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.themes.BubbleThemeUtils
 import im.vector.app.features.themes.ThemeUtils
 import kotlin.math.ceil
@@ -223,7 +224,14 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         super.unbind(holder)
     }
 
-    private fun Attributes.getMemberNameColor() = messageColorProvider.getMemberNameTextColor(informationData.matrixItem)
+    private fun Attributes.getMemberNameColor() = messageColorProvider.getMemberNameTextColor(
+            informationData.matrixItem,
+            MatrixItemColorProvider.UserInRoomInformation(
+                    attributes.informationData.isDirect,
+                    attributes.informationData.isPublic,
+                    attributes.informationData.senderPowerLevel
+            )
+    )
 
     abstract class Holder(@IdRes stubId: Int) : AbsBaseMessageItem.Holder(stubId) {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
