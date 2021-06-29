@@ -8,6 +8,6 @@
     <dimen name="text_size_caption">12sp</dimen>
     <dimen name="text_size_micro">10sp</dimen>
 
-    <dimen name="text_size_button">16sp</dimen>
+    <dimen name="text_size_button">14sp</dimen>
 
 </resources>
