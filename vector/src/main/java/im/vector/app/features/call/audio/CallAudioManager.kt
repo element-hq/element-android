@@ -19,7 +19,10 @@ package im.vector.app.features.call.audio
 import android.content.Context
 import android.media.AudioManager
 import android.os.Build
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
+import im.vector.app.R
 import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 import java.util.HashSet
@@ -31,11 +34,11 @@ class CallAudioManager(private val context: Context, val configChange: (() -> Un
     private var audioDeviceDetector: AudioDeviceDetector? = null
     private var audioDeviceRouter: AudioDeviceRouter? = null
 
-    enum class Device {
-        PHONE,
-        SPEAKER,
-        HEADSET,
-        WIRELESS_HEADSET
+    enum class Device(@StringRes val titleRes: Int, @DrawableRes val drawableRes: Int) {
+        PHONE(R.string.sound_device_phone,R.drawable.ic_sound_device_phone),
+        SPEAKER(R.string.sound_device_speaker,R.drawable.ic_sound_device_speaker),
+        HEADSET(R.string.sound_device_headset,R.drawable.ic_sound_device_headphone),
+        WIRELESS_HEADSET(R.string.sound_device_wireless_headset,R.drawable.ic_sound_device_headphone)
     }
 
     enum class Mode {

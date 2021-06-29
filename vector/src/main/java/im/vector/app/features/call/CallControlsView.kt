@@ -36,14 +36,17 @@ class CallControlsView @JvmOverloads constructor(
     init {
         inflate(context, R.layout.view_call_controls, this)
         views = ViewCallControlsBinding.bind(this)
-
+        views.audioSettingsIcon.setOnClickListener { didTapAudioSettings() }
         views.ringingControlAccept.setOnClickListener { acceptIncomingCall() }
         views.ringingControlDecline.setOnClickListener { declineIncomingCall() }
         views.endCallIcon.setOnClickListener { endOngoingCall() }
         views.muteIcon.setOnClickListener { toggleMute() }
         views.videoToggleIcon.setOnClickListener { toggleVideo() }
-        views.openChatIcon.setOnClickListener { returnToChat() }
         views.moreIcon.setOnClickListener { moreControlOption() }
+    }
+
+    private fun didTapAudioSettings() {
+        interactionListener?.didTapAudioSettings()
     }
 
     private fun acceptIncomingCall() {
@@ -66,9 +69,6 @@ class CallControlsView @JvmOverloads constructor(
         interactionListener?.didTapToggleVideo()
     }
 
-    private fun returnToChat() {
-        interactionListener?.returnToChat()
-    }
 
     private fun moreControlOption() {
         interactionListener?.didTapMore()
@@ -127,12 +127,12 @@ class CallControlsView @JvmOverloads constructor(
     }
 
     interface InteractionListener {
+        fun didTapAudioSettings()
         fun didAcceptIncomingCall()
         fun didDeclineIncomingCall()
         fun didEndCall()
         fun didTapToggleMute()
         fun didTapToggleVideo()
-        fun returnToChat()
         fun didTapMore()
     }
 }

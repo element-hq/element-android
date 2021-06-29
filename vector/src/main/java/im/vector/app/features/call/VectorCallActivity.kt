@@ -26,6 +26,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.view.WindowManager
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
@@ -43,6 +44,7 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.databinding.ActivityCallBinding
+import im.vector.app.features.call.audio.CallAudioManager
 import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.utils.EglUtils
@@ -53,6 +55,7 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
+import me.gujun.android.span.span
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
@@ -404,6 +407,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         }
     }
 
+    override fun didTapAudioSettings() {
+        CallSoundDeviceChooserBottomSheet().show(supportFragmentManager, "SoundDeviceChooser")
+    }
+
     override fun didAcceptIncomingCall() {
         callViewModel.handle(VectorCallViewActions.AcceptCall)
     }
@@ -424,7 +431,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         callViewModel.handle(VectorCallViewActions.ToggleVideo)
     }
 
-    override fun returnToChat() {
+    private fun returnToChat() {
         val args = RoomDetailArgs(callArgs.signalingRoomId)
         val intent = RoomDetailActivity.newIntent(this, args).apply {
             flags = FLAG_ACTIVITY_CLEAR_TOP
