@@ -89,7 +89,10 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         }.getOrNull()
 
         val wellknownResult = runCatching {
-            getWellknownTask.execute(GetWellknownTask.Params(userId, homeServerConnectionConfig))
+            getWellknownTask.execute(GetWellknownTask.Params(
+                    domain = userId.substringAfter(":"),
+                    homeServerConnectionConfig = homeServerConnectionConfig
+            ))
         }.getOrNull()
 
         insertInDb(capabilities, mediaConfig, versions, wellknownResult)

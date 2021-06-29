@@ -51,6 +51,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import java.util.concurrent.CancellationException
@@ -569,14 +570,6 @@ class LoginViewModel @AssistedInject constructor(
                     } else {
                         onWellKnownError()
                     }
-                is WellknownResult.InvalidMatrixId -> {
-                    setState {
-                        copy(
-                                asyncLoginAction = Uninitialized
-                        )
-                    }
-                    _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id))))
-                }
                 else                               -> {
                     onWellKnownError()
                 }
@@ -620,19 +613,23 @@ class LoginViewModel @AssistedInject constructor(
     }
 
     private fun onDirectLoginError(failure: Throwable) {
-        if (failure is Failure.UnrecognizedCertificateFailure) {
-            // Display this error in a dialog
-            _viewEvents.post(LoginViewEvents.Failure(failure))
-            setState {
-                copy(
-                        asyncLoginAction = Uninitialized
-                )
+        when (failure) {
+            is MatrixIdFailure.InvalidMatrixId,
+            is Failure.UnrecognizedCertificateFailure -> {
+                // Display this error in a dialog
+                _viewEvents.post(LoginViewEvents.Failure(failure))
+                setState {
+                    copy(
+                            asyncLoginAction = Uninitialized
+                    )
+                }
             }
-        } else {
-            setState {
-                copy(
-                        asyncLoginAction = Fail(failure)
-                )
+            else                                      -> {
+                setState {
+                    copy(
+                            asyncLoginAction = Fail(failure)
+                    )
+                }
             }
         }
     }

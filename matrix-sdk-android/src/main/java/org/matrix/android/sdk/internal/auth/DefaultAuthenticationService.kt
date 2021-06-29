@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.auth
 import android.net.Uri
 import dagger.Lazy
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -28,6 +29,7 @@ import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.SessionManager
@@ -275,9 +277,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         val domain = homeServerConnectionConfig.homeServerUri.host
                 ?: throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
 
-        // Create a fake userId, for the getWellknown task
-        val fakeUserId = "@alice:$domain"
-        val wellknownResult = getWellknownTask.execute(GetWellknownTask.Params(fakeUserId, homeServerConnectionConfig))
+        val wellknownResult = getWellknownTask.execute(GetWellknownTask.Params(domain, homeServerConnectionConfig))
 
         return when (wellknownResult) {
             is WellknownResult.Prompt -> {
@@ -379,7 +379,14 @@ internal class DefaultAuthenticationService @Inject constructor(
 
     override suspend fun getWellKnownData(matrixId: String,
                                           homeServerConnectionConfig: HomeServerConnectionConfig?): WellknownResult {
-        return getWellknownTask.execute(GetWellknownTask.Params(matrixId, homeServerConnectionConfig))
+        if (!MatrixPatterns.isUserId(matrixId)) {
+            throw MatrixIdFailure.InvalidMatrixId
+        }
+
+        return getWellknownTask.execute(GetWellknownTask.Params(
+                domain = matrixId.substringAfter(":"),
+                homeServerConnectionConfig = homeServerConnectionConfig)
+        )
     }
 
     override suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,

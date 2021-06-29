@@ -39,7 +39,11 @@ import javax.net.ssl.HttpsURLConnection
 
 internal interface GetWellknownTask : Task<GetWellknownTask.Params, WellknownResult> {
     data class Params(
-            val matrixId: String,
+            /**
+             * domain, for instance "matrix.org"
+             * the URL will be https://{domain}/.well-known/matrix/client
+             */
+            val domain: String,
             val homeServerConnectionConfig: HomeServerConnectionConfig?
     )
 }
@@ -54,14 +58,8 @@ internal class DefaultGetWellknownTask @Inject constructor(
 ) : GetWellknownTask {
 
     override suspend fun execute(params: GetWellknownTask.Params): WellknownResult {
-        if (!MatrixPatterns.isUserId(params.matrixId)) {
-            return WellknownResult.InvalidMatrixId
-        }
-
-        val homeServerDomain = params.matrixId.substringAfter(":")
-
         val client = buildClient(params.homeServerConnectionConfig)
-        return findClientConfig(homeServerDomain, client)
+        return findClientConfig(params.domain, client)
     }
 
     private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig?): OkHttpClient {

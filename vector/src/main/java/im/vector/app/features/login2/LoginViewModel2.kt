@@ -595,10 +595,6 @@ class LoginViewModel2 @AssistedInject constructor(
                     } else {
                         onWellKnownError()
                     }
-                is WellknownResult.InvalidMatrixId -> {
-                    setState { copy(isLoading = false) }
-                    _viewEvents.post(LoginViewEvents2.Failure(Exception(stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id))))
-                }
                 else                               -> {
                     onWellKnownError()
                 }
