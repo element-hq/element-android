@@ -22,9 +22,11 @@
 
     <org.webrtc.SurfaceViewRenderer
         android:id="@+id/fullscreenRenderer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <org.webrtc.SurfaceViewRenderer
@@ -36,6 +38,25 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/callToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back_24dp"
+        app:navigationIconTint="@color/element_background_light"
+        app:subtitle="3:10"
+        app:subtitleTextAppearance="@style/TextAppearance.Vector.Caption"
+        app:subtitleTextColor="@color/element_background_light"
+        app:title="Video call"
+        app:titleMarginTop="16dp"
+        app:titleTextAppearance="@style/TextAppearance.Vector.Body.Medium"
+        app:titleTextColor="@color/element_background_light" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/otherKnownCallLayout"
@@ -112,22 +133,6 @@
         app:layout_constraintTop_toBottomOf="@id/otherMemberAvatar"
         tools:text="@sample/users.json/data/displayName" />
 
-    <TextView
-        android:id="@+id/callStatusText"
-        style="@style/Widget.Vector.TextView.Body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_horizontal_margin"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/participantNameText"
-        tools:text="@string/call_connecting" />
-
     <Button
         android:id="@+id/callActionText"
         style="@style/Widget.Vector.Button.Text"
@@ -138,27 +143,16 @@
         android:textColor="?colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/callStatusText"
+        app:layout_constraintTop_toBottomOf="@id/participantNameText"
         tools:text="@string/call_resume_action" />
 
-    <ProgressBar
-        android:id="@+id/callConnectingProgress"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_margin="8dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/callStatusText"
-        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/callInfoGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="participantNameText, otherMemberAvatar,callStatusText" />
+        app:constraint_referenced_ids="participantNameText, otherMemberAvatar" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/callVideoGroup"

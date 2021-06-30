@@ -24,9 +24,9 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
@@ -38,13 +38,13 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.databinding.ActivityCallBinding
-import im.vector.app.features.call.audio.CallAudioManager
 import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.utils.EglUtils
@@ -55,7 +55,6 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
-import me.gujun.android.span.span
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
@@ -127,6 +126,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         if (savedInstanceState != null) {
             (supportFragmentManager.findFragmentByTag(FRAGMENT_DIAL_PAD_TAG) as? CallDialPadBottomSheet)?.callback = dialPadCallback
         }
+        setSupportActionBar(views.callToolbar)
         configureCallViews()
 
         callViewModel.subscribe(this) {
@@ -152,6 +152,16 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         }
     }
 
+    override fun getMenuRes() = R.menu.vector_call
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_call_open_chat) {
+            returnToChat()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onDestroy() {
         callManager.getCallById(callArgs.callId)?.detachRenderers(listOf(views.pipRenderer, views.fullscreenRenderer))
         if (surfaceRenderersAreInitialized) {
@@ -171,35 +181,27 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
         views.callControlsView.updateForState(state)
         val callState = state.callState.invoke()
-        views.callConnectingProgress.isVisible = false
         views.callActionText.setOnClickListener(null)
         views.callActionText.isVisible = false
         views.smallIsHeldIcon.isVisible = false
         when (callState) {
             is CallState.Idle,
             is CallState.CreateOffer,
+            is CallState.LocalRinging,
             is CallState.Dialing      -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
-                views.callStatusText.setText(R.string.call_ring)
+                views.callToolbar.setSubtitle(R.string.call_ring)
                 configureCallInfo(state)
             }
-
-            is CallState.LocalRinging -> {
-                views.callVideoGroup.isInvisible = true
-                views.callInfoGroup.isVisible = true
-                views.callStatusText.text = null
-                configureCallInfo(state)
-            }
-
             is CallState.Answering    -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
-                views.callStatusText.setText(R.string.call_connecting)
-                views.callConnectingProgress.isVisible = true
+                views.callToolbar.setSubtitle(R.string.call_connecting)
                 configureCallInfo(state)
             }
             is CallState.Connected    -> {
+                views.callToolbar.subtitle = state.formattedDuration
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
@@ -210,11 +212,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                             views.callActionText.setText(R.string.call_resume_action)
                             views.callActionText.isVisible = true
                             views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.ToggleHoldResume) }
-                            views.callStatusText.setText(R.string.call_held_by_you)
+                            views.callToolbar.setSubtitle(R.string.call_held_by_you)
                         } else {
                             views.callActionText.isInvisible = true
                             state.callInfo?.opponentUserItem?.let {
-                                views.callStatusText.text = getString(R.string.call_held_by_user, it.getBestName())
+                                views.callToolbar.subtitle = getString(R.string.call_held_by_user, it.getBestName())
                             }
                         }
                     } else if (state.transferee !is VectorCallViewState.TransfereeState.NoTransferee) {
@@ -226,10 +228,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                         views.callActionText.text = getString(R.string.call_transfer_transfer_to_title, transfereeName)
                         views.callActionText.isVisible = true
                         views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.TransferCall) }
-                        views.callStatusText.text = state.formattedDuration
                         configureCallInfo(state)
                     } else {
-                        views.callStatusText.text = state.formattedDuration
                         configureCallInfo(state)
                         if (callArgs.isVideoCall) {
                             views.callVideoGroup.isVisible = true
@@ -245,8 +245,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callVideoGroup.isInvisible = true
                     views.callInfoGroup.isVisible = true
                     configureCallInfo(state)
-                    views.callStatusText.setText(R.string.call_connecting)
-                    views.callConnectingProgress.isVisible = true
+                    views.callToolbar.setSubtitle(R.string.call_connecting)
                 }
             }
             is CallState.Terminated   -> {
@@ -262,9 +261,14 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen_blur)
             avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter, addPlaceholder = false)
             if (state.transferee is VectorCallViewState.TransfereeState.NoTransferee) {
-                views.participantNameText.text = it.getBestName()
+                views.participantNameText.setTextOrHide(null)
+                views.callToolbar.title = if (state.isVideoCall) {
+                    getString(R.string.video_call_with_participant, it.getBestName())
+                } else {
+                    getString(R.string.audio_call_with_participant, it.getBestName())
+                }
             } else {
-                views.participantNameText.text = getString(R.string.call_transfer_consulting_with, it.getBestName())
+                views.participantNameText.setTextOrHide(getString(R.string.call_transfer_consulting_with, it.getBestName()))
             }
             if (blurAvatar) {
                 avatarRenderer.renderBlur(it, views.otherMemberAvatar, sampling = 2, rounded = true, colorFilter = colorFilter, addPlaceholder = true)
