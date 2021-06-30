@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.wellknown
 
 import android.util.MalformedJsonException
 import dagger.Lazy
-import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.WellKnown
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
