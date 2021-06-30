@@ -18,11 +18,11 @@ package org.matrix.android.sdk.api.auth.data
 
 import android.net.Uri
 import com.squareup.moshi.JsonClass
+import okhttp3.CipherSuite
+import okhttp3.TlsVersion
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig.Builder
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
-import okhttp3.CipherSuite
-import okhttp3.TlsVersion
 
 /**
  * This data class holds how to connect to a specific Homeserver.
@@ -30,7 +30,7 @@ import okhttp3.TlsVersion
  * You should use the [Builder] to create one.
  */
 @JsonClass(generateAdapter = true)
-data class HomeServerConnectionConfig constructor(
+data class HomeServerConnectionConfig(
         // This is the homeserver URL entered by the user
         val homeServerUri: Uri,
         // This is the homeserver base URL for the client-server API. Default to homeServerUri,
