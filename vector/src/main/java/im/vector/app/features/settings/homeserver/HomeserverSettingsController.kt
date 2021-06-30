@@ -29,13 +29,15 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsCenteredImageItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.federation.FederationVersion
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import javax.inject.Inject
 
 class HomeserverSettingsController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<HomeServerSettingsViewState>() {
 
     var callback: Callback? = null
@@ -78,7 +80,17 @@ class HomeserverSettingsController @Inject constructor(
         }
         settingsInfoItem {
             id("urlValue")
-            helperText(state.baseUrl)
+            helperText(state.homeserverUrl)
+        }
+        if (vectorPreferences.developerMode()) {
+            settingsSectionTitleItem {
+                id("urlApiTitle")
+                titleResId(R.string.hs_client_url)
+            }
+            settingsInfoItem {
+                id("urlApiValue")
+                helperText(state.homeserverClientServerApiUrl)
+            }
         }
     }
 
