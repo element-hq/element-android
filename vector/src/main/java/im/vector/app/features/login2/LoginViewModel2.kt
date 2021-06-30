@@ -612,7 +612,7 @@ class LoginViewModel2 @AssistedInject constructor(
                                            homeServerConnectionConfig: HomeServerConnectionConfig?) {
         val alteredHomeServerConnectionConfig = homeServerConnectionConfig
                 ?.copy(
-                        homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
+                        homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
                         identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                 )
                 ?: HomeServerConnectionConfig(
@@ -752,7 +752,7 @@ class LoginViewModel2 @AssistedInject constructor(
             } ?: return@launch
 
             // Valid Homeserver, add it to the history.
-            // Note: we add what the user has input, data.homeServerUrl can be different
+            // Note: we add what the user has input, data.homeServerUrlBase can be different
             rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
 
             val loginMode = when {

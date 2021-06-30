@@ -30,8 +30,13 @@ import okhttp3.TlsVersion
  * You should use the [Builder] to create one.
  */
 @JsonClass(generateAdapter = true)
-data class HomeServerConnectionConfig(
+data class HomeServerConnectionConfig constructor(
+        // This is the homeserver URL entered by the user
         val homeServerUri: Uri,
+        // This is the homeserver base URL for the client-server API. Default to homeServerUri,
+        // but can be updated with data from .Well-Known before login, and/or with the data
+        // included in the login response
+        val homeServerUriBase: Uri = homeServerUri,
         val identityServerUri: Uri? = null,
         val antiVirusServerUri: Uri? = null,
         val allowedFingerprints: List<Fingerprint> = emptyList(),
@@ -47,7 +52,6 @@ data class HomeServerConnectionConfig(
      * This builder should be use to create a [HomeServerConnectionConfig] instance.
      */
     class Builder {
-
         private lateinit var homeServerUri: Uri
         private var identityServerUri: Uri? = null
         private var antiVirusServerUri: Uri? = null
@@ -234,16 +238,16 @@ data class HomeServerConnectionConfig(
          */
         fun build(): HomeServerConnectionConfig {
             return HomeServerConnectionConfig(
-                    homeServerUri,
-                    identityServerUri,
-                    antiVirusServerUri,
-                    allowedFingerprints,
-                    shouldPin,
-                    tlsVersions,
-                    tlsCipherSuites,
-                    shouldAcceptTlsExtensions,
-                    allowHttpExtension,
-                    forceUsageTlsVersions
+                    homeServerUri = homeServerUri,
+                    identityServerUri = identityServerUri,
+                    antiVirusServerUri = antiVirusServerUri,
+                    allowedFingerprints = allowedFingerprints,
+                    shouldPin = shouldPin,
+                    tlsVersions = tlsVersions,
+                    tlsCipherSuites = tlsCipherSuites,
+                    shouldAcceptTlsExtensions = shouldAcceptTlsExtensions,
+                    allowHttpExtension = allowHttpExtension,
+                    forceUsageTlsVersions = forceUsageTlsVersions
             )
         }
     }

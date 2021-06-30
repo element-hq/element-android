@@ -124,7 +124,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     private fun getHomeServerUrlBase(): String? {
         return pendingSessionData
                 ?.homeServerConnectionConfig
-                ?.homeServerUri
+                ?.homeServerUriBase
                 ?.toString()
                 ?.trim { it == '/' }
     }
@@ -147,7 +147,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                     // The homeserver exists and up to date, keep the config
                     // Homeserver url may have been changed, if it was a Riot url
                     val alteredHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                            homeServerUri = Uri.parse(it.homeServerUrl)
+                            homeServerUriBase = Uri.parse(it.homeServerUrl)
                     )
 
                     pendingSessionData = PendingSessionData(alteredHomeServerConnectionConfig)
@@ -156,7 +156,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                 },
                 {
                     if (it is UnrecognizedCertificateException) {
-                        throw Failure.UnrecognizedCertificateFailure(homeServerConnectionConfig.homeServerUri.toString(), it.fingerprint)
+                        throw Failure.UnrecognizedCertificateFailure(homeServerConnectionConfig.homeServerUriBase.toString(), it.fingerprint)
                     } else {
                         throw it
                     }
@@ -175,7 +175,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
                 .map { versions ->
                     // Ok, it seems that the homeserver url is valid
-                    getLoginFlowResult(authAPI, versions, homeServerConnectionConfig.homeServerUri.toString())
+                    getLoginFlowResult(authAPI, versions, homeServerConnectionConfig.homeServerUriBase.toString())
                 }
                 .fold(
                         {
@@ -196,7 +196,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     private suspend fun getRiotDomainLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
-        val domain = homeServerConnectionConfig.homeServerUri.host
+        val domain = homeServerConnectionConfig.homeServerUriBase.host
                 ?: return getRiotLoginFlowInternal(homeServerConnectionConfig)
 
         // Ok, try to get the config.domain.json file of a RiotWeb client
@@ -257,7 +257,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         if (defaultHomeServerUrl?.isNotEmpty() == true) {
             // Ok, good sign, we got a default hs url
             val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                    homeServerUri = Uri.parse(defaultHomeServerUrl)
+                    homeServerUriBase = Uri.parse(defaultHomeServerUrl)
             )
 
             val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
@@ -274,7 +274,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     }
 
     private suspend fun getWellknownLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
-        val domain = homeServerConnectionConfig.homeServerUri.host
+        val domain = homeServerConnectionConfig.homeServerUriBase.host
                 ?: throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
 
         val wellknownResult = getWellknownTask.execute(GetWellknownTask.Params(domain, homeServerConnectionConfig))
@@ -282,7 +282,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         return when (wellknownResult) {
             is WellknownResult.Prompt -> {
                 val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                        homeServerUri = Uri.parse(wellknownResult.homeServerUrl),
+                        homeServerUriBase = Uri.parse(wellknownResult.homeServerUrl),
                         identityServerUri = wellknownResult.identityServerUrl?.let { Uri.parse(it) }
                 )
 
@@ -397,7 +397,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
-        val retrofit = retrofitFactory.create(buildClient(homeServerConnectionConfig), homeServerConnectionConfig.homeServerUri.toString())
+        val retrofit = retrofitFactory.create(buildClient(homeServerConnectionConfig), homeServerConnectionConfig.homeServerUriBase.toString())
         return retrofit.create(AuthAPI::class.java)
     }
 
