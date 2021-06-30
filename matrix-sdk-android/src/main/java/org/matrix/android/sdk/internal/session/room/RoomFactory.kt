@@ -89,10 +89,10 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                 roomMembersService = membershipServiceFactory.create(roomId),
                 roomPushRuleService = roomPushRuleServiceFactory.create(roomId),
                 roomAccountDataService = roomAccountDataServiceFactory.create(roomId),
+                roomVersionService = roomVersionServiceFactory.create(roomId),
                 sendStateTask = sendStateTask,
                 searchTask = searchTask,
-                viaParameterFinder = viaParameterFinder,
-                roomVersionService = roomVersionServiceFactory.create(roomId)
+                viaParameterFinder = viaParameterFinder
         )
     }
 }

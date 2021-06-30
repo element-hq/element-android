@@ -106,7 +106,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             if (getCapabilitiesResult != null) {
                 homeServerCapabilitiesEntity.canChangePassword = getCapabilitiesResult.canChangePassword()
 
-                homeServerCapabilitiesEntity.roomVersionJson = getCapabilitiesResult.capabilities?.roomVersions?.let {
+                homeServerCapabilitiesEntity.roomVersionsJson = getCapabilitiesResult.capabilities?.roomVersions?.let {
                     MoshiProvider.providesMoshi().adapter(RoomVersions::class.java).toJson(it)
                 }
             }

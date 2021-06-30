@@ -37,20 +37,29 @@ internal object HomeServerCapabilitiesMapper {
                 maxUploadFileSize = entity.maxUploadFileSize,
                 lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
                 defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
-                roomVersions = entity.roomVersionJson?.let {
-                    tryOrNull {
-                        MoshiProvider.providesMoshi().adapter(RoomVersions::class.java).fromJson(it)?.let {
-                            RoomVersionCapabilities(
-                                    defaultRoomVersion = it.default ?: DefaultRoomVersionService.DEFAULT_ROOM_VERSION,
-                                    supportedVersion = it.available.entries.map { entry ->
-                                        RoomVersionInfo(entry.key, RoomVersionStatus.STABLE
-                                                .takeIf { entry.value == "stable" }
-                                                ?: RoomVersionStatus.UNSTABLE)
+                roomVersions = mapRoomVersion(entity.roomVersionsJson)
+        )
+    }
+
+    private fun mapRoomVersion(roomVersionsJson: String?): RoomVersionCapabilities? {
+        roomVersionsJson ?: return null
+
+        return tryOrNull {
+            MoshiProvider.providesMoshi().adapter(RoomVersions::class.java).fromJson(roomVersionsJson)?.let {
+                RoomVersionCapabilities(
+                        defaultRoomVersion = it.default ?: DefaultRoomVersionService.DEFAULT_ROOM_VERSION,
+                        supportedVersion = it.available.entries.map { entry ->
+                            RoomVersionInfo(
+                                    version = entry.key,
+                                    status = if (entry.value == "stable") {
+                                        RoomVersionStatus.STABLE
+                                    } else {
+                                        RoomVersionStatus.UNSTABLE
                                     }
                             )
                         }
-                    }
-                }
-        )
+                )
+            }
+        }
     }
 }

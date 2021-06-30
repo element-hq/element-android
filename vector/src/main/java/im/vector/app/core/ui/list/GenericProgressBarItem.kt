@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
 /**
- * A generic list item.
- * Displays an item with a title, and optional description.
- * Can display an accessory on the right, that can be an image or an indeterminate progress.
- * If provided with an action, will display a button at the bottom of the list item.
+ * A generic progress bar item.
  */
 @EpoxyModelClass(layout = R.layout.item_generic_progress)
 abstract class GenericProgressBarItem : VectorEpoxyModel<GenericProgressBarItem.Holder>() {

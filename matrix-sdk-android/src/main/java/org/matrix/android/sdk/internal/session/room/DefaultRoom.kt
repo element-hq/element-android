@@ -68,10 +68,11 @@ internal class DefaultRoom(override val roomId: String,
                            private val roomMembersService: MembershipService,
                            private val roomPushRuleService: RoomPushRuleService,
                            private val roomAccountDataService: RoomAccountDataService,
+                           private val roomVersionService: RoomVersionService,
                            private val sendStateTask: SendStateTask,
                            private val viaParameterFinder: ViaParameterFinder,
-                           private val searchTask: SearchTask,
-                           private val roomVersionService: RoomVersionService) :
+                           private val searchTask: SearchTask
+) :
         Room,
         TimelineService by timelineService,
         SendService by sendService,

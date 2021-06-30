@@ -2736,7 +2736,7 @@
     <string name="settings_server_upload_size_content">Your homeserver accepts attachments (files, media, etc.) with a size up to %s.</string>
     <string name="settings_server_upload_size_unknown">The limit is unknown.</string>
     <!-- Only visible in developer mode-->
-    <string name="settings_server_room_versions">Room Versions 🕶</string>
+    <string name="settings_server_room_versions">Room Versions 👓</string>
     <string name="settings_server_default_room_version">Default Version</string>
     <string name="settings_server_room_version_stable">stable</string>
     <string name="settings_server_room_version_unstable">unstable</string>

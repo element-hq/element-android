@@ -33,7 +33,11 @@ data class HomeServerCapabilities(
          * Default identity server url, provided in Wellknown
          */
         val defaultIdentityServerUrl: String? = null,
-
+        /**
+         * Room versions supported by the server
+         * This capability describes the default and available room versions a server supports, and at what level of stability.
+         * Clients should make use of this capability to determine if users need to be encouraged to upgrade their rooms.
+         */
         val roomVersions: RoomVersionCapabilities? = null
 ) {
     companion object {

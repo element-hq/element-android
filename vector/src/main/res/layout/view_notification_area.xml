@@ -24,10 +24,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:paddingStart="4dp"
-        android:paddingEnd="0dp"
         android:accessibilityLiveRegion="polite"
         android:gravity="start"
+        android:paddingStart="4dp"
+        android:paddingEnd="0dp"
         android:textColor="?vctr_content_primary"
         tools:text="@string/room_do_not_have_permission_to_post" />
 

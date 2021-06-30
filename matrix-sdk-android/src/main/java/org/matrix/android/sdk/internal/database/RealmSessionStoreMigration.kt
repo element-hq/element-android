@@ -312,5 +312,9 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         Timber.d("Step 14 -> 15")
         realm.schema.get("HomeServerCapabilitiesEntity")
                 ?.addField(HomeServerCapabilitiesEntityFields.ROOM_VERSION_JSON, String::class.java)
+                ?.transform { obj ->
+                    // Schedule a refresh of the capabilities
+                    obj.setLong(HomeServerCapabilitiesEntityFields.LAST_UPDATED_TIMESTAMP, 0)
+                }
     }
 }

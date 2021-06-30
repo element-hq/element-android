@@ -1,6 +1,6 @@
 <ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/genericProgressBar"
-    style="?android:attr/progressBarStyleHorizontal"
+    style="@style/Widget.Vector.ProgressBar.Horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp" />

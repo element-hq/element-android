@@ -61,11 +61,14 @@ internal data class ChangePassword(
 @JsonClass(generateAdapter = true)
 internal data class RoomVersions(
         /**
-         * Required. True if the user can change their password, false otherwise.
+         * Required. The default room version the server is using for new rooms.
          */
         @Json(name = "default")
         val default: String?,
 
+        /**
+         * Required. A detailed description of the room versions the server supports.
+         */
         @Json(name = "available")
         val available: JsonDict
 )

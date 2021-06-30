@@ -16,11 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.room.version
 
-import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.realm.Realm
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -29,15 +27,12 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.version.RoomVersionService
-import org.matrix.android.sdk.internal.database.mapper.HomeServerCapabilitiesMapper
-import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntity
-import org.matrix.android.sdk.internal.database.query.get
-import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 
 internal class DefaultRoomVersionService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        @SessionDatabase private val monarchy: Monarchy,
+        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
         private val stateEventDataSource: StateEventDataSource,
         private val roomVersionUpgradeTask: RoomVersionUpgradeTask
 ) : RoomVersionService {
@@ -59,29 +54,20 @@ internal class DefaultRoomVersionService @AssistedInject constructor(
     override suspend fun upgradeToVersion(version: String): String {
         return roomVersionUpgradeTask.execute(
                 RoomVersionUpgradeTask.Params(
-                        roomId, version
+                        roomId = roomId,
+                        newVersion = version
                 )
         )
     }
 
     override fun getRecommendedVersion(): String {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            HomeServerCapabilitiesEntity.get(realm)?.let {
-                HomeServerCapabilitiesMapper.map(it)
-            }?.roomVersions?.defaultRoomVersion ?: DEFAULT_ROOM_VERSION
-        }
+        return homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.roomVersions?.defaultRoomVersion ?: DEFAULT_ROOM_VERSION
     }
 
     override fun isUsingUnstableRoomVersion(): Boolean {
-        var isUsingUnstable: Boolean
-        Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val versionCaps = HomeServerCapabilitiesEntity.get(realm)?.let {
-                HomeServerCapabilitiesMapper.map(it)
-            }?.roomVersions
-            val currentVersion = getRoomVersion()
-            isUsingUnstable = versionCaps?.supportedVersion?.firstOrNull { it.version == currentVersion }?.status == RoomVersionStatus.UNSTABLE
-        }
-        return isUsingUnstable
+        val versionCaps = homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.roomVersions
+        val currentVersion = getRoomVersion()
+        return versionCaps?.supportedVersion?.firstOrNull { it.version == currentVersion }?.status == RoomVersionStatus.UNSTABLE
     }
 
     override fun userMayUpgradeRoom(userId: String): Boolean {
