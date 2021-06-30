@@ -563,16 +563,16 @@ class LoginViewModel @AssistedInject constructor(
                 return@launch
             }
             when (data) {
-                is WellknownResult.Prompt          ->
+                is WellknownResult.Prompt     ->
                     onWellknownSuccess(action, data, homeServerConnectionConfig)
-                is WellknownResult.FailPrompt      ->
+                is WellknownResult.FailPrompt ->
                     // Relax on IS discovery if home server is valid
                     if (data.homeServerUrl != null && data.wellKnown != null) {
                         onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
                     } else {
                         onWellKnownError()
                     }
-                else                               -> {
+                else                          -> {
                     onWellKnownError()
                 }
             }.exhaustive
@@ -597,7 +597,8 @@ class LoginViewModel @AssistedInject constructor(
                         identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                 )
                 ?: HomeServerConnectionConfig(
-                        homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
+                        homeServerUri = Uri.parse("https://${action.username.substringAfter(":")}"),
+                        homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
                         identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                 )
 
