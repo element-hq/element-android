@@ -167,36 +167,47 @@ internal class DefaultAuthenticationService @Inject constructor(
     private suspend fun getLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
-        // First check the homeserver version
-        return runCatching {
-            executeRequest(null) {
-                authAPI.versions()
+        // First check if there is a well-known file
+        return try {
+            getWellknownLoginFlowInternal(homeServerConnectionConfig)
+        } catch (failure: Throwable) {
+            if (failure is Failure.OtherServerError
+                    && failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                // 404, no well-known data, try direct access to the API
+                // First check the homeserver version
+                return runCatching {
+                    executeRequest(null) {
+                        authAPI.versions()
+                    }
+                }
+                        .map { versions ->
+                            // Ok, it seems that the homeserver url is valid
+                            getLoginFlowResult(authAPI, versions, homeServerConnectionConfig.homeServerUriBase.toString())
+                        }
+                        .fold(
+                                {
+                                    it
+                                },
+                                {
+                                    if (it is Failure.OtherServerError
+                                            && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                                        // It's maybe a Riot url?
+                                        getRiotDomainLoginFlowInternal(homeServerConnectionConfig)
+                                    } else {
+                                        throw it
+                                    }
+                                }
+                        )
+            } else {
+                throw failure
             }
         }
-                .map { versions ->
-                    // Ok, it seems that the homeserver url is valid
-                    getLoginFlowResult(authAPI, versions, homeServerConnectionConfig.homeServerUriBase.toString())
-                }
-                .fold(
-                        {
-                            it
-                        },
-                        {
-                            if (it is Failure.OtherServerError
-                                    && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
-                                // It's maybe a Riot url?
-                                getRiotDomainLoginFlowInternal(homeServerConnectionConfig)
-                            } else {
-                                throw it
-                            }
-                        }
-                )
     }
 
     private suspend fun getRiotDomainLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
-        val domain = homeServerConnectionConfig.homeServerUriBase.host
+        val domain = homeServerConnectionConfig.homeServerUri.host
                 ?: return getRiotLoginFlowInternal(homeServerConnectionConfig)
 
         // Ok, try to get the config.domain.json file of a RiotWeb client
@@ -228,28 +239,12 @@ internal class DefaultAuthenticationService @Inject constructor(
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
         // Ok, try to get the config.json file of a RiotWeb client
-        return runCatching {
-            executeRequest(null) {
-                authAPI.getRiotConfig()
-            }
+        return executeRequest(null) {
+            authAPI.getRiotConfig()
         }
-                .map { riotConfig ->
+                .let { riotConfig ->
                     onRiotConfigRetrieved(homeServerConnectionConfig, riotConfig)
                 }
-                .fold(
-                        {
-                            it
-                        },
-                        {
-                            if (it is Failure.OtherServerError
-                                    && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
-                                // Try with wellknown
-                                getWellknownLoginFlowInternal(homeServerConnectionConfig)
-                            } else {
-                                throw it
-                            }
-                        }
-                )
     }
 
     private suspend fun onRiotConfigRetrieved(homeServerConnectionConfig: HomeServerConnectionConfig, riotConfig: RiotConfig): LoginFlowResult {
@@ -274,7 +269,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     }
 
     private suspend fun getWellknownLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
-        val domain = homeServerConnectionConfig.homeServerUriBase.host
+        val domain = homeServerConnectionConfig.homeServerUri.host
                 ?: throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
 
         val wellknownResult = getWellknownTask.execute(GetWellknownTask.Params(domain, homeServerConnectionConfig))
@@ -283,7 +278,7 @@ internal class DefaultAuthenticationService @Inject constructor(
             is WellknownResult.Prompt -> {
                 val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
                         homeServerUriBase = Uri.parse(wellknownResult.homeServerUrl),
-                        identityServerUri = wellknownResult.identityServerUrl?.let { Uri.parse(it) }
+                        identityServerUri = wellknownResult.identityServerUrl?.let { Uri.parse(it) } ?: homeServerConnectionConfig.identityServerUri
                 )
 
                 val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
