@@ -214,6 +214,7 @@ class LoginViewModel @AssistedInject constructor(
             copy(
                     signMode = SignMode.SignIn,
                     loginMode = LoginMode.Sso(action.ssoIdentityProviders),
+                    homeServerUrlFromUser = action.homeServerUrl,
                     homeServerUrl = action.homeServerUrl,
                     deviceId = action.deviceId
             )
@@ -365,6 +366,7 @@ class LoginViewModel @AssistedInject constructor(
                     setState {
                         copy(
                                 asyncHomeServerLoginFlowRequest = Uninitialized,
+                                homeServerUrlFromUser = null,
                                 homeServerUrl = null,
                                 loginMode = LoginMode.Unknown,
                                 serverType = ServerType.Unknown,
@@ -788,6 +790,7 @@ class LoginViewModel @AssistedInject constructor(
             setState {
                 copy(
                         asyncHomeServerLoginFlowRequest = Uninitialized,
+                        homeServerUrlFromUser = homeServerConnectionConfig.homeServerUri.toString(),
                         homeServerUrl = data.homeServerUrl,
                         loginMode = loginMode,
                         loginModeSupportedTypes = data.supportedLoginTypes.toList()

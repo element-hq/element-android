@@ -174,7 +174,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 ServerType.MatrixOrg -> {
                     views.loginServerIcon.isVisible = true
                     views.loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                    views.loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
+                    views.loginTitle.text = getString(resId, state.homeServerUrlFromUser.toReducedUrl())
                     views.loginNotice.text = getString(R.string.login_server_matrix_org_text)
                 }
                 ServerType.EMS       -> {
@@ -185,7 +185,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 }
                 ServerType.Other     -> {
                     views.loginServerIcon.isVisible = false
-                    views.loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
+                    views.loginTitle.text = getString(resId, state.homeServerUrlFromUser.toReducedUrl())
                     views.loginNotice.text = getString(R.string.login_server_other_text)
                 }
                 ServerType.Unknown   -> Unit /* Should not happen */
