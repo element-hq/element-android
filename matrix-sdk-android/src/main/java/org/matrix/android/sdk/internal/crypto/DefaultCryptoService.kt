@@ -45,7 +45,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
@@ -107,8 +106,37 @@ import kotlin.math.max
 
 internal class RequestSender @Inject constructor(
         private val sendToDeviceTask: SendToDeviceTask,
+        private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
+        private val uploadKeysTask: UploadKeysTask,
+        private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
         private val sendVerificationMessageTask: Lazy<DefaultSendVerificationMessageTask>,
-        ) {
+) {
+
+    suspend fun claimKeys(request: Request.KeysClaim): String {
+        val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(request.oneTimeKeys)
+        val response = oneTimeKeysForUsersDeviceTask.execute(claimParams)
+        val adapter = MoshiProvider
+                .providesMoshi()
+                .adapter(KeysClaimResponse::class.java)
+        return adapter.toJson(response)!!
+    }
+
+    suspend fun queryKeys(request: Request.KeysQuery): String {
+        val params = DownloadKeysForUsersTask.Params(request.users, null)
+        val response = downloadKeysForUsersTask.execute(params)
+        val adapter = MoshiProvider.providesMoshi().adapter(KeysQueryResponse::class.java)
+        return adapter.toJson(response)!!
+    }
+
+    suspend fun uploadKeys(request: Request.KeysUpload): String {
+        val body = MoshiProvider.providesMoshi().adapter<JsonDict>(Map::class.java).fromJson(request.body)!!
+        val params = UploadKeysTask.Params(body)
+
+        val response = uploadKeysTask.execute(params)
+        val adapter = MoshiProvider.providesMoshi().adapter(KeysUploadResponse::class.java)
+
+        return adapter.toJson(response)!!
+    }
 
     suspend fun sendVerificationRequest(request: OutgoingVerificationRequest) {
         when (request) {
@@ -142,8 +170,7 @@ internal class RequestSender @Inject constructor(
     }
 
     suspend fun sendToDevice(eventType: String, body: String) {
-        // TODO this produces floats for the Olm type fields, which
-        // are integers originally.
+        // TODO this produces floats for the Olm type fields, which are integers originally.
         val adapter = MoshiProvider
                 .providesMoshi()
                 .adapter<Map<String, HashMap<String, Any>>>(Map::class.java)
@@ -187,12 +214,8 @@ internal class DefaultCryptoService @Inject constructor(
         // Tasks
         private val deleteDeviceTask: DeleteDeviceTask,
         private val getDevicesTask: GetDevicesTask,
-        private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
-        private val sendToDeviceTask: SendToDeviceTask,
-        private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
         private val getDeviceInfoTask: GetDeviceInfoTask,
         private val setDeviceNameTask: SetDeviceNameTask,
-        private val uploadKeysTask: UploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
@@ -809,36 +832,15 @@ internal class DefaultCryptoService @Inject constructor(
         return olmMachine!!.encrypt(roomId, eventType, content)
     }
 
-    private suspend fun uploadKeys(outgoingRequest: Request.KeysUpload) {
-        val body = MoshiProvider
-            .providesMoshi()
-            .adapter<JsonDict>(Map::class.java)
-            .fromJson(outgoingRequest.body)!!
-
-        val request = UploadKeysTask.Params(body)
-
-        val response = uploadKeysTask.execute(request)
-        val adapter = MoshiProvider
-            .providesMoshi()
-            .adapter(KeysUploadResponse::class.java)
-
-        val jsonResponse = adapter.toJson(response)!!
-
-        this.olmMachine!!.markRequestAsSent(
-            outgoingRequest.requestId,
-            RequestType.KEYS_UPLOAD,
-            jsonResponse
-        )
+    private suspend fun uploadKeys(request: Request.KeysUpload) {
+        val response = this.sender.uploadKeys(request)
+        this.olmMachine!!.markRequestAsSent(request.requestId, RequestType.KEYS_UPLOAD, response)
     }
 
-    private suspend fun queryKeys(outgoingRequest: Request.KeysQuery) {
-        val params = DownloadKeysForUsersTask.Params(outgoingRequest.users, null)
-
+    private suspend fun queryKeys(request: Request.KeysQuery) {
         try {
-            val response = downloadKeysForUsersTask.execute(params)
-            val adapter = MoshiProvider.providesMoshi().adapter(KeysQueryResponse::class.java)
-            val jsonResponse = adapter.toJson(response)!!
-            this.olmMachine!!.markRequestAsSent(outgoingRequest.requestId, RequestType.KEYS_QUERY, jsonResponse)
+            val response = this.sender.queryKeys(request)
+            this.olmMachine!!.markRequestAsSent(request.requestId, RequestType.KEYS_QUERY, response)
         } catch (throwable: Throwable) {
             Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
         }
@@ -850,14 +852,8 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private suspend fun claimKeys(request: Request.KeysClaim) {
-        val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(request.oneTimeKeys)
-        val response = oneTimeKeysForUsersDeviceTask.execute(claimParams)
-        val adapter = MoshiProvider
-            .providesMoshi()
-            .adapter(KeysClaimResponse::class.java)
-        val jsonResponse = adapter.toJson(response)!!
-
-        olmMachine!!.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, jsonResponse)
+        val response = this.sender.claimKeys(request)
+        olmMachine!!.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, response)
     }
 
     private suspend fun sendOutgoingRequests() {
