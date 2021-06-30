@@ -1115,6 +1115,10 @@
     <string name="settings_troubleshoot_test_endpoint_success">Endpoint successfully retrieved:\n%1$s</string>
     <string name="settings_troubleshoot_test_endpoint_failed">Failed to retrieved Endpoint.</string>
 
+    <!-- UnifiedPush Distributor Picker Dialog -->
+    <string name="unifiedpush_getdistributors_dialog_title">Choose a distributor</string>
+    <string name="unifiedpush_getdistributors_dialog_fcm_fallback">FCM Fallback</string>
+
     <!-- FCM Token, not used anymore -->
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
     <string name="settings_troubleshoot_test_fcm_success">FCM token successfully retrieved:\n%1$s</string>

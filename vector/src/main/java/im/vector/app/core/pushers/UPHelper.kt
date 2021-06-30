@@ -16,6 +16,7 @@
 package im.vector.app.core.pushers
 
 import android.content.Context
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import im.vector.app.R
@@ -95,7 +96,7 @@ object UPHelper {
         when (distributors.size) {
             0 -> {
                 /**
-                 * TODO: fallback with sync service : automatic ?
+                 * Fallback with sync service
                  */
             }
             1 -> {
@@ -104,10 +105,22 @@ object UPHelper {
             }
             else -> {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-                builder.setTitle("Choose a distributor")
+                builder.setTitle(context.getString(R.string.unifiedpush_getdistributors_dialog_title))
 
                 val distributorsArray = distributors.toTypedArray()
-                builder.setItems(distributorsArray) { _, which ->
+                val distributorsNameArray = distributorsArray.map {
+                    if (it == context.packageName) {
+                        context.getString(R.string.unifiedpush_getdistributors_dialog_fcm_fallback)
+                    } else {
+                        try {
+                            val ai = context.packageManager.getApplicationInfo(it, 0)
+                            context.packageManager.getApplicationLabel(ai)
+                        } catch (e: PackageManager.NameNotFoundException) {
+                            it
+                        } as String
+                    }
+                }.toTypedArray()
+                builder.setItems(distributorsNameArray) { _, which ->
                     val distributor = distributorsArray[which]
                     up.saveDistributor(context, distributor)
                     Timber.i("Saving distributor: $distributor")
