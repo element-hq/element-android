@@ -16,7 +16,6 @@
 
 package im.vector.app.features.signout.soft
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +24,6 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
@@ -127,7 +125,7 @@ class SoftLogoutFragment @Inject constructor(
                 R.string.soft_logout_clear_data_dialog_content
             }
 
-            MaterialAlertDialogBuilder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                     .setTitle(R.string.soft_logout_clear_data_dialog_title)
                     .setMessage(messageResId)
                     .setNegativeButton(R.string.cancel, null)
@@ -135,7 +133,6 @@ class SoftLogoutFragment @Inject constructor(
                         softLogoutViewModel.handle(SoftLogoutAction.ClearData)
                     }
                     .show()
-                    .withColoredButton(DialogInterface.BUTTON_POSITIVE)
         }
     }
 
@@ -145,10 +142,6 @@ class SoftLogoutFragment @Inject constructor(
 
     override fun forgetPasswordClicked() {
         loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnForgetPasswordClicked))
-    }
-
-    override fun revealPasswordClicked() {
-        softLogoutViewModel.handle(SoftLogoutAction.TogglePassword)
     }
 
     override fun resetViewModel() {

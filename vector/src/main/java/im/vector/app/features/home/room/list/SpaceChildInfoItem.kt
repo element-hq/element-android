@@ -33,6 +33,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.image
@@ -52,6 +53,7 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
     @EpoxyAttribute var loading: Boolean = false
 
     @EpoxyAttribute var buttonLabel: String? = null
+    @EpoxyAttribute var errorLabel: String? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemLongClickListener: View.OnLongClickListener? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: ClickListener? = null
@@ -97,6 +99,8 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
             holder.joinButton.isVisible = true
         }
 
+        holder.errorTextView.setTextOrHide(errorLabel)
+
         holder.joinButton.onClick {
             // local echo
             holder.joinButton.isEnabled = false
@@ -120,5 +124,6 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
         val descriptionText by bind<TextView>(R.id.suggestedRoomDescription)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)
+        val errorTextView by bind<TextView>(R.id.inlineErrorText)
     }
 }

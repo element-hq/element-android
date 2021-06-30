@@ -50,7 +50,6 @@ import java.io.ByteArrayOutputStream
 data class SharedSecureStorageViewState(
         val ready: Boolean = false,
         val hasPassphrase: Boolean = true,
-        val passphraseVisible: Boolean = false,
         val checkingSSSSAction: Async<Unit> = Uninitialized,
         val step: Step = Step.EnterPassphrase,
         val activeDeviceCount: Int = 0,
@@ -128,7 +127,6 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
     override fun handle(action: SharedSecureStorageAction) = withState {
         when (action) {
-            is SharedSecureStorageAction.TogglePasswordVisibility -> handleTogglePasswordVisibility()
             is SharedSecureStorageAction.Cancel                   -> handleCancel()
             is SharedSecureStorageAction.SubmitPassphrase         -> handleSubmitPassphrase(action)
             SharedSecureStorageAction.UseKey                      -> handleUseKey()
@@ -317,14 +315,6 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
     private fun handleCancel() {
         _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
-    }
-
-    private fun handleTogglePasswordVisibility() {
-        setState {
-            copy(
-                    passphraseVisible = !passphraseVisible
-            )
-        }
     }
 
     companion object : MvRxViewModelFactory<SharedSecureStorageViewModel, SharedSecureStorageViewState> {

@@ -783,7 +783,7 @@
     <string name="list_members">List members</string>
     <string name="open_chat_header">Open header</string>
     <string name="room_sync_in_progress">Syncing…</string>
-    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+    <string name="room_jump_to_first_unread">Jump to unread</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">You have been invited to join this room by %s</string>
@@ -3416,7 +3416,6 @@
     <string name="joining_replacement_room">Join replacement room</string>
     <string name="it_may_take_some_time">Please be patient, it may take some time.</string>
 
-
     <string name="upgrade">Upgrade</string>
     <string name="upgrade_public_room">Upgrade public room</string>
     <string name="upgrade_private_room">Upgrade private room</string>
@@ -3430,4 +3429,6 @@
 
     <string name="room_using_unstable_room_version">This room is running room version %s, which this homeserver has marked as unstable.</string>
     <string name="room_upgrade_to_recommened_version">Upgrade to the recommended room version</string>
- </resources>
+
+    <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
+</resources>

@@ -24,7 +24,6 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentReauthConfirmBinding
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
@@ -40,13 +39,6 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
         super.onViewCreated(view, savedInstanceState)
         views.reAuthConfirmButton.debouncedClicks {
             onButtonClicked()
-        }
-        views.passwordReveal.debouncedClicks {
-            viewModel.handle(ReAuthActions.StartSSOFallback)
-        }
-
-        views.passwordReveal.debouncedClicks {
-            viewModel.handle(ReAuthActions.TogglePassVisibility)
         }
     }
 
@@ -74,20 +66,17 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
     override fun invalidate() = withState(viewModel) {
         when (it.flowType) {
             LoginFlowTypes.SSO -> {
-                views.passwordContainer.isVisible = false
+                views.passwordFieldTil.isVisible = false
                 views.reAuthConfirmButton.text = getString(R.string.auth_login_sso)
             }
             LoginFlowTypes.PASSWORD -> {
-                views.passwordContainer.isVisible = true
+                views.passwordFieldTil.isVisible = true
                 views.reAuthConfirmButton.text = getString(R.string._continue)
             }
             else                    -> {
                 // This login flow is not supported, you should use web?
             }
         }
-
-        views.passwordField.showPassword(it.passwordVisible)
-        views.passwordReveal.render(it.passwordVisible)
 
         if (it.lastErrorCode != null) {
             when (it.flowType) {
