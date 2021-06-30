@@ -718,7 +718,7 @@ impl OlmMachine {
 
     pub fn request_verification(&self, user_id: &str) {
         let _user_id = UserId::try_from(user_id).unwrap();
-        todo!()
+        todo!("Requesting key verification isn't yet supported")
     }
 
     pub fn get_verification(&self, user_id: &str, flow_id: &str) -> Option<Verification> {

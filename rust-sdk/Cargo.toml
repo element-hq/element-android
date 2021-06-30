@@ -24,12 +24,14 @@ version = "0.2.1"
 features = ["lax_deserialize"]
 
 [dependencies.matrix-sdk-common]
-git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "d2e4b3f3bbcdc139560cdacbdf62dedab6f156b9"
+path = "/home/poljar/werk/matrix/nio-rust/matrix_sdk_common"
+# git = "https://github.com/matrix-org/matrix-rust-sdk/"
+# rev = "d2e4b3f3bbcdc139560cdacbdf62dedab6f156b9"
 
 [dependencies.matrix-sdk-crypto]
-git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "d2e4b3f3bbcdc139560cdacbdf62dedab6f156b9"
+path = "/home/poljar/werk/matrix/nio-rust/matrix_sdk_crypto"
+# git = "https://github.com/matrix-org/matrix-rust-sdk/"
+# rev = "d2e4b3f3bbcdc139560cdacbdf62dedab6f156b9"
 features = ["sled_cryptostore"]
 
 [dependencies.tokio]

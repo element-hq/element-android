@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
+import dagger.Lazy
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -44,6 +45,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
@@ -68,11 +70,13 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
+import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendVerificationMessageTask
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
+import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.verification.RustVerificationService
@@ -101,14 +105,32 @@ import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import kotlin.math.max
 
-internal class RequestSender(
+internal class RequestSender @Inject constructor(
         private val sendToDeviceTask: SendToDeviceTask,
-) {
+        private val sendVerificationMessageTask: Lazy<DefaultSendVerificationMessageTask>,
+        ) {
+
     suspend fun sendVerificationRequest(request: OutgoingVerificationRequest) {
         when (request) {
-            is OutgoingVerificationRequest.InRoom   -> TODO()
+            is OutgoingVerificationRequest.InRoom   -> sendRoomMessage(request)
             is OutgoingVerificationRequest.ToDevice -> sendToDevice(request)
         }
+    }
+
+    suspend fun sendRoomMessage(request: OutgoingVerificationRequest.InRoom) {
+        sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId)
+    }
+
+    suspend fun sendRoomMessage(request: Request.RoomMessage) {
+        sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId)
+    }
+
+    suspend fun sendRoomMessage(eventType: String, roomId: String, content: String, transactionId: String) {
+        val adapter = MoshiProvider.providesMoshi().adapter<Content>(Map::class.java)
+        val jsonContent = adapter.fromJson(content)
+        val event = Event(eventType, transactionId, jsonContent, roomId = roomId)
+        val params = SendVerificationMessageTask.Params(event)
+        this.sendVerificationMessageTask.get().execute(params)
     }
 
     suspend fun sendToDevice(request: Request.ToDevice) {
@@ -176,11 +198,11 @@ internal class DefaultCryptoService @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope,
+        private val sender: RequestSender,
 ) : CryptoService {
 
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
-    private val sender = RequestSender(this.sendToDeviceTask)
 
     private var olmMachine: OlmMachine? = null
     // The verification service.
@@ -348,8 +370,7 @@ internal class DefaultCryptoService @Inject constructor(
             setRustLogger()
             val machine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver)
             this.olmMachine = machine
-            this.verificationService =
-            RustVerificationService(machine, this.sender)
+            this.verificationService = RustVerificationService(machine, this.sender)
             Timber.v(
                 "## CRYPTO | Successfully started up an Olm machine for " +
                 "${userId}, ${deviceId}, identity keys: ${this.olmMachine?.identityKeys()}")
@@ -859,8 +880,15 @@ internal class DefaultCryptoService @Inject constructor(
                                 sendToDevice(it)
                             }
                         }
-                        else -> {
-                            async {}
+                        is Request.KeysClaim  -> {
+                            async {
+                                claimKeys(it)
+                            }
+                        }
+                        is Request.RoomMessage -> {
+                            async {
+                                sender.sendRoomMessage(it)
+                            }
                         }
                     }
                 }.joinAll()

@@ -228,7 +228,7 @@ internal class QrCodeVerification(
         runBlocking {
             when (request) {
                 is OutgoingVerificationRequest.ToDevice -> {
-                    sender.sendToDevice(request.eventType, request.body)
+                    sender.sendToDevice(request)
                 }
                 is OutgoingVerificationRequest.InRoom   -> TODO()
             }

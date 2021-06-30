@@ -19,7 +19,7 @@ use ruma::{
 
 use matrix_sdk_crypto::{
     IncomingResponse, OutgoingRequest, OutgoingVerificationRequest as SdkVerificationRequest,
-    ToDeviceRequest,
+    ToDeviceRequest, RoomMessageRequest,
 };
 
 pub enum OutgoingVerificationRequest {
@@ -73,6 +73,12 @@ pub enum Request {
         request_id: String,
         one_time_keys: HashMap<String, HashMap<String, String>>,
     },
+    RoomMessage {
+        request_id: String,
+        room_id: String,
+        event_type: String,
+        content: String,
+    },
 }
 
 impl From<OutgoingRequest> for Request {
@@ -100,8 +106,8 @@ impl From<OutgoingRequest> for Request {
                 }
             }
             ToDeviceRequest(t) => Request::from(t),
-            SignatureUpload(_) => todo!(),
-            RoomMessage(_) => todo!(),
+            SignatureUpload(_) => todo!("Uploading signatures isn't yet supported"),
+            RoomMessage(r) => Request::from(r),
         }
     }
 }
@@ -122,6 +128,18 @@ impl From<&ToDeviceRequest> for Request {
             request_id: r.txn_id_string(),
             event_type: r.event_type.to_string(),
             body: serde_json::to_string(&r.messages).expect("Can't serialize to-device body"),
+        }
+    }
+}
+
+impl From<&RoomMessageRequest> for Request {
+    fn from(r: &RoomMessageRequest) -> Self {
+        Self::RoomMessage {
+            request_id: r.txn_id.to_string(),
+            room_id: r.room_id.to_string(),
+            event_type: r.content.event_type().to_string(),
+            content: serde_json::to_string(&r.content)
+                .expect("Can't serialize message content"),
         }
     }
 }

@@ -140,6 +140,7 @@ interface Request {
     KeysUpload(string request_id, string body);
     KeysQuery(string request_id, sequence<string> users);
     KeysClaim(string request_id, record<DOMString, record<DOMString, string>> one_time_keys);
+    RoomMessage(string request_id, string room_id, string event_type, string content);
 };
 
 enum RequestType {
