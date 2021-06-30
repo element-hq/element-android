@@ -94,13 +94,30 @@ val upHandler = object: MessagingReceiverHandler {
 
         lateinit var data: JSONObject
         lateinit var notification: JSONObject
-        try {
-            data = JSONObject(message)
-            notification = data.getJSONObject("notification")
-        } catch (e: JSONException) {
-            Timber.e(e)
-            return
+        if (UPHelper.isEmbeddedDistributor(context)) {
+            try {
+                notification = JSONObject(message)
+            } catch (e: JSONException) {
+                Timber.e(e)
+                return
+            }
+        } else {
+            try {
+                data = JSONObject(message)
+                notification = data.getJSONObject("notification")
+            } catch (e: JSONException) {
+                Timber.e(e)
+                return
+            }
+            try {
+                notification.put("unread",
+                        notification.getJSONObject("count").getInt("unread"))
+            } catch (e: JSONException) {
+                Timber.i("No unread on notification")
+                notification.put("unread", 0)
+            }
         }
+
         val eventId: String = try {
             notification.getString("event_id")
         } catch (e: JSONException) {
@@ -108,6 +125,7 @@ val upHandler = object: MessagingReceiverHandler {
             notification.put("event_id", "")
             ""
         }
+
         try {
             notification.getString("room_id")
         } catch (e: JSONException) {
@@ -191,7 +209,7 @@ val upHandler = object: MessagingReceiverHandler {
             }
 
             // update the badge counter
-            val unreadCount = data.getJSONObject("counts").getInt("unread")
+            val unreadCount = data.getInt("unread")
             BadgeProxy.updateBadgeCount(context, unreadCount)
 
             val session = activeSessionHolder.getSafeActiveSession()
