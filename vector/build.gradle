@@ -246,6 +246,11 @@ android {
 
     productFlavors {
         gplay {
+            apply plugin: 'com.google.gms.google-services'
+            afterEvaluate {
+                tasks.matching { it.name.contains("GoogleServices") && !it.name.contains("Gplay") }*.enabled = false
+            }
+
             dimension "store"
             isDefault = true
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
@@ -505,8 +510,4 @@ dependencies {
     androidTestImplementation('com.schibsted.spain:barista:3.9.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
-}
-
-if (getGradle().getStartParameter().getTaskRequests().toString().contains("Gplay")) {
-    apply plugin: 'com.google.gms.google-services'
 }
