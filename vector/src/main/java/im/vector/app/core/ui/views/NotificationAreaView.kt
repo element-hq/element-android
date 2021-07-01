@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.italic
 import im.vector.app.R
 import im.vector.app.core.error.ResourceLimitErrorFormatter
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewNotificationAreaBinding
 import im.vector.app.features.themes.ThemeUtils
@@ -69,12 +70,13 @@ class NotificationAreaView @JvmOverloads constructor(
         cleanUp()
         state = newState
         when (newState) {
+            State.Initial                       -> Unit
             is State.Default                    -> renderDefault()
             is State.Hidden                     -> renderHidden()
             is State.NoPermissionToPost         -> renderNoPermissionToPost()
-            is State.Tombstone                  -> renderTombstone(newState)
+            is State.Tombstone                  -> renderTombstone()
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
-        }
+        }.exhaustive
     }
 
     // PRIVATE METHODS ****************************************************************************************************************************************
@@ -125,7 +127,7 @@ class NotificationAreaView @JvmOverloads constructor(
         setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
     }
 
-    private fun renderTombstone(state: State.Tombstone) {
+    private fun renderTombstone() {
         visibility = View.VISIBLE
         views.roomNotificationIcon.setImageResource(R.drawable.ic_warning_badge)
         val message = span {
@@ -133,7 +135,7 @@ class NotificationAreaView @JvmOverloads constructor(
             +"\n"
             span(resources.getString(R.string.room_tombstone_continuation_link)) {
                 textDecorationLine = "underline"
-                onClick = { delegate?.onTombstoneEventClicked(state.tombstoneEvent) }
+                onClick = { delegate?.onTombstoneEventClicked() }
             }
         }
         views.roomNotificationMessage.movementMethod = BetterLinkMovementMethod.getInstance()
@@ -177,6 +179,6 @@ class NotificationAreaView @JvmOverloads constructor(
      * An interface to delegate some actions to another object
      */
     interface Delegate {
-        fun onTombstoneEventClicked(tombstoneEvent: Event)
+        fun onTombstoneEventClicked()
     }
 }

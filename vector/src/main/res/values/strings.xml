@@ -2735,7 +2735,7 @@
     <string name="settings_server_upload_size_title">Server file upload limit</string>
     <string name="settings_server_upload_size_content">Your homeserver accepts attachments (files, media, etc.) with a size up to %s.</string>
     <string name="settings_server_upload_size_unknown">The limit is unknown.</string>
-    <!-- Only visible in developer mode-->
+    <!-- Please use the same emoji in the translations -->
     <string name="settings_server_room_versions">Room Versions 👓</string>
     <string name="settings_server_default_room_version">Default Version</string>
     <string name="settings_server_room_version_stable">stable</string>
@@ -3422,13 +3422,11 @@
     <string name="upgrade_room_warning">Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.\nThis usually only affects how the room is processed on the server.</string>
     <string name="upgrade_public_room_from_to">You\'ll upgrade this room from %s to %s.</string>
     <string name="upgrade_room_auto_invite">Automatically invite users</string>
-    <string name="upgrade_room_update_parent_sapce">Automatically update space parent</string>
-    <string name="upgrade_room_update_parent">Automatically update parent space</string>
+    <string name="upgrade_room_update_parent_space">Automatically update space parent</string>
     <string name="upgrade_room_no_power_to_manage">You need permission to upgrade a room</string>
 
-
     <string name="room_using_unstable_room_version">This room is running room version %s, which this homeserver has marked as unstable.</string>
-    <string name="room_upgrade_to_recommened_version">Upgrade to the recommended room version</string>
+    <string name="room_upgrade_to_recommended_version">Upgrade to the recommended room version</string>
 
     <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
 </resources>

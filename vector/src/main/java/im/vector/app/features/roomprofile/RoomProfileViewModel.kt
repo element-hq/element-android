@@ -84,6 +84,7 @@ class RoomProfileViewModel @AssistedInject constructor(
                 .execute { async ->
                     copy(
                             roomCreateContent = async,
+                            // This is a shortcut, we should do the next lines elsewhere, but keep it like that for the moment.
                             recommendedRoomVersion = room.getRecommendedVersion(),
                             isUsingUnstableRoomVersion = room.isUsingUnstableRoomVersion(),
                             canUpgradeRoom = room.userMayUpgradeRoom(session.myUserId),

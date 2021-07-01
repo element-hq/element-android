@@ -25,7 +25,6 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.parentFragmentViewModel
-import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.epoxy.ClickListener
@@ -58,16 +57,14 @@ class JoinReplacementRoomBottomSheet :
 
         views.roomUpgradeButton.retryClicked = object : ClickListener {
             override fun invoke(view: View) {
-                withState(viewModel) { it.tombstoneEvent }?.let {
-                    viewModel.handle(RoomDetailAction.HandleTombstoneEvent(it))
-                }
+                viewModel.handle(RoomDetailAction.JoinAndOpenReplacementRoom)
             }
         }
 
-        viewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling) { joinState ->
+        viewModel.selectSubscribe(this, RoomDetailViewState::joinUpgradedRoomAsync) { joinState ->
             when (joinState) {
                 // it should never be Uninitialized
-                Uninitialized -> views.roomUpgradeButton.render(ButtonStateView.State.Loaded)
+                Uninitialized,
                 is Loading    -> {
                     views.roomUpgradeButton.render(ButtonStateView.State.Loading)
                     views.descriptionText.setText(R.string.it_may_take_some_time)

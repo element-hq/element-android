@@ -108,7 +108,7 @@ class RoomProfileController @Inject constructor(
 
             genericPositiveButtonItem {
                 id("migrate_button")
-                text(host.stringProvider.getString(R.string.room_upgrade_to_recommened_version))
+                text(host.stringProvider.getString(R.string.room_upgrade_to_recommended_version))
                 buttonClickAction { host.callback?.doMigrateToVersion(data.recommendedRoomVersion) }
             }
         }

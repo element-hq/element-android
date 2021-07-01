@@ -61,7 +61,6 @@ class MigrateRoomBottomSheet :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-
         views.headerText.setText(if (state.isPublic) R.string.upgrade_public_room else R.string.upgrade_private_room)
         views.upgradeFromTo.text = getString(R.string.upgrade_public_room_from_to, state.currentVersion, state.newVersion)
 

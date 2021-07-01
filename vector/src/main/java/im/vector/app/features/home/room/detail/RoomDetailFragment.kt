@@ -179,7 +179,6 @@ import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -359,10 +358,6 @@ class RoomDetailFragment @Inject constructor(
                     invalidateOptionsMenu()
                 })
 
-        roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
-            renderTombstoneEventHandling(it)
-        }
-
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::canShowJumpToReadMarker, RoomDetailViewState::unreadState) { _, _ ->
             updateJumpToReadMarkerViewVisibility()
         }
@@ -498,6 +493,9 @@ class RoomDetailFragment @Inject constructor(
 
     private fun handleOpenRoom(openRoom: RoomDetailViewEvents.OpenRoom) {
         navigator.openRoom(requireContext(), openRoom.roomId, null)
+        if (openRoom.closeCurrentRoom) {
+            requireActivity().finish()
+        }
     }
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
@@ -802,8 +800,8 @@ class RoomDetailFragment @Inject constructor(
 
     private fun setupNotificationView() {
         views.notificationAreaView.delegate = object : NotificationAreaView.Delegate {
-            override fun onTombstoneEventClicked(tombstoneEvent: Event) {
-                roomDetailViewModel.handle(RoomDetailAction.HandleTombstoneEvent(tombstoneEvent))
+            override fun onTombstoneEventClicked() {
+                roomDetailViewModel.handle(RoomDetailAction.JoinAndOpenReplacementRoom)
             }
         }
     }
@@ -1334,21 +1332,6 @@ class RoomDetailFragment @Inject constructor(
             } else {
                 setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 setTypeface(null, Typeface.BOLD)
-            }
-        }
-    }
-
-    private fun renderTombstoneEventHandling(async: Async<String>) {
-        when (async) {
-            is Loading -> {
-                // shown in bottom sheet
-            }
-            is Success -> {
-                navigator.openRoom(vectorBaseActivity, async())
-                vectorBaseActivity.finish()
-            }
-            is Fail    -> {
-                // shown in bottom sheet
             }
         }
     }

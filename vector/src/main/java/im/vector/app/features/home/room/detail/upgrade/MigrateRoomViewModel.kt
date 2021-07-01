@@ -84,16 +84,6 @@ class MigrateRoomViewModel @AssistedInject constructor(
         }
     }
 
-    val upgradingProgress: ((indeterminate: Boolean, progress: Int, total: Int) -> Unit) = { indeterminate, progress, total ->
-        setState {
-            copy(
-                    upgradingProgress = progress,
-                    upgradingProgressTotal = total,
-                    upgradingProgressIndeterminate = indeterminate
-            )
-        }
-    }
-
     private fun handleUpgradeRoom() = withState { state ->
         val summary = session.getRoomSummary(state.roomId)
         setState {
@@ -105,7 +95,15 @@ class MigrateRoomViewModel @AssistedInject constructor(
                     newVersion = state.newVersion,
                     userIdsToAutoInvite = summary?.otherMemberIds?.takeIf { state.shouldIssueInvites } ?: emptyList(),
                     parentSpaceToUpdate = summary?.flattenParentIds?.takeIf { state.shouldUpdateKnownParents } ?: emptyList(),
-                    progressReporter = upgradingProgress
+                    progressReporter = { indeterminate, progress, total ->
+                        setState {
+                            copy(
+                                    upgradingProgress = progress,
+                                    upgradingProgressTotal = total,
+                                    upgradingProgressIndeterminate = indeterminate
+                            )
+                        }
+                    }
             ))
 
             setState {

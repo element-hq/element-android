@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?colorSurface"
+    android:background="?android:colorBackground"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -26,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:gravity="start"
-        android:textColor="?vctr_content_secondary"
-        android:text="@string/upgrade_room_warning" />
+        android:text="@string/upgrade_room_warning"
+        android:textColor="?vctr_content_secondary" />
 
     <TextView
         android:id="@+id/upgradeFromTo"
@@ -43,25 +43,25 @@
         android:id="@+id/autoInviteSwitch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:checked="true"
         android:layout_marginBottom="8dp"
         android:text="@string/upgrade_room_auto_invite"
+        tools:checked="true"
         tools:visibility="visible" />
-
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/autoUpdateParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/upgrade_room_update_parent_sapce"
+        android:text="@string/upgrade_room_update_parent_space"
         tools:visibility="visible" />
 
     <Button
         android:id="@+id/button"
         style="@style/Widget.Vector.Button.Outlined"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_marginTop="@dimen/layout_vertical_margin"
         android:text="@string/upgrade"
         android:textAllCaps="true"
@@ -69,7 +69,7 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
+        style="@style/Widget.Vector.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
