@@ -96,7 +96,7 @@ class StartCallActionsHandler(
                             }
                     ))
                 } else {
-                    if (state.activeRoomWidgets()?.filter { it.type == WidgetType.Jitsi }?.any() == true) {
+                    if (state.hasActiveJitsiWidget()) {
                         // A conference is already in progress!
                         showDialogWithMessage(fragment.getString(R.string.conference_call_in_progress))
                     } else {

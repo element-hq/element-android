@@ -793,7 +793,8 @@ class RoomDetailFragment @Inject constructor(
         }
         withState(roomDetailViewModel) { state ->
             // Set the visual state of the call buttons (voice/video) to enabled/disabled according to user permissions
-            val callButtonsEnabled = when (state.asyncRoomSummary.invoke()?.joinedMembersCount) {
+            val hasCallInRoom = callManager.getCallsByRoomId(state.roomId).isNotEmpty()
+            val callButtonsEnabled = !hasCallInRoom && when (state.asyncRoomSummary.invoke()?.joinedMembersCount) {
                 1    -> false
                 2    -> state.isAllowedToStartWebRTCCall
                 else -> state.isAllowedToManageWidgets
@@ -843,10 +844,6 @@ class RoomDetailFragment @Inject constructor(
             }
             R.id.video_call       -> {
                 callActionsHandler.onVideoCallClicked()
-                true
-            }
-            R.id.hangup_call      -> {
-                roomDetailViewModel.handle(RoomDetailAction.EndCall)
                 true
             }
             R.id.search           -> {
