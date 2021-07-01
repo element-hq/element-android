@@ -35,6 +35,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
@@ -53,6 +54,8 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
+import io.github.hyuwah.draggableviewlib.DraggableView
+import io.github.hyuwah.draggableviewlib.setupDraggable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -96,6 +99,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private var rootEglBase: EglBase? = null
+    private var pipDraggrableView: DraggableView<MaterialCardView>? = null
 
     var surfaceRenderersAreInitialized = false
 
@@ -188,19 +192,19 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is CallState.Idle,
             is CallState.CreateOffer,
             is CallState.LocalRinging,
-            is CallState.Dialing      -> {
+            is CallState.Dialing    -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
                 views.callToolbar.setSubtitle(R.string.call_ring)
                 configureCallInfo(state)
             }
-            is CallState.Answering    -> {
+            is CallState.Answering  -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
                 views.callToolbar.setSubtitle(R.string.call_connecting)
                 configureCallInfo(state)
             }
-            is CallState.Connected    -> {
+            is CallState.Connected  -> {
                 views.callToolbar.subtitle = state.formattedDuration
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold || state.isRemoteOnHold) {
@@ -248,10 +252,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callToolbar.setSubtitle(R.string.call_connecting)
                 }
             }
-            is CallState.Terminated   -> {
+            is CallState.Terminated -> {
                 finish()
             }
-            null                      -> {
+            null                    -> {
             }
         }
     }
@@ -290,7 +294,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     addPlaceholder = true
             )
             views.otherKnownCallLayout.isVisible = true
-            views.otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold || it.remoteOnHold }.orFalse()
+            views.otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold || it.isRemoteOnHold }.orFalse()
         }
     }
 
@@ -303,6 +307,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 finish()
             }
         }
+        pipDraggrableView = views.pipRendererWrapper.setupDraggable().build()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -322,21 +327,21 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         }
 
         // Init Picture in Picture renderer
-        views.pipRenderer.init(rootEglBase!!.eglBaseContext, null)
-        views.pipRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
-
+        views.pipRenderer.apply {
+            init(rootEglBase!!.eglBaseContext, null)
+            setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_BALANCED)
+            setEnableHardwareScaler(true)
+            setZOrderMediaOverlay(true)
+        }
         // Init Full Screen renderer
         views.fullscreenRenderer.init(rootEglBase!!.eglBaseContext, null)
         views.fullscreenRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL)
-
-        views.pipRenderer.setZOrderMediaOverlay(true)
-        views.pipRenderer.setEnableHardwareScaler(true /* enabled */)
         views.fullscreenRenderer.setEnableHardwareScaler(true /* enabled */)
 
         callManager.getCallById(callArgs.callId)?.attachViewRenderers(views.pipRenderer, views.fullscreenRenderer,
                 intent.getStringExtra(EXTRA_MODE)?.takeIf { isFirstCreation() })
 
-        views.pipRenderer.setOnClickListener {
+        views.pipRendererWrapper.setOnClickListener {
             callViewModel.handle(VectorCallViewActions.ToggleCamera)
         }
         surfaceRenderersAreInitialized = true

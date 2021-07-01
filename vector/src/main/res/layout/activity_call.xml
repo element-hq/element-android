@@ -29,15 +29,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <org.webrtc.SurfaceViewRenderer
-        android:id="@+id/pipRenderer"
-        android:layout_width="wrap_content"
-        android:layout_height="144dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginTop="16dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/pipRendererWrapper"
+        android:layout_width="@dimen/call_pip_width"
+        android:layout_height="@dimen/call_pip_height"
+        app:cardCornerRadius="@dimen/call_pip_radius"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/callControlsView">
+
+        <org.webrtc.SurfaceViewRenderer
+            android:id="@+id/pipRenderer"
+            android:layout_width="@dimen/call_pip_width"
+            android:layout_height="@dimen/call_pip_height"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/callToolbar"
@@ -60,15 +69,15 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/otherKnownCallLayout"
-        android:layout_width="80dp"
-        android:layout_height="144dp"
+        android:layout_width="@dimen/call_pip_width"
+        android:layout_height="@dimen/call_pip_height"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:background="@color/element_background_light"
         android:foreground="?attr/selectableItemBackground"
         android:visibility="gone"
         app:cardBackgroundColor="@color/bg_call_screen"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="@dimen/call_pip_radius"
         app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -95,8 +104,8 @@
 
     <ImageView
         android:id="@+id/otherMemberAvatar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:contentDescription="@string/avatar"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
@@ -159,7 +168,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="pipRenderer, fullscreenRenderer"
+        app:constraint_referenced_ids="pipRendererWrapper, fullscreenRenderer"
         tools:visibility="invisible" />
 
     <im.vector.app.features.call.CallControlsView

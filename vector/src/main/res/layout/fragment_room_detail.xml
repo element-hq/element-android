@@ -100,20 +100,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
-    <im.vector.app.core.ui.views.CurrentCallsView
-        android:id="@+id/activeCallView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/syncStateView"
-        tools:visibility="visible" />
-
     <im.vector.app.core.ui.views.ActiveConferenceView
         android:id="@+id/activeConferenceView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/activeCallView"
+        app:layout_constraintTop_toBottomOf="@id/syncStateView"
         tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -193,26 +185,20 @@
         app:barrierDirection="top"
         app:constraint_referenced_ids="composerLayout,notificationAreaView, failedMessagesWarningView" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/activeCallPiPWrap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+    <im.vector.app.core.ui.views.CurrentCallsCardView
+        android:id="@+id/currentCallsCardView"
+        android:layout_width="@dimen/call_pip_width"
+        android:layout_height="@dimen/call_pip_height"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        app:cardElevation="8dp"
         android:clickable="true"
         android:focusable="true"
-        app:cardCornerRadius="16dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="@dimen/call_pip_radius"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/jumpToReadMarkerView">
+        app:layout_constraintBottom_toTopOf="@id/failedMessagesWarningView"/>
 
-        <org.webrtc.SurfaceViewRenderer
-            android:id="@+id/activeCallPiP"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-    </com.google.android.material.card.MaterialCardView>
 
     <im.vector.app.core.platform.BadgeFloatingActionButton
         android:id="@+id/jumpToBottomView"

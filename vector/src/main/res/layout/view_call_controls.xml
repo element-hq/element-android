@@ -87,8 +87,8 @@
             android:clickable="true"
             android:contentDescription="@string/a11y_mute_microphone"
             android:focusable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_microphone_off"
+            android:padding="12dp"
+            android:src="@drawable/ic_mic_off"
             app:backgroundTint="?android:colorBackground"
             app:tint="?vctr_content_primary"
             tools:ignore="MissingConstraints,MissingPrefix" />
@@ -102,8 +102,8 @@
             android:clickable="true"
             android:contentDescription="@string/a11y_stop_camera"
             android:focusable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_call_videocam_off_default"
+            android:padding="12dp"
+            android:src="@drawable/ic_video"
             app:backgroundTint="?android:colorBackground"
             app:tint="?vctr_content_primary"
             tools:ignore="MissingConstraints,MissingPrefix" />
@@ -139,7 +139,7 @@
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="audioSettingsIcon,videoToggleIcon, muteIcon, endCallIcon, moreIcon"
+            app:constraint_referenced_ids="videoToggleIcon, audioSettingsIcon, muteIcon, endCallIcon, moreIcon"
             app:flow_horizontalGap="16dp"
             app:flow_horizontalStyle="packed"
             app:flow_wrapMode="chain"

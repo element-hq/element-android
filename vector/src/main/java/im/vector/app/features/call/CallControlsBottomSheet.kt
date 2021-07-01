@@ -73,7 +73,6 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
     private fun renderState(state: VectorCallViewState) {
         views.callControlsSwitchCamera.isVisible = state.isVideoCall && state.canSwitchCamera
         views.callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) R.string.call_camera_front else R.string.call_camera_back)
-
         if (state.isVideoCall) {
             views.callControlsToggleSDHD.isVisible = true
             if (state.isHD) {

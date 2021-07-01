@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/call_pip_width"
+    android:layout_height="@dimen/call_pip_height"
+    android:backgroundTint="@color/bg_call_screen_blur"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="@dimen/call_pip_radius"
+    tools:parentTag="com.google.android.material.card.MaterialCardView">
+
+    <org.webrtc.SurfaceViewRenderer
+        android:id="@+id/activeCallPiP"
+        android:layout_width="@dimen/call_pip_width"
+        android:layout_height="@dimen/call_pip_height"
+        android:visibility="gone"
+        tools:visibility="invisible" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/avatarViews"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/activeCallOpponentAvatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/otherCallOpponentAvatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:src="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/activeCallPausedIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_call_small_pause"
+            app:layout_constraintBottom_toBottomOf="@+id/activeCallOpponentAvatar"
+            app:layout_constraintEnd_toEndOf="@+id/activeCallOpponentAvatar"
+            app:layout_constraintStart_toStartOf="@+id/activeCallOpponentAvatar"
+            app:layout_constraintTop_toTopOf="@+id/activeCallOpponentAvatar" />
+
+
+        <ImageView
+            android:id="@+id/otherCallOpponentAvatar"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="8dp"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/activeCallOpponentAvatar"
+            tools:src="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/otherCallPausedIcon"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_call_small_pause"
+            app:layout_constraintBottom_toBottomOf="@+id/otherCallOpponentAvatar"
+            app:layout_constraintEnd_toEndOf="@+id/otherCallOpponentAvatar"
+            app:layout_constraintStart_toStartOf="@+id/otherCallOpponentAvatar"
+            app:layout_constraintTop_toTopOf="@+id/otherCallOpponentAvatar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/activeCallProgress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/element_background_light"
+        android:indeterminateTintMode="src_atop"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+
+</merge>

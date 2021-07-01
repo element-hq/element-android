@@ -69,7 +69,6 @@ class CallControlsView @JvmOverloads constructor(
         interactionListener?.didTapToggleVideo()
     }
 
-
     private fun moreControlOption() {
         interactionListener?.didTapMore()
     }
@@ -77,49 +76,36 @@ class CallControlsView @JvmOverloads constructor(
     fun updateForState(state: VectorCallViewState) {
         val callState = state.callState.invoke()
         if (state.isAudioMuted) {
-            views.muteIcon.setImageResource(R.drawable.ic_microphone_off)
+            views.muteIcon.setImageResource(R.drawable.ic_mic_off)
             views.muteIcon.contentDescription = resources.getString(R.string.a11y_unmute_microphone)
         } else {
-            views.muteIcon.setImageResource(R.drawable.ic_microphone_on)
+            views.muteIcon.setImageResource(R.drawable.ic_mic_on)
             views.muteIcon.contentDescription = resources.getString(R.string.a11y_mute_microphone)
         }
         if (state.isVideoEnabled) {
             views.videoToggleIcon.setImageResource(R.drawable.ic_video)
             views.videoToggleIcon.contentDescription = resources.getString(R.string.a11y_stop_camera)
         } else {
-          views.videoToggleIcon.setImageResource(R.drawable.ic_video_off)
+            views.videoToggleIcon.setImageResource(R.drawable.ic_video_off)
             views.videoToggleIcon.contentDescription = resources.getString(R.string.a11y_start_camera)
         }
 
         when (callState) {
-            is CallState.Idle,
-            is CallState.Dialing,
-            is CallState.Answering    -> {
-                views.ringingControls.isVisible = true
-                views.ringingControlAccept.isVisible = false
-                views.ringingControlDecline.isVisible = true
-                views.connectedControls.isVisible = false
-            }
             is CallState.LocalRinging -> {
                 views.ringingControls.isVisible = true
                 views.ringingControlAccept.isVisible = true
                 views.ringingControlDecline.isVisible = true
                 views.connectedControls.isVisible = false
             }
-            is CallState.Connected    -> {
-                if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
-                    views.ringingControls.isVisible = false
-                    views.connectedControls.isVisible = true
-                    views.videoToggleIcon.isVisible = state.isVideoCall
-                } else {
-                    views.ringingControls.isVisible = true
-                    views.ringingControlAccept.isVisible = false
-                    views.ringingControlDecline.isVisible = true
-                    views.connectedControls.isVisible = false
-                }
+            is CallState.Connected,
+            is CallState.Dialing,
+            is CallState.Answering    -> {
+                views.ringingControls.isVisible = false
+                views.connectedControls.isVisible = true
+                views.videoToggleIcon.isVisible = state.isVideoCall
+                views.moreIcon.isVisible = callState is CallState.Connected && callState.iceConnectionState == MxPeerConnectionState.CONNECTED
             }
-            is CallState.Terminated,
-            null                      -> {
+            else                      -> {
                 views.ringingControls.isVisible = false
                 views.connectedControls.isVisible = false
             }

@@ -164,7 +164,7 @@ class WebRtcCall(
         private set
     var videoMuted = false
         private set
-    var remoteOnHold = false
+    var isRemoteOnHold = false
         private set
     var isLocalOnHold = false
         private set
@@ -586,12 +586,12 @@ class WebRtcCall(
     }
 
     private fun updateMuteStatus() {
-        val micShouldBeMuted = micMuted || remoteOnHold
+        val micShouldBeMuted = micMuted || isRemoteOnHold
         localAudioTrack?.setEnabled(!micShouldBeMuted)
-        remoteAudioTrack?.setEnabled(!remoteOnHold)
-        val vidShouldBeMuted = videoMuted || remoteOnHold
+        remoteAudioTrack?.setEnabled(!isRemoteOnHold)
+        val vidShouldBeMuted = videoMuted || isRemoteOnHold
         localVideoTrack?.setEnabled(!vidShouldBeMuted)
-        remoteVideoTrack?.setEnabled(!remoteOnHold)
+        remoteVideoTrack?.setEnabled(!isRemoteOnHold)
     }
 
     /**
@@ -617,16 +617,16 @@ class WebRtcCall(
 
     fun updateRemoteOnHold(onHold: Boolean) {
         sessionScope?.launch(dispatcher) {
-            if (remoteOnHold == onHold) return@launch
+            if (isRemoteOnHold == onHold) return@launch
             val direction: RtpTransceiver.RtpTransceiverDirection
             if (onHold) {
                 wasLocalOnHold = isLocalOnHold
-                remoteOnHold = true
+                isRemoteOnHold = true
                 isLocalOnHold = true
                 direction = RtpTransceiver.RtpTransceiverDirection.SEND_ONLY
                 timer.pause()
             } else {
-                remoteOnHold = false
+                isRemoteOnHold = false
                 isLocalOnHold = wasLocalOnHold
                 onCallBecomeActive(this@WebRtcCall)
                 direction = RtpTransceiver.RtpTransceiverDirection.SEND_RECV

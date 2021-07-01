@@ -90,9 +90,8 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.ActiveConferenceView
-import im.vector.app.core.ui.views.CurrentCallsView
+import im.vector.app.core.ui.views.CurrentCallsCardView
 import im.vector.app.core.ui.views.FailedMessagesWarningView
-import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
@@ -239,7 +238,7 @@ class RoomDetailFragment @Inject constructor(
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
         GalleryOrCameraDialogHelper.Listener,
-        CurrentCallsView.Callback {
+        CurrentCallsCardView.Callback {
 
     companion object {
         /**
@@ -298,7 +297,6 @@ class RoomDetailFragment @Inject constructor(
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
-    private val knownCallsViewHolder = KnownCallsViewHolder()
 
     private lateinit var emojiPopup: EmojiPopup
 
@@ -344,7 +342,7 @@ class RoomDetailFragment @Inject constructor(
         knownCallsViewModel
                 .liveKnownCalls
                 .observe(viewLifecycleOwner, {
-                    knownCallsViewHolder.updateCall(callManager.getCurrentCall(), it)
+                    views.currentCallsCardView.render(callManager.getCurrentCall(), it)
                     invalidateOptionsMenu()
                 })
 
@@ -687,7 +685,6 @@ class RoomDetailFragment @Inject constructor(
     override fun onDestroyView() {
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
-        views.activeCallView.callback = null
         modelBuildListener = null
         autoCompleter.clear()
         debouncer.cancelAll()
@@ -698,7 +695,6 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroy() {
-        knownCallsViewHolder.unBind()
         roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
         super.onDestroy()
     }
@@ -734,12 +730,11 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupActiveCallView() {
-        knownCallsViewHolder.bind(
-                views.activeCallPiP,
-                views.activeCallView,
-                views.activeCallPiPWrap,
-                this
-        )
+        views.currentCallsCardView.apply {
+            this.callback = this@RoomDetailFragment
+            this.avatarRenderer = this@RoomDetailFragment.avatarRenderer
+            this.session = this@RoomDetailFragment.session
+        }
     }
 
     private fun navigateToEvent(action: RoomDetailViewEvents.NavigateToEvent) {
