@@ -143,8 +143,7 @@ class MigrateRoomBottomSheet :
         const val REQUEST_KEY = "MigrateRoomBottomSheetRequest"
         const val BUNDLE_KEY_REPLACEMENT_ROOM = "BUNDLE_KEY_REPLACEMENT_ROOM"
 
-        fun newInstance(roomId: String, newVersion: String)
-                : MigrateRoomBottomSheet {
+        fun newInstance(roomId: String, newVersion: String): MigrateRoomBottomSheet {
             return MigrateRoomBottomSheet().apply {
                 setArguments(Args(roomId, newVersion))
             }
