@@ -19,7 +19,7 @@ use ruma::{
 
 use matrix_sdk_crypto::{
     IncomingResponse, OutgoingRequest, OutgoingVerificationRequest as SdkVerificationRequest,
-    ToDeviceRequest, RoomMessageRequest,
+    RoomMessageRequest, ToDeviceRequest,
 };
 
 pub enum OutgoingVerificationRequest {
@@ -39,11 +39,7 @@ pub enum OutgoingVerificationRequest {
 impl From<SdkVerificationRequest> for OutgoingVerificationRequest {
     fn from(r: SdkVerificationRequest) -> Self {
         match r {
-            SdkVerificationRequest::ToDevice(r) => Self::ToDevice {
-                request_id: r.txn_id_string(),
-                event_type: r.event_type.to_string(),
-                body: serde_json::to_string(&r.messages).expect("Can't serialize to-device body"),
-            },
+            SdkVerificationRequest::ToDevice(r) => r.into(),
             SdkVerificationRequest::InRoom(r) => Self::InRoom {
                 request_id: r.txn_id.to_string(),
                 room_id: r.room_id.to_string(),
@@ -51,6 +47,16 @@ impl From<SdkVerificationRequest> for OutgoingVerificationRequest {
                     .expect("Can't serialize message content"),
                 event_type: r.content.event_type().to_string(),
             },
+        }
+    }
+}
+
+impl From<ToDeviceRequest> for OutgoingVerificationRequest {
+    fn from(r: ToDeviceRequest) -> Self {
+        Self::ToDevice {
+            request_id: r.txn_id_string(),
+            event_type: r.event_type.to_string(),
+            body: serde_json::to_string(&r.messages).expect("Can't serialize to-device body"),
         }
     }
 }
@@ -138,8 +144,7 @@ impl From<&RoomMessageRequest> for Request {
             request_id: r.txn_id.to_string(),
             room_id: r.room_id.to_string(),
             event_type: r.content.event_type().to_string(),
-            content: serde_json::to_string(&r.content)
-                .expect("Can't serialize message content"),
+            content: serde_json::to_string(&r.content).expect("Can't serialize message content"),
         }
     }
 }

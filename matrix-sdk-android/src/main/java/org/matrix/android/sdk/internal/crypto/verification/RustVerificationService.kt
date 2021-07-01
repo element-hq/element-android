@@ -20,7 +20,9 @@ import android.os.Handler
 import android.os.Looper
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
@@ -30,6 +32,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.internal.crypto.Device
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.QrCodeVerification
 import org.matrix.android.sdk.internal.crypto.RequestSender
@@ -39,13 +42,13 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import uniffi.olm.Verification
 
-private fun getFlowId(event: Event): String? {
-    @JsonClass(generateAdapter = true)
-    data class ToDeviceVerificationEvent(
-            @Json(name = "sender") val sender: String?,
-            @Json(name = "transaction_id") val transactionId: String,
-    )
+@JsonClass(generateAdapter = true)
+data class ToDeviceVerificationEvent(
+        @Json(name = "sender") val sender: String?,
+        @Json(name = "transaction_id") val transactionId: String,
+)
 
+private fun getFlowId(event: Event): String? {
     return if (event.eventId != null) {
         val relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
         relatesTo?.eventId
@@ -186,9 +189,24 @@ internal class RustVerificationService(
         }
     }
 
+    private suspend fun getDevice(userId: String, deviceID: String): Device? {
+        val device = withContext(Dispatchers.IO) {
+            olmMachine.inner().getDevice(userId, deviceID)
+        }
+
+        return if (device != null) {
+            Device(this.olmMachine.inner(), device, this.requestSender, this.listeners)
+        } else {
+            null
+        }
+    }
+
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
         // TODO this doesn't seem to be used anymore?
-        runBlocking { olmMachine.markDeviceAsTrusted(userId, deviceID) }
+        runBlocking {
+            val device = getDevice(userId, deviceID)
+            device?.markAsTrusted()
+        }
     }
 
     override fun onPotentiallyInterestingEventRoomFailToDecrypt(event: Event) {
@@ -200,9 +218,14 @@ internal class RustVerificationService(
             tid: String,
     ): VerificationTransaction? {
         val verification = this.olmMachine.getVerification(otherUserId, tid) ?: return null
+
         return when (verification) {
-            is Verification.QrCodeV1 -> QrCodeVerification(this.olmMachine.inner(), verification.qrcode, this.requestSender, this.listeners)
-            is Verification.SasV1    -> SasVerification(this.olmMachine.inner(), verification.sas, this.requestSender, this.listeners)
+            is Verification.QrCodeV1 -> {
+                QrCodeVerification(this.olmMachine.inner(), verification.qrcode, this.requestSender, this.listeners)
+            }
+            is Verification.SasV1    -> {
+                SasVerification(this.olmMachine.inner(), verification.sas, this.requestSender, this.listeners)
+            }
         }
     }
 
@@ -235,7 +258,8 @@ internal class RustVerificationService(
             tid: String?
     ): PendingVerificationRequest? {
         // This is only used in `RoomDetailViewModel` to resume the verification.
-        TODO()
+        // We don't support resuming in the rust-sdk, at least for now, so let's return null here.
+        return null
     }
 
     override fun requestKeyVerification(
@@ -303,27 +327,34 @@ internal class RustVerificationService(
     ): String? {
         // should check if already one (and cancel it)
         return if (method == VerificationMethod.SAS) {
-            val request = transactionId?.let { this.getVerificationRequest(otherUserId, it) }
+            if (transactionId != null) {
+                val request = this.getVerificationRequest(otherUserId, transactionId)
 
-            if (request != null) {
                 runBlocking {
-                    val sas = request.startSasVerification()
+                    val sas = request?.startSasVerification()
 
                     if (sas != null) {
-                        val sasTransaction = SasVerification(olmMachine.inner(), sas, requestSender, listeners)
-                        dispatchTxAdded(sasTransaction)
-                        sasTransaction.transactionId
+                        dispatchTxAdded(sas)
+                        sas.transactionId
                     } else {
                         null
                     }
                 }
             } else {
-                // This should start the short SAS flow, the one that doesn't start with
+                // This starts the short SAS flow, the one that doesn't start with
                 // a `m.key.verification.request`, Element web stopped doing this, might
                 // be wise do do so as well
                 // DeviceListBottomSheetViewModel triggers this, interestingly the method that
                 // triggers this is called `manuallyVerify()`
-                TODO()
+                runBlocking {
+                    val sas = getDevice(otherUserId, otherDeviceId)?.startVerification()
+                    if (sas != null) {
+                        dispatchTxAdded(sas)
+                        sas.transactionId
+                    } else {
+                        null
+                    }
+                }
             }
         } else {
             throw IllegalArgumentException("Unknown verification method")

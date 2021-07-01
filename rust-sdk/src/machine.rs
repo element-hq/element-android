@@ -758,6 +758,30 @@ impl OlmMachine {
             })
     }
 
+    pub fn start_sas_with_device(
+        &self,
+        user_id: &str,
+        device_id: &str,
+    ) -> Result<Option<StartSasResult>, CryptoStoreError> {
+        let user_id = UserId::try_from(user_id)?;
+
+        Ok(
+            if let Some(device) = self
+                .runtime
+                .block_on(self.inner.get_device(&user_id, device_id.into()))?
+            {
+                let (sas, request) = self.runtime.block_on(device.start_verification())?;
+
+                Some(StartSasResult {
+                    sas: sas.into(),
+                    request: request.into(),
+                })
+            } else {
+                None
+            },
+        )
+    }
+
     pub fn start_sas_verification(
         &self,
         user_id: &str,

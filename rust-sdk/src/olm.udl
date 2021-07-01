@@ -200,6 +200,8 @@ interface OlmMachine {
     );
 
     [Throws=CryptoStoreError]
+    StartSasResult? start_sas_with_device([ByRef] string user_id, [ByRef] string device_id);
+    [Throws=CryptoStoreError]
     StartSasResult? start_sas_verification([ByRef] string user_id, [ByRef] string flow_id);
     [Throws=CryptoStoreError]
     OutgoingVerificationRequest? confirm_verification([ByRef] string user_id, [ByRef] string flow_id);

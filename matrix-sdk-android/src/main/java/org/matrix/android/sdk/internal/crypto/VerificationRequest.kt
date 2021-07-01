@@ -33,7 +33,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_REC
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import timber.log.Timber
 import uniffi.olm.OlmMachine
-import uniffi.olm.Sas
 import uniffi.olm.VerificationRequest
 
 internal class VerificationRequest(
@@ -64,6 +63,21 @@ internal class VerificationRequest(
                 }
             }
         }
+    }
+
+    fun isCanceled(): Boolean {
+        refreshData()
+        return this.inner.isCancelled
+    }
+
+    fun isDone(): Boolean {
+        refreshData()
+        return this.inner.isDone
+    }
+
+    fun isReady(): Boolean {
+        refreshData()
+        return this.inner.isReady
     }
 
     internal fun startQrVerification(): QrCodeVerification? {
@@ -99,7 +113,10 @@ internal class VerificationRequest(
         }
 
         val request = this.machine.acceptVerificationRequest(
-                this.inner.otherUserId, this.inner.flowId, stringMethods)
+            this.inner.otherUserId,
+            this.inner.flowId,
+            stringMethods
+        )
 
         if (request != null) {
             this.sender.sendVerificationRequest(request)
@@ -116,29 +133,14 @@ internal class VerificationRequest(
         }
     }
 
-    fun isCanceled(): Boolean {
-        refreshData()
-        return this.inner.isCancelled
-    }
-
-    fun isDone(): Boolean {
-        refreshData()
-        return this.inner.isDone
-    }
-
-    fun isReady(): Boolean {
-        refreshData()
-        return this.inner.isReady
-    }
-
-    suspend fun startSasVerification(): Sas? {
+    suspend fun startSasVerification(): SasVerification? {
         refreshData()
 
         return withContext(Dispatchers.IO) {
             val result = machine.startSasVerification(inner.otherUserId, inner.flowId)
             if (result != null) {
                 sender.sendVerificationRequest(result.request)
-                result.sas
+                SasVerification(machine, result.sas, sender, listeners)
             } else {
                 null
             }

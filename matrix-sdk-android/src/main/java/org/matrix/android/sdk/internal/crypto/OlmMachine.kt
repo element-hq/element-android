@@ -49,7 +49,7 @@ import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
 import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.DecryptionErrorException
-import uniffi.olm.Device
+import uniffi.olm.Device as InnerDevice
 import uniffi.olm.DeviceLists
 import uniffi.olm.KeyRequestPair
 import uniffi.olm.Logger
@@ -98,7 +98,7 @@ fun setRustLogger() {
 }
 
 /** Convert a Rust Device into a Kotlin CryptoDeviceInfo */
-private fun toCryptoDeviceInfo(device: Device): CryptoDeviceInfo {
+private fun toCryptoDeviceInfo(device: InnerDevice): CryptoDeviceInfo {
     val keys = device.keys.map { (keyId, key) -> "$keyId:$device.deviceId" to key }.toMap()
 
     return CryptoDeviceInfo(
@@ -125,6 +125,36 @@ internal class DeviceUpdateObserver {
 
     fun removeDeviceUpdateListener(device: LiveDevice) {
         listeners.remove(device)
+    }
+}
+
+internal class Device(
+        private val machine: uniffi.olm.OlmMachine,
+        private var inner: InnerDevice,
+        private val sender: RequestSender,
+        private val listeners: ArrayList<VerificationService.Listener>,
+) {
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun startVerification(): SasVerification? {
+        val result = withContext(Dispatchers.IO) {
+            machine.startSasWithDevice(inner.userId, inner.deviceId)
+        }
+
+        return if (result != null) {
+            this.sender.sendVerificationRequest(result.request)
+            SasVerification(
+                    this.machine, result.sas, this.sender, this.listeners,
+            )
+        } else {
+            null
+        }
+    }
+
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun markAsTrusted() {
+        withContext(Dispatchers.IO) {
+            machine.markDeviceAsTrusted(inner.userId, inner.deviceId)
+        }
     }
 }
 
@@ -670,7 +700,7 @@ internal class OlmMachine(
         runBlocking { inner.discardRoomKey(roomId) }
     }
 
-    fun getVerificationRequests(userId: String): List<uniffi.olm.VerificationRequest> {
+    fun getVerificationRequests(userId: String): List<VerificationRequest> {
         return this.inner.getVerificationRequests(userId)
     }
 
