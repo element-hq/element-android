@@ -41,7 +41,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 data class DeactivateAccountViewState(
-        val passwordShown: Boolean = false
+        val dummy: Boolean = false
 ) : MvRxState
 
 class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private val initialState: DeactivateAccountViewState,
@@ -58,7 +58,6 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
 
     override fun handle(action: DeactivateAccountAction) {
         when (action) {
-            DeactivateAccountAction.TogglePassword -> handleTogglePassword()
             is DeactivateAccountAction.DeactivateAccount -> handleDeactivateAccount(action)
             DeactivateAccountAction.SsoAuthDone -> {
                 Timber.d("## UIA - FallBack success")
@@ -85,12 +84,6 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
                 pendingAuth = null
             }
         }.exhaustive
-    }
-
-    private fun handleTogglePassword() = withState {
-        setState {
-            copy(passwordShown = !passwordShown)
-        }
     }
 
     private fun handleDeactivateAccount(action: DeactivateAccountAction.DeactivateAccount) {

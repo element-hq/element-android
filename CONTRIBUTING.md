@@ -63,7 +63,7 @@ Supported filename extensions are:
 - ``.bugfix``: Signifying a bug fix.
 - ``.doc``: Signifying a documentation improvement.
 - ``.removal``: Signifying a deprecation or removal of public API. Can be used to notifying about API change in the Matrix SDK
-- ``.misc``: A ticket has been closed, but it is not of interest to users. Note that in this case, the content of the file will not be output, but just the issue/PR number.
+- ``.misc``: Any other changes.
 
 See https://github.com/twisted/towncrier#news-fragments if you need more details.
 

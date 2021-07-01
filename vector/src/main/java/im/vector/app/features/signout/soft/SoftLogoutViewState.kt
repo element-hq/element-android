@@ -31,7 +31,6 @@ data class SoftLogoutViewState(
         val deviceId: String,
         val userDisplayName: String,
         val hasUnsavedKeys: Boolean,
-        val passwordShown: Boolean = false,
         val enteredPassword: String = ""
 ) : MvRxState {
 

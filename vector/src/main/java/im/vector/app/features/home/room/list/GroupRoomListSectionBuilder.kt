@@ -22,6 +22,8 @@ import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
+import im.vector.app.features.invite.AutoAcceptInvites
+import im.vector.app.features.invite.showInvites
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -38,6 +40,7 @@ class GroupRoomListSectionBuilder(
         val stringProvider: StringProvider,
         val viewModelScope: CoroutineScope,
         val appStateHandler: AppStateHandler,
+        private val autoAcceptInvites: AutoAcceptInvites,
         val onDisposable: (Disposable) -> Unit,
         val onUdpatable: (UpdatableLivePageResult) -> Unit
 ) : RoomListSectionBuilder {
@@ -48,15 +51,15 @@ class GroupRoomListSectionBuilder(
         val actualGroupId = appStateHandler.safeActiveGroupId()
 
         when (mode) {
-            RoomListDisplayMode.PEOPLE -> {
+            RoomListDisplayMode.PEOPLE        -> {
                 // 3 sections Invites / Fav / Dms
                 buildPeopleSections(sections, activeGroupAwareQueries, actualGroupId)
             }
-            RoomListDisplayMode.ROOMS -> {
+            RoomListDisplayMode.ROOMS         -> {
                 // 5 sections invites / Fav / Rooms / Low Priority / Server notice
                 buildRoomsSections(sections, activeGroupAwareQueries, actualGroupId)
             }
-            RoomListDisplayMode.FILTERED -> {
+            RoomListDisplayMode.FILTERED      -> {
                 // Used when searching for rooms
                 withQueryParams(
                         {
@@ -73,17 +76,18 @@ class GroupRoomListSectionBuilder(
                 )
             }
             RoomListDisplayMode.NOTIFICATIONS -> {
-                addSection(
-                        sections,
-                        activeGroupAwareQueries,
-                        R.string.invitations_header,
-                        true
-                ) {
-                    it.memberships = listOf(Membership.INVITE)
-                    it.roomCategoryFilter = RoomCategoryFilter.ALL
-                    it.activeGroupId = actualGroupId
+                if (autoAcceptInvites.showInvites()) {
+                    addSection(
+                            sections,
+                            activeGroupAwareQueries,
+                            R.string.invitations_header,
+                            true
+                    ) {
+                        it.memberships = listOf(Membership.INVITE)
+                        it.roomCategoryFilter = RoomCategoryFilter.ALL
+                        it.activeGroupId = actualGroupId
+                    }
                 }
-
                 addSection(
                         sections,
                         activeGroupAwareQueries,
@@ -115,15 +119,17 @@ class GroupRoomListSectionBuilder(
     private fun buildRoomsSections(sections: MutableList<RoomsSection>,
                                    activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
                                    actualGroupId: String?) {
-        addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.invitations_header,
-                true
-        ) {
-            it.memberships = listOf(Membership.INVITE)
-            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            it.activeGroupId = actualGroupId
+        if (autoAcceptInvites.showInvites()) {
+            addSection(
+                    sections,
+                    activeSpaceAwareQueries,
+                    R.string.invitations_header,
+                    true
+            ) {
+                it.memberships = listOf(Membership.INVITE)
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                it.activeGroupId = actualGroupId
+            }
         }
 
         addSection(
@@ -180,14 +186,16 @@ class GroupRoomListSectionBuilder(
             activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
             actualGroupId: String?
     ) {
-        addSection(sections,
-                activeSpaceAwareQueries,
-                R.string.invitations_header,
-                true
-        ) {
-            it.memberships = listOf(Membership.INVITE)
-            it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-            it.activeGroupId = actualGroupId
+        if (autoAcceptInvites.showInvites()) {
+            addSection(sections,
+                    activeSpaceAwareQueries,
+                    R.string.invitations_header,
+                    true
+            ) {
+                it.memberships = listOf(Membership.INVITE)
+                it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                it.activeGroupId = actualGroupId
+            }
         }
 
         addSection(

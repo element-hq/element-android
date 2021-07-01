@@ -16,7 +16,6 @@
 
 package im.vector.app.features.roomprofile.alias
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +26,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
@@ -133,7 +131,7 @@ class RoomAliasFragment @Inject constructor(
     }
 
     private fun unpublishAlias(alias: String) {
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(getString(R.string.room_alias_unpublish_confirmation, alias))
                 .setNegativeButton(R.string.cancel, null)
@@ -141,7 +139,6 @@ class RoomAliasFragment @Inject constructor(
                     viewModel.handle(RoomAliasAction.UnpublishAlias(alias))
                 }
                 .show()
-                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 
     override fun toggleManualPublishForm() {
@@ -185,7 +182,7 @@ class RoomAliasFragment @Inject constructor(
     }
 
     private fun removeLocalAlias(alias: String) {
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(getString(R.string.room_alias_delete_confirmation, alias))
                 .setNegativeButton(R.string.cancel, null)
@@ -193,6 +190,5 @@ class RoomAliasFragment @Inject constructor(
                     viewModel.handle(RoomAliasAction.RemoveLocalAlias(alias))
                 }
                 .show()
-                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 }
