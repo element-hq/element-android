@@ -131,10 +131,16 @@
         android:src="@drawable/ic_send"
         tools:ignore="MissingConstraints" />
 
-    <im.vector.app.features.home.room.detail.composer.VoiceMessageRecorderView
-        android:id="@+id/voiceMessageRecorderView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints" />
+    <!--
+    <ImageButton
+        android:id="@+id/voiceMessageMicButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/a11y_start_voice_message"
+        android:src="@drawable/ic_voice_mic" />
+    -->
 
 </merge>

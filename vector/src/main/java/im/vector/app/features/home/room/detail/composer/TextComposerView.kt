@@ -20,6 +20,7 @@ import android.content.Context
 import android.net.Uri
 import android.text.Editable
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -48,9 +49,7 @@ class TextComposerView @JvmOverloads constructor(
         fun onCloseRelatedMessage()
         fun onSendMessage(text: CharSequence)
         fun onAddAttachment()
-        fun onVoiceRecordingStarted()
-        fun onVoiceRecordingEnded(recordTime: Long)
-        fun checkVoiceRecordingPermission(): Boolean
+        fun onTouchVoiceRecording()
     }
 
     val views: ComposerLayoutBinding
@@ -78,7 +77,7 @@ class TextComposerView @JvmOverloads constructor(
             override fun onTextEmptyStateChanged(isEmpty: Boolean) {
                 val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isEmpty
                 views.sendButton.isInvisible = !shouldShowSendButton
-                views.voiceMessageRecorderView.isVisible = !shouldShowSendButton
+                callback?.onTextEmptyStateChanged(isEmpty)
             }
         }
         views.composerRelatedMessageCloseButton.setOnClickListener {
@@ -94,28 +93,6 @@ class TextComposerView @JvmOverloads constructor(
         views.attachmentButton.setOnClickListener {
             callback?.onAddAttachment()
         }
-
-        views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
-            override fun onVoiceRecordingStarted() {
-                views.attachmentButton.isVisible = false
-                views.composerEditText.isVisible = false
-                views.composerEmojiButton.isVisible = false
-                views.composerEditTextOuterBorder.isVisible = false
-                callback?.onVoiceRecordingStarted()
-            }
-
-            override fun onVoiceRecordingEnded(recordTime: Long) {
-                views.attachmentButton.isVisible = true
-                views.composerEditText.isVisible = true
-                views.composerEmojiButton.isVisible = true
-                views.composerEditTextOuterBorder.isVisible = true
-                callback?.onVoiceRecordingEnded(recordTime)
-            }
-
-            override fun checkVoiceRecordingPermission(): Boolean {
-                return callback?.checkVoiceRecordingPermission().orFalse()
-            }
-        }
     }
 
     fun collapse(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
@@ -128,7 +105,6 @@ class TextComposerView @JvmOverloads constructor(
 
         val shouldShowSendButton = !views.composerEditText.text.isNullOrEmpty()
         views.sendButton.isInvisible = !shouldShowSendButton
-        views.voiceMessageRecorderView.isVisible = !shouldShowSendButton
     }
 
     fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
@@ -139,7 +115,6 @@ class TextComposerView @JvmOverloads constructor(
         currentConstraintSetId = R.layout.composer_layout_constraint_set_expanded
         applyNewConstraintSet(animate, transitionComplete)
         views.sendButton.isInvisible = false
-        views.voiceMessageRecorderView.isVisible = false
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {

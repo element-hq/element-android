@@ -50,7 +50,7 @@ allprojects {
                 includeGroupByRegex 'nl\\.dionsegijn'
 
                 // Voice RecordView
-                includeGroupByRegex 'com\\.github\\.3llomi'
+                includeGroupByRegex 'com\\.github\\.Armen101'
             }
         }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
