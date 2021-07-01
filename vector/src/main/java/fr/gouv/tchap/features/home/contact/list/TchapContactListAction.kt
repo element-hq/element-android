@@ -22,4 +22,5 @@ sealed class TchapContactListAction : VectorViewModelAction {
     data class SearchUsers(val value: String) : TchapContactListAction()
     object ClearSearchUsers : TchapContactListAction()
     object LoadContacts : TchapContactListAction()
+    object SetUserConsent : TchapContactListAction()
 }

@@ -20,6 +20,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
@@ -54,11 +56,7 @@ class TchapContactListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupSearchView()
-
-        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher,
-                        R.string.permissions_rationale_msg_contacts)) {
-            viewModel.handle(TchapContactListAction.LoadContacts)
-        }
+        setupUserConsent()
     }
 
     override fun onDestroyView() {
@@ -83,6 +81,29 @@ class TchapContactListFragment @Inject constructor(
                 .disposeOnDestroyView()
 
         views.userListSearch.setupAsSearch()
+    }
+
+    private fun setupUserConsent() = withState(viewModel) {
+        if (!it.userConsent) {
+            AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.permissions_rationale_popup_title)
+                    .setMessage(R.string.permissions_rationale_msg_contacts)
+                    .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        viewModel.handle(TchapContactListAction.SetUserConsent)
+                        checkPermission()
+                    }
+                    .show()
+        } else {
+            checkPermission()
+        }
+    }
+
+    private fun checkPermission() {
+        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher,
+                        R.string.permissions_rationale_msg_contacts)) {
+            viewModel.handle(TchapContactListAction.LoadContacts)
+        }
     }
 
     fun searchContactsWith(value: String) {

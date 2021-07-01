@@ -63,6 +63,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
 
     // All users from roomSummaries
     private var roomSummariesUsers: List<User> = emptyList()
+
     // All the contacts on the phone
     private var localUsers: List<User> = emptyList()
 
@@ -89,14 +90,19 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         selectSubscribe(TchapContactListViewState::searchTerm) { _ ->
             updateFilteredContacts()
         }
-    }
 
-    private fun loadContacts() {
         setState {
             copy(
-                    mappedContacts = Loading(),
                     identityServerUrl = session.identityService().getCurrentIdentityServerUrl(),
                     userConsent = session.identityService().getUserConsent()
+            )
+        }
+    }
+
+    private fun handleLoadContacts() {
+        setState {
+            copy(
+                    mappedContacts = Loading()
             )
         }
 
@@ -194,9 +200,10 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
 
     override fun handle(action: TchapContactListAction) {
         when (action) {
-            is TchapContactListAction.SearchUsers -> handleSearchUsers(action.value)
+            is TchapContactListAction.SearchUsers   -> handleSearchUsers(action.value)
             TchapContactListAction.ClearSearchUsers -> handleClearSearchUsers()
-            TchapContactListAction.LoadContacts -> loadContacts()
+            TchapContactListAction.LoadContacts     -> handleLoadContacts()
+            TchapContactListAction.SetUserConsent   -> handleSetUserConsent()
         }.exhaustive
     }
 
@@ -213,6 +220,16 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         directoryUsersSearch.accept("")
         setState {
             copy(searchTerm = "")
+        }
+    }
+
+    private fun handleSetUserConsent() {
+        session.identityService().setUserConsent(true)
+
+        setState {
+            copy(
+                    userConsent = session.identityService().getUserConsent()
+            )
         }
     }
 
