@@ -132,6 +132,7 @@ import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivit
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.composer.TextComposerView
+import im.vector.app.features.home.room.detail.composer.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
@@ -139,6 +140,7 @@ import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBot
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
@@ -185,6 +187,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
@@ -235,7 +238,8 @@ class RoomDetailFragment @Inject constructor(
         private val imageContentRenderer: ImageContentRenderer,
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
-        private val callManager: WebRtcCallManager
+        private val callManager: WebRtcCallManager,
+        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker
 ) :
         VectorBaseFragment<FragmentRoomDetailBinding>(),
         TimelineEventController.Callback,
@@ -334,6 +338,7 @@ class RoomDetailFragment @Inject constructor(
         setupConfBannerView()
         setupEmojiPopup()
         setupFailedMessagesWarningView()
+        setupVoiceMessageView()
 
         views.roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
@@ -581,6 +586,33 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onRetryClicked() {
                 roomDetailViewModel.handle(RoomDetailAction.ResendAll)
+            }
+        }
+    }
+
+    private fun setupVoiceMessageView() {
+        views.voiceMessageRecorderView.voiceMessagePlaybackTracker = voiceMessagePlaybackTracker
+
+        views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
+            override fun onVoiceRecordingStarted() {
+                if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, requireActivity(), 0)) {
+                    views.composerLayout.isInvisible = true
+                    roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
+                    context?.toast(R.string.voice_message_release_to_send_toast)
+                }
+            }
+
+            override fun onVoiceRecordingEnded(isCancelled: Boolean) {
+                views.composerLayout.isInvisible = false
+                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled))
+            }
+
+            override fun onVoiceRecordingPlaybackModeOn() {
+                roomDetailViewModel.handle(RoomDetailAction.PauseRecordingVoiceMessage)
+            }
+
+            override fun onVoicePlaybackButtonClicked() {
+                roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseRecordingPlayback)
             }
         }
     }
@@ -969,6 +1001,10 @@ class RoomDetailFragment @Inject constructor(
         notificationDrawerManager.setCurrentRoom(null)
 
         roomDetailViewModel.handle(RoomDetailAction.SaveDraft(views.composerLayout.text.toString()))
+
+        // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
+        roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions)
+        views.voiceMessageRecorderView.initVoiceRecordingViews()
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
@@ -1191,19 +1227,14 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onTextEmptyStateChanged(isEmpty: Boolean) {
-                // No op
+                views.voiceMessageRecorderView.isVisible = !views.composerLayout.views.sendButton.isVisible
             }
 
-            override fun onVoiceRecordingStarted() {
-                roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
-            }
-
-            override fun onVoiceRecordingEnded(recordTime: Long) {
-                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(recordTime))
-            }
-
-            override fun checkVoiceRecordingPermission(): Boolean {
-                return checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, requireActivity(), 0)
+            override fun onTouchVoiceRecording() {
+                if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, requireActivity(), 0)) {
+                    views.composerLayout.isInvisible = true
+                    views.voiceMessageRecorderView.isVisible = true
+                }
             }
         }
     }
@@ -1720,12 +1751,16 @@ class RoomDetailFragment @Inject constructor(
         onUrlClicked(url, url)
     }
 
-    override fun onPreviewUrlCloseClicked(eventId: String, url: String) {
-        roomDetailViewModel.handle(RoomDetailAction.DoNotShowPreviewUrlFor(eventId, url))
+    override fun onPreviewUrlCloseClicked(eventId: String, fileUrl: String) {
+        roomDetailViewModel.handle(RoomDetailAction.DoNotShowPreviewUrlFor(eventId, fileUrl))
     }
 
     override fun onPreviewUrlImageClicked(sharedView: View?, mxcUrl: String?, title: String?) {
         navigator.openBigImageViewer(requireActivity(), sharedView, mxcUrl, title)
+    }
+
+    override fun onVoiceControlButtonClicked(eventId: String, messageAudioContent: MessageAudioContent) {
+        roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseVoicePlayback(eventId, messageAudioContent))
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {

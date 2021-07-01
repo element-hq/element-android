@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
-import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -49,7 +48,7 @@ import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
-import im.vector.app.features.home.room.detail.composer.VoiceMessageRecordingHelper
+import im.vector.app.features.home.room.detail.composer.VoiceMessageHelper
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
@@ -59,7 +58,6 @@ import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -123,7 +121,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val chatEffectManager: ChatEffectManager,
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
-        private val voiceMessageRecordingHelper: VoiceMessageRecordingHelper,
+        private val voiceMessageHelper: VoiceMessageHelper,
         timelineSettingsFactory: TimelineSettingsFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
@@ -321,7 +319,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             RoomDetailAction.QuickActionSetAvatar                -> handleQuickSetAvatar()
             is RoomDetailAction.SetAvatarAction                  -> handleSetNewAvatar(action)
             RoomDetailAction.QuickActionSetTopic                 -> _viewEvents.post(RoomDetailViewEvents.OpenRoomSettings)
-            is RoomDetailAction.ShowRoomAvatarFullScreen         -> {
+            is RoomDetailAction.ShowRoomAvatarFullScreen -> {
                 _viewEvents.post(
                         RoomDetailViewEvents.ShowRoomAvatarFullScreen(action.matrixItem, action.transitionView)
                 )
@@ -330,7 +328,11 @@ class RoomDetailViewModel @AssistedInject constructor(
             RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
             RoomDetailAction.ResendAll                           -> handleResendAll()
             RoomDetailAction.StartRecordingVoiceMessage          -> handleStartRecordingVoiceMessage()
-            is RoomDetailAction.EndRecordingVoiceMessage         -> handleEndRecordingVoiceMessage(action.recordTime)
+            is RoomDetailAction.EndRecordingVoiceMessage         -> handleEndRecordingVoiceMessage(action.isCancelled)
+            is RoomDetailAction.PlayOrPauseVoicePlayback         -> handlePlayOrPauseVoicePlayback(action)
+            RoomDetailAction.PauseRecordingVoiceMessage          -> handlePauseRecordingVoiceMessage()
+            RoomDetailAction.PlayOrPauseRecordingPlayback        -> handlePlayOrPauseRecordingPlayback()
+            RoomDetailAction.EndAllVoiceActions                  -> handleEndAllVoiceActions()
         }.exhaustive
     }
 
@@ -619,19 +621,37 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleStartRecordingVoiceMessage() {
-        voiceMessageRecordingHelper.startRecording()
+        voiceMessageHelper.startRecording()
     }
 
-    private fun handleEndRecordingVoiceMessage(recordTime: Long) {
-        if (recordTime == 0L) {
-            voiceMessageRecordingHelper.deleteRecording()
+    private fun handleEndRecordingVoiceMessage(isCancelled: Boolean) {
+        if (isCancelled) {
+            voiceMessageHelper.deleteRecording()
             return
         }
-        voiceMessageRecordingHelper.stopRecording(recordTime)?.let { audioType ->
+        voiceMessageHelper.stopRecording()?.let { audioType ->
             room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
-            room
             //voiceMessageRecordingHelper.deleteRecording()
         }
+    }
+
+    private fun handlePlayOrPauseVoicePlayback(action: RoomDetailAction.PlayOrPauseVoicePlayback) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val audioFile = session.fileService().downloadFile(action.messageAudioContent)
+            voiceMessageHelper.startOrPausePlayback(action.eventId, audioFile)
+        }
+    }
+
+    private fun handlePlayOrPauseRecordingPlayback() {
+        voiceMessageHelper.startOrPauseRecordingPlayback()
+    }
+
+    private fun handleEndAllVoiceActions() {
+        voiceMessageHelper.stopAllVoiceActions()
+    }
+
+    private fun handlePauseRecordingVoiceMessage() {
+        voiceMessageHelper.pauseRecording()
     }
 
     private fun isIntegrationEnabled() = session.integrationManagerService().isIntegrationEnabled()

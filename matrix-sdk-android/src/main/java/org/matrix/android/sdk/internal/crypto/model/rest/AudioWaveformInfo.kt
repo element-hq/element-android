@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class AudioWaveformInfo(
         @Json(name = "duration")
-        val duration: Long? = null,
+        val duration: Int? = null,
 
         @Json(name = "waveform")
         val waveform: List<Int>? = null

@@ -300,8 +300,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ),
                 url = attachment.queryUri.toString(),
                 audioWaveformInfo = if (!isVoiceMessage) null else AudioWaveformInfo(
-                        duration = attachment.duration,
-                        waveform = null // TODO.
+                        duration = attachment.duration?.toInt(),
+                        waveform = attachment.waveform
                 ),
                 voiceMessageIndicator = if (!isVoiceMessage) null else Any()
         )
