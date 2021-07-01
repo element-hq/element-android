@@ -24,11 +24,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
@@ -40,7 +40,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.openUrlInExternalBrowser
-import im.vector.app.databinding.FragmentRoomDirectoryPickerBinding
+import im.vector.app.databinding.FragmentSpaceDirectoryBinding
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.matrixto.SpaceCardRenderer
 import im.vector.app.features.permalink.PermalinkHandler
@@ -63,7 +63,7 @@ class SpaceDirectoryFragment @Inject constructor(
         private val permalinkHandler: PermalinkHandler,
         private val spaceCardRenderer: SpaceCardRenderer,
         private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentRoomDirectoryPickerBinding>(),
+) : VectorBaseFragment<FragmentSpaceDirectoryBinding>(),
         SpaceDirectoryController.InteractionListener,
         TimelineEventController.UrlClickCallback,
         OnBackPressed {
@@ -71,7 +71,7 @@ class SpaceDirectoryFragment @Inject constructor(
     override fun getMenuRes() = R.menu.menu_space_directory
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            FragmentRoomDirectoryPickerBinding.inflate(layoutInflater, container, false)
+            FragmentSpaceDirectoryBinding.inflate(layoutInflater, container, false)
 
     private val viewModel by activityViewModel(SpaceDirectoryViewModel::class)
 
@@ -85,7 +85,7 @@ class SpaceDirectoryFragment @Inject constructor(
             it.setDisplayHomeAsUpEnabled(true)
         }
         epoxyController.listener = this
-        views.roomDirectoryPickerList.configureWith(epoxyController)
+        views.spaceDirectoryList.configureWith(epoxyController)
 
         viewModel.selectSubscribe(this, SpaceDirectoryState::canAddRooms) {
             invalidateOptionsMenu()
@@ -97,7 +97,7 @@ class SpaceDirectoryFragment @Inject constructor(
 
     override fun onDestroyView() {
         epoxyController.listener = null
-        views.roomDirectoryPickerList.cleanup()
+        views.spaceDirectoryList.cleanup()
         super.onDestroyView()
     }
 
@@ -180,13 +180,13 @@ class SpaceDirectoryFragment @Inject constructor(
                 .subscribe { managed ->
                     if (!managed) {
                         if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
-                            AlertDialog.Builder(requireActivity())
+                            MaterialAlertDialogBuilder(requireActivity())
                                     .setTitle(R.string.external_link_confirmation_title)
                                     .setMessage(
                                             getString(R.string.external_link_confirmation_message, title, url)
                                                     .toSpannable()
-                                                    .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
-                                                    .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+                                                    .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                                                    .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
                                     )
                                     .setPositiveButton(R.string._continue) { _, _ ->
                                         openUrlInExternalBrowser(requireContext(), url)

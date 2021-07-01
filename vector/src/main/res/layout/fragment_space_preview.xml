@@ -11,72 +11,64 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/roomPreviewNoPreviewToolbar"
-            style="@style/VectorToolbarStyle"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:elevation="4dp"
-            app:navigationIcon="@drawable/ic_x_18dp">
+            android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/roomPreviewNoPreviewToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="?actionBarSize"
+                app:navigationIcon="@drawable/ic_x_18dp"
+                app:navigationIconTint="?vctr_content_secondary">
 
-                <!--                <ImageView-->
-                <!--                    android:id="@+id/spacePreviewClose"-->
-                <!--                    android:layout_width="@dimen/layout_touch_size"-->
-                <!--                    android:layout_height="@dimen/layout_touch_size"-->
-                <!--                    android:clickable="true"-->
-                <!--                    android:focusable="true"-->
-                <!--                    android:foreground="?attr/selectableItemBackground"-->
-                <!--                    android:scaleType="center"-->
-                <!--                    android:src="@drawable/ic_x_18dp"-->
-                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/spacePreviewToolbarAvatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:contentDescription="@string/avatar"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@sample/space_avatars" />
+                    <ImageView
+                        android:id="@+id/spacePreviewToolbarAvatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:contentDescription="@string/avatar"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@sample/space_avatars" />
 
-                <TextView
-                    android:id="@+id/roomPreviewNoPreviewToolbarTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="?vctr_toolbar_primary_text_color"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/spacePreviewToolbarAvatar"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="@sample/users.json/data/displayName" />
+                    <TextView
+                        android:id="@+id/roomPreviewNoPreviewToolbarTitle"
+                        style="@style/Widget.Vector.TextView.HeadlineMedium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="?vctr_content_primary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/spacePreviewToolbarAvatar"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@sample/users.json/data/displayName" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
 
-        <ProgressBar
-            android:id="@+id/spacePreviewPeekingProgress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="14dp"
-            android:layout_gravity="center"
-            android:background="?riotx_header_panel_background"
-            android:indeterminate="true" />
+            <ProgressBar
+                android:id="@+id/spacePreviewPeekingProgress"
+                style="@style/Widget.Vector.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="14dp"
+                android:layout_gravity="center"
+                android:indeterminate="true" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/spacePreviewRecyclerView"
@@ -96,7 +88,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?list_divider_color" />
+            android:background="?vctr_list_separator" />
 
         <LinearLayout
             android:id="@+id/spacePreviewButtonBar"
@@ -107,18 +99,20 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/spacePreviewDeclineInviteButton"
-                style="@style/VectorButtonStyleDestructive"
+                style="@style/Widget.Vector.Button.Destructive"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/decline" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/spacePreviewAcceptInviteButton"
-                style="@style/VectorButtonStylePositive"
+                style="@style/Widget.Vector.Button.Positive"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/accept" />
 

@@ -25,10 +25,10 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import timber.log.Timber
@@ -222,7 +222,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
         // if some permissions were already denied: display a dialog to the user before asking again.
         if (permissionListAlreadyDenied.isNotEmpty() && rationaleMessage != 0) {
             // display the dialog with the info text
-            AlertDialog.Builder(activity)
+            MaterialAlertDialogBuilder(activity)
                     .setTitle(R.string.permissions_rationale_popup_title)
                     .setMessage(rationaleMessage)
                     .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
@@ -246,7 +246,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                         && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                     TODO()
                     /*
-                    AlertDialog.Builder(activity)
+                    MaterialAlertDialogBuilder(activity)
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .setTitle(R.string.permissions_rationale_popup_title)
                             .setMessage(R.string.permissions_msg_contacts_warning_other_androids)

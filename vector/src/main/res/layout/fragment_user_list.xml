@@ -5,19 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/userListToolbar"
-            style="@style/VectorToolbarStyle"
-            android:layout_width="0dp"
-            android:layout_height="?actionBarSize"
-            android:elevation="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -35,10 +32,13 @@
                     android:src="@drawable/ic_x_18dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="?vctr_content_secondary"
+                    tools:ignore="MissingPrefix" />
 
                 <TextView
                     android:id="@+id/userListTitle"
+                    style="@style/Widget.Vector.TextView.HeadlineMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -46,8 +46,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@string/fab_menu_create_chat"
-                    android:textColor="?riotx_text_primary"
-                    android:textSize="18sp"
+                    android:textColor="?vctr_content_primary"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -57,84 +56,84 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.MaterialToolbar>
 
-        <im.vector.app.core.platform.MaxHeightScrollView
-            android:id="@+id/chipGroupScrollView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/layout_horizontal_margin"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userListToolbar"
-            app:maxHeight="64dp">
+    </com.google.android.material.appbar.AppBarLayout>
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:lineSpacing="2dp" />
+    <im.vector.app.core.platform.MaxHeightScrollView
+        android:id="@+id/chipGroupScrollView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        app:maxHeight="64dp">
 
-        </im.vector.app.core.platform.MaxHeightScrollView>
-
-        <EditText
-            android:id="@+id/userListSearch"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/layout_horizontal_margin"
-            android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            android:background="@null"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:hint="@string/user_directory_search_hint"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:maxHeight="80dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chipGroupScrollView" />
-
-        <View
-            android:id="@+id/userListFilterDivider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="?attr/vctr_list_divider_color"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userListSearch" />
-
-
-        <TextView
-            android:id="@+id/userListE2EbyDefaultDisabled"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:drawablePadding="8dp"
-            android:text="@string/settings_hs_admin_e2e_disabled"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="14sp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/userListFilterDivider"
-            tools:visibility="visible" />
+            app:lineSpacing="2dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userListRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:fastScrollEnabled="true"
-            android:overScrollMode="always"
-            android:scrollbars="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userListE2EbyDefaultDisabled"
-            tools:listitem="@layout/item_known_user" />
+    </im.vector.app.core.platform.MaxHeightScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:id="@+id/userListSearch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:background="@null"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:hint="@string/user_directory_search_hint"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:maxHeight="80dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chipGroupScrollView" />
+
+    <View
+        android:id="@+id/userListFilterDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?vctr_list_separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userListSearch" />
+
+
+    <TextView
+        android:id="@+id/userListE2EbyDefaultDisabled"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:drawablePadding="8dp"
+        android:text="@string/settings_hs_admin_e2e_disabled"
+        android:textColor="?vctr_content_secondary"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/userListFilterDivider"
+        tools:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userListRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fastScrollEnabled="true"
+        android:overScrollMode="always"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userListE2EbyDefaultDisabled"
+        tools:listitem="@layout/item_known_user" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

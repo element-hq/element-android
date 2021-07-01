@@ -19,7 +19,7 @@ package im.vector.app.features.widgets
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
@@ -150,7 +150,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
         finish()
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 }

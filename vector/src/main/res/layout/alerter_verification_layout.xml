@@ -5,24 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    tools:background="@android:color/darker_gray"
-    tools:foreground="?android:attr/selectableItemBackground"
+    tools:background="?colorPrimary"
     tools:style="@style/AlertStyle">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/ivUserAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:contentDescription="@string/avatar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/alerter_texts"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@sample/user_round_avatars" />
 
+    <!-- Note: this is handled by the Alerter library, it has to be a AppCompatImageView -->
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_shield_warning"
         app:layout_constraintCircle="@+id/ivUserAvatar"
         app:layout_constraintCircleAngle="135"
@@ -40,21 +42,26 @@
         app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Note: this is handled by the Alerter library, it has to be a AppCompatTextView -->
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvTitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/alerter_padding_half"
             android:layout_marginEnd="@dimen/alerter_padding_half"
             android:paddingStart="@dimen/alerter_padding_small"
             android:paddingEnd="@dimen/alerter_padding_small"
-            android:textAppearance="@style/AlertTextAppearance.Title"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
             android:visibility="gone"
             tools:text="Title"
             tools:visibility="visible" />
 
+        <!-- Note: this is handled by the Alerter library, it has to be a AppCompatTextView -->
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/alerter_padding_half"
@@ -64,28 +71,11 @@
             android:paddingTop="@dimen/alerter_padding_small"
             android:paddingEnd="@dimen/alerter_padding_small"
             android:paddingBottom="@dimen/alerter_padding_small"
-            android:textAppearance="@style/AlertTextAppearance.Text"
+            android:textColor="@android:color/white"
             android:visibility="gone"
             tools:text="Text"
             tools:visibility="visible" />
 
     </LinearLayout>
 
-    <!--    <FrameLayout-->
-    <!--        android:id="@+id/flRightIconContainer"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="center_vertical">-->
-
-    <!--        <androidx.appcompat.widget.AppCompatImageView-->
-    <!--            android:id="@+id/ivRightIcon"-->
-    <!--            android:layout_width="@dimen/alerter_alert_icn_size"-->
-    <!--            android:layout_height="@dimen/alerter_alert_icn_size"-->
-    <!--            android:maxWidth="@dimen/alerter_alert_icn_size"-->
-    <!--            android:maxHeight="@dimen/alerter_alert_icn_size"-->
-    <!--            android:visibility="gone"-->
-    <!--            app:srcCompat="@drawable/alerter_ic_notifications"-->
-    <!--            app:tint="@color/alert_default_icon_color"-->
-    <!--            tools:visibility="visible" />-->
-    <!--    </FrameLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

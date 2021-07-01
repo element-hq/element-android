@@ -15,20 +15,21 @@
         android:layout_margin="8dp"
         android:importantForAccessibility="no"
         android:minHeight="56dp"
-        android:src="@drawable/ic_public_room"
+        app:iconTint="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_public_room" />
 
     <TextView
         android:id="@+id/title"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="4dp"
         android:gravity="start"
-        android:textColor="?riotx_text_primary"
-        android:textSize="16sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/subTitle"
         app:layout_constraintEnd_toStartOf="@id/rightChevron"
@@ -39,14 +40,13 @@
 
     <TextView
         android:id="@+id/subTitle"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="4dp"
         android:gravity="start"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
-        android:textStyle="normal"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/rightChevron"
         app:layout_constraintStart_toEndOf="@id/buttonImageView"
@@ -59,11 +59,11 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:importantForAccessibility="no"
-        android:src="@drawable/ic_material_chevron_right_black"
+        android:src="@drawable/ic_arrow_right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_secondary"
+        app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

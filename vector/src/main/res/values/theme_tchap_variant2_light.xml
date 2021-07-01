@@ -3,10 +3,10 @@
 
     <!-- VARIANT 2 LIGHT THEME COLORS -->
 
-    <style name="AppTheme.Light.Variant2" parent="AppTheme.Light">
+    <style name="AppTheme.Light.Variant2" parent="Theme.Vector.Light">
         <!-- Bar -->
-        <item name="bar_bg_color">@color/white</item>
-        <item name="bar_title_color">@color/black</item>
+        <item name="bar_bg_color">@android:color/white</item>
+        <item name="bar_title_color">@android:color/black</item>
         <item name="bar_subtitle_color">@color/tchap_dark_blue</item>
         <item name="bar_action_color">@color/tchap_light_navy</item>
         <item name="bar_hint_color">@color/tchap_warm_grey</item>
@@ -16,13 +16,13 @@
         <item name="actionMenuTextColor">?bar_title_color</item>
 
         <!-- Button -->
-        <item name="button_bordered_title_color">@color/white</item>
+        <item name="button_bordered_title_color">@android:color/white</item>
         <item name="button_bordered_bg_color">@color/tchap_dark_blue</item>
         <item name="button_plain_title_color">@color/tchap_light_navy</item>
 
         <!-- Body -->
-        <item name="primary_bg_color">@color/white</item>
-        <item name="primary_text_color">@color/black</item>
+        <item name="primary_bg_color">@android:color/white</item>
+        <item name="primary_text_color">@android:color/black</item>
         <item name="primary_subtext_color">@color/tchap_dark_blue</item>
         <item name="placeholder_text_color">@color/tchap_warm_grey</item>
         <item name="separator_color">@color/tchap_light_navy</item>

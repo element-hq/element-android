@@ -26,8 +26,8 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.app.core.ui.list.genericHeaderItem
 import im.vector.app.core.ui.list.genericItem
-import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.core.ui.list.genericLoaderItem
 import im.vector.app.features.html.EventHtmlRenderer
 import me.gujun.android.span.span
@@ -87,7 +87,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
                 }
                 if (lastDate?.get(Calendar.DAY_OF_YEAR) != evDate.get(Calendar.DAY_OF_YEAR)) {
                     // need to display header with day
-                    genericItemHeader {
+                    genericHeaderItem {
                         id(evDate.hashCode())
                         text(host.dateFormatter.format(evDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
                     }
@@ -112,14 +112,14 @@ class ViewEditHistoryEpoxyController @Inject constructor(
                                 diff_match_patch.Operation.DELETE -> {
                                     span {
                                         text = it.text.replace("\n", " ")
-                                        textColor = colorProvider.getColor(R.color.vector_error_color)
+                                        textColor = colorProvider.getColorFromAttribute(R.attr.colorError)
                                         textDecorationLine = "line-through"
                                     }
                                 }
                                 diff_match_patch.Operation.INSERT -> {
                                     span {
                                         text = it.text
-                                        textColor = colorProvider.getColor(R.color.vector_success_color)
+                                        textColor = colorProvider.getColor(R.color.palette_element_green)
                                     }
                                 }
                                 else                              -> {

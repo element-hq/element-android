@@ -21,10 +21,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -40,12 +40,14 @@ import im.vector.app.core.extensions.withoutLeftMargin
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.databinding.FragmentHomeDetailBinding
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
+import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
@@ -54,6 +56,7 @@ import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
+import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
 import im.vector.app.features.themes.ThemeUtils
@@ -69,6 +72,7 @@ class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
         private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
+        private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences
@@ -108,6 +112,14 @@ class HomeDetailFragment @Inject constructor(
         }
     }
 
+//    override fun onPrepareOptionsMenu(menu: Menu) {
+//        withState(viewModel) { state ->
+//            menu.iterator().forEach { it.isVisible = state.currentTab is HomeTab.RoomList }
+//        }
+//        menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = hasUnreadRooms
+//        super.onPrepareOptionsMenu(menu)
+//    }
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
     }
@@ -118,7 +130,6 @@ class HomeDetailFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         sharedCallActionViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
-
         setupBottomNavigationView()
         setupToolbar()
         setupKeysBackupBanner()
@@ -126,7 +137,7 @@ class HomeDetailFragment @Inject constructor(
 
         withState(viewModel) {
             // Update the navigation view if needed (for when we restore the tabs)
-            views.bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
+            views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
         }
 
         viewModel.selectSubscribe(this, HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
@@ -140,12 +151,20 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
-            switchDisplayMode(displayMode)
+        viewModel.selectSubscribe(this, HomeDetailViewState::currentTab) { currentTab ->
+            updateUIForTab(currentTab)
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::myMatrixItem) { matrixItem ->
-            matrixItem?.let { avatarRenderer.render(it, views.toolbarAvatarImageView) }
+        viewModel.selectSubscribe(this, HomeDetailViewState::showDialPadTab) { showDialPadTab ->
+            updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
+        }
+
+        viewModel.observeViewEvents { viewEvent ->
+            when (viewEvent) {
+                HomeDetailViewEvents.CallStarted   -> dismissLoadingDialog()
+                is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
+                HomeDetailViewEvents.Loading       -> showLoadingDialog()
+            }
         }
 
         unknownDeviceDetectorSharedViewModel.subscribe { state ->
@@ -193,6 +212,9 @@ class HomeDetailFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
         // update notification tab if needed
+        updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
+        callManager.checkForProtocolsSupportIfNeeded()
+
         checkNotificationTabStatus()
     }
 
@@ -225,8 +247,9 @@ class HomeDetailFragment @Inject constructor(
         if (wasVisible && !vectorPreferences.labAddNotificationTab()) {
             // As we hide it check if it's not the current item!
             withState(viewModel) {
-                if (it.displayMode.toMenuId() == R.id.bottom_action_notification) {
-                    viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.PEOPLE))
+                val tab = it.currentTab
+                if (tab is HomeTab.RoomList && tab.toMenuId() == R.id.bottom_action_notification) {
+                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.ContactList))
                 }
             }
         }
@@ -242,7 +265,7 @@ class HomeDetailFragment @Inject constructor(
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
-                    colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
+                    colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)
                                 ?.navigator
@@ -270,7 +293,7 @@ class HomeDetailFragment @Inject constructor(
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
-                    colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
+                    colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             // mark as ignored to avoid showing it again
@@ -365,13 +388,13 @@ class HomeDetailFragment @Inject constructor(
     private fun setupBottomNavigationView() {
         views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
         views.bottomNavigationView.setOnNavigationItemSelectedListener {
-            val displayMode = when (it.itemId) {
-                R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
-                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
-                else                      -> RoomListDisplayMode.NOTIFICATIONS
+            val tab = when (it.itemId) {
+                R.id.bottom_action_people       -> HomeTab.ContactList
+                R.id.bottom_action_rooms        -> HomeTab.RoomList(RoomListDisplayMode.ROOMS)
+                R.id.bottom_action_notification -> HomeTab.RoomList(RoomListDisplayMode.NOTIFICATIONS)
+                else                            -> HomeTab.DialPad
             }
-            closeSearchView()
-            viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
+            viewModel.handle(HomeDetailAction.SwitchTab(tab))
             true
         }
 
@@ -387,13 +410,15 @@ class HomeDetailFragment @Inject constructor(
 //        }
     }
 
-    private fun switchDisplayMode(displayMode: RoomListDisplayMode) {
-        views.groupToolbarTitleView.setText(displayMode.titleRes)
-        updateSelectedFragment(displayMode)
+    private fun updateUIForTab(tab: HomeTab) {
+        views.bottomNavigationView.menu.findItem(tab.toMenuId()).isChecked = true
+        views.groupToolbarTitleView.setText(tab.titleRes)
+        updateSelectedFragment(tab)
+        invalidateOptionsMenu()
     }
 
-    private fun updateSelectedFragment(displayMode: RoomListDisplayMode) {
-        val fragmentTag = "$FRAGMENT_TAG_PREFIX${displayMode.name}"
+    private fun updateSelectedFragment(tab: HomeTab) {
+        val fragmentTag = "FRAGMENT_TAG_$tab"
         val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
         childFragmentManager.commitTransaction {
             childFragmentManager.fragments
@@ -402,17 +427,23 @@ class HomeDetailFragment @Inject constructor(
                         detach(it)
                     }
             if (fragmentToShow == null) {
-                when (displayMode) {
-                    RoomListDisplayMode.PEOPLE -> {
+                when (tab) {
+                    is HomeTab.RoomList -> {
+                        val params = RoomListParams(tab.displayMode)
+                        add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+                    }
+                    is HomeTab.DialPad  -> {
+                        add(R.id.roomListContainer, createDialPadFragment())
+                    }
+                    is HomeTab.ContactList -> {
                         val params = TchapContactListFragmentArgs(title = getString(R.string.invite_users_to_room_title))
                         add(R.id.roomListContainer, TchapContactListFragment::class.java, params.toMvRxBundle(), fragmentTag)
                     }
-                    else                       -> {
-                        val params = RoomListParams(displayMode)
-                        add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
-                    }
                 }
             } else {
+                if (tab is HomeTab.DialPad) {
+                    (fragmentToShow as? DialPadFragment)?.applyCallback()
+                }
                 attach(fragmentToShow)
             }
         }
@@ -420,13 +451,38 @@ class HomeDetailFragment @Inject constructor(
 
     private fun searchWith(value: String) {
         withState(viewModel) {
-            val displayMode = it.displayMode
-            val fragmentTag = "$FRAGMENT_TAG_PREFIX${displayMode.name}"
+            val tab = it.currentTab
+            val fragmentTag = "$FRAGMENT_TAG_PREFIX${tab}"
             val fragment = childFragmentManager.findFragmentByTag(fragmentTag)
-            when (displayMode) {
-                RoomListDisplayMode.PEOPLE -> (fragment as? TchapContactListFragment)?.searchContactsWith(value)
-                RoomListDisplayMode.ROOMS  -> (fragment as? RoomListFragment)?.filterRoomsWith(value)
+            when (tab) {
+                is HomeTab.ContactList     -> (fragment as? TchapContactListFragment)?.searchContactsWith(value)
+                is HomeTab.RoomList        -> (fragment as? RoomListFragment)?.filterRoomsWith(value)
                 else                       -> Unit // nothing to do
+            }
+        }
+    }
+    
+    private fun createDialPadFragment(): Fragment {
+        val fragment = childFragmentManager.fragmentFactory.instantiate(vectorBaseActivity.classLoader, DialPadFragment::class.java.name)
+        return (fragment as DialPadFragment).apply {
+            arguments = Bundle().apply {
+                putBoolean(DialPadFragment.EXTRA_ENABLE_DELETE, true)
+                putBoolean(DialPadFragment.EXTRA_ENABLE_OK, true)
+                putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
+            }
+            applyCallback()
+        }
+    }
+
+    private fun updateTabVisibilitySafely(tabId: Int, isVisible: Boolean) {
+        val wasVisible = views.bottomNavigationView.menu.findItem(tabId).isVisible
+        views.bottomNavigationView.menu.findItem(tabId).isVisible = isVisible
+        if (wasVisible && !isVisible) {
+            // As we hide it check if it's not the current item!
+            withState(viewModel) {
+                if (it.currentTab.toMenuId() == tabId) {
+                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.PEOPLE)))
+                }
             }
         }
     }
@@ -456,18 +512,22 @@ class HomeDetailFragment @Inject constructor(
         isVisible = count > 0
         number = count
         maxCharacterCount = 3
-        badgeTextColor = ContextCompat.getColor(requireContext(), R.color.white)
+        badgeTextColor = ThemeUtils.getColor(requireContext(), R.attr.colorOnPrimary)
         backgroundColor = if (highlight) {
-            ContextCompat.getColor(requireContext(), R.color.riotx_notice)
+            ThemeUtils.getColor(requireContext(), R.attr.colorError)
         } else {
-            ThemeUtils.getColor(requireContext(), R.attr.riotx_unread_room_badge)
+            ThemeUtils.getColor(requireContext(), R.attr.vctr_unread_room_badge)
         }
     }
 
-    private fun RoomListDisplayMode.toMenuId() = when (this) {
-        RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
-        else                       -> R.id.bottom_action_notification
+    private fun HomeTab.toMenuId() = when (this) {
+        is HomeTab.DialPad  -> R.id.bottom_action_dial_pad
+        is HomeTab.RoomList -> when (displayMode) {
+            RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
+            RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
+            else                       -> R.id.bottom_action_notification
+        }
+        HomeTab.ContactList -> R.id.bottom_action_people
     }
 
     override fun onTapToReturnToCall() {
@@ -484,6 +544,16 @@ class HomeDetailFragment @Inject constructor(
                 startActivity(it)
             }
         }
+    }
+
+    private fun DialPadFragment.applyCallback(): DialPadFragment {
+        callback = object : DialPadFragment.Callback {
+            override fun onOkClicked(formatted: String?, raw: String?) {
+                if (raw.isNullOrEmpty()) return
+                viewModel.handle(HomeDetailAction.StartCallWithPhoneNumber(raw))
+            }
+        }
+        return this
     }
 
     override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {

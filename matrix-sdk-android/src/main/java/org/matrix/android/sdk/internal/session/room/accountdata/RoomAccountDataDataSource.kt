@@ -20,14 +20,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.session.accountdata.AccountDataEvent
+import io.realm.Realm
+import io.realm.RealmQuery
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataEvent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.AccountDataMapper
 import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntity
-import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import javax.inject.Inject
 
@@ -35,43 +37,62 @@ internal class RoomAccountDataDataSource @Inject constructor(@SessionDatabase pr
                                                              private val realmSessionProvider: RealmSessionProvider,
                                                              private val accountDataMapper: AccountDataMapper) {
 
-    fun getAccountDataEvent(roomId: String, type: String): AccountDataEvent? {
+    fun getAccountDataEvent(roomId: String, type: String): RoomAccountDataEvent? {
         return getAccountDataEvents(roomId, setOf(type)).firstOrNull()
     }
 
-    fun getLiveAccountDataEvent(roomId: String, type: String): LiveData<Optional<AccountDataEvent>> {
+    fun getLiveAccountDataEvent(roomId: String, type: String): LiveData<Optional<RoomAccountDataEvent>> {
         return Transformations.map(getLiveAccountDataEvents(roomId, setOf(type))) {
             it.firstOrNull()?.toOptional()
         }
     }
 
-    fun getAccountDataEvents(roomId: String, types: Set<String>): List<AccountDataEvent> {
+    /**
+     * @param roomId the roomId to search for account data event. If null will check in every room.
+     * @param types the types to filter. If empty will return all account data event in given room (or every room if roomId is null)
+     *
+     */
+    fun getAccountDataEvents(roomId: String?, types: Set<String>): List<RoomAccountDataEvent> {
         return realmSessionProvider.withRealm { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return@withRealm emptyList()
+            val roomEntity = buildRoomQuery(realm, roomId, types).findFirst() ?: return@withRealm emptyList()
             roomEntity.accountDataEvents(types)
         }
     }
 
-    fun getLiveAccountDataEvents(roomId: String, types: Set<String>): LiveData<List<AccountDataEvent>> {
-        val liveRoomEntity = monarchy.findAllManagedWithChanges { RoomEntity.where(it, roomId) }
-        val resultLiveData = MediatorLiveData<List<AccountDataEvent>>()
-        resultLiveData.addSource(liveRoomEntity) {
-            val roomEntity = it.realmResults.firstOrNull()
-            if (roomEntity == null) {
-                resultLiveData.postValue(emptyList())
-            } else {
-                val mappedResult = roomEntity.accountDataEvents(types)
-                resultLiveData.postValue(mappedResult)
-            }
+    /**
+     * @param roomId the roomId to search for account data event. If null will check in every room.
+     * @param types the types to filter. If empty will return all account data event in the given room (or every room if roomId is null).
+     *
+     */
+    fun getLiveAccountDataEvents(roomId: String?, types: Set<String>): LiveData<List<RoomAccountDataEvent>> {
+        val liveRoomEntity = monarchy.findAllManagedWithChanges {
+            buildRoomQuery(it, roomId, types)
+        }
+        val resultLiveData = MediatorLiveData<List<RoomAccountDataEvent>>()
+        resultLiveData.addSource(liveRoomEntity) { changeSet ->
+            val mappedResult = changeSet.realmResults.flatMap { it.accountDataEvents(types) }
+            resultLiveData.postValue(mappedResult)
         }
         return resultLiveData
     }
 
-    private fun RoomEntity.accountDataEvents(types: Set<String>): List<AccountDataEvent> {
+    private fun buildRoomQuery(realm: Realm, roomId: String?, types: Set<String>): RealmQuery<RoomEntity> {
+        val query = realm.where(RoomEntity::class.java)
+        if (roomId != null) {
+            query.equalTo(RoomEntityFields.ROOM_ID, roomId)
+        }
+        query.isNotEmpty(RoomEntityFields.ACCOUNT_DATA.`$`)
+        if (types.isNotEmpty()) {
+            query.`in`(RoomEntityFields.ACCOUNT_DATA.TYPE, types.toTypedArray())
+        }
+        return query
+    }
+
+    private fun RoomEntity.accountDataEvents(types: Set<String>): List<RoomAccountDataEvent> {
         val query = accountData.where()
         if (types.isNotEmpty()) {
             query.`in`(RoomAccountDataEntityFields.TYPE, types.toTypedArray())
         }
-        return query.findAll().map { accountDataMapper.map(it) }
+        return query.findAll().map { accountDataMapper.map(roomId, it) }
     }
 }

@@ -17,10 +17,10 @@ package im.vector.app.features.crypto.keysbackup.settings
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
@@ -60,7 +60,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
                 is Fail    -> {
                     updateWaitingView(null)
 
-                    AlertDialog.Builder(this)
+                    MaterialAlertDialogBuilder(this)
                             .setTitle(R.string.unknown_error)
                             .setMessage(getString(R.string.keys_backup_get_version_error, asyncDelete.error.localizedMessage))
                             .setCancelable(false)

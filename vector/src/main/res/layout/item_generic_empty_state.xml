@@ -17,19 +17,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_reaction_background_on"
+        app:tint="?vctr_reaction_background_on"
         tools:ignore="MissingPrefix"
         tools:src="@drawable/ic_empty_icon_room" />
 
     <TextView
         android:id="@+id/emptyItemTitleView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/emptyItemMessageView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +40,7 @@
 
     <TextView
         android:id="@+id/emptyItemMessageView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -48,15 +49,14 @@
         android:gravity="center"
         android:maxWidth="300dp"
         android:maxLines="10"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toTopOf="@+id/emptyItemButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emptyItemTitleView"
         tools:text="@string/this_space_has_no_rooms_admin" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/emptyItemButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

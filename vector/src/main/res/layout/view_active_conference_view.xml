@@ -9,6 +9,7 @@
 
     <TextView
         android:id="@+id/activeConferenceInfo"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/deleteWidgetButton"
@@ -18,15 +19,15 @@
         android:paddingTop="12dp"
         android:paddingEnd="16dp"
         android:paddingBottom="12dp"
-        android:textColor="@color/white"
-        android:textColorLink="@color/white"
-        app:drawableTint="@color/white"
-        tools:text="@string/ongoing_conference_call"
-        app:drawableStartCompat="@drawable/ic_call_answer" />
+        android:textColor="?colorOnPrimary"
+        android:textColorLink="?colorOnPrimary"
+        app:drawableStartCompat="@drawable/ic_call_answer"
+        app:drawableTint="?colorOnPrimary"
+        tools:text="@string/ongoing_conference_call" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/deleteWidgetButton"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        style="@style/Widget.Vector.Button.Text.OnPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/activeConferenceInfo"
@@ -34,12 +35,9 @@
         android:layout_alignParentEnd="true"
         android:clickable="false"
         android:focusable="false"
-        android:gravity="center"
         android:paddingStart="8dp"
         android:paddingEnd="16dp"
         android:text="@string/action_close"
-        android:textColor="@color/white"
-        android:textSize="15sp"
         android:textStyle="bold" />
 
 </merge>

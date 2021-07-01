@@ -19,8 +19,8 @@ package org.matrix.android.sdk.internal.session.room
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataService
 import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
+import org.matrix.android.sdk.internal.session.room.accountdata.DefaultRoomAccountDataService
 import org.matrix.android.sdk.internal.session.room.alias.DefaultAliasService
 import org.matrix.android.sdk.internal.session.room.call.DefaultRoomCallService
 import org.matrix.android.sdk.internal.session.room.draft.DefaultDraftService
@@ -61,7 +61,7 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                                                       private val relationServiceFactory: DefaultRelationService.Factory,
                                                       private val membershipServiceFactory: DefaultMembershipService.Factory,
                                                       private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory,
-                                                      private val roomAccountDataServiceFactory: RoomAccountDataService.Factory,
+                                                      private val roomAccountDataServiceFactory: DefaultRoomAccountDataService.Factory,
                                                       private val sendStateTask: SendStateTask,
                                                       private val viaParameterFinder: ViaParameterFinder,
                                                       private val searchTask: SearchTask) :

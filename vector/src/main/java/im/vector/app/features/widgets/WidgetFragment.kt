@@ -26,7 +26,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -37,6 +36,7 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
@@ -307,7 +307,7 @@ class WidgetFragment @Inject constructor() :
     }
 
     fun deleteWidget() {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.widget_delete_message_confirmation)
                 .setPositiveButton(R.string.remove) { _, _ ->
                     viewModel.handle(WidgetAction.DeleteWidget)

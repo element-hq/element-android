@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:padding="16dp">
 
     <ImageView
@@ -31,11 +31,10 @@
 
     <TextView
         android:id="@+id/roomProfileNameView"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textAppearance="@style/Vector.Toolbar.Title"
-        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/roomProfileAliasView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,14 +44,13 @@
 
     <TextView
         android:id="@+id/roomProfileAliasView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:singleLine="true"
-        android:textAppearance="@style/Vector.Toolbar.Title"
-        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

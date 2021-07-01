@@ -42,7 +42,7 @@
     <!--    <color name="tchap_search_bar_text">#7d7d7d</color>-->
 
     <!-- Action bar text colors -->
-    <color name="tchap_action_bar_text_color">@color/white</color>
+    <color name="tchap_action_bar_text_color">@android:color/white</color>
     <color name="tchap_action_bar_text_color_with_alpha">#9fffffff</color>
 
     <!--    <color name="tchap_primary_text_color">#000000</color>-->

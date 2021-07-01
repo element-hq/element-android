@@ -104,7 +104,7 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
     private fun renderSelection(holder: Holder, isSelected: Boolean) {
         if (isSelected) {
             holder.avatarCheckedImageView.visibility = View.VISIBLE
-            val backgroundColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
+            val backgroundColor = ThemeUtils.getColor(holder.view.context, R.attr.colorPrimary)
             val backgroundDrawable = TextDrawable.builder().buildRound("", backgroundColor)
             holder.avatarImageView.setImageDrawable(backgroundDrawable)
         } else {

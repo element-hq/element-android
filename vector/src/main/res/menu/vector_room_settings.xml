@@ -4,6 +4,6 @@
     <item
         android:id="@+id/roomSettingsSaveAction"
         android:title="@string/save"
-        app:iconTint="?attr/colorAccent"
+        app:iconTint="?colorSecondary"
         app:showAsAction="ifRoom" />
 </menu>

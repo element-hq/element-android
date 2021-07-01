@@ -24,8 +24,10 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import fr.gouv.tchap.core.ui.views.HexagonMaskView
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.features.home.AvatarRenderer
@@ -40,37 +42,17 @@ abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var secondLine: CharSequence? = null
-    @EpoxyAttribute var listener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
     @EpoxyAttribute lateinit var changeMembershipState: ChangeMembershipState
-    @EpoxyAttribute var acceptListener: (() -> Unit)? = null
-    @EpoxyAttribute var rejectListener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var acceptListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var rejectListener: ClickListener? = null
     @EpoxyAttribute @JvmField var isDirect: Boolean = false
-
-    private val acceptCallback = object : ButtonStateView.Callback {
-        override fun onButtonClicked() {
-            acceptListener?.invoke()
-        }
-
-        override fun onRetryClicked() {
-            acceptListener?.invoke()
-        }
-    }
-
-    private val rejectCallback = object : ButtonStateView.Callback {
-        override fun onButtonClicked() {
-            rejectListener?.invoke()
-        }
-
-        override fun onRetryClicked() {
-            rejectListener?.invoke()
-        }
-    }
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.rootView.setOnClickListener { listener?.invoke() }
-        holder.acceptView.callback = acceptCallback
-        holder.rejectView.callback = rejectCallback
+        holder.rootView.onClick(listener)
+        holder.acceptView.commonClicked = acceptListener
+        holder.rejectView.commonClicked = rejectListener
         InviteButtonStateBinder.bind(holder.acceptView, holder.rejectView, changeMembershipState)
         holder.titleView.text = matrixItem.getBestName()
         holder.subtitleView.setTextOrHide(secondLine)

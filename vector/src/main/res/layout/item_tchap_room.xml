@@ -5,7 +5,7 @@
     android:id="@+id/itemRoomLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
@@ -118,6 +118,7 @@
         app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
         app:layout_constraintTop_toTopOf="@+id/roomAvatarContainer">
 
+<!--        todo fix color -->
         <TextView
             android:id="@+id/roomNameView"
             android:layout_width="wrap_content"
@@ -127,14 +128,14 @@
             android:includeFontPadding="false"
             android:maxLines="1"
             android:padding="0dp"
-            android:textColor="?primary_text_color"
+            android:textColor="?vctr_content_primary"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toStartOf="@+id/roomDisabledNotificationsBadge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@sample/matrix.json/data/displayName" />
+            tools:text="@sample/users.json/data/displayName" />
 
         <ImageView
             android:id="@+id/roomDisabledNotificationsBadge"
@@ -146,7 +147,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/roomNameView"
-            app:tint="?riotx_text_primary"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix"
             tools:visibility="visible" />
 
@@ -160,11 +161,12 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
             app:layout_constraintStart_toEndOf="@+id/roomDisabledNotificationsBadge"
-            app:tint="?riotx_text_primary"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--        todo fix color -->
     <TextView
         android:id="@+id/roomDomainNameView"
         android:layout_width="wrap_content"
@@ -173,7 +175,7 @@
         android:fontFamily="sans-serif-medium"
         android:gravity="end"
         android:includeFontPadding="false"
-        android:textColor="?primary_subtext_color"
+        android:textColor="?vctr_content_primary"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameContainer"
         app:layout_constraintEnd_toEndOf="parent"
@@ -230,7 +232,7 @@
         android:layout_marginEnd="12dp"
         android:gravity="end"
         android:includeFontPadding="false"
-        android:textColor="?secondary_text_color"
+        android:textColor="?vctr_content_secondary"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/roomAvatarContainer"
         app:layout_constraintEnd_toEndOf="parent"
@@ -246,12 +248,12 @@
         android:lineSpacingExtra="3sp"
         android:maxLines="2"
         android:minLines="2"
-        android:textColor="?secondary_text_color"
+        android:textColor="?vctr_content_secondary"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@+id/roomAvatarContainer"
         app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
         app:layout_constraintStart_toStartOf="@+id/roomNameContainer"
-        tools:text="@sample/matrix.json/data/message" />
+        tools:text="@sample/messages.json/data/message" />
 
     <TextView
         android:id="@+id/roomTypingView"
@@ -262,7 +264,7 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-medium"
         android:maxLines="2"
-        android:textColor="@color/riotx_accent"
+        android:textColor="?vctr_content_primary"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
         app:layout_constraintStart_toStartOf="@+id/roomNameContainer"
@@ -282,7 +284,7 @@
         android:id="@+id/roomDividerView"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?riotx_header_panel_border_mobile"
+        android:background="?vctr_list_separator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/roomLastEventView" />

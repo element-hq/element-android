@@ -22,7 +22,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -33,6 +32,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
@@ -84,7 +84,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
             when (it) {
                 DevToolsViewEvents.Dismiss             -> finish()
                 is DevToolsViewEvents.ShowAlertMessage -> {
-                    AlertDialog.Builder(this)
+                    MaterialAlertDialogBuilder(this)
                             .setMessage(it.message)
                             .setPositiveButton(R.string.ok, null)
                             .show()

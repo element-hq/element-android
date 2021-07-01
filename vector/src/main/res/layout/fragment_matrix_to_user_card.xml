@@ -21,6 +21,7 @@
 
     <TextView
         android:id="@+id/matrixToCardNameText"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -29,13 +30,13 @@
         android:maxLines="1"
         android:singleLine="true"
         android:textAlignment="center"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
         tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/matrixToCardUserIdText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -44,12 +45,11 @@
         android:maxLines="1"
         android:singleLine="true"
         android:textAlignment="center"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
         tools:text="@sample/users.json/data/id" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/matrixToCardSendMessageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,7 +58,6 @@
         android:minWidth="130dp"
         android:text="@string/start_chatting"
         app:icon="@drawable/ic_fab_add_chat"
-        app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

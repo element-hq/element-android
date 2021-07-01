@@ -10,10 +10,11 @@
     <!-- size in dp, because we do not want the display to be impacted by font size setting -->
     <TextView
         android:id="@+id/item_emoji_tv"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@color/black"
+        android:textColor="@color/emoji_color"
         android:textSize="40dp"
         tools:ignore="SpUsage"
         tools:text="🌵"
@@ -34,13 +35,14 @@
 
     <TextView
         android:id="@+id/item_emoji_name_tv"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:minWidth="60sp"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         tools:text="@string/verification_emoji_cactus" />
 
 </LinearLayout>

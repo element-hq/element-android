@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -19,11 +19,12 @@
 
             <TextView
                 android:id="@+id/loginServerTitle"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:text="@string/login_server_title"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:textColor="?vctr_content_primary"
                 android:transitionName="loginTitleTransition"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -31,12 +32,13 @@
 
             <TextView
                 android:id="@+id/loginServerText"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:gravity="start"
                 android:text="@string/login_server_text"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                android:textColor="?vctr_content_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginServerTitle" />
@@ -66,17 +68,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
-                    app:tint="?riotx_text_primary"
+                    app:tint="?vctr_content_primary"
                     tools:ignore="MissingPrefix" />
 
                 <TextView
                     android:id="@+id/loginServerChoiceMatrixOrgText"
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="start"
                     android:text="@string/login_server_matrix_org_text"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                    android:textColor="?vctr_content_secondary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -108,17 +111,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
-                    app:tint="?riotx_text_primary"
+                    app:tint="?vctr_content_primary"
                     tools:ignore="MissingPrefix" />
 
                 <TextView
                     android:id="@+id/loginServerChoiceEmsText"
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
                     android:gravity="start"
                     android:text="@string/login_server_modular_text"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                    android:textColor="?vctr_content_secondary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/loginServerChoiceEmsLearnMore"
                     app:layout_constraintStart_toStartOf="parent"
@@ -126,12 +130,12 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceEmsLearnMore"
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="@string/login_server_modular_learn_more"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
-                    android:textColor="@color/riotx_accent"
+                    android:textColor="?colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/loginServerChoiceEmsText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/loginServerChoiceEmsText" />
@@ -154,13 +158,12 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceOtherTitle"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="@string/login_server_other_title"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                    android:textColor="?riotx_text_primary"
-                    android:textSize="16sp"
+                    android:textColor="?vctr_content_primary"
                     app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceOtherText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -168,12 +171,13 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceOtherText"
+                    style="@style/Widget.Vector.TextView.Caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:gravity="start"
                     android:text="@string/login_server_other_text"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                    android:textColor="?vctr_content_secondary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -181,9 +185,9 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginServerIKnowMyIdSubmit"
-                style="@style/Style.Vector.Login.Button.Text"
+                style="@style/Widget.Vector.Button.Text.Login"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"

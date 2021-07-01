@@ -16,27 +16,27 @@
     <!-- TODO In the future we could add a toggle to switch the flash, and other possible settings -->
 
     <!-- TODO add take from album option.. -->
-<!--    <com.google.android.material.button.MaterialButton-->
-<!--        android:id="@+id/openAlbumButton"-->
-<!--        style="@style/Widget.MaterialComponents.Button.Icon"-->
-<!--        android:layout_width="34dp"-->
-<!--        android:layout_height="34dp"-->
-<!--        android:layout_marginEnd="@dimen/layout_horizontal_margin"-->
-<!--        android:layout_marginBottom="@dimen/layout_vertical_margin_big"-->
-<!--        android:backgroundTint="?riotx_bottom_nav_background_color"-->
-<!--        android:elevation="0dp"-->
-<!--        android:insetLeft="0dp"-->
-<!--        android:insetTop="0dp"-->
-<!--        android:insetRight="0dp"-->
-<!--        android:insetBottom="0dp"-->
-<!--        android:padding="0dp"-->
-<!--        app:cornerRadius="17dp"-->
-<!--        app:icon="@drawable/ic_picture_icon"-->
-<!--        app:iconGravity="textStart"-->
-<!--        app:iconPadding="0dp"-->
-<!--        app:iconSize="20dp"-->
-<!--        app:iconTint="@color/riotx_accent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+    <!--    <Button-->
+    <!--        android:id="@+id/openAlbumButton"-->
+    <!--        style="@style/Widget.MaterialComponents.Button.Icon"-->
+    <!--        android:layout_width="34dp"-->
+    <!--        android:layout_height="34dp"-->
+    <!--        android:layout_marginEnd="@dimen/layout_horizontal_margin"-->
+    <!--        android:layout_marginBottom="@dimen/layout_vertical_margin_big"-->
+    <!--        android:backgroundTint="?vctr_bottom_nav_background_color"-->
+    <!--        android:elevation="0dp"-->
+    <!--        android:insetLeft="0dp"-->
+    <!--        android:insetTop="0dp"-->
+    <!--        android:insetRight="0dp"-->
+    <!--        android:insetBottom="0dp"-->
+    <!--        android:padding="0dp"-->
+    <!--        app:cornerRadius="17dp"-->
+    <!--        app:icon="@drawable/ic_picture_icon"-->
+    <!--        app:iconGravity="textStart"-->
+    <!--        app:iconPadding="0dp"-->
+    <!--        app:iconSize="20dp"-->
+    <!--        app:iconTint="?colorPrimary"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

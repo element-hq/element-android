@@ -24,6 +24,7 @@
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_sender"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -31,8 +32,7 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-bold"
         android:singleLine="true"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/bottom_sheet_message_preview_timestamp"
         app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
@@ -42,11 +42,11 @@
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_timestamp"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="@id/bottom_sheet_message_preview_sender"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Friday 8pm" />
@@ -67,6 +67,7 @@
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_body"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -74,9 +75,8 @@
         android:layout_marginBottom="4dp"
         android:ellipsize="end"
         android:maxLines="3"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textIsSelectable="false"
-        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_sheet_message_preview_body_details"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
@@ -86,14 +86,14 @@
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_body_details"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_tertiary"
+        android:textColor="?vctr_content_tertiary"
         android:textIsSelectable="false"
-        android:textSize="12sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/bottom_sheet_message_preview_body"

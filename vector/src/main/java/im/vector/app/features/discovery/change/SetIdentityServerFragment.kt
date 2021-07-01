@@ -21,12 +21,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
@@ -68,7 +68,7 @@ class SetIdentityServerFragment @Inject constructor(
             )
                     .toSpannable()
                     .colorizeMatchingText(state.defaultIdentityServerUrl.toReducedUrl(),
-                            colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+                            colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
 
             views.identityServerSetDefaultNotice.isVisible = true
             views.identityServerSetDefaultSubmit.isVisible = true
@@ -112,7 +112,7 @@ class SetIdentityServerFragment @Inject constructor(
                 is SetIdentityServerViewEvents.Failure       -> handleFailure(it)
                 is SetIdentityServerViewEvents.OtherFailure  -> showFailure(it.failure)
                 is SetIdentityServerViewEvents.NoTerms       -> {
-                    AlertDialog.Builder(requireActivity())
+                    MaterialAlertDialogBuilder(requireActivity())
                             .setTitle(R.string.settings_discovery_no_terms_title)
                             .setMessage(R.string.settings_discovery_no_terms)
                             .setPositiveButton(R.string._continue) { _, _ ->
@@ -139,7 +139,7 @@ class SetIdentityServerFragment @Inject constructor(
         val message = getString(failure.errorMessageId)
         if (failure.forDefault) {
             // Display the error in a dialog
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(message)
                     .setPositiveButton(R.string.ok, null)

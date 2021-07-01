@@ -10,7 +10,7 @@
         android:id="@+id/bottomSheetActionClickableZone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?riotx_bottom_sheet_background"
+        android:background="?colorSurface"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -30,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?riotx_text_primary"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix"
             tools:src="@drawable/ic_share"
             tools:visibility="visible" />
@@ -38,11 +38,11 @@
 
         <TextView
             android:id="@+id/bottomSheetActionTitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textColor="@color/riotx_accent"
-            android:textSize="16sp"
+            android:textColor="?colorPrimary"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@+id/bottomSheetActionSubTitle"
             app:layout_constraintEnd_toStartOf="@+id/bottomSheetActionIcon"
@@ -54,11 +54,11 @@
 
         <TextView
             android:id="@+id/bottomSheetActionSubTitle"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="12sp"
+            android:textColor="?vctr_content_secondary"
             android:visibility="gone"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -77,7 +77,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?riotx_text_primary"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix"
             tools:src="@drawable/ic_arrow_right" />
 

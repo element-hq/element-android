@@ -5,13 +5,14 @@
     android:id="@+id/stateView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_header_panel_background">
+    android:background="?android:colorBackground">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/roomListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="always"
+        tools:itemCount="5"
         tools:listitem="@layout/item_room" />
 
     <im.vector.app.features.home.room.list.widget.NotifsFabMenuView

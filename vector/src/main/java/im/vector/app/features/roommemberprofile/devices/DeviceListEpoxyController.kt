@@ -16,7 +16,6 @@
  */
 package im.vector.app.features.roommemberprofile.devices
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -30,7 +29,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
-import im.vector.app.core.ui.list.genericItemWithValue
+import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.span
@@ -102,7 +101,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                 } else {
                     // Build list of device with status
                     deviceList.forEach { device ->
-                        genericItemWithValue {
+                        genericWithValueItem {
                             id(device.deviceId)
                             titleIconResourceId(if (device.isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                             apply {
@@ -112,7 +111,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                         +"\n"
                                         span {
                                             text = "(${device.deviceId})"
-                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                             textSize = host.dimensionConverter.spToPx(14)
                                         }
                                     }
@@ -127,13 +126,13 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                     )
                             )
                             valueColorInt(
-                                    host.colorProvider.getColor(
-                                            if (device.isVerified) R.color.riotx_positive_accent else R.color.riotx_destructive_accent
+                                    host.colorProvider.getColorFromAttribute(
+                                            if (device.isVerified) R.attr.colorPrimary else R.attr.colorError
                                     )
                             )
-                            itemClickAction(View.OnClickListener {
+                            itemClickAction {
                                 host.interactionListener?.onDeviceSelected(device)
-                            })
+                            }
                         }
                     }
                 }
@@ -153,7 +152,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
     private fun addDebugInfo(data: DeviceListViewState) {
         val host = this
         data.memberCrossSigningKey?.masterKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("msk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
@@ -161,7 +160,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                             +"Master Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
                         }
@@ -169,7 +168,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
             }
         }
         data.memberCrossSigningKey?.userKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("usk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
@@ -177,7 +176,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                             +"User Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
                         }
@@ -185,7 +184,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
             }
         }
         data.memberCrossSigningKey?.selfSigningKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("ssk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
@@ -193,7 +192,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                             +"Self Signed Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
                         }

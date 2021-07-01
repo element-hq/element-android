@@ -36,6 +36,7 @@
 
     <TextView
         android:id="@+id/reactionText"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginStart="6dp"
@@ -44,8 +45,7 @@
         android:maxEms="10"
         android:minWidth="20dp"
         android:singleLine="true"
-        android:textColor="@color/black"
-        android:textSize="13sp"
+        android:textColor="@color/emoji_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/reactionCount"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -55,14 +55,14 @@
 
     <TextView
         android:id="@+id/reactionCount"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="10sp"
+        android:textColor="?vctr_content_secondary"
         android:textStyle="bold"
         app:autoSizeMaxTextSize="14sp"
         app:autoSizeMinTextSize="8sp"

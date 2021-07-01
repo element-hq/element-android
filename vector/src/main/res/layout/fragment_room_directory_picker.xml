@@ -5,58 +5,36 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
-    <com.google.android.material.appbar.AppBarLayout
-        style="@style/VectorAppBarLayoutStyle"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="4dp">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/spaceExploreCollapsingToolbarLayout"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:theme="@style/Vector.Toolbar.Profile"
-            app:contentScrim="?riotx_background"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:scrimAnimationDuration="250"
-            app:scrimVisibleHeightTrigger="120dp"
-            app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar">
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp">
-
-                <include
-                    android:id="@+id/spaceCard"
-                    layout="@layout/fragment_matrix_to_room_space_card" />
-            </FrameLayout>
-
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="4dp"
-                app:layout_collapseMode="pin"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                tools:title="Title" />
 
+        </com.google.android.material.appbar.AppBarLayout>
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/roomDirectoryPickerList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+            tools:listitem="@layout/item_room_directory" />
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/roomDirectoryPickerList"
-        android:background="?riotx_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/item_room_directory" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

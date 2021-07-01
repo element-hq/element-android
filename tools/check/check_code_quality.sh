@@ -105,6 +105,14 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_resources.txt
 
 resultForbiddenStringInResource=$?
 
+echo
+echo "Search for forbidden patterns in layouts..."
+
+${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_layout.txt \
+    ./vector/src/main/res/layout
+
+resultForbiddenStringInLayout=$?
+
 #######################################################################################################################
 # Check files with long lines
 #######################################################################################################################
@@ -166,7 +174,14 @@ fi
 
 echo
 
-if [[ ${resultNbOfDrawable} -eq 0 ]] && [[ ${resultForbiddenStringInCode} -eq 0 ]] && [[ ${resultForbiddenStringInCodeSdk} -eq 0 ]] && [[ ${resultForbiddenStringInCodeSdkTchap} -eq 0 ]] && [[ ${resultForbiddenStringInResource} -eq 0 ]] && [[ ${resultLongFiles} -eq 0 ]] && [[ ${resultPngInDrawable} -eq 0 ]]; then
+if [[ ${resultNbOfDrawable} -eq 0 ]] \
+   && [[ ${resultForbiddenStringInCode} -eq 0 ]] \
+   && [[ ${resultForbiddenStringInCodeSdk} -eq 0 ]] \
+   && [[ ${resultForbiddenStringInCodeSdkTchap} -eq 0 ]] \
+   && [[ ${resultForbiddenStringInResource} -eq 0 ]] \
+   && [[ ${resultForbiddenStringInLayout} -eq 0 ]] \
+   && [[ ${resultLongFiles} -eq 0 ]] \
+   && [[ ${resultPngInDrawable} -eq 0 ]]; then
    echo "MAIN OK"
 else
    echo "❌ MAIN ERROR"

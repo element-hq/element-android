@@ -20,19 +20,19 @@
             app:layout_constraintBottom_toBottomOf="@+id/ssss_restore_with_key"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ssss_restore_with_key"
-            app:tint="?riotx_text_primary"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/ssss_restore_with_key"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="36dp"
             android:layout_marginEnd="16dp"
             android:text="@string/recovery_key"
-            android:textColor="?riotx_text_primary"
-            android:textSize="20sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ssss_shield"
@@ -41,11 +41,11 @@
 
         <TextView
             android:id="@+id/ssss_restore_with_key_text"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:textColor="?riotx_text_primary"
-            android:textSize="16sp"
+            android:textColor="?vctr_content_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ssss_restore_with_key"
@@ -54,7 +54,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ssss_key_enter_til"
-            style="@style/VectorTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -73,7 +72,6 @@
                 android:imeOptions="actionDone"
                 android:maxLines="3"
                 android:singleLine="false"
-                android:textColor="?android:textColorPrimary"
                 tools:inputType="textMultiLine" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -81,18 +79,18 @@
         <!--        -->
 
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/ssss_key_use_file"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/use_file"
             app:icon="@drawable/ic_file"
             tools:ignore="MissingConstraints" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/ssss_key_submit"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_continue"
@@ -122,8 +120,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ssss_key_flow"
             app:leftIcon="@drawable/ic_alert_triangle"
-            app:tint="@color/vector_error_color"
-            app:titleTextColor="?riotx_text_secondary" />
+            app:tint="?colorError"
+            app:titleTextColor="?vctr_content_secondary" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

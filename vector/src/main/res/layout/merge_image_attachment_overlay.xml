@@ -32,19 +32,19 @@
         app:layout_constraintStart_toStartOf="@id/overlayTopBackground"
         app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
         app:srcCompat="@drawable/ic_back_24dp"
-        app:tint="@color/white"
+        app:tint="?colorOnPrimary"
         tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/overlayCounterText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textColor="?colorOnPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/overlayInfoText"
         app:layout_constraintEnd_toStartOf="@id/overlayShareButton"
@@ -55,13 +55,13 @@
 
     <TextView
         android:id="@+id/overlayInfoText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textColor="?colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
         app:layout_constraintEnd_toStartOf="@id/overlayShareButton"
         app:layout_constraintStart_toStartOf="@id/overlayCounterText"
@@ -82,7 +82,7 @@
         app:layout_constraintEnd_toEndOf="@id/overlayTopBackground"
         app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
         app:srcCompat="@drawable/ic_share"
-        app:tint="@color/white"
+        app:tint="?colorOnPrimary"
         tools:ignore="MissingPrefix" />
 
 
@@ -117,7 +117,7 @@
         app:layout_constraintStart_toStartOf="@id/overlayBottomBackground"
         app:layout_constraintTop_toTopOf="@id/overlayBottomBackground"
         app:srcCompat="@drawable/ic_play_arrow"
-        app:tint="@color/white"
+        app:tint="?colorOnPrimary"
         tools:ignore="MissingPrefix" />
 
     <SeekBar
@@ -126,9 +126,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/white"
-        android:progressBackgroundTint="@color/white"
-        android:thumbTint="@color/white"
+        android:backgroundTint="?colorOnPrimary"
+        android:progressBackgroundTint="?colorOnPrimary"
+        android:thumbTint="?colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="@id/overlayBottomBackground"
         app:layout_constraintEnd_toEndOf="@id/overlayBottomBackground"
         app:layout_constraintStart_toEndOf="@id/overlayPlayPauseButton"

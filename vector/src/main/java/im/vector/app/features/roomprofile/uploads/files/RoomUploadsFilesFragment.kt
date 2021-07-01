@@ -58,7 +58,7 @@ class RoomUploadsFilesFragment @Inject constructor(
         views.genericStateViewListStateView.eventCallback = this
 
         views.genericStateViewListRecycler.trackItemsVisibilityChange()
-        views.genericStateViewListRecycler.configureWith(controller, showDivider = true)
+        views.genericStateViewListRecycler.configureWith(controller, dividerDrawable = R.drawable.divider_horizontal)
         controller.listener = this
     }
 

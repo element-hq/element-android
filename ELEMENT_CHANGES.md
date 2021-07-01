@@ -1,3 +1,42 @@
+Changes in Element v1.1.11 (2021-06-22)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Send button does not show up half of the time ([#3535](https://github.com/vector-im/element-android/issues/3535))
+ - Fix crash on signout: release session at the end of clean up. ([#3538](https://github.com/vector-im/element-android/issues/3538))
+
+
+Changes in Element v1.1.10 (2021-06-18)
+=======================================
+
+Features ✨
+----------
+ - Migrate DefaultTypingService, KeysImporter and KeysExporter to coroutines ([#2449](https://github.com/vector-im/element-android/issues/2449))
+ - Update Message Composer design ([#3182](https://github.com/vector-im/element-android/issues/3182))
+ - Cleanup Epoxy items, and debounce all the clicks ([#3435](https://github.com/vector-im/element-android/issues/3435))
+ - Adds support for receiving MSC3086 Asserted Identity events. ([#3451](https://github.com/vector-im/element-android/issues/3451))
+ - Migrate to new colors and cleanup the style and theme. Now exported in module :library:ui-styles
+  Ref: https://material.io/blog/migrate-android-material-components ([#3459](https://github.com/vector-im/element-android/issues/3459))
+ - Add option to set aliases for public spaces ([#3483](https://github.com/vector-im/element-android/issues/3483))
+ - Add beta warning to private space creation flow ([#3485](https://github.com/vector-im/element-android/issues/3485))
+ - User defined top level spaces ordering ([#3501](https://github.com/vector-im/element-android/issues/3501))
+
+Bugfixes 🐛
+----------
+ - Fix new DMs not always marked as such ([#3333](https://github.com/vector-im/element-android/issues/3333))
+
+SDK API changes ⚠️
+------------------
+ - Splits SessionAccountDataService and RoomAccountDataService and offers to query RoomAccountDataEvent at the session level. ([#3479](https://github.com/vector-im/element-android/issues/3479))
+
+Other changes
+-------------
+ - Move the ability to start a call from dialpad directly to a dedicated tab in the home screen. ([#3457](https://github.com/vector-im/element-android/issues/3457))
+ - VoIP: Change hold direction to send-only. ([#3467](https://github.com/vector-im/element-android/issues/3467))
+ - Some improvements on DialPad (cursor edition, paste number, small fixes). ([#3516](https://github.com/vector-im/element-android/issues/3516))
+
+
 Changes in Element v1.1.9 (2021-06-02)
 ======================================
 
@@ -43,6 +82,9 @@ Build 🧱:
 Other changes:
  - Add documentation on LoginWizard and RegistrationWizard (#3303)
  - Setup towncrier tool (#3293)
+
+ Security:
+  - Element Android shares name of E2EE files with homeserver (#3387)
 
 Changes in Element 1.1.7 (2021-05-12)
 ===================================================

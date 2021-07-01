@@ -138,7 +138,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
         setState {
             copy(
                     asyncLoginAction = Uninitialized,
-                    submitEnabled = action.password.isNotBlank()
+                    enteredPassword = action.password
             )
         }
     }

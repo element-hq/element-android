@@ -1,11 +1,11 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Vector.TextView.Body"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:drawablePadding="8dp"
     android:gravity="center_vertical"
     android:text="@string/event_redacted"
-    android:textColor="?riotx_text_primary_body_contrast"
-    android:textSize="14sp"
-    app:drawableTint="?riotx_text_primary_body_contrast"
-    app:drawableStartCompat="@drawable/ic_trash_16" />
+    android:textColor="?vctr_content_tertiary"
+    app:drawableStartCompat="@drawable/ic_trash_16"
+    app:drawableTint="?vctr_content_tertiary" />

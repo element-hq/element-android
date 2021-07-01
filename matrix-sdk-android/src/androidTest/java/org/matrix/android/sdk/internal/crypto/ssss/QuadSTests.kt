@@ -33,7 +33,7 @@ import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
-import org.matrix.android.sdk.api.session.accountdata.AccountDataEvent
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -73,12 +73,12 @@ class QuadSTests : InstrumentedTest {
 
         // Assert Account data is updated
         val accountDataLock = CountDownLatch(1)
-        var accountData: AccountDataEvent? = null
+        var accountData: UserAccountDataEvent? = null
 
         val liveAccountData = runBlocking(Dispatchers.Main) {
-            aliceSession.userAccountDataService().getLiveAccountDataEvent("${DefaultSharedSecretStorageService.KEY_ID_BASE}.$TEST_KEY_ID")
+            aliceSession.accountDataService().getLiveUserAccountDataEvent("${DefaultSharedSecretStorageService.KEY_ID_BASE}.$TEST_KEY_ID")
         }
-        val accountDataObserver = Observer<Optional<AccountDataEvent>?> { t ->
+        val accountDataObserver = Observer<Optional<UserAccountDataEvent>?> { t ->
             if (t?.getOrNull()?.type == "${DefaultSharedSecretStorageService.KEY_ID_BASE}.$TEST_KEY_ID") {
                 accountData = t.getOrNull()
                 accountDataLock.countDown()
@@ -100,13 +100,13 @@ class QuadSTests : InstrumentedTest {
             quadS.setDefaultKey(TEST_KEY_ID)
         }
 
-        var defaultKeyAccountData: AccountDataEvent? = null
+        var defaultKeyAccountData: UserAccountDataEvent? = null
         val defaultDataLock = CountDownLatch(1)
 
         val liveDefAccountData = runBlocking(Dispatchers.Main) {
-            aliceSession.userAccountDataService().getLiveAccountDataEvent(DefaultSharedSecretStorageService.DEFAULT_KEY_ID)
+            aliceSession.accountDataService().getLiveUserAccountDataEvent(DefaultSharedSecretStorageService.DEFAULT_KEY_ID)
         }
-        val accountDefDataObserver = Observer<Optional<AccountDataEvent>?> { t ->
+        val accountDefDataObserver = Observer<Optional<UserAccountDataEvent>?> { t ->
             if (t?.getOrNull()?.type == DefaultSharedSecretStorageService.DEFAULT_KEY_ID) {
                 defaultKeyAccountData = t.getOrNull()!!
                 defaultDataLock.countDown()
@@ -206,7 +206,7 @@ class QuadSTests : InstrumentedTest {
             )
         }
 
-        val accountDataEvent = aliceSession.userAccountDataService().getAccountDataEvent("my.secret")
+        val accountDataEvent = aliceSession.accountDataService().getUserAccountDataEvent("my.secret")
         val encryptedContent = accountDataEvent?.content?.get("encrypted") as? Map<*, *>
 
         assertEquals("Content should contains two encryptions", 2, encryptedContent?.keys?.size ?: 0)
@@ -275,14 +275,14 @@ class QuadSTests : InstrumentedTest {
         mTestHelper.signOutAndClose(aliceSession)
     }
 
-    private fun assertAccountData(session: Session, type: String): AccountDataEvent {
+    private fun assertAccountData(session: Session, type: String): UserAccountDataEvent {
         val accountDataLock = CountDownLatch(1)
-        var accountData: AccountDataEvent? = null
+        var accountData: UserAccountDataEvent? = null
 
         val liveAccountData = runBlocking(Dispatchers.Main) {
-            session.userAccountDataService().getLiveAccountDataEvent(type)
+            session.accountDataService().getLiveUserAccountDataEvent(type)
         }
-        val accountDataObserver = Observer<Optional<AccountDataEvent>?> { t ->
+        val accountDataObserver = Observer<Optional<UserAccountDataEvent>?> { t ->
             if (t?.getOrNull()?.type == type) {
                 accountData = t.getOrNull()
                 accountDataLock.countDown()

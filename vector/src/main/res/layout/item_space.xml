@@ -35,6 +35,7 @@
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/groupCounterBadge"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -44,8 +45,7 @@
         android:minHeight="16dp"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textColor="@android:color/white"
-        android:textSize="10sp"
+        android:textColor="?colorOnError"
         android:visibility="gone"
         app:layout_constraintCircle="@+id/groupAvatarImageView"
         app:layout_constraintCircleAngle="45"
@@ -57,14 +57,14 @@
 
     <TextView
         android:id="@+id/groupNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/groupDescView"
         app:layout_constraintEnd_toStartOf="@+id/groupChildrenCollapse"
@@ -75,22 +75,22 @@
 
     <TextView
         android:id="@+id/groupDescView"
-        android:visibility="gone"
-        tools:visibility="visible"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_secondary"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
         app:layout_constraintEnd_toStartOf="@+id/groupChildrenCollapse"
         app:layout_constraintStart_toEndOf="@+id/groupAvatarImageView"
         app:layout_constraintTop_toBottomOf="@id/groupNameView"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="@tools:sample/lorem/random" />
+        tools:text="@tools:sample/lorem/random"
+        tools:visibility="visible" />
 
 
     <ImageView
@@ -101,14 +101,13 @@
         android:background="?selectableItemBackground"
         android:clickable="true"
         android:importantForAccessibility="no"
-        android:src="@drawable/ic_expand_less_white"
+        android:src="@drawable/ic_expand_less"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
         app:layout_constraintEnd_toStartOf="@+id/groupTmpLeave"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_primary"
+        app:tint="?vctr_content_primary"
         tools:ignore="MissingPrefix"
-        tools:src="@drawable/ic_expand_more_white"
         tools:visibility="visible" />
 
     <ImageView
@@ -124,7 +123,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/groupAvatarChevron"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_secondary" />
+        app:tint="?vctr_content_secondary" />
 
     <ImageView
         android:id="@+id/groupAvatarChevron"
@@ -137,14 +136,14 @@
         app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_primary"
+        app:tint="?vctr_content_primary"
         tools:ignore="MissingPrefix" />
 
     <View
         android:id="@+id/groupBottomSeparator"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?riotx_header_panel_border_mobile"
+        android:background="?vctr_list_separator_on_surface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

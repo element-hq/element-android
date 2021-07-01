@@ -95,35 +95,35 @@ class ContactsBookController @Inject constructor(
                 avatarRenderer(host.avatarRenderer)
             }
             mappedContact.emails
-                    .forEachIndexed { index, it ->
-                        if (onlyBoundContacts && it.matrixId == null) return@forEachIndexed
+                    .forEachIndexed { index, email ->
+                        if (onlyBoundContacts && email.matrixId == null) return@forEachIndexed
 
                         contactDetailItem {
-                            id("${mappedContact.id}-e-$index-${it.email}")
-                            threePid(it.email)
-                            matrixId(it.matrixId)
+                            id("${mappedContact.id}-e-$index-${email.email}")
+                            threePid(email.email)
+                            matrixId(email.matrixId)
                             clickListener {
-                                if (it.matrixId != null) {
-                                    host.callback?.onMatrixIdClick(it.matrixId)
+                                if (email.matrixId != null) {
+                                    host.callback?.onMatrixIdClick(email.matrixId)
                                 } else {
-                                    host.callback?.onThreePidClick(ThreePid.Email(it.email))
+                                    host.callback?.onThreePidClick(ThreePid.Email(email.email))
                                 }
                             }
                         }
                     }
             mappedContact.msisdns
-                    .forEachIndexed { index, it ->
-                        if (onlyBoundContacts && it.matrixId == null) return@forEachIndexed
+                    .forEachIndexed { index, msisdn ->
+                        if (onlyBoundContacts && msisdn.matrixId == null) return@forEachIndexed
 
                         contactDetailItem {
-                            id("${mappedContact.id}-m-$index-${it.phoneNumber}")
-                            threePid(it.phoneNumber)
-                            matrixId(it.matrixId)
+                            id("${mappedContact.id}-m-$index-${msisdn.phoneNumber}")
+                            threePid(msisdn.phoneNumber)
+                            matrixId(msisdn.matrixId)
                             clickListener {
-                                if (it.matrixId != null) {
-                                    host.callback?.onMatrixIdClick(it.matrixId)
+                                if (msisdn.matrixId != null) {
+                                    host.callback?.onMatrixIdClick(msisdn.matrixId)
                                 } else {
-                                    host.callback?.onThreePidClick(ThreePid.Msisdn(it.phoneNumber))
+                                    host.callback?.onThreePidClick(ThreePid.Msisdn(msisdn.phoneNumber))
                                 }
                             }
                         }

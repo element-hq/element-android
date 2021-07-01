@@ -31,9 +31,11 @@ internal class DirectChatsHelper @Inject constructor(@SessionDatabase
      */
     fun getLocalUserAccount(filterRoomId: String? = null): MutableMap<String, MutableList<String>> {
         return Realm.getInstance(realmConfiguration).use { realm ->
+            // Makes sure we have the latest realm updates, this is important as we sent this information to the server.
+            realm.refresh()
             RoomSummaryEntity.getDirectRooms(realm)
                     .asSequence()
-                    .filter { it.roomId != filterRoomId && it.directUserId != null }
+                    .filter { it.roomId != filterRoomId && it.directUserId != null && it.membership.isActive() }
                     .groupByTo(mutableMapOf(), { it.directUserId!! }, { it.roomId })
         }
     }

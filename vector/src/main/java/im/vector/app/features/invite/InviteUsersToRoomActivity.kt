@@ -22,9 +22,9 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -157,7 +157,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
         } else {
             errorFormatter.toHumanReadable(error)
         }
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setMessage(message)
                 .setPositiveButton(R.string.ok, null)
                 .show()

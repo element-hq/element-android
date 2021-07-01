@@ -18,22 +18,22 @@
 
         <TextView
             android:id="@+id/settings_item_title"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="15sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             tools:text="Title" />
 
         <TextView
             android:id="@+id/settings_item_description"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:orientation="vertical"
-            android:textColor="?android:textColorSecondary"
-            android:textSize="15sp"
+            android:textColor="?vctr_content_secondary"
             tools:text="Description / Value" />
     </LinearLayout>
 

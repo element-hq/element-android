@@ -20,7 +20,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import im.vector.app.R
-import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.ColorProvider
@@ -127,7 +127,7 @@ class VerificationEmojiCodeController @Inject constructor(
 
     private fun buildActions(state: VerificationEmojiCodeViewState) {
         val host = this
-        dividerItem {
+        bottomSheetDividerItem {
             id("sep0")
         }
 
@@ -140,20 +140,20 @@ class VerificationEmojiCodeController @Inject constructor(
             bottomSheetVerificationActionItem {
                 id("ko")
                 title(host.stringProvider.getString(R.string.verification_sas_do_not_match))
-                titleColor(host.colorProvider.getColor(R.color.vector_error_color))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 iconRes(R.drawable.ic_check_off)
-                iconColor(host.colorProvider.getColor(R.color.vector_error_color))
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 listener { host.listener?.onDoNotMatchButtonTapped() }
             }
-            dividerItem {
+            bottomSheetDividerItem {
                 id("sep1")
             }
             bottomSheetVerificationActionItem {
                 id("ok")
                 title(host.stringProvider.getString(R.string.verification_sas_match))
-                titleColor(host.colorProvider.getColor(R.color.riotx_accent))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 iconRes(R.drawable.ic_check_on)
-                iconColor(host.colorProvider.getColor(R.color.riotx_accent))
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 listener { host.listener?.onMatchButtonTapped() }
             }
         }

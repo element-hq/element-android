@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Define all the colors used across the Element Android project
+     Source: https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1338%3A17947 -->
+
+    <!-- For all themes -->
+    <color name="palette_azure">#368BD6</color>
+    <color name="palette_kiwi">#74D12C</color>
+    <color name="palette_grape">#AC3BA8</color>
+    <color name="palette_verde">#03B381</color>
+    <color name="palette_polly">#E64F7A</color>
+    <color name="palette_melon">#FF812D</color>
+
+    <color name="palette_element_green">#0DBD8B</color>
+    <color name="palette_white">#FFFFFF</color>
+    <color name="palette_vermilion">#FF5B55</color>
+    <color name="palette_ems">#7E69FF</color>
+    <color name="palette_aqua">#2DC2C5</color>
+    <color name="palette_prune">#5C56F5</color>
+    <color name="palette_links">#0086E6</color>
+
+
+    <!-- For light themes -->
+    <color name="palette_gray_25">#F4F6FA</color>
+    <color name="palette_gray_50">#E6E8F0</color>
+    <color name="palette_gray_100">#C1C6CD</color>
+    <color name="palette_gray_150">#8D97A5</color>
+    <color name="palette_gray_200">#737D8C</color>
+    <color name="palette_black_900">#17191C</color>
+    <color name="palette_ice">#F4F9FD</color>
+
+    <!-- For dark themes -->
+    <color name="palette_gray_250">#A9B2BC</color>
+    <color name="palette_gray_300">#8E99A4</color>
+    <color name="palette_gray_400">#6F7882</color>
+    <color name="palette_gray_450">#394049</color>
+    <color name="palette_black_800">#15191E</color>
+    <color name="palette_black_950">#21262C</color>
+
+</resources>
