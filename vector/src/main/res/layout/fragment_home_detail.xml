@@ -150,7 +150,7 @@
         android:id="@+id/roomListContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="?riotx_header_panel_background"
+        android:background="?riotx_background"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintTop_toBottomOf="@+id/activeCallView" />
 

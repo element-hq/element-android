@@ -31,7 +31,6 @@ import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.core.contacts.ContactsDataSource
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +55,7 @@ private typealias DirectoryUsersSearch = String
 class TchapContactListViewModel @AssistedInject constructor(@Assisted initialState: TchapContactListViewState,
                                                             private val contactsDataSource: ContactsDataSource,
                                                             private val session: Session)
-    : VectorViewModel<TchapContactListViewState, TchapContactListAction, EmptyViewEvents>(initialState) {
+    : VectorViewModel<TchapContactListViewState, TchapContactListAction, TchapContactListViewEvents>(initialState) {
 
     //    private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
     private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
@@ -73,6 +72,13 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
     }
 
     companion object : MvRxViewModelFactory<TchapContactListViewModel, TchapContactListViewState> {
+
+        override fun initialState(viewModelContext: ViewModelContext): TchapContactListViewState? {
+            return TchapContactListViewState(
+                    excludedUserIds = null,
+                    showSearch = true
+            )
+        }
 
         override fun create(viewModelContext: ViewModelContext, state: TchapContactListViewState): TchapContactListViewModel? {
             val factory = when (viewModelContext) {
@@ -204,6 +210,8 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
             TchapContactListAction.ClearSearchUsers -> handleClearSearchUsers()
             TchapContactListAction.LoadContacts     -> handleLoadContacts()
             TchapContactListAction.SetUserConsent   -> handleSetUserConsent()
+            TchapContactListAction.CancelSearch     -> handleCancelSearch()
+            TchapContactListAction.OpenSearch       -> handleOpenSearch()
         }.exhaustive
     }
 
@@ -231,6 +239,14 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                     userConsent = session.identityService().getUserConsent()
             )
         }
+    }
+
+    private fun handleOpenSearch() {
+        _viewEvents.post(TchapContactListViewEvents.OpenSearch)
+    }
+
+    private fun handleCancelSearch() {
+        _viewEvents.post(TchapContactListViewEvents.CancelSearch)
     }
 
     private fun observeUsers() = withState { state ->

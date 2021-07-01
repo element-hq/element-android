@@ -3142,7 +3142,7 @@
     <string name="add_from_phone_book">Add from my phone book</string>
     <string name="empty_phone_book">Your phone book is empty</string>
     <string name="phone_book_title">Phone book</string>
-    <string name="search_in_my_contacts">Search in my contacts</string>
+    <string name="template_search_in_my_contacts">Search in ${app_name} directory</string>
     <string name="loading_contact_book">Retrieving your contacts…</string>
     <string name="empty_contact_book">Your contact book is empty</string>
     <string name="contacts_book_title">Contacts book</string>

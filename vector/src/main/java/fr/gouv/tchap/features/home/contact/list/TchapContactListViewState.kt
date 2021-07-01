@@ -40,9 +40,13 @@ data class TchapContactListViewState(
         // User consent to perform lookup (send emails to the identity server)
         val userConsent: Boolean = false,
         // Use to filter contacts by display name
-        val searchTerm: String = ""
+        val searchTerm: String = "",
+
+        // Display search button
+        val showSearch: Boolean
 ) : MvRxState {
     constructor(args: TchapContactListFragmentArgs) : this(
-            excludedUserIds = args.excludedUserIds
+            excludedUserIds = args.excludedUserIds,
+            showSearch = args.showSearch
     )
 }

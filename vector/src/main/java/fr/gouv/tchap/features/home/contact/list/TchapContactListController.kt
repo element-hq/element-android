@@ -16,6 +16,7 @@
 
 package fr.gouv.tchap.features.home.contact.list
 
+import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -28,6 +29,7 @@ import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.userdirectory.actionItem
 import im.vector.app.features.userdirectory.userDirectoryUserItem
 import im.vector.app.features.userdirectory.userListHeaderItem
 import org.matrix.android.sdk.api.session.Session
@@ -51,6 +53,18 @@ class TchapContactListController @Inject constructor(private val session: Sessio
 
     override fun buildModels() {
         val currentState = state ?: return
+        val host = this
+
+        if (currentState.showSearch) {
+            actionItem {
+                id(R.drawable.ic_tchap_contact_search)
+                title(host.stringProvider.getString(R.string.search_in_my_contacts))
+                actionIconRes(R.drawable.ic_tchap_contact_search)
+                clickAction(View.OnClickListener {
+                    host.callback?.onContactSearchClick()
+                })
+            }
+        }
 
         buildlocalContacts(currentState)
 
@@ -174,5 +188,6 @@ class TchapContactListController @Inject constructor(private val session: Sessio
     interface Callback {
         fun onItemClick(user: User)
         fun onMatrixIdClick(matrixId: String)
+        fun onContactSearchClick()
     }
 }

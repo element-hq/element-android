@@ -16,13 +16,12 @@
 
 package fr.gouv.tchap.features.home.contact.list
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.platform.VectorViewEvents
 
-sealed class TchapContactListAction : VectorViewModelAction {
-    data class SearchUsers(val value: String) : TchapContactListAction()
-    object ClearSearchUsers : TchapContactListAction()
-    object LoadContacts : TchapContactListAction()
-    object SetUserConsent : TchapContactListAction()
-    object OpenSearch : TchapContactListAction()
-    object CancelSearch : TchapContactListAction()
+/**
+ * Transient events for invite users to room screen
+ */
+sealed class TchapContactListViewEvents : VectorViewEvents {
+    object OpenSearch : TchapContactListViewEvents()
+    object CancelSearch : TchapContactListViewEvents()
 }

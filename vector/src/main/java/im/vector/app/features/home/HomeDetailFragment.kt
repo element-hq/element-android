@@ -32,6 +32,8 @@ import com.google.android.material.badge.BadgeDrawable
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragmentArgs
+import fr.gouv.tchap.features.home.contact.list.TchapContactListViewEvents
+import fr.gouv.tchap.features.home.contact.list.TchapContactListViewModel
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
@@ -82,6 +84,7 @@ class HomeDetailFragment @Inject constructor(
     private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
     private val roomListViewModel: RoomListViewModel by activityViewModel()
+    private val tchapContactListViewModel: TchapContactListViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
@@ -188,6 +191,15 @@ class HomeDetailFragment @Inject constructor(
                 view.doOnNextLayout { closeSearchView() }
             }
         }
+
+        tchapContactListViewModel.observeViewEvents {
+            when (it) {
+                is TchapContactListViewEvents.OpenSearch   -> openSearchView()
+                // TODO close searchview when we come back on this screen
+                //  view.doOnNextLayout { closeSearchView() }
+                is TchapContactListViewEvents.CancelSearch -> closeSearchView()
+            }
+        }
     }
 
     override fun onResume() {
@@ -199,15 +211,19 @@ class HomeDetailFragment @Inject constructor(
     private fun toggleSearchView() {
         val isSearchMode = views.homeSearchView.isVisible
         if (!isSearchMode) {
-            views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(0)
-            views.homeToolbarContent.isVisible = false
-            views.groupToolbarAvatarImageView.isVisible = false
-            views.homeSearchView.apply {
-                isVisible = true
-                isIconified = false
-            }
+            openSearchView()
         } else {
             closeSearchView()
+        }
+    }
+
+    private fun openSearchView() {
+        views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(0)
+        views.homeToolbarContent.isVisible = false
+        views.groupToolbarAvatarImageView.isVisible = false
+        views.homeSearchView.apply {
+            isVisible = true
+            isIconified = false
         }
     }
 

@@ -11,14 +11,13 @@
 
     <ImageView
         android:id="@+id/actionIconImageView"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:importantForAccessibility="no"
         android:padding="10dp"
-        app:tint="?riotx_text_secondary"
-        tools:src="@drawable/ic_invite_people" />
+        tools:src="@drawable/ic_tchap_contact_search" />
 
     <TextView
         android:id="@+id/actionTitleText"
@@ -28,8 +27,8 @@
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?primary_text_color"
         android:textSize="15sp"
-        tools:text="@string/invite_friends" />
+        tools:text="@string/search_in_my_contacts" />
 
 </LinearLayout>
