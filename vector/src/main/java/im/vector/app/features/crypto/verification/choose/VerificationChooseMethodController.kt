@@ -45,9 +45,19 @@ class VerificationChooseMethodController @Inject constructor(
         val host = this
 
         if (state.otherCanScanQrCode || state.otherCanShowQrCode) {
+            var scanCodeInstructions: String
+            var scanOtherCodeTitle: String
+            if (state.isMe) {
+                scanCodeInstructions = host.stringProvider.getString(R.string.verification_scan_self_notice)
+                scanOtherCodeTitle = host.stringProvider.getString(R.string.verification_scan_with_this_device)
+            } else {
+                scanCodeInstructions = host.stringProvider.getString(R.string.verification_scan_notice)
+                scanOtherCodeTitle = host.stringProvider.getString(R.string.verification_scan_their_code)
+            }
+
             bottomSheetVerificationNoticeItem {
                 id("notice")
-                notice(host.stringProvider.getString(R.string.verification_scan_notice))
+                notice(scanCodeInstructions)
             }
 
             if (state.otherCanScanQrCode && !state.qrCodeText.isNullOrBlank()) {
@@ -64,7 +74,7 @@ class VerificationChooseMethodController @Inject constructor(
             if (state.otherCanShowQrCode) {
                 bottomSheetVerificationActionItem {
                     id("openCamera")
-                    title(host.stringProvider.getString(R.string.verification_scan_their_code))
+                    title(scanOtherCodeTitle)
                     titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     iconRes(R.drawable.ic_camera)
                     iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
