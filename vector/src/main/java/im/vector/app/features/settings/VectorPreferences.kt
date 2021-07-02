@@ -724,7 +724,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true if the help on room list should be shown
      */
     fun shouldShowLongClickOnRoomHelp(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY, true)
+        return defaultPrefs.getBoolean(SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY, false)
     }
 
     /**
