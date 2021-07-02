@@ -2806,4 +2806,9 @@
     <string name="directory_add_a_new_server_prompt">Ange namnet för en ny server du vill utforska.</string>
     <string name="directory_add_a_new_server">Lägg till en ny server</string>
     <string name="directory_your_server">Din server</string>
+    <string name="teammate_spaces_might_not_join">För tillfället så kan folk kanske inte gå med i privata rum som du skapar.
+\n
+\nVi kommer att förbättra detta som en del av betan, men ville låta dig veta.</string>
+    <string name="teammate_spaces_arent_quite_ready">Lagkamratsutrymmen är inte riktigt färdiga men du kan ändå testa dem</string>
+    <string name="continue_anyway">Fortsätt ändå</string>
 </resources>

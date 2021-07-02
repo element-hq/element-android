@@ -2806,4 +2806,9 @@
     <string name="directory_add_a_new_server_prompt">Sisesta serveri nimi, mille sisu sa soovid uurida.</string>
     <string name="directory_add_a_new_server">Lisa uus server</string>
     <string name="directory_your_server">Sinu server</string>
+    <string name="teammate_spaces_arent_quite_ready">Kaasteeliste kogukonnakeskused pole veel päris valmis, aga sa võid neid juba proovida</string>
+    <string name="continue_anyway">Jätka ikkagi</string>
+    <string name="teammate_spaces_might_not_join">Hetkel teiste kasutajate liitumine sinu poolt tehtud privaatsete jututubadega ei pruugi õnnestuda.
+\n
+\nKuna tegemist on beetaversiooniga, siis me veel parandame seda funktsionaalsust, aga lihtsalt tahtsime sind teavitada.</string>
 </resources>
