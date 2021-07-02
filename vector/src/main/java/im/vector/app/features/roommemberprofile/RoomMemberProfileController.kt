@@ -21,6 +21,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import org.matrix.android.sdk.api.session.Session
@@ -31,6 +32,7 @@ import javax.inject.Inject
 
 class RoomMemberProfileController @Inject constructor(
         private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider,
         private val session: Session
 ) : TypedEpoxyController<RoomMemberProfileViewState>() {
 
@@ -146,6 +148,7 @@ class RoomMemberProfileController @Inject constructor(
                         id("verify_footer")
                         text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle))
                         centered(false)
+                        backgroundColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_header_background))
                     }
                 }
             } else {
@@ -163,6 +166,7 @@ class RoomMemberProfileController @Inject constructor(
                 id("verify_footer_not_encrypted")
                 text(host.stringProvider.getString(R.string.room_profile_not_encrypted_subtitle))
                 centered(false)
+                backgroundColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_header_background))
             }
         }
     }
