@@ -1897,12 +1897,7 @@
     <string name="verify_user_sas_emoji_security_tip">Per avere la massima certezza effettuate l\'operazione tramite un mezzo di comunicazione già fidato oppure fatelo di persona.</string>
     <string name="verification_green_shield">Il badge verde garantisce che l\'identità dell\'utente è verificata. Verifica tutti gli utenti in una stanza per assicurarti che sia sicura.</string>
     <string name="verification_conclusion_not_secure">Non sicuro</string>
-    <string name="verification_conclusion_compromised">Uno dei seguenti potrebbe essere compromesso:
-\n
-\n - Il tuo Home Server
-\n - L\'Home Server al quale è connesso l\'utente che stai verificando
-\n - La tua connessione internet o quella dell\'altro utente
-\n - Il tuo dispositivo o quello dell\'altro utente</string>
+    <string name="verification_conclusion_compromised">Uno dei seguenti potrebbe essere compromesso:\n\n - Il tuo Home Server\n - L\'Home Server al quale è connesso l\'utente che stai verificando\n - La tua connessione internet o quella dell\'altro utente\n - Il tuo dispositivo o quello dell\'altro utente</string>
     <string name="sent_a_video">Video.</string>
     <string name="sent_an_image">Immagine.</string>
     <string name="sent_an_audio_file">Audio</string>
