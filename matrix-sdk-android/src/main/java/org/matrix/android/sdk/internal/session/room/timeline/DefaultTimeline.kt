@@ -221,6 +221,10 @@ internal class DefaultTimeline(
         postSnapshot()
     }
 
+    override fun getInitialEventId(): String? {
+        return initialEventId
+    }
+
     override fun getTimelineEventAtIndex(index: Int): TimelineEvent? {
         return builtEvents.getOrNull(index)
     }

@@ -28,8 +28,23 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
 
     private val newTimelineEventIds = CopyOnWriteArrayList<String>()
     private var forceScroll = false
+    var initialForceScroll = false
+    var initialForceScrollEventId: String? = null
+        get() = field ?: timelineEventController.timeline?.getInitialEventId()
 
     fun addNewTimelineEventIds(eventIds: List<String>) {
+        // Disable initial force scroll
+        initialForceScroll = false
+        // Update force scroll id when sticking to the bottom - TODO try this if staying at bottom is not reliable as well
+        /*
+        if (eventIds.isNotEmpty()) {
+            initialForceScrollEventId.let {
+                if (it != null && it == timelineEventController.timeline?.getInitialEventId()) {
+                    initialForceScrollEventId = eventIds[0]
+                }
+            }
+        }
+         */
         newTimelineEventIds.addAll(0, eventIds)
     }
 
@@ -38,6 +53,12 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
     }
 
     override fun onInserted(position: Int, count: Int) {
+        if (initialForceScroll) {
+            timelineEventController.searchPositionOfEvent(initialForceScrollEventId)?.let {
+                layoutManager.scrollToPosition(it)
+            }
+            return
+        }
         if (position != 0) {
             return
         }

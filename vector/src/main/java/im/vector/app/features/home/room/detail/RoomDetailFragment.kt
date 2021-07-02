@@ -740,6 +740,8 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun navigateToEvent(action: RoomDetailViewEvents.NavigateToEvent) {
+        scrollOnNewMessageCallback.initialForceScroll = true
+        scrollOnNewMessageCallback.initialForceScrollEventId = action.eventId
         val scrollPosition = timelineEventController.searchPositionOfEvent(action.eventId)
         if (scrollPosition == null) {
             scrollOnHighlightedEventCallback.scheduleScrollTo(action.eventId)
@@ -1067,6 +1069,8 @@ class RoomDetailFragment @Inject constructor(
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)
+        // Force scroll until the user has scrolled to address the bug where the list would jump during initial loading
+        scrollOnNewMessageCallback.initialForceScroll = true
         scrollOnHighlightedEventCallback = ScrollOnHighlightedEventCallback(views.timelineRecyclerView, layoutManager, timelineEventController)
         views.timelineRecyclerView.layoutManager = layoutManager
         views.timelineRecyclerView.itemAnimator = null
@@ -1080,6 +1084,15 @@ class RoomDetailFragment @Inject constructor(
         }
         timelineEventController.addModelBuildListener(modelBuildListener)
         views.timelineRecyclerView.adapter = timelineEventController.adapter
+        views.timelineRecyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy != 0) {
+                    // User has scrolled, stop force scrolling
+                    scrollOnNewMessageCallback.initialForceScroll = false
+                }
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val quickReplyHandler = object : RoomMessageTouchHelperCallback.QuickReplayHandler {
