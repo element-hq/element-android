@@ -218,7 +218,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     )
 
     init {
-        isDebugLoggingEnabled = true
         addInterceptor(this)
         requestModelBuild()
     }
