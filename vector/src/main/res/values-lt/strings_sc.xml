@@ -51,4 +51,7 @@
     <string name="settings_unimportant_counter_badge_summary">Įtraukti pokalbius be pranešimų neperskaitytų kategorijoje</string>
     <string name="settings_simplified_mode_summary">Slėpti išplėstas funkcijas, įskaitant viešų pokalbių katalogus ir pokalbių šifravimo nustatymus</string>
     <string name="settings_system_dark_theme_pre_ten_summary">Pateikite atskirus temos nustatymus šviesiai ir tamsiai temai. Dabartinė Android versija gali nepalaikyti šviesių ir tamsių temų perjungimo!</string>
+    <string name="element_light_theme">Element Šviesi</string>
+    <string name="element_dark_theme">Element Tamsi</string>
+    <string name="element_black_theme">Element Juoda</string>
 </resources>

@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="normal_priority_header">Normální priorita</string>
-
     <string name="settings_home_overview">Přehled</string>
-
     <string name="settings_single_overview">Kombinovaný přehled chatu</string>
     <string name="settings_single_overview_summary">Zobrazit přímé zprávy i místnosti na jedné stránce</string>
-
     <string name="settings_room_unread_kind_dm">Náhled obsahu přímých zpráv</string>
     <string name="settings_room_unread_kind_group">Náhled obsahu skupinových zpráv</string>
     <string name="settings_room_unread_kind_default">Zobrazit všechny události</string>
     <string name="settings_room_unread_kind_content">Skrýt změny členů</string>
     <string name="settings_room_unread_kind_original_content">Skrýt změny členů a reakce</string>
-
     <string name="settings_simplified_mode">Snadný režim</string>
     <string name="settings_simplified_mode_summary">Skrýt pokročilé funkce včetně adresářů veřejných místností a nastavení šifrování chatu</string>
     <string name="prompt_simplified_mode_title">Výběr uživatelského rozhraní</string>
@@ -23,7 +18,6 @@
     <string name="prompt_simplified_mode_on_text">Mám v plánu chatovat pouze s lidmi, které znám, a další možnosti považuji za matoucí.</string>
     <string name="prompt_simplified_mode_off">Kompletní</string>
     <string name="prompt_simplified_mode_off_text">Hledám plnou funkčnost včetně zjišťování veřejných místností a jemného nastavení místností a šifrování.</string>
-
     <string name="settings_light_theme">Světlý režim</string>
     <string name="settings_dark_theme">Tmavý režim</string>
     <string name="settings_system_dark_theme_pre_ten">Podle nastavení tmavého režimu v systému</string>
@@ -33,7 +27,6 @@
     <string name="sc_dark_theme">SC tmavý</string>
     <string name="sc_colored_theme">SC černý, barevné bubliny</string>
     <string name="sc_dark_colored_theme">SC tmavý, barevné bubliny</string>
-
     <string name="bubble_style">Bubliny zpráv</string>
     <string name="bubble_style_none">Žádné</string>
     <string name="bubble_style_start">Na jedné straně</string>
@@ -41,30 +34,26 @@
     <string name="bubble_time_location">Umístění časové značky</string>
     <string name="bubble_time_location_top">Nahoře</string>
     <string name="bubble_time_location_bottom">Dole</string>
-
     <string name="settings_unimportant_counter_badge">Počítadlo nedůležitých událostí chatu</string>
     <string name="settings_unimportant_counter_badge_summary">Zahrnout chaty bez oznámení do počítadla nepřečtených zpráv</string>
-
     <string name="labs_mark_rooms_unread">Označit chaty jako nepřečtené</string>
     <string name="labs_mark_rooms_unread_summary">Umožňuje označit chaty jako nepřečtené. Ostatní klienti Matrixu tuto funkci zatím nemusí podporovat.</string>
     <string name="url_previews_in_encrypted_rooms">Náhledy URL v šifrovaných chatech</string>
     <string name="url_previews_in_encrypted_rooms_summary">URL adresy z vašich šifrovaných zpráv budou viditelné pro váš homeserver!</string>
-
     <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="bottom_action_all">Přehled</string>
     <string name="all_list_rooms_empty_title">SchildiChat</string>
     <string name="all_list_rooms_empty_body">Chaty se zobrazí zde</string>
-
     <!-- Login screen -->
     <string name="login_connect_using_matrix_id_text_sc">např. @uživatel:doména.com</string>
     <string name="login_server_other_title_sc">Vlastní server</string>
     <string name="login_server_other_text_sc">Zadejte adresu serveru pro přihlášení nebo registraci</string>
-
     <string name="show_room_info_sc">Podrobnosti místnoti</string>
     <string name="show_participants_sc">Členové</string>
     <string name="room_list_quick_actions_mark_room_unread">Označit jako nepřečtené</string>
     <string name="room_list_quick_actions_mark_room_read">Označit jako přečtené</string>
-
     <string name="footer_read_receipt_content_description">Stav zprávy</string>
-
+    <string name="element_light_theme">Element světlý</string>
+    <string name="element_dark_theme">Element tmavý</string>
+    <string name="element_black_theme">Element černý</string>
 </resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="normal_priority_header">Priorité normale</string>
+    <string name="settings_home_overview">Vue d\'ensemble</string>
+    <string name="settings_simplified_mode">Mode facile</string>
+    <string name="settings_room_unread_kind_default">Afficher tous les évènements</string>
+    <string name="settings_light_theme">Thème clair</string>
+    <string name="settings_dark_theme">Thème sombre</string>
+    <string name="bubble_style">Bulles de message</string>
+    <string name="prompt_simplified_mode_title">Sélectionner une interface utilisateur</string>
+    <string name="bottom_action_all">Vue d\'ensemble</string>
+    <string name="login_server_other_text_sc">Entrez une adresse de serveur pour vous connecter ou vous inscrire</string>
+    <string name="show_room_info_sc">Détails du salon</string>
+    <string name="show_participants_sc">Participants</string>
+    <string name="room_list_quick_actions_mark_room_unread">Marquer comme non lu</string>
+    <string name="room_list_quick_actions_mark_room_read">Marquer comme lu</string>
+    <string name="footer_read_receipt_content_description">Statut du message</string>
+</resources>
