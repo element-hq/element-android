@@ -1430,10 +1430,7 @@
 \nNome sessione: %1$s
 \nUltimo accesso: %2$s
 \nSe non hai effettuato l\'accesso da un\'altra sessione, ignora questa richiesta.</string>
-    <string name="your_unverified_device_requesting_with_info">Una sessione non verificata sta chiedendo le chiavi crittografiche. 
-\nNome sessione: %1$s 
-\nUltimo accesso: %2$s 
-\nSe non hai effettuato l\'accesso da un\'altra sessione, ignora questa richiesta.</string>
+    <string name="your_unverified_device_requesting_with_info">Una sessione non verificata sta chiedendo le chiavi crittografiche.\nNome sessione: %1$s\nUltimo accesso: %2$s\nSe non hai effettuato l\'accesso da un\'altra sessione, ignora questa richiesta.</string>
     <string name="start_verification_short_label">Verifica</string>
     <string name="share_without_verifying_short_label">Condividi</string>
     <string name="key_share_request">Richiesta condivisione chiavi crittografiche</string>
