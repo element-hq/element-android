@@ -134,8 +134,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 if (attributes.informationData.showInformation) {
                     if (canHideSender) {
                         // In the case of footer time, we can also hide the names without making it look awkward
-                        hiddenViews.add(holder.bubbleMemberNameView)
-                        memberNameView = null
+                        if (memberNameView != null) {
+                            hiddenViews.add(memberNameView)
+                            memberNameView = null
+                        }
                         hiddenViews.add(holder.bubbleTimeView)
                     } else if (!senderInBubble) {
                         // We don't need to reserve space here
