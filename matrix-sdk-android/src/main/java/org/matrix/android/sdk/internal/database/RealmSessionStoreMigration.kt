@@ -43,13 +43,10 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.query.process
 import timber.log.Timber
-import javax.inject.Inject
 
-class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
+internal object RealmSessionStoreMigration : RealmMigration {
 
-    companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 15L
-    }
+    const val SESSION_STORE_SCHEMA_VERSION = 15L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
