@@ -6,8 +6,7 @@ The matrix protocol is a decentralized approach to modern messaging, allowing fo
 Compared to the Element app, SchildiChat features following changes:
 - A unified chat list for both direct and group chats
 - Optional message bubbles
-- Follows the system setting for dark/light mode
-- Further small usability improvements
+- Further usability improvements and additional settings to configure the app
 
 SchildiChat is open source: https://github.com/SchildiChat/SchildiChat-android
 More information about the Matrix protocol: https://matrix.org/

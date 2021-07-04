@@ -6,8 +6,7 @@ Das Matrix-Protokoll ist ein dezentralisierter Ansatz für die moderne Nachricht
 Verglichen mit der Element-Referenzanwendung bietet SchildiChat folgende Änderungen:
 - Eine gemeinsame Liste für Direkt-Chats und Gruppen
 - Optionale Nachrichtenblasen
-- Folgt der Systempräferenz bezüglich hellem bzw. dunklem Design
-- Weitere kleinere Verbesserungen zur Benutzerfreundlichkeit
+- Weitere Verbesserungen bezüglich der Benutzerfreundlichkeit und zusätzliche Einstellungen zur Konfiguration der App
 
 SchildiChat ist quelloffen: https://github.com/SchildiChat/SchildiChat-android
 Mehr Informationen zum Matrix-Protokoll: https://matrix.org/
