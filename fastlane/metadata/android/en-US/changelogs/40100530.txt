@@ -1,0 +1,4 @@
+- Update codebase to Element v1.1.11
+- Reworked light SC theme
+- Fix chat position jumps during message loading
+- Fix some corner case where a wrong display name would show
