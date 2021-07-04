@@ -9,16 +9,14 @@ Compared to Element, SchildiChat features following most important changes:
 
 - A unified chat list for both direct and group chats
 - Optional message bubbles
-- Further small usability improvements
+- Further usability improvements and additional settings to configure the app
 
-A more thorough list of changes compared to Element can be found [here](FEATURES.md).
+A more thorough list of changes compared to Element can be found [here](FEATURES.md) - but keep in mind this list might not be up-to-date at all times.
 
 <a href="https://f-droid.org/packages/de.spiritcroc.riotx/" alt="Get it on F-Droid" target="_blank"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="80"></a>
+<a href="https://play.google.com/store/apps/details?id=de.spiritcroc.riotx" alt="Get it on Google Play" target="_blank"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="80"></a>
 
-The version in the official F-Droid repositories comes without the proprietary libraries for push notifications.
-This might lead to increased battery drain and a higher delay for delivering messages.
-If you are looking for a version with push notification support, you can get it from [my F-Droid repository](https://s2.spiritcroc.de/fdroid/repo/).
-The latest version should also be available for direct download [here](https://s2.spiritcroc.de/fdroid/SchildiChat.apk).
+Information about available app variants can be found [on our website](https://schildi.chat/android/).
 
 <a href="https://matrix.to/#/#schildichat-android:matrix.org" target="_blank">Join the discussion on matrix</a>
 
