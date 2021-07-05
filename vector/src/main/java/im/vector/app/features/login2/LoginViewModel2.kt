@@ -41,6 +41,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -651,7 +652,7 @@ class LoginViewModel2 @AssistedInject constructor(
         }
         viewEvent?.let { _viewEvents.post(it) }
 
-        val urlFromUser = action.username.substringAfter(":")
+        val urlFromUser = action.username.getDomain()
         setState {
             copy(
                     isLoading = false,

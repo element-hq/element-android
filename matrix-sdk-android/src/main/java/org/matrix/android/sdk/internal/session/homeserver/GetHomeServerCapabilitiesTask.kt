@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.homeserver
 
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
@@ -90,7 +91,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
 
         val wellknownResult = runCatching {
             getWellknownTask.execute(GetWellknownTask.Params(
-                    domain = userId.substringAfter(":"),
+                    domain = userId.getDomain(),
                     homeServerConnectionConfig = homeServerConnectionConfig
             ))
         }.getOrNull()

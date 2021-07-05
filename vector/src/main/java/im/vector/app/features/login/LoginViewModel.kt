@@ -40,6 +40,7 @@ import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.signout.soft.SoftLogoutActivity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -597,7 +598,7 @@ class LoginViewModel @AssistedInject constructor(
                         identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                 )
                 ?: HomeServerConnectionConfig(
-                        homeServerUri = Uri.parse("https://${action.username.substringAfter(":")}"),
+                        homeServerUri = Uri.parse("https://${action.username.getDomain()}"),
                         homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
                         identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                 )
