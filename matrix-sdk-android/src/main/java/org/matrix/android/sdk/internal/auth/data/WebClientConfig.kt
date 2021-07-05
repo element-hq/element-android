@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class RiotConfig(
+internal data class WebClientConfig(
         /**
          * This is now deprecated, but still used first, rather than value from "default_server_config"
          */
@@ -28,7 +28,7 @@ internal data class RiotConfig(
         val defaultHomeServerUrl: String?,
 
         @Json(name = "default_server_config")
-        val defaultServerConfig: RiotConfigDefaultServerConfig?
+        val defaultServerConfig: WebClientConfigDefaultServerConfig?
 ) {
     fun getPreferredHomeServerUrl(): String? {
         return defaultHomeServerUrl
@@ -38,13 +38,13 @@ internal data class RiotConfig(
 }
 
 @JsonClass(generateAdapter = true)
-internal data class RiotConfigDefaultServerConfig(
+internal data class WebClientConfigDefaultServerConfig(
         @Json(name = "m.homeserver")
-        val homeServer: RiotConfigBaseConfig? = null
+        val homeServer: WebClientConfigBaseConfig? = null
 )
 
 @JsonClass(generateAdapter = true)
-internal data class RiotConfigBaseConfig(
+internal data class WebClientConfigBaseConfig(
         @Json(name = "base_url")
         val baseURL: String? = null
 )

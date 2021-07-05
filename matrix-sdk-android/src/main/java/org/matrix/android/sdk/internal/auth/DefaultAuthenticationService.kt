@@ -33,7 +33,7 @@ import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.auth.data.RiotConfig
+import org.matrix.android.sdk.internal.auth.data.WebClientConfig
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
@@ -145,7 +145,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         return result.fold(
                 {
                     // The homeserver exists and up to date, keep the config
-                    // Homeserver url may have been changed, if it was a Riot url
+                    // Homeserver url may have been changed, if it was a Web client url
                     val alteredHomeServerConnectionConfig = homeServerConnectionConfig.copy(
                             homeServerUriBase = Uri.parse(it.homeServerUrl)
                     )
@@ -191,8 +191,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                                 {
                                     if (it is Failure.OtherServerError
                                             && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
-                                        // It's maybe a Riot url?
-                                        getRiotDomainLoginFlowInternal(homeServerConnectionConfig)
+                                        // It's maybe a Web client url?
+                                        getWebClientDomainLoginFlowInternal(homeServerConnectionConfig)
                                     } else {
                                         throw it
                                     }
@@ -204,20 +204,20 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
     }
 
-    private suspend fun getRiotDomainLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
+    private suspend fun getWebClientDomainLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
         val domain = homeServerConnectionConfig.homeServerUri.host
-                ?: return getRiotLoginFlowInternal(homeServerConnectionConfig)
+                ?: return getWebClientLoginFlowInternal(homeServerConnectionConfig)
 
-        // Ok, try to get the config.domain.json file of a RiotWeb client
+        // Ok, try to get the config.domain.json file of a Web client
         return runCatching {
             executeRequest(null) {
-                authAPI.getRiotConfigDomain(domain)
+                authAPI.getWebClientConfigDomain(domain)
             }
         }
-                .map { riotConfig ->
-                    onRiotConfigRetrieved(homeServerConnectionConfig, riotConfig)
+                .map { webClientConfig ->
+                    onWebClientConfigRetrieved(homeServerConnectionConfig, webClientConfig)
                 }
                 .fold(
                         {
@@ -227,7 +227,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                             if (it is Failure.OtherServerError
                                     && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
                                 // Try with config.json
-                                getRiotLoginFlowInternal(homeServerConnectionConfig)
+                                getWebClientLoginFlowInternal(homeServerConnectionConfig)
                             } else {
                                 throw it
                             }
@@ -235,20 +235,20 @@ internal class DefaultAuthenticationService @Inject constructor(
                 )
     }
 
-    private suspend fun getRiotLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
+    private suspend fun getWebClientLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
-        // Ok, try to get the config.json file of a RiotWeb client
+        // Ok, try to get the config.json file of a Web client
         return executeRequest(null) {
-            authAPI.getRiotConfig()
+            authAPI.getWebClientConfig()
         }
-                .let { riotConfig ->
-                    onRiotConfigRetrieved(homeServerConnectionConfig, riotConfig)
+                .let { webClientConfig ->
+                    onWebClientConfigRetrieved(homeServerConnectionConfig, webClientConfig)
                 }
     }
 
-    private suspend fun onRiotConfigRetrieved(homeServerConnectionConfig: HomeServerConnectionConfig, riotConfig: RiotConfig): LoginFlowResult {
-        val defaultHomeServerUrl = riotConfig.getPreferredHomeServerUrl()
+    private suspend fun onWebClientConfigRetrieved(homeServerConnectionConfig: HomeServerConnectionConfig, webClientConfig: WebClientConfig): LoginFlowResult {
+        val defaultHomeServerUrl = webClientConfig.getPreferredHomeServerUrl()
         if (defaultHomeServerUrl?.isNotEmpty() == true) {
             // Ok, good sign, we got a default hs url
             val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
