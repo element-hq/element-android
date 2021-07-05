@@ -1,0 +1,1 @@
+Perform .well-known request first, even if the entered URL is a valid homeserver base url

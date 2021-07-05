@@ -36,6 +36,7 @@ import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.AliasAvailabilityResult
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
@@ -51,7 +52,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
     init {
         setState {
             copy(
-                    homeServerName = session.myUserId.substringAfter(":")
+                    homeServerName = session.myUserId.getDomain()
             )
         }
     }

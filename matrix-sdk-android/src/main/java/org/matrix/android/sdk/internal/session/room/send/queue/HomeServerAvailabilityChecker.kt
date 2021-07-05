@@ -26,8 +26,8 @@ import java.net.Socket
 internal class HomeServerAvailabilityChecker(val sessionParams: SessionParams) {
 
     fun check(): Boolean {
-        val host = sessionParams.homeServerConnectionConfig.homeServerUri.host ?: return false
-        val port = sessionParams.homeServerConnectionConfig.homeServerUri.port.takeIf { it != -1 } ?: 80
+        val host = sessionParams.homeServerConnectionConfig.homeServerUriBase.host ?: return false
+        val port = sessionParams.homeServerConnectionConfig.homeServerUriBase.port.takeIf { it != -1 } ?: 80
         val timeout = 30_000
         try {
             Socket().use { socket ->

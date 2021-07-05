@@ -34,6 +34,7 @@ import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
@@ -62,7 +63,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
     private fun initHomeServerName() {
         setState {
             copy(
-                    homeServerName = session.myUserId.substringAfter(":")
+                    homeServerName = session.myUserId.getDomain()
             )
         }
     }
@@ -72,7 +73,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
     private fun initAdminE2eByDefault() {
         viewModelScope.launch(Dispatchers.IO) {
             adminE2EByDefault = tryOrNull {
-                rawService.getElementWellknown(session.myUserId)
+                rawService.getElementWellknown(session.sessionParams)
                         ?.isE2EByDefault()
                         ?: true
             } ?: true

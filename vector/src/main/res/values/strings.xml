@@ -538,6 +538,7 @@
     <string name="login">Log in</string>
     <string name="logout">Sign out</string>
     <string name="hs_url">Homeserver URL</string>
+    <string name="hs_client_url">Homeserver API URL</string>
     <string name="identity_url">Identity Server URL</string>
     <string name="search">Search</string>
 
