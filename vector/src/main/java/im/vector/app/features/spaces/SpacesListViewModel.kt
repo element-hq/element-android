@@ -28,6 +28,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.group
@@ -61,7 +62,8 @@ import java.util.concurrent.TimeUnit
 class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
                                                       private val appStateHandler: AppStateHandler,
                                                       private val session: Session,
-                                                      private val vectorPreferences: VectorPreferences
+                                                      private val vectorPreferences: VectorPreferences,
+                                                      private val autoAcceptInvites: AutoAcceptInvites
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -126,10 +128,13 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.computation())
                 .subscribe {
-                    val inviteCount = session.getRoomSummaries(
-                            roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
-                    ).size
-
+                    val inviteCount = if (autoAcceptInvites.hideInvites) {
+                        0
+                    } else {
+                        session.getRoomSummaries(
+                                roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
+                        ).size
+                    }
                     val totalCount = session.getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)

@@ -65,13 +65,6 @@ class ReAuthViewModel @AssistedInject constructor(
             ReAuthActions.FallBackPageClosed -> {
                 // Should we do something here?
             }
-            ReAuthActions.TogglePassVisibility -> {
-                setState {
-                    copy(
-                            passwordVisible = !state.passwordVisible
-                    )
-                }
-            }
             is ReAuthActions.ReAuthWithPass -> {
                 val safeForIntentCypher = ByteArrayOutputStream().also {
                     it.use {

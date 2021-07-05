@@ -28,7 +28,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
-import im.vector.app.core.extensions.showPassword
+import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
 import io.reactivex.Observable
@@ -41,8 +41,6 @@ import javax.inject.Inject
  */
 class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
 
-    private var passwordShown = false
-
     // Show warning only once
     private var showWarning = true
 
@@ -54,7 +52,6 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
         super.onViewCreated(view, savedInstanceState)
 
         setupSubmitButton()
-        setupPasswordReveal()
     }
 
     private fun setupUi(state: LoginViewState) {
@@ -112,23 +109,6 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
         views.passwordFieldTil.error = null
     }
 
-    private fun setupPasswordReveal() {
-        passwordShown = false
-
-        views.passwordReveal.setOnClickListener {
-            passwordShown = !passwordShown
-
-            renderPasswordField()
-        }
-
-        renderPasswordField()
-    }
-
-    private fun renderPasswordField() {
-        views.passwordField.showPassword(passwordShown)
-        views.passwordReveal.render(passwordShown)
-    }
-
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetResetPassword)
     }
@@ -139,8 +119,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
         when (state.asyncResetPassword) {
             is Loading -> {
                 // Ensure new password is hidden
-                passwordShown = false
-                renderPasswordField()
+                views.passwordField.hidePassword()
             }
             is Fail    -> {
                 views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
