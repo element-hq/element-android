@@ -45,17 +45,17 @@ class VerificationChooseMethodController @Inject constructor(
         val host = this
 
         if (state.otherCanScanQrCode || state.otherCanShowQrCode) {
-            var scanCodeInstructions: String
-            var scanOtherCodeTitle: String
-            var compareEmojiSubtitle: String
+            val scanCodeInstructions: String
+            val scanOtherCodeTitle: String
+            val compareEmojiSubtitle: String
             if (state.isMe) {
-                scanCodeInstructions = host.stringProvider.getString(R.string.verification_scan_self_notice)
-                scanOtherCodeTitle = host.stringProvider.getString(R.string.verification_scan_with_this_device)
-                compareEmojiSubtitle = host.stringProvider.getString(R.string.verification_scan_self_emoji_subtitle)
+                scanCodeInstructions = stringProvider.getString(R.string.verification_scan_self_notice)
+                scanOtherCodeTitle = stringProvider.getString(R.string.verification_scan_with_this_device)
+                compareEmojiSubtitle = stringProvider.getString(R.string.verification_scan_self_emoji_subtitle)
             } else {
-                scanCodeInstructions = host.stringProvider.getString(R.string.verification_scan_notice)
-                scanOtherCodeTitle = host.stringProvider.getString(R.string.verification_scan_their_code)
-                compareEmojiSubtitle = host.stringProvider.getString(R.string.verification_scan_emoji_subtitle)
+                scanCodeInstructions = stringProvider.getString(R.string.verification_scan_notice)
+                scanOtherCodeTitle = stringProvider.getString(R.string.verification_scan_their_code)
+                compareEmojiSubtitle = stringProvider.getString(R.string.verification_scan_emoji_subtitle)
             }
 
             bottomSheetVerificationNoticeItem {
