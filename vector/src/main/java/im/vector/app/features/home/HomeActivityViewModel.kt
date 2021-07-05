@@ -254,7 +254,6 @@ class HomeActivityViewModel @AssistedInject constructor(
                     session.identityService().setNewIdentityServer(identityServerUrl)
                     Timber.d("## updateIdentityServer succeeded ($identityServerUrl)")
                 }
-                session.identityService().setUserConsent(true)
             } catch (failure: Throwable) {
                 Timber.e(failure, "## updateIdentityServer failed ")
             }

@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.features.home.contact.list
+package fr.gouv.tchap.android.sdk.api.session.userinfo.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class TchapContactListFragmentArgs(
-        val title: String,
-        val excludedUserIds: Set<String>? = null,
-        val singleSelection: Boolean = false,
-        val showFilter: Boolean = false,
-        val showSearch: Boolean = true,
-        val showInviteActions: Boolean = true
-) : Parcelable
+/**
+ * Ref: https://gitlab.matrix.org/new-vector/internal/-/wikis/DINSIC#get-_matrixfederationv1queryuser_info-federationsynapse
+ */
+data class UserInfo(
+        /**
+         * Whether the user account is expired.
+         */
+        val expired: Boolean,
+        /**
+         * Whether the user account is deactivated.
+         */
+        val deactivated: Boolean
+)

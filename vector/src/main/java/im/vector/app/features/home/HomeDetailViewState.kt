@@ -39,7 +39,9 @@ data class HomeDetailViewState(
         val notificationHighlightRooms: Boolean = false,
         val hasUnreadMessages: Boolean = false,
         val syncState: SyncState = SyncState.Idle,
-        val showDialPadTab: Boolean = false
+        val showDialPadTab: Boolean = false,
+        val inviteEmail: String? = null,
+        val existingRoom: String? = null
 ) : MvRxState
 
 sealed class HomeTab(@StringRes val titleRes: Int) {

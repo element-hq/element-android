@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.features.home.contact.list
+package fr.gouv.tchap.android.sdk.internal.session.users
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-@Parcelize
-data class TchapContactListFragmentArgs(
-        val title: String,
-        val excludedUserIds: Set<String>? = null,
-        val singleSelection: Boolean = false,
-        val showFilter: Boolean = false,
-        val showSearch: Boolean = true,
-        val showInviteActions: Boolean = true
-) : Parcelable
+/**
+ * @property userIds Required. The list of user Matrix IDs to query information about.
+ */
+@JsonClass(generateAdapter = true)
+internal data class GetUsersInfoParams(
+        @Json(name = "user_ids") val userIds: List<String>
+)

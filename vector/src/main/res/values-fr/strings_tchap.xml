@@ -31,7 +31,7 @@
 
     <!-- tchap new strings -->
     <string name="tchap_room_admin_leave_prompt_msg">Voulez-vous vraiment quitter cette conversation ?\n\nElle ne sera plus administrée, et vous risquez de ne plus pouvoir la joindre de nouveau.</string>
-    <string name="tchap_invite_contacts_to_tchap">Inviter des contacts dans Tchap</string>
+    <string name="tchap_invite_contacts_to_tchap">Inviter à rejoindre Tchap</string>
     <string name="tchap_invite_contacts_by_email">Inviter par e\u2011mail</string>
     <string name="tchap_invite_contacts_by_link">Inviter par lien</string>
     <string name="tchap_invite_contacts_to_room">Inviter au salon</string>
@@ -46,10 +46,7 @@
     <string name="tchap_send_invite_failed">Echec de l’envoi de l’invitation à %s</string>
     <string name="tchap_send_invite_network_error">Impossible d’envoyer une invitation : erreur réseau</string>
     <string name="tchap_send_invite_confirmation">Vous recevrez une notification lorsque \n votre invité rejoindra la communauté Tchap</string>
-    <plurals name="tchap_succes_invite_notification">
-        <item quantity="one">%d invitation a bien été envoyée.</item>
-        <item quantity="other">%d invitations ont bien été envoyées.</item>
-    </plurals>
+    <string name="tchap_invite_sending_succeeded">L’invitation a bien été envoyée.</string>
     <string name="tchap_burger_menu_contacts">Contacts</string>
     <string name="tchap_burger_menu_public_rooms">Salons forums</string>
     <string name="tchap_burger_menu_info">Cette application n’est pas approuvée\npour l’échange d’informations en diffusion restreinte</string>

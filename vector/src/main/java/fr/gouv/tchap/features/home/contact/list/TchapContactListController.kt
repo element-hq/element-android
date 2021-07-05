@@ -28,6 +28,7 @@ import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.userdirectory.actionItem
 import im.vector.app.features.userdirectory.userDirectoryUserItem
 import im.vector.app.features.userdirectory.userListHeaderItem
 import org.matrix.android.sdk.api.session.Session
@@ -51,6 +52,29 @@ class TchapContactListController @Inject constructor(private val session: Sessio
 
     override fun buildModels() {
         val currentState = state ?: return
+        val host = this
+
+        if (currentState.showSearch) {
+            actionItem {
+                id(R.drawable.ic_tchap_contact_search)
+                title(host.stringProvider.getString(R.string.search_in_my_contacts))
+                actionIconRes(R.drawable.ic_tchap_contact_search)
+                clickAction {
+                    host.callback?.onContactSearchClick()
+                }
+            }
+        }
+
+        if (currentState.showInviteActions) {
+            actionItem {
+                id(R.drawable.ic_tchap_invite_email)
+                title(host.stringProvider.getString(R.string.tchap_invite_contacts_to_tchap))
+                actionIconRes(R.drawable.ic_tchap_invite_email)
+                clickAction {
+                    host.callback?.onInviteByEmailClick()
+                }
+            }
+        }
 
         buildlocalContacts(currentState)
 
@@ -172,7 +196,9 @@ class TchapContactListController @Inject constructor(private val session: Sessio
     }
 
     interface Callback {
+        fun onInviteByEmailClick()
         fun onItemClick(user: User)
         fun onMatrixIdClick(matrixId: String)
+        fun onContactSearchClick()
     }
 }

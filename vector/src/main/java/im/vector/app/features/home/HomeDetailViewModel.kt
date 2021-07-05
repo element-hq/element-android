@@ -35,11 +35,15 @@ import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
@@ -99,6 +103,9 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             is HomeDetailAction.SwitchTab                -> handleSwitchTab(action)
             HomeDetailAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
             is HomeDetailAction.StartCallWithPhoneNumber -> handleStartCallWithPhoneNumber(action)
+            is HomeDetailAction.InviteByEmail            -> handleIndividualInviteByEmail(action)
+            is HomeDetailAction.CreateDiscussion         -> handleCreateDiscussion(action)
+            HomeDetailAction.UnauthorizedEmail           -> handleUnauthorizedEmail()
         }
     }
 
@@ -157,6 +164,108 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 session.markAllAsRead(roomIds)
             } catch (failure: Throwable) {
                 Timber.d(failure, "Failed to mark all as read")
+            }
+        }
+    }
+
+    private fun handleIndividualInviteByEmail(action: HomeDetailAction.InviteByEmail) {
+        val existingRoom = session.getExistingDirectRoomWithUser(action.email)
+
+        setState {
+            copy(
+                    inviteEmail = action.email,
+                    existingRoom = existingRoom
+            )
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            // Start the invite process by checking whether a Tchap account has been created for this email.
+            val data = tryOrNull { session.identityService().lookUp(listOf(ThreePid.Email(action.email))) }
+
+            if (data.isNullOrEmpty()) {
+                _viewEvents.post(HomeDetailViewEvents.GetPlatform(action.email))
+            } else {
+                _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(action.email))
+            }
+        }
+    }
+
+    private fun handleUnauthorizedEmail() = withState {
+        it.inviteEmail ?: return@withState
+
+        if (it.existingRoom.isNullOrEmpty()) {
+            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail(it.inviteEmail))
+        } else {
+            // Ignore the error, notify the user that the invite has been already sent
+            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
+        }
+    }
+
+    private fun handleCreateDiscussion(action: HomeDetailAction.CreateDiscussion) = withState {
+        it.inviteEmail ?: return@withState
+
+        if (it.existingRoom.isNullOrEmpty()) {
+            // Send the invite if the email is authorized
+            viewModelScope.launch {
+                createDiscussion(it.inviteEmail)
+            }
+        } else {
+            // There is already a discussion with this email
+            // We do not re-invite the NoTchapUser except if
+            // the email is bound to the external instance (for which the invites may expire).
+            if (action.isExternalEmail) {
+                // Revoke the pending invite and leave this empty discussion, we will invite again this email.
+                // We don't have a way for the moment to check if the invite expired or not...
+                viewModelScope.launch {
+                    try {
+                        revokePendingInviteAndLeave(it.existingRoom)
+                        createDiscussion(it.inviteEmail)
+                    } catch (failure: Throwable) {
+                        // Ignore the error, notify the user that the invite has been already sent
+                        _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
+                    }
+                }
+            } else {
+                // Notify the user that the invite has been already sent
+                _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
+            }
+        }
+    }
+
+    private suspend fun createDiscussion(email: String) {
+        val roomParams = CreateRoomParams()
+                .apply {
+                    invite3pids.add(ThreePid.Email(email))
+                    setDirectMessage()
+                }
+
+        runCatching { session.createRoom(roomParams) }.fold(
+                { _ -> _viewEvents.post(HomeDetailViewEvents.InviteNoTchapUserByEmail) },
+                { failure -> _viewEvents.post(HomeDetailViewEvents.Failure(failure)) }
+        )
+    }
+
+    private suspend fun revokePendingInviteAndLeave(roomId: String) = withState {
+        val room = session.getRoom(roomId) ?: return@withState
+        val event = room.getStateEvent(EventType.STATE_ROOM_THIRD_PARTY_INVITE) ?: return@withState
+        val token = event.stateKey
+
+        viewModelScope.launch {
+            if (!token.isNullOrEmpty()) {
+                try {
+                    room.sendStateEvent(
+                            eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+                            stateKey = token,
+                            body = emptyMap()
+                    )
+
+                    room.leave()
+                } catch (failure: Throwable) {
+                    throw failure
+                }
+            } else {
+                Timber.d("unable to revoke invite (no pending invite)")
+                room.leave()
             }
         }
     }

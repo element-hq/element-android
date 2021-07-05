@@ -22,4 +22,10 @@ sealed class HomeDetailViewEvents : VectorViewEvents {
     object Loading : HomeDetailViewEvents()
     object CallStarted : HomeDetailViewEvents()
     data class FailToCall(val failure: Throwable) : HomeDetailViewEvents()
+    data class InviteIgnoredForDiscoveredUser(val email: String) : HomeDetailViewEvents()
+    data class InviteIgnoredForUnauthorizedEmail(val email: String) : HomeDetailViewEvents()
+    data class InviteIgnoredForExistingRoom(val email: String) : HomeDetailViewEvents()
+    object InviteNoTchapUserByEmail : HomeDetailViewEvents()
+    data class GetPlatform(val email: String) : HomeDetailViewEvents()
+    data class Failure(val throwable: Throwable) : HomeDetailViewEvents()
 }

@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.features.home.contact.list
+package fr.gouv.tchap.features.userdirectory
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import im.vector.app.core.platform.VectorSharedAction
 
-@Parcelize
-data class TchapContactListFragmentArgs(
-        val title: String,
-        val excludedUserIds: Set<String>? = null,
-        val singleSelection: Boolean = false,
-        val showFilter: Boolean = false,
-        val showSearch: Boolean = true,
-        val showInviteActions: Boolean = true
-) : Parcelable
+sealed class TchapContactListSharedAction : VectorSharedAction {
+    data class OnInviteByEmail(val email: String) : TchapContactListSharedAction()
+}

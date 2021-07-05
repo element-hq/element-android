@@ -16,15 +16,12 @@
 
 package fr.gouv.tchap.features.home.contact.list
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import im.vector.app.core.platform.VectorViewEvents
 
-@Parcelize
-data class TchapContactListFragmentArgs(
-        val title: String,
-        val excludedUserIds: Set<String>? = null,
-        val singleSelection: Boolean = false,
-        val showFilter: Boolean = false,
-        val showSearch: Boolean = true,
-        val showInviteActions: Boolean = true
-) : Parcelable
+/**
+ * Transient events for invite users to room screen
+ */
+sealed class TchapContactListViewEvents : VectorViewEvents {
+    object OpenSearch : TchapContactListViewEvents()
+    object CancelSearch : TchapContactListViewEvents()
+}

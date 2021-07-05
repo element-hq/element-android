@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.features.home.contact.list
+package fr.gouv.tchap.android.sdk.internal.session.users
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import fr.gouv.tchap.android.sdk.api.session.userinfo.UsersInfoService
+import fr.gouv.tchap.android.sdk.api.session.userinfo.model.UserInfo
+import javax.inject.Inject
 
-@Parcelize
-data class TchapContactListFragmentArgs(
-        val title: String,
-        val excludedUserIds: Set<String>? = null,
-        val singleSelection: Boolean = false,
-        val showFilter: Boolean = false,
-        val showSearch: Boolean = true,
-        val showInviteActions: Boolean = true
-) : Parcelable
+internal class TchapUsersInfoService @Inject constructor(
+        private val getUsersInfoTask: GetUsersInfoTask
+) : UsersInfoService {
+
+    override suspend fun getUsersInfo(userIds: List<String>): Map<String, UserInfo> {
+        return getUsersInfoTask.execute(
+                GetUsersInfoParams(userIds)
+        )
+    }
+}

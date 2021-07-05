@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
@@ -30,11 +31,21 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
+import fr.gouv.tchap.core.utils.TchapUtils
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragmentArgs
+import fr.gouv.tchap.features.home.contact.list.TchapContactListViewEvents
+import fr.gouv.tchap.features.home.contact.list.TchapContactListViewModel
+import fr.gouv.tchap.features.platform.PlatformAction
+import fr.gouv.tchap.features.platform.PlatformViewEvents
+import fr.gouv.tchap.features.platform.PlatformViewModel
+import fr.gouv.tchap.features.platform.PlatformViewState
+import fr.gouv.tchap.features.userdirectory.TchapContactListSharedAction
+import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.extensions.withoutLeftMargin
 import im.vector.app.core.platform.ToolbarConfigurable
@@ -71,6 +82,7 @@ import javax.inject.Inject
 class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
         private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
+        private val platformViewModelFactory: PlatformViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
@@ -79,16 +91,20 @@ class HomeDetailFragment @Inject constructor(
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
-        ServerBackupStatusViewModel.Factory {
+        ServerBackupStatusViewModel.Factory,
+        PlatformViewModel.Factory {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
+    private val platformViewModel: PlatformViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
     private val unreadMessagesSharedViewModel: UnreadMessagesSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
     private val roomListViewModel: RoomListViewModel by activityViewModel()
+    private val tchapContactListViewModel: TchapContactListViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
+    private lateinit var sharedContactActionViewModel: TchapContactListSharedActionViewModel
 
     private var hasUnreadRooms = false
         set(value) {
@@ -130,6 +146,8 @@ class HomeDetailFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         sharedCallActionViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
+        sharedContactActionViewModel = activityViewModelProvider.get(TchapContactListSharedActionViewModel::class.java)
+
         setupBottomNavigationView()
         setupToolbar()
         setupKeysBackupBanner()
@@ -194,6 +212,15 @@ class HomeDetailFragment @Inject constructor(
             )
         }
 
+        sharedContactActionViewModel
+                .observe()
+                .subscribe { action ->
+                    when (action) {
+                        is TchapContactListSharedAction.OnInviteByEmail -> onInviteByEmail(action)
+                    }.exhaustive
+                }
+                .disposeOnDestroyView()
+
         sharedCallActionViewModel
                 .liveKnownCalls
                 .observe(viewLifecycleOwner, {
@@ -205,6 +232,54 @@ class HomeDetailFragment @Inject constructor(
             if (it is RoomListViewEvents.CancelSearch) {
                 // prevent glitch caused by search refresh during activity transition
                 view.doOnNextLayout { closeSearchView() }
+            }
+        }
+
+        tchapContactListViewModel.observeViewEvents {
+            when (it) {
+                is TchapContactListViewEvents.OpenSearch -> openSearchView()
+                // TODO close searchview when we come back on this screen
+                //  view.doOnNextLayout { closeSearchView() }
+                is TchapContactListViewEvents.CancelSearch -> closeSearchView()
+            }
+        }
+
+        platformViewModel.observeViewEvents {
+            when (it) {
+                is PlatformViewEvents.Loading -> showLoading(it.message)
+                is PlatformViewEvents.Failure -> viewModel.handle(HomeDetailAction.UnauthorizedEmail)
+                is PlatformViewEvents.Success -> {
+                    if (it.platform.hs.isNotEmpty()) {
+                        viewModel.handle(HomeDetailAction.CreateDiscussion(TchapUtils.isExternalTchapServer(it.platform.hs)))
+                    } else {
+                        viewModel.handle(HomeDetailAction.UnauthorizedEmail)
+                    }
+                }
+            }.exhaustive
+        }
+
+        viewModel.observeViewEvents {
+            when (it) {
+                is HomeDetailViewEvents.InviteIgnoredForDiscoveredUser    -> {
+                    // TODO display a dialog to inform that an account already exist for this email, prompt the user to send a direct message
+                    //  note: the potential DM is already known see the existing room from state.
+//                    withState(viewModel) {
+//                        it.existingRoom
+//                    }
+                    Toast.makeText(requireContext(), getString(R.string.tchap_discussion_already_exist, it.email), Toast.LENGTH_LONG).show()
+                }
+                is HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail -> {
+                    Toast.makeText(requireContext(), getString(R.string.tchap_invite_unauthorized_message, it.email), Toast.LENGTH_LONG).show()
+                }
+                is HomeDetailViewEvents.InviteIgnoredForExistingRoom      -> {
+                    Toast.makeText(requireContext(), getString(R.string.tchap_invite_already_send_message, it.email), Toast.LENGTH_LONG).show()
+                }
+                HomeDetailViewEvents.InviteNoTchapUserByEmail             -> {
+                    Toast.makeText(requireContext(), "${getString(R.string.tchap_invite_sending_succeeded)}\n" +
+                            "${getString(R.string.tchap_send_invite_confirmation)}", Toast.LENGTH_LONG).show()
+                }
+                is HomeDetailViewEvents.GetPlatform                       -> platformViewModel.handle(PlatformAction.DiscoverTchapPlatform(it.email))
+                is HomeDetailViewEvents.Failure                           -> showFailure(it.throwable)
             }
         }
     }
@@ -221,15 +296,19 @@ class HomeDetailFragment @Inject constructor(
     private fun toggleSearchView() {
         val isSearchMode = views.homeSearchView.isVisible
         if (!isSearchMode) {
-            views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(0)
-            views.homeToolbarContent.isVisible = false
-            views.groupToolbarAvatarImageView.isVisible = false
-            views.homeSearchView.apply {
-                isVisible = true
-                isIconified = false
-            }
+            openSearchView()
         } else {
             closeSearchView()
+        }
+    }
+
+    private fun openSearchView() {
+        views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(0)
+        views.homeToolbarContent.isVisible = false
+        views.groupToolbarAvatarImageView.isVisible = false
+        views.homeSearchView.apply {
+            isVisible = true
+            isIconified = false
         }
     }
 
@@ -328,6 +407,10 @@ class HomeDetailFragment @Inject constructor(
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = spaceSummary.displayName
         }
+    }
+
+    private fun onInviteByEmail(action: TchapContactListSharedAction.OnInviteByEmail) {
+        viewModel.handle(HomeDetailAction.InviteByEmail(action.email))
     }
 
     private fun setupKeysBackupBanner() {
@@ -452,16 +535,16 @@ class HomeDetailFragment @Inject constructor(
     private fun searchWith(value: String) {
         withState(viewModel) {
             val tab = it.currentTab
-            val fragmentTag = "$FRAGMENT_TAG_PREFIX${tab}"
+            val fragmentTag = "$FRAGMENT_TAG_PREFIX$tab"
             val fragment = childFragmentManager.findFragmentByTag(fragmentTag)
             when (tab) {
-                is HomeTab.ContactList     -> (fragment as? TchapContactListFragment)?.searchContactsWith(value)
-                is HomeTab.RoomList        -> (fragment as? RoomListFragment)?.filterRoomsWith(value)
-                else                       -> Unit // nothing to do
+                is HomeTab.ContactList -> (fragment as? TchapContactListFragment)?.searchContactsWith(value)
+                is HomeTab.RoomList    -> (fragment as? RoomListFragment)?.filterRoomsWith(value)
+                else                   -> Unit // nothing to do
             }
         }
     }
-    
+
     private fun createDialPadFragment(): Fragment {
         val fragment = childFragmentManager.fragmentFactory.instantiate(vectorBaseActivity.classLoader, DialPadFragment::class.java.name)
         return (fragment as DialPadFragment).apply {
@@ -481,7 +564,7 @@ class HomeDetailFragment @Inject constructor(
             // As we hide it check if it's not the current item!
             withState(viewModel) {
                 if (it.currentTab.toMenuId() == tabId) {
-                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.PEOPLE)))
+                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.ROOMS)))
                 }
             }
         }
@@ -558,6 +641,10 @@ class HomeDetailFragment @Inject constructor(
 
     override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
         return serverBackupStatusViewModelFactory.create(initialState)
+    }
+
+    override fun create(initialState: PlatformViewState): PlatformViewModel {
+        return platformViewModelFactory.create(initialState)
     }
 
     companion object {

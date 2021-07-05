@@ -46,10 +46,7 @@
     <string name="tchap_send_invite_failed">Failed to send invitation to %s</string>
     <string name="tchap_send_invite_network_error">Unable to send invite: Network error</string>
     <string name="tchap_send_invite_confirmation">You will receive a notification when \n your guest joins the Tchap community</string>
-    <plurals name="tchap_succes_invite_notification">
-        <item quantity="one">%d invitation has been sent.</item>
-        <item quantity="other">%d invitations have been sent.</item>
-    </plurals>
+    <string name="tchap_invite_sending_succeeded">The invitation has been sent.</string>
     <string name="tchap_burger_menu_contacts">Contacts</string>
     <string name="tchap_burger_menu_public_rooms">Forums</string>
     <string name="tchap_burger_menu_info">This app is not approved for\nrestricted information interchange</string>

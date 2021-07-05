@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
 import im.vector.app.core.platform.ConfigurationViewModel
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyViewModel
@@ -154,4 +155,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(SpacePeopleSharedActionViewModel::class)
     fun bindSpacePeopleSharedActionViewModel(viewModel: SpacePeopleSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TchapContactListSharedActionViewModel::class)
+    fun bindTchapContactListSharedActionViewModel(viewModel: TchapContactListSharedActionViewModel): ViewModel
 }

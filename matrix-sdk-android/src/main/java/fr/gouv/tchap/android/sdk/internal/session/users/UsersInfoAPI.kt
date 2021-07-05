@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.features.home.contact.list
+package fr.gouv.tchap.android.sdk.internal.session.users
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.internal.network.NetworkConstants
+import retrofit2.http.Body
+import retrofit2.http.POST
 
-@Parcelize
-data class TchapContactListFragmentArgs(
-        val title: String,
-        val excludedUserIds: Set<String>? = null,
-        val singleSelection: Boolean = false,
-        val showFilter: Boolean = false,
-        val showSearch: Boolean = true,
-        val showInviteActions: Boolean = true
-) : Parcelable
+internal interface UsersInfoAPI {
+
+    /**
+     * Get the expiration and deactivation information about the given user ids.
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "users/info")
+    suspend fun getUsersInfo(@Body usersInfoParams: GetUsersInfoParams): Map<String, GetUsersInfoResult>
+}
