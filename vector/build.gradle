@@ -321,7 +321,7 @@ dependencies {
 
     // Tests
     def kluent_version = '1.67'
-    def androidxTest_version = '1.3.0'
+    def androidxTest_version = '1.4.0'
     def espresso_version = '3.3.0'
 
     implementation project(":matrix-sdk-android")
