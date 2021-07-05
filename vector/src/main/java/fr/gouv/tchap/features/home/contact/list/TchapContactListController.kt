@@ -66,6 +66,17 @@ class TchapContactListController @Inject constructor(private val session: Sessio
             }
         }
 
+        if (currentState.showInviteActions) {
+            actionItem {
+                id(R.drawable.ic_tchap_invite_email)
+                title(host.stringProvider.getString(R.string.tchap_invite_contacts_to_tchap))
+                actionIconRes(R.drawable.ic_tchap_invite_email)
+                clickAction(View.OnClickListener {
+                    host.callback?.onInviteByEmailClick()
+                })
+            }
+        }
+
         buildlocalContacts(currentState)
 
         when (val asyncUsers = currentState.directoryUsers) {
@@ -186,6 +197,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
     }
 
     interface Callback {
+        fun onInviteByEmailClick()
         fun onItemClick(user: User)
         fun onMatrixIdClick(matrixId: String)
         fun onContactSearchClick()

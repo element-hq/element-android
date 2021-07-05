@@ -20,4 +20,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run unit tests
-        run: ./gradlew clean test --stacktrace -PallWarningsAsErrors=false
+        run: ./gradlew clean TestGplayPreprodWithoutvoipWithoutpinningDebugUnitTest --stacktrace -PallWarningsAsErrors=false

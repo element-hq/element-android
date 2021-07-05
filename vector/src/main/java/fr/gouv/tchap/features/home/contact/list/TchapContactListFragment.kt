@@ -23,20 +23,28 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
+import fr.gouv.tchap.features.userdirectory.TchapContactListSharedAction
+import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.databinding.DialogInviteByIdBinding
 import im.vector.app.databinding.FragmentTchapContactListBinding
+import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.userdirectory.PendingSelection
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
 
@@ -47,6 +55,7 @@ class TchapContactListFragment @Inject constructor(
 
     private val args: TchapContactListFragmentArgs by args()
     private val viewModel: TchapContactListViewModel by activityViewModel()
+    private lateinit var sharedActionViewModel: TchapContactListSharedActionViewModel
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapContactListBinding {
         return FragmentTchapContactListBinding.inflate(inflater, container, false)
@@ -54,9 +63,16 @@ class TchapContactListFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(TchapContactListSharedActionViewModel::class.java)
+
         setupRecyclerView()
         setupSearchView()
         setupUserConsent()
+
+        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher,
+                        R.string.permissions_rationale_msg_contacts)) {
+            viewModel.handle(TchapContactListAction.LoadContacts)
+        }
     }
 
     override fun onDestroyView() {
@@ -117,6 +133,35 @@ class TchapContactListFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) {
         tchapContactListController.setData(it)
+    }
+
+    override fun onInviteByEmailClick(): Unit = withState(viewModel) {
+        val dialogLayout = requireActivity().layoutInflater.inflate(R.layout.dialog_invite_by_id, null)
+        val views = DialogInviteByIdBinding.bind(dialogLayout)
+
+        val inviteDialog = AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.people_search_invite_by_id_dialog_title)
+                .setView(dialogLayout)
+                .setPositiveButton(R.string.invite) { _, _ ->
+                    val text = views.inviteByIdEditText.text.toString().lowercase(VectorLocale.applicationLocale).trim()
+
+                    if (text.isEmail()) {
+                        view?.hideKeyboard()
+                        viewModel.handle(TchapContactListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(ThreePid.Email(text))))
+                        sharedActionViewModel.post(TchapContactListSharedAction.OnInviteByEmail(text))
+                    }
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+
+        val inviteButton = inviteDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        inviteButton.isEnabled = false
+
+        views.inviteByIdEditText.doOnTextChanged { text, _, _, _ ->
+            if (text != null) {
+                inviteButton.isEnabled = text.trim().isEmail()
+            }
+        }
     }
 
     override fun onItemClick(user: User) {

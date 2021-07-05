@@ -17,10 +17,13 @@
 package fr.gouv.tchap.features.home.contact.list
 
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.userdirectory.PendingSelection
 
 sealed class TchapContactListAction : VectorViewModelAction {
     data class SearchUsers(val value: String) : TchapContactListAction()
     object ClearSearchUsers : TchapContactListAction()
+    data class AddPendingSelection(val pendingSelection: PendingSelection) : TchapContactListAction()
+    data class RemovePendingSelection(val pendingSelection: PendingSelection) : TchapContactListAction()
     object LoadContacts : TchapContactListAction()
     object SetUserConsent : TchapContactListAction()
     object OpenSearch : TchapContactListAction()

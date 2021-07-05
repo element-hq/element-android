@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.contacts.MappedContact
+import im.vector.app.features.userdirectory.PendingSelection
 import org.matrix.android.sdk.api.session.user.model.User
 
 data class TchapContactListViewState(
@@ -43,10 +44,17 @@ data class TchapContactListViewState(
         val searchTerm: String = "",
 
         // Display search button
-        val showSearch: Boolean
+        val showSearch: Boolean,
+        // Display invite button
+        val showInviteActions: Boolean,
+
+        val singleSelection: Boolean,
+        val pendingSelections: Set<PendingSelection> = emptySet()
 ) : MvRxState {
     constructor(args: TchapContactListFragmentArgs) : this(
             excludedUserIds = args.excludedUserIds,
-            showSearch = args.showSearch
+            singleSelection = args.singleSelection,
+            showSearch = args.showSearch,
+            showInviteActions = args.showInviteActions
     )
 }

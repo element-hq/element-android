@@ -904,8 +904,8 @@
     <string name="people_search_user_directory">User directory (%s)</string>
     <string name="people_search_filter_text">Matrix users only</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Invite user by email</string>
-    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address</string>
+    <string name="people_search_invite_by_id_dialog_title">Send an invitation</string>
+    <string name="people_search_invite_by_id_dialog_description">Please enter email address of the person to invite</string>
     <string name="people_search_invite_by_id_dialog_hint">Email</string>
 
     <!--  Chat -->

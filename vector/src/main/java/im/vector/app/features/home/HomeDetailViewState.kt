@@ -36,5 +36,7 @@ data class HomeDetailViewState(
         val notificationCountRooms: Int = 0,
         val notificationHighlightRooms: Boolean = false,
         val hasUnreadMessages: Boolean = false,
-        val syncState: SyncState = SyncState.Idle
+        val syncState: SyncState = SyncState.Idle,
+        val inviteEmail: String? = null,
+        val existingRoom: String? = null
 ) : MvRxState

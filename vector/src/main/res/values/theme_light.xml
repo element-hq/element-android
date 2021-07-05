@@ -53,7 +53,7 @@
 
         <item name="materialButtonStyle">@style/VectorButtonStyle</item>
         <item name="toolbarStyle">@style/VectorToolbarStyle</item>
-        <item name="alertDialogTheme">@style/VectorAlertDialogStyleLight</item>
+<!--        <item name="alertDialogTheme">@style/VectorAlertDialogStyleLight</item>-->
 
         <item name="android:textColorLink">@color/link_color_light</item>
 
