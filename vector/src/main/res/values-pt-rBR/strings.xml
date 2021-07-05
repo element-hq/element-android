@@ -2549,7 +2549,7 @@
     <string name="create_room_alias_already_in_use">Este endereço já está em uso</string>
     <string name="create_room_alias_hint">Endereço de sala</string>
     <string name="create_room_disable_federation_description">Você pode ativar isto se a sala vai somente ser usada para colaborar com times internos em seu servidorcasa. Isto não poder ser mudado mais tarde.</string>
-    <string name="create_room_disable_federation_title">Bloquear qualquer pessoa que não é parte de %s de nunca se juntar a esta sala</string>
+    <string name="create_room_disable_federation_title">Bloquear qualquer pessoa que não é parte de %s de jamais se juntar a esta sala</string>
     <string name="attachment_viewer_item_x_of_y">%1$d de %2$d</string>
     <string name="a11y_create_direct_message_by_qr_code">Criar uma nova conversa direta ao scannar um QR code</string>
     <string name="a11y_create_direct_message_by_mxid">Criar uma nova conversa direta por ID Matrix</string>
