@@ -314,7 +314,7 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
-                .playable(messageContent.info?.mimeType == MimeTypes.Gif)
+                .playable(messageContent.mimeType == MimeTypes.Gif)
                 .highlighted(highlight)
                 .mediaData(data)
                 .apply {

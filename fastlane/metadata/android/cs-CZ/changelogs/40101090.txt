@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: doplněna podpora pro síť gitter.im
+Úplný záznam změn: https://github.com/vector-im/element-android/releases/tag/v1.1.9

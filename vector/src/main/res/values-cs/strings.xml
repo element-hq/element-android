@@ -2859,4 +2859,9 @@
     <string name="directory_add_a_new_server_prompt">Zadejte název nového serveru, který chcete prozkoumat.</string>
     <string name="directory_add_a_new_server">Přidat nový server</string>
     <string name="directory_your_server">Váš server</string>
+    <string name="continue_anyway">Přesto pokračovat</string>
+    <string name="teammate_spaces_might_not_join">V současné době se lidé nemohou připojit k soukromým místnostem, které jste vytvořili.
+\n
+\nV rámci beta verze to zlepšíme, ale jen jsme vás chtěli informovat.</string>
+    <string name="teammate_spaces_arent_quite_ready">Prostory pro spolupracovníky nejsou ještě zcela připravené, ale přesto je můžete vyzkoušet</string>
 </resources>

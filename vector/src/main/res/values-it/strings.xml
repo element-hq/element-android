@@ -1430,10 +1430,7 @@
 \nNome sessione: %1$s
 \nUltimo accesso: %2$s
 \nSe non hai effettuato l\'accesso da un\'altra sessione, ignora questa richiesta.</string>
-    <string name="your_unverified_device_requesting_with_info">Una sessione non verificata sta chiedendo le chiavi crittografiche. 
-\nNome sessione: %1$s 
-\nUltimo accesso: %2$s 
-\nSe non hai effettuato l\'accesso da un\'altra sessione, ignora questa richiesta.</string>
+    <string name="your_unverified_device_requesting_with_info">Una sessione non verificata sta chiedendo le chiavi crittografiche.\nNome sessione: %1$s\nUltimo accesso: %2$s\nSe non hai effettuato l\'accesso da un\'altra sessione, ignora questa richiesta.</string>
     <string name="start_verification_short_label">Verifica</string>
     <string name="share_without_verifying_short_label">Condividi</string>
     <string name="key_share_request">Richiesta condivisione chiavi crittografiche</string>
@@ -1897,12 +1894,7 @@
     <string name="verify_user_sas_emoji_security_tip">Per avere la massima certezza effettuate l\'operazione tramite un mezzo di comunicazione già fidato oppure fatelo di persona.</string>
     <string name="verification_green_shield">Il badge verde garantisce che l\'identità dell\'utente è verificata. Verifica tutti gli utenti in una stanza per assicurarti che sia sicura.</string>
     <string name="verification_conclusion_not_secure">Non sicuro</string>
-    <string name="verification_conclusion_compromised">Uno dei seguenti potrebbe essere compromesso:
-\n
-\n - Il tuo Home Server
-\n - L\'Home Server al quale è connesso l\'utente che stai verificando
-\n - La tua connessione internet o quella dell\'altro utente
-\n - Il tuo dispositivo o quello dell\'altro utente</string>
+    <string name="verification_conclusion_compromised">Uno dei seguenti potrebbe essere compromesso:\n\n - Il tuo Home Server\n - L\'Home Server al quale è connesso l\'utente che stai verificando\n - La tua connessione internet o quella dell\'altro utente\n - Il tuo dispositivo o quello dell\'altro utente</string>
     <string name="sent_a_video">Video.</string>
     <string name="sent_an_image">Immagine.</string>
     <string name="sent_an_audio_file">Audio</string>
@@ -2868,4 +2860,9 @@
     <string name="directory_add_a_new_server_prompt">Inserisci il nome di un nuovo server che vuoi esplorare.</string>
     <string name="directory_add_a_new_server">Aggiungi un nuovo server</string>
     <string name="directory_your_server">Il tuo server</string>
+    <string name="teammate_spaces_might_not_join">Al momento le persone potrebbero non poter entrare nelle stanze private che crei.
+\n
+\nMiglioreremo questa cosa come parte della beta, ma volevamo almeno fartelo sapere.</string>
+    <string name="teammate_spaces_arent_quite_ready">Gli spazi dei compagni non sono ancora pronti del tutto, ma puoi comunque provarli</string>
+    <string name="continue_anyway">Continua comunque</string>
 </resources>
