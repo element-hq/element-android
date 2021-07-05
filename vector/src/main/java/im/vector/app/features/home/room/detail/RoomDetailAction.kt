@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail
 import android.net.Uri
 import android.view.View
 import im.vector.app.core.platform.VectorViewModelAction
+import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
@@ -92,6 +93,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class EnsureNativeWidgetAllowed(val widget: Widget,
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
+    data class UpdateJoinJitsiCallStatus(val broadcastEvent: BroadcastEvent): RoomDetailAction()
 
     data class OpenOrCreateDm(val userId: String) : RoomDetailAction()
     data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
@@ -100,6 +102,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class SetAvatarAction(val newAvatarUri: Uri, val newAvatarFileName: String) : RoomDetailAction()
     object QuickActionSetTopic : RoomDetailAction()
     data class ShowRoomAvatarFullScreen(val matrixItem: MatrixItem?, val transitionView: View?) : RoomDetailAction()
+
 
     // Preview URL
     data class DoNotShowPreviewUrlFor(val eventId: String, val url: String) : RoomDetailAction()

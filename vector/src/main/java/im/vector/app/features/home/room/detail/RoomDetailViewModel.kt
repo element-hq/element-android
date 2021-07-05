@@ -39,6 +39,7 @@ import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.call.conference.JitsiService
+import im.vector.app.features.call.conference.extractConferenceUrl
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.CommandParser
@@ -63,8 +64,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -236,8 +239,11 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .map { widgets ->
                     widgets.filter { it.isActive }
                 }
-                .execute {
-                    copy(activeRoomWidgets = it)
+                .execute { widgets ->
+                    val jitsiConfId = widgets()?.firstOrNull { it.type == WidgetType.Jitsi }?.let { jitsiWidget ->
+                        jitsiService.extractProperties(jitsiWidget)?.confId
+                    }
+                    copy(activeRoomWidgets = widgets, jitsiConfId = jitsiConfId)
                 }
     }
 
@@ -303,6 +309,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.EndCall                          -> handleEndCall()
             is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
             is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
+            is RoomDetailAction.UpdateJoinJitsiCallStatus        -> handleJitsiCallJoinStatus(action)
             is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
             is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
             is RoomDetailAction.CancelSend                       -> handleCancel(action)
@@ -321,6 +328,25 @@ class RoomDetailViewModel @AssistedInject constructor(
             RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
             RoomDetailAction.ResendAll                           -> handleResendAll()
         }.exhaustive
+    }
+
+    private fun handleJitsiCallJoinStatus(action: RoomDetailAction.UpdateJoinJitsiCallStatus) = withState { state ->
+        if (state.jitsiConfId == null) {
+            // If jitsi widget is removed while on the call
+            if (state.hasJoinedActiveJitsiConference) {
+                setState { copy(hasJoinedActiveJitsiConference = false) }
+            }
+            return@withState
+        }
+        when (action.broadcastEvent.type) {
+            BroadcastEvent.Type.CONFERENCE_JOINED,
+            BroadcastEvent.Type.CONFERENCE_TERMINATED -> {
+                if (action.broadcastEvent.extractConferenceUrl()?.endsWith(state.jitsiConfId).orFalse()) {
+                    setState { copy(hasJoinedActiveJitsiConference = action.broadcastEvent.type == BroadcastEvent.Type.CONFERENCE_JOINED) }
+                }
+            }
+            else                                      -> Unit
+        }
     }
 
     private fun handleAcceptCall(action: RoomDetailAction.AcceptCall) {
@@ -607,7 +633,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.invite           -> state.canInvite
             R.id.open_matrix_apps -> true
             R.id.voice_call       -> state.isWebRTCCallOptionAvailable()
-            R.id.video_call       -> state.isWebRTCCallOptionAvailable() || !state.hasActiveJitsiWidget()
+            R.id.video_call       -> true
             R.id.search           -> true
             R.id.dev_tools        -> vectorPreferences.developerMode()
             else                  -> false

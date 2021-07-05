@@ -120,7 +120,9 @@ import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
+import im.vector.app.features.call.conference.JitsiBroadcastEventObserver
 import im.vector.app.features.call.conference.JitsiCallViewModel
+import im.vector.app.features.call.conference.extractConferenceUrl
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
@@ -174,6 +176,7 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
+import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -301,6 +304,7 @@ class RoomDetailFragment @Inject constructor(
     private lateinit var emojiPopup: EmojiPopup
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        lifecycle.addObserver(JitsiBroadcastEventObserver(vectorBaseActivity, this::onBroadcastEvent))
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         knownCallsViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
@@ -410,6 +414,10 @@ class RoomDetailFragment @Inject constructor(
             handleShareData()
             handleSpaceShare()
         }
+    }
+
+    private fun onBroadcastEvent(event: BroadcastEvent) {
+        roomDetailViewModel.handle(RoomDetailAction.UpdateJoinJitsiCallStatus(event))
     }
 
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
