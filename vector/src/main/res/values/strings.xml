@@ -2630,9 +2630,12 @@
     <string name="you">You</string>
 
     <string name="verification_scan_notice">Scan the code with the other user\'s device to securely verify each other</string>
+    <string name="verification_scan_self_notice">Scan the code with your other device or switch and scan with this device</string>
     <string name="verification_scan_their_code">Scan their code</string>
+    <string name="verification_scan_with_this_device">Scan with this device</string>
     <string name="verification_scan_emoji_title">Can\'t scan</string>
     <string name="verification_scan_emoji_subtitle">If you\'re not in person, compare emoji instead</string>
+    <string name="verification_scan_self_emoji_subtitle">Verify by comparing emoji instead</string>
 
     <string name="verification_no_scan_emoji_title">Verify by comparing emojis</string>
 
