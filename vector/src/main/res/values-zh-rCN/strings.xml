@@ -2763,4 +2763,9 @@
     <string name="directory_add_a_new_server_prompt">输入你想要探索的新服务器的名称。</string>
     <string name="directory_add_a_new_server">添加一个新的服务器</string>
     <string name="directory_your_server">你的服务器</string>
+    <string name="teammate_spaces_might_not_join">眼下，人们可能无法加入您设置的任何私人房间。
+\n
+\n作为测试版的一部分，我们将对此进行改进，只是想让你知道。</string>
+    <string name="teammate_spaces_arent_quite_ready">队友空间还没有完全准备好，但你仍然可以尝试一下</string>
+    <string name="continue_anyway">不论如何继续</string>
 </resources>

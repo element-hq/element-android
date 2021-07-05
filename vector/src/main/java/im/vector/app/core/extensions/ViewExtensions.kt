@@ -41,7 +41,7 @@ fun SearchView.withoutLeftMargin() {
 }
 
 fun EditText.hidePassword() {
-    inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+    inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 }
 
 fun View.getMeasurements(): Pair<Int, Int> {
