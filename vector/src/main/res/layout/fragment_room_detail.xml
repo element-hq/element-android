@@ -131,6 +131,7 @@
         android:id="@+id/jumpToReadMarkerView"
         style="?vctr_jump_to_unread_style"
         app:chipIcon="@drawable/ic_jump_to_unread"
+        app:chipIconTint="?colorPrimary"
         app:closeIcon="@drawable/ic_close_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

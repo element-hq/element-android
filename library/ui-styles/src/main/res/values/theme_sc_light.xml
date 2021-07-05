@@ -92,6 +92,8 @@
 
         <item name="android:statusBarColor">@color/background_black_sc</item>
         <item name="android:navigationBarColor">@color/background_black_sc</item>
+
+        <item name="vctr_jump_to_unread_style">@style/Widget.Vector.JumpToUnread.SC.Light</item>
     </style>
 
     <!-- Default AppTheme for usage where settings don't apply -->

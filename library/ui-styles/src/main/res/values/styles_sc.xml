@@ -47,4 +47,14 @@
         <item name="boxStrokeColor">@color/edit_text_outline_dark</item>
     </style>
 
+    <style name="Widget.Vector.JumpToUnread.SC.Dark" parent="Widget.Vector.JumpToUnread.Dark">
+        <item name="chipBackgroundColor">@color/background_floating_sc</item>
+        <item name="closeIconTint">?vctr_content_quaternary</item>
+    </style>
+
+    <style name="Widget.Vector.JumpToUnread.SC.Light" parent="Widget.Vector.JumpToUnread.Light">
+        <item name="chipBackgroundColor">@color/background_floating_sc_light</item>
+        <item name="closeIconTint">?vctr_content_secondary</item>
+    </style>
+
 </resources>

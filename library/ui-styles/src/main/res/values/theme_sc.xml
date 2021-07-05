@@ -95,6 +95,8 @@
 
         <!-- Broken login screen outline color on dark theme  otherwise? -->
         <item name="textInputStyle">@style/Widget.Vector.TextInputLayout.Dark.SC</item>
+
+        <item name="vctr_jump_to_unread_style">@style/Widget.Vector.JumpToUnread.SC.Dark</item>
     </style>
 
     <style name="AppTheme.Base.SC.Dark">
