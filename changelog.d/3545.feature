@@ -1,1 +1,0 @@
-Reveal password: use facility from com.google.android.material.textfield.TextInputLayout instead of manual handling.
