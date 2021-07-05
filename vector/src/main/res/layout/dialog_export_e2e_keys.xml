@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
@@ -19,27 +19,12 @@
         android:textColor="?vctr_content_primary"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <im.vector.app.core.ui.views.RevealPasswordImageView
-        android:id="@+id/exportDialogShowPassword"
-        android:layout_width="@dimen/layout_touch_size"
-        android:layout_height="@dimen/layout_touch_size"
-        android:layout_marginTop="8dp"
-        android:background="?attr/selectableItemBackground"
-        android:scaleType="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/exportDialogTil"
-        app:layout_constraintTop_toTopOf="@id/exportDialogTil"
-        app:tint="?colorSecondary" />
-
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/exportDialogTil"
-        android:layout_width="0dp"
+        style="@style/Widget.Vector.TextInputLayout.Password"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/exportDialogShowPassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exportDialogText">
+        android:layout_marginTop="8dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/exportDialogEt"
@@ -53,13 +38,11 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/exportDialogTilConfirm"
-        android:layout_width="0dp"
+        style="@style/Widget.Vector.TextInputLayout.Password"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        app:errorEnabled="true"
-        app:layout_constraintEnd_toEndOf="@+id/exportDialogTil"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exportDialogTil">
+        app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/exportDialogEtConfirm"
@@ -81,4 +64,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/exportDialogTilConfirm" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

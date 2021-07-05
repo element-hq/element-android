@@ -453,6 +453,27 @@
                     android:text="Show Dialog" />
 
                 <Button
+                    android:id="@+id/debugShowDialogDestructive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Show Dialog Destructive" />
+
+                <Button
+                    android:id="@+id/debugShowDialogNegativeDestructive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Show Dialog Neg Destructive" />
+
+                <Button
+                    android:id="@+id/debugShowProgressDialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Show Progress Dialog" />
+
+                <Button
                     android:id="@+id/debugShowBottomSheet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

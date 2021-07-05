@@ -32,6 +32,7 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.features.home.room.detail.RoomDetailActivity
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
@@ -55,7 +56,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                                                     private val activeSessionDataSource: ActiveSessionDataSource,
                                                     private val iconLoader: IconLoader,
                                                     private val bitmapLoader: BitmapLoader,
-                                                    private val outdatedDetector: OutdatedEventDetector?) {
+                                                    private val outdatedDetector: OutdatedEventDetector?,
+                                                    private val autoAcceptInvites: AutoAcceptInvites) {
 
     private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
     private var backgroundHandler: Handler
@@ -258,7 +260,14 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                             roomEvents.add(event)
                         }
                     }
-                    is InviteNotifiableEvent  -> invitationEvents.add(event)
+                    is InviteNotifiableEvent  -> {
+                        if (autoAcceptInvites.hideInvites) {
+                            // Forget this event
+                           eventIterator.remove()
+                        } else {
+                            invitationEvents.add(event)
+                        }
+                    }
                     is SimpleNotifiableEvent  -> simpleEvents.add(event)
                     else                      -> Timber.w("Type not handled")
                 }

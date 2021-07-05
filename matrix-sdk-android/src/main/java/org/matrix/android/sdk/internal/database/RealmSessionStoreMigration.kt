@@ -19,9 +19,10 @@ package org.matrix.android.sdk.internal.database
 import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
-import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
+import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
@@ -40,20 +41,19 @@ import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntityFie
 import org.matrix.android.sdk.internal.database.model.SpaceParentSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.query.process
 import timber.log.Timber
-import javax.inject.Inject
 
-class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
+internal object RealmSessionStoreMigration : RealmMigration {
 
-    companion object {
-        // SC-specific DB changes on top of Element
-        // 1: added markedUnread field
-        const val SESSION_STORE_SCHEMA_SC_VERSION = 2L
-        const val SESSION_STORE_SCHEMA_SC_VERSION_OFFSET = (1L shl 12)
+    // SC-specific DB changes on top of Element
+    // 1: added markedUnread field
+    const val SESSION_STORE_SCHEMA_SC_VERSION = 2L
+    const val SESSION_STORE_SCHEMA_SC_VERSION_OFFSET = (1L shl 12)
 
-        const val SESSION_STORE_SCHEMA_VERSION = 14L +
-                SESSION_STORE_SCHEMA_SC_VERSION * SESSION_STORE_SCHEMA_SC_VERSION_OFFSET
-    }
+    const val SESSION_STORE_SCHEMA_VERSION = 15L +
+            SESSION_STORE_SCHEMA_SC_VERSION * SESSION_STORE_SCHEMA_SC_VERSION_OFFSET
+
 
     override fun migrate(realm: DynamicRealm, combinedOldVersion: Long, newVersion: Long) {
         val oldVersion = combinedOldVersion % SESSION_STORE_SCHEMA_SC_VERSION_OFFSET
@@ -75,6 +75,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 11) migrateTo12(realm)
         if (oldVersion <= 12) migrateTo13(realm)
         if (oldVersion <= 13) migrateTo14(realm)
+        if (oldVersion <= 14) migrateTo15(realm)
 
         if (oldScVersion <= 0) migrateToSc1(realm)
         if (oldScVersion <= 1) migrateToSc2(realm)
@@ -320,7 +321,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         Timber.d("Step 13 -> 14")
         val roomAccountDataSchema = realm.schema.create("RoomAccountDataEntity")
                 .addField(RoomAccountDataEntityFields.CONTENT_STR, String::class.java)
-                .addField(RoomAccountDataEntityFields.TYPE, String::class.java,  FieldAttribute.INDEXED)
+                .addField(RoomAccountDataEntityFields.TYPE, String::class.java, FieldAttribute.INDEXED)
 
         realm.schema.get("RoomEntity")
                 ?.addRealmListField(RoomEntityFields.ACCOUNT_DATA.`$`, roomAccountDataSchema)
@@ -333,5 +334,17 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 }
 
         roomAccountDataSchema.isEmbedded = true
+    }
+
+    private fun migrateTo15(realm: DynamicRealm) {
+        // fix issue with flattenParentIds on DM that kept growing with duplicate
+        // so we reset it, will be updated next sync
+        realm.where("RoomSummaryEntity")
+                .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                .findAll()
+                .onEach {
+                    it.setString(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, null)
+                }
     }
 }

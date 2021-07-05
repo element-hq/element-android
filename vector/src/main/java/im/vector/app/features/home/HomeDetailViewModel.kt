@@ -32,6 +32,8 @@ import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.home.room.ScSdkPreferences
+import im.vector.app.features.invite.AutoAcceptInvites
+import im.vector.app.features.invite.showInvites
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
@@ -58,7 +60,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val scSdkPreferences: ScSdkPreferences,
                                                       private val callManager: WebRtcCallManager,
                                                       private val directRoomHelper: DirectRoomHelper,
-                                                      private val appStateHandler: AppStateHandler)
+                                                      private val appStateHandler: AppStateHandler,
+private val autoAcceptInvites: AutoAcceptInvites)
     : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
@@ -206,21 +209,25 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                         }
                         is RoomGroupingMethod.BySpace       -> {
                             val activeSpaceRoomId = groupingMethod.spaceSummary?.roomId
-                            val dmInvites = session.getRoomSummaries(
-                                    roomSummaryQueryParams {
-                                        memberships = listOf(Membership.INVITE)
-                                        roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                        activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
-                                    }
-                            ).size
+                            var dmInvites = 0
+                            var roomsInvite = 0
+                            if (autoAcceptInvites.showInvites()) {
+                                dmInvites = session.getRoomSummaries(
+                                        roomSummaryQueryParams {
+                                            memberships = listOf(Membership.INVITE)
+                                            roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                                            activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
+                                        }
+                                ).size
 
-                            val roomsInvite = session.getRoomSummaries(
-                                    roomSummaryQueryParams {
-                                        memberships = listOf(Membership.INVITE)
-                                        roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
-                                    }
-                            ).size
+                                roomsInvite = session.getRoomSummaries(
+                                        roomSummaryQueryParams {
+                                            memberships = listOf(Membership.INVITE)
+                                            roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
+                                        }
+                                ).size
+                            }
 
                             val dmRooms = session.getNotificationCountForRooms(
                                     roomSummaryQueryParams {

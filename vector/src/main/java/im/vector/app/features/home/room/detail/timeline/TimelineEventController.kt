@@ -39,14 +39,14 @@ import im.vector.app.features.home.room.detail.UnreadState
 import im.vector.app.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
 import im.vector.app.features.home.room.detail.timeline.factory.ReadReceiptsItemFactory
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactory
+import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
+import im.vector.app.features.home.room.detail.timeline.helper.InvalidateTimelineEventDiffUtilCallback
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineControllerInterceptorHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
-import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
-import im.vector.app.features.home.room.detail.timeline.helper.InvalidateTimelineEventDiffUtilCallback
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
@@ -164,9 +164,18 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         override fun onChanged(position: Int, count: Int, payload: Any?) {
             synchronized(modelCache) {
                 assertUpdateCallbacksAllowed()
-                (position until (position + count)).forEach {
+                (position until position + count).forEach {
                     // Invalidate cache
                     modelCache[it] = null
+                }
+                // Also invalidate the first previous displayable event if
+                // it's sent by the same user so we are sure we have up to date information.
+                val invalidatedSenderId: String? = currentSnapshot.getOrNull(position)?.senderInfo?.userId
+                val prevDisplayableEventIndex = currentSnapshot.subList(0, position).indexOfLast {
+                    timelineEventVisibilityHelper.shouldShowEvent(it, eventIdToHighlight)
+                }
+                if (prevDisplayableEventIndex != -1 && currentSnapshot[prevDisplayableEventIndex].senderInfo.userId == invalidatedSenderId) {
+                    modelCache[prevDisplayableEventIndex] = null
                 }
                 requestModelBuild()
             }
@@ -353,10 +362,14 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val event = currentSnapshot[position]
             val nextEvent = currentSnapshot.nextOrNull(position)
             val prevEvent = currentSnapshot.prevOrNull(position)
+            val nextDisplayableEvent = currentSnapshot.subList(position + 1, currentSnapshot.size).firstOrNull {
+                timelineEventVisibilityHelper.shouldShowEvent(it, eventIdToHighlight)
+            }
             val params = TimelineItemFactoryParams(
                     event = event,
                     prevEvent = prevEvent,
                     nextEvent = nextEvent,
+                    nextDisplayableEvent = nextDisplayableEvent,
                     highlightedEventId = eventIdToHighlight,
                     lastSentEventIdWithoutReadReceipts = lastSentEventWithoutReadReceipts,
                     callback = callback

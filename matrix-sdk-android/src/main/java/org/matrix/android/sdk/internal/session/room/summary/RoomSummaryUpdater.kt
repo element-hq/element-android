@@ -213,7 +213,6 @@ internal class RoomSummaryUpdater @Inject constructor(
         measureTimeMillis {
             val lookupMap = realm.where(RoomSummaryEntity::class.java)
                     .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
-                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                     // we order by roomID to be consistent when breaking parent/child cycles
                     .sort(RoomSummaryEntityFields.ROOM_ID)
                     .findAll().map {

@@ -2813,4 +2813,9 @@
     <string name="directory_add_a_new_server">Ajouter un nouveau serveur</string>
     <string name="directory_your_server">Votre serveur</string>
     <string name="call_transfer_consulting_with">Consultation de %1$s</string>
+    <string name="teammate_spaces_might_not_join">Pour l’instant, vos coéquipiers pourraient ne pas pouvoir rejoindre les salons privés que vous créez.
+\n
+\nNous allons améliorer ceci dans la bêta, mais nous voulions vous en faire part.</string>
+    <string name="teammate_spaces_arent_quite_ready">Les espaces pour les équipes ne sont pas tout à fait prêts, mais vous pouvez quand même les essayer</string>
+    <string name="continue_anyway">Poursuivre malgré tout</string>
 </resources>

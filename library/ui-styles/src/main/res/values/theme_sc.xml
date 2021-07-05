@@ -71,7 +71,6 @@
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">?vctr_content_tertiary</item>
 
-        <item name="materialAlertDialogTheme">@style/VectorAlertDialogStyleDark.SC</item>
 
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar.SC</item>

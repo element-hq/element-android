@@ -127,32 +127,22 @@
         app:layout_constraintTop_toBottomOf="@id/activeConferenceView"
         tools:listitem="@layout/item_timeline_event_base" />
 
-    <FrameLayout
-        android:id="@+id/bannersContainer"
-        android:layout_width="0dp"
+    <com.google.android.material.chip.Chip
+        android:id="@+id/jumpToReadMarkerView"
+        style="?vctr_jump_to_unread_style"
+        app:chipIcon="@drawable/ic_jump_to_unread"
+        app:closeIcon="@drawable/ic_close_24dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:text="@string/room_jump_to_first_unread"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activeConferenceView">
+        app:layout_constraintTop_toBottomOf="@id/activeConferenceView"
+        tools:visibility="visible" />
 
-        <!--        <im.vector.app.features.home.room.detail.widget.RoomWidgetsBannerView-->
-        <!--            android:id="@+id/roomWidgetsBannerView"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="8dp"-->
-        <!--            android:layout_marginTop="8dp"-->
-        <!--            android:layout_marginEnd="8dp"-->
-        <!--            android:visibility="gone"-->
-        <!--            tools:visibility="visible" />-->
-
-        <im.vector.app.core.ui.views.JumpToReadMarkerView
-            android:id="@+id/jumpToReadMarkerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            tools:visibility="visible" />
-
-    </FrameLayout>
 
     <im.vector.app.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
@@ -213,7 +203,7 @@
         android:focusable="true"
         app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activeConferenceView">
+        app:layout_constraintTop_toBottomOf="@id/jumpToReadMarkerView">
 
         <org.webrtc.SurfaceViewRenderer
             android:id="@+id/activeCallPiP"

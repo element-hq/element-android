@@ -31,6 +31,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.room.ScSdkPreferences
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,7 +52,8 @@ class RoomListViewModel @Inject constructor(
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,
         private val scSdkPreferences: ScSdkPreferences,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val autoAcceptInvites: AutoAcceptInvites
 ) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
     interface Factory {
@@ -129,6 +131,7 @@ class RoomListViewModel @Inject constructor(
                     appStateHandler,
                     viewModelScope,
                     suggestedRoomJoiningState,
+                    autoAcceptInvites,
                     {
                         it.disposeOnClear()
                     },
@@ -144,6 +147,7 @@ class RoomListViewModel @Inject constructor(
                     stringProvider,
                     viewModelScope,
                     appStateHandler,
+                    autoAcceptInvites,
                     {
                         it.disposeOnClear()
                     },

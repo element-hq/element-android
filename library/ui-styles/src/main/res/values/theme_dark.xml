@@ -76,7 +76,6 @@
         <item name="android:textViewStyle">@style/Widget.Vector.TextView.Body</item>
         <item name="materialButtonStyle">@style/Widget.Vector.Button</item>
         <item name="toolbarStyle">@style/Widget.Vector.Toolbar</item>
-        <item name="materialAlertDialogTheme">@style/AlertDialog.Vector.Dark</item>
         <item name="bottomNavigationStyle">@style/BottomNavigation.Vector</item>
         <item name="searchViewStyle">@style/Widget.Vector.SearchView</item>
         <item name="textInputStyle">@style/Widget.Vector.TextInputLayout</item>
@@ -89,6 +88,7 @@
 
         <!-- Default theme -->
         <item name="bottomSheetDialogTheme">@style/Theme.Vector.BottomSheetDialog.Dark</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Vector.MaterialAlertDialog</item>
 
         <item name="android:textColorLink">@color/element_link_dark</item>
 
@@ -145,6 +145,9 @@
         <item name="vctr_social_login_button_twitter_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Twitter.Dark</item>
         <item name="vctr_social_login_button_apple_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Apple.Dark</item>
         <item name="vctr_social_login_button_gitlab_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Gitlab.Dark</item>
+
+        <item name="vctr_jump_to_unread_style">@style/Widget.Vector.JumpToUnread.Dark</item>
+
     </style>
 
     <style name="Theme.Vector.Dark" parent="Base.Theme.Vector.Dark" />

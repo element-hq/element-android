@@ -43,6 +43,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.PowerLevelsHolder
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.VectorHtmlCompressor
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotifiableEventResolver
@@ -160,6 +161,8 @@ interface VectorComponent {
     fun reAuthHelper(): ReAuthHelper
 
     fun pinLocker(): PinLocker
+
+    fun autoAcceptInvites(): AutoAcceptInvites
 
     fun webRtcCallManager(): WebRtcCallManager
 

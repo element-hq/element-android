@@ -2796,4 +2796,9 @@
     <string name="directory_add_a_new_server_prompt">Jepni emrin e e një shërbyesi të ri që doni të eksploroni.</string>
     <string name="directory_add_a_new_server">Shtoni shërbyes të ri</string>
     <string name="directory_your_server">Shërbyesi juaj</string>
+    <string name="teammate_spaces_might_not_join">Hëpërhë, personat mund të mos jenë në gjendje të hyjnë në çfarëdo dhome private që krijoni.
+\n
+\nDo ta përmirësojmë këtë punë, si pjesë e versionit beta, thjesht donim t’ua bënim të ditur.</string>
+    <string name="teammate_spaces_arent_quite_ready">Hapësirat për anëtarë ekipi ende s’janë tërësisht gati, por mund t’i provoni</string>
+    <string name="continue_anyway">Vazhdo, Sido Qoftë</string>
 </resources>

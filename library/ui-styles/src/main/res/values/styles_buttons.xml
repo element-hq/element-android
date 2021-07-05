@@ -6,6 +6,7 @@
         <item name="android:paddingRight">16dp</item>
         <item name="android:minWidth">94dp</item>
         <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
+        <item name="cornerRadius">8dp</item>
         <item name="lineHeight">24sp</item>
     </style>
 
@@ -32,6 +33,7 @@
         <item name="android:paddingRight">16dp</item>
         <item name="android:minWidth">94dp</item>
         <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
+        <item name="cornerRadius">8dp</item>
         <item name="lineHeight">24sp</item>
     </style>
 
@@ -48,6 +50,7 @@
         <item name="colorControlHighlight">?colorSecondary</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
         <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
+        <item name="cornerRadius">8dp</item>
         <item name="lineHeight">24sp</item>
     </style>
 
@@ -61,6 +64,7 @@
         <item name="strokeColor">@color/button_background_tint_selector</item>
         <item name="strokeWidth">1dp</item>
         <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
+        <item name="cornerRadius">8dp</item>
         <item name="lineHeight">24sp</item>
     </style>
 

@@ -49,13 +49,12 @@ fun RoomGroupingMethod.group() = (this as? RoomGroupingMethod.ByLegacyGroup)?.gr
 // TODO Keep this class for now, will maybe be used fro Space
 @Singleton
 class AppStateHandler @Inject constructor(
-        sessionDataSource: ActiveSessionDataSource,
+        private val sessionDataSource: ActiveSessionDataSource,
         private val uiStateRepository: UiStateRepository,
         private val activeSessionHolder: ActiveSessionHolder
 ) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
-
     private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
 
     val selectedRoomGroupingObservable = selectedSpaceDataSource.observe()
@@ -95,11 +94,11 @@ class AppStateHandler @Inject constructor(
         }
     }
 
-    init {
+    private fun observeActiveSession() {
         sessionDataSource.observe()
                 .distinctUntilChanged()
                 .subscribe {
-                    // sessionDataSource could already return a session while acitveSession holder still returns null
+                    // sessionDataSource could already return a session while activeSession holder still returns null
                     it.orNull()?.let { session ->
                         if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
                             setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
@@ -122,6 +121,7 @@ class AppStateHandler @Inject constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
+        observeActiveSession()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -129,7 +129,7 @@ class AppStateHandler @Inject constructor(
         compositeDisposable.clear()
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
-            is RoomGroupingMethod.BySpace -> {
+            is RoomGroupingMethod.BySpace       -> {
                 uiStateRepository.storeGroupingMethod(true, session.sessionId)
                 uiStateRepository.storeSelectedSpace(currentMethod.spaceSummary?.roomId, session.sessionId)
             }

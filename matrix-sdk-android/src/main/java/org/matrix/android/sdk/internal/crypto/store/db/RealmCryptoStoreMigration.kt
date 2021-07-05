@@ -18,6 +18,9 @@ package org.matrix.android.sdk.internal.crypto.store.db
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import io.realm.DynamicRealm
+import io.realm.RealmMigration
+import io.realm.RealmObjectSchema
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
@@ -35,29 +38,24 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntit
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.TrustLevelEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEntityFields
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.SerializeNulls
-import io.realm.DynamicRealm
-import io.realm.RealmMigration
-import io.realm.RealmObjectSchema
-import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntityFields
 import org.matrix.androidsdk.crypto.data.MXOlmInboundGroupSession2
 import timber.log.Timber
-import javax.inject.Inject
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo as LegacyMXDeviceInfo
 
-internal class RealmCryptoStoreMigration @Inject constructor(private val crossSigningKeysMapper: CrossSigningKeysMapper) : RealmMigration {
+internal object RealmCryptoStoreMigration : RealmMigration {
 
-    companion object {
-        // 0, 1, 2: legacy Riot-Android
-        // 3: migrate to RiotX schema
-        // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
-        const val CRYPTO_STORE_SCHEMA_VERSION = 12L
-    }
+    // 0, 1, 2: legacy Riot-Android
+    // 3: migrate to RiotX schema
+    // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
+    const val CRYPTO_STORE_SCHEMA_VERSION = 12L
 
     private fun RealmObjectSchema.addFieldIfNotExists(fieldName: String, fieldType: Class<*>): RealmObjectSchema {
         if (!hasField(fieldName)) {
@@ -384,6 +382,8 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
     private fun migrateTo7(realm: DynamicRealm) {
         Timber.d("Step 6 -> 7")
         Timber.d("Updating KeyInfoEntity table")
+        val crossSigningKeysMapper = CrossSigningKeysMapper(MoshiProvider.providesMoshi())
+
         val keyInfoEntities = realm.where("KeyInfoEntity").findAll()
         try {
             keyInfoEntities.forEach {

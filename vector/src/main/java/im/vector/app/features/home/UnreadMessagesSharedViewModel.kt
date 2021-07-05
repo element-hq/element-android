@@ -30,6 +30,7 @@ import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.ScSdkPreferences
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -56,7 +57,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                                                 session: Session,
                                                                 private val scSdkPreferences: ScSdkPreferences,
                                                                 private val vectorPreferences: VectorPreferences,
-                                                                appStateHandler: AppStateHandler)
+                                                                appStateHandler: AppStateHandler,
+                                                                private val autoAcceptInvites: AutoAcceptInvites)
     : VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -95,12 +97,17 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             },
                             scSdkPreferences
                     )
-                    val invites = session.getRoomSummaries(
-                            roomSummaryQueryParams {
-                                this.memberships = listOf(Membership.INVITE)
-                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
-                            }
-                    ).size
+                    val invites = if (autoAcceptInvites.hideInvites) {
+                        0
+                    } else {
+                        session.getRoomSummaries(
+                                roomSummaryQueryParams {
+                                    this.memberships = listOf(Membership.INVITE)
+                                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
+                                }
+                        ).size
+                    }
+
                     copy(
                             homeSpaceUnread = RoomAggregateNotificationCount(
                                     counts.notificationCount + invites,
@@ -134,10 +141,13 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                         is RoomGroupingMethod.BySpace       -> {
                             val selectedSpace = appStateHandler.safeActiveSpaceId()
 
-                            val inviteCount = session.getRoomSummaries(
-                                    roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
-                            ).size
-
+                            val inviteCount = if (autoAcceptInvites.hideInvites) {
+                                0
+                            } else {
+                                session.getRoomSummaries(
+                                        roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
+                                ).size
+                            }
                             val totalCount = session.getNotificationCountForRooms(
                                     roomSummaryQueryParams {
                                         this.memberships = listOf(Membership.JOIN)
