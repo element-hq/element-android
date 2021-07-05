@@ -1,3 +1,20 @@
+Changes in Element 1.1.12 (2021-07-05)
+======================================
+
+Features ✨
+----------
+ - Reveal password: use facility from com.google.android.material.textfield.TextInputLayout instead of manual handling. ([#3545](https://github.com/vector-im/element-android/issues/3545))
+ - Implements new design for Jump to unread and quick fix visibility issues. ([#3547](https://github.com/vector-im/element-android/issues/3547))
+
+Bugfixes 🐛
+----------
+ - Fix some issues with timeline cache invalidation and visibility. ([#3542](https://github.com/vector-im/element-android/issues/3542))
+ - Fix call invite processed after call is ended because of fastlane mode. ([#3564](https://github.com/vector-im/element-android/issues/3564))
+ - Fix crash after video call. ([#3577](https://github.com/vector-im/element-android/issues/3577))
+ - Fix crash out of memory ([#3583](https://github.com/vector-im/element-android/issues/3583))
+ - CryptoStore migration has to be object to avoid crash ([#3605](https://github.com/vector-im/element-android/issues/3605))
+
+
 Changes in Element v1.1.11 (2021-06-22)
 =======================================
 
