@@ -253,7 +253,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
-    
+
     /**
      * Allow subscribing and unsubscribing to configuration changes. This is
      * particularly useful when you need to be notified of a configuration change
@@ -262,6 +262,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     fun subscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
         defaultPrefs.registerOnSharedPreferenceChangeListener(listener)
     }
+
     fun unsubscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
         defaultPrefs.unregisterOnSharedPreferenceChangeListener(listener)
     }
