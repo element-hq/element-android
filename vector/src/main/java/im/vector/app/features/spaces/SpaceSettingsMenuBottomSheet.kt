@@ -16,7 +16,6 @@
 
 package im.vector.app.features.spaces
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -28,7 +27,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.resources.ColorProvider
@@ -128,7 +126,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     isLastAdmin = isAdmin && otherAdminCount == 0
                 }.disposeOnDestroyView()
 
-        views.spaceBetaTag.setOnClickListener {
+        views.spaceBetaTag.debouncedClicks {
             bugReporter.openBugReportScreen(requireActivity(), ReportType.SPACE_BETA_FEEDBACK)
         }
 
@@ -174,7 +172,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                 null
             }
 
-            MaterialAlertDialogBuilder(requireContext())
+            MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                     .setMessage(warningMessage)
                     .setTitle(getString(R.string.space_leave_prompt_msg))
                     .setPositiveButton(R.string.leave) { _, _ ->
@@ -189,7 +187,6 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
-                    .withColoredButton(DialogInterface.BUTTON_POSITIVE)
         }
     }
 

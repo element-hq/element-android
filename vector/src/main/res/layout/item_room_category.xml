@@ -18,6 +18,7 @@
 
     <TextView
         android:id="@+id/roomCategoryTitleView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -25,14 +26,14 @@
         android:gravity="center_vertical"
         android:maxLines="1"
         android:textColor="?vctr_content_secondary"
-        android:textSize="14sp"
         android:textStyle="bold"
         app:drawableTint="?vctr_content_secondary"
-        tools:drawableEnd="@drawable/ic_expand_more_white"
+        tools:drawableEnd="@drawable/ic_expand_more"
         tools:text="@string/room_participants_header_direct_chats" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomCategoryUnreadCounterBadgeView"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -41,7 +42,6 @@
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
         android:textColor="?colorOnError"
-        android:textSize="10sp"
         tools:background="@drawable/bg_unread_highlight"
         tools:text="24" />
 

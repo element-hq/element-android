@@ -10,17 +10,18 @@
 
     <TextView
         android:id="@+id/bootstrapSaveText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="@string/bottom_sheet_save_your_recovery_key_content"
-        android:textColor="?vctr_content_primary"
-        android:textSize="14sp" />
+        android:textColor="?vctr_content_primary" />
 
     <TextView
         android:id="@+id/bootstrapRecoveryKeyText"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -29,7 +30,6 @@
         android:gravity="center_horizontal"
         android:padding="4dp"
         android:textColor="?vctr_notice_secondary"
-        android:textSize="15sp"
         tools:text="HHWJ Y8DK RDR4\nBQEN FQ4V M4F8\nBQEN FQ4V M4A8" />
 
 

@@ -139,7 +139,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     private fun handleStartMigratingKeyBackup() {
         if (isBackupCreatedFromPassphrase) {
             setState {
-                copy(step = BootstrapStep.GetBackupSecretPassForMigration(isPasswordVisible = false, useKey = false))
+                copy(step = BootstrapStep.GetBackupSecretPassForMigration(useKey = false))
             }
         } else {
             setState {
@@ -151,29 +151,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     override fun handle(action: BootstrapActions) = withState { state ->
         when (action) {
             is BootstrapActions.GoBack                           -> queryBack()
-            BootstrapActions.TogglePasswordVisibility            -> {
-                when (state.step) {
-                    is BootstrapStep.SetupPassphrase                 -> {
-                        setState {
-                            copy(step = state.step.copy(isPasswordVisible = !state.step.isPasswordVisible))
-                        }
-                    }
-                    is BootstrapStep.ConfirmPassphrase               -> {
-                        setState {
-                            copy(step = state.step.copy(isPasswordVisible = !state.step.isPasswordVisible))
-                        }
-                    }
-                    is BootstrapStep.AccountReAuth                   -> {
-                        // nop
-                    }
-                    is BootstrapStep.GetBackupSecretPassForMigration -> {
-                        setState {
-                            copy(step = state.step.copy(isPasswordVisible = !state.step.isPasswordVisible))
-                        }
-                    }
-                    else                                             -> Unit
-                }
-            }
             BootstrapActions.StartKeyBackupMigration             -> {
                 handleStartMigratingKeyBackup()
             }
@@ -193,9 +170,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 setState {
                     copy(
                             passphrase = action.passphrase,
-                            step = BootstrapStep.ConfirmPassphrase(
-                                    isPasswordVisible = (state.step as? BootstrapStep.SetupPassphrase)?.isPasswordVisible ?: false
-                            )
+                            step = BootstrapStep.ConfirmPassphrase
                     )
                 }
             }
@@ -255,7 +230,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             BootstrapActions.HandleForgotBackupPassphrase        -> {
                 if (state.step is BootstrapStep.GetBackupSecretPassForMigration) {
                     setState {
-                        copy(step = BootstrapStep.GetBackupSecretPassForMigration(state.step.isPasswordVisible, true))
+                        copy(step = BootstrapStep.GetBackupSecretPassForMigration(true))
                     }
                 } else return@withState
             }
@@ -293,7 +268,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         if (action.userWantsToEnterPassphrase) {
             setState {
                 copy(
-                        step = BootstrapStep.SetupPassphrase(isPasswordVisible = false)
+                        step = BootstrapStep.SetupPassphrase
                 )
             }
         } else {
@@ -493,7 +468,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     setState {
                         copy(
                                 step = BootstrapStep.GetBackupSecretPassForMigration(
-                                        isPasswordVisible = state.step.isPasswordVisible,
                                         useKey = false
                                 )
                         )
@@ -524,9 +498,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             is BootstrapStep.ConfirmPassphrase               -> {
                 setState {
                     copy(
-                            step = BootstrapStep.SetupPassphrase(
-                                    isPasswordVisible = state.step.isPasswordVisible
-                            )
+                            step = BootstrapStep.SetupPassphrase
                     )
                 }
             }

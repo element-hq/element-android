@@ -10,13 +10,13 @@
 
     <TextView
         android:id="@+id/formSwitchTitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:duplicateParentState="true"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/formSwitchSummary"
         app:layout_constraintEnd_toStartOf="@+id/formSwitchSwitch"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,11 +26,11 @@
 
     <TextView
         android:id="@+id/formSwitchSummary"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:textColor="?vctr_content_secondary"
-        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/formSwitchSwitch"
         app:layout_constraintStart_toStartOf="@+id/formSwitchTitle"

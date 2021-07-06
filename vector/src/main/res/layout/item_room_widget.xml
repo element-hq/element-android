@@ -40,7 +40,6 @@
         android:id="@+id/roomWidgetUrl"
         style="@style/BottomSheetItemTextSecondary"
         android:layout_marginEnd="8dp"
-        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/roomWidgetEditable"
         app:layout_constraintStart_toStartOf="@id/roomWidgetName"

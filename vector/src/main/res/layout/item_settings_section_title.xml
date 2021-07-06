@@ -2,6 +2,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/settings_section_title_text"
+    style="@style/Widget.Vector.TextView.HeadlineMedium"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?vctr_header_background"
@@ -10,6 +11,5 @@
     android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="@dimen/layout_vertical_margin"
     android:textColor="?vctr_content_primary"
-    android:textSize="18sp"
     android:textStyle="bold"
     tools:text="Title" />

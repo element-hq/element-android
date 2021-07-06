@@ -885,7 +885,7 @@
     <string name="select_room_directory">選擇一個聊天室目錄</string>
     <string name="directory_server_fail_to_retrieve_server">伺服器可能不可用或超載</string>
     <string name="directory_server_type_homeserver">輸入一個主伺服器來列出所有公開聊天室</string>
-    <string name="directory_server_placeholder">家伺服器 URL</string>
+    <string name="directory_server_placeholder">伺服器名稱</string>
     <string name="directory_server_all_rooms_on_server">在 %s 伺服器上的所有聊天室</string>
     <string name="directory_server_native_rooms">所有本地 %s 聊天室</string>
     <string name="lock_screen_hint">在此輸入…</string>
@@ -2486,9 +2486,9 @@
     <string name="room_settings_room_read_history_dialog_subtitle">對可讀取歷史紀錄的人的變更將僅試用於此聊天室中的未來訊息。現有歷史紀錄的可見性將保持不便。</string>
     <string name="action_unpublish">取消發佈</string>
     <string name="action_add">新增</string>
-    <string name="default_message_emote_snow">傳送雪 ❄️</string>
+    <string name="default_message_emote_snow">傳送下雪特效 ❄️</string>
     <string name="default_message_emote_confetti">傳送五彩紙屑 🎉</string>
-    <string name="command_snow">與雪一同傳送指定的訊息</string>
+    <string name="command_snow">與下雪特效一同傳送指定的訊息</string>
     <string name="command_confetti">與五彩紙屑一同傳送指定的訊息</string>
     <string name="login_clear_homeserver_history">清除歷史紀錄</string>
     <string name="login_social_sso">單一登入</string>
@@ -2625,7 +2625,7 @@
     <string name="labs_use_restricted_join_rule_desc">警告需要伺服器支援與實驗性聊天室版本</string>
     <string name="labs_use_restricted_join_rule">實驗性空間 - 受限制的聊天室。</string>
     <string name="you_are_invited">您被邀請了</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">空間是將聊天室與夥伴依工作、娛樂或是您自己的喜好分組的方式。</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">空間是將聊天室與人們分組的新方式。</string>
     <string name="spaces_beta_welcome_to_spaces">歡迎使用空間！</string>
     <string name="space_add_existing_rooms">新增既有的聊天室與空間</string>
     <string name="space_leave_prompt_msg">您確定您想要離開空間嗎？</string>
@@ -2718,4 +2718,39 @@
     <string name="send_file_step_compressing_image">正在壓縮圖片……</string>
     <string name="use_as_default_and_do_not_ask_again">預設使用，不再詢問</string>
     <string name="option_always_ask">總是詢問</string>
+    <string name="this_space_has_no_rooms_admin">有些聊天室可能是隱藏的，因為其為私人聊天室，您需要邀請。</string>
+    <string name="this_space_has_no_rooms_not_admin">有些聊天室可能是隱藏的，因為其為私人聊天室，您需要邀請。
+\n您沒有權限新增聊天室。</string>
+    <string name="this_space_has_no_rooms">此空間沒有聊天室</string>
+    <string name="spaces_no_server_support_description">請聯絡您的家伺服器管理員以取得進一步的資訊</string>
+    <string name="spaces_no_server_support_title">看來您的家伺服器尚未支援空間</string>
+    <string name="spaces_feeling_experimental_subspace">想要做點實驗嗎？
+\n您可以將既有的空間新增至其他空間中。</string>
+    <string name="labs_space_show_orphan_in_home">實驗性空間，僅在首頁顯示無人看管的聊天室</string>
+    <string name="space_add_rooms">新增聊天室</string>
+    <string name="space_leave_prompt_msg_as_admin">您是此空間的管理員，請確保在您離開前已將管理權轉交給另一個成員。</string>
+    <string name="space_leave_prompt_msg_private">此空間並非公開。您將無法在無邀請的狀況下重新加入。</string>
+    <string name="space_leave_prompt_msg_only_you">您是這裡唯一的人。如果您離開，包含您在內的所有人都將無法加入。</string>
+    <string name="invite_to_space">邀請至 %s</string>
+    <string name="a11y_beta">此功能仍在測試版</string>
+    <string name="give_feedback">給予回饋</string>
+    <string name="feedback_failed">回饋傳送失敗 (%s)</string>
+    <string name="feedback_sent">謝謝，您的回饋已成功傳送</string>
+    <string name="you_may_contact_me">如果您有任何後續的問題，歡迎聯絡我</string>
+    <string name="send_feedback_space_info">您正在使用空間的測試版本。您的回饋有助於改善未來的版本。我們將會紀錄您的平台與使用者名稱以協助我們使用您的回饋。</string>
+    <string name="feedback">回饋</string>
+    <string name="send_feedback_space_title">空間回饋</string>
+    <string name="error_jitsi_join_conf">抱歉，嘗試加入會議時發生錯誤</string>
+    <string name="unnamed_room">未命名聊天室</string>
+    <string name="private_space">私人空間</string>
+    <string name="public_space">公開空間</string>
+    <string name="a11y_public_space">此空間是公開的</string>
+    <string name="call_transfer_unknown_person">未知的人</string>
+    <string name="call_transfer_transfer_to_title">轉移至 %1$s</string>
+    <string name="call_transfer_consulting_with">與 %1$s 進行諮詢</string>
+    <string name="directory_add_a_new_server_error_already_added">此伺服器已在清單中</string>
+    <string name="directory_add_a_new_server_error">找不到此伺服器或其聊天室清單</string>
+    <string name="directory_add_a_new_server_prompt">輸入您想要探索的新伺服器名稱。</string>
+    <string name="directory_add_a_new_server">加入新的伺服器</string>
+    <string name="directory_your_server">您的伺服器</string>
 </resources>

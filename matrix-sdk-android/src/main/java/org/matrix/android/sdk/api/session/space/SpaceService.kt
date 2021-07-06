@@ -36,7 +36,11 @@ interface SpaceService {
     /**
      * Just a shortcut for space creation for ease of use
      */
-    suspend fun createSpace(name: String, topic: String?, avatarUri: Uri?, isPublic: Boolean): String
+    suspend fun createSpace(name: String,
+                            topic: String?,
+                            avatarUri: Uri?,
+                            isPublic: Boolean,
+                            roomAliasLocalPart: String? = null): String
 
     /**
      * Get a space from a roomId

@@ -8,10 +8,10 @@
 
     <TextView
         android:id="@+id/messageTextView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="?vctr_content_primary"
-        android:textSize="14sp"
         tools:text="@sample/messages.json/data/message" />
 
     <im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView

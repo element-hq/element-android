@@ -98,8 +98,15 @@ layout_constraintLeft_
 ### Use com.google.android.material.switchmaterial.SwitchMaterial instead of Switch, the inflater will not automatically inflate Material Views for Switch.
 <Switch
 
+### Use com.google.android.material.appbar.MaterialToolbar instead of Toolbar, the inflater will not automatically inflate Material Views for Toolbar.
+<Toolbar
+<androidx\.appcompat\.widget\.Toolbar
+
 ### Use colorSecondary
 colorAccent
 
 ### Use MaterialCardView
 <androidx\.cardview\.widget\.CardView
+
+### Useless attribute, please remove
+android:textStyle=\"normal\"

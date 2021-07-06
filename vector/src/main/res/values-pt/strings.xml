@@ -2,7 +2,6 @@
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s enviou uma imagem.</string>
-
     <string name="notice_room_invite_no_invitee">convite de %s</string>
     <string name="notice_room_invite">%1$s convidou %2$s</string>
     <string name="notice_room_invite_you">%1$s convidou-o</string>
@@ -30,55 +29,39 @@
     <string name="notice_room_visibility_world_readable">todos.</string>
     <string name="notice_room_visibility_unknown">desconhecida (%s).</string>
     <string name="notice_end_to_end">%1$s ativou a criptografia ponta-a-ponta (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s solicitou uma conferência VoIP</string>
     <string name="notice_voip_started">A conferência VoIP começou</string>
     <string name="notice_voip_finished">A conferência VoIP terminou</string>
-
     <string name="notice_avatar_changed_too">(o avatar também foi alterado)</string>
     <string name="notice_room_name_removed">%1$s removeu o nome da sala</string>
     <string name="notice_room_topic_removed">%1$s removeu o tópico da sala</string>
     <string name="notice_profile_change_redacted">%1$s atualizou o seu perfil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s enviou um convite para que %2$s se junte à sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s aceitou o convite para %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Impossível decifrar: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">O dispositivo de quem enviou a mensagem não nos enviou as chaves para esta mensagem.</string>
-
     <!-- Room Screen -->
     <string name="could_not_redact">Não foi possível apagar</string>
     <string name="unable_to_send_message">Não foi possível enviar a mensagem</string>
-
     <string name="message_failed_to_upload">O envio da imagem falhou</string>
-
     <!-- general errors -->
     <string name="network_error">Erro de conexão à Internet</string>
     <string name="matrix_error">Erro do Matrix</string>
-
     <!-- Home Screen -->
-
     <!-- Last seen time -->
-
     <!-- call events -->
-
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">Ainda não é possível voltar a entrar numa sala vazia.</string>
-
     <!-- medium friendly name -->
     <string name="medium_email">Endereço de e-mail</string>
     <string name="medium_phone_number">Número de telefone</string>
-
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Convite de %s</string>
     <string name="room_displayname_room_invite">Convite para sala</string>
     <string name="room_displayname_two_members">%1$s e %2$s</string>
     <string name="room_displayname_empty_room">Sala vazia</string>
-
-
     <string name="summary_user_sent_sticker">%1$s enviou um sticker.</string>
-
     <string name="notice_room_update">%s fez o upgrade da sala.</string>
-
     <string name="notice_event_redacted">Mensagem removida</string>
     <string name="notice_event_redacted_by">Mensagem removida por %1$s</string>
     <!-- titles -->
@@ -1044,4 +1027,6 @@ Por favor, verifique configurações de aplicação</string>
     <string name="settings_system_preferences_summary">Escolha cor de LED, vibração, som…</string>
     <string name="notification_sync_init">A iniciar o serviço</string>
     <string name="title_activity_verify_device">Verificar sessão</string>
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} irá sincronizar em fundo periodicamente em tempo preciso (configurável).
+\nIsto terá impacto na utilização do rádio e da bateria, será exibida uma notificação permanente declarando que ${app_name} está à escuta dos eventos.</string>
 </resources>

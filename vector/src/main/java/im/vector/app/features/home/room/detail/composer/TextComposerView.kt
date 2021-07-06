@@ -27,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.transition.AutoTransition
 import androidx.transition.ChangeBounds
 import androidx.transition.Fade
 import androidx.transition.Transition
@@ -38,7 +39,6 @@ import org.matrix.android.sdk.api.extensions.orFalse
 
 /**
  * Encapsulate the timeline composer UX.
- *
  */
 class TextComposerView @JvmOverloads constructor(
         context: Context,
@@ -74,10 +74,17 @@ class TextComposerView @JvmOverloads constructor(
                 return callback?.onRichContentSelected(contentUri) ?: false
             }
 
-            override fun onTextEmptyStateChanged(isEmpty: Boolean) {
-                val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isEmpty
-                views.sendButton.isInvisible = !shouldShowSendButton
-                callback?.onTextEmptyStateChanged(isEmpty)
+            override fun onTextBlankStateChanged(isBlank: Boolean) {
+                callback?.onTextBlankStateChanged(isBlank)
+                val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank
+                TransitionManager.endTransitions(this@TextComposerView)
+                if (views.sendButton.isVisible != shouldShowSendButton) {
+                    TransitionManager.beginDelayedTransition(
+                            this@TextComposerView,
+                            AutoTransition().also { it.duration = 150 }
+                    )
+                    views.sendButton.isInvisible = !shouldShowSendButton
+                }
             }
         }
         views.composerRelatedMessageCloseButton.setOnClickListener {

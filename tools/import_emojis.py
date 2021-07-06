@@ -130,4 +130,10 @@ print("Writing emoji_picker_datasource.json...")
 scripts_dir = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(scripts_dir, "../vector/src/main/res/raw/emoji_picker_datasource.json"), "w") as outfile:
     json.dump(emoji_picker_datasource, outfile, ensure_ascii=False, separators=(',', ':'))
+
+# Also export a formatted version
+print("Writing emoji_picker_datasource_formatted.json...")
+with open(os.path.join(scripts_dir, "../tools/emojis/emoji_picker_datasource_formatted.json"), "w") as outfile:
+    json.dump(emoji_picker_datasource, outfile, ensure_ascii=False, indent=4)
+
 print("Done.")

@@ -394,7 +394,7 @@
     <string name="auth_forgot_password">Harruat fjalëkalimin?</string>
     <string name="auth_use_server_options">Përdor mundësi vetjake shërbyesi (e përparuar)</string>
     <string name="auth_email_validation_message">Ju lutemi, që të vazhdojë regjistrimi, kontrolloni email-in tuaj</string>
-    <string name="auth_recaptcha_message">Ky Shërbyes Home do të donte të sigurohej se s’jeni robot</string>
+    <string name="auth_recaptcha_message">Ky shërbyes Home do të donte të sigurohej se s’jeni robot</string>
     <string name="auth_username_in_use">Emër përdoruesi në përdorim</string>
     <string name="auth_home_server">Shërbyes Home:</string>
     <string name="auth_identity_server">Shërbyes Identitetesh:</string>
@@ -1022,7 +1022,7 @@
     <string name="encryption_information_unblock">Hiqe nga listë e zezë</string>
     <string name="encryption_information_verify_device_warning">Ripohojeni duke krahasuar sa vijon me Rregullimet e Përdoruesit te sesioni juaj tjetër:</string>
     <string name="encryption_information_verify_device_warning2">Nëse s’përputhen, siguria e komunikimeve tuaja mund të jetë komprometuar.</string>
-    <string name="directory_server_placeholder">URL Shërbyesi Home</string>
+    <string name="directory_server_placeholder">Emër shërbyesi</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d dhomë</item>
         <item quantity="other">%d dhoma</item>
@@ -2120,7 +2120,7 @@
     <string name="invitations_sent_to_two_users">Ftesa u dërgua te %1$s dhe %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="one">U dërguan ftesa te %1$s dhe një tjetër</item>
-        <item quantity="other">U dërguan ftesa te %1$s dhe %2$s të tjerë</item>
+        <item quantity="other">U dërguan ftesa te %1$s dhe %2$d të tjerë</item>
     </plurals>
     <string name="invite_users_to_room_failure">S’ftuam dot përdorues. Ju lutemi, kontrolloni përdoruesit që doni të ftoni dhe riprovoni.</string>
     <string name="event_redacted">Mesazhi u fshi</string>
@@ -2662,7 +2662,7 @@
 \nPo shkarkohen të dhëna…</string>
     <string name="initial_sync_start_server_computing">Njëkohësimi Fillestar:
 \nPo pritet për përgjigje nga shërbyesi…</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Hapësirat janë mënyra për të grupuar dhoma dhe persona për punë, zbavitje ose thjesht për veten tuaj.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Hapësirat janë mënyra për të grupuar dhoma dhe persona.</string>
     <string name="labs_use_restricted_join_rule_desc">Sinjalizimi lyp mbulim nga shërbyesi dhe version eksperimental dhome</string>
     <string name="labs_use_restricted_join_rule">Hapësirë Eksperimentale - Dhomë e Kufizuar.</string>
     <string name="you_are_invited">Jeni ftuar</string>
@@ -2747,7 +2747,7 @@
     <string name="make_this_space_public">Bëje publike këtë hapësirë</string>
     <string name="space_settings_manage_rooms">Administroni dhoma</string>
     <string name="looking_for_someone_not_in_space">Po kërkoni për dikë jo në %s\?</string>
-    <string name="user_invites_you">%1$s ju fton</string>
+    <string name="user_invites_you">%s ju fton</string>
     <string name="a11y_public_room">Kjo dhomë është publike</string>
     <string name="a11y_unchecked">E pakontrolluar</string>
     <string name="a11y_checked">U kontrollua</string>
@@ -2761,4 +2761,39 @@
     <string name="send_file_step_compressing_image">Po ngjeshet figurë…</string>
     <string name="use_as_default_and_do_not_ask_again">Përdore si parazgjedhje dhe mos pyet sërish</string>
     <string name="option_always_ask">Pyet përherë</string>
+    <string name="this_space_has_no_rooms_admin">Disa dhoma mund të jenë të fshehura, ngaqë janë private dhe mund t’ju duhet një ftesë.</string>
+    <string name="this_space_has_no_rooms_not_admin">Disa dhoma mund të jenë të fshehura, ngaqë janë private dhe ju duhet një ftesë.
+\nS’keni leje të shtoni dhoma.</string>
+    <string name="this_space_has_no_rooms">Kjo hapësirë s’ka dhoma</string>
+    <string name="spaces_no_server_support_description">Ju lutemi, për më tepër hollësi, lidhuni me përgjegjësin e shërbyesit tuaj Home</string>
+    <string name="spaces_no_server_support_title">Duket sikur shërbyesi juaj Home nuk mbulon ende Hapësira</string>
+    <string name="spaces_feeling_experimental_subspace">Ndiheni eksperimentues\?
+\nMund të shtoni te një hapësirë hapësira ekzistuese.</string>
+    <string name="labs_space_show_orphan_in_home">Hapësirë Eksperimentale - Shfaq jetimë te Kreu</string>
+    <string name="space_add_rooms">Shtoni dhoma</string>
+    <string name="space_leave_prompt_msg_as_admin">Jeni përgjegjës i kësaj hapësirë, sigurohuni se keni shpërngulur të drejt përgjegjësi te një anëtar tjetër, përpara braktisjes.</string>
+    <string name="space_leave_prompt_msg_private">Kjo hapësirë s’është publike. S’do të jeni në gjendje të rihyni pa një ftesë.</string>
+    <string name="space_leave_prompt_msg_only_you">Jeni personi i vetëm këtu. Nëse ikni, askush s’do të jetë në gjendje të marrë pjesë në të ardhmen, përfshi ju.</string>
+    <string name="invite_to_space">Ftojeni te %s</string>
+    <string name="a11y_beta">Kjo veçori është në fazë beta</string>
+    <string name="give_feedback">Jepni Përshtypje</string>
+    <string name="feedback_failed">Dështoi dërgimi i përshtypjeve (%s)</string>
+    <string name="feedback_sent">Faleminderit, përshtypjet tuaja u dërguan me sukses</string>
+    <string name="you_may_contact_me">Mund të lidheni me mua, nëse keni ndonjë pyetje më tej</string>
+    <string name="send_feedback_space_info">Po përdorni një version beta të hapësirave. Përshtypjet tuaja do të ndihmojnë në përmirësimin e versioneve të ardhshëm. Platforma dhe emri juaj i përdoruesit do të mbahen shënim, për të na ndihmuar të përdoren përshtypjet tuaja sa më shumë që të jetë e mundur.</string>
+    <string name="feedback">Përshtypje</string>
+    <string name="send_feedback_space_title">Përshtypje për hapësirat</string>
+    <string name="error_jitsi_join_conf">Na ndjeni, ndodhi një gabim teksa provohej të hyhej te konferenca</string>
+    <string name="unnamed_room">Dhomë e Paemërtuar</string>
+    <string name="private_space">Hapësirë private</string>
+    <string name="public_space">Hapësirë publike</string>
+    <string name="a11y_public_space">Kjo Hapësirë është publike</string>
+    <string name="call_transfer_unknown_person">Person i panjohur</string>
+    <string name="call_transfer_transfer_to_title">Shpërngule te %1$s</string>
+    <string name="call_transfer_consulting_with">Po konsultohet me %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">Ky shërbyes është tashmë i pranishëm te lista</string>
+    <string name="directory_add_a_new_server_error">S’gjendet dot ky shërbyes ose lista e dhomave të tij</string>
+    <string name="directory_add_a_new_server_prompt">Jepni emrin e e një shërbyesi të ri që doni të eksploroni.</string>
+    <string name="directory_add_a_new_server">Shtoni shërbyes të ri</string>
+    <string name="directory_your_server">Shërbyesi juaj</string>
 </resources>

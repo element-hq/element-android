@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/itemGenericItemButton"
-        style="@style/VectorButtonStyle.Positive"
+        style="@style/Widget.Vector.Button.Positive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"

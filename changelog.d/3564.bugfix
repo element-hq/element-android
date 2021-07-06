@@ -1,0 +1,1 @@
+Fix call invite processed after call is ended because of fastlane mode.

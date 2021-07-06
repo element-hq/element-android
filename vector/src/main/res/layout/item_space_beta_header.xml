@@ -9,25 +9,26 @@
     android:paddingEnd="16dp">
 
     <TextView
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/spaces_header"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         android:textStyle="bold"
         app:drawableEndCompat="@drawable/ic_beta_pill" />
 
     <TextView
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/spaces_beta_welcome_to_spaces_desc"
-        android:textColor="?vctr_content_secondary"
-        android:textSize="15sp" />
+        android:textColor="?vctr_content_secondary" />
 
     <TextView
         android:id="@+id/spaceBetaFeedbackAction"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
@@ -37,7 +38,6 @@
         android:paddingBottom="8dp"
         android:text="@string/give_feedback"
         android:textColor="@color/vector_info_color"
-        android:textSize="15sp"
         app:drawableStartCompat="@drawable/ic_feedback" />
 
 </LinearLayout>

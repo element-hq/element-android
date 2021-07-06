@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/settings_item_cancel_button"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
@@ -19,7 +19,7 @@
 
     <Button
         android:id="@+id/settings_item_continue_button"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_continue"

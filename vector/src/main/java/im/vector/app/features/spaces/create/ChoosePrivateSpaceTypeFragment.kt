@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.setFragmentResultListener
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
@@ -38,6 +39,13 @@ class ChoosePrivateSpaceTypeFragment @Inject constructor(
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             FragmentSpaceCreateChoosePrivateModelBinding.inflate(layoutInflater, container, false)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(BetaWarningBottomSheet.REQUEST_KEY) { _, _ ->
+            sharedViewModel.handle(CreateSpaceAction.SetSpaceTopology(SpaceTopology.MeAndTeammates))
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -46,7 +54,7 @@ class ChoosePrivateSpaceTypeFragment @Inject constructor(
         }
 
         views.teammatesButton.onClick {
-            sharedViewModel.handle(CreateSpaceAction.SetSpaceTopology(SpaceTopology.MeAndTeammates))
+            BetaWarningBottomSheet().show(parentFragmentManager, "warning")
         }
 
         sharedViewModel.subscribe { state ->

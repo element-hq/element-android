@@ -8,7 +8,7 @@
 
     <ProgressBar
         android:id="@+id/messageFileProgressbar"
-        style="@style/FileProgressBar"
+        style="@style/Widget.Vector.ProgressBar.Horizontal.File"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:progress="40" />

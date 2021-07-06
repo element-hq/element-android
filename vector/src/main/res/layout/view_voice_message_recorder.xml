@@ -3,115 +3,85 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/voice_message_recording_layout"
-    android:minHeight="200dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:minHeight="200dp">
 
     <View
         android:id="@+id/voiceMessageLockBackground"
-        android:layout_width="52dp"
-        android:layout_height="160dp"
-        android:background="@drawable/bg_voice_message_lock"
+        style="@style/VoiceMessageLockBackground"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/voiceMessageMicButton" />
+        app:layout_constraintTop_toBottomOf="@id/voiceMessageMicButton"
+        tools:visibility="visible" />
 
     <ImageButton
         android:id="@+id/voiceMessageMicButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
+        style="@style/VoiceMessageMicButton"
         android:contentDescription="@string/a11y_start_voice_message"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="12dp"
-        android:src="@drawable/ic_voice_mic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageButton
         android:id="@+id/voiceMessageSendButton"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        style="@style/VoiceMessageSendButton"
         android:contentDescription="@string/send"
-        android:background="@drawable/bg_send"
-        android:scaleType="center"
         android:visibility="gone"
-        tools:visibility="visible"
-        android:src="@drawable/ic_send"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/voiceMessageTimerIndicator"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_marginStart="20dp"
+        style="@style/VoiceMessageTimerIndicator"
         android:contentDescription="@string/a11y_recording_voice_message"
-        android:src="@drawable/circle"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/voiceMessageMicButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/voiceMessageMicButton"
-        app:tint="@color/palette_vermilion"
-        tools:ignore="MissingPrefix" />
+        tools:ignore="MissingPrefix"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/voiceMessageTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:lineSpacingExtra="4dp"
-        android:textColor="@color/palette_gray_200"
-        android:textSize="14sp"
+        style="@style/VoiceMessageTimer"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/voiceMessageMicButton"
         app:layout_constraintStart_toEndOf="@id/voiceMessageTimerIndicator"
         app:layout_constraintTop_toTopOf="@id/voiceMessageMicButton"
-        tools:text="00:03" />
+        tools:text="00:03"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/voiceMessageSlideToCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        style="@style/VoiceMessageSlideToCancel"
         android:text="@string/voice_message_slide_to_cancel"
-        android:textColor="@color/palette_gray_300"
-        android:textSize="14sp"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:drawableStartCompat="@drawable/ic_voice_slide_to_cancel_arrow"
         app:layout_constraintBottom_toBottomOf="@id/voiceMessageMicButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/voiceMessageMicButton" />
+        app:layout_constraintTop_toTopOf="@id/voiceMessageMicButton"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/voiceMessageLockImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        style="@style/VoiceMessageLockImage"
         android:contentDescription="@string/a11y_lock_voice_message"
-        android:src="@drawable/ic_voice_message_unlocked"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="@id/voiceMessageLockBackground"
         app:layout_constraintStart_toStartOf="@id/voiceMessageLockBackground"
-        app:layout_constraintTop_toTopOf="@id/voiceMessageLockBackground" />
+        app:layout_constraintTop_toTopOf="@id/voiceMessageLockBackground"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/voiceMessageLockArrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_voice_lock_arrow"
+        style="@style/VoiceMessageLockArrow"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/voiceMessageMicButton"
         app:layout_constraintEnd_toEndOf="@id/voiceMessageLockBackground"
         app:layout_constraintStart_toStartOf="@id/voiceMessageLockBackground"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/voiceMessagePlaybackLayout"
@@ -119,74 +89,49 @@
         android:layout_height="44dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:visibility="gone"
-        tools:visibility="visible"
         android:layout_marginBottom="4dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/voiceMessageMicButton"
-        app:layout_constraintStart_toStartOf="parent" >
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
 
         <ImageButton
             android:id="@+id/voiceMessageDeletePlayback"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
+            style="@style/VoiceMessageDeletePlayback"
             android:contentDescription="@string/a11y_delete_recorded_voice_message"
-            android:src="@drawable/recv_ic_delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/palette_gray_200"
             tools:ignore="MissingPrefix" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toEndOf="@id/voiceMessageDeletePlayback"
+            style="@style/VoiceMessageRecordingPlaybackLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:backgroundTint="?vctr_voice_message_recording_playback_background"
-            android:background="@drawable/bg_voice_playback"
-            android:layout_marginStart="16dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toEndOf="@id/voiceMessageDeletePlayback"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/voiceMessagePlaybackTimerIndicator"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:layout_marginStart="8dp"
+                style="@style/VoiceMessagePlaybackTimerIndicator"
                 android:contentDescription="@string/a11y_recording_voice_message"
-                android:src="@drawable/circle"
-                app:layout_goneMarginStart="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/palette_vermilion"
                 tools:ignore="MissingPrefix" />
 
             <ImageButton
                 android:id="@+id/voicePlaybackControlButton"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/bg_voice_play_pause_button"
+                style="@style/VoicePlaybackControlButton"
                 android:contentDescription="@string/a11y_play_voice_message"
-                android:paddingStart="3dp"
-                android:layout_marginStart="8dp"
-                android:paddingEnd="0dp"
-                android:src="@drawable/ic_voice_play"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/voicePlaybackTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:lineSpacingExtra="4sp"
-                android:textColor="@color/palette_gray_200"
-                app:layout_goneMarginStart="24dp"
-                android:textSize="14sp"
+                style="@style/VoicePlaybackTime"
                 app:layout_constraintBottom_toBottomOf="@id/voicePlaybackControlButton"
                 app:layout_constraintStart_toEndOf="@id/voicePlaybackControlButton"
                 app:layout_constraintTop_toTopOf="@id/voicePlaybackControlButton"
@@ -194,18 +139,7 @@
 
             <com.visualizer.amplitude.AudioRecordView
                 android:id="@+id/voicePlaybackWaveform"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:chunkAlignTo="center"
-                app:chunkColor="@color/palette_gray_300"
-                app:chunkMinHeight="1dp"
-                app:chunkRoundedCorners="true"
-                app:chunkSoftTransition="true"
-                app:chunkSpace="2dp"
-                app:chunkWidth="2dp"
-                app:direction="leftToRight"
+                style="@style/VoicePlaybackWaveform"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/voicePlaybackTime"

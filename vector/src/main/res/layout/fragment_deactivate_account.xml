@@ -11,6 +11,7 @@
 
         <TextView
             android:id="@+id/deactivateAccountContent"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/deactivate_account_content"
@@ -32,7 +33,7 @@
 
         <Button
             android:id="@+id/deactivateAccountSubmit"
-            style="@style/VectorButtonStyle.Destructive"
+            style="@style/Widget.Vector.Button.Destructive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

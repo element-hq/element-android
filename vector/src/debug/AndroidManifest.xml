@@ -5,27 +5,6 @@
     <application>
         <activity android:name=".features.debug.TestLinkifyActivity" />
         <activity android:name=".features.debug.sas.DebugSasEmojiActivity" />
-        <activity
-            android:name=".features.debug.DebugMaterialThemeLightDefaultActivity"
-            android:theme="@style/VectorMaterialThemeDebugLight" />
-        <activity
-            android:name=".features.debug.DebugMaterialThemeLightTestActivity"
-            android:theme="@style/VectorMaterialThemeDebugLight.Test" />
-        <activity
-            android:name=".features.debug.DebugMaterialThemeLightVectorActivity"
-            android:theme="@style/AppTheme.Light" />
-        <activity
-            android:name=".features.debug.DebugMaterialThemeDarkDefaultActivity"
-            android:theme="@style/VectorMaterialThemeDebugDark" />
-        <activity
-            android:name=".features.debug.DebugMaterialThemeDarkTestActivity"
-            android:theme="@style/VectorMaterialThemeDebugDark.Test" />
-        <activity
-            android:name=".features.debug.DebugMaterialThemeDarkVectorActivity"
-            android:theme="@style/AppTheme.Dark" />
-        <activity
-            android:name=".features.debug.DebugVectorButtonStylesActivity"
-            android:theme="@style/AppTheme.Light" />
     </application>
 
 </manifest>

@@ -64,7 +64,6 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
     var confirmPassphraseError: MutableLiveData<String> = MutableLiveData()
 
     var passwordStrength: MutableLiveData<Strength> = MutableLiveData()
-    var showPasswordMode: MutableLiveData<Boolean> = MutableLiveData()
 
     // Step 3
     // Var to ignore events from previous request(s) to generate a recovery key
@@ -80,7 +79,6 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
     var loadingStatus: MutableLiveData<WaitingViewData> = MutableLiveData()
 
     init {
-        showPasswordMode.value = false
         recoveryKey.value = null
         isCreatingBackupVersion.value = false
         prepareRecoverFailError.value = null
@@ -96,9 +94,6 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
         // Update requestId
         currentRequestId.value = System.currentTimeMillis()
         isCreatingBackupVersion.value = true
-
-        // Ensure passphrase is hidden during the process
-        showPasswordMode.value = false
 
         recoveryKey.value = null
         prepareRecoverFailError.value = null

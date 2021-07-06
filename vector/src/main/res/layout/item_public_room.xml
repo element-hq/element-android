@@ -25,6 +25,7 @@
 
     <TextView
         android:id="@+id/itemPublicRoomName"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
@@ -32,7 +33,6 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomTopic"
         app:layout_constraintEnd_toStartOf="@+id/itemPublicRoomButtonState"
@@ -43,6 +43,7 @@
 
     <TextView
         android:id="@+id/itemPublicRoomTopic"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -51,7 +52,6 @@
         android:maxLines="1"
         android:singleLine="true"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomMembersCount"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,6 +62,7 @@
 
     <TextView
         android:id="@+id/itemPublicRoomMembersCount"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -70,7 +71,6 @@
         android:gravity="center_vertical"
         android:minWidth="56dp"
         android:textColor="?vctr_content_secondary"
-        android:textSize="15sp"
         app:drawableStartCompat="@drawable/ic_user"
         app:drawableTint="?vctr_content_secondary"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
@@ -80,6 +80,7 @@
 
     <TextView
         android:id="@+id/itemPublicRoomAlias"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -89,7 +90,6 @@
         android:minWidth="40dp"
         android:singleLine="true"
         android:textColor="?vctr_content_secondary"
-        android:textSize="15sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/itemPublicRoomMembersCount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/itemPublicRoomMembersCount"

@@ -8,39 +8,21 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/voicePlaybackLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_voice_playback"
-        android:minHeight="48dp"
-        android:paddingStart="8dp"
-        android:paddingTop="6dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="6dp"
+        style="@style/VoiceTimelinePlaybackLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/voicePlaybackControlButton"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="@drawable/bg_voice_play_pause_button"
-            android:contentDescription="@string/a11y_play_voice_message"
-            android:paddingStart="3dp"
-            android:paddingEnd="0dp"
-            android:src="@drawable/ic_voice_play"
+            style="@style/VoiceTimelinePlaybackControlButton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/voicePlaybackTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:lineSpacingExtra="4sp"
-            android:textColor="@color/palette_gray_200"
-            android:textSize="14sp"
+            style="@style/VoiceTimelinePlaybackTime"
             app:layout_constraintBottom_toBottomOf="@id/voicePlaybackControlButton"
             app:layout_constraintStart_toEndOf="@id/voicePlaybackControlButton"
             app:layout_constraintTop_toTopOf="@id/voicePlaybackControlButton"
@@ -48,18 +30,7 @@
 
         <com.visualizer.amplitude.AudioRecordView
             android:id="@+id/voicePlaybackWaveform"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:chunkAlignTo="center"
-            app:chunkColor="@color/palette_gray_300"
-            app:chunkMinHeight="1dp"
-            app:chunkRoundedCorners="true"
-            app:chunkSoftTransition="true"
-            app:chunkSpace="2dp"
-            app:chunkWidth="2dp"
-            app:direction="leftToRight"
+            style="@style/VoicePlaybackWaveform"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/voicePlaybackTime"

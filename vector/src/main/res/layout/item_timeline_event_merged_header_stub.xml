@@ -21,6 +21,7 @@
 
         <TextView
             android:id="@+id/itemMergedExpandTextView"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -31,7 +32,6 @@
             android:paddingBottom="4dp"
             android:text="@string/merged_events_expand"
             android:textColor="?colorSecondary"
-            android:textSize="14sp"
             android:textStyle="italic" />
 
     </RelativeLayout>
@@ -45,12 +45,12 @@
 
     <TextView
         android:id="@+id/itemMergedSummaryTextView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:textColor="?vctr_content_secondary"
         android:textIsSelectable="false"
-        android:textSize="14sp"
         tools:text="3 membership changes" />
 
 </LinearLayout>
