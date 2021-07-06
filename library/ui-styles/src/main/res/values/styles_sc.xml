@@ -48,7 +48,7 @@
     </style>
 
     <style name="Widget.Vector.JumpToUnread.SC.Dark" parent="Widget.Vector.JumpToUnread.Dark">
-        <item name="chipBackgroundColor">@color/background_floating_sc</item>
+        <item name="chipBackgroundColor">@color/background_sc_bright</item>
         <item name="closeIconTint">?vctr_content_quaternary</item>
     </style>
 
