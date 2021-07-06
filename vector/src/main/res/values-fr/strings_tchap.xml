@@ -55,6 +55,7 @@
 
     <!-- tchap discussion -->
     <string name="tchap_cannot_invite_deactivated_account_user">Votre correspondant a quitté définitivement cette discussion.\nVous devez en créer une nouvelle pour le recontacter.</string>
+    <string name="tchap_contact_external">Externe</string>
 
     <!-- tchap room -->
     <string name="tchap_room_private_room_type">Privé</string>

@@ -68,6 +68,9 @@
     <!-- color of the direct chat avatar ring -->
     <color name="direct_chat_ring_color">@color/tchap_dark_blue</color>
 
+    <!-- domain color for external contacts -->
+    <color name="tchap_contact_external_color">@color/tchap_pumpkin_orange</color>
+
     <!-- Bar color attributes  -->
     <attr name="bar_bg_color" format="color" />
     <attr name="bar_title_color" format="color" />
