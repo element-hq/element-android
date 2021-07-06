@@ -10,7 +10,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?vctr_list_divider_color" />
+        android:background="?vctr_list_separator" />
 
     <ImageView
         android:id="@+id/roomNotificationIcon"
@@ -20,10 +20,11 @@
         android:layout_marginStart="24dp"
         android:importantForAccessibility="no"
         android:padding="5dp"
-        tools:src="@drawable/vector_typing" />
+        tools:src="@drawable/error" />
 
     <TextView
         android:id="@+id/roomNotificationMessage"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -31,7 +32,7 @@
         android:layout_marginEnd="16dp"
         android:accessibilityLiveRegion="polite"
         android:gravity="center"
-        android:textColor="?attr/vctr_room_notification_text_color"
+        android:textColor="?vctr_content_primary"
         tools:text="@string/room_do_not_have_permission_to_post" />
 
 </merge>

@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.crypto.secrets
 
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.listeners.ProgressListener
-import org.matrix.android.sdk.api.session.accountdata.AccountDataService
+import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.securestorage.EncryptedSecretContent
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
@@ -56,7 +56,7 @@ import kotlin.experimental.and
 
 internal class DefaultSharedSecretStorageService @Inject constructor(
         @UserId private val userId: String,
-        private val accountDataService: AccountDataService,
+        private val accountDataService: SessionAccountDataService,
         private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope
@@ -84,7 +84,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 )
             } ?: storageKeyContent
 
-            accountDataService.updateAccountData("$KEY_ID_BASE.$keyId", signedContent.toContent())
+            accountDataService.updateUserAccountData("$KEY_ID_BASE.$keyId", signedContent.toContent())
             SsssKeyCreationInfo(
                     keyId = keyId,
                     content = storageKeyContent,
@@ -113,7 +113,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 )
             } ?: storageKeyContent
 
-            accountDataService.updateAccountData(
+            accountDataService.updateUserAccountData(
                     "$KEY_ID_BASE.$keyId",
                     signedContent.toContent()
             )
@@ -127,11 +127,11 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
     }
 
     override fun hasKey(keyId: String): Boolean {
-        return accountDataService.getAccountDataEvent("$KEY_ID_BASE.$keyId") != null
+        return accountDataService.getUserAccountDataEvent("$KEY_ID_BASE.$keyId") != null
     }
 
     override fun getKey(keyId: String): KeyInfoResult {
-        val accountData = accountDataService.getAccountDataEvent("$KEY_ID_BASE.$keyId")
+        val accountData = accountDataService.getUserAccountDataEvent("$KEY_ID_BASE.$keyId")
                 ?: return KeyInfoResult.Error(SharedSecretStorageError.UnknownKey(keyId))
         return SecretStorageKeyContent.fromJson(accountData.content)?.let {
             KeyInfoResult.Success(
@@ -143,14 +143,14 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
     override suspend fun setDefaultKey(keyId: String) {
         val existingKey = getKey(keyId)
         if (existingKey is KeyInfoResult.Success) {
-            accountDataService.updateAccountData(DEFAULT_KEY_ID, mapOf("key" to keyId))
+            accountDataService.updateUserAccountData(DEFAULT_KEY_ID, mapOf("key" to keyId))
         } else {
             throw SharedSecretStorageError.UnknownKey(keyId)
         }
     }
 
     override fun getDefaultKey(): KeyInfoResult {
-        val accountData = accountDataService.getAccountDataEvent(DEFAULT_KEY_ID)
+        val accountData = accountDataService.getUserAccountDataEvent(DEFAULT_KEY_ID)
                 ?: return KeyInfoResult.Error(SharedSecretStorageError.UnknownKey(DEFAULT_KEY_ID))
         val keyId = accountData.content["key"] as? String
                 ?: return KeyInfoResult.Error(SharedSecretStorageError.UnknownKey(DEFAULT_KEY_ID))
@@ -178,7 +178,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 }
             }
 
-            accountDataService.updateAccountData(
+            accountDataService.updateUserAccountData(
                     type = name,
                     content = mapOf("encrypted" to encryptedContents)
             )
@@ -288,7 +288,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
     }
 
     override fun getAlgorithmsForSecret(name: String): List<KeyInfoResult> {
-        val accountData = accountDataService.getAccountDataEvent(name)
+        val accountData = accountDataService.getUserAccountDataEvent(name)
                 ?: return listOf(KeyInfoResult.Error(SharedSecretStorageError.UnknownSecret(name)))
         val encryptedContent = accountData.content[ENCRYPTED] as? Map<*, *>
                 ?: return listOf(KeyInfoResult.Error(SharedSecretStorageError.SecretNotEncrypted(name)))
@@ -303,7 +303,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
     }
 
     override suspend fun getSecret(name: String, keyId: String?, secretKey: SsssKeySpec): String {
-        val accountData = accountDataService.getAccountDataEvent(name) ?: throw SharedSecretStorageError.UnknownSecret(name)
+        val accountData = accountDataService.getUserAccountDataEvent(name) ?: throw SharedSecretStorageError.UnknownSecret(name)
         val encryptedContent = accountData.content[ENCRYPTED] as? Map<*, *> ?: throw SharedSecretStorageError.SecretNotEncrypted(name)
         val key = keyId?.let { getKey(it) } as? KeyInfoResult.Success ?: getDefaultKey() as? KeyInfoResult.Success
         ?: throw SharedSecretStorageError.UnknownKey(name)
@@ -368,7 +368,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         }
 
         secretNames.forEach { secretName ->
-            val secretEvent = accountDataService.getAccountDataEvent(secretName)
+            val secretEvent = accountDataService.getUserAccountDataEvent(secretName)
                     ?: return IntegrityResult.Error(SharedSecretStorageError.UnknownSecret(secretName))
             if ((secretEvent.content["encrypted"] as? Map<*, *>)?.get(keyInfo.id) == null) {
                 return IntegrityResult.Error(SharedSecretStorageError.SecretNotEncryptedWithKey(secretName, keyInfo.id))

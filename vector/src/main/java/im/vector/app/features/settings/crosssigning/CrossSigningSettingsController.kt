@@ -21,9 +21,8 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericItem
-import im.vector.app.core.ui.list.genericItemWithValue
 import im.vector.app.core.ui.list.genericPositiveButtonItem
-import im.vector.app.core.utils.DebouncedClickListener
+import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.core.utils.DimensionConverter
 import me.gujun.android.span.span
 import javax.inject.Inject
@@ -53,9 +52,9 @@ class CrossSigningSettingsController @Inject constructor(
                 genericButtonItem {
                     id("Reset")
                     text(host.stringProvider.getString(R.string.reset_cross_signing))
-                    buttonClickAction(DebouncedClickListener({
+                    buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
-                    }))
+                    }
                 }
             }
             data.xSigningKeysAreTrusted    -> {
@@ -67,9 +66,9 @@ class CrossSigningSettingsController @Inject constructor(
                 genericButtonItem {
                     id("Reset")
                     text(host.stringProvider.getString(R.string.reset_cross_signing))
-                    buttonClickAction(DebouncedClickListener({
+                    buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
-                    }))
+                    }
                 }
             }
             data.xSigningIsEnableInAccount -> {
@@ -81,9 +80,9 @@ class CrossSigningSettingsController @Inject constructor(
                 genericButtonItem {
                     id("Reset")
                     text(host.stringProvider.getString(R.string.reset_cross_signing))
-                    buttonClickAction(DebouncedClickListener({
+                    buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
-                    }))
+                    }
                 }
             }
             else                           -> {
@@ -95,9 +94,9 @@ class CrossSigningSettingsController @Inject constructor(
                 genericPositiveButtonItem {
                     id("Initialize")
                     text(host.stringProvider.getString(R.string.initialize_cross_signing))
-                    buttonClickAction(DebouncedClickListener({
+                    buttonClickAction {
                         host.interactionListener?.didTapInitializeCrossSigning()
-                    }))
+                    }
                 }
             }
         }
@@ -105,7 +104,7 @@ class CrossSigningSettingsController @Inject constructor(
         val crossSigningKeys = data.crossSigningInfo
 
         crossSigningKeys?.masterKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("msk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
@@ -113,7 +112,7 @@ class CrossSigningSettingsController @Inject constructor(
                             +"Master Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
                         }
@@ -121,7 +120,7 @@ class CrossSigningSettingsController @Inject constructor(
             }
         }
         crossSigningKeys?.userKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("usk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
@@ -129,7 +128,7 @@ class CrossSigningSettingsController @Inject constructor(
                             +"User Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
                         }
@@ -137,7 +136,7 @@ class CrossSigningSettingsController @Inject constructor(
             }
         }
         crossSigningKeys?.selfSigningKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("ssk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
@@ -145,7 +144,7 @@ class CrossSigningSettingsController @Inject constructor(
                             +"Self Signed Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
                         }

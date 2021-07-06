@@ -113,13 +113,12 @@ class SoftLogoutController @Inject constructor(
                         loginPasswordFormItem {
                             id("passwordForm")
                             stringProvider(host.stringProvider)
-                            passwordShown(state.passwordShown)
-                            submitEnabled(state.submitEnabled)
+                            passwordValue(state.enteredPassword)
+                            submitEnabled(state.enteredPassword.isNotEmpty())
                             onPasswordEdited { host.listener?.passwordEdited(it) }
                             errorText((state.asyncLoginAction as? Fail)?.error?.let { host.errorFormatter.toHumanReadable(it) })
-                            passwordRevealClickListener { host.listener?.revealPasswordClicked() }
                             forgetPasswordClickListener { host.listener?.forgetPasswordClicked() }
-                            submitClickListener { password -> host.listener?.signinSubmit(password) }
+                            submitClickListener { host.listener?.submit() }
                         }
                     }
                     is LoginMode.Sso            -> {
@@ -164,10 +163,9 @@ class SoftLogoutController @Inject constructor(
     interface Listener {
         fun retry()
         fun passwordEdited(password: String)
-        fun signinSubmit(password: String)
+        fun submit()
         fun signinFallbackSubmit()
         fun clearData()
         fun forgetPasswordClicked()
-        fun revealPasswordClicked()
     }
 }

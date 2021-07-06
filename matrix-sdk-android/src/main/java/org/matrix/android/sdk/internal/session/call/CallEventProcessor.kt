@@ -37,7 +37,9 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
             EventType.CALL_CANDIDATES,
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
-            EventType.ENCRYPTED
+            EventType.ENCRYPTED,
+            EventType.CALL_ASSERTED_IDENTITY,
+            EventType.CALL_ASSERTED_IDENTITY_PREFIX
     )
 
     private val eventsToPostProcess = mutableListOf<Event>()
@@ -57,9 +59,8 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
         return eventType == EventType.CALL_INVITE
     }
 
-    suspend fun processFastLane(event: Event) {
-        eventsToPostProcess.add(event)
-        onPostProcess()
+    fun processFastLane(event: Event) {
+        dispatchToCallSignalingHandlerIfNeeded(event)
     }
 
     override suspend fun onPostProcess() {
@@ -71,13 +72,12 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
 
     private fun dispatchToCallSignalingHandlerIfNeeded(event: Event) {
         val now = System.currentTimeMillis()
-        // TODO might check if an invite is not closed (hangup/answered) in the same event batch?
         event.roomId ?: return Unit.also {
             Timber.w("Event with no room id ${event.eventId}")
         }
         val age = now - (event.ageLocalTs ?: now)
         if (age > 40_000) {
-            // To old to ring?
+            // Too old to ring?
             return
         }
         callSignalingHandler.onCallEvent(event)

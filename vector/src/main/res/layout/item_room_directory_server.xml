@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?vctr_list_header_background_color"
+    android:background="?vctr_header_background"
     android:minHeight="?listPreferredItemHeight">
 
     <TextView
         android:id="@+id/itemRoomDirectoryServerName"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -16,8 +17,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:maxLines="2"
-        android:textColor="?riotx_text_primary"
-        android:textSize="16sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/itemRoomDirectoryServerDescription"
         app:layout_constraintEnd_toStartOf="@id/itemRoomDirectoryServerRemove"
@@ -29,6 +29,7 @@
 
     <TextView
         android:id="@+id/itemRoomDirectoryServerDescription"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -36,8 +37,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:maxLines="2"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/itemRoomDirectoryServerRemove"
@@ -60,7 +60,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/vector_error_color"
+        app:tint="?colorError"
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />
 

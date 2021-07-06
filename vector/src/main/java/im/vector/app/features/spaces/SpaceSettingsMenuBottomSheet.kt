@@ -16,19 +16,17 @@
 
 package im.vector.app.features.spaces
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.resources.ColorProvider
@@ -128,7 +126,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     isLastAdmin = isAdmin && otherAdminCount == 0
                 }.disposeOnDestroyView()
 
-        views.spaceBetaTag.setOnClickListener {
+        views.spaceBetaTag.debouncedClicks {
             bugReporter.openBugReportScreen(requireActivity(), ReportType.SPACE_BETA_FEEDBACK)
         }
 
@@ -160,21 +158,21 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     ?: return@debouncedClicks
             val warningMessage: CharSequence? = if (spaceSummary.otherMemberIds.isEmpty()) {
                 span(getString(R.string.space_leave_prompt_msg_only_you)) {
-                    textColor = colorProvider.getColor(R.color.riotx_destructive_accent)
+                    textColor = colorProvider.getColorFromAttribute(R.attr.colorError)
                 }
             } else if (isLastAdmin) {
                 span(getString(R.string.space_leave_prompt_msg_as_admin)) {
-                    textColor = colorProvider.getColor(R.color.riotx_destructive_accent)
+                    textColor = colorProvider.getColorFromAttribute(R.attr.colorError)
                 }
             } else if (!spaceSummary.isPublic) {
                 span(getString(R.string.space_leave_prompt_msg_private)) {
-                    textColor = colorProvider.getColor(R.color.riotx_destructive_accent)
+                    textColor = colorProvider.getColorFromAttribute(R.attr.colorError)
                 }
             } else {
                 null
             }
 
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                     .setMessage(warningMessage)
                     .setTitle(getString(R.string.space_leave_prompt_msg))
                     .setPositiveButton(R.string.leave) { _, _ ->
@@ -189,7 +187,6 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
-                    .withColoredButton(DialogInterface.BUTTON_POSITIVE)
         }
     }
 

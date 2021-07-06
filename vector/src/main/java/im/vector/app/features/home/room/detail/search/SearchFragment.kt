@@ -71,7 +71,7 @@ class SearchFragment @Inject constructor(
 
     private fun configureRecyclerView() {
         views.searchResultRecycler.trackItemsVisibilityChange()
-        views.searchResultRecycler.configureWith(controller, showDivider = false)
+        views.searchResultRecycler.configureWith(controller)
         (views.searchResultRecycler.layoutManager as? LinearLayoutManager)?.stackFromEnd = true
         controller.listener = this
     }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Vector.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:minWidth">94dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="lineHeight">24sp</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Destructive">
+        <item name="android:minWidth">94dp</item>
+        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayDestructive</item>
+    </style>
+
+    <style name="VectorMaterialThemeOverlayDestructive">
+        <item name="colorPrimary">?colorError</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Positive">
+        <item name="android:minWidth">94dp</item>
+        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
+    </style>
+
+    <style name="VectorMaterialThemeOverlayPositive">
+        <!-- Keep default colors from the theme -->
+    </style>
+
+    <style name="Widget.Vector.Button.Unelevated" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:minWidth">94dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="lineHeight">24sp</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Unelevated.Bot">
+        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayBot</item>
+    </style>
+
+    <style name="VectorMaterialThemeOverlayBot">
+        <item name="colorPrimary">@color/button_bot_background_color</item>
+        <item name="colorOnPrimary">@color/button_bot_enabled_text_color</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="colorControlHighlight">?colorSecondary</item>
+        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="lineHeight">24sp</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Text.OnPrimary">
+        <item name="colorControlHighlight">?colorOnPrimary</item>
+        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayOnPrimary</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="strokeColor">@color/button_background_tint_selector</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="lineHeight">24sp</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Text.Alerter">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayOnPrimary</item>
+    </style>
+
+    <style name="VectorMaterialThemeOverlayOnPrimary">
+        <item name="colorPrimary">?colorOnPrimary</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Outlined.Poll">
+        <item name="android:minHeight">44dp</item>
+        <item name="cornerRadius">10dp</item>
+    </style>
+
+</resources>

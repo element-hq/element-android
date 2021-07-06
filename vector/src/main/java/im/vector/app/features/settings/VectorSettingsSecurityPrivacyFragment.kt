@@ -20,10 +20,10 @@ package im.vector.app.features.settings
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -31,12 +31,12 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.intent.ExternalIntentData
 import im.vector.app.core.intent.analyseIntent
 import im.vector.app.core.intent.getFilenameFromUri
@@ -60,11 +60,11 @@ import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.launch
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.rx.SecretsSynchronisationInfo
@@ -75,6 +75,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val activeSessionHolder: ActiveSessionHolder,
         private val pinCodeStore: PinCodeStore,
+        private val keysExporter: KeysExporter,
+        private val keysImporter: KeysImporter,
         private val navigator: Navigator
 ) : VectorSettingsBaseFragment() {
 
@@ -155,7 +157,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
                     vectorActivity.getVectorComponent()
                             .rawService()
-                            .getElementWellknown(session.myUserId)
+                            .getElementWellknown(session.sessionParams)
                             ?.isE2EByDefault() == false
         }
     }
@@ -269,17 +271,17 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
         secureBackupPreference.icon = activity?.let {
             ThemeUtils.tintDrawable(it,
-                    ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_settings_icon_tint_color)
+                    ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_content_primary)
         }
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.let {
             it.icon = ThemeUtils.tintDrawableWithColor(
                     ContextCompat.getDrawable(requireContext(), R.drawable.ic_notification_privacy_warning)!!,
-                    ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+                    ThemeUtils.getColor(requireContext(), R.attr.colorError)
             )
             it.summary = span {
                 text = getString(R.string.settings_hs_admin_e2e_disabled)
-                textColor = ContextCompat.getColor(requireContext(), R.color.riotx_destructive_accent)
+                textColor = ThemeUtils.getColor(requireContext(), R.attr.colorError)
             }
         }
     }
@@ -320,26 +322,21 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 override fun onPassphrase(passphrase: String) {
                     displayLoadingView()
 
-                    KeysExporter(session)
-                            .export(requireContext(),
-                                    passphrase,
-                                    uri,
-                                    object : MatrixCallback<Boolean> {
-                                        override fun onSuccess(data: Boolean) {
-                                            if (data) {
-                                                requireActivity().toast(getString(R.string.encryption_exported_successfully))
-                                            } else {
-                                                requireActivity().toast(getString(R.string.unexpected_error))
-                                            }
-                                            hideLoadingView()
-                                        }
-
-                                        override fun onFailure(failure: Throwable) {
-                                            onCommonDone(failure.localizedMessage)
-                                        }
-                                    })
+                    export(passphrase, uri)
                 }
             })
+        }
+    }
+
+    private fun export(passphrase: String, uri: Uri) {
+        lifecycleScope.launch {
+            try {
+                keysExporter.export(passphrase, uri)
+                requireActivity().toast(getString(R.string.encryption_exported_successfully))
+            } catch (failure: Throwable) {
+                requireActivity().toast(errorFormatter.toHumanReadable(failure))
+            }
+            hideLoadingView()
         }
     }
 
@@ -449,17 +446,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 views.dialogE2eKeysPassphraseFilename.text = getString(R.string.import_e2e_keys_from_file, filename)
             }
 
-            val builder = AlertDialog.Builder(thisActivity)
+            val builder = MaterialAlertDialogBuilder(thisActivity)
                     .setTitle(R.string.encryption_import_room_keys)
                     .setView(dialogLayout)
-
-            var passwordVisible = false
-
-            views.importDialogShowPassword.setOnClickListener {
-                passwordVisible = !passwordVisible
-                views.dialogE2eKeysPassphraseEditText.showPassword(passwordVisible)
-                views.importDialogShowPassword.render(passwordVisible)
-            }
 
             views.dialogE2eKeysPassphraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -474,34 +463,25 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
                 displayLoadingView()
 
-                KeysImporter(session)
-                        .import(requireContext(),
-                                uri,
-                                mimetype,
-                                password,
-                                object : MatrixCallback<ImportRoomKeysResult> {
-                                    override fun onSuccess(data: ImportRoomKeysResult) {
-                                        if (!isAdded) {
-                                            return
-                                        }
+                lifecycleScope.launch {
+                    val data = try {
+                        keysImporter.import(uri, mimetype, password)
+                    } catch (failure: Throwable) {
+                        appContext.toast(errorFormatter.toHumanReadable(failure))
+                        null
+                    }
+                    hideLoadingView()
 
-                                        hideLoadingView()
-
-                                        AlertDialog.Builder(thisActivity)
-                                                .setMessage(resources.getQuantityString(R.plurals.encryption_import_room_keys_success,
-                                                        data.successfullyNumberOfImportedKeys,
-                                                        data.successfullyNumberOfImportedKeys,
-                                                        data.totalNumberOfKeys))
-                                                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-                                                .show()
-                                    }
-
-                                    override fun onFailure(failure: Throwable) {
-                                        appContext.toast(failure.localizedMessage ?: getString(R.string.unexpected_error))
-                                        hideLoadingView()
-                                    }
-                                })
-
+                    if (data != null) {
+                        MaterialAlertDialogBuilder(thisActivity)
+                                .setMessage(resources.getQuantityString(R.plurals.encryption_import_room_keys_success,
+                                        data.successfullyNumberOfImportedKeys,
+                                        data.successfullyNumberOfImportedKeys,
+                                        data.totalNumberOfKeys))
+                                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                .show()
+                    }
+                }
                 importDialog.dismiss()
             }
         }

@@ -16,13 +16,11 @@
 
 package im.vector.app.features.home.room.list
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ConcatAdapter
@@ -33,8 +31,8 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.exhaustive
@@ -386,7 +384,7 @@ class RoomListFragment @Inject constructor(
                 append(getString(R.string.room_participants_leave_private_warning))
             }
         }
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), if (isPublicRoom) 0 else R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.room_participants_leave_prompt_title)
                 .setMessage(message)
                 .setPositiveButton(R.string.leave) { _, _ ->
@@ -394,11 +392,6 @@ class RoomListFragment @Inject constructor(
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
-                .apply {
-                    if (!isPublicRoom) {
-                        withColoredButton(DialogInterface.BUTTON_POSITIVE)
-                    }
-                }
     }
 
     override fun invalidate() = withState(roomListViewModel) { state ->

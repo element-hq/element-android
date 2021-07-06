@@ -140,7 +140,7 @@
     <string name="ssl_remain_offline">Ignorer</string>
     <string name="room_details_people">Folk</string>
     <string name="room_details_files">Filer</string>
-    <string name="room_details_settings">Instillinger</string>
+    <string name="room_details_settings">Innstillinger</string>
     <string name="room_details_people_present_group_name">BLE MED</string>
     <string name="room_event_action_cancel_upload">Avbryt opplastning</string>
     <string name="room_event_action_cancel_download">Avbryt nedlasting</string>
@@ -318,7 +318,7 @@
     <string name="attachment_type_audio">Lyd</string>
     <string name="attachment_type_gallery">Galleri</string>
     <string name="room_list_quick_actions_notifications_mute">Demp</string>
-    <string name="room_list_quick_actions_settings">Instillinger</string>
+    <string name="room_list_quick_actions_settings">Innstillinger</string>
     <string name="login_server_modular_learn_more">Lær mer</string>
     <string name="login_server_other_title">Annet</string>
     <string name="login_continue">Fortsett</string>
@@ -349,7 +349,7 @@
     <string name="soft_logout_signin_title">Logg på</string>
     <string name="soft_logout_signin_submit">Logg på</string>
     <string name="soft_logout_signin_password_hint">Passord</string>
-    <string name="settings">Instillinger</string>
+    <string name="settings">Innstillinger</string>
     <string name="devices_current_device">Gjeldende økt</string>
     <string name="command_description_shrug">Føyer til ¯\\_(ツ)_/¯ på en råtekstmelding</string>
     <string name="sent_a_video">Video.</string>
@@ -897,13 +897,13 @@
     <string name="auth_recaptcha_message">Denne hjemmetjeneren vil vite om du er en robot</string>
     <string name="auth_threepid_warning_message">Registrering med e-post og telefonummer samtidig fungerer ikke enda. Bare telefonummeret kommer til å bli registrert.
 \n
-\nDu kan legge e-postadressen din til i instillinger.</string>
-    <string name="auth_use_server_options">Bruk egendefinerte tjenerinstillinger (avansert)</string>
+\nDu kan legge e-postadressen din til i innstillinger.</string>
+    <string name="auth_use_server_options">Bruk egendefinerte tjenerinnstillinger (avansert)</string>
     <string name="call_failed_no_connection_description">Klarte ikke å starte en sanntidskopling.
 \nVennligst be hjemmetjeneradministratoren din om å sette opp en TURN server så samtaler blir mer stabile.</string>
     <string name="call_failed_no_ice_description">Vennligst be administratoren for hjemmetjeneren din (%1$s) til å sette opp en TURN tjener for at telefonsamtaler skal fungere ordentlig.
 \n
-\nAlternativt kan du prøve å bruke den offentlige tjeneren på %2$s, men dette vil ikke være like stabilt, og det vil dele IP-adressen din med den serveren. Du kan styre dette i instillinger.</string>
+\nAlternativt kan du prøve å bruke den offentlige tjeneren på %2$s, men dette vil ikke være like stabilt, og det vil dele IP-adressen din med den serveren. Du kan styre dette i innstillinger.</string>
     <string name="login_error_login_email_not_yet">E-postkoblingen som ikke er klikket på ennå</string>
     <string name="login_error_user_in_use">Dette brukernavnet er allerede brukt</string>
     <string name="login_error_not_json">Inneholdt ikke gyldig JSON</string>

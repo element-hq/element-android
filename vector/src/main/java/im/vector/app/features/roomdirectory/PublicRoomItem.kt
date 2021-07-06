@@ -22,8 +22,10 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.features.home.AvatarRenderer
@@ -50,15 +52,15 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
     @EpoxyAttribute
     var joinState: JoinState = JoinState.NOT_JOINED
 
-    @EpoxyAttribute
-    var globalListener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var globalListener: ClickListener? = null
 
-    @EpoxyAttribute
-    var joinListener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var joinListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.rootView.setOnClickListener { globalListener?.invoke() }
+        holder.rootView.onClick(globalListener)
 
         avatarRenderer.render(matrixItem, holder.avatarView)
         holder.nameView.text = matrixItem.displayName
@@ -76,16 +78,7 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
                 }
         )
 
-        holder.buttonState.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                joinListener?.invoke()
-            }
-
-            override fun onRetryClicked() {
-                // Same action
-                onButtonClicked()
-            }
-        }
+        holder.buttonState.commonClicked = { joinListener?.invoke(it) }
     }
 
     class Holder : VectorEpoxyHolder() {

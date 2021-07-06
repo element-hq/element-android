@@ -1,3 +1,78 @@
+Changes in Element 1.1.12 (2021-07-05)
+======================================
+
+Features ✨
+----------
+ - Reveal password: use facility from com.google.android.material.textfield.TextInputLayout instead of manual handling. ([#3545](https://github.com/vector-im/element-android/issues/3545))
+ - Implements new design for Jump to unread and quick fix visibility issues. ([#3547](https://github.com/vector-im/element-android/issues/3547))
+
+Bugfixes 🐛
+----------
+ - Fix some issues with timeline cache invalidation and visibility. ([#3542](https://github.com/vector-im/element-android/issues/3542))
+ - Fix call invite processed after call is ended because of fastlane mode. ([#3564](https://github.com/vector-im/element-android/issues/3564))
+ - Fix crash after video call. ([#3577](https://github.com/vector-im/element-android/issues/3577))
+ - Fix crash out of memory ([#3583](https://github.com/vector-im/element-android/issues/3583))
+ - CryptoStore migration has to be object to avoid crash ([#3605](https://github.com/vector-im/element-android/issues/3605))
+
+
+Changes in Element v1.1.11 (2021-06-22)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Send button does not show up half of the time ([#3535](https://github.com/vector-im/element-android/issues/3535))
+ - Fix crash on signout: release session at the end of clean up. ([#3538](https://github.com/vector-im/element-android/issues/3538))
+
+
+Changes in Element v1.1.10 (2021-06-18)
+=======================================
+
+Features ✨
+----------
+ - Migrate DefaultTypingService, KeysImporter and KeysExporter to coroutines ([#2449](https://github.com/vector-im/element-android/issues/2449))
+ - Update Message Composer design ([#3182](https://github.com/vector-im/element-android/issues/3182))
+ - Cleanup Epoxy items, and debounce all the clicks ([#3435](https://github.com/vector-im/element-android/issues/3435))
+ - Adds support for receiving MSC3086 Asserted Identity events. ([#3451](https://github.com/vector-im/element-android/issues/3451))
+ - Migrate to new colors and cleanup the style and theme. Now exported in module :library:ui-styles
+  Ref: https://material.io/blog/migrate-android-material-components ([#3459](https://github.com/vector-im/element-android/issues/3459))
+ - Add option to set aliases for public spaces ([#3483](https://github.com/vector-im/element-android/issues/3483))
+ - Add beta warning to private space creation flow ([#3485](https://github.com/vector-im/element-android/issues/3485))
+ - User defined top level spaces ordering ([#3501](https://github.com/vector-im/element-android/issues/3501))
+
+Bugfixes 🐛
+----------
+ - Fix new DMs not always marked as such ([#3333](https://github.com/vector-im/element-android/issues/3333))
+
+SDK API changes ⚠️
+------------------
+ - Splits SessionAccountDataService and RoomAccountDataService and offers to query RoomAccountDataEvent at the session level. ([#3479](https://github.com/vector-im/element-android/issues/3479))
+
+Other changes
+-------------
+ - Move the ability to start a call from dialpad directly to a dedicated tab in the home screen. ([#3457](https://github.com/vector-im/element-android/issues/3457))
+ - VoIP: Change hold direction to send-only. ([#3467](https://github.com/vector-im/element-android/issues/3467))
+ - Some improvements on DialPad (cursor edition, paste number, small fixes). ([#3516](https://github.com/vector-im/element-android/issues/3516))
+
+
+Changes in Element v1.1.9 (2021-06-02)
+======================================
+
+Features ✨:
+ - Upgrade Olm dependency to 3.2.4
+ - Allow user to add custom "network" in room search (#1458)
+ - Add Gitter.im as a default in the Change Network menu (#3196)
+ - VoIP: support for virtual rooms (#3355)
+ - Compress thumbnail: change Jpeg quality from 100 to 80 (#3396)
+ - Inconsistent usage of the term homeserver in Settings (#3404)
+ - VoIP: support attended transfer (#3420)
+ - /snow -> /snowfall and update wording (iso Element Web) (#3430)
+
+Bugfixes 🐛:
+ - Fix | On Android it seems to be impossible to view the complete description of a Space (without dev tools) (#3401)
+ - Fix | Suggest Rooms, Show a detailed view of the room on click (#3406)
+ - Fix app crashing when signing out (#3424)
+ - Switch to stable endpoint/fields for MSC2858 (#3442)
+
 Changes in Element 1.1.8 (2021-05-25)
 ===================================================
 
@@ -24,6 +99,9 @@ Build 🧱:
 Other changes:
  - Add documentation on LoginWizard and RegistrationWizard (#3303)
  - Setup towncrier tool (#3293)
+
+ Security:
+  - Element Android shares name of E2EE files with homeserver (#3387)
 
 Changes in Element 1.1.7 (2021-05-12)
 ===================================================

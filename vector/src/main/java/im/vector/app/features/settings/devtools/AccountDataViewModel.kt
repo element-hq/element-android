@@ -31,11 +31,11 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.accountdata.AccountDataEvent
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.rx.rx
 
 data class AccountDataViewState(
-        val accountData: Async<List<AccountDataEvent>> = Uninitialized
+        val accountData: Async<List<UserAccountDataEvent>> = Uninitialized
 ) : MvRxState
 
 class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: AccountDataViewState,
@@ -57,7 +57,7 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
 
     private fun handleDeleteAccountData(action: AccountDataAction.DeleteAccountData) {
         viewModelScope.launch {
-            session.userAccountDataService().updateAccountData(action.type, emptyMap())
+            session.accountDataService().updateUserAccountData(action.type, emptyMap())
         }
     }
 

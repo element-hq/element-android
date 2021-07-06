@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/itemLoginRedButton"
-        style="@style/Style.Vector.Login.Button"
+        style="@style/Widget.Vector.Button.Login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="36dp"
-        app:backgroundTint="@color/vector_error_color"
+        app:backgroundTint="?colorError"
         tools:text="@string/soft_logout_clear_data_submit" />
 
 </FrameLayout>

@@ -56,7 +56,7 @@ class ViewEditHistoryBottomSheet:
         super.onViewCreated(view, savedInstanceState)
         views.bottomSheetRecyclerView.configureWith(
                 epoxyController,
-                showDivider = true,
+                dividerDrawable = R.drawable.divider_horizontal_on_secondary,
                 hasFixedSize = false)
         views.bottomSheetTitle.text = context?.getString(R.string.message_edits)
     }

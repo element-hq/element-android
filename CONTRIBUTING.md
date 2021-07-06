@@ -26,7 +26,7 @@ To install the template (to be done only once):
 
 To create a new screen:
 - First create a new package in your code.
-- Then right click on the package, and select `New/New Vector/RiotX Feature`.
+- Then right click on the package, and select `New/New Vector/Element Feature`.
 - Follow the Wizard, especially replace `Main` by something more relevant to your feature.
 - Click on `Finish`.
 - Remaining steps are described as TODO in the generated files, or will be pointed out by the compiler, or at runtime :)
@@ -53,7 +53,7 @@ This project is full Kotlin. Please do not write Java classes.
 
 ### Changelog
 
-Please create at least one file under ./newsfragment containing details about your change. Towncrier will be used when preparing the release.
+Please create at least one file under ./changelog.d containing details about your change. Towncrier will be used when preparing the release.
 
 Towncrier says to use the PR number for the filename, but the issue number is also fine.
 
@@ -63,7 +63,7 @@ Supported filename extensions are:
 - ``.bugfix``: Signifying a bug fix.
 - ``.doc``: Signifying a documentation improvement.
 - ``.removal``: Signifying a deprecation or removal of public API. Can be used to notifying about API change in the Matrix SDK
-- ``.misc``: A ticket has been closed, but it is not of interest to users. Note that in this case, the content of the file will not be output, but just the issue/PR number.
+- ``.misc``: Any other changes.
 
 See https://github.com/twisted/towncrier#news-fragments if you need more details.
 

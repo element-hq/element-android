@@ -5,6 +5,6 @@
         android:id="@+id/roomMemberProfileShareAction"
         android:icon="@drawable/ic_material_share"
         android:title="@string/share"
-        app:iconTint="?attr/colorAccent"
+        app:iconTint="?colorSecondary"
         app:showAsAction="ifRoom" />
 </menu>

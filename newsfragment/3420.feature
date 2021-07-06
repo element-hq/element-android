@@ -1,1 +1,0 @@
-VoIP: support attended transfer

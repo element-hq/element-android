@@ -9,11 +9,11 @@
 
     <TextView
         android:id="@+id/bootstrapDescriptionText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@id/waitingProgress"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/re_authentication_activity_title" />
@@ -28,28 +28,28 @@
 
     <TextView
         android:id="@+id/reAuthFailureText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColor="?colorError"
-        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/buttonFlow"
-        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintTop_toBottomOf="@id/waitingProgress"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="Authentication failed" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/bootstrapCancelButton"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"
         android:text="@string/cancel"
         tools:ignore="MissingConstraints" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/bootstrapRetryButton"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:constraint_referenced_ids="bootstrapCancelButton, bootstrapRetryButton"
-        app:layout_constraintTop_toBottomOf="@id/reAuthFailureText"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reAuthFailureText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

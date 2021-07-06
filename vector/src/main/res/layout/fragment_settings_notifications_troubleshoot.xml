@@ -26,27 +26,29 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?attr/vctr_list_divider_color" />
+            android:background="?vctr_list_separator" />
 
         <TextView
             android:id="@+id/troubleshoot_summ_title"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:text="@string/settings_troubleshoot_diagnostic"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/toubleshoot_summ_description"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             tools:text="@string/settings_troubleshoot_diagnostic_running_status" />
 
         <LinearLayout
@@ -55,30 +57,26 @@
             android:gravity="center_vertical|end"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/troubleshoot_run_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="16dp"
-                android:background="?attr/colorAccent"
                 android:padding="8dp"
                 android:text="@string/settings_troubleshoot_diagnostic_run_button_title"
-                android:textColor="@android:color/white"
                 android:visibility="gone"
                 tools:enabled="false"
                 tools:visibility="visible" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/troubleshoot_summ_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="16dp"
-                android:background="?attr/colorAccent"
                 android:padding="8dp"
                 android:text="@string/send_bug_report"
-                android:textColor="@android:color/white"
                 android:visibility="gone"
                 tools:visibility="visible" />
         </LinearLayout>

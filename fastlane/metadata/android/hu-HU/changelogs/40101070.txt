@@ -1,0 +1,2 @@
+Fő változás ebben a verzióban: béta állapotú Tér támogatás. Videó tömörítés küldés előtt.
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.1.7

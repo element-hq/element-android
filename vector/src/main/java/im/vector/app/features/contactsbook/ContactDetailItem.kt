@@ -31,7 +31,9 @@ abstract class ContactDetailItem : VectorEpoxyModel<ContactDetailItem.Holder>() 
 
     @EpoxyAttribute lateinit var threePid: String
     @EpoxyAttribute var matrixId: String? = null
-    @EpoxyAttribute var clickListener: ClickListener? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var clickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

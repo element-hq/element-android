@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.alias
 
+import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.internal.di.UserId
@@ -51,19 +52,19 @@ internal class RoomAliasAvailabilityChecker @Inject constructor(
         } catch (throwable: Throwable) {
             if (throwable is Failure.ServerError && throwable.httpCode == 404) {
                 // This is a 404, so the alias is available: nominal case
-                null
+                return
             } else {
                 // Other error, propagate it
                 throw throwable
             }
         }
-                ?.let {
+                .let {
                     // Alias already exists: error case
                     throw RoomAliasError.AliasNotAvailable
                 }
     }
 
     companion object {
-        internal fun String.toFullLocalAlias(userId: String) = "#" + this + ":" + userId.substringAfter(":")
+        internal fun String.toFullLocalAlias(userId: String) = "#" + this + ":" + userId.getDomain()
     }
 }

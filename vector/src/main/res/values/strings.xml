@@ -538,6 +538,7 @@
     <string name="login">Log in</string>
     <string name="logout">Sign out</string>
     <string name="hs_url">Homeserver URL</string>
+    <string name="hs_client_url">Homeserver API URL</string>
     <string name="identity_url">Identity Server URL</string>
     <string name="search">Search</string>
 
@@ -771,6 +772,7 @@
     <string name="yes">YES</string>
     <string name="no">NO</string>
     <string name="_continue">Continue</string>
+    <string name="continue_anyway">Continue Anyway</string>
 
     <!-- Actions -->
     <string name="remove">Remove</string>
@@ -782,7 +784,7 @@
     <string name="list_members">List members</string>
     <string name="open_chat_header">Open header</string>
     <string name="room_sync_in_progress">Syncing…</string>
-    <string name="room_jump_to_first_unread">Jump to first unread message.</string>
+    <string name="room_jump_to_first_unread">Jump to unread</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">You have been invited to join this room by %s</string>
@@ -1429,6 +1431,8 @@
     <!-- room settings : alias -->
     <string name="room_settings_alias_title">Room addresses</string>
     <string name="room_settings_alias_subtitle">See and managed addresses of this room, and its visibility in the room directory.</string>
+    <string name="space_settings_alias_title">Space addresses</string>
+    <string name="space_settings_alias_subtitle">See and managed addresses of this space.</string>
 
     <string name="room_alias_title">Room Addresses</string>
     <string name="room_alias_published_alias_title">Published Addresses</string>
@@ -2600,6 +2604,7 @@
     <string name="create_room_disable_federation_description">You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.</string>
 
     <string name="create_room_alias_hint">Room address</string>
+    <string name="create_space_alias_hint">Space address</string>
     <string name="create_room_alias_already_in_use">This address is already in use</string>
     <string name="create_room_alias_empty">Please provide a room address</string>
     <string name="create_room_alias_invalid">Some characters are not allowed</string>
@@ -2642,9 +2647,12 @@
     <string name="you">You</string>
 
     <string name="verification_scan_notice">Scan the code with the other user\'s device to securely verify each other</string>
+    <string name="verification_scan_self_notice">Scan the code with your other device or switch and scan with this device</string>
     <string name="verification_scan_their_code">Scan their code</string>
+    <string name="verification_scan_with_this_device">Scan with this device</string>
     <string name="verification_scan_emoji_title">Can\'t scan</string>
     <string name="verification_scan_emoji_subtitle">If you\'re not in person, compare emoji instead</string>
+    <string name="verification_scan_self_emoji_subtitle">Verify by comparing emoji instead</string>
 
     <string name="verification_no_scan_emoji_title">Verify by comparing emojis</string>
 
@@ -3415,4 +3423,8 @@
     <string name="this_space_has_no_rooms_admin">Some rooms may be hidden because they’re private and you need an invite.</string>
 
     <string name="unnamed_room">Unnamed Room</string>
+
+    <string name="teammate_spaces_arent_quite_ready">"Teammate spaces aren’t quite ready but you can still give them a try"</string>
+    <string name="teammate_spaces_might_not_join">"At the moment people might not be able to join any private rooms you make.\n\nWe’ll be improving this as part of the beta, but just wanted to let you know."</string>
+    <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
 </resources>

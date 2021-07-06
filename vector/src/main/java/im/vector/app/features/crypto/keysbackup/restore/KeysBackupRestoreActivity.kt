@@ -18,7 +18,7 @@ package im.vector.app.features.crypto.keysbackup.restore
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.observeEvent
@@ -66,7 +66,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         }
 
         viewModel.keyVersionResultError.observeEvent(this) { message ->
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.unknown_error)
                     .setMessage(message)
                     .setCancelable(false)
@@ -97,7 +97,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                     launch4SActivity()
                 }
                 KeysBackupRestoreSharedViewModel.NAVIGATE_FAILED_TO_LOAD_4S   -> {
-                    AlertDialog.Builder(this)
+                    MaterialAlertDialogBuilder(this)
                             .setTitle(R.string.unknown_error)
                             .setMessage(R.string.error_failed_to_import_keys)
                             .setCancelable(false)

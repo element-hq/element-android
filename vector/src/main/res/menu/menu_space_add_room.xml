@@ -4,6 +4,5 @@
     <item
         android:id="@+id/spaceAddRoomSaveItem"
         android:title="@string/save"
-        app:iconTint="?attr/colorAccent"
         app:showAsAction="always" />
 </menu>

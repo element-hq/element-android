@@ -7,6 +7,6 @@
         android:layout_width="2dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="?riotx_list_bottom_sheet_divider_color" />
+        android:background="?vctr_header_background" />
 
 </FrameLayout>

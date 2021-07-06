@@ -10,15 +10,16 @@
 
         <TextView
             android:id="@+id/codeBlockTextView"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:textSize="14sp" />
+            android:fontFamily="monospace" />
 
     </HorizontalScrollView>
 
     <TextView
         android:id="@+id/codeBlockEditedView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp" />

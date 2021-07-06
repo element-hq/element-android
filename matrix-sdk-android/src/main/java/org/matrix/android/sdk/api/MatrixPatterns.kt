@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api
 
+import org.matrix.android.sdk.BuildConfig
+
 /**
  * This class contains pattern to match the different Matrix ids
  */
@@ -70,6 +72,9 @@ object MatrixPatterns {
 
     private const val LINK_TO_APP_ROOM_ALIAS_REGEXP = APP_BASE_REGEX + MATRIX_ROOM_ALIAS_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_REGEX
     private val PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ALIAS = LINK_TO_APP_ROOM_ALIAS_REGEXP.toRegex(RegexOption.IGNORE_CASE)
+
+    // ascii characters in the range \x20 (space) to \x7E (~)
+    val ORDER_STRING_REGEX = "[ -~]+".toRegex()
 
     // list of patterns to find some matrix item.
     val MATRIX_PATTERNS = listOf(
@@ -145,5 +150,32 @@ object MatrixPatterns {
      */
     fun extractServerNameFromId(matrixId: String?): String? {
         return matrixId?.substringAfter(":", missingDelimiterValue = "")?.takeIf { it.isNotEmpty() }
+    }
+
+    /**
+     * Orders which are not strings, or do not consist solely of ascii characters in the range \x20 (space) to \x7E (~),
+     * or consist of more than 50 characters, are forbidden and the field should be ignored if received.
+     */
+    fun isValidOrderString(order: String?): Boolean {
+        return order != null && order.length < 50 && order matches ORDER_STRING_REGEX
+    }
+
+    fun candidateAliasFromRoomName(name: String): String {
+        return Regex("\\s").replace(name.lowercase(), "_").let {
+            "[^a-z0-9._%#@=+-]".toRegex().replace(it, "")
+        }
+    }
+
+    /**
+     * Return the domain form a userId
+     * Examples:
+     * - "@alice:domain.org".getDomain() will return "domain.org"
+     * - "@bob:domain.org:3455".getDomain() will return "domain.org:3455"
+     */
+    fun String.getDomain(): String {
+        if (BuildConfig.DEBUG) {
+            assert(isUserId(this))
+        }
+        return substringAfter(":")
     }
 }

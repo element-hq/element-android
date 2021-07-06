@@ -24,8 +24,9 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
@@ -143,14 +144,16 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
         override fun bindView(itemView: View) {
             super.bindView(itemView)
             val buttons = listOf(button1, button2, button3, button4, button5)
-            val clickListener = DebouncedClickListener({
-                val optionIndex = buttons.indexOf(it)
-                if (optionIndex != -1 && pollId != null) {
-                    val compatValue = if (optionIndex < optionValues?.size ?: 0) optionValues?.get(optionIndex) else null
-                    callback?.onTimelineItemAction(RoomDetailAction.ReplyToOptions(pollId!!, optionIndex, compatValue ?: "$optionIndex"))
+            val clickListener = object : ClickListener {
+                override fun invoke(p1: View) {
+                    val optionIndex = buttons.indexOf(p1)
+                    if (optionIndex != -1 && pollId != null) {
+                        val compatValue = if (optionIndex < optionValues?.size ?: 0) optionValues?.get(optionIndex) else null
+                        callback?.onTimelineItemAction(RoomDetailAction.ReplyToOptions(pollId!!, optionIndex, compatValue ?: "$optionIndex"))
+                    }
                 }
-            })
-            buttons.forEach { it.setOnClickListener(clickListener) }
+            }
+            buttons.forEach { it.onClick(clickListener) }
         }
     }
 

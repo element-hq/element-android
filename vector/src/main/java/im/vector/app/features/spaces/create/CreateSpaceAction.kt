@@ -23,6 +23,7 @@ sealed class CreateSpaceAction : VectorViewModelAction {
     data class SetRoomType(val type: SpaceType) : CreateSpaceAction()
     data class NameChanged(val name: String) : CreateSpaceAction()
     data class TopicChanged(val topic: String) : CreateSpaceAction()
+    data class SpaceAliasChanged(val aliasLocalPart: String) : CreateSpaceAction()
     data class SetAvatar(val uri: Uri?) : CreateSpaceAction()
     object OnBackPressed : CreateSpaceAction()
     object NextFromDetails : CreateSpaceAction()

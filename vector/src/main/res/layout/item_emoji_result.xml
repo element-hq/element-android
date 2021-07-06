@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:minHeight="48dp"
@@ -11,14 +11,13 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingEnd="@dimen/layout_horizontal_margin">
 
-    <!-- size in dp, because we do not want the display to be impacted by font size setting -->
     <TextView
         android:id="@+id/item_emoji_tv"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textColor="@color/black"
-        android:textSize="25dp"
+        android:textColor="@color/emoji_color"
         tools:ignore="SpUsage"
         tools:text="@sample/reactions.json/data/reaction" />
 
@@ -30,20 +29,20 @@
 
         <TextView
             android:id="@+id/item_emoji_name"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?riotx_text_primary"
-            android:textSize="16sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             tools:text="Smiley Face" />
 
         <TextView
             android:id="@+id/item_emoji_keyword"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="14sp"
+            android:textColor="?vctr_content_secondary"
             android:visibility="gone"
             tools:text="Smile, foo, bar"
             tools:visibility="visible" />

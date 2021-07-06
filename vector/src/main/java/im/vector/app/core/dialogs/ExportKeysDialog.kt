@@ -18,20 +18,17 @@ package im.vector.app.core.dialogs
 
 import android.app.Activity
 import android.text.Editable
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.databinding.DialogExportE2eKeysBinding
 
 class ExportKeysDialog {
 
-    private var passwordVisible = false
-
     fun show(activity: Activity, exportKeyDialogListener: ExportKeyDialogListener) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
         val views = DialogExportE2eKeysBinding.bind(dialogLayout)
-        val builder = AlertDialog.Builder(activity)
+        val builder = MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.encryption_export_room_keys)
                 .setView(dialogLayout)
 
@@ -56,13 +53,6 @@ class ExportKeysDialog {
 
         views.exportDialogEt.addTextChangedListener(textWatcher)
         views.exportDialogEtConfirm.addTextChangedListener(textWatcher)
-
-        views.exportDialogShowPassword.setOnClickListener {
-            passwordVisible = !passwordVisible
-            views.exportDialogEt.showPassword(passwordVisible)
-            views.exportDialogEtConfirm.showPassword(passwordVisible)
-            views.exportDialogShowPassword.render(passwordVisible)
-        }
 
         val exportDialog = builder.show()
 

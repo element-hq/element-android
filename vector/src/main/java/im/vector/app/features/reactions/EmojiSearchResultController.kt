@@ -63,13 +63,13 @@ class EmojiSearchResultController @Inject constructor(
             }
         } else {
             // Build the search results
-            results.forEach {
+            results.forEach { emojiItem ->
                 emojiSearchResultItem {
-                    id(it.name)
-                    emojiItem(it)
+                    id(emojiItem.name)
+                    emojiItem(emojiItem)
                     emojiTypeFace(host.emojiTypeface)
                     currentQuery(data.query)
-                    onClickListener(host.listener)
+                    onClickListener { host.listener?.onReactionSelected(emojiItem.emoji) }
                 }
             }
         }

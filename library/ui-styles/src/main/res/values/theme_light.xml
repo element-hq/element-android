@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- LIGHT THEME COLORS -->
+
+    <style name="Base.Theme.Vector.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Element attribute for palette -->
+        <!-- content colors -->
+        <item name="vctr_content_primary">@color/element_content_primary_light</item>
+        <item name="vctr_content_secondary">@color/element_content_secondary_light</item>
+        <item name="vctr_content_tertiary">@color/element_content_tertiary_light</item>
+        <item name="vctr_content_quaternary">@color/element_content_quaternary_light</item>
+        <item name="vctr_content_quinary">@color/element_content_quinary_light</item>
+
+        <!-- system colors -->
+        <item name="vctr_system">@color/element_system_light</item>
+
+        <!-- other colors -->
+        <item name="vctr_unread_room_badge">@color/vctr_unread_room_badge_light</item>
+        <item name="vctr_fab_label_bg">@color/vctr_fab_label_bg_light</item>
+        <item name="vctr_fab_label_stroke">@color/vctr_fab_label_stroke_light</item>
+        <item name="vctr_fab_label_color">@color/vctr_fab_label_color_light</item>
+        <item name="vctr_touch_guard_bg">@color/vctr_touch_guard_bg_light</item>
+        <item name="vctr_keys_backup_banner_accent_color">@color/vctr_keys_backup_banner_accent_color_light</item>
+        <item name="vctr_attachment_selector_background">@color/vctr_attachment_selector_background_light</item>
+        <item name="vctr_attachment_selector_border">@color/vctr_attachment_selector_border_light</item>
+        <item name="vctr_room_active_widgets_banner_bg">@color/vctr_room_active_widgets_banner_bg_light</item>
+        <item name="vctr_room_active_widgets_banner_text">@color/vctr_room_active_widgets_banner_text_light</item>
+        <item name="vctr_reaction_background_off">@color/vctr_reaction_background_off_light</item>
+        <item name="vctr_reaction_background_on">@color/vctr_reaction_background_on_light</item>
+        <item name="vctr_waiting_background_color">@color/vctr_waiting_background_color_light</item>
+        <item name="vctr_chat_effect_snow_background">@color/vctr_chat_effect_snow_background_light</item>
+        <item name="vctr_toolbar_background">@color/element_background_light</item>
+
+        <!-- room message colors -->
+        <item name="vctr_notice_secondary">#61708B</item>
+        <item name="vctr_unsent_message_text_color">?colorError</item>
+        <item name="vctr_message_text_color">@color/element_content_primary_light</item>
+        <item name="vctr_notice_text_color">#FF61708b</item>
+        <item name="vctr_encrypting_message_text_color">@color/palette_element_green</item>
+        <item name="vctr_sending_message_text_color">@color/element_content_secondary_light</item>
+        <item name="vctr_markdown_block_background_color">#FFEEEEEE</item>
+        <item name="vctr_spoiler_background_color">#FF000000</item>
+
+        <!-- Some alias -->
+        <item name="vctr_header_background">?vctr_system</item>
+        <item name="vctr_list_separator">?vctr_content_quinary</item>
+        <item name="vctr_list_separator_system">?vctr_system</item>
+        <item name="vctr_list_separator_on_surface">?vctr_system</item>
+
+        <!-- Material color -->
+        <item name="colorPrimary">@color/element_accent_light</item>
+        <item name="colorPrimaryVariant">@color/element_accent_light</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorSecondary">@color/element_accent_light</item>
+        <item name="colorSecondaryVariant">@color/element_accent_light</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+        <item name="colorError">@color/element_alert_light</item>
+        <item name="colorOnError">@color/palette_white</item>
+        <item name="colorSurface">@color/element_system_light</item>
+        <item name="colorOnSurface">?vctr_content_primary</item>
+        <item name="android:colorBackground">@color/element_background_light</item>
+        <item name="colorOnBackground">?vctr_content_primary</item>
+
+        <!--Material type attributes-->
+        <item name="textAppearanceButton">@style/TextAppearance.Vector.Button</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.Vector.Caption</item>
+        <!-- Default Text appearance for TextViews -->
+        <item name="android:textAppearanceSmall">@style/TextAppearance.Vector.Body</item>
+        <!-- Text appearance for List item -->
+        <item name="textAppearanceListItem">@style/TextAppearance.Vector.Subtitle</item>
+        <item name="textAppearanceListItemSecondary">@style/TextAppearance.Vector.Body</item>
+        <item name="textAppearanceListItemSmall">@style/TextAppearance.Vector.Body</item>
+
+        <!-- Default styles -->
+        <item name="android:textViewStyle">@style/Widget.Vector.TextView.Body</item>
+        <item name="materialButtonStyle">@style/Widget.Vector.Button</item>
+        <item name="toolbarStyle">@style/Widget.Vector.Toolbar</item>
+        <item name="bottomNavigationStyle">@style/BottomNavigation.Vector</item>
+        <item name="searchViewStyle">@style/Widget.Vector.SearchView</item>
+        <item name="textInputStyle">@style/Widget.Vector.TextInputLayout</item>
+        <item name="appBarLayoutStyle">@style/Widget.Vector.AppBarLayout</item>
+        <item name="popupMenuStyle">@style/Widget.Vector.PopupMenu</item>
+        <item name="snackbarStyle">@style/Widget.Vector.SnackBar</item>
+        <item name="snackbarButtonStyle">@style/Widget.Vector.SnackBar.Button</item>
+        <item name="snackbarTextViewStyle">@style/Widget.Vector.SnackBar.TextView</item>
+        <item name="actionModeStyle">@style/Widget.Vector.ActionMode</item>
+
+        <!-- Default theme -->
+        <item name="bottomSheetDialogTheme">@style/Theme.Vector.BottomSheetDialog.Light</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Vector.MaterialAlertDialog</item>
+
+        <item name="android:textColorLink">@color/element_link_light</item>
+
+        <!-- Menu text color -->
+        <item name="android:actionMenuTextColor">?colorSecondary</item>
+
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/element_content_primary_light</item>
+
+        <!-- ANDROID SUPPORT ATTRIBUTES -->
+        <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
+        <item name="android:overScrollMode">never</item>
+
+        <!-- fonts -->
+        <item name="android:typeface">sans</item>
+
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
+        <item name="pf_lock_screen">@style/PinCodeScreenStyle</item>
+        <item name="pf_key_button">@style/PinCodeKeyButtonStyle</item>
+        <item name="pf_title">@style/PinCodeTitleStyle</item>
+        <item name="pf_hint">@style/PinCodeHintStyle</item>
+        <item name="pf_code_view">@style/PinCodeDotsViewStyle</item>
+        <item name="pf_delete_button">@style/PinCodeDeleteButtonStyle</item>
+        <item name="pf_fingerprint_button">@style/PinCodeFingerprintButtonStyle</item>
+        <item name="pf_next">@style/PinCodeNextButtonStyle</item>
+
+        <!-- Use dark color, to have enough contrast with icons color. windowLightStatusBar is only available in API 23+ -->
+        <item name="android:statusBarColor">@color/android_status_bar_background_dark</item>
+        <!-- Use dark color, to have enough contrast with icons color. windowLightNavigationBar is only available in API 27+ -->
+        <item name="android:navigationBarColor">@color/android_navigation_bar_background_dark</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- specify shared element enter and exit transitions -->
+        <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
+
+        <item name="vctr_social_login_button_google_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Google.Light</item>
+        <item name="vctr_social_login_button_github_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Github.Light</item>
+        <item name="vctr_social_login_button_facebook_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Facebook.Light</item>
+        <item name="vctr_social_login_button_twitter_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Twitter.Light</item>
+        <item name="vctr_social_login_button_apple_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Apple.Light</item>
+        <item name="vctr_social_login_button_gitlab_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Gitlab.Light</item>
+
+        <item name="vctr_jump_to_unread_style">@style/Widget.Vector.JumpToUnread.Light</item>
+
+    </style>
+
+    <style name="Theme.Vector.Light" parent="Base.Theme.Vector.Light" />
+
+</resources>

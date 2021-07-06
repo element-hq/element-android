@@ -122,7 +122,6 @@ class SoftLogoutViewModel @AssistedInject constructor(
         when (action) {
             is SoftLogoutAction.RetryLoginFlow  -> getSupportedLoginFlow()
             is SoftLogoutAction.PasswordChanged -> handlePasswordChange(action)
-            is SoftLogoutAction.TogglePassword  -> handleTogglePassword()
             is SoftLogoutAction.SignInAgain     -> handleSignInAgain(action)
             is SoftLogoutAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is SoftLogoutAction.ClearData       -> handleClearData()
@@ -138,18 +137,8 @@ class SoftLogoutViewModel @AssistedInject constructor(
         setState {
             copy(
                     asyncLoginAction = Uninitialized,
-                    submitEnabled = action.password.isNotBlank()
+                    enteredPassword = action.password
             )
-        }
-    }
-
-    private fun handleTogglePassword() {
-        withState {
-            setState {
-                copy(
-                        passwordShown = !this.passwordShown
-                )
-            }
         }
     }
 
@@ -188,9 +177,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
     private fun handleSignInAgain(action: SoftLogoutAction.SignInAgain) {
         setState {
             copy(
-                    asyncLoginAction = Loading(),
-                    // Ensure password is hidden
-                    passwordShown = false
+                    asyncLoginAction = Loading()
             )
         }
         viewModelScope.launch {

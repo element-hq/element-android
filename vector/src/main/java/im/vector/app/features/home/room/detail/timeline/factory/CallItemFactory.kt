@@ -16,6 +16,7 @@
 package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.features.call.vectorCallService
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -26,6 +27,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHold
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
@@ -38,6 +40,7 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class CallItemFactory @Inject constructor(
+        private val session: Session,
         private val messageColorProvider: MessageColorProvider,
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
@@ -132,7 +135,8 @@ class CallItemFactory @Inject constructor(
             isStillActive: Boolean,
             callback: TimelineEventController.Callback?
     ): CallTileTimelineItem? {
-        val userOfInterest = roomSummariesHolder.get(roomId)?.toMatrixItem() ?: return null
+        val correctedRoomId = session.vectorCallService.userMapper.nativeRoomForVirtualRoom(roomId) ?: roomId
+        val userOfInterest = roomSummariesHolder.get(correctedRoomId)?.toMatrixItem() ?: return null
         val attributes = messageItemAttributesFactory.create(null, informationData, callback).let {
             CallTileTimelineItem.Attributes(
                     callId = callId,

@@ -36,9 +36,9 @@ import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formSwitchItem
 import im.vector.app.features.roomdirectory.createroom.RoomAliasErrorFormatter
-import im.vector.app.features.roomdirectory.createroom.roomAliasEditItem
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import javax.inject.Inject
 
 class RoomAliasController @Inject constructor(
@@ -57,6 +57,7 @@ class RoomAliasController @Inject constructor(
         fun setNewLocalAliasLocalPart(aliasLocalPart: String)
         fun addLocalAlias()
         fun openAliasDetail(alias: String)
+        fun retry()
     }
 
     var callback: Callback? = null
@@ -71,7 +72,9 @@ class RoomAliasController @Inject constructor(
         // Published alias
         buildPublishInfo(data)
         // Room directory visibility
-        buildRoomDirectoryVisibility(data)
+        if (data.roomSummary.invoke()?.roomType != RoomType.SPACE) {
+            buildRoomDirectoryVisibility(data)
+        }
         // Local alias
         buildLocalInfo(data)
     }
@@ -85,7 +88,6 @@ class RoomAliasController @Inject constructor(
                 formSwitchItem {
                     id("roomVisibility")
                     title(host.stringProvider.getString(R.string.room_alias_publish_to_directory, data.homeServerName))
-                    showDivider(false)
                     switchChecked(data.roomDirectoryVisibility() == RoomDirectoryVisibility.PUBLIC)
                     listener {
                         if (it) {
@@ -98,8 +100,10 @@ class RoomAliasController @Inject constructor(
             }
             is Fail       -> {
                 errorWithRetryItem {
+                    id("rd_error")
                     text(host.stringProvider.getString(R.string.room_alias_publish_to_directory_error,
                             host.errorFormatter.toHumanReadable(data.roomDirectoryVisibility.error)))
+                    listener { host.callback?.retry() }
                 }
             }
         }
@@ -118,7 +122,6 @@ class RoomAliasController @Inject constructor(
         data.canonicalAlias
                 ?.takeIf { it.isNotEmpty() }
                 ?.let { canonicalAlias ->
-
                     profileActionItem {
                         id("canonical")
                         title(data.canonicalAlias)
@@ -171,7 +174,6 @@ class RoomAliasController @Inject constructor(
                 formEditTextItem {
                     id("publishManuallyEdit")
                     value(data.publishManuallyState.value)
-                    showBottomSeparator(false)
                     hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                     inputType(InputType.TYPE_CLASS_TEXT)
                     onTextChange { text ->
@@ -224,6 +226,7 @@ class RoomAliasController @Inject constructor(
                 errorWithRetryItem {
                     id("alt_error")
                     text(host.errorFormatter.toHumanReadable(localAliases.error))
+                    listener { host.callback?.retry() }
                 }
             }
         }
@@ -245,11 +248,12 @@ class RoomAliasController @Inject constructor(
                 }
             }
             is RoomAliasViewState.AddAliasState.Editing -> {
-                roomAliasEditItem {
+                formEditTextItem {
                     id("newLocalAlias")
                     value(data.newLocalAliasState.value)
-                    homeServer(":" + data.homeServerName)
-                    showBottomSeparator(false)
+                    suffixText(":" + data.homeServerName)
+                    prefixText("#")
+                    hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                     errorMessage(host.roomAliasErrorFormatter.format((data.newLocalAliasState.asyncRequest as? Fail)?.error as? RoomAliasError))
                     onTextChange { value ->
                         host.callback?.setNewLocalAliasLocalPart(value)

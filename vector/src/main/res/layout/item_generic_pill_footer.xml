@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     android:background="@drawable/rounded_rect_shape_8"
-    android:backgroundTint="?riotx_reaction_background_off"
+    android:backgroundTint="?vctr_reaction_background_off"
     android:orientation="horizontal"
     android:padding="16dp">
 
@@ -16,10 +16,11 @@
         android:layout_height="20dp"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_info"
-        app:tint="?riotx_text_secondary" />
+        app:tint="?vctr_content_secondary" />
 
     <TextView
         android:id="@+id/itemGenericPillText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

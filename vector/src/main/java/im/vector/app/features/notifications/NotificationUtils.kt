@@ -33,7 +33,7 @@ import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import androidx.annotation.ColorRes
+import androidx.annotation.AttrRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
@@ -57,6 +57,7 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.troubleshoot.TestNotificationReceiver
+import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -329,8 +330,9 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         builder.addAction(
                 NotificationCompat.Action(
-                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
-                        getActionText(R.string.call_notification_reject, R.color.riotx_notice),
+                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup)
+                                .setTint(ThemeUtils.getColor(context, R.attr.colorError)),
+                        getActionText(R.string.call_notification_reject, R.attr.colorError),
                         rejectCallPendingIntent)
         )
 
@@ -338,8 +340,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 NotificationCompat.Action(
                         R.drawable.ic_call_answer,
                         // IconCompat.createWithResource(applicationContext, R.drawable.ic_call)
-                        // .setTint(ContextCompat.getColor(applicationContext, R.color.riotx_positive_accent)),
-                        getActionText(R.string.call_notification_answer, R.color.riotx_positive_accent),
+                        // .setTint(ContextCompat.getColor(applicationContext, R.color.vctr_positive_accent)),
+                        getActionText(R.string.call_notification_answer, R.attr.colorPrimary),
                         answerCallPendingIntent
                 )
         )
@@ -377,8 +379,9 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         builder.addAction(
                 NotificationCompat.Action(
-                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
-                        getActionText(R.string.call_notification_hangup, R.color.riotx_notice),
+                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup)
+                                .setTint(ThemeUtils.getColor(context, R.attr.colorError)),
+                        getActionText(R.string.call_notification_hangup, R.attr.colorError),
                         rejectCallPendingIntent)
         )
         builder.setContentIntent(contentPendingIntent)
@@ -415,8 +418,9 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         builder.addAction(
                 NotificationCompat.Action(
-                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
-                        getActionText(R.string.call_notification_hangup, R.color.riotx_notice),
+                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup)
+                                .setTint(ThemeUtils.getColor(context, R.attr.colorError)),
+                        getActionText(R.string.call_notification_hangup, R.attr.colorError),
                         rejectCallPendingIntent)
         )
 
@@ -868,9 +872,9 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 || setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
     }
 
-    private fun getActionText(@StringRes stringRes: Int, @ColorRes colorRes: Int): Spannable {
+    private fun getActionText(@StringRes stringRes: Int, @AttrRes colorRes: Int): Spannable {
         return SpannableString(context.getText(stringRes)).apply {
-            val foregroundColorSpan = ForegroundColorSpan(ContextCompat.getColor(context, colorRes))
+            val foregroundColorSpan = ForegroundColorSpan(ThemeUtils.getColor(context, colorRes))
             setSpan(foregroundColorSpan, 0, length, 0)
         }
     }

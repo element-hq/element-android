@@ -19,13 +19,10 @@ package org.matrix.android.sdk.internal.session.identity.db
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
 import timber.log.Timber
-import javax.inject.Inject
 
-internal class RealmIdentityStoreMigration @Inject constructor() : RealmMigration {
+internal object RealmIdentityStoreMigration : RealmMigration {
 
-    companion object {
-        const val IDENTITY_STORE_SCHEMA_VERSION = 1L
-    }
+    const val IDENTITY_STORE_SCHEMA_VERSION = 1L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Identity from $oldVersion to $newVersion")

@@ -26,8 +26,10 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.platform.CheckableConstraintLayout
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.themes.ThemeUtils
@@ -36,7 +38,7 @@ import im.vector.app.features.themes.ThemeUtils
 abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Holder>() {
 
     @EpoxyAttribute var selected: Boolean = false
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
     @EpoxyAttribute var countState : UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
     @EpoxyAttribute var showSeparator: Boolean = false
 
@@ -47,13 +49,13 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.rootView.setOnClickListener { listener?.invoke() }
+        holder.rootView.onClick(listener)
         holder.groupNameView.text = holder.view.context.getString(R.string.group_details_home)
         holder.rootView.isChecked = selected
         holder.rootView.context.resources
         holder.avatarImageView.background = ContextCompat.getDrawable(holder.view.context, R.drawable.space_home_background)
         holder.avatarImageView.setImageResource(R.drawable.ic_space_home)
-        holder.avatarImageView.imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(holder.view.context, R.attr.riot_primary_text_color))
+        holder.avatarImageView.imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_primary))
         holder.avatarImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
         holder.leaveView.isVisible = false
 

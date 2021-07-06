@@ -34,6 +34,7 @@ import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.glide.AvatarPlaceholder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.glide.GlideRequests
@@ -136,7 +137,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                matrixItem: MatrixItem,
                target: Target<Drawable>) {
         val placeholder = getPlaceholderDrawable(matrixItem)
-        buildGlideRequest(glideRequests, matrixItem.avatarUrl)
+        glideRequests.loadResolvedUrl(matrixItem.avatarUrl)
                 .apply {
                     when (matrixItem) {
                         is MatrixItem.SpaceItem -> {
@@ -175,7 +176,12 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @UiThread
-    fun renderBlur(matrixItem: MatrixItem, imageView: ImageView, sampling: Int, rounded: Boolean, @ColorInt colorFilter: Int? = null) {
+    fun renderBlur(matrixItem: MatrixItem,
+                   imageView: ImageView,
+                   sampling: Int,
+                   rounded: Boolean,
+                   @ColorInt colorFilter: Int? = null,
+                   addPlaceholder: Boolean) {
         val transformations = mutableListOf<Transformation<Bitmap>>(
                 BlurTransformation(20, sampling)
         )
@@ -185,14 +191,26 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
         if (rounded) {
             transformations.add(CircleCrop())
         }
-        buildGlideRequest(GlideApp.with(imageView), matrixItem.avatarUrl)
-                .apply(RequestOptions.bitmapTransform(MultiTransformation(transformations)))
+        val bitmapTransform = RequestOptions.bitmapTransform(MultiTransformation(transformations))
+        val glideRequests = GlideApp.with(imageView)
+        val placeholderRequest = if (addPlaceholder) {
+            glideRequests
+                    .load(AvatarPlaceholder(matrixItem))
+                    .apply(bitmapTransform)
+        } else {
+            null
+        }
+        glideRequests.loadResolvedUrl(matrixItem.avatarUrl)
+                .apply(bitmapTransform)
+                // We are using thumbnail and error API so we can have blur transformation on it...
+                .thumbnail(placeholderRequest)
+                .error(placeholderRequest)
                 .into(imageView)
     }
 
     @AnyThread
     fun getCachedDrawable(glideRequests: GlideRequests, matrixItem: MatrixItem): Drawable {
-        return buildGlideRequest(glideRequests, matrixItem.avatarUrl)
+        return glideRequests.loadResolvedUrl(matrixItem.avatarUrl)
                 .onlyRetrieveFromCache(true)
                 .apply(RequestOptions.circleCropTransform())
                 .submit()
@@ -220,9 +238,9 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     // PRIVATE API *********************************************************************************
 
-    private fun buildGlideRequest(glideRequests: GlideRequests, avatarUrl: String?): GlideRequest<Drawable> {
+    private fun GlideRequests.loadResolvedUrl(avatarUrl: String?): GlideRequest<Drawable> {
         val resolvedUrl = resolvedUrl(avatarUrl)
-        return glideRequests.load(resolvedUrl)
+        return load(resolvedUrl)
     }
 
     private fun resolvedUrl(avatarUrl: String?): String? {

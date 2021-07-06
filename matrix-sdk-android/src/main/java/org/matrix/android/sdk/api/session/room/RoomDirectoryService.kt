@@ -40,4 +40,6 @@ interface RoomDirectoryService {
      * Set the visibility of a room in the directory
      */
     suspend fun setRoomDirectoryVisibility(roomId: String, roomDirectoryVisibility: RoomDirectoryVisibility)
+
+    suspend fun checkAliasAvailability(aliasLocalPart: String?) : AliasAvailabilityResult
 }
