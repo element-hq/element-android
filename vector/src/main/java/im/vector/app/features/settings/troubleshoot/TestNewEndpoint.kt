@@ -38,9 +38,9 @@ class TestNewEndpoint @Inject constructor(private val context: AppCompatActivity
         if (!endpoint.isNullOrEmpty()) {
             status = TestStatus.SUCCESS
             description = stringProvider.getString(R.string.settings_troubleshoot_test_endpoint_success, endpoint)
-            return
+        } else {
+            status = TestStatus.FAILED
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_endpoint_failed)
         }
-        status = TestStatus.FAILED
-        description = stringProvider.getString(R.string.settings_troubleshoot_test_endpoint_failed)
     }
 }

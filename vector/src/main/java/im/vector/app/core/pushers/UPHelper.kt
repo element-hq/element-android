@@ -19,6 +19,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.push.fcm.FcmHelper
@@ -104,7 +105,7 @@ object UPHelper {
                 up.registerApp(context)
             }
             else -> {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+                val builder: AlertDialog.Builder = MaterialAlertDialogBuilder(context)
                 builder.setTitle(context.getString(R.string.unifiedpush_getdistributors_dialog_title))
 
                 val distributorsArray = distributors.toTypedArray()
@@ -142,8 +143,9 @@ object UPHelper {
         // register app_id type upfcm on sygnal
         // the pushkey if FCM key
         val up = Registration()
-        if (up.getDistributor(context) == context.packageName)
+        if (up.getDistributor(context) == context.packageName) {
             return context.getString(R.string.pusher_http_url)
+        }
         // else, unifiedpush, and pushkey is an endpoint
         val default = context.getString(R.string.default_push_gateway_http_url)
         endpoint?.let {
@@ -175,5 +177,4 @@ object UPHelper {
         val up = Registration()
         return up.getDistributor(context) == context.packageName
     }
-
 }

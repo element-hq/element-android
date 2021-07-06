@@ -71,8 +71,9 @@ class PushersManager @Inject constructor(
         val appId = stringProvider.getString(R.string.pusher_app_id)
         return if (UPHelper.isEmbeddedDistributor(context)) {
             appId
-        } else
-            "${appId}.up"
+        } else {
+            "$appId.up"
+        }
     }
 
     companion object {

@@ -35,7 +35,6 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
         private val testSystemSettings: TestSystemSettings,
         private val testAccountSettings: TestAccountSettings,
         private val testDeviceSettings: TestDeviceSettings,
-        private val testBingRulesSettings: TestPushRulesSettings,
         private val testNewEndpoint: TestNewEndpoint,
         private val testTokenRegistration: TestTokenRegistration,
         private val testPushFromPushGateway: TestPushFromPushGateway,
@@ -51,13 +50,12 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
         mgr.addTest(testSystemSettings)
         mgr.addTest(testAccountSettings)
         mgr.addTest(testDeviceSettings)
+        mgr.addTest(testPushRulesSettings)
         if (UPHelper.distributorExists(fragment.requireContext())) {
-            mgr.addTest(testBingRulesSettings)
             mgr.addTest(testNewEndpoint)
             mgr.addTest(testTokenRegistration)
             mgr.addTest(testPushFromPushGateway)
         } else {
-            mgr.addTest(testPushRulesSettings)
             mgr.addTest(testAutoStartBoot)
             mgr.addTest(testBackgroundRestrictions)
             mgr.addTest(testBatteryOptimization)
