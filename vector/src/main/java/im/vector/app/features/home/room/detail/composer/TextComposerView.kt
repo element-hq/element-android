@@ -75,7 +75,6 @@ class TextComposerView @JvmOverloads constructor(
             }
 
             override fun onTextBlankStateChanged(isBlank: Boolean) {
-                callback?.onTextBlankStateChanged(isBlank)
                 val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank
                 TransitionManager.endTransitions(this@TextComposerView)
                 if (views.sendButton.isVisible != shouldShowSendButton) {
@@ -85,6 +84,7 @@ class TextComposerView @JvmOverloads constructor(
                     )
                     views.sendButton.isInvisible = !shouldShowSendButton
                 }
+                callback?.onTextBlankStateChanged(isBlank)
             }
         }
         views.composerRelatedMessageCloseButton.setOnClickListener {

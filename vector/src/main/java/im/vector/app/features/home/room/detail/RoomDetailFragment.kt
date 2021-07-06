@@ -922,6 +922,8 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.exitSpecialMode()
         views.composerLayout.collapse()
 
+        views.voiceMessageRecorderView.isVisible = text.isBlank()
+
         updateComposerText(text)
         views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
     }
@@ -968,6 +970,7 @@ class RoomDetailFragment @Inject constructor(
                 // need to do it here also when not using quick reply
                 focusComposerAndShowKeyboard()
                 views.composerLayout.views.composerRelatedMessageImage.isVisible = isImageVisible
+                views.voiceMessageRecorderView.isVisible = false
             }
         }
         focusComposerAndShowKeyboard()
@@ -1256,6 +1259,7 @@ class RoomDetailFragment @Inject constructor(
         if (text.isNotBlank()) {
             // We collapse ASAP, if not there will be a slight anoying delay
             views.composerLayout.collapse(true)
+            views.voiceMessageRecorderView.isVisible = true
             lockSendButton = true
             roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
             emojiPopup.dismiss()
