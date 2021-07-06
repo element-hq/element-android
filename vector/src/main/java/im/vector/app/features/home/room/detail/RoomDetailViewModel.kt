@@ -65,6 +65,7 @@ import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import org.jitsi.meet.sdk.BroadcastEvent
+import org.jitsi.meet.sdk.JitsiMeet
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -240,10 +241,17 @@ class RoomDetailViewModel @AssistedInject constructor(
                     widgets.filter { it.isActive }
                 }
                 .execute { widgets ->
-                    val jitsiConfId = widgets()?.firstOrNull { it.type == WidgetType.Jitsi }?.let { jitsiWidget ->
-                        jitsiService.extractProperties(jitsiWidget)?.confId
+                    val jitsiWidget = widgets()?.firstOrNull { it.type == WidgetType.Jitsi }
+                    val jitsiConfId = jitsiWidget?.let {
+                        jitsiService.extractProperties(it)?.confId
                     }
-                    copy(activeRoomWidgets = widgets, jitsiConfId = jitsiConfId)
+                    copy(
+                            activeRoomWidgets = widgets,
+                            jitsiState = jitsiState.copy(
+                                    confId = jitsiConfId,
+                                    widgetId = jitsiWidget?.widgetId
+                            )
+                    )
                 }
     }
 
@@ -310,6 +318,8 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
             is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
             is RoomDetailAction.UpdateJoinJitsiCallStatus        -> handleJitsiCallJoinStatus(action)
+            is RoomDetailAction.JoinJitsiCall -> handleJoinJitsiCall()
+            is RoomDetailAction.LeaveJitsiCall -> handleLeaveJitsiCall()
             is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
             is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
             is RoomDetailAction.CancelSend                       -> handleCancel(action)
@@ -331,22 +341,32 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleJitsiCallJoinStatus(action: RoomDetailAction.UpdateJoinJitsiCallStatus) = withState { state ->
-        if (state.jitsiConfId == null) {
+        if (state.jitsiState.confId == null) {
             // If jitsi widget is removed while on the call
-            if (state.hasJoinedActiveJitsiConference) {
-                setState { copy(hasJoinedActiveJitsiConference = false) }
+            if (state.jitsiState.hasJoined) {
+                setState { copy(jitsiState = jitsiState.copy(hasJoined = false)) }
             }
             return@withState
         }
         when (action.broadcastEvent.type) {
             BroadcastEvent.Type.CONFERENCE_JOINED,
             BroadcastEvent.Type.CONFERENCE_TERMINATED -> {
-                if (action.broadcastEvent.extractConferenceUrl()?.endsWith(state.jitsiConfId).orFalse()) {
-                    setState { copy(hasJoinedActiveJitsiConference = action.broadcastEvent.type == BroadcastEvent.Type.CONFERENCE_JOINED) }
+                if (action.broadcastEvent.extractConferenceUrl()?.endsWith(state.jitsiState.confId).orFalse()) {
+                    setState { copy(jitsiState = jitsiState.copy(hasJoined = action.broadcastEvent.type == BroadcastEvent.Type.CONFERENCE_JOINED)) }
                 }
             }
             else                                      -> Unit
         }
+    }
+
+    private fun handleLeaveJitsiCall() {
+        _viewEvents.post(RoomDetailViewEvents.LeaveJitsiConference)
+    }
+
+    private fun handleJoinJitsiCall() = withState{ state ->
+        val jitsiWidget = state.activeRoomWidgets()?.firstOrNull { it.widgetId ==  state.jitsiState.widgetId} ?: return@withState
+        val action = RoomDetailAction.EnsureNativeWidgetAllowed(jitsiWidget, false, RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, true))
+        handleCheckWidgetAllowed(action)
     }
 
     private fun handleAcceptCall(action: RoomDetailAction.AcceptCall) {

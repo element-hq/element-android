@@ -37,13 +37,16 @@ import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import org.matrix.android.sdk.api.util.MatrixItem
-import timber.log.Timber
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
 abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Holder>() {
 
     override val baseAttributes: AbsBaseMessageItem.Attributes
         get() = attributes
+
+    override fun isCacheable(): Boolean {
+        return attributes.callKind != CallKind.CONFERENCE
+    }
 
     @EpoxyAttribute
     lateinit var attributes: Attributes
@@ -64,61 +67,108 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         } else {
             holder.callKindView.isVisible = false
         }
-        if (attributes.callStatus == CallStatus.INVITED && !attributes.informationData.sentByMe && attributes.isStillActive) {
-            holder.acceptRejectViewGroup.isVisible = true
-            holder.acceptView.onClick {
-                attributes.callback?.onTimelineItemAction(RoomDetailAction.AcceptCall(callId = attributes.callId))
+        when (attributes.callStatus) {
+            CallStatus.INVITED  -> renderInvitedStatus(holder)
+            CallStatus.IN_CALL  -> renderInCallStatus(holder)
+            CallStatus.REJECTED -> renderRejectedStatus(holder)
+            CallStatus.ENDED    -> renderEndedStatus(holder)
+        }
+        renderSendState(holder.view, null, holder.failedToSendIndicator)
+    }
+
+    private fun renderEndedStatus(holder: Holder) {
+        holder.acceptRejectViewGroup.isVisible = false
+        holder.statusView.isVisible = true
+        holder.statusView.setText(R.string.call_tile_ended)
+    }
+
+    private fun renderRejectedStatus(holder: Holder) {
+        holder.acceptRejectViewGroup.isVisible = false
+        holder.statusView.isVisible = true
+        if (attributes.informationData.sentByMe) {
+            holder.statusView.setTextWithColoredPart(R.string.call_tile_you_declined, R.string.call_tile_call_back) {
+                val callbackAction = RoomDetailAction.StartCall(attributes.callKind == CallKind.VIDEO)
+                attributes.callback?.onTimelineItemAction(callbackAction)
             }
-            holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.attr.colorOnPrimary)
-            holder.rejectView.onClick {
-                attributes.callback?.onTimelineItemAction(RoomDetailAction.EndCall)
-            }
-            holder.statusView.isVisible = false
-            when (attributes.callKind) {
-                CallKind.CONFERENCE -> {
-                    holder.rejectView.setText(R.string.ignore)
-                    holder.acceptView.setText(R.string.join)
-                    holder.acceptView.setLeftDrawable(R.drawable.ic_call_audio_small, R.attr.colorOnPrimary)
+        } else {
+            holder.statusView.text = holder.view.context.getString(R.string.call_tile_other_declined, attributes.userOfInterest.getBestName())
+        }
+    }
+
+    private fun renderInCallStatus(holder: Holder) {
+        holder.acceptRejectViewGroup.isVisible = true
+        holder.acceptView.isVisible = false
+        when {
+            attributes.callKind == CallKind.CONFERENCE -> {
+                holder.statusView.isVisible = false
+                holder.rejectView.isVisible = true
+                holder.rejectView.setText(R.string.leave)
+                holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.attr.colorOnPrimary)
+                holder.rejectView.onClick {
+                    attributes.callback?.onTimelineItemAction(RoomDetailAction.LeaveJitsiCall)
                 }
-                CallKind.AUDIO      -> {
+            }
+            attributes.isStillActive                   -> {
+                holder.statusView.isVisible = false
+                holder.rejectView.isVisible = true
+                holder.rejectView.setText(R.string.call_notification_hangup)
+                holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.attr.colorOnPrimary)
+                holder.rejectView.onClick {
+                    attributes.callback?.onTimelineItemAction(RoomDetailAction.EndCall)
+                }
+            }
+            else                                       -> {
+                holder.statusView.isVisible = true
+                holder.statusView.setText(R.string.call_tile_in_call)
+                holder.acceptRejectViewGroup.isVisible = false
+            }
+        }
+    }
+
+    private fun renderInvitedStatus(holder: Holder) {
+        when {
+            attributes.callKind == CallKind.CONFERENCE                       -> {
+                holder.statusView.isVisible = false
+                holder.acceptRejectViewGroup.isVisible = true
+                holder.acceptView.onClick {
+                    attributes.callback?.onTimelineItemAction(RoomDetailAction.JoinJitsiCall)
+                }
+                holder.acceptView.isVisible = true
+                holder.rejectView.isVisible = false
+                holder.acceptView.setText(R.string.join)
+                holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, R.attr.colorOnPrimary)
+            }
+            !attributes.informationData.sentByMe && attributes.isStillActive -> {
+                holder.acceptRejectViewGroup.isVisible = true
+                holder.acceptView.isVisible = true
+                holder.rejectView.isVisible = true
+                holder.acceptView.onClick {
+                    attributes.callback?.onTimelineItemAction(RoomDetailAction.AcceptCall(callId = attributes.callId))
+                }
+                holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.attr.colorOnPrimary)
+                holder.rejectView.onClick {
+                    attributes.callback?.onTimelineItemAction(RoomDetailAction.EndCall)
+                }
+                holder.statusView.isVisible = false
+                if (attributes.callKind == CallKind.AUDIO) {
                     holder.rejectView.setText(R.string.call_notification_reject)
                     holder.acceptView.setText(R.string.call_notification_answer)
                     holder.acceptView.setLeftDrawable(R.drawable.ic_call_audio_small, R.attr.colorOnPrimary)
-                }
-                CallKind.VIDEO      -> {
+                } else if (attributes.callKind == CallKind.VIDEO) {
                     holder.rejectView.setText(R.string.call_notification_reject)
                     holder.acceptView.setText(R.string.call_notification_answer)
                     holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, R.attr.colorOnPrimary)
                 }
-                else                -> {
-                    Timber.w("Shouldn't be in that state")
+            }
+            else                                                             -> {
+                holder.acceptRejectViewGroup.isVisible = false
+                holder.statusView.isVisible = true
+                if (attributes.informationData.sentByMe) {
+                    holder.statusView.setText(R.string.call_tile_you_started_call)
+                } else {
+                    holder.statusView.text = holder.view.context.getString(R.string.call_tile_other_started_call, attributes.userOfInterest.getBestName())
                 }
             }
-        } else {
-            holder.acceptRejectViewGroup.isVisible = false
-            holder.statusView.isVisible = true
-        }
-        holder.statusView.setCallStatus(attributes)
-        renderSendState(holder.view, null, holder.failedToSendIndicator)
-    }
-
-    private fun TextView.setCallStatus(attributes: Attributes) {
-        when (attributes.callStatus) {
-            CallStatus.INVITED  -> if (attributes.informationData.sentByMe) {
-                setText(R.string.call_tile_you_started_call)
-            } else {
-                text = context.getString(R.string.call_tile_other_started_call, attributes.userOfInterest.getBestName())
-            }
-            CallStatus.IN_CALL  -> setText(R.string.call_tile_in_call)
-            CallStatus.REJECTED -> if (attributes.informationData.sentByMe) {
-                setTextWithColoredPart(R.string.call_tile_you_declined, R.string.call_tile_call_back) {
-                    val callbackAction = RoomDetailAction.StartCall(attributes.callKind == CallKind.VIDEO)
-                    attributes.callback?.onTimelineItemAction(callbackAction)
-                }
-            } else {
-                text = context.getString(R.string.call_tile_other_declined, attributes.userOfInterest.getBestName())
-            }
-            CallStatus.ENDED    -> setText(R.string.call_tile_ended)
         }
     }
 
@@ -157,7 +207,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     enum class CallKind(@DrawableRes val icon: Int, @StringRes val title: Int) {
         VIDEO(R.drawable.ic_call_video_small, R.string.action_video_call),
         AUDIO(R.drawable.ic_call_audio_small, R.string.action_voice_call),
-        CONFERENCE(R.drawable.ic_call_conference_small, R.string.conference_call_in_progress),
+        CONFERENCE(R.drawable.ic_call_video_small, R.string.action_video_call),
         UNKNOWN(0, 0)
     }
 

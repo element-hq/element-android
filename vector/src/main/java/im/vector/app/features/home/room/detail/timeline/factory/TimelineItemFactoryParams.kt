@@ -24,9 +24,13 @@ data class TimelineItemFactoryParams(
         val prevEvent: TimelineEvent? = null,
         val nextEvent: TimelineEvent? = null,
         val nextDisplayableEvent: TimelineEvent? = null,
-        val highlightedEventId: String? = null,
+        val partialState: TimelineEventController.PartialState = TimelineEventController.PartialState(),
         val lastSentEventIdWithoutReadReceipts: String? = null,
         val callback: TimelineEventController.Callback? = null
 ) {
+
+    val highlightedEventId: String?
+        get() = partialState.highlightedEventId
+
     val isHighlighted = highlightedEventId == event.eventId
 }

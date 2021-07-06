@@ -31,7 +31,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
-import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.modules.core.PermissionListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
@@ -40,7 +39,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
 import kotlinx.parcelize.Parcelize
-import org.jitsi.meet.sdk.BroadcastEmitter
 import org.jitsi.meet.sdk.BroadcastEvent
 import org.jitsi.meet.sdk.JitsiMeet
 import org.jitsi.meet.sdk.JitsiMeetActivityDelegate
@@ -115,8 +113,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         jitsiMeetView?.dispose()
         // Fake emitting CONFERENCE_TERMINATED event when currentConf is not null (probably when closing the PiP screen).
         if (currentConf != null) {
-            val broadcastEventData = JavaOnlyMap.of("url", currentConf)
-            BroadcastEmitter(this).sendBroadcast(BroadcastEvent.Type.CONFERENCE_TERMINATED.name, broadcastEventData)
+            JitsiBroadcastEmitter(this).emitConferenceEnded()
         }
         JitsiMeetActivityDelegate.onHostDestroy(this)
         super.onDestroy()

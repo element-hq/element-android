@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
+import android.telecom.Conference
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
 import im.vector.app.core.epoxy.LoadingItem_
@@ -113,11 +114,12 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
             callIds: MutableSet<String>,
             showHiddenEvents: Boolean
     ): Boolean {
-        val callId = epoxyModel.attributes.callId
+        val attributes = epoxyModel.attributes
+        val callId = attributes.callId
         // We should remove the call tile if we already have one for this call or
         // if this is an active call tile without an actual call (which can happen with permalink)
         val shouldRemoveCallItem = callIds.contains(callId)
-                || (!callManager.getAdvertisedCalls().contains(callId) && epoxyModel.attributes.callStatus.isActive())
+                || (!callManager.getAdvertisedCalls().contains(callId) && attributes.callStatus.isActive() && attributes.callKind != CallTileTimelineItem.CallKind.CONFERENCE)
         val removed = shouldRemoveCallItem && !showHiddenEvents
         if (removed) {
             remove()

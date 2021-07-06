@@ -67,6 +67,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.facebook.react.bridge.JavaOnlyMap
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -120,6 +121,7 @@ import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
+import im.vector.app.features.call.conference.JitsiBroadcastEmitter
 import im.vector.app.features.call.conference.JitsiBroadcastEventObserver
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.extractConferenceUrl
@@ -176,6 +178,7 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
+import org.jitsi.meet.sdk.BroadcastEmitter
 import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -394,6 +397,7 @@ class RoomDetailFragment @Inject constructor(
                 RoomDetailViewEvents.OpenActiveWidgetBottomSheet         -> onViewWidgetsClicked()
                 is RoomDetailViewEvents.ShowInfoOkDialog                 -> showDialogWithMessage(it.message)
                 is RoomDetailViewEvents.JoinJitsiConference              -> joinJitsiRoom(it.widget, it.withVideo)
+                RoomDetailViewEvents.LeaveJitsiConference -> leaveJitsiConference()
                 RoomDetailViewEvents.ShowWaitingView                     -> vectorBaseActivity.showWaitingView()
                 RoomDetailViewEvents.HideWaitingView                     -> vectorBaseActivity.hideWaitingView()
                 is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
@@ -414,6 +418,10 @@ class RoomDetailFragment @Inject constructor(
             handleShareData()
             handleSpaceShare()
         }
+    }
+
+    private fun leaveJitsiConference() {
+        JitsiBroadcastEmitter(vectorBaseActivity).emitConferenceEnded()
     }
 
     private fun onBroadcastEvent(event: BroadcastEvent) {

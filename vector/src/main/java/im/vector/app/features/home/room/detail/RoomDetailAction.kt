@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachme
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.matrix.android.sdk.api.util.MatrixItem
 
 sealed class RoomDetailAction : VectorViewModelAction {
@@ -90,6 +91,10 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object ManageIntegrations : RoomDetailAction()
     data class AddJitsiWidget(val withVideo: Boolean) : RoomDetailAction()
     data class RemoveWidget(val widgetId: String) : RoomDetailAction()
+
+    object JoinJitsiCall: RoomDetailAction()
+    object LeaveJitsiCall: RoomDetailAction()
+
     data class EnsureNativeWidgetAllowed(val widget: Widget,
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()

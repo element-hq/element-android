@@ -55,6 +55,13 @@ sealed class UnreadState {
     data class HasUnread(val firstUnreadEventId: String) : UnreadState()
 }
 
+data class JitsiState(
+        val hasJoined: Boolean = false,
+        // Not null if we have an active jitsi widget on the room
+        val confId: String? = null,
+        val widgetId: String? = null
+)
+
 data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
@@ -76,9 +83,7 @@ data class RoomDetailViewState(
         val isAllowedToManageWidgets: Boolean = false,
         val isAllowedToStartWebRTCCall: Boolean = true,
         val hasFailedSending: Boolean = false,
-        val hasJoinedActiveJitsiConference: Boolean = false,
-        // Not null if we have an active jitsi widget on the room
-        val jitsiConfId: String? = null
+        val jitsiState: JitsiState = JitsiState()
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(
@@ -90,7 +95,7 @@ data class RoomDetailViewState(
 
     fun isWebRTCCallOptionAvailable() = (asyncRoomSummary.invoke()?.joinedMembersCount ?: 0) <= 2
 
-    fun hasActiveJitsiWidget() =jitsiConfId != null
+    fun hasActiveJitsiWidget() = jitsiState.confId != null
 
     fun isDm() = asyncRoomSummary()?.isDirect == true
 }

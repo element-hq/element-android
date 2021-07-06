@@ -24,15 +24,28 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.facebook.react.bridge.JavaOnlyMap
+import org.jitsi.meet.sdk.BroadcastEmitter
 import org.jitsi.meet.sdk.BroadcastEvent
+import org.jitsi.meet.sdk.JitsiMeet
 import org.matrix.android.sdk.api.extensions.tryOrNull
+
+private const val CONFERENCE_URL_DATA_KEY = "url"
 
 fun BroadcastEvent.extractConferenceUrl(): String? {
     return when (type) {
         BroadcastEvent.Type.CONFERENCE_TERMINATED,
         BroadcastEvent.Type.CONFERENCE_WILL_JOIN,
-        BroadcastEvent.Type.CONFERENCE_JOINED -> data["url"] as? String
+        BroadcastEvent.Type.CONFERENCE_JOINED -> data[CONFERENCE_URL_DATA_KEY] as? String
         else                                  -> null
+    }
+}
+
+class JitsiBroadcastEmitter(private val context: Context) {
+
+    fun emitConferenceEnded() {
+        val broadcastEventData = JavaOnlyMap.of(CONFERENCE_URL_DATA_KEY, JitsiMeet.getCurrentConference())
+        BroadcastEmitter(context).sendBroadcast(BroadcastEvent.Type.CONFERENCE_TERMINATED.name, broadcastEventData)
     }
 }
 
