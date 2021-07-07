@@ -51,19 +51,19 @@ import org.unifiedpush.android.connector.MessagingReceiver
 import org.unifiedpush.android.connector.MessagingReceiverHandler
 import timber.log.Timber
 
-data class UnifiedPushMessage (
+data class UnifiedPushMessage(
         val notification: Notification
         )
 
 @JsonClass(generateAdapter = true)
-data class Notification (
+data class Notification(
         @Json(name = "event_id") val eventId: String = "",
         @Json(name = "room_id") val roomId: String = "",
         var unread: Int = 0,
         val counts: Counts = Counts()
         )
 
-data class Counts (
+data class Counts(
         val unread: Int = 0
         )
 
