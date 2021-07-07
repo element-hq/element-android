@@ -24,4 +24,5 @@ import im.vector.app.core.platform.VectorViewEvents
 sealed class TchapContactListViewEvents : VectorViewEvents {
     object OpenSearch : TchapContactListViewEvents()
     object CancelSearch : TchapContactListViewEvents()
+    data class OpenDirectChat(val roomId: String) : TchapContactListViewEvents()
 }

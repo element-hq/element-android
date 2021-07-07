@@ -229,10 +229,9 @@ class HomeDetailFragment @Inject constructor(
 
         tchapContactListViewModel.observeViewEvents {
             when (it) {
-                is TchapContactListViewEvents.OpenSearch -> openSearchView()
-                // TODO close searchview when we come back on this screen
-                //  view.doOnNextLayout { closeSearchView() }
-                is TchapContactListViewEvents.CancelSearch -> closeSearchView()
+                is TchapContactListViewEvents.OpenSearch   -> openSearchView()
+                is TchapContactListViewEvents.CancelSearch -> view.doOnNextLayout { closeSearchView() }
+                else                                       -> Unit // nothing to do
             }
         }
 

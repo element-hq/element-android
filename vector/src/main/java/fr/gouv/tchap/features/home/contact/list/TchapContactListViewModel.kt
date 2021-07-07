@@ -225,6 +225,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
             TchapContactListAction.SetUserConsent            -> handleSetUserConsent()
             TchapContactListAction.CancelSearch              -> handleCancelSearch()
             TchapContactListAction.OpenSearch                -> handleOpenSearch()
+            is TchapContactListAction.SelectContact          -> handleSelectContact(action)
         }.exhaustive
     }
 
@@ -337,5 +338,14 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
     private fun handleRemoveSelectedUser(action: TchapContactListAction.RemovePendingSelection) = withState { state ->
         val selections = state.pendingSelections.minus(action.pendingSelection)
         setState { copy(pendingSelections = selections) }
+    }
+
+    private fun handleSelectContact(action: TchapContactListAction.SelectContact) {
+        val directRoomId = session.getExistingDirectRoomWithUser(action.user.userId)
+        if (directRoomId != null) {
+            _viewEvents.post(TchapContactListViewEvents.OpenDirectChat(directRoomId))
+        } else {
+            // Todo: handle direct room creation
+        }
     }
 }
