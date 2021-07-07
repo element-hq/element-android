@@ -315,7 +315,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             RoomDetailAction.QuickActionSetAvatar                -> handleQuickSetAvatar()
             is RoomDetailAction.SetAvatarAction                  -> handleSetNewAvatar(action)
             RoomDetailAction.QuickActionSetTopic                 -> _viewEvents.post(RoomDetailViewEvents.OpenRoomSettings)
-            is RoomDetailAction.ShowRoomAvatarFullScreen -> {
+            is RoomDetailAction.ShowRoomAvatarFullScreen         -> {
                 _viewEvents.post(
                         RoomDetailViewEvents.ShowRoomAvatarFullScreen(action.matrixItem, action.transitionView)
                 )
