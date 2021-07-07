@@ -449,7 +449,11 @@ dependencies {
     // UnifiedPush
     implementation 'com.github.UnifiedPush:android-connector:1.2.0'
     // UnifiedPush gplay flavor only
-    gplayImplementation 'com.github.UnifiedPush:android-embedded_fcm_distributor:1.1.0'
+    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:1.1.0') {
+        exclude group: 'com.google.firebase', module: 'firebase-core'
+        exclude group: 'com.google.firebase', module: 'firebase-analytics'
+        exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
+    }
 
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
