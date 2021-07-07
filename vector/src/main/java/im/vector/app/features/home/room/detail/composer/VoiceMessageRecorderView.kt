@@ -30,6 +30,7 @@ import androidx.core.view.isVisible
 import com.visualizer.amplitude.AudioRecordView
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
@@ -37,6 +38,7 @@ import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.math.abs
+import kotlin.math.floor
 
 /**
  * Encapsulates the voice message recording view and animations.
@@ -152,13 +154,15 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private fun handleMoveAction(event: MotionEvent) {
         val currentX = event.rawX
         val currentY = event.rawY
-        updateRecordingState(currentX, currentY)
+
+        val isRecordingStateChanged = updateRecordingState(currentX, currentY)
 
         when (recordingState) {
             RecordingState.CANCELLING -> {
                 val translationAmount = currentX - firstX
                 views.voiceMessageMicButton.translationX = translationAmount
                 views.voiceMessageSlideToCancel.translationX = translationAmount
+                views.voiceMessageSlideToCancel.alpha = 1 - abs(translationAmount) / ((firstX - views.voiceMessageTimer.x) / 3)
                 views.voiceMessageLockBackground.isVisible = false
                 views.voiceMessageLockImage.isVisible = false
                 views.voiceMessageLockArrow.isVisible = false
@@ -174,10 +178,12 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 hideRecordingViews()
             }
             RecordingState.LOCKED     -> {
-                views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_locked)
-                views.voiceMessageLockImage.postDelayed({
-                    showRecordingLockedViews()
-                }, 500)
+                if (isRecordingStateChanged) { // Do not update views if it was already in locked state.
+                    views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_locked)
+                    views.voiceMessageLockImage.postDelayed({
+                        showRecordingLockedViews()
+                    }, 500)
+                }
             }
             RecordingState.STARTED    -> {
                 showRecordingViews()
@@ -189,7 +195,8 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         lastY = currentY
     }
 
-    private fun updateRecordingState(currentX: Float, currentY: Float) {
+    private fun updateRecordingState(currentX: Float, currentY: Float): Boolean {
+        val previousRecordingState = recordingState
         val distanceX = abs(firstX - currentX)
         val distanceY = abs(firstY - currentY)
         if (recordingState == RecordingState.STARTED) { // Determine if cancelling or locking for the first move action.
@@ -211,10 +218,12 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 recordingState = RecordingState.LOCKED
             }
         }
+        return previousRecordingState != recordingState
     }
 
     private fun shouldCancelRecording(): Boolean {
         return abs(views.voiceMessageTimer.x + views.voiceMessageTimer.width - views.voiceMessageSlideToCancel.x) < 10
+                || views.voiceMessageSlideToCancel.x <= views.voiceMessageTimer.x + views.voiceMessageTimer.width // To handle super fast moving
     }
 
     private fun shouldLockRecording(): Boolean {
@@ -230,15 +239,14 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 val timeDiffToRecordingLimit = BuildConfig.VOICE_MESSAGE_DURATION_LIMIT_MS - recordingTime * 1000
                 if (timeDiffToRecordingLimit <= 0) {
                     views.voiceMessageRecordingLayout.post {
-                        callback?.onVoiceRecordingEnded(false)
-                        recordingState = RecordingState.NONE
+                        recordingState = RecordingState.PLAYBACK
+                        showPlaybackViews()
                         stopRecordingTimer()
-                        hideRecordingViews(animationDuration = 0)
                     }
-                } else if (timeDiffToRecordingLimit in 10000..11000) {
+                } else if (timeDiffToRecordingLimit in 10000..10999) {
                     views.voiceMessageRecordingLayout.post {
-                        views.voiceMessageSendButton.isVisible = false
-                        context.toast(context.getString(R.string.voice_message_n_seconds_warning_toast, (timeDiffToRecordingLimit / 1000).toInt()))
+                        context.toast(context.getString(R.string.voice_message_n_seconds_warning_toast, floor(timeDiffToRecordingLimit / 1000f).toInt()))
+                        vibrate(context)
                     }
                 }
             }
@@ -290,12 +298,13 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessageSlideToCancel.isVisible = true
         views.voiceMessageTimerIndicator.isVisible = true
         views.voiceMessageTimer.isVisible = true
+        views.voiceMessageSlideToCancel.alpha = 1f
         views.voiceMessageSendButton.isVisible = false
     }
 
     fun hideRecordingViews(animationDuration: Int = 300) {
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic)
-        views.voiceMessageMicButton.animate().translationX(0f).translationY(0f).setDuration(animationDuration.toLong()).start()
+        views.voiceMessageMicButton.animate().translationX(0f).translationY(0f).setDuration(animationDuration.toLong()).setDuration(0).start()
         (views.voiceMessageMicButton.layoutParams as MarginLayoutParams).apply { setMargins(0, 0, dpToPx(12).toInt(), dpToPx(12).toInt()) }
         views.voiceMessageLockBackground.isVisible = false
         views.voiceMessageLockBackground.animate().translationY(dpToPx(0)).start()
@@ -316,6 +325,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessagePlaybackLayout.findViewById<ImageView>(R.id.voiceMessagePlaybackTimerIndicator).isVisible = true
         views.voiceMessagePlaybackLayout.findViewById<ImageView>(R.id.voicePlaybackControlButton).isVisible = false
         views.voiceMessageSendButton.isVisible = true
+        context.toast(R.string.voice_message_tap_to_stop_toast)
     }
 
     private fun showPlaybackViews() {

@@ -84,6 +84,7 @@ import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequests
+import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
@@ -599,6 +600,7 @@ class RoomDetailFragment @Inject constructor(
                     views.composerLayout.isInvisible = true
                     roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
                     context?.toast(R.string.voice_message_release_to_send_toast)
+                    vibrate(requireContext())
                 }
             }
 

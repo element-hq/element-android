@@ -3416,8 +3416,9 @@
     <string name="a11y_pause_voice_message">Pause Voice Message</string>
     <string name="a11y_recording_voice_message">Recording voice message</string>
     <string name="a11y_delete_recorded_voice_message">Delete recorded voice message</string>
-    <string name="voice_message_release_to_send_toast">Release to send</string>
+    <string name="voice_message_release_to_send_toast">Hold to record, release to send</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds left</string>
     <string name="voice_message_tap_on_waveform_to_stop_toast">Tap on the waveform to stop and playback</string>
     <string name="labs_use_voice_message">Enable voice message</string>
+    <string name="voice_message_tap_to_stop_toast">Tap on the wavelength to stop and playback</string>
 </resources>
