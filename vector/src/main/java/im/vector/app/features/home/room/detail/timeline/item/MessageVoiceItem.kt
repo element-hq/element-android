@@ -60,7 +60,6 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     @EpoxyAttribute
     lateinit var voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker
 
-
     override fun bind(holder: Holder) {
         super.bind(holder)
         renderSendState(holder.voiceLayout, null)

@@ -175,7 +175,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             RecordingState.LOCKED     -> {
                 views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_locked)
-                views.voiceMessageLockImage.postDelayed( {
+                views.voiceMessageLockImage.postDelayed({
                     showRecordingLockedViews()
                 }, 500)
             }
@@ -238,7 +238,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 } else if (timeDiffToRecordingLimit in 10000..11000) {
                     views.voiceMessageRecordingLayout.post {
                         views.voiceMessageSendButton.isVisible = false
-                        context.toast(context.getString(R.string.voice_message_n_seconds_warning_toast, (timeDiffToRecordingLimit/1000).toInt()))
+                        context.toast(context.getString(R.string.voice_message_n_seconds_warning_toast, (timeDiffToRecordingLimit / 1000).toInt()))
                     }
                 }
             }
