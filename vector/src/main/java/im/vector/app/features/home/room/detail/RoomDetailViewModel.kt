@@ -615,8 +615,11 @@ class RoomDetailViewModel @AssistedInject constructor(
             return
         }
         voiceMessageHelper.stopRecording()?.let { audioType ->
-            room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
-            //voiceMessageRecordingHelper.deleteRecording()
+            if (audioType.duration > 1000) {
+                room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
+            } else {
+                voiceMessageHelper.deleteRecording()
+            }
         }
     }
 

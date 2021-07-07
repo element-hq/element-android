@@ -922,7 +922,7 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.exitSpecialMode()
         views.composerLayout.collapse()
 
-        views.voiceMessageRecorderView.isVisible = text.isBlank()
+        views.voiceMessageRecorderView.isVisible = text.isBlank() && vectorPreferences.labsUseVoiceMessage()
 
         updateComposerText(text)
         views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
@@ -1239,7 +1239,7 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onTextBlankStateChanged(isBlank: Boolean) {
-                views.voiceMessageRecorderView.isVisible = !views.composerLayout.views.sendButton.isVisible
+                views.voiceMessageRecorderView.isVisible = !views.composerLayout.views.sendButton.isVisible && vectorPreferences.labsUseVoiceMessage()
             }
 
             override fun onTouchVoiceRecording() {
@@ -1259,7 +1259,7 @@ class RoomDetailFragment @Inject constructor(
         if (text.isNotBlank()) {
             // We collapse ASAP, if not there will be a slight anoying delay
             views.composerLayout.collapse(true)
-            views.voiceMessageRecorderView.isVisible = true
+            views.voiceMessageRecorderView.isVisible = true && vectorPreferences.labsUseVoiceMessage()
             lockSendButton = true
             roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
             emojiPopup.dismiss()
@@ -1314,6 +1314,7 @@ class RoomDetailFragment @Inject constructor(
                     views.composerLayout.visibility = View.VISIBLE
                     views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                     views.notificationAreaView.render(NotificationAreaView.State.Hidden)
+                    views.composerLayout.alwaysShowSendButton = !vectorPreferences.labsUseVoiceMessage()
                 } else {
                     views.composerLayout.visibility = View.GONE
                     views.notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost)

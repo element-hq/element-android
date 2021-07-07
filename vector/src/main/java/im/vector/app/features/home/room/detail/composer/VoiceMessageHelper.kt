@@ -179,6 +179,9 @@ class VoiceMessageHelper @Inject constructor(
                 } catch (e: IllegalStateException) {
                     Timber.e(e, "Cannot get max amplitude. Amplitude recording timer will be stopped.")
                     amplitudeTimerTask?.cancel()
+                } catch (e: RuntimeException) {
+                    Timber.e(e, "Cannot get max amplitude (native error). Amplitude recording timer will be stopped.")
+                    amplitudeTimerTask?.cancel()
                 }
             }
         }

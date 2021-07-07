@@ -3419,4 +3419,5 @@
     <string name="voice_message_release_to_send_toast">Release to send</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds left</string>
     <string name="voice_message_tap_on_waveform_to_stop_toast">Tap on the waveform to stop and playback</string>
+    <string name="labs_use_voice_message">Enable voice message</string>
 </resources>

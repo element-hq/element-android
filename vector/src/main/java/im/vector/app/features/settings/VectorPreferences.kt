@@ -153,10 +153,13 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE = "SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE"
         const val SETTINGS_LABS_SPACES_HOME_AS_ORPHAN = "SETTINGS_LABS_SPACES_HOME_AS_ORPHAN"
 
+        const val SETTINGS_LABS_VOICE_MESSAGE = "SETTINGS_LABS_VOICE_MESSAGE"
+
         private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
+
 
         // SETTINGS_LABS_HIDE_TECHNICAL_E2E_ERRORS
         private const val SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM = "SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM"
@@ -972,5 +975,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.edit {
             putInt(TAKE_PHOTO_VIDEO_MODE, mode)
         }
+    }
+
+    fun labsUseVoiceMessage(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_VOICE_MESSAGE, false)
     }
 }

@@ -20,7 +20,6 @@ import android.content.Context
 import android.net.Uri
 import android.text.Editable
 import android.util.AttributeSet
-import android.view.KeyEvent
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -63,6 +62,13 @@ class TextComposerView @JvmOverloads constructor(
     val text: Editable?
         get() = views.composerEditText.text
 
+    var alwaysShowSendButton = false
+        set(value) {
+            field = value
+            val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || text?.isNotBlank().orFalse() || value
+            views.sendButton.isInvisible = !shouldShowSendButton
+        }
+
     init {
         inflate(context, R.layout.composer_layout, this)
         views = ComposerLayoutBinding.bind(this)
@@ -75,7 +81,7 @@ class TextComposerView @JvmOverloads constructor(
             }
 
             override fun onTextBlankStateChanged(isBlank: Boolean) {
-                val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank
+                val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank || alwaysShowSendButton
                 TransitionManager.endTransitions(this@TextComposerView)
                 if (views.sendButton.isVisible != shouldShowSendButton) {
                     TransitionManager.beginDelayedTransition(
@@ -110,7 +116,7 @@ class TextComposerView @JvmOverloads constructor(
         currentConstraintSetId = R.layout.composer_layout_constraint_set_compact
         applyNewConstraintSet(animate, transitionComplete)
 
-        val shouldShowSendButton = !views.composerEditText.text.isNullOrEmpty()
+        val shouldShowSendButton = !views.composerEditText.text.isNullOrEmpty() || alwaysShowSendButton
         views.sendButton.isInvisible = !shouldShowSendButton
     }
 
