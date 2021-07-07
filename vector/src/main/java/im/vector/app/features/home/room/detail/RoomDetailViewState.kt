@@ -59,7 +59,8 @@ data class JitsiState(
         val hasJoined: Boolean = false,
         // Not null if we have an active jitsi widget on the room
         val confId: String? = null,
-        val widgetId: String? = null
+        val widgetId: String? = null,
+        val deleteWidgetInProgress: Boolean = false
 )
 
 data class RoomDetailViewState(

@@ -60,12 +60,12 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import org.jitsi.meet.sdk.BroadcastEvent
-import org.jitsi.meet.sdk.JitsiMeet
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -241,18 +241,25 @@ class RoomDetailViewModel @AssistedInject constructor(
                     widgets.filter { it.isActive }
                 }
                 .execute { widgets ->
-                    val jitsiWidget = widgets()?.firstOrNull { it.type == WidgetType.Jitsi }
-                    val jitsiConfId = jitsiWidget?.let {
-                        jitsiService.extractProperties(it)?.confId
-                    }
                     copy(
                             activeRoomWidgets = widgets,
-                            jitsiState = jitsiState.copy(
-                                    confId = jitsiConfId,
-                                    widgetId = jitsiWidget?.widgetId
-                            )
                     )
                 }
+
+        asyncSubscribe(RoomDetailViewState::activeRoomWidgets) { widgets ->
+            setState {
+                val jitsiWidget = widgets.firstOrNull { it.type == WidgetType.Jitsi }
+                val jitsiConfId = jitsiWidget?.let {
+                    jitsiService.extractProperties(it)?.confId
+                }
+                copy(
+                        jitsiState = jitsiState.copy(
+                                confId = jitsiConfId,
+                                widgetId = jitsiWidget?.widgetId
+                        )
+                )
+            }
+        }
     }
 
     private fun observeMyRoomMember() {
@@ -318,8 +325,8 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
             is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
             is RoomDetailAction.UpdateJoinJitsiCallStatus        -> handleJitsiCallJoinStatus(action)
-            is RoomDetailAction.JoinJitsiCall -> handleJoinJitsiCall()
-            is RoomDetailAction.LeaveJitsiCall -> handleLeaveJitsiCall()
+            is RoomDetailAction.JoinJitsiCall                    -> handleJoinJitsiCall()
+            is RoomDetailAction.LeaveJitsiCall                   -> handleLeaveJitsiCall()
             is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
             is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
             is RoomDetailAction.CancelSend                       -> handleCancel(action)
@@ -363,8 +370,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.LeaveJitsiConference)
     }
 
-    private fun handleJoinJitsiCall() = withState{ state ->
-        val jitsiWidget = state.activeRoomWidgets()?.firstOrNull { it.widgetId ==  state.jitsiState.widgetId} ?: return@withState
+    private fun handleJoinJitsiCall() = withState { state ->
+        val jitsiWidget = state.activeRoomWidgets()?.firstOrNull { it.widgetId == state.jitsiState.widgetId } ?: return@withState
         val action = RoomDetailAction.EnsureNativeWidgetAllowed(jitsiWidget, false, RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, true))
         handleCheckWidgetAllowed(action)
     }
@@ -477,10 +484,15 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleDeleteWidget(widgetId: String) {
-        _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
+    private fun handleDeleteWidget(widgetId: String) = withState { state ->
+        val isJitsiWidget = state.jitsiState.widgetId == widgetId
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                if (isJitsiWidget) {
+                    setState { copy(jitsiState = jitsiState.copy(deleteWidgetInProgress = true)) }
+                } else {
+                    _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
+                }
                 session.widgetService().destroyRoomWidget(room.roomId, widgetId)
                 // local echo
                 setState {
@@ -496,7 +508,11 @@ class RoomDetailViewModel @AssistedInject constructor(
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.failed_to_remove_widget)))
             } finally {
-                _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
+                if (isJitsiWidget) {
+                    setState { copy(jitsiState = jitsiState.copy(deleteWidgetInProgress = false)) }
+                } else {
+                    _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
+                }
             }
         }
     }

@@ -38,13 +38,8 @@ class WidgetItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val messageColorProvider: MessageColorProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val activeSessionDataSource: ActiveSessionDataSource,
         private val roomSummariesHolder: RoomSummariesHolder
 ) {
-    private val currentUserId: String?
-        get() = activeSessionDataSource.currentValue?.orNull()?.myUserId
-
-    private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event

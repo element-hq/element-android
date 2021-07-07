@@ -742,6 +742,8 @@
     <string name="call_error_camera_init_failed">Cannot initialize the camera</string>
     <string name="call_error_answered_elsewhere">call answered elsewhere</string>
 
+    <string name="call_remove_jitsi_widget_progress">Ending call…</string>
+
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Take a picture or a video"</string>
     <string name="media_picker_cannot_record_video">Cannot record video"</string>
@@ -3247,6 +3249,8 @@
     <string name="call_transfer_transfer_to_title">Transfer to %1$s</string>
     <string name="call_transfer_unknown_person">Unknown person</string>
 
+    <string name="call_slide_to_end_conference">Slide to end the call for everyone</string>
+
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_re_authentication_default_confirm_text">${app_name} requires you to enter your credentials to perform this action.</string>
@@ -3409,4 +3413,5 @@
     <string name="teammate_spaces_arent_quite_ready">"Teammate spaces aren’t quite ready but you can still give them a try"</string>
     <string name="teammate_spaces_might_not_join">"At the moment people might not be able to join any private rooms you make.\n\nWe’ll be improving this as part of the beta, but just wanted to let you know."</string>
     <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
+
 </resources>

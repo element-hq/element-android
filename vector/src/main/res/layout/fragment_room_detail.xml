@@ -100,13 +100,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
-    <im.vector.app.core.ui.views.ActiveConferenceView
-        android:id="@+id/activeConferenceView"
+    <im.vector.app.features.call.conference.RemoveJitsiWidgetView
+        android:id="@+id/removeJitsiWidgetView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/syncStateView"
-        tools:visibility="visible" />
+        android:visibility="visible"
+        android:background="?android:colorBackground"
+        android:minHeight="54dp"
+        app:layout_constraintTop_toBottomOf="@id/syncStateView"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/timelineRecyclerView"
@@ -116,7 +117,7 @@
         app:layout_constraintBottom_toTopOf="@+id/timelineRecyclerViewBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activeConferenceView"
+        app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"
         tools:listitem="@layout/item_timeline_event_base" />
 
     <com.google.android.material.chip.Chip
@@ -132,7 +133,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activeConferenceView"
+        app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"
         tools:visibility="visible" />
 
 
