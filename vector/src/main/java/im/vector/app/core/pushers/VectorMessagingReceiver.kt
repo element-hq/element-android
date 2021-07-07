@@ -27,6 +27,10 @@ import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.vectorComponent
@@ -41,16 +45,30 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.json.JSONException
-import org.json.JSONObject
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.unifiedpush.android.connector.MessagingReceiver
 import org.unifiedpush.android.connector.MessagingReceiverHandler
 import timber.log.Timber
 
+data class UnifiedPushMessage (
+        val notification: Notification
+        )
+
+@JsonClass(generateAdapter = true)
+data class Notification (
+        @Json(name = "event_id") val eventId: String = "",
+        @Json(name = "room_id") val roomId: String = "",
+        var unread: Int = 0,
+        val counts: Counts = Counts()
+        )
+
+data class Counts (
+        val unread: Int = 0
+        )
+
 /**
- * Unifiedpush handler.
+ * UnifiedPush handler.
  */
 val upHandler = object: MessagingReceiverHandler {
 
@@ -92,49 +110,23 @@ val upHandler = object: MessagingReceiverHandler {
         }
         Timber.d("## onMessage() received")
 
-        lateinit var data: JSONObject
-        lateinit var notification: JSONObject
+        val moshi: Moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+        lateinit var notification: Notification
+
         if (UPHelper.isEmbeddedDistributor(context)) {
-            try {
-                notification = JSONObject(message)
-            } catch (e: JSONException) {
-                Timber.e(e)
-                return
-            }
+            notification = moshi.adapter(Notification::class.java)
+                    .fromJson(message)!!
         } else {
-            try {
-                data = JSONObject(message)
-                notification = data.getJSONObject("notification")
-            } catch (e: JSONException) {
-                Timber.e(e)
-                return
-            }
-            try {
-                notification.put("unread",
-                        notification.getJSONObject("count").getInt("unread"))
-            } catch (e: JSONException) {
-                Timber.i("No unread on notification")
-                notification.put("unread", 0)
-            }
-        }
-
-        val eventId: String = try {
-            notification.getString("event_id")
-        } catch (e: JSONException) {
-            Timber.i("No event_id on notification")
-            notification.put("event_id", "")
-            ""
-        }
-
-        try {
-            notification.getString("room_id")
-        } catch (e: JSONException) {
-            Timber.i("No room_id on notification")
-            notification.put("room_id", "")
+            val data = moshi.adapter(UnifiedPushMessage::class.java)
+                    .fromJson(message)!!
+            notification = data.notification
+            notification.unread = notification.counts.unread
         }
 
         // Diagnostic Push
-        if (eventId == PushersManager.TEST_EVENT_ID) {
+        if (notification.eventId == PushersManager.TEST_EVENT_ID) {
             val intent = Intent(NotificationUtils.PUSH_ACTION)
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
             return
@@ -200,32 +192,28 @@ val upHandler = object: MessagingReceiverHandler {
     /**
      * Internal receive method
      *
-     * @param data Data json containing message data.
+     * @param notification Notification containing message data.
      */
-    private fun onMessageReceivedInternal(context: Context, data: JSONObject) {
+    private fun onMessageReceivedInternal(context: Context, notification: Notification) {
         try {
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                Timber.d("## onMessageReceivedInternal() : $data")
+                Timber.d("## onMessageReceivedInternal() : $notification")
             }
 
             // update the badge counter
-            val unreadCount = data.getInt("unread")
-            BadgeProxy.updateBadgeCount(context, unreadCount)
+            BadgeProxy.updateBadgeCount(context, notification.unread)
 
             val session = activeSessionHolder.getSafeActiveSession()
 
             if (session == null) {
                 Timber.w("## Can't sync from push, no current session")
             } else {
-                val eventId = data.getString("event_id")
-                val roomId = data.getString("room_id")
-
-                if (isEventAlreadyKnown(eventId, roomId)) {
+                if (isEventAlreadyKnown(notification.eventId, notification.roomId)) {
                     Timber.d("Ignoring push, event already known")
                 } else {
                     // Try to get the Event content faster
                     Timber.d("Requesting event in fast lane")
-                    getEventFastLane(session, roomId, eventId)
+                    getEventFastLane(session, notification.roomId, notification.eventId)
 
                     Timber.d("Requesting background sync")
                     session.requireBackgroundSync()
