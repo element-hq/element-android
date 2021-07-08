@@ -2873,4 +2873,5 @@
     <string name="continue_anyway">Trotzdem fortfahren</string>
     <string name="call_transfer_consulting_with">Bei %1$s anfragen</string>
     <string name="call_transfer_transfer_to_title">Zu %1$s weiterleiten</string>
+    <string name="space_settings_alias_title">Space Adressen</string>
 </resources>
