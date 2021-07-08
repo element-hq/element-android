@@ -619,12 +619,15 @@ internal class OlmMachine(
      */
     @Throws(CryptoStoreErrorException::class)
     suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo> {
-        val ownDevice = ownDevice()
         val devices = inner.getUserDevices(userId).map { toCryptoDeviceInfo(it) }.toMutableList()
 
         // EA doesn't differentiate much between our own and other devices of
         // while the rust-sdk does, append our own device here.
-        devices.add(ownDevice)
+        val ownDevice = this.ownDevice()
+        
+        if (userId == ownDevice.userId) {
+            devices.add(ownDevice)
+        }
 
         return devices
     }
