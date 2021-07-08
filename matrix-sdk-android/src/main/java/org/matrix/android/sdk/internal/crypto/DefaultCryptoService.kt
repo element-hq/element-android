@@ -228,6 +228,7 @@ internal class DefaultCryptoService @Inject constructor(
     private val isStarted = AtomicBoolean(false)
 
     private var olmMachine: OlmMachine? = null
+
     // The verification service.
     private var verificationService: RustVerificationService? = null
 
@@ -254,7 +255,7 @@ internal class DefaultCryptoService @Inject constructor(
             EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
-            else -> this.verificationService?.onEvent(event)
+            else                                    -> this.verificationService?.onEvent(event)
         }
     }
 
@@ -361,7 +362,7 @@ internal class DefaultCryptoService @Inject constructor(
      * devices.
      *
      */
-    suspend fun start() {
+    fun start() {
         internalStart()
         // Just update
         fetchDevicesList(NoOpMatrixCallback())
@@ -383,7 +384,7 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    private suspend fun internalStart() {
+    private fun internalStart() {
         if (isStarted.get() || isStarting.get()) {
             return
         }
@@ -392,11 +393,11 @@ internal class DefaultCryptoService @Inject constructor(
         try {
             setRustLogger()
             val machine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver)
-            this.olmMachine = machine
-            this.verificationService = RustVerificationService(machine, this.sender)
+            olmMachine = machine
+            verificationService = RustVerificationService(machine, this.sender)
             Timber.v(
-                "## CRYPTO | Successfully started up an Olm machine for " +
-                "${userId}, ${deviceId}, identity keys: ${this.olmMachine?.identityKeys()}")
+                    "## CRYPTO | Successfully started up an Olm machine for " +
+                            "${userId}, ${deviceId}, identity keys: ${this.olmMachine?.identityKeys()}")
         } catch (throwable: Throwable) {
             Timber.v("Failed create an Olm machine: $throwable")
         }
@@ -404,18 +405,8 @@ internal class DefaultCryptoService @Inject constructor(
         // Open the store
         cryptoStore.open()
 
-        runCatching {
-        }.fold(
-                {
-                    isStarting.set(false)
-                    isStarted.set(true)
-                },
-                {
-                    isStarting.set(false)
-                    isStarted.set(false)
-                    Timber.e(it, "Start failed")
-                }
-        )
+        isStarting.set(false)
+        isStarted.set(true)
     }
 
     /**
@@ -456,9 +447,7 @@ internal class DefaultCryptoService @Inject constructor(
         // Let's initialize here as a workaround until we figure out if the
         // above conclusion is correct.
         if (verificationService == null) {
-            runBlocking {
-                internalStart()
-            }
+            internalStart()
         }
 
         return verificationService!!
@@ -740,8 +729,8 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private fun notifyRoomKeyReceived(
-        roomId: String,
-        sessionId: String,
+            roomId: String,
+            sessionId: String,
     ) {
         // The sender key is actually unused since it's unimportant for megolm
         // Our events don't contain the info so pass an empty string until we
@@ -757,38 +746,38 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     suspend fun receiveSyncChanges(
-        toDevice: ToDeviceSyncResponse?,
-        deviceChanges: DeviceListResponse?,
-        keyCounts: DeviceOneTimeKeysCountSyncResponse?) {
-            // Decrypt and handle our to-device events
-            val toDeviceEvents = this.olmMachine!!.receiveSyncChanges(toDevice, deviceChanges, keyCounts)
+            toDevice: ToDeviceSyncResponse?,
+            deviceChanges: DeviceListResponse?,
+            keyCounts: DeviceOneTimeKeysCountSyncResponse?) {
+        // Decrypt and handle our to-device events
+        val toDeviceEvents = this.olmMachine!!.receiveSyncChanges(toDevice, deviceChanges, keyCounts)
 
-            // Notify the our listeners about room keys so decryption is retried.
-            if (toDeviceEvents.events != null) {
-                toDeviceEvents.events.forEach { event ->
-                    when (event.type) {
-                        EventType.ROOM_KEY           -> {
-                            val content = event.getClearContent().toModel<RoomKeyContent>() ?: return@forEach
+        // Notify the our listeners about room keys so decryption is retried.
+        if (toDeviceEvents.events != null) {
+            toDeviceEvents.events.forEach { event ->
+                when (event.type) {
+                    EventType.ROOM_KEY           -> {
+                        val content = event.getClearContent().toModel<RoomKeyContent>() ?: return@forEach
 
-                            val roomId = content.sessionId ?: return@forEach
-                            val sessionId = content.sessionId
+                        val roomId = content.sessionId ?: return@forEach
+                        val sessionId = content.sessionId
 
-                            notifyRoomKeyReceived(roomId, sessionId)
-                        }
-                        EventType.FORWARDED_ROOM_KEY -> {
-                            val content = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: return@forEach
+                        notifyRoomKeyReceived(roomId, sessionId)
+                    }
+                    EventType.FORWARDED_ROOM_KEY -> {
+                        val content = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: return@forEach
 
-                            val roomId = content.sessionId ?: return@forEach
-                            val sessionId = content.sessionId
+                        val roomId = content.sessionId ?: return@forEach
+                        val sessionId = content.sessionId
 
-                            notifyRoomKeyReceived(roomId, sessionId)
-                        }
-                        else                         -> {
-                            this.verificationService?.onEvent(event)
-                        }
+                        notifyRoomKeyReceived(roomId, sessionId)
+                    }
+                    else                         -> {
+                        this.verificationService?.onEvent(event)
                     }
                 }
             }
+        }
     }
 
     private suspend fun preshareRoomKey(roomId: String, roomMembers: List<String>) {
@@ -800,7 +789,8 @@ internal class DefaultCryptoService @Inject constructor(
                     is Request.KeysClaim -> {
                         claimKeys(request)
                     }
-                    else                 -> {}
+                    else                 -> {
+                    }
                 }
             }
         }
@@ -816,7 +806,7 @@ internal class DefaultCryptoService @Inject constructor(
                                 sendToDevice(it)
                             }
                         }
-                        else -> {
+                        else                -> {
                             // This request can only be a to-device request but
                             // we need to handle all our cases and put this
                             // async block for our joinAll to work.
@@ -861,22 +851,22 @@ internal class DefaultCryptoService @Inject constructor(
             coroutineScope {
                 olmMachine!!.outgoingRequests().map {
                     when (it) {
-                        is Request.KeysUpload -> {
+                        is Request.KeysUpload  -> {
                             async {
                                 uploadKeys(it)
                             }
                         }
-                        is Request.KeysQuery -> {
+                        is Request.KeysQuery   -> {
                             async {
                                 queryKeys(it)
                             }
                         }
-                        is Request.ToDevice -> {
+                        is Request.ToDevice    -> {
                             async {
                                 sendToDevice(it)
                             }
                         }
-                        is Request.KeysClaim  -> {
+                        is Request.KeysClaim   -> {
                             async {
                                 claimKeys(it)
                             }
@@ -912,8 +902,8 @@ internal class DefaultCryptoService @Inject constructor(
      * @return the result ImportRoomKeysResult
      */
     override suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
-                                password: String,
-                                progressListener: ProgressListener?): ImportRoomKeysResult {
+                                        password: String,
+                                        progressListener: ProgressListener?): ImportRoomKeysResult {
         return olmMachine!!.importKeys(roomKeysAsArray, password, progressListener)
     }
 
@@ -1022,7 +1012,7 @@ internal class DefaultCryptoService @Inject constructor(
                 }
             }
 
-            when(request) {
+            when (request) {
                 is Request.ToDevice -> {
                     sendToDevice(request)
                 }
