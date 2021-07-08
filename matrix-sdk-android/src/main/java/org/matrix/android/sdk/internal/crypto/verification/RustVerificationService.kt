@@ -66,7 +66,7 @@ private fun getFlowId(event: Event): String? {
 internal class RustVerificationService(
         private val olmMachine: OlmMachine,
         private val requestSender: RequestSender,
-) : DefaultVerificationTransaction.Listener, VerificationService {
+) : VerificationService {
     private val uiHandler = Handler(Looper.getMainLooper())
     private var listeners = ArrayList<VerificationService.Listener>()
 
@@ -427,10 +427,5 @@ internal class RustVerificationService(
     ) {
         val verificationRequest = this.getVerificationRequest(otherUserId, transactionId)
         runBlocking { verificationRequest?.cancel() }
-    }
-
-    override fun transactionUpdated(tx: VerificationTransaction) {
-        // TODO this isn't really used anymore
-        dispatchTxUpdated(tx)
     }
 }
