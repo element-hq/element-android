@@ -62,14 +62,28 @@
 
     <!-- Power-level based username colors -->
     <color name="user_color_sc_pl_100">#F44336</color>
+    <color name="user_color_sc_pl_95">#FF5722</color>
+    <color name="user_color_sc_pl_51">#03A9F4</color>
     <color name="user_color_sc_pl_50">#2196F3</color>
-    <color name="user_color_sc_pl_0">@color/accent_sc</color>
+    <color name="user_color_sc_pl_1">#CDDC39</color>
+    <color name="user_color_sc_pl_0">#8bc34a</color>
+    <!--
+    <color name="user_color_sc_pl_100">#F44336</color>
+    <color name="user_color_sc_pl_95">#FF5722</color>
+    <color name="user_color_sc_pl_51">#FF9800</color>
+    <color name="user_color_sc_pl_50">#2196F3</color>
+    <color name="user_color_sc_pl_1">#03A9F4</color>
+    <color name="user_color_sc_pl_0">#8bc34a</color>
+    -->
 
     <!-- Exposed Element colors -->
     <!-- This is actually not an SC color, but the one found in element for ic_material_play_circle PNGs -->
     <color name="element_accent_pale">#76cfa6</color>
     <color name="user_color_element_pl_100">@color/palette_polly</color>
+    <color name="user_color_element_pl_95">@color/palette_grape</color>
+    <color name="user_color_element_pl_51">@color/palette_azure</color>
     <color name="user_color_element_pl_50">@color/palette_azure</color>
+    <color name="user_color_element_pl_1">@color/palette_kiwi</color>
     <color name="user_color_element_pl_0">@color/palette_element_green</color>
 
 </resources>

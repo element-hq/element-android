@@ -41,13 +41,17 @@ class MatrixItemColorProvider @Inject constructor(
         val coloringMode = vectorPreferences.userColorMode(userInRoomInformation?.isDm ?: false, userInRoomInformation?.isPublicRoom ?: false)
         return when (coloringMode) {
             USER_COLORING_FROM_PL -> {
-                if (userInRoomInformation?.userPowerLevel == null || userInRoomInformation.userPowerLevel < 30) {
-                    colorProvider.getColorFromAttribute(R.attr.user_color_pl_0)
-                } else if (userInRoomInformation.userPowerLevel < 80) {
-                    colorProvider.getColorFromAttribute(R.attr.user_color_pl_50)
-                } else {
-                    colorProvider.getColorFromAttribute(R.attr.user_color_pl_100)
-                }
+                colorProvider.getColorFromAttribute(
+                        when {
+                            userInRoomInformation?.userPowerLevel == null -> R.attr.user_color_pl_0
+                            userInRoomInformation.userPowerLevel >= 100 -> R.attr.user_color_pl_100
+                            userInRoomInformation.userPowerLevel >= 95 -> R.attr.user_color_pl_95
+                            userInRoomInformation.userPowerLevel >= 51 -> R.attr.user_color_pl_51
+                            userInRoomInformation.userPowerLevel >= 50 -> R.attr.user_color_pl_50
+                            userInRoomInformation.userPowerLevel >= 1 -> R.attr.user_color_pl_1
+                            else -> R.attr.user_color_pl_0
+                        }
+                )
             }
             USER_COLORING_FROM_ID -> {
                 return cache.getOrPut(matrixItem.id) {
