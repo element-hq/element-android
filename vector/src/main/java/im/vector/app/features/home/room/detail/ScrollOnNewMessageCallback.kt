@@ -79,7 +79,8 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
             while (newTimelineEventIds.lastOrNull() != firstNewItemIds) {
                 newTimelineEventIds.removeLastOrNull()
             }
-            layoutManager.scrollToPosition(0)
+            //layoutManager.scrollToPosition(0)
+            layoutManager.scrollToPositionWithOffset(0, Integer.MAX_VALUE)
         }
     }
 }
