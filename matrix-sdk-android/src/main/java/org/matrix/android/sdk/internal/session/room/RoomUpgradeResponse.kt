@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.detail
+package org.matrix.android.sdk.internal.session.room
 
-sealed class RoomDetailPendingAction {
-    data class OpenOrCreateDm(val userId: String) : RoomDetailPendingAction()
-    data class JumpToReadReceipt(val userId: String) : RoomDetailPendingAction()
-    data class MentionUser(val userId: String) : RoomDetailPendingAction()
-    data class OpenRoom(val roomId: String, val closeCurrentRoom: Boolean = false) : RoomDetailPendingAction()
-}
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+internal data class RoomUpgradeResponse(
+        @Json(name = "replacement_room")
+        val replacementRoomId: String
+)

@@ -927,7 +927,7 @@
     <string name="room_resend_unsent_messages">Resend unsent messages</string>
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
     <string name="room_message_file_not_found">File not found</string>
-    <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
+    <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d new message</item>
         <item quantity="other">%d new messages</item>
@@ -1821,7 +1821,7 @@
 
     <string name="error_empty_field_enter_user_name">Please enter a username.</string>
     <string name="error_empty_field_your_password">Please enter your password.</string>
-    <string name="room_tombstone_versioned_description">This room has been replaced and is no longer active</string>
+    <string name="room_tombstone_versioned_description">This room has been replaced and is no longer active.</string>
     <string name="room_tombstone_continuation_link">The conversation continues here</string>
     <string name="room_tombstone_continuation_description">This room is a continuation of another conversation</string>
     <string name="room_tombstone_predecessor_link">Click here to see older messages</string>
@@ -2739,6 +2739,11 @@
     <string name="settings_server_upload_size_title">Server file upload limit</string>
     <string name="settings_server_upload_size_content">Your homeserver accepts attachments (files, media, etc.) with a size up to %s.</string>
     <string name="settings_server_upload_size_unknown">The limit is unknown.</string>
+    <!-- Please use the same emoji in the translations -->
+    <string name="settings_server_room_versions">Room Versions 👓</string>
+    <string name="settings_server_default_room_version">Default Version</string>
+    <string name="settings_server_room_version_stable">stable</string>
+    <string name="settings_server_room_version_unstable">unstable</string>
 
     <string name="settings_failed_to_get_crypto_device_info">No cryptographic information available</string>
 
@@ -3299,6 +3304,7 @@
     <string name="command_description_create_space">Create a Space</string>
     <string name="command_description_join_space">Join the Space with the given id</string>
     <string name="command_description_leave_room">Leave room with given id (or current room if null)</string>
+    <string name="command_description_upgrade_room">Upgrades a room to a new version</string>
 
     <string name="event_status_a11y_sending">Sending</string>
     <string name="event_status_a11y_sent">Sent</string>
@@ -3410,5 +3416,21 @@
 
     <string name="teammate_spaces_arent_quite_ready">"Teammate spaces aren’t quite ready but you can still give them a try"</string>
     <string name="teammate_spaces_might_not_join">"At the moment people might not be able to join any private rooms you make.\n\nWe’ll be improving this as part of the beta, but just wanted to let you know."</string>
+
+    <string name="joining_replacement_room">Join replacement room</string>
+    <string name="it_may_take_some_time">Please be patient, it may take some time.</string>
+
+    <string name="upgrade">Upgrade</string>
+    <string name="upgrade_public_room">Upgrade public room</string>
+    <string name="upgrade_private_room">Upgrade private room</string>
+    <string name="upgrade_room_warning">Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.\nThis usually only affects how the room is processed on the server.</string>
+    <string name="upgrade_public_room_from_to">You\'ll upgrade this room from %s to %s.</string>
+    <string name="upgrade_room_auto_invite">Automatically invite users</string>
+    <string name="upgrade_room_update_parent_space">Automatically update space parent</string>
+    <string name="upgrade_room_no_power_to_manage">You need permission to upgrade a room</string>
+
+    <string name="room_using_unstable_room_version">This room is running room version %s, which this homeserver has marked as unstable.</string>
+    <string name="room_upgrade_to_recommended_version">Upgrade to the recommended room version</string>
+
     <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
 </resources>

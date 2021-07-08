@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/headerText"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="center"
+        android:text="@string/joining_replacement_room"
+        android:textColor="?vctr_content_primary"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/descriptionText"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintBottom_toTopOf="@id/joinInfoHelpText"
+        app:layout_constraintTop_toBottomOf="@id/headerText"
+        app:layout_constraintVertical_bias="1"
+        tools:text="@string/it_may_take_some_time" />
+
+    <im.vector.app.core.platform.ButtonStateView
+        android:id="@+id/roomUpgradeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/layout_vertical_margin_big"
+        app:bsv_button_text="@string/join"
+        app:bsv_loaded_image_src="@drawable/ic_tick"
+        app:bsv_use_flat_button="true" />
+
+</LinearLayout>

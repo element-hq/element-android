@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.detail
+package im.vector.app.features.home.room.detail.upgrade
 
-sealed class RoomDetailPendingAction {
-    data class OpenOrCreateDm(val userId: String) : RoomDetailPendingAction()
-    data class JumpToReadReceipt(val userId: String) : RoomDetailPendingAction()
-    data class MentionUser(val userId: String) : RoomDetailPendingAction()
-    data class OpenRoom(val roomId: String, val closeCurrentRoom: Boolean = false) : RoomDetailPendingAction()
+import im.vector.app.core.platform.VectorViewModelAction
+
+sealed class MigrateRoomAction : VectorViewModelAction {
+    data class SetAutoInvite(val autoInvite: Boolean) : MigrateRoomAction()
+    data class SetUpdateKnownParentSpace(val update: Boolean) : MigrateRoomAction()
+    object UpgradeRoom : MigrateRoomAction()
 }
