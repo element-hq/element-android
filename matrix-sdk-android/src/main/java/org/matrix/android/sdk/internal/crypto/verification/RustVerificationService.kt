@@ -42,7 +42,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import org.matrix.android.sdk.internal.crypto.model.rest.toValue
-import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import uniffi.olm.Verification
 
@@ -62,7 +61,6 @@ private fun getFlowId(event: Event): String? {
     }
 }
 
-@SessionScope
 internal class RustVerificationService(
         private val olmMachine: OlmMachine,
         private val requestSender: RequestSender,
