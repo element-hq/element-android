@@ -2875,4 +2875,5 @@
     <string name="call_transfer_transfer_to_title">Zu %1$s weiterleiten</string>
     <string name="space_settings_alias_title">Space-Adressen</string>
     <string name="space_settings_alias_subtitle">Adressen dieses Spaces anzeigen und verwalten.</string>
+    <string name="create_space_alias_hint">Space Adressen</string>
 </resources>
