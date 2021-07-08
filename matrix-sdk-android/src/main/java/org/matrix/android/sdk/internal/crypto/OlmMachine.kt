@@ -203,21 +203,20 @@ internal class QrCodeVerification(
     override var state: VerificationTxState
         get() {
             refreshData()
-            val state = when {
-                this.inner.isDone           -> VerificationTxState.Verified
-                this.inner.hasBeenConfirmed -> VerificationTxState.WaitingOtherReciprocateConfirm
-                this.inner.otherSideScanned -> VerificationTxState.QrScannedByOther
-                this.inner.isCancelled      -> {
-                    val cancelCode = safeValueOf(this.inner.cancelCode)
-                    val byMe = this.inner.cancelledByUs ?: false
+
+            return when {
+                inner.isDone           -> VerificationTxState.Verified
+                inner.hasBeenConfirmed -> VerificationTxState.WaitingOtherReciprocateConfirm
+                inner.otherSideScanned -> VerificationTxState.QrScannedByOther
+                inner.isCancelled      -> {
+                    val cancelCode = safeValueOf(inner.cancelCode)
+                    val byMe = inner.cancelledByUs ?: false
                     VerificationTxState.Cancelled(cancelCode, byMe)
                 }
-                else                        -> {
+                else                   -> {
                     VerificationTxState.None
                 }
             }
-
-            return state
         }
         @Suppress("UNUSED_PARAMETER")
         set(value) {}

@@ -117,6 +117,11 @@ dictionary VerificationRequest {
 
 };
 
+dictionary RequestVerificationResult {
+    VerificationRequest verification;
+    OutgoingVerificationRequest request;
+};
+
 [Enum]
 interface Verification {
     SasV1(Sas sas);
@@ -199,6 +204,20 @@ interface OlmMachine {
         sequence<string> methods
     );
 
+    [Throws=CryptoStoreError]
+    VerificationRequest? request_verification(
+        [ByRef] string user_id,
+        [ByRef] string room_id,
+        [ByRef] string event_id,
+        sequence<string> methods
+    );
+    [Throws=CryptoStoreError]
+    string? verification_request_content(
+        [ByRef] string user_id,
+        sequence<string> methods
+    );
+    [Throws=CryptoStoreError]
+    RequestVerificationResult? request_self_verification(sequence<string> methods);
     [Throws=CryptoStoreError]
     StartSasResult? start_sas_with_device([ByRef] string user_id, [ByRef] string device_id);
     [Throws=CryptoStoreError]

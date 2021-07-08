@@ -38,6 +38,10 @@ import org.matrix.android.sdk.internal.crypto.QrCodeVerification
 import org.matrix.android.sdk.internal.crypto.RequestSender
 import org.matrix.android.sdk.internal.crypto.SasVerification
 import org.matrix.android.sdk.internal.crypto.VerificationRequest
+import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
+import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
+import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
+import org.matrix.android.sdk.internal.crypto.model.rest.toValue
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import uniffi.olm.Verification
@@ -258,7 +262,22 @@ internal class RustVerificationService(
             tid: String?
     ): PendingVerificationRequest? {
         // This is only used in `RoomDetailViewModel` to resume the verification.
-        // We don't support resuming in the rust-sdk, at least for now, so let's return null here.
+        //
+        // Is this actually useful? SAS and QR code verifications ephemeral nature
+        // due to the usage of ephemeral secrets. In the case of SAS verification, the
+        // ephemeral key can't be stored due to libolm missing support for it, I would
+        // argue that the ephemeral secret for QR verifications shouldn't be persisted either.
+        //
+        // This means that once we transition from a verification request into an actual
+        // verification flow (SAS/QR) we won't be able to resume. In other words resumption
+        // is only supported before both sides agree to verify.
+        //
+        // We would either need to remember if the request transitioned into a flow and only
+        // support resumption if we didn't, otherwise we would risk getting different emojis
+        // or secrets in the QR code, not to mention that the flows could be interrupted in
+        // any non-starting state.
+        //
+        // In any case, we don't support resuming in the rust-sdk, so let's return null here.
         return null
     }
 
@@ -267,8 +286,19 @@ internal class RustVerificationService(
             otherUserId: String,
             otherDevices: List<String>?
     ): PendingVerificationRequest {
-        // This was mostly a copy paste of the InDMs method, do the same here
-        TODO()
+
+        val stringMethods: MutableList<String> = methods.map { it.toValue() }.toMutableList()
+        if (stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SHOW) ||
+                stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SCAN)) {
+            stringMethods.add(VERIFICATION_METHOD_RECIPROCATE)
+        }
+
+        val result = this.olmMachine.inner().requestSelfVerification(stringMethods)
+        runBlocking {
+            requestSender.sendVerificationRequest(result!!.request)
+        }
+
+        return VerificationRequest(this.olmMachine.inner(), result!!.verification, this.requestSender, this.listeners).toPendingVerificationRequest()
     }
 
     override fun requestKeyVerificationInDMs(
@@ -278,10 +308,21 @@ internal class RustVerificationService(
             localId: String?
     ): PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $otherUserId in room $roomId")
+        val stringMethods: MutableList<String> = methods.map { it.toValue() }.toMutableList()
 
-        // TODO cancel other active requests, create a new request here and
-        // dispatch it
-        TODO()
+        if (stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SHOW) ||
+                stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SCAN)) {
+            stringMethods.add(VERIFICATION_METHOD_RECIPROCATE)
+        }
+
+        val content = this.olmMachine.inner().verificationRequestContent(otherUserId, stringMethods)!!
+
+        val eventID = runBlocking {
+            requestSender.sendRoomMessage(EventType.MESSAGE, roomId, content, localId!!)
+        }
+
+        val innerRequest = this.olmMachine.inner().requestVerification(otherUserId, roomId, eventID, stringMethods)!!
+        return VerificationRequest(this.olmMachine.inner(), innerRequest, this.requestSender, this.listeners).toPendingVerificationRequest()
     }
 
     override fun readyPendingVerification(
@@ -347,10 +388,10 @@ internal class RustVerificationService(
                 // DeviceListBottomSheetViewModel triggers this, interestingly the method that
                 // triggers this is called `manuallyVerify()`
                 runBlocking {
-                    val sas = getDevice(otherUserId, otherDeviceId)?.startVerification()
-                    if (sas != null) {
-                        dispatchTxAdded(sas)
-                        sas.transactionId
+                    val verification = getDevice(otherUserId, otherDeviceId)?.startVerification()
+                    if (verification != null) {
+                        dispatchTxAdded(verification)
+                        verification.transactionId
                     } else {
                         null
                     }

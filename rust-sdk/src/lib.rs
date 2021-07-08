@@ -8,7 +8,8 @@ pub use device::Device;
 pub use error::{CryptoStoreError, DecryptionError, KeyImportError, MachineCreationError};
 pub use logger::{set_logger, Logger};
 pub use machine::{
-    KeyRequestPair, OlmMachine, QrCode, Sas, StartSasResult, Verification, VerificationRequest,
+    KeyRequestPair, OlmMachine, QrCode, RequestVerificationResult, Sas, StartSasResult,
+    Verification, VerificationRequest,
 };
 pub use responses::{
     DeviceLists, KeysImportResult, OutgoingVerificationRequest, Request, RequestType,

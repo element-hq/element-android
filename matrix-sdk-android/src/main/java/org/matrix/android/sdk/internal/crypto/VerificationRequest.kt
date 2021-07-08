@@ -31,6 +31,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
+import org.matrix.android.sdk.internal.crypto.model.rest.toValue
 import timber.log.Timber
 import uniffi.olm.OlmMachine
 import uniffi.olm.VerificationRequest
@@ -96,16 +97,7 @@ internal class VerificationRequest(
     }
 
     suspend fun acceptWithMethods(methods: List<VerificationMethod>) {
-        val stringMethods: MutableList<String> =
-                methods
-                        .map {
-                            when (it) {
-                                VerificationMethod.QR_CODE_SCAN -> VERIFICATION_METHOD_QR_CODE_SCAN
-                                VerificationMethod.QR_CODE_SHOW -> VERIFICATION_METHOD_QR_CODE_SHOW
-                                VerificationMethod.SAS          -> VERIFICATION_METHOD_SAS
-                            }
-                        }
-                        .toMutableList()
+        val stringMethods: MutableList<String> = methods.map { it.toValue() }.toMutableList()
 
         if (stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SHOW) ||
                 stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SCAN)) {

@@ -145,31 +145,31 @@ internal class RequestSender @Inject constructor(
         }
     }
 
-    suspend fun sendRoomMessage(request: OutgoingVerificationRequest.InRoom) {
-        sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId)
+    suspend fun sendRoomMessage(request: OutgoingVerificationRequest.InRoom): String {
+        return sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId)
     }
 
-    suspend fun sendRoomMessage(request: Request.RoomMessage) {
-        sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId)
+    suspend fun sendRoomMessage(request: Request.RoomMessage): String {
+        return sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId)
     }
 
-    suspend fun sendRoomMessage(eventType: String, roomId: String, content: String, transactionId: String) {
+    suspend fun sendRoomMessage(eventType: String, roomId: String, content: String, transactionId: String): String {
         val adapter = MoshiProvider.providesMoshi().adapter<Content>(Map::class.java)
         val jsonContent = adapter.fromJson(content)
         val event = Event(eventType, transactionId, jsonContent, roomId = roomId)
         val params = SendVerificationMessageTask.Params(event)
-        this.sendVerificationMessageTask.get().execute(params)
+        return this.sendVerificationMessageTask.get().execute(params)
     }
 
     suspend fun sendToDevice(request: Request.ToDevice) {
-        sendToDevice(request.eventType, request.body)
+        sendToDevice(request.eventType, request.body, request.requestId)
     }
 
     suspend fun sendToDevice(request: OutgoingVerificationRequest.ToDevice) {
-        sendToDevice(request.eventType, request.body)
+        sendToDevice(request.eventType, request.body, request.requestId)
     }
 
-    suspend fun sendToDevice(eventType: String, body: String) {
+    suspend fun sendToDevice(eventType: String, body: String, transactionId: String) {
         // TODO this produces floats for the Olm type fields, which are integers originally.
         val adapter = MoshiProvider
                 .providesMoshi()
@@ -179,7 +179,7 @@ internal class RequestSender @Inject constructor(
         val userMap = MXUsersDevicesMap<Any>()
         userMap.join(jsonBody)
 
-        val sendToDeviceParams = SendToDeviceTask.Params(eventType, userMap)
+        val sendToDeviceParams = SendToDeviceTask.Params(eventType, userMap, transactionId)
         sendToDeviceTask.execute(sendToDeviceParams)
     }
 }

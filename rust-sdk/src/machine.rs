@@ -22,7 +22,7 @@ use ruma::{
         key::verification::VerificationMethod, room::encrypted::EncryptedEventContent,
         AnyMessageEventContent, EventContent, SyncMessageEvent,
     },
-    DeviceKeyAlgorithm, RoomId, UserId,
+    DeviceKeyAlgorithm, EventId, RoomId, UserId,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::value::RawValue;
@@ -126,6 +126,11 @@ impl From<InnerSas> for Sas {
             has_been_accepted: sas.has_been_accepted(),
         }
     }
+}
+
+pub struct RequestVerificationResult {
+    pub verification: VerificationRequest,
+    pub request: OutgoingVerificationRequest,
 }
 
 pub struct VerificationRequest {
@@ -716,11 +721,6 @@ impl OlmMachine {
         }
     }
 
-    pub fn request_verification(&self, user_id: &str) {
-        let _user_id = UserId::try_from(user_id).unwrap();
-        todo!("Requesting key verification isn't yet supported")
-    }
-
     pub fn get_verification(&self, user_id: &str, flow_id: &str) -> Option<Verification> {
         let user_id = UserId::try_from(user_id).ok()?;
         self.inner
@@ -756,6 +756,87 @@ impl OlmMachine {
                 v.qr_v1()
                     .and_then(|qr| qr.to_bytes().map(|b| encode(b)).ok())
             })
+    }
+
+    pub fn request_verification(
+        &self,
+        user_id: &str,
+        room_id: &str,
+        event_id: &str,
+        methods: Vec<String>,
+    ) -> Result<Option<VerificationRequest>, CryptoStoreError> {
+        let user_id = UserId::try_from(user_id)?;
+        let event_id = EventId::try_from(event_id)?;
+        let room_id = RoomId::try_from(room_id)?;
+
+        let identity = self.runtime.block_on(self.inner.get_identity(&user_id))?;
+
+        let methods = methods
+            .into_iter()
+            .map(|m| VerificationMethod::from(m))
+            .collect();
+
+        Ok(if let Some(identity) = identity.and_then(|i| i.other()) {
+            let request = self.runtime.block_on(identity.request_verification(
+                &room_id,
+                &event_id,
+                Some(methods),
+            ));
+
+            Some(request.into())
+        } else {
+            None
+        })
+    }
+
+    pub fn verification_request_content(
+        &self,
+        user_id: &str,
+        methods: Vec<String>,
+    ) -> Result<Option<String>, CryptoStoreError> {
+        let user_id = UserId::try_from(user_id)?;
+
+        let identity = self.runtime.block_on(self.inner.get_identity(&user_id))?;
+
+        let methods = methods
+            .into_iter()
+            .map(|m| VerificationMethod::from(m))
+            .collect();
+
+        Ok(if let Some(identity) = identity.and_then(|i| i.other()) {
+            let content = self
+                .runtime
+                .block_on(identity.verification_request_content(Some(methods)));
+            Some(serde_json::to_string(&content)?)
+        } else {
+            None
+        })
+    }
+
+    pub fn request_self_verification(
+        &self,
+        methods: Vec<String>,
+    ) -> Result<Option<RequestVerificationResult>, CryptoStoreError> {
+        let identity = self
+            .runtime
+            .block_on(self.inner.get_identity(self.inner.user_id()))?;
+
+        let methods = methods
+            .into_iter()
+            .map(|m| VerificationMethod::from(m))
+            .collect();
+
+        Ok(if let Some(identity) = identity.and_then(|i| i.own()) {
+            let (verification, request) = self
+                .runtime
+                .block_on(identity.request_verification_with_methods(methods))?;
+            Some(RequestVerificationResult {
+                verification: verification.into(),
+                request: request.into(),
+            })
+        } else {
+            None
+        })
     }
 
     pub fn start_sas_with_device(
