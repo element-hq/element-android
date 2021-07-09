@@ -17,9 +17,11 @@
 package im.vector.app.features.roomprofile.settings.joinrule.advanced
 
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.util.MatrixItem
 
 sealed class RoomJoinRuleChooseRestrictedActions : VectorViewModelAction {
-    data class FilterWith(val filter: String): RoomJoinRuleChooseRestrictedActions()
-    data class ToggleSelection(val matrixItem: MatrixItem): RoomJoinRuleChooseRestrictedActions()
+    data class FilterWith(val filter: String) : RoomJoinRuleChooseRestrictedActions()
+    data class ToggleSelection(val matrixItem: MatrixItem) : RoomJoinRuleChooseRestrictedActions()
+    data class SelectJoinRules(val rules: RoomJoinRules) : RoomJoinRuleChooseRestrictedActions()
 }

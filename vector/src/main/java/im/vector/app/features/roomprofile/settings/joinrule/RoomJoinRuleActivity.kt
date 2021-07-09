@@ -27,6 +27,7 @@ import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedState
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
+import javax.inject.Inject
 
 class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         RoomJoinRuleChooseRestrictedViewModel.Factory {
@@ -35,13 +36,15 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
 
     private lateinit var roomProfileArgs: RoomProfileArgs
 
-    private lateinit var allowListViewModelFactory: RoomJoinRuleChooseRestrictedViewModel.Factory
+    @Inject
+    lateinit var allowListViewModelFactory: RoomJoinRuleChooseRestrictedViewModel.Factory
 
     override fun create(initialState: RoomJoinRuleChooseRestrictedState) = allowListViewModelFactory.create(initialState)
 
     override fun injectWith(injector: ScreenComponent) {
-       injector.inject(this)
+        injector.inject(this)
     }
+
     override fun initUiAndData() {
         roomProfileArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
         if (isFirstCreation()) {
@@ -52,10 +55,6 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
             )
         }
     }
-//
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//    }
 
     companion object {
 

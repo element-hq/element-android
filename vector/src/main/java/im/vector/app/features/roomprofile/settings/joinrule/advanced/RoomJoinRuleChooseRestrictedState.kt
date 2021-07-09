@@ -32,14 +32,14 @@ data class RoomJoinRuleChooseRestrictedState(
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val initialRoomJoinRules: RoomJoinRules? = null,
         val currentRoomJoinRules: RoomJoinRules? = null,
-        val updatedAllowList: List<MatrixItem>? = null,
+        val updatedAllowList: List<MatrixItem> = emptyList(),
         val choices: List<JoinRulesOptionSupport>? = null,
         val initialAllowList: List<RoomJoinRulesAllowEntry> = emptyList(),
-        val selectedRoomList: List<String> = emptyList(),
         val possibleSpaceCandidate: List<MatrixItem> = emptyList(),
         val unknownRestricted: List<MatrixItem> = emptyList(),
         val filter: String = "",
-        val filteredResults: Async<List<MatrixItem>> = Uninitialized
+        val filteredResults: Async<List<MatrixItem>> = Uninitialized,
+        val hasUnsavedChanges: Boolean = false
 ) : MvRxState {
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }

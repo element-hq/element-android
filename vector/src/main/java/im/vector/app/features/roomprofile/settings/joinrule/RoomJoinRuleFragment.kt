@@ -20,25 +20,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentJoinRulesRecyclerBinding
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedActions
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
 class RoomJoinRuleFragment @Inject constructor(
         val controller: RoomJoinRuleAdvancedController,
-//        val viewModelFactory: RoomJoinRuleAdvancedViewModel.Factory,
         val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentJoinRulesRecyclerBinding>(),
-//        RoomJoinRuleAdvancedViewModel.Factory,
         OnBackPressed, RoomJoinRuleAdvancedController.InteractionListener {
 
     private val viewModel: RoomJoinRuleChooseRestrictedViewModel by activityViewModel()
@@ -48,54 +49,55 @@ class RoomJoinRuleFragment @Inject constructor(
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         // TODO
-        requireActivity().finish()
+        val hasUnsavedChanges = withState(viewModel) { it.hasUnsavedChanges }
+        if (!hasUnsavedChanges) {
+            requireActivity().finish()
+        }
         return true
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
         controller.setData(state)
+        if (state.hasUnsavedChanges) {
+            // show discard and save
+            views.cancelButton.isVisible = true
+            views.positiveButton.text = getString(R.string.warning_unsaved_change_discard)
+            views.positiveButton.isVisible = true
+            views.positiveButton.text = getString(R.string.save)
+        } else {
+            views.cancelButton.isVisible = false
+            views.positiveButton.isVisible = true
+            views.positiveButton.text = getString(R.string.ok)
+            views.positiveButton.debouncedClicks { requireActivity().finish() }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
-//        setupRoomHistoryVisibilitySharedActionViewModel()
-//        setupRoomJoinRuleSharedActionViewModel()
-//        controller.callback = this
         views.genericRecyclerView.configureWith(controller, hasFixedSize = true)
         controller.interactionListener = this
-//        views.waitingView.waitingStatusText.setText(R.string.please_wait)
-//        views.waitingView.waitingStatusText.isVisible = true
-
-//        // Use the Kotlin extension in the fragment-ktx artifact
-//        setFragmentResultListener("SelectAllowList") { requestKey, bundle ->
-//            // We use a String here, but any type that can be put in a Bundle is supported
-//            bundle.getStringArrayList("bundleKey")?.toList()?.let {
-//                 viewModel.handle(RoomJoinRuleAdvancedAction.UpdateAllowList(it))
-//             }
-//        }
-
-        viewModel.observeViewEvents {
-            when (it) {
-                RoomJoinRuleAdvancedEvents.SelectAllowList -> {
-                    parentFragmentManager.commitTransaction {
-                        setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                        val tag = RoomJoinRuleChooseRestrictedFragment::class.simpleName
-                        replace(R.id.simpleFragmentContainer,
-                                RoomJoinRuleChooseRestrictedFragment::class.java,
-                                this@RoomJoinRuleFragment.arguments,
-                                tag
-                        ).addToBackStack(tag)
-                    }
-                }
-            }
-        }
+        views.cancelButton.debouncedClicks { requireActivity().finish() }
     }
 
-    override fun create(initialState: RoomJoinRuleAdvancedState) = viewModelFactory.create(initialState)
+    override fun onDestroyView() {
+        views.genericRecyclerView.cleanup()
+        super.onDestroyView()
+    }
 
     override fun didSelectRule(rules: RoomJoinRules) {
-        viewModel.handle(RoomJoinRuleAdvancedAction.SelectJoinRules(rules))
+        val oldRule = withState(viewModel) { it.currentRoomJoinRules }
+        viewModel.handle(RoomJoinRuleChooseRestrictedActions.SelectJoinRules(rules))
+        if (rules == RoomJoinRules.RESTRICTED && oldRule == RoomJoinRules.RESTRICTED) {
+            parentFragmentManager.commitTransaction {
+                setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+                val tag = RoomJoinRuleChooseRestrictedFragment::class.simpleName
+                replace(R.id.simpleFragmentContainer,
+                        RoomJoinRuleChooseRestrictedFragment::class.java,
+                        this@RoomJoinRuleFragment.arguments,
+                        tag
+                ).addToBackStack(tag)
+            }
+        }
     }
 }

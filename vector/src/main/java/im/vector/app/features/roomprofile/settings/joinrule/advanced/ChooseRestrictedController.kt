@@ -53,14 +53,17 @@ class ChooseRestrictedController @Inject constructor(
                 is Loading -> loadingItem { id("filter_load") }
                 is Success -> {
                     if (results.invoke().isEmpty()) {
-                        noResultItem { id("empty") }
+                        noResultItem {
+                            id("empty")
+                            text(host.stringProvider.getString(R.string.no_result_placeholder))
+                        }
                     } else {
                         results.invoke().forEach { matrixItem ->
                             roomSelectionItem {
                                 id(matrixItem.id)
                                 matrixItem(matrixItem)
                                 avatarRenderer(host.avatarRenderer)
-                                selected(data.selectedRoomList.firstOrNull { it == matrixItem.id } != null)
+                                selected(data.updatedAllowList.firstOrNull { it.id == matrixItem.id } != null)
                                 itemClickListener { host.listener?.onItemSelected(matrixItem) }
                             }
                         }
@@ -77,18 +80,12 @@ class ChooseRestrictedController @Inject constructor(
             centered(false)
         }
 
-//        val testList = mutableListOf<MatrixItem>()
-//        for(i in 0..20) {
-//            testList.addAll(data.knownSpaceParents)
-//        }
-//        testList
-
         data.possibleSpaceCandidate.forEach { matrixItem ->
             roomSelectionItem {
                 id(matrixItem.id)
                 matrixItem(matrixItem)
                 avatarRenderer(host.avatarRenderer)
-                selected(data.selectedRoomList.firstOrNull { it == matrixItem.id } != null)
+                selected(data.updatedAllowList.firstOrNull { it.id == matrixItem.id } != null)
                 itemClickListener { host.listener?.onItemSelected(matrixItem) }
             }
         }
@@ -105,7 +102,7 @@ class ChooseRestrictedController @Inject constructor(
                     id(matrixItem.id)
                     matrixItem(matrixItem)
                     avatarRenderer(host.avatarRenderer)
-                    selected(data.selectedRoomList.firstOrNull { it == matrixItem.id } != null)
+                    selected(data.updatedAllowList.firstOrNull { it.id == matrixItem.id } != null)
                     itemClickListener { host.listener?.onItemSelected(matrixItem) }
                 }
             }

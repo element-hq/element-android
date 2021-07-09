@@ -127,12 +127,36 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
                             currentRoomJoinRules = safeRule,
                             choices = choices,
                             initialAllowList = initialAllowList.orEmpty(),
-                            selectedRoomList = initialAllowList.orEmpty().map { it.spaceID },
+                            updatedAllowList = initialAllowList.orEmpty().map {
+                                session.getRoomSummary(it.spaceID)?.toMatrixItem() ?: MatrixItem.RoomItem(it.spaceID, null, null)
+                            },
+//                            selectedRoomList = initialAllowList.orEmpty().map { it.spaceID },
                             possibleSpaceCandidate = possibleSpaceCandidate,
                             unknownRestricted = unknownAllowedOrRooms
                     )
                 }
             }
+        }
+    }
+
+    fun checkForChanges() = withState { state ->
+        if (state.initialRoomJoinRules != state.currentRoomJoinRules) {
+            setState {
+                copy(hasUnsavedChanges = true)
+            }
+            return@withState
+        }
+
+        if (state.currentRoomJoinRules == RoomJoinRules.RESTRICTED) {
+            val allowDidChange = state.initialAllowList.map { it.spaceID } != state.updatedAllowList.map { it.id }
+            setState {
+                copy(hasUnsavedChanges = allowDidChange)
+            }
+            return@withState
+        }
+
+        setState {
+            copy(hasUnsavedChanges = false)
         }
     }
 
@@ -145,35 +169,50 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
         when (action) {
             is RoomJoinRuleChooseRestrictedActions.FilterWith      -> handleFilter(action)
             is RoomJoinRuleChooseRestrictedActions.ToggleSelection -> handleToggleSelection(action)
+            is RoomJoinRuleChooseRestrictedActions.SelectJoinRules -> handleSelectRule(action)
         }.exhaustive
+        checkForChanges()
+    }
+
+    fun handleSelectRule(action: RoomJoinRuleChooseRestrictedActions.SelectJoinRules) = withState { state ->
+        setState {
+            copy(
+                    currentRoomJoinRules = action.rules
+            )
+        }
     }
 
     private fun handleToggleSelection(action: RoomJoinRuleChooseRestrictedActions.ToggleSelection) = withState { state ->
-        val selection = state.selectedRoomList.toMutableList()
-        if (selection.contains(action.matrixItem.id)) {
-            selection.remove(action.matrixItem.id)
+        val selection = state.updatedAllowList.toMutableList()
+        if (selection.indexOfFirst { action.matrixItem.id == it.id } != -1) {
+            selection.removeAll { it.id == action.matrixItem.id }
         } else {
-            selection.add(action.matrixItem.id)
+            selection.add(action.matrixItem)
         }
         val unknownAllowedOrRooms = mutableListOf<MatrixItem>()
 
         // we would like to keep initial allowed here to show them unchecked
         // to make it easier for users to spot the changes
-        state.initialAllowList.map { it.spaceID }.union(selection).sorted().forEach { entry ->
-            val summary = session.getRoomSummary(entry)
+        val union = mutableListOf<MatrixItem>().apply {
+            addAll(
+                    state.initialAllowList.map {
+                        session.getRoomSummary(it.spaceID)?.toMatrixItem() ?: MatrixItem.RoomItem(it.spaceID, null, null)
+                    }
+            )
+            addAll(selection)
+        }.distinctBy { it.id }.sortedBy { it.id }
+
+        union.forEach { entry ->
+            val summary = session.getRoomSummary(entry.id)
             if (summary == null) {
                 unknownAllowedOrRooms.add(
-                        MatrixItem.RoomItem(entry, null, null)
+                        entry
                 )
             } else if (summary.roomType != RoomType.SPACE) {
-                unknownAllowedOrRooms.add(
-                        summary.toMatrixItem()
-                )
-            } else if (!state.roomSummary.invoke()!!.flattenParentIds.contains(entry)) {
+                unknownAllowedOrRooms.add(entry)
+            } else if (!state.roomSummary.invoke()!!.flattenParentIds.contains(entry.id)) {
                 // it's a space but not a direct parent
-                unknownAllowedOrRooms.add(
-                        summary.toMatrixItem()
-                )
+                unknownAllowedOrRooms.add(entry)
             } else {
                 // nop
             }
@@ -181,7 +220,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    selectedRoomList = selection.toList(),
+                    updatedAllowList = selection.toList(),
                     unknownRestricted = unknownAllowedOrRooms
             )
         }

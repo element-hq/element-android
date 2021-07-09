@@ -39,14 +39,10 @@ import javax.inject.Inject
 
 class RoomJoinRuleChooseRestrictedFragment @Inject constructor(
         val controller: ChooseRestrictedController,
-       // val viewModelFactory: RoomJoinRuleChooseRestrictedViewModel.Factory,
         val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentSpaceRestrictedSelectBinding>(),
-        // RoomJoinRuleChooseRestrictedViewModel.Factory,
         ChooseRestrictedController.Listener,
         OnBackPressed {
-
-    // override fun create(initialState: RoomJoinRuleChooseRestrictedState) = viewModelFactory.create(initialState)
 
     private val viewModel: RoomJoinRuleChooseRestrictedViewModel by activityViewModel(RoomJoinRuleChooseRestrictedViewModel::class)
 
@@ -65,11 +61,7 @@ class RoomJoinRuleChooseRestrictedFragment @Inject constructor(
                 .disposeOnDestroyView()
 
         views.okButton.debouncedClicks {
-//            withState(viewModel) {
-//                // let's return the updated selection list
-//                setFragmentResult("SelectAllowList", bundleOf("bundleKey" to it.selectedRoomList))
-//                parentFragmentManager.popBackStack()
-//            }
+            parentFragmentManager.popBackStack()
         }
     }
 
