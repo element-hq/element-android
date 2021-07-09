@@ -69,7 +69,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private var lastX: Float = 0f
     private var lastY: Float = 0f
 
-    private var recordingTime: Int = 0
+    private var recordingTime: Int = -1
     private var amplitudeList = emptyList<Int>()
     private val recordingTimer = Timer()
     private var recordingTimerTask: TimerTask? = null
@@ -266,7 +266,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     private fun showRecordingTimer() {
-        val formattedTimerText = DateUtils.formatElapsedTime((recordingTime).toLong())
+        val formattedTimerText = DateUtils.formatElapsedTime(recordingTime.toLong())
         if (recordingState == RecordingState.LOCKED) {
             views.voicePlaybackTime.apply {
                 post {
@@ -294,7 +294,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     private fun stopRecordingTimer() {
         recordingTimerTask?.cancel()
-        recordingTime = 0
+        recordingTime = -1
     }
 
     private fun showRecordingViews() {
