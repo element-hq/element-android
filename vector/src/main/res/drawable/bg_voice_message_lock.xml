@@ -4,7 +4,7 @@
         android:width="56dp"
         android:height="160dp" />
 
-    <solid android:color="?vctr_voice_message_lock_background" />
+    <solid android:color="#F00" />
 
     <corners
         android:bottomLeftRadius="28dp"

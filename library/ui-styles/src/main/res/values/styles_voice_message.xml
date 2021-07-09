@@ -1,115 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="VoiceMessageLockBackground">
-        <item name="android:layout_width">52dp</item>
-        <item name="android:layout_height">160dp</item>
-        <item name="android:background">@drawable/bg_voice_message_lock</item>
-        <item name="android:backgroundTint">?vctr_voice_message_lock_background</item>
-    </style>
-
-    <style name="VoiceMessageMicButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">?android:attr/selectableItemBackground</item>
-        <item name="android:layout_marginBottom">12dp</item>
-        <item name="android:layout_marginEnd">12dp</item>
-        <item name="android:src">@drawable/ic_voice_mic</item>
-    </style>
-
-    <style name="VoiceMessageSendButton">
-        <item name="android:layout_width">56dp</item>
-        <item name="android:layout_height">56dp</item>
-        <item name="android:background">@drawable/bg_send</item>
-        <item name="android:scaleType">center</item>
-        <item name="android:src">@drawable/ic_send</item>
-    </style>
-
-    <style name="VoiceMessageTimerIndicator">
-        <item name="android:layout_width">10dp</item>
-        <item name="android:layout_height">10dp</item>
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:src">@drawable/circle</item>
-        <item name="tint">@color/palette_vermilion</item>
-    </style>
-
-    <style name="VoiceMessageTimer">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">4dp</item>
-        <item name="android:lineSpacingExtra">4dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/palette_gray_200</item>
-    </style>
-
-    <style name="VoiceMessageSlideToCancel">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/palette_gray_300</item>
-        <item name="android:textSize">14sp</item>
-        <item name="drawableStartCompat">@drawable/ic_voice_slide_to_cancel_arrow</item>
-    </style>
-
-    <style name="VoiceMessageLockImage">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:src">@drawable/ic_voice_message_unlocked</item>
-    </style>
-
-    <style name="VoiceMessageLockArrow">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:src">@drawable/ic_voice_lock_arrow</item>
-    </style>
-
-    <style name="VoiceMessageRecordingPlaybackLayout">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:background">@drawable/bg_voice_playback</item>
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:backgroundTint">?vctr_voice_message_recording_playback_background</item>
-    </style>
-
-    <style name="VoiceMessageDeletePlayback">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">?android:attr/selectableItemBackground</item>
-        <item name="android:src">@drawable/ic_recycle_bin</item>
-        <item name="tint">@color/palette_gray_200</item>
-    </style>
-
-    <style name="VoiceMessagePlaybackTimerIndicator">
-        <item name="android:layout_width">10dp</item>
-        <item name="android:layout_height">10dp</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:src">@drawable/circle</item>
-        <item name="layout_goneMarginStart">24dp</item>
-        <item name="tint">@color/palette_vermilion</item>
-    </style>
-
-    <style name="VoicePlaybackControlButton">
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
-        <item name="android:background">@drawable/bg_voice_play_pause_button</item>
-        <item name="android:paddingStart">3dp</item>
-        <item name="android:paddingEnd">0dp</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:src">@drawable/ic_voice_play</item>
-        <item name="android:backgroundTint">?vctr_voice_message_play_pause_button_background</item>
-    </style>
-
-    <style name="VoicePlaybackTime" parent="VoiceMessageTimer">
-        <item name="android:layout_marginStart">6dp</item>
-        <item name="layout_goneMarginStart">24dp</item>
-    </style>
-
     <style name="VoicePlaybackWaveform">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:layout_marginEnd">8dp</item>
         <item name="chunkColor">@color/palette_gray_300</item>
         <item name="chunkAlignTo">center</item>
         <item name="chunkMinHeight">1dp</item>
@@ -118,32 +10,6 @@
         <item name="chunkSpace">2dp</item>
         <item name="chunkWidth">2dp</item>
         <item name="direction">leftToRight</item>
-    </style>
-
-    <style name="VoiceTimelinePlaybackLayout">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/bg_voice_playback</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="android:paddingStart">8dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingEnd">8dp</item>
-        <item name="android:paddingBottom">6dp</item>
-        <item name="android:backgroundTint">?vctr_voice_message_playback_background</item>
-    </style>
-
-    <style name="VoiceTimelinePlaybackControlButton">
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
-        <item name="android:background">@drawable/bg_voice_play_pause_button</item>
-        <item name="android:paddingStart">3dp</item>
-        <item name="android:paddingEnd">0dp</item>
-        <item name="android:src">@drawable/ic_voice_play</item>
-        <item name="android:backgroundTint">?vctr_voice_message_play_pause_button_background</item>
-    </style>
-
-    <style name="VoiceTimelinePlaybackTime" parent="VoiceMessageTimer">
-        <item name="android:layout_marginStart">6dp</item>
     </style>
 
 </resources>
