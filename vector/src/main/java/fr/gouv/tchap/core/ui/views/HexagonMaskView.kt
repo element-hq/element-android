@@ -34,6 +34,7 @@ class HexagonMaskView @JvmOverloads constructor(
 
     private val hexagonPath = Path()
     private val borderPaint = Paint()
+    private val fillPaint = Paint()
 
     private val width
         get() = measuredWidth.toFloat()
@@ -58,8 +59,15 @@ class HexagonMaskView @JvmOverloads constructor(
             style = Paint.Style.STROKE
         }
 
+        fillPaint.apply {
+            isAntiAlias = true
+            style = Paint.Style.FILL
+
+        }
+
         context.withStyledAttributes(attrs, R.styleable.HexagonMaskView) {
             borderPaint.color = getColor(R.styleable.HexagonMaskView_borderColor, Color.LTGRAY)
+            fillPaint.color = getColor(R.styleable.HexagonMaskView_fillColor, Color.TRANSPARENT)
         }
     }
 
@@ -94,6 +102,10 @@ class HexagonMaskView @JvmOverloads constructor(
     public override fun onDraw(canvas: Canvas) {
         // Apply a clip to draw the bitmap inside an hexagon shape
         canvas.apply {
+
+            // Fill the hexagon
+            drawPath(hexagonPath, fillPaint)
+
             save()
 
             clipPath(hexagonPath)

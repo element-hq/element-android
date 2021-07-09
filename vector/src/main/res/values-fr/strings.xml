@@ -1432,7 +1432,7 @@
     <string name="fab_menu_create_chat">Nouveau message direct</string>
     <string name="create_room_title">Nouveau salon</string>
     <string name="create_room_action_create">CRÉER</string>
-    <string name="create_room_name_hint">Nom du salon</string>
+    <string name="create_room_name_hint">Nommer le salon</string>
     <string name="create_room_public_title">Public</string>
     <string name="create_room_public_description">Tout le monde pourra rejoindre ce salon</string>
     <string name="create_room_directory_title">Annuaire des salons</string>

@@ -29,6 +29,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.features.home.roomdirectory.createroom.TchapCreateRoomController
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
@@ -52,11 +53,11 @@ data class CreateRoomArgs(
 ) : Parcelable
 
 class CreateRoomFragment @Inject constructor(
-        private val createRoomController: CreateRoomController,
+        private val createRoomController: TchapCreateRoomController,
         val createRoomViewModelFactory: CreateRoomViewModel.Factory,
         colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentCreateRoomBinding>(),
-        CreateRoomController.Listener,
+        TchapCreateRoomController.Listener,
         GalleryOrCameraDialogHelper.Listener,
         OnBackPressed {
 

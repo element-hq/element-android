@@ -2,5 +2,6 @@
 <resources>
     <declare-styleable name="HexagonMaskView">
         <attr name="borderColor" format="color" />
+        <attr name="fillColor" format="color" />
     </declare-styleable>
 </resources>
