@@ -303,7 +303,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         duration = attachment.duration?.toInt(),
                         waveform = attachment.waveform
                 ),
-                voiceMessageIndicator = if (!isVoiceMessage) null else Any()
+                voiceMessageIndicator = if (!isVoiceMessage) null else emptyMap()
         )
         return createMessageEvent(roomId, content)
     }
