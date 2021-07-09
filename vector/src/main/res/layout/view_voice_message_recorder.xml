@@ -16,7 +16,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/voiceMessageMicButton"
-        tools:layout_constraintBottom_toBottomOf="parent"
+        tools:translationY="-148dp"
         tools:visibility="visible" />
 
     <ImageButton
@@ -42,6 +42,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_marginBottom="320dp"
         tools:visibility="visible" />
 
     <ImageView
@@ -75,14 +76,15 @@
 
     <TextView
         android:id="@+id/voiceMessageSlideToCancel"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/voice_message_slide_to_cancel"
-        android:textColor="@color/palette_gray_300"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:drawableStartCompat="@drawable/ic_voice_slide_to_cancel_arrow"
+        app:drawableTint="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="@id/voiceMessageMicButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -106,12 +108,13 @@
         android:id="@+id/voiceMessageLockArrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_voice_lock_arrow"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/voiceMessageMicButton"
         app:layout_constraintEnd_toEndOf="@id/voiceMessageLockBackground"
         app:layout_constraintStart_toStartOf="@id/voiceMessageLockBackground"
-        tools:ignore="ContentDescription"
+        app:tint="?vctr_content_secondary"
         tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
