@@ -22,80 +22,60 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.withStyledAttributes
+import im.vector.app.R
+import kotlin.math.min
 import kotlin.math.sqrt
 
-class HexagonMaskView : AppCompatImageView {
-    private var hexagonPath: Path? = null
-    private var width = 0f
-    private var height = 0f
-    private var borderPaint: Paint? = null
-    private var borderRatio = 0
+class HexagonMaskView @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet? = null
+) : AppCompatImageView(context, attrs) {
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
+    private val hexagonPath = Path()
+    private val borderPaint = Paint()
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        init()
-    }
-
-    constructor(
-            context: Context,
-            attrs: AttributeSet?,
-            defStyleAttr: Int
-    ) : super(context, attrs, defStyleAttr) {
-        init()
-    }
+    private val width
+        get() = measuredWidth.toFloat()
+    private val height
+        get() = measuredHeight.toFloat()
 
     /**
-     * Define the border settings
-     *
-     * @param color the border color (Color.LTGRAY by default).
-     * @param ratio the ratio of the border width to the radius
-     * of the hexagon (value between 0 and 100, default value: 1)
+     * The ratio of the border width to the radius of the hexagon (value between 0 and 100, default value: 3).
      */
-    fun setBorderSettings(color: Int, ratio: Int) {
-        borderPaint?.color = color
-
-        val finalRatio: Int = if (ratio >= 0) {
-            if (ratio > MAX_RATIO) MAX_RATIO else ratio
-        } else 0
-
-        if (borderRatio != ratio) {
-            borderRatio = finalRatio
-            // The hexagon path must be updated
-            calculatePath()
-        } else {
-            invalidate()
+    var borderRatio = DEFAULT_RATIO
+        set(value) {
+            val finalRatio = value.coerceIn(0, MAX_RATIO)
+            if (field != finalRatio) {
+                field = finalRatio
+                calculatePath()
+            }
         }
-    }
 
-    private fun init() {
-        hexagonPath = Path()
-        borderPaint = Paint()
-
-        borderPaint?.apply {
+    init {
+        borderPaint.apply {
             isAntiAlias = true
             style = Paint.Style.STROKE
-            color = Color.LTGRAY
         }
 
-        borderRatio = DEFAULT_RATIO
+        context.withStyledAttributes(attrs, R.styleable.HexagonMaskView) {
+            borderPaint.color = getColor(R.styleable.HexagonMaskView_borderColor, Color.LTGRAY)
+        }
     }
 
     private fun calculatePath() {
         // Compute the radius of the hexagon, and the border width
-        val radius = height / DEFAULT_DIVIDER
-        val borderWidth = radius * borderRatio / PCT_VALUE
-        borderPaint?.strokeWidth = borderWidth
+        val radius = min(width, height) / DEFAULT_DIVIDER
+        val borderWidth = radius * borderRatio / PERCENT_VALUE
+        borderPaint.strokeWidth = borderWidth
 
         // Define the hexagon path by placing it in the middle of the border.
         val pathRadius = radius - borderWidth / DEFAULT_DIVIDER
-        val triangleHeight = (sqrt(DEFAULT_DOUBLE_RADIUS) * pathRadius / DEFAULT_DIVIDER).toFloat()
+        val triangleHeight = (sqrt(borderRatio.toFloat()) * pathRadius / DEFAULT_DIVIDER)
         val centerX = width / DEFAULT_DIVIDER
         val centerY = height / DEFAULT_DIVIDER
 
-        hexagonPath?.apply {
+        hexagonPath.apply {
             reset()
             moveTo(centerX, centerY + pathRadius)
             lineTo(centerX - triangleHeight, centerY + pathRadius / DEFAULT_DIVIDER)
@@ -116,7 +96,7 @@ class HexagonMaskView : AppCompatImageView {
         canvas.apply {
             save()
 
-            hexagonPath?.let { clipPath(it) }
+            clipPath(hexagonPath)
 
             super.onDraw(this)
 
@@ -124,27 +104,20 @@ class HexagonMaskView : AppCompatImageView {
             restore()
 
             // Draw the border
-            hexagonPath?.let { hexPath ->
-                borderPaint?.let { border ->
-                    drawPath(hexPath, border)
-                }
-            }
+            drawPath(hexagonPath, borderPaint)
         }
     }
 
     // getting the view size
     public override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        width = this.measuredWidth.toFloat()
-        height = this.measuredHeight.toFloat()
         calculatePath()
     }
 
     companion object {
         private const val DEFAULT_DIVIDER = 2
-        private const val PCT_VALUE = 100
+        private const val PERCENT_VALUE = 100
         private const val MAX_RATIO = 100
         private const val DEFAULT_RATIO = 3
-        private const val DEFAULT_DOUBLE_RADIUS = DEFAULT_RATIO.toDouble()
     }
 }

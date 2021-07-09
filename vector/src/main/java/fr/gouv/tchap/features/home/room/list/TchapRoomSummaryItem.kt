@@ -122,12 +122,7 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
                 if (isDirect) {
                     holder.avatarImageView
                 } else {
-                    holder.avatarHexagonImageView.apply {
-                        setBorderSettings(
-                                ContextCompat.getColor(holder.view.context, R.color.element_room_01),
-                                1
-                        )
-                    }
+                    holder.avatarHexagonImageView
                 }
         )
     }
