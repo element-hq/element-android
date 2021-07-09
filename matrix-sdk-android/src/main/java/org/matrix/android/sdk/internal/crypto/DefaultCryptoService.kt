@@ -642,7 +642,6 @@ internal class DefaultCryptoService @Inject constructor(
      */
     @Throws(MXCryptoError::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-
         return runBlocking {
             olmMachine!!.decryptRoomEvent(event)
         }
