@@ -19,14 +19,13 @@ package im.vector.app.features.home.room.detail.composer
 import android.content.Context
 import android.text.format.DateUtils
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.MotionEvent
-import androidx.annotation.Px
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.hardware.vibrate
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -73,6 +72,8 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private var amplitudeList = emptyList<Int>()
     private val recordingTimer = Timer()
     private var recordingTimerTask: TimerTask? = null
+
+    private val dimensionConverter = DimensionConverter(context.resources)
 
     init {
         inflate(context, R.layout.view_voice_message_recorder, this)
@@ -301,10 +302,10 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic_recording)
         (views.voiceMessageMicButton.layoutParams as MarginLayoutParams).apply { setMargins(0, 0, 0, 0) }
         views.voiceMessageLockBackground.isVisible = true
-        views.voiceMessageLockBackground.animate().setDuration(300).translationY(-dpToPx(148)).start()
+        views.voiceMessageLockBackground.animate().setDuration(300).translationY(-dimensionConverter.dpToPx(148).toFloat()).start()
         views.voiceMessageLockImage.isVisible = true
         views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_unlocked)
-        views.voiceMessageLockImage.animate().setDuration(500).translationY(-dpToPx(148)).start()
+        views.voiceMessageLockImage.animate().setDuration(500).translationY(-dimensionConverter.dpToPx(148).toFloat()).start()
         views.voiceMessageLockArrow.isVisible = true
         views.voiceMessageSlideToCancel.isVisible = true
         views.voiceMessageTimerIndicator.isVisible = true
@@ -316,11 +317,13 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private fun hideRecordingViews(animationDuration: Int = 300) {
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic)
         views.voiceMessageMicButton.animate().translationX(0f).translationY(0f).setDuration(animationDuration.toLong()).setDuration(0).start()
-        (views.voiceMessageMicButton.layoutParams as MarginLayoutParams).apply { setMargins(0, 0, dpToPx(12).toInt(), dpToPx(12).toInt()) }
+        (views.voiceMessageMicButton.layoutParams as MarginLayoutParams).apply {
+            setMargins(0, 0, dimensionConverter.dpToPx(12), dimensionConverter.dpToPx(12))
+        }
         views.voiceMessageLockBackground.isVisible = false
-        views.voiceMessageLockBackground.animate().translationY(dpToPx(0)).start()
+        views.voiceMessageLockBackground.animate().translationY(0f).start()
         views.voiceMessageLockImage.isVisible = false
-        views.voiceMessageLockImage.animate().translationY(dpToPx(0)).start()
+        views.voiceMessageLockImage.animate().translationY(0f).start()
         views.voiceMessageLockArrow.isVisible = false
         views.voiceMessageLockArrow.animate().translationY(0f).start()
         views.voiceMessageSlideToCancel.isVisible = false
@@ -343,15 +346,6 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessagePlaybackTimerIndicator.isVisible = false
         views.voicePlaybackControlButton.isVisible = true
         callback?.onVoiceRecordingPlaybackModeOn()
-    }
-
-    @Px
-    private fun dpToPx(dp: Int): Float {
-        return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp.toFloat(),
-                resources.displayMetrics
-        )
     }
 
     private enum class RecordingState {
