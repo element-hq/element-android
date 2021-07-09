@@ -42,7 +42,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_marginBottom="320dp"
+        tools:layout_marginBottom="180dp"
         tools:visibility="visible" />
 
     <ImageView
@@ -210,5 +210,18 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/voiceMessageToast"
+        style="@style/Widget.Vector.TextView.Caption.Toast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="84dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/voice_message_release_to_send_toast"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

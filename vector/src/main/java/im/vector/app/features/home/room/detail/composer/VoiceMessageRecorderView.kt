@@ -21,19 +21,15 @@ import android.text.format.DateUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.Px
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import com.visualizer.amplitude.AudioRecordView
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.hardware.vibrate
-import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
@@ -50,7 +46,8 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr), VoiceMessagePlaybackTracker.Listener {
 
     interface Callback {
-        fun onVoiceRecordingStarted()
+        // Return true if the recording is started
+        fun onVoiceRecordingStarted(): Boolean
         fun onVoiceRecordingEnded(isCancelled: Boolean)
         fun onVoiceRecordingPlaybackModeOn()
         fun onVoicePlaybackButtonClicked()
@@ -122,7 +119,10 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             return@setOnTouchListener when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     startRecordingTimer()
-                    callback?.onVoiceRecordingStarted()
+                    val recordingStarted = callback?.onVoiceRecordingStarted().orFalse()
+                    if (recordingStarted) {
+                        renderToast(context.getString(R.string.voice_message_release_to_send_toast))
+                    }
                     recordingState = RecordingState.STARTED
                     showRecordingViews()
 
@@ -245,13 +245,24 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                     }
                 } else if (timeDiffToRecordingLimit in 10000..10999) {
                     views.voiceMessageRecordingLayout.post {
-                        context.toast(context.getString(R.string.voice_message_n_seconds_warning_toast, floor(timeDiffToRecordingLimit / 1000f).toInt()))
+                        renderToast(context.getString(R.string.voice_message_n_seconds_warning_toast, floor(timeDiffToRecordingLimit / 1000f).toInt()))
                         vibrate(context)
                     }
                 }
             }
         }
         recordingTimer.scheduleAtFixedRate(recordingTimerTask, 0, 1000)
+    }
+
+    private fun renderToast(message: String) {
+        views.voiceMessageToast.removeCallbacks(hideToastRunnable)
+        views.voiceMessageToast.text = message
+        views.voiceMessageToast.isVisible = true
+        views.voiceMessageToast.postDelayed(hideToastRunnable, 2_000)
+    }
+
+    private val hideToastRunnable = Runnable {
+        views.voiceMessageToast.isVisible = false
     }
 
     private fun showRecordingTimer() {
@@ -325,7 +336,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessagePlaybackTimerIndicator.isVisible = true
         views.voicePlaybackControlButton.isVisible = false
         views.voiceMessageSendButton.isVisible = true
-        context.toast(R.string.voice_message_tap_to_stop_toast)
+        renderToast(context.getString(R.string.voice_message_tap_to_stop_toast))
     }
 
     private fun showPlaybackViews() {
@@ -355,15 +366,15 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
         when (state) {
-            is VoiceMessagePlaybackTracker.Listener.State.Recording    -> {
+            is VoiceMessagePlaybackTracker.Listener.State.Recording -> {
                 this.amplitudeList = state.amplitudeList
             }
-            is VoiceMessagePlaybackTracker.Listener.State.Playing  -> {
+            is VoiceMessagePlaybackTracker.Listener.State.Playing   -> {
                 views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
                 val formattedTimerText = DateUtils.formatElapsedTime((state.playbackTime / 1000).toLong())
                 views.voicePlaybackTime.setText(formattedTimerText)
             }
-            is VoiceMessagePlaybackTracker.Listener.State.Idle -> {
+            is VoiceMessagePlaybackTracker.Listener.State.Idle      -> {
                 views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
             }
         }

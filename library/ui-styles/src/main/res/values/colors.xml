@@ -144,4 +144,8 @@
     <color name="vctr_voice_message_recording_playback_background_light">#FFE3E8F0</color>
     <color name="vctr_voice_message_recording_playback_background_dark">#FF394049</color>
 
+    <attr name="vctr_voice_message_toast_background" format="color" />
+    <color name="vctr_voice_message_toast_background_light">@color/palette_black_900</color>
+    <color name="vctr_voice_message_toast_background_dark">@color/palette_gray_450</color>
+
 </resources>

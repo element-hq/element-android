@@ -595,12 +595,14 @@ class RoomDetailFragment @Inject constructor(
         views.voiceMessageRecorderView.voiceMessagePlaybackTracker = voiceMessagePlaybackTracker
 
         views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
-            override fun onVoiceRecordingStarted() {
-                if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, requireActivity(), 0)) {
+            override fun onVoiceRecordingStarted(): Boolean {
+                return if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, requireActivity(), 0)) {
                     views.composerLayout.isInvisible = true
                     roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
-                    context?.toast(R.string.voice_message_release_to_send_toast)
                     vibrate(requireContext())
+                    true
+                } else {
+                    false
                 }
             }
 
