@@ -290,7 +290,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     private fun createAudioEvent(roomId: String, attachment: ContentAttachmentData): Event {
-        val isVoiceMessage = attachment.mimeType == "audio/ogg"
+        val isVoiceMessage = attachment.waveform != null
         val content = MessageAudioContent(
                 msgType = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
