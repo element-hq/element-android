@@ -6,14 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/Vector.ActionBarTheme.TchapLogin"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/tchap_connection_title" />
+        app:textAllCaps="false">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/groupToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/tchap_connection_title"
+            tools:navigationIcon="@drawable/ic_back_24dp" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tchap_login_email_layout"
@@ -23,11 +30,9 @@
         android:layout_marginTop="16dp"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
-        android:textColorHint="@color/tchap_text_color_light"
-        app:hintTextAppearance="@style/TchapTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tchap_login_email"
@@ -35,7 +40,6 @@
             android:layout_height="wrap_content"
             android:hint="@string/tchap_connection_email"
             android:inputType="textEmailAddress"
-            android:textColor="@color/tchap_text_color_light"
             android:textSize="16sp"
             tools:text="manu@gouv.fr" />
 
@@ -49,8 +53,6 @@
         android:layout_marginTop="32dp"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
-        android:textColorHint="@color/tchap_text_color_light"
-        app:hintTextAppearance="@style/TchapTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tchap_login_email_layout">
@@ -62,7 +64,6 @@
             android:hint="@string/tchap_connection_password"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
-            android:textColor="@color/tchap_text_color_light"
             android:textSize="16sp"
             tools:text="password" />
 
@@ -76,9 +77,7 @@
         android:fontFamily="sans-serif"
         android:padding="8dp"
         android:text="@string/tchap_connection_forgotten_email"
-        android:textColor="@color/tchap_text_color_light"
         android:textSize="13.5sp"
-        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tchap_login_password_layout" />

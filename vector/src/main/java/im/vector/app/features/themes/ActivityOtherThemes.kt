@@ -45,14 +45,4 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
             R.style.Theme_Vector_Black_Transparent,
             R.style.Theme_Vector_Black_Transparent
     )
-
-    object LightVariant1 : ActivityOtherThemes(
-            R.style.AppTheme_Light_Variant1,
-            R.style.AppTheme_Light_Variant1
-    )
-
-    object LightVariant2 : ActivityOtherThemes(
-            R.style.AppTheme_Light_Variant2,
-            R.style.AppTheme_Light_Variant2
-    )
 }

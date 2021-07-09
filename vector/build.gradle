@@ -117,6 +117,7 @@ android {
 
         renderscriptTargetApi 24
         renderscriptSupportModeEnabled true
+        vectorDrawables.useSupportLibrary = true
 
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
         // Other branches (main, features, etc.) will have version code based on application version.

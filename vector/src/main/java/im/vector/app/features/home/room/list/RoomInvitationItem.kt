@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import fr.gouv.tchap.core.ui.views.HexagonMaskView
@@ -32,7 +33,6 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.invite.InviteButtonStateBinder
-import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -71,7 +71,7 @@ abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(
                 } else {
                     holder.avatarHexagonImageView.apply {
                         setBorderSettings(
-                                ThemeUtils.getColor(holder.view.context, R.attr.avatar_border_color),
+                                ContextCompat.getColor(holder.view.context, R.color.element_room_01),
                                 1
                         )
                     }

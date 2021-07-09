@@ -47,5 +47,5 @@ data class HomeDetailViewState(
 sealed class HomeTab(@StringRes val titleRes: Int) {
     data class RoomList(val displayMode: RoomListDisplayMode) : HomeTab(displayMode.titleRes)
     object DialPad : HomeTab(R.string.call_dial_pad_title)
-    object ContactList : HomeTab(R.string.invite_users_to_room_title)
+    object ContactList : HomeTab(R.string.direct_room_user_list_contacts_title)
 }

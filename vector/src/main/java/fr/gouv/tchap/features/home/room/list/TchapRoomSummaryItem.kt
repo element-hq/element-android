@@ -124,7 +124,7 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
                 } else {
                     holder.avatarHexagonImageView.apply {
                         setBorderSettings(
-                                ThemeUtils.getColor(holder.view.context, R.attr.avatar_border_color),
+                                ContextCompat.getColor(holder.view.context, R.color.element_room_01),
                                 1
                         )
                     }
@@ -139,25 +139,25 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
             when (roomType) {
                 TchapRoomType.DIRECT   -> {
                     text = TchapUtils.getDomainFromDisplayName(matrixItem.getBestName())
-                    setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.secondary_text_color))
+                    setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary))
                     resource = R.drawable.ic_tchap_room_lock_grey
                     visibility = View.VISIBLE
                 }
                 TchapRoomType.PRIVATE  -> {
                     text = holder.view.context.getString(R.string.tchap_room_private_room_type)
-                    setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_coral))
+                    setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_private))
                     resource = R.drawable.ic_tchap_room_lock_red
                     visibility = View.VISIBLE
                 }
                 TchapRoomType.EXTERNAL -> {
                     text = holder.view.context.getString(R.string.tchap_room_extern_room_type)
-                    setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_pumpkin_orange))
+                    setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_external))
                     resource = R.drawable.ic_tchap_room_lock_orange
                     visibility = View.VISIBLE
                 }
                 TchapRoomType.FORUM    -> {
                     text = holder.view.context.getString(R.string.tchap_room_forum_type)
-                    setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_jade_green))
+                    setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_forum))
                     resource = R.drawable.ic_tchap_forum
                     visibility = View.VISIBLE
                 }

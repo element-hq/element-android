@@ -5,5 +5,5 @@
 
     <corners android:radius="40dp" />
 
-    <solid android:color="?warn_text_color" />
+    <solid android:color="?colorError" />
 </shape>

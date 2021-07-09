@@ -107,7 +107,6 @@
             android:name="fr.gouv.tchap.features.login.TchapLoginActivity"
             android:launchMode="singleTask"
             android:enabled="@bool/useLoginV1"
-            android:theme="@style/AppTheme.Light.Variant2"
             android:windowSoftInputMode="adjustResize">
             <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
             <!--<intent-filter>

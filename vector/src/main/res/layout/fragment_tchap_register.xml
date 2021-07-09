@@ -10,7 +10,6 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:theme="@style/Vector.ActionBarTheme.TchapLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/tchap_register_title" />
@@ -23,8 +22,6 @@
         android:layout_marginTop="16dp"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
-        android:textColorHint="@color/tchap_text_color_light"
-        app:hintTextAppearance="@style/TchapTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
@@ -35,7 +32,6 @@
             android:layout_height="wrap_content"
             android:hint="@string/tchap_connection_email"
             android:inputType="textEmailAddress"
-            android:textColor="@color/tchap_text_color_light"
             android:textSize="16sp"
             tools:text="manu@gouv.fr" />
 
@@ -66,8 +62,6 @@
         android:layout_marginTop="16dp"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
-        android:textColorHint="@color/tchap_text_color_light"
-        app:hintTextAppearance="@style/TchapTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tchap_register_email_help">
@@ -78,7 +72,6 @@
             android:layout_height="wrap_content"
             android:hint="@string/tchap_connection_password"
             android:inputType="textPassword"
-            android:textColor="@color/tchap_text_color_light"
             android:textSize="16sp"
             tools:text="password" />
 
@@ -109,8 +102,6 @@
         android:layout_marginTop="16dp"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
-        android:textColorHint="@color/tchap_text_color_light"
-        app:hintTextAppearance="@style/TchapTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tchap_register_password_help">
@@ -122,7 +113,6 @@
             android:hint="@string/tchap_connection_password_confirm"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
-            android:textColor="@color/tchap_text_color_light"
             android:textSize="16sp"
             tools:text="password" />
 

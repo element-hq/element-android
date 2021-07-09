@@ -38,7 +38,7 @@
 
                 <TextView
                     android:id="@+id/userListTitle"
-                    style="@style/Widget.Vector.TextView.HeadlineMedium"
+                    style="@style/TextAppearance.Tchap.Toolbar.Title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -46,8 +46,6 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@string/fab_menu_create_chat"
-                    android:textColor="?vctr_content_primary"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"

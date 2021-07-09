@@ -45,6 +45,7 @@
     </style>
 
     <style name="Widget.Vector.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">?colorPrimaryVariant</item>
         <item name="colorControlHighlight">?colorSecondary</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
         <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>

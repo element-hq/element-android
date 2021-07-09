@@ -19,7 +19,6 @@ package fr.gouv.tchap.features.login
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
-import androidx.appcompat.app.AlertDialog
 import androidx.transition.TransitionInflater
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.activityViewModel
@@ -130,7 +129,7 @@ abstract class TchapAbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<
         return when {
             displayCancelDialog && isResetPasswordStarted               -> {
                 // Ask for confirmation before cancelling the reset password
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.login_reset_password_cancel_confirmation_title)
                         .setMessage(R.string.login_reset_password_cancel_confirmation_content)
                         .setPositiveButton(R.string.yes) { _, _ ->

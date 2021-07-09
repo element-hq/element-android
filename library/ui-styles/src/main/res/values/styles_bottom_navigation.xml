@@ -6,7 +6,8 @@
         <item name="itemBackground">@drawable/bg_bottom_navigation</item>
         <item name="itemIconSize">20dp</item>
         <item name="itemIconTint">@color/bottom_navigation_icon_tint_selector</item>
-        <item name="labelVisibilityMode">unlabeled</item>
+        <item name="itemTextColor">@color/bottom_navigation_icon_tint_selector</item>
+        <item name="labelVisibilityMode">labeled</item>
     </style>
 
 </resources>

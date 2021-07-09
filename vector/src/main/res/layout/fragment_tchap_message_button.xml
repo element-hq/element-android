@@ -22,12 +22,13 @@
 
     <Button
         android:id="@+id/fragment_tchap_message_button_submit"
-        style="@style/TchapLoginButtonStyle"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        tools:text="@string/auth_reset_password_next_step_button"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_tchap_message_button_notice" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_tchap_message_button_notice"
+        tools:text="@string/auth_reset_password_next_step_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

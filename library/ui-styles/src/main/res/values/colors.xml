@@ -43,6 +43,9 @@
     <!-- Used for toolbar background -->
     <attr name="vctr_toolbar_background" format="color" />
 
+    <!-- Used for appbar background -->
+    <attr name="tchap_bottom_navigation_background" format="color" />
+
     <!-- Used for header background -->
     <attr name="vctr_header_background" format="color" />
 

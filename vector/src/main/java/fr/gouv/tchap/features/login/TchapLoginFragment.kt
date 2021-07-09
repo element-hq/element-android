@@ -59,8 +59,8 @@ class TchapLoginFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(views.toolbar)
-        views.toolbar.setTitle(R.string.tchap_connection_title)
+        setupToolbar(views.groupToolbar)
+        views.groupToolbar.setTitle(R.string.tchap_connection_title)
 
         viewModel.observeViewEvents {
             when (it) {

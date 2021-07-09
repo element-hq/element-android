@@ -21,8 +21,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.fragmentViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import fr.gouv.tchap.core.utils.TchapUtils
 import fr.gouv.tchap.features.login.TchapAbstractLoginFragment
@@ -89,7 +89,7 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
                     if (emailStage != null) {
                         loginViewModel.handle(TchapLoginAction.AddThreePid(RegisterThreePid.Email(login)))
                     } else {
-                        AlertDialog.Builder(requireActivity())
+                        MaterialAlertDialogBuilder(requireActivity())
                                 .setTitle(R.string.dialog_title_error)
                                 .setMessage(R.string.login_error_unable_register)
                                 .setPositiveButton(R.string.ok, null)
@@ -150,7 +150,7 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
 
     private fun updateHomeServer(platform: Platform) {
         if (TchapUtils.isExternalTchapServer(platform.hs)) {
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.tchap_register_warning_for_external_title)
                     .setCancelable(false)
                     .setMessage(R.string.tchap_register_warning_for_external)
