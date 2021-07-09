@@ -406,6 +406,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             // we need also to filter DMs...
             // it's more annoying as based on if the other members belong the space or not
+            /*
             RoomSummaryEntity.where(realm)
                     .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
                     .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
@@ -430,6 +431,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                         }
 //                        Timber.v("## SPACES: flatten of ${dmRoom.otherMemberIds.joinToString(",")} is ${dmRoom.flattenParentIds}")
                     }
+             */
 
             // Maybe a good place to count the number of notifications for spaces?
 
