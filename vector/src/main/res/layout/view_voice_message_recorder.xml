@@ -49,7 +49,7 @@
         app:layout_constraintBottom_toBottomOf="@id/voiceMessageMicButton"
         app:layout_constraintStart_toEndOf="@id/voiceMessageTimerIndicator"
         app:layout_constraintTop_toTopOf="@id/voiceMessageMicButton"
-        tools:text="00:03"
+        tools:text="0:03"
         tools:visibility="visible" />
 
     <TextView
@@ -94,6 +94,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/voiceMessageMicButton"
         app:layout_constraintStart_toStartOf="parent"
+        tools:layout_marginBottom="120dp"
         tools:visibility="visible">
 
         <ImageButton

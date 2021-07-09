@@ -99,7 +99,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             callback?.onVoiceRecordingEnded(isCancelled = false)
         }
 
-        views.voiceMessagePlaybackLayout.findViewById<ImageButton>(R.id.voiceMessageDeletePlayback).setOnClickListener {
+        views.voiceMessageDeletePlayback.setOnClickListener {
             stopRecordingTimer()
             hideRecordingViews(animationDuration = 0)
             views.voiceMessageSendButton.isVisible = false
@@ -107,14 +107,14 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             callback?.onVoiceRecordingEnded(isCancelled = true)
         }
 
-        views.voiceMessagePlaybackLayout.findViewById<AudioRecordView>(R.id.voicePlaybackWaveform).setOnClickListener {
+        views.voicePlaybackWaveform.setOnClickListener {
             if (recordingState !== RecordingState.PLAYBACK) {
                 recordingState = RecordingState.PLAYBACK
                 showPlaybackViews()
             }
         }
 
-        views.voiceMessagePlaybackLayout.findViewById<ImageButton>(R.id.voicePlaybackControlButton).setOnClickListener {
+        views.voicePlaybackControlButton.setOnClickListener {
             callback?.onVoicePlaybackButtonClicked()
         }
 
@@ -257,7 +257,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private fun showRecordingTimer() {
         val formattedTimerText = DateUtils.formatElapsedTime((recordingTime).toLong())
         if (recordingState == RecordingState.LOCKED) {
-            views.voiceMessagePlaybackLayout.findViewById<TextView>(R.id.voicePlaybackTime).apply {
+            views.voicePlaybackTime.apply {
                 post {
                     text = formattedTimerText
                 }
@@ -270,7 +270,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     private fun showRecordingWaveform() {
-        val audioRecordView = views.voiceMessagePlaybackLayout.findViewById<AudioRecordView>(R.id.voicePlaybackWaveform)
+        val audioRecordView = views.voicePlaybackWaveform
         audioRecordView.apply {
             post {
                 recreate()
@@ -302,7 +302,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessageSendButton.isVisible = false
     }
 
-    fun hideRecordingViews(animationDuration: Int = 300) {
+    private fun hideRecordingViews(animationDuration: Int = 300) {
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic)
         views.voiceMessageMicButton.animate().translationX(0f).translationY(0f).setDuration(animationDuration.toLong()).setDuration(0).start()
         (views.voiceMessageMicButton.layoutParams as MarginLayoutParams).apply { setMargins(0, 0, dpToPx(12).toInt(), dpToPx(12).toInt()) }
@@ -322,15 +322,15 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private fun showRecordingLockedViews() {
         hideRecordingViews(animationDuration = 0)
         views.voiceMessagePlaybackLayout.isVisible = true
-        views.voiceMessagePlaybackLayout.findViewById<ImageView>(R.id.voiceMessagePlaybackTimerIndicator).isVisible = true
-        views.voiceMessagePlaybackLayout.findViewById<ImageView>(R.id.voicePlaybackControlButton).isVisible = false
+        views.voiceMessagePlaybackTimerIndicator.isVisible = true
+        views.voicePlaybackControlButton.isVisible = false
         views.voiceMessageSendButton.isVisible = true
         context.toast(R.string.voice_message_tap_to_stop_toast)
     }
 
     private fun showPlaybackViews() {
-        views.voiceMessagePlaybackLayout.findViewById<ImageView>(R.id.voiceMessagePlaybackTimerIndicator).isVisible = false
-        views.voiceMessagePlaybackLayout.findViewById<ImageView>(R.id.voicePlaybackControlButton).isVisible = true
+        views.voiceMessagePlaybackTimerIndicator.isVisible = false
+        views.voicePlaybackControlButton.isVisible = true
         callback?.onVoiceRecordingPlaybackModeOn()
     }
 
@@ -343,7 +343,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         )
     }
 
-    enum class RecordingState {
+    private enum class RecordingState {
         NONE,
         STARTED,
         CANCELLING,
@@ -359,15 +359,12 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 this.amplitudeList = state.amplitudeList
             }
             is VoiceMessagePlaybackTracker.Listener.State.Playing  -> {
-                views.voiceMessagePlaybackLayout.findViewById<ImageButton>(R.id.voicePlaybackControlButton)
-                        .setImageResource(R.drawable.ic_voice_pause)
+                views.voicePlaybackControlButton.setImageResource(R.drawable.ic_voice_pause)
                 val formattedTimerText = DateUtils.formatElapsedTime((state.playbackTime / 1000).toLong())
-                views.voiceMessagePlaybackLayout.findViewById<TextView>(R.id.voicePlaybackTime)
-                        .setText(formattedTimerText)
+                views.voicePlaybackTime.setText(formattedTimerText)
             }
             is VoiceMessagePlaybackTracker.Listener.State.Idle -> {
-                views.voiceMessagePlaybackLayout.findViewById<ImageButton>(R.id.voicePlaybackControlButton)
-                        .setImageResource(R.drawable.ic_voice_play)
+                views.voicePlaybackControlButton.setImageResource(R.drawable.ic_voice_play)
             }
         }
     }
