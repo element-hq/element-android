@@ -26,6 +26,7 @@ import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedState
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
+import timber.log.Timber
 import javax.inject.Inject
 
 class RoomJoinRuleAdvancedController @Inject constructor(
@@ -76,12 +77,13 @@ class RoomJoinRuleAdvancedController @Inject constructor(
 
         if (choices.firstOrNull { it.rule == RoomJoinRules.RESTRICTED } != null) {
             val restrictedRule = choices.first { it.rule == RoomJoinRules.RESTRICTED }
+            Timber.w("##@@ ${state.updatedAllowList}")
             spaceJoinRuleItem {
                 id("restricted")
                 avatarRenderer(host.avatarRenderer)
                 needUpgrade(restrictedRule.needUpgrade)
                 selected(state.currentRoomJoinRules == RoomJoinRules.RESTRICTED)
-                restrictedList(state.updatedAllowList.orEmpty())
+                restrictedList(state.updatedAllowList)
                 listener { host.interactionListener?.didSelectRule(RoomJoinRules.RESTRICTED) }
             }
         }

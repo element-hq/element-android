@@ -18,11 +18,20 @@ package im.vector.app.features.roomprofile.settings.joinrule
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import androidx.core.view.isVisible
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.viewModel
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedState
@@ -39,6 +48,11 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
     @Inject
     lateinit var allowListViewModelFactory: RoomJoinRuleChooseRestrictedViewModel.Factory
 
+    @Inject
+    lateinit var errorFormatter: ErrorFormatter
+
+    val viewModel: RoomJoinRuleChooseRestrictedViewModel by viewModel()
+
     override fun create(initialState: RoomJoinRuleChooseRestrictedState) = allowListViewModelFactory.create(initialState)
 
     override fun injectWith(injector: ScreenComponent) {
@@ -53,6 +67,27 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
                     RoomJoinRuleFragment::class.java,
                     roomProfileArgs
             )
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.selectSubscribe(this, RoomJoinRuleChooseRestrictedState::updatingStatus) {
+            when (it) {
+                Uninitialized -> {
+                    // nop
+                }
+                is Loading    -> {
+                    views.simpleActivityWaitingView.isVisible = true
+                }
+                is Success    -> {
+                    finish()
+                }
+                is Fail       -> {
+                    views.simpleActivityWaitingView.isVisible = false
+                    toast(errorFormatter.toHumanReadable(it.error))
+                }
+            }
         }
     }
 

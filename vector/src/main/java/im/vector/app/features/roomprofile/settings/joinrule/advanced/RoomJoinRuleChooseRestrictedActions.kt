@@ -24,4 +24,5 @@ sealed class RoomJoinRuleChooseRestrictedActions : VectorViewModelAction {
     data class FilterWith(val filter: String) : RoomJoinRuleChooseRestrictedActions()
     data class ToggleSelection(val matrixItem: MatrixItem) : RoomJoinRuleChooseRestrictedActions()
     data class SelectJoinRules(val rules: RoomJoinRules) : RoomJoinRuleChooseRestrictedActions()
+    object DoUpdateJoinRules : RoomJoinRuleChooseRestrictedActions()
 }

@@ -74,6 +74,7 @@ abstract class SpaceJoinRuleItem : VectorEpoxyModel<SpaceJoinRuleItem.Holder>() 
             holder.listTitle.isVisible = true
             restrictedList.forEachIndexed { index, matrixItem ->
                 if (index < items.size) {
+                    items[index].isVisible = true
                     avatarRenderer.render(matrixItem, items[index])
                 } else if (index == items.size) {
                     holder.spaceMore.isVisible = true

@@ -18,6 +18,7 @@ package im.vector.app.features.roomprofile.settings.joinrule.advanced
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -60,10 +61,6 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
                         ?.content
                         ?.toModel<RoomJoinRulesContent>()
                 val initialAllowList = joinRulesContent?.allowList
-
-//                val others = session.spaceService().getSpaceSummaries(spaceSummaryQueryParams {
-//                    memberships = listOf(Membership.JOIN)
-//                }).map { it.toMatrixItem() }
 
                 val knownParentSpacesAllowed = mutableListOf<MatrixItem>()
                 val unknownAllowedOrRooms = mutableListOf<MatrixItem>()
@@ -130,7 +127,6 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
                             updatedAllowList = initialAllowList.orEmpty().map {
                                 session.getRoomSummary(it.spaceID)?.toMatrixItem() ?: MatrixItem.RoomItem(it.spaceID, null, null)
                             },
-//                            selectedRoomList = initialAllowList.orEmpty().map { it.spaceID },
                             possibleSpaceCandidate = possibleSpaceCandidate,
                             unknownRestricted = unknownAllowedOrRooms
                     )
@@ -170,11 +166,50 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
             is RoomJoinRuleChooseRestrictedActions.FilterWith      -> handleFilter(action)
             is RoomJoinRuleChooseRestrictedActions.ToggleSelection -> handleToggleSelection(action)
             is RoomJoinRuleChooseRestrictedActions.SelectJoinRules -> handleSelectRule(action)
+            RoomJoinRuleChooseRestrictedActions.DoUpdateJoinRules  -> handleSubmit()
         }.exhaustive
         checkForChanges()
     }
 
+    fun handleSubmit() = withState { state ->
+        setState { copy(updatingStatus = Loading()) }
+        viewModelScope.launch {
+            try {
+                when (state.currentRoomJoinRules) {
+                    RoomJoinRules.PUBLIC     -> room.setJoinRulePublic()
+                    RoomJoinRules.INVITE     -> room.setJoinRuleInviteOnly()
+                    RoomJoinRules.RESTRICTED -> room.setJoinRuleRestricted(state.updatedAllowList.map { it.id })
+                    RoomJoinRules.KNOCK,
+                    RoomJoinRules.PRIVATE,
+                    null                     -> {
+                        throw UnsupportedOperationException()
+                    }
+                }
+                setState { copy(updatingStatus = Success(Unit)) }
+            } catch (failure: Throwable) {
+                setState { copy(updatingStatus = Fail(failure)) }
+            }
+        }
+    }
+
     fun handleSelectRule(action: RoomJoinRuleChooseRestrictedActions.SelectJoinRules) = withState { state ->
+        if (action.rules == RoomJoinRules.RESTRICTED && state.currentRoomJoinRules != RoomJoinRules.RESTRICTED) {
+            // switching to restricted
+            // if allow list is empty, then default to current space parents
+            if (state.updatedAllowList.isEmpty()) {
+                val candidates = session.getRoomSummary(initialState.roomId)
+                        ?.flattenParentIds
+                        ?.filter {
+                            session.getRoomSummary(it)?.spaceChildren?.firstOrNull { it.childRoomId == initialState.roomId } != null
+                        }?.mapNotNull {
+                            session.getRoomSummary(it)?.toMatrixItem()
+                        }.orEmpty()
+                setState {
+                    copy(updatedAllowList = candidates)
+                }
+            }
+        }
+
         setState {
             copy(
                     currentRoomJoinRules = action.rules

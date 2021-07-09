@@ -21,8 +21,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.commitTransaction
@@ -48,10 +50,20 @@ class RoomJoinRuleFragment @Inject constructor(
             FragmentJoinRulesRecyclerBinding.inflate(inflater, container, false)
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        // TODO
         val hasUnsavedChanges = withState(viewModel) { it.hasUnsavedChanges }
-        if (!hasUnsavedChanges) {
+        val isLoading = withState(viewModel) { it.updatingStatus is Loading }
+        if (!hasUnsavedChanges || isLoading) {
             requireActivity().finish()
+        } else {
+            MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.dialog_title_warning)
+                    .setMessage(R.string.warning_unsaved_change)
+                    .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
+                        requireActivity().finish()
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+            return true
         }
         return true
     }
@@ -65,6 +77,9 @@ class RoomJoinRuleFragment @Inject constructor(
             views.positiveButton.text = getString(R.string.warning_unsaved_change_discard)
             views.positiveButton.isVisible = true
             views.positiveButton.text = getString(R.string.save)
+            views.positiveButton.debouncedClicks {
+                viewModel.handle(RoomJoinRuleChooseRestrictedActions.DoUpdateJoinRules)
+            }
         } else {
             views.cancelButton.isVisible = false
             views.positiveButton.isVisible = true
@@ -86,6 +101,9 @@ class RoomJoinRuleFragment @Inject constructor(
     }
 
     override fun didSelectRule(rules: RoomJoinRules) {
+        val isLoading = withState(viewModel) { it.updatingStatus is Loading }
+        if (isLoading) return
+
         val oldRule = withState(viewModel) { it.currentRoomJoinRules }
         viewModel.handle(RoomJoinRuleChooseRestrictedActions.SelectJoinRules(rules))
         if (rules == RoomJoinRules.RESTRICTED && oldRule == RoomJoinRules.RESTRICTED) {
