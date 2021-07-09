@@ -1,0 +1,1 @@
+Remove redundant mimetype (vector-im/element-web#2547)

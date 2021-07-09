@@ -312,23 +312,31 @@ object CommandParser {
                         )
                     }
                 }
-                Command.ADD_TO_SPACE.command        -> {
+                Command.ADD_TO_SPACE.command           -> {
                     val rawCommand = textMessage.substring(Command.ADD_TO_SPACE.command.length).trim()
                     ParsedCommand.AddToSpace(
                             rawCommand
                     )
                 }
-                Command.JOIN_SPACE.command        -> {
+                Command.JOIN_SPACE.command             -> {
                     val spaceIdOrAlias = textMessage.substring(Command.JOIN_SPACE.command.length).trim()
                     ParsedCommand.JoinSpace(
                             spaceIdOrAlias
                     )
                 }
-                Command.LEAVE_ROOM.command        -> {
+                Command.LEAVE_ROOM.command             -> {
                     val spaceIdOrAlias = textMessage.substring(Command.LEAVE_ROOM.command.length).trim()
                     ParsedCommand.LeaveRoom(
                             spaceIdOrAlias
                     )
+                }
+                Command.UPGRADE_ROOM.command           -> {
+                    val newVersion = textMessage.substring(Command.UPGRADE_ROOM.command.length).trim()
+                    if (newVersion.isEmpty()) {
+                        ParsedCommand.ErrorSyntax(Command.UPGRADE_ROOM)
+                    } else {
+                        ParsedCommand.UpgradeRoom(newVersion)
+                    }
                 }
                 else                                   -> {
                     // Unknown command

@@ -50,6 +50,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,11 +60,7 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -148,6 +145,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
+import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
@@ -181,7 +179,6 @@ import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -308,6 +305,15 @@ class RoomDetailFragment @Inject constructor(
 
     private lateinit var emojiPopup: EmojiPopup
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY) { _, bundle ->
+            bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
+                roomDetailViewModel.handle(RoomDetailAction.RoomUpgradeSuccess(replacementRoomId))
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
@@ -354,10 +360,6 @@ class RoomDetailFragment @Inject constructor(
                     knownCallsViewHolder.updateCall(callManager.getCurrentCall(), it)
                     invalidateOptionsMenu()
                 })
-
-        roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
-            renderTombstoneEventHandling(it)
-        }
 
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::canShowJumpToReadMarker, RoomDetailViewState::unreadState) { _, _ ->
             updateJumpToReadMarkerViewVisibility()
@@ -412,6 +414,8 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.StartChatEffect                  -> handleChatEffect(it.type)
                 RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
+                RoomDetailViewEvents.RoomReplacementStarted              -> handleRoomReplacement()
+                is RoomDetailViewEvents.ShowRoomUpgradeDialog            -> handleShowRoomUpgradeDialog(it)
             }.exhaustive
         }
 
@@ -428,6 +432,19 @@ class RoomDetailFragment @Inject constructor(
                 mode = VectorCallActivity.INCOMING_ACCEPT
         )
         startActivity(intent)
+    }
+
+    private fun handleRoomReplacement() {
+        // this will join a new room, it can take time and might fail
+        // so we need to report progress and retry
+        val tag = JoinReplacementRoomBottomSheet::javaClass.name
+        JoinReplacementRoomBottomSheet().show(childFragmentManager, tag)
+    }
+
+    private fun handleShowRoomUpgradeDialog(roomDetailViewEvents: RoomDetailViewEvents.ShowRoomUpgradeDialog) {
+        val tag = MigrateRoomBottomSheet::javaClass.name
+        MigrateRoomBottomSheet.newInstance(roomDetailArgs.roomId, roomDetailViewEvents.newVersion)
+                .show(parentFragmentManager, tag)
     }
 
     private fun handleChatEffect(chatEffect: ChatEffect) {
@@ -479,6 +496,9 @@ class RoomDetailFragment @Inject constructor(
 
     private fun handleOpenRoom(openRoom: RoomDetailViewEvents.OpenRoom) {
         navigator.openRoom(requireContext(), openRoom.roomId, null)
+        if (openRoom.closeCurrentRoom) {
+            requireActivity().finish()
+        }
     }
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
@@ -813,8 +833,8 @@ class RoomDetailFragment @Inject constructor(
 
     private fun setupNotificationView() {
         views.notificationAreaView.delegate = object : NotificationAreaView.Delegate {
-            override fun onTombstoneEventClicked(tombstoneEvent: Event) {
-                roomDetailViewModel.handle(RoomDetailAction.HandleTombstoneEvent(tombstoneEvent))
+            override fun onTombstoneEventClicked() {
+                roomDetailViewModel.handle(RoomDetailAction.JoinAndOpenReplacementRoom)
             }
         }
     }
@@ -1004,6 +1024,8 @@ class RoomDetailFragment @Inject constructor(
                 insertUserDisplayNameInTextEditor(roomDetailPendingAction.userId)
             is RoomDetailPendingAction.OpenOrCreateDm    ->
                 roomDetailViewModel.handle(RoomDetailAction.OpenOrCreateDm(roomDetailPendingAction.userId))
+            is RoomDetailPendingAction.OpenRoom          ->
+                handleOpenRoom(RoomDetailViewEvents.OpenRoom(roomDetailPendingAction.roomId, roomDetailPendingAction.closeCurrentRoom))
         }.exhaustive
     }
 
@@ -1361,23 +1383,6 @@ class RoomDetailFragment @Inject constructor(
             } else {
                 setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 setTypeface(null, Typeface.BOLD)
-            }
-        }
-    }
-
-    private fun renderTombstoneEventHandling(async: Async<String>) {
-        when (async) {
-            is Loading -> {
-                // TODO Better handling progress
-                vectorBaseActivity.showWaitingView(getString(R.string.joining_room))
-            }
-            is Success -> {
-                navigator.openRoom(vectorBaseActivity, async())
-                vectorBaseActivity.finish()
-            }
-            is Fail    -> {
-                vectorBaseActivity.hideWaitingView()
-                vectorBaseActivity.toast(errorFormatter.toHumanReadable(async.error))
             }
         }
     }

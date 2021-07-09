@@ -2753,4 +2753,9 @@
     <string name="directory_add_a_new_server_prompt">輸入您想要探索的新伺服器名稱。</string>
     <string name="directory_add_a_new_server">加入新的伺服器</string>
     <string name="directory_your_server">您的伺服器</string>
+    <string name="teammate_spaces_might_not_join">目前，人們可能無法加入您開啟的任何私人聊天室。
+\n
+\n作為測試版的一部分，我們會對此進行改善，但想先讓您知道。</string>
+    <string name="teammate_spaces_arent_quite_ready">隊友空間還沒有完全準備好，但您仍可以試試看</string>
+    <string name="continue_anyway">無論如何都要繼續</string>
 </resources>

@@ -2811,4 +2811,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="directory_add_a_new_server_prompt">Add meg a felfedezni kívánt új szerver nevét.</string>
     <string name="directory_add_a_new_server">Új szerver hozzáadása</string>
     <string name="directory_your_server">Matrix szervered</string>
+    <string name="teammate_spaces_might_not_join">Az emberek jelen pillanatban nem fognak tudni csatlakozni egyetlen olyan privát szobához sem amit készítettél.
+\n
+\nEzt folyamatosan fejlesztjük a béta program keretében, csak szerettünk volna tájékoztatni róla.</string>
+    <string name="teammate_spaces_arent_quite_ready">A csoporttárs terek még nem igazán vannak készen de már tehetsz velük egy próbát</string>
+    <string name="continue_anyway">Mindenképpen folytatás</string>
 </resources>

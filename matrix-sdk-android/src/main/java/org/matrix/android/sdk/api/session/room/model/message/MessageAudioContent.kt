@@ -65,5 +65,5 @@ data class MessageAudioContent(
 ) : MessageWithAttachmentContent {
 
     override val mimeType: String?
-        get() = encryptedFileInfo?.mimetype ?: audioInfo?.mimeType
+        get() = audioInfo?.mimeType
 }

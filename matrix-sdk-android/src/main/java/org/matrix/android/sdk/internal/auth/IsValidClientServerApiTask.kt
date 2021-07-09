@@ -42,7 +42,7 @@ internal class DefaultIsValidClientServerApiTask @Inject constructor(
 
     override suspend fun execute(params: IsValidClientServerApiTask.Params): Boolean {
         val client = buildClient(params.homeServerConnectionConfig)
-        val homeServerUrl = params.homeServerConnectionConfig.homeServerUri.toString()
+        val homeServerUrl = params.homeServerConnectionConfig.homeServerUriBase.toString()
 
         val authAPI = retrofitFactory.create(client, homeServerUrl)
                 .create(AuthAPI::class.java)

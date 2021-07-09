@@ -16,17 +16,19 @@
 
 package org.matrix.android.sdk.internal.auth.db
 
-import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.api.auth.data.sessionId
-import org.matrix.android.sdk.internal.di.MoshiProvider
+import android.net.Uri
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
+import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
+import org.matrix.android.sdk.api.auth.data.sessionId
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
 
 internal object AuthRealmMigration : RealmMigration {
 
     // Current schema version
-    const val SCHEMA_VERSION = 3L
+    const val SCHEMA_VERSION = 4L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.d("Migrating Auth Realm from $oldVersion to $newVersion")
@@ -34,6 +36,7 @@ internal object AuthRealmMigration : RealmMigration {
         if (oldVersion <= 0) migrateTo1(realm)
         if (oldVersion <= 1) migrateTo2(realm)
         if (oldVersion <= 2) migrateTo3(realm)
+        if (oldVersion <= 3) migrateTo4(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -80,5 +83,35 @@ internal object AuthRealmMigration : RealmMigration {
                     it.set(SessionParamsEntityFields.SESSION_ID, credentials!!.sessionId())
                 }
                 ?.addPrimaryKey(SessionParamsEntityFields.SESSION_ID)
+    }
+
+    private fun migrateTo4(realm: DynamicRealm) {
+        Timber.d("Step 3 -> 4")
+        Timber.d("Update SessionParamsEntity to add HomeServerConnectionConfig.homeServerUriBase value")
+
+        val adapter = MoshiProvider.providesMoshi()
+                .adapter(HomeServerConnectionConfig::class.java)
+
+        realm.schema.get("SessionParamsEntity")
+                ?.transform {
+                    val homeserverConnectionConfigJson = it.getString(SessionParamsEntityFields.HOME_SERVER_CONNECTION_CONFIG_JSON)
+
+                    val homeserverConnectionConfig = adapter
+                            .fromJson(homeserverConnectionConfigJson)
+
+                    val homeserverUrl = homeserverConnectionConfig?.homeServerUri?.toString()
+                    // Special case for matrix.org. Old session may use "https://matrix.org", newer one may use
+                    // "https://matrix-client.matrix.org". So fix that here
+                    val alteredHomeserverConnectionConfig =
+                            if (homeserverUrl == "https://matrix.org" || homeserverUrl == "https://matrix-client.matrix.org") {
+                                homeserverConnectionConfig.copy(
+                                        homeServerUri = Uri.parse("https://matrix.org"),
+                                        homeServerUriBase = Uri.parse("https://matrix-client.matrix.org")
+                                )
+                            } else {
+                                homeserverConnectionConfig
+                            }
+                    it.set(SessionParamsEntityFields.HOME_SERVER_CONNECTION_CONFIG_JSON, adapter.toJson(alteredHomeserverConnectionConfig))
+                }
     }
 }
