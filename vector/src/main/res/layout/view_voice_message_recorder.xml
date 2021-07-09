@@ -174,13 +174,12 @@
                 android:background="@drawable/bg_voice_play_pause_button"
                 android:backgroundTint="?vctr_voice_message_play_pause_button_background"
                 android:contentDescription="@string/a11y_play_voice_message"
-                android:paddingStart="3dp"
-                android:paddingEnd="0dp"
-                android:src="@drawable/ic_voice_play"
+                android:src="@drawable/ic_play_pause_play"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?vctr_content_secondary" />
 
             <TextView
                 android:id="@+id/voicePlaybackTime"

@@ -92,7 +92,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     }
 
     private fun handleIdleState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Idle) {
-        holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_voice_play)
+        holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
         if (state.playbackTime > 0) {
             holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
         } else {
@@ -101,7 +101,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     }
 
     private fun handlePlayingState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
-        holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_voice_pause)
+        holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
         if (state.playbackTime > 0) {
             holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
         } else {

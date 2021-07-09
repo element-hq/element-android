@@ -359,12 +359,12 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 this.amplitudeList = state.amplitudeList
             }
             is VoiceMessagePlaybackTracker.Listener.State.Playing  -> {
-                views.voicePlaybackControlButton.setImageResource(R.drawable.ic_voice_pause)
+                views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
                 val formattedTimerText = DateUtils.formatElapsedTime((state.playbackTime / 1000).toLong())
                 views.voicePlaybackTime.setText(formattedTimerText)
             }
             is VoiceMessagePlaybackTracker.Listener.State.Idle -> {
-                views.voicePlaybackControlButton.setImageResource(R.drawable.ic_voice_play)
+                views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
             }
         }
     }
