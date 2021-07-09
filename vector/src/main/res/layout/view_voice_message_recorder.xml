@@ -121,7 +121,6 @@
         android:id="@+id/voiceMessagePlaybackLayout"
         android:layout_width="0dp"
         android:layout_height="44dp"
-        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp"
         android:visibility="gone"
@@ -133,8 +132,8 @@
 
         <ImageButton
             android:id="@+id/voiceMessageDeletePlayback"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/layout_touch_size"
+            android:layout_height="0dp"
             android:background="?android:attr/selectableItemBackground"
             android:contentDescription="@string/a11y_delete_recorded_voice_message"
             android:src="@drawable/ic_recycle_bin"
@@ -147,7 +146,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
             android:background="@drawable/bg_voice_playback"
             android:backgroundTint="?vctr_voice_message_recording_playback_background"
             app:layout_constraintBottom_toBottomOf="parent"
