@@ -73,7 +73,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                 }
                 epoxyModel.getEventIds().forEach { eventId ->
                     adapterPositionMapping[eventId] = index
-                    appendReadMarker = epoxyModel.canAppendReadMarker() && eventId == firstUnreadEventId && atLeastOneVisibleItemsBeforeReadMarker
+                    appendReadMarker = appendReadMarker || (epoxyModel.canAppendReadMarker() && eventId == firstUnreadEventId && atLeastOneVisibleItemsBeforeReadMarker)
                 }
             }
             if (epoxyModel is DaySeparatorItem) {
