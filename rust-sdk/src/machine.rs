@@ -4,7 +4,7 @@ use std::{
     io::Cursor,
 };
 
-use base64::encode;
+use base64::{decode_config, encode, STANDARD_NO_PAD};
 use js_int::UInt;
 use ruma::{
     api::{
@@ -30,8 +30,8 @@ use tokio::runtime::Runtime;
 
 use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
 use matrix_sdk_crypto::{
-    decrypt_key_export, encrypt_key_export, EncryptionSettings, LocalTrust,
-    OlmMachine as InnerMachine, QrVerification as InnerQr, Sas as InnerSas,
+    decrypt_key_export, encrypt_key_export, matrix_qrcode::QrVerificationData, EncryptionSettings,
+    LocalTrust, OlmMachine as InnerMachine, QrVerification as InnerQr, Sas as InnerSas,
     Verification as RustVerification, VerificationRequest as InnerVerificationRequest,
 };
 
@@ -80,6 +80,7 @@ pub struct QrCode {
     pub we_started: bool,
     pub other_side_scanned: bool,
     pub has_been_confirmed: bool,
+    pub reciprocated: bool,
     pub cancel_code: Option<String>,
     pub cancelled_by_us: Option<bool>,
 }
@@ -93,6 +94,7 @@ impl From<InnerQr> for QrCode {
             is_done: qr.is_done(),
             cancel_code: qr.cancel_code().map(|c| c.to_string()),
             cancelled_by_us: qr.cancelled_by_us(),
+            reciprocated: qr.reciprocated(),
             we_started: qr.we_started(),
             other_side_scanned: qr.has_been_scanned(),
             has_been_confirmed: qr.has_been_confirmed(),
@@ -104,6 +106,11 @@ impl From<InnerQr> for QrCode {
 
 pub struct StartSasResult {
     pub sas: Sas,
+    pub request: OutgoingVerificationRequest,
+}
+
+pub struct ScanResult {
+    pub qr: QrCode,
     pub request: OutgoingVerificationRequest,
 }
 
@@ -756,6 +763,32 @@ impl OlmMachine {
                 v.qr_v1()
                     .and_then(|qr| qr.to_bytes().map(|b| encode(b)).ok())
             })
+    }
+
+    pub fn scan_qr_code(&self, user_id: &str, flow_id: &str, data: &str) -> Option<ScanResult> {
+        let user_id = UserId::try_from(user_id).ok()?;
+        // TODO create a custom error type
+        let data = decode_config(data, STANDARD_NO_PAD).ok()?;
+        let data = QrVerificationData::from_bytes(data).ok()?;
+
+        if let Some(verification) = self.inner.get_verification_request(&user_id, flow_id) {
+            if let Some(qr) = self
+                .runtime
+                .block_on(verification.scan_qr_code(data))
+                .ok()?
+            {
+                let request = qr.reciprocate()?;
+
+                Some(ScanResult {
+                    qr: qr.into(),
+                    request: request.into(),
+                })
+            } else {
+                None
+            }
+        } else {
+            None
+        }
     }
 
     pub fn request_verification(

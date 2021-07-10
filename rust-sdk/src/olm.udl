@@ -87,12 +87,19 @@ dictionary Sas {
     boolean supports_emoji;
 };
 
+dictionary ScanResult {
+    QrCode qr;
+    OutgoingVerificationRequest request;
+};
+
+
 dictionary QrCode {
     string other_user_id;
     string other_device_id;
     string flow_id;
     string? cancel_code;
     string? room_id;
+    boolean reciprocated;
     boolean we_started;
     boolean has_been_confirmed;
     boolean? cancelled_by_us;
@@ -232,6 +239,7 @@ interface OlmMachine {
     OutgoingVerificationRequest? accept_sas_verification([ByRef] string user_id, [ByRef] string flow_id);
     [Throws=CryptoStoreError]
     QrCode? start_qr_verification([ByRef] string user_id, [ByRef] string flow_id);
+    ScanResult? scan_qr_code([ByRef] string user_id, [ByRef] string flow_id, [ByRef] string data);
     string? generate_qr_code([ByRef] string user_id, [ByRef] string flow_id);
 
     sequence<i32>? get_emoji_index([ByRef] string user_id, [ByRef] string flow_id);

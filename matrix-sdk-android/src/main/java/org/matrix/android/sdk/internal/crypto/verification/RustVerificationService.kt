@@ -219,14 +219,26 @@ internal class RustVerificationService(
             otherUserId: String,
             tid: String,
     ): VerificationTransaction? {
-        val verification = this.olmMachine.getVerification(otherUserId, tid) ?: return null
-
-        return when (verification) {
+        return when (val verification = this.olmMachine.getVerification(otherUserId, tid)) {
             is Verification.QrCodeV1 -> {
-                QrCodeVerification(this.olmMachine.inner(), verification.qrcode, this.requestSender, this.listeners)
+                val request = getVerificationRequest(otherUserId, tid) ?: return null
+                QrCodeVerification(this.olmMachine.inner(), request, verification.qrcode, this.requestSender, this.listeners)
             }
             is Verification.SasV1    -> {
                 SasVerification(this.olmMachine.inner(), verification.sas, this.requestSender, this.listeners)
+            }
+            null -> {
+                // This branch exists because scanning a QR code is tied to the QrCodeVerification,
+                // i.e. instead of branching into a scanned QR code verification from the verification request,
+                // like it's done for SAS verifications, the public API expects us to create an empty dummy
+                // QrCodeVerification object that gets populated once a QR code is scanned.
+                val request = getVerificationRequest(otherUserId, tid) ?: return null
+
+                if (request.canScanQrCodes()) {
+                    QrCodeVerification(this.olmMachine.inner(), request, null, this.requestSender, this.listeners)
+                } else {
+                    null
+                }
             }
         }
     }

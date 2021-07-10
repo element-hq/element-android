@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto
 
 import android.os.Handler
 import android.os.Looper
+import com.sun.jna.Native.toByteArray
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
@@ -27,6 +28,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationI
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
+import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
@@ -76,9 +78,40 @@ internal class VerificationRequest(
         return this.inner.isDone
     }
 
+    fun flowId(): String {
+        return this.inner.flowId
+    }
+
+    fun otherUser(): String {
+        return this.inner.otherUserId
+    }
+
+    fun otherDeviceId(): String? {
+        refreshData()
+        return this.inner.otherDeviceId
+    }
+
+    fun weStarted(): Boolean {
+        return this.inner.weStarted
+    }
+
+    fun roomId(): String? {
+        return this.inner.roomId
+    }
+
     fun isReady(): Boolean {
         refreshData()
         return this.inner.isReady
+    }
+
+    internal suspend fun scanQrCode(data: String): QrCodeVerification? {
+        // TODO again, what's the deal with ISO_8859_1?
+        val byteArray = data.toByteArray(Charsets.ISO_8859_1)
+        val encodedData = byteArray.toBase64NoPadding()
+        val result = this.machine.scanQrCode(this.otherUser(), this.flowId(), encodedData) ?: return null
+
+        this.sender.sendVerificationRequest(result.request)
+        return QrCodeVerification(this.machine, this, result.qr, this.sender, this.listeners)
     }
 
     internal fun startQrVerification(): QrCodeVerification? {
@@ -87,6 +120,7 @@ internal class VerificationRequest(
         return if (qrcode != null) {
             QrCodeVerification(
                     this.machine,
+                    this,
                     qrcode,
                     this.sender,
                     this.listeners,
@@ -123,6 +157,11 @@ internal class VerificationRequest(
             this.sender.sendVerificationRequest(request)
             this.dispatchRequestUpdated()
         }
+    }
+
+    fun canScanQrCodes(): Boolean {
+        refreshData()
+        return this.inner.ourMethods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN) ?: false
     }
 
     suspend fun startSasVerification(): SasVerification? {

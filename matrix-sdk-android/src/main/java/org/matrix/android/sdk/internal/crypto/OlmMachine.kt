@@ -160,7 +160,8 @@ internal class Device(
 
 internal class QrCodeVerification(
         private val machine: uniffi.olm.OlmMachine,
-        private var inner: QrCode,
+        private var request: org.matrix.android.sdk.internal.crypto.VerificationRequest,
+        private var inner: QrCode?,
         private val sender: RequestSender,
         private val listeners: ArrayList<VerificationService.Listener>,
 ) : QrCodeVerificationTransaction {
@@ -180,14 +181,17 @@ internal class QrCodeVerification(
 
     override val qrCodeText: String?
         get() {
-            val data = this.machine.generateQrCode(this.inner.otherUserId, this.inner.flowId)
+            val data = this.inner?.let { this.machine.generateQrCode(it.otherUserId, it.flowId) }
 
             // TODO Why are we encoding this to ISO_8859_1? If we're going to encode, why not base64?
             return data?.fromBase64()?.toString(Charsets.ISO_8859_1)
         }
 
     override fun userHasScannedOtherQrCode(otherQrCodeText: String) {
-        TODO("Not yet implemented")
+        runBlocking {
+            request.scanQrCode(otherQrCodeText)
+        }
+        dispatchTxUpdated()
     }
 
     override fun otherUserScannedMyQrCode() {
@@ -203,37 +207,43 @@ internal class QrCodeVerification(
     override var state: VerificationTxState
         get() {
             refreshData()
+            val inner = this.inner
 
-            return when {
-                inner.isDone           -> VerificationTxState.Verified
-                inner.hasBeenConfirmed -> VerificationTxState.WaitingOtherReciprocateConfirm
-                inner.otherSideScanned -> VerificationTxState.QrScannedByOther
-                inner.isCancelled      -> {
-                    val cancelCode = safeValueOf(inner.cancelCode)
-                    val byMe = inner.cancelledByUs ?: false
-                    VerificationTxState.Cancelled(cancelCode, byMe)
+            return if (inner != null) {
+                when {
+                    inner.isDone           -> VerificationTxState.Verified
+                    inner.reciprocated     -> VerificationTxState.Started
+                    inner.hasBeenConfirmed -> VerificationTxState.WaitingOtherReciprocateConfirm
+                    inner.otherSideScanned -> VerificationTxState.QrScannedByOther
+                    inner.isCancelled      -> {
+                        val cancelCode = safeValueOf(inner.cancelCode)
+                        val byMe = inner.cancelledByUs ?: false
+                        VerificationTxState.Cancelled(cancelCode, byMe)
+                    }
+                    else                   -> {
+                        VerificationTxState.None
+                    }
                 }
-                else                   -> {
-                    VerificationTxState.None
-                }
+            } else {
+                VerificationTxState.None
             }
         }
         @Suppress("UNUSED_PARAMETER")
         set(value) {}
 
     override val transactionId: String
-        get() = this.inner.flowId
+        get() = this.request.flowId()
 
     override val otherUserId: String
-        get() = this.inner.otherUserId
+        get() = this.request.otherUser()
 
     override var otherDeviceId: String?
-        get() = this.inner.otherDeviceId
+        get() = this.request.otherDeviceId()
         @Suppress("UNUSED_PARAMETER")
         set(value) {}
 
     override val isIncoming: Boolean
-        get() = !this.inner.weStarted
+        get() = !this.request.weStarted()
 
     override fun cancel() {
         cancelHelper(CancelCode.User)
@@ -244,13 +254,13 @@ internal class QrCodeVerification(
     }
 
     override fun isToDeviceTransport(): Boolean {
-        return this.inner.roomId == null
+        return this.request.roomId() == null
     }
 
     @Throws(CryptoStoreErrorException::class)
     suspend fun confirm(): OutgoingVerificationRequest? =
             withContext(Dispatchers.IO) {
-                machine.confirmVerification(inner.otherUserId, inner.flowId)
+                machine.confirmVerification(request.otherUser(), request.flowId())
             }
 
     private fun sendRequest(request: OutgoingVerificationRequest) {
@@ -268,7 +278,7 @@ internal class QrCodeVerification(
     }
 
     private fun cancelHelper(code: CancelCode) {
-        val request = this.machine.cancelVerification(this.inner.otherUserId, inner.flowId, code.value)
+        val request = this.machine.cancelVerification(this.request.otherUser(), this.request.flowId(), code.value)
 
         if (request != null) {
             sendRequest(request)
@@ -276,11 +286,12 @@ internal class QrCodeVerification(
     }
 
     private fun refreshData() {
-        when (val verification = this.machine.getVerification(this.inner.otherUserId, this.inner.flowId)) {
-            is Verification.QrCodeV1    -> {
+        when (val verification = this.machine.getVerification(this.request.otherUser(), this.request.flowId())) {
+            is Verification.QrCodeV1 -> {
                 this.inner = verification.qrcode
             }
-            else                     -> {}
+            else                     -> {
+            }
         }
 
         return
