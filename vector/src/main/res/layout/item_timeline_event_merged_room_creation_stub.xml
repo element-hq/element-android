@@ -157,6 +157,7 @@
         <TextView
             android:id="@+id/itemNoticeTextView"
             style="@style/Widget.Vector.TextView.Body"
+            android:textDirection="locale"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

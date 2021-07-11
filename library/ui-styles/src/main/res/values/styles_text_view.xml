@@ -13,6 +13,7 @@
         <!--
         <item name="lineHeight">32sp</item>
         -->
+        <item name="android:textDirection">locale</item>
     </style>
 
     <style name="Widget.Vector.TextView.Title.Medium">
@@ -21,10 +22,12 @@
 
     <style name="Widget.Vector.TextView.HeadlineMedium">
         <item name="android:textAppearance">@style/TextAppearance.Vector.Headline.Medium</item>
+        <item name="android:textDirection">locale</item>
     </style>
 
     <style name="Widget.Vector.TextView.Subtitle">
         <item name="android:textAppearance">@style/TextAppearance.Vector.Subtitle</item>
+        <item name="android:textDirection">locale</item>
     </style>
 
     <style name="Widget.Vector.TextView.Subtitle.Medium">
