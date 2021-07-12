@@ -65,7 +65,7 @@ class ScanUserCodeFragment @Inject constructor()
         }
     }
 
-    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted, _ ->
         if (allGranted) {
             startCamera()
         } else {

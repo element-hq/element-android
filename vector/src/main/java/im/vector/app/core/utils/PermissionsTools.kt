@@ -26,6 +26,7 @@ import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
@@ -78,9 +79,22 @@ fun ComponentActivity.registerForPermissionsResult(lambda: (allGranted: Boolean,
     }
 }
 
-fun Fragment.registerForPermissionsResult(allGranted: (Boolean) -> Unit): ActivityResultLauncher<Array<String>> {
+fun Fragment.registerForPermissionsResult(lambda: (allGranted: Boolean, deniedPermanently: Boolean) -> Unit): ActivityResultLauncher<Array<String>> {
     return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-        allGranted.invoke(result.keys.all { result[it] == true })
+        if (result.keys.all { result[it] == true }) {
+            lambda(true, /* not used */ false)
+        } else {
+            if (permissionDialogDisplayed) {
+                // A permission dialog has been displayed, so even if the user has checked the do not ask again button, we do
+                // not tell the user to open the app settings
+                lambda(false, false)
+            } else {
+                // No dialog has been displayed, so tell the user to go to the system setting
+                lambda(false, true)
+            }
+        }
+        // Reset
+        permissionDialogDisplayed = false
     }
 }
 
@@ -162,4 +176,15 @@ fun VectorBaseActivity<*>.onPermissionDeniedSnackbar(@StringRes rationaleMessage
     showSnackbar(getString(rationaleMessage), R.string.settings) {
         openAppSettingsPage(this)
     }
+}
+
+fun FragmentActivity.onPermissionDeniedDialog(@StringRes rationaleMessage: Int) {
+    MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.missing_permissions_title)
+            .setMessage(rationaleMessage)
+            .setPositiveButton(R.string.open_settings) { _, _ ->
+                openAppSettingsPage(this)
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
 }

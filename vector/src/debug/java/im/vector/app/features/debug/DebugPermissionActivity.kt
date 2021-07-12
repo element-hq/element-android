@@ -26,6 +26,8 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_ALL
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
+import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.ActivityDebugPermissionBinding
 import timber.log.Timber
@@ -33,6 +35,8 @@ import timber.log.Timber
 class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBinding>() {
 
     override fun getBinding() = ActivityDebugPermissionBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     private var lastPermissions = emptyList<String>()
 
@@ -67,12 +71,19 @@ class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBindin
         }
     }
 
+    private var dialogOrSnackbar = false
+
     private val launcher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             Toast.makeText(this, "All granted", Toast.LENGTH_SHORT).show()
         } else {
             if (deniedPermanently) {
-                Toast.makeText(this, "Denied forever", Toast.LENGTH_SHORT).show()
+                dialogOrSnackbar = !dialogOrSnackbar
+                if (dialogOrSnackbar) {
+                    onPermissionDeniedDialog(R.string.denied_permission_camera)
+                } else {
+                    onPermissionDeniedSnackbar(R.string.denied_permission_camera)
+                }
             } else {
                 Toast.makeText(this, "Denied", Toast.LENGTH_SHORT).show()
             }
