@@ -56,6 +56,7 @@
 
     <!-- tchap discussion -->
     <string name="tchap_cannot_invite_deactivated_account_user">The remote user left definitely this room</string>
+    <string name="tchap_contact_external">External</string>
 
     <!-- tchap room -->
     <string name="tchap_room_private_room_type">Private</string>

@@ -54,6 +54,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userListFilterDivider"
-        tools:listitem="@layout/item_known_user" />
+        tools:listitem="@layout/item_tchap_known_user" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

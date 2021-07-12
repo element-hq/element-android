@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <FrameLayout
+        android:id="@+id/knownUserAvatarContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/knownUserAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/avatar"
+            tools:src="@sample/user_round_avatars" />
+
+        <ImageView
+            android:id="@+id/knownUserAvatarChecked"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/a11y_checked"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_material_done"
+            app:tint="@android:color/white"
+            tools:ignore="MissingPrefix" />
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/knownUserStatus"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:contentDescription="@string/room_status_online"
+        android:src="@drawable/ic_room_status_online"
+        android:visibility="gone"
+        app:layout_constraintCircle="@id/knownUserAvatarContainer"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/knownUserName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?vctr_content_primary"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/knownUserDomain"
+        app:layout_constraintStart_toEndOf="@id/knownUserAvatarContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@sample/tchap_users.json/data/displayName" />
+
+    <TextView
+        android:id="@+id/knownUserDomain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="?vctr_content_secondary"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@sample/tchap_users.json/data/domain" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

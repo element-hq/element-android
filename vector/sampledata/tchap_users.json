@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "displayName": "amandine",
+      "id": "@amandine:matrix.org",
+      "domain": "Matrix"
+    },
+    {
+      "displayName": "benoit",
+      "id": "@benoit:matrix.org",
+      "domain": "Matrix"
+    },
+    {
+      "displayName": "gaelle",
+      "id": "@gawa:matrix.org",
+      "domain": "Matrix"
+    },
+    {
+      "displayName": "Manu",
+      "id": "@manu:matrix.org",
+      "domain": "Matrix"
+    },
+    {
+      "displayName": "Matthew",
+      "id": "@matthew:matrix.org",
+      "domain": "Matrix"
+    },
+    {
+      "displayName": "Nad",
+      "id": "@nadonomy:matrix.org",
+      "domain": "Matrix"
+    }
+  ]
+}

@@ -23,6 +23,7 @@ Improvements 🙌:
  - Be able to select the best direct chat related to a user id #88
  - [Home screen] cancel the search when the user selects an item from the search result #107
  - Implement the users/info endpoint to get users status #87
+ - Design Tchap contact cells #98
 
 
 =======================================================

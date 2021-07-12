@@ -128,14 +128,6 @@ class HomeDetailFragment @Inject constructor(
         }
     }
 
-//    override fun onPrepareOptionsMenu(menu: Menu) {
-//        withState(viewModel) { state ->
-//            menu.iterator().forEach { it.isVisible = state.currentTab is HomeTab.RoomList }
-//        }
-//        menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = hasUnreadRooms
-//        super.onPrepareOptionsMenu(menu)
-//    }
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
     }
@@ -477,6 +469,7 @@ class HomeDetailFragment @Inject constructor(
                 R.id.bottom_action_notification -> HomeTab.RoomList(RoomListDisplayMode.NOTIFICATIONS)
                 else                            -> HomeTab.DialPad
             }
+            closeSearchView()
             viewModel.handle(HomeDetailAction.SwitchTab(tab))
             true
         }
