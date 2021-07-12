@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,43 +14,39 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.preference
+package im.vector.app.features.settings
 
-import android.content.Context
-import android.util.AttributeSet
-import android.view.View
-import android.widget.RadioGroup
-import androidx.preference.PreferenceViewHolder
-import im.vector.app.R
+import androidx.lifecycle.lifecycleScope
+import androidx.preference.Preference
+import im.vector.app.core.preference.VectorCheckboxPreference
+import im.vector.app.core.utils.toast
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
 
-class PushRulePreference : VectorPreference {
+abstract class VectorSettingsPushRuleNotificationPreferenceFragment
+    : VectorSettingsBaseFragment() {
 
-    /**
-     * @return the selected push rule and its kind
-     */
-    var ruleAndKind: PushRuleAndKind? = null
-        private set
 
-    constructor(context: Context) : super(context)
+    fun indexFromBooleanPreference(pushRuleOn: Boolean): Int {
+        return if (pushRuleOn) {
+            NOTIFICATION_NOISY_INDEX
+        } else {
+            NOTIFICATION_OFF_INDEX
+        }
+    }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
-
-    init {
-        layoutResource = R.layout.vector_preference_push_rule
+    fun booleanPreferenceFromIndex(index: Int): Boolean {
+        return index != NOTIFICATION_OFF_INDEX
     }
 
     /**
      * @return the bing rule status index
      */
-    private val ruleStatusIndex: Int
-        get() {
+    fun ruleStatusIndexFor(ruleAndKind: PushRuleAndKind? ): Int {
             val safeRule = ruleAndKind?.pushRule ?: return NOTIFICATION_OFF_INDEX
 
             if (safeRule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
@@ -79,35 +75,15 @@ class PushRulePreference : VectorPreference {
         }
 
     /**
-     * Update the push rule.
-     *
-     * @param pushRule
-     */
-    fun setPushRule(pushRuleAndKind: PushRuleAndKind?) {
-        ruleAndKind = pushRuleAndKind
-        refreshSummary()
-    }
-
-    /**
-     * Refresh the summary
-     */
-    private fun refreshSummary() {
-        summary = context.getString(when (ruleStatusIndex) {
-            NOTIFICATION_OFF_INDEX    -> R.string.notification_off
-            NOTIFICATION_SILENT_INDEX -> R.string.notification_silent
-            else                      -> R.string.notification_noisy
-        })
-    }
-
-    /**
      * Create a push rule with the updated required at index.
      *
      * @param index index
      * @return a push rule with the updated flags / null if there is no update
      */
-    fun createNewRule(index: Int): PushRule? {
+    fun createNewRule(ruleAndKind: PushRuleAndKind?, index: Int): PushRule? {
         val safeRule = ruleAndKind?.pushRule ?: return null
-        val safeKind = ruleAndKind?.kind ?: return null
+        val safeKind = ruleAndKind.kind
+        val ruleStatusIndex = ruleStatusIndexFor(ruleAndKind)
 
         return if (index != ruleStatusIndex) {
             if (safeRule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
@@ -126,7 +102,7 @@ class PushRulePreference : VectorPreference {
                                 .setNotify(true)
                                 .setNotificationSound()
                     }
-                    else                      -> safeRule
+                    else                                         -> safeRule
                 }
             } else {
                 if (NOTIFICATION_OFF_INDEX == index) {
@@ -160,42 +136,66 @@ class PushRulePreference : VectorPreference {
         }
     }
 
-    override fun onBindViewHolder(holder: PreferenceViewHolder) {
-        super.onBindViewHolder(holder)
 
-        holder.findViewById(android.R.id.summary)?.visibility = View.GONE
-        holder.itemView.setOnClickListener(null)
-        holder.itemView.setOnLongClickListener(null)
+    override fun bindPref() {
+        for (preferenceKey in prefKeyToPushRuleId.keys) {
+            val preference = findPreference<VectorCheckboxPreference>(preferenceKey)!!
+            // preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
+            val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
 
-        val radioGroup = holder.findViewById(R.id.bingPreferenceRadioGroup) as? RadioGroup
-        radioGroup?.setOnCheckedChangeListener(null)
+            if (ruleAndKind == null) {
+                // The rule is not defined, hide the preference
+                preference.isVisible = false
+            } else {
+                preference.isVisible = true
 
-        when (ruleStatusIndex) {
-            NOTIFICATION_OFF_INDEX    -> {
-                radioGroup?.check(R.id.bingPreferenceRadioBingRuleOff)
-            }
-            NOTIFICATION_SILENT_INDEX -> {
-                radioGroup?.check(R.id.bingPreferenceRadioBingRuleSilent)
-            }
-            else                      -> {
-                radioGroup?.check(R.id.bingPreferenceRadioBingRuleNoisy)
-            }
-        }
+                val index = ruleStatusIndexFor(ruleAndKind)
+                val boolPreference = booleanPreferenceFromIndex(index)
+                preference.isChecked = boolPreference
+                preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    val newIndex = indexFromBooleanPreference(newValue as Boolean)
+                    val newRule = createNewRule(ruleAndKind, newIndex)
 
-        radioGroup?.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                R.id.bingPreferenceRadioBingRuleOff    -> {
-                    onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_OFF_INDEX)
-                }
-                R.id.bingPreferenceRadioBingRuleSilent -> {
-                    onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_SILENT_INDEX)
-                }
-                R.id.bingPreferenceRadioBingRuleNoisy  -> {
-                    onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_NOISY_INDEX)
+                    if (newRule != null) {
+                        displayLoadingView()
+
+                        lifecycleScope.launch {
+                            val result = runCatching {
+                                session.updatePushRuleActions(
+                                        ruleAndKind.kind,
+                                        ruleAndKind.pushRule,
+                                        newRule
+                                )
+                            }
+                            if (!isAdded) {
+                                return@launch
+                            }
+                            hideLoadingView()
+                            result.onSuccess {
+                                preference.isChecked = newValue
+                            }
+                            result.onFailure { failure ->
+                                // Restore the previous value
+                                refreshDisplay()
+                                activity?.toast(errorFormatter.toHumanReadable(failure))
+                            }
+                        }
+                    }
+                    false
                 }
             }
         }
     }
+
+    private fun refreshDisplay() {
+        listView?.adapter?.notifyDataSetChanged()
+    }
+
+    /* ==========================================================================================
+     * Companion
+     * ========================================================================================== */
+
+    abstract val prefKeyToPushRuleId: Map<String, String>
 
     companion object {
 

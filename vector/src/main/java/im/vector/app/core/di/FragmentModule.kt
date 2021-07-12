@@ -111,7 +111,6 @@ import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
-import im.vector.app.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.app.features.settings.VectorSettingsGeneralFragment
 import im.vector.app.features.settings.VectorSettingsHelpAboutFragment
 import im.vector.app.features.settings.VectorSettingsLabsFragment
@@ -390,10 +389,10 @@ interface FragmentModule {
     @FragmentKey(VectorSettingsNotificationsTroubleshootFragment::class)
     fun bindVectorSettingsNotificationsTroubleshootFragment(fragment: VectorSettingsNotificationsTroubleshootFragment): Fragment
 
-    @Binds
-    @IntoMap
-    @FragmentKey(VectorSettingsAdvancedNotificationPreferenceFragment::class)
-    fun bindVectorSettingsAdvancedNotificationPreferenceFragment(fragment: VectorSettingsAdvancedNotificationPreferenceFragment): Fragment
+//    @Binds
+//    @IntoMap
+//    @FragmentKey(VectorSettingsAdvancedNotificationPreferenceFragment::class)
+//    fun bindVectorSettingsAdvancedNotificationPreferenceFragment(fragment: VectorSettingsAdvancedNotificationPreferenceFragment): Fragment
 
     @Binds
     @IntoMap
