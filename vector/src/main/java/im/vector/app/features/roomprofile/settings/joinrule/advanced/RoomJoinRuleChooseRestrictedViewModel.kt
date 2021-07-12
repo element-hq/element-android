@@ -16,6 +16,8 @@
 
 package im.vector.app.features.roomprofile.settings.joinrule.advanced
 
+import android.graphics.Typeface
+import androidx.core.text.toSpannable
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
@@ -23,12 +25,16 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.features.roomprofile.settings.joinrule.toOption
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.launch
@@ -46,91 +52,99 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 
 class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
-        @Assisted val initialState: RoomJoinRuleChooseRestrictedState,
+        @Assisted initialState: RoomJoinRuleChooseRestrictedState,
         private val session: Session,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val stringProvider: StringProvider
 ) : VectorViewModel<RoomJoinRuleChooseRestrictedState, RoomJoinRuleChooseRestrictedActions, RoomJoinRuleChooseRestrictedEvents>(initialState) {
 
-    val room = session.getRoom(initialState.roomId)!!
+    var room = session.getRoom(initialState.roomId)!!
 
     init {
-
         viewModelScope.launch {
-            session.getRoomSummary(initialState.roomId)?.let { roomSummary ->
-                val joinRulesContent = session.getRoom(initialState.roomId)?.getStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
-                        ?.content
-                        ?.toModel<RoomJoinRulesContent>()
-                val initialAllowList = joinRulesContent?.allowList
+            initializeForRoom(initialState.roomId)
+        }
+    }
 
-                val knownParentSpacesAllowed = mutableListOf<MatrixItem>()
-                val unknownAllowedOrRooms = mutableListOf<MatrixItem>()
-                initialAllowList.orEmpty().forEach { entry ->
-                    val summary = session.getRoomSummary(entry.spaceID)
-                    if (summary == null // it's not known by me
-                            || summary.roomType != RoomType.SPACE // it's not a space
-                            || !roomSummary.flattenParentIds.contains(summary.roomId) // it's not a parent space
-                    ) {
-                        unknownAllowedOrRooms.add(
-                                summary?.toMatrixItem() ?: MatrixItem.RoomItem(entry.spaceID, null, null)
-                        )
-                    } else {
-                        knownParentSpacesAllowed.add(summary.toMatrixItem())
-                    }
-                }
+    private fun initializeForRoom(roomId: String) {
+        room = session.getRoom(roomId)!!
+        session.getRoomSummary(roomId)?.let { roomSummary ->
+            val joinRulesContent = room.getStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
+                    ?.content
+                    ?.toModel<RoomJoinRulesContent>()
+            val initialAllowList = joinRulesContent?.allowList
 
-                val possibleSpaceCandidate = knownParentSpacesAllowed.toMutableList()
-                roomSummary.flattenParentIds.mapNotNull {
-                    session.getRoomSummary(it)?.toMatrixItem()
-                }.forEach {
-                    if (!possibleSpaceCandidate.contains(it)) {
-                        possibleSpaceCandidate.add(it)
-                    }
-                }
-
-                val homeServerCapabilities = session.getHomeServerCapabilities()
-                var safeRule: RoomJoinRules = joinRulesContent?.joinRules ?: RoomJoinRules.INVITE
-                // server is not really checking that, just to be sure let's check
-                val restrictedSupportedByThisVersion = homeServerCapabilities
-                        .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.getRoomVersion())
-                if (safeRule == RoomJoinRules.RESTRICTED
-                        && !restrictedSupportedByThisVersion) {
-                    safeRule = RoomJoinRules.INVITE
-                }
-
-                val restrictedSupport = homeServerCapabilities.isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
-                val couldUpgradeToRestricted = when (restrictedSupport) {
-                    HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED          -> true
-                    HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
-                    else                                                            -> false
-                }
-
-                val choices = if (restrictedSupportedByThisVersion || couldUpgradeToRestricted) {
-                    listOf(
-                            RoomJoinRules.INVITE.toOption(false),
-                            RoomJoinRules.RESTRICTED.toOption(!restrictedSupportedByThisVersion),
-                            RoomJoinRules.PUBLIC.toOption(false)
+            val knownParentSpacesAllowed = mutableListOf<MatrixItem>()
+            val unknownAllowedOrRooms = mutableListOf<MatrixItem>()
+            initialAllowList.orEmpty().forEach { entry ->
+                val summary = session.getRoomSummary(entry.spaceID)
+                if (summary == null // it's not known by me
+                        || summary.roomType != RoomType.SPACE // it's not a space
+                        || !roomSummary.flattenParentIds.contains(summary.roomId) // it's not a parent space
+                ) {
+                    unknownAllowedOrRooms.add(
+                            summary?.toMatrixItem() ?: MatrixItem.RoomItem(entry.spaceID, null, null)
                     )
                 } else {
-                    listOf(
-                            RoomJoinRules.INVITE.toOption(false),
-                            RoomJoinRules.PUBLIC.toOption(false)
-                    )
+                    knownParentSpacesAllowed.add(summary.toMatrixItem())
                 }
+            }
 
-                setState {
-                    copy(
-                            roomSummary = Success(roomSummary),
-                            initialRoomJoinRules = safeRule,
-                            currentRoomJoinRules = safeRule,
-                            choices = choices,
-                            initialAllowList = initialAllowList.orEmpty(),
-                            updatedAllowList = initialAllowList.orEmpty().map {
-                                session.getRoomSummary(it.spaceID)?.toMatrixItem() ?: MatrixItem.RoomItem(it.spaceID, null, null)
-                            },
-                            possibleSpaceCandidate = possibleSpaceCandidate,
-                            unknownRestricted = unknownAllowedOrRooms
-                    )
+            val possibleSpaceCandidate = knownParentSpacesAllowed.toMutableList()
+            roomSummary.flattenParentIds.mapNotNull {
+                session.getRoomSummary(it)?.toMatrixItem()
+            }.forEach {
+                if (!possibleSpaceCandidate.contains(it)) {
+                    possibleSpaceCandidate.add(it)
                 }
+            }
+
+            val homeServerCapabilities = session.getHomeServerCapabilities()
+            var safeRule: RoomJoinRules = joinRulesContent?.joinRules ?: RoomJoinRules.INVITE
+            // server is not really checking that, just to be sure let's check
+            val restrictedSupportedByThisVersion = homeServerCapabilities
+                    .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.getRoomVersion())
+            if (safeRule == RoomJoinRules.RESTRICTED
+                    && !restrictedSupportedByThisVersion) {
+                safeRule = RoomJoinRules.INVITE
+            }
+
+            val restrictedSupport = homeServerCapabilities.isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
+            val couldUpgradeToRestricted = when (restrictedSupport) {
+                HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED          -> true
+                HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
+                else                                                            -> false
+            }
+
+            val choices = if (restrictedSupportedByThisVersion || couldUpgradeToRestricted) {
+                listOf(
+                        RoomJoinRules.INVITE.toOption(false),
+                        RoomJoinRules.RESTRICTED.toOption(!restrictedSupportedByThisVersion),
+                        RoomJoinRules.PUBLIC.toOption(false)
+                )
+            } else {
+                listOf(
+                        RoomJoinRules.INVITE.toOption(false),
+                        RoomJoinRules.PUBLIC.toOption(false)
+                )
+            }
+
+            setState {
+                copy(
+                        roomSummary = Success(roomSummary),
+                        initialRoomJoinRules = safeRule,
+                        currentRoomJoinRules = safeRule,
+                        choices = choices,
+                        initialAllowList = initialAllowList.orEmpty(),
+                        updatedAllowList = initialAllowList.orEmpty().map {
+                            session.getRoomSummary(it.spaceID)?.toMatrixItem() ?: MatrixItem.RoomItem(it.spaceID, null, null)
+                        },
+                        possibleSpaceCandidate = possibleSpaceCandidate,
+                        unknownRestricted = unknownAllowedOrRooms,
+                        restrictedSupportedByThisVersion = restrictedSupportedByThisVersion,
+                        upgradeNeededForRestricted = !restrictedSupportedByThisVersion && couldUpgradeToRestricted,
+                        restrictedVersionNeeded = homeServerCapabilities.versionOverrideForFeature(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
+                )
             }
         }
     }
@@ -163,10 +177,11 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomJoinRuleChooseRestrictedActions) {
         when (action) {
-            is RoomJoinRuleChooseRestrictedActions.FilterWith      -> handleFilter(action)
-            is RoomJoinRuleChooseRestrictedActions.ToggleSelection -> handleToggleSelection(action)
-            is RoomJoinRuleChooseRestrictedActions.SelectJoinRules -> handleSelectRule(action)
-            RoomJoinRuleChooseRestrictedActions.DoUpdateJoinRules  -> handleSubmit()
+            is RoomJoinRuleChooseRestrictedActions.FilterWith                 -> handleFilter(action)
+            is RoomJoinRuleChooseRestrictedActions.ToggleSelection            -> handleToggleSelection(action)
+            is RoomJoinRuleChooseRestrictedActions.SelectJoinRules            -> handleSelectRule(action)
+            is RoomJoinRuleChooseRestrictedActions.SwitchToRoomAfterMigration -> handleSwitchToRoom(action)
+            RoomJoinRuleChooseRestrictedActions.DoUpdateJoinRules             -> handleSubmit()
         }.exhaustive
         checkForChanges()
     }
@@ -193,14 +208,43 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
     }
 
     fun handleSelectRule(action: RoomJoinRuleChooseRestrictedActions.SelectJoinRules) = withState { state ->
-        if (action.rules == RoomJoinRules.RESTRICTED && state.currentRoomJoinRules != RoomJoinRules.RESTRICTED) {
+        val currentRoomJoinRules = state.currentRoomJoinRules
+
+        val candidate = session.getRoomSummary(state.roomId)
+                ?.flattenParentIds
+                ?.filter {
+                    session.getRoomSummary(it)?.spaceChildren?.firstOrNull { it.childRoomId == state.roomId } != null
+                }?.mapNotNull {
+                    session.getRoomSummary(it)?.toMatrixItem()
+                }?.firstOrNull()
+        val description = if (candidate != null) {
+            stringProvider.getString(R.string.upgrade_room_for_restricted, candidate.getBestName()).toSpannable().let {
+                it.styleMatchingText(candidate.getBestName(), Typeface.BOLD)
+            }
+        } else {
+            stringProvider.getString(R.string.upgrade_room_for_restricted_no_param)
+        }
+
+        if (action.rules == RoomJoinRules.RESTRICTED && state.upgradeNeededForRestricted) {
+            // let's show the room upgrade bottom sheet
+            _viewEvents.post(
+                    RoomJoinRuleChooseRestrictedEvents.NavigateToUpgradeRoom(
+                            state.roomId,
+                            state.restrictedVersionNeeded ?: "",
+                            description
+                    )
+            )
+            return@withState
+        }
+
+        if (action.rules == RoomJoinRules.RESTRICTED && currentRoomJoinRules != RoomJoinRules.RESTRICTED) {
             // switching to restricted
             // if allow list is empty, then default to current space parents
             if (state.updatedAllowList.isEmpty()) {
-                val candidates = session.getRoomSummary(initialState.roomId)
+                val candidates = session.getRoomSummary(state.roomId)
                         ?.flattenParentIds
                         ?.filter {
-                            session.getRoomSummary(it)?.spaceChildren?.firstOrNull { it.childRoomId == initialState.roomId } != null
+                            session.getRoomSummary(it)?.spaceChildren?.firstOrNull { it.childRoomId == state.roomId } != null
                         }?.mapNotNull {
                             session.getRoomSummary(it)?.toMatrixItem()
                         }.orEmpty()
@@ -214,6 +258,48 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
             copy(
                     currentRoomJoinRules = action.rules
             )
+        }
+
+        if (action.rules == RoomJoinRules.RESTRICTED && currentRoomJoinRules == RoomJoinRules.RESTRICTED) {
+            _viewEvents.post(RoomJoinRuleChooseRestrictedEvents.NavigateToChooseRestricted)
+        }
+    }
+
+    private fun handleSwitchToRoom(action: RoomJoinRuleChooseRestrictedActions.SwitchToRoomAfterMigration) = withState { state ->
+        viewModelScope.launch {
+            val oldRoomSummary = session.getRoomSummary(state.roomId)
+            val replacementRoomSummary = session.getRoomSummary(action.roomId)
+            setState {
+                copy(
+                        roomId = action.roomId,
+                        roomSummary = replacementRoomSummary?.let { Success(it) } ?: Uninitialized,
+                        didSwitchToReplacementRoom = true
+                )
+            }
+            initializeForRoom(action.roomId)
+            // set as restricted now
+            val candidates = oldRoomSummary
+                    ?.flattenParentIds
+                    ?.filter {
+                        session.getRoomSummary(it)?.spaceChildren?.firstOrNull { it.childRoomId == state.roomId } != null
+                    }?.mapNotNull {
+                        session.getRoomSummary(it)?.toMatrixItem()
+                    }.orEmpty()
+            setState {
+                copy(
+                        currentRoomJoinRules = RoomJoinRules.RESTRICTED,
+                        updatedAllowList = candidates
+                )
+            }
+            setState { copy(updatingStatus = Loading()) }
+            viewModelScope.launch {
+                try {
+                    room.setJoinRuleRestricted(candidates.map { it.id })
+                    setState { copy(updatingStatus = Success(Unit)) }
+                } catch (failure: Throwable) {
+                    setState { copy(updatingStatus = Fail(failure)) }
+                }
+            }
         }
     }
 
@@ -261,7 +347,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleFilter(action: RoomJoinRuleChooseRestrictedActions.FilterWith) {
+    private fun handleFilter(action: RoomJoinRuleChooseRestrictedActions.FilterWith) = withState { state ->
         setState {
             copy(filter = action.filter, filteredResults = Loading())
         }
@@ -283,7 +369,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
                 setState {
                     copy(
                             filteredResults = Success(
-                                    session.getRoomSummary(initialState.roomId)?.flattenParentIds?.mapNotNull {
+                                    session.getRoomSummary(state.roomId)?.flattenParentIds?.mapNotNull {
                                         session.getRoomSummary(it)?.toMatrixItem()
                                     }?.filter {
                                         it.displayName?.contains(filter, true) == true

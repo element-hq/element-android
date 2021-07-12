@@ -28,6 +28,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -53,6 +54,7 @@ abstract class SpaceJoinRuleItem : VectorEpoxyModel<SpaceJoinRuleItem.Holder>() 
         super.bind(holder)
 
         holder.view.onClick(listener)
+        holder.upgradeRequiredButton.setOnClickListener(DebouncedClickListener(listener))
 
         if (selected) {
             holder.radioImage.setImageDrawable(ContextCompat.getDrawable(holder.view.context, R.drawable.ic_radio_on))
@@ -67,19 +69,24 @@ abstract class SpaceJoinRuleItem : VectorEpoxyModel<SpaceJoinRuleItem.Holder>() 
 
         val items = listOf(holder.space1, holder.space2, holder.space3, holder.space4, holder.space5)
         holder.spaceMore.isVisible = false
-        if (restrictedList.isEmpty()) {
-            holder.listTitle.isVisible = false
-            items.onEach { it.isVisible = false }
-        } else {
-            holder.listTitle.isVisible = true
-            restrictedList.forEachIndexed { index, matrixItem ->
-                if (index < items.size) {
-                    items[index].isVisible = true
-                    avatarRenderer.render(matrixItem, items[index])
-                } else if (index == items.size) {
-                    holder.spaceMore.isVisible = true
+        items.onEach { it.isVisible = false }
+        if (!needUpgrade) {
+            if (restrictedList.isEmpty()) {
+                holder.listTitle.isVisible = false
+            } else {
+                holder.listTitle.isVisible = true
+                restrictedList.forEachIndexed { index, matrixItem ->
+                    if (index < items.size) {
+                        items[index].isVisible = true
+                        avatarRenderer.render(matrixItem, items[index])
+                    } else if (index == items.size) {
+                        holder.spaceMore.isVisible = true
+                    }
                 }
             }
+        } else {
+            holder.listTitle.isVisible = false
+            holder.helperText.isVisible = false
         }
     }
 

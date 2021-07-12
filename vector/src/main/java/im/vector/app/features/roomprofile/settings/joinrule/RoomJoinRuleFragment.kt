@@ -27,7 +27,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
-import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
@@ -104,18 +103,6 @@ class RoomJoinRuleFragment @Inject constructor(
         val isLoading = withState(viewModel) { it.updatingStatus is Loading }
         if (isLoading) return
 
-        val oldRule = withState(viewModel) { it.currentRoomJoinRules }
         viewModel.handle(RoomJoinRuleChooseRestrictedActions.SelectJoinRules(rules))
-        if (rules == RoomJoinRules.RESTRICTED && oldRule == RoomJoinRules.RESTRICTED) {
-            parentFragmentManager.commitTransaction {
-                setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                val tag = RoomJoinRuleChooseRestrictedFragment::class.simpleName
-                replace(R.id.simpleFragmentContainer,
-                        RoomJoinRuleChooseRestrictedFragment::class.java,
-                        this@RoomJoinRuleFragment.arguments,
-                        tag
-                ).addToBackStack(tag)
-            }
-        }
     }
 }

@@ -40,7 +40,11 @@ data class RoomJoinRuleChooseRestrictedState(
         val filter: String = "",
         val filteredResults: Async<List<MatrixItem>> = Uninitialized,
         val hasUnsavedChanges: Boolean = false,
-        val updatingStatus: Async<Unit> = Uninitialized
+        val updatingStatus: Async<Unit> = Uninitialized,
+        val upgradeNeededForRestricted: Boolean = false,
+        val restrictedSupportedByThisVersion: Boolean = false,
+        val restrictedVersionNeeded: String? = null,
+        val didSwitchToReplacementRoom: Boolean = false
 ) : MvRxState {
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }

@@ -26,14 +26,20 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.viewModel
+import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
+import im.vector.app.core.extensions.commitTransaction
+import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedActions
+import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedEvents
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedState
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
 import javax.inject.Inject
@@ -81,13 +87,53 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
                     views.simpleActivityWaitingView.isVisible = true
                 }
                 is Success    -> {
-                    finish()
+                    withState(viewModel) { state ->
+                        if (state.didSwitchToReplacementRoom) {
+                            // we should navigate to new room
+                            navigator.openRoom(this, state.roomId, null, true)
+                        }
+                        finish()
+                    }
                 }
                 is Fail       -> {
                     views.simpleActivityWaitingView.isVisible = false
                     toast(errorFormatter.toHumanReadable(it.error))
                 }
             }
+        }
+
+        viewModel.observeViewEvents {
+            when (it) {
+                RoomJoinRuleChooseRestrictedEvents.NavigateToChooseRestricted -> navigateToChooseRestricted()
+                is RoomJoinRuleChooseRestrictedEvents.NavigateToUpgradeRoom   -> navigateToUpgradeRoom(it)
+            }
+        }
+
+        supportFragmentManager.setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY, this) { _, bundle ->
+            bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
+                viewModel.handle(RoomJoinRuleChooseRestrictedActions.SwitchToRoomAfterMigration(replacementRoomId))
+            }
+        }
+    }
+
+    private fun navigateToUpgradeRoom(events: RoomJoinRuleChooseRestrictedEvents.NavigateToUpgradeRoom) {
+        MigrateRoomBottomSheet.newInstance(
+                events.roomId,
+                events.toVersion,
+                MigrateRoomBottomSheet.MigrationReason.FOR_RESTRICTED,
+                events.description
+        ).show(supportFragmentManager, "migrate")
+    }
+
+    private fun navigateToChooseRestricted() {
+        supportFragmentManager.commitTransaction {
+            setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+            val tag = RoomJoinRuleChooseRestrictedFragment::class.simpleName
+            replace(R.id.simpleFragmentContainer,
+                    RoomJoinRuleChooseRestrictedFragment::class.java,
+                    this@RoomJoinRuleActivity.roomProfileArgs.toMvRxBundle(),
+                    tag
+            ).addToBackStack(tag)
         }
     }
 
