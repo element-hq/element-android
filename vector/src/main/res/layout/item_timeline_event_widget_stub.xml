@@ -9,14 +9,14 @@
 
     <TextView
         android:id="@+id/itemWidgetTitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawablePadding="6dp"
         android:gravity="center"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:drawableTint="?riotx_text_primary"
+        app:drawableTint="?vctr_content_primary"
         tools:drawableStart="@drawable/ic_video"
         tools:text="@string/notice_widget_jitsi_added_by_you" />
 

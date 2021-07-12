@@ -16,34 +16,40 @@
 
 package im.vector.app.features.call.dialpad
 
+import android.content.ClipboardManager
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
+import android.telephony.PhoneNumberUtils
+import android.text.Editable
+import android.text.InputType
+import android.text.TextUtils
+import android.text.TextWatcher
+import android.text.method.DialerKeyListener
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import com.android.dialer.dialpadview.DialpadView
 import com.android.dialer.dialpadview.DigitsEditText
-import com.android.dialer.dialpadview.R
-import com.google.i18n.phonenumbers.AsYouTypeFormatter
-import com.google.i18n.phonenumbers.PhoneNumberUtil
+import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
 
-class DialPadFragment : Fragment() {
+class DialPadFragment : Fragment(), TextWatcher {
 
     var callback: Callback? = null
 
-    private var digits: DigitsEditText? = null
-    private var formatter: AsYouTypeFormatter? = null
-    private var input = ""
+    private lateinit var digits: DigitsEditText
     private var regionCode: String = DEFAULT_REGION_CODE
     private var formatAsYouType = true
     private var enableStar = true
     private var enablePound = true
     private var enablePlus = true
-    private var cursorVisible = false
+    private var cursorVisible = true
     private var enableDelete = true
     private var enableFabOk = true
 
@@ -53,70 +59,78 @@ class DialPadFragment : Fragment() {
             savedInstanceState: Bundle?): View {
         initArgs(savedInstanceState)
         val view = inflater.inflate(R.layout.dialpad_fragment, container, false)
+        view.setBackgroundColor(ThemeUtils.getColor(requireContext(), R.attr.backgroundColor))
         val dialpadView = view.findViewById<View>(R.id.dialpad_view) as DialpadView
         dialpadView.findViewById<View>(R.id.dialpad_key_voicemail).isVisible = false
-        digits = dialpadView.digits as? DigitsEditText
-        digits?.isCursorVisible = cursorVisible
-        digits?.setTextColor(ThemeUtils.getColor(requireContext(), im.vector.app.R.attr.riotx_text_primary))
-        dialpadView.findViewById<View>(R.id.zero).setOnClickListener { append('0') }
-        if (enablePlus) {
-            dialpadView.findViewById<View>(R.id.zero).setOnLongClickListener {
-                append('+')
-                true
-            }
-        }
-        dialpadView.findViewById<View>(R.id.one).setOnClickListener { append('1') }
-        dialpadView.findViewById<View>(R.id.two).setOnClickListener { append('2') }
-        dialpadView.findViewById<View>(R.id.three).setOnClickListener { append('3') }
-        dialpadView.findViewById<View>(R.id.four).setOnClickListener { append('4') }
-        dialpadView.findViewById<View>(R.id.four).setOnClickListener { append('4') }
-        dialpadView.findViewById<View>(R.id.five).setOnClickListener { append('5') }
-        dialpadView.findViewById<View>(R.id.six).setOnClickListener { append('6') }
-        dialpadView.findViewById<View>(R.id.seven).setOnClickListener { append('7') }
-        dialpadView.findViewById<View>(R.id.eight).setOnClickListener { append('8') }
-        dialpadView.findViewById<View>(R.id.nine).setOnClickListener { append('9') }
+        digits = dialpadView.digits as DigitsEditText
+        digits.isCursorVisible = cursorVisible
+        digits.inputType = InputType.TYPE_CLASS_PHONE
+        digits.keyListener = DialerKeyListener.getInstance()
+        digits.setTextColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_content_primary))
+        digits.addTextChangedListener(PhoneNumberFormattingTextWatcher(if (formatAsYouType) regionCode else ""))
+        digits.addTextChangedListener(this)
+        dialpadView.findViewById<View>(R.id.zero).setOnClickListener { keyPressed(KeyEvent.KEYCODE_0, "0") }
+        dialpadView.findViewById<View>(R.id.one).setOnClickListener { keyPressed(KeyEvent.KEYCODE_1, "1") }
+        dialpadView.findViewById<View>(R.id.two).setOnClickListener { keyPressed(KeyEvent.KEYCODE_2, "2") }
+        dialpadView.findViewById<View>(R.id.three).setOnClickListener { keyPressed(KeyEvent.KEYCODE_3, "3") }
+        dialpadView.findViewById<View>(R.id.four).setOnClickListener { keyPressed(KeyEvent.KEYCODE_4, "4") }
+        dialpadView.findViewById<View>(R.id.five).setOnClickListener { keyPressed(KeyEvent.KEYCODE_5, "5") }
+        dialpadView.findViewById<View>(R.id.six).setOnClickListener { keyPressed(KeyEvent.KEYCODE_6, "6") }
+        dialpadView.findViewById<View>(R.id.seven).setOnClickListener { keyPressed(KeyEvent.KEYCODE_7, "7") }
+        dialpadView.findViewById<View>(R.id.eight).setOnClickListener { keyPressed(KeyEvent.KEYCODE_8, "8") }
+        dialpadView.findViewById<View>(R.id.nine).setOnClickListener { keyPressed(KeyEvent.KEYCODE_9, "9") }
         if (enableStar) {
-            dialpadView.findViewById<View>(R.id.star).setOnClickListener { append('*') }
+            dialpadView.findViewById<View>(R.id.star).setOnClickListener { keyPressed(KeyEvent.KEYCODE_STAR, "*") }
         } else {
             dialpadView.findViewById<View>(R.id.star).isVisible = false
         }
         if (enablePound) {
-            dialpadView.findViewById<View>(R.id.pound).setOnClickListener { append('#') }
+            dialpadView.findViewById<View>(R.id.pound).setOnClickListener { keyPressed(KeyEvent.KEYCODE_POUND, "#") }
         } else {
             dialpadView.findViewById<View>(R.id.pound).isVisible = false
         }
+        if (enablePlus) {
+            dialpadView.findViewById<View>(R.id.zero).setOnLongClickListener {
+                keyPressed(KeyEvent.KEYCODE_PLUS, "+")
+                true
+            }
+        }
         if (enableDelete) {
-            dialpadView.deleteButton.setOnClickListener { poll() }
+            dialpadView.deleteButton.setOnClickListener { keyPressed(KeyEvent.KEYCODE_DEL, null) }
             dialpadView.deleteButton.setOnLongClickListener {
                 clear()
                 true
             }
-            val tintColor = ThemeUtils.getColor(requireContext(), im.vector.app.R.attr.riotx_text_secondary)
+            val tintColor = ThemeUtils.getColor(requireContext(), R.attr.vctr_content_secondary)
             ImageViewCompat.setImageTintList(dialpadView.deleteButton, ColorStateList.valueOf(tintColor))
         } else {
             dialpadView.deleteButton.isVisible = false
         }
-
-        // if region code is null, no formatting is performed
-        formatter = PhoneNumberUtil.getInstance().getAsYouTypeFormatter(if (formatAsYouType) regionCode else "")
-
         val fabOk = view.findViewById<View>(R.id.fab_ok)
         if (enableFabOk) {
-            fabOk.setOnClickListener {
-                callback?.onOkClicked(digits?.text.toString(), input)
-            }
+            fabOk.setOnClickListener { onOkClicked() }
         } else {
             fabOk.isVisible = false
         }
-
-        digits?.setOnTextContextMenuClickListener {
-            val string = digits?.text.toString()
-            clear()
-            for (element in string) {
-                append(element)
-            }
-        }
         return view
+    }
+
+    private fun onOkClicked() {
+        val rawInput = getRawInput()
+        if (rawInput.isEmpty()) {
+            val clipboard = requireContext().getSystemService<ClipboardManager>()
+            val textToPaste = clipboard?.primaryClip?.getItemAt(0)?.text ?: return
+            val formatted = formatNumber(textToPaste.toString())
+            digits.setText(formatted)
+            digits.setSelection(digits.text!!.length)
+        } else {
+            val formatted = digits.text.toString()
+            callback?.onOkClicked(formatted, rawInput)
+        }
+    }
+
+    fun getRawInput(): String {
+        return PhoneNumberUtils.normalizeNumber(digits.text.toString())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -145,40 +159,35 @@ class DialPadFragment : Fragment() {
         }
     }
 
-    private fun poll() {
-        if (input.isNotEmpty()) {
-            input = input.substring(0, input.length - 1)
-            formatter = PhoneNumberUtil.getInstance().getAsYouTypeFormatter(regionCode)
-            if (formatAsYouType) {
-                digits?.setText("")
-                for (c in input.toCharArray()) {
-                    digits?.setText(formatter?.inputDigit(c))
-                }
-            } else {
-                digits?.setText(input)
-            }
+    private fun keyPressed(keyCode: Int, digitString: String?) {
+        val event = KeyEvent(KeyEvent.ACTION_DOWN, keyCode)
+        // Disable cursor and enable it again after onKeyDown otherwise DigitsEditText force replacing cursor at the end
+        digits.isCursorVisible = false
+        digits.onKeyDown(keyCode, event)
+        digits.isCursorVisible = cursorVisible
+        digitString?.also {
+            callback?.onDigitAppended(it)
         }
     }
 
     private fun clear() {
-        formatter?.clear()
-        digits?.setText("")
-        input = ""
+        digits.setText("")
     }
 
-    private fun append(c: Char) {
-        callback?.onDigitAppended(c.toString())
-        input += c
-        if (formatAsYouType) {
-            digits?.setText(formatter?.inputDigit(c))
-        } else {
-            digits?.setText(input)
+    private fun formatNumber(dialString: String): String {
+        val networkPortion = PhoneNumberUtils.extractNetworkPortion(dialString)
+        if (TextUtils.isEmpty(networkPortion)) {
+            return ""
         }
+        val number = PhoneNumberUtils.formatNumber(networkPortion, null, regionCode) ?: networkPortion
+        // Also retrieve the post dial portion of the provided data, so that the entire dial string can be reconstituted
+        val postDial = PhoneNumberUtils.extractPostDialPortion(dialString)
+        return number + postDial
     }
 
     interface Callback {
-        fun onOkClicked(formatted: String?, raw: String?) = Unit
         fun onDigitAppended(digit: String) = Unit
+        fun onOkClicked(formatted: String?, raw: String?) = Unit
     }
 
     companion object {
@@ -192,5 +201,21 @@ class DialPadFragment : Fragment() {
         const val EXTRA_CURSOR_VISIBLE = "EXTRA_CURSOR_VISIBLE"
 
         private const val DEFAULT_REGION_CODE = "US"
+    }
+
+    // Text watcher
+
+    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+        // Noop
+    }
+
+    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        // Noop
+    }
+
+    override fun afterTextChanged(s: Editable) {
+        if (s.isEmpty()) {
+            digits.clearFocus()
+        }
     }
 }

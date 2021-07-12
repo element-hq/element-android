@@ -21,6 +21,7 @@
 
         <TextView
             android:id="@+id/itemVerificationDoneTitleTextView"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -28,14 +29,14 @@
             android:drawablePadding="2dp"
             android:gravity="start"
             android:text="@string/notice_crypto_unable_to_decrypt_merged"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="15sp"
-            app:drawableTint="?riotx_text_secondary"
-            app:drawableStartCompat="@drawable/ic_clock" />
+            android:textColor="?vctr_content_secondary"
+            app:drawableStartCompat="@drawable/ic_clock"
+            app:drawableTint="?vctr_content_secondary" />
 
 
         <TextView
             android:id="@+id/itemVerificationDoneDetailTextView"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -44,13 +45,13 @@
             android:layout_marginBottom="12dp"
             android:gravity="center"
             android:text="@string/notice_crypto_unable_to_decrypt_friendly_desc"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="12sp"
+            android:textColor="?vctr_content_secondary"
             android:textStyle="italic" />
 
 
         <TextView
             android:id="@+id/itemMergedExpandTextView"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -60,8 +61,7 @@
             android:paddingEnd="8dp"
             android:paddingBottom="4dp"
             android:text="@string/merged_events_expand"
-            android:textColor="?attr/colorAccent"
-            android:textSize="14sp"
+            android:textColor="?colorSecondary"
             android:textStyle="italic"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -74,6 +74,6 @@
         android:layout_height="1dp"
         android:layout_below="@+id/mergedUTDTile"
         android:layout_marginTop="4dp"
-        android:background="?attr/riotx_header_panel_background" />
+        android:background="?vctr_list_separator" />
 
 </RelativeLayout>

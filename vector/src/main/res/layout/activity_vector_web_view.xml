@@ -6,31 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".features.webview.VectorWebViewActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/webview_toolbar"
-        style="@style/VectorToolbarStyle"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:title="Title of the web page" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/webview_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            tools:title="Title of the web page" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <WebView
         android:id="@+id/simple_webview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/webview_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <ProgressBar
         android:id="@+id/simple_webview_loader"
-        style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

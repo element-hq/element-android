@@ -22,7 +22,6 @@ import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.epoxy.profiles.profileMatrixItemWithProgress
 import im.vector.app.core.extensions.join
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.AvatarRenderer
@@ -34,15 +33,12 @@ import javax.inject.Inject
 class RoomBannedMemberListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
-        private val roomMemberSummaryFilter: RoomMemberSummaryFilter,
-        colorProvider: ColorProvider
+        private val roomMemberSummaryFilter: RoomMemberSummaryFilter
 ) : TypedEpoxyController<RoomBannedMemberListViewState>() {
 
     interface Callback {
         fun onUnbanClicked(roomMember: RoomMemberSummary)
     }
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var callback: Callback? = null
 
@@ -83,7 +79,7 @@ class RoomBannedMemberListController @Inject constructor(
                                         } else {
                                             inProgress(false)
                                             editable(true)
-                                            clickListener { _ ->
+                                            clickListener {
                                                 host.callback?.onUnbanClicked(roomMember)
                                             }
                                         }
@@ -93,7 +89,6 @@ class RoomBannedMemberListController @Inject constructor(
                             between = { _, roomMemberBefore ->
                                 dividerItem {
                                     id("divider_${roomMemberBefore.userId}")
-                                    color(host.dividerColor)
                                 }
                             }
                     )

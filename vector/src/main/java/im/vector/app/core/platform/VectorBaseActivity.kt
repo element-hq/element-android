@@ -27,13 +27,12 @@ import android.view.View
 import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.TextView
-import androidx.annotation.AttrRes
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -456,7 +455,6 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
 
         if (menuRes != -1) {
             menuInflater.inflate(menuRes, menu)
-            ThemeUtils.tintMenuIcons(menu, ThemeUtils.getColor(this, getMenuTint()))
             return true
         }
 
@@ -521,7 +519,7 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
     /**
      * Configure the Toolbar, with default back button.
      */
-    protected fun configureToolbar(toolbar: Toolbar, displayBack: Boolean = true) {
+    protected fun configureToolbar(toolbar: MaterialToolbar, displayBack: Boolean = true) {
         setSupportActionBar(toolbar)
         supportActionBar?.let {
             it.setDisplayShowHomeEnabled(displayBack)
@@ -583,9 +581,6 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
 
     @MenuRes
     open fun getMenuRes() = -1
-
-    @AttrRes
-    open fun getMenuTint() = R.attr.vctr_icon_tint_on_light_action_bar_color
 
     /**
      * Return a object containing other themes for this activity

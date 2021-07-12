@@ -9,12 +9,12 @@
 
     <TextView
         android:id="@+id/localeTitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/layout_horizontal_margin"
         android:paddingEnd="@dimen/layout_horizontal_margin"
-        android:textColor="?riotx_text_primary"
-        android:textSize="16sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@+id/localeSubtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,12 +24,12 @@
 
     <TextView
         android:id="@+id/localeSubtitle"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/layout_horizontal_margin"
         android:paddingEnd="@dimen/layout_horizontal_margin"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

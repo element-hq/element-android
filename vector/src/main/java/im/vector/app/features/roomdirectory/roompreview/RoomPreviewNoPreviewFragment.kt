@@ -57,16 +57,7 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.roomPreviewNoPreviewToolbar)
 
-        views.roomPreviewNoPreviewJoin.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                roomPreviewViewModel.handle(RoomPreviewAction.Join)
-            }
-
-            override fun onRetryClicked() {
-                // Same action
-                onButtonClicked()
-            }
-        }
+        views.roomPreviewNoPreviewJoin.commonClicked = { roomPreviewViewModel.handle(RoomPreviewAction.Join) }
     }
 
     override fun invalidate() = withState(roomPreviewViewModel) { state ->

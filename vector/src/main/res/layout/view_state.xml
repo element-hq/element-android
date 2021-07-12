@@ -26,15 +26,15 @@
 
         <TextView
             android:id="@+id/errorMessageView"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="?riotx_text_primary"
-            android:textSize="16sp"
+            android:textColor="?vctr_content_primary"
             tools:text="Une erreur est survenue" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/errorRetryView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,12 +75,12 @@
 
         <TextView
             android:id="@+id/emptyTitleView"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:textColor="?riotx_text_primary"
-            android:textSize="15sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/emptyMessageView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,13 +91,13 @@
 
         <TextView
             android:id="@+id/emptyMessageView"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="14sp"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

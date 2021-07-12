@@ -4,7 +4,7 @@
     android:id="@+id/itemDeviceRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:orientation="horizontal"
     android:padding="8dp">
@@ -18,12 +18,12 @@
         <!-- In compact mode only this is shown-->
         <TextView
             android:id="@+id/itemDeviceSimpleSummary"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:minHeight="40dp"
-            android:textColor="?riotx_text_primary"
-            android:textSize="16sp"
+            android:textColor="?vctr_content_primary"
             tools:text="Riot X" />
 
         <!---
@@ -31,55 +31,55 @@
         -->
         <TextView
             android:id="@+id/itemDeviceDisplayNameLabel"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/devices_details_name_title"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="12sp" />
+            android:textColor="?vctr_content_secondary" />
 
         <TextView
             android:id="@+id/itemDeviceDisplayName"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?riotx_text_primary"
-            android:textSize="16sp"
+            android:textColor="?vctr_content_primary"
             tools:text="Android phone" />
 
         <TextView
             android:id="@+id/itemDeviceIdLabel"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/devices_details_id_title"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="12sp" />
+            android:textColor="?vctr_content_secondary" />
 
         <TextView
             android:id="@+id/itemDeviceId"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="?riotx_text_primary"
-            android:textSize="15sp"
+            android:textColor="?vctr_content_primary"
             tools:text="XUIDERFZAA" />
 
         <TextView
             android:id="@+id/itemDeviceLastSeenLabel"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/devices_details_last_seen_title"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="12sp" />
+            android:textColor="?vctr_content_secondary" />
 
         <TextView
             android:id="@+id/itemDeviceLastSeen"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?riotx_text_primary"
-            android:textSize="15sp"
+            android:textColor="?vctr_content_primary"
             tools:text="x.x.x.x @ 01/01 00:00:00" />
 
     </LinearLayout>

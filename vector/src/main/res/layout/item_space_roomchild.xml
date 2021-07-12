@@ -41,6 +41,7 @@
 
         <TextView
             android:id="@+id/childRoomName"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -49,8 +50,7 @@
             android:layout_marginEnd="4dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="?riotx_text_primary"
-            android:textSize="15sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/childRoomTopic"
             app:layout_constraintEnd_toStartOf="@id/spaceChildMemberCountIcon"
@@ -61,11 +61,11 @@
 
         <TextView
             android:id="@+id/childRoomTopic"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="15sp"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toBottomOf="@id/spaceChildBarrier"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -83,16 +83,17 @@
             app:layout_constraintBottom_toBottomOf="@+id/spaceChildMemberCountText"
             app:layout_constraintEnd_toStartOf="@+id/spaceChildMemberCountText"
             app:layout_constraintTop_toTopOf="@+id/spaceChildMemberCountText"
-            app:tint="?riotx_text_secondary" />
+            app:tint="?vctr_content_secondary" />
 
         <TextView
             android:id="@+id/spaceChildMemberCountText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:maxLength="5"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="123" />

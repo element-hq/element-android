@@ -18,61 +18,61 @@
             android:layout_margin="4dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_poll"
-            app:tint="@color/riotx_accent"
+            app:tint="?colorPrimary"
             tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/pollLabelText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="4dp"
-            android:textColor="?riotx_text_primary"
-            android:textSize="14sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             tools:text="What would you like to do?" />
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/pollButton1"
-        style="@style/Style.Vector.Poll.Button"
+        style="@style/Widget.Vector.Button.Outlined.Poll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
         tools:text="Create Github issue"
         tools:visibility="visible" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/pollButton2"
-        style="@style/Style.Vector.Poll.Button"
+        style="@style/Widget.Vector.Button.Outlined.Poll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
         tools:text="Search Github"
         tools:visibility="visible" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/pollButton3"
-        style="@style/Style.Vector.Poll.Button"
+        style="@style/Widget.Vector.Button.Outlined.Poll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
         tools:text="Logout"
         tools:visibility="visible" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/pollButton4"
-        style="@style/Style.Vector.Poll.Button"
+        style="@style/Widget.Vector.Button.Outlined.Poll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
         tools:text="Option 4"
         tools:visibility="visible" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/pollButton5"
-        style="@style/Style.Vector.Poll.Button"
+        style="@style/Widget.Vector.Button.Outlined.Poll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -134,11 +134,11 @@
 
     <TextView
         android:id="@+id/pollInfosText"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         tools:text="12 votes - Final Results"
         tools:visibility="visible" />

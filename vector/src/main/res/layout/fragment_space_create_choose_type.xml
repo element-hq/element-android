@@ -12,22 +12,22 @@
 
         <TextView
             android:id="@+id/headerText"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/create_spaces_type_header"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="16sp"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            style="@style/Widget.Vector.TextView.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="@string/create_spaces_choose_type_label"
-            android:textColor="?riotx_text_primary"
-            android:textSize="20sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/joinInfoHelpText"
             app:layout_constraintTop_toBottomOf="@id/headerText"
@@ -35,13 +35,13 @@
 
         <TextView
             android:id="@+id/joinInfoHelpText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="@string/create_spaces_join_info_help"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="14sp"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/publicButton" />
 
         <im.vector.app.features.spaces.create.WizardButtonView
@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:icon="@drawable/ic_public_room"
+            app:iconTint="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/privateButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:icon="@drawable/ic_room_private"
+            app:iconTint="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/changeLaterText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,13 +72,13 @@
 
         <TextView
             android:id="@+id/changeLaterText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="@string/create_spaces_you_can_change_later"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="14sp"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

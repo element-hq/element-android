@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/itemGenericItemButton"
-        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-        android:textAllCaps="false"
-        tools:icon="@drawable/ic_shield_warning"
-        app:iconGravity="textStart"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        app:iconGravity="textStart"
+        tools:icon="@drawable/ic_shield_warning"
         tools:text="Action Name" />
 
 </LinearLayout>

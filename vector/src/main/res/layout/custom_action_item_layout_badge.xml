@@ -19,17 +19,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/riotx_accent"
+        app:tint="?colorPrimary"
         tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/cart_badge"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        style="@style/Widget.Vector.TextView.Micro"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:background="@drawable/bg_unread_highlight"
         android:gravity="center"
-        android:textColor="@android:color/white"
-        android:textSize="8sp"
+        android:textColor="?colorOnError"
         app:layout_constraintCircle="@+id/action_view_icon_image"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="12dp"

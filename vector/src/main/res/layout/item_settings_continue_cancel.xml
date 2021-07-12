@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingEnd="@dimen/layout_horizontal_margin">
 
     <Button
         android:id="@+id/settings_item_cancel_button"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
-        android:textColor="@color/riotx_destructive_accent"
+        android:textColor="?colorError"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/settings_item_continue_button"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_continue"

@@ -16,9 +16,11 @@
 
 package im.vector.app.features.home
 
+import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.sync.SyncState
@@ -28,7 +30,7 @@ data class HomeDetailViewState(
         val roomGroupingMethod: RoomGroupingMethod = RoomGroupingMethod.BySpace(null),
         val myMatrixItem: MatrixItem? = null,
         val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
-        val displayMode: RoomListDisplayMode = RoomListDisplayMode.PEOPLE,
+        val currentTab: HomeTab = HomeTab.RoomList(RoomListDisplayMode.PEOPLE),
         val notificationCountCatchup: Int = 0,
         val notificationHighlightCatchup: Boolean = false,
         val notificationCountPeople: Int = 0,
@@ -37,6 +39,13 @@ data class HomeDetailViewState(
         val notificationHighlightRooms: Boolean = false,
         val hasUnreadMessages: Boolean = false,
         val syncState: SyncState = SyncState.Idle,
+        val showDialPadTab: Boolean = false,
         val inviteEmail: String? = null,
         val existingRoom: String? = null
 ) : MvRxState
+
+sealed class HomeTab(@StringRes val titleRes: Int) {
+    data class RoomList(val displayMode: RoomListDisplayMode) : HomeTab(displayMode.titleRes)
+    object DialPad : HomeTab(R.string.call_dial_pad_title)
+    object ContactList : HomeTab(R.string.direct_room_user_list_contacts_title)
+}

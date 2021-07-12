@@ -40,9 +40,7 @@ class AutocompleteMemberController @Inject constructor() : TypedEpoxyController<
                 id(user.userId)
                 matrixItem(user.toMatrixItem())
                 avatarRenderer(host.avatarRenderer)
-                clickListener { _ ->
-                    host.listener?.onItemClick(user)
-                }
+                clickListener { host.listener?.onItemClick(user) }
             }
         }
     }

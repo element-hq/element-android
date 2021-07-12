@@ -153,7 +153,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
     }
 
     private fun importCryptoDb(legacyConfig: LegacyHomeServerConnectionConfig) {
-        // Here we migrate the DB, we copy the crypto DB to the location specific to RiotX, and we encrypt it.
+        // Here we migrate the DB, we copy the crypto DB to the location specific to Matrix SDK2, and we encrypt it.
         val userMd5 = legacyConfig.credentials.userId.md5()
 
         val sessionId = legacyConfig.credentials.let { (if (it.deviceId.isNullOrBlank()) it.userId else "${it.userId}|${it.deviceId}").md5() }
@@ -177,12 +177,12 @@ internal class DefaultLegacySessionImporter @Inject constructor(
 
         Timber.d("Migration: copy DB to encrypted DB")
         Realm.getInstance(realmConfiguration).use {
-            // Move the DB to the new location, handled by RiotX
+            // Move the DB to the new location, handled by Matrix SDK2
             it.writeEncryptedCopyTo(File(newLocation, realmConfiguration.realmFileName), realmKeysUtils.getRealmEncryptionKey(keyAlias))
         }
     }
 
-    // Delete all the files created by Riot Android which will not be used anymore by RiotX
+    // Delete all the files created by Riot Android which will not be used anymore by Element
     private fun clearFileSystem(legacyConfig: LegacyHomeServerConnectionConfig) {
         val cryptoFolder = legacyConfig.credentials.userId.md5()
 

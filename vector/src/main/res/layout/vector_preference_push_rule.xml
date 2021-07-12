@@ -19,27 +19,28 @@
 
         <TextView
             android:id="@android:id/title"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceListItem"
-            android:textSize="16sp"
+            android:textAppearance="?textAppearanceListItem"
+            android:textColor="?vctr_content_primary"
             tools:text="Title" />
 
         <TextView
             android:id="@android:id/summary"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@android:id/title"
             android:layout_alignStart="@android:id/title"
             android:maxLines="2"
             android:paddingTop="6dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="14sp"
+            android:textAppearance="?textAppearanceListItemSecondary"
+            android:textColor="?vctr_content_secondary"
             tools:text="Summary"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
     </RelativeLayout>
 

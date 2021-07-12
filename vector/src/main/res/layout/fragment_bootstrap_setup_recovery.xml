@@ -10,20 +10,20 @@
 
     <TextView
         android:id="@+id/bootstrapSetupSecureText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="@string/bottom_sheet_setup_secure_backup_subtitle"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp" />
+        android:textColor="?vctr_content_primary" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/layout_vertical_margin"
-        android:background="?attr/vctr_list_divider_color" />
+        android:background="?vctr_list_separator_on_surface" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/bootstrapSetupSecureSubmit"
@@ -32,7 +32,7 @@
         android:minHeight="50dp"
         app:actionTitle="@string/bottom_sheet_setup_secure_backup_submit"
         app:rightIcon="@drawable/ic_arrow_right"
-        app:tint="?colorAccent" />
+        app:tint="?colorSecondary" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/bootstrapSetupSecureUseSecurityKey"
@@ -43,15 +43,15 @@
         app:actionDescription="@string/bottom_sheet_setup_secure_backup_security_key_subtitle"
         app:actionTitle="@string/bottom_sheet_setup_secure_backup_security_key_title"
         app:leftIcon="@drawable/ic_security_key_24dp"
-        app:tint="?attr/riotx_text_primary"
         app:rightIcon="@drawable/ic_arrow_right"
+        app:tint="?vctr_content_primary"
         tools:visibility="visible" />
 
     <View
         android:id="@+id/bootstrapSetupSecureUseSecurityPassphraseSeparator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/vctr_list_divider_color"
+        android:background="?vctr_list_separator_on_surface"
         android:visibility="gone"
         tools:visibility="visible" />
 
@@ -64,27 +64,27 @@
         app:actionDescription="@string/bottom_sheet_setup_secure_backup_security_phrase_subtitle"
         app:actionTitle="@string/bottom_sheet_setup_secure_backup_security_phrase_title"
         app:leftIcon="@drawable/ic_security_phrase_24dp"
-        app:tint="?attr/riotx_text_primary"
         app:rightIcon="@drawable/ic_arrow_right"
+        app:tint="?vctr_content_primary"
         tools:visibility="visible" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/vctr_list_divider_color" />
+        android:background="?vctr_list_separator_on_surface" />
 
     <TextView
         android:id="@+id/bootstrapSetupWarningTextView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/reset_secure_backup_warning"
-        android:textColor="@color/riotx_destructive_accent"
+        android:layout_marginBottom="16dp"
         android:drawablePadding="4dp"
-        android:textSize="14sp"
+        android:text="@string/reset_secure_backup_warning"
+        android:textColor="?colorError"
         app:drawableStartCompat="@drawable/ic_warning_badge" />
 
 </LinearLayout>

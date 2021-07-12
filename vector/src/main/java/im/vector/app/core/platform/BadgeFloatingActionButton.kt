@@ -122,6 +122,10 @@ class BadgeFloatingActionButton @JvmOverloads constructor(
         }
 
     init {
+        if (isInEditMode) {
+            count = 3
+        }
+
         countStr = countStr(count)
         textPaint.getTextBounds(countStr, 0, countStr.length, counterTextBounds)
         countMaxStr = "$maxCount+"

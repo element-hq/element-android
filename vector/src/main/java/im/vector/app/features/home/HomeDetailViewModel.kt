@@ -23,20 +23,21 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import fr.gouv.tchap.features.home.TchapHomeViewEvents
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.call.dialpad.DialPadLookup
+import im.vector.app.features.call.lookup.CallProtocolsChecker
+import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
-import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -56,11 +57,12 @@ import java.util.concurrent.TimeUnit
  */
 class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
                                                       private val session: Session,
-                                                      private val matrix: Matrix,
-                                                      private val rawService: RawService,
                                                       private val uiStateRepository: UiStateRepository,
+                                                      private val callManager: WebRtcCallManager,
+                                                      private val directRoomHelper: DirectRoomHelper,
                                                       private val appStateHandler: AppStateHandler)
-    : VectorViewModel<HomeDetailViewState, HomeDetailAction, TchapHomeViewEvents>(initialState) {
+    : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
+        CallProtocolsChecker.Listener {
 
     @AssistedFactory
     interface Factory {
@@ -72,7 +74,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState? {
             val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
             return HomeDetailViewState(
-                    displayMode = uiStateRepository.getDisplayMode()
+                    currentTab = HomeTab.RoomList(uiStateRepository.getDisplayMode())
             )
         }
 
@@ -87,7 +89,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         observeSyncState()
         observeRoomGroupingMethod()
         observeRoomSummaries()
-
+        updateShowDialPadTab()
+        callManager.addProtocolsCheckerListener(this)
         session.rx().liveUser(session.myUserId).execute {
             copy(
                     myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
@@ -97,21 +100,51 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
     override fun handle(action: HomeDetailAction) {
         when (action) {
-            is HomeDetailAction.SwitchDisplayMode -> handleSwitchDisplayMode(action)
-            HomeDetailAction.MarkAllRoomsRead     -> handleMarkAllRoomsRead()
-            is HomeDetailAction.InviteByEmail     -> handleIndividualInviteByEmail(action)
-            is HomeDetailAction.CreateDiscussion -> handleCreateDiscussion(action)
-            HomeDetailAction.UnauthorizedEmail   -> handleUnauthorizedEmail()
+            is HomeDetailAction.SwitchTab                -> handleSwitchTab(action)
+            HomeDetailAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
+            is HomeDetailAction.StartCallWithPhoneNumber -> handleStartCallWithPhoneNumber(action)
+            is HomeDetailAction.InviteByEmail            -> handleIndividualInviteByEmail(action)
+            is HomeDetailAction.CreateDiscussion         -> handleCreateDiscussion(action)
+            HomeDetailAction.UnauthorizedEmail           -> handleUnauthorizedEmail()
         }
     }
 
-    private fun handleSwitchDisplayMode(action: HomeDetailAction.SwitchDisplayMode) = withState { state ->
-        if (state.displayMode != action.displayMode) {
-            setState {
-                copy(displayMode = action.displayMode)
+    private fun handleStartCallWithPhoneNumber(action: HomeDetailAction.StartCallWithPhoneNumber) {
+        viewModelScope.launch {
+            try {
+                _viewEvents.post(HomeDetailViewEvents.Loading)
+                val result = DialPadLookup(session, callManager, directRoomHelper).lookupPhoneNumber(action.phoneNumber)
+                callManager.startOutgoingCall(result.roomId, result.userId, isVideoCall = false)
+                _viewEvents.post(HomeDetailViewEvents.CallStarted)
+            } catch (failure: Throwable) {
+                _viewEvents.post(HomeDetailViewEvents.FailToCall(failure))
             }
+        }
+    }
 
-            uiStateRepository.storeDisplayMode(action.displayMode)
+    private fun handleSwitchTab(action: HomeDetailAction.SwitchTab) = withState { state ->
+        if (state.currentTab != action.tab) {
+            setState {
+                copy(currentTab = action.tab)
+            }
+            if (action.tab is HomeTab.RoomList) {
+                uiStateRepository.storeDisplayMode(action.tab.displayMode)
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        callManager.removeProtocolsCheckerListener(this)
+    }
+
+    override fun onPSTNSupportUpdated() {
+        updateShowDialPadTab()
+    }
+
+    private fun updateShowDialPadTab() {
+        setState {
+            copy(showDialPadTab = callManager.supportsPSTNProtocol)
         }
     }
 
@@ -150,9 +183,9 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             val data = tryOrNull { session.identityService().lookUp(listOf(ThreePid.Email(action.email))) }
 
             if (data.isNullOrEmpty()) {
-                _viewEvents.post(TchapHomeViewEvents.GetPlatform(action.email))
+                _viewEvents.post(HomeDetailViewEvents.GetPlatform(action.email))
             } else {
-                _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForDiscoveredUser(action.email))
+                _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(action.email))
             }
         }
     }
@@ -161,10 +194,10 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         it.inviteEmail ?: return@withState
 
         if (it.existingRoom.isNullOrEmpty()) {
-            _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForUnauthorizedEmail(it.inviteEmail))
+            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail(it.inviteEmail))
         } else {
             // Ignore the error, notify the user that the invite has been already sent
-            _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
+            _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
         }
     }
 
@@ -189,12 +222,12 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                         createDiscussion(it.inviteEmail)
                     } catch (failure: Throwable) {
                         // Ignore the error, notify the user that the invite has been already sent
-                        _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
+                        _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
                     }
                 }
             } else {
                 // Notify the user that the invite has been already sent
-                _viewEvents.post(TchapHomeViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
+                _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
             }
         }
     }
@@ -207,8 +240,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 }
 
         runCatching { session.createRoom(roomParams) }.fold(
-                { _ -> _viewEvents.post(TchapHomeViewEvents.InviteNoTchapUserByEmail) },
-                { failure -> _viewEvents.post(TchapHomeViewEvents.Failure(failure)) }
+                { _ -> _viewEvents.post(HomeDetailViewEvents.InviteNoTchapUserByEmail) },
+                { failure -> _viewEvents.post(HomeDetailViewEvents.Failure(failure)) }
         )
     }
 

@@ -16,17 +16,18 @@
 
 package fr.gouv.tchap.features.home.contact.list
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedAction
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
@@ -101,7 +102,7 @@ class TchapContactListFragment @Inject constructor(
 
     private fun setupUserConsent() = withState(viewModel) {
         if (!it.userConsent) {
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.permissions_rationale_popup_title)
                     .setMessage(R.string.permissions_rationale_msg_contacts)
                     .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
@@ -139,7 +140,7 @@ class TchapContactListFragment @Inject constructor(
         val dialogLayout = requireActivity().layoutInflater.inflate(R.layout.dialog_invite_by_id, null)
         val views = DialogInviteByIdBinding.bind(dialogLayout)
 
-        val inviteDialog = AlertDialog.Builder(requireActivity())
+        val inviteDialog = MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.people_search_invite_by_id_dialog_title)
                 .setView(dialogLayout)
                 .setPositiveButton(R.string.invite) { _, _ ->
@@ -154,7 +155,7 @@ class TchapContactListFragment @Inject constructor(
                 .setNegativeButton(R.string.cancel, null)
                 .show()
 
-        val inviteButton = inviteDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        val inviteButton = inviteDialog.getButton(DialogInterface.BUTTON_POSITIVE)
         inviteButton.isEnabled = false
 
         views.inviteByIdEditText.doOnTextChanged { text, _, _, _ ->

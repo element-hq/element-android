@@ -16,7 +16,7 @@
 
 package im.vector.app.features.share
 
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
@@ -35,7 +35,7 @@ class IncomingShareActivity : VectorBaseActivity<ActivitySimpleBinding>(), Toolb
         }
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar, displayBack = false)
     }
 }

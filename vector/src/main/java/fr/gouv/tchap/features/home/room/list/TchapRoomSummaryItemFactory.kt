@@ -71,8 +71,8 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 .buttonLabel(stringProvider.getString(R.string.join))
                 .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
                 .memberCount(spaceChildInfo.activeMemberCount ?: 0)
-                .buttonClickListener(DebouncedClickListener({ listener?.onJoinSuggestedRoom(spaceChildInfo) }))
-                .itemClickListener(DebouncedClickListener({ listener?.onSuggestedRoomClicked(spaceChildInfo) }))
+                .buttonClickListener { listener?.onJoinSuggestedRoom(spaceChildInfo) }
+                .itemClickListener { listener?.onSuggestedRoomClicked(spaceChildInfo) }
     }
 
     private fun createInvitationItem(roomSummary: RoomSummary,

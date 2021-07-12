@@ -22,14 +22,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.gouv.tchap.features.home.contact.list.TchapContactListViewModel
 import fr.gouv.tchap.features.home.contact.list.TchapContactListViewState
 import im.vector.app.AppStateHandler
@@ -67,7 +66,6 @@ import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
-import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
@@ -153,8 +151,6 @@ class HomeActivity :
     }
 
     override fun getBinding() = ActivityHomeBinding.inflate(layoutInflater)
-
-    override fun getOtherThemes() = ActivityOtherThemes.LightVariant2
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -291,7 +287,7 @@ class HomeActivity :
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { isHandled ->
                         if (!isHandled) {
-                            AlertDialog.Builder(this)
+                            MaterialAlertDialogBuilder(this)
                                     .setTitle(R.string.dialog_title_error)
                                     .setMessage(R.string.permalink_malformed)
                                     .setPositiveButton(R.string.ok, null)
@@ -410,7 +406,7 @@ class HomeActivity :
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(userItem, avatarRenderer)
-                    colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
+                    colorInt = ThemeUtils.getColor(this@HomeActivity, R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             action(it)
@@ -440,7 +436,7 @@ class HomeActivity :
         if (vectorUncaughtExceptionHandler.didAppCrash(this)) {
             vectorUncaughtExceptionHandler.clearAppCrashStatus(this)
 
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.send_bug_report_app_crashed)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
@@ -454,7 +450,7 @@ class HomeActivity :
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar, false)
     }
 

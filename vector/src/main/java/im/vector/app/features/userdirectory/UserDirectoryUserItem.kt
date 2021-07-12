@@ -26,6 +26,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.home.AvatarRenderer
@@ -37,7 +38,7 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
-    @EpoxyAttribute var clickListener: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var clickListener: ClickListener? = null
     @EpoxyAttribute var selected: Boolean = false
 
     override fun bind(holder: Holder) {
@@ -49,11 +50,11 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
         if (TchapUtils.isExternalTchapUser(matrixItem.id)) {
             holder.nameView.text = displayName
             holder.domainView.text = holder.view.context.resources.getString(R.string.tchap_contact_external)
-            holder.domainView.setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_contact_external_color))
+            holder.domainView.setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_external))
         } else {
             holder.nameView.text = TchapUtils.getNameFromDisplayName(displayName)
             holder.domainView.text = TchapUtils.getDomainFromDisplayName(displayName)
-            holder.domainView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.secondary_text_color))
+            holder.domainView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary))
         }
         holder.statusImageView.isVisible = false // Todo: Handle user status
         renderSelection(holder, selected)
@@ -62,7 +63,7 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
     private fun renderSelection(holder: Holder, isSelected: Boolean) {
         if (isSelected) {
             holder.avatarCheckedImageView.visibility = View.VISIBLE
-            val backgroundColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
+            val backgroundColor = ThemeUtils.getColor(holder.view.context, R.attr.colorPrimary)
             val backgroundDrawable = TextDrawable.builder().buildRound("", backgroundColor)
             holder.avatarImageView.setImageDrawable(backgroundDrawable)
         } else {

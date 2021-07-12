@@ -40,9 +40,7 @@ class AutocompleteGroupController @Inject constructor() : TypedEpoxyController<L
                 id(groupSummary.groupId)
                 matrixItem(groupSummary.toMatrixItem())
                 avatarRenderer(host.avatarRenderer)
-                clickListener { _ ->
-                    host.listener?.onItemClick(groupSummary)
-                }
+                clickListener { host.listener?.onItemClick(groupSummary) }
             }
         }
     }

@@ -4,9 +4,9 @@
 
     <size android:width="40dp" android:height="40dp"/>
 
-    <solid android:color="?riotx_background" />
+    <solid android:color="?android:colorBackground" />
 
-    <stroke android:width="1dp" android:color="@color/riotx_disabled_accent"/>
+    <stroke android:width="1dp" android:color="?vctr_header_background"/>
 
     <corners android:radius="8dp" />
 

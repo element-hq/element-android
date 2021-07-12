@@ -10,12 +10,12 @@
 
     <TextView
         android:id="@+id/bootstrapDescriptionText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/bootstrap_loading_text"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
@@ -28,12 +28,12 @@
 
     <TextView
         android:id="@+id/bootstrapLoadingStatusText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintTop_toBottomOf="@id/bootstrapWaitingProgress"
         tools:text="Bending the spoon..." />
 

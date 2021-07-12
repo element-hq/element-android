@@ -2,6 +2,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/settings_helper_text"
+    style="@style/Widget.Vector.TextView.Body"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="4dp"
@@ -10,7 +11,6 @@
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp"
-    android:textColor="?android:textColorSecondary"
-    android:textSize="14sp"
+    android:textColor="?vctr_content_secondary"
     tools:drawableStart="@drawable/vector_warning_red"
     tools:text="If you don’t want this, opt out below. You can also manage any of these preferences in Settings." />

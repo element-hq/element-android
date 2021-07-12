@@ -65,10 +65,10 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                             ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
                     span(message) {
                         textStyle = "italic"
-                        textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                        textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                     }
                 } else {
-                    val colorFromAttribute = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                    val colorFromAttribute = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                     if (cryptoError == null) {
                         span(stringProvider.getString(R.string.encrypted_message)) {
                             textStyle = "italic"

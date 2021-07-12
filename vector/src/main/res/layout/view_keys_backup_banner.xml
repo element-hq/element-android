@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_keys_backup_banner_accent_color"
+    android:background="?vctr_keys_backup_banner_accent_color"
     android:minHeight="67dp"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_primary"
+        app:tint="?vctr_content_primary"
         tools:ignore="MissingPrefix" />
 
     <Space
@@ -31,12 +31,12 @@
 
     <TextView
         android:id="@+id/view_keys_backup_banner_text_1"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:text="@string/secure_backup_banner_setup_line1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="18sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@id/view_keys_backup_banner_text_2"
         app:layout_constraintEnd_toStartOf="@id/view_keys_backup_banner_barrier"
         app:layout_constraintStart_toEndOf="@id/view_keys_backup_banner_picto"
@@ -44,12 +44,12 @@
 
     <TextView
         android:id="@+id/view_keys_backup_banner_text_2"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:text="@string/secure_backup_banner_setup_line2"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/view_keys_backup_banner_space2"
         app:layout_constraintEnd_toStartOf="@id/view_keys_backup_banner_barrier"
@@ -106,15 +106,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:contentDescription="@string/a11y_close_keys_backup_banner"
-        android:src="@drawable/ic_small_close"
+        android:src="@drawable/ic_close_24dp"
         app:layout_constraintEnd_toEndOf="@id/view_keys_backup_banner_close"
         app:layout_constraintStart_toStartOf="@id/view_keys_backup_banner_close"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?vctr_content_secondary" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@drawable/line_divider"
+        android:background="?vctr_list_separator"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </merge>

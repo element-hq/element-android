@@ -37,6 +37,16 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityDebugMenuBinding
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
 import im.vector.app.features.qrcode.QrCodeScannerActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkDefaultActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkTestActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkVectorActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightDefaultActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightTestActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightVectorActivity
+import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesDarkActivity
+import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesLightActivity
+import im.vector.lib.ui.styles.debug.DebugVectorTextViewDarkActivity
+import im.vector.lib.ui.styles.debug.DebugVectorTextViewLightActivity
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
 
 import timber.log.Timber
@@ -71,10 +81,38 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     private fun setupViews() {
         views.debugTestTextViewLink.setOnClickListener { testTextViewLink() }
+        views.debugOpenButtonStylesLight.setOnClickListener {
+            startActivity(Intent(this, DebugVectorButtonStylesLightActivity::class.java))
+        }
+        views.debugOpenButtonStylesDark.setOnClickListener {
+            startActivity(Intent(this, DebugVectorButtonStylesDarkActivity::class.java))
+        }
+        views.debugTestTextViewLight.setOnClickListener {
+            startActivity(Intent(this, DebugVectorTextViewLightActivity::class.java))
+        }
+        views.debugTestTextViewDark.setOnClickListener {
+            startActivity(Intent(this, DebugVectorTextViewDarkActivity::class.java))
+        }
         views.debugShowSasEmoji.setOnClickListener { showSasEmoji() }
         views.debugTestNotification.setOnClickListener { testNotification() }
-        views.debugTestMaterialThemeLight.setOnClickListener { testMaterialThemeLight() }
-        views.debugTestMaterialThemeDark.setOnClickListener { testMaterialThemeDark() }
+        views.debugTestMaterialThemeLightDefault.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightDefaultActivity::class.java))
+        }
+        views.debugTestMaterialThemeLightTest.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightTestActivity::class.java))
+        }
+        views.debugTestMaterialThemeLightVector.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightVectorActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkDefault.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkDefaultActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkTest.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkTestActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkVector.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkVectorActivity::class.java))
+        }
         views.debugTestCrash.setOnClickListener { testCrash() }
         views.debugScanQrCode.setOnClickListener { scanQRCode() }
     }
@@ -172,14 +210,6 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                         .setGroup("GroupKey")
                         .build()
         )
-    }
-
-    private fun testMaterialThemeLight() {
-        startActivity(Intent(this, DebugMaterialThemeLightActivity::class.java))
-    }
-
-    private fun testMaterialThemeDark() {
-        startActivity(Intent(this, DebugMaterialThemeDarkActivity::class.java))
     }
 
     private fun testCrash() {

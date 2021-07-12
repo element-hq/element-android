@@ -5,7 +5,7 @@
     android:id="@+id/login_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -17,23 +17,24 @@
 
             <TextView
                 android:id="@+id/loginTitle"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_please_enter_your_matrix_identifier"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title" />
+                android:textColor="?vctr_content_primary" />
 
             <TextView
                 android:id="@+id/loginSubtitle"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:text="@string/login_please_enter_your_matrix_identifier_help"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text" />
+                android:textColor="?vctr_content_secondary" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginFieldTil"
-                style="@style/VectorTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -49,9 +50,9 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginSubmit"
-                style="@style/Style.Vector.Login.Button"
+                style="@style/Widget.Vector.Button.Login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -60,16 +61,17 @@
 
             <TextView
                 android:id="@+id/loginServerText3"
+                style="@style/Widget.Vector.TextView.Caption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:gravity="start"
                 android:text="@string/login_enter_identifier_help"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small" />
+                android:textColor="?vctr_content_secondary" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginChooseAServer"
-                style="@style/Style.Vector.Login.Button.Text"
+                style="@style/Widget.Vector.Button.Text.Login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

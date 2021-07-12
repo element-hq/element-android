@@ -25,8 +25,10 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.themes.ThemeUtils
 
@@ -42,8 +44,8 @@ abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>() {
     @EpoxyAttribute
     var style: ItemStyle = ItemStyle.NORMAL_TEXT
 
-    @EpoxyAttribute
-    var itemClickAction: GenericItem.Action? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var itemClickAction: ClickListener? = null
 
     @EpoxyAttribute
     var centered: Boolean = false
@@ -70,15 +72,13 @@ abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>() {
             holder.imageView.isVisible = false
         }
         if (tintIcon) {
-            val iconTintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+            val iconTintColor = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
             ImageViewCompat.setImageTintList(holder.imageView, ColorStateList.valueOf(iconTintColor))
         } else {
             ImageViewCompat.setImageTintList(holder.imageView, null)
         }
 
-        holder.view.setOnClickListener {
-            itemClickAction?.perform?.run()
-        }
+        holder.view.onClick(itemClickAction)
     }
 
     class Holder : VectorEpoxyHolder() {

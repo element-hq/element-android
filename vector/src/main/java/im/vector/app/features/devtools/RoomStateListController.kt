@@ -21,7 +21,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericItem
 import me.gujun.android.span.span
 import org.json.JSONObject
@@ -51,11 +50,9 @@ class RoomStateListController @Inject constructor(
                             id(entry.key)
                             title(entry.key)
                             description(host.stringProvider.getQuantityString(R.plurals.entries, entry.value.size, entry.value.size))
-                            itemClickAction(GenericItem.Action("view").apply {
-                                perform = Runnable {
-                                    host.interactionListener?.processAction(RoomDevToolAction.ShowStateEventType(entry.key))
-                                }
-                            })
+                            itemClickAction {
+                                host.interactionListener?.processAction(RoomDevToolAction.ShowStateEventType(entry.key))
+                            }
                         }
                     }
                 }
@@ -81,23 +78,21 @@ class RoomStateListController @Inject constructor(
                             title(span {
                                 +"Type: "
                                 span {
-                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                     text = "\"${stateEvent.type}\""
                                     textStyle = "normal"
                                 }
                                 +"\nState Key: "
                                 span {
-                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                     text = stateEvent.stateKey.let { "\"$it\"" }
                                     textStyle = "normal"
                                 }
                             })
                             description(contentJson)
-                            itemClickAction(GenericItem.Action("view").apply {
-                                perform = Runnable {
-                                    host.interactionListener?.processAction(RoomDevToolAction.ShowStateEvent(stateEvent))
-                                }
-                            })
+                            itemClickAction {
+                                host.interactionListener?.processAction(RoomDevToolAction.ShowStateEvent(stateEvent))
+                            }
                         }
                     }
                 }

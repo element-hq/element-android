@@ -52,13 +52,13 @@ class ViewReactionsEpoxyController @Inject constructor(
                 }
             }
             is Success    -> {
-                state.mapReactionKeyToMemberList()?.forEach {
+                state.mapReactionKeyToMemberList()?.forEach { reactionInfo ->
                     reactionInfoSimpleItem {
-                        id(it.eventId)
-                        timeStamp(it.timestamp)
-                        reactionKey(host.emojiCompatWrapper.safeEmojiSpanify(it.reactionKey))
-                        authorDisplayName(it.authorName ?: it.authorId)
-                        userClicked { host.listener?.didSelectUser(it.authorId) }
+                        id(reactionInfo.eventId)
+                        timeStamp(reactionInfo.timestamp)
+                        reactionKey(host.emojiCompatWrapper.safeEmojiSpanify(reactionInfo.reactionKey))
+                        authorDisplayName(reactionInfo.authorName ?: reactionInfo.authorId)
+                        userClicked { host.listener?.didSelectUser(reactionInfo.authorId) }
                     }
                 }
             }

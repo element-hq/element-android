@@ -16,28 +16,28 @@
 
 package im.vector.app.features.userdirectory
 
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.utils.DebouncedClickListener
 
 @EpoxyModelClass(layout = R.layout.item_contact_action)
 abstract class ActionItem : VectorEpoxyModel<ActionItem.Holder>() {
 
     @EpoxyAttribute var title: CharSequence? = null
     @EpoxyAttribute @DrawableRes var actionIconRes: Int? = null
-    @EpoxyAttribute var clickAction: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var clickAction: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener(clickAction?.let { DebouncedClickListener(it) })
+        holder.view.onClick(clickAction)
         // If name is empty, use userId as name and force it being centered
         holder.actionTitleText.setTextOrHide(title)
         if (actionIconRes != null) {

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:fadeScrollbars="false"
     android:scrollbars="vertical">
 
@@ -26,22 +26,23 @@
             android:src="@drawable/ic_security_key_24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?riotx_text_primary"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/bootstrapTitleText"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
-            android:textColor="?riotx_text_primary"
-            android:textSize="20sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/bootstrapIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/bootstrapIcon"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/bootstrapIcon"
             tools:text="@string/bottom_sheet_setup_secure_backup_title" />
 
         <androidx.fragment.app.FragmentContainerView

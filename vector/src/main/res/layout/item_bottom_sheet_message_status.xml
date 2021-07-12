@@ -21,14 +21,15 @@
 
     <TextView
         android:id="@+id/messageStatusText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
         android:drawablePadding="4dp"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textStyle="bold"
-        tools:text="@string/unable_to_send_message"
-        app:drawableStartCompat="@drawable/ic_warning_badge" />
+        app:drawableStartCompat="@drawable/ic_warning_badge"
+        tools:text="@string/unable_to_send_message" />
 
 </LinearLayout>

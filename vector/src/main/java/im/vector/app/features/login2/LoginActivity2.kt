@@ -21,8 +21,7 @@ import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -30,6 +29,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
@@ -147,7 +147,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                 }
             }
             is LoginViewEvents2.OutdatedHomeserver                         -> {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setTitle(R.string.login_error_outdated_homeserver_title)
                         .setMessage(R.string.login_error_outdated_homeserver_warning_content)
                         .setPositiveButton(R.string.ok, null)
@@ -298,7 +298,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         // And inform the user
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.login_sso_error_message, onWebLoginError.description, onWebLoginError.errorCode))
                 .setPositiveButton(R.string.ok, null)
@@ -317,7 +317,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
     }
 
     private fun onRegistrationStageNotSupported() {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.app_name)
                 .setMessage(getString(R.string.login_registration_not_supported))
                 .setPositiveButton(R.string.yes) { _, _ ->
@@ -330,7 +330,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
     }
 
     private fun onLoginModeNotSupported(supportedTypes: List<String>) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.app_name)
                 .setMessage(getString(R.string.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
                 .setPositiveButton(R.string.yes) { _, _ ->
@@ -388,7 +388,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
         }
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 

@@ -9,21 +9,21 @@
     android:paddingStart="16dp"
     android:paddingEnd="16dp">
 
-    <com.google.android.material.checkbox.MaterialCheckBox
+    <CheckBox
         android:id="@+id/adapter_item_policy_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:buttonTint="@color/login_button_tint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/adapter_item_policy_title"
-        style="@style/TextAppearance.Vector.Login.Text"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@+id/adapter_item_policy_subtitle"
         app:layout_constraintEnd_toStartOf="@+id/adapter_item_policy_arrow"
         app:layout_constraintStart_toEndOf="@+id/adapter_item_policy_checkbox"
@@ -33,11 +33,12 @@
 
     <TextView
         android:id="@+id/adapter_item_policy_subtitle"
-        style="@style/TextAppearance.Vector.Login.Text.Small"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:drawablePadding="8dp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/adapter_item_policy_arrow"
         app:layout_constraintStart_toEndOf="@+id/adapter_item_policy_checkbox"
@@ -53,11 +54,11 @@
         android:paddingStart="8dp"
         android:paddingEnd="0dp"
         android:rotationY="@integer/rtl_mirror_flip"
-        android:src="@drawable/ic_material_chevron_right_black"
+        android:src="@drawable/ic_arrow_right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_android_secondary"
+        app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

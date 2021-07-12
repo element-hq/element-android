@@ -11,14 +11,14 @@
 
         <TextView
             android:id="@+id/reAuthConfirmText"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:text="@string/re_authentication_default_confirm_text"
-            android:textColor="?riotx_text_primary"
-            android:textSize="16sp"
+            android:textColor="?vctr_content_primary"
             app:layout_constraintBottom_toTopOf="@id/reAuthConfirmButton"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0"
@@ -33,7 +33,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordFieldTil"
-                style="@style/VectorTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/login_signup_password_hint"
@@ -61,7 +60,7 @@
                 android:layout_marginTop="8dp"
                 android:background="?attr/selectableItemBackground"
                 android:scaleType="center"
-                app:tint="?attr/colorAccent" />
+                app:tint="?colorSecondary" />
 
         </FrameLayout>
 
@@ -71,7 +70,7 @@
         <!--            android:layout_height="wrap_content"-->
         <!--            android:gravity="start"-->
         <!--            android:text="@string/login_signin_matrix_id_password_notice"-->
-        <!--            android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"-->
+        <!--            style="@style/Widget.Vector.TextView.Caption"-->
         <!--            android:visibility="gone"-->
         <!--            app:layout_constraintEnd_toEndOf="parent"-->
         <!--            app:layout_constraintStart_toStartOf="parent"-->
@@ -80,11 +79,11 @@
 
         <TextView
             android:id="@+id/genericErrorText"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="@string/authentication_error"
-            android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
             android:textColor="?colorError"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,10 +91,9 @@
             app:layout_constraintTop_toBottomOf="@id/passwordContainer"
             tools:visibility="visible" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/reAuthConfirmButton"
-            style="@style/VectorButtonStylePositive"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
@@ -103,6 +101,8 @@
             android:layout_marginBottom="20dp"
             android:text="@string/_continue"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/genericErrorText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

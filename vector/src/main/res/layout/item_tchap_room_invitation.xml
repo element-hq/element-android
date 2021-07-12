@@ -5,7 +5,7 @@
     android:id="@+id/itemRoomInvitationLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:focusable="true">
 
     <FrameLayout
@@ -57,7 +57,7 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textSize="15sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/roomInvitationAvatarContainer"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/roomInvitationSubTitle"
@@ -74,12 +74,12 @@
         android:layout_marginTop="3dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="@id/roomInvitationNameView"
         app:layout_constraintStart_toStartOf="@id/roomInvitationNameView"
         app:layout_constraintTop_toBottomOf="@id/roomInvitationNameView"
-        tools:text="@sample/matrix.json/data/message" />
+        tools:text="@sample/messages.json/data/message" />
 
     <!-- Margin bottom does not work, so I use space -->
     <Space
@@ -119,7 +119,7 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="5dp"
-        android:background="?riotx_header_panel_border_mobile"
+        android:background="?vctr_list_separator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

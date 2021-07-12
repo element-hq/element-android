@@ -48,7 +48,7 @@ class ConsentWebViewEventListener(activity: VectorBaseActivity<*>,
      */
     private fun createRiotBotRoomIfNeeded() {
         safeActivity?.let {
-            /* We do not create a Room with RiotBot in RiotX for the moment
+            /* We do not create a Room with RiotBot in Element for the moment
             val joinedRooms = session.dataHandler.store.rooms.filter {
                 it.isJoined
             }

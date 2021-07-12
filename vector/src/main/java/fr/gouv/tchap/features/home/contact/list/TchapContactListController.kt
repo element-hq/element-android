@@ -16,7 +16,6 @@
 
 package fr.gouv.tchap.features.home.contact.list
 
-import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -60,9 +59,9 @@ class TchapContactListController @Inject constructor(private val session: Sessio
                 id(R.drawable.ic_tchap_contact_search)
                 title(host.stringProvider.getString(R.string.search_in_my_contacts))
                 actionIconRes(R.drawable.ic_tchap_contact_search)
-                clickAction(View.OnClickListener {
+                clickAction {
                     host.callback?.onContactSearchClick()
-                })
+                }
             }
         }
 
@@ -71,9 +70,9 @@ class TchapContactListController @Inject constructor(private val session: Sessio
                 id(R.drawable.ic_tchap_invite_email)
                 title(host.stringProvider.getString(R.string.tchap_invite_contacts_to_tchap))
                 actionIconRes(R.drawable.ic_tchap_invite_email)
-                clickAction(View.OnClickListener {
+                clickAction {
                     host.callback?.onInviteByEmailClick()
-                })
+                }
             }
         }
 

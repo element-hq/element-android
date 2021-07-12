@@ -8,18 +8,17 @@
 
     <TextView
         android:id="@+id/bootstrapDescriptionText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/bootstrap_info_text_2"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@id/ssss_passphrase_enter_til"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ssss_passphrase_enter_til"
-        style="@style/VectorTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -35,7 +34,6 @@
             android:imeOptions="actionDone"
             android:maxLines="3"
             android:singleLine="false"
-            android:textColor="?android:textColorPrimary"
             tools:hint="@string/passphrase_enter_passphrase"
             tools:inputType="textPassword" />
 
@@ -50,6 +48,7 @@
 
         <TextView
             android:id="@+id/bootstrapWarningInfo"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -57,9 +56,9 @@
             android:drawablePadding="4dp"
             android:gravity="center_vertical"
             android:text="@string/bootstrap_dont_reuse_pwd"
-            android:textSize="12sp"
+            android:textColor="?vctr_content_primary"
             app:drawableStartCompat="@drawable/ic_alert_triangle"
-            app:drawableTint="@color/riotx_destructive_accent" />
+            app:drawableTint="?colorError" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -73,11 +72,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ssss_passphrase_enter_til"
         app:layout_constraintTop_toTopOf="@+id/ssss_passphrase_enter_til"
-        app:tint="?colorAccent" />
+        app:tint="?colorSecondary" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/bootstrapSubmit"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/_continue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

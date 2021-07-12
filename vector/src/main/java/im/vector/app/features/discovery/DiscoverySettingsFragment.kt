@@ -20,10 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -143,7 +143,7 @@ class DiscoverySettingsFragment @Inject constructor(
 
         if (hasBoundIds) {
             // we should prompt
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.change_identity_server)
                     .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
                     .setPositiveButton(R.string._continue) { _, _ -> navigateToChangeIdentityServerFragment() }
@@ -167,7 +167,7 @@ class DiscoverySettingsFragment @Inject constructor(
                 getString(R.string.disconnect_identity_server_dialog_content, state.identityServer())
             }
 
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.disconnect_identity_server)
                     .setMessage(message)
                     .setPositiveButton(R.string.disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.DisconnectIdentityServer) }
@@ -179,7 +179,7 @@ class DiscoverySettingsFragment @Inject constructor(
     override fun onTapUpdateUserConsent(newValue: Boolean) {
         if (newValue) {
             withState(viewModel) { state ->
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.identity_server_consent_dialog_title)
                         .setMessage(getString(R.string.identity_server_consent_dialog_content, state.identityServer.invoke()))
                         .setPositiveButton(R.string.yes) { _, _ ->

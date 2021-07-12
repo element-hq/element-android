@@ -6,12 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp"
-        android:theme="@style/Vector.ActionBarTheme.TchapLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/tchap_register_title" />
@@ -26,9 +25,8 @@
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
         android:text="@string/tchap_register_wait_for_email_title"
-        android:textColor="@color/tchap_text_color_light"
+        android:textColor="?colorPrimaryVariant"
         android:textSize="20sp"
-        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
@@ -42,9 +40,8 @@
         android:gravity="center_horizontal"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
-        android:textColor="@color/tchap_text_color_dark_grey"
+        android:textColor="?vctr_content_secondary"
         android:textSize="12.5sp"
-        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_tchap_register_wait_for_email_title"
@@ -60,16 +57,15 @@
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
         android:text="@string/tchap_register_wait_for_email_subtitle"
-        android:textColor="@color/tchap_text_color_light"
+        android:textColor="?colorPrimaryVariant"
         android:textSize="17.5sp"
-        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_tchap_register_wait_for_email_email" />
 
     <Button
         android:id="@+id/fragment_tchap_register_wait_for_email_login_button"
-        style="@style/TchapLoginButtonStyle"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -90,9 +86,7 @@
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
         android:text="@string/tchap_register_wait_for_email_no_email"
-        android:textColor="@color/tchap_text_color_light"
         android:textSize="17.5sp"
-        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

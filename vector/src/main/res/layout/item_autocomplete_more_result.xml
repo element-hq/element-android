@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.Vector.TextView.Caption"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:padding="8dp"
     android:text="@string/autocomplete_limited_results"
-    android:textColor="?riotx_text_secondary"
-    android:textSize="12sp" />
+    android:textColor="?vctr_content_secondary" />

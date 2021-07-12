@@ -17,17 +17,19 @@
         android:layout_marginEnd="8dp"
         android:importantForAccessibility="no"
         android:padding="10dp"
+        app:tint="?colorPrimaryVariant"
         tools:src="@drawable/ic_tchap_contact_search" />
 
     <TextView
         android:id="@+id/actionTitleText"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?primary_text_color"
+        android:textColor="?colorPrimaryVariant"
         android:textSize="15sp"
         tools:text="@string/search_in_my_contacts" />
 

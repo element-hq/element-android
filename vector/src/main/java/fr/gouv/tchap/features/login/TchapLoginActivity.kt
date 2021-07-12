@@ -20,8 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -29,6 +27,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragmentArgument
@@ -48,7 +48,6 @@ import im.vector.app.features.login.LoginViewState
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.isSupported
 import im.vector.app.features.pin.UnlockedActivity
-import im.vector.app.features.themes.ActivityOtherThemes
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import javax.inject.Inject
@@ -88,8 +87,6 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
     }
 
     final override fun getBinding() = ActivityLoginBinding.inflate(layoutInflater)
-
-    override fun getOtherThemes() = ActivityOtherThemes.LightVariant2
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
@@ -141,7 +138,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                 }
             }
             is TchapLoginViewEvents.OutdatedHomeserver                         -> {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setTitle(R.string.login_error_outdated_homeserver_title)
                         .setMessage(R.string.login_error_outdated_homeserver_warning_content)
                         .setPositiveButton(R.string.ok, null)
@@ -201,7 +198,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
     }
 
     private fun onRegistrationStageNotSupported() {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.app_name)
                 .setMessage(getString(R.string.login_registration_not_supported))
                 .setPositiveButton(R.string.ok, null)
@@ -238,7 +235,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         }
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 

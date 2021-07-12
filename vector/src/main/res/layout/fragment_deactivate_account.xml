@@ -11,28 +11,31 @@
 
         <TextView
             android:id="@+id/deactivateAccountContent"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/deactivate_account_content"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.SwitchCompat
+        <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/deactivateAccountEraseCheckbox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/deactivate_account_delete_checkbox"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/deactivateAccountContent" />
 
         <Button
             android:id="@+id/deactivateAccountSubmit"
-            style="@style/VectorButtonStyleDestructive"
+            style="@style/Widget.Vector.Button.Destructive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/deactivate_account_submit"
             app:layout_constraintBottom_toBottomOf="parent"

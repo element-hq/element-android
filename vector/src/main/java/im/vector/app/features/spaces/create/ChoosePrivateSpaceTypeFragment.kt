@@ -20,12 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.setFragmentResultListener
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.databinding.FragmentSpaceCreateChoosePrivateModelBinding
 import javax.inject.Inject
 
@@ -38,16 +39,23 @@ class ChoosePrivateSpaceTypeFragment @Inject constructor(
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             FragmentSpaceCreateChoosePrivateModelBinding.inflate(layoutInflater, container, false)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(BetaWarningBottomSheet.REQUEST_KEY) { _, _ ->
+            sharedViewModel.handle(CreateSpaceAction.SetSpaceTopology(SpaceTopology.MeAndTeammates))
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.justMeButton.setOnClickListener(DebouncedClickListener({
+        views.justMeButton.onClick {
             sharedViewModel.handle(CreateSpaceAction.SetSpaceTopology(SpaceTopology.JustMe))
-        }))
+        }
 
-        views.teammatesButton.setOnClickListener(DebouncedClickListener({
-            sharedViewModel.handle(CreateSpaceAction.SetSpaceTopology(SpaceTopology.MeAndTeammates))
-        }))
+        views.teammatesButton.onClick {
+            BetaWarningBottomSheet().show(parentFragmentManager, "warning")
+        }
 
         sharedViewModel.subscribe { state ->
             views.accessInfoHelpText.text = stringProvider.getString(R.string.create_spaces_make_sure_access, state.name ?: "")
