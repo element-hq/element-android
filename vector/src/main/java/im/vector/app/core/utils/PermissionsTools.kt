@@ -18,7 +18,6 @@ package im.vector.app.core.utils
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
@@ -45,30 +44,13 @@ val PERMISSIONS_FOR_PICKING_CONTACT = listOf(Manifest.permission.READ_CONTACTS)
 
 val PERMISSIONS_EMPTY = emptyList<String>()
 
-/**
- * Log the used permissions statuses.
- */
-fun logPermissionStatuses(context: Context) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val permissions = listOf(
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.READ_CONTACTS)
-
-        Timber.v("## logPermissionStatuses() : log the permissions status used by the app")
-
-        for (permission in permissions) {
-            Timber.v(("Status of [$permission] : " +
-                    if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, permission)) {
-                        "PERMISSION_GRANTED"
-                    } else {
-                        "PERMISSION_DENIED"
-                    }))
-        }
-    }
-}
+// For debug
+val PERMISSIONS_ALL = listOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.READ_CONTACTS)
 
 fun ComponentActivity.registerForPermissionsResult(allGranted: (Boolean) -> Unit): ActivityResultLauncher<Array<String>> {
     return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
