@@ -122,6 +122,9 @@ class CreateRoomController @Inject constructor(
                         action = { host.listener?.selectVisibility() }
                 )
             }
+            else                     -> {
+                // not yet supported
+            }
         }
 
         settingsSectionTitleItem {
