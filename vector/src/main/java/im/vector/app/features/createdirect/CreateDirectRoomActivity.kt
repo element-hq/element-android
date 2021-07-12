@@ -108,14 +108,14 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
     }
 
     private fun openAddByQrCode() {
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher, 0)) {
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
             addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
         }
     }
 
     private fun openPhoneBook() {
         // Check permission first
-        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, this, permissionReadContactLauncher, 0)) {
+        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, this, permissionReadContactLauncher)) {
             addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
         }
     }
