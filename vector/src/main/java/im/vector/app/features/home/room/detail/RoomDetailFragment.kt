@@ -1285,9 +1285,9 @@ class RoomDetailFragment @Inject constructor(
             return
         }
         if (text.isNotBlank()) {
-            // We collapse ASAP, if not there will be a slight anoying delay
+            // We collapse ASAP, if not there will be a slight annoying delay
             views.composerLayout.collapse(true)
-            views.voiceMessageRecorderView.isVisible = true && vectorPreferences.labsUseVoiceMessage()
+            views.voiceMessageRecorderView.isVisible = vectorPreferences.labsUseVoiceMessage()
             lockSendButton = true
             roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
             emojiPopup.dismiss()
@@ -1336,23 +1336,26 @@ class RoomDetailFragment @Inject constructor(
             views.jumpToBottomView.count = summary.notificationCount
             views.jumpToBottomView.drawBadge = summary.hasUnreadMessages
             timelineEventController.update(state)
-            views.inviteView.visibility = View.GONE
+            views.inviteView.isVisible = false
             if (state.tombstoneEvent == null) {
                 if (state.canSendMessage) {
-                    views.composerLayout.visibility = View.VISIBLE
+                    views.composerLayout.isVisible = true
+                    views.voiceMessageRecorderView.isVisible = vectorPreferences.labsUseVoiceMessage()
                     views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                     views.notificationAreaView.render(NotificationAreaView.State.Hidden)
                     views.composerLayout.alwaysShowSendButton = !vectorPreferences.labsUseVoiceMessage()
                 } else {
-                    views.composerLayout.visibility = View.GONE
+                    views.composerLayout.isVisible = false
+                    views.voiceMessageRecorderView.isVisible = false
                     views.notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost)
                 }
             } else {
-                views.composerLayout.visibility = View.GONE
+                views.composerLayout.isVisible = false
+                views.voiceMessageRecorderView.isVisible = false
                 views.notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
             }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
-            views.inviteView.visibility = View.VISIBLE
+            views.inviteView.isVisible = true
             views.inviteView.render(inviter, VectorInviteView.Mode.LARGE, state.changeMembershipState)
             // Intercept click event
             views.inviteView.setOnClickListener { }
