@@ -298,7 +298,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         }
     }
 
-    private val permissionCameraLauncher = registerForPermissionsResult { allGranted ->
+    private val permissionCameraLauncher = registerForPermissionsResult { allGranted, _ ->
         if (allGranted) {
             start()
         } else {

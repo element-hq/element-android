@@ -34,6 +34,7 @@ import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.features.contactsbook.ContactsBookFragment
@@ -122,11 +123,11 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
         }
     }
 
-    private val permissionContactLauncher = registerForPermissionsResult { allGranted ->
+    private val permissionContactLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
-        } else {
-            Toast.makeText(baseContext, R.string.missing_permissions_error, Toast.LENGTH_SHORT).show()
+        } else if (deniedPermanently) {
+            onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
         }
     }
 

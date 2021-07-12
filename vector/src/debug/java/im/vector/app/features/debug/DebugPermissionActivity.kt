@@ -16,6 +16,7 @@
 
 package im.vector.app.features.debug
 
+import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
@@ -33,27 +34,48 @@ class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBindin
 
     override fun getBinding() = ActivityDebugPermissionBinding.inflate(layoutInflater)
 
+    private var lastPermissions = emptyList<String>()
+
     override fun initUiAndData() {
         views.status.setOnClickListener { refresh() }
 
-        listOf(
-                views.audio,
-                views.camera,
-                views.write,
-                views.read,
-                views.contact
-        ).forEach { button ->
-            button.setOnClickListener {
-                checkPermissions(listOf(button.text.toString()), this, launcher, R.string.debug_rationale)
-            }
+        views.camera.setOnClickListener {
+            lastPermissions = listOf(Manifest.permission.CAMERA)
+            checkPerm()
+        }
+        views.audio.setOnClickListener {
+            lastPermissions = listOf(Manifest.permission.RECORD_AUDIO)
+            checkPerm()
+        }
+        views.write.setOnClickListener {
+            lastPermissions = listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            checkPerm()
+        }
+        views.read.setOnClickListener {
+            lastPermissions = listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            checkPerm()
+        }
+        views.contact.setOnClickListener {
+            lastPermissions = listOf(Manifest.permission.READ_CONTACTS)
+            checkPerm()
         }
     }
 
-    private val launcher = registerForPermissionsResult { allGranted ->
+    private fun checkPerm() {
+        if (checkPermissions(lastPermissions, this, launcher, R.string.debug_rationale)) {
+            Toast.makeText(this, "Already granted, sync call", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val launcher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             Toast.makeText(this, "All granted", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(this, "Denied", Toast.LENGTH_SHORT).show()
+            if (deniedPermanently) {
+                Toast.makeText(this, "Denied forever", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Denied", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

@@ -120,18 +120,18 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
         }
     }
 
-    private val permissionReadContactLauncher = registerForPermissionsResult { allGranted ->
+    private val permissionReadContactLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
-        } else {
+        } else if (deniedPermanently) {
             onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
         }
     }
 
-    private val permissionCameraLauncher = registerForPermissionsResult { allGranted ->
+    private val permissionCameraLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
-        } else {
+        } else if (deniedPermanently) {
             onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
         }
     }

@@ -19,8 +19,6 @@ package im.vector.app.core.utils
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.os.Build
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,7 +29,6 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
-import timber.log.Timber
 
 // Permissions sets
 val PERMISSIONS_FOR_AUDIO_IP_CALL = listOf(Manifest.permission.RECORD_AUDIO)
@@ -52,9 +49,32 @@ val PERMISSIONS_ALL = listOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.READ_CONTACTS)
 
-fun ComponentActivity.registerForPermissionsResult(allGranted: (Boolean) -> Unit): ActivityResultLauncher<Array<String>> {
+// This is not ideal to store the value like that, but it works
+private var permissionDialogDisplayed = false
+
+/**
+ * First boolean is true if all permissions have been granted
+ * Second boolean is true if the permission is denied forever AND the permission request has not been displayed.
+ * So when the user does not grant the permission and check the box do not ask again, this boolean will be false.
+ * Only useful if the first boolean is false
+ */
+fun ComponentActivity.registerForPermissionsResult(lambda: (allGranted: Boolean, deniedPermanently: Boolean) -> Unit)
+        : ActivityResultLauncher<Array<String>> {
     return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-        allGranted.invoke(result.keys.all { result[it] == true })
+        if (result.keys.all { result[it] == true }) {
+            lambda(true, /* not used */ false)
+        } else {
+            if (permissionDialogDisplayed) {
+                // A permission dialog has been displayed, so even if the user has checked the do not ask again button, we do
+                // not tell the user to open the app settings
+                lambda(false, false)
+            } else {
+                // No dialog has been displayed, so tell the user to go to the system setting
+                lambda(false, true)
+            }
+        }
+        // Reset
+        permissionDialogDisplayed = false
     }
 }
 
@@ -80,88 +100,66 @@ fun Fragment.registerForPermissionsResult(allGranted: (Boolean) -> Unit): Activi
  * @param permissionsToBeGranted the permissions to be granted
  * @param activity               the calling Activity that is requesting the permissions (or fragment parent)
  * @param activityResultLauncher from the calling fragment/Activity that is requesting the permissions
+ * @param rationaleMessage       message to be displayed BEFORE requesting for the permission
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
 fun checkPermissions(permissionsToBeGranted: List<String>,
                      activity: Activity,
                      activityResultLauncher: ActivityResultLauncher<Array<String>>,
                      @StringRes rationaleMessage: Int = 0): Boolean {
-    var isPermissionGranted = false
+    // retrieve the permissions to be granted according to the permission list
+    val missingPermissions = permissionsToBeGranted.filter { permission ->
+        ContextCompat.checkSelfPermission(activity.applicationContext, permission) == PackageManager.PERMISSION_DENIED
+    }
 
-    // sanity check
-    if (permissionsToBeGranted.isEmpty()) {
-        isPermissionGranted = true
-    } else {
-        val permissionListAlreadyDenied = mutableListOf<String>()
-        val permissionsListToBeGranted = mutableListOf<String>()
-        var isRequestPermissionRequired = false
+    return if (missingPermissions.isNotEmpty()) {
+        permissionDialogDisplayed = !permissionsDeniedPermanently(missingPermissions, activity)
 
-        // retrieve the permissions to be granted according to the permission list
-        permissionsToBeGranted.forEach { permission ->
-            if (updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permission)) {
-                isRequestPermissionRequired = true
-            }
-        }
-
-        // if some permissions were already denied: display a dialog to the user before asking again.
-        if (permissionListAlreadyDenied.isNotEmpty() && rationaleMessage != 0) {
-            // display the dialog with the info text
+        if (rationaleMessage != 0 && permissionDialogDisplayed) {
+            // display the dialog with the info text. Do not do it if no system dialog will
+            // be displayed
             MaterialAlertDialogBuilder(activity)
                     .setTitle(R.string.permissions_rationale_popup_title)
                     .setMessage(rationaleMessage)
-                    .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
+                    .setCancelable(false)
                     .setPositiveButton(R.string.ok) { _, _ ->
-                        if (permissionsListToBeGranted.isNotEmpty()) {
-                            activityResultLauncher.launch(permissionsListToBeGranted.toTypedArray())
-                        }
+                        activityResultLauncher.launch(missingPermissions.toTypedArray())
                     }
                     .show()
         } else {
             // some permissions are not granted, ask permissions
-            if (isRequestPermissionRequired) {
-                activityResultLauncher.launch(permissionsListToBeGranted.toTypedArray())
-            } else {
-                // permissions were granted, start now.
-                isPermissionGranted = true
-            }
+            activityResultLauncher.launch(missingPermissions.toTypedArray())
         }
+        false
+    } else {
+        // permissions were granted, start now.
+        true
     }
+}
 
-    return isPermissionGranted
+/**
+ * To be call after the permission request
+ *
+ * @param permissionsToBeGranted the permissions to be granted
+ * @param activity               the calling Activity that is requesting the permissions (or fragment parent)
+ *
+ * @return true if one of the permission has been denied and the user check the do not ask again checkbox
+ */
+private fun permissionsDeniedPermanently(permissionsToBeGranted: List<String>,
+                                         activity: Activity): Boolean {
+    return permissionsToBeGranted
+            .filter { permission ->
+                ContextCompat.checkSelfPermission(activity.applicationContext, permission) == PackageManager.PERMISSION_DENIED
+            }
+            .any { permission ->
+                // If shouldShowRequestPermissionRationale() returns true, it means that the user as denied the permission, but not permanently.
+                // If it return false, it mean that the user as denied permanently the permission
+                ActivityCompat.shouldShowRequestPermissionRationale(activity, permission).not()
+            }
 }
 
 fun VectorBaseActivity<*>.onPermissionDeniedSnackbar(@StringRes rationaleMessage: Int) {
     showSnackbar(getString(rationaleMessage), R.string.settings) {
         openAppSettingsPage(this)
     }
-}
-
-/**
- * Helper method used in [.checkPermissions] to populate the list of the
- * permissions to be granted (permissionsListToBeGrantedOut) and the list of the permissions already denied (permissionAlreadyDeniedListOut).
- *
- * @param activity                       calling activity
- * @param permissionAlreadyDeniedListOut list to be updated with the permissions already denied by the user
- * @param permissionsListToBeGrantedOut  list to be updated with the permissions to be granted
- * @param permissionType                 the permission to be checked
- * @return true if the permission requires to be granted, false otherwise
- */
-private fun updatePermissionsToBeGranted(activity: Activity,
-                                         permissionAlreadyDeniedListOut: MutableList<String>,
-                                         permissionsListToBeGrantedOut: MutableList<String>,
-                                         permissionType: String): Boolean {
-    var isRequestPermissionRequested = false
-
-    // add permission to be granted
-    permissionsListToBeGrantedOut.add(permissionType)
-
-    if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(activity.applicationContext, permissionType)) {
-        isRequestPermissionRequested = true
-
-        // add permission to the ones that were already asked to the user
-        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permissionType)) {
-            permissionAlreadyDeniedListOut.add(permissionType)
-        }
-    }
-    return isRequestPermissionRequested
 }
