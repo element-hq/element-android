@@ -7,12 +7,12 @@
         <im.vector.app.core.preference.VectorCheckboxPreference
             android:key="SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY"
             android:persistent="false"
-            android:title="@string/settings_containing_my_display_name" />
+            android:title="@string/settings_messages_containing_display_name" />
 
         <im.vector.app.core.preference.VectorCheckboxPreference
             android:key="SETTINGS_PUSH_RULE_CONTAINING_MY_USER_NAME_PREFERENCE_KEY"
             android:persistent="false"
-            android:title="@string/settings_containing_my_user_name" />
+            android:title="@string/settings_messages_containing_username" />
 
         <im.vector.app.core.preference.VectorCheckboxPreference
             android:key="SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY"
