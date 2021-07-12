@@ -156,12 +156,16 @@ val upHandler = object: MessagingReceiverHandler {
     override fun onNewEndpoint(context: Context?, endpoint: String, instance: String) {
         initVar(context!!)
         Timber.i("onNewEndpoint: adding $endpoint")
-        UPHelper.storeUpEndpoint(context, endpoint)
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
             val gateway = UPHelper.customOrDefaultGateway(context, endpoint)
-            UPHelper.storePushGateway(context, gateway)
-            UPHelper.storeUpEndpoint(context, endpoint)
-            pusherManager.registerPusher(context, endpoint, gateway)
+            if (UPHelper.getUpEndpoint(context) != endpoint ||
+                    UPHelper.getPushGateway(context) != gateway) {
+                UPHelper.storePushGateway(context, gateway)
+                UPHelper.storeUpEndpoint(context, endpoint)
+                pusherManager.registerPusher(context, endpoint, gateway)
+            } else {
+                Timber.i("onNewEndpoint: skipped")
+            }
         }
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
