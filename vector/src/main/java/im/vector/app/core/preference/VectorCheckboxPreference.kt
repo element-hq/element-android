@@ -16,18 +16,11 @@
 
 package im.vector.app.core.preference
 
-import android.animation.Animator
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.widget.TextView
-import androidx.core.animation.doOnEnd
 import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceViewHolder
-import im.vector.app.R
-import im.vector.app.features.themes.ThemeUtils
 
 open class VectorCheckboxPreference : CheckBoxPreference {
     // Note: @JvmOverload does not work here...
@@ -44,49 +37,9 @@ open class VectorCheckboxPreference : CheckBoxPreference {
         isIconSpaceReserved = true
     }
 
-    var isHighlighted = false
-        set(value) {
-            field = value
-            notifyChanged()
-        }
-
-    var currentHighlightAnimator: Animator? = null
-
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         // display the title in multi-line to avoid ellipsis.
         (holder.findViewById(android.R.id.title) as? TextView)?.isSingleLine = false
-
-        // cancel existing animation (find a way to resume if happens during anim?)
-        currentHighlightAnimator?.cancel()
-
-        val itemView = holder.itemView
-        if (isHighlighted) {
-            val colorFrom = Color.TRANSPARENT
-            val colorTo = ThemeUtils.getColor(itemView.context, R.attr.colorControlHighlight)
-            currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
-                duration = 250 // milliseconds
-                addUpdateListener { animator ->
-                    itemView.setBackgroundColor(animator.animatedValue as Int)
-                }
-                doOnEnd {
-                    currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorTo, colorFrom).apply {
-                        duration = 250 // milliseconds
-                        addUpdateListener { animator ->
-                            itemView.setBackgroundColor(animator.animatedValue as Int)
-                        }
-                        doOnEnd {
-                            isHighlighted = false
-                        }
-                        start()
-                    }
-                }
-                startDelay = 200
-                start()
-            }
-        } else {
-            itemView.setBackgroundColor(Color.TRANSPARENT)
-        }
-
         super.onBindViewHolder(holder)
     }
 }

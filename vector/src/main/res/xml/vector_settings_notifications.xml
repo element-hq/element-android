@@ -27,19 +27,19 @@
             android:title="@string/settings_notification_global"
             app:fragment="im.vector.app.features.settings.VectorSettingsGlobalNotificationPreferenceFragment" />
 
-<!--        <im.vector.app.core.preference.VectorPreference-->
-<!--            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"-->
-<!--            android:key="SETTINGS_NOTIFICATION_KEYWORD_AND_MENTIONS_PREFERENCE_KEY"-->
-<!--            android:persistent="false"-->
-<!--            android:title="@string/settings_notification_mentions_and_keywords"-->
-<!--            app:fragment="im.vector.app.features.settings.VectorSettingsKeywordAndMentionsNotificationPreferenceFragment" />-->
+        <im.vector.app.core.preference.VectorPreference
+            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+            android:key="SETTINGS_NOTIFICATION_KEYWORD_AND_MENTIONS_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_notification_mentions_and_keywords"
+            app:fragment="im.vector.app.features.settings.VectorSettingsKeywordAndMentionsNotificationPreferenceFragment" />
 
-<!--        <im.vector.app.core.preference.VectorPreference-->
-<!--            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"-->
-<!--            android:key="SETTINGS_NOTIFICATION_OTHER_PREFERENCE_KEY"-->
-<!--            android:persistent="false"-->
-<!--            android:title="@string/settings_notification_other"-->
-<!--            app:fragment="im.vector.app.features.settings.VectorSettingsOtherNotificationPreferenceFragment" />-->
+        <im.vector.app.core.preference.VectorPreference
+            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+            android:key="SETTINGS_NOTIFICATION_OTHER_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_notification_other"
+            app:fragment="im.vector.app.features.settings.VectorSettingsOtherNotificationPreferenceFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 

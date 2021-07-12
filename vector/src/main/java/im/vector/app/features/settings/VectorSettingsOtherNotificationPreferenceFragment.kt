@@ -18,9 +18,8 @@ package im.vector.app.features.settings
 
 import im.vector.app.R
 import org.matrix.android.sdk.api.pushrules.RuleIds
-import javax.inject.Inject
 
-class VectorSettingsOtherNotificationPreferenceFragment @Inject constructor()
+class VectorSettingsOtherNotificationPreferenceFragment
     : VectorSettingsPushRuleNotificationPreferenceFragment() {
 
     override var titleRes: Int = R.string.settings_notification_other

@@ -389,11 +389,6 @@ interface FragmentModule {
     @FragmentKey(VectorSettingsNotificationsTroubleshootFragment::class)
     fun bindVectorSettingsNotificationsTroubleshootFragment(fragment: VectorSettingsNotificationsTroubleshootFragment): Fragment
 
-//    @Binds
-//    @IntoMap
-//    @FragmentKey(VectorSettingsAdvancedNotificationPreferenceFragment::class)
-//    fun bindVectorSettingsAdvancedNotificationPreferenceFragment(fragment: VectorSettingsAdvancedNotificationPreferenceFragment): Fragment
-
     @Binds
     @IntoMap
     @FragmentKey(VectorSettingsNotificationPreferenceFragment::class)
