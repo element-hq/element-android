@@ -32,7 +32,6 @@ import androidx.annotation.MainThread
 import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.appbar.MaterialToolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -42,6 +41,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.util.Util
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
 import im.vector.app.BuildConfig
@@ -82,14 +82,13 @@ import im.vector.app.receivers.DebugReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
 
-abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScreenInjector {
+abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasScreenInjector {
     /* ==========================================================================================
      * View
      * ========================================================================================== */
@@ -596,12 +595,19 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
     }
 
     fun showSnackbar(message: String, @StringRes withActionTitle: Int?, action: (() -> Unit)?) {
-        getCoordinatorLayout()?.let {
-            Snackbar.make(it, message, Snackbar.LENGTH_LONG).apply {
+        val coordinatorLayout = getCoordinatorLayout()
+        if (coordinatorLayout != null) {
+            Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).apply {
                 withActionTitle?.let {
-                    setAction(withActionTitle, { action?.invoke() })
+                    setAction(withActionTitle) { action?.invoke() }
                 }
             }.show()
+        } else {
+            if (vectorPreferences.failFast()) {
+                error("No CoordinatorLayout to display this snackbar!")
+            } else {
+                Timber.w("No CoordinatorLayout to display this snackbar!")
+            }
         }
     }
 
