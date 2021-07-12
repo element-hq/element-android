@@ -89,7 +89,9 @@ import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.ui.views.CurrentCallsCardView
+import im.vector.app.core.ui.views.CurrentCallsViewPresenter
+
+import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.FailedMessagesWarningView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
@@ -240,7 +242,7 @@ class RoomDetailFragment @Inject constructor(
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
         GalleryOrCameraDialogHelper.Listener,
-        CurrentCallsCardView.Callback {
+        CurrentCallsView.Callback {
 
     companion object {
         /**
@@ -299,6 +301,7 @@ class RoomDetailFragment @Inject constructor(
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
+    private val currentCallsViewPresenter = CurrentCallsViewPresenter()
 
     private lateinit var emojiPopup: EmojiPopup
 
@@ -346,7 +349,7 @@ class RoomDetailFragment @Inject constructor(
         knownCallsViewModel
                 .liveKnownCalls
                 .observe(viewLifecycleOwner, {
-                    views.currentCallsCardView.render(callManager.getCurrentCall(), it)
+                    currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), it)
                     invalidateOptionsMenu()
                 })
 
@@ -685,6 +688,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onDestroyView() {
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
+        currentCallsViewPresenter.unBind()
         modelBuildListener = null
         autoCompleter.clear()
         debouncer.cancelAll()
@@ -730,11 +734,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupActiveCallView() {
-        views.currentCallsCardView.apply {
-            this.callback = this@RoomDetailFragment
-            this.avatarRenderer = this@RoomDetailFragment.avatarRenderer
-            this.session = this@RoomDetailFragment.session
-        }
+        currentCallsViewPresenter.bind(views.currentCallsView, this)
     }
 
     private fun navigateToEvent(action: RoomDetailViewEvents.NavigateToEvent) {

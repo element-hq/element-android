@@ -37,7 +37,8 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.ui.views.CurrentCallsCardView
+import im.vector.app.core.ui.views.CurrentCallsView
+import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentHomeDetailBinding
 import im.vector.app.features.call.SharedKnownCallsViewModel
@@ -56,7 +57,6 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
@@ -69,12 +69,11 @@ class HomeDetailFragment @Inject constructor(
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
-        private val vectorPreferences: VectorPreferences,
-        private val session: Session
+        private val vectorPreferences: VectorPreferences
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
-        ServerBackupStatusViewModel.Factory,
-        CurrentCallsCardView.Callback {
+        CurrentCallsView.Callback,
+        ServerBackupStatusViewModel.Factory {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -116,6 +115,8 @@ class HomeDetailFragment @Inject constructor(
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
     }
+
+    private val currentCallsViewPresenter = CurrentCallsViewPresenter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -188,9 +189,14 @@ class HomeDetailFragment @Inject constructor(
         sharedCallActionViewModel
                 .liveKnownCalls
                 .observe(viewLifecycleOwner, {
-                    views.currentCallsCardView.render(callManager.getCurrentCall(), callManager.getCalls())
+                    currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 })
+    }
+
+    override fun onDestroyView() {
+        currentCallsViewPresenter.unBind()
+        super.onDestroyView()
     }
 
     override fun onResume() {
@@ -289,11 +295,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupActiveCallView() {
-        views.currentCallsCardView.apply {
-            this.avatarRenderer = this@HomeDetailFragment.avatarRenderer
-            this.session = this@HomeDetailFragment.session
-            this.callback = this@HomeDetailFragment
-        }
+        currentCallsViewPresenter.bind(views.currentCallsView, this)
     }
 
     private fun setupToolbar() {

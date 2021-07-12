@@ -11,6 +11,15 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
 
+        <im.vector.app.core.ui.views.CurrentCallsView
+            android:id="@+id/currentCallsView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/homeKeysBackupBanner"
+            tools:visibility="visible" />
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/groupToolbar"
             android:layout_width="match_parent"
@@ -134,21 +143,6 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintTop_toBottomOf="@+id/homeKeysBackupBanner" />
-
-    <im.vector.app.core.ui.views.CurrentCallsCardView
-        android:id="@+id/currentCallsCardView"
-        android:layout_width="@dimen/call_pip_width"
-        android:layout_height="@dimen/call_pip_height"
-        app:cardElevation="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        app:cardCornerRadius="@dimen/call_pip_radius"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintEnd_toEndOf="parent" />
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
