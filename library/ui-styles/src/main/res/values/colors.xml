@@ -136,10 +136,6 @@
     <color name="vctr_voice_message_playback_background_light">#FFE3E8F0</color>
     <color name="vctr_voice_message_playback_background_dark">#FF394049</color>
 
-    <attr name="vctr_voice_message_play_pause_button_background" format="color" />
-    <color name="vctr_voice_message_play_pause_button_background_light">@android:color/white</color>
-    <color name="vctr_voice_message_play_pause_button_background_dark">#FF8E99A4</color>
-
     <attr name="vctr_voice_message_recording_playback_background" format="color" />
     <color name="vctr_voice_message_recording_playback_background_light">#FFE3E8F0</color>
     <color name="vctr_voice_message_recording_playback_background_dark">#FF394049</color>

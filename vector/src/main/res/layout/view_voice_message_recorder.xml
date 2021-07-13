@@ -173,7 +173,7 @@
                 android:layout_height="32dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/bg_voice_play_pause_button"
-                android:backgroundTint="?vctr_voice_message_play_pause_button_background"
+                android:backgroundTint="?android:colorBackground"
                 android:contentDescription="@string/a11y_play_voice_message"
                 android:src="@drawable/ic_play_pause_play"
                 app:layout_constraintBottom_toBottomOf="parent"

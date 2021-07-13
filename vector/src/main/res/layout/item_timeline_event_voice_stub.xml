@@ -26,7 +26,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:background="@drawable/bg_voice_play_pause_button"
-            android:backgroundTint="?vctr_voice_message_play_pause_button_background"
+            android:backgroundTint="?android:colorBackground"
             android:src="@drawable/ic_play_pause_play"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
