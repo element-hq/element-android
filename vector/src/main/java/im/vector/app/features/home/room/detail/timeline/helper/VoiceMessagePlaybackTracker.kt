@@ -37,6 +37,10 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
         }
     }
 
+    fun unTrack(id: String) {
+        listeners.remove(id)
+    }
+
     fun makeAllPlaybacksIdle() {
         listeners.keys.forEach { key ->
             val currentPlaybackTime = getPlaybackTime(key)
@@ -95,9 +99,9 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
 
     fun getPlaybackTime(id: String): Int {
         return when (val state = states[id]) {
-            is Listener.State.Playing    -> state.playbackTime
-            is Listener.State.Idle       -> state.playbackTime
-            else                         -> 0
+            is Listener.State.Playing -> state.playbackTime
+            is Listener.State.Idle    -> state.playbackTime
+            else                      -> 0
         }
     }
 
@@ -118,7 +122,7 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
         fun onUpdate(state: State)
 
         sealed class State {
-            data class Idle(val playbackTime: Int): State()
+            data class Idle(val playbackTime: Int) : State()
             data class Playing(val playbackTime: Int) : State()
             data class Recording(val amplitudeList: List<Int>) : State()
         }

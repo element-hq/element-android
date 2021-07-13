@@ -115,6 +115,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         super.unbind(holder)
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
         contentDownloadStateTrackerBinder.unbind(mxcUrl)
+        voiceMessagePlaybackTracker.unTrack(attributes.informationData.eventId)
     }
 
     override fun getViewType() = STUB_ID
