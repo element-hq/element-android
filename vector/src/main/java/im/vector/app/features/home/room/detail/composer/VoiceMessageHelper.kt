@@ -22,17 +22,17 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import androidx.core.content.FileProvider
 import im.vector.app.BuildConfig
+import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import java.util.Timer
-import java.util.TimerTask
 import java.util.UUID
 import javax.inject.Inject
 
@@ -43,7 +43,6 @@ class VoiceMessageHelper @Inject constructor(
         private val context: Context,
         private val playbackTracker: VoiceMessagePlaybackTracker
 ) {
-
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var mediaRecorder: MediaRecorder
     private val outputDirectory = File(context.cacheDir, "downloads")
@@ -52,11 +51,8 @@ class VoiceMessageHelper @Inject constructor(
 
     private val amplitudeList = mutableListOf<Int>()
 
-    private val amplitudeTimer = Timer()
-    private var amplitudeTimerTask: TimerTask? = null
-
-    private val playbackTimer = Timer()
-    private var playbackTimerTask: TimerTask? = null
+    private var amplitudeTimer: CountUpTimer? = null
+    private var playbackTimer: CountUpTimer? = null
 
     init {
         if (!outputDirectory.exists()) {
@@ -91,12 +87,7 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     fun stopRecording(): MultiPickerAudioType? {
-        try {
-            stopRecordingAmplitudes()
-            releaseMediaRecorder()
-        } catch (e: RuntimeException) { // Usually thrown when the record is less than 1 second.
-            Timber.e(e, "Cannot stop media recorder!")
-        }
+        internalStopRecording()
         try {
             outputFile?.let {
                 val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it)
@@ -112,6 +103,16 @@ class VoiceMessageHelper @Inject constructor(
         }
     }
 
+    private fun internalStopRecording() {
+        tryOrNull("Cannot stop media recording amplitude") {
+            stopRecordingAmplitudes()
+        }
+        tryOrNull("Cannot stop media recorder!") {
+            // Usually throws when the record is less than 1 second.
+            releaseMediaRecorder()
+        }
+    }
+
     private fun releaseMediaRecorder() {
         mediaRecorder.stop()
         mediaRecorder.reset()
@@ -123,7 +124,9 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     fun deleteRecording() {
+        internalStopRecording()
         outputFile?.delete()
+        outputFile = null
     }
 
     fun startOrPauseRecordingPlayback() {
@@ -168,44 +171,67 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     private fun startRecordingAmplitudes() {
-        amplitudeTimerTask = object : TimerTask() {
-            override fun run() {
-                try {
-                    val maxAmplitude = mediaRecorder.maxAmplitude
-                    amplitudeList.add(maxAmplitude)
-                    playbackTracker.updateCurrentRecording(VoiceMessagePlaybackTracker.RECORDING_ID, amplitudeList)
-                } catch (e: IllegalStateException) {
-                    Timber.e(e, "Cannot get max amplitude. Amplitude recording timer will be stopped.")
-                    amplitudeTimerTask?.cancel()
-                } catch (e: RuntimeException) {
-                    Timber.e(e, "Cannot get max amplitude (native error). Amplitude recording timer will be stopped.")
-                    amplitudeTimerTask?.cancel()
+        amplitudeTimer?.stop()
+        amplitudeTimer = CountUpTimer(100).apply {
+            tickListener = object : CountUpTimer.TickListener {
+                override fun onTick(milliseconds: Long) {
+                    onAmplitudeTimerTick()
                 }
             }
+            resume()
         }
-        amplitudeTimer.scheduleAtFixedRate(amplitudeTimerTask, 0, 100)
+    }
+
+    private fun onAmplitudeTimerTick() {
+        try {
+            val maxAmplitude = mediaRecorder.maxAmplitude
+            amplitudeList.add(maxAmplitude)
+            playbackTracker.updateCurrentRecording(VoiceMessagePlaybackTracker.RECORDING_ID, amplitudeList)
+        } catch (e: IllegalStateException) {
+            Timber.e(e, "Cannot get max amplitude. Amplitude recording timer will be stopped.")
+            stopRecordingAmplitudes()
+        } catch (e: RuntimeException) {
+            Timber.e(e, "Cannot get max amplitude (native error). Amplitude recording timer will be stopped.")
+            stopRecordingAmplitudes()
+        }
     }
 
     private fun stopRecordingAmplitudes() {
-        amplitudeTimerTask?.cancel()
+        amplitudeTimer?.stop()
+        amplitudeTimer = null
     }
 
     private fun startPlaybackTimer(id: String) {
-        playbackTimerTask = object : TimerTask() {
-            override fun run() {
-                if (mediaPlayer?.isPlaying.orFalse()) {
-                    val currentPosition = mediaPlayer?.currentPosition ?: 0
-                    playbackTracker.updateCurrentPlaybackTime(id, currentPosition)
-                } else {
-                    playbackTracker.stopPlayback(id = id, rememberPlaybackTime = false)
+        playbackTimer?.stop()
+        playbackTimer = CountUpTimer().apply {
+            tickListener = object : CountUpTimer.TickListener {
+                override fun onTick(milliseconds: Long) {
+                    onPlaybackTimerTick(id, false)
                 }
             }
+            resume()
         }
-        playbackTimer.scheduleAtFixedRate(playbackTimerTask, 0, 1000)
+        onPlaybackTimerTick(id, true)
+    }
+
+    private fun onPlaybackTimerTick(id: String, firstCall: Boolean) {
+        when {
+            firstCall                        -> {
+                playbackTracker.updateCurrentPlaybackTime(id, 0)
+            }
+            mediaPlayer?.isPlaying.orFalse() -> {
+                val currentPosition = mediaPlayer?.currentPosition ?: 0
+                playbackTracker.updateCurrentPlaybackTime(id, currentPosition)
+            }
+            else                             -> {
+                playbackTracker.stopPlayback(id = id, rememberPlaybackTime = false)
+            }
+        }
     }
 
     private fun stopPlaybackTimer() {
-        playbackTimerTask?.cancel()
+        playbackTimer?.stop()
+        playbackTimer = null
     }
 
     fun stopAllVoiceActions() {

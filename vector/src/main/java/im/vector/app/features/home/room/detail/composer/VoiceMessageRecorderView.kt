@@ -289,8 +289,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     private fun renderRecordingWaveform() {
-        val audioRecordView = views.voicePlaybackWaveform
-        audioRecordView.apply {
+        views.voicePlaybackWaveform.apply {
             post {
                 recreate()
                 amplitudeList.toMutableList().forEach { amplitude ->
