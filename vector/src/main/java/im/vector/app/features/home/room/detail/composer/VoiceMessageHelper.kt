@@ -20,6 +20,7 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.os.Build
 import androidx.core.content.FileProvider
 import im.vector.app.BuildConfig
 import im.vector.app.core.utils.CountUpTimer
@@ -33,7 +34,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -74,16 +74,19 @@ class VoiceMessageHelper @Inject constructor(
         stopPlayback()
         playbackTracker.makeAllPlaybacksIdle()
 
-        outputFile = File(outputDirectory, UUID.randomUUID().toString() + ".ogg")
+        outputFile = File(outputDirectory, "Voice message.ogg")
         lastRecordingFile = outputFile
         amplitudeList.clear()
-        FileOutputStream(outputFile).use { fos ->
-            refreshMediaRecorder()
-            mediaRecorder.setOutputFile(fos.fd)
-            mediaRecorder.prepare()
-            mediaRecorder.start()
-            startRecordingAmplitudes()
+
+        refreshMediaRecorder()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mediaRecorder.setOutputFile(outputFile)
+        } else {
+            mediaRecorder.setOutputFile(FileOutputStream(outputFile).fd)
         }
+        mediaRecorder.prepare()
+        mediaRecorder.start()
+        startRecordingAmplitudes()
     }
 
     fun stopRecording(): MultiPickerAudioType? {
