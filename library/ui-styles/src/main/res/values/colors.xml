@@ -132,10 +132,6 @@
     <color name="vctr_voice_message_lock_background_light">#FFF3F8FD</color>
     <color name="vctr_voice_message_lock_background_dark">#22252B</color>
 
-    <attr name="vctr_voice_message_playback_background" format="color" />
-    <color name="vctr_voice_message_playback_background_light">#FFE3E8F0</color>
-    <color name="vctr_voice_message_playback_background_dark">#FF394049</color>
-
     <attr name="vctr_voice_message_recording_playback_background" format="color" />
     <color name="vctr_voice_message_recording_playback_background_light">#FFE3E8F0</color>
     <color name="vctr_voice_message_recording_playback_background_dark">#FF394049</color>

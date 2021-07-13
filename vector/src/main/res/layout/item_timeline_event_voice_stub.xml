@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_voice_playback"
-        android:backgroundTint="?vctr_voice_message_playback_background"
+        android:backgroundTint="?vctr_content_quinary"
         android:minHeight="48dp"
         android:paddingStart="8dp"
         android:paddingTop="6dp"
