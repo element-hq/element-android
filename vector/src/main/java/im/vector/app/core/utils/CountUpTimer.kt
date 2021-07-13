@@ -17,7 +17,6 @@
 package im.vector.app.core.utils
 
 import io.reactivex.Observable
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong

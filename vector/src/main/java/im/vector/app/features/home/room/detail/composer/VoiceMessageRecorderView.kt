@@ -67,7 +67,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private var lastX: Float = 0f
     private var lastY: Float = 0f
 
-    private var recordingTimer: CountUpTimer? = null
+    private var recordingTicker: CountUpTimer? = null
 
     private val dimensionConverter = DimensionConverter(context.resources)
 
@@ -81,7 +81,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     fun initVoiceRecordingViews() {
         hideRecordingViews(animationDuration = 0)
-        stopRecordingTimer()
+        stopRecordingTicker()
 
         views.voiceMessageMicButton.isVisible = true
         views.voiceMessageSendButton.isVisible = false
@@ -89,7 +89,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     private fun initListeners() {
         views.voiceMessageSendButton.setOnClickListener {
-            stopRecordingTimer()
+            stopRecordingTicker()
             hideRecordingViews(animationDuration = 0)
             views.voiceMessageSendButton.isVisible = false
             recordingState = RecordingState.NONE
@@ -97,7 +97,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         }
 
         views.voiceMessageDeletePlayback.setOnClickListener {
-            stopRecordingTimer()
+            stopRecordingTicker()
             hideRecordingViews(animationDuration = 0)
             views.voiceMessageSendButton.isVisible = false
             recordingState = RecordingState.NONE
@@ -120,7 +120,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 MotionEvent.ACTION_DOWN -> {
                     val recordingStarted = callback?.onVoiceRecordingStarted().orFalse()
                     if (recordingStarted) {
-                        startRecordingTimer()
+                        startRecordingTicker()
                         renderToast(context.getString(R.string.voice_message_release_to_send_toast))
                         recordingState = RecordingState.STARTED
                         showRecordingViews()
@@ -134,7 +134,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 }
                 MotionEvent.ACTION_UP   -> {
                     if (recordingState != RecordingState.LOCKED) {
-                        stopRecordingTimer()
+                        stopRecordingTicker()
                         val isCancelled = recordingState == RecordingState.NONE || recordingState == RecordingState.CANCELLED
                         callback?.onVoiceRecordingEnded(isCancelled)
                         recordingState = RecordingState.NONE
@@ -230,27 +230,27 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         return abs(views.voiceMessageLockImage.y + views.voiceMessageLockImage.height - views.voiceMessageLockArrow.y) < 10
     }
 
-    private fun startRecordingTimer() {
-        recordingTimer?.stop()
-        recordingTimer = CountUpTimer().apply {
+    private fun startRecordingTicker() {
+        recordingTicker?.stop()
+        recordingTicker = CountUpTimer().apply {
             tickListener = object : CountUpTimer.TickListener {
                 override fun onTick(milliseconds: Long) {
-                    onRecordingTimerTick(milliseconds)
+                    onRecordingTick(milliseconds)
                 }
             }
             resume()
         }
-        onRecordingTimerTick(0L)
+        onRecordingTick(0L)
     }
 
-    private fun onRecordingTimerTick(milliseconds: Long) {
+    private fun onRecordingTick(milliseconds: Long) {
         renderRecordingTimer(milliseconds / 1_000)
         val timeDiffToRecordingLimit = BuildConfig.VOICE_MESSAGE_DURATION_LIMIT_MS - milliseconds
         if (timeDiffToRecordingLimit <= 0) {
             views.voiceMessageRecordingLayout.post {
                 recordingState = RecordingState.PLAYBACK
                 showPlaybackViews()
-                stopRecordingTimer()
+                stopRecordingTicker()
             }
         } else if (timeDiffToRecordingLimit in 10_000..10_999) {
             views.voiceMessageRecordingLayout.post {
@@ -298,9 +298,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         }
     }
 
-    private fun stopRecordingTimer() {
-        recordingTimer?.stop()
-        recordingTimer = null
+    private fun stopRecordingTicker() {
+        recordingTicker?.stop()
+        recordingTicker = null
     }
 
     private fun showRecordingViews() {

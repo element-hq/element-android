@@ -51,8 +51,8 @@ class VoiceMessageHelper @Inject constructor(
 
     private val amplitudeList = mutableListOf<Int>()
 
-    private var amplitudeTimer: CountUpTimer? = null
-    private var playbackTimer: CountUpTimer? = null
+    private var amplitudeTicker: CountUpTimer? = null
+    private var playbackTicker: CountUpTimer? = null
 
     init {
         if (!outputDirectory.exists()) {
@@ -162,27 +162,27 @@ class VoiceMessageHelper @Inject constructor(
                 seekTo(currentPlaybackTime)
             }
         }
-        startPlaybackTimer(id)
+        startPlaybackTicker(id)
     }
 
     private fun stopPlayback() {
         mediaPlayer?.stop()
-        stopPlaybackTimer()
+        stopPlaybackTicker()
     }
 
     private fun startRecordingAmplitudes() {
-        amplitudeTimer?.stop()
-        amplitudeTimer = CountUpTimer(100).apply {
+        amplitudeTicker?.stop()
+        amplitudeTicker = CountUpTimer(100).apply {
             tickListener = object : CountUpTimer.TickListener {
                 override fun onTick(milliseconds: Long) {
-                    onAmplitudeTimerTick()
+                    onAmplitudeTick()
                 }
             }
             resume()
         }
     }
 
-    private fun onAmplitudeTimerTick() {
+    private fun onAmplitudeTick() {
         try {
             val maxAmplitude = mediaRecorder.maxAmplitude
             amplitudeList.add(maxAmplitude)
@@ -197,36 +197,36 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     private fun stopRecordingAmplitudes() {
-        amplitudeTimer?.stop()
-        amplitudeTimer = null
+        amplitudeTicker?.stop()
+        amplitudeTicker = null
     }
 
-    private fun startPlaybackTimer(id: String) {
-        playbackTimer?.stop()
-        playbackTimer = CountUpTimer().apply {
+    private fun startPlaybackTicker(id: String) {
+        playbackTicker?.stop()
+        playbackTicker = CountUpTimer().apply {
             tickListener = object : CountUpTimer.TickListener {
                 override fun onTick(milliseconds: Long) {
-                    onPlaybackTimerTick(id)
+                    onPlaybackTick(id)
                 }
             }
             resume()
         }
-        onPlaybackTimerTick(id)
+        onPlaybackTick(id)
     }
 
-    private fun onPlaybackTimerTick(id: String) {
+    private fun onPlaybackTick(id: String) {
         if (mediaPlayer?.isPlaying.orFalse()) {
             val currentPosition = mediaPlayer?.currentPosition ?: 0
             playbackTracker.updateCurrentPlaybackTime(id, currentPosition)
         } else {
             playbackTracker.stopPlayback(id)
-            stopPlaybackTimer()
+            stopPlaybackTicker()
         }
     }
 
-    private fun stopPlaybackTimer() {
-        playbackTimer?.stop()
-        playbackTimer = null
+    private fun stopPlaybackTicker() {
+        playbackTicker?.stop()
+        playbackTicker = null
     }
 
     fun stopAllVoiceActions() {
