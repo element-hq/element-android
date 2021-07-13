@@ -101,6 +101,7 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.core.utils.isValidUrl
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.saveMedia
@@ -1062,14 +1063,16 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val startCallActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val startCallActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
                 roomDetailViewModel.pendingAction = null
                 roomDetailViewModel.handle(it)
             }
         } else {
-            context?.toast(R.string.permissions_action_not_performed_missing_permissions)
+            if (deniedPermanently) {
+                activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
+            }
             cleanUpAfterPermissionNotGranted()
         }
     }
@@ -1738,13 +1741,16 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val saveActionActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val saveActionActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             sharedActionViewModel.pendingAction?.let {
                 handleActions(it)
                 sharedActionViewModel.pendingAction = null
             }
         } else {
+            if (deniedPermanently) {
+                activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
+            }
             cleanUpAfterPermissionNotGranted()
         }
     }
@@ -1977,7 +1983,7 @@ class RoomDetailFragment @Inject constructor(
 
 // AttachmentTypeSelectorView.Callback
 
-    private val typeSelectedActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val typeSelectedActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             val pendingType = attachmentsHelper.pendingType
             if (pendingType != null) {
@@ -1985,12 +1991,15 @@ class RoomDetailFragment @Inject constructor(
                 launchAttachmentProcess(pendingType)
             }
         } else {
+            if (deniedPermanently) {
+                activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
+            }
             cleanUpAfterPermissionNotGranted()
         }
     }
 
     override fun onTypeSelected(type: AttachmentTypeSelectorView.Type) {
-        if (checkPermissions(type.permissionsBit, requireActivity(), typeSelectedActivityResultLauncher)) {
+        if (checkPermissions(type.permissions, requireActivity(), typeSelectedActivityResultLauncher)) {
             launchAttachmentProcess(type)
         } else {
             attachmentsHelper.pendingType = type
