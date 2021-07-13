@@ -75,6 +75,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         private val markdownParser: MarkdownParser,
         private val textPillsUtils: TextPillsUtils,
         private val thumbnailExtractor: ThumbnailExtractor,
+        private val waveformSanitizer: WaveFormSanitizer,
         private val localEchoRepository: LocalEchoRepository,
         private val permalinkFactory: PermalinkFactory
 ) {
@@ -302,7 +303,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 url = attachment.queryUri.toString(),
                 audioWaveformInfo = if (!isVoiceMessage) null else AudioWaveformInfo(
                         duration = attachment.duration?.toInt(),
-                        waveform = attachment.waveform
+                        waveform = waveformSanitizer.sanitize(attachment.waveform)
                 ),
                 voiceMessageIndicator = if (!isVoiceMessage) null else emptyMap()
         )
