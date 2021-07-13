@@ -119,18 +119,18 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessageMicButton.setOnTouchListener { _, event ->
             return@setOnTouchListener when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    startRecordingTimer()
                     val recordingStarted = callback?.onVoiceRecordingStarted().orFalse()
                     if (recordingStarted) {
+                        startRecordingTimer()
                         renderToast(context.getString(R.string.voice_message_release_to_send_toast))
-                    }
-                    recordingState = RecordingState.STARTED
-                    showRecordingViews()
+                        recordingState = RecordingState.STARTED
+                        showRecordingViews()
 
-                    firstX = event.rawX
-                    firstY = event.rawY
-                    lastX = firstX
-                    lastY = firstY
+                        firstX = event.rawX
+                        firstY = event.rawY
+                        lastX = firstX
+                        lastY = firstY
+                    }
                     true
                 }
                 MotionEvent.ACTION_UP   -> {

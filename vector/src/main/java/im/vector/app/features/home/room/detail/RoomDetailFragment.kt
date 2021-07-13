@@ -95,7 +95,7 @@ import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.KeyboardStateUtils
-import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
+import im.vector.app.core.utils.PERMISSIONS_FOR_VOICE_MESSAGE
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.colorizeMatchingText
@@ -104,6 +104,7 @@ import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.onPermissionDeniedDialog
+import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.saveMedia
@@ -613,17 +614,26 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    private val permissionVoiceMessageLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            // In this case, let the user start again the gesture
+        } else if (deniedPermanently) {
+            vectorBaseActivity.onPermissionDeniedSnackbar(R.string.denied_permission_voice_message)
+        }
+    }
+
     private fun setupVoiceMessageView() {
         views.voiceMessageRecorderView.voiceMessagePlaybackTracker = voiceMessagePlaybackTracker
 
         views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
             override fun onVoiceRecordingStarted(): Boolean {
-                return if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, requireActivity(), 0)) {
+                return if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
                     views.composerLayout.isInvisible = true
                     roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
                     vibrate(requireContext())
                     true
                 } else {
+                    // Permission dialog is displayed
                     false
                 }
             }
@@ -1271,13 +1281,6 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onTextBlankStateChanged(isBlank: Boolean) {
                 views.voiceMessageRecorderView.isVisible = !views.composerLayout.views.sendButton.isVisible && vectorPreferences.labsUseVoiceMessage()
-            }
-
-            override fun onTouchVoiceRecording() {
-                if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, requireActivity(), 0)) {
-                    views.composerLayout.isInvisible = true
-                    views.voiceMessageRecorderView.isVisible = true
-                }
             }
         }
     }

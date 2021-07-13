@@ -48,7 +48,6 @@ class TextComposerView @JvmOverloads constructor(
         fun onCloseRelatedMessage()
         fun onSendMessage(text: CharSequence)
         fun onAddAttachment()
-        fun onTouchVoiceRecording()
     }
 
     val views: ComposerLayoutBinding
