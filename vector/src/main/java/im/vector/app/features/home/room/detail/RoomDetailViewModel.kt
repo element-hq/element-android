@@ -627,13 +627,13 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleEndRecordingVoiceMessage(isCancelled: Boolean) {
         if (isCancelled) {
             voiceMessageHelper.deleteRecording()
-            return
-        }
-        voiceMessageHelper.stopRecording()?.let { audioType ->
-            if (audioType.duration > 1000) {
-                room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
-            } else {
-                voiceMessageHelper.deleteRecording()
+        } else {
+            voiceMessageHelper.stopRecording()?.let { audioType ->
+                if (audioType.duration > 1000) {
+                    room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
+                } else {
+                    voiceMessageHelper.deleteRecording()
+                }
             }
         }
     }

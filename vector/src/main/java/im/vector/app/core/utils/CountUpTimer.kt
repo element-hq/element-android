@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
-class CountUpTimer(private val intervalInMs: Long) {
+class CountUpTimer(private val intervalInMs: Long = 1_000) {
 
     private val elapsedTime: AtomicLong = AtomicLong()
     private val resumed: AtomicBoolean = AtomicBoolean(false)
