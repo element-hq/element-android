@@ -206,27 +206,21 @@ class VoiceMessageHelper @Inject constructor(
         playbackTimer = CountUpTimer().apply {
             tickListener = object : CountUpTimer.TickListener {
                 override fun onTick(milliseconds: Long) {
-                    onPlaybackTimerTick(id, false)
+                    onPlaybackTimerTick(id)
                 }
             }
             resume()
         }
-        onPlaybackTimerTick(id, true)
+        onPlaybackTimerTick(id)
     }
 
-    private fun onPlaybackTimerTick(id: String, firstCall: Boolean) {
-        when {
-            firstCall                        -> {
-                playbackTracker.updateCurrentPlaybackTime(id, 0)
-            }
-            mediaPlayer?.isPlaying.orFalse() -> {
-                val currentPosition = mediaPlayer?.currentPosition ?: 0
-                playbackTracker.updateCurrentPlaybackTime(id, currentPosition)
-            }
-            else                             -> {
-                playbackTracker.stopPlayback(id)
-                stopPlaybackTimer()
-            }
+    private fun onPlaybackTimerTick(id: String) {
+        if (mediaPlayer?.isPlaying.orFalse()) {
+            val currentPosition = mediaPlayer?.currentPosition ?: 0
+            playbackTracker.updateCurrentPlaybackTime(id, currentPosition)
+        } else {
+            playbackTracker.stopPlayback(id)
+            stopPlaybackTimer()
         }
     }
 
