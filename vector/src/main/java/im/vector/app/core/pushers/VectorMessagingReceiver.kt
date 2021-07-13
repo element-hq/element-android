@@ -158,8 +158,8 @@ val upHandler = object: MessagingReceiverHandler {
         Timber.i("onNewEndpoint: adding $endpoint")
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
             val gateway = UPHelper.customOrDefaultGateway(context, endpoint)
-            if (UPHelper.getUpEndpoint(context) != endpoint ||
-                    UPHelper.getPushGateway(context) != gateway) {
+            if (UPHelper.getUpEndpoint(context) != endpoint
+                    || UPHelper.getPushGateway(context) != gateway) {
                 UPHelper.storePushGateway(context, gateway)
                 UPHelper.storeUpEndpoint(context, endpoint)
                 pusherManager.registerPusher(context, endpoint, gateway)
