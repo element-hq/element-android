@@ -257,7 +257,7 @@ class MessageItemFactory @Inject constructor(
         return MessageVoiceItem_()
                 .attributes(attributes)
                 .duration(messageContent.audioWaveformInfo?.duration ?: 0)
-                .waveform(messageContent.audioWaveformInfo?.waveform ?: emptyList())
+                .waveform(messageContent.audioWaveformInfo?.waveform?.toFft().orEmpty())
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
                 .voiceMessagePlaybackTracker(voiceMessagePlaybackTracker)
                 .izLocalFile(localFilesHelper.isLocalFile(fileUrl))
@@ -620,6 +620,13 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
+    }
+
+    private fun List<Int>?.toFft(): List<Int>? {
+        return this?.map {
+            // Value comes from AudioRecordView.maxReportableAmp, and 1024 is the max value in the Matrix spec
+            it * 22760 / 1024
+        }
     }
 
     companion object {

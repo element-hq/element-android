@@ -80,7 +80,7 @@ internal class WaveFormSanitizer @Inject constructor() {
             positiveList
         }
 
-        Timber.d("Sanitize from ${waveForm.size} items to ${finalList.size} items")
+        Timber.d("Sanitize from ${waveForm.size} items to ${finalList.size} items. Max value was $max")
         return finalList
     }
 }
