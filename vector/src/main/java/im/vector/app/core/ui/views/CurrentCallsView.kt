@@ -17,12 +17,9 @@
 package im.vector.app.core.ui.views
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.os.Build
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import androidx.appcompat.content.res.AppCompatResources
 import im.vector.app.R
 import im.vector.app.databinding.ViewCurrentCallsBinding
@@ -55,21 +52,25 @@ class CurrentCallsView @JvmOverloads constructor(
     }
 
     fun render(calls: List<WebRtcCall>, formattedDuration: String) {
-        val connectedCalls = calls.filter {
-            it.mxCall.state is CallState.Connected
-        }
-        val heldCalls = connectedCalls.filter {
-            it.isLocalOnHold || it.isRemoteOnHold
-        }
-        if (connectedCalls.isEmpty()) return
-        views.currentCallsInfo.text = if (connectedCalls.size == heldCalls.size) {
-            resources.getQuantityString(R.plurals.call_only_paused, heldCalls.size, heldCalls.size)
-        } else {
-            if (heldCalls.isEmpty()) {
-                resources.getString(R.string.call_only_active, formattedDuration)
-            } else {
-                resources.getQuantityString(R.plurals.call_one_active_and_other_paused, heldCalls.size, formattedDuration, heldCalls.size)
+        val tapToReturnFormat = if (calls.size == 1) {
+            val firstCall = calls.first()
+            when (firstCall.mxCall.state) {
+                is CallState.Idle,
+                is CallState.CreateOffer,
+                is CallState.LocalRinging,
+                is CallState.Dialing   -> {
+                    resources.getString(R.string.call_ringing)
+                }
+                is CallState.Answering -> {
+                    resources.getString(R.string.call_connecting)
+                }
+                else                   -> {
+                    resources.getString(R.string.call_one_active, formattedDuration)
+                }
             }
+        } else {
+            resources.getString(R.string.call_multiple_active, calls.size)
         }
+        views.currentCallsInfo.text = resources.getString(R.string.call_tap_to_return, tapToReturnFormat)
     }
 }

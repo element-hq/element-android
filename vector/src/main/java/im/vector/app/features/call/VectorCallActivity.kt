@@ -245,7 +245,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is CallState.Dialing    -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
-                views.callToolbar.setSubtitle(R.string.call_ring)
+                views.callToolbar.setSubtitle(R.string.call_ringing)
                 configureCallInfo(state)
             }
             is CallState.Answering  -> {

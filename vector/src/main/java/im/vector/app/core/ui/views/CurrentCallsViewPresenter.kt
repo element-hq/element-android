@@ -19,6 +19,7 @@ package im.vector.app.core.ui.views
 import androidx.core.view.isVisible
 import im.vector.app.features.call.webrtc.WebRtcCall
 import org.matrix.android.sdk.api.session.call.CallState
+import timber.log.Timber
 
 class CurrentCallsViewPresenter {
 
@@ -37,13 +38,9 @@ class CurrentCallsViewPresenter {
         this.currentCall = currentCall
         this.currentCall?.addListener(tickListener)
         this.calls = calls
-        val hasActiveCall = currentCall?.mxCall?.state is CallState.Connected
+        val hasActiveCall = currentCall != null
         currentCallsView?.isVisible = hasActiveCall
-        if (hasActiveCall) {
-            currentCallsView?.render(calls, currentCall?.formattedDuration() ?: "")
-        } else {
-            currentCallsView?.isVisible = false
-        }
+        currentCallsView?.render(calls, currentCall?.formattedDuration() ?: "")
     }
 
     fun bind(activeCallView: CurrentCallsView, interactionListener: CurrentCallsView.Callback) {
