@@ -232,7 +232,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun renderFullScreenMode(state: VectorCallViewState) {
         views.callToolbar.isVisible = true
         views.callControlsView.isVisible = true
-        views.pipRendererWrapper.isVisible = true
         views.callControlsView.updateForState(state)
         val callState = state.callState.invoke()
         views.callActionText.setOnClickListener(null)
@@ -243,13 +242,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is CallState.CreateOffer,
             is CallState.LocalRinging,
             is CallState.Dialing    -> {
-                views.callVideoGroup.isInvisible = true
+                views.callVideoGroup.isVisible = false
                 views.callInfoGroup.isVisible = true
                 views.callToolbar.setSubtitle(R.string.call_ringing)
                 configureCallInfo(state)
             }
             is CallState.Answering  -> {
-                views.callVideoGroup.isInvisible = true
+                views.callVideoGroup.isVisible = false
                 views.callInfoGroup.isVisible = true
                 views.callToolbar.setSubtitle(R.string.call_connecting)
                 configureCallInfo(state)
@@ -259,7 +258,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
-                        views.callVideoGroup.isInvisible = true
+                        views.callVideoGroup.isVisible = false
                         views.callInfoGroup.isVisible = true
                         configureCallInfo(state, blurAvatar = true)
                         if (state.isRemoteOnHold) {
@@ -290,13 +289,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                             views.callInfoGroup.isVisible = false
                             views.pipRenderer.isVisible = !state.isVideoCaptureInError && state.otherKnownCallInfo == null
                         } else {
-                            views.callVideoGroup.isInvisible = true
+                            views.callVideoGroup.isVisible = false
                             views.callInfoGroup.isVisible = true
                         }
                     }
                 } else {
                     // This state is not final, if you change network, new candidates will be sent
-                    views.callVideoGroup.isInvisible = true
+                    views.callVideoGroup.isVisible = false
                     views.callInfoGroup.isVisible = true
                     configureCallInfo(state)
                     views.callToolbar.setSubtitle(R.string.call_connecting)

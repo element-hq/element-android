@@ -36,6 +36,7 @@
         app:cardCornerRadius="@dimen/call_pip_radius"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
+        app:layout_goneMarginEnd="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/callControlsView">
 
@@ -71,16 +72,16 @@
         android:id="@+id/otherKnownCallLayout"
         android:layout_width="@dimen/call_pip_width"
         android:layout_height="@dimen/call_pip_height"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/element_background_light"
         android:foreground="?attr/selectableItemBackground"
         android:visibility="gone"
         app:cardBackgroundColor="@color/bg_call_screen"
         app:cardCornerRadius="@dimen/call_pip_radius"
         app:cardElevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/callControlsView"
+        app:layout_constraintEnd_toStartOf="@id/pipRendererWrapper"
         tools:visibility="visible">
 
         <ImageView
