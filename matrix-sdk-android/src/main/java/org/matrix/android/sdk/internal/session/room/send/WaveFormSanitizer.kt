@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.send
 
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -38,43 +39,48 @@ internal class WaveFormSanitizer @Inject constructor() {
         }
 
         // Limit the number of items
-        val result = mutableListOf<Int>()
-        if (waveForm.size < MIN_NUMBER_OF_VALUES) {
-            // Repeat the same value to have at least 30 items
-            val repeatTimes = ceil(MIN_NUMBER_OF_VALUES / waveForm.size.toDouble()).toInt()
-            waveForm.map { value ->
-                repeat(repeatTimes) {
-                    result.add(value)
+        val sizeInRangeList = mutableListOf<Int>()
+        when {
+            waveForm.size < MIN_NUMBER_OF_VALUES -> {
+                // Repeat the same value to have at least 30 items
+                val repeatTimes = ceil(MIN_NUMBER_OF_VALUES / waveForm.size.toDouble()).toInt()
+                waveForm.map { value ->
+                    repeat(repeatTimes) {
+                        sizeInRangeList.add(value)
+                    }
                 }
             }
-        } else if (waveForm.size > MAX_NUMBER_OF_VALUES) {
-            val keepOneOf = ceil(waveForm.size.toDouble() / MAX_NUMBER_OF_VALUES).toInt()
-            waveForm.mapIndexed { idx, value ->
-                if (idx % keepOneOf == 0) {
-                    result.add(value)
+            waveForm.size > MAX_NUMBER_OF_VALUES -> {
+                val keepOneOf = ceil(waveForm.size.toDouble() / MAX_NUMBER_OF_VALUES).toInt()
+                waveForm.mapIndexed { idx, value ->
+                    if (idx % keepOneOf == 0) {
+                        sizeInRangeList.add(value)
+                    }
                 }
             }
-        } else {
-            result.addAll(waveForm)
+            else                                 -> {
+                sizeInRangeList.addAll(waveForm)
+            }
         }
 
         // OK, ensure all items are positive
-        val limited = result.map {
+        val positiveList = sizeInRangeList.map {
             abs(it)
         }
 
         // Ensure max is not above MAX_VALUE
-        val max = limited.maxOrNull() ?: MAX_VALUE
+        val max = positiveList.maxOrNull() ?: MAX_VALUE
 
-        val final = if (max > MAX_VALUE) {
-            // Reduce the range
-            limited.map {
+        val finalList = if (max > MAX_VALUE) {
+            // Reduce the values
+            positiveList.map {
                 it * MAX_VALUE / max
             }
         } else {
-            limited
+            positiveList
         }
 
-        return final
+        Timber.d("Sanitize from ${waveForm.size} items to ${finalList.size} items")
+        return finalList
     }
 }
