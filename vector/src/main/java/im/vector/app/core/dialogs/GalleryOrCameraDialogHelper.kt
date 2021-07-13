@@ -29,6 +29,7 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.lib.multipicker.MultiPicker
@@ -55,9 +56,11 @@ class GalleryOrCameraDialogHelper(
 
     private val listener = fragment as? Listener ?: error("Fragment must implement GalleryOrCameraDialogHelper.Listener")
 
-    private val takePhotoPermissionActivityResultLauncher = fragment.registerForPermissionsResult { allGranted ->
+    private val takePhotoPermissionActivityResultLauncher = fragment.registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             doOpenCamera()
+        } else if (deniedPermanently) {
+            activity.onPermissionDeniedDialog(R.string.denied_permission_camera)
         }
     }
 
@@ -116,7 +119,7 @@ class GalleryOrCameraDialogHelper(
 
     private fun onAvatarTypeSelected(type: Type) {
         when (type) {
-            Type.Camera ->
+            Type.Camera  ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, takePhotoPermissionActivityResultLauncher)) {
                     doOpenCamera()
                 }

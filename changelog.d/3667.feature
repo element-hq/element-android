@@ -1,0 +1,1 @@
+Better management of permission requests
