@@ -17,13 +17,16 @@
 package im.vector.app.features.call
 
 import android.app.KeyguardManager
+import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Rational
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -158,9 +161,46 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     override fun getMenuRes() = R.menu.vector_call
 
+    override fun onUserLeaveHint() {
+        enterPictureInPictureIfRequired()
+    }
+
+    override fun onBackPressed() {
+        if (!enterPictureInPictureIfRequired()) {
+            super.onBackPressed()
+        }
+    }
+
+    private fun enterPictureInPictureIfRequired(): Boolean = withState(callViewModel) {
+        if (!it.isVideoCall) {
+            false
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val aspectRatio = Rational(resources.getDimensionPixelSize(R.dimen.call_pip_width), resources.getDimensionPixelSize(R.dimen.call_pip_height))
+            val params = PictureInPictureParams.Builder()
+                    .setAspectRatio(aspectRatio)
+                    .build()
+            renderPiPMode(it)
+            enterPictureInPictureMode(params)
+        } else {
+            false
+        }
+    }
+
+    private fun isInPictureInPictureModeSafe(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInPictureInPictureMode
+    }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) = withState(callViewModel) {
+            renderState(it)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_call_open_chat) {
             returnToChat()
+            return true
+        } else if (item.itemId == android.R.id.home) {
+            // We check here as we want PiP in some cases
+            onBackPressed()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -182,7 +222,17 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             finish()
             return
         }
+        if (isInPictureInPictureModeSafe()) {
+            renderPiPMode(state)
+        } else {
+            renderFullScreenMode(state)
+        }
+    }
 
+    private fun renderFullScreenMode(state: VectorCallViewState) {
+        views.callToolbar.isVisible = true
+        views.callControlsView.isVisible = true
+        views.pipRendererWrapper.isVisible = true
         views.callControlsView.updateForState(state)
         val callState = state.callState.invoke()
         views.callActionText.setOnClickListener(null)
@@ -260,6 +310,46 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         }
     }
 
+    private fun renderPiPMode(state: VectorCallViewState) {
+        val callState = state.callState.invoke()
+        views.callToolbar.isVisible = false
+        views.callControlsView.isVisible = false
+        views.pipRendererWrapper.isVisible = false
+        views.pipRenderer.isVisible = false
+        when (callState) {
+            is CallState.Idle,
+            is CallState.CreateOffer,
+            is CallState.LocalRinging,
+            is CallState.Dialing,
+            is CallState.Answering  -> {
+                views.fullscreenRenderer.isVisible = false
+                views.callInfoGroup.isVisible = false
+                // showLoading()
+            }
+            is CallState.Connected  -> {
+                if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
+                    if (state.isLocalOnHold || state.isRemoteOnHold) {
+                        views.smallIsHeldIcon.isVisible = true
+                        views.fullscreenRenderer.isVisible = false
+                        views.callInfoGroup.isVisible = true
+                        configureCallInfo(state, blurAvatar = true)
+                    } else {
+                        configureCallInfo(state)
+                        views.fullscreenRenderer.isVisible = true
+                        views.callInfoGroup.isVisible = false
+                    }
+                } else {
+                    //showLoading()
+                }
+            }
+            is CallState.Terminated -> {
+                finish()
+            }
+            null                    -> {
+            }
+        }
+    }
+
     private fun configureCallInfo(state: VectorCallViewState, blurAvatar: Boolean = false) {
         state.callInfo?.opponentUserItem?.let {
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen_blur)
@@ -280,7 +370,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 avatarRenderer.render(it, views.otherMemberAvatar)
             }
         }
-        if (state.otherKnownCallInfo?.opponentUserItem == null) {
+        if (state.otherKnownCallInfo?.opponentUserItem == null || isInPictureInPictureModeSafe()) {
             views.otherKnownCallLayout.isVisible = false
         } else {
             val otherCall = callManager.getCallById(state.otherKnownCallInfo.callId)
