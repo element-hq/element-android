@@ -218,12 +218,12 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
     }
 
     private fun scanQRCode() {
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCamera)) {
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
             doScanQRCode()
         }
     }
 
-    private val permissionCamera = registerForPermissionsResult { allGranted, _ ->
+    private val permissionCameraLauncher = registerForPermissionsResult { allGranted, _ ->
         if (allGranted) {
             doScanQRCode()
         }

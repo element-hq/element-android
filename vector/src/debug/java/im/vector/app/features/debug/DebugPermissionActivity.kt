@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.core.utils.PERMISSIONS_ALL
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
@@ -38,6 +37,14 @@ class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBindin
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
+    // For debug
+    private val allPermissions = listOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.READ_CONTACTS)
+
     private var lastPermissions = emptyList<String>()
 
     override fun initUiAndData() {
@@ -49,6 +56,10 @@ class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBindin
         }
         views.audio.setOnClickListener {
             lastPermissions = listOf(Manifest.permission.RECORD_AUDIO)
+            checkPerm()
+        }
+        views.cameraAudio.setOnClickListener {
+            lastPermissions = listOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
             checkPerm()
         }
         views.write.setOnClickListener {
@@ -80,9 +91,9 @@ class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBindin
             if (deniedPermanently) {
                 dialogOrSnackbar = !dialogOrSnackbar
                 if (dialogOrSnackbar) {
-                    onPermissionDeniedDialog(R.string.denied_permission_camera)
+                    onPermissionDeniedDialog(R.string.denied_permission_generic)
                 } else {
-                    onPermissionDeniedSnackbar(R.string.denied_permission_camera)
+                    onPermissionDeniedSnackbar(R.string.denied_permission_generic)
                 }
             } else {
                 Toast.makeText(this, "Denied", Toast.LENGTH_SHORT).show()
@@ -103,9 +114,9 @@ class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBindin
         return buildString {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Timber.v("## debugPermission() : log the permissions status used by the app")
-                PERMISSIONS_ALL.forEach { permission ->
+                allPermissions.forEach { permission ->
                     append("[$permission] : ")
-                    if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this@DebugPermissionActivity, permission)) {
+                    if (ContextCompat.checkSelfPermission(this@DebugPermissionActivity, permission) == PackageManager.PERMISSION_GRANTED) {
                         append("PERMISSION_GRANTED")
                     } else {
                         append("PERMISSION_DENIED")

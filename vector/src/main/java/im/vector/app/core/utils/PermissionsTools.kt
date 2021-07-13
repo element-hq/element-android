@@ -42,14 +42,6 @@ val PERMISSIONS_FOR_PICKING_CONTACT = listOf(Manifest.permission.READ_CONTACTS)
 
 val PERMISSIONS_EMPTY = emptyList<String>()
 
-// For debug
-val PERMISSIONS_ALL = listOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.RECORD_AUDIO,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.READ_CONTACTS)
-
 // This is not ideal to store the value like that, but it works
 private var permissionDialogDisplayed = false
 
@@ -62,40 +54,31 @@ private var permissionDialogDisplayed = false
 fun ComponentActivity.registerForPermissionsResult(lambda: (allGranted: Boolean, deniedPermanently: Boolean) -> Unit)
         : ActivityResultLauncher<Array<String>> {
     return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-        if (result.keys.all { result[it] == true }) {
-            lambda(true, /* not used */ false)
-        } else {
-            if (permissionDialogDisplayed) {
-                // A permission dialog has been displayed, so even if the user has checked the do not ask again button, we do
-                // not tell the user to open the app settings
-                lambda(false, false)
-            } else {
-                // No dialog has been displayed, so tell the user to go to the system setting
-                lambda(false, true)
-            }
-        }
-        // Reset
-        permissionDialogDisplayed = false
+        onPermissionResult(result, lambda)
     }
 }
 
 fun Fragment.registerForPermissionsResult(lambda: (allGranted: Boolean, deniedPermanently: Boolean) -> Unit): ActivityResultLauncher<Array<String>> {
     return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-        if (result.keys.all { result[it] == true }) {
-            lambda(true, /* not used */ false)
-        } else {
-            if (permissionDialogDisplayed) {
-                // A permission dialog has been displayed, so even if the user has checked the do not ask again button, we do
-                // not tell the user to open the app settings
-                lambda(false, false)
-            } else {
-                // No dialog has been displayed, so tell the user to go to the system setting
-                lambda(false, true)
-            }
-        }
-        // Reset
-        permissionDialogDisplayed = false
+        onPermissionResult(result, lambda)
     }
+}
+
+private fun onPermissionResult(result: Map<String, Boolean>, lambda: (allGranted: Boolean, deniedPermanently: Boolean) -> Unit) {
+    if (result.keys.all { result[it] == true }) {
+        lambda(true, /* not used */ false)
+    } else {
+        if (permissionDialogDisplayed) {
+            // A permission dialog has been displayed, so even if the user has checked the do not ask again button, we do
+            // not tell the user to open the app settings
+            lambda(false, false)
+        } else {
+            // No dialog has been displayed, so tell the user to go to the system setting
+            lambda(false, true)
+        }
+    }
+    // Reset
+    permissionDialogDisplayed = false
 }
 
 /**

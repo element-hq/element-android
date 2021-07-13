@@ -30,35 +30,42 @@
                 android:id="@+id/camera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Manifest.permission.CAMERA"
+                android:text="CAMERA"
                 android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/audio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Manifest.permission.RECORD_AUDIO"
+                android:text="RECORD_AUDIO"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/camera_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CAMERA + RECORD_AUDIO"
                 android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/write"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Manifest.permission.WRITE_EXTERNAL_STORAGE"
+                android:text="WRITE_EXTERNAL_STORAGE"
                 android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/read"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Manifest.permission.READ_EXTERNAL_STORAGE"
+                android:text="READ_EXTERNAL_STORAGE"
                 android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/contact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Manifest.permission.READ_CONTACTS"
+                android:text="READ_CONTACTS"
                 android:textAllCaps="false" />
 
         </LinearLayout>
