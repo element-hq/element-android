@@ -67,7 +67,6 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private var lastX: Float = 0f
     private var lastY: Float = 0f
 
-    private var amplitudeList = emptyList<Int>()
     private var recordingTimer: CountUpTimer? = null
 
     private val dimensionConverter = DimensionConverter(context.resources)
@@ -246,7 +245,6 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     private fun onRecordingTimerTick(milliseconds: Long) {
         renderRecordingTimer(milliseconds / 1_000)
-        renderRecordingWaveform()
         val timeDiffToRecordingLimit = BuildConfig.VOICE_MESSAGE_DURATION_LIMIT_MS - milliseconds
         if (timeDiffToRecordingLimit <= 0) {
             views.voiceMessageRecordingLayout.post {
@@ -288,11 +286,11 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         }
     }
 
-    private fun renderRecordingWaveform() {
+    private fun renderRecordingWaveform(amplitudeList: List<Int>) {
         views.voicePlaybackWaveform.apply {
             post {
                 recreate()
-                amplitudeList.toMutableList().forEach { amplitude ->
+                amplitudeList.forEach { amplitude ->
                     update(amplitude)
                 }
             }
@@ -367,7 +365,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
         when (state) {
             is VoiceMessagePlaybackTracker.Listener.State.Recording -> {
-                this.amplitudeList = state.amplitudeList
+                renderRecordingWaveform(state.amplitudeList)
             }
             is VoiceMessagePlaybackTracker.Listener.State.Playing   -> {
                 views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
