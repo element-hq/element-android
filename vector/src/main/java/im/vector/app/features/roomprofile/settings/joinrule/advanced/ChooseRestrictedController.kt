@@ -43,7 +43,7 @@ class ChooseRestrictedController @Inject constructor(
     var listener: Listener? = null
 
     override fun buildModels(data: RoomJoinRuleChooseRestrictedState?) {
-        val summary = data?.roomSummary?.invoke() ?: return
+        data ?: return
         val host = this
 
         if (data.filter.isNotEmpty()) {
