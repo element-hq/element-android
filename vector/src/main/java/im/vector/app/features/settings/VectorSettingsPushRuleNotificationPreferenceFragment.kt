@@ -30,104 +30,57 @@ import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
 abstract class VectorSettingsPushRuleNotificationPreferenceFragment
     : VectorSettingsBaseFragment() {
 
-
-    fun indexFromBooleanPreference(pushRuleOn: Boolean): Int {
-        return if (pushRuleOn) {
-            NOTIFICATION_NOISY_INDEX
-        } else {
-            NOTIFICATION_OFF_INDEX
-        }
-    }
-
-    fun booleanPreferenceFromIndex(index: Int): Boolean {
-        return index != NOTIFICATION_OFF_INDEX
-    }
-
     /**
-     * @return the bing rule status index
+     * @return the bing rule status boolean
      */
-    fun ruleStatusIndexFor(ruleAndKind: PushRuleAndKind? ): Int {
-            val safeRule = ruleAndKind?.pushRule ?: return NOTIFICATION_OFF_INDEX
-
-            if (safeRule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
-                if (safeRule.shouldNotNotify()) {
-                    return if (safeRule.enabled) {
-                        NOTIFICATION_OFF_INDEX
-                    } else {
-                        NOTIFICATION_SILENT_INDEX
-                    }
-                } else if (safeRule.shouldNotify()) {
-                    return NOTIFICATION_NOISY_INDEX
-                }
-            }
-
-            if (safeRule.enabled) {
-                return if (safeRule.shouldNotNotify()) {
-                    NOTIFICATION_OFF_INDEX
-                } else if (safeRule.getNotificationSound() != null) {
-                    NOTIFICATION_NOISY_INDEX
-                } else {
-                    NOTIFICATION_SILENT_INDEX
-                }
-            }
-
-            return NOTIFICATION_OFF_INDEX
+    fun ruleStatusIndexFor(ruleAndKind: PushRuleAndKind): Boolean {
+        val rule = ruleAndKind.pushRule
+        if (rule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
+            return rule.shouldNotify() || rule.shouldNotNotify() && !rule.enabled
         }
+        return rule.enabled && !rule.shouldNotNotify()
+    }
 
     /**
      * Create a push rule with the updated required at index.
      *
-     * @param index index
-     * @return a push rule with the updated flags / null if there is no update
+     * @param status boolean checkbox status
+     * @return a push rule with the updated flags
      */
-    fun createNewRule(ruleAndKind: PushRuleAndKind?, index: Int): PushRule? {
-        val safeRule = ruleAndKind?.pushRule ?: return null
+    fun createNewRule(ruleAndKind: PushRuleAndKind, status: Boolean): PushRule {
+        val safeRule = ruleAndKind.pushRule
         val safeKind = ruleAndKind.kind
         val ruleStatusIndex = ruleStatusIndexFor(ruleAndKind)
 
-        return if (index != ruleStatusIndex) {
+        return if (status != ruleStatusIndex) {
             if (safeRule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
-                when (index) {
-                    NOTIFICATION_OFF_INDEX    -> {
-                        safeRule.copy(enabled = true)
-                                .setNotify(false)
-                                .removeNotificationSound()
-                    }
-                    NOTIFICATION_SILENT_INDEX -> {
-                        safeRule.copy(enabled = false)
-                                .setNotify(false)
-                    }
-                    NOTIFICATION_NOISY_INDEX  -> {
-                        safeRule.copy(enabled = true)
-                                .setNotify(true)
-                                .setNotificationSound()
-                    }
-                    else                                         -> safeRule
+                if (status) {
+                    safeRule.copy(enabled = true)
+                            .setNotify(true)
+                            .setNotificationSound()
+                } else {
+                    safeRule.copy(enabled = true)
+                            .setNotify(false)
+                            .removeNotificationSound()
                 }
             } else {
-                if (NOTIFICATION_OFF_INDEX == index) {
+                if (status) {
+                    safeRule.copy(enabled = true)
+                            .setNotify(true)
+                            .setHighlight(safeKind != RuleSetKey.UNDERRIDE
+                                    && safeRule.ruleId != RuleIds.RULE_ID_INVITE_ME)
+                            .setNotificationSound(
+                                    if (safeRule.ruleId == RuleIds.RULE_ID_CALL) {
+                                        Action.ACTION_OBJECT_VALUE_VALUE_RING
+                                    } else {
+                                        Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT
+                                    }
+                            )
+                } else {
                     if (safeKind == RuleSetKey.UNDERRIDE || safeRule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
                         safeRule.setNotify(false)
                     } else {
                         safeRule.copy(enabled = false)
-                    }
-                } else {
-                    val newRule = safeRule.copy(enabled = true)
-                            .setNotify(true)
-                            .setHighlight(safeKind != RuleSetKey.UNDERRIDE
-                                    && safeRule.ruleId != RuleIds.RULE_ID_INVITE_ME
-                                    && NOTIFICATION_NOISY_INDEX == index)
-
-                    if (NOTIFICATION_NOISY_INDEX == index) {
-                        newRule.setNotificationSound(
-                                if (safeRule.ruleId == RuleIds.RULE_ID_CALL) {
-                                    Action.ACTION_OBJECT_VALUE_VALUE_RING
-                                } else {
-                                    Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT
-                                }
-                        )
-                    } else {
-                        newRule.removeNotificationSound()
                     }
                 }
             }
@@ -136,51 +89,44 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
         }
     }
 
-
     override fun bindPref() {
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorCheckboxPreference>(preferenceKey)!!
-            // preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
             val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
-
             if (ruleAndKind == null) {
                 // The rule is not defined, hide the preference
                 preference.isVisible = false
             } else {
+                var oldRuleAndKind: PushRuleAndKind = ruleAndKind
                 preference.isVisible = true
-
-                val index = ruleStatusIndexFor(ruleAndKind)
-                val boolPreference = booleanPreferenceFromIndex(index)
-                preference.isChecked = boolPreference
+                preference.isChecked = ruleStatusIndexFor(ruleAndKind)
                 preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    val newIndex = indexFromBooleanPreference(newValue as Boolean)
-                    val newRule = createNewRule(ruleAndKind, newIndex)
+                    val newRule = createNewRule(ruleAndKind, newValue as Boolean)
+                    displayLoadingView()
 
-                    if (newRule != null) {
-                        displayLoadingView()
-
-                        lifecycleScope.launch {
-                            val result = runCatching {
-                                session.updatePushRuleActions(
-                                        ruleAndKind.kind,
-                                        ruleAndKind.pushRule,
-                                        newRule
-                                )
-                            }
-                            if (!isAdded) {
-                                return@launch
-                            }
-                            hideLoadingView()
-                            result.onSuccess {
-                                preference.isChecked = newValue
-                            }
-                            result.onFailure { failure ->
-                                // Restore the previous value
-                                refreshDisplay()
-                                activity?.toast(errorFormatter.toHumanReadable(failure))
-                            }
+                    lifecycleScope.launch {
+                        val result = runCatching {
+                            session.updatePushRuleActions(
+                                    oldRuleAndKind.kind,
+                                    oldRuleAndKind.pushRule,
+                                    newRule
+                            )
+                        }
+                        if (!isAdded) {
+                            return@launch
+                        }
+                        hideLoadingView()
+                        result.onSuccess {
+                            oldRuleAndKind = oldRuleAndKind.copy(pushRule = newRule)
+                            preference.isChecked = newValue
+                        }
+                        result.onFailure { failure ->
+                            // Restore the previous value
+                            refreshDisplay()
+                            activity?.toast(errorFormatter.toHumanReadable(failure))
                         }
                     }
+
                     false
                 }
             }
@@ -191,17 +137,6 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
         listView?.adapter?.notifyDataSetChanged()
     }
 
-    /* ==========================================================================================
-     * Companion
-     * ========================================================================================== */
-
     abstract val prefKeyToPushRuleId: Map<String, String>
 
-    companion object {
-
-        // index in mRuleStatuses
-        private const val NOTIFICATION_OFF_INDEX = 0
-        private const val NOTIFICATION_SILENT_INDEX = 1
-        private const val NOTIFICATION_NOISY_INDEX = 2
-    }
 }

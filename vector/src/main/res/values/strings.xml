@@ -1189,6 +1189,15 @@
     <string name="settings_silent_notifications_preferences">Configure Silent Notifications</string>
     <string name="settings_system_preferences_summary">Choose LED color, vibration, sound…</string>
 
+    <string name="settings_messages_in_e2e_one_to_one">Encrypted messages in one-to-one chats</string>
+    <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
+    <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
+    <string name="settings_containing_my_display_name">Msgs containing my display name</string>
+    <string name="settings_containing_my_user_name">Msgs containing my user name</string>
+    <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
+    <string name="settings_messages_in_group_chat">Msgs in group chats</string>
+    <string name="settings_invited_to_room">When I’m invited to a room</string>
+    <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
 
     <string name="settings_messages_containing_display_name">Messages containing my display name</string>
     <string name="settings_messages_containing_username">Messages containing my username</string>

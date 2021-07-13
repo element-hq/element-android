@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_NOTIFICATION_LEVEL"
+        android:title="@string/settings_notification_by_event">
+
+        <im.vector.app.core.preference.PushRulePreference
+            android:key="SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_containing_my_display_name" />
+
+        <im.vector.app.core.preference.PushRulePreference
+            android:key="SETTINGS_PUSH_RULE_CONTAINING_MY_USER_NAME_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_containing_my_user_name" />
+
+        <im.vector.app.core.preference.PushRulePreference
+            android:key="SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_messages_at_room" />
+
+        <!-- TODO Support message with keywords rule -->
+
+        <im.vector.app.core.preference.PushRulePreference
+            android:key="SETTINGS_PUSH_RULE_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_messages_in_one_to_one" />
+
+        <im.vector.app.core.preference.PushRulePreference
+            android:key="SETTINGS_PUSH_RULE_MESSAGES_IN_E2E_ONE_ONE_CHAT_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_messages_in_e2e_one_to_one" />
+
+        <im.vector.app.core.preference.PushRulePreference
+            android:key="SETTINGS_PUSH_RULE_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_messages_in_group_chat" />
+
+        <im.vector.app.core.preference.PushRulePreference
+            android:key="SETTINGS_PUSH_RULE_MESSAGES_IN_E2E_GROUP_CHAT_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_messages_in_e2e_group_chat" />
+
+        <im.vector.app.core.preference.PushRulePreference
+            android:key="SETTINGS_PUSH_RULE_INVITED_TO_ROOM_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_invited_to_room" />
+
+        <im.vector.app.core.preference.PushRulePreference
+            android:key="SETTINGS_PUSH_RULE_CALL_INVITATIONS_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_call_invitations" />
+
+        <im.vector.app.core.preference.PushRulePreference
+            android:key="SETTINGS_PUSH_RULE_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_messages_sent_by_bot" />
+
+        <im.vector.app.core.preference.PushRulePreference
+            android:key="SETTINGS_PUSH_RULE_ROOMS_UPGRADED_KEY"
+            android:persistent="false"
+            android:title="@string/settings_when_rooms_are_upgraded" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
+</androidx.preference.PreferenceScreen>
