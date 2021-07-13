@@ -74,7 +74,7 @@ class HexagonMaskView @JvmOverloads constructor(
     private fun calculatePath() {
         // Compute the radius of the hexagon, and the border width
         val radius = min(width, height) / DEFAULT_DIVIDER
-        val borderWidth = radius * borderRatio / PERCENT_VALUE
+        val borderWidth = context.resources.getDimension(R.dimen.tchap_hexagon_stroke_width)
         borderPaint.strokeWidth = borderWidth
 
         // Define the hexagon path by placing it in the middle of the border.
