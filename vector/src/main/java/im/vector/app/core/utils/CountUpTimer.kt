@@ -17,6 +17,7 @@
 package im.vector.app.core.utils
 
 import io.reactivex.Observable
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
@@ -26,11 +27,12 @@ class CountUpTimer(private val intervalInMs: Long) {
     private val elapsedTime: AtomicLong = AtomicLong()
     private val resumed: AtomicBoolean = AtomicBoolean(false)
 
-    private val disposable = Observable.interval(intervalInMs, TimeUnit.MILLISECONDS)
+    private val disposable = Observable.interval(intervalInMs / 10, TimeUnit.MILLISECONDS)
             .filter { resumed.get() }
-            .doOnNext { elapsedTime.addAndGet(intervalInMs) }
+            .map { elapsedTime.addAndGet(intervalInMs / 10) }
+            .filter { it % intervalInMs == 0L }
             .subscribe {
-                tickListener?.onTick(elapsedTime.get())
+                tickListener?.onTick(it)
             }
 
     var tickListener: TickListener? = null
