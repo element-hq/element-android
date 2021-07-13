@@ -110,7 +110,7 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
     }
 
     companion object {
-        var RECORDING_ID = "RECORDING_ID"
+        const val RECORDING_ID = "RECORDING_ID"
     }
 
     interface Listener {

@@ -88,14 +88,14 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : VoiceMessagePlaybackTracker.Listener {
             override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
                 when (state) {
-                    is VoiceMessagePlaybackTracker.Listener.State.Idle    -> handleIdleState(holder, state)
-                    is VoiceMessagePlaybackTracker.Listener.State.Playing -> handlePlayingState(holder, state)
+                    is VoiceMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder, state)
+                    is VoiceMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state)
                 }
             }
         })
     }
 
-    private fun handleIdleState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Idle) {
+    private fun renderIdleState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Idle) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
         if (state.playbackTime > 0) {
             holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
@@ -104,13 +104,9 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         }
     }
 
-    private fun handlePlayingState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
+    private fun renderPlayingState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
-        if (state.playbackTime > 0) {
-            holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
-        } else {
-            holder.voicePlaybackTime.text = formatPlaybackTime(duration)
-        }
+        holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 
     private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())

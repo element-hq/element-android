@@ -225,6 +225,7 @@ class VoiceMessageHelper @Inject constructor(
             }
             else                             -> {
                 playbackTracker.stopPlayback(id = id, rememberPlaybackTime = false)
+                stopPlaybackTimer()
             }
         }
     }
