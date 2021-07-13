@@ -31,7 +31,7 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
     fun track(id: String, listener: Listener) {
         listeners[id] = listener
 
-        val currentState = states[id] ?: Listener.State.Idle(0)
+        val currentState = states[id] ?: Listener.State.Idle
         mainHandler.post {
             listener.onUpdate(currentState)
         }
@@ -43,56 +43,51 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
 
     fun makeAllPlaybacksIdle() {
         listeners.keys.forEach { key ->
-            val currentPlaybackTime = getPlaybackTime(key)
-            states[key] = Listener.State.Idle(currentPlaybackTime)
-            mainHandler.post {
-                listeners[key]?.onUpdate(Listener.State.Idle(currentPlaybackTime))
-            }
+            setState(key, Listener.State.Idle)
+        }
+    }
+
+    /**
+     * Set state and notify the listeners
+     */
+    private fun setState(key: String, state: Listener.State) {
+        states[key] = state
+        mainHandler.post {
+            listeners[key]?.onUpdate(state)
         }
     }
 
     fun startPlayback(id: String) {
         val currentPlaybackTime = getPlaybackTime(id)
         val currentState = Listener.State.Playing(currentPlaybackTime)
-        states[id] = currentState
-        mainHandler.post {
-            listeners[id]?.onUpdate(currentState)
-        }
-        // Make active playback IDLE
+        setState(id, currentState)
+        // Pause any active playback
         states
                 .filter { it.key != id }
-                .filter { it.value is Listener.State.Playing }
                 .keys
                 .forEach { key ->
-                    val playbackTime = getPlaybackTime(key)
-                    val state = Listener.State.Idle(playbackTime)
-                    states[key] = state
-                    mainHandler.post {
-                        listeners[key]?.onUpdate(state)
+                    val state = states[key]
+                    if (state is Listener.State.Playing) {
+                        setState(key, Listener.State.Paused(state.playbackTime))
                     }
                 }
     }
 
-    fun stopPlayback(id: String, rememberPlaybackTime: Boolean = true) {
-        val currentPlaybackTime = if (rememberPlaybackTime) getPlaybackTime(id) else 0
-        states[id] = Listener.State.Idle(currentPlaybackTime)
-        mainHandler.post {
-            listeners[id]?.onUpdate(states[id]!!)
-        }
+    fun pausePlayback(id: String) {
+        val currentPlaybackTime = getPlaybackTime(id)
+        setState(id, Listener.State.Paused(currentPlaybackTime))
+    }
+
+    fun stopPlayback(id: String) {
+        setState(id, Listener.State.Idle)
     }
 
     fun updateCurrentPlaybackTime(id: String, time: Int) {
-        states[id] = Listener.State.Playing(time)
-        mainHandler.post {
-            listeners[id]?.onUpdate(states[id]!!)
-        }
+        setState(id, Listener.State.Playing(time))
     }
 
     fun updateCurrentRecording(id: String, amplitudeList: List<Int>) {
-        states[id] = Listener.State.Recording(amplitudeList)
-        mainHandler.post {
-            listeners[id]?.onUpdate(states[id]!!)
-        }
+        setState(id, Listener.State.Recording(amplitudeList))
     }
 
     fun getPlaybackState(id: String) = states[id]
@@ -100,14 +95,15 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
     fun getPlaybackTime(id: String): Int {
         return when (val state = states[id]) {
             is Listener.State.Playing -> state.playbackTime
-            is Listener.State.Idle    -> state.playbackTime
+            is Listener.State.Paused  -> state.playbackTime
+            /* Listener.State.Idle, */
             else                      -> 0
         }
     }
 
     fun clear() {
         listeners.forEach {
-            it.value.onUpdate(Listener.State.Idle(0))
+            it.value.onUpdate(Listener.State.Idle)
         }
         listeners.clear()
         states.clear()
@@ -122,8 +118,9 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
         fun onUpdate(state: State)
 
         sealed class State {
-            data class Idle(val playbackTime: Int) : State()
+            object Idle : State()
             data class Playing(val playbackTime: Int) : State()
+            data class Paused(val playbackTime: Int) : State()
             data class Recording(val amplitudeList: List<Int>) : State()
         }
     }

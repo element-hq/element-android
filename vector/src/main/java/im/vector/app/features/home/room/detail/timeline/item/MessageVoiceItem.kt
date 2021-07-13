@@ -74,8 +74,6 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
             holder.progressLayout.isVisible = false
         }
 
-        holder.voicePlaybackTime.text = formatPlaybackTime(duration)
-
         holder.voicePlaybackWaveform.post {
             holder.voicePlaybackWaveform.recreate()
             waveform.forEach { amplitude ->
@@ -88,24 +86,26 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : VoiceMessagePlaybackTracker.Listener {
             override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
                 when (state) {
-                    is VoiceMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder, state)
+                    is VoiceMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder)
                     is VoiceMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state)
+                    is VoiceMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state)
                 }
             }
         })
     }
 
-    private fun renderIdleState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Idle) {
+    private fun renderIdleState(holder: Holder) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
-        if (state.playbackTime > 0) {
-            holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
-        } else {
-            holder.voicePlaybackTime.text = formatPlaybackTime(duration)
-        }
+        holder.voicePlaybackTime.text = formatPlaybackTime(duration)
     }
 
     private fun renderPlayingState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
+        holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
+    }
+
+    private fun renderPausedState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Paused) {
+        holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
         holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 

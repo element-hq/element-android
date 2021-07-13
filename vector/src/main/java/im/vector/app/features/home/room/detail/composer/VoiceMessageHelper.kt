@@ -138,7 +138,7 @@ class VoiceMessageHelper @Inject constructor(
     fun startOrPausePlayback(id: String, file: File) {
         stopPlayback()
         if (playbackTracker.getPlaybackState(id) is VoiceMessagePlaybackTracker.Listener.State.Playing) {
-            playbackTracker.stopPlayback(id)
+            playbackTracker.pausePlayback(id)
         } else {
             playbackTracker.startPlayback(id)
             startPlayback(id, file)
@@ -224,7 +224,7 @@ class VoiceMessageHelper @Inject constructor(
                 playbackTracker.updateCurrentPlaybackTime(id, currentPosition)
             }
             else                             -> {
-                playbackTracker.stopPlayback(id = id, rememberPlaybackTime = false)
+                playbackTracker.stopPlayback(id)
                 stopPlaybackTimer()
             }
         }
