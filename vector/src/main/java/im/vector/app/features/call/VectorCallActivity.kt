@@ -103,6 +103,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private var rootEglBase: EglBase? = null
     private var pipDraggrableView: DraggableView<MaterialCardView>? = null
+    private var otherCallDraggableView: DraggableView<MaterialCardView>? = null
 
     var surfaceRenderersAreInitialized = false
 
@@ -191,7 +192,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) = withState(callViewModel) {
-            renderState(it)
+        renderState(it)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -242,13 +243,15 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is CallState.CreateOffer,
             is CallState.LocalRinging,
             is CallState.Dialing    -> {
-                views.callVideoGroup.isVisible = false
+                views.fullscreenRenderer.isVisible = false
+                views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
                 views.callToolbar.setSubtitle(R.string.call_ringing)
                 configureCallInfo(state)
             }
             is CallState.Answering  -> {
-                views.callVideoGroup.isVisible = false
+                views.fullscreenRenderer.isVisible = false
+                views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
                 views.callToolbar.setSubtitle(R.string.call_connecting)
                 configureCallInfo(state)
@@ -258,7 +261,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
-                        views.callVideoGroup.isVisible = false
+                        views.fullscreenRenderer.isVisible = false
+                        views.pipRendererWrapper.isVisible = false
                         views.callInfoGroup.isVisible = true
                         configureCallInfo(state, blurAvatar = true)
                         if (state.isRemoteOnHold) {
@@ -285,17 +289,20 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     } else {
                         configureCallInfo(state)
                         if (callArgs.isVideoCall) {
-                            views.callVideoGroup.isVisible = true
+                            views.fullscreenRenderer.isVisible = true
+                            views.pipRendererWrapper.isVisible = true
                             views.callInfoGroup.isVisible = false
                             views.pipRenderer.isVisible = !state.isVideoCaptureInError && state.otherKnownCallInfo == null
                         } else {
-                            views.callVideoGroup.isVisible = false
+                            views.fullscreenRenderer.isVisible = false
+                            views.pipRendererWrapper.isVisible = false
                             views.callInfoGroup.isVisible = true
                         }
                     }
                 } else {
                     // This state is not final, if you change network, new candidates will be sent
-                    views.callVideoGroup.isVisible = false
+                    views.fullscreenRenderer.isVisible = false
+                    views.pipRendererWrapper.isVisible = false
                     views.callInfoGroup.isVisible = true
                     configureCallInfo(state)
                     views.callToolbar.setSubtitle(R.string.call_connecting)
@@ -315,6 +322,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         views.callControlsView.isVisible = false
         views.pipRendererWrapper.isVisible = false
         views.pipRenderer.isVisible = false
+        views.callActionText.isVisible = false
         when (callState) {
             is CallState.Idle,
             is CallState.CreateOffer,
@@ -396,7 +404,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 finish()
             }
         }
-        pipDraggrableView = views.pipRendererWrapper.setupDraggable().build()
+        pipDraggrableView = views.pipRendererWrapper.setupDraggable()
+                .setStickyMode(DraggableView.Mode.STICKY_XY)
+                .build()
+
+        otherCallDraggableView = views.otherKnownCallLayout.setupDraggable()
+                .setStickyMode(DraggableView.Mode.STICKY_XY)
+                .build()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

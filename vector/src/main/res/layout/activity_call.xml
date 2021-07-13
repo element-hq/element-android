@@ -29,25 +29,71 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/pipRendererWrapper"
-        android:layout_width="@dimen/call_pip_width"
-        android:layout_height="@dimen/call_pip_height"
-        app:cardCornerRadius="@dimen/call_pip_radius"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_goneMarginEnd="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pipContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/callControlsView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/callControlsView">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/callToolbar">
 
-        <org.webrtc.SurfaceViewRenderer
-            android:id="@+id/pipRenderer"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/pipRendererWrapper"
             android:layout_width="@dimen/call_pip_width"
             android:layout_height="@dimen/call_pip_height"
-            android:visibility="gone"
-            tools:visibility="visible" />
+            android:layout_marginEnd="16dp"
+            app:layout_goneMarginEnd="0dp"
+            app:cardCornerRadius="@dimen/call_pip_radius"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-    </com.google.android.material.card.MaterialCardView>
+            <org.webrtc.SurfaceViewRenderer
+                android:id="@+id/pipRenderer"
+                android:layout_width="@dimen/call_pip_width"
+                android:layout_height="@dimen/call_pip_height"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/otherKnownCallLayout"
+            android:layout_width="@dimen/call_pip_width"
+            android:layout_height="@dimen/call_pip_height"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/element_background_light"
+            android:foreground="?attr/selectableItemBackground"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/bg_call_screen"
+            app:cardCornerRadius="@dimen/call_pip_radius"
+            app:cardElevation="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/pipRendererWrapper"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/otherKnownCallAvatarView"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/otherSmallIsHeldIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_call_small_pause" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/callToolbar"
@@ -67,41 +113,6 @@
         app:titleMarginTop="16dp"
         app:titleTextAppearance="@style/TextAppearance.Vector.Body.Medium"
         app:titleTextColor="@color/element_background_light" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/otherKnownCallLayout"
-        android:layout_width="@dimen/call_pip_width"
-        android:layout_height="@dimen/call_pip_height"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/element_background_light"
-        android:foreground="?attr/selectableItemBackground"
-        android:visibility="gone"
-        app:cardBackgroundColor="@color/bg_call_screen"
-        app:cardCornerRadius="@dimen/call_pip_radius"
-        app:cardElevation="4dp"
-        app:layout_constraintBottom_toTopOf="@id/callControlsView"
-        app:layout_constraintEnd_toStartOf="@id/pipRendererWrapper"
-        tools:visibility="visible">
-
-        <ImageView
-            android:id="@+id/otherKnownCallAvatarView"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
-
-        <ImageView
-            android:id="@+id/otherSmallIsHeldIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_call_small_pause" />
-
-    </com.google.android.material.card.MaterialCardView>
 
     <ImageView
         android:id="@+id/otherMemberAvatar"
@@ -163,14 +174,6 @@
         android:layout_height="wrap_content"
         android:visibility="visible"
         app:constraint_referenced_ids="participantNameText, otherMemberAvatar" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/callVideoGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:constraint_referenced_ids="pipRendererWrapper, fullscreenRenderer"
-        tools:visibility="invisible" />
 
     <im.vector.app.features.call.CallControlsView
         android:id="@+id/callControlsView"
