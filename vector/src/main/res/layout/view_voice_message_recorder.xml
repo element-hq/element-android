@@ -12,7 +12,7 @@
         android:layout_width="52dp"
         android:layout_height="160dp"
         android:background="@drawable/bg_voice_message_lock"
-        android:backgroundTint="?vctr_voice_message_lock_background"
+        android:backgroundTint="?vctr_system"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/voiceMessageMicButton"

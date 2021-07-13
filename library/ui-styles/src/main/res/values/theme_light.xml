@@ -138,7 +138,6 @@
         <item name="vctr_jump_to_unread_style">@style/Widget.Vector.JumpToUnread.Light</item>
 
         <!-- Voice Message -->
-        <item name="vctr_voice_message_lock_background">@color/vctr_voice_message_lock_background_light</item>
         <item name="vctr_voice_message_toast_background">@color/vctr_voice_message_toast_background_light</item>
     </style>
 
