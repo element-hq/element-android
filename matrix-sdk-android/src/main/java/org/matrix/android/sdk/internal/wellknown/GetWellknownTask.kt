@@ -130,7 +130,7 @@ internal class DefaultGetWellknownTask @Inject constructor(
     }
 
     /**
-     * Return true if home server is valid, and (if applicable) if identity server is pingable
+     * Return true if homeserver is valid, and (if applicable) if identity server is pingable
      */
     private suspend fun validateHomeServer(homeServerBaseUrl: String, wellKnown: WellKnown, client: OkHttpClient): WellknownResult {
         val capabilitiesAPI = retrofitFactory.create(client, homeServerBaseUrl)
@@ -186,7 +186,7 @@ internal class DefaultGetWellknownTask @Inject constructor(
     }
 
     /**
-     * Try to get an identity server URL from a home server URL, using a .wellknown request
+     * Try to get an identity server URL from a homeserver URL, using a .wellknown request
      */
     /*
     fun getIdentityServer(homeServerUrl: String, callback: ApiCallback<String?>) {

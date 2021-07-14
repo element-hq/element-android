@@ -273,7 +273,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     fun clearPreferences() {
         val keysToKeep = HashSet(mKeysToKeepAfterLogout)
 
-        // home server urls
+        // homeserver urls
         keysToKeep.add(ServerUrlsRepository.HOME_SERVER_URL_PREF)
         keysToKeep.add(ServerUrlsRepository.IDENTITY_SERVER_URL_PREF)
 

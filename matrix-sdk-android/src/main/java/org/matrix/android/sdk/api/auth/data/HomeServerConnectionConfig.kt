@@ -73,14 +73,14 @@ data class HomeServerConnectionConfig(
          */
         fun withHomeServerUri(hsUri: Uri): Builder {
             if (hsUri.scheme != "http" && hsUri.scheme != "https") {
-                throw RuntimeException("Invalid home server URI: $hsUri")
+                throw RuntimeException("Invalid homeserver URI: $hsUri")
             }
             // ensure trailing /
             val hsString = hsUri.toString().ensureTrailingSlash()
             homeServerUri = try {
                 Uri.parse(hsString)
             } catch (e: Exception) {
-                throw RuntimeException("Invalid home server URI: $hsUri")
+                throw RuntimeException("Invalid homeserver URI: $hsUri")
             }
             return this
         }
@@ -138,7 +138,7 @@ data class HomeServerConnectionConfig(
         }
 
         /**
-         * Add an accepted TLS version for TLS connections with the home server.
+         * Add an accepted TLS version for TLS connections with the homeserver.
          *
          * @param tlsVersion the tls version to add to the set of TLS versions accepted.
          * @return this builder
@@ -160,7 +160,7 @@ data class HomeServerConnectionConfig(
         }
 
         /**
-         * Add a TLS cipher suite to the list of accepted TLS connections with the home server.
+         * Add a TLS cipher suite to the list of accepted TLS connections with the homeserver.
          *
          * @param tlsCipherSuite the tls cipher suite to add.
          * @return this builder

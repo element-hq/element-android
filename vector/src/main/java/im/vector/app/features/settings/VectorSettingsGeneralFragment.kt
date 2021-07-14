@@ -179,7 +179,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_LOGGED_IN_PREFERENCE_KEY)!!
                 .summary = session.myUserId
 
-        // home server
+        // homeserver
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)!!
                 .summary = session.sessionParams.homeServerUrl
 

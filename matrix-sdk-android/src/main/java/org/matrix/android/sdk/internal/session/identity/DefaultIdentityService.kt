@@ -241,7 +241,7 @@ internal class DefaultIdentityService @Inject constructor(
 
     override suspend fun getShareStatus(threePids: List<ThreePid>): Map<ThreePid, SharedState> {
         // Note: we do not require user consent here, because it is used for emails and phone numbers that the user has already sent
-        // to the home server, and not emails and phone numbers from the contact book of the user
+        // to the homeserver, and not emails and phone numbers from the contact book of the user
 
         if (threePids.isEmpty()) {
             return emptyMap()

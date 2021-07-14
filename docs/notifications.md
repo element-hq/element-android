@@ -2,11 +2,11 @@ This document aims to describe how Element android displays notifications to the
 
 # Table of Contents
 1. [Prerequisites Knowledge](#prerequisites-knowledge)
-    * [How does a matrix client get a message from a Home Server?](#how-does-a-matrix-client-get-a-message-from-a-home-server)
+    * [How does a matrix client get a message from a homeserver?](#how-does-a-matrix-client-get-a-message-from-a-homeserver)
     * [How does a mobile app receives push notification?](#how-does-a-mobile-app-receives-push-notification)
     * [Push VS Notification](#push-vs-notification)
     * [Push in the matrix federated world](#push-in-the-matrix-federated-world)
-    * [How does the Home Server knows when to notify a client?](#how-does-the-home-server-knows-when-to-notify-a-client)
+    * [How does the homeserver know when to notify a client?](#how-does-the-homeserver-know-when-to-notify-a-client)
     * [Push vs privacy, and mitigation](#push-vs-privacy-and-mitigation)
     * [Background processing limitations](#background-processing-limitations)
 2. [Element Notification implementations](#element-notification-implementations)
@@ -22,9 +22,9 @@ First let's start with some prerequisite knowledge
 
 # Prerequisites Knowledge
 
-## How does a matrix client get a message from a Home Server?
+## How does a matrix client get a message from a homeserver?
 
-In order to get messages from a home server, a matrix client need to perform a ``sync`` operation.
+In order to get messages from a homeserver, a matrix client need to perform a ``sync`` operation.
 
 `To read events, the intended flow of operation is for clients to first call the /sync API without a since parameter. This returns the most recent message events for each room, as well as the state of the room at the start of the returned timeline. `
 
@@ -90,7 +90,7 @@ That means that Element Android, a matrix client created by New Vector, is using
 
 If you create your own matrix client, you will also need to deploy an instance of a **Push Gateway** with the credentials needed to use FCM for your app.
 
-On registration, a matrix client must tell to it's Home Server what Push Gateway to use.
+On registration, a matrix client must tell its homeserver what Push Gateway to use.
 
 See [Sygnal](https://github.com/matrix-org/sygnal/) for a reference implementation.
 ```
@@ -122,13 +122,13 @@ Recommended reading:
 * https://matrix.org/docs/spec/client_server/r0.4.0.html#id128
 
 
-## How does the Home Server knows when to notify a client?
+## How does the homeserver know when to notify a client?
 
 This is defined by [**push rules**](https://matrix.org/docs/spec/client_server/r0.4.0.html#push-rules-).
 
 `A push rule is a single rule that states under what conditions an event should be passed onto a push gateway and how the notification should be presented (sound / importance).`
 
-A Home Server can be configured with default rules (for Direct messages, group messages, mentions, etc.. ). 
+A homeserver can be configured with default rules (for Direct messages, group messages, mentions, etc.. ).
 
 There are different kind of push rules, it can be per room (each new message on this room should be notified), it can also define a pattern that a message should match (when you are mentioned, or key word based).
 
@@ -217,7 +217,7 @@ Homeserver ----> Sygnal ----> FCM ----> Element
 
 **Possible outcomes**
 
-Upon reception of the FCM push, Element will perform a sync call to the Home Server, during this process it is possible that:
+Upon reception of the FCM push, Element will perform a sync call to the homeserver, during this process it is possible that:
   * Happy path, the sync is performed, the message resolved and displayed in the notification drawer
   * The notified message is not in the sync. Can happen if a lot of things did happen since the push (`gappy sync`)
   * The sync generates additional notifications (e.g an encrypted message where the user is mentioned detected locally)
