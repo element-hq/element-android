@@ -34,4 +34,3 @@ class VectorSettingsGlobalNotificationPreferenceFragment
                 "SETTINGS_PUSH_RULE_MESSAGES_IN_E2E_GROUP_CHAT_PREFERENCE_KEY" to RuleIds.RULE_ID_ENCRYPTED
         )
 }
-

@@ -142,6 +142,7 @@ android {
         resValue "bool", "useLoginV1", "true"
         resValue "bool", "useLoginV2", "false"
 
+        // NotificationSettingsV2 is disabled. To be released in conjunction with iOS/Web
         resValue "bool", "useNotificationSettingsV1", "true"
         resValue "bool", "useNotificationSettingsV2", "false"
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_OTHER"
         android:title="@string/settings_notification_notify_me_for">
@@ -24,4 +24,4 @@
             android:persistent="false"
             android:title="@string/settings_room_upgrades" />
     </im.vector.app.core.preference.VectorPreferenceCategory>
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

@@ -19,7 +19,6 @@ package im.vector.app.features.settings
 import im.vector.app.R
 import org.matrix.android.sdk.api.pushrules.RuleIds
 
-
 class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
     : VectorSettingsPushRuleNotificationPreferenceFragment() {
 

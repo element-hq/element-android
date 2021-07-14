@@ -138,5 +138,4 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
     }
 
     abstract val prefKeyToPushRuleId: Map<String, String>
-
 }
