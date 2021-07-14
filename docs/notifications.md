@@ -187,7 +187,7 @@ In background, and depending on wether push is available or not, Element will us
 
 ## Push (FCM) received in background 
 
-In order to enable Push, Element must first get a push token from the firebase SDK, then register a pusher with this token on the HomeServer.
+In order to enable Push, Element must first get a push token from the firebase SDK, then register a pusher with this token on the homeserver.
 
 When a message should be notified to a user,  the user's homeserver notifies the registered `push gateway` for Element, that is [sygnal](https://github.com/matrix-org/sygnal) _- The reference implementation for push gateways -_ hosted by matrix.org. 
 
@@ -199,7 +199,7 @@ Homeserver ----> Sygnal (configured for Element) ----> FCM ----> Element
 
 The push gateway is configured to only send  `(eventId,roomId)` in the push payload (for better [privacy](#push-vs-privacy-and-mitigation)).
 
-Element needs then to synchronise with the user's HomeServer, in order to resolve the event and create a notification.
+Element needs then to synchronise with the user's homeserver, in order to resolve the event and create a notification.
 
 As per [Google recommendation](https://android-developers.googleblog.com/2018/09/notifying-your-users-with-fcm.html), Element will then use the WorkManager API in order to trigger a background sync. 
 
