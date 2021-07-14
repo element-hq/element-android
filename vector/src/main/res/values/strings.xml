@@ -386,12 +386,16 @@
     <string name="reset">Reset</string>
     <string name="start_chatting">Start Chatting</string>
 
+    <!-- Permissions denied forever -->
+    <string name="denied_permission_generic">Some permissions are missing to perform this action, please grant the permissions from the system settings.</string>
+    <string name="denied_permission_camera">To perform this action, please grant the Camera permission from the system settings.</string>
 
     <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
     <string name="ongoing_conference_call">Ongoing conference call.\nJoin as %1$s or %2$s</string>
     <string name="ongoing_conference_call_voice">Voice</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Cannot start the call, please try later</string>
+    <string name="missing_permissions_title">Missing permissions</string>
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>

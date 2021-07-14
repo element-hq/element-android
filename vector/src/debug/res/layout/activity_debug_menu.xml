@@ -152,6 +152,12 @@
                 android:layout_height="200dp"
                 tools:src="@drawable/ic_qr_code_add" />
 
+            <Button
+                android:id="@+id/debug_permission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Permissions" />
+
         </LinearLayout>
 
     </ScrollView>
