@@ -191,7 +191,7 @@ internal class DefaultIdentityService @Inject constructor(
         } else {
             // Disconnect previous one if any, first, because the token will change.
             // In case of error when configuring the new identity server, this is not a big deal,
-            // we will ask for a new token on the previous Identity server
+            // we will ask for a new token on the previous identity server
             runCatching { identityDisconnectTask.execute(Unit) }
                     .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
