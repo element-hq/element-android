@@ -42,7 +42,7 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
     }
 
     /**
-     * Create a push rule with the updated required at index.
+     * Create a push rule with the updated checkbox status.
      *
      * @param status boolean checkbox status
      * @return a push rule with the updated flags
