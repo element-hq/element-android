@@ -2,6 +2,8 @@ package im.vector.app.core.ui.views
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Rect
+import android.text.Layout
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import kotlin.math.ceil
@@ -19,6 +21,9 @@ class FooteredTextView @JvmOverloads constructor(
     var footerHeight: Int = 0
     var footerWidth: Int = 0
     //var widthLimit: Float = 0f
+
+    // Some Rect to use during draw, since we should not alloc it during draw
+    private val testBounds = Rect()
 
     // Workaround to RTL languages with non-RTL content messages aligning left instead of start
     private var requiredHorizontalCanvasMove = 0f
@@ -48,13 +53,25 @@ class FooteredTextView @JvmOverloads constructor(
 
         // Let's check if the last line's text has the same RTL behaviour as the layout direction.
         val viewIsRtl = layoutDirection == LAYOUT_DIRECTION_RTL
+        val looksLikeRtl = layout.getParagraphDirection(lastLine) == Layout.DIR_RIGHT_TO_LEFT
+        /*
         val lastVisibleCharacter = layout.getLineVisibleEnd(lastLine) - 1
         val looksLikeRtl = layout.isRtlCharAt(lastVisibleCharacter)
+         */
 
         // Get required width for all lines
         var maxLineWidth = 0f
         for (i in 0 until layout.lineCount) {
-            maxLineWidth = max(layout.getLineWidth(i), maxLineWidth)
+            // For some reasons, the getLineWidth is not working too well with RTL lines when rendering replies.
+            // -> https://github.com/SchildiChat/SchildiChat-android/issues/74
+            // However, the bounds method is a little generous sometimes (reserving too much space),
+            // so we don't want to use it over getLineWidth() unless required.
+            maxLineWidth = if (layout.getParagraphDirection(i) == Layout.DIR_RIGHT_TO_LEFT) {
+                layout.getLineBounds(i, testBounds)
+                max((testBounds.right - testBounds.left).toFloat(), maxLineWidth)
+            } else {
+                max(layout.getLineWidth(i), maxLineWidth)
+            }
         }
 
         // Fix wrap_content in multi-line texts by using maxLineWidth instead of measuredWidth here
