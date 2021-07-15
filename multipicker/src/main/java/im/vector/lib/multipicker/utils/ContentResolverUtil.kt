@@ -141,7 +141,7 @@ fun Uri.toMultiPickerAudioType(context: Context): MultiPickerAudioType? {
             MultiPickerAudioType(
                     name,
                     size,
-                    context.contentResolver.getType(this),
+                    sanitize(context.contentResolver.getType(this)),
                     this,
                     duration
             )
@@ -149,4 +149,12 @@ fun Uri.toMultiPickerAudioType(context: Context): MultiPickerAudioType? {
             null
         }
     }
+}
+
+private fun sanitize(type: String?): String? {
+    if (type == "application/ogg") {
+        // Not supported on old system
+        return "audio/ogg"
+    }
+    return type
 }

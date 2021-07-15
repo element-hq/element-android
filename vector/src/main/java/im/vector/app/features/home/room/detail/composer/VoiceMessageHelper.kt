@@ -74,7 +74,6 @@ class VoiceMessageHelper @Inject constructor(
             voiceRecorder.getVoiceMessageFile()
         }
         try {
-            // TODO Improve this
             voiceMessageFile?.let {
                 val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it)
                 return outputFileUri
