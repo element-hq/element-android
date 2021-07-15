@@ -116,42 +116,51 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         }
 
         views.voiceMessageMicButton.setOnTouchListener { _, event ->
-            return@setOnTouchListener when (event.action) {
+            when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    val recordingStarted = callback?.onVoiceRecordingStarted().orFalse()
-                    if (recordingStarted) {
-                        startRecordingTicker()
-                        renderToast(context.getString(R.string.voice_message_release_to_send_toast))
-                        recordingState = RecordingState.STARTED
-                        showRecordingViews()
-
-                        firstX = event.rawX
-                        firstY = event.rawY
-                        lastX = firstX
-                        lastY = firstY
-                    }
+                    handleMicActionDown(event)
                     true
                 }
                 MotionEvent.ACTION_UP   -> {
-                    if (recordingState != RecordingState.LOCKED) {
-                        stopRecordingTicker()
-                        val isCancelled = recordingState == RecordingState.NONE || recordingState == RecordingState.CANCELLED
-                        callback?.onVoiceRecordingEnded(isCancelled)
-                        recordingState = RecordingState.NONE
-                        hideRecordingViews()
-                    }
+                    handleMicActionUp()
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    handleMoveAction(event)
+                    handleMicActionMove(event)
                     true
                 }
-                else                    -> false
+                else                    ->
+                    false
             }
         }
     }
 
-    private fun handleMoveAction(event: MotionEvent) {
+    private fun handleMicActionDown(event: MotionEvent) {
+        val recordingStarted = callback?.onVoiceRecordingStarted().orFalse()
+        if (recordingStarted) {
+            startRecordingTicker()
+            renderToast(context.getString(R.string.voice_message_release_to_send_toast))
+            recordingState = RecordingState.STARTED
+            showRecordingViews()
+
+            firstX = event.rawX
+            firstY = event.rawY
+            lastX = firstX
+            lastY = firstY
+        }
+    }
+
+    private fun handleMicActionUp() {
+        if (recordingState != RecordingState.LOCKED) {
+            stopRecordingTicker()
+            val isCancelled = recordingState == RecordingState.NONE || recordingState == RecordingState.CANCELLED
+            callback?.onVoiceRecordingEnded(isCancelled)
+            recordingState = RecordingState.NONE
+            hideRecordingViews()
+        }
+    }
+
+    private fun handleMicActionMove(event: MotionEvent) {
         val currentX = event.rawX
         val currentY = event.rawY
 
