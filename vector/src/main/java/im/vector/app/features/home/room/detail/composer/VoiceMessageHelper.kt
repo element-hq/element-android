@@ -25,6 +25,7 @@ import androidx.core.content.FileProvider
 import im.vector.app.BuildConfig
 import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.voice.VoiceFailure
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -44,7 +45,7 @@ class VoiceMessageHelper @Inject constructor(
         private val playbackTracker: VoiceMessagePlaybackTracker
 ) {
     private var mediaPlayer: MediaPlayer? = null
-    private lateinit var mediaRecorder: MediaRecorder
+    private var mediaRecorder: MediaRecorder? = null
     private val outputDirectory = File(context.cacheDir, "downloads")
     private var outputFile: File? = null
     private var lastRecordingFile: File? = null // In case of user pauses recording, plays another one in timeline
@@ -60,13 +61,14 @@ class VoiceMessageHelper @Inject constructor(
         }
     }
 
-    private fun refreshMediaRecorder() {
-        mediaRecorder = MediaRecorder().apply {
-            setAudioSource(MediaRecorder.AudioSource.DEFAULT)
-            setOutputFormat(MediaRecorder.OutputFormat.OGG)
-            setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
-            setAudioEncodingBitRate(24000)
-            setAudioSamplingRate(48000)
+    private fun initMediaRecorder() {
+        MediaRecorder().let {
+            it.setAudioSource(MediaRecorder.AudioSource.DEFAULT)
+            it.setOutputFormat(MediaRecorder.OutputFormat.OGG)
+            it.setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
+            it.setAudioEncodingBitRate(24000)
+            it.setAudioSamplingRate(48000)
+            mediaRecorder = it
         }
     }
 
@@ -78,14 +80,19 @@ class VoiceMessageHelper @Inject constructor(
         lastRecordingFile = outputFile
         amplitudeList.clear()
 
-        refreshMediaRecorder()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mediaRecorder.setOutputFile(outputFile)
-        } else {
-            mediaRecorder.setOutputFile(FileOutputStream(outputFile).fd)
+        try {
+            initMediaRecorder()
+            val mr = mediaRecorder!!
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                mr.setOutputFile(outputFile)
+            } else {
+                mr.setOutputFile(FileOutputStream(outputFile).fd)
+            }
+            mr.prepare()
+            mr.start()
+        } catch (failure: Throwable) {
+            throw VoiceFailure.UnableToRecord(failure)
         }
-        mediaRecorder.prepare()
-        mediaRecorder.start()
         startRecordingAmplitudes()
     }
 
@@ -117,9 +124,13 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     private fun releaseMediaRecorder() {
-        mediaRecorder.stop()
-        mediaRecorder.reset()
-        mediaRecorder.release()
+        mediaRecorder?.let {
+            it.stop()
+            it.reset()
+            it.release()
+        }
+
+        mediaRecorder = null
     }
 
     fun pauseRecording() {
@@ -143,27 +154,31 @@ class VoiceMessageHelper @Inject constructor(
         if (playbackTracker.getPlaybackState(id) is VoiceMessagePlaybackTracker.Listener.State.Playing) {
             playbackTracker.pausePlayback(id)
         } else {
-            playbackTracker.startPlayback(id)
             startPlayback(id, file)
+            playbackTracker.startPlayback(id)
         }
     }
 
     private fun startPlayback(id: String, file: File) {
         val currentPlaybackTime = playbackTracker.getPlaybackTime(id)
 
-        FileInputStream(file).use { fis ->
-            mediaPlayer = MediaPlayer().apply {
-                setAudioAttributes(
-                        AudioAttributes.Builder()
-                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                .setUsage(AudioAttributes.USAGE_MEDIA)
-                                .build()
-                )
-                setDataSource(fis.fd)
-                prepare()
-                start()
-                seekTo(currentPlaybackTime)
+        try {
+            FileInputStream(file).use { fis ->
+                mediaPlayer = MediaPlayer().apply {
+                    setAudioAttributes(
+                            AudioAttributes.Builder()
+                                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                                    .build()
+                    )
+                    setDataSource(fis.fd)
+                    prepare()
+                    start()
+                    seekTo(currentPlaybackTime)
+                }
             }
+        } catch (failure: Throwable) {
+            throw VoiceFailure.UnableToPlay(failure)
         }
         startPlaybackTicker(id)
     }
@@ -186,8 +201,9 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     private fun onAmplitudeTick() {
+        val mr = mediaRecorder ?: return
         try {
-            val maxAmplitude = mediaRecorder.maxAmplitude
+            val maxAmplitude = mr.maxAmplitude
             amplitudeList.add(maxAmplitude)
             playbackTracker.updateCurrentRecording(VoiceMessagePlaybackTracker.RECORDING_ID, amplitudeList)
         } catch (e: IllegalStateException) {

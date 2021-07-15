@@ -621,7 +621,11 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleStartRecordingVoiceMessage() {
-        voiceMessageHelper.startRecording()
+        try {
+            voiceMessageHelper.startRecording()
+        } catch (failure: Throwable) {
+            _viewEvents.post(RoomDetailViewEvents.Failure(failure))
+        }
     }
 
     private fun handleEndRecordingVoiceMessage(isCancelled: Boolean) {
@@ -640,8 +644,14 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handlePlayOrPauseVoicePlayback(action: RoomDetailAction.PlayOrPauseVoicePlayback) {
         viewModelScope.launch(Dispatchers.IO) {
-            val audioFile = session.fileService().downloadFile(action.messageAudioContent)
-            voiceMessageHelper.startOrPausePlayback(action.eventId, audioFile)
+            try {
+                // Download can fail
+                val audioFile = session.fileService().downloadFile(action.messageAudioContent)
+                // Play can fail
+                voiceMessageHelper.startOrPausePlayback(action.eventId, audioFile)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.Failure(failure))
+            }
         }
     }
 

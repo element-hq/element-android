@@ -3452,4 +3452,6 @@
     <string name="voice_message_tap_on_waveform_to_stop_toast">Tap on the waveform to stop and playback</string>
     <string name="labs_use_voice_message">Enable voice message</string>
     <string name="voice_message_tap_to_stop_toast">Tap on the wavelength to stop and playback</string>
+    <string name="error_voice_message_unable_to_play">Cannot play this voice message</string>
+    <string name="error_voice_message_unable_to_record">Cannot record a voice message</string>
 </resources>

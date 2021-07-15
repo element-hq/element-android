@@ -168,6 +168,7 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
@@ -386,7 +387,12 @@ class RoomDetailFragment @Inject constructor(
 
         roomDetailViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.Failure                          -> showErrorInSnackbar(it.throwable)
+                is RoomDetailViewEvents.Failure                          -> {
+                    if (it.throwable is VoiceFailure.UnableToRecord) {
+                        onCannotRecord()
+                    }
+                    showErrorInSnackbar(it.throwable)
+                }
                 is RoomDetailViewEvents.OnNewTimelineEvents              -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
                 is RoomDetailViewEvents.ActionSuccess                    -> displayRoomDetailActionSuccess(it)
                 is RoomDetailViewEvents.ActionFailure                    -> displayRoomDetailActionFailure(it)
@@ -426,6 +432,11 @@ class RoomDetailFragment @Inject constructor(
             handleShareData()
             handleSpaceShare()
         }
+    }
+
+    private fun onCannotRecord() {
+        // Update the UI, cancel the animation
+        views.voiceMessageRecorderView.initVoiceRecordingViews()
     }
 
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
