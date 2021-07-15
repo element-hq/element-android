@@ -60,12 +60,14 @@ internal object HomeServerCapabilitiesMapper {
                                 val support = (it["support"] as? List<*>)?.filterIsInstance<String>()
                                 entry.key to RoomCapabilitySupport(preferred, support.orEmpty())
                             }
-                        }?.toMap() ?: mapOf(
-                                HomeServerCapabilities.ROOM_CAP_RESTRICTED to RoomCapabilitySupport(
-                                        preferred = null,
-                                        support = listOf("org.matrix.msc3083")
-                                )
-                        )
+                        }?.toMap()
+                        // Just for debug purpose
+//                                ?: mapOf(
+//                                HomeServerCapabilities.ROOM_CAP_RESTRICTED to RoomCapabilitySupport(
+//                                        preferred = null,
+//                                        support = listOf("org.matrix.msc3083")
+//                                )
+//                                )
                 )
             }
         }

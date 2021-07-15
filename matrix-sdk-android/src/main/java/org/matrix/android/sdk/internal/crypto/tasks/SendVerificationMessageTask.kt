@@ -15,7 +15,6 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
-import dagger.Lazy
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
@@ -35,7 +34,7 @@ internal interface SendVerificationMessageTask : Task<SendVerificationMessageTas
 
 internal class DefaultSendVerificationMessageTask @Inject constructor(
         private val localEchoRepository: LocalEchoRepository,
-        private val encryptEventTask: Lazy<DefaultEncryptEventTask>,
+        private val encryptEventTask: DefaultEncryptEventTask,
         private val roomAPI: RoomAPI,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val globalErrorReceiver: GlobalErrorReceiver) : SendVerificationMessageTask {
@@ -65,7 +64,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
     private suspend fun handleEncryption(params: SendVerificationMessageTask.Params): Event {
         if (cryptoSessionInfoProvider.isRoomEncrypted(params.event.roomId ?: "")) {
             try {
-                return encryptEventTask.get().execute(EncryptEventTask.Params(
+                return encryptEventTask.execute(EncryptEventTask.Params(
                         params.event.roomId ?: "",
                         params.event,
                         listOf("m.relates_to")

@@ -180,20 +180,6 @@ class RoomSettingsFragment @Inject constructor(
     }
 
     override fun onJoinRuleClicked() {
-//    = withState(viewModel) { state ->
-//        val currentJoinRule = state.newRoomJoinRules.newJoinRules ?: state.currentRoomJoinRules
-//        val allowedRules = if (state.supportsRestricted) {
-//            listOf(
-//                    RoomJoinRules.INVITE, RoomJoinRules.PUBLIC, RoomJoinRules.RESTRICTED
-//            )
-//        } else {
-//            listOf(
-//                    RoomJoinRules.INVITE, RoomJoinRules.PUBLIC
-//            )
-//        }
-//        RoomJoinRuleBottomSheet.newInstance(currentJoinRule, allowedRules)
-//                .show(childFragmentManager, "RoomJoinRuleBottomSheet")
-
         startActivity(RoomJoinRuleActivity.newIntent(requireContext(), roomProfileArgs.roomId))
     }
 

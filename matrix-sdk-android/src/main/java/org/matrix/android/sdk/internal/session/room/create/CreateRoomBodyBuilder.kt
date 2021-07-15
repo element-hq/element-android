@@ -69,8 +69,6 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                     }
                 }
 
-
-
         params.featurePreset?.updateRoomParams(params)
 
         val initialStates = (
@@ -152,19 +150,6 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 }
     }
 
-//    private fun buildJoinRulesRestricted(params: CreateRoomParams): Event? {
-//        return params.joinRuleRestricted
-//                ?.let { allowList ->
-//                    Event(
-//                            type = EventType.STATE_ROOM_JOIN_RULES,
-//                            stateKey = "",
-//                            content = RoomJoinRulesContent(
-//                                    _joinRules = RoomJoinRules.RESTRICTED.value,
-//                                    allowList = allowList
-//                            ).toContent()
-//                    )
-//                }
-//    }
 
     /**
      * Add the crypto algorithm to the room creation parameters.

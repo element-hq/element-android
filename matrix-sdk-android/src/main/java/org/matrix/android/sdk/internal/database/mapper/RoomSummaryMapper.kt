@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.session.room.model.SpaceParentInfo
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
-import timber.log.Timber
 import javax.inject.Inject
 
 internal class RoomSummaryMapper @Inject constructor(private val timelineEventMapper: TimelineEventMapper,
@@ -39,7 +38,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
         }
         // typings are updated through the sync where room summary entity gets updated no matter what, so it's ok get there
         val typingUsers = typingUsersTracker.getTypingUsers(roomSummaryEntity.roomId)
-        Timber.i("[${roomSummaryEntity.displayName ?: "?"}] roomSummaryEntity.flattenParentIds: <${roomSummaryEntity.flattenParentIds?.take(400)}>")
+
         return RoomSummary(
                 roomId = roomSummaryEntity.roomId,
                 displayName = roomSummaryEntity.displayName ?: "",
@@ -98,7 +97,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                             worldReadable = it.childSummaryEntity?.joinRules == RoomJoinRules.PUBLIC
                     )
                 },
-                flattenParentIds = roomSummaryEntity.flattenParentIds?.split('|', ignoreCase = false, limit = 100) ?: emptyList()
+                flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList()
         )
     }
 }
