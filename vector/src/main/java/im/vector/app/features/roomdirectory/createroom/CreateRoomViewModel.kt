@@ -28,6 +28,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -57,6 +58,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 
     init {
         initHomeServerName()
+        initUserDomain()
         initAdminE2eByDefault()
     }
 
@@ -66,6 +68,15 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     homeServerName = session.myUserId.getDomain()
             )
         }
+    }
+
+    private fun initUserDomain() {
+        val displayName = session.run { getUser(myUserId) }
+                ?.displayName
+                ?.takeUnless { it.isEmpty() }
+                ?: TchapUtils.computeDisplayNameFromUserId(session.myUserId).orEmpty()
+
+        setState { copy(userDomain = TchapUtils.getDomainFromDisplayName(displayName)) }
     }
 
     private var adminE2EByDefault = true

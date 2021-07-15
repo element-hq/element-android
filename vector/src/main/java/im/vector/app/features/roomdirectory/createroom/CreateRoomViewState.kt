@@ -31,6 +31,7 @@ data class CreateRoomViewState(
         val showAdvanced: Boolean = false,
         val disableFederation: Boolean = false,
         val homeServerName: String = "",
+        val userDomain: String = "",
         val hsAdminHasDisabledE2E: Boolean = false,
         val asyncCreateRoomRequest: Async<String> = Uninitialized,
         val parentSpaceId: String?

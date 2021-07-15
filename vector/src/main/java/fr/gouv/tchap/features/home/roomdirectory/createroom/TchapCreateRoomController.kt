@@ -20,9 +20,9 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Loading
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.roomdirectory.createroom.CreateRoomViewState
-import im.vector.app.features.roomdirectory.createroom.tchapRoomAvatarWithNameItem
 import javax.inject.Inject
 
 class TchapCreateRoomController @Inject constructor(
@@ -52,6 +52,28 @@ class TchapCreateRoomController @Inject constructor(
             value(viewState.roomName)
             hint(host.stringProvider.getString(R.string.create_room_name_hint))
             onTextChange { host.listener?.onNameChange(it) }
+        }
+
+        settingsSectionTitleItem {
+            id("typeSection")
+            titleResId(R.string.tchap_room_creation_room_type_title)
+            showBackground(false)
+        }
+
+        tchapRoomTypePrivateItem {
+            id("privateRoomItem")
+            selected(true)
+        }
+
+        tchapRoomTypeExternalItem {
+            id("externalRoomItem")
+            selected(true)
+        }
+
+        tchapRoomTypeForumItem {
+            id("forumRoomItem")
+            userDomain(viewState.userDomain)
+            selected(true)
         }
 
         formSubmitButtonItem {

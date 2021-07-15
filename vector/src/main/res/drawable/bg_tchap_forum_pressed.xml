@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/palette_tchap_light_blue" />
+
+    <stroke
+        android:width="@dimen/tchap_room_item_stroke_width"
+        android:color="@color/palette_tchap_jade_green" />
+
+    <corners android:radius="12dp" />
+</shape>

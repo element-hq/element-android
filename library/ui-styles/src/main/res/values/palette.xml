@@ -42,6 +42,7 @@
     <color name="palette_tchap_dark_blue">#162d58</color>
     <color name="palette_tchap_dark_blue_alpha25">#3f162d58</color>
     <color name="palette_tchap_dark_grey_blue">#374c72</color>
+    <color name="palette_tchap_light_blue">#E8EDF2</color>
     <color name="palette_tchap_light_navy">#124a9d</color>
     <color name="palette_tchap_light_navy_alpha60">#99124a9d</color>
     <color name="palette_tchap_greyish_purple">#8b8999</color>

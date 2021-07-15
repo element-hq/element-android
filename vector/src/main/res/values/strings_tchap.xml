@@ -15,18 +15,18 @@
         <item quantity="one">The room history is limited to %d day</item>
         <item quantity="other">The room history is limited to %d days</item>
     </plurals>
-    <string name="tchap_room_creation_disable_federation">Limit the access to this room to the members of the domain \"%s\"</string>
-    <string name="tchap_room_creation_public_info">A public room can be joined by any member of the Tchap community, it must not contain any sensitive data.</string>
+    <string name="tchap_room_creation_limited_domain">Limited to my domain (%s)</string>
+    <string name="tchap_room_creation_public_info">It must not contain any sensitive data.</string>
     <string name="tchap_room_invite_member_title">Invite contacts in Room</string>
     <string name="tchap_room_invite_member_action">Validate</string>
     <string name="tchap_room_creation_save_avatar_failed">Failed to save picture.\n Do you want to retry?</string>
     <string name="tchap_room_creation_room_type_title">Room type</string>
-    <string name="tchap_room_creation_private_room_title">Private room</string>
-    <string name="tchap_room_creation_extern_room_title">Private room opened to externals</string>
-    <string name="tchap_room_creation_forum_room_title">Forum room</string>
-    <string name="tchap_room_creation_private_room_info">Accessible to all users by invitation from an administrator.</string>
-    <string name="tchap_room_creation_extern_room_info">Accessible to all users and to external guests by invitation of an administrator.</string>
-    <string name="tchap_room_creation_forum_room_info">Accessible to all users from the forum directory or from a shared link.</string>
+    <string name="tchap_room_creation_private_room_title">Private</string>
+    <string name="tchap_room_creation_extern_room_title">Private with externals</string>
+    <string name="tchap_room_creation_forum_room_title">Forum</string>
+    <string name="tchap_room_creation_private_room_info">Encrypted and accessible only to agent users by invitation from an administrator.</string>
+    <string name="tchap_room_creation_extern_room_info">Encrypted and accessible to all agent users and to external guests by invitation of an administrator.</string>
+    <string name="tchap_room_creation_forum_room_info">Unencrypted and accessible automatically and only to all agent users from the forum directory (or a shared link).</string>
 
     <!-- tchap new strings -->
     <string name="tchap_room_admin_leave_prompt_msg">Are you sure you want to leave the room?\n\nThe room will no longer be administered, and you may not be able to join it again</string>
