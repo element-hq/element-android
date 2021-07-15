@@ -22,7 +22,7 @@
             app:titleEnabled="false"
             app:toolbarId="@+id/toolbar">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -47,7 +47,7 @@
                         android:textColor="?vctr_content_secondary" />
                 </LinearLayout>
 
-            </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
 
 
             <!--            <com.google.android.material.appbar.MaterialToolbar-->

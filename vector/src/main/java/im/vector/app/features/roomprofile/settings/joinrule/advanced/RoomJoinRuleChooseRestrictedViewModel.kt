@@ -354,11 +354,13 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
         viewModelScope.launch {
             if (vectorPreferences.developerMode()) {
                 // in developer mode we let you choose any room or space to restrict to
-                val filteredCandidates = session.getRoomSummaries(roomSummaryQueryParams {
-                    excludeType = null
-                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
-                    memberships = listOf(Membership.JOIN)
-                }).map { it.toMatrixItem() }
+                val filteredCandidates = session.getRoomSummaries(
+                        roomSummaryQueryParams {
+                            excludeType = null
+                            displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
+                            memberships = listOf(Membership.JOIN)
+                        }
+                ).map { it.toMatrixItem() }
                 setState {
                     copy(
                             filteredResults = Success(filteredCandidates)
