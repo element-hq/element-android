@@ -19,13 +19,13 @@ package im.vector.app.features.home.room.detail.composer
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.media.MediaRecorder
-import android.os.Build
 import androidx.core.content.FileProvider
 import im.vector.app.BuildConfig
 import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
+import im.vector.app.features.voice.VoiceRecorder
+import im.vector.app.features.voice.VoiceRecorderProvider
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -34,7 +34,6 @@ import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import javax.inject.Inject
 
 /**
@@ -42,54 +41,24 @@ import javax.inject.Inject
  */
 class VoiceMessageHelper @Inject constructor(
         private val context: Context,
-        private val playbackTracker: VoiceMessagePlaybackTracker
+        private val playbackTracker: VoiceMessagePlaybackTracker,
+        voiceRecorderProvider: VoiceRecorderProvider
 ) {
     private var mediaPlayer: MediaPlayer? = null
-    private var mediaRecorder: MediaRecorder? = null
-    private val outputDirectory = File(context.cacheDir, "downloads")
-    private var outputFile: File? = null
-    private var lastRecordingFile: File? = null // In case of user pauses recording, plays another one in timeline
+    private var voiceRecorder: VoiceRecorder = voiceRecorderProvider.provideVoiceRecorder()
 
     private val amplitudeList = mutableListOf<Int>()
 
     private var amplitudeTicker: CountUpTimer? = null
     private var playbackTicker: CountUpTimer? = null
 
-    init {
-        if (!outputDirectory.exists()) {
-            outputDirectory.mkdirs()
-        }
-    }
-
-    private fun initMediaRecorder() {
-        MediaRecorder().let {
-            it.setAudioSource(MediaRecorder.AudioSource.DEFAULT)
-            it.setOutputFormat(MediaRecorder.OutputFormat.OGG)
-            it.setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
-            it.setAudioEncodingBitRate(24000)
-            it.setAudioSamplingRate(48000)
-            mediaRecorder = it
-        }
-    }
-
     fun startRecording() {
         stopPlayback()
         playbackTracker.makeAllPlaybacksIdle()
-
-        outputFile = File(outputDirectory, "Voice message.ogg")
-        lastRecordingFile = outputFile
         amplitudeList.clear()
 
         try {
-            initMediaRecorder()
-            val mr = mediaRecorder!!
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                mr.setOutputFile(outputFile)
-            } else {
-                mr.setOutputFile(FileOutputStream(outputFile).fd)
-            }
-            mr.prepare()
-            mr.start()
+            voiceRecorder.startRecord()
         } catch (failure: Throwable) {
             throw VoiceFailure.UnableToRecord(failure)
         }
@@ -97,9 +66,16 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     fun stopRecording(): MultiPickerAudioType? {
-        internalStopRecording()
+        tryOrNull("Cannot stop media recording amplitude") {
+            stopRecordingAmplitudes()
+        }
+        val voiceMessageFile = tryOrNull("Cannot stop media recorder!") {
+            voiceRecorder.stopRecord()
+            voiceRecorder.getVoiceMessageFile()
+        }
         try {
-            outputFile?.let {
+            // TODO Improve this
+            voiceMessageFile?.let {
                 val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it)
                 return outputFileUri
                         ?.toMultiPickerAudioType(context)
@@ -113,38 +89,24 @@ class VoiceMessageHelper @Inject constructor(
         }
     }
 
-    private fun internalStopRecording() {
+    /**
+     * When entering in playback mode actually
+     */
+    fun pauseRecording() {
+        voiceRecorder.stopRecord()
+    }
+
+    fun deleteRecording() {
         tryOrNull("Cannot stop media recording amplitude") {
             stopRecordingAmplitudes()
         }
         tryOrNull("Cannot stop media recorder!") {
-            // Usually throws when the record is less than 1 second.
-            releaseMediaRecorder()
+            voiceRecorder.cancelRecord()
         }
-    }
-
-    private fun releaseMediaRecorder() {
-        mediaRecorder?.let {
-            it.stop()
-            it.reset()
-            it.release()
-        }
-
-        mediaRecorder = null
-    }
-
-    fun pauseRecording() {
-        releaseMediaRecorder()
-    }
-
-    fun deleteRecording() {
-        internalStopRecording()
-        outputFile?.delete()
-        outputFile = null
     }
 
     fun startOrPauseRecordingPlayback() {
-        lastRecordingFile?.let {
+        voiceRecorder.getCurrentRecord()?.let {
             startOrPausePlayback(VoiceMessagePlaybackTracker.RECORDING_ID, it)
         }
     }
@@ -201,9 +163,8 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     private fun onAmplitudeTick() {
-        val mr = mediaRecorder ?: return
         try {
-            val maxAmplitude = mr.maxAmplitude
+            val maxAmplitude = voiceRecorder.getMaxAmplitude()
             amplitudeList.add(maxAmplitude)
             playbackTracker.updateCurrentRecording(VoiceMessagePlaybackTracker.RECORDING_ID, amplitudeList)
         } catch (e: IllegalStateException) {

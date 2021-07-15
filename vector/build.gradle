@@ -144,7 +144,7 @@ android {
 
         buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
 
-        buildConfigField "Long", "VOICE_MESSAGE_DURATION_LIMIT_MS", "120000L"
+        buildConfigField "Long", "VOICE_MESSAGE_DURATION_LIMIT_MS", "120_000L"
 
         //  If set, MSC3086 asserted identity messages sent on VoIP calls will cause the call to appear in the room corresponding to the asserted identity.
         //  This *must* only be set in trusted environments.
@@ -410,6 +410,9 @@ dependencies {
 
     // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.5.2'
+
+    // To convert voice message on old platforms
+    implementation 'com.arthenica:ffmpeg-kit-audio:4.4.LTS'
 
     //Alerter
     implementation 'com.tapadoo.android:alerter:7.0.1'
