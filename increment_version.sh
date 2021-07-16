@@ -154,7 +154,8 @@ git_changelog() {
         | grep -v "Update string correction" \
         | grep -v "Added translation using Weblate" \
         | grep -v "Translated using Weblate" \
-        | grep -v "weblate/sc"
+        | grep -v "weblate/sc" \
+        || echo "No significant changes since the last stable release"
 }
 
 changelog_dir=fastlane/metadata/android/en-US/changelogs
