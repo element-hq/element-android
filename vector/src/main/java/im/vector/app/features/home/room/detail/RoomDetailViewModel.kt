@@ -57,6 +57,7 @@ import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voice.VoicePlayerHelper
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -121,6 +122,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
         private val voiceMessageHelper: VoiceMessageHelper,
+        private val voicePlayerHelper: VoicePlayerHelper,
         timelineFactory: TimelineFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
@@ -647,8 +649,10 @@ class RoomDetailViewModel @AssistedInject constructor(
             try {
                 // Download can fail
                 val audioFile = session.fileService().downloadFile(action.messageAudioContent)
+                // Conversion can fail, fallback to the original file in this case and let the player fail for us
+                val convertedFile = voicePlayerHelper.convertFile(audioFile) ?: audioFile
                 // Play can fail
-                voiceMessageHelper.startOrPausePlayback(action.eventId, audioFile)
+                voiceMessageHelper.startOrPausePlayback(action.eventId, convertedFile)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.Failure(failure))
             }
