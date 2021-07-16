@@ -23,7 +23,7 @@
         android:id="@+id/voiceMessageMicButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="12dp"
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/a11y_start_voice_message"
