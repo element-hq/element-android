@@ -86,7 +86,7 @@ internal interface ProfileAPI {
     suspend fun addMsisdn(@Body body: AddMsisdnBody): AddMsisdnResponse
 
     /**
-     * Validate Msisdn code (same model than for Identity server API)
+     * Validate Msisdn code (same model than for identity server API)
      */
     @POST
     suspend fun validateMsisdn(@Url url: String,

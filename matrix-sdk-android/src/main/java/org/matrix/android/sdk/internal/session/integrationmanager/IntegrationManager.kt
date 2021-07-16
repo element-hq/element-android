@@ -43,8 +43,8 @@ import javax.inject.Inject
 
 /**
  * The integration manager allows to
- *  - Get the Integration Manager that a user has explicitly set for its account (via account data)
- *  - Get the recommended/preferred Integration Manager list as defined by the HomeServer (via wellknown)
+ *  - Get the integration manager that a user has explicitly set for its account (via account data)
+ *  - Get the recommended/preferred integration manager list as defined by the homeserver (via wellknown)
  *  - Check if the user has disabled the integration manager feature
  *  - Allow / Disallow Integration manager (propagated to other riot clients)
  *

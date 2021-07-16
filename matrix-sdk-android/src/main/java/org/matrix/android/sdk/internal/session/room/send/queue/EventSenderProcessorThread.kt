@@ -42,7 +42,7 @@ import kotlin.concurrent.schedule
 
 /**
  * A simple ever running thread unique for that session responsible of sending events in order.
- * Each send is retried 3 times, if there is no network (e.g if cannot ping home server) it will wait and
+ * Each send is retried 3 times, if there is no network (e.g if cannot ping homeserver) it will wait and
  * periodically test reachability before resume (does not count as a retry)
  *
  * If the app is killed before all event were sent, on next wakeup the scheduled events will be re posted

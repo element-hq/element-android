@@ -34,7 +34,7 @@ data class RoomPreviewViewState(
 
         val shouldPeekFromServer: Boolean = false,
         /**
-         * Can be empty when the server is the current user's home server.
+         * Can be empty when the server is the current user's homeserver.
          */
         val homeServers: List<String> = emptyList(),
         // Current state of the room in preview
