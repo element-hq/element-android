@@ -66,10 +66,15 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private var firstY: Float = 0f
     private var lastX: Float = 0f
     private var lastY: Float = 0f
+    private var lastDistanceX: Float = 0f
+    private var lastDistanceY: Float = 0f
 
     private var recordingTicker: CountUpTimer? = null
 
     private val dimensionConverter = DimensionConverter(context.resources)
+    private val minimumMove = dimensionConverter.dpToPx(10)
+    private val distanceToLock = dimensionConverter.dpToPx(34).toFloat()
+    private val distanceToCancel = dimensionConverter.dpToPx(120).toFloat()
 
     init {
         inflate(context, R.layout.view_voice_message_recorder, this)
@@ -105,7 +110,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         }
 
         views.voicePlaybackWaveform.setOnClickListener {
-            if (recordingState !== RecordingState.PLAYBACK) {
+            if (recordingState != RecordingState.PLAYBACK) {
                 recordingState = RecordingState.PLAYBACK
                 showPlaybackViews()
             }
@@ -147,6 +152,8 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             firstY = event.rawY
             lastX = firstX
             lastY = firstY
+            lastDistanceX = 0F
+            lastDistanceY = 0F
         }
     }
 
@@ -164,11 +171,14 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         val currentX = event.rawX
         val currentY = event.rawY
 
-        val isRecordingStateChanged = updateRecordingState(currentX, currentY)
+        val distanceX = abs(firstX - currentX)
+        val distanceY = abs(firstY - currentY)
+
+        val isRecordingStateChanged = updateRecordingState(currentX, currentY, distanceX, distanceY)
 
         when (recordingState) {
             RecordingState.CANCELLING -> {
-                val translationAmount = currentX - firstX
+                val translationAmount = -distanceX.coerceAtMost(distanceToCancel)
                 views.voiceMessageMicButton.translationX = translationAmount
                 views.voiceMessageSlideToCancel.translationX = translationAmount
                 views.voiceMessageSlideToCancel.alpha = 1 - abs(translationAmount) / ((firstX - views.voiceMessageTimer.x) / 3)
@@ -178,7 +188,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             RecordingState.LOCKING    -> {
                 views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_unlocked)
-                val translationAmount = currentY - firstY
+                val translationAmount = -distanceY.coerceIn(0F, distanceToLock)
                 views.voiceMessageMicButton.translationY = translationAmount
                 views.voiceMessageLockArrow.translationY = translationAmount
             }
@@ -202,12 +212,12 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         }
         lastX = currentX
         lastY = currentY
+        lastDistanceX = distanceX
+        lastDistanceY = distanceY
     }
 
-    private fun updateRecordingState(currentX: Float, currentY: Float): Boolean {
+    private fun updateRecordingState(currentX: Float, currentY: Float, distanceX: Float, distanceY: Float): Boolean {
         val previousRecordingState = recordingState
-        val distanceX = abs(firstX - currentX)
-        val distanceY = abs(firstY - currentY)
         if (recordingState == RecordingState.STARTED) { // Determine if cancelling or locking for the first move action.
             if (currentX < firstX && distanceX > distanceY) {
                 recordingState = RecordingState.CANCELLING
@@ -215,28 +225,27 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 recordingState = RecordingState.LOCKING
             }
         } else if (recordingState == RecordingState.CANCELLING) { // Check if cancelling conditions met, also check if it should be initial state
-            if (abs(currentX - firstX) < 10 && lastX < currentX) {
+            if (distanceX < minimumMove && distanceX < lastDistanceX) {
                 recordingState = RecordingState.STARTED
-            } else if (shouldCancelRecording()) {
+            } else if (shouldCancelRecording(distanceX)) {
                 recordingState = RecordingState.CANCELLED
             }
         } else if (recordingState == RecordingState.LOCKING) { // Check if locking conditions met, also check if it should be initial state
-            if (abs(currentY - firstY) < 10 && lastY < currentY) {
+            if (distanceY < minimumMove && distanceY < lastDistanceY) {
                 recordingState = RecordingState.STARTED
-            } else if (shouldLockRecording()) {
+            } else if (shouldLockRecording(distanceY)) {
                 recordingState = RecordingState.LOCKED
             }
         }
         return previousRecordingState != recordingState
     }
 
-    private fun shouldCancelRecording(): Boolean {
-        return abs(views.voiceMessageTimer.x + views.voiceMessageTimer.width - views.voiceMessageSlideToCancel.x) < 10
-                || views.voiceMessageSlideToCancel.x <= views.voiceMessageTimer.x + views.voiceMessageTimer.width // To handle super fast moving
+    private fun shouldCancelRecording(distanceX: Float): Boolean {
+        return distanceX >= distanceToCancel
     }
 
-    private fun shouldLockRecording(): Boolean {
-        return abs(views.voiceMessageLockImage.y + views.voiceMessageLockImage.height - views.voiceMessageLockArrow.y) < 10
+    private fun shouldLockRecording(distanceY: Float): Boolean {
+        return distanceY >= distanceToLock
     }
 
     private fun startRecordingTicker() {
