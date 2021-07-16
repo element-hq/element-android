@@ -1,0 +1,7 @@
+- Update codebase to Element v1.1.12
+- Add setting for member name colors in chats: uniform, based on mxid, based on power level
+- Improve sticking the chat timeline to the bottom
+- Fix unread messages marker being hidden in collapsed membership summaries
+- Avoid broken downloads in cache
+- Fix top row of emoji reaction picker on small displays
+- Some RTL language layout improvements
