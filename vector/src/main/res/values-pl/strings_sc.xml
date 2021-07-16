@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_home_overview">Przegląd</string>
+    <string name="settings_single_overview">Połączony przegląd czatów</string>
+    <string name="normal_priority_header">Normalny priorytet</string>
+    <string name="settings_room_unread_kind_default">Pokaż wszystkie zdarzenia</string>
+    <string name="settings_simplified_mode">Tryb niezaawansowany</string>
+    <string name="settings_simplified_mode_summary">Ukrywa zaawansowane funkcjonalności, włączając w to katalogi pokojów publicznych oraz ustawienia szyfrowania czatu</string>
+    <string name="prompt_simplified_mode_title">Wybierz interfejs użytkownika</string>
+    <string name="prompt_simplified_mode_text">Możesz zmienić to później w ustawieniach.</string>
+    <string name="prompt_simplified_mode_on">Niezaawansowany</string>
+    <string name="prompt_simplified_mode_on_text">Planuję pisać jedynie z osobami, które znam i dodatkowe funkcjonalności są dla mnie niezrozumiałe.</string>
+    <string name="prompt_simplified_mode_off_text">Chcę pełnej funkcjonalności aplikacji, włączając w to katalogi pokojów publicznych, szczegółowe ustawienia pokojów oraz ustawienia szyfrowania.</string>
+    <string name="settings_light_theme">Jasny tryb</string>
+    <string name="settings_dark_theme">Ciemny tryb</string>
+    <string name="settings_system_dark_theme_pre_ten">Używaj systemowego trybu ciemnego</string>
+</resources>
