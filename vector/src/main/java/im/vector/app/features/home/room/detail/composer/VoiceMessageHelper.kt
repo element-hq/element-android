@@ -128,6 +128,7 @@ class VoiceMessageHelper @Inject constructor(
                 mediaPlayer = MediaPlayer().apply {
                     setAudioAttributes(
                             AudioAttributes.Builder()
+                                    // Do not use CONTENT_TYPE_SPEECH / USAGE_VOICE_COMMUNICATION because we want to play loud here
                                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                                     .setUsage(AudioAttributes.USAGE_MEDIA)
                                     .build()
