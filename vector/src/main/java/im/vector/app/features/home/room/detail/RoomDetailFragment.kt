@@ -54,6 +54,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import com.airbnb.epoxy.EpoxyModel
@@ -212,25 +213,25 @@ data class RoomDetailArgs(
         val openShareSpaceForId: String? = null
 ) : Parcelable
 
-class MySmoothScroller : RecyclerView.SmoothScroller() {
-    override fun onStart() {
-        TODO("Not yet implemented")
-    }
+//class MySmoothScroller : RecyclerView.SmoothScroller() {
+//    override fun onStart() {
+//        TODO("Not yet implemented")
+//    }
+//
+//    override fun onStop() {
+//        TODO("Not yet implemented")
+//    }
+//
+//    override fun onSeekTargetStep(dx: Int, dy: Int, state: RecyclerView.State, action: Action) {
+//        TODO("Not yet implemented")
+//    }
+//
+//    override fun onTargetFound(targetView: View, state: RecyclerView.State, action: Action) {
+//        TODO("Not yet implemented")
+//    }
+//}
 
-    override fun onStop() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onSeekTargetStep(dx: Int, dy: Int, state: RecyclerView.State, action: Action) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onTargetFound(targetView: View, state: RecyclerView.State, action: Action) {
-        TODO("Not yet implemented")
-    }
-}
-
-class RoomDetailFragment @Inject constructor(
+open class RoomDetailFragment @Inject constructor(
         private val session: Session,
         private val avatarRenderer: AvatarRenderer,
         private val timelineEventController: TimelineEventController,
@@ -305,6 +306,7 @@ class RoomDetailFragment @Inject constructor(
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var jumpToBottomViewVisibilityManager: JumpToBottomViewVisibilityManager
+    private lateinit var smoothScroller: RecyclerView.SmoothScroller
     private var modelBuildListener: OnModelBuildFinishedListener? = null
 
     private lateinit var attachmentsHelper: AttachmentsHelper
@@ -435,6 +437,8 @@ class RoomDetailFragment @Inject constructor(
             handleShareData()
             handleSpaceShare()
         }
+
+        smoothScroller = LinearSmoothScroller(context)
     }
 
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
@@ -751,7 +755,12 @@ class RoomDetailFragment @Inject constructor(
                 scrollOnNewMessageCallback.forceScrollOnNextUpdate()
                 roomDetailViewModel.timeline.restartWithEventId(null)
             } else {
-                layoutManager.scrollToPosition(0)
+                smoothScroller.targetPosition = 0
+                layoutManager.startSmoothScroll(smoothScroller)
+//                layoutManager.postOnAnimation {
+//                    Timber.i("setupJumpToBottomView: %s", (smoothScroller.isRunning))
+//                }
+//                layoutManager.scrollToPosition(0)
             }
         }
 
@@ -762,8 +771,9 @@ class RoomDetailFragment @Inject constructor(
                 layoutManager
         )
 
-        layoutManager.isSmoothScrollbarEnabled = true
-        layoutManager.startSmoothScroll(MySmoothScroller())
+//        layoutManager.isSmoothScrollbarEnabled = true
+//        layoutManager.startSmoothScroll()
+//        layoutManager.startSmoothScroll(MySmoothScroller())
     }
 
     private fun setupJumpToReadMarkerView() {
