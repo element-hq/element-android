@@ -757,10 +757,10 @@ open class RoomDetailFragment @Inject constructor(
             } else {
                 smoothScroller.targetPosition = 0
                 layoutManager.startSmoothScroll(smoothScroller)
-//                layoutManager.postOnAnimation {
-//                    Timber.i("setupJumpToBottomView: %s", (smoothScroller.isRunning))
-//                }
-//                layoutManager.scrollToPosition(0)
+            // layoutManager.postOnAnimation {
+            // Timber.i("setupJumpToBottomView: %s", (smoothScroller.isRunning))
+            // }
+            // layoutManager.scrollToPosition(0)
             }
         }
 
@@ -771,9 +771,9 @@ open class RoomDetailFragment @Inject constructor(
                 layoutManager
         )
 
-//        layoutManager.isSmoothScrollbarEnabled = true
-//        layoutManager.startSmoothScroll()
-//        layoutManager.startSmoothScroll(MySmoothScroller())
+        // layoutManager.isSmoothScrollbarEnabled = true
+        // layoutManager.startSmoothScroll()
+        // layoutManager.startSmoothScroll(MySmoothScroller())
     }
 
     private fun setupJumpToReadMarkerView() {
