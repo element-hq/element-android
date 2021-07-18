@@ -213,24 +213,6 @@ data class RoomDetailArgs(
         val openShareSpaceForId: String? = null
 ) : Parcelable
 
-//class MySmoothScroller : RecyclerView.SmoothScroller() {
-//    override fun onStart() {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun onStop() {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun onSeekTargetStep(dx: Int, dy: Int, state: RecyclerView.State, action: Action) {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun onTargetFound(targetView: View, state: RecyclerView.State, action: Action) {
-//        TODO("Not yet implemented")
-//    }
-//}
-
 open class RoomDetailFragment @Inject constructor(
         private val session: Session,
         private val avatarRenderer: AvatarRenderer,
