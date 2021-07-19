@@ -52,7 +52,7 @@ class GroupRoomListSectionBuilder(
 
         when (mode) {
             RoomListDisplayMode.PEOPLE        -> {
-                // 3 sections Invites / Fav / Dms
+                // 4 sections Invites / Fav / Dms / Low Priority
                 buildPeopleSections(sections, activeGroupAwareQueries, actualGroupId)
             }
             RoomListDisplayMode.ROOMS         -> {
@@ -218,7 +218,19 @@ class GroupRoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, null)
+            it.activeGroupId = actualGroupId
+        }
+
+        addSection(
+                sections,
+                activeSpaceAwareQueries,
+                R.string.low_priority_header,
+                false
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, true, null)
             it.activeGroupId = actualGroupId
         }
     }
@@ -231,7 +243,6 @@ class GroupRoomListSectionBuilder(
         withQueryParams(
                 { query.invoke(it) },
                 { roomQueryParams ->
-
                     val name = stringProvider.getString(nameRes)
                     session.getFilteredPagedRoomSummariesLive(roomQueryParams)
                             .also {

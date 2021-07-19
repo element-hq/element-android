@@ -261,7 +261,8 @@ class SpaceRoomListSectionBuilder(
 
     private fun buildDmSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
         if (autoAcceptInvites.showInvites()) {
-            addSection(sections = sections,
+            addSection(
+                    sections = sections,
                     activeSpaceUpdaters = activeSpaceAwareQueries,
                     nameRes = R.string.invitations_header,
                     notifyOfLocalEcho = true,
@@ -273,7 +274,8 @@ class SpaceRoomListSectionBuilder(
             }
         }
 
-        addSection(sections,
+        addSection(
+                sections,
                 activeSpaceAwareQueries,
                 R.string.bottom_action_favourites,
                 false,
@@ -284,7 +286,8 @@ class SpaceRoomListSectionBuilder(
             it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
         }
 
-        addSection(sections,
+        addSection(
+                sections,
                 activeSpaceAwareQueries,
                 R.string.bottom_action_people_x,
                 false,
@@ -292,7 +295,19 @@ class SpaceRoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, null)
+        }
+
+        addSection(
+                sections,
+                activeSpaceAwareQueries,
+                R.string.low_priority_header,
+                false,
+                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, true, null)
         }
     }
 
