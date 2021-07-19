@@ -150,7 +150,6 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 }
     }
 
-
     /**
      * Add the crypto algorithm to the room creation parameters.
      */
