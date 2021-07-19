@@ -30,7 +30,7 @@ import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
 import im.vector.app.space
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -52,11 +52,12 @@ class RoomListSectionBuilderSpace(
         private val appStateHandler: AppStateHandler,
         private val viewModelScope: CoroutineScope,
         private val autoAcceptInvites: AutoAcceptInvites,
-        private val onDisposable: (Disposable) -> Unit,
         private val onUpdatable: (UpdatableLivePageResult) -> Unit,
         private val suggestedRoomJoiningState: LiveData<Map<String, Async<Unit>>>,
         private val onlyOrphansInHome: Boolean = false
 ) : RoomListSectionBuilder {
+
+    private val disposables = CompositeDisposable()
 
     private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(10)
@@ -137,7 +138,7 @@ class RoomListSectionBuilderSpace(
                         updater.updateForSpaceId(selectedSpace?.roomId)
                     }
                 }.also {
-                    onDisposable.invoke(it)
+                    disposables.add(it)
                 }
 
         return sections
@@ -252,7 +253,7 @@ class RoomListSectionBuilderSpace(
         }.subscribe {
             liveSuggestedRooms.postValue(it)
         }.also {
-            onDisposable.invoke(it)
+            disposables.add(it)
         }
         sections.add(
                 RoomsSection(
@@ -384,7 +385,7 @@ class RoomListSectionBuilderSpace(
                                                             }
                                                     )
                                         }.also {
-                                            onDisposable.invoke(it)
+                                            disposables.add(it)
                                         }
 
                                 sections.add(
@@ -427,5 +428,9 @@ class RoomListSectionBuilderSpace(
             }
             RoomListViewModel.SpaceFilterStrategy.NONE                  -> this
         }
+    }
+
+    override fun dispose() {
+        disposables.dispose()
     }
 }

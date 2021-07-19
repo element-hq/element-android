@@ -24,7 +24,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
@@ -39,9 +39,10 @@ class RoomListSectionBuilderGroup(
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,
         private val autoAcceptInvites: AutoAcceptInvites,
-        private val onDisposable: (Disposable) -> Unit,
         private val onUpdatable: (UpdatableLivePageResult) -> Unit
 ) : RoomListSectionBuilder {
+
+    private val disposables = CompositeDisposable()
 
     override fun buildSections(mode: RoomListDisplayMode): List<RoomsSection> {
         val activeGroupAwareQueries = mutableListOf<UpdatableLivePageResult>()
@@ -110,7 +111,7 @@ class RoomListSectionBuilderGroup(
                         }
                     }
                 }.also {
-                    onDisposable.invoke(it)
+                    disposables.add(it)
                 }
 
         return sections
@@ -257,7 +258,7 @@ class RoomListSectionBuilderGroup(
                                                     ?.notificationCount
                                                     ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
                                         }.also {
-                                            onDisposable.invoke(it)
+                                            disposables.add(it)
                                         }
 
                                 sections.add(
@@ -278,5 +279,9 @@ class RoomListSectionBuilderGroup(
                 .apply { builder.invoke(this) }
                 .build()
                 .let { block(it) }
+    }
+
+    override fun dispose() {
+        disposables.dispose()
     }
 }
