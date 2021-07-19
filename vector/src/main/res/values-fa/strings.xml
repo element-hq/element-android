@@ -398,7 +398,7 @@
     <string name="no">نَه</string>
     <string name="media_slider_saved_message">در دانلودها ذخیره شود؟</string>
     <string name="_continue">ادامه</string>
-    <string name="remove">زُدودَن</string>
+    <string name="remove">حذف</string>
     <string name="join">پیوستن</string>
     <string name="preview">پیش‌نمایش</string>
     <string name="reject">رد کردن</string>
@@ -802,10 +802,10 @@
     <string name="template_permissions_rationale_msg_camera">المنت برای گرفتن عکس و تماس‌های ویدیویی نیاز به اجازه دارد.</string>
     <string name="open_chat_header">بازکردن سرتیتر</string>
     <string name="room_sync_in_progress">در حال هم‌گام‌سازی…</string>
-    <string name="room_jump_to_first_unread">پریدن به نخستین پیام خوانده نشده.</string>
+    <string name="room_jump_to_first_unread">پریدن به پیام خوانده نشده</string>
     <string name="room_preview_invitation_format">شما برای پیوستن به این اتاق توسط %s دعوت شدید</string>
     <string name="room_preview_try_join_an_unknown_room_default">یک اتاق</string>
-    <string name="room_creation_title">گَپِ نو</string>
+    <string name="room_creation_title">گفت و گو جدید</string>
     <string name="room_creation_add_member">افزودن عضو</string>
     <plurals name="room_header_active_members_count">
         <item quantity="one">%d عضو فعّال</item>
@@ -925,7 +925,7 @@
     <string name="room_resend_unsent_messages">بازفرستادن پیام‌های فرستاده‌نشده</string>
     <string name="room_delete_unsent_messages">حذف پیام‌های فرستاده‌نشده</string>
     <string name="room_message_file_not_found">پرونده پیدا نشد</string>
-    <string name="room_do_not_have_permission_to_post">اجازهٔ فرستادن در این اتاق را ندارید</string>
+    <string name="room_do_not_have_permission_to_post">شما اجازهٔ ارسال به این اتاق را ندارید.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d پیام جدید</item>
         <item quantity="other">%d پیام جدید</item>
@@ -2244,7 +2244,7 @@
     <string name="resource_limit_soft_default">سرور از یکی از محدودیت های منابع خود فراتر رفته است <b>بنابراین برخی از کاربران نمی توانند وارد سیستم شوند</b>.</string>
     <string name="room_tombstone_continuation_description">این اتاق ادامه‌ی گفتگوی دیگر است</string>
     <string name="room_tombstone_continuation_link">گفتگو در اینجا ادامه دارد</string>
-    <string name="room_tombstone_versioned_description">این اتاق جایگزین شده و دیگر فعال نیست</string>
+    <string name="room_tombstone_versioned_description">این اتاق جایگزین شده و دیگر فعال نیست.</string>
     <string name="deactivate_account_delete_checkbox">لطفاً تمام پیام‌های ارسال شده‌ی من را حدف کن (هشدار: این امر باعث می شود کاربران آینده مکالمات را به صورت ناقص ببینند)</string>
     <string name="deactivate_account_content">این کار باعث می شود حساب شما برای همیشه غیرقابل استفاده شود. شما قادر به ورود به سیستم نخواهید بود و هیچ کس نمی تواند شناسه کاربری مشابه را دوباره ثبت کند. این باعث می شود که حساب شما از همه اتاق هایی که در آن شرکت می کند خارج شود و جزئیات حساب شما از سرور هویت حذف می شود. <b>این اقدام برگشت ناپذیر است </b>.
 \n
@@ -2783,7 +2783,7 @@
     <string name="error_jitsi_join_conf">متاسفم، یک خطا زمانی که در تلاش برای اضافه شدن به کنفرانس بود ، اتفاق افتاد</string>
     <string name="directory_add_a_new_server_error_already_added">این کارساز در حال حاضر در فهرست موجود است</string>
     <string name="directory_add_a_new_server_error">نمی‌توانم این کارساز یا فهرست اتاقش را بیابم</string>
-    <string name="directory_add_a_new_server_prompt">نام کارساز جدیدی که می‌خواهید در آن به جستجو بپردازید را وارد کنید</string>
+    <string name="directory_add_a_new_server_prompt">نام کارساز جدیدی که می‌خواهید در آن به جستجو بپردازید را وارد کنید.</string>
     <string name="directory_add_a_new_server">اضافه کردن یک کارساز(سرور) جدید</string>
     <string name="directory_your_server">کارساز شما</string>
     <string name="unnamed_room">اتاق نامگذاری نشده</string>
@@ -2797,4 +2797,10 @@
     <string name="space_leave_prompt_msg_as_admin">شما مدیر این اسپیس هستید،مطمئن شوید قبل از خروج، حق مدیریت را به عضوی دیگر منتقل کرده اید.</string>
     <string name="space_leave_prompt_msg_private">این اسپیس عمومی نیست. شما نمیتوانید بدون یک دعوتنامه دوباره ملحق شوید.</string>
     <string name="space_leave_prompt_msg_only_you">شما تنها فرد اینجا هستید. اگر خارج شوید، هیچ کس از جمله شما قادر نخواهد بود در آینده ملحق شود.</string>
+    <string name="continue_anyway">به هر روش ادامه بده</string>
+    <string name="you_may_contact_me">در صورت داشتن هرگونه سوالی میتوانید با من تماس بگیرید</string>
+    <string name="send_feedback_space_title">بازخورد فضاها</string>
+    <string name="missing_permissions_title">مجوز های از دست رفته</string>
+    <string name="denied_permission_camera">برای انجام این عمل، لطفاً از تنظیمات سیستم به دوربین اجازه دهید.</string>
+    <string name="denied_permission_generic">برخی از مجوزها برای انجام این عمل وجود ندارد، لطفاً از تنظیمات سیستم مجوزها را بدهید.</string>
 </resources>
