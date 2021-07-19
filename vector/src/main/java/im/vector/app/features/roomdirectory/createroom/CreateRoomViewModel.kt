@@ -170,7 +170,11 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
             )
         } else {
             copy(
-                    roomVisibilityType = CreateRoomViewState.RoomVisibilityType.Private,
+                    roomVisibilityType = if (action.restricted) {
+                        CreateRoomViewState.RoomVisibilityType.Private
+                    } else {
+                        CreateRoomViewState.RoomVisibilityType.External
+                    },
                     isEncrypted = adminE2EByDefault
             )
         }
@@ -217,14 +221,15 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     topic = state.roomTopic.takeIf { it.isNotBlank() }
                     avatarUri = state.avatarUri
                     when (state.roomVisibilityType) {
-                        is CreateRoomViewState.RoomVisibilityType.Public  -> {
+                        is CreateRoomViewState.RoomVisibilityType.Public -> {
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PUBLIC
                             // Preset
                             preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                             roomAliasName = state.roomVisibilityType.aliasLocalPart
                         }
-                        is CreateRoomViewState.RoomVisibilityType.Private -> {
+                        CreateRoomViewState.RoomVisibilityType.External,
+                        CreateRoomViewState.RoomVisibilityType.Private   -> {
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PRIVATE
                             // Preset

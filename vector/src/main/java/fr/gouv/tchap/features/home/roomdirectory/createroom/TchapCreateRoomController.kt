@@ -23,6 +23,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.roomdirectory.createroom.CreateRoomViewState
+import im.vector.app.features.roomdirectory.createroom.CreateRoomViewState.RoomVisibilityType
 import javax.inject.Inject
 
 class TchapCreateRoomController @Inject constructor(
@@ -62,18 +63,21 @@ class TchapCreateRoomController @Inject constructor(
 
         tchapRoomTypePrivateItem {
             id("privateRoomItem")
-            selected(true)
+            selected(viewState.roomVisibilityType == RoomVisibilityType.Private)
+            clickListener { host.listener?.setIsPublic(isPublic = false, restricted = true) }
         }
 
         tchapRoomTypeExternalItem {
             id("externalRoomItem")
-            selected(true)
+            selected(viewState.roomVisibilityType == RoomVisibilityType.External)
+            clickListener { host.listener?.setIsPublic(isPublic = false, restricted = false) }
         }
 
         tchapRoomTypeForumItem {
             id("forumRoomItem")
             userDomain(viewState.userDomain)
-            selected(true)
+            selected(viewState.roomVisibilityType is RoomVisibilityType.Public)
+            clickListener { host.listener?.setIsPublic(isPublic = true, restricted = true) }
         }
 
         formSubmitButtonItem {
@@ -89,7 +93,7 @@ class TchapCreateRoomController @Inject constructor(
         fun onAvatarChange()
         fun onNameChange(newName: String)
         fun onTopicChange(newTopic: String)
-        fun setIsPublic(isPublic: Boolean)
+        fun setIsPublic(isPublic: Boolean, restricted: Boolean = true)
         fun setAliasLocalPart(aliasLocalPart: String)
         fun setIsEncrypted(isEncrypted: Boolean)
         fun toggleShowAdvanced()

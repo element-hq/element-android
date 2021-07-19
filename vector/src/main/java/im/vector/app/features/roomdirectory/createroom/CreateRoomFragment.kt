@@ -131,8 +131,8 @@ class CreateRoomFragment @Inject constructor(
         viewModel.handle(CreateRoomAction.SetTopic(newTopic))
     }
 
-    override fun setIsPublic(isPublic: Boolean) {
-        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic))
+    override fun setIsPublic(isPublic: Boolean, restricted: Boolean) {
+        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic, restricted))
     }
 
     override fun setAliasLocalPart(aliasLocalPart: String) {
