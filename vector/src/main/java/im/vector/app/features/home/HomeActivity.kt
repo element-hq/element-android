@@ -71,8 +71,13 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
 import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
@@ -178,8 +183,17 @@ class HomeActivity :
             appStateHandler.selectedRoomGroupingObservable.subscribe {
                 (it.orNull() as? RoomGroupingMethod.BySpace)?.spaceSummary?.let { currentSpaceSummary ->
                     if (!currentSpaceSummary.isPublic && currentSpaceSummary.otherMemberIds.isNotEmpty()) {
+                        val isAdmin = activeSessionHolder
+                                .getSafeActiveSession()
+                                ?.getRoom(currentSpaceSummary.roomId)
+                                ?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+                                ?.content?.toModel<PowerLevelsContent>()
+                                ?.let { PowerLevelsHelper(it) }
+                                ?.isUserAllowedToSend(activeSessionHolder.getActiveSession().myUserId, true, EventType.STATE_SPACE_CHILD)
+                                ?: false
+
                         // It's a private space with some members show this once
-                        if (!popupAlertManager.hasAlertsToShow()) {
+                        if (isAdmin && !popupAlertManager.hasAlertsToShow()) {
                             if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
                                 vectorPreferences.setDidPromoteNewRestrictedFeature()
                                 RestrictedPromoBottomSheet().show(supportFragmentManager, "FOO")
