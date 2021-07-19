@@ -1,1 +1,0 @@
-RawService.getWellknown() now takes a domain instead of a matrixId as parameter

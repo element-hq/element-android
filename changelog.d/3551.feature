@@ -1,1 +1,0 @@
-Room version capabilities and room upgrade support, better error feedback
