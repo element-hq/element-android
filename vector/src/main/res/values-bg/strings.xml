@@ -1659,7 +1659,7 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Services адрес</string>
     <string name="login_server_url_form_other_hint">Адрес</string>
     <string name="login_server_url_form_modular_text">Премиум хостинг за организации</string>
-    <string name="login_server_url_form_modular_notice">Въведете адреса на Modular SchildiChat или на сървър, който искате да използвате</string>
+    <string name="login_server_url_form_modular_notice">Въведете адреса на Modular Element или на сървър, който искате да използвате</string>
     <string name="login_sso_error_message">Възникна грешка при зареждане на страницата: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Приложението не може да влезе в този сървър. Сървъра поддържа следните методи за вход: %1$s.
 \n
@@ -2342,7 +2342,7 @@
     <string name="disclaimer_positive_button">НАУЧИ ПОВЕЧЕ</string>
     <string name="disclaimer_negative_button">РАЗБРАХ</string>
     <string name="disclaimer_content">Развълнувани сме да съобщим, че променихме името! Приложението ви е обновено и сте вписани в профила си.</string>
-    <string name="disclaimer_title">Riot вече е SchildiChat!</string>
+    <string name="disclaimer_title">Riot вече е Element!</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Изчакване на история на шифроването</string>
     <string name="crypto_error_withheld_generic">Не можете да достъпите това съобщение, защото изпращача нарочно не е изпратил ключовете за него</string>
     <string name="crypto_error_withheld_unverified">Не можете да достъпите това съобщение, защото изпращача не се доверява на сесията ви</string>
