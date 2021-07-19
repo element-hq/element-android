@@ -725,7 +725,7 @@
     <string name="room_recents_join_room">进入聊天室</string>
     <string name="room_recents_join_room_title">进入一个聊天室</string>
     <string name="room_recents_join_room_prompt">输入聊天室 ID 或者聊天室别名</string>
-    <string name="room_jump_to_first_unread">跳到第一条未读消息。</string>
+    <string name="room_jump_to_first_unread">跳到未读</string>
     <string name="settings_home_display">主页显示</string>
     <string name="settings_pin_missed_notifications">固定含错过通知的聊天室</string>
     <string name="settings_pin_unread_messages">置顶含有未读消息的聊天室</string>
@@ -2768,4 +2768,8 @@
 \n作为测试版的一部分，我们将对此进行改进，只是想让你知道。</string>
     <string name="teammate_spaces_arent_quite_ready">队友空间还没有完全准备好，但你仍然可以尝试一下</string>
     <string name="continue_anyway">不论如何继续</string>
+    <string name="error_failed_to_join_room">抱歉，尝试加入 %s 时发生了一个错误</string>
+    <string name="create_space_alias_hint">空间地址</string>
+    <string name="space_settings_alias_subtitle">查看和管理这个空间的地址。</string>
+    <string name="space_settings_alias_title">空间地址</string>
 </resources>

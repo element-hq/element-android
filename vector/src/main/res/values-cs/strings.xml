@@ -549,7 +549,7 @@
     <string name="list_members">Zobrazit členy</string>
     <string name="open_chat_header">Otevřít záhlaví</string>
     <string name="room_sync_in_progress">Synchronizuji…</string>
-    <string name="room_jump_to_first_unread">Přejít na první nepřečtenou zprávu.</string>
+    <string name="room_jump_to_first_unread">Přejít na nepřečtené</string>
     <string name="room_preview_try_join_an_unknown_room_default">místnost</string>
     <string name="room_creation_title">Nová konverzace</string>
     <string name="room_creation_add_member">Přidat člena</string>
@@ -2864,4 +2864,8 @@
 \n
 \nV rámci beta verze to zlepšíme, ale jen jsme vás chtěli informovat.</string>
     <string name="teammate_spaces_arent_quite_ready">Prostory pro spolupracovníky nejsou ještě zcela připravené, ale přesto je můžete vyzkoušet</string>
+    <string name="error_failed_to_join_room">Omlouváme se, došlo k chybě během pokusu o přistoupení: %s</string>
+    <string name="create_space_alias_hint">Adresa prostoru</string>
+    <string name="space_settings_alias_subtitle">Prohlédnout a spravovat adresy tohoto prostoru.</string>
+    <string name="space_settings_alias_title">Adresy prostorů</string>
 </resources>
