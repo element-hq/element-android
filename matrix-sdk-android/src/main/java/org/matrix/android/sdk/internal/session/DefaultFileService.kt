@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificateWithProgress
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.file.AtomicFileCreator
 import org.matrix.android.sdk.internal.util.md5
 import org.matrix.android.sdk.internal.util.writeToFile
 import timber.log.Timber
@@ -131,14 +132,11 @@ internal class DefaultFileService @Inject constructor(
                     Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${!source.exhausted()}")
 
                     // Write the file to cache (encrypted version if the file is encrypted)
-                    // Write to a tmp file first, so if we abort before done, we don't have a broken cached file
-                    val tmpFile = File(cachedFiles.file.parentFile, "${cachedFiles.file.name}.tmp")
-                    if (tmpFile.exists()) {
-                        Timber.v("## FileService: discard aborted tmp file ${tmpFile.path}")
-                    }
-                    writeToFile(source.inputStream(), tmpFile)
+                    // Write to a part file first, so if we abort before done, we don't have a broken cached file
+                    val atomicFileCreator = AtomicFileCreator(cachedFiles.file)
+                    writeToFile(source.inputStream(), atomicFileCreator.partFile)
                     response.close()
-                    tmpFile.renameTo(cachedFiles.file)
+                    atomicFileCreator.commit()
                 } else {
                     Timber.v("## FileService: cache hit for $url")
                 }
@@ -151,13 +149,10 @@ internal class DefaultFileService @Inject constructor(
                     Timber.v("## FileService: decrypt file")
                     // Ensure the parent folder exists
                     cachedFiles.decryptedFile.parentFile?.mkdirs()
-                    // Write to a tmp file first, so if we abort before done, we don't have a broken cached file
-                    val tmpFile = File(cachedFiles.decryptedFile.parentFile, "${cachedFiles.decryptedFile.name}.tmp")
-                    if (tmpFile.exists()) {
-                        Timber.v("## FileService: discard aborted tmp file ${tmpFile.path}")
-                    }
+                    // Write to a part file first, so if we abort before done, we don't have a broken cached file
+                    val atomicFileCreator = AtomicFileCreator(cachedFiles.decryptedFile)
                     val decryptSuccess = cachedFiles.file.inputStream().use { inputStream ->
-                        tmpFile.outputStream().buffered().use { outputStream ->
+                        atomicFileCreator.partFile.outputStream().buffered().use { outputStream ->
                             MXEncryptedAttachments.decryptAttachment(
                                     inputStream,
                                     elementToDecrypt,
@@ -165,7 +160,7 @@ internal class DefaultFileService @Inject constructor(
                             )
                         }
                     }
-                    tmpFile.renameTo(cachedFiles.decryptedFile)
+                    atomicFileCreator.commit()
                     if (!decryptSuccess) {
                         throw IllegalStateException("Decryption error")
                     }
