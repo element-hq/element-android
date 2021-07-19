@@ -136,7 +136,7 @@ class RoomListViewModel @Inject constructor(
                         updatableQuery = it
                     },
                     vectorPreferences.labsSpacesOnlyOrphansInHome()
-            ).buildSections(initialState.displayMode)
+            )
         } else {
             RoomListSectionBuilderGroup(
                     session,
@@ -150,8 +150,9 @@ class RoomListViewModel @Inject constructor(
                     {
                         updatableQuery = it
                     }
-            ).buildSections(initialState.displayMode)
+            )
         }
+                .buildSections(initialState.displayMode)
     }
 
     override fun handle(action: RoomListAction) {
