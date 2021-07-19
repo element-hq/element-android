@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="6dp"
-            tools:text="Home Server URL: http://matrix.org" />
+            tools:text="Homeserver URL: http://matrix.org" />
 
         <TextView
             android:id="@+id/ssl_fingerprint_title"

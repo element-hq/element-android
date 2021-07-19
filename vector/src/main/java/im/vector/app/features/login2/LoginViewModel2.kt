@@ -41,6 +41,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -589,16 +590,12 @@ class LoginViewModel2 @AssistedInject constructor(
                 is WellknownResult.Prompt          ->
                     onWellknownSuccess(action, data, homeServerConnectionConfig)
                 is WellknownResult.FailPrompt      ->
-                    // Relax on IS discovery if home server is valid
+                    // Relax on IS discovery if homeserver is valid
                     if (data.homeServerUrl != null && data.wellKnown != null) {
                         onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
                     } else {
                         onWellKnownError()
                     }
-                is WellknownResult.InvalidMatrixId -> {
-                    setState { copy(isLoading = false) }
-                    _viewEvents.post(LoginViewEvents2.Failure(Exception(stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id))))
-                }
                 else                               -> {
                     onWellKnownError()
                 }
@@ -616,7 +613,7 @@ class LoginViewModel2 @AssistedInject constructor(
                                            homeServerConnectionConfig: HomeServerConnectionConfig?) {
         val alteredHomeServerConnectionConfig = homeServerConnectionConfig
                 ?.copy(
-                        homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
+                        homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
                         identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                 )
                 ?: HomeServerConnectionConfig(
@@ -655,7 +652,7 @@ class LoginViewModel2 @AssistedInject constructor(
         }
         viewEvent?.let { _viewEvents.post(it) }
 
-        val urlFromUser = action.username.substringAfter(":")
+        val urlFromUser = action.username.getDomain()
         setState {
             copy(
                     isLoading = false,
@@ -756,7 +753,7 @@ class LoginViewModel2 @AssistedInject constructor(
             } ?: return@launch
 
             // Valid Homeserver, add it to the history.
-            // Note: we add what the user has input, data.homeServerUrl can be different
+            // Note: we add what the user has input, data.homeServerUrlBase can be different
             rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
 
             val loginMode = when {

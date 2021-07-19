@@ -64,7 +64,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
 
             if (mRuleMaster == null) {
-                // The home server does not support RULE_ID_DISABLE_ALL, so hide the preference
+                // The homeserver does not support RULE_ID_DISABLE_ALL, so hide the preference
                 pref.isVisible = false
                 return
             }

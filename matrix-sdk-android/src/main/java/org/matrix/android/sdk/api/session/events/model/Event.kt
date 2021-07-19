@@ -104,7 +104,7 @@ data class Event(
 
     /**
      * The `age` value transcoded in a timestamp based on the device clock when the SDK received
-     * the event from the home server.
+     * the event from the homeserver.
      * Unlike `age`, this value is static.
      */
     @Transient

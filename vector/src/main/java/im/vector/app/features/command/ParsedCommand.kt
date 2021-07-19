@@ -61,4 +61,5 @@ sealed class ParsedCommand {
     class AddToSpace(val spaceId: String) : ParsedCommand()
     class JoinSpace(val spaceIdOrAlias: String) : ParsedCommand()
     class LeaveRoom(val roomId: String) : ParsedCommand()
+    class UpgradeRoom(val newVersion: String) : ParsedCommand()
 }

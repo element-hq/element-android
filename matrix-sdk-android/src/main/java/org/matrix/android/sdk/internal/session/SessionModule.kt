@@ -261,7 +261,7 @@ internal abstract class SessionModule {
                              sessionParams: SessionParams,
                              retrofitFactory: RetrofitFactory): Retrofit {
             return retrofitFactory
-                    .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUri.toString())
+                    .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUriBase.toString())
         }
 
         @JvmStatic

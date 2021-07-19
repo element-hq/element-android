@@ -54,7 +54,7 @@ enum class KeysBackupState {
     // Need to check the current backup version on the homeserver
     Unknown,
 
-    // Checking if backup is enabled on home server
+    // Checking if backup is enabled on homeserver
     CheckingBackUpOnHomeserver,
 
     // Backup has been stopped because a new backup version has been detected on the homeserver

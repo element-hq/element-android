@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Add MvRx capabilities to bottomsheetdialog (like BaseMvRxFragment)
  */
-abstract class VectorBaseBottomSheetDialogFragment<VB: ViewBinding> : BottomSheetDialogFragment(), MvRxView {
+abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomSheetDialogFragment(), MvRxView {
 
     private val mvrxViewIdProperty = MvRxViewId()
     final override val mvrxViewId: String by mvrxViewIdProperty
@@ -168,6 +168,10 @@ abstract class VectorBaseBottomSheetDialogFragment<VB: ViewBinding> : BottomShee
 
     @CallSuper
     override fun invalidate() {
+        forceExpandState()
+    }
+
+    protected fun forceExpandState() {
         if (showExpanded) {
             // Force the bottom sheet to be expanded
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
