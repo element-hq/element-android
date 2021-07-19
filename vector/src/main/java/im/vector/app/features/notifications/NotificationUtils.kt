@@ -459,6 +459,26 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .build()
     }
 
+    /**
+     * Build notification for the CallService, when a call is missed
+     */
+    fun buildCallMissedNotification(roomId: String, caller: String): Notification {
+        val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(caller)
+                .setContentText(stringProvider.getString(R.string.call_missed, caller))
+                .setSmallIcon(R.drawable.ic_material_call_end_grey)
+                .setAutoCancel(true)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+
+        val contentPendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
+                .addNextIntent(RoomDetailActivity.newIntent(context, RoomDetailArgs(roomId)))
+                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+
+        builder.setContentIntent(contentPendingIntent)
+        return builder.build()
+    }
+
     fun buildDownloadFileNotification(uri: Uri, fileName: String, mimeType: String): Notification {
         return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setGroup(stringProvider.getString(R.string.app_name))

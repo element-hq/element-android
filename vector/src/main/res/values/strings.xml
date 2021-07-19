@@ -727,6 +727,7 @@
     <string name="call_connected">Call connected</string>
     <string name="call_connecting">Call connecting…</string>
     <string name="call_ended">Call ended</string>
+    <string name="call_missed">You missed a call from %s</string>
     <string name="call_ring">Calling…</string>
     <string name="incoming_call">Incoming Call</string>
     <string name="incoming_video_call">Incoming Video Call</string>

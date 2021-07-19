@@ -99,7 +99,7 @@ class WebRtcCall(
         private val sessionProvider: Provider<Session?>,
         private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
         private val onCallBecomeActive: (WebRtcCall) -> Unit,
-        private val onCallEnded: (String) -> Unit
+        private val onCallEnded: (String, Boolean) -> Unit
 ) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
@@ -810,7 +810,8 @@ class WebRtcCall(
             val wasRinging = mxCall.state is CallState.LocalRinging
             mxCall.state = CallState.Terminated
             release()
-            onCallEnded(callId)
+            val isRejected = wasRinging && sendEndSignaling
+            onCallEnded(callId, isRejected)
             if (sendEndSignaling) {
                 if (wasRinging) {
                     mxCall.reject()

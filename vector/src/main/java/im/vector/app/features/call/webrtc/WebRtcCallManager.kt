@@ -232,12 +232,12 @@ class WebRtcCallManager @Inject constructor(
         this.currentCall.setAndNotify(call)
     }
 
-    private fun onCallEnded(callId: String) {
+    private fun onCallEnded(callId: String, isRejected: Boolean) {
         Timber.v("## VOIP WebRtcPeerConnectionManager onCall ended: $callId")
         val webRtcCall = callsByCallId.remove(callId) ?: return Unit.also {
             Timber.v("On call ended for unknown call $callId")
         }
-        CallService.onCallTerminated(context, callId)
+        CallService.onCallTerminated(context, callId, isRejected)
         callsByRoomId[webRtcCall.signalingRoomId]?.remove(webRtcCall)
         callsByRoomId[webRtcCall.nativeRoomId]?.remove(webRtcCall)
         transferees.remove(callId)
@@ -420,7 +420,7 @@ class WebRtcCallManager @Inject constructor(
 
     override fun onCallManagedByOtherSession(callId: String) {
         Timber.v("## VOIP onCallManagedByOtherSession: $callId")
-        onCallEnded(callId)
+        onCallEnded(callId, false)
     }
 
     override fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {
