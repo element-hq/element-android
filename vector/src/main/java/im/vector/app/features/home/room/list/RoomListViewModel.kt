@@ -122,7 +122,7 @@ class RoomListViewModel @Inject constructor(
 
     val sections: List<RoomsSection> by lazy {
         if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
-            SpaceRoomListSectionBuilder(
+            RoomListSectionBuilderSpace(
                     session,
                     stringProvider,
                     appStateHandler,
@@ -138,7 +138,7 @@ class RoomListViewModel @Inject constructor(
                     vectorPreferences.labsSpacesOnlyOrphansInHome()
             ).buildSections(initialState.displayMode)
         } else {
-            GroupRoomListSectionBuilder(
+            RoomListSectionBuilderGroup(
                     session,
                     stringProvider,
                     viewModelScope,

@@ -35,7 +35,7 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.rx.asObservable
 
-class GroupRoomListSectionBuilder(
+class RoomListSectionBuilderGroup(
         val session: Session,
         val stringProvider: StringProvider,
         val viewModelScope: CoroutineScope,

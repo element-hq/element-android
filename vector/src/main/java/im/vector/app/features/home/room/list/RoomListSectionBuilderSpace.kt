@@ -46,7 +46,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.rx.asObservable
 
-class SpaceRoomListSectionBuilder(
+class RoomListSectionBuilderSpace(
         val session: Session,
         val stringProvider: StringProvider,
         val appStateHandler: AppStateHandler,
