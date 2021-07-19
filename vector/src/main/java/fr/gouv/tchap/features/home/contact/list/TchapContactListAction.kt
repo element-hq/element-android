@@ -18,7 +18,6 @@ package fr.gouv.tchap.features.home.contact.list
 
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.userdirectory.PendingSelection
-import org.matrix.android.sdk.api.session.user.model.User
 
 sealed class TchapContactListAction : VectorViewModelAction {
     data class SearchUsers(val value: String) : TchapContactListAction()
@@ -29,5 +28,4 @@ sealed class TchapContactListAction : VectorViewModelAction {
     object SetUserConsent : TchapContactListAction()
     object OpenSearch : TchapContactListAction()
     object CancelSearch : TchapContactListAction()
-    data class SelectContact(val user: User) : TchapContactListAction()
 }

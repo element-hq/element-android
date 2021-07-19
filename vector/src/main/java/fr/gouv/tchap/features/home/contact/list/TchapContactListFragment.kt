@@ -34,7 +34,6 @@ import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewMode
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setupAsSearch
@@ -74,14 +73,6 @@ class TchapContactListFragment @Inject constructor(
         if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher,
                         R.string.permissions_rationale_msg_contacts)) {
             viewModel.handle(TchapContactListAction.LoadContacts)
-        }
-
-        viewModel.observeViewEvents {
-            when (it) {
-                TchapContactListViewEvents.OpenSearch        -> Unit
-                TchapContactListViewEvents.CancelSearch      -> Unit
-                is TchapContactListViewEvents.OpenDirectChat -> handleOpenRoom(it.roomId)
-            }.exhaustive
         }
     }
 
@@ -176,7 +167,7 @@ class TchapContactListFragment @Inject constructor(
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(TchapContactListAction.SelectContact(user))
+        sharedActionViewModel.post(TchapContactListSharedAction.OnSelectContact(user))
 //        viewModel.handle(TchapContactListAction.AddPendingSelection(PendingSelection.UserPendingSelection(user)))
     }
 
@@ -194,10 +185,5 @@ class TchapContactListFragment @Inject constructor(
         if (allGranted) {
             viewModel.handle(TchapContactListAction.LoadContacts)
         }
-    }
-
-    private fun handleOpenRoom(roomId: String) {
-        navigator.openRoom(requireActivity(), roomId)
-        viewModel.handle(TchapContactListAction.CancelSearch)
     }
 }

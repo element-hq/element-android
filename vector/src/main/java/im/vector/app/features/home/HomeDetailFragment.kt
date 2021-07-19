@@ -209,6 +209,7 @@ class HomeDetailFragment @Inject constructor(
                 .subscribe { action ->
                     when (action) {
                         is TchapContactListSharedAction.OnInviteByEmail -> onInviteByEmail(action)
+                        is TchapContactListSharedAction.OnSelectContact -> onSelectContact(action)
                     }.exhaustive
                 }
                 .disposeOnDestroyView()
@@ -223,16 +224,15 @@ class HomeDetailFragment @Inject constructor(
         roomListViewModel.observeViewEvents {
             if (it is RoomListViewEvents.CancelSearch) {
                 // prevent glitch caused by search refresh during activity transition
-                view.doOnNextLayout { closeSearchView() }
+                cancelSearch()
             }
         }
 
         tchapContactListViewModel.observeViewEvents {
             when (it) {
                 is TchapContactListViewEvents.OpenSearch   -> openSearchView()
-                is TchapContactListViewEvents.CancelSearch -> view.doOnNextLayout { closeSearchView() }
-                else                                       -> Unit // nothing to do
-            }
+                is TchapContactListViewEvents.CancelSearch -> cancelSearch()
+            }.exhaustive
         }
 
         platformViewModel.observeViewEvents {
@@ -266,10 +266,11 @@ class HomeDetailFragment @Inject constructor(
                     Toast.makeText(requireContext(), getString(R.string.tchap_invite_already_send_message, it.email), Toast.LENGTH_LONG).show()
                 }
                 HomeDetailViewEvents.InviteNoTchapUserByEmail             -> {
-                    Toast.makeText(requireContext(), "${getString(R.string.tchap_invite_sending_succeeded)}\n" +
-                            "${getString(R.string.tchap_send_invite_confirmation)}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), getString(R.string.tchap_invite_sending_succeeded) + "\n" +
+                            getString(R.string.tchap_send_invite_confirmation), Toast.LENGTH_LONG).show()
                 }
                 is HomeDetailViewEvents.GetPlatform                       -> platformViewModel.handle(PlatformAction.DiscoverTchapPlatform(it.email))
+                is HomeDetailViewEvents.OpenDirectChat                    -> openRoom(it.roomId)
                 is HomeDetailViewEvents.Failure                           -> showFailure(it.throwable)
             }
         }
@@ -309,6 +310,10 @@ class HomeDetailFragment @Inject constructor(
         views.homeToolbarContent.isVisible = true
         views.groupToolbarAvatarImageView.isVisible = true
         views.homeSearchView.takeUnless { it.isEmpty() }?.setQuery("", false)
+    }
+
+    private fun cancelSearch() {
+        view?.doOnNextLayout { closeSearchView() }
     }
 
     private fun checkNotificationTabStatus() {
@@ -402,6 +407,10 @@ class HomeDetailFragment @Inject constructor(
 
     private fun onInviteByEmail(action: TchapContactListSharedAction.OnInviteByEmail) {
         viewModel.handle(HomeDetailAction.InviteByEmail(action.email))
+    }
+
+    private fun onSelectContact(action: TchapContactListSharedAction.OnSelectContact) {
+        viewModel.handle(HomeDetailAction.SelectContact(action.user))
     }
 
     private fun setupKeysBackupBanner() {
@@ -629,6 +638,11 @@ class HomeDetailFragment @Inject constructor(
             }
         }
         return this
+    }
+
+    private fun openRoom(roomId: String) {
+        navigator.openRoom(requireActivity(), roomId)
+        cancelSearch()
     }
 
     override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
