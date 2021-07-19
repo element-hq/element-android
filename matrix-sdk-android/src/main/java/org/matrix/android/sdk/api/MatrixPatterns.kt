@@ -29,7 +29,7 @@ object MatrixPatterns {
     private const val DOMAIN_REGEX = ":[A-Z0-9.-]+(:[0-9]{2,5})?"
 
     // regex pattern to find matrix user ids in a string.
-    // See https://matrix.org/speculator/spec/HEAD/appendices.html#historical-user-ids
+    // See https://matrix.org/docs/spec/appendices#historical-user-ids
     private const val MATRIX_USER_IDENTIFIER_REGEX = "@[A-Z0-9\\x21-\\x39\\x3B-\\x7F]+$DOMAIN_REGEX"
     val PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER = MATRIX_USER_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
