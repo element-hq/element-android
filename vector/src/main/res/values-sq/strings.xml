@@ -452,7 +452,7 @@
     <string name="reject">Hidheni tej</string>
     <string name="list_members">Anëtarë liste</string>
     <string name="room_sync_in_progress">Po njëkohësohet…</string>
-    <string name="room_jump_to_first_unread">Hidhu te mesazhi i parë i palexuar.</string>
+    <string name="room_jump_to_first_unread">Hidhu te të palexuarit.</string>
     <string name="room_preview_invitation_format">Jeni ftuar të merrni pjesë në këtë dhomë nga %s</string>
     <string name="room_preview_try_join_an_unknown_room_default">një dhomë</string>
     <string name="room_creation_title">Fjalosje e Re</string>
@@ -2801,4 +2801,8 @@
 \nDo ta përmirësojmë këtë punë, si pjesë e versionit beta, thjesht donim t’ua bënim të ditur.</string>
     <string name="teammate_spaces_arent_quite_ready">Hapësirat për anëtarë ekipi ende s’janë tërësisht gati, por mund t’i provoni</string>
     <string name="continue_anyway">Vazhdo, Sido Qoftë</string>
+    <string name="error_failed_to_join_room">Na ndjeni, ndodhi një gabim teksa provohej të hyhej: %s</string>
+    <string name="create_space_alias_hint">Adresë hapësire</string>
+    <string name="space_settings_alias_title">Adresa hapësire</string>
+    <string name="space_settings_alias_subtitle">Shihni dhe administroni adresa në këtë hapësirë.</string>
 </resources>

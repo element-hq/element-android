@@ -408,7 +408,7 @@
     <string name="join">Csatlakozás</string>
     <string name="preview">Előnézet</string>
     <string name="reject">Elutasítás</string>
-    <string name="room_jump_to_first_unread">Ugrás az első olvasatlan üzenethez.</string>
+    <string name="room_jump_to_first_unread">Ugrás az olvasatlanra</string>
     <string name="room_preview_invitation_format">Meg lettél hívva, hogy csatlakozz ehhez a szobához %s által</string>
     <string name="title_activity_member_details">Tagok adatai</string>
     <string name="forward">Továbbítás</string>
@@ -2816,4 +2816,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \nEzt folyamatosan fejlesztjük a béta program keretében, csak szerettünk volna tájékoztatni róla.</string>
     <string name="teammate_spaces_arent_quite_ready">A csoporttárs terek még nem igazán vannak készen de már tehetsz velük egy próbát</string>
     <string name="continue_anyway">Mindenképpen folytatás</string>
+    <string name="error_failed_to_join_room">Bocsánat, hiba történt a csatlakozáskor ide: %s</string>
+    <string name="create_space_alias_hint">Tér cím</string>
+    <string name="space_settings_alias_subtitle">Tér címek megjelenítése és kezelése.</string>
+    <string name="space_settings_alias_title">Tér címek</string>
 </resources>

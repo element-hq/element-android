@@ -601,7 +601,7 @@
     <string name="preview">Eelvaade</string>
     <string name="reject">Hülga</string>
     <string name="room_sync_in_progress">Sünkroniseerin…</string>
-    <string name="room_jump_to_first_unread">Mine esimese lugemata sõnumi juurde.</string>
+    <string name="room_jump_to_first_unread">Mine lugemata sõnumite juurde</string>
     <string name="room_preview_invitation_format">Sa oled kutsutud siia jututuppa %s poolt</string>
     <string name="room_preview_unlinked_email_warning">Kutse saadeti %s e-posti aadressile, aga see ei ole seotud antud kasutajakontoga.
 \nSa kas peaksid logima sisse teise kontoga või lisama selle e-posti aadressi oma kasutajakontole.</string>
@@ -2811,4 +2811,8 @@
     <string name="teammate_spaces_might_not_join">Hetkel teiste kasutajate liitumine sinu poolt tehtud privaatsete jututubadega ei pruugi õnnestuda.
 \n
 \nKuna tegemist on beetaversiooniga, siis me veel parandame seda funktsionaalsust, aga lihtsalt tahtsime sind teavitada.</string>
+    <string name="error_failed_to_join_room">Vabandust, liitumisel tekkis viga: %s</string>
+    <string name="create_space_alias_hint">Kogukonnakeskuse aadressid</string>
+    <string name="space_settings_alias_subtitle">Selle kogukonnakeskuse hallatud ja nähtavad aadressid.</string>
+    <string name="space_settings_alias_title">Kogukonnakeskuse aadressid</string>
 </resources>
