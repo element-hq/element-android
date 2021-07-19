@@ -543,7 +543,7 @@
     <string name="logout">Sign out</string>
     <string name="hs_url">Homeserver URL</string>
     <string name="hs_client_url">Homeserver API URL</string>
-    <string name="identity_url">Identity Server URL</string>
+    <string name="identity_url">Identity server URL</string>
     <string name="search">Search</string>
 
     <string name="start_new_chat">Start New Chat</string>
@@ -633,7 +633,7 @@
     <string name="auth_recaptcha_message">This homeserver would like to make sure you are not a robot</string>
     <string name="auth_username_in_use">Username in use</string>
     <string name="auth_home_server">Homeserver:</string>
-    <string name="auth_identity_server">Identity Server:</string>
+    <string name="auth_identity_server">Identity server:</string>
     <string name="auth_reset_password_next_step_button">I have verified my email address</string>
     <string name="auth_reset_password_message">To reset your password, enter the email address linked to your account:</string>
     <string name="auth_reset_password_missing_email">The email address linked to your account must be entered.</string>
@@ -1128,8 +1128,8 @@
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Add Account</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Token Registration</string>
-    <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to HomeServer.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Failed to register FCM token to HomeServer:\n%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to homeserver.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Failed to register FCM token to homeserver:\n%1$s</string>
 
     <string name="settings_troubleshoot_test_push_loop_title">Test Push</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">The application is waiting for the PUSH</string>
@@ -1171,7 +1171,7 @@
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_reduced">Reduced privacy</string>
     <string name="settings_notification_privacy_need_permission">The app needs permission to run in the background</string>
-    <string name="settings_notification_privacy_no_background_sync">The apps does <b>not</b> need to connect to the HomeServer in the background, it should reduce battery usage</string>
+    <string name="settings_notification_privacy_no_background_sync">The apps does <b>not</b> need to connect to the homeserver in the background, it should reduce battery usage</string>
     <string name="settings_notification_privacy_fcm">• Notifications are sent via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Notifications only contain meta data</string>
     <string name="settings_notification_privacy_secure_message_content">• Message content of the notification is <b>located securely direct from the Matrix homeserver</b></string>
@@ -1236,7 +1236,7 @@
     <string name="settings_other">Other</string>
     <string name="settings_advanced">Advanced</string>
     <string name="settings_integrations">Integrations</string>
-    <string name="settings_integrations_summary">Use an Integration Manager to manage bots, bridges, widgets and sticker packs.\nIntegration Managers receive configuration data, and can modify widgets, send room invites and set power levels on your behalf.</string>
+    <string name="settings_integrations_summary">Use an integration manager to manage bots, bridges, widgets and sticker packs.\nIntegration managers receive configuration data, and can modify widgets, send room invites and set power levels on your behalf.</string>
     <string name="settings_cryptography">Cryptography</string>
     <string name="settings_cryptography_manage_keys">Cryptography Keys Management</string>
     <string name="settings_notifications_targets">Notification Targets</string>
@@ -1321,9 +1321,9 @@
 
     <string name="settings_logged_in">Logged in as</string>
     <string name="settings_home_server">Homeserver</string>
-    <string name="settings_identity_server">Identity Server</string>
+    <string name="settings_identity_server">Identity server</string>
     <string name="settings_integration_allow">Allow integrations</string>
-    <string name="settings_integration_manager">Integration Manager</string>
+    <string name="settings_integration_manager">Integration manager</string>
 
     <string name="disabled_integration_dialog_title">Integrations are disabled</string>
     <string name="disabled_integration_dialog_content">"Enable 'Allow integrations' in Settings to do this."</string>
@@ -1698,7 +1698,7 @@
     <string name="room_widget_webview_access_microphone">Use the microphone</string>
     <string name="room_widget_webview_read_protected_media">Read DRM protected Media</string>
 
-    <!-- Widget Integration Manager -->
+    <!-- Widget integration manager -->
 
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
     <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
@@ -1909,7 +1909,7 @@
     <string name="recovery_key_export_saved_as_warning">The recovery key has been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
     <string name="recovery_key_export_saved">The recovery key has been saved.</string>
 
-    <string name="keys_backup_setup_override_backup_prompt_tile">A backup already exist on your HomeServer</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">A backup already exist on your homeserver</string>
     <string name="keys_backup_setup_override_backup_prompt_description">It looks like you already have setup key backup from another session. Do you want to replace it with the one you’re creating?</string>
     <string name="keys_backup_setup_override_replace">Replace</string>
     <string name="keys_backup_setup_override_stop">Stop</string>
@@ -2075,7 +2075,7 @@
     <string name="sas_error_unknown">Unknown Error</string>
 
     <!-- Identity server -->
-    <string name="identity_server_not_defined">You are not using any Identity Server</string>
+    <string name="identity_server_not_defined">You are not using any identity server</string>
     <string name="identity_server_not_defined_for_password_reset">No identity server is configured, it is required to reset your password.</string>
 
     <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
@@ -2273,7 +2273,7 @@
     <string name="settings_discovery_consent_action_give_consent">Give consent</string>
 
     <string name="identity_server_consent_dialog_title">Send emails and phone numbers</string>
-    <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured Identity Server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
+    <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured identity server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
