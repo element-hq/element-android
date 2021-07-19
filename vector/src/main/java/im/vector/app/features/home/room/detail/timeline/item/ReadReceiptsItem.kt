@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
@@ -30,6 +31,8 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.ui.views.BubbleDependentView
 import im.vector.app.core.ui.views.ReadReceiptsView
+import im.vector.app.core.ui.views.setFlatRtl
+import im.vector.app.core.ui.views.updateMessageBubble
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.BubbleThemeUtils
 import timber.log.Timber
@@ -105,4 +108,9 @@ abstract class ReadReceiptsItem : EpoxyModelWithHolder<ReadReceiptsItem.Holder>(
         // Also set rtl to have members fill from the natural side
         setFlatRtl(holder.readReceiptsView, if (dualBubbles) reverseDirection else defaultDirection, defaultDirection)
     }
+
+    fun updateMessageBubble(context: Context, holder: Holder) {
+        return updateMessageBubble(context, this, holder)
+    }
+
 }

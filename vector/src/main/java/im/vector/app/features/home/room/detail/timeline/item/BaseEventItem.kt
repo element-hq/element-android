@@ -32,6 +32,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableView
 import im.vector.app.core.ui.views.BubbleDependentView
+import im.vector.app.core.ui.views.updateMessageBubble
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.themes.BubbleThemeUtils
 
@@ -129,4 +130,8 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         */
     }
 
+
+    fun updateMessageBubble(context: Context, holder: H) {
+        return updateMessageBubble(context, this, holder)
+    }
 }
