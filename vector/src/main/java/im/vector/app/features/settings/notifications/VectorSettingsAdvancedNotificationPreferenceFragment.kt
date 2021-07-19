@@ -89,25 +89,25 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
 
     private fun getNotificationIndexForRule(rule: PushRule): NotificationIndex? {
         return NotificationIndex.values().firstOrNull {
+            // Get the actions for the index
             val standardAction = getStandardAction(rule.ruleId, it) ?: return@firstOrNull false
             val indexActions = standardAction.actions ?: listOf()
+            // Check if the input rule matches a rule generated from the static rule definitions
             val targetRule = rule.copy(enabled = standardAction != StandardAction.Disabled, actions = indexActions.toJson())
-            val match = ruleMatches(rule, targetRule)
-            match
+            ruleMatches(rule, targetRule)
         }
     }
 
-
     private fun ruleMatches(rule: PushRule, targetRule: PushRule): Boolean {
-        return (!rule.enabled && !targetRule.enabled) ||
-                (rule.enabled
+        //Rules match if both are disabled, or if both are enabled and their highlight/sound/notify actions match up.
+        return (!rule.enabled && !targetRule.enabled)
+                || (rule.enabled
                         && targetRule.enabled
                         && rule.getHighlight() == targetRule.getHighlight()
                         && rule.getNotificationSound() == targetRule.getNotificationSound()
                         && rule.shouldNotify() == targetRule.shouldNotify()
                         && rule.shouldNotNotify() == targetRule.shouldNotNotify())
     }
-
 
     private fun refreshDisplay() {
         listView?.adapter?.notifyDataSetChanged()
