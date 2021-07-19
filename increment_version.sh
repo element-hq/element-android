@@ -146,6 +146,7 @@ git_changelog() {
         | grep -v 'Automatic revert to unchanged upstream strings' \
         | grep -v 'Automatic upstream merge preparation' \
         | sed "s|Merge tag '\\(.*\\)' into sc|Update codebase to Element \1|" \
+        | grep -v "Merge branch" \
         | grep -v "Automatic color correction" \
         | grep -v "Automatic upstream merge postprocessing" \
         | grep -v "Automatic SchildiChat string correction" \
