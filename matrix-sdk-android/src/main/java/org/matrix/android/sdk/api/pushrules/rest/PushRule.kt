@@ -107,7 +107,6 @@ data class PushRule(
         return (getActions().firstOrNull { it is Action.Highlight } as? Action.Highlight)?.highlight ?: false
     }
 
-
     /**
      * Set the notification status.
      *
@@ -141,6 +140,4 @@ data class PushRule(
      * @return true if the rule should not play sound
      */
     fun shouldNotNotify() = actions.contains(Action.ACTION_DONT_NOTIFY)
-
-    companion object { }
 }

@@ -56,7 +56,7 @@ class PushRulePreference : VectorPreference {
      *
      * @param pushRule
      */
-    fun setIndex(notificationIndex: NotificationIndex? ) {
+    fun setIndex(notificationIndex: NotificationIndex?) {
         index = notificationIndex
         refreshSummary()
     }

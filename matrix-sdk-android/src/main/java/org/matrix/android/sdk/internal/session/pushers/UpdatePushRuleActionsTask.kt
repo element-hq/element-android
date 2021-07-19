@@ -47,6 +47,5 @@ internal class DefaultUpdatePushRuleActionsTask @Inject constructor(
                     pushRulesApi.updateRuleActions(params.kind.value, params.ruleId, body)
                 }
             }
-
     }
 }
