@@ -127,7 +127,6 @@ class RoomListViewModel @Inject constructor(
                     stringProvider,
                     appStateHandler,
                     viewModelScope,
-                    suggestedRoomJoiningState,
                     autoAcceptInvites,
                     {
                         it.disposeOnClear()
@@ -135,22 +134,21 @@ class RoomListViewModel @Inject constructor(
                     {
                         updatableQuery = it
                     },
+                    suggestedRoomJoiningState,
                     vectorPreferences.labsSpacesOnlyOrphansInHome()
             )
         } else {
             RoomListSectionBuilderGroup(
                     session,
                     stringProvider,
-                    viewModelScope,
                     appStateHandler,
                     autoAcceptInvites,
                     {
                         it.disposeOnClear()
-                    },
-                    {
-                        updatableQuery = it
                     }
-            )
+            ) {
+                updatableQuery = it
+            }
         }
                 .buildSections(initialState.displayMode)
     }

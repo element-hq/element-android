@@ -26,7 +26,6 @@ import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.session.Session
@@ -36,13 +35,12 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.rx.asObservable
 
 class RoomListSectionBuilderGroup(
-        val session: Session,
-        val stringProvider: StringProvider,
-        val viewModelScope: CoroutineScope,
-        val appStateHandler: AppStateHandler,
+        private val session: Session,
+        private val stringProvider: StringProvider,
+        private val appStateHandler: AppStateHandler,
         private val autoAcceptInvites: AutoAcceptInvites,
-        val onDisposable: (Disposable) -> Unit,
-        val onUpdatable: (UpdatableLivePageResult) -> Unit
+        private val onDisposable: (Disposable) -> Unit,
+        private val onUpdatable: (UpdatableLivePageResult) -> Unit
 ) : RoomListSectionBuilder {
 
     override fun buildSections(mode: RoomListDisplayMode): List<RoomsSection> {

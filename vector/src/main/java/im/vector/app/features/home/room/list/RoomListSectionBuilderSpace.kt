@@ -47,18 +47,18 @@ import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotification
 import org.matrix.android.sdk.rx.asObservable
 
 class RoomListSectionBuilderSpace(
-        val session: Session,
-        val stringProvider: StringProvider,
-        val appStateHandler: AppStateHandler,
-        val viewModelScope: CoroutineScope,
-        private val suggestedRoomJoiningState: LiveData<Map<String, Async<Unit>>>,
+        private val session: Session,
+        private val stringProvider: StringProvider,
+        private val appStateHandler: AppStateHandler,
+        private val viewModelScope: CoroutineScope,
         private val autoAcceptInvites: AutoAcceptInvites,
-        val onDisposable: (Disposable) -> Unit,
-        val onUpdatable: (UpdatableLivePageResult) -> Unit,
-        val onlyOrphansInHome: Boolean = false
+        private val onDisposable: (Disposable) -> Unit,
+        private val onUpdatable: (UpdatableLivePageResult) -> Unit,
+        private val suggestedRoomJoiningState: LiveData<Map<String, Async<Unit>>>,
+        private val onlyOrphansInHome: Boolean = false
 ) : RoomListSectionBuilder {
 
-    val pagedListConfig = PagedList.Config.Builder()
+    private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(10)
             .setInitialLoadSizeHint(20)
             .setEnablePlaceholders(true)
