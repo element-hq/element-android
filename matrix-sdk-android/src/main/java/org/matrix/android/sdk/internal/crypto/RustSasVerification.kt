@@ -82,11 +82,11 @@ internal class SasVerification(
     override var state: VerificationTxState
         get() {
             refreshData()
+            val cancelInfo = this.inner.cancelInfo
             return when {
-                this.inner.isCancelled     -> {
-                    val cancelCode = safeValueOf(this.inner.cancelCode)
-                    val byMe = this.inner.cancelledByUs ?: false
-                    VerificationTxState.Cancelled(cancelCode, byMe)
+                cancelInfo != null     -> {
+                    val cancelCode = safeValueOf(cancelInfo.cancelCode)
+                    VerificationTxState.Cancelled(cancelCode, cancelInfo.cancelledByUs)
                 }
                 this.inner.isDone          -> VerificationTxState.Verified
                 this.inner.haveWeConfirmed -> VerificationTxState.ShortCodeAccepted

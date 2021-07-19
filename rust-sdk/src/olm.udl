@@ -65,6 +65,12 @@ dictionary Device {
     boolean cross_signing_trusted;
 };
 
+dictionary CancelInfo {
+    string cancel_code;
+    string reason;
+    boolean cancelled_by_us;
+};
+
 dictionary StartSasResult {
     Sas sas;
     OutgoingVerificationRequest request;
@@ -74,10 +80,8 @@ dictionary Sas {
     string other_user_id;
     string other_device_id;
     string flow_id;
-    string? cancel_code;
     string? room_id;
     boolean we_started;
-    boolean? cancelled_by_us;
     boolean has_been_accepted;
     boolean have_we_confirmed;
     boolean is_done;
@@ -85,6 +89,7 @@ dictionary Sas {
     boolean can_be_presented;
     boolean timed_out;
     boolean supports_emoji;
+    CancelInfo? cancel_info;
 };
 
 dictionary ScanResult {
@@ -97,15 +102,14 @@ dictionary QrCode {
     string other_user_id;
     string other_device_id;
     string flow_id;
-    string? cancel_code;
     string? room_id;
     boolean reciprocated;
     boolean we_started;
     boolean has_been_confirmed;
-    boolean? cancelled_by_us;
     boolean is_done;
     boolean is_cancelled;
     boolean other_side_scanned;
+    CancelInfo? cancel_info;
 };
 
 dictionary VerificationRequest {
@@ -118,7 +122,7 @@ dictionary VerificationRequest {
     boolean we_started;
     boolean is_passive;
     string? room_id;
-    string? cancel_code;
+    CancelInfo? cancel_info;
     sequence<string>? their_methods;
     sequence<string>? our_methods;
 

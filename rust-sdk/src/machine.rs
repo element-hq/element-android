@@ -30,9 +30,10 @@ use tokio::runtime::Runtime;
 
 use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
 use matrix_sdk_crypto::{
-    decrypt_key_export, encrypt_key_export, matrix_qrcode::QrVerificationData, EncryptionSettings,
-    LocalTrust, OlmMachine as InnerMachine, QrVerification as InnerQr, Sas as InnerSas,
-    Verification as RustVerification, VerificationRequest as InnerVerificationRequest,
+    decrypt_key_export, encrypt_key_export, matrix_qrcode::QrVerificationData,
+    CancelInfo as RustCancelInfo, EncryptionSettings, LocalTrust, OlmMachine as InnerMachine,
+    QrVerification as InnerQr, Sas as InnerSas, Verification as RustVerification,
+    VerificationRequest as InnerVerificationRequest,
 };
 
 use crate::{
@@ -61,8 +62,7 @@ pub struct Sas {
     pub have_we_confirmed: bool,
     pub is_cancelled: bool,
     pub is_done: bool,
-    pub cancel_code: Option<String>,
-    pub cancelled_by_us: Option<bool>,
+    pub cancel_info: Option<CancelInfo>,
     pub has_been_accepted: bool,
     pub we_started: bool,
     pub can_be_presented: bool,
@@ -81,8 +81,7 @@ pub struct QrCode {
     pub other_side_scanned: bool,
     pub has_been_confirmed: bool,
     pub reciprocated: bool,
-    pub cancel_code: Option<String>,
-    pub cancelled_by_us: Option<bool>,
+    pub cancel_info: Option<CancelInfo>,
 }
 
 impl From<InnerQr> for QrCode {
@@ -92,14 +91,29 @@ impl From<InnerQr> for QrCode {
             flow_id: qr.flow_id().as_str().to_owned(),
             is_cancelled: qr.is_cancelled(),
             is_done: qr.is_done(),
-            cancel_code: qr.cancel_code().map(|c| c.to_string()),
-            cancelled_by_us: qr.cancelled_by_us(),
+            cancel_info: qr.cancel_info().map(|c| c.into()),
             reciprocated: qr.reciprocated(),
             we_started: qr.we_started(),
             other_side_scanned: qr.has_been_scanned(),
             has_been_confirmed: qr.has_been_confirmed(),
             other_device_id: qr.other_device_id().to_string(),
             room_id: qr.room_id().map(|r| r.to_string()),
+        }
+    }
+}
+
+pub struct CancelInfo {
+    pub reason: String,
+    pub cancel_code: String,
+    pub cancelled_by_us: bool,
+}
+
+impl From<RustCancelInfo> for CancelInfo {
+    fn from(c: RustCancelInfo) -> Self {
+        Self {
+            reason: c.reason().to_owned(),
+            cancel_code: c.cancel_code().to_string(),
+            cancelled_by_us: c.cancelled_by_us(),
         }
     }
 }
@@ -126,11 +140,10 @@ impl From<InnerSas> for Sas {
             timed_out: sas.timed_out(),
             supports_emoji: sas.supports_emoji(),
             have_we_confirmed: sas.have_we_confirmed(),
-            cancel_code: sas.cancel_code().map(|c| c.as_str().to_owned()),
             we_started: sas.we_started(),
             room_id: sas.room_id().map(|r| r.to_string()),
-            cancelled_by_us: sas.cancelled_by_us(),
             has_been_accepted: sas.has_been_accepted(),
+            cancel_info: sas.cancel_info().map(|c| c.into()),
         }
     }
 }
@@ -148,11 +161,11 @@ pub struct VerificationRequest {
     pub is_done: bool,
     pub is_ready: bool,
     pub room_id: Option<String>,
-    pub cancel_code: Option<String>,
     pub we_started: bool,
     pub is_passive: bool,
     pub their_methods: Option<Vec<String>>,
     pub our_methods: Option<Vec<String>>,
+    pub cancel_info: Option<CancelInfo>,
 }
 
 impl From<InnerVerificationRequest> for VerificationRequest {
@@ -165,9 +178,9 @@ impl From<InnerVerificationRequest> for VerificationRequest {
             is_done: v.is_done(),
             is_ready: v.is_ready(),
             room_id: v.room_id().map(|r| r.to_string()),
-            cancel_code: v.cancel_code().map(|c| c.as_str().to_owned()),
             we_started: v.we_started(),
             is_passive: v.is_passive(),
+            cancel_info: v.cancel_info().map(|c| c.into()),
             their_methods: v
                 .their_supported_methods()
                 .map(|v| v.into_iter().map(|m| m.to_string()).collect()),

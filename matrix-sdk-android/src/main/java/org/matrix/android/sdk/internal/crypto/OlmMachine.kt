@@ -208,6 +208,7 @@ internal class QrCodeVerification(
         get() {
             refreshData()
             val inner = this.inner
+            val cancelInfo = inner?.cancelInfo
 
             return if (inner != null) {
                 when {
@@ -215,9 +216,9 @@ internal class QrCodeVerification(
                     inner.reciprocated     -> VerificationTxState.Started
                     inner.hasBeenConfirmed -> VerificationTxState.WaitingOtherReciprocateConfirm
                     inner.otherSideScanned -> VerificationTxState.QrScannedByOther
-                    inner.isCancelled      -> {
-                        val cancelCode = safeValueOf(inner.cancelCode)
-                        val byMe = inner.cancelledByUs ?: false
+                    cancelInfo != null -> {
+                        val cancelCode = safeValueOf(cancelInfo.cancelCode)
+                        val byMe = cancelInfo.cancelledByUs
                         VerificationTxState.Cancelled(cancelCode, byMe)
                     }
                     else                   -> {

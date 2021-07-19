@@ -180,11 +180,10 @@ internal class VerificationRequest(
 
     fun toPendingVerificationRequest(): PendingVerificationRequest {
         refreshData()
-        val code = this.inner.cancelCode
-
+        val cancelInfo = this.inner.cancelInfo
         val cancelCode =
-                if (code != null) {
-                    safeValueOf(code)
+                if (cancelInfo != null) {
+                    safeValueOf(cancelInfo.cancelCode)
                 } else {
                     null
                 }
