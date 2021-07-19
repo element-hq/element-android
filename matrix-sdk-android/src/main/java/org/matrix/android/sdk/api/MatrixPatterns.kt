@@ -17,9 +17,11 @@
 package org.matrix.android.sdk.api
 
 import org.matrix.android.sdk.BuildConfig
+import timber.log.Timber
 
 /**
  * This class contains pattern to match the different Matrix ids
+ * Ref: https://matrix.org/docs/spec/appendices#identifier-grammar
  */
 object MatrixPatterns {
 
@@ -173,8 +175,9 @@ object MatrixPatterns {
      * - "@bob:domain.org:3455".getDomain() will return "domain.org:3455"
      */
     fun String.getDomain(): String {
-        if (BuildConfig.DEBUG) {
-            assert(isUserId(this))
+        if (BuildConfig.DEBUG && !isUserId(this)) {
+            // They are some invalid userId localpart in the wild, but the domain part should be there anyway
+            Timber.w("Not a valid user ID: $this")
         }
         return substringAfter(":")
     }
