@@ -50,7 +50,15 @@ class UnrecognizedCertificateDialog @Inject constructor(
         val userId = activeSessionHolder.getSafeActiveSession()?.myUserId
         val hsConfig = activeSessionHolder.getSafeActiveSession()?.sessionParams?.homeServerConnectionConfig ?: return
 
-        internalShow(activity, unrecognizedFingerprint, true, callback, userId, hsConfig.homeServerUri.toString(), hsConfig.allowedFingerprints.isNotEmpty())
+        internalShow(
+                activity = activity,
+                unrecognizedFingerprint = unrecognizedFingerprint,
+                existing = true,
+                callback = callback,
+                userId = userId,
+                homeServerUrl = hsConfig.homeServerUriBase.toString(),
+                homeServerConnectionConfigHasFingerprints = hsConfig.allowedFingerprints.isNotEmpty()
+        )
     }
 
     /**
@@ -60,7 +68,15 @@ class UnrecognizedCertificateDialog @Inject constructor(
              unrecognizedFingerprint: Fingerprint,
              homeServerUrl: String,
              callback: Callback) {
-        internalShow(activity, unrecognizedFingerprint, false, callback, null, homeServerUrl, false)
+        internalShow(
+                activity = activity,
+                unrecognizedFingerprint = unrecognizedFingerprint,
+                existing = false,
+                callback = callback,
+                userId = null,
+                homeServerUrl = homeServerUrl,
+                homeServerConnectionConfigHasFingerprints = false
+        )
     }
 
     /**

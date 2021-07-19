@@ -97,7 +97,7 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
 
             Timber.v("## CrossSigning - sskPublicKey:$sskPublicKey")
 
-            // Sign userSigningKey with master
+            // Sign selfSigningKey with master
             val signedSSK = CryptoCrossSigningKey.Builder(userId, KeyUsage.SELF_SIGNING)
                     .key(sskPublicKey)
                     .build()

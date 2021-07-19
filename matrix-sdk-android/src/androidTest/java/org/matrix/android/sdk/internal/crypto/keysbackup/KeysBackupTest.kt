@@ -816,7 +816,7 @@ class KeysBackupTest : InstrumentedTest {
         // - Do an e2e backup to the homeserver
         mKeysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup)
 
-        // Get key backup version from the home server
+        // Get key backup version from the homeserver
         val keysVersionResult = mTestHelper.doSync<KeysVersionResult?> {
             keysBackup.getCurrentVersion(it)
         }

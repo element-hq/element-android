@@ -51,7 +51,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
     const val SESSION_STORE_SCHEMA_SC_VERSION = 2L
     const val SESSION_STORE_SCHEMA_SC_VERSION_OFFSET = (1L shl 12)
 
-    const val SESSION_STORE_SCHEMA_VERSION = 15L +
+    const val SESSION_STORE_SCHEMA_VERSION = 16L +
             SESSION_STORE_SCHEMA_SC_VERSION * SESSION_STORE_SCHEMA_SC_VERSION_OFFSET
 
 
@@ -76,6 +76,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
         if (oldVersion <= 12) migrateTo13(realm)
         if (oldVersion <= 13) migrateTo14(realm)
         if (oldVersion <= 14) migrateTo15(realm)
+        if (oldVersion <= 15) migrateTo16(realm)
 
         if (oldScVersion <= 0) migrateToSc1(realm)
         if (oldScVersion <= 1) migrateToSc2(realm)
@@ -337,6 +338,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
     }
 
     private fun migrateTo15(realm: DynamicRealm) {
+        Timber.d("Step 14 -> 15")
         // fix issue with flattenParentIds on DM that kept growing with duplicate
         // so we reset it, will be updated next sync
         realm.where("RoomSummaryEntity")
@@ -345,6 +347,16 @@ internal object RealmSessionStoreMigration : RealmMigration {
                 .findAll()
                 .onEach {
                     it.setString(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, null)
+                }
+    }
+
+    private fun migrateTo16(realm: DynamicRealm) {
+        Timber.d("Step 15 -> 16")
+        realm.schema.get("HomeServerCapabilitiesEntity")
+                ?.addField(HomeServerCapabilitiesEntityFields.ROOM_VERSIONS_JSON, String::class.java)
+                ?.transform { obj ->
+                    // Schedule a refresh of the capabilities
+                    obj.setLong(HomeServerCapabilitiesEntityFields.LAST_UPDATED_TIMESTAMP, 0)
                 }
     }
 }

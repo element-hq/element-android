@@ -94,6 +94,8 @@ import org.matrix.android.sdk.internal.session.room.typing.DefaultSendTypingTask
 import org.matrix.android.sdk.internal.session.room.typing.SendTypingTask
 import org.matrix.android.sdk.internal.session.room.uploads.DefaultGetUploadsTask
 import org.matrix.android.sdk.internal.session.room.uploads.GetUploadsTask
+import org.matrix.android.sdk.internal.session.room.version.DefaultRoomVersionUpgradeTask
+import org.matrix.android.sdk.internal.session.room.version.RoomVersionUpgradeTask
 import org.matrix.android.sdk.internal.session.space.DefaultSpaceService
 import retrofit2.Retrofit
 
@@ -248,4 +250,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindGetEventTask(task: DefaultGetEventTask): GetEventTask
+
+    @Binds
+    abstract fun bindRoomVersionUpgradeTask(task: DefaultRoomVersionUpgradeTask): RoomVersionUpgradeTask
 }

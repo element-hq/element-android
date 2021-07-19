@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.session.room.tags.TagsService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
+import org.matrix.android.sdk.api.session.room.version.RoomVersionService
 import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.util.Optional
@@ -57,7 +58,8 @@ interface Room :
         RelationService,
         RoomCryptoService,
         RoomPushRuleService,
-        RoomAccountDataService {
+        RoomAccountDataService,
+        RoomVersionService {
 
     /**
      * The roomId of this room

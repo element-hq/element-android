@@ -43,14 +43,14 @@ class NotifsFabMenuView @JvmOverloads constructor(context: Context, attrs: Attri
                 .forEach {
                     it.setOnClickListener {
                         closeFabMenu()
-                        listener?.createDirectChat()
+                        listener?.fabCreateDirectChat()
                     }
                 }
         listOf(views.createRoomItemGroup, views.createRoomItemGroupLabel)
                 .forEach {
                     it.setOnClickListener {
                         closeFabMenu()
-                        listener?.openRoomDirectory()
+                        listener?.fabOpenRoomDirectory()
                     }
                 }
 
@@ -99,7 +99,7 @@ class NotifsFabMenuView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     interface Listener {
-        fun createDirectChat()
-        fun openRoomDirectory(initialFilter: String = "")
+        fun fabCreateDirectChat()
+        fun fabOpenRoomDirectory()
     }
 }

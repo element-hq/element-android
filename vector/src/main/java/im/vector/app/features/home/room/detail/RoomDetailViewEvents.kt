@@ -41,7 +41,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class ShowInfoOkDialog(val message: String) : RoomDetailViewEvents()
     data class ShowE2EErrorMessage(val withHeldCode: WithHeldCode?) : RoomDetailViewEvents()
 
-    data class OpenRoom(val roomId: String) : RoomDetailViewEvents()
+    data class OpenRoom(val roomId: String, val closeCurrentRoom: Boolean = false) : RoomDetailViewEvents()
 
     data class NavigateToEvent(val eventId: String) : RoomDetailViewEvents()
     data class JoinJitsiConference(val widget: Widget, val withVideo: Boolean) : RoomDetailViewEvents()
@@ -94,4 +94,6 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     data class StartChatEffect(val type: ChatEffect) : RoomDetailViewEvents()
     object StopChatEffects : RoomDetailViewEvents()
+    object RoomReplacementStarted : RoomDetailViewEvents()
+    data class ShowRoomUpgradeDialog(val newVersion: String, val isPublic: Boolean): RoomDetailViewEvents()
 }

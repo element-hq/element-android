@@ -502,7 +502,7 @@
     <string name="list_members">列出成員</string>
     <string name="open_chat_header">打開標頭</string>
     <string name="room_sync_in_progress">正在同步……</string>
-    <string name="room_jump_to_first_unread">跳到第一個未讀的訊息。</string>
+    <string name="room_jump_to_first_unread">跳到未讀</string>
     <string name="room_preview_invitation_format">你已經被 %s 邀請加入此聊天室</string>
     <string name="room_preview_unlinked_email_warning">邀請已經被傳送給 %s，但與此帳號沒有進行關連。 
 \n你也許希望以不同帳號登入，或將電子郵件加入到您的帳號。</string>
@@ -2758,4 +2758,8 @@
 \n作為測試版的一部分，我們會對此進行改善，但想先讓您知道。</string>
     <string name="teammate_spaces_arent_quite_ready">隊友空間還沒有完全準備好，但您仍可以試試看</string>
     <string name="continue_anyway">無論如何都要繼續</string>
+    <string name="error_failed_to_join_room">抱歉，試圖加入時發生錯誤：%s</string>
+    <string name="create_space_alias_hint">空間地址</string>
+    <string name="space_settings_alias_subtitle">檢視與管理此空間的地址。</string>
+    <string name="space_settings_alias_title">空間地址</string>
 </resources>

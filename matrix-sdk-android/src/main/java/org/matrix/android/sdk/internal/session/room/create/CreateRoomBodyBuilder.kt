@@ -59,7 +59,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
         val invite3pids = params.invite3pids
                 .takeIf { it.isNotEmpty() }
                 ?.let { invites ->
-                    // This can throw Exception if Identity server is not configured
+                    // This can throw an exception if identity server is not configured
                     ensureIdentityTokenTask.execute(Unit)
 
                     val identityServerUrlWithoutProtocol = identityStore.getIdentityServerUrlWithoutProtocol()

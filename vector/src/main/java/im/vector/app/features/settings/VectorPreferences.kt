@@ -16,6 +16,7 @@
 package im.vector.app.features.settings
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
@@ -270,12 +271,25 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
 
     /**
+     * Allow subscribing and unsubscribing to configuration changes. This is
+     * particularly useful when you need to be notified of a configuration change
+     * in a background service, e.g. for the P2P demos.
+     */
+    fun subscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        defaultPrefs.registerOnSharedPreferenceChangeListener(listener)
+    }
+
+    fun unsubscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        defaultPrefs.unregisterOnSharedPreferenceChangeListener(listener)
+    }
+
+    /**
      * Clear the preferences.
      */
     fun clearPreferences() {
         val keysToKeep = HashSet(mKeysToKeepAfterLogout)
 
-        // home server urls
+        // homeserver urls
         keysToKeep.add(ServerUrlsRepository.HOME_SERVER_URL_PREF)
         keysToKeep.add(ServerUrlsRepository.IDENTITY_SERVER_URL_PREF)
 

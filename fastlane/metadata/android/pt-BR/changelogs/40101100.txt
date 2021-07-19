@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: atualização de tema e estilo e novas funcionalidades para espaços.
+Changelog completo: https://github.com/vector-im/element-android/releases/tag/v1.1.10

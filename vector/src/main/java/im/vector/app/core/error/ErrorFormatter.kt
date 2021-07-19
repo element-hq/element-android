@@ -21,6 +21,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.call.dialpad.DialPadLookup
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import java.net.HttpURLConnection
@@ -39,9 +40,9 @@ class DefaultErrorFormatter @Inject constructor(
 
     override fun toHumanReadable(throwable: Throwable?): String {
         return when (throwable) {
-            null                         -> null
-            is IdentityServiceError      -> identityServerError(throwable)
-            is Failure.NetworkConnection -> {
+            null                                   -> null
+            is IdentityServiceError                -> identityServerError(throwable)
+            is Failure.NetworkConnection           -> {
                 when (throwable.ioException) {
                     is SocketTimeoutException     ->
                         stringProvider.getString(R.string.error_network_timeout)
@@ -54,7 +55,7 @@ class DefaultErrorFormatter @Inject constructor(
                         stringProvider.getString(R.string.error_no_network)
                 }
             }
-            is Failure.ServerError       -> {
+            is Failure.ServerError                 -> {
                 when {
                     throwable.error.code == MatrixError.M_CONSENT_NOT_GIVEN          -> {
                         // Special case for terms and conditions
@@ -104,23 +105,25 @@ class DefaultErrorFormatter @Inject constructor(
                     }
                 }
             }
-            is Failure.OtherServerError -> {
+            is Failure.OtherServerError            -> {
                 when (throwable.httpCode) {
-                    HttpURLConnection.HTTP_NOT_FOUND ->
+                    HttpURLConnection.HTTP_NOT_FOUND    ->
                         // homeserver not found
                         stringProvider.getString(R.string.login_error_no_homeserver_found)
                     HttpURLConnection.HTTP_UNAUTHORIZED ->
                         // uia errors?
                         stringProvider.getString(R.string.error_unauthorized)
-                    else                             ->
+                    else                                ->
                         throwable.localizedMessage
                 }
             }
-            is DialPadLookup.Failure.NumberIsYours    ->
+            is DialPadLookup.Failure.NumberIsYours ->
                 stringProvider.getString(R.string.cannot_call_yourself)
-            is DialPadLookup.Failure.NoResult    ->
+            is DialPadLookup.Failure.NoResult      ->
                 stringProvider.getString(R.string.call_dial_pad_lookup_error)
-            else                        -> throwable.localizedMessage
+            is MatrixIdFailure.InvalidMatrixId     ->
+                stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id)
+            else                                   -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)
     }

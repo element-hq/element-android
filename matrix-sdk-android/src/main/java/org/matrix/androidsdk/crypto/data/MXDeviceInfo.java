@@ -66,7 +66,7 @@ public class MXDeviceInfo implements Serializable {
     public Map<String, Map<String, String>> signatures;
 
     /*
-     * Additional data from the home server.
+     * Additional data from the homeserver.
      */
     public Map<String, Object> unsigned;
 
