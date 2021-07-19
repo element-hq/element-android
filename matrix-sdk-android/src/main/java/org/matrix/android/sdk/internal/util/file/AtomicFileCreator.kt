@@ -32,6 +32,10 @@ internal class AtomicFileCreator(private val file: File) {
         }
     }
 
+    fun cancel() {
+        partFile.delete()
+    }
+
     fun commit() {
         partFile.renameTo(file)
     }

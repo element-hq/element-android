@@ -97,6 +97,9 @@ internal class DefaultFileService @Inject constructor(
             }
         }
 
+        var atomicFileCreator1: AtomicFileCreator? = null
+        var atomicFileCreator2: AtomicFileCreator? = null
+
         if (existingDownload != null) {
             // FIXME If the first downloader cancels then we'll unfortunately be cancelled too.
             return existingDownload.await()
@@ -133,7 +136,7 @@ internal class DefaultFileService @Inject constructor(
 
                     // Write the file to cache (encrypted version if the file is encrypted)
                     // Write to a part file first, so if we abort before done, we don't have a broken cached file
-                    val atomicFileCreator = AtomicFileCreator(cachedFiles.file)
+                    val atomicFileCreator = AtomicFileCreator(cachedFiles.file).also { atomicFileCreator1 = it }
                     writeToFile(source.inputStream(), atomicFileCreator.partFile)
                     response.close()
                     atomicFileCreator.commit()
@@ -150,7 +153,7 @@ internal class DefaultFileService @Inject constructor(
                     // Ensure the parent folder exists
                     cachedFiles.decryptedFile.parentFile?.mkdirs()
                     // Write to a part file first, so if we abort before done, we don't have a broken cached file
-                    val atomicFileCreator = AtomicFileCreator(cachedFiles.decryptedFile)
+                    val atomicFileCreator = AtomicFileCreator(cachedFiles.decryptedFile).also { atomicFileCreator2 = it }
                     val decryptSuccess = cachedFiles.file.inputStream().use { inputStream ->
                         atomicFileCreator.partFile.outputStream().buffered().use { outputStream ->
                             MXEncryptedAttachments.decryptAttachment(
@@ -180,6 +183,11 @@ internal class DefaultFileService @Inject constructor(
             Timber.v("## FileService additional to notify is > 0 ")
         }
         toNotify?.completeWith(result)
+
+        result.onFailure {
+            atomicFileCreator1?.cancel()
+            atomicFileCreator2?.cancel()
+        }
 
         return result.getOrThrow()
     }
