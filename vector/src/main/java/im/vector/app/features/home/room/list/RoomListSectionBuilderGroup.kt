@@ -86,6 +86,7 @@ class RoomListSectionBuilderGroup(
                         it.activeGroupId = actualGroupId
                     }
                 }
+
                 addSection(
                         sections,
                         activeGroupAwareQueries,
@@ -111,6 +112,7 @@ class RoomListSectionBuilderGroup(
                 }.also {
                     onDisposable.invoke(it)
                 }
+
         return sections
     }
 
@@ -257,6 +259,7 @@ class RoomListSectionBuilderGroup(
                                         }.also {
                                             onDisposable.invoke(it)
                                         }
+
                                 sections.add(
                                         RoomsSection(
                                                 sectionName = name,

@@ -70,12 +70,15 @@ class RoomListSectionBuilderSpace(
         val activeSpaceAwareQueries = mutableListOf<RoomListViewModel.ActiveSpaceQueryUpdater>()
         when (mode) {
             RoomListDisplayMode.PEOPLE        -> {
+                // 4 sections Invites / Fav / Dms / Low Priority
                 buildDmSections(sections, activeSpaceAwareQueries)
             }
             RoomListDisplayMode.ROOMS         -> {
+                // 6 sections invites / Fav / Rooms / Low Priority / Server notice / Suggested rooms
                 buildRoomsSections(sections, activeSpaceAwareQueries)
             }
             RoomListDisplayMode.FILTERED      -> {
+                // Used when searching for rooms
                 withQueryParams(
                         {
                             it.memberships = Membership.activeMemberships()
@@ -140,7 +143,8 @@ class RoomListSectionBuilderSpace(
         return sections
     }
 
-    private fun buildRoomsSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
+    private fun buildRoomsSections(sections: MutableList<RoomsSection>,
+                                   activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections = sections,
@@ -259,7 +263,8 @@ class RoomListSectionBuilderSpace(
         )
     }
 
-    private fun buildDmSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
+    private fun buildDmSections(sections: MutableList<RoomsSection>,
+                                activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections = sections,
@@ -321,7 +326,6 @@ class RoomListSectionBuilderSpace(
         withQueryParams(
                 { query.invoke(it) },
                 { roomQueryParams ->
-
                     val name = stringProvider.getString(nameRes)
                     session.getFilteredPagedRoomSummariesLive(
                             roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
@@ -364,7 +368,6 @@ class RoomListSectionBuilderSpace(
                         }
                     }.livePagedList
                             .let { livePagedList ->
-
                                 // use it also as a source to update count
                                 livePagedList.asObservable()
                                         .observeOn(Schedulers.computation())
