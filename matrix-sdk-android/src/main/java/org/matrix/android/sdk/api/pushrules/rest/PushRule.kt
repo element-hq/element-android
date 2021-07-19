@@ -101,6 +101,14 @@ data class PushRule(
     }
 
     /**
+     * Get the highlight status. As spec mentions assume false if no tweak present.
+     */
+    fun getHighlight(): Boolean {
+        return (getActions().firstOrNull { it is Action.Highlight } as? Action.Highlight)?.highlight ?: false
+    }
+
+
+    /**
      * Set the notification status.
      *
      * @param notify true to notify
@@ -133,4 +141,6 @@ data class PushRule(
      * @return true if the rule should not play sound
      */
     fun shouldNotNotify() = actions.contains(Action.ACTION_DONT_NOTIFY)
+
+    companion object { }
 }

@@ -31,7 +31,7 @@ interface PushRuleService {
 
     suspend fun addPushRule(kind: RuleKind, pushRule: PushRule)
 
-    suspend fun updatePushRuleActions(kind: RuleKind, oldPushRule: PushRule, newPushRule: PushRule)
+    suspend fun updatePushRuleActions(kind: RuleKind, ruleId: String, enable: Boolean, actions: List<Action>?)
 
     suspend fun removePushRule(kind: RuleKind, pushRule: PushRule)
 
