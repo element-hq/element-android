@@ -38,7 +38,7 @@ data class RegistrationFlowResponse(
         val completedStages: List<String>? = null,
 
         /**
-         * The session identifier that the client must pass back to the home server, if one is provided,
+         * The session identifier that the client must pass back to the homeserver, if one is provided,
          * in subsequent attempts to authenticate in the same API call.
          */
         @Json(name = "session")

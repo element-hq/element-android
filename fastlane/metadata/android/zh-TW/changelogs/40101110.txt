@@ -1,0 +1,2 @@
+此版本中的主要變動：佈景主題與樣式更新，以及空間的新功能（1.1.10 的臭蟲修復版本）
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.1.11

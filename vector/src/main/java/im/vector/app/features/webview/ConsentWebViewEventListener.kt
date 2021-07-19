@@ -58,7 +58,7 @@ class ConsentWebViewEventListener(activity: VectorBaseActivity<*>,
                 session.profileApiClient
                         .displayname(RIOT_BOT_ID, object : MatrixCallback<String>(createRiotBotRoomCallback) {
                             override fun onSuccess(info: String?) {
-                                // Ok, the Home Server knows riot-Bot, so create a Room with him
+                                // Ok, the homeserver knows riot-Bot, so create a Room with him
                                 session.createDirectMessageRoom(RIOT_BOT_ID, createRiotBotRoomCallback)
                             }
                         })
