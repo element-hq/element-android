@@ -42,7 +42,7 @@ class GroupRoomListSectionBuilder(
         val appStateHandler: AppStateHandler,
         private val autoAcceptInvites: AutoAcceptInvites,
         val onDisposable: (Disposable) -> Unit,
-        val onUdpatable: (UpdatableLivePageResult) -> Unit
+        val onUpdatable: (UpdatableLivePageResult) -> Unit
 ) : RoomListSectionBuilder {
 
     override fun buildSections(mode: RoomListDisplayMode): List<RoomsSection> {
@@ -69,7 +69,7 @@ class GroupRoomListSectionBuilder(
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
                             session.getFilteredPagedRoomSummariesLive(qpm)
                                     .let { updatableFilterLivePageResult ->
-                                        onUdpatable(updatableFilterLivePageResult)
+                                        onUpdatable(updatableFilterLivePageResult)
                                         sections.add(RoomsSection(name, updatableFilterLivePageResult.livePagedList))
                                     }
                         }
