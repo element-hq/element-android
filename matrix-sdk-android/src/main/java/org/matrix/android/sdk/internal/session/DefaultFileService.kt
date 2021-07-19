@@ -97,8 +97,8 @@ internal class DefaultFileService @Inject constructor(
             }
         }
 
-        var atomicFileCreator1: AtomicFileCreator? = null
-        var atomicFileCreator2: AtomicFileCreator? = null
+        var atomicFileDownload: AtomicFileCreator? = null
+        var atomicFileDecrypt: AtomicFileCreator? = null
 
         if (existingDownload != null) {
             // FIXME If the first downloader cancels then we'll unfortunately be cancelled too.
@@ -136,7 +136,7 @@ internal class DefaultFileService @Inject constructor(
 
                     // Write the file to cache (encrypted version if the file is encrypted)
                     // Write to a part file first, so if we abort before done, we don't have a broken cached file
-                    val atomicFileCreator = AtomicFileCreator(cachedFiles.file).also { atomicFileCreator1 = it }
+                    val atomicFileCreator = AtomicFileCreator(cachedFiles.file).also { atomicFileDownload = it }
                     writeToFile(source.inputStream(), atomicFileCreator.partFile)
                     response.close()
                     atomicFileCreator.commit()
@@ -153,7 +153,7 @@ internal class DefaultFileService @Inject constructor(
                     // Ensure the parent folder exists
                     cachedFiles.decryptedFile.parentFile?.mkdirs()
                     // Write to a part file first, so if we abort before done, we don't have a broken cached file
-                    val atomicFileCreator = AtomicFileCreator(cachedFiles.decryptedFile).also { atomicFileCreator2 = it }
+                    val atomicFileCreator = AtomicFileCreator(cachedFiles.decryptedFile).also { atomicFileDecrypt = it }
                     val decryptSuccess = cachedFiles.file.inputStream().use { inputStream ->
                         atomicFileCreator.partFile.outputStream().buffered().use { outputStream ->
                             MXEncryptedAttachments.decryptAttachment(
@@ -185,8 +185,8 @@ internal class DefaultFileService @Inject constructor(
         toNotify?.completeWith(result)
 
         result.onFailure {
-            atomicFileCreator1?.cancel()
-            atomicFileCreator2?.cancel()
+            atomicFileDownload?.cancel()
+            atomicFileDecrypt?.cancel()
         }
 
         return result.getOrThrow()
