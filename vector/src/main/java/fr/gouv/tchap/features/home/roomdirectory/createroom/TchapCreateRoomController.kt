@@ -82,7 +82,7 @@ class TchapCreateRoomController @Inject constructor(
 
         formSubmitButtonItem {
             id("submit")
-            enabled(enableFormElement)
+            enabled(enableFormElement && viewState.roomName.isNotEmpty())
             buttonTitleId(R.string.create_room_action_create)
             buttonClickListener { host.listener?.submit() }
         }

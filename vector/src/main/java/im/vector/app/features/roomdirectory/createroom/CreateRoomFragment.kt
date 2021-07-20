@@ -22,6 +22,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -152,7 +153,8 @@ class CreateRoomFragment @Inject constructor(
     }
 
     override fun submit() {
-        viewModel.handle(CreateRoomAction.Create)
+        // viewModel.handle(CreateRoomAction.Create)
+        Toast.makeText(requireContext(), "Not implemented yet", Toast.LENGTH_SHORT).show()
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
