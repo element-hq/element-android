@@ -200,6 +200,10 @@ class CallService : VectorService() {
             return
         }
         knownCalls.remove(terminatedCall)
+        if (knownCalls.isEmpty()) {
+            mediaSession?.isActive = false
+            myStopSelf()
+        }
         val wasOngoing = ongoingCallIds.remove(callId)
         if (wasOngoing || isRejected) {
             val notification =  notificationUtils.buildCallEndedNotification()
@@ -207,15 +211,10 @@ class CallService : VectorService() {
         } else {
             val notification =  notificationUtils.buildCallMissedNotification(
                     roomId = terminatedCall.nativeRoomId,
-                    caller = terminatedCall.matrixItem?.getBestName() ?: terminatedCall.opponentUserId
+                    title = terminatedCall.matrixItem?.getBestName() ?: terminatedCall.opponentUserId
             )
             notificationManager.cancel(callId.hashCode())
-            notificationManager.notify(MISSED_CALL_TAG, callId.hashCode(), notification)
-        }
-
-        if (knownCalls.isEmpty()) {
-            mediaSession?.isActive = false
-            myStopSelf()
+            notificationManager.notify(MISSED_CALL_TAG, terminatedCall.nativeRoomId.hashCode(), notification)
         }
     }
 

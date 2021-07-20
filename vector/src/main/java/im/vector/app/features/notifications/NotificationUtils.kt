@@ -462,10 +462,10 @@ class NotificationUtils @Inject constructor(private val context: Context,
     /**
      * Build notification for the CallService, when a call is missed
      */
-    fun buildCallMissedNotification(roomId: String, caller: String): Notification {
-        val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(caller)
-                .setContentText(stringProvider.getString(R.string.call_missed, caller))
+    fun buildCallMissedNotification(roomId: String, title: String): Notification {
+        val builder = NotificationCompat.Builder(context, NOISY_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(stringProvider.getString(R.string.call_missed))
                 .setSmallIcon(R.drawable.ic_material_call_end_grey)
                 .setAutoCancel(true)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
