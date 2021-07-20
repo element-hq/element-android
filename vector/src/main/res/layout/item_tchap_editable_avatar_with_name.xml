@@ -40,6 +40,17 @@
     </FrameLayout>
 
     <ImageView
+        android:id="@+id/itemEditableAvatarRoomType"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:contentDescription="@string/room_encrypted"
+        app:layout_constraintCircle="@id/itemEditableAvatarImageContainer"
+        app:layout_constraintCircleAngle="45"
+        app:layout_constraintCircleRadius="50dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@drawable/ic_tchap_forum" />
+
+    <ImageView
         android:id="@+id/itemEditableAvatarDelete"
         android:layout_width="32dp"
         android:layout_height="32dp"
@@ -51,8 +62,7 @@
         app:layout_constraintEnd_toEndOf="@+id/itemEditableAvatarImageContainer"
         app:layout_constraintTop_toTopOf="@+id/itemEditableAvatarImageContainer"
         app:tint="?colorError"
-        tools:ignore="MissingPrefix"
-        tools:visibility="visible" />
+        tools:ignore="MissingPrefix" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/formTextInputTextInputLayout"

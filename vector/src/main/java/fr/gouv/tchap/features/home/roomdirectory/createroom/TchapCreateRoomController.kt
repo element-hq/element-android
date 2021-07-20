@@ -18,6 +18,7 @@ package fr.gouv.tchap.features.home.roomdirectory.createroom
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Loading
+import fr.gouv.tchap.core.utils.RoomUtils
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsSectionTitleItem
@@ -47,6 +48,7 @@ class TchapCreateRoomController @Inject constructor(
             imageUri(viewState.avatarUri)
             clickListener { host.listener?.onAvatarChange() }
             deleteListener { host.listener?.onAvatarDelete() }
+            roomType(RoomUtils.getRoomType(viewState.roomVisibilityType))
 
             value(viewState.roomName)
             hint(host.stringProvider.getString(R.string.create_room_name_hint))

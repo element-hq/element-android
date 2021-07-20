@@ -19,6 +19,7 @@ import android.net.Uri
 import android.text.Editable
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -28,6 +29,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import fr.gouv.tchap.core.ui.views.HexagonMaskView
+import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
@@ -59,6 +61,9 @@ abstract class TchapRoomAvatarWithNameItem : EpoxyModelWithHolder<TchapRoomAvata
 
     @EpoxyAttribute
     var deleteListener: ClickListener? = null
+
+    @EpoxyAttribute
+    lateinit var roomType: TchapRoomType
 
     // Room name
     @EpoxyAttribute
@@ -114,8 +119,14 @@ abstract class TchapRoomAvatarWithNameItem : EpoxyModelWithHolder<TchapRoomAvata
         }
         val isAvatarLoaded = imageUri != null || matrixItem?.avatarUrl?.isNotEmpty() == true
         holder.addImage.isVisible = enabled && !isAvatarLoaded
-        holder.delete.isVisible = enabled && isAvatarLoaded
-        holder.delete.onClick(deleteListener?.takeIf { enabled })
+        // holder.delete.isVisible = enabled && isAvatarLoaded
+        // holder.delete.onClick(deleteListener?.takeIf { enabled })
+        holder.roomTypeIcon.setImageResource(when (roomType) {
+            TchapRoomType.PRIVATE  -> R.drawable.ic_tchap_room_lock_red_bordered
+            TchapRoomType.EXTERNAL -> R.drawable.ic_tchap_room_lock_orange_bordered
+            TchapRoomType.FORUM    -> R.drawable.ic_tchap_forum
+            else                   -> 0
+        })
     }
 
     private fun bindRoomName(holder: Holder) {
@@ -150,6 +161,7 @@ abstract class TchapRoomAvatarWithNameItem : EpoxyModelWithHolder<TchapRoomAvata
         val image by bind<HexagonMaskView>(R.id.itemEditableAvatarImage)
         val addImage by bind<View>(R.id.addImageIcon)
         val delete by bind<View>(R.id.itemEditableAvatarDelete)
+        val roomTypeIcon by bind<ImageView>(R.id.itemEditableAvatarRoomType)
 
         // Room name
         val textInputLayout by bind<TextInputLayout>(R.id.formTextInputTextInputLayout)
