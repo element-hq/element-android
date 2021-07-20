@@ -46,7 +46,7 @@ import timber.log.Timber
 import uniffi.olm.Verification
 
 @JsonClass(generateAdapter = true)
-data class ToDeviceVerificationEvent(
+internal data class ToDeviceVerificationEvent(
         @Json(name = "sender") val sender: String?,
         @Json(name = "transaction_id") val transactionId: String,
 )
@@ -59,6 +59,17 @@ private fun getFlowId(event: Event): String? {
         val content = event.getClearContent().toModel<ToDeviceVerificationEvent>() ?: return null
         content.transactionId
     }
+}
+
+internal fun prepareMethods(methods: List<VerificationMethod>): List<String> {
+    val stringMethods: MutableList<String> = methods.map { it.toValue() }.toMutableList()
+
+    if (stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SHOW) ||
+            stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SCAN)) {
+        stringMethods.add(VERIFICATION_METHOD_RECIPROCATE)
+    }
+
+    return stringMethods
 }
 
 internal class RustVerificationService(
@@ -117,7 +128,7 @@ internal class RustVerificationService(
         }
     }
 
-    suspend fun onEvent(event: Event) = when (event.getClearType()) {
+    internal suspend fun onEvent(event: Event) = when (event.getClearType()) {
         MessageType.MSGTYPE_VERIFICATION_REQUEST -> onRequest(event)
         EventType.KEY_VERIFICATION_START         -> onStart(event)
         EventType.KEY_VERIFICATION_READY,
@@ -148,11 +159,11 @@ internal class RustVerificationService(
 
         if (request != null && request.isReady()) {
             // If this is a SAS verification originating from a `m.key.verification.request`
-            // event we auto-accept here considering that we either initiated the request or
-            // accepted the request, otherwise it's a QR code verification, just dispatch an update.
+            // event, we auto-accept here considering that we either initiated the request or
+            // accepted the request. If it's a QR code verification, just dispatch an update.
             if (verification is SasVerification) {
                 // Accept dispatches an update, no need to do it twice.
-                    Timber.d("## Verification: Auto accepting SAS verification with $sender")
+                Timber.d("## Verification: Auto accepting SAS verification with $sender")
                 verification.accept()
             } else {
                 dispatchTxUpdated(verification)
@@ -227,7 +238,7 @@ internal class RustVerificationService(
             is Verification.SasV1    -> {
                 SasVerification(this.olmMachine.inner(), verification.sas, this.requestSender, this.listeners)
             }
-            null -> {
+            null                     -> {
                 // This branch exists because scanning a QR code is tied to the QrCodeVerification,
                 // i.e. instead of branching into a scanned QR code verification from the verification request,
                 // like it's done for SAS verifications, the public API expects us to create an empty dummy
@@ -296,12 +307,7 @@ internal class RustVerificationService(
             otherUserId: String,
             otherDevices: List<String>?
     ): PendingVerificationRequest {
-
-        val stringMethods: MutableList<String> = methods.map { it.toValue() }.toMutableList()
-        if (stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SHOW) ||
-                stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SCAN)) {
-            stringMethods.add(VERIFICATION_METHOD_RECIPROCATE)
-        }
+        val stringMethods = prepareMethods(methods)
 
         val result = this.olmMachine.inner().requestSelfVerification(stringMethods)
         runBlocking {
@@ -318,13 +324,7 @@ internal class RustVerificationService(
             localId: String?
     ): PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $otherUserId in room $roomId")
-        val stringMethods: MutableList<String> = methods.map { it.toValue() }.toMutableList()
-
-        if (stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SHOW) ||
-                stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SCAN)) {
-            stringMethods.add(VERIFICATION_METHOD_RECIPROCATE)
-        }
-
+        val stringMethods = prepareMethods(methods)
         val content = this.olmMachine.inner().verificationRequestContent(otherUserId, stringMethods)!!
 
         val eventID = runBlocking {
@@ -376,7 +376,6 @@ internal class RustVerificationService(
             otherDeviceId: String,
             transactionId: String?
     ): String? {
-        // should check if already one (and cancel it)
         return if (method == VerificationMethod.SAS) {
             if (transactionId != null) {
                 val request = this.getVerificationRequest(otherUserId, transactionId)

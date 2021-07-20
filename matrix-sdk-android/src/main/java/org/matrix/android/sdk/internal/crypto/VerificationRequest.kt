@@ -34,6 +34,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import org.matrix.android.sdk.internal.crypto.model.rest.toValue
+import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import timber.log.Timber
 import uniffi.olm.OlmMachine
 import uniffi.olm.VerificationRequest
@@ -45,16 +46,6 @@ internal class VerificationRequest(
         private val listeners: ArrayList<VerificationService.Listener>,
 ) {
     private val uiHandler = Handler(Looper.getMainLooper())
-
-    private fun refreshData() {
-        val request = this.machine.getVerificationRequest(this.inner.otherUserId, this.inner.flowId)
-
-        if (request != null) {
-            this.inner = request
-        }
-
-        return
-    }
 
     internal fun dispatchRequestUpdated() {
         uiHandler.post {
@@ -68,40 +59,63 @@ internal class VerificationRequest(
         }
     }
 
-    fun isCanceled(): Boolean {
-        refreshData()
-        return this.inner.isCancelled
-    }
-
-    fun isDone(): Boolean {
-        refreshData()
-        return this.inner.isDone
-    }
-
-    fun flowId(): String {
+    internal fun flowId(): String {
         return this.inner.flowId
     }
 
-    fun otherUser(): String {
+    internal fun otherUser(): String {
         return this.inner.otherUserId
     }
 
-    fun otherDeviceId(): String? {
+    internal fun otherDeviceId(): String? {
         refreshData()
         return this.inner.otherDeviceId
     }
 
-    fun weStarted(): Boolean {
+    internal fun weStarted(): Boolean {
         return this.inner.weStarted
     }
 
-    fun roomId(): String? {
+    internal fun roomId(): String? {
         return this.inner.roomId
     }
 
-    fun isReady(): Boolean {
+    internal fun isReady(): Boolean {
         refreshData()
         return this.inner.isReady
+    }
+
+    internal fun canScanQrCodes(): Boolean {
+        refreshData()
+        return this.inner.ourMethods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN) ?: false
+    }
+
+    suspend fun acceptWithMethods(methods: List<VerificationMethod>) {
+        val stringMethods = prepareMethods(methods)
+
+        val request = this.machine.acceptVerificationRequest(
+                this.inner.otherUserId,
+                this.inner.flowId,
+                stringMethods
+        )
+
+        if (request != null) {
+            this.sender.sendVerificationRequest(request)
+            this.dispatchRequestUpdated()
+        }
+    }
+
+    internal suspend fun startSasVerification(): SasVerification? {
+        return withContext(Dispatchers.IO) {
+            val result = machine.startSasVerification(inner.otherUserId, inner.flowId)
+
+            if (result != null) {
+                sender.sendVerificationRequest(result.request)
+                SasVerification(machine, result.sas, sender, listeners)
+            } else {
+                null
+            }
+        }
     }
 
     internal suspend fun scanQrCode(data: String): QrCodeVerification? {
@@ -130,18 +144,11 @@ internal class VerificationRequest(
         }
     }
 
-    suspend fun acceptWithMethods(methods: List<VerificationMethod>) {
-        val stringMethods: MutableList<String> = methods.map { it.toValue() }.toMutableList()
-
-        if (stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SHOW) ||
-                stringMethods.contains(VERIFICATION_METHOD_QR_CODE_SCAN)) {
-            stringMethods.add(VERIFICATION_METHOD_RECIPROCATE)
-        }
-
-        val request = this.machine.acceptVerificationRequest(
-            this.inner.otherUserId,
-            this.inner.flowId,
-            stringMethods
+    internal suspend fun cancel() {
+        val request = this.machine.cancelVerification(
+                this.inner.otherUserId,
+                this.inner.flowId,
+                CancelCode.User.value
         )
 
         if (request != null) {
@@ -150,35 +157,15 @@ internal class VerificationRequest(
         }
     }
 
-    suspend fun cancel() {
-        val request = this.machine.cancelVerification(this.inner.otherUserId, this.inner.flowId, CancelCode.User.value)
+    private fun refreshData() {
+        val request = this.machine.getVerificationRequest(this.inner.otherUserId, this.inner.flowId)
 
         if (request != null) {
-            this.sender.sendVerificationRequest(request)
-            this.dispatchRequestUpdated()
+            this.inner = request
         }
     }
 
-    fun canScanQrCodes(): Boolean {
-        refreshData()
-        return this.inner.ourMethods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN) ?: false
-    }
-
-    suspend fun startSasVerification(): SasVerification? {
-        refreshData()
-
-        return withContext(Dispatchers.IO) {
-            val result = machine.startSasVerification(inner.otherUserId, inner.flowId)
-            if (result != null) {
-                sender.sendVerificationRequest(result.request)
-                SasVerification(machine, result.sas, sender, listeners)
-            } else {
-                null
-            }
-        }
-    }
-
-    fun toPendingVerificationRequest(): PendingVerificationRequest {
+    internal fun toPendingVerificationRequest(): PendingVerificationRequest {
         refreshData()
         val cancelInfo = this.inner.cancelInfo
         val cancelCode =

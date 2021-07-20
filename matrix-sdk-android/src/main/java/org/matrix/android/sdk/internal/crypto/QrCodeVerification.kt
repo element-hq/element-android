@@ -156,7 +156,7 @@ internal class QrCodeVerification(
      * This confirms that the other side has scanned our QR code.
      */
     @Throws(CryptoStoreErrorException::class)
-    suspend fun confirm() {
+    private suspend fun confirm() {
         val request = withContext(Dispatchers.IO)
         {
             machine.confirmVerification(request.otherUser(), request.flowId())
@@ -167,20 +167,20 @@ internal class QrCodeVerification(
         }
     }
 
-    /** Send out a verification request in a blocking manner*/
-    private fun sendRequest(request: OutgoingVerificationRequest) {
-        runBlocking { sender.sendVerificationRequest(request) }
-
-        refreshData()
-        dispatchTxUpdated()
-    }
-
     private fun cancelHelper(code: CancelCode) {
         val request = this.machine.cancelVerification(this.request.otherUser(), this.request.flowId(), code.value)
 
         if (request != null) {
             sendRequest(request)
         }
+    }
+
+    /** Send out a verification request in a blocking manner*/
+    private fun sendRequest(request: OutgoingVerificationRequest) {
+        runBlocking { sender.sendVerificationRequest(request) }
+
+        refreshData()
+        dispatchTxUpdated()
     }
 
     /** Fetch fetch data from the Rust side for our verification flow */

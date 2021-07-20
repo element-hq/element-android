@@ -56,18 +56,6 @@ internal class SasVerification(
         }
     }
 
-    private fun refreshData() {
-        when (val verification = this.machine.getVerification(this.inner.otherUserId, this.inner.flowId)) {
-            is Verification.SasV1 -> {
-                this.inner = verification.sas
-            }
-            else                  -> {
-            }
-        }
-
-        return
-    }
-
     override val isIncoming: Boolean
         get() = !this.inner.weStarted
 
@@ -84,7 +72,7 @@ internal class SasVerification(
             refreshData()
             val cancelInfo = this.inner.cancelInfo
             return when {
-                cancelInfo != null     -> {
+                cancelInfo != null         -> {
                     val cancelCode = safeValueOf(cancelInfo.cancelCode)
                     VerificationTxState.Cancelled(cancelCode, cancelInfo.cancelledByUs)
                 }
@@ -118,9 +106,8 @@ internal class SasVerification(
 
     override fun supportsDecimal(): Boolean {
         // This is ignored anyways, throw it away?
-        // The spec also mandates that devices support
-        // at least decimal and the rust-sdk cancels if
-        // devices don't support it
+        // The spec also mandates that devices support at least decimal and
+        // the rust-sdk cancels if devices don't support it
         return true
     }
 
@@ -130,15 +117,26 @@ internal class SasVerification(
     }
 
     override fun userHasVerifiedShortCode() {
-        val request = runBlocking { confirm() } ?: return
-        sendRequest(request)
+        runBlocking { confirm() }
     }
 
     override fun acceptVerification() {
         runBlocking { accept() }
     }
 
-    suspend fun accept() {
+    override fun getDecimalCodeRepresentation(): String {
+        val decimals = this.machine.getDecimals(this.inner.otherUserId, this.inner.flowId)
+
+        return decimals?.joinToString(" ") ?: ""
+    }
+
+    override fun getEmojiCodeRepresentation(): List<EmojiRepresentation> {
+        val emojiIndex = this.machine.getEmojiIndex(this.inner.otherUserId, this.inner.flowId)
+
+        return emojiIndex?.map { getEmojiForCode(it) } ?: listOf()
+    }
+
+    internal suspend fun accept() {
         val request = this.machine.acceptSasVerification(this.inner.otherUserId, inner.flowId)
 
         if (request != null) {
@@ -149,12 +147,16 @@ internal class SasVerification(
     }
 
     @Throws(CryptoStoreErrorException::class)
-    suspend fun confirm(): OutgoingVerificationRequest? =
-            withContext(Dispatchers.IO) {
-                machine.confirmVerification(inner.otherUserId, inner.flowId)
-            }
+    private suspend fun confirm() {
+        val request = withContext(Dispatchers.IO) {
+            machine.confirmVerification(inner.otherUserId, inner.flowId)
+        }
+        if (request != null) {
+            this.sender.sendVerificationRequest(request)
+        }
+    }
 
-    fun cancelHelper(code: CancelCode) {
+    private fun cancelHelper(code: CancelCode) {
         val request = this.machine.cancelVerification(this.inner.otherUserId, inner.flowId, code.value)
 
         if (request != null) {
@@ -162,24 +164,22 @@ internal class SasVerification(
         }
     }
 
-    override fun getEmojiCodeRepresentation(): List<EmojiRepresentation> {
-        val emojiIndex = this.machine.getEmojiIndex(this.inner.otherUserId, this.inner.flowId)
-
-        return emojiIndex?.map { getEmojiForCode(it) } ?: listOf()
-    }
-
-    override fun getDecimalCodeRepresentation(): String {
-        val decimals = this.machine.getDecimals(this.inner.otherUserId, this.inner.flowId)
-
-        return decimals?.joinToString(" ") ?: ""
-    }
-
-    fun sendRequest(request: OutgoingVerificationRequest) {
-        runBlocking {
-            sender.sendVerificationRequest(request)
-        }
+    private fun sendRequest(request: OutgoingVerificationRequest) {
+        runBlocking { sender.sendVerificationRequest(request) }
 
         refreshData()
         dispatchTxUpdated()
+    }
+
+    private fun refreshData() {
+        when (val verification = this.machine.getVerification(this.inner.otherUserId, this.inner.flowId)) {
+            is Verification.SasV1 -> {
+                this.inner = verification.sas
+            }
+            else                  -> {
+            }
+        }
+
+        return
     }
 }
