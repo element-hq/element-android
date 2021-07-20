@@ -33,7 +33,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.AppStateHandler
 import im.vector.app.R
-import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
@@ -71,13 +70,8 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.query.QueryStringValue
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
 import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
@@ -96,6 +90,7 @@ class HomeActivity :
         UnknownDeviceDetectorSharedViewModel.Factory,
         ServerBackupStatusViewModel.Factory,
         UnreadMessagesSharedViewModel.Factory,
+        PromoteRestrictedViewModel.Factory,
         NavigationInterceptor,
         SpaceInviteBottomSheet.InteractionListener {
 
@@ -106,6 +101,8 @@ class HomeActivity :
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
     @Inject lateinit var serverBackupviewModelFactory: ServerBackupStatusViewModel.Factory
+    @Inject lateinit var promoteRestrictedViewModelFactory: PromoteRestrictedViewModel.Factory
+    private val promoteRestrictedViewModel: PromoteRestrictedViewModel by viewModel()
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -179,30 +176,6 @@ class HomeActivity :
             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
             replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
-        if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
-            appStateHandler.selectedRoomGroupingObservable.subscribe {
-                (it.orNull() as? RoomGroupingMethod.BySpace)?.spaceSummary?.let { currentSpaceSummary ->
-                    if (!currentSpaceSummary.isPublic && currentSpaceSummary.otherMemberIds.isNotEmpty()) {
-                        val isAdmin = activeSessionHolder
-                                .getSafeActiveSession()
-                                ?.getRoom(currentSpaceSummary.roomId)
-                                ?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
-                                ?.content?.toModel<PowerLevelsContent>()
-                                ?.let { PowerLevelsHelper(it) }
-                                ?.isUserAllowedToSend(activeSessionHolder.getActiveSession().myUserId, true, EventType.STATE_SPACE_CHILD)
-                                ?: false
-
-                        // It's a private space with some members show this once
-                        if (isAdmin && !popupAlertManager.hasAlertsToShow()) {
-                            if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
-                                vectorPreferences.setDidPromoteNewRestrictedFeature()
-                                RestrictedPromoBottomSheet().show(supportFragmentManager, "FOO")
-                            }
-                        }
-                    }
-                }
-            }.disposeOnDestroy()
-        }
 
         sharedActionViewModel
                 .observe()
@@ -269,6 +242,21 @@ class HomeActivity :
 
         shortcutsHandler.observeRoomsAndBuildShortcuts()
                 .disposeOnDestroy()
+
+        if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
+            promoteRestrictedViewModel.subscribe(this) {
+                if (it.activeSpaceSummary != null && !it.activeSpaceSummary.isPublic
+                        && it.activeSpaceSummary.otherMemberIds.isNotEmpty()) {
+                    // It's a private space with some members show this once
+                    if (it.canUserManageSpace && !popupAlertManager.hasAlertsToShow()) {
+                        if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
+                            vectorPreferences.setDidPromoteNewRestrictedFeature()
+                            RestrictedPromoBottomSheet().show(supportFragmentManager, "FOO")
+                        }
+                    }
+                }
+            }
+        }
 
         if (isFirstCreation()) {
             handleIntent(intent)
@@ -576,4 +564,6 @@ class HomeActivity :
         private const val ROOM_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
         private const val USER_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
     }
+
+    override fun create(initialState: ActiveSpaceViewState) = promoteRestrictedViewModelFactory.create(initialState)
 }

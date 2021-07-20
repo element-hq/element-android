@@ -32,7 +32,7 @@ class RestrictedPromoBottomSheet : VectorBaseBottomSheetDialogFragment<BottomShe
 
     override val showExpanded = true
 
-    var learnMorelMode: Boolean = false
+    var learnMoreMode: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,24 +42,23 @@ class RestrictedPromoBottomSheet : VectorBaseBottomSheetDialogFragment<BottomShe
         }
 
         views.learnMore.debouncedClicks {
-            if (learnMorelMode) {
+            if (learnMoreMode) {
                 dismiss()
             } else {
-                learnMorelMode = true
+                learnMoreMode = true
                 render()
             }
         }
     }
 
     private fun render() {
-        if (learnMorelMode) {
+        if (learnMoreMode) {
             views.title.text = getString(R.string.new_let_people_in_spaces_find_and_join)
             views.topDescription.text = getString(R.string.to_help_space_members_find_and_join)
             views.imageHint.isVisible = true
             views.bottomDescription.isVisible = true
             views.bottomDescription.text = getString(R.string.this_makes_it_easy_for_rooms_to_stay_private_to_a_space)
             views.skipButton.isVisible = false
-            views.learnMore.isVisible = true
             views.learnMore.text = getString(R.string.ok)
         } else {
             views.title.text = getString(R.string.help_space_members)
@@ -68,9 +67,7 @@ class RestrictedPromoBottomSheet : VectorBaseBottomSheetDialogFragment<BottomShe
             views.bottomDescription.isVisible = false
             views.skipButton.isVisible = true
             views.learnMore.isVisible = true
-            views.skipButton.text = getString(R.string.skip)
             views.learnMore.text = getString(R.string.learn_more)
-            views.learnMore.isVisible = true
         }
     }
 }
