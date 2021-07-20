@@ -32,8 +32,6 @@ class TchapCreateRoomController @Inject constructor(
 
     var listener: Listener? = null
 
-    var index = 0
-
     override fun buildModels(viewState: CreateRoomViewState) {
         // display the form
         buildForm(viewState, viewState.asyncCreateRoomRequest !is Loading)
@@ -77,7 +75,9 @@ class TchapCreateRoomController @Inject constructor(
             id("forumRoomItem")
             userDomain(viewState.userDomain)
             selected(viewState.roomVisibilityType is RoomVisibilityType.Public)
+            checked(viewState.disableFederation)
             clickListener { host.listener?.setIsPublic(isPublic = true, restricted = true) }
+            checkListener { _, isChecked -> host.listener?.setDisableFederation(isChecked) }
         }
 
         formSubmitButtonItem {

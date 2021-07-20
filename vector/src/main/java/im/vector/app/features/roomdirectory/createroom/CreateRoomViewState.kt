@@ -29,7 +29,7 @@ data class CreateRoomViewState(
         val roomVisibilityType: RoomVisibilityType = RoomVisibilityType.Private,
         val isEncrypted: Boolean = false,
         val showAdvanced: Boolean = false,
-        val disableFederation: Boolean = false,
+        val disableFederation: Boolean = true,
         val homeServerName: String = "",
         val userDomain: String = "",
         val hsAdminHasDisabledE2E: Boolean = false,
