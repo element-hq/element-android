@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="normal_priority_header">Normal priority</string>
-
     <string name="settings_home_overview">Overview</string>
-
     <string name="settings_single_overview">Combined chat overview</string>
     <string name="settings_single_overview_summary">View both direct messages and rooms on one page</string>
-
     <string name="settings_room_unread_kind_dm">Direct chat preview content</string>
     <string name="settings_room_unread_kind_group">Group chat preview content</string>
     <string name="settings_room_unread_kind_default">Show all events</string>
     <string name="settings_room_unread_kind_content">Hide member changes</string>
     <string name="settings_room_unread_kind_original_content">Hide member changes and reactions</string>
-
     <string name="settings_simplified_mode">Easy mode</string>
     <string name="settings_simplified_mode_summary">Hide advanced functionality, including public room directories and chat encryption settings</string>
     <string name="prompt_simplified_mode_title">Select user interface</string>
@@ -22,7 +17,6 @@
     <string name="prompt_simplified_mode_on_text">I only plan to chat with people I know, and consider extra options confusing.</string>
     <string name="prompt_simplified_mode_off">Complete</string>
     <string name="prompt_simplified_mode_off_text">I\'m looking for full functionality, including discovery of public rooms and fine-grained room and encryption settings.</string>
-
     <string name="settings_light_theme">Light theme</string>
     <string name="settings_dark_theme">Dark theme</string>
     <string name="settings_system_dark_theme_pre_ten">Follow system dark theme</string>
@@ -35,7 +29,6 @@
     <string name="element_light_theme">Element Light</string>
     <string name="element_dark_theme">Element Dark</string>
     <string name="element_black_theme">Element Black</string>
-
     <string name="bubble_style">Message bubbles</string>
     <string name="bubble_style_none">None</string>
     <string name="bubble_style_start">Same side</string>
@@ -43,32 +36,25 @@
     <string name="bubble_time_location">Timestamp location</string>
     <string name="bubble_time_location_top">Top</string>
     <string name="bubble_time_location_bottom">Bottom</string>
-
     <string name="settings_unimportant_counter_badge">Count unimportant chat events</string>
     <string name="settings_unimportant_counter_badge_summary">Include chats without notifications in the category unread counter</string>
-
     <string name="labs_mark_rooms_unread">Mark chats as unread</string>
-    <string name="labs_mark_rooms_unread_summary">Allow to mark chats as unread. Other matrix clients might not support this functionality yet.</string>
+    <string name="labs_mark_rooms_unread_summary">Allow marking chats as unread. Other Matrix clients might not support this yet.</string>
     <string name="url_previews_in_encrypted_rooms">URL previews in encrypted chats</string>
     <string name="url_previews_in_encrypted_rooms_summary">This will leak URLs from your messages to your homeserver!</string>
-
     <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="bottom_action_all">Overview</string>
     <string name="all_list_rooms_empty_title">SchildiChat</string>
     <string name="all_list_rooms_empty_body">Chats will be displayed here</string>
-
     <!-- Login screen -->
     <string name="login_connect_using_matrix_id_text_sc">e.g. @user:domain.com</string>
     <string name="login_server_other_title_sc">Custom server</string>
-    <string name="login_server_other_text_sc">Enter server address to login or register</string>
-
+    <string name="login_server_other_text_sc">Enter server address to log in or register on</string>
     <string name="show_room_info_sc">Room details</string>
     <string name="show_participants_sc">Participants</string>
     <string name="room_list_quick_actions_mark_room_unread">Mark as unread</string>
     <string name="room_list_quick_actions_mark_room_read">Mark as read</string>
-
     <string name="footer_read_receipt_content_description">Message status</string>
-
     <!-- Username colors -->
     <string name="settings_user_colors_in_dm">User colors in direct chats</string>
     <string name="settings_user_colors_in_default">User colors in group chats</string>
@@ -76,8 +62,6 @@
     <string name="user_colors_uniform">Uniform</string>
     <string name="user_colors_from_pl">Based on power level</string>
     <string name="user_colors_from_id">Based on Matrix ID</string>
-
     <string name="settings_advanced_theme_settings">Advanced theme settings</string>
     <string name="settings_user_colors">User colors</string>
-
 </resources>
