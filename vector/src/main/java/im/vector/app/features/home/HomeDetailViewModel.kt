@@ -104,6 +104,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             HomeDetailAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
             is HomeDetailAction.StartCallWithPhoneNumber -> handleStartCallWithPhoneNumber(action)
             is HomeDetailAction.InviteByEmail            -> handleIndividualInviteByEmail(action)
+            is HomeDetailAction.SelectContact            -> handleSelectContact(action)
             is HomeDetailAction.CreateDiscussion         -> handleCreateDiscussion(action)
             HomeDetailAction.UnauthorizedEmail           -> handleUnauthorizedEmail()
         }
@@ -187,6 +188,15 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             } else {
                 _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(action.email))
             }
+        }
+    }
+
+    private fun handleSelectContact(action: HomeDetailAction.SelectContact) {
+        val directRoomId = session.getExistingDirectRoomWithUser(action.user.userId)
+        if (directRoomId != null) {
+            _viewEvents.post(HomeDetailViewEvents.OpenDirectChat(directRoomId))
+        } else {
+            // Todo: handle direct room creation
         }
     }
 

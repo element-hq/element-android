@@ -17,7 +17,9 @@
 package fr.gouv.tchap.features.userdirectory
 
 import im.vector.app.core.platform.VectorSharedAction
+import org.matrix.android.sdk.api.session.user.model.User
 
 sealed class TchapContactListSharedAction : VectorSharedAction {
     data class OnInviteByEmail(val email: String) : TchapContactListSharedAction()
+    data class OnSelectContact(val user: User) : TchapContactListSharedAction()
 }

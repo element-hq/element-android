@@ -24,6 +24,7 @@ Improvements 🙌:
  - [Home screen] cancel the search when the user selects an item from the search result #107
  - Implement the users/info endpoint to get users status #87
  - Design Tchap contact cells #98
+ - [Contacts list] open the DM (if any) for the selected user #129
 
 
 =======================================================

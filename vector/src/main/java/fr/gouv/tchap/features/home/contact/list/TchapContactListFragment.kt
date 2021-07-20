@@ -167,7 +167,7 @@ class TchapContactListFragment @Inject constructor(
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(TchapContactListAction.CancelSearch)
+        sharedActionViewModel.post(TchapContactListSharedAction.OnSelectContact(user))
 //        viewModel.handle(TchapContactListAction.AddPendingSelection(PendingSelection.UserPendingSelection(user)))
     }
 

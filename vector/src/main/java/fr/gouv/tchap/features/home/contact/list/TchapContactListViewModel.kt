@@ -74,7 +74,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
 
     companion object : MvRxViewModelFactory<TchapContactListViewModel, TchapContactListViewState> {
 
-        override fun initialState(viewModelContext: ViewModelContext): TchapContactListViewState? {
+        override fun initialState(viewModelContext: ViewModelContext): TchapContactListViewState {
             return TchapContactListViewState(
                     excludedUserIds = null,
                     singleSelection = true,
@@ -83,7 +83,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
             )
         }
 
-        override fun create(viewModelContext: ViewModelContext, state: TchapContactListViewState): TchapContactListViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: TchapContactListViewState): TchapContactListViewModel {
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory
                 is ActivityViewModelContext -> viewModelContext.activity as? Factory
@@ -96,7 +96,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         observeUsers()
         observeDMs()
 
-        selectSubscribe(TchapContactListViewState::searchTerm) { _ ->
+        selectSubscribe(TchapContactListViewState::searchTerm) {
             updateFilteredContacts()
         }
 
@@ -277,7 +277,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .switchMapSingle { search ->
                     val stream = if (search.isBlank()) {
-                        Single.just(emptyList<User>())
+                        Single.just(emptyList())
                     } else {
                         session.rx().searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
                     }
