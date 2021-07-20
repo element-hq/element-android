@@ -39,12 +39,6 @@ fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = 
             .build()
 }
 
-enum class RoomCategoryFilter {
-    ONLY_DM,
-    ONLY_ROOMS,
-    ALL
-}
-
 /**
  * This class can be used to filter room summaries to use with:
  * [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService]
@@ -59,11 +53,10 @@ data class RoomSummaryQueryParams(
         val excludeType: List<String?>?,
         val includeType: List<String?>?,
         val activeSpaceFilter: ActiveSpaceFilter?,
-        var activeGroupId: String? = null
+        val activeGroupId: String? = null
 ) {
 
     class Builder {
-
         var roomId: QueryStringValue = QueryStringValue.IsNotEmpty
         var displayName: QueryStringValue = QueryStringValue.IsNotEmpty
         var canonicalAlias: QueryStringValue = QueryStringValue.NoCondition
