@@ -26,7 +26,7 @@ import androidx.autofill.HintConstants
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.showPassword
+import im.vector.app.core.extensions.hidePassword
 import im.vector.app.databinding.FragmentLoginSignupPassword2Binding
 import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
@@ -37,8 +37,6 @@ import javax.inject.Inject
  */
 class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment2<FragmentLoginSignupPassword2Binding>() {
 
-    private var passwordShown = false
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSignupPassword2Binding {
         return FragmentLoginSignupPassword2Binding.inflate(inflater, container, false)
     }
@@ -48,7 +46,6 @@ class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment
 
         setupSubmitButton()
         setupAutoFill()
-        setupPasswordReveal()
 
         views.passwordField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -97,23 +94,6 @@ class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment
                 .disposeOnDestroyView()
     }
 
-    private fun setupPasswordReveal() {
-        passwordShown = false
-
-        views.passwordReveal.setOnClickListener {
-            passwordShown = !passwordShown
-
-            renderPasswordField()
-        }
-
-        renderPasswordField()
-    }
-
-    private fun renderPasswordField() {
-        views.passwordReveal.render(passwordShown)
-        views.passwordField.showPassword(passwordShown)
-    }
-
     override fun resetViewModel() {
         // loginViewModel.handle(LoginAction2.ResetSignup)
     }
@@ -127,8 +107,7 @@ class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment
 
         if (state.isLoading) {
             // Ensure password is hidden
-            passwordShown = false
-            renderPasswordField()
+            views.passwordField.hidePassword()
         }
     }
 }

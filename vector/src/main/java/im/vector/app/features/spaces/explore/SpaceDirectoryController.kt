@@ -35,6 +35,7 @@ import im.vector.app.features.home.room.list.spaceChildInfoItem
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError.Companion.M_UNRECOGNIZED
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -127,6 +128,7 @@ class SpaceDirectoryController @Inject constructor(
                     val isSpace = info.roomType == RoomType.SPACE
                     val isJoined = data?.joinedRoomsIds?.contains(info.childRoomId) == true
                     val isLoading = data?.changeMembershipStates?.get(info.childRoomId)?.isInProgress() ?: false
+                    val error = (data?.changeMembershipStates?.get(info.childRoomId) as? ChangeMembershipState.FailedJoining)?.throwable
                     // if it's known use that matrixItem because it would have a better computed name
                     val matrixItem = data?.knownRoomSummaries?.find { it.roomId == info.childRoomId }?.toMatrixItem()
                             ?: info.toMatrixItem()
@@ -135,11 +137,19 @@ class SpaceDirectoryController @Inject constructor(
                         matrixItem(matrixItem)
                         avatarRenderer(host.avatarRenderer)
                         topic(info.topic)
+                        errorLabel(
+                                error?.let {
+                                    host.stringProvider.getString(R.string.error_failed_to_join_room, host.errorFormatter.toHumanReadable(it))
+                                }
+                        )
                         memberCount(info.activeMemberCount ?: 0)
                         loading(isLoading)
                         buttonLabel(
-                                if (isJoined) host.stringProvider.getString(R.string.action_open)
-                                else host.stringProvider.getString(R.string.join)
+                                when {
+                                    error != null -> host.stringProvider.getString(R.string.global_retry)
+                                    isJoined      -> host.stringProvider.getString(R.string.action_open)
+                                    else          -> host.stringProvider.getString(R.string.join)
+                                }
                         )
                         apply {
                             if (isSpace) {

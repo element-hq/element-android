@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:ignore="HardcodedText">
 
     <TextView
@@ -64,5 +66,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Default (TextAppearance.Vector.Body)\nline 2" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/debugTextInputLayout"
+        style="@style/Widget.Vector.TextInputLayout.Password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Password"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/debugTextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/debugShowPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show password" />
+
+    <Button
+        android:id="@+id/debugHidePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hide password" />
 
 </LinearLayout>

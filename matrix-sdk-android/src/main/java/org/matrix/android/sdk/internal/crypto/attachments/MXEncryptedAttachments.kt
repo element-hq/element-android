@@ -39,7 +39,9 @@ internal object MXEncryptedAttachments {
     private const val SECRET_KEY_SPEC_ALGORITHM = "AES"
     private const val MESSAGE_DIGEST_ALGORITHM = "SHA-256"
 
-    fun encrypt(clearStream: InputStream, mimetype: String?, outputFile: File, progress: ((current: Int, total: Int) -> Unit)): EncryptedFileInfo {
+    fun encrypt(clearStream: InputStream,
+                outputFile: File,
+                progress: ((current: Int, total: Int) -> Unit)): EncryptedFileInfo {
         val t0 = System.currentTimeMillis()
         val secureRandom = SecureRandom()
         val initVectorBytes = ByteArray(16) { 0.toByte() }
@@ -86,7 +88,6 @@ internal object MXEncryptedAttachments {
 
         return EncryptedFileInfo(
                 url = null,
-                mimetype = mimetype,
                 key = EncryptedFileKey(
                         alg = "A256CTR",
                         ext = true,
@@ -155,10 +156,9 @@ internal object MXEncryptedAttachments {
      * Encrypt an attachment stream.
      * DO NOT USE for big files, it will load all in memory
      * @param attachmentStream the attachment stream. Will be closed after this method call.
-     * @param mimetype the mime type
      * @return the encryption file info
      */
-    fun encryptAttachment(attachmentStream: InputStream, mimetype: String?): EncryptionResult {
+    fun encryptAttachment(attachmentStream: InputStream): EncryptionResult {
         val t0 = System.currentTimeMillis()
         val secureRandom = SecureRandom()
 
@@ -207,7 +207,6 @@ internal object MXEncryptedAttachments {
         return EncryptionResult(
                 encryptedFileInfo = EncryptedFileInfo(
                         url = null,
-                        mimetype = mimetype,
                         key = EncryptedFileKey(
                                 alg = "A256CTR",
                                 ext = true,
@@ -232,7 +231,9 @@ internal object MXEncryptedAttachments {
      * @param outputStream     the outputStream where the decrypted attachment will be write.
      * @return true in case of success, false in case of error
      */
-    fun decryptAttachment(attachmentStream: InputStream?, elementToDecrypt: ElementToDecrypt?, outputStream: OutputStream): Boolean {
+    fun decryptAttachment(attachmentStream: InputStream?,
+                          elementToDecrypt: ElementToDecrypt?,
+                          outputStream: OutputStream): Boolean {
         // sanity checks
         if (null == attachmentStream || elementToDecrypt == null) {
             Timber.e("## decryptAttachment() : null stream")

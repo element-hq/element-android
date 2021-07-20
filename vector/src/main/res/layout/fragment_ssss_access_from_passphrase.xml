@@ -16,7 +16,7 @@
             android:id="@+id/ssss_shield"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_security_phrase_24dp"
             app:layout_constraintBottom_toBottomOf="@+id/ssss_restore_with_passphrase"
@@ -53,12 +53,14 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ssss_passphrase_enter_til"
+            style="@style/Widget.Vector.TextInputLayout.Password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/layout_horizontal_margin"
             app:errorEnabled="true"
-            app:layout_constraintEnd_toStartOf="@id/ssss_view_show_password"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ssss_restore_with_passphrase_warning_text">
 
@@ -73,18 +75,6 @@
                 tools:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
-        <im.vector.app.core.ui.views.RevealPasswordImageView
-            android:id="@+id/ssss_view_show_password"
-            android:layout_width="@dimen/layout_touch_size"
-            android:layout_height="@dimen/layout_touch_size"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            android:background="?attr/selectableItemBackground"
-            android:scaleType="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ssss_passphrase_enter_til"
-            app:tint="?colorSecondary" />
 
         <Button
             android:id="@+id/ssss_passphrase_submit"

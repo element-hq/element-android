@@ -29,10 +29,9 @@ internal class DefaultRawService @Inject constructor(
         return getUrlTask.execute(GetUrlTask.Params(url, cacheStrategy))
     }
 
-    override suspend fun getWellknown(userId: String): String {
-        val homeServerDomain = userId.substringAfter(":")
+    override suspend fun getWellknown(domain: String): String {
         return getUrl(
-                "https://$homeServerDomain/.well-known/matrix/client",
+                "https://$domain/.well-known/matrix/client",
                 CacheStrategy.TtlCache(TimeUnit.HOURS.toMillis(8), false)
         )
     }

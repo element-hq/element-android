@@ -21,8 +21,8 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.data.Availability
 import org.matrix.android.sdk.internal.auth.data.LoginFlowResponse
 import org.matrix.android.sdk.internal.auth.data.PasswordLoginParams
-import org.matrix.android.sdk.internal.auth.data.RiotConfig
 import org.matrix.android.sdk.internal.auth.data.TokenLoginParams
+import org.matrix.android.sdk.internal.auth.data.WebClientConfig
 import org.matrix.android.sdk.internal.auth.login.ResetPasswordMailConfirmed
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationParams
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationResponse
@@ -44,16 +44,16 @@ import retrofit2.http.Url
  */
 internal interface AuthAPI {
     /**
-     * Get a Riot config file, using the name including the domain
+     * Get a Web client config file, using the name including the domain
      */
     @GET("config.{domain}.json")
-    suspend fun getRiotConfigDomain(@Path("domain") domain: String): RiotConfig
+    suspend fun getWebClientConfigDomain(@Path("domain") domain: String): WebClientConfig
 
     /**
-     * Get a Riot config file
+     * Get a Web client default config file
      */
     @GET("config.json")
-    suspend fun getRiotConfig(): RiotConfig
+    suspend fun getWebClientConfig(): WebClientConfig
 
     /**
      * Get the version information of the homeserver

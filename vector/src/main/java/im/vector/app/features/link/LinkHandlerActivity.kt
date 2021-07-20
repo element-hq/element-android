@@ -122,7 +122,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     }
 
     /**
-     * Start the login screen with identity server and home server pre-filled
+     * Start the login screen with identity server and homeserver pre-filled
      */
     private fun startLoginActivity(uri: Uri) {
         navigator.openLogin(

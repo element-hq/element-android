@@ -57,6 +57,7 @@ class RoomAliasController @Inject constructor(
         fun setNewLocalAliasLocalPart(aliasLocalPart: String)
         fun addLocalAlias()
         fun openAliasDetail(alias: String)
+        fun retry()
     }
 
     var callback: Callback? = null
@@ -99,8 +100,10 @@ class RoomAliasController @Inject constructor(
             }
             is Fail       -> {
                 errorWithRetryItem {
+                    id("rd_error")
                     text(host.stringProvider.getString(R.string.room_alias_publish_to_directory_error,
                             host.errorFormatter.toHumanReadable(data.roomDirectoryVisibility.error)))
+                    listener { host.callback?.retry() }
                 }
             }
         }
@@ -119,7 +122,6 @@ class RoomAliasController @Inject constructor(
         data.canonicalAlias
                 ?.takeIf { it.isNotEmpty() }
                 ?.let { canonicalAlias ->
-
                     profileActionItem {
                         id("canonical")
                         title(data.canonicalAlias)
@@ -224,6 +226,7 @@ class RoomAliasController @Inject constructor(
                 errorWithRetryItem {
                     id("alt_error")
                     text(host.errorFormatter.toHumanReadable(localAliases.error))
+                    listener { host.callback?.retry() }
                 }
             }
         }

@@ -188,20 +188,21 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
 
     private fun handleJoinOrOpen(spaceChildInfo: SpaceChildInfo) = withState { state ->
         val isSpace = spaceChildInfo.roomType == RoomType.SPACE
-        if (state.joinedRoomsIds.contains(spaceChildInfo.childRoomId)) {
+        val childId = spaceChildInfo.childRoomId
+        if (state.joinedRoomsIds.contains(childId)) {
             if (isSpace) {
                 handle(SpaceDirectoryViewAction.ExploreSubSpace(spaceChildInfo))
             } else {
-                _viewEvents.post(SpaceDirectoryViewEvents.NavigateToRoom(spaceChildInfo.childRoomId))
+                _viewEvents.post(SpaceDirectoryViewEvents.NavigateToRoom(childId))
             }
         } else {
             // join
             viewModelScope.launch {
                 try {
                     if (isSpace) {
-                        session.spaceService().joinSpace(spaceChildInfo.childRoomId, null, spaceChildInfo.viaServers)
+                        session.spaceService().joinSpace(childId, null, spaceChildInfo.viaServers)
                     } else {
-                        session.joinRoom(spaceChildInfo.childRoomId, null, spaceChildInfo.viaServers)
+                        session.joinRoom(childId, null, spaceChildInfo.viaServers)
                     }
                 } catch (failure: Throwable) {
                     Timber.e(failure, "## Space: Failed to join room or subspace")

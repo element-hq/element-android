@@ -40,6 +40,7 @@ import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.DialogInviteByIdBinding
 import im.vector.app.databinding.FragmentTchapContactListBinding
@@ -181,9 +182,11 @@ class TchapContactListFragment @Inject constructor(
         viewModel.handle(TchapContactListAction.OpenSearch)
     }
 
-    private val loadContactsActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val loadContactsActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             viewModel.handle(TchapContactListAction.LoadContacts)
+        } else if (deniedPermanently) {
+            activity?.onPermissionDeniedDialog(R.string.permissions_denied_add_contact)
         }
     }
 }

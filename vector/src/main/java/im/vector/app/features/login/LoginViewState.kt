@@ -38,7 +38,12 @@ data class LoginViewState(
         @PersistState
         val resetPasswordEmail: String? = null,
         @PersistState
+        val homeServerUrlFromUser: String? = null,
+
+        // Can be modified after a Wellknown request
+        @PersistState
         val homeServerUrl: String? = null,
+
         // For SSO session recovery
         @PersistState
         val deviceId: String? = null,

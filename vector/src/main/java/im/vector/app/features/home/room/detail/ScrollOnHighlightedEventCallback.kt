@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.app.core.platform.DefaultListUpdateCallback
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -42,19 +41,10 @@ class ScrollOnHighlightedEventCallback(private val recyclerView: RecyclerView,
 
     private fun scrollIfNeeded() {
         val eventId = scheduledEventId.get() ?: return
-        val positionToScroll = timelineEventController.searchPositionOfEvent(eventId)
-        if (positionToScroll != null) {
-            val firstVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
-            val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
-
-            // Do not scroll it item is already visible
-            if (positionToScroll !in firstVisibleItem..lastVisibleItem) {
-                Timber.v("Scroll to $positionToScroll")
-                recyclerView.stopScroll()
-                layoutManager.scrollToPosition(positionToScroll)
-            }
-            scheduledEventId.set(null)
-        }
+        val positionToScroll = timelineEventController.searchPositionOfEvent(eventId) ?: return
+        recyclerView.stopScroll()
+        layoutManager.scrollToPosition(positionToScroll)
+        scheduledEventId.set(null)
     }
 
     fun scheduleScrollTo(eventId: String?) {

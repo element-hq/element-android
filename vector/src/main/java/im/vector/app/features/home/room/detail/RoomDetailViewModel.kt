@@ -48,8 +48,8 @@ import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrate
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
+import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
-import im.vector.app.features.home.room.detail.timeline.helper.TimelineSettingsFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
@@ -118,7 +118,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val chatEffectManager: ChatEffectManager,
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
-        timelineSettingsFactory: TimelineSettingsFactory
+        timelineFactory: TimelineFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
 
@@ -126,9 +126,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     private val eventId = initialState.eventId
     private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsInvisible>()
     private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
-    private val timelineSettings = timelineSettingsFactory.create()
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
-    val timeline = room.createTimeline(eventId, timelineSettings)
+    val timeline = timelineFactory.createTimeline(viewModelScope, room, eventId)
 
     // Same lifecycle than the ViewModel (survive to screen rotation)
     val previewUrlRetriever = PreviewUrlRetriever(session, viewModelScope)
@@ -282,7 +281,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.EnterReplyMode                   -> handleReplyAction(action)
             is RoomDetailAction.DownloadOrOpen                   -> handleOpenOrDownloadFile(action)
             is RoomDetailAction.NavigateToEvent                  -> handleNavigateToEvent(action)
-            is RoomDetailAction.HandleTombstoneEvent             -> handleTombstoneEvent(action)
+            is RoomDetailAction.JoinAndOpenReplacementRoom       -> handleJoinAndOpenReplacementRoom()
             is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
             is RoomDetailAction.RemoveFailedEcho                 -> handleRemove(action)
             is RoomDetailAction.MarkAllAsRead                    -> handleMarkAllAsRead()
@@ -321,6 +320,12 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
             RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
             RoomDetailAction.ResendAll                           -> handleResendAll()
+            is RoomDetailAction.RoomUpgradeSuccess               -> {
+                setState {
+                    copy(joinUpgradedRoomAsync = Success(action.replacementRoomId))
+                }
+                _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
+            }
         }.exhaustive
     }
 
@@ -574,24 +579,33 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleTombstoneEvent(action: RoomDetailAction.HandleTombstoneEvent) {
-        val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>() ?: return
+    private fun handleJoinAndOpenReplacementRoom() = withState { state ->
+        val tombstoneContent = state.tombstoneEvent?.getClearContent()?.toModel<RoomTombstoneContent>() ?: return@withState
 
         val roomId = tombstoneContent.replacementRoomId ?: ""
         val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
         if (isRoomJoined) {
-            setState { copy(tombstoneEventHandling = Success(roomId)) }
+            setState { copy(joinUpgradedRoomAsync = Success(roomId)) }
+            _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId, closeCurrentRoom = true))
         } else {
-            val viaServers = MatrixPatterns.extractServerNameFromId(action.event.senderId)
+            val viaServers = MatrixPatterns.extractServerNameFromId(state.tombstoneEvent.senderId)
                     ?.let { listOf(it) }
                     .orEmpty()
+            // need to provide feedback as joining could take some time
+            _viewEvents.post(RoomDetailViewEvents.RoomReplacementStarted)
+            setState {
+                copy(joinUpgradedRoomAsync = Loading())
+            }
             viewModelScope.launch {
                 val result = runCatchingToAsync {
                     session.joinRoom(roomId, viaServers = viaServers)
                     roomId
                 }
                 setState {
-                    copy(tombstoneEventHandling = result)
+                    copy(joinUpgradedRoomAsync = result)
+                }
+                if (result is Success) {
+                    _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId, closeCurrentRoom = true))
                 }
             }
         }
@@ -814,6 +828,16 @@ class RoomDetailViewModel @AssistedInject constructor(
                                     _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
                                 }
                             }
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.UpgradeRoom              -> {
+                            _viewEvents.post(
+                                    RoomDetailViewEvents.ShowRoomUpgradeDialog(
+                                            slashCommandResult.newVersion,
+                                            room.roomSummary()?.isPublic ?: false
+                                    )
+                            )
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
@@ -1244,6 +1268,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleMarkAllAsRead() {
+        setState { copy(unreadState = UnreadState.HasNoUnread) }
         viewModelScope.launch {
             tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.BOTH) }
         }
@@ -1380,7 +1405,6 @@ class RoomDetailViewModel @AssistedInject constructor(
                     }
                 }
                 .subscribe {
-                    Timber.v("Unread state: $it")
                     setState { copy(unreadState = it) }
                 }
                 .disposeOnClear()

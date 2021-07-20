@@ -312,53 +312,31 @@ object CommandParser {
                         )
                     }
                 }
-                Command.ADD_TO_SPACE.command        -> {
+                Command.ADD_TO_SPACE.command           -> {
                     val rawCommand = textMessage.substring(Command.ADD_TO_SPACE.command.length).trim()
                     ParsedCommand.AddToSpace(
                             rawCommand
                     )
                 }
-                Command.JOIN_SPACE.command        -> {
+                Command.JOIN_SPACE.command             -> {
                     val spaceIdOrAlias = textMessage.substring(Command.JOIN_SPACE.command.length).trim()
                     ParsedCommand.JoinSpace(
                             spaceIdOrAlias
                     )
                 }
-                Command.LEAVE_ROOM.command        -> {
+                Command.LEAVE_ROOM.command             -> {
                     val spaceIdOrAlias = textMessage.substring(Command.LEAVE_ROOM.command.length).trim()
                     ParsedCommand.LeaveRoom(
                             spaceIdOrAlias
                     )
                 }
-                Command.CREATE_SPACE.command           -> {
-                    val rawCommand = textMessage.substring(Command.CREATE_SPACE.command.length).trim()
-                    val split = rawCommand.split(" ").map { it.trim() }
-                    if (split.isEmpty()) {
-                        ParsedCommand.ErrorSyntax(Command.CREATE_SPACE)
+                Command.UPGRADE_ROOM.command           -> {
+                    val newVersion = textMessage.substring(Command.UPGRADE_ROOM.command.length).trim()
+                    if (newVersion.isEmpty()) {
+                        ParsedCommand.ErrorSyntax(Command.UPGRADE_ROOM)
                     } else {
-                        ParsedCommand.CreateSpace(
-                                split[0],
-                                split.subList(1, split.size)
-                        )
+                        ParsedCommand.UpgradeRoom(newVersion)
                     }
-                }
-                Command.ADD_TO_SPACE.command        -> {
-                    val rawCommand = textMessage.substring(Command.ADD_TO_SPACE.command.length).trim()
-                    ParsedCommand.AddToSpace(
-                            rawCommand
-                    )
-                }
-                Command.JOIN_SPACE.command        -> {
-                    val spaceIdOrAlias = textMessage.substring(Command.JOIN_SPACE.command.length).trim()
-                    ParsedCommand.JoinSpace(
-                            spaceIdOrAlias
-                    )
-                }
-                Command.LEAVE_ROOM.command        -> {
-                    val spaceIdOrAlias = textMessage.substring(Command.LEAVE_ROOM.command.length).trim()
-                    ParsedCommand.LeaveRoom(
-                            spaceIdOrAlias
-                    )
                 }
                 else                                   -> {
                     // Unknown command
