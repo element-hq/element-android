@@ -37,6 +37,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.popup.IncomingCallAlert
 import im.vector.app.features.popup.PopupAlertManager
+import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
 
@@ -47,7 +48,7 @@ class CallService : VectorService() {
 
     private val connections = mutableMapOf<String, CallConnection>()
     private val knownCalls = mutableSetOf<CallInformation>()
-    private val ongoingCallIds = mutableSetOf<String>()
+    private val connectedCallIds = mutableSetOf<String>()
 
     private lateinit var notificationManager: NotificationManagerCompat
     private lateinit var notificationUtils: NotificationUtils
@@ -204,15 +205,12 @@ class CallService : VectorService() {
             mediaSession?.isActive = false
             myStopSelf()
         }
-        val wasOngoing = ongoingCallIds.remove(callId)
-        if (wasOngoing || isRejected) {
-            val notification =  notificationUtils.buildCallEndedNotification()
+        val wasConnected = connectedCallIds.remove(callId)
+        if (wasConnected || terminatedCall.isOutgoing || isRejected) {
+            val notification = notificationUtils.buildCallEndedNotification(terminatedCall.isVideoCall)
             notificationManager.notify(callId.hashCode(), notification)
         } else {
-            val notification =  notificationUtils.buildCallMissedNotification(
-                    roomId = terminatedCall.nativeRoomId,
-                    title = terminatedCall.matrixItem?.getBestName() ?: terminatedCall.opponentUserId
-            )
+            val notification = notificationUtils.buildCallMissedNotification(terminatedCall)
             notificationManager.cancel(callId.hashCode())
             notificationManager.notify(MISSED_CALL_TAG, terminatedCall.nativeRoomId.hashCode(), notification)
         }
@@ -252,7 +250,7 @@ class CallService : VectorService() {
     private fun displayCallInProgressNotification(intent: Intent) {
         Timber.v("## VOIP displayCallInProgressNotification")
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
-        ongoingCallIds.add(callId)
+        connectedCallIds.add(callId)
         val call = callManager.getCallById(callId) ?: return Unit.also {
             handleUnexpectedState(callId)
         }
@@ -277,7 +275,7 @@ class CallService : VectorService() {
         if (callId != null) {
             notificationManager.cancel(callId.hashCode())
         }
-        val notification = notificationUtils.buildCallEndedNotification()
+        val notification = notificationUtils.buildCallEndedNotification(false)
         startForeground(DEFAULT_NOTIFICATION_ID, notification)
         if (knownCalls.isEmpty()) {
             mediaSession?.isActive = false
@@ -296,15 +294,19 @@ class CallService : VectorService() {
                 opponentUserId = this.mxCall.opponentUserId,
                 matrixItem = vectorComponent().activeSessionHolder().getSafeActiveSession()?.let {
                     this.getOpponentAsMatrixItem(it)
-                }
+                },
+                isVideoCall = this.mxCall.isVideoCall,
+                isOutgoing = this.mxCall.isOutgoing
         )
     }
 
-    private data class CallInformation(
+    data class CallInformation(
             val callId: String,
             val nativeRoomId: String,
             val opponentUserId: String,
-            val matrixItem: MatrixItem?
+            val matrixItem: MatrixItem?,
+            val isVideoCall: Boolean,
+            val isOutgoing: Boolean,
     )
 
     companion object {
