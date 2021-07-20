@@ -510,7 +510,7 @@
     <string name="preview">Anteprima</string>
     <string name="reject">Rifiuta</string>
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Vai al primo messaggio non letto.</string>
+    <string name="room_jump_to_first_unread">Vai ai non letti</string>
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Sei stato invitato da %s a entrare in questa stanza</string>
     <string name="room_preview_unlinked_email_warning">Questo invito è stato spedito a %s, che non è associato a questo account.
@@ -2865,4 +2865,8 @@
 \nMiglioreremo questa cosa come parte della beta, ma volevamo almeno fartelo sapere.</string>
     <string name="teammate_spaces_arent_quite_ready">Gli spazi dei compagni non sono ancora pronti del tutto, ma puoi comunque provarli</string>
     <string name="continue_anyway">Continua comunque</string>
+    <string name="error_failed_to_join_room">Spiacenti, si è verificato un errore tentando di entrare: %s</string>
+    <string name="create_space_alias_hint">Indirizzo dello spazio</string>
+    <string name="space_settings_alias_subtitle">Vedi e gestisci gli indirizzi di questo spazio.</string>
+    <string name="space_settings_alias_title">Indirizzi dello spazio</string>
 </resources>
