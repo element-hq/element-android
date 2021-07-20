@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.pushrules.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.pushrules.getActions
 import org.matrix.android.sdk.api.pushrules.toJson
@@ -104,7 +105,7 @@ data class PushRule(
      * Get the highlight status. As spec mentions assume false if no tweak present.
      */
     fun getHighlight(): Boolean {
-        return (getActions().firstOrNull { it is Action.Highlight } as? Action.Highlight)?.highlight ?: false
+        return (getActions().firstOrNull { it is Action.Highlight } as? Action.Highlight)?.highlight.orFalse()
     }
 
     /**

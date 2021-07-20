@@ -55,7 +55,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
                         val newIndex = newValue as NotificationIndex
                         val standardAction = getStandardAction(ruleAndKind.pushRule.ruleId, newIndex)
                         if (standardAction != null) {
-                            val enabled = standardAction != StandardAction.Disabled
+                            val enabled = standardAction != StandardActions.Disabled
                             val newActions = standardAction.actions
                             displayLoadingView()
 
@@ -93,7 +93,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
             val standardAction = getStandardAction(rule.ruleId, it) ?: return@firstOrNull false
             val indexActions = standardAction.actions ?: listOf()
             // Check if the input rule matches a rule generated from the static rule definitions
-            val targetRule = rule.copy(enabled = standardAction != StandardAction.Disabled, actions = indexActions.toJson())
+            val targetRule = rule.copy(enabled = standardAction != StandardActions.Disabled, actions = indexActions.toJson())
             ruleMatches(rule, targetRule)
         }
     }

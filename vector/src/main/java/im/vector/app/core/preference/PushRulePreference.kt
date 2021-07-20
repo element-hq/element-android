@@ -28,7 +28,7 @@ class PushRulePreference : VectorPreference {
     enum class NotificationIndex(val index: Int) {
         OFF(0),
         SILENT(1),
-        NOISEY(2);
+        NOISY(2);
 
         companion object {
             fun fromInt(index: Int) = values().first { it.index == index }
@@ -67,8 +67,8 @@ class PushRulePreference : VectorPreference {
     private fun refreshSummary() {
         summary = context.getString(when (index) {
             NotificationIndex.OFF           -> R.string.notification_off
-            NotificationIndex.SILENT        -> R.string.notification_silent
-            NotificationIndex.NOISEY, null  -> R.string.notification_noisy
+            NotificationIndex.SILENT      -> R.string.notification_silent
+            NotificationIndex.NOISY, null -> R.string.notification_noisy
         })
     }
 
@@ -86,10 +86,10 @@ class PushRulePreference : VectorPreference {
             NotificationIndex.OFF       -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleOff)
             }
-            NotificationIndex.SILENT    -> {
+            NotificationIndex.SILENT -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleSilent)
             }
-            NotificationIndex.NOISEY    -> {
+            NotificationIndex.NOISY  -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleNoisy)
             }
         }
@@ -103,7 +103,7 @@ class PushRulePreference : VectorPreference {
                     onPreferenceChangeListener?.onPreferenceChange(this, NotificationIndex.SILENT)
                 }
                 R.id.bingPreferenceRadioBingRuleNoisy  -> {
-                    onPreferenceChangeListener?.onPreferenceChange(this, NotificationIndex.NOISEY)
+                    onPreferenceChangeListener?.onPreferenceChange(this, NotificationIndex.NOISY)
                 }
             }
         }

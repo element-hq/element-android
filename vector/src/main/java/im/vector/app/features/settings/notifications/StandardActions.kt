@@ -18,14 +18,14 @@ package im.vector.app.features.settings.notifications
 
 import org.matrix.android.sdk.api.pushrules.Action
 
-sealed class StandardAction(
+sealed class StandardActions(
         val actions: List<Action>?
 ) {
-    object Notify : StandardAction(actions = listOf(Action.Notify))
-    object NotifyDefaultSound : StandardAction(actions = listOf(Action.Notify, Action.Sound()))
-    object NotifyRingSound : StandardAction(actions = listOf(Action.Notify, Action.Sound(sound = Action.ACTION_OBJECT_VALUE_VALUE_RING)))
-    object Highlight : StandardAction(actions = listOf(Action.Notify, Action.Highlight(highlight = true)))
-    object HighlightDefaultSound : StandardAction(actions = listOf(Action.Notify, Action.Highlight(highlight = true), Action.Sound()))
-    object DontNotify : StandardAction(actions = listOf(Action.DoNotNotify))
-    object Disabled : StandardAction(actions = null)
+    object Notify : StandardActions(actions = listOf(Action.Notify))
+    object NotifyDefaultSound : StandardActions(actions = listOf(Action.Notify, Action.Sound()))
+    object NotifyRingSound : StandardActions(actions = listOf(Action.Notify, Action.Sound(sound = Action.ACTION_OBJECT_VALUE_VALUE_RING)))
+    object Highlight : StandardActions(actions = listOf(Action.Notify, Action.Highlight(highlight = true)))
+    object HighlightDefaultSound : StandardActions(actions = listOf(Action.Notify, Action.Highlight(highlight = true), Action.Sound()))
+    object DontNotify : StandardActions(actions = listOf(Action.DoNotNotify))
+    object Disabled : StandardActions(actions = null)
 }
