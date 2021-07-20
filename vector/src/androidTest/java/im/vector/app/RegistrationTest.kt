@@ -57,7 +57,7 @@ class RegistrationTest {
         onView(withId(R.id.loginSplashSubmit))
                 .perform(click())
 
-        // Check that home server options are shown
+        // Check that homeserver options are shown
         onView(withId(R.id.loginServerTitle))
                 .check(matches(isDisplayed()))
                 .check(matches(withText(R.string.login_server_title)))

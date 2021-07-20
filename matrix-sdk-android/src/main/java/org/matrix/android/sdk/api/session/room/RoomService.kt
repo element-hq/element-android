@@ -126,6 +126,12 @@ interface RoomService {
     suspend fun deleteRoomAlias(roomAlias: String)
 
     /**
+     * Return the current local changes membership for the given room.
+     * see [getChangeMembershipsLive] for more details.
+     */
+    fun getChangeMemberships(roomIdOrAlias: String): ChangeMembershipState
+
+    /**
      * Return a live data of all local changes membership that happened since the session has been opened.
      * It allows you to track this in your client to known what is currently being processed by the SDK.
      * It won't know anything about change being done in other client.

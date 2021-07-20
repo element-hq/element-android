@@ -28,7 +28,6 @@ import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -84,7 +83,6 @@ class BootstrapConfirmPassphraseFragment @Inject constructor()
 //            }
         }
 
-        views.ssssViewShowPassword.debouncedClicks { sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility) }
         views.bootstrapSubmit.debouncedClicks { submit() }
     }
 
@@ -102,14 +100,6 @@ class BootstrapConfirmPassphraseFragment @Inject constructor()
                 view?.hideKeyboard()
                 sharedViewModel.handle(BootstrapActions.DoInitialize(passphrase))
             }
-        }
-    }
-
-    override fun invalidate() = withState(sharedViewModel) { state ->
-        if (state.step is BootstrapStep.ConfirmPassphrase) {
-            val isPasswordVisible = state.step.isPasswordVisible
-            views.ssssPassphraseEnterEdittext.showPassword(isPasswordVisible, updateCursor = false)
-            views.ssssViewShowPassword.render(isPasswordVisible)
         }
     }
 }

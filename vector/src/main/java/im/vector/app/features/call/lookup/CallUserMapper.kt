@@ -27,9 +27,19 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 class CallUserMapper(private val session: Session, private val protocolsChecker: CallProtocolsChecker) {
 
     fun nativeRoomForVirtualRoom(roomId: String): String? {
+        if (!protocolsChecker.supportVirtualRooms) return null
         val virtualRoom = session.getRoom(roomId) ?: return null
         val virtualRoomEvent = virtualRoom.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM)
         return virtualRoomEvent?.content?.toModel<RoomVirtualContent>()?.nativeRoomId
+    }
+
+    fun virtualRoomForNativeRoom(roomId: String): String? {
+        if (!protocolsChecker.supportVirtualRooms) return null
+        val virtualRoomEvents = session.accountDataService().getRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM))
+        return virtualRoomEvents.firstOrNull {
+            val virtualRoomContent = it.content.toModel<RoomVirtualContent>()
+            virtualRoomContent?.nativeRoomId == roomId
+        }?.roomId
     }
 
     suspend fun getOrCreateVirtualRoomForRoom(roomId: String, opponentUserId: String): String? {
@@ -57,10 +67,6 @@ class CallUserMapper(private val session: Session, private val protocolsChecker:
                 // will make sure we know where how to map calls and also allow us know not to display
                 // it in the future.
                 invitedRoom.markVirtual(nativeRoomId)
-                // also auto-join the virtual room if we have a matching native room
-                // (possibly we should only join if we've also joined the native room, then we'd also have
-                // to make sure we joined virtual rooms on joining a native one)
-                session.joinRoom(invitedRoomId)
             }
         }
     }

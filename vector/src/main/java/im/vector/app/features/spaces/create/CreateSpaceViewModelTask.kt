@@ -75,7 +75,7 @@ class CreateSpaceViewModelTask @Inject constructor(
         val childIds = mutableListOf<String>()
 
         val e2eByDefault = tryOrNull {
-            rawService.getElementWellknown(session.myUserId)
+            rawService.getElementWellknown(session.sessionParams)
                     ?.isE2EByDefault()
                     ?: true
         } ?: true

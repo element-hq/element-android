@@ -47,6 +47,7 @@ import im.vector.app.core.rx.RxConfig
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.disclaimer.doNotShowDisclaimerDialog
+import im.vector.app.features.invite.InvitesAcceptor
 import im.vector.app.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
@@ -95,6 +96,7 @@ class VectorApplication :
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var callManager: WebRtcCallManager
+    @Inject lateinit var invitesAcceptor: InvitesAcceptor
 
     lateinit var vectorComponent: VectorComponent
 
@@ -116,6 +118,7 @@ class VectorApplication :
         appContext = this
         vectorComponent = DaggerVectorComponent.factory().create(this)
         vectorComponent.inject(this)
+        invitesAcceptor.initialize()
         vectorUncaughtExceptionHandler.activate(this)
         rxConfig.setupRxPlugin()
 
@@ -159,7 +162,6 @@ class VectorApplication :
             // Do not display the name change popup
             doNotShowDisclaimerDialog(this)
         }
-
         if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)

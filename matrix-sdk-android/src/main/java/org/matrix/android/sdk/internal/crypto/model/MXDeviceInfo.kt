@@ -56,7 +56,7 @@ data class MXDeviceInfo(
         val signatures: Map<String, Map<String, String>>? = null,
 
         /*
-         * Additional data from the home server.
+         * Additional data from the homeserver.
          */
         @Json(name = "unsigned")
         val unsigned: JsonDict? = null,

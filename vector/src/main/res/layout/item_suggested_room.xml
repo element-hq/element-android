@@ -80,7 +80,7 @@
         android:layout_marginEnd="8dp"
         android:maxWidth="@dimen/button_max_width"
         android:text="@string/join"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/inlineErrorText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -102,6 +102,18 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="roomAvatarBottomSpace" />
 
+    <TextView
+        android:id="@+id/inlineErrorText"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:textColor="?colorError"
+        app:drawableStartCompat="@drawable/ic_warning_badge"
+        app:layout_constraintTop_toBottomOf="@+id/roomBottomBarrier"
+        tools:text="An error occured while joining" />
+
     <!-- We use vctr_list_separator_system here for a better rendering -->
     <View
         android:id="@+id/roomDividerView"
@@ -111,6 +123,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomBottomBarrier" />
+        app:layout_constraintTop_toBottomOf="@+id/inlineErrorText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

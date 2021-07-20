@@ -43,7 +43,6 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         @SessionFilesDirectory val directory: File,
         @SessionId val sessionId: String,
         @UserMd5 val userMd5: String,
-        val migration: RealmSessionStoreMigration,
         context: Context) {
 
     // Keep legacy preferences name for compatibility reason
@@ -72,7 +71,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
                 .allowWritesOnUiThread(true)
                 .modules(SessionRealmModule())
                 .schemaVersion(RealmSessionStoreMigration.SESSION_STORE_SCHEMA_VERSION)
-                .migration(migration)
+                .migration(RealmSessionStoreMigration)
                 .build()
 
         // Try creating a realm instance and if it succeeds we can clear the flag

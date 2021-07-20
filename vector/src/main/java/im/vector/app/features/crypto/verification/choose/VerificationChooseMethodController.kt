@@ -45,9 +45,22 @@ class VerificationChooseMethodController @Inject constructor(
         val host = this
 
         if (state.otherCanScanQrCode || state.otherCanShowQrCode) {
+            val scanCodeInstructions: String
+            val scanOtherCodeTitle: String
+            val compareEmojiSubtitle: String
+            if (state.isMe) {
+                scanCodeInstructions = stringProvider.getString(R.string.verification_scan_self_notice)
+                scanOtherCodeTitle = stringProvider.getString(R.string.verification_scan_with_this_device)
+                compareEmojiSubtitle = stringProvider.getString(R.string.verification_scan_self_emoji_subtitle)
+            } else {
+                scanCodeInstructions = stringProvider.getString(R.string.verification_scan_notice)
+                scanOtherCodeTitle = stringProvider.getString(R.string.verification_scan_their_code)
+                compareEmojiSubtitle = stringProvider.getString(R.string.verification_scan_emoji_subtitle)
+            }
+
             bottomSheetVerificationNoticeItem {
                 id("notice")
-                notice(host.stringProvider.getString(R.string.verification_scan_notice))
+                notice(scanCodeInstructions)
             }
 
             if (state.otherCanScanQrCode && !state.qrCodeText.isNullOrBlank()) {
@@ -64,7 +77,7 @@ class VerificationChooseMethodController @Inject constructor(
             if (state.otherCanShowQrCode) {
                 bottomSheetVerificationActionItem {
                     id("openCamera")
-                    title(host.stringProvider.getString(R.string.verification_scan_their_code))
+                    title(scanOtherCodeTitle)
                     titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     iconRes(R.drawable.ic_camera)
                     iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
@@ -80,7 +93,7 @@ class VerificationChooseMethodController @Inject constructor(
                 id("openEmoji")
                 title(host.stringProvider.getString(R.string.verification_scan_emoji_title))
                 titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                subTitle(host.stringProvider.getString(R.string.verification_scan_emoji_subtitle))
+                subTitle(compareEmojiSubtitle)
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                 listener { host.listener?.doVerifyBySas() }

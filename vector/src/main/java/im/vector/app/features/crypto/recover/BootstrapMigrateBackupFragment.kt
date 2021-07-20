@@ -34,7 +34,6 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
@@ -84,7 +83,6 @@ class BootstrapMigrateBackupFragment @Inject constructor(
 
         // sharedViewModel.observeViewEvents {}
         views.bootstrapMigrateContinueButton.debouncedClicks { submit() }
-        views.bootstrapMigrateShowPassword.debouncedClicks { sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility) }
         views.bootstrapMigrateForgotPassphrase.debouncedClicks { sharedViewModel.handle(BootstrapActions.HandleForgotBackupPassphrase) }
         views.bootstrapMigrateUseFile.debouncedClicks { startImportTextFromFileIntent(requireContext(), importFileStartForActivityResult) }
     }
@@ -116,7 +114,6 @@ class BootstrapMigrateBackupFragment @Inject constructor(
         val isEnteringKey = getBackupSecretForMigration.useKey()
 
         if (isEnteringKey) {
-            views.bootstrapMigrateShowPassword.isVisible = false
             views.bootstrapMigrateEditText.inputType = TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or TYPE_TEXT_FLAG_MULTI_LINE
 
             val recKey = getString(R.string.bootstrap_migration_backup_recovery_key)
@@ -128,14 +125,6 @@ class BootstrapMigrateBackupFragment @Inject constructor(
             views.bootstrapMigrateForgotPassphrase.isVisible = false
             views.bootstrapMigrateUseFile.isVisible = true
         } else {
-            views.bootstrapMigrateShowPassword.isVisible = true
-
-            if (state.step is BootstrapStep.GetBackupSecretPassForMigration) {
-                val isPasswordVisible = state.step.isPasswordVisible
-                views.bootstrapMigrateEditText.showPassword(isPasswordVisible, updateCursor = false)
-                views.bootstrapMigrateShowPassword.render(isPasswordVisible)
-            }
-
             views.bootstrapDescriptionText.text = getString(R.string.bootstrap_migration_enter_backup_password)
 
             views.bootstrapMigrateEditText.hint = getString(R.string.passphrase_enter_passphrase)

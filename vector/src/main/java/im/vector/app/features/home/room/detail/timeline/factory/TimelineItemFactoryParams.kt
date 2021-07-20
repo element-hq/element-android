@@ -23,6 +23,7 @@ data class TimelineItemFactoryParams(
         val event: TimelineEvent,
         val prevEvent: TimelineEvent? = null,
         val nextEvent: TimelineEvent? = null,
+        val nextDisplayableEvent: TimelineEvent? = null,
         val highlightedEventId: String? = null,
         val lastSentEventIdWithoutReadReceipts: String? = null,
         val callback: TimelineEventController.Callback? = null

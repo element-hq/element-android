@@ -317,7 +317,7 @@ internal class DefaultSession @Inject constructor(
 
     override fun getUiaSsoFallbackUrl(authenticationSessionId: String): String {
         val hsBas = sessionParams.homeServerConnectionConfig
-                .homeServerUri
+                .homeServerUriBase
                 .toString()
                 .trim { it == '/' }
         return buildString {

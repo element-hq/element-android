@@ -46,7 +46,7 @@ private const val MAX_RETRY_COUNT = 3
 
 /**
  * This class is responsible for sending events in order in each room. It uses the QueuedTask.queueIdentifier to execute tasks sequentially.
- * Each send is retried 3 times, if there is no network (e.g if cannot ping home server) it will wait and
+ * Each send is retried 3 times, if there is no network (e.g if cannot ping homeserver) it will wait and
  * periodically test reachability before resume (does not count as a retry)
  *
  * If the app is killed before all event were sent, on next wakeup the scheduled events will be re posted

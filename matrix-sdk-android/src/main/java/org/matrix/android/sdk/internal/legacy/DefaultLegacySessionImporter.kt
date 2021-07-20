@@ -42,7 +42,6 @@ import org.matrix.android.sdk.internal.legacy.riot.HomeServerConnectionConfig as
 internal class DefaultLegacySessionImporter @Inject constructor(
         private val context: Context,
         private val sessionParamsStore: SessionParamsStore,
-        private val realmCryptoStoreMigration: RealmCryptoStoreMigration,
         private val realmKeysUtils: RealmKeysUtils
 ) : LegacySessionImporter {
 
@@ -172,7 +171,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                 .name("crypto_store.realm")
                 .modules(RealmCryptoStoreModule())
                 .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
-                .migration(realmCryptoStoreMigration)
+                .migration(RealmCryptoStoreMigration)
                 .build()
 
         Timber.d("Migration: copy DB to encrypted DB")
