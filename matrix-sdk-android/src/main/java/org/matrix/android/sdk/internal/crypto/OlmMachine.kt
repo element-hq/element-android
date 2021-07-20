@@ -526,6 +526,11 @@ internal class OlmMachine(
         return plainDevices
     }
 
+    /** Mark the device for the given user with the given device ID as trusted
+     *
+     * This will mark the device locally as trusted, it won't upload any type of cross
+     * signing signature
+     * */
     @Throws(CryptoStoreErrorException::class)
     internal suspend fun markDeviceAsTrusted(userId: String, deviceId: String) =
         withContext(Dispatchers.IO) {
@@ -564,15 +569,26 @@ internal class OlmMachine(
         runBlocking { inner.discardRoomKey(roomId) }
     }
 
+    /** Get all the verification requests we have with the given user
+     *
+     * @param userId The ID of the user for which we would like to fetch the
+     * verification requests
+     *
+     * @return The list of VerificationRequests that we share with the given user
+     */
     fun getVerificationRequests(userId: String): List<VerificationRequest> {
         return this.inner.getVerificationRequests(userId)
     }
 
+    /** Get a verification request for the given user with the given flow ID */
     fun getVerificationRequest(userId: String, flowId: String): VerificationRequest? {
         return this.inner.getVerificationRequest(userId, flowId)
     }
 
-    /** Get an active verification */
+    /** Get an active verification for the given user and given flow ID
+     *
+     * This can return a SAS verification or a QR code verification
+     */
     fun getVerification(userId: String, flowId: String): Verification? {
         return this.inner.getVerification(userId, flowId)
     }
