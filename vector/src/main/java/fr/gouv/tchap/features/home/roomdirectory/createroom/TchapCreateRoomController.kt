@@ -62,13 +62,13 @@ class TchapCreateRoomController @Inject constructor(
         tchapRoomTypePrivateItem {
             id("privateRoomItem")
             selected(viewState.roomVisibilityType == RoomVisibilityType.Private)
-            clickListener { host.listener?.setIsPublic(isPublic = false, restricted = true) }
+            clickListener { host.listener?.setIsPublic(isPublic = false, isRestricted = true) }
         }
 
         tchapRoomTypeExternalItem {
             id("externalRoomItem")
             selected(viewState.roomVisibilityType == RoomVisibilityType.External)
-            clickListener { host.listener?.setIsPublic(isPublic = false, restricted = false) }
+            clickListener { host.listener?.setIsPublic(isPublic = false, isRestricted = false) }
         }
 
         tchapRoomTypeForumItem {
@@ -76,7 +76,7 @@ class TchapCreateRoomController @Inject constructor(
             userDomain(viewState.userDomain)
             selected(viewState.roomVisibilityType is RoomVisibilityType.Public)
             checked(viewState.disableFederation)
-            clickListener { host.listener?.setIsPublic(isPublic = true, restricted = true) }
+            clickListener { host.listener?.setIsPublic(isPublic = true, isRestricted = true) }
             checkListener { _, isChecked -> host.listener?.setDisableFederation(isChecked) }
         }
 
@@ -93,7 +93,7 @@ class TchapCreateRoomController @Inject constructor(
         fun onAvatarChange()
         fun onNameChange(newName: String)
         fun onTopicChange(newTopic: String)
-        fun setIsPublic(isPublic: Boolean, restricted: Boolean = true)
+        fun setIsPublic(isPublic: Boolean, isRestricted: Boolean)
         fun setAliasLocalPart(aliasLocalPart: String)
         fun setIsEncrypted(isEncrypted: Boolean)
         fun toggleShowAdvanced()
