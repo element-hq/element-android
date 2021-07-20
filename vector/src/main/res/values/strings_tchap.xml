@@ -37,7 +37,7 @@
     <string name="tchap_invite_contacts_to_room">Invite contacts in Room</string>
     <string name="tchap_room_invite_member_direct_chat">New discussion</string>
     <string name="tchap_invite_already_send_message">You have already sent an invitation to %s</string>
-    <string name="tchap_discussion_already_exist">A discussion with %s already exists</string>
+    <string name="tchap_invite_not_sent_for_discovered_user">This contact already uses Tchap, you can send him a message now.</string>
     <string name="tchap_start_discussion_with_discovered_user">%s already uses Tchap, a discussion has been created with this contact</string>
     <string name="tchap_invite_unreachable_message">%s cannot be reached for the moment by Tchap</string>
     <string name="tchap_invite_unauthorized_title_restricted_room">The externals are not allowed to join this room</string>
