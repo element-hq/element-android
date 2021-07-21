@@ -43,7 +43,7 @@ internal class CancelGossipRequestWorker(context: Context,
             override val sessionId: String,
             val requestId: String,
             val recipients: Map<String, List<String>>,
-            // The txnId for the sendToDevice request. Nullable for compatibility reason, but MUST always be provided
+            // The txnId for the sendToDevice request. Nullable for compatibility reasons, but MUST always be provided
             // to use the same value if this worker is retried.
             val txnId: String? = null,
             override val lastFailureMessage: String? = null
