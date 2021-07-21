@@ -26,7 +26,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.JsonDict
@@ -116,36 +115,6 @@ internal class DeviceUpdateObserver {
 
     fun removeDeviceUpdateListener(device: LiveDevice) {
         listeners.remove(device)
-    }
-}
-
-internal class Device(
-        private val machine: uniffi.olm.OlmMachine,
-        private var inner: InnerDevice,
-        private val sender: RequestSender,
-        private val listeners: ArrayList<VerificationService.Listener>,
-) {
-    @Throws(CryptoStoreErrorException::class)
-    suspend fun startVerification(): SasVerification? {
-        val result = withContext(Dispatchers.IO) {
-            machine.startSasWithDevice(inner.userId, inner.deviceId)
-        }
-
-        return if (result != null) {
-            this.sender.sendVerificationRequest(result.request)
-            SasVerification(
-                    this.machine, result.sas, this.sender, this.listeners,
-            )
-        } else {
-            null
-        }
-    }
-
-    @Throws(CryptoStoreErrorException::class)
-    suspend fun markAsTrusted() {
-        withContext(Dispatchers.IO) {
-            machine.markDeviceAsTrusted(inner.userId, inner.deviceId)
-        }
     }
 }
 
