@@ -125,6 +125,7 @@
         <item name="colorAccentPale">@color/element_accent_pale</item>
         <item name="dense_dropdown_text_input">@style/Widget.Vector.TextInputLayout.Dense.ExposedDropdownMenu.Dark.SC</item>
         <item name="message_highlight_bg_color">?vctr_header_background</item>
+        <item name="code_block_bg_color">#19ffffff</item>
         <item name="user_color_pl_0">@color/user_color_element_pl_0</item>
         <item name="user_color_pl_1">@color/user_color_element_pl_1</item>
         <item name="user_color_pl_50">@color/user_color_element_pl_50</item>

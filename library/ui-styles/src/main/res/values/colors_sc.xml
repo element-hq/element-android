@@ -76,6 +76,10 @@
     <color name="user_color_sc_pl_0">#8bc34a</color>
     -->
 
+    <!-- Code background colors -->
+    <color name="code_background_sc">#121212</color>
+    <color name="code_background_sc_light">#10000000</color>
+
     <!-- Exposed Element colors -->
     <!-- This is actually not an SC color, but the one found in element for ic_material_play_circle PNGs -->
     <color name="element_accent_pale">#76cfa6</color>
