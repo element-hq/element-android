@@ -544,11 +544,11 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="widget_creation_failure">ウィジェットの作成に失敗しました</string>
     <string name="widget_delete_message_confirmation">ウィジェットをこの部屋から削除してもよろしいですか？</string>
     <string name="directory_server_fail_to_retrieve_server">サーバーが利用できないか、オーバーロードしている可能性があります</string>
-    <string name="unknown_devices_alert_message">この部屋は検証されていない不明なデバイスが含まれています。
-つまり、デバイスが主張するユーザーに属しているという保証はありません。
-続行する前に、各デバイスの検証プロセスを進めることをおすすめしますが、検証することなくメッセージを再送信することができます。
-
-不明なデバイス:</string>
+    <string name="unknown_devices_alert_message">この部屋は検証されていない不明なセッションが含まれています。
+\nこれは、そのセッションが主張するユーザーのものであるという保証がないことを意味します。
+\n続行する前に、各セッションの検証プロセスを進めることをおすすめしますが、検証せずにメッセージを再送信することもできます。
+\n
+\n不明なセッション:</string>
     <string name="unknown_devices_alert_title">部屋に不明なデバイスが含まれています</string>
     <string name="encryption_information_verify_key_match">キーが一致していることを確認</string>
     <string name="encryption_information_verify_device_warning2">一致する場合は、下の確認ボタンを押します。そうでない場合は、他の誰かがこのデバイスを盗聴しているので、代わりにブロックボタンを押すことをおすすめします。将来この検証プロセスはより洗練されたものになるでしょう。</string>
