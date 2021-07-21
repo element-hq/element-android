@@ -60,6 +60,12 @@ internal class QrCodeVerification(
      * QR code verification can't verify devices between two users, so in the case that
      * we're verifying another user and we don't have or trust our cross signing identity
      * no QR code will be generated.
+     *
+     * @return A ISO_8859_1 encoded string containing data that should be encoded as a QR code.
+     * The string contains data as specified in the [QR code format] part of the Matrix spec.
+     * The list of bytes as defined in the spec are then encoded using ISO_8859_1 to get a string.
+     *
+     * [QR code format]: https://spec.matrix.org/unstable/client-server-api/#qr-code-format
      */
     override val qrCodeText: String?
         get() {
@@ -136,12 +142,30 @@ internal class QrCodeVerification(
     override val isIncoming: Boolean
         get() = !this.request.weStarted()
 
-    /** Cancel the verification flow */
+    /** Cancel the verification flow
+     *
+     * This will send out a m.key.verification.cancel event with the cancel
+     * code set to m.user.
+     *
+     * Cancelling the verification request will also cancel the parent VerificationRequest.
+     *
+     * The method turns into a noop, if the verification flow has already been cancelled.
+     * */
     override fun cancel() {
         cancelHelper(CancelCode.User)
     }
 
-    /** Cancel the verification with the given cancel code */
+    /** Cancel the verification flow
+     *
+     * This will send out a m.key.verification.cancel event with the cancel
+     * code set to the given CancelCode.
+     *
+     * Cancelling the verification request will also cancel the parent VerificationRequest.
+     *
+     * The method turns into a noop, if the verification flow has already been cancelled.
+     *
+     * @param code The cancel code that should be given as the reason for the cancellation.
+     * */
     override fun cancel(code: CancelCode) {
         cancelHelper(code)
     }
@@ -153,7 +177,11 @@ internal class QrCodeVerification(
 
     /** Confirm the QR code verification
      *
-     * This confirms that the other side has scanned our QR code.
+     * This confirms that the other side has scanned our QR code and sends
+     * out a m.key.verification.done event to the other side.
+     *
+     * The method turns into a noop if we're not yet ready to confirm the scanning,
+     * i.e. we didn't yet receive a m.key.verification.start event from the other side.
      */
     @Throws(CryptoStoreErrorException::class)
     private suspend fun confirm() {
@@ -175,7 +203,7 @@ internal class QrCodeVerification(
         }
     }
 
-    /** Send out a verification request in a blocking manner*/
+    /** Send out a verification request in a blocking manner */
     private fun sendRequest(request: OutgoingVerificationRequest) {
         runBlocking { sender.sendVerificationRequest(request) }
 
@@ -183,7 +211,7 @@ internal class QrCodeVerification(
         dispatchTxUpdated()
     }
 
-    /** Fetch fetch data from the Rust side for our verification flow */
+    /** Fetch fresh data from the Rust side for our verification flow */
     private fun refreshData() {
         when (val verification = this.machine.getVerification(this.request.otherUser(), this.request.flowId())) {
             is Verification.QrCodeV1 -> {
