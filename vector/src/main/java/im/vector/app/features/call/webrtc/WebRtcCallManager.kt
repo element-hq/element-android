@@ -29,7 +29,9 @@ import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.lookup.CallUserMapper
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.vectorCallService
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.push.fcm.FcmHelper
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -45,6 +47,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
+import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.webrtc.DefaultVideoDecoderFactory
 import org.webrtc.DefaultVideoEncoderFactory
 import org.webrtc.PeerConnectionFactory
@@ -74,6 +77,9 @@ class WebRtcCallManager @Inject constructor(
 
     private val callUserMapper: CallUserMapper?
         get() = currentSession?.vectorCallService?.userMapper
+
+    private val sessionScope: CoroutineScope?
+        get() = currentSession?.coroutineScope
 
     interface CurrentCallListener {
         fun onCurrentCallChange(call: WebRtcCall?) {}
@@ -232,12 +238,12 @@ class WebRtcCallManager @Inject constructor(
         this.currentCall.setAndNotify(call)
     }
 
-    private fun onCallEnded(callId: String, isRejected: Boolean) {
+    private fun onCallEnded(callId: String, endCallReason: EndCallReason, rejected: Boolean) {
         Timber.v("## VOIP WebRtcPeerConnectionManager onCall ended: $callId")
         val webRtcCall = callsByCallId.remove(callId) ?: return Unit.also {
             Timber.v("On call ended for unknown call $callId")
         }
-        CallService.onCallTerminated(context, callId, isRejected)
+        CallService.onCallTerminated(context, callId, endCallReason, rejected)
         callsByRoomId[webRtcCall.signalingRoomId]?.remove(webRtcCall)
         callsByRoomId[webRtcCall.nativeRoomId]?.remove(webRtcCall)
         transferees.remove(callId)
@@ -329,8 +335,8 @@ class WebRtcCallManager @Inject constructor(
         return webRtcCall
     }
 
-    fun endCallForRoom(roomId: String, originatedByMe: Boolean = true) {
-        callsByRoomId[roomId]?.firstOrNull()?.endCall(originatedByMe)
+    fun endCallForRoom(roomId: String) {
+        callsByRoomId[roomId]?.firstOrNull()?.endCall()
     }
 
     override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
@@ -386,7 +392,7 @@ class WebRtcCallManager @Inject constructor(
                 ?: return Unit.also {
                     Timber.w("onCallHangupReceived for non active call? ${callHangupContent.callId}")
                 }
-        call.endCall(false)
+        call.onCallHangupReceived(callHangupContent)
     }
 
     override fun onCallRejectReceived(callRejectContent: CallRejectContent) {
@@ -394,7 +400,7 @@ class WebRtcCallManager @Inject constructor(
                 ?: return Unit.also {
                     Timber.w("onCallRejectReceived for non active call? ${callRejectContent.callId}")
                 }
-        call.endCall(false)
+        call.onCallRejectReceived(callRejectContent)
     }
 
     override fun onCallSelectAnswerReceived(callSelectAnswerContent: CallSelectAnswerContent) {
@@ -402,12 +408,7 @@ class WebRtcCallManager @Inject constructor(
                 ?: return Unit.also {
                     Timber.w("onCallSelectAnswerReceived for non active call? ${callSelectAnswerContent.callId}")
                 }
-        val selectedPartyId = callSelectAnswerContent.selectedPartyId
-        if (selectedPartyId != call.mxCall.ourPartyId) {
-            Timber.i("Got select_answer for party ID $selectedPartyId: we are party ID ${call.mxCall.ourPartyId}.")
-            // The other party has picked somebody else's answer
-            call.endCall(false)
-        }
+        call.onCallSelectedAnswerReceived(callSelectAnswerContent)
     }
 
     override fun onCallNegotiateReceived(callNegotiateContent: CallNegotiateContent) {
@@ -420,7 +421,7 @@ class WebRtcCallManager @Inject constructor(
 
     override fun onCallManagedByOtherSession(callId: String) {
         Timber.v("## VOIP onCallManagedByOtherSession: $callId")
-        onCallEnded(callId, false)
+        onCallEnded(callId, EndCallReason.ANSWERED_ELSEWHERE, false)
     }
 
     override fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {

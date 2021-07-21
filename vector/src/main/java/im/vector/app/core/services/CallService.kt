@@ -37,7 +37,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.popup.IncomingCallAlert
 import im.vector.app.features.popup.PopupAlertManager
-import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
 
@@ -192,7 +192,8 @@ class CallService : VectorService() {
 
     private fun handleCallTerminated(intent: Intent) {
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
-        val isRejected = intent.getBooleanExtra(EXTRA_IS_REJECTED, false)
+        val endCallReason = intent.getSerializableExtra(EXTRA_END_CALL_REASON) as EndCallReason
+        val rejected = intent.getBooleanExtra(EXTRA_END_CALL_REJECTED, false)
         alertManager.cancelAlert(callId)
         val terminatedCall = knownCalls.firstOrNull { it.callId == callId }
         if (terminatedCall == null) {
@@ -206,13 +207,13 @@ class CallService : VectorService() {
             myStopSelf()
         }
         val wasConnected = connectedCallIds.remove(callId)
-        if (wasConnected || terminatedCall.isOutgoing || isRejected) {
-            val notification = notificationUtils.buildCallEndedNotification(terminatedCall.isVideoCall)
-            notificationManager.notify(callId.hashCode(), notification)
-        } else {
+        if (!wasConnected && !terminatedCall.isOutgoing && !rejected && endCallReason != EndCallReason.ANSWERED_ELSEWHERE) {
             val notification = notificationUtils.buildCallMissedNotification(terminatedCall)
             notificationManager.cancel(callId.hashCode())
             notificationManager.notify(MISSED_CALL_TAG, terminatedCall.nativeRoomId.hashCode(), notification)
+        } else {
+            val notification = notificationUtils.buildCallEndedNotification(terminatedCall.isVideoCall)
+            notificationManager.notify(callId.hashCode(), notification)
         }
     }
 
@@ -287,7 +288,7 @@ class CallService : VectorService() {
         connections[callConnection.callId] = callConnection
     }
 
-    private fun WebRtcCall.toCallInformation(): CallInformation{
+    private fun WebRtcCall.toCallInformation(): CallInformation {
         return CallInformation(
                 callId = this.callId,
                 nativeRoomId = this.nativeRoomId,
@@ -306,7 +307,7 @@ class CallService : VectorService() {
             val opponentUserId: String,
             val matrixItem: MatrixItem?,
             val isVideoCall: Boolean,
-            val isOutgoing: Boolean,
+            val isOutgoing: Boolean
     )
 
     companion object {
@@ -324,7 +325,8 @@ class CallService : VectorService() {
 
         private const val EXTRA_CALL_ID = "EXTRA_CALL_ID"
         private const val EXTRA_IS_IN_BG = "EXTRA_IS_IN_BG"
-        private const val EXTRA_IS_REJECTED = "EXTRA_IS_REJECTED"
+        private const val EXTRA_END_CALL_REJECTED = "EXTRA_END_CALL_REJECTED"
+        private const val EXTRA_END_CALL_REASON = "EXTRA_END_CALL_REASON"
 
         fun onIncomingCallRinging(context: Context,
                                   callId: String,
@@ -360,12 +362,13 @@ class CallService : VectorService() {
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun onCallTerminated(context: Context, callId: String, isRejected: Boolean) {
+        fun onCallTerminated(context: Context, callId: String, endCallReason: EndCallReason, rejected: Boolean) {
             val intent = Intent(context, CallService::class.java)
                     .apply {
                         action = ACTION_CALL_TERMINATED
                         putExtra(EXTRA_CALL_ID, callId)
-                        putExtra(EXTRA_IS_REJECTED, isRejected)
+                        putExtra(EXTRA_END_CALL_REASON, endCallReason)
+                        putExtra(EXTRA_END_CALL_REJECTED, rejected)
                     }
             ContextCompat.startForegroundService(context, intent)
         }

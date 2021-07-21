@@ -43,29 +43,5 @@ data class CallHangupContent(
          * or `invite_timeout` for when the other party did not answer in time.
          * One of: ["ice_failed", "invite_timeout"]
          */
-        @Json(name = "reason") val reason: Reason? = null
-) : CallSignalingContent {
-    @JsonClass(generateAdapter = false)
-    enum class Reason {
-        @Json(name = "ice_failed")
-        ICE_FAILED,
-
-        @Json(name = "ice_timeout")
-        ICE_TIMEOUT,
-
-        @Json(name = "user_hangup")
-        USER_HANGUP,
-
-        @Json(name = "replaced")
-        REPLACED,
-
-        @Json(name = "user_media_failed")
-        USER_MEDIA_FAILED,
-
-        @Json(name = "invite_timeout")
-        INVITE_TIMEOUT,
-
-        @Json(name = "unknown_error")
-        UNKWOWN_ERROR
-    }
-}
+        @Json(name = "reason") val reason: EndCallReason? = null
+) : CallSignalingContent
