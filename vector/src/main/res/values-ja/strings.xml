@@ -393,7 +393,7 @@
 \n設定からプロフィールにメールアドレスを追加できます。</string>
     <string name="auth_recaptcha_message">このホームサーバはあなたがロボットではない認証を求めます。</string>
     <string name="auth_username_in_use">ユーザ名はすでに使用されています</string>
-    <string name="auth_home_server">接続先サーバ:</string>
+    <string name="auth_home_server">ホームサーバ：</string>
     <string name="auth_identity_server">認証サーバ:</string>
     <string name="auth_reset_password_next_step_button">自分用電子メールアドレスで認証をします</string>
     <string name="auth_reset_password_message">パスワードを初期化するには, アカウントに登録されている電子メールアドレスを入力してください:</string>
@@ -1787,4 +1787,5 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="spaces_invited_header">招待</string>
     <string name="suggested_header">おすすめの部屋</string>
     <string name="spaces_header">スペース</string>
+    <string name="hs_client_url">ホームサーバAPIのURL</string>
 </resources>
