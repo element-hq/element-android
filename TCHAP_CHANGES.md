@@ -25,6 +25,7 @@ Improvements 🙌:
  - Implement the users/info endpoint to get users status #87
  - Design Tchap contact cells #98
  - [Contacts list] open the DM (if any) for the selected user #129
+ - Set up the application icon (Btchap/Tchap/Tchap secure) #102
 
 
 =======================================================
