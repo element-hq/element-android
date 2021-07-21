@@ -65,7 +65,9 @@ internal class SendGossipWorker(context: Context,
     }
 
     override suspend fun doSafeWork(params: Params): Result {
-        // (temporary code)
+        // params.txnId should be provided in all cases now. But Params can be deserialized by
+        // the WorkManager from data serialized in a previous version of the application, so without the txnId field.
+        // So if not present, we create a txnId
         val txnId = params.txnId ?: createUniqueTxnId()
         val eventType: String = EventType.SEND_SECRET
 
