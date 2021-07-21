@@ -46,7 +46,9 @@ internal class DefaultSendToDeviceTask @Inject constructor(
                 messages = params.contentMap.map
         )
 
-        // Create a unique txnId first, to use the same value if the request is retried
+        // If params.transactionId is not provided, we create a unique txnId.
+        // It's important to do that outside the requestBlock parameter of executeRequest()
+        // to use the same value if the request is retried
         val txnId = params.transactionId ?: createUniqueTxnId()
 
         return executeRequest(
