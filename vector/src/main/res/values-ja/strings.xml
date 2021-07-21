@@ -18,7 +18,7 @@
     <string name="notice_display_name_changed_from">%1$sが表示名を%2$sから%3$sに変更しました</string>
     <string name="notice_display_name_removed">%1$sが表示名 (%2$s) を削除しました</string>
     <string name="notice_room_topic_changed">%1$sがテーマを%2$sに変更しました</string>
-    <string name="notice_room_name_changed">%1$sが部屋名を%2$sに変更しました</string>
+    <string name="notice_room_name_changed">%1$sがルーム名を%2$sに変更しました</string>
     <string name="notice_placed_video_call">%sがビデオ通話を開始しました。</string>
     <string name="notice_placed_voice_call">%sが音声通話を開始しました。</string>
     <string name="notice_answered_call">%sが電話に出ました。</string>
@@ -30,7 +30,7 @@
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="other">%1$sと他%2$d名</item>
     </plurals>
-    <string name="notice_made_future_room_visibility">%1$sは、今後の部屋履歴を%2$sに表示させました</string>
+    <string name="notice_made_future_room_visibility">%1$sは、今後のルーム履歴を%2$sに表示させました</string>
     <string name="notice_room_visibility_invited">部屋のメンバー全員、招待された時点から。</string>
     <string name="notice_room_visibility_joined">部屋のメンバー全員、参加した時点から。</string>
     <string name="notice_room_visibility_shared">部屋のメンバー全員。</string>
@@ -845,7 +845,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="notice_avatar">アバターに通知を表示</string>
     <string name="dialog_user_consent_submit">今すぐ見る</string>
     <string name="deactivate_account_title">アカウントを停止</string>
-    <string name="deactivate_account_content">この操作によりあなたのアカウントは永久に使えなくなります。あなたはログインできなくなり、誰も同じユーザIDを再登録できなくなります。アカウントが参加しているすべての部屋を退出し、IDサーバからアカウントの詳細を削除することになります。 <b>この操作は取り消しできません</b> 
+    <string name="deactivate_account_content">この操作によりあなたのアカウントは永久に使えなくなります。あなたはログインできなくなり、誰も同じユーザIDを再登録できなくなります。アカウントが参加しているすべてのルームを退出し、IDサーバからアカウントの詳細を削除することになります。 <b>この操作は取り消しできません</b> 
 \n
 \nあなたのアカウントを停止することによって <b>デフォルトではあなたが送信したメッセージの削除はされません</b>。メッセージを削除を望む場合は、以下のボックスにチェックを入れてください。 
 \n
@@ -1087,7 +1087,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="report_content_custom_hint">このコンテンツを報告する理由</string>
     <string name="report_content_custom_submit">報告する</string>
     <string name="block_user">ユーザーを無視する</string>
-    <string name="message_ignore_user">ユーザーをブロック</string>
+    <string name="message_ignore_user">ユーザーを無視する</string>
     <string name="enter_secret_storage_passphrase_warning">警告:</string>
     <plurals name="send_images_with_original_size">
         <item quantity="other">元の大きさのまま画像を送信する</item>
@@ -1450,7 +1450,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="notice_widget_added_by_you">あなたは%1$sウィジェットを追加しました</string>
     <string name="notice_room_third_party_registered_invite_by_you">あなたは %1$sの招待を受けました</string>
     <string name="notice_widget_added">%1$sが %2$sウィジェットを追加しました</string>
-    <string name="notice_room_name_changed_by_you">部屋名を変更しました:%1$s</string>
+    <string name="notice_room_name_changed_by_you">ルーム名を変更しました：%1$s</string>
     <string name="notice_direct_room_third_party_revoked_invite_by_you">あなたは%1$sの招待を取り消しました</string>
     <string name="notice_direct_room_third_party_revoked_invite">%1$sが%2$sの招待を取り消しました</string>
     <string name="notice_direct_room_third_party_invite_by_you">あなたは%1$sを招待しました</string>
@@ -1674,7 +1674,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="keys_backup_setup_override_stop">中止</string>
     <string name="keys_backup_setup_override_replace">上書き</string>
     <string name="keys_backup_setup_override_backup_prompt_description">違うセッションにより設定された暗号鍵バックアップが既に存在します。既存のバックアップを上書きしますか？</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">ホームサーバーには既存のバックアップがあります</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">ホームサーバには既存のバックアップがあります</string>
     <string name="recovery_key_export_saved">復元鍵が保存されました。</string>
     <string name="recovery_key_export_saved_as_warning">復号鍵が%sに保存されました。
 \n
@@ -1687,11 +1687,11 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="keys_backup_setup_step3_text_line1">暗号鍵がバックアップ中です。</string>
     <string name="keys_backup_setup_step2_skip_button_title">（高度）復元鍵を使用して設定</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">または、復元鍵を使用してバックアップを保護しバックアップを保護できます。復元鍵は安全な場所で保管してください。</string>
-    <string name="keys_backup_setup_step2_text_description">暗号鍵のコピーを暗号化してホームサーバーに保存します。バックアップを保護するためにパスフレーズを設定してください。
+    <string name="keys_backup_setup_step2_text_description">暗号鍵のコピーを暗号化してホームサーバに保存します。バックアップを保護するためにパスフレーズを設定してください。
 \n
 \n最高度のセキュリティのために、アカウントのパスワードと異なることが大切です。</string>
     <string name="keys_backup_setup_step2_text_title">パスフレーズを使用してバックアップを保護します。</string>
-    <string name="keys_backup_setup_step1_description">暗号化が有効な部屋で送信されたメッセージはEnd-to-end暗号化によって保護されます。メッセージを読むための暗号鍵を持っているのは送受信者のみです。
+    <string name="keys_backup_setup_step1_description">暗号化が有効な部屋で送信されたメッセージはエンドツーエンド暗号化によって保護されます。メッセージを読むための暗号鍵を持っているのは送受信者のみです。
 \n
 \n暗号鍵を失わないように保護されたバックアップをしてください。</string>
     <string name="keys_backup_setup_step1_advanced">（高度）</string>
