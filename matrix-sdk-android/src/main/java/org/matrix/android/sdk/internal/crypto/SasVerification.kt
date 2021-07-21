@@ -56,16 +56,19 @@ internal class SasVerification(
         }
     }
 
-    override val isIncoming: Boolean
-        get() = !this.inner.weStarted
+    /** The user ID of the other user that is participating in this verification flow */
+    override val otherUserId: String = this.inner.otherUserId
 
+    /** Get the device id of the other user's device participating in this verification flow */
     override var otherDeviceId: String?
         get() = this.inner.otherDeviceId
         @Suppress("UNUSED_PARAMETER")
         set(value) {
         }
 
-    override val otherUserId: String = this.inner.otherUserId
+    /** Did the other side initiate this verification flow */
+    override val isIncoming: Boolean
+        get() = !this.inner.weStarted
 
     override var state: VerificationTxState
         get() {
@@ -87,23 +90,55 @@ internal class SasVerification(
         set(v) {
         }
 
+    /** Get the unique id of this verification */
     override val transactionId: String
         get() = this.inner.flowId
 
+    /** Cancel the verification flow
+     *
+     * This will send out a m.key.verification.cancel event with the cancel
+     * code set to m.user.
+     *
+     * Cancelling the verification request will also cancel the parent VerificationRequest.
+     *
+     * The method turns into a noop, if the verification flow has already been cancelled.
+     * */
     override fun cancel() {
         this.cancelHelper(CancelCode.User)
     }
 
+    /** Cancel the verification flow
+     *
+     * This will send out a m.key.verification.cancel event with the cancel
+     * code set to the given CancelCode.
+     *
+     * Cancelling the verification request will also cancel the parent VerificationRequest.
+     *
+     * The method turns into a noop, if the verification flow has already been cancelled.
+     *
+     * @param code The cancel code that should be given as the reason for the cancellation.
+     * */
     override fun cancel(code: CancelCode) {
         this.cancelHelper(code)
     }
 
+    /** Cancel the verification flow
+     *
+     * This will send out a m.key.verification.cancel event with the cancel
+     * code set to the m.mismatched_sas cancel code.
+     *
+     * Cancelling the verification request will also cancel the parent VerificationRequest.
+     *
+     * The method turns into a noop, if the verification flow has already been cancelled.
+     */
     override fun shortCodeDoesNotMatch() {
         this.cancelHelper(CancelCode.MismatchedSas)
     }
 
+    /** Is this verification happening over to-device messages */
     override fun isToDeviceTransport(): Boolean = this.inner.roomId == null
 
+    /** Does the verification flow support showing decimals as the short auth string */
     override fun supportsDecimal(): Boolean {
         // This is ignored anyways, throw it away?
         // The spec also mandates that devices support at least decimal and
@@ -111,25 +146,55 @@ internal class SasVerification(
         return true
     }
 
+    /** Does the verification flow support showing emojis as the short auth string */
     override fun supportsEmoji(): Boolean {
         refreshData()
         return this.inner.supportsEmoji
     }
 
+    /** Confirm that the short authentication code matches on both sides
+     *
+     * This sends a m.key.verification.mac event out, the verification isn't yet
+     * done, we still need to receive such an event from the other side if we haven't
+     * already done so.
+     *
+     * This method is a noop if we're not yet in a presentable state, i.e. we didn't receive
+     * a m.key.verification.key event from the other side or we're cancelled.
+     */
     override fun userHasVerifiedShortCode() {
         runBlocking { confirm() }
     }
 
+    /** Accept the verification flow, signaling the other side that we do want to verify
+     *
+     * This sends a m.key.verification.accept event out that is a response to a
+     * m.key.verification.start event from the other side.
+     *
+     * This method is a noop if we send the start event out or if the verification has already
+     * been accepted.
+     */
     override fun acceptVerification() {
         runBlocking { accept() }
     }
 
+    /** Get the decimal representation of the short auth string
+     *
+     * @return A string of three space delimited numbers that
+     * represent the short auth string or an empty string if we're not yet
+     * in a presentable state.
+     */
     override fun getDecimalCodeRepresentation(): String {
         val decimals = this.machine.getDecimals(this.inner.otherUserId, this.inner.flowId)
 
         return decimals?.joinToString(" ") ?: ""
     }
 
+    /** Get the emoji representation of the short auth string
+     *
+     * @return A list of 7 EmojiRepresentation objects that represent the
+     * short auth string or an empty list if we're not yet in a presentable
+     * state.
+     */
     override fun getEmojiCodeRepresentation(): List<EmojiRepresentation> {
         val emojiIndex = this.machine.getEmojiIndex(this.inner.otherUserId, this.inner.flowId)
 
@@ -164,6 +229,12 @@ internal class SasVerification(
         }
     }
 
+    /** Send out a verification request in a blocking manner
+     *
+     * This is useful since the public methods to accept/confirm/cancel the verification
+     * aren't suspendable but sending a request out obviously should be. This bridges the
+     * gap between our suspendable and non-suspendable methods.
+     */
     private fun sendRequest(request: OutgoingVerificationRequest) {
         runBlocking { sender.sendVerificationRequest(request) }
 
@@ -171,6 +242,7 @@ internal class SasVerification(
         dispatchTxUpdated()
     }
 
+    /** Fetch fresh data from the Rust side for our verification flow */
     private fun refreshData() {
         when (val verification = this.machine.getVerification(this.inner.otherUserId, this.inner.flowId)) {
             is Verification.SasV1 -> {

@@ -203,7 +203,12 @@ internal class QrCodeVerification(
         }
     }
 
-    /** Send out a verification request in a blocking manner */
+    /** Send out a verification request in a blocking manner
+     *
+     * This is useful since the public methods to accept/confirm/cancel the verification
+     * aren't suspendable but sending a request out obviously should be. This bridges the
+     * gap between our suspendable and non-suspendable methods.
+     */
     private fun sendRequest(request: OutgoingVerificationRequest) {
         runBlocking { sender.sendVerificationRequest(request) }
 
