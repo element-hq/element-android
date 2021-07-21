@@ -1333,7 +1333,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="notice_room_server_acl_updated_title_by_you">この部屋のサーバのACLを変更しました。</string>
     <string name="notice_room_server_acl_set_title_by_you">この部屋のサーバACLを設定しました。</string>
     <string name="notice_direct_room_update_by_you">ここをアップグレードしました。</string>
-    <string name="notice_room_update_by_you">この部屋をアップグレードしました。</string>
+    <string name="notice_room_update_by_you">あなたはこの部屋をアップグレードしました。</string>
     <string name="notice_ended_call_by_you">通話を終えました。</string>
     <string name="notice_answered_call_by_you">通話に応えました。</string>
     <string name="notice_call_candidates_by_you">通話を設定するためのデータを送信しました。</string>
@@ -1373,7 +1373,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="notice_direct_room_update">%sがここをアップグレードしました。</string>
     <string name="notice_room_update">%sがこの部屋をアップグレードしました。</string>
     <string name="notice_end_to_end_by_you">エンドツーエンド暗号化をオンにしました (%1$s)</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">将来の部屋のメッセージを %1$sに見えるようにしました</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">あなたは今後のメッセージを%1$sに見えるようにしました</string>
     <string name="notice_made_future_room_visibility_by_you">今後の部屋履歴を%1$sに表示させました</string>
     <string name="notice_made_future_direct_room_visibility">%1$s は将来のメッセージを %2$sに見えるようにしました</string>
     <string name="notice_call_candidates">%sが通話を設定するためのデータを送信しました。</string>
