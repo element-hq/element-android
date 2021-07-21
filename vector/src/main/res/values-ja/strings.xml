@@ -173,7 +173,7 @@
     <string name="yes">はい</string>
     <string name="no">いいえ</string>
     <string name="_continue">続ける</string>
-    <string name="room_jump_to_first_unread">最初の未読位置へ移動.</string>
+    <string name="room_jump_to_first_unread">最新の未読へ移動</string>
     <string name="room_participants_leave_prompt_title">部屋を退室</string>
     <string name="room_participants_leave_prompt_msg">本当にこの部屋を退室しますか？</string>
     <string name="room_participants_create">作成</string>
@@ -1724,7 +1724,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="room_widget_failed_to_load">ウィジェットの読込に失敗しました。
 \n%s</string>
     <string name="room_widget_reload">ウィジェットを再読込</string>
-    <string name="room_widget_permission_webview_shared_info_title"/>
+    <string name="room_widget_permission_webview_shared_info_title">クッキーを設定し%sとデータを交換する可能性があります</string>
     <string name="room_widget_permission_added_by">ウィジェットの追加者:</string>
     <string name="notification_inline_reply_failed">**送信に失敗 - 部屋を開いてください</string>
     <string name="notification_new_invitation">新しい招待</string>
@@ -1792,4 +1792,5 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="auth_add_phone_message_2">電話番号を設定して、後からオプションで知人に見つけてもらえるようにできます。</string>
     <string name="call_failed_no_ice_use_alt">%s を使用してみてください</string>
     <string name="room_widget_revoke_access">アクセスを取り消す</string>
+    <string name="active_widget_view_action">表示</string>
 </resources>
