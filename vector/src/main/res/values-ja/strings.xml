@@ -1086,7 +1086,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="report_content_custom_title">コンテンツの報告</string>
     <string name="report_content_custom_hint">このコンテンツを報告する理由</string>
     <string name="report_content_custom_submit">報告する</string>
-    <string name="block_user">ユーザーをブロック</string>
+    <string name="block_user">ユーザーを無視する</string>
     <string name="message_ignore_user">ユーザーをブロック</string>
     <string name="enter_secret_storage_passphrase_warning">警告:</string>
     <plurals name="send_images_with_original_size">
@@ -1374,7 +1374,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="notice_room_update">%sがこの部屋をアップグレードしました。</string>
     <string name="notice_end_to_end_by_you">エンドツーエンド暗号化をオンにしました (%1$s)</string>
     <string name="notice_made_future_direct_room_visibility_by_you">将来の部屋のメッセージを %1$sに見えるようにしました</string>
-    <string name="notice_made_future_room_visibility_by_you">将来の部屋の履歴を %1$sに見えるようにしました</string>
+    <string name="notice_made_future_room_visibility_by_you">今後の部屋履歴を%1$sに表示させました</string>
     <string name="notice_made_future_direct_room_visibility">%1$s は将来のメッセージを %2$sに見えるようにしました</string>
     <string name="notice_call_candidates">%sが通話を設定するためのデータを送信しました。</string>
     <string name="notice_placed_voice_call_by_you">通話をしました。</string>
