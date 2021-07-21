@@ -26,6 +26,8 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.JsonDict
@@ -49,8 +51,7 @@ import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
-import uniffi.olm.Verification
-import uniffi.olm.VerificationRequest
+import uniffi.olm.Verification as InnerVerification
 import uniffi.olm.setLogger
 
 class CryptoLogger : Logger {
@@ -122,10 +123,12 @@ internal class OlmMachine(
         user_id: String,
         device_id: String,
         path: File,
-        deviceObserver: DeviceUpdateObserver
+        deviceObserver: DeviceUpdateObserver,
+        private val requestSender: RequestSender,
 ) {
     private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
     private val deviceUpdateObserver = deviceObserver
+    internal val verificationListeners = ArrayList<VerificationService.Listener>()
 
     /** Get our own user ID. */
     fun userId(): String {
@@ -429,17 +432,26 @@ internal class OlmMachine(
      * @return The Device if it found one.
      */
     @Throws(CryptoStoreErrorException::class)
-    suspend fun getDevice(userId: String, deviceId: String): CryptoDeviceInfo? =
-            withContext(Dispatchers.IO) {
-                // Our own device isn't part of our store on the rust side, return it
-                // using our ownDevice method
-                if (userId == userId() && deviceId == deviceId()) {
-                    ownDevice()
-                } else {
-                    val device = inner.getDevice(userId, deviceId)
-                    if (device != null) toCryptoDeviceInfo(device) else null
-                }
-            }
+    suspend fun getCryptoDeviceInfo(userId: String, deviceId: String): CryptoDeviceInfo? {
+        return if (userId == userId() && deviceId == deviceId()) {
+            // Our own device isn't part of our store on the Rust side, return it
+            // using our ownDevice method
+            ownDevice()
+        } else {
+            val device = getRawDevice(userId, deviceId) ?: return null
+            toCryptoDeviceInfo(device)
+        }
+    }
+
+    private suspend fun getRawDevice(userId: String, deviceId: String): InnerDevice? =
+        withContext(Dispatchers.IO) {
+            inner.getDevice(userId, deviceId)
+        }
+
+    suspend fun getDevice(userId: String, deviceId: String): Device? {
+        val device = this.getRawDevice(userId, deviceId) ?: return null
+        return Device(this.inner, device, this.requestSender, this.verificationListeners)
+    }
 
     /**
      * Get all devices of an user.
@@ -546,19 +558,58 @@ internal class OlmMachine(
      * @return The list of VerificationRequests that we share with the given user
      */
     fun getVerificationRequests(userId: String): List<VerificationRequest> {
-        return this.inner.getVerificationRequests(userId)
+        return this.inner.getVerificationRequests(userId).map {
+            VerificationRequest(
+                    this.inner,
+                    it,
+                    this.requestSender,
+                    this.verificationListeners,
+            )
+        }
     }
 
     /** Get a verification request for the given user with the given flow ID */
     fun getVerificationRequest(userId: String, flowId: String): VerificationRequest? {
-        return this.inner.getVerificationRequest(userId, flowId)
+        val request = this.inner.getVerificationRequest(userId, flowId)
+
+        return if (request != null) {
+            VerificationRequest(
+                    this.inner,
+                    request,
+                    requestSender,
+                    this.verificationListeners,
+            )
+        } else {
+            null
+        }
     }
 
     /** Get an active verification for the given user and given flow ID
      *
      * This can return a SAS verification or a QR code verification
      */
-    fun getVerification(userId: String, flowId: String): Verification? {
-        return this.inner.getVerification(userId, flowId)
+    fun getVerification(userId: String, flowId: String): VerificationTransaction? {
+        return when (val verification = this.inner.getVerification(userId, flowId)) {
+            is uniffi.olm.Verification.QrCodeV1 -> {
+                val request = this.getVerificationRequest(userId, flowId) ?: return null
+                QrCodeVerification(inner, request, verification.qrcode, requestSender, verificationListeners)
+            }
+            is uniffi.olm.Verification.SasV1    -> {
+                SasVerification(inner, verification.sas, requestSender, verificationListeners)
+            }
+            null                                -> {
+                // This branch exists because scanning a QR code is tied to the QrCodeVerification,
+                // i.e. instead of branching into a scanned QR code verification from the verification request,
+                // like it's done for SAS verifications, the public API expects us to create an empty dummy
+                // QrCodeVerification object that gets populated once a QR code is scanned.
+                val request = getVerificationRequest(userId, flowId) ?: return null
+
+                if (request.canScanQrCodes()) {
+                    QrCodeVerification(inner, request, null, requestSender, verificationListeners)
+                } else {
+                    null
+                }
+            }
+        }
     }
 }

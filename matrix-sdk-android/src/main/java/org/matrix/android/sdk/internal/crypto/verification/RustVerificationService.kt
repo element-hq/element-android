@@ -20,9 +20,7 @@ import android.os.Handler
 import android.os.Looper
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
@@ -34,7 +32,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageRelationCont
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.internal.crypto.Device
 import org.matrix.android.sdk.internal.crypto.OlmMachine
-import org.matrix.android.sdk.internal.crypto.QrCodeVerification
 import org.matrix.android.sdk.internal.crypto.RequestSender
 import org.matrix.android.sdk.internal.crypto.SasVerification
 import org.matrix.android.sdk.internal.crypto.VerificationRequest
@@ -43,14 +40,15 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import org.matrix.android.sdk.internal.crypto.model.rest.toValue
 import timber.log.Timber
-import uniffi.olm.Verification
 
+/** A helper class to deserialize to-device `m.key.verification.*` events to fetch the transaction id out */
 @JsonClass(generateAdapter = true)
 internal data class ToDeviceVerificationEvent(
         @Json(name = "sender") val sender: String?,
         @Json(name = "transaction_id") val transactionId: String,
 )
 
+/** Helper method to fetch the unique ID of the verification event */
 private fun getFlowId(event: Event): String? {
     return if (event.eventId != null) {
         val relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
@@ -61,6 +59,7 @@ private fun getFlowId(event: Event): String? {
     }
 }
 
+/** Convert a list of VerificationMethod into a list of strings that can be passed to the Rust side */
 internal fun prepareMethods(methods: List<VerificationMethod>): List<String> {
     val stringMethods: MutableList<String> = methods.map { it.toValue() }.toMutableList()
 
@@ -77,23 +76,22 @@ internal class RustVerificationService(
         private val requestSender: RequestSender,
 ) : VerificationService {
     private val uiHandler = Handler(Looper.getMainLooper())
-    private var listeners = ArrayList<VerificationService.Listener>()
 
     override fun addListener(listener: VerificationService.Listener) {
         uiHandler.post {
-            if (!listeners.contains(listener)) {
-                listeners.add(listener)
+            if (!this.olmMachine.verificationListeners.contains(listener)) {
+                this.olmMachine.verificationListeners.add(listener)
             }
         }
     }
 
     override fun removeListener(listener: VerificationService.Listener) {
-        uiHandler.post { listeners.remove(listener) }
+        uiHandler.post { this.olmMachine.verificationListeners.remove(listener) }
     }
 
     private fun dispatchTxAdded(tx: VerificationTransaction) {
         uiHandler.post {
-            listeners.forEach {
+            this.olmMachine.verificationListeners.forEach {
                 try {
                     it.transactionCreated(tx)
                 } catch (e: Throwable) {
@@ -105,7 +103,7 @@ internal class RustVerificationService(
 
     private fun dispatchTxUpdated(tx: VerificationTransaction) {
         uiHandler.post {
-            listeners.forEach {
+            this.olmMachine.verificationListeners.forEach {
                 try {
                     it.transactionUpdated(tx)
                 } catch (e: Throwable) {
@@ -118,7 +116,7 @@ internal class RustVerificationService(
     private fun dispatchRequestAdded(tx: PendingVerificationRequest) {
         Timber.v("## SAS dispatchRequestAdded txId:${tx.transactionId} $tx")
         uiHandler.post {
-            listeners.forEach {
+            this.olmMachine.verificationListeners.forEach {
                 try {
                     it.verificationRequestCreated(tx)
                 } catch (e: Throwable) {
@@ -188,30 +186,11 @@ internal class RustVerificationService(
     }
 
     private fun getVerificationRequest(otherUserId: String, transactionId: String): VerificationRequest? {
-        val request = this.olmMachine.getVerificationRequest(otherUserId, transactionId)
-
-        return if (request != null) {
-            VerificationRequest(
-                    this.olmMachine.inner(),
-                    request,
-                    requestSender,
-                    listeners,
-            )
-        } else {
-            null
-        }
+        return this.olmMachine.getVerificationRequest(otherUserId, transactionId)
     }
 
     private suspend fun getDevice(userId: String, deviceID: String): Device? {
-        val device = withContext(Dispatchers.IO) {
-            olmMachine.inner().getDevice(userId, deviceID)
-        }
-
-        return if (device != null) {
-            Device(this.olmMachine.inner(), device, this.requestSender, this.listeners)
-        } else {
-            null
-        }
+        return this.olmMachine.getDevice(userId, deviceID)
     }
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
@@ -230,40 +209,14 @@ internal class RustVerificationService(
             otherUserId: String,
             tid: String,
     ): VerificationTransaction? {
-        return when (val verification = this.olmMachine.getVerification(otherUserId, tid)) {
-            is Verification.QrCodeV1 -> {
-                val request = getVerificationRequest(otherUserId, tid) ?: return null
-                QrCodeVerification(this.olmMachine.inner(), request, verification.qrcode, this.requestSender, this.listeners)
-            }
-            is Verification.SasV1    -> {
-                SasVerification(this.olmMachine.inner(), verification.sas, this.requestSender, this.listeners)
-            }
-            null                     -> {
-                // This branch exists because scanning a QR code is tied to the QrCodeVerification,
-                // i.e. instead of branching into a scanned QR code verification from the verification request,
-                // like it's done for SAS verifications, the public API expects us to create an empty dummy
-                // QrCodeVerification object that gets populated once a QR code is scanned.
-                val request = getVerificationRequest(otherUserId, tid) ?: return null
-
-                if (request.canScanQrCodes()) {
-                    QrCodeVerification(this.olmMachine.inner(), request, null, this.requestSender, this.listeners)
-                } else {
-                    null
-                }
-            }
-        }
+        return this.olmMachine.getVerification(otherUserId, tid)
     }
 
     override fun getExistingVerificationRequests(
             otherUserId: String
     ): List<PendingVerificationRequest> {
         return this.olmMachine.getVerificationRequests(otherUserId).map {
-            VerificationRequest(
-                    this.olmMachine.inner(),
-                    it,
-                    this.requestSender,
-                    this.listeners,
-            ).toPendingVerificationRequest()
+            it.toPendingVerificationRequest()
         }
     }
 
@@ -314,7 +267,12 @@ internal class RustVerificationService(
             requestSender.sendVerificationRequest(result!!.request)
         }
 
-        return VerificationRequest(this.olmMachine.inner(), result!!.verification, this.requestSender, this.listeners).toPendingVerificationRequest()
+        return VerificationRequest(
+                this.olmMachine.inner(),
+                result!!.verification,
+                this.requestSender,
+                this.olmMachine.verificationListeners
+        ).toPendingVerificationRequest()
     }
 
     override fun requestKeyVerificationInDMs(
@@ -332,7 +290,12 @@ internal class RustVerificationService(
         }
 
         val innerRequest = this.olmMachine.inner().requestVerification(otherUserId, roomId, eventID, stringMethods)!!
-        return VerificationRequest(this.olmMachine.inner(), innerRequest, this.requestSender, this.listeners).toPendingVerificationRequest()
+        return VerificationRequest(
+                this.olmMachine.inner(),
+                innerRequest,
+                this.requestSender,
+                this.olmMachine.verificationListeners
+        ).toPendingVerificationRequest()
     }
 
     override fun readyPendingVerification(

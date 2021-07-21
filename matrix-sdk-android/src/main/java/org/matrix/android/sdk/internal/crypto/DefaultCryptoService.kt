@@ -392,7 +392,7 @@ internal class DefaultCryptoService @Inject constructor(
 
         try {
             setRustLogger()
-            val machine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver)
+            val machine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver, sender)
             olmMachine = machine
             verificationService = RustVerificationService(machine, this.sender)
             Timber.v(
@@ -482,7 +482,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
         return if (userId.isNotEmpty() && !deviceId.isNullOrEmpty()) {
             runBlocking {
-                this@DefaultCryptoService.olmMachine?.getDevice(userId, deviceId)
+                this@DefaultCryptoService.olmMachine?.getCryptoDeviceInfo(userId, deviceId)
             }
         } else {
             null
