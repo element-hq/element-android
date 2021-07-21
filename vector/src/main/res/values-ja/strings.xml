@@ -1788,4 +1788,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="suggested_header">おすすめの部屋</string>
     <string name="spaces_header">スペース</string>
     <string name="hs_client_url">ホームサーバAPIのURL</string>
+    <string name="auth_add_email_phone_message_2">復旧用のメールアドレスを設定します。後からオプションでメールアドレスや電話番号を使用して知人に見つけてもらえるようにできます。</string>
+    <string name="auth_add_phone_message_2">電話番号を設定して、後からオプションで知人に見つけてもらえるようにできます。</string>
+    <string name="call_failed_no_ice_use_alt">%s を使用してみてください</string>
 </resources>
