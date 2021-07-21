@@ -26,6 +26,7 @@ import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -131,7 +132,8 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
         val params = SendGossipRequestWorker.Params(
                 sessionId = sessionId,
                 keyShareRequest = request as? OutgoingRoomKeyRequest,
-                secretShareRequest = request as? OutgoingSecretRequest
+                secretShareRequest = request as? OutgoingSecretRequest,
+                txnId = createUniqueTxnId()
         )
         cryptoStore.updateOutgoingGossipingRequestState(request.requestId, OutgoingGossipingRequestState.SENDING)
         val workRequest = gossipingWorkManager.createWork<SendGossipRequestWorker>(WorkerParamsFactory.toData(params), true)
@@ -154,7 +156,8 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
         if (resend) {
             val reSendParams = SendGossipRequestWorker.Params(
                     sessionId = sessionId,
-                    keyShareRequest = request.copy(requestId = LocalEcho.createLocalEchoId())
+                    keyShareRequest = request.copy(requestId = LocalEcho.createLocalEchoId()),
+                    txnId = createUniqueTxnId()
             )
             val reSendWorkRequest = gossipingWorkManager.createWork<SendGossipRequestWorker>(WorkerParamsFactory.toData(reSendParams), true)
             gossipingWorkManager.postWork(reSendWorkRequest)
