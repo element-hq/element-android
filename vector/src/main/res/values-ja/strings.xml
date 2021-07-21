@@ -1019,7 +1019,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="room_member_power_level_default_in">%1$s のデフォルトユーザー</string>
     <string name="room_member_power_level_custom_in">%2$s のカスタム (%1$d)</string>
     <string name="settings_category_timeline">タイムライン</string>
-    <string name="room_settings_enable_encryption">エンドツーエンド暗号化を有効にする</string>
+    <string name="room_settings_enable_encryption">エンドツーエンド暗号化を有効にする…</string>
     <string name="room_settings_enable_encryption_dialog_submit">暗号化を有効にする</string>
     <string name="encryption_information_cross_signing_state">クロス署名</string>
     <string name="encryption_information_dg_xsigning_complete">クロス署名は有効です
