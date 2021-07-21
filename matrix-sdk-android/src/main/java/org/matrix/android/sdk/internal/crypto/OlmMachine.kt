@@ -51,7 +51,6 @@ import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
-import uniffi.olm.Verification as InnerVerification
 import uniffi.olm.setLogger
 
 class CryptoLogger : Logger {
@@ -462,7 +461,9 @@ internal class OlmMachine(
      */
     @Throws(CryptoStoreErrorException::class)
     suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo> {
-        val devices = inner.getUserDevices(userId).map { toCryptoDeviceInfo(it) }.toMutableList()
+        val devices = withContext(Dispatchers.IO) {
+            inner.getUserDevices(userId).map { toCryptoDeviceInfo(it) }.toMutableList()
+        }
 
         // EA doesn't differentiate much between our own and other devices of
         // while the rust-sdk does, append our own device here.
