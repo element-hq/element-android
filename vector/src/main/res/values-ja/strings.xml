@@ -31,9 +31,9 @@
         <item quantity="other">%1$sと他%2$d名</item>
     </plurals>
     <string name="notice_made_future_room_visibility">%1$sは、今後のルーム履歴を%2$sに表示させました</string>
-    <string name="notice_room_visibility_invited">部屋のメンバー全員、招待された時点から。</string>
-    <string name="notice_room_visibility_joined">部屋のメンバー全員、参加した時点から。</string>
-    <string name="notice_room_visibility_shared">部屋のメンバー全員。</string>
+    <string name="notice_room_visibility_invited">ルームのメンバー全員、招待された時点から。</string>
+    <string name="notice_room_visibility_joined">ルームのメンバー全員、参加した時点から。</string>
+    <string name="notice_room_visibility_shared">ルームのメンバー全員。</string>
     <string name="notice_room_visibility_world_readable">誰でも。</string>
     <string name="notice_room_visibility_unknown">不明 (%s)。</string>
     <string name="notice_end_to_end">%1$s がエンドツーエンド暗号化を有効にしました (%2$s)</string>
@@ -1371,10 +1371,10 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="notice_room_server_acl_set_banned">・%sに一致するサーバは禁止されています。</string>
     <string name="notice_room_server_acl_set_title">%sがこの部屋のサーバACLを設定しました。</string>
     <string name="notice_direct_room_update">%sがここをアップグレードしました。</string>
-    <string name="notice_room_update">%sがこの部屋をアップグレードしました。</string>
+    <string name="notice_room_update">%s がこのルームをアップグレードしました。</string>
     <string name="notice_end_to_end_by_you">エンドツーエンド暗号化をオンにしました (%1$s)</string>
     <string name="notice_made_future_direct_room_visibility_by_you">あなたは今後のメッセージを%1$sに見えるようにしました</string>
-    <string name="notice_made_future_room_visibility_by_you">今後の部屋履歴を%1$sに表示させました</string>
+    <string name="notice_made_future_room_visibility_by_you">今後のルーム履歴を%1$sに表示させました</string>
     <string name="notice_made_future_direct_room_visibility">%1$s は将来のメッセージを %2$sに見えるようにしました</string>
     <string name="notice_call_candidates">%sが通話を設定するためのデータを送信しました。</string>
     <string name="notice_placed_voice_call_by_you">通話をしました。</string>
