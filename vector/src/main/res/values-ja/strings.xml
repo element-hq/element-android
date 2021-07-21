@@ -687,7 +687,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="room_settings_add_new_group">新しいコミュニティID (記入例 +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">無効なコミュニティID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' は有効なコミュニティIDではありません</string>
-    <string name="encryption_export_saved_as">部屋のエンドツーエンド暗号鍵は \'%s\' に保存されました。
+    <string name="encryption_export_saved_as">ルームのエンドツーエンド暗号鍵は \'%s\' に保存されました。
 \n 
 \n警告: このファイルは、アプリケーションをアンインストールすると削除されることがあります。</string>
     <string name="you_added_a_new_device">暗号鍵を要求している新しい端末 \'%s\' を追加しました。</string>
