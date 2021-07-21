@@ -391,7 +391,7 @@
     <string name="auth_threepid_warning_message">メールと電話番号の同時登録はまだシステムが対応できませんが、電話番号だけの登録は可能です。
 \n
 \n設定からプロフィールにメールアドレスを追加できます。</string>
-    <string name="auth_recaptcha_message">接続先サーバ側かが、機械による自動登録ではなく、あなたが人間であることを確認したいとのことです</string>
+    <string name="auth_recaptcha_message">このホームサーバはあなたがロボットではない認証を求めます。</string>
     <string name="auth_username_in_use">ユーザ名はすでに使用されています</string>
     <string name="auth_home_server">接続先サーバ:</string>
     <string name="auth_identity_server">認証サーバ:</string>
@@ -499,7 +499,7 @@
     <string name="widget_integration_no_permission_in_room">あなたはこの部屋で権限がありません。</string>
     <string name="widget_integration_room_not_visible">部屋 %s は、見ることができません。</string>
     <string name="username">ユーザ名</string>
-    <string name="hs_url">接続先サーバ URL</string>
+    <string name="hs_url">ホームサーバ URL</string>
     <string name="identity_url">認証サーバ URL</string>
     <string name="auth_login">ログイン</string>
     <string name="room_add_matrix_apps">Matrixアプリを追加</string>
@@ -1279,7 +1279,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="return_to_call">コールし直す</string>
     <string name="call_resume_action">通話をやり直す</string>
     <string name="active_call_with_duration">アクティブな通話（%s）</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">ホームサーバーにアシスト機能を提供しない場合は、代わりに%sを使用します（IPアドレスは通話中に共有されます）</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">あなたのホームサーバーがアシスト機能を提供しない場合、代わりに%sを使用します（IPアドレスは通話中に共有されます）</string>
     <string name="video_call_in_progress">ビデオ通話が行われています…</string>
     <string name="settings_call_ringtone_use_default_stun">フォールバックコールアシストサーバーを許可する</string>
     <string name="error_unauthorized">有効な認証情報ではありません</string>
@@ -1724,7 +1724,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="room_widget_failed_to_load">ウィジェットの読込に失敗しました。
 \n%s</string>
     <string name="room_widget_reload">ウィジェットを再読込</string>
-    <string name="room_widget_permission_webview_shared_info_title"></string>
+    <string name="room_widget_permission_webview_shared_info_title"/>
     <string name="room_widget_permission_added_by">ウィジェットの追加者:</string>
     <string name="notification_inline_reply_failed">**送信に失敗 - 部屋を開いてください</string>
     <string name="notification_new_invitation">新しい招待</string>
@@ -1786,4 +1786,5 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="option_always_ask">毎回確認する</string>
     <string name="spaces_invited_header">招待</string>
     <string name="suggested_header">おすすめの部屋</string>
+    <string name="spaces_header">スペース</string>
 </resources>
