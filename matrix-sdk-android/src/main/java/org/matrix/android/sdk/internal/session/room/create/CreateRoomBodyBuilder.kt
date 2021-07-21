@@ -96,7 +96,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 roomAliasName = params.roomAliasName,
                 name = params.name,
                 topic = params.topic,
-                invitedUserIds = params.invitedUserIds.filter { it != userId },
+                invitedUserIds = params.invitedUserIds.filter { it != userId }.takeIf { it.isNotEmpty() },
                 invite3pids = invite3pids,
                 creationContent = params.creationContent.takeIf { it.isNotEmpty() },
                 initialStates = initialStates,
@@ -104,7 +104,6 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 isDirect = params.isDirect,
                 powerLevelContentOverride = params.powerLevelContentOverride,
                 roomVersion = params.roomVersion
-
         )
     }
 
