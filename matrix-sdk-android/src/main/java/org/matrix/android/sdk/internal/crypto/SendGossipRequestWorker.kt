@@ -46,7 +46,7 @@ internal class SendGossipRequestWorker(context: Context,
             override val sessionId: String,
             val keyShareRequest: OutgoingRoomKeyRequest? = null,
             val secretShareRequest: OutgoingSecretRequest? = null,
-            // The txnId for the sendToDevice request. Nullable for compatibility reason, but MUST always be provided
+            // The txnId for the sendToDevice request. Nullable for compatibility reasons, but MUST always be provided
             // to use the same value if this worker is retried.
             val txnId: String? = null,
             override val lastFailureMessage: String? = null
