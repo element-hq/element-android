@@ -22,8 +22,8 @@ import org.matrix.android.sdk.internal.crypto.model.rest.SendToDeviceBody
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
+import java.util.UUID
 import javax.inject.Inject
-import kotlin.random.Random
 
 internal interface SendToDeviceTask : Task<SendToDeviceTask.Params, Unit> {
     data class Params(
@@ -31,7 +31,7 @@ internal interface SendToDeviceTask : Task<SendToDeviceTask.Params, Unit> {
             val eventType: String,
             // the content to send. Map from user_id to device_id to content dictionary.
             val contentMap: MXUsersDevicesMap<Any>,
-            // the transactionId
+            // the transactionId. If not provided, a transactionId will be created by the task
             val transactionId: String? = null
     )
 }
@@ -46,16 +46,21 @@ internal class DefaultSendToDeviceTask @Inject constructor(
                 messages = params.contentMap.map
         )
 
+        // Create a unique txnId first, to use the same value if the request is retried
+        val txnId = params.transactionId ?: createUniqueTxnId()
+
         return executeRequest(
                 globalErrorReceiver,
                 canRetry = true,
                 maxRetriesCount = 3
         ) {
             cryptoApi.sendToDevice(
-                    params.eventType,
-                    params.transactionId ?: Random.nextInt(Integer.MAX_VALUE).toString(),
-                    sendToDeviceBody
+                    eventType = params.eventType,
+                    transactionId = txnId,
+                    body = sendToDeviceBody
             )
         }
     }
 }
+
+internal fun createUniqueTxnId() = UUID.randomUUID().toString()
