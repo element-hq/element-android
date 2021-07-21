@@ -52,7 +52,7 @@ interface VerificationService {
                              transactionId: String?): String?
 
     /**
-     * Request a key verification from another user using event in a room.
+     * Request key verification with another user via room events (instead of the to-device API)
      */
     fun requestKeyVerificationInDMs(methods: List<VerificationMethod>,
                                     otherUserId: String,
