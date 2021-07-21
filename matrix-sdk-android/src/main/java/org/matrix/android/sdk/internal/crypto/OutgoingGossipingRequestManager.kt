@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.di.SessionId
@@ -27,6 +26,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
+import org.matrix.android.sdk.internal.crypto.util.RequestIdHelper
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -156,7 +156,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
         if (resend) {
             val reSendParams = SendGossipRequestWorker.Params(
                     sessionId = sessionId,
-                    keyShareRequest = request.copy(requestId = LocalEcho.createLocalEchoId()),
+                    keyShareRequest = request.copy(requestId = RequestIdHelper.createUniqueRequestId()),
                     txnId = createUniqueTxnId()
             )
             val reSendWorkRequest = gossipingWorkManager.createWork<SendGossipRequestWorker>(WorkerParamsFactory.toData(reSendParams), true)
