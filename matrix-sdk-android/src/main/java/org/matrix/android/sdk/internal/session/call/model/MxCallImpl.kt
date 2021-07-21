@@ -143,7 +143,7 @@ internal class MxCallImpl(
     override fun reject() {
         if (opponentVersion < 1) {
             Timber.v("Opponent version is less than 1 ($opponentVersion): sending hangup instead of reject")
-            hangUp()
+            hangUp(EndCallReason.USER_HANGUP)
             return
         }
         Timber.v("## VOIP reject $callId")
@@ -162,7 +162,7 @@ internal class MxCallImpl(
         CallHangupContent(
                 callId = callId,
                 partyId = ourPartyId,
-                reason = reason ?: EndCallReason.USER_HANGUP,
+                reason = reason,
                 version = MxCall.VOIP_PROTO_VERSION.toString()
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = it.toContent()) }

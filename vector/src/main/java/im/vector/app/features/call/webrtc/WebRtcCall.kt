@@ -798,7 +798,7 @@ class WebRtcCall(
         }
     }
 
-    fun endCall(reason: EndCallReason? = null) {
+    fun endCall(reason: EndCallReason = EndCallReason.USER_HANGUP) {
         sessionScope?.launch(dispatcher) {
             if (mxCall.state is CallState.Ended) {
                 return@launch

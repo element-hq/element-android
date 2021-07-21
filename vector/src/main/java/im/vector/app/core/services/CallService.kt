@@ -167,7 +167,7 @@ class CallService : VectorService() {
                 }
         ).apply {
             viewBinder = IncomingCallAlert.ViewBinder(
-                    matrixItem = callInformation.matrixItem,
+                    matrixItem = callInformation.opponentMatrixItem,
                     avatarRenderer = avatarRenderer,
                     isVideoCall = isVideoCall,
                     onAccept = { showCallScreen(call, VectorCallActivity.INCOMING_ACCEPT) },
@@ -179,7 +179,7 @@ class CallService : VectorService() {
         alertManager.postVectorAlert(incomingCallAlert)
         val notification = notificationUtils.buildIncomingCallNotification(
                 call = call,
-                title = callInformation.matrixItem?.getBestName() ?: callInformation.opponentUserId,
+                title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId,
                 fromBg = fromBg
         )
         if (knownCalls.isEmpty()) {
@@ -235,7 +235,7 @@ class CallService : VectorService() {
         Timber.v("displayOutgoingCallNotification : display the dedicated notification")
         val notification = notificationUtils.buildOutgoingRingingCallNotification(
                 call = call,
-                title = callInformation.matrixItem?.getBestName() ?: callInformation.opponentUserId
+                title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
         )
         if (knownCalls.isEmpty()) {
             startForeground(callId.hashCode(), notification)
@@ -259,7 +259,7 @@ class CallService : VectorService() {
         val callInformation = call.toCallInformation()
         val notification = notificationUtils.buildPendingCallNotification(
                 call = call,
-                title = callInformation.matrixItem?.getBestName() ?: callInformation.opponentUserId
+                title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
         )
         if (knownCalls.isEmpty()) {
             startForeground(callId.hashCode(), notification)
@@ -293,7 +293,7 @@ class CallService : VectorService() {
                 callId = this.callId,
                 nativeRoomId = this.nativeRoomId,
                 opponentUserId = this.mxCall.opponentUserId,
-                matrixItem = vectorComponent().activeSessionHolder().getSafeActiveSession()?.let {
+                opponentMatrixItem = vectorComponent().activeSessionHolder().getSafeActiveSession()?.let {
                     this.getOpponentAsMatrixItem(it)
                 },
                 isVideoCall = this.mxCall.isVideoCall,
@@ -305,7 +305,7 @@ class CallService : VectorService() {
             val callId: String,
             val nativeRoomId: String,
             val opponentUserId: String,
-            val matrixItem: MatrixItem?,
+            val opponentMatrixItem: MatrixItem?,
             val isVideoCall: Boolean,
             val isOutgoing: Boolean
     )

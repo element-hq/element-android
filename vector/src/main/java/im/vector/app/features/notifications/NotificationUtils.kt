@@ -479,13 +479,13 @@ class NotificationUtils @Inject constructor(private val context: Context,
      */
     fun buildCallMissedNotification(callInformation: CallService.CallInformation): Notification {
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(callInformation.matrixItem?.getBestName() ?: callInformation.opponentUserId)
+                .setContentTitle(callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId)
                 .apply {
                     if (callInformation.isVideoCall) {
-                        setContentText(stringProvider.getString(R.string.missed_video_call))
+                        setContentText(stringProvider.getQuantityString(R.plurals.missed_video_call, 1, 1))
                         setSmallIcon(R.drawable.ic_missed_video_call)
                     } else {
-                        setContentText(stringProvider.getString(R.string.missed_audio_call))
+                        setContentText(stringProvider.getQuantityString(R.plurals.missed_audio_call, 1, 1))
                         setSmallIcon(R.drawable.ic_missed_voice_call)
                     }
                 }
