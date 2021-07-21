@@ -391,7 +391,7 @@
     <string name="auth_threepid_warning_message">メールと電話番号の同時登録はまだシステムが対応できませんが、電話番号だけの登録は可能です。
 \n
 \n設定からプロフィールにメールアドレスを追加できます。</string>
-    <string name="auth_recaptcha_message">このホームサーバはあなたがロボットではない認証を求めます。</string>
+    <string name="auth_recaptcha_message">このホームサーバはあなたがロボットではない認証を求めます</string>
     <string name="auth_username_in_use">ユーザ名はすでに使用されています</string>
     <string name="auth_home_server">ホームサーバ：</string>
     <string name="auth_identity_server">認証サーバ:</string>
@@ -854,7 +854,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="deactivate_account_prompt_password">続けるには、パスワードを入力してください:</string>
     <string name="deactivate_account_submit">アカウントを停止</string>
     <string name="error_empty_field_your_password">パスワードを入力してください。</string>
-    <string name="room_tombstone_versioned_description">この部屋は置き換えられており、アクティブではありません</string>
+    <string name="room_tombstone_versioned_description">このルームは置き換えられており、アクティブではありません。</string>
     <string name="room_tombstone_continuation_link">ここで会話が続いています</string>
     <string name="room_tombstone_continuation_description">この部屋は別の会話の続きです</string>
     <string name="room_tombstone_predecessor_link">より古いメッセージを見るには、ここをクリックしてください</string>
@@ -1657,7 +1657,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="keys_backup_restore_with_key_helper">復元鍵を喪失しましたか？設定で新しいのを設定できます。</string>
     <string name="keys_backup_restore_setup_recovery_key">メッセージの復元</string>
     <string name="keys_backup_restore_is_getting_backup_version">バックアップのバージョンを取得中…</string>
-    <string name="keys_backup_restore_with_passphrase">復元パスフレーズを使用して暗号化されたメッセージ履歴書をアンロックします。</string>
+    <string name="keys_backup_restore_with_passphrase">暗号化されたメッセージ履歴のロックを解除するには、復元パスフレーズを使用してください</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">復元パスフレーズをご存知でなければ、%sができます。</string>
     <string name="keys_backup_restore_with_recovery_key">復元鍵を使用して暗号化されたメッセージ履歴をアンロックします</string>
     <string name="keys_backup_restore_key_enter_hint">復元鍵を入力</string>
@@ -1726,7 +1726,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="room_widget_failed_to_load">ウィジェットの読込に失敗しました。
 \n%s</string>
     <string name="room_widget_reload">ウィジェットを再読込</string>
-    <string name="room_widget_permission_webview_shared_info_title">クッキーを設定し%sとデータを交換する可能性があります</string>
+    <string name="room_widget_permission_webview_shared_info_title">クッキーを設定し%sとデータを交換する可能性があります：</string>
     <string name="room_widget_permission_added_by">ウィジェットの追加者:</string>
     <string name="notification_inline_reply_failed">**送信に失敗 - 部屋を開いてください</string>
     <string name="notification_new_invitation">新しい招待</string>
