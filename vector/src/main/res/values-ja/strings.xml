@@ -271,8 +271,8 @@
     <string name="devices_details_last_seen_title">最終接続日</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_title">認証</string>
-    <string name="devices_delete_dialog_text">この操作を行うには追加の認証が必要です.
-続けるにはあなたのパスワードを入力して下さい.</string>
+    <string name="devices_delete_dialog_text">この操作には追加の認証が必要です。
+\n続行するには、パスワードを入力してください。</string>
     <string name="devices_delete_submit_button_label">受諾</string>
     <string name="settings_logged_in">ログイン中のアカウント</string>
     <string name="settings_select_language">言語を選択</string>
@@ -325,7 +325,7 @@
     <string name="room_settings_labs_end_to_end_warnings">暗号を有効にするためにはログアウトする必要があります.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">認証された端末のみで暗号化</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">この部屋では, この端末から認証されていない端末への暗号送信をしません.</string>
-    <string name="room_settings_addresses_add_new_address">"新しい住所表記 (記入例  #foo:matrix.org)"</string>
+    <string name="room_settings_addresses_add_new_address">新しいアドレス (記入例 #foo:matrix.org)</string>
     <string name="room_settings_addresses_no_local_addresses">この部屋はサーバ内住所表記がありません</string>
     <string name="room_settings_addresses_pref_title">住所表記</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">住所表記が正しくありません</string>
@@ -481,13 +481,14 @@
     <string name="settings_confirm_password">新しいパスワードの確認</string>
     <string name="settings_fail_to_update_password">パスワードの更新に失敗しました</string>
     <string name="settings_unignore_user">%sのすべてのメッセージを表示しますか？
-
-この操作はアプリを再起動し、時間がかかることに注意してください。</string>
+\n
+\nこの操作はアプリを再起動するため時間がかかる場合があります。</string>
     <string name="settings_phone_number_verification_error">電話番号の認証時にエラーが発生しました</string>
     <string name="room_settings_room_access_warning">この部屋へのリンクを作成するには、部屋の住所表記が必要です。</string>
     <string name="room_settings_addresses_e2e_enabled">この部屋は暗号化されています。</string>
     <string name="room_settings_addresses_e2e_disabled">この部屋は暗号化されていません。</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">暗号化を有効化 (警告: 部屋の暗号を再度無効することはできません！)</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">暗号化を有効にします
+\n（警告: 有効後にこれを無効にすることはできません！)</string>
     <string name="directory_title">部屋一覧</string>
     <string name="settings_theme">外観</string>
     <string name="encryption_information_title">エンドツーエンド暗号化についての情報</string>
@@ -509,8 +510,8 @@
     <string name="call_error_user_not_responding">通信先が通話の受取に失敗しました。</string>
     <string name="permissions_rationale_popup_title">情報</string>
     <string name="template_permissions_rationale_msg_storage">${app_name}は添付ファイルを送信および保存するために写真とビデオライブラリにアクセスするための許可が必要です。
-
-あなたの携帯端末からファイルを送信できるようにするには、次のポップアップでアクセスを許可してください。</string>
+\n
+\nあなたの端末からファイルを送信できるようにするには、次のポップアップでアクセスを許可してください。</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \n通話をするには、次のポップアップでアクセスできるように設定してください。"</string>
@@ -518,15 +519,15 @@
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \n通話をするためには、次のポップアップでアクセスを許可してください。"</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">ビデオ通話を行うには、カメラとマイクにアクセスするための権限が${app_name}アプリに必要です。
-
-通話をするには、次のポップアップでのアクセスを許可してください。</string>
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name}はビデオ通話を行うためにカメラとマイクにアクセスする許可を必要としています。
+\n
+\n次のポップアップでアクセスを許可して通話ができるようにしてください。</string>
     <string name="template_permissions_rationale_msg_contacts">Matrixユーザが電子メールアドレスや電話番号を元に他のユーザを検索するためには、${app_name}アプリがあなたの端末内電話帳へアクセスする許可が必要です。
 
 ${app_name}からあなた個人の電話帳への検索要求を許可する場合は、次のポップアップでアクセスを許可してください。</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">あなた個人の端末内の電話帳に登録されている電子メールアドレス、電話番号を元に、${app_name}の利用者を検索する場合は、アプリが端末内電話帳へアクセスする許可が必要です。
-
-${app_name}アプリがあなたの電話帳へアクセスすることを許可しますか？</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name}はあなたの連絡先のメールアドレスや電話番号をもとに他のユーザーを見つけることができます。
+\n
+\nこのアプリがあなたの連絡先へアクセスすることを許可しますか？</string>
     <string name="permissions_action_not_performed_missing_permissions">申し訳ありません。権限がないために操作が実行されませんでした</string>
     <string name="report_content">発言を通報する</string>
     <string name="read_receipt">既読</string>
@@ -571,12 +572,13 @@ ${app_name}アプリがあなたの電話帳へアクセスすることを許可
     <string name="title_activity_bug_report">不具合報告</string>
     <string name="read_receipts_list">開封確認メッセージのリスト</string>
     <string name="media_slider_saved_message">ダウンロードファイルに保存しますか？</string>
-    <string name="room_preview_unlinked_email_warning">この招待は%sさんに送られましたが、このアカウントには関連づけられていません。 他のアカウントでログインするか、このメールアドレスをあなたののアカウントに追加できます。</string>
+    <string name="room_preview_unlinked_email_warning">この招待はこのアカウントに関連付けられていない %s に送信されました。
+\n別のアカウントでログインするか、このメールを自分のアカウントに追加してください。</string>
     <string name="room_preview_try_join_an_unknown_room">あなたは%sにアクセスしようとしています。話し合いに参加しますか？</string>
     <string name="room_preview_try_join_an_unknown_room_default">部屋</string>
     <string name="room_preview_room_interactions_disabled">これは部屋のプレビューです。部屋でのやりとりはできません。</string>
-    <string name="room_participants_power_level_prompt">このユーザーにあなたと同じ権限を与える変更は取り消せません。
-よろしいですか？</string>
+    <string name="room_participants_power_level_prompt">このユーザーにあなたと同じ権限を与えますが、この変更は取り消せません。
+\n本当によろしいですか？</string>
     <string name="people_search_local_contacts">端末の連絡先 (%d)</string>
     <string name="people_search_user_directory">ユーザディレクトリ (%s)</string>
     <string name="people_search_filter_text">Matrixユーザのみ</string>
@@ -594,8 +596,8 @@ ${app_name}アプリがあなたの電話帳へアクセスすることを許可
     <string name="malformed_id">不正な形式のIDです。メールアドレスまたは\'@localpart:domain\'のようなMatrix IDを入力してください</string>
     <string name="room_event_action_report_prompt_reason">このコンテンツを報告する理由</string>
     <string name="room_event_action_report_prompt_ignore_user">このユーザによるすべてのメッセージを非表示にしますか？
-
-この操作はアプリを再起動し、時間がかかることに注意してください。</string>
+\n
+\nこの操作はアプリを再起動するため時間がかかる場合があります。</string>
     <string name="room_event_action_cancel_upload">アップロードをキャンセルする</string>
     <string name="room_event_action_cancel_download">ダウンロードをキャンセルする</string>
     <string name="search_hint">検索</string>
@@ -686,8 +688,8 @@ ${app_name}アプリがあなたの電話帳へアクセスすることを許可
     <string name="room_settings_invalid_group_format_dialog_title">無効なコミュニティID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' は有効なコミュニティIDではありません</string>
     <string name="encryption_export_saved_as">部屋のエンドツーエンド暗号鍵は \'%s\' に保存されました。
-
-警告：このファイルは、アプリケーションがアンインストールされた場合に削除されることがあります。</string>
+\n 
+\n警告: このファイルは、アプリケーションをアンインストールすると削除されることがあります。</string>
     <string name="you_added_a_new_device">暗号鍵を要求している新しい端末 \'%s\' を追加しました。</string>
     <string name="your_unverified_device_requesting">未認証の端末 \'%s\' が暗号鍵を要求しています。</string>
     <string name="create">作成</string>
@@ -785,7 +787,7 @@ ${app_name}アプリがあなたの電話帳へアクセスすることを許可
     </plurals>
     <string name="settings_notification_privacy_reduced">低プライバシー</string>
     <string name="settings_notification_privacy_secure_message_content">• 通知中のメッセージの内容は <b>Matrixのホームサーバから直接安全に入手しています</b></string>
-    <string name="settings_notification_privacy_nosecure_message_content">"•  "<b>メタデータとメッセージのデータ</b> を含む通知</string>
+    <string name="settings_notification_privacy_nosecure_message_content">・通知は <b>メタデータとメッセージのデータ</b> を含みます</string>
     <string name="settings_notification_privacy_message_content_not_shown">• 通知は <b>メッセージの内容を表示しません</b></string>
     <string name="settings_vibrate_on_mention">ユーザの名前をあげるときバイブレーションで通知</string>
     <string name="settings_preview_media_before_sending">送信の前にメディアをプレビュー</string>
@@ -914,7 +916,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="settings_show_read_receipts">開封確認メッセージを表示</string>
     <string name="settings_show_read_receipts_summary">開封確認メッセージをクリックすると詳細なリストを確認できます。</string>
     <string name="settings_send_message_with_enter">エンター入力でメッセージを送信</string>
-    <string name="settings_send_message_with_enter_summary">ソフトウェアキーボードのエンターボタンを押した際に、改行を追加する代わりにメッセージを送信します。</string>
+    <string name="settings_send_message_with_enter_summary">ソフトウェアキーボードのEnterボタンを押した際に改行せずにメッセージを送信します</string>
     <string name="settings_password">パスワード</string>
     <string name="settings_change_password_submit">パスワードを更新</string>
     <string name="settings_fail_to_update_password_invalid_current_password">パスワードが無効です</string>
@@ -949,9 +951,9 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="keys_backup_info_title_algorithm">アルゴリズム</string>
     <string name="keys_backup_info_title_signature">署名</string>
     <string name="settings_notification_troubleshoot">通知に関する問題の解決</string>
-    <string name="settings_troubleshoot_test_system_settings_title">システム設定</string>
-    <string name="settings_troubleshoot_test_account_settings_title">アカウント設定</string>
-    <string name="settings_troubleshoot_test_bing_settings_title">カスタム設定</string>
+    <string name="settings_troubleshoot_test_system_settings_title">システム設定。</string>
+    <string name="settings_troubleshoot_test_account_settings_title">アカウント設定。</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">カスタム設定。</string>
     <string name="settings_troubleshoot_test_service_boot_title">起動時の実行</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">バックグラウンド制限の確認</string>
     <string name="stay">とどまる</string>
@@ -1023,7 +1025,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="room_settings_enable_encryption_dialog_submit">暗号化を有効にする</string>
     <string name="encryption_information_cross_signing_state">クロス署名</string>
     <string name="encryption_information_dg_xsigning_complete">クロス署名は有効です
-\n秘密鍵は端末内です</string>
+\n秘密鍵は端末内にあります。</string>
     <string name="encryption_information_dg_xsigning_trusted">クロス署名は有効です
 \n鍵は信頼されています
 \n秘密鍵は不明です</string>
@@ -1133,7 +1135,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="invited_by">%s からの招待</string>
     <string name="sas_verified_successful">このセッションは正常に検証されました。</string>
     <string name="qr_code_scanned_by_other_notice">概ね完了しました。%s の画面にも同じシールドアイコンが表示されていますか？</string>
-    <string name="verification_scan_notice">相手のユーザーのデバイスのコードをスキャンし、相互に安全性を検証します。</string>
+    <string name="verification_scan_notice">相手ユーザーのデバイスのコードをスキャンし、相互に安全性を検証します</string>
     <string name="verification_scan_their_code">相手のコードをスキャン</string>
     <string name="verification_scan_emoji_title">スキャンできません</string>
     <string name="decline">断る</string>
