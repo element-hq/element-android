@@ -95,17 +95,15 @@ internal class OneTimeKeysUploader @Inject constructor(
             // private keys clogging up our local storage.
             // So we need some kind of engineering compromise to balance all of
             // these factors.
-            try {
+            tryOrNull {
                 val uploadedKeys = uploadOTK(oneTimeKeyCountFromSync, keyLimit)
                 Timber.v("## uploadKeys() : success, $uploadedKeys key(s) sent")
-            } finally {
-                oneTimeKeyCheckInProgress = false
             }
         } else {
             Timber.w("maybeUploadOneTimeKeys: waiting to know the number of OTK from the sync")
-            oneTimeKeyCheckInProgress = false
             lastOneTimeKeyCheck = 0
         }
+        oneTimeKeyCheckInProgress = false
     }
 
     private suspend fun fetchOtkNumber(): Int? {
