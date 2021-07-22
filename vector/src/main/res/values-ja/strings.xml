@@ -1795,7 +1795,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="call_failed_no_ice_use_alt">%s を使用してみてください</string>
     <string name="room_widget_revoke_access">アクセスを取り消す</string>
     <string name="active_widget_view_action">表示</string>
-    <string name="direct_room_encryption_enabled_tile_description">この部屋内のメッセージはエンドツーエンド暗号化されています。</string>
+    <string name="direct_room_encryption_enabled_tile_description">このルーム内のメッセージはエンドツーエンド暗号化されています。</string>
     <string name="room_member_open_or_create_dm">ダイレクトメッセージ</string>
     <string name="room_filtering_footer_create_new_direct_message">新しいダイレクトメッセージを送信する</string>
     <string name="login_set_email_optional_hint">メールアドレス（任意）</string>
@@ -1841,4 +1841,5 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="login_splash_text1">直接またはグループで人々とチャットする</string>
     <string name="login_splash_title">あなたの会話。 それを所有する。</string>
     <string name="auth_add_email_message_2">アカウントの復旧用のメールアドレスを設定して、後からオプションで知人に見つけてもらえるようにできます。</string>
+    <string name="this_is_the_beginning_of_dm">これは、%sを使用したダイレクトメッセージ履歴の始まりです。</string>
 </resources>
