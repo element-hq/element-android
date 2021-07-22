@@ -17,14 +17,13 @@
 package im.vector.app.features.home
 
 import im.vector.app.core.platform.VectorViewModelAction
-import org.matrix.android.sdk.api.session.user.model.User
 
 sealed class HomeDetailAction : VectorViewModelAction {
     data class SwitchTab(val tab: HomeTab) : HomeDetailAction()
     object MarkAllRoomsRead : HomeDetailAction()
     data class StartCallWithPhoneNumber(val phoneNumber: String): HomeDetailAction()
     data class InviteByEmail(val email: String) : HomeDetailAction()
-    data class SelectContact(val user: User) : HomeDetailAction()
+    data class SelectContact(val userId: String) : HomeDetailAction()
     object UnauthorizedEmail : HomeDetailAction()
     data class CreateDiscussion(val isExternalEmail: Boolean) : HomeDetailAction()
 }

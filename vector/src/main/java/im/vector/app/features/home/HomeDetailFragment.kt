@@ -30,6 +30,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import fr.gouv.tchap.core.utils.TchapUtils
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
@@ -171,11 +172,21 @@ class HomeDetailFragment @Inject constructor(
 
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                HomeDetailViewEvents.CallStarted   -> dismissLoadingDialog()
-                is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
-                HomeDetailViewEvents.Loading       -> showLoadingDialog()
+                HomeDetailViewEvents.CallStarted                          -> dismissLoadingDialog()
+                is HomeDetailViewEvents.FailToCall                        -> showFailure(viewEvent.failure)
+                HomeDetailViewEvents.Loading                              -> showLoadingDialog()
+                is HomeDetailViewEvents.InviteIgnoredForDiscoveredUser    -> handleExistingUser(viewEvent.userId)
+                is HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail ->
+                    handleInviteByEmailFailed(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
+                is HomeDetailViewEvents.InviteIgnoredForExistingRoom      ->
+                    handleInviteByEmailFailed(getString(R.string.tchap_invite_already_send_message, viewEvent.email))
+                HomeDetailViewEvents.InviteNoTchapUserByEmail             ->
+                    handleInviteByEmailFailed(getString(R.string.tchap_invite_sending_succeeded) + "\n" + getString(R.string.tchap_send_invite_confirmation))
+                is HomeDetailViewEvents.GetPlatform                       -> platformViewModel.handle(PlatformAction.DiscoverTchapPlatform(viewEvent.email))
+                is HomeDetailViewEvents.OpenDirectChat                    -> openRoom(viewEvent.roomId)
+                is HomeDetailViewEvents.Failure                           -> showFailure(viewEvent.throwable)
             }
-        }
+        }.exhaustive
 
         unknownDeviceDetectorSharedViewModel.subscribe { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
@@ -247,32 +258,6 @@ class HomeDetailFragment @Inject constructor(
                     }
                 }
             }.exhaustive
-        }
-
-        viewModel.observeViewEvents {
-            when (it) {
-                is HomeDetailViewEvents.InviteIgnoredForDiscoveredUser    -> {
-                    // TODO display a dialog to inform that an account already exist for this email, prompt the user to send a direct message
-                    //  note: the potential DM is already known see the existing room from state.
-//                    withState(viewModel) {
-//                        it.existingRoom
-//                    }
-                    Toast.makeText(requireContext(), getString(R.string.tchap_discussion_already_exist, it.email), Toast.LENGTH_LONG).show()
-                }
-                is HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail -> {
-                    Toast.makeText(requireContext(), getString(R.string.tchap_invite_unauthorized_message, it.email), Toast.LENGTH_LONG).show()
-                }
-                is HomeDetailViewEvents.InviteIgnoredForExistingRoom      -> {
-                    Toast.makeText(requireContext(), getString(R.string.tchap_invite_already_send_message, it.email), Toast.LENGTH_LONG).show()
-                }
-                HomeDetailViewEvents.InviteNoTchapUserByEmail             -> {
-                    Toast.makeText(requireContext(), getString(R.string.tchap_invite_sending_succeeded) + "\n" +
-                            getString(R.string.tchap_send_invite_confirmation), Toast.LENGTH_LONG).show()
-                }
-                is HomeDetailViewEvents.GetPlatform                       -> platformViewModel.handle(PlatformAction.DiscoverTchapPlatform(it.email))
-                is HomeDetailViewEvents.OpenDirectChat                    -> openRoom(it.roomId)
-                is HomeDetailViewEvents.Failure                           -> showFailure(it.throwable)
-            }
         }
     }
 
@@ -410,7 +395,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun onSelectContact(action: TchapContactListSharedAction.OnSelectContact) {
-        viewModel.handle(HomeDetailAction.SelectContact(action.user))
+        viewModel.handle(HomeDetailAction.SelectContact(action.user.userId))
     }
 
     private fun setupKeysBackupBanner() {
@@ -643,6 +628,20 @@ class HomeDetailFragment @Inject constructor(
     private fun openRoom(roomId: String) {
         navigator.openRoom(requireActivity(), roomId)
         cancelSearch()
+    }
+
+    private fun handleInviteByEmailFailed(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun handleExistingUser(userId: String) {
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.permissions_rationale_popup_title)
+                .setMessage(R.string.tchap_invite_not_sent_for_discovered_user)
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    viewModel.handle(HomeDetailAction.SelectContact(userId))
+                }
+                .show()
     }
 
     override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
