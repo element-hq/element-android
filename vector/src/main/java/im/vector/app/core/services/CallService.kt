@@ -37,8 +37,11 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.popup.IncomingCallAlert
 import im.vector.app.features.popup.PopupAlertManager
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
+
+private val CallServiceTag = LoggerTag("CallService", LoggerTag.VOIP)
 
 /**
  * Foreground service to manage calls
@@ -91,7 +94,7 @@ class CallService : VectorService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Timber.v("## VOIP onStartCommand $intent")
+        Timber.tag(CallServiceTag.computedValue).v("onStartCommand $intent")
         if (mediaSession == null) {
             mediaSession = MediaSessionCompat(applicationContext, CallService::class.java.name).apply {
                 setCallback(mediaSessionButtonCallback)
@@ -115,19 +118,19 @@ class CallService : VectorService() {
                 callRingPlayerOutgoing?.start()
                 displayOutgoingRingingCallNotification(intent)
             }
-            ACTION_ONGOING_CALL -> {
+            ACTION_ONGOING_CALL          -> {
                 callRingPlayerIncoming?.stop()
                 callRingPlayerOutgoing?.stop()
                 displayCallInProgressNotification(intent)
             }
-            ACTION_CALL_CONNECTING -> {
+            ACTION_CALL_CONNECTING       -> {
                 // lower notification priority
                 displayCallInProgressNotification(intent)
                 // stop ringing
                 callRingPlayerIncoming?.stop()
                 callRingPlayerOutgoing?.stop()
             }
-            ACTION_CALL_TERMINATED -> {
+            ACTION_CALL_TERMINATED       -> {
                 handleCallTerminated(intent)
             }
             else                         -> {
@@ -148,7 +151,7 @@ class CallService : VectorService() {
      *
      */
     private fun displayIncomingCallNotification(intent: Intent) {
-        Timber.v("## VOIP displayIncomingCallNotification $intent")
+        Timber.tag(CallServiceTag.computedValue).v("displayIncomingCallNotification $intent")
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
         val call = callManager.getCallById(callId) ?: return Unit.also {
             handleUnexpectedState(callId)
@@ -156,7 +159,7 @@ class CallService : VectorService() {
         val isVideoCall = call.mxCall.isVideoCall
         val fromBg = intent.getBooleanExtra(EXTRA_IS_IN_BG, false)
         val opponentMatrixItem = getOpponentMatrixItem(call)
-        Timber.v("displayIncomingCallNotification : display the dedicated notification")
+        Timber.tag(CallServiceTag.computedValue).v("displayIncomingCallNotification : display the dedicated notification")
         val incomingCallAlert = IncomingCallAlert(callId,
                 shouldBeDisplayedIn = { activity ->
                     if (activity is VectorCallActivity) {
@@ -192,7 +195,7 @@ class CallService : VectorService() {
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
         alertManager.cancelAlert(callId)
         if (!knownCalls.remove(callId)) {
-            Timber.v("Call terminated for unknown call $callId$")
+            Timber.tag(CallServiceTag.computedValue).v("Call terminated for unknown call $callId$")
             handleUnexpectedState(callId)
             return
         }
@@ -219,7 +222,7 @@ class CallService : VectorService() {
             handleUnexpectedState(callId)
         }
         val opponentMatrixItem = getOpponentMatrixItem(call)
-        Timber.v("displayOutgoingCallNotification : display the dedicated notification")
+        Timber.tag(CallServiceTag.computedValue).v("displayOutgoingCallNotification : display the dedicated notification")
         val notification = notificationUtils.buildOutgoingRingingCallNotification(
                 call = call,
                 title = opponentMatrixItem?.getBestName() ?: call.mxCall.opponentUserId
@@ -236,7 +239,7 @@ class CallService : VectorService() {
      * Display a call in progress notification.
      */
     private fun displayCallInProgressNotification(intent: Intent) {
-        Timber.v("## VOIP displayCallInProgressNotification")
+        Timber.tag(CallServiceTag.computedValue).v("displayCallInProgressNotification")
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
         val call = callManager.getCallById(callId) ?: return Unit.also {
             handleUnexpectedState(callId)
@@ -256,7 +259,7 @@ class CallService : VectorService() {
     }
 
     private fun handleUnexpectedState(callId: String?) {
-        Timber.v("Fallback to clear everything")
+        Timber.tag(CallServiceTag.computedValue).v("Fallback to clear everything")
         callRingPlayerIncoming?.stop()
         callRingPlayerOutgoing?.stop()
         if (callId != null) {
