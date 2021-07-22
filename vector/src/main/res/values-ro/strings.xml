@@ -297,4 +297,6 @@
     <string name="notice_room_server_acl_set_banned">• Serverele care se potrivesc %s sunt interzise.</string>
     <string name="notice_room_server_acl_set_title_by_you">Tu ai setat lista de acces in aceasta cameră.</string>
     <string name="notice_end_to_end">%1$s porniți criptarea de la un capat la altul (%2$s)</string>
+    <string name="notice_made_future_room_visibility_by_you">Ați făcut istoria camerei viitoare vizibilă pentru %1$s</string>
+    <string name="notice_made_future_room_visibility">%1$s a făcut istoria camerei viitoare vizibilă pentru %2$s</string>
 </resources>
