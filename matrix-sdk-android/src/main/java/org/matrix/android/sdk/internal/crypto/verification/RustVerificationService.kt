@@ -70,6 +70,7 @@ internal fun prepareMethods(methods: List<VerificationMethod>): List<String> {
     return stringMethods
 }
 
+/** Class that implements some common methods to dispatch updates for the verification related classes */
 internal class UpdateDispatcher(private val listeners: ArrayList<VerificationService.Listener>) {
     private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -129,6 +130,16 @@ internal class RustVerificationService(
 ) : VerificationService {
     private val dispatcher = UpdateDispatcher(this.olmMachine.verificationListeners)
 
+    /** The main entry point for the verification service
+     *
+     * All verification related events should be forwarded through this method to
+     * the verification service.
+     *
+     * Since events are at this point already handled by the rust-sdk through the receival
+     * of the to-device events and the decryption of room events, this method mainly just
+     * fetches the appropriate rust object that will be created or updated by the event and
+     * dispatches updates to our listeners.
+     */
     internal suspend fun onEvent(event: Event) = when (event.getClearType()) {
         // I'm not entirely sure why getClearType() returns a msgtype in one case
         // and a event type in the other case, but this is how the old verification
@@ -145,6 +156,7 @@ internal class RustVerificationService(
         }
     }
 
+    /** Dispatch updates after a verification event has been received */
     private fun onUpdate(event: Event) {
         val sender = event.senderId ?: return
         val flowId = getFlowId(event) ?: return
@@ -154,6 +166,7 @@ internal class RustVerificationService(
         this.dispatcher.dispatchTxUpdated(verification)
     }
 
+    /** Check if the start event created new verification objects and dispatch updates */
     private suspend fun onStart(event: Event) {
         val sender = event.senderId ?: return
         val flowId = getFlowId(event) ?: return
@@ -166,7 +179,7 @@ internal class RustVerificationService(
             // event, we auto-accept here considering that we either initiated the request or
             // accepted the request. If it's a QR code verification, just dispatch an update.
             if (verification is SasVerification) {
-                // Accept dispatches an update, no need to do it twice.
+                // accept() will dispatch an update, no need to do it twice.
                 Timber.d("## Verification: Auto accepting SAS verification with $sender")
                 verification.accept()
             } else {
@@ -182,6 +195,7 @@ internal class RustVerificationService(
         }
     }
 
+    /** Check if the request event created a nev verification request object and dispatch that it dis so */
     private fun onRequest(event: Event) {
         val flowId = getFlowId(event) ?: return
         val sender = event.senderId ?: return
