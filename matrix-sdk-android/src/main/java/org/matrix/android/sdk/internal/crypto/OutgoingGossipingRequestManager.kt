@@ -16,16 +16,15 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import org.matrix.android.sdk.api.session.events.model.LocalEcho
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -141,7 +140,8 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
     /**
      * Given a OutgoingRoomKeyRequest, cancel it and delete the request record
      *
-     * @param request the request
+     * @param request the request to cancel
+     * @param resend  true to send the same request again, using a new requestId
      */
     private fun sendOutgoingRoomKeyRequestCancellation(request: OutgoingRoomKeyRequest, resend: Boolean = false) {
         Timber.v("## CRYPTO - sendOutgoingRoomKeyRequestCancellation $request")
@@ -152,12 +152,10 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
         gossipingWorkManager.postWork(workRequest)
 
         if (resend) {
-            val reSendParams = SendGossipRequestWorker.Params(
-                    sessionId = sessionId,
-                    keyShareRequest = request.copy(requestId = LocalEcho.createLocalEchoId())
-            )
-            val reSendWorkRequest = gossipingWorkManager.createWork<SendGossipRequestWorker>(WorkerParamsFactory.toData(reSendParams), true)
-            gossipingWorkManager.postWork(reSendWorkRequest)
+            request.requestBody?.let {
+                // Ensure the new request is correctly added to the DB
+                sendRoomKeyRequest(it, request.recipients)
+            }
         }
     }
 }
