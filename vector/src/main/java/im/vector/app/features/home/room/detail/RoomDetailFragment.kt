@@ -18,15 +18,18 @@ package im.vector.app.features.home.room.detail
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.PointF
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
+import android.util.DisplayMetrics
 import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -40,6 +43,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.annotation.Nullable
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -205,6 +209,39 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+open class SmoothLinearLayoutManger : LinearLayoutManager {
+    constructor(context: Context?) : super(context, VERTICAL, false)
+    constructor(context: Context?, orientation: Int, reverseLayout: Boolean) : super(context, orientation, reverseLayout) {}
+
+    override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State, position: Int) {
+        val smoothScroller: RecyclerView.SmoothScroller = CenterSmoothScroller(recyclerView.context)
+        smoothScroller.targetPosition = position
+        startSmoothScroll(smoothScroller)
+    }
+
+    private inner class CenterSmoothScroller(context: Context?) : LinearSmoothScroller(context) {
+        @Nullable
+        override fun computeScrollVectorForPosition(targetPosition: Int): PointF? {
+            return this@SmoothLinearLayoutManger.computeScrollVectorForPosition(targetPosition)
+        }
+
+        override fun calculateDtToFit(viewStart: Int, viewEnd: Int, boxStart: Int, boxEnd: Int, snapPreference: Int): Int {
+            return boxStart + (boxEnd - boxStart) / 2 - (viewStart + (viewEnd - viewStart) / 2)
+        }
+
+        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+            // todo make it smoother
+            // displayMetrics.heightPixels
+            return 0.2f
+        }
+
+        override fun getVerticalSnapPreference(): Int {
+            return SNAP_TO_START
+        }
+    }
+}
+
+
 @Parcelize
 data class RoomDetailArgs(
         val roomId: String,
@@ -286,9 +323,10 @@ open class RoomDetailFragment @Inject constructor(
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
     private lateinit var knownCallsViewModel: SharedKnownCallsViewModel
 
-    private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var layoutManager: SmoothLinearLayoutManger
+//    private lateinit var layoutManager: LinearLayoutManager
     private lateinit var jumpToBottomViewVisibilityManager: JumpToBottomViewVisibilityManager
-    private lateinit var smoothScroller: RecyclerView.SmoothScroller
+//    private lateinit var smoothScroller: RecyclerView.SmoothScroller
     private var modelBuildListener: OnModelBuildFinishedListener? = null
 
     private lateinit var attachmentsHelper: AttachmentsHelper
@@ -420,7 +458,7 @@ open class RoomDetailFragment @Inject constructor(
             handleSpaceShare()
         }
 
-        smoothScroller = LinearSmoothScroller(context)
+//        smoothScroller = LinearSmoothScroller(context)
     }
 
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
@@ -737,25 +775,20 @@ open class RoomDetailFragment @Inject constructor(
                 scrollOnNewMessageCallback.forceScrollOnNextUpdate()
                 roomDetailViewModel.timeline.restartWithEventId(null)
             } else {
-                smoothScroller.targetPosition = 0
-                layoutManager.startSmoothScroll(smoothScroller)
-            // layoutManager.postOnAnimation {
-            // Timber.i("setupJumpToBottomView: %s", (smoothScroller.isRunning))
-            // }
-            // layoutManager.scrollToPosition(0)
+                // L784: RecyclerView.State(), : any problem it has?
+                layoutManager.smoothScrollToPosition(
+                        views.timelineRecyclerView,
+                        RecyclerView.State(),
+                        0
+                )
             }
         }
-
         jumpToBottomViewVisibilityManager = JumpToBottomViewVisibilityManager(
                 views.jumpToBottomView,
                 debouncer,
                 views.timelineRecyclerView,
                 layoutManager
         )
-
-        // layoutManager.isSmoothScrollbarEnabled = true
-        // layoutManager.startSmoothScroll()
-        // layoutManager.startSmoothScroll(MySmoothScroller())
     }
 
     private fun setupJumpToReadMarkerView() {
@@ -1097,7 +1130,7 @@ open class RoomDetailFragment @Inject constructor(
         timelineEventController.timeline = roomDetailViewModel.timeline
 
         views.timelineRecyclerView.trackItemsVisibilityChange()
-        layoutManager = object : LinearLayoutManager(context, RecyclerView.VERTICAL, true) {
+        layoutManager = object : SmoothLinearLayoutManger(context, RecyclerView.VERTICAL, true) {
             override fun onLayoutCompleted(state: RecyclerView.State?) {
                 super.onLayoutCompleted(state)
                 updateJumpToReadMarkerViewVisibility()
