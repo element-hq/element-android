@@ -315,7 +315,7 @@ internal class DefaultCryptoService @Inject constructor(
             // Open the store
             cryptoStore.open()
 
-            if (!cryptoStore.getDeviceKeysUploaded()) {
+            if (!cryptoStore.areDeviceKeysUploaded()) {
                 // Schedule upload of OTK
                 oneTimeKeysUploader.updateOneTimeKeyCount(0)
             }
@@ -911,7 +911,7 @@ internal class DefaultCryptoService @Inject constructor(
      * Upload my user's device keys.
      */
     private suspend fun uploadDeviceKeys() {
-        if (cryptoStore.getDeviceKeysUploaded()) {
+        if (cryptoStore.areDeviceKeysUploaded()) {
             Timber.d("Keys already uploaded, nothing to do")
             return
         }
