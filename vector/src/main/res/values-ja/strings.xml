@@ -1841,5 +1841,5 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="login_splash_text1">直接またはグループで人々とチャットする</string>
     <string name="login_splash_title">あなたの会話。 それを所有する。</string>
     <string name="auth_add_email_message_2">アカウントの復旧用のメールアドレスを設定して、後からオプションで知人に見つけてもらえるようにできます。</string>
-    <string name="this_is_the_beginning_of_dm">これは、%sを使用したダイレクトメッセージ履歴の始まりです。</string>
+    <string name="this_is_the_beginning_of_dm">ここが%sとのダイレクトメッセージのスタート地点です。</string>
 </resources>
