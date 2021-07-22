@@ -26,7 +26,7 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
 
-private val CallEventProcessorTag = LoggerTag("CallEventProcessor", LoggerTag.VOIP)
+private val loggerTag = LoggerTag("CallEventProcessor", LoggerTag.VOIP)
 
 @SessionScope
 internal class CallEventProcessor @Inject constructor(private val callSignalingHandler: CallSignalingHandler)
@@ -75,7 +75,7 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
 
     private fun dispatchToCallSignalingHandlerIfNeeded(event: Event) {
         event.roomId ?: return Unit.also {
-            Timber.tag(CallEventProcessorTag.computedValue).w("Event with no room id ${event.eventId}")
+            Timber.tag(loggerTag.value).w("Event with no room id ${event.eventId}")
         }
         callSignalingHandler.onCallEvent(event)
     }

@@ -61,7 +61,7 @@ import javax.inject.Singleton
  * Manage peerConnectionFactory & Peer connections outside of activity lifecycle to resist configuration changes
  * Use app context
  */
-private val WebRtcCallManagerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
+private val loggerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
 
 @Singleton
 class WebRtcCallManager @Inject constructor(
@@ -187,7 +187,7 @@ class WebRtcCallManager @Inject constructor(
     fun getAdvertisedCalls() = advertisedCalls
 
     fun headSetButtonTapped() {
-        Timber.tag(WebRtcCallManagerTag.computedValue).v("headSetButtonTapped")
+        Timber.tag(loggerTag.value).v("headSetButtonTapped")
         val call = getCurrentCall() ?: return
         if (call.mxCall.state is CallState.LocalRinging) {
             call.acceptIncomingCall()
@@ -200,12 +200,12 @@ class WebRtcCallManager @Inject constructor(
 
     private fun createPeerConnectionFactoryIfNeeded() {
         if (peerConnectionFactory != null) return
-        Timber.tag(WebRtcCallManagerTag.computedValue).v("createPeerConnectionFactory")
+        Timber.tag(loggerTag.value).v("createPeerConnectionFactory")
         val eglBaseContext = rootEglBase?.eglBaseContext ?: return Unit.also {
-            Timber.tag(WebRtcCallManagerTag.computedValue).e("No EGL BASE")
+            Timber.tag(loggerTag.value).e("No EGL BASE")
         }
 
-        Timber.tag(WebRtcCallManagerTag.computedValue).v("PeerConnectionFactory.initialize")
+        Timber.tag(loggerTag.value).v("PeerConnectionFactory.initialize")
         PeerConnectionFactory.initialize(PeerConnectionFactory
                 .InitializationOptions.builder(context.applicationContext)
                 .createInitializationOptions()
@@ -219,7 +219,7 @@ class WebRtcCallManager @Inject constructor(
                 /* enableH264HighProfile */
                 true)
         val defaultVideoDecoderFactory = DefaultVideoDecoderFactory(eglBaseContext)
-        Timber.tag(WebRtcCallManagerTag.computedValue).v("PeerConnectionFactory.createPeerConnectionFactory ...")
+        Timber.tag(loggerTag.value).v("PeerConnectionFactory.createPeerConnectionFactory ...")
         peerConnectionFactory = PeerConnectionFactory.builder()
                 .setOptions(options)
                 .setVideoEncoderFactory(defaultVideoEncoderFactory)
@@ -228,7 +228,7 @@ class WebRtcCallManager @Inject constructor(
     }
 
     private fun onCallActive(call: WebRtcCall) {
-        Timber.tag(WebRtcCallManagerTag.computedValue).v("WebRtcPeerConnectionManager onCall active: ${call.mxCall.callId}")
+        Timber.tag(loggerTag.value).v("WebRtcPeerConnectionManager onCall active: ${call.mxCall.callId}")
         val currentCall = getCurrentCall().takeIf { it != call }
         currentCall?.updateRemoteOnHold(onHold = true)
         audioManager.setMode(if (call.mxCall.isVideoCall) CallAudioManager.Mode.VIDEO_CALL else CallAudioManager.Mode.AUDIO_CALL)
@@ -236,9 +236,9 @@ class WebRtcCallManager @Inject constructor(
     }
 
     private fun onCallEnded(callId: String) {
-        Timber.tag(WebRtcCallManagerTag.computedValue).v("WebRtcPeerConnectionManager onCall ended: $callId")
+        Timber.tag(loggerTag.value).v("WebRtcPeerConnectionManager onCall ended: $callId")
         val webRtcCall = callsByCallId.remove(callId) ?: return Unit.also {
-            Timber.tag(WebRtcCallManagerTag.computedValue).v("On call ended for unknown call $callId")
+            Timber.tag(loggerTag.value).v("On call ended for unknown call $callId")
         }
         CallService.onCallTerminated(context, callId)
         callsByRoomId[webRtcCall.signalingRoomId]?.remove(webRtcCall)
@@ -250,7 +250,7 @@ class WebRtcCallManager @Inject constructor(
         }
         // There is no active calls
         if (getCurrentCall() == null) {
-            Timber.tag(WebRtcCallManagerTag.computedValue).v("Dispose peerConnectionFactory as there is no need to keep one")
+            Timber.tag(loggerTag.value).v("Dispose peerConnectionFactory as there is no need to keep one")
             peerConnectionFactory?.dispose()
             peerConnectionFactory = null
             audioManager.setMode(CallAudioManager.Mode.DEFAULT)
@@ -268,13 +268,13 @@ class WebRtcCallManager @Inject constructor(
 
     suspend fun startOutgoingCall(nativeRoomId: String, otherUserId: String, isVideoCall: Boolean, transferee: WebRtcCall? = null) {
         val signalingRoomId = callUserMapper?.getOrCreateVirtualRoomForRoom(nativeRoomId, otherUserId) ?: nativeRoomId
-        Timber.tag(WebRtcCallManagerTag.computedValue).v("startOutgoingCall in room $signalingRoomId to $otherUserId isVideo $isVideoCall")
+        Timber.tag(loggerTag.value).v("startOutgoingCall in room $signalingRoomId to $otherUserId isVideo $isVideoCall")
         if (getCallsByRoomId(nativeRoomId).isNotEmpty()) {
-            Timber.tag(WebRtcCallManagerTag.computedValue).w("you already have a call in this room")
+            Timber.tag(loggerTag.value).w("you already have a call in this room")
             return
         }
         if (getCurrentCall() != null && getCurrentCall()?.mxCall?.state !is CallState.Connected || getCalls().size >= 2) {
-            Timber.tag(WebRtcCallManagerTag.computedValue).w("cannot start outgoing call")
+            Timber.tag(loggerTag.value).w("cannot start outgoing call")
             // Just ignore, maybe we could answer from other session?
             return
         }
@@ -297,10 +297,10 @@ class WebRtcCallManager @Inject constructor(
     }
 
     override fun onCallIceCandidateReceived(mxCall: MxCall, iceCandidatesContent: CallCandidatesContent) {
-        Timber.tag(WebRtcCallManagerTag.computedValue).v("onCallIceCandidateReceived for call ${mxCall.callId}")
+        Timber.tag(loggerTag.value).v("onCallIceCandidateReceived for call ${mxCall.callId}")
         val call = callsByCallId[iceCandidatesContent.callId]
                 ?: return Unit.also {
-                    Timber.tag(WebRtcCallManagerTag.computedValue).w("onCallIceCandidateReceived for non active call? ${iceCandidatesContent.callId}")
+                    Timber.tag(loggerTag.value).w("onCallIceCandidateReceived for non active call? ${iceCandidatesContent.callId}")
                 }
         call.onCallIceCandidateReceived(iceCandidatesContent)
     }
@@ -337,14 +337,14 @@ class WebRtcCallManager @Inject constructor(
     }
 
     override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
-        Timber.tag(WebRtcCallManagerTag.computedValue).v("onCallInviteReceived callId ${mxCall.callId}")
+        Timber.tag(loggerTag.value).v("onCallInviteReceived callId ${mxCall.callId}")
         val nativeRoomId = callUserMapper?.nativeRoomForVirtualRoom(mxCall.roomId) ?: mxCall.roomId
         if (getCallsByRoomId(nativeRoomId).isNotEmpty()) {
-            Timber.tag(WebRtcCallManagerTag.computedValue).w("you already have a call in this room")
+            Timber.tag(loggerTag.value).w("you already have a call in this room")
             return
         }
         if ((getCurrentCall() != null && getCurrentCall()?.mxCall?.state !is CallState.Connected) || getCalls().size >= 2) {
-            Timber.tag(WebRtcCallManagerTag.computedValue).w("receiving incoming call but cannot handle it")
+            Timber.tag(loggerTag.value).w("receiving incoming call but cannot handle it")
             // Just ignore, maybe we could answer from other session?
             return
         }
@@ -373,7 +373,7 @@ class WebRtcCallManager @Inject constructor(
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
         val call = callsByCallId[callAnswerContent.callId]
                 ?: return Unit.also {
-                    Timber.tag(WebRtcCallManagerTag.computedValue).w("onCallAnswerReceived for non active call? ${callAnswerContent.callId}")
+                    Timber.tag(loggerTag.value).w("onCallAnswerReceived for non active call? ${callAnswerContent.callId}")
                 }
         val mxCall = call.mxCall
         // Update service state
@@ -387,7 +387,7 @@ class WebRtcCallManager @Inject constructor(
     override fun onCallHangupReceived(callHangupContent: CallHangupContent) {
         val call = callsByCallId[callHangupContent.callId]
                 ?: return Unit.also {
-                    Timber.tag(WebRtcCallManagerTag.computedValue).w("onCallHangupReceived for non active call? ${callHangupContent.callId}")
+                    Timber.tag(loggerTag.value).w("onCallHangupReceived for non active call? ${callHangupContent.callId}")
                 }
         call.endCall(false)
     }
@@ -395,7 +395,7 @@ class WebRtcCallManager @Inject constructor(
     override fun onCallRejectReceived(callRejectContent: CallRejectContent) {
         val call = callsByCallId[callRejectContent.callId]
                 ?: return Unit.also {
-                    Timber.tag(WebRtcCallManagerTag.computedValue).w("onCallRejectReceived for non active call? ${callRejectContent.callId}")
+                    Timber.tag(loggerTag.value).w("onCallRejectReceived for non active call? ${callRejectContent.callId}")
                 }
         call.endCall(false)
     }
@@ -403,7 +403,7 @@ class WebRtcCallManager @Inject constructor(
     override fun onCallSelectAnswerReceived(callSelectAnswerContent: CallSelectAnswerContent) {
         val call = callsByCallId[callSelectAnswerContent.callId]
                 ?: return Unit.also {
-                    Timber.tag(WebRtcCallManagerTag.computedValue).w("onCallSelectAnswerReceived for non active call? ${callSelectAnswerContent.callId}")
+                    Timber.tag(loggerTag.value).w("onCallSelectAnswerReceived for non active call? ${callSelectAnswerContent.callId}")
                 }
         val selectedPartyId = callSelectAnswerContent.selectedPartyId
         if (selectedPartyId != call.mxCall.ourPartyId) {
@@ -416,13 +416,13 @@ class WebRtcCallManager @Inject constructor(
     override fun onCallNegotiateReceived(callNegotiateContent: CallNegotiateContent) {
         val call = callsByCallId[callNegotiateContent.callId]
                 ?: return Unit.also {
-                    Timber.tag(WebRtcCallManagerTag.computedValue).w("onCallNegotiateReceived for non active call? ${callNegotiateContent.callId}")
+                    Timber.tag(loggerTag.value).w("onCallNegotiateReceived for non active call? ${callNegotiateContent.callId}")
                 }
         call.onCallNegotiateReceived(callNegotiateContent)
     }
 
     override fun onCallManagedByOtherSession(callId: String) {
-        Timber.tag(WebRtcCallManagerTag.computedValue).v("onCallManagedByOtherSession: $callId")
+        Timber.tag(loggerTag.value).v("onCallManagedByOtherSession: $callId")
         onCallEnded(callId)
     }
 
@@ -432,7 +432,7 @@ class WebRtcCallManager @Inject constructor(
         }
         val call = callsByCallId[callAssertedIdentityContent.callId]
                 ?: return Unit.also {
-                    Timber.tag(WebRtcCallManagerTag.computedValue).w("onCallAssertedIdentityReceived for non active call? ${callAssertedIdentityContent.callId}")
+                    Timber.tag(loggerTag.value).w("onCallAssertedIdentityReceived for non active call? ${callAssertedIdentityContent.callId}")
                 }
         call.onCallAssertedIdentityReceived(callAssertedIdentityContent)
     }

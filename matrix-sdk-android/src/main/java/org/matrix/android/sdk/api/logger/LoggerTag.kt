@@ -17,16 +17,21 @@
 package org.matrix.android.sdk.api.logger
 
 /**
- * Some tags used on Timber.
+ * Parent class for custom logger tags. Can be used with Timber :
+ *
+ * val loggerTag = LoggerTag("MyTag", LoggerTag.VOIP)
+ * Timber.tag(loggerTag.value).v("My log message")
  */
-open class LoggerTag(private val value: String, private val parentTag: LoggerTag? = null) {
+open class LoggerTag(private val _value: String, private val parentTag: LoggerTag? = null) {
 
     object VOIP : LoggerTag("VOIP", null)
 
-    val computedValue: String
+    val value: String
         get() {
-            if (parentTag == null) return value
-            return "${parentTag.computedValue}/$value"
+            return if (parentTag == null) {
+                _value
+            } else {
+                "${parentTag.value}/$_value"
+            }
         }
 }
-
