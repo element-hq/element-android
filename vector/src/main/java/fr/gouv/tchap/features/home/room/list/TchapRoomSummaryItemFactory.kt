@@ -79,6 +79,7 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                                      changeMembershipState: ChangeMembershipState,
                                      listener: RoomListListener?): VectorEpoxyModel<*> {
         val secondLine = roomSummary.inviterId?.let { userId ->
+            // TODO: it should be better to update User.getBestName function to compute the displayname
             val displayName = session.getUser(userId)?.displayName
                     ?.let { displayName ->
                         displayName.takeUnless { roomSummary.isDirect } ?: TchapUtils.getNameFromDisplayName(displayName)

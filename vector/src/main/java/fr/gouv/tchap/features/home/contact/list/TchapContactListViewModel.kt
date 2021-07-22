@@ -299,25 +299,29 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         ).asObservable()
                 .subscribe { roomSummaries ->
                     val unresolvedThreePids = mutableListOf<String>()
-                    val users: MutableMap<String, User> = roomSummaries.mapNotNull { roomSummary ->
-                        roomSummary.directUserId?.let {
-                            var user = session.getUser(it)
-                            user = if (user == null) {
-                                unresolvedThreePids.add(it)
-                                User(it, TchapUtils.computeDisplayNameFromUserId(it), null)
-                            } else {
-                                user
-                            }
-
-                            it to user
-                        }
-                    }.toMap().toMutableMap()
-
-                    roomSummariesUsers = users.values.toList()
-
-                    updateFilteredContacts()
+                    val directUserIds = roomSummaries.mapNotNull { roomSummary -> roomSummary.directUserId }
 
                     viewModelScope.launch {
+                        val users: MutableMap<String, User> = session.usersInfoService().getUsersInfo(directUserIds)
+                                .filterValues {
+                                    !it.deactivated
+                                }.keys
+                                .map {
+                                    var user = session.getUser(it)
+                                    user = if (user == null) {
+                                        unresolvedThreePids.add(it)
+                                        User(it, TchapUtils.computeDisplayNameFromUserId(it), null)
+                                    } else {
+                                        user
+                                    }
+
+                                    it to user
+                                }.toMap().toMutableMap()
+
+                        roomSummariesUsers = users.values.toList()
+
+                        updateFilteredContacts()
+
                         unresolvedThreePids.mapNotNull {
                             tryOrNull { session.resolveUser(it) }
                         }.forEach { user -> users[user.userId] = user }
