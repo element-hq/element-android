@@ -34,6 +34,13 @@ import timber.log.Timber
 import uniffi.olm.OlmMachine
 import uniffi.olm.VerificationRequest
 
+/** A verification request object
+ *
+ * This represents a verification flow that starts with a m.key.verification.request event
+ *
+ * Once the VerificationRequest gets to a ready state users can transition into the different
+ * concrete verification flows.
+ */
 internal class VerificationRequest(
         private val machine: OlmMachine,
         private var inner: VerificationRequest,

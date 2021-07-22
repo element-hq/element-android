@@ -30,7 +30,6 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.internal.crypto.Device
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.RequestSender
 import org.matrix.android.sdk.internal.crypto.SasVerification
@@ -143,7 +142,7 @@ internal class RustVerificationService(
         val sender = event.senderId ?: return
         val flowId = getFlowId(event) ?: return
 
-        this.getVerificationRequest(sender, flowId)?.dispatchRequestUpdated()
+        this.olmMachine.getVerificationRequest(sender, flowId)?.dispatchRequestUpdated()
         val verification = this.getExistingTransaction(sender, flowId) ?: return
         dispatchTxUpdated(verification)
     }
@@ -153,7 +152,7 @@ internal class RustVerificationService(
         val flowId = getFlowId(event) ?: return
 
         val verification = this.getExistingTransaction(sender, flowId) ?: return
-        val request = this.getVerificationRequest(sender, flowId)
+        val request = this.olmMachine.getVerificationRequest(sender, flowId)
 
         if (request != null && request.isReady()) {
             // If this is a SAS verification originating from a `m.key.verification.request`
@@ -185,18 +184,10 @@ internal class RustVerificationService(
         dispatchRequestAdded(request)
     }
 
-    private fun getVerificationRequest(otherUserId: String, transactionId: String): VerificationRequest? {
-        return this.olmMachine.getVerificationRequest(otherUserId, transactionId)
-    }
-
-    private suspend fun getDevice(userId: String, deviceID: String): Device? {
-        return this.olmMachine.getDevice(userId, deviceID)
-    }
-
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
         // TODO this doesn't seem to be used anymore?
         runBlocking {
-            val device = getDevice(userId, deviceID)
+            val device = olmMachine.getDevice(userId, deviceID)
             device?.markAsTrusted()
         }
     }
@@ -225,7 +216,7 @@ internal class RustVerificationService(
             tid: String?
     ): PendingVerificationRequest? {
         return if (tid != null) {
-            this.getVerificationRequest(otherUserId, tid)?.toPendingVerificationRequest()
+            this.olmMachine.getVerificationRequest(otherUserId, tid)?.toPendingVerificationRequest()
         } else {
             null
         }
@@ -303,7 +294,7 @@ internal class RustVerificationService(
             otherUserId: String,
             transactionId: String
     ): Boolean {
-        val request = this.getVerificationRequest(otherUserId, transactionId)
+        val request = this.olmMachine.getVerificationRequest(otherUserId, transactionId)
 
         return if (request != null) {
             runBlocking { request.acceptWithMethods(methods) }
@@ -341,7 +332,7 @@ internal class RustVerificationService(
     ): String? {
         return if (method == VerificationMethod.SAS) {
             if (transactionId != null) {
-                val request = this.getVerificationRequest(otherUserId, transactionId)
+                val request = this.olmMachine.getVerificationRequest(otherUserId, transactionId)
 
                 runBlocking {
                     val sas = request?.startSasVerification()
@@ -360,7 +351,7 @@ internal class RustVerificationService(
                 // DeviceListBottomSheetViewModel triggers this, interestingly the method that
                 // triggers this is called `manuallyVerify()`
                 runBlocking {
-                    val verification = getDevice(otherUserId, otherDeviceId)?.startVerification()
+                    val verification = olmMachine.getDevice(otherUserId, otherDeviceId)?.startVerification()
                     if (verification != null) {
                         dispatchTxAdded(verification)
                         verification.transactionId
@@ -388,7 +379,9 @@ internal class RustVerificationService(
     }
 
     override fun cancelVerificationRequest(request: PendingVerificationRequest) {
-        val verificationRequest = request.transactionId?.let { this.getVerificationRequest(request.otherUserId, it) }
+        val verificationRequest = request.transactionId?.let {
+            this.olmMachine.getVerificationRequest(request.otherUserId, it)
+        }
         runBlocking { verificationRequest?.cancel() }
     }
 
@@ -397,7 +390,7 @@ internal class RustVerificationService(
             transactionId: String,
             roomId: String
     ) {
-        val verificationRequest = this.getVerificationRequest(otherUserId, transactionId)
+        val verificationRequest = this.olmMachine.getVerificationRequest(otherUserId, transactionId)
         runBlocking { verificationRequest?.cancel() }
     }
 }
