@@ -210,13 +210,11 @@ class CallService : VectorService() {
             myStopSelf()
         }
         val wasConnected = connectedCallIds.remove(callId)
+        val notification = notificationUtils.buildCallEndedNotification(terminatedCall.isVideoCall)
+        notificationManager.notify(callId.hashCode(), notification)
         if (!wasConnected && !terminatedCall.isOutgoing && !rejected && endCallReason != EndCallReason.ANSWERED_ELSEWHERE) {
-            val notification = notificationUtils.buildCallMissedNotification(terminatedCall)
-            notificationManager.cancel(callId.hashCode())
-            notificationManager.notify(MISSED_CALL_TAG, terminatedCall.nativeRoomId.hashCode(), notification)
-        } else {
-            val notification = notificationUtils.buildCallEndedNotification(terminatedCall.isVideoCall)
-            notificationManager.notify(callId.hashCode(), notification)
+            val missedCallNotification = notificationUtils.buildCallMissedNotification(terminatedCall)
+            notificationManager.notify(MISSED_CALL_TAG, terminatedCall.nativeRoomId.hashCode(), missedCallNotification)
         }
     }
 
