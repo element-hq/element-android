@@ -1840,4 +1840,5 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="login_splash_text2">暗号化して会話をプライベートに保つ</string>
     <string name="login_splash_text1">直接またはグループで人々とチャットする</string>
     <string name="login_splash_title">あなたの会話。 それを所有する。</string>
+    <string name="auth_add_email_message_2">アカウントの復旧用のメールアドレスを設定して、後からオプションで知人に見つけてもらえるようにできます。</string>
 </resources>
