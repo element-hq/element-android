@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import android.os.Handler
-import android.os.Looper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -27,8 +25,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTra
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
+import org.matrix.android.sdk.internal.crypto.verification.UpdateDispatcher
 import org.matrix.android.sdk.internal.crypto.verification.getEmojiForCode
-import timber.log.Timber
 import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.OlmMachine
 import uniffi.olm.OutgoingVerificationRequest
@@ -39,21 +37,13 @@ internal class SasVerification(
         private val machine: OlmMachine,
         private var inner: Sas,
         private val sender: RequestSender,
-        private val listeners: ArrayList<VerificationService.Listener>,
+        listeners: ArrayList<VerificationService.Listener>,
 ) :
         SasVerificationTransaction {
-    private val uiHandler = Handler(Looper.getMainLooper())
+    private val dispatcher = UpdateDispatcher(listeners)
 
     private fun dispatchTxUpdated() {
-        uiHandler.post {
-            listeners.forEach {
-                try {
-                    it.transactionUpdated(this)
-                } catch (e: Throwable) {
-                    Timber.e(e, "## Error while notifying listeners")
-                }
-            }
-        }
+        this.dispatcher.dispatchTxUpdated(this)
     }
 
     /** The user ID of the other user that is participating in this verification flow */

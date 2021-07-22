@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import android.os.Handler
-import android.os.Looper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -27,7 +25,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import timber.log.Timber
+import org.matrix.android.sdk.internal.crypto.verification.UpdateDispatcher
 import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.OlmMachine
 import uniffi.olm.OutgoingVerificationRequest
@@ -39,20 +37,12 @@ internal class QrCodeVerification(
         private var request: VerificationRequest,
         private var inner: QrCode?,
         private val sender: RequestSender,
-        private val listeners: ArrayList<VerificationService.Listener>,
+        listeners: ArrayList<VerificationService.Listener>,
 ) : QrCodeVerificationTransaction {
-    private val uiHandler = Handler(Looper.getMainLooper())
+    private val dispatcher = UpdateDispatcher(listeners)
 
     private fun dispatchTxUpdated() {
-        uiHandler.post {
-            listeners.forEach {
-                try {
-                    it.transactionUpdated(this)
-                } catch (e: Throwable) {
-                    Timber.e(e, "## Error while notifying listeners")
-                }
-            }
-        }
+        this.dispatcher.dispatchTxUpdated(this)
     }
 
     /** Generate, if possible, data that should be encoded as a QR code for QR code verification.

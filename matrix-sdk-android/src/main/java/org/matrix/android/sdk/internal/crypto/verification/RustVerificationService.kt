@@ -70,27 +70,24 @@ internal fun prepareMethods(methods: List<VerificationMethod>): List<String> {
     return stringMethods
 }
 
-internal class RustVerificationService(
-        private val olmMachine: OlmMachine,
-        private val requestSender: RequestSender,
-) : VerificationService {
+internal class UpdateDispatcher(private val listeners: ArrayList<VerificationService.Listener>) {
     private val uiHandler = Handler(Looper.getMainLooper())
 
-    override fun addListener(listener: VerificationService.Listener) {
+    internal fun addListener(listener: VerificationService.Listener) {
         uiHandler.post {
-            if (!this.olmMachine.verificationListeners.contains(listener)) {
-                this.olmMachine.verificationListeners.add(listener)
+            if (!this.listeners.contains(listener)) {
+                this.listeners.add(listener)
             }
         }
     }
 
-    override fun removeListener(listener: VerificationService.Listener) {
-        uiHandler.post { this.olmMachine.verificationListeners.remove(listener) }
+    internal fun removeListener(listener: VerificationService.Listener) {
+        uiHandler.post { this.listeners.remove(listener) }
     }
 
-    private fun dispatchTxAdded(tx: VerificationTransaction) {
+    internal fun dispatchTxAdded(tx: VerificationTransaction) {
         uiHandler.post {
-            this.olmMachine.verificationListeners.forEach {
+            this.listeners.forEach {
                 try {
                     it.transactionCreated(tx)
                 } catch (e: Throwable) {
@@ -100,9 +97,9 @@ internal class RustVerificationService(
         }
     }
 
-    private fun dispatchTxUpdated(tx: VerificationTransaction) {
+    internal fun dispatchTxUpdated(tx: VerificationTransaction) {
         uiHandler.post {
-            this.olmMachine.verificationListeners.forEach {
+            this.listeners.forEach {
                 try {
                     it.transactionUpdated(tx)
                 } catch (e: Throwable) {
@@ -112,10 +109,10 @@ internal class RustVerificationService(
         }
     }
 
-    private fun dispatchRequestAdded(tx: PendingVerificationRequest) {
+    internal fun dispatchRequestAdded(tx: PendingVerificationRequest) {
         Timber.v("## SAS dispatchRequestAdded txId:${tx.transactionId} $tx")
         uiHandler.post {
-            this.olmMachine.verificationListeners.forEach {
+            this.listeners.forEach {
                 try {
                     it.verificationRequestCreated(tx)
                 } catch (e: Throwable) {
@@ -124,8 +121,18 @@ internal class RustVerificationService(
             }
         }
     }
+}
+
+internal class RustVerificationService(
+        private val olmMachine: OlmMachine,
+        private val requestSender: RequestSender,
+) : VerificationService {
+    private val dispatcher = UpdateDispatcher(this.olmMachine.verificationListeners)
 
     internal suspend fun onEvent(event: Event) = when (event.getClearType()) {
+        // I'm not entirely sure why getClearType() returns a msgtype in one case
+        // and a event type in the other case, but this is how the old verification
+        // service did things and it does seem to work.
         MessageType.MSGTYPE_VERIFICATION_REQUEST -> onRequest(event)
         EventType.KEY_VERIFICATION_START         -> onStart(event)
         EventType.KEY_VERIFICATION_READY,
@@ -144,7 +151,7 @@ internal class RustVerificationService(
 
         this.olmMachine.getVerificationRequest(sender, flowId)?.dispatchRequestUpdated()
         val verification = this.getExistingTransaction(sender, flowId) ?: return
-        dispatchTxUpdated(verification)
+        this.dispatcher.dispatchTxUpdated(verification)
     }
 
     private suspend fun onStart(event: Event) {
@@ -163,15 +170,15 @@ internal class RustVerificationService(
                 Timber.d("## Verification: Auto accepting SAS verification with $sender")
                 verification.accept()
             } else {
-                dispatchTxUpdated(verification)
+                this.dispatcher.dispatchTxUpdated(verification)
             }
         } else {
             // This didn't originate from a request, so tell our listeners that
             // this is a new verification.
-            dispatchTxAdded(verification)
+            this.dispatcher.dispatchTxAdded(verification)
             // The IncomingVerificationRequestHandler seems to only listen to updates
             // so let's trigger an update after the addition as well.
-            dispatchTxUpdated(verification)
+            this.dispatcher.dispatchTxUpdated(verification)
         }
     }
 
@@ -181,7 +188,15 @@ internal class RustVerificationService(
 
         val request = this.getExistingVerificationRequest(sender, flowId) ?: return
 
-        dispatchRequestAdded(request)
+        this.dispatcher.dispatchRequestAdded(request)
+    }
+
+    override fun addListener(listener: VerificationService.Listener) {
+        this.dispatcher.addListener(listener)
+    }
+
+    override fun removeListener(listener: VerificationService.Listener) {
+        this.dispatcher.removeListener(listener)
     }
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
@@ -303,7 +318,7 @@ internal class RustVerificationService(
                 val qrcode = request.startQrVerification()
 
                 if (qrcode != null) {
-                    dispatchTxAdded(qrcode)
+                    this.dispatcher.dispatchTxAdded(qrcode)
                 }
 
                 true
@@ -338,7 +353,7 @@ internal class RustVerificationService(
                     val sas = request?.startSasVerification()
 
                     if (sas != null) {
-                        dispatchTxAdded(sas)
+                        dispatcher.dispatchTxAdded(sas)
                         sas.transactionId
                     } else {
                         null
@@ -353,7 +368,7 @@ internal class RustVerificationService(
                 runBlocking {
                     val verification = olmMachine.getDevice(otherUserId, otherDeviceId)?.startVerification()
                     if (verification != null) {
-                        dispatchTxAdded(verification)
+                        dispatcher.dispatchTxAdded(verification)
                         verification.transactionId
                     } else {
                         null
