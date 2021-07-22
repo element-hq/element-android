@@ -80,7 +80,7 @@ internal class OneTimeKeysUploader @Inject constructor(
         val keyLimit = floor(maxOneTimeKeys / 2.0).toInt()
         if (oneTimeKeyCount == null) {
             // Ask the server how many otk he has
-            oneTimeKeyCount = fetchOtkNumber()
+            oneTimeKeyCount = fetchOtkCount()
         }
         val oneTimeKeyCountFromSync = oneTimeKeyCount
         if (oneTimeKeyCountFromSync != null) {
@@ -95,7 +95,7 @@ internal class OneTimeKeysUploader @Inject constructor(
             // private keys clogging up our local storage.
             // So we need some kind of engineering compromise to balance all of
             // these factors.
-            tryOrNull {
+            tryOrNull("Unable to upload OTK") {
                 val uploadedKeys = uploadOTK(oneTimeKeyCountFromSync, keyLimit)
                 Timber.v("## uploadKeys() : success, $uploadedKeys key(s) sent")
             }
@@ -106,8 +106,8 @@ internal class OneTimeKeysUploader @Inject constructor(
         oneTimeKeyCheckInProgress = false
     }
 
-    private suspend fun fetchOtkNumber(): Int? {
-        return tryOrNull {
+    private suspend fun fetchOtkCount(): Int? {
+        return tryOrNull("Unable to get OTK count") {
             val result = uploadKeysTask.execute(UploadKeysTask.Params(null, null))
             result.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)
         }
