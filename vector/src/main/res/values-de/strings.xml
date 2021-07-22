@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s hat den Raum betreten</string>
     <string name="notice_room_leave">%1$s hat den Raum verlassen</string>
     <string name="notice_room_reject">%1$s hat die Einladung abgelehnt</string>
-    <string name="notice_room_kick">%1$s hat %2$s gekickt</string>
+    <string name="notice_room_kick">%1$s hat %2$s entfernt</string>
     <string name="notice_room_unban">%1$s hat den Bann von %2$s aufgehoben</string>
     <string name="notice_room_ban">%1$s hat %2$s gebannt</string>
     <string name="notice_room_withdraw">%1$s hat die Einladung für %2$s zurückgezogen</string>
@@ -95,7 +95,7 @@
     <string name="notice_room_join_with_reason">%1$s ist dem Raum beigetreten. Grund: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s hat den Raum verlassen. Grund: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s hat die Einladung abgelehnt. Grund: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s hat %2$s gekickt. Grund: %3$s</string>
+    <string name="notice_room_kick_with_reason">%1$s hat %2$s entfernt. Grund: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s hat Sperre von %2$s aufgehoben. Grund: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s hat %2$s verbannt. Grund: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s hat eine Einladung an %2$s gesandt um diesem Raum beizutreten. Grund: %3$s</string>
@@ -952,7 +952,7 @@
     <string name="filter_group_members">Filter Gruppen-Mitglieder</string>
     <string name="filter_group_rooms">Filter Gruppen-Räume</string>
     <string name="group_no_long_description">Der Community-Administrator hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
-    <string name="has_been_kicked">Du wurdest von %2$s aus %1$s gekickt</string>
+    <string name="has_been_kicked">Du wurdest von %2$s aus %1$s entfernt</string>
     <string name="has_been_banned">Du wurdest von %2$s aus %1$s verbannt</string>
     <string name="reason_colon">Grund: %1$s</string>
     <string name="rejoin">Erneut beitreten</string>
@@ -1075,7 +1075,7 @@
     <string name="command_description_join_room">Tritt dem Raum mit angegebenen Alias bei</string>
     <string name="command_description_part_room">Verlasse Raum</string>
     <string name="command_description_topic">Raumthema ändern</string>
-    <string name="command_description_kick_user">Kickt Benutzer mit angegebener ID</string>
+    <string name="command_description_kick_user">Entfernt die Person angegebener ID</string>
     <string name="command_description_nick">Ändert deinen Anzeigenamen</string>
     <string name="command_description_markdown">(De-)Aktiviert Markdown</string>
     <string name="command_description_clear_scalar_token">Um das Matrix-App-Management zu reparieren</string>
@@ -2628,7 +2628,7 @@
     <string name="login_social_continue_with">Mit %s weitermachen</string>
     <string name="settings_show_emoji_keyboard_summary">Knopf zum Nachrichteneditor hinzufügen, der die Emoji-Tastatur öffnet</string>
     <string name="settings_show_emoji_keyboard">Emoji-Tastatur anzeigen</string>
-    <string name="settings_chat_effects_description">Nutze /confetti Kommando oder sende Nachrichten, die ❄️ oder 🎉 enthalten</string>
+    <string name="settings_chat_effects_description">Nutze /confetti oder sende Nachrichten mit ❄️ oder 🎉</string>
     <string name="settings_chat_effects_title">Chateffekte</string>
     <string name="room_permissions_change_topic">Thema ändern</string>
     <string name="room_permissions_upgrade_the_room">Raum aktualisieren</string>
@@ -2877,4 +2877,11 @@
     <string name="space_settings_alias_subtitle">Adressen des Spaces anzeigen und verwalten.</string>
     <string name="create_space_alias_hint">Space-Adressen</string>
     <string name="error_failed_to_join_room">Beim Versuch %s beizutreten, ist leider ein Fehler aufgetreten</string>
+    <string name="room_upgrade_to_recommended_version">Zur empfohlenen Raumversion upgraden</string>
+    <string name="joining_replacement_room">Ersatzraum betreten</string>
+    <string name="command_description_upgrade_room">Raum zu neuer Version upgraden</string>
+    <string name="settings_server_room_version_stable">stabil</string>
+    <string name="settings_server_room_version_unstable">instabil</string>
+    <string name="settings_server_room_versions">Raumversionen 👓</string>
+    <string name="missing_permissions_title">Fehlende Berechtigungen</string>
 </resources>
