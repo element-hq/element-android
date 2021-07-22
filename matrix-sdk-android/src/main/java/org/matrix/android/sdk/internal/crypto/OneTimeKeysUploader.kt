@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.model.MXKey
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
@@ -77,6 +78,10 @@ internal class OneTimeKeysUploader @Inject constructor(
         // discard the oldest private keys first. This will eventually clean
         // out stale private keys that won't receive a message.
         val keyLimit = floor(maxOneTimeKeys / 2.0).toInt()
+        if (oneTimeKeyCount == null) {
+            // Ask the server how many otk he has
+            oneTimeKeyCount = fetchOtkNumber()
+        }
         val oneTimeKeyCountFromSync = oneTimeKeyCount
         if (oneTimeKeyCountFromSync != null) {
             // We need to keep a pool of one time public keys on the server so that
@@ -100,6 +105,13 @@ internal class OneTimeKeysUploader @Inject constructor(
             Timber.w("maybeUploadOneTimeKeys: waiting to know the number of OTK from the sync")
             oneTimeKeyCheckInProgress = false
             lastOneTimeKeyCheck = 0
+        }
+    }
+
+    private suspend fun fetchOtkNumber(): Int? {
+        return tryOrNull {
+            val result = uploadKeysTask.execute(UploadKeysTask.Params(null, null))
+            result.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)
         }
     }
 
