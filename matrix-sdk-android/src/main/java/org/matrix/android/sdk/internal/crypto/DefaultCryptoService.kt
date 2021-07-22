@@ -314,6 +314,12 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.launchToCallback(coroutineDispatchers.crypto, NoOpMatrixCallback()) {
             // Open the store
             cryptoStore.open()
+
+            if (!cryptoStore.getDeviceKeysUploaded()) {
+                // Schedule upload of OTK
+                oneTimeKeysUploader.updateOneTimeKeyCount(0)
+            }
+
             // this can throw if no network
             tryOrNull {
                 uploadDeviceKeys()
