@@ -58,6 +58,9 @@ import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
+import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
+import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
+import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.matrix.android.sdk.api.session.room.model.call.SdpType
 import org.threeten.bp.Duration
 import org.webrtc.AudioSource
@@ -102,7 +105,7 @@ class WebRtcCall(
         private val sessionProvider: Provider<Session?>,
         private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
         private val onCallBecomeActive: (WebRtcCall) -> Unit,
-        private val onCallEnded: (String) -> Unit
+        private val onCallEnded: (String, EndCallReason, Boolean) -> Unit
 ) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
@@ -230,7 +233,7 @@ class WebRtcCall(
                     // Allow a short time for initial candidates to be gathered
                     delay(200)
                 }
-                if (mxCall.state == CallState.Terminated) {
+                if (mxCall.state is CallState.Ended) {
                     return@launch
                 }
                 if (mxCall.state == CallState.CreateOffer) {
@@ -288,7 +291,7 @@ class WebRtcCall(
                     createCallId = CallIdGenerator.generate(),
                     awaitCallId = null
             )
-            endCall(sendEndSignaling = false)
+            terminate(EndCallReason.REPLACED)
         }
     }
 
@@ -310,8 +313,8 @@ class WebRtcCall(
                     createCallId = newCallId,
                     awaitCallId = null
             )
-            endCall(sendEndSignaling = false)
-            transferTargetCall.endCall(sendEndSignaling = false)
+            terminate(EndCallReason.REPLACED)
+            transferTargetCall.terminate(EndCallReason.REPLACED)
         }
     }
 
@@ -464,7 +467,7 @@ class WebRtcCall(
             peerConnection?.awaitSetRemoteDescription(offerSdp)
         } catch (failure: Throwable) {
             Timber.tag(loggerTag.value).v("Failure putting remote description")
-            endCall(true, CallHangupContent.Reason.UNKWOWN_ERROR)
+            endCall(reason = EndCallReason.UNKWOWN_ERROR)
             return@withContext
         }
         // 2) Access camera + microphone, create local stream
@@ -770,7 +773,7 @@ class WebRtcCall(
             if (stream.audioTracks.size > 1 || stream.videoTracks.size > 1) {
                 Timber.tag(loggerTag.value).e("StreamObserver weird looking stream: $stream")
                 // TODO maybe do something more??
-                endCall(true)
+                endCall(EndCallReason.UNKWOWN_ERROR)
                 return@launch
             }
             if (stream.audioTracks.size == 1) {
@@ -798,30 +801,32 @@ class WebRtcCall(
         }
     }
 
-    fun endCall(sendEndSignaling: Boolean = true, reason: CallHangupContent.Reason? = null) {
+    fun endCall(reason: EndCallReason = EndCallReason.USER_HANGUP) {
         sessionScope?.launch(dispatcher) {
-            if (mxCall.state == CallState.Terminated) {
+            if (mxCall.state is CallState.Ended) {
                 return@launch
             }
-            // Close tracks ASAP
-            localVideoTrack?.setEnabled(false)
-            localVideoTrack?.setEnabled(false)
-            cameraAvailabilityCallback?.let { cameraAvailabilityCallback ->
-                val cameraManager = context.getSystemService<CameraManager>()!!
-                cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
-            }
-            val wasRinging = mxCall.state is CallState.LocalRinging
-            mxCall.state = CallState.Terminated
-            release()
-            onCallEnded(callId)
-            if (sendEndSignaling) {
-                if (wasRinging) {
-                    mxCall.reject()
-                } else {
-                    mxCall.hangUp(reason)
-                }
+            val reject = mxCall.state is CallState.LocalRinging
+            terminate(EndCallReason.USER_HANGUP, reject)
+            if (reject) {
+                mxCall.reject()
+            } else {
+                mxCall.hangUp(reason)
             }
         }
+    }
+
+    private suspend fun terminate(reason: EndCallReason? = null, rejected: Boolean = false) = withContext(dispatcher) {
+        // Close tracks ASAP
+        localVideoTrack?.setEnabled(false)
+        localVideoTrack?.setEnabled(false)
+        cameraAvailabilityCallback?.let { cameraAvailabilityCallback ->
+            val cameraManager = context.getSystemService<CameraManager>()!!
+            cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
+        }
+        mxCall.state = CallState.Ended(reason ?: EndCallReason.USER_HANGUP)
+        release()
+        onCallEnded(callId, reason ?: EndCallReason.USER_HANGUP, rejected)
     }
 
     // Call listener
@@ -846,7 +851,7 @@ class WebRtcCall(
             try {
                 peerConnection?.awaitSetRemoteDescription(sdp)
             } catch (failure: Throwable) {
-                endCall(true, CallHangupContent.Reason.UNKWOWN_ERROR)
+                endCall(EndCallReason.UNKWOWN_ERROR)
                 return@launch
             }
             if (mxCall.opponentPartyId?.hasValue().orFalse()) {
@@ -903,6 +908,29 @@ class WebRtcCall(
                 listeners.forEach {
                     tryOrNull { it.onHoldUnhold() }
                 }
+            }
+        }
+    }
+
+    fun onCallHangupReceived(callHangupContent: CallHangupContent) {
+        sessionScope?.launch(dispatcher) {
+            terminate(callHangupContent.reason)
+        }
+    }
+
+    fun onCallRejectReceived(callRejectContent: CallRejectContent) {
+        sessionScope?.launch(dispatcher) {
+            terminate(callRejectContent.reason, true)
+        }
+    }
+
+    fun onCallSelectedAnswerReceived(callSelectAnswerContent: CallSelectAnswerContent) {
+        sessionScope?.launch(dispatcher) {
+            val selectedPartyId = callSelectAnswerContent.selectedPartyId
+            if (selectedPartyId != mxCall.ourPartyId) {
+                Timber.i("Got select_answer for party ID $selectedPartyId: we are party ID ${mxCall.ourPartyId}.")
+                // The other party has picked somebody else's answer
+                terminate()
             }
         }
     }

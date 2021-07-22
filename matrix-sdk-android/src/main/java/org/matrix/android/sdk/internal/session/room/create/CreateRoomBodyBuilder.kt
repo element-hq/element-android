@@ -81,13 +81,14 @@ internal class CreateRoomBodyBuilder @Inject constructor(
             params.historyVisibility = params.historyVisibility ?: RoomHistoryVisibility.SHARED
             params.guestAccess = params.guestAccess ?: GuestAccess.Forbidden
         }
-        val initialStates = listOfNotNull(
+        val initialStates = (listOfNotNull(
                 buildEncryptionWithAlgorithmEvent(params),
                 buildHistoryVisibilityEvent(params),
                 buildAvatarEvent(params),
                 buildGuestAccess(params),
                 buildJoinRulesRestricted(params)
         )
+                + buildCustomInitialStates(params))
                 .takeIf { it.isNotEmpty() }
 
         return CreateRoomBody(
@@ -95,7 +96,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 roomAliasName = params.roomAliasName,
                 name = params.name,
                 topic = params.topic,
-                invitedUserIds = params.invitedUserIds.filter { it != userId },
+                invitedUserIds = params.invitedUserIds.filter { it != userId }.takeIf { it.isNotEmpty() },
                 invite3pids = invite3pids,
                 creationContent = params.creationContent.takeIf { it.isNotEmpty() },
                 initialStates = initialStates,
@@ -103,8 +104,17 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 isDirect = params.isDirect,
                 powerLevelContentOverride = params.powerLevelContentOverride,
                 roomVersion = params.roomVersion
-
         )
+    }
+
+    private fun buildCustomInitialStates(params: CreateRoomParams): List<Event> {
+        return params.initialStates.map {
+            Event(
+                    type = it.type,
+                    stateKey = it.stateKey,
+                    content = it.content
+            )
+        }
     }
 
     private suspend fun buildAvatarEvent(params: CreateRoomParams): Event? {

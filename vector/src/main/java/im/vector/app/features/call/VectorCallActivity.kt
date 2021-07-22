@@ -199,7 +199,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 views.callConnectingProgress.isVisible = true
                 configureCallInfo(state)
             }
-            is CallState.Connected    -> {
+            is CallState.Connected -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
@@ -249,10 +249,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callConnectingProgress.isVisible = true
                 }
             }
-            is CallState.Terminated   -> {
+            is CallState.Ended     -> {
                 finish()
             }
-            null                      -> {
+            null                   -> {
             }
         }
     }

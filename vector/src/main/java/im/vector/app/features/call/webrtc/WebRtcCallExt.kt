@@ -21,7 +21,12 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 
 fun WebRtcCall.getOpponentAsMatrixItem(session: Session): MatrixItem? {
-    return session.getRoomSummary(nativeRoomId)?.otherMemberIds?.firstOrNull()?.let {
-        session.getUser(it)?.toMatrixItem()
+    return session.getRoomSummary(nativeRoomId)?.let { roomSummary ->
+        // Fallback to RoomSummary if there is no other member.
+        if (roomSummary.otherMemberIds.isEmpty()) {
+            roomSummary.toMatrixItem()
+        } else {
+            roomSummary.otherMemberIds.first().let { session.getUser(it)?.toMatrixItem() }
+        }
     }
 }

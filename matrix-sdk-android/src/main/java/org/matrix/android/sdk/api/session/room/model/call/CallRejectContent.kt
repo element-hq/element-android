@@ -36,5 +36,10 @@ data class CallRejectContent(
         /**
          * Required. The version of the VoIP specification this message adheres to.
          */
-        @Json(name = "version") override val version: String?
+        @Json(name = "version") override val version: String?,
+
+        /**
+         * Optional error reason for the reject.
+         */
+        @Json(name = "reason") val reason: EndCallReason? = null
 ) : CallSignalingContent
