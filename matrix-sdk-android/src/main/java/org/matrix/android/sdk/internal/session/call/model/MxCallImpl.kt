@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallReplacesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSignalingContent
+import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.matrix.android.sdk.api.session.room.model.call.SdpType
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.call.DefaultCallSignalingService
@@ -142,7 +143,7 @@ internal class MxCallImpl(
     override fun reject() {
         if (opponentVersion < 1) {
             Timber.v("Opponent version is less than 1 ($opponentVersion): sending hangup instead of reject")
-            hangUp()
+            hangUp(EndCallReason.USER_HANGUP)
             return
         }
         Timber.v("## VOIP reject $callId")
@@ -153,20 +154,20 @@ internal class MxCallImpl(
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_REJECT, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
-        state = CallState.Terminated
+        state = CallState.Ended(reason = EndCallReason.USER_HANGUP)
     }
 
-    override fun hangUp(reason: CallHangupContent.Reason?) {
+    override fun hangUp(reason: EndCallReason?) {
         Timber.v("## VOIP hangup $callId")
         CallHangupContent(
                 callId = callId,
                 partyId = ourPartyId,
-                reason = reason ?: CallHangupContent.Reason.USER_HANGUP,
+                reason = reason,
                 version = MxCall.VOIP_PROTO_VERSION.toString()
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
-        state = CallState.Terminated
+        state = CallState.Ended(reason)
     }
 
     override fun accept(sdpString: String) {

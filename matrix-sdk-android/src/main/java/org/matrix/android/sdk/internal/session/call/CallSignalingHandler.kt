@@ -166,7 +166,7 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
             Timber.v("Ignoring hangup from party ID ${content.partyId} we have chosen party ID ${call.opponentPartyId}")
             return
         }
-        if (call.state != CallState.Terminated) {
+        if (call.state !is CallState.Ended) {
             activeCallHandler.removeCall(content.callId)
             callListenersDispatcher.onCallHangupReceived(content)
         }
