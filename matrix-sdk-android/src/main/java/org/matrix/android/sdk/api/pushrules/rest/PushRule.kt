@@ -105,7 +105,7 @@ data class PushRule(
      * Get the highlight status. As spec mentions assume false if no tweak present.
      */
     fun getHighlight(): Boolean {
-        return (getActions().firstOrNull { it is Action.Highlight } as? Action.Highlight)?.highlight.orFalse()
+        return getActions().filterIsInstance<Action.Highlight>().firstOrNull()?.highlight.orFalse()
     }
 
     /**
