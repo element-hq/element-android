@@ -18,6 +18,7 @@ package im.vector.app.features.roomprofile.notifications
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -30,7 +31,6 @@ data class RoomNotificationSettingsViewState(
         val roomEncrypted: Boolean = false,
         val notificationState: Async<RoomNotificationState> = Uninitialized,
 )  : MvRxState {
-
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }
 
@@ -39,10 +39,26 @@ data class AvatarData (
         val avatarUrl: String
 )
 
+/**
+ * Used to map this old room notification settings to the new options in v2.
+ */
+val RoomNotificationSettingsViewState.notificationStateMapped: Async<RoomNotificationState>
+    get() {
+        if ((roomEncrypted && notificationState() == RoomNotificationState.MENTIONS_ONLY) || notificationState() == RoomNotificationState.ALL_MESSAGES) {
+            /** if in an encrypted room, mentions notifications are not supported so show "All Messages" as selected.
+             * Also in the new settings there is no notion of notifications without sound so it maps to noisy also
+             */
+            return Success(RoomNotificationState.ALL_MESSAGES_NOISY)
+        }
+        return  notificationState
+    }
+/**
+ * Used to enumerate the new settings in notification settings v2. Notifications without sound and mentions in encrypted rooms not supported.
+ */
 val RoomNotificationSettingsViewState.notificationOptions: List<RoomNotificationState>
     get() {
         return if (roomEncrypted) {
-            listOf(RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.ALL_MESSAGES, RoomNotificationState.MUTE)
+            listOf(RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.MUTE)
         } else
-            RoomNotificationState.values().asList()
+            listOf(RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.MENTIONS_ONLY, RoomNotificationState.MUTE)
     }

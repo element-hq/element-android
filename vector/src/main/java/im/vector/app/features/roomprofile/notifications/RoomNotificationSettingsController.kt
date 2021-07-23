@@ -41,11 +41,11 @@ class RoomNotificationSettingsController @Inject constructor() : TypedEpoxyContr
     }
 
     @StringRes
-    private fun titleForNotificationState(notificationState: RoomNotificationState) = when(notificationState) {
-        RoomNotificationState.ALL_MESSAGES_NOISY -> R.string.room_settings_all_messages_noisy
-        RoomNotificationState.ALL_MESSAGES       -> R.string.room_settings_all_messages
-        RoomNotificationState.MENTIONS_ONLY      -> R.string.room_settings_mention_only
-        RoomNotificationState.MUTE               -> R.string.room_settings_mute
+    private fun titleForNotificationState(notificationState: RoomNotificationState): Int? = when(notificationState) {
+        RoomNotificationState.ALL_MESSAGES_NOISY -> R.string.room_settings_all_messages
+        RoomNotificationState.MENTIONS_ONLY      -> R.string.room_settings_mention_and_keyword_only
+        RoomNotificationState.MUTE               -> R.string.room_settings_none
+        else -> null
     }
 
     override fun buildModels(data: RoomNotificationSettingsViewState?) {
@@ -61,7 +61,7 @@ class RoomNotificationSettingsController @Inject constructor() : TypedEpoxyContr
             radioButtonItem {
                 id(notificationState.name)
                 titleRes(title)
-                selected(data.notificationState() == notificationState)
+                selected(data.notificationStateMapped() == notificationState)
                 listener {
                     host.callback?.didSelectRoomNotificationState(notificationState)
                 }

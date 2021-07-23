@@ -1037,6 +1037,8 @@
     <string name="room_settings_all_messages">All messages</string>
     <string name="room_settings_mention_only">Mentions only</string>
     <string name="room_settings_mute">Mute</string>
+    <string name="room_settings_mention_and_keyword_only">Mentions &amp; Keywords only</string>
+    <string name="room_settings_none">None</string>
     <string name="room_settings_favourite">Favourite</string>
     <string name="room_settings_de_prioritize">De-prioritize</string>
     <string name="room_settings_direct_chat">Direct Chat</string>
