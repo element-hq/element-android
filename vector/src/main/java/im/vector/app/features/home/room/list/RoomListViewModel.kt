@@ -134,38 +134,32 @@ class RoomListViewModel @Inject constructor(
         }
     }
 
-    val sections: List<RoomsSection> by lazy {
-        if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
-            SpaceRoomListSectionBuilder(
-                    session,
-                    stringProvider,
-                    appStateHandler,
-                    viewModelScope,
-                    suggestedRoomJoiningState,
-                    autoAcceptInvites,
-                    {
-                        it.disposeOnClear()
-                    },
-                    {
-                        updatableQueries.add(it)
-                    },
-                    vectorPreferences.labsSpacesOnlyOrphansInHome()
-            ).buildSections(initialState.displayMode)
-        } else {
-            GroupRoomListSectionBuilder(
-                    session,
-                    stringProvider,
-                    viewModelScope,
-                    appStateHandler,
-                    autoAcceptInvites,
-                    {
-                        it.disposeOnClear()
-                    },
-                    {
-                        updatableQueries.add(it)
-                    }
-            ).buildSections(initialState.displayMode)
+    private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
+        RoomListSectionBuilderSpace(
+                session,
+                stringProvider,
+                appStateHandler,
+                viewModelScope,
+                autoAcceptInvites,
+                {
+                    updatableQueries.add(it)
+                },
+                suggestedRoomJoiningState,
+                vectorPreferences.labsSpacesOnlyOrphansInHome()
+        )
+    } else {
+        RoomListSectionBuilderGroup(
+                session,
+                stringProvider,
+                appStateHandler,
+                autoAcceptInvites
+        ) {
+            updatableQueries.add(it)
         }
+    }
+
+    val sections: List<RoomsSection> by lazy {
+        roomListSectionBuilder.buildSections(initialState.displayMode)
     }
 
     override fun handle(action: RoomListAction) {
@@ -372,5 +366,10 @@ class RoomListViewModel @Inject constructor(
 
     private fun handleCancelSearch() {
         _viewEvents.post(RoomListViewEvents.CancelSearch)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        roomListSectionBuilder.dispose()
     }
 }
