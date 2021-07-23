@@ -38,6 +38,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 private val loggerTag = LoggerTag("CallSignalingHandler", LoggerTag.VOIP)
+private const val MAX_AGE_TO_RING = 40_000
 
 @SessionScope
 internal class CallSignalingHandler @Inject constructor(private val activeCallHandler: ActiveCallHandler,
@@ -185,7 +186,7 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
         }
         val now = System.currentTimeMillis()
         val age = now - (event.ageLocalTs ?: now)
-        if (age > 40_000 && event.getClearType() == EventType.CALL_INVITE) {
+        if (age > MAX_AGE_TO_RING) {
             Timber.tag(loggerTag.value).w("Call invite is too old to ring.")
             return
         }

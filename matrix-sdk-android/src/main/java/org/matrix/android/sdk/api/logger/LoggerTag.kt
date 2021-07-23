@@ -22,16 +22,13 @@ package org.matrix.android.sdk.api.logger
  * val loggerTag = LoggerTag("MyTag", LoggerTag.VOIP)
  * Timber.tag(loggerTag.value).v("My log message")
  */
-open class LoggerTag(private val _value: String, private val parentTag: LoggerTag? = null) {
+open class LoggerTag(_value: String, parentTag: LoggerTag? = null) {
 
     object VOIP : LoggerTag("VOIP", null)
 
-    val value: String
-        get() {
-            return if (parentTag == null) {
-                _value
-            } else {
-                "${parentTag.value}/$_value"
-            }
-        }
+    val value: String = if (parentTag == null) {
+        _value
+    } else {
+        "${parentTag.value}/$_value"
+    }
 }
