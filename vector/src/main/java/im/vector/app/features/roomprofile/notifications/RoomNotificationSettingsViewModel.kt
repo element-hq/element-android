@@ -28,6 +28,7 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.rx.unwrap
 
 class RoomNotificationSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomNotificationSettingsViewState,
@@ -44,7 +45,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel {
             val fragment: RoomNotificationSettingsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.roomNotificationSettingsViewModel.create(state)
+            return fragment.viewModelFactory.create(state)
         }
     }
 
@@ -52,6 +53,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
 
     init {
         initEncrypted()
+        observeSummary()
         observeNotificationState()
     }
 
@@ -59,6 +61,14 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
         setState {
             copy(roomEncrypted = room.isEncrypted())
         }
+    }
+
+    private fun observeSummary() {
+        room.rx().liveRoomSummary()
+                .unwrap()
+                .execute { async ->
+                    copy(roomSummary = async)
+                }
     }
 
     private fun observeNotificationState() {

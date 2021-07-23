@@ -19,7 +19,11 @@ package im.vector.app.features.roomprofile.notifications
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.radioButtonItem
+import im.vector.app.core.epoxy.profiles.notifications.notificationSettingsFooterItem
+import im.vector.app.core.epoxy.profiles.notifications.radioButtonItem
+import im.vector.app.core.epoxy.profiles.notifications.textHeaderItem
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.genericHeaderItem
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import javax.inject.Inject
 
@@ -27,6 +31,7 @@ class RoomNotificationSettingsController @Inject constructor() : TypedEpoxyContr
 
     interface Callback {
         fun didSelectRoomNotificationState(roomNotificationState: RoomNotificationState)
+        fun didSelectAccountSettingsLink()
     }
 
     var callback: Callback? = null
@@ -47,6 +52,10 @@ class RoomNotificationSettingsController @Inject constructor() : TypedEpoxyContr
         val host = this
         data ?: return
 
+        textHeaderItem {
+            id("roomNotificationSettingsHeader")
+            textRes(R.string.room_settings_room_notifications_notify_me)
+        }
         data.notificationOptions.forEach {  notificationState ->
             val title = titleForNotificationState(notificationState)
             radioButtonItem {
@@ -56,6 +65,13 @@ class RoomNotificationSettingsController @Inject constructor() : TypedEpoxyContr
                 listener {
                     host.callback?.didSelectRoomNotificationState(notificationState)
                 }
+            }
+        }
+        notificationSettingsFooterItem {
+            id("roomNotificationSettingsFooter")
+            encrypted(data.roomEncrypted)
+            clickListener {
+                host.callback?.didSelectAccountSettingsLink()
             }
         }
     }

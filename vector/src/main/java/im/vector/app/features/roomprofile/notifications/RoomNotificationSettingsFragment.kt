@@ -27,12 +27,15 @@ import im.vector.app.R
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
+import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomNotificationSettingsFragment @Inject constructor(
-        val roomNotificationSettingsViewModel: RoomNotificationSettingsViewModel.Factory,
-        val roomNotificationSettingsController: RoomNotificationSettingsController
+        val viewModelFactory: RoomNotificationSettingsViewModel.Factory,
+        private val roomNotificationSettingsController: RoomNotificationSettingsController,
+        private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomNotificationSettingsController.Callback {
 
@@ -45,7 +48,6 @@ class RoomNotificationSettingsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.roomSettingsToolbar)
-        views.roomSettingsToolbarTitleView.setText(R.string.settings_notifications)
         roomNotificationSettingsController.callback = this
         views.roomSettingsRecyclerView.configureWith(roomNotificationSettingsController, hasFixedSize = true)
         setupWaitingView()
@@ -67,9 +69,22 @@ class RoomNotificationSettingsFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { viewState ->
         roomNotificationSettingsController.setData(viewState)
         views.waitingView.root.isVisible = viewState.isLoading
+        renderRoomSummary(viewState)
     }
 
     override fun didSelectRoomNotificationState(roomNotificationState: RoomNotificationState) {
         viewModel.handle(RoomNotificationSettingsAction.SelectNotificationState(roomNotificationState))
+    }
+
+    override fun didSelectAccountSettingsLink() {
+        navigator.openSettings(requireContext())
+    }
+
+    private fun renderRoomSummary(state: RoomNotificationSettingsViewState) {
+        state.roomSummary()?.let {
+            views.roomSettingsToolbarTitleView.text = it.displayName
+            avatarRenderer.render(it.toMatrixItem(), views.roomSettingsToolbarAvatarImageView)
+            views.roomSettingsDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
+        }
     }
 }

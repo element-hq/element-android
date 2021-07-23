@@ -20,14 +20,15 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 
 data class RoomNotificationSettingsViewState(
         val roomId: String,
+        val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
         val roomEncrypted: Boolean = false,
         val notificationState: Async<RoomNotificationState> = Uninitialized,
-        val avatarData: AvatarData? = null
 )  : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
