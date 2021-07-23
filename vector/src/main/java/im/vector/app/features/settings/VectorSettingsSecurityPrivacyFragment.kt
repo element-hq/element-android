@@ -157,7 +157,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
                     vectorActivity.getVectorComponent()
                             .rawService()
-                            .getElementWellknown(session.myUserId)
+                            .getElementWellknown(session.sessionParams)
                             ?.isE2EByDefault() == false
         }
     }

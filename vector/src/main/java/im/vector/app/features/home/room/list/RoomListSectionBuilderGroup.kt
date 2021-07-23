@@ -24,9 +24,8 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.session.Session
@@ -35,15 +34,15 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.rx.asObservable
 
-class GroupRoomListSectionBuilder(
-        val session: Session,
-        val stringProvider: StringProvider,
-        val viewModelScope: CoroutineScope,
-        val appStateHandler: AppStateHandler,
+class RoomListSectionBuilderGroup(
+        private val session: Session,
+        private val stringProvider: StringProvider,
+        private val appStateHandler: AppStateHandler,
         private val autoAcceptInvites: AutoAcceptInvites,
-        val onDisposable: (Disposable) -> Unit,
-        val onUdpatable: (UpdatableLivePageResult) -> Unit
+        private val onUpdatable: (UpdatableLivePageResult) -> Unit
 ) : RoomListSectionBuilder {
+
+    private val disposables = CompositeDisposable()
 
     override fun buildSections(mode: RoomListDisplayMode): List<RoomsSection> {
         val activeGroupAwareQueries = mutableListOf<UpdatableLivePageResult>()
@@ -52,7 +51,7 @@ class GroupRoomListSectionBuilder(
 
         when (mode) {
             RoomListDisplayMode.PEOPLE        -> {
-                // 3 sections Invites / Fav / Dms
+                // 4 sections Invites / Fav / Dms / Low Priority
                 buildPeopleSections(sections, activeGroupAwareQueries, actualGroupId)
             }
             RoomListDisplayMode.ROOMS         -> {
@@ -69,7 +68,7 @@ class GroupRoomListSectionBuilder(
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
                             session.getFilteredPagedRoomSummariesLive(qpm)
                                     .let { updatableFilterLivePageResult ->
-                                        onUdpatable(updatableFilterLivePageResult)
+                                        onUpdatable(updatableFilterLivePageResult)
                                         sections.add(RoomsSection(name, updatableFilterLivePageResult.livePagedList))
                                     }
                         }
@@ -88,6 +87,7 @@ class GroupRoomListSectionBuilder(
                         it.activeGroupId = actualGroupId
                     }
                 }
+
                 addSection(
                         sections,
                         activeGroupAwareQueries,
@@ -111,8 +111,9 @@ class GroupRoomListSectionBuilder(
                         }
                     }
                 }.also {
-                    onDisposable.invoke(it)
+                    disposables.add(it)
                 }
+
         return sections
     }
 
@@ -218,7 +219,19 @@ class GroupRoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, null)
+            it.activeGroupId = actualGroupId
+        }
+
+        addSection(
+                sections,
+                activeSpaceAwareQueries,
+                R.string.low_priority_header,
+                false
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, true, null)
             it.activeGroupId = actualGroupId
         }
     }
@@ -231,7 +244,6 @@ class GroupRoomListSectionBuilder(
         withQueryParams(
                 { query.invoke(it) },
                 { roomQueryParams ->
-
                     val name = stringProvider.getString(nameRes)
                     session.getFilteredPagedRoomSummariesLive(roomQueryParams)
                             .also {
@@ -246,8 +258,9 @@ class GroupRoomListSectionBuilder(
                                                     ?.notificationCount
                                                     ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
                                         }.also {
-                                            onDisposable.invoke(it)
+                                            disposables.add(it)
                                         }
+
                                 sections.add(
                                         RoomsSection(
                                                 sectionName = name,
@@ -266,5 +279,9 @@ class GroupRoomListSectionBuilder(
                 .apply { builder.invoke(this) }
                 .build()
                 .let { block(it) }
+    }
+
+    override fun dispose() {
+        disposables.dispose()
     }
 }

@@ -53,19 +53,19 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
             ServerType.MatrixOrg -> {
                 views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
                 views.loginSignupSigninServerIcon.isVisible = true
-                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
+                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrlFromUser.toReducedUrl())
                 views.loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.EMS       -> {
                 views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                 views.loginSignupSigninServerIcon.isVisible = true
                 views.loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
-                views.loginSignupSigninText.text = state.homeServerUrl.toReducedUrl()
+                views.loginSignupSigninText.text = state.homeServerUrlFromUser.toReducedUrl()
             }
             ServerType.Other     -> {
                 views.loginSignupSigninServerIcon.isVisible = false
                 views.loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
-                views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
+                views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrlFromUser.toReducedUrl())
             }
             ServerType.Unknown   -> Unit /* Should not happen */
         }

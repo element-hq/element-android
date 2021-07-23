@@ -22,8 +22,10 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.expandableTextItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.app.core.ui.list.genericPositiveButtonItem
 import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
@@ -34,6 +36,7 @@ import javax.inject.Inject
 
 class RoomProfileController @Inject constructor(
         private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider,
         private val vectorPreferences: VectorPreferences,
         private val shortcutCreator: ShortcutCreator
 ) : TypedEpoxyController<RoomProfileViewState>() {
@@ -55,6 +58,7 @@ class RoomProfileController @Inject constructor(
         fun onRoomIdClicked()
         fun onRoomDevToolsClicked()
         fun onUrlInTopicLongClicked(url: String)
+        fun doMigrateToVersion(newVersion: String)
     }
 
     override fun buildModels(data: RoomProfileViewState?) {
@@ -87,6 +91,28 @@ class RoomProfileController @Inject constructor(
 
         // Security
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
+
+        // Upgrade warning
+        val roomVersion = data.roomCreateContent()?.roomVersion
+        if (data.canUpgradeRoom
+                && !data.isTombstoned
+                && roomVersion != null
+                && data.isUsingUnstableRoomVersion
+                && data.recommendedRoomVersion != null) {
+            genericFooterItem {
+                id("version_warning")
+                text(host.stringProvider.getString(R.string.room_using_unstable_room_version, roomVersion))
+                textColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                centered(false)
+            }
+
+            genericPositiveButtonItem {
+                id("migrate_button")
+                text(host.stringProvider.getString(R.string.room_upgrade_to_recommended_version))
+                buttonClickAction { host.callback?.doMigrateToVersion(data.recommendedRoomVersion) }
+            }
+        }
+
         val learnMoreSubtitle = if (roomSummary.isEncrypted) {
             if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_subtitle else R.string.room_profile_encrypted_subtitle
         } else {
@@ -194,7 +220,7 @@ class RoomProfileController @Inject constructor(
                     editable = false,
                     action = { callback?.onRoomIdClicked() }
             )
-            data.roomCreateContent()?.roomVersion?.let {
+            roomVersion?.let {
                 buildProfileAction(
                         id = "roomVersion",
                         title = stringProvider.getString(R.string.room_settings_room_version_title),

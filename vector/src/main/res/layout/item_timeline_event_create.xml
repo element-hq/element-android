@@ -10,7 +10,6 @@
         style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:background="?vctr_keys_backup_banner_accent_color"
@@ -18,7 +17,7 @@
         android:gravity="center|start"
         android:minHeight="80dp"
         android:padding="16dp"
-        app:drawableStartCompat="@drawable/error"
+        app:drawableStartCompat="@drawable/ic_warning_badge"
         tools:text="This room is continuation…" />
 
 </FrameLayout>

@@ -1,30 +1,39 @@
-Element est une nouvelle application de messagerie et de collaboration qui :
+Element est à la fois une messagerie sécurisée et une application de collaboration en équipe, idéale pour les conversations de groupe en télétravail. Cette application utilise le chiffrement de bout en bout. Elle permet de mettre en place des téléconférences vidéo, du partage de fichier et des appels vocaux.
 
-1. Vous permet de préserver votre vie privée
-2. Vous permet de communiquer avec n’importe qui sur réseau Matrix, et plus encore grâce aux intégrations d’autres applications telles que Slack ou Discord
-3. Vous protège de la publicité et de la collecte de données
-4. Vous protège grâce au chiffrement de bout-à-bout et à la signature croisée pour authentifier les autres utilisateurs
+<b>Les fonctionnalités d’Element incluent :</b>
+- Outils de communication en ligne avancés
+- Communication d’entreprise sécurisée par le chiffrement de bout en bout des messages, même pour les travailleurs à distance
+- Messagerie décentralisée basée sur le framework open source Matrix
+- Partage sécurisé de fichiers avec chiffrement des données lors de la gestion de projet
+- Conversations vidéo par voix sur IP et partage d’écran
+- Intégration facile avec vos outils de collaboration, de gestion de projet, services de VoIP et autres applications de messagerie
 
-Element est complètement différente des autres applications de messagerie et de collaboration puisque l’application est décentralisée et open-source.
+Element est complètement différente des autres applications de messagerie et de collaboration. Elle s’appuie sur Matrix, un réseau ouvert de communication décentralisée. Elle permet l’auto-hébergement pour que ses utilisateurs restent le plus en contrôle possible de leurs données et leurs messages.
 
-Element vous permet d’héberger vous-même ou de choisir un hôte vous permettant d’assurer votre vie privée, la propriété et le contrôle de vos données et de vos conversations. Cela vous donne accès à un réseau ouvert. Vous n’êtes donc pas condamné à parler à d’autres utilisateurs d’Element seulement. Et c'est très sécurisé.
+<b>Confidentialité et messagerie chiffrée</b>
+Element vous protège des publicités non désirées, du minage de données et des prisons dorées. Elle protègé vos données et vos communications vocales grâce au chiffrement de bout en bout et à la vérification de signature croisée entre appareils.
 
-Element peut faire tout ça car elle est basée sur Matrix, le protocole standard pour la communication ouverte et décentralisée.
+Element vous donne la main sur votre confidentialité en vous permettant de communiquer de manière sécurisée avec tout le réseau Matrix ou d’autres applications de communication d’entreprise au travers d’intégrations d’applications comme Slack.
 
-Element vous donne le contrôle en vous laissant choisir qui héberge vos conversations. Depuis l'application Element, vous pouvez choisir votre hôte de différentes manières :
+<b>Element peut être auto-hébergé</b>
+Pour une meilleure souveraineté sur vos données et conversations, Element peut être auto-hébergé ou vous pouvez choisir votre hôte Matrix - la norme open source pour les communications décentralisées. Element garantit votre confidentialité, conformité aux normes de sécurité, tout en proposant une intégration souple.
 
-1. Créer un compte gratuit sur le serveur public matrix.org hébergé par les développeurs de Matrix, ou choisir parmi les milliers de serveurs public hébergés par des bénévoles
-2. Héberger vous-même votre compte en installant un serveur sur votre propre machine
-3. Créer un compte sur un serveur personnalisé en souscrivant sur la plateforme d'hébergement « Element Matrix Services » (EMS)
+<b>Vos données vous appartiennent</b>
+Vous décidez où stocker vos données et messages. Aucun risque de minage de données où d’accès par des tierce parties.
 
-<b>Pourquoi choisir Element ?</b>
+Element vous place aux commandes de différente manières :
+1. Inscrivez vous sur le serveur public matrix.org hébergé par les développeurs de Matrix ou choisissez parmi des milliers de serveurs publics hébergés par des bénévoles
+2. Auto-hébergez votre compte sur un serveur de votre proper infrastructure informatique
+3. Inscrivez vous à la plateforme d’hébergement Element Matrix Services
 
-<b>VOS DONNÉES VOUS APPARTIENNENT</b> : vous décidez où stocker vos données et messages. Ils vous appartiennent et vous les maîtrisez. Aucune multinationale ne viendra extraire vos données pour les envoyer au plus offrant.
+<b>Messagerie et collaboration ouvertes</b>
+Vous pouvez discuter avec tout le réseau Matrix, que vos interlocuteurs utilisent Element, une autre application Matrix, ou même s’ils utilisent une application complètement différente.
 
-<b>MESSAGERIE ET COLLABORATION OUVERTES</b> : vous pouvez discuter avec tout le réseau Matrix, qu’ils utilisent Element ou une autre application Matrix, même s’ils utilisent une autre plateforme de messagerie telle que Slack, IRC ou XMPP.
+<b>Ultra sécurisé</b>
+Chiffrement de bout en bout (seules les personnes dans la conversation peuvent déchiffrer les messages) et vérification de signature croisée entre appareils.
 
-<b>ULTRA SÉCURISÉ</b> : chiffrement de bout en bout (seuls les membres d’une conversation peuvent déchiffrer les messages), et signature croisée pour vérifier les appareils de vos interlocuteurs.
+<b>Communication et intégration parfaites</b>
+Messagerie instantannée, appels audio et vidéo, partage de fichier, partage d’écran et bien d’autres intégrations, bots et widgets. Lancez des salons, des communautés, restez en contact et menez vos projets à bien.
 
-<b>TOUTES VOS COMMUNICATIONS</b> : messagerie, appels audio et vidéo, partage de fichier, partage d’écran et un grand nombre d’intégrations, robots et widgets. Participez à des salons, des communautés, restez en contact et faites avancer vos projets.
-
-<b>PARTOUT AVEC VOUS</b> : votre historique reste synchronisé entre tous vos appareils et sur le web sur https://element.io/app.
+<b>Reprenez où vous vous êtes arrêté</b>
+Restez en contact où que vous soyez grâce à l’historique des messages synchronisé entre tous vos appareils et sur le web sur https://app.element.io

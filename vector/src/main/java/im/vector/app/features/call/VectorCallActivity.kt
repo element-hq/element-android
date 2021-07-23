@@ -40,8 +40,8 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.ActivityCallBinding
 import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
@@ -54,6 +54,7 @@ import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
@@ -70,6 +71,8 @@ data class CallArgs(
         val isIncomingCall: Boolean,
         val isVideoCall: Boolean
 ) : Parcelable
+
+private val loggerTag = LoggerTag("VectorCallActivity", LoggerTag.VOIP)
 
 class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallControlsView.InteractionListener {
 
@@ -113,11 +116,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         if (intent.hasExtra(MvRx.KEY_ARG)) {
             callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
         } else {
-            Timber.e("## VOIP missing callArgs for VectorCall Activity")
+            Timber.tag(loggerTag.value).e("missing callArgs for VectorCall Activity")
             finish()
         }
 
-        Timber.v("## VOIP EXTRA_MODE is ${intent.getStringExtra(EXTRA_MODE)}")
+        Timber.tag(loggerTag.value).v("EXTRA_MODE is ${intent.getStringExtra(EXTRA_MODE)}")
         if (intent.getStringExtra(EXTRA_MODE) == INCOMING_RINGING) {
             turnScreenOnAndKeyguardOff()
         }
@@ -139,11 +142,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 .disposeOnDestroy()
 
         if (callArgs.isVideoCall) {
-            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, CAPTURE_PERMISSION_REQUEST_CODE, R.string.permissions_rationale_msg_camera_and_audio)) {
+            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_camera_and_audio)) {
                 start()
             }
         } else {
-            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, CAPTURE_PERMISSION_REQUEST_CODE, R.string.permissions_rationale_msg_record_audio)) {
+            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_record_audio)) {
                 start()
             }
         }
@@ -160,7 +163,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private fun renderState(state: VectorCallViewState) {
-        Timber.v("## VOIP renderState call $state")
+        Timber.tag(loggerTag.value).v("renderState call $state")
         if (state.callState is Fail) {
             finish()
             return
@@ -196,7 +199,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 views.callConnectingProgress.isVisible = true
                 configureCallInfo(state)
             }
-            is CallState.Connected    -> {
+            is CallState.Connected -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
@@ -246,10 +249,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callConnectingProgress.isVisible = true
                 }
             }
-            is CallState.Terminated   -> {
+            is CallState.Ended     -> {
                 finish()
             }
-            null                      -> {
+            null                   -> {
             }
         }
     }
@@ -298,9 +301,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAPTURE_PERMISSION_REQUEST_CODE && allGranted(grantResults)) {
+    private val permissionCameraLauncher = registerForPermissionsResult { allGranted, _ ->
+        if (allGranted) {
             start()
         } else {
             // TODO display something
@@ -310,7 +312,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private fun start() {
         rootEglBase = EglUtils.rootEglBase ?: return Unit.also {
-            Timber.v("## VOIP rootEglBase is null")
+            Timber.tag(loggerTag.value).v("rootEglBase is null")
             finish()
         }
 
@@ -336,7 +338,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private fun handleViewEvents(event: VectorCallViewEvents?) {
-        Timber.v("## VOIP handleViewEvents $event")
+        Timber.tag(loggerTag.value).v("handleViewEvents $event")
         when (event) {
             VectorCallViewEvents.DismissNoCall             -> {
                 finish()
@@ -358,7 +360,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private fun onErrorTimoutConnect(turn: TurnServerResponse?) {
-        Timber.d("## VOIP onErrorTimoutConnect $turn")
+        Timber.tag(loggerTag.value).d("onErrorTimoutConnect $turn")
         // TODO ask to use default stun, etc...
         MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.call_failed_no_connection)
@@ -370,8 +372,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     companion object {
-
-        private const val CAPTURE_PERMISSION_REQUEST_CODE = 1
         private const val EXTRA_MODE = "EXTRA_MODE"
         private const val FRAGMENT_DIAL_PAD_TAG = "FRAGMENT_DIAL_PAD_TAG"
 
@@ -440,7 +440,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     // Needed to let you answer call when phone is locked
     private fun turnScreenOnAndKeyguardOff() {
-        Timber.v("## VOIP turnScreenOnAndKeyguardOff")
+        Timber.tag(loggerTag.value).v("turnScreenOnAndKeyguardOff")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
@@ -461,7 +461,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private fun turnScreenOffAndKeyguardOn() {
-        Timber.v("## VOIP turnScreenOnAndKeyguardOn")
+        Timber.tag(loggerTag.value).v("turnScreenOnAndKeyguardOn")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(false)
             setTurnScreenOn(false)

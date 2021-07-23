@@ -1820,4 +1820,13 @@
     <string name="notice_widget_removed">%1$s %2$s widgetını kaldırdı</string>
     <string name="notice_end_to_end">%1$s uçtan uca şifrelemeyi etkinleştirdi (%2$s)</string>
     <string name="notice_room_visibility_unknown">bilinmeyen (%s).</string>
+    <string name="notice_direct_room_update">%s güncellendi.</string>
+    <string name="notice_room_visibility_world_readable">birisi.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Gelecek mesajları %1$s için görünür yaptınız.</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s, gelecek mesajları %2$s için görünür hale getirdi.</string>
+    <string name="notice_made_future_room_visibility_by_you">Oda geçmişini %1$s için görünür yaptınız.</string>
+    <string name="notice_made_future_room_visibility">%1$s oda geçmişini %2$s \'ye görünür yaptı.</string>
+    <string name="notice_call_candidates_by_you">Çağrı kurulumu için verileri gönderdiniz.</string>
+    <string name="notice_call_candidates">%s kurulumu çağrı verileri gönderildi.</string>
+    <string name="notice_display_name_removed_by_you">%1$s başlıklı görünen ad silindi.</string>
 </resources>

@@ -18,7 +18,7 @@ package org.matrix.android.sdk.api.session.call
 
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidate
 import org.matrix.android.sdk.api.session.room.model.call.CallCapabilities
-import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
+import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.matrix.android.sdk.api.session.room.model.call.SdpType
 import org.matrix.android.sdk.api.util.Optional
 
@@ -69,7 +69,7 @@ interface MxCall : MxCallDetail {
     /**
      * End the call
      */
-    fun hangUp(reason: CallHangupContent.Reason? = null)
+    fun hangUp(reason: EndCallReason? = null)
 
     /**
      * Start a call
