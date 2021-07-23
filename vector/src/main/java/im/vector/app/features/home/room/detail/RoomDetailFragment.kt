@@ -1291,7 +1291,14 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onTextBlankStateChanged(isBlank: Boolean) {
-                views.voiceMessageRecorderView.isVisible = !views.composerLayout.views.sendButton.isVisible && vectorPreferences.labsUseVoiceMessage()
+                if (!views.composerLayout.views.sendButton.isVisible && vectorPreferences.labsUseVoiceMessage()) {
+                    // Animate alpha to prevent overlapping with the animation of the send button
+                    views.voiceMessageRecorderView.alpha = 0f
+                    views.voiceMessageRecorderView.isVisible = true
+                    views.voiceMessageRecorderView.animate().alpha(1f).setDuration(300).start()
+                } else {
+                    views.voiceMessageRecorderView.isVisible = false
+                }
             }
         }
     }
@@ -1356,11 +1363,13 @@ class RoomDetailFragment @Inject constructor(
             views.inviteView.isVisible = false
             if (state.tombstoneEvent == null) {
                 if (state.canSendMessage) {
-                    views.composerLayout.isVisible = true
-                    views.voiceMessageRecorderView.isVisible = vectorPreferences.labsUseVoiceMessage()
-                    views.composerLayout.setRoomEncrypted(summary.isEncrypted)
-                    views.notificationAreaView.render(NotificationAreaView.State.Hidden)
-                    views.composerLayout.alwaysShowSendButton = !vectorPreferences.labsUseVoiceMessage()
+                    if (!views.voiceMessageRecorderView.isActive()) {
+                        views.composerLayout.isVisible = true
+                        views.voiceMessageRecorderView.isVisible = vectorPreferences.labsUseVoiceMessage()
+                        views.composerLayout.setRoomEncrypted(summary.isEncrypted)
+                        views.notificationAreaView.render(NotificationAreaView.State.Hidden)
+                        views.composerLayout.alwaysShowSendButton = !vectorPreferences.labsUseVoiceMessage()
+                    }
                 } else {
                     views.composerLayout.isVisible = false
                     views.voiceMessageRecorderView.isVisible = false
@@ -1904,13 +1913,21 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is EventSharedAction.Edit                       -> {
-                roomDetailViewModel.handle(RoomDetailAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
+                if (!views.voiceMessageRecorderView.isActive()) {
+                    roomDetailViewModel.handle(RoomDetailAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
+                } else {
+                    requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
+                }
             }
             is EventSharedAction.Quote                      -> {
                 roomDetailViewModel.handle(RoomDetailAction.EnterQuoteMode(action.eventId, views.composerLayout.text.toString()))
             }
             is EventSharedAction.Reply                      -> {
-                roomDetailViewModel.handle(RoomDetailAction.EnterReplyMode(action.eventId, views.composerLayout.text.toString()))
+                if (!views.voiceMessageRecorderView.isActive()) {
+                    roomDetailViewModel.handle(RoomDetailAction.EnterReplyMode(action.eventId, views.composerLayout.text.toString()))
+                } else {
+                    requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
+                }
             }
             is EventSharedAction.CopyPermalink              -> {
                 val permalink = session.permalinkService().createPermalink(roomDetailArgs.roomId, action.eventId)

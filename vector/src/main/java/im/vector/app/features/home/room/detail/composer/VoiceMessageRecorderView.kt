@@ -400,6 +400,11 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         PLAYBACK
     }
 
+    /**
+     * Returns true if the voice message is recording or is in playback mode
+     */
+    fun isActive() = recordingState !in listOf(RecordingState.NONE, RecordingState.CANCELLED)
+
     override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
         when (state) {
             is VoiceMessagePlaybackTracker.Listener.State.Recording -> {
