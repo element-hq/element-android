@@ -1,3 +1,52 @@
+Changes in Element 1.1.14 (2021-07-23)
+======================================
+
+Features ✨
+----------
+ - Add low priority section in DM tab ([#3463](https://github.com/vector-im/element-android/issues/3463))
+ - Show missed call notification. ([#3710](https://github.com/vector-im/element-android/issues/3710))
+
+Bugfixes 🐛
+----------
+ - Don't use the transaction ID of the verification for the request ([#3589](https://github.com/vector-im/element-android/issues/3589))
+ - Avoid incomplete downloads in cache ([#3656](https://github.com/vector-im/element-android/issues/3656))
+ - Fix a crash which can happen when user signs out ([#3720](https://github.com/vector-im/element-android/issues/3720))
+ - Ensure OTKs are uploaded when the session is created ([#3724](https://github.com/vector-im/element-android/issues/3724))
+
+SDK API changes ⚠️
+------------------
+ - Add initialState support to CreateRoomParams (#3713) ([#3713](https://github.com/vector-im/element-android/issues/3713))
+
+Other changes
+-------------
+ - Apply grammatical fixes to the Server ACL timeline messages. ([#3721](https://github.com/vector-im/element-android/issues/3721))
+ - Add tags in the log, especially for VoIP, but can be used for other features in the future ([#3723](https://github.com/vector-im/element-android/issues/3723))
+
+
+Changes in Element v1.1.13 (2021-07-19)
+=======================================
+
+Features ✨
+----------
+ - Remove redundant mimetype (vector-im/element-web#2547) ([#3273](https://github.com/vector-im/element-android/issues/3273))
+ - Room version capabilities and room upgrade support, better error feedback ([#3551](https://github.com/vector-im/element-android/issues/3551))
+ - Add retry support in room addresses screen ([#3635](https://github.com/vector-im/element-android/issues/3635))
+ - Better management of permission requests ([#3667](https://github.com/vector-im/element-android/issues/3667))
+
+Bugfixes 🐛
+----------
+ - Standardise spelling and casing of homeserver, identity server, and integration manager. ([#491](https://github.com/vector-im/element-android/issues/491))
+ - Perform .well-known request first, even if the entered URL is a valid homeserver base url ([#2843](https://github.com/vector-im/element-android/issues/2843))
+ - Use different copy for self verification. ([#3624](https://github.com/vector-im/element-android/issues/3624))
+ - Crash when opening room addresses screen with no internet connection ([#3634](https://github.com/vector-im/element-android/issues/3634))
+ - Fix unread messages marker being hidden in collapsed membership item ([#3655](https://github.com/vector-im/element-android/issues/3655))
+ - Ensure reaction emoji picker tabs look fine on small displays ([#3661](https://github.com/vector-im/element-android/issues/3661))
+
+SDK API changes ⚠️
+------------------
+ - RawService.getWellknown() now takes a domain instead of a matrixId as parameter ([#3572](https://github.com/vector-im/element-android/issues/3572))
+
+
 Changes in Element 1.1.12 (2021-07-05)
 ======================================
 

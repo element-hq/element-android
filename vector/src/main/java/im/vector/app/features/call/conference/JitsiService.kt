@@ -56,7 +56,7 @@ class JitsiService @Inject constructor(
         // Build data for a jitsi widget
         val widgetId: String = WidgetType.Jitsi.preferred + "_" + session.myUserId + "_" + System.currentTimeMillis()
         val preferredJitsiDomain = tryOrNull {
-            rawService.getElementWellknown(session.myUserId)
+            rawService.getElementWellknown(session.sessionParams)
                     ?.jitsiServer
                     ?.preferredDomain
         }

@@ -76,7 +76,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
             is UserCodeActions.SwitchMode -> setState { copy(mode = action.mode) }
             is UserCodeActions.DecodedQRCode -> handleQrCodeDecoded(action)
             is UserCodeActions.StartChattingWithUser -> handleStartChatting(action)
-            UserCodeActions.CameraPermissionNotGranted -> _viewEvents.post(UserCodeShareViewEvents.CameraPermissionNotGranted)
+            is UserCodeActions.CameraPermissionNotGranted -> _viewEvents.post(UserCodeShareViewEvents.CameraPermissionNotGranted(action.deniedPermanently))
             UserCodeActions.ShareByText -> handleShareByText()
         }
     }

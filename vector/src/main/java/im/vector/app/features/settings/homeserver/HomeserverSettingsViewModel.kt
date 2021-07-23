@@ -53,7 +53,8 @@ class HomeserverSettingsViewModel @AssistedInject constructor(
     init {
         setState {
             copy(
-                    baseUrl = session.sessionParams.homeServerUrl,
+                    homeserverUrl = session.sessionParams.homeServerUrl,
+                    homeserverClientServerApiUrl = session.sessionParams.homeServerUrlBase,
                     homeServerCapabilities = session.getHomeServerCapabilities()
             )
         }

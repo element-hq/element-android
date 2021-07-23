@@ -326,7 +326,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun setupBottomNavigationView() {
         views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
-        views.bottomNavigationView.setOnNavigationItemSelectedListener {
+        views.bottomNavigationView.setOnItemSelectedListener {
             val tab = when (it.itemId) {
                 R.id.bottom_action_people       -> HomeTab.RoomList(RoomListDisplayMode.PEOPLE)
                 R.id.bottom_action_rooms        -> HomeTab.RoomList(RoomListDisplayMode.ROOMS)

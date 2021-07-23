@@ -36,4 +36,7 @@ sealed class RoomAliasAction : VectorViewModelAction {
     object ToggleAddLocalAliasForm : RoomAliasAction()
     data class SetNewLocalAliasLocalPart(val aliasLocalPart: String) : RoomAliasAction()
     object AddLocalAlias : RoomAliasAction()
+
+    // Retry to fetch data in error
+    object Retry : RoomAliasAction()
 }

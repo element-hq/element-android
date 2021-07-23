@@ -50,6 +50,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,11 +60,7 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -104,6 +101,7 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.core.utils.isValidUrl
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.saveMedia
@@ -146,6 +144,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
+import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
@@ -180,7 +179,6 @@ import org.commonmark.parser.Parser
 import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -305,6 +303,15 @@ class RoomDetailFragment @Inject constructor(
 
     private lateinit var emojiPopup: EmojiPopup
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY) { _, bundle ->
+            bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
+                roomDetailViewModel.handle(RoomDetailAction.RoomUpgradeSuccess(replacementRoomId))
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         lifecycle.addObserver(JitsiBroadcastEventObserver(vectorBaseActivity, this::onBroadcastEvent))
         super.onViewCreated(view, savedInstanceState)
@@ -352,10 +359,6 @@ class RoomDetailFragment @Inject constructor(
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), it)
                     invalidateOptionsMenu()
                 })
-
-        roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
-            renderTombstoneEventHandling(it)
-        }
 
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::canShowJumpToReadMarker, RoomDetailViewState::unreadState) { _, _ ->
             updateJumpToReadMarkerViewVisibility()
@@ -411,6 +414,8 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.StartChatEffect                  -> handleChatEffect(it.type)
                 RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
+                RoomDetailViewEvents.RoomReplacementStarted              -> handleRoomReplacement()
+                is RoomDetailViewEvents.ShowRoomUpgradeDialog            -> handleShowRoomUpgradeDialog(it)
             }.exhaustive
         }
 
@@ -447,6 +452,19 @@ class RoomDetailFragment @Inject constructor(
                 mode = VectorCallActivity.INCOMING_ACCEPT
         )
         startActivity(intent)
+    }
+
+    private fun handleRoomReplacement() {
+        // this will join a new room, it can take time and might fail
+        // so we need to report progress and retry
+        val tag = JoinReplacementRoomBottomSheet::javaClass.name
+        JoinReplacementRoomBottomSheet().show(childFragmentManager, tag)
+    }
+
+    private fun handleShowRoomUpgradeDialog(roomDetailViewEvents: RoomDetailViewEvents.ShowRoomUpgradeDialog) {
+        val tag = MigrateRoomBottomSheet::javaClass.name
+        MigrateRoomBottomSheet.newInstance(roomDetailArgs.roomId, roomDetailViewEvents.newVersion)
+                .show(parentFragmentManager, tag)
     }
 
     private fun handleChatEffect(chatEffect: ChatEffect) {
@@ -498,6 +516,9 @@ class RoomDetailFragment @Inject constructor(
 
     private fun handleOpenRoom(openRoom: RoomDetailViewEvents.OpenRoom) {
         navigator.openRoom(requireContext(), openRoom.roomId, null)
+        if (openRoom.closeCurrentRoom) {
+            requireActivity().finish()
+        }
     }
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
@@ -771,8 +792,8 @@ class RoomDetailFragment @Inject constructor(
 
     private fun setupNotificationView() {
         views.notificationAreaView.delegate = object : NotificationAreaView.Delegate {
-            override fun onTombstoneEventClicked(tombstoneEvent: Event) {
-                roomDetailViewModel.handle(RoomDetailAction.HandleTombstoneEvent(tombstoneEvent))
+            override fun onTombstoneEventClicked() {
+                roomDetailViewModel.handle(RoomDetailAction.JoinAndOpenReplacementRoom)
             }
         }
     }
@@ -956,6 +977,8 @@ class RoomDetailFragment @Inject constructor(
                 insertUserDisplayNameInTextEditor(roomDetailPendingAction.userId)
             is RoomDetailPendingAction.OpenOrCreateDm    ->
                 roomDetailViewModel.handle(RoomDetailAction.OpenOrCreateDm(roomDetailPendingAction.userId))
+            is RoomDetailPendingAction.OpenRoom          ->
+                handleOpenRoom(RoomDetailViewEvents.OpenRoom(roomDetailPendingAction.roomId, roomDetailPendingAction.closeCurrentRoom))
         }.exhaustive
     }
 
@@ -1032,14 +1055,16 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val startCallActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val startCallActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
                 roomDetailViewModel.pendingAction = null
                 roomDetailViewModel.handle(it)
             }
         } else {
-            context?.toast(R.string.permissions_action_not_performed_missing_permissions)
+            if (deniedPermanently) {
+                activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
+            }
             cleanUpAfterPermissionNotGranted()
         }
     }
@@ -1300,23 +1325,6 @@ class RoomDetailFragment @Inject constructor(
             } else {
                 setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 setTypeface(null, Typeface.BOLD)
-            }
-        }
-    }
-
-    private fun renderTombstoneEventHandling(async: Async<String>) {
-        when (async) {
-            is Loading -> {
-                // TODO Better handling progress
-                vectorBaseActivity.showWaitingView(getString(R.string.joining_room))
-            }
-            is Success -> {
-                navigator.openRoom(vectorBaseActivity, async())
-                vectorBaseActivity.finish()
-            }
-            is Fail    -> {
-                vectorBaseActivity.hideWaitingView()
-                vectorBaseActivity.toast(errorFormatter.toHumanReadable(async.error))
             }
         }
     }
@@ -1725,13 +1733,16 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val saveActionActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val saveActionActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             sharedActionViewModel.pendingAction?.let {
                 handleActions(it)
                 sharedActionViewModel.pendingAction = null
             }
         } else {
+            if (deniedPermanently) {
+                activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
+            }
             cleanUpAfterPermissionNotGranted()
         }
     }
@@ -1964,7 +1975,7 @@ class RoomDetailFragment @Inject constructor(
 
 // AttachmentTypeSelectorView.Callback
 
-    private val typeSelectedActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val typeSelectedActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             val pendingType = attachmentsHelper.pendingType
             if (pendingType != null) {
@@ -1972,12 +1983,15 @@ class RoomDetailFragment @Inject constructor(
                 launchAttachmentProcess(pendingType)
             }
         } else {
+            if (deniedPermanently) {
+                activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
+            }
             cleanUpAfterPermissionNotGranted()
         }
     }
 
     override fun onTypeSelected(type: AttachmentTypeSelectorView.Type) {
-        if (checkPermissions(type.permissionsBit, requireActivity(), typeSelectedActivityResultLauncher)) {
+        if (checkPermissions(type.permissions, requireActivity(), typeSelectedActivityResultLauncher)) {
             launchAttachmentProcess(type)
         } else {
             attachmentsHelper.pendingType = type

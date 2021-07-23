@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.space
 
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
 
 interface Space {
 
@@ -37,6 +38,8 @@ interface Space {
                             order: String?,
                             autoJoin: Boolean = false,
                             suggested: Boolean? = false)
+
+    fun getChildInfo(roomId: String): SpaceChildContent?
 
     suspend fun removeChildren(roomId: String)
 

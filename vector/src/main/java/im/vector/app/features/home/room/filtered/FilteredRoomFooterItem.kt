@@ -23,13 +23,12 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
-import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 
 @EpoxyModelClass(layout = R.layout.item_room_filter_footer)
 abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.Holder>() {
 
     @EpoxyAttribute
-    var listener: FilteredRoomFooterItemListener? = null
+    var listener: Listener? = null
 
     @EpoxyAttribute
     var currentFilter: String = ""
@@ -47,7 +46,9 @@ abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.
         val openRoomDirectory by bind<Button>(R.id.roomFilterFooterOpenRoomDirectory)
     }
 
-    interface FilteredRoomFooterItemListener : NotifsFabMenuView.Listener {
+    interface Listener {
         fun createRoom(initialName: String)
+        fun createDirectChat()
+        fun openRoomDirectory(initialFilter: String)
     }
 }

@@ -22,7 +22,7 @@ package im.vector.app.features.roomdirectory
 data class RoomDirectoryData(
         /**
          * The server name (might be null)
-         * Set null when the server is the current user's home server.
+         * Set null when the server is the current user's homeserver.
          */
         val homeServer: String? = null,
 

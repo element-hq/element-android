@@ -43,11 +43,11 @@ class ShowUserCodeFragment @Inject constructor(
 
     val sharedViewModel: UserCodeSharedViewModel by activityViewModel()
 
-    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             doOpenQRCodeScanner()
         } else {
-            sharedViewModel.handle(UserCodeActions.CameraPermissionNotGranted)
+            sharedViewModel.handle(UserCodeActions.CameraPermissionNotGranted(deniedPermanently))
         }
     }
 

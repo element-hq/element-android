@@ -81,13 +81,17 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                UserCodeShareViewEvents.Dismiss                    -> ActivityCompat.finishAfterTransition(this)
-                UserCodeShareViewEvents.ShowWaitingScreen          -> views.simpleActivityWaitingView.isVisible = true
-                UserCodeShareViewEvents.HideWaitingScreen          -> views.simpleActivityWaitingView.isVisible = false
-                is UserCodeShareViewEvents.ToastMessage            -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                is UserCodeShareViewEvents.NavigateToRoom          -> navigator.openRoom(this, it.roomId)
-                UserCodeShareViewEvents.CameraPermissionNotGranted -> onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
-                else                                               -> {
+                UserCodeShareViewEvents.Dismiss                       -> ActivityCompat.finishAfterTransition(this)
+                UserCodeShareViewEvents.ShowWaitingScreen             -> views.simpleActivityWaitingView.isVisible = true
+                UserCodeShareViewEvents.HideWaitingScreen             -> views.simpleActivityWaitingView.isVisible = false
+                is UserCodeShareViewEvents.ToastMessage               -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                is UserCodeShareViewEvents.NavigateToRoom             -> navigator.openRoom(this, it.roomId)
+                is UserCodeShareViewEvents.CameraPermissionNotGranted -> {
+                    if (it.deniedPermanently) {
+                        onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
+                    }
+                }
+                else                                                  -> {
                 }
             }
         }

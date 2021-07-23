@@ -181,6 +181,10 @@ class RoomAliasFragment @Inject constructor(
                 .show(childFragmentManager, "ROOM_ALIAS_ACTIONS")
     }
 
+    override fun retry() {
+        viewModel.handle(RoomAliasAction.Retry)
+    }
+
     private fun removeLocalAlias(alias: String) {
         MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.dialog_title_confirmation)

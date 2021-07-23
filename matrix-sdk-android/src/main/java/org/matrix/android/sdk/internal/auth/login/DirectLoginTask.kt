@@ -50,7 +50,7 @@ internal class DefaultDirectLoginTask @Inject constructor(
 
     override suspend fun execute(params: DirectLoginTask.Params): Session {
         val client = buildClient(params.homeServerConnectionConfig)
-        val homeServerUrl = params.homeServerConnectionConfig.homeServerUri.toString()
+        val homeServerUrl = params.homeServerConnectionConfig.homeServerUriBase.toString()
 
         val authAPI = retrofitFactory.create(client, homeServerUrl)
                 .create(AuthAPI::class.java)
