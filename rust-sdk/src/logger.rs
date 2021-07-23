@@ -4,8 +4,13 @@ use std::{
 };
 use tracing_subscriber::{fmt::MakeWriter, EnvFilter};
 
+/// Trait that can be used to forward Rust logs over FFI to a language specific
+/// logger.
 pub trait Logger: Send {
+    /// Called every time the Rust side wants to post a log line.
     fn log(&self, log_line: String);
+    // TODO add support for different log levels, do this by adding more methods
+    // to the trait.
 }
 
 impl Write for LoggerWrapper {
@@ -34,6 +39,7 @@ pub struct LoggerWrapper {
     inner: Arc<Mutex<Box<dyn Logger>>>,
 }
 
+/// Set the logger that should be used to forward Rust logs over FFI.
 pub fn set_logger(logger: Box<dyn Logger>) {
     let logger = LoggerWrapper {
         inner: Arc::new(Mutex::new(logger)),

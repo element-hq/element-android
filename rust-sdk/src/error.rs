@@ -1,3 +1,5 @@
+#![allow(missing_docs)]
+
 use matrix_sdk_crypto::{
     store::CryptoStoreError as InnerStoreError, KeyExportError, MegolmError, OlmError,
 };
