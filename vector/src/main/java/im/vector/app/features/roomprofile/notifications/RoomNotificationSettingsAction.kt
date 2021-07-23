@@ -21,5 +21,4 @@ import org.matrix.android.sdk.api.session.room.notification.RoomNotificationStat
 
 sealed class RoomNotificationSettingsAction : VectorViewModelAction {
     data class SelectNotificationState(val notificationState: RoomNotificationState): RoomNotificationSettingsAction()
-    object Save: RoomNotificationSettingsAction()
 }

@@ -20,40 +20,56 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
+import im.vector.app.R
+import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.ViewEditRoomNotificationSettingsBinding
-import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.databinding.FragmentRoomSettingGenericBinding
+import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import javax.inject.Inject
 
-/**
- * In this screen:
- * - the account has been created and we propose the user to set an avatar and a display name
- */
 class RoomNotificationSettingsFragment @Inject constructor(
         val roomNotificationSettingsViewModel: RoomNotificationSettingsViewModel.Factory,
-        private val avatarRenderer: AvatarRenderer,
-) : VectorBaseFragment<ViewEditRoomNotificationSettingsBinding>() {
+        val roomNotificationSettingsController: RoomNotificationSettingsController
+) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
+        RoomNotificationSettingsController.Callback {
 
     private val viewModel: RoomNotificationSettingsViewModel by fragmentViewModel()
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): ViewEditRoomNotificationSettingsBinding {
-        return ViewEditRoomNotificationSettingsBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomSettingGenericBinding {
+        return FragmentRoomSettingGenericBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setupToolbar(views.roomSettingsToolbar)
+        views.roomSettingsToolbarTitleView.setText(R.string.settings_notifications)
+        roomNotificationSettingsController.callback = this
+        views.roomSettingsRecyclerView.configureWith(roomNotificationSettingsController, hasFixedSize = true)
+        setupWaitingView()
         observeViewEvents()
+    }
+    private fun setupWaitingView() {
+        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.isVisible = true
     }
 
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
                 is RoomNotificationSettingsViewEvents.Failure -> displayErrorDialog(it.throwable)
-                RoomNotificationSettingsViewEvents.SaveComplete -> TODO()
             }
         }
     }
 
+    override fun invalidate() = withState(viewModel) { viewState ->
+        roomNotificationSettingsController.setData(viewState)
+        views.waitingView.root.isVisible = viewState.isLoading
+    }
+
+    override fun didSelectRoomNotificationState(roomNotificationState: RoomNotificationState) {
+        viewModel.handle(RoomNotificationSettingsAction.SelectNotificationState(roomNotificationState))
+    }
 }

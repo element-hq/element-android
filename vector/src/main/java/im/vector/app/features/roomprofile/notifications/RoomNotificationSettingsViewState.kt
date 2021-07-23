@@ -16,15 +16,22 @@
 
 package im.vector.app.features.roomprofile.notifications
 
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
+import im.vector.app.features.roomprofile.RoomProfileArgs
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 
 data class RoomNotificationSettingsViewState(
-        val isLoading: Boolean,
-        val roomEncrypted: Boolean,
-        val notificationState: RoomNotificationState,
-        val avatarData: AvatarData?
-) : MvRxState
+        val roomId: String,
+        val isLoading: Boolean = false,
+        val roomEncrypted: Boolean = false,
+        val notificationState: Async<RoomNotificationState> = Uninitialized,
+        val avatarData: AvatarData? = null
+)  : MvRxState {
+
+    constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
+}
 
 data class AvatarData (
         val displayName: String,
@@ -34,7 +41,7 @@ data class AvatarData (
 val RoomNotificationSettingsViewState.notificationOptions: List<RoomNotificationState>
     get() {
         return if (roomEncrypted) {
-            listOf(RoomNotificationState.ALL_MESSAGES, RoomNotificationState.MUTE)
+            listOf(RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.ALL_MESSAGES, RoomNotificationState.MUTE)
         } else
             RoomNotificationState.values().asList()
     }

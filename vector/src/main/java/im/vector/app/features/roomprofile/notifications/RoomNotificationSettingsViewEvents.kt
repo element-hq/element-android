@@ -20,5 +20,4 @@ import im.vector.app.core.platform.VectorViewEvents
 
 sealed class RoomNotificationSettingsViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : RoomNotificationSettingsViewEvents()
-    object SaveComplete : RoomNotificationSettingsViewEvents()
 }

@@ -10,5 +10,26 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <RadioButton
+            android:id="@+id/allMesssagesRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/room_settings_all_messages"
+            android:textColor="?vctr_content_primary" />
+
+        <RadioButton
+            android:id="@+id/mentionsOnlyRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/room_settings_mention_only"
+            android:textColor="?vctr_content_primary" />
+
+        <RadioButton
+            android:id="@+id/muteRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/room_settings_mute"
+            android:textColor="?vctr_content_primary" />
+
     </RadioGroup>
 </LinearLayout>

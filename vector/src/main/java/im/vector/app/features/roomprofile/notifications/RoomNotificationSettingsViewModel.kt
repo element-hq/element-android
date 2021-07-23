@@ -19,18 +19,19 @@ package im.vector.app.features.roomprofile.notifications
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.rx.rx
 
 class RoomNotificationSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomNotificationSettingsViewState,
-        private val room: Room
+        session: Session
 ) : VectorViewModel<RoomNotificationSettingsViewState, RoomNotificationSettingsAction, RoomNotificationSettingsViewEvents>(initialState) {
 
     @AssistedFactory
@@ -41,50 +42,46 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
     companion object : MvRxViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel {
             val fragment: RoomNotificationSettingsFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.roomNotificationSettingsViewModel.create(state)
         }
     }
 
+    private val room = session.getRoom(initialState.roomId)!!
+
     init {
+        initEncrypted()
         observeNotificationState()
+    }
+
+    private fun initEncrypted() {
+        setState {
+            copy(roomEncrypted = room.isEncrypted())
+        }
     }
 
     private fun observeNotificationState() {
         room.rx()
                 .liveNotificationState()
-                .subscribe{
-                    setState {
-                        copy(notificationState = it )
-                    }
+                .execute {
+                    copy(notificationState = it)
                 }
-                .disposeOnClear()
     }
 
     override fun handle(action: RoomNotificationSettingsAction) {
         when (action) {
             is RoomNotificationSettingsAction.SelectNotificationState -> handleSelectNotificationState(action)
-            is RoomNotificationSettingsAction.Save -> handleSaveNotificationSelection(action)
         }
     }
 
     private fun handleSelectNotificationState(action: RoomNotificationSettingsAction.SelectNotificationState) {
-        setState {
-            copy(notificationState = action.notificationState)
-        }
-    }
-
-    private fun handleSaveNotificationSelection(action: RoomNotificationSettingsAction.Save) {
         setState { copy(isLoading = true) }
-        withState { state ->
-            viewModelScope.launch {
-                runCatching {  room.setRoomNotificationState(state.notificationState) }
-                        .onFailure { _viewEvents.post(RoomNotificationSettingsViewEvents.Failure(it)) }
-                setState {
-                    copy(isLoading = false)
-                }
-                _viewEvents.post(RoomNotificationSettingsViewEvents.SaveComplete)
+        viewModelScope.launch {
+            runCatching {  room.setRoomNotificationState(action.notificationState) }
+                    .onFailure { _viewEvents.post(RoomNotificationSettingsViewEvents.Failure(it)) }
+            setState {
+                copy(isLoading = false, notificationState = Success(action.notificationState))
             }
         }
     }
