@@ -18,10 +18,13 @@ package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
+import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.Device as InnerDevice
 import uniffi.olm.OlmMachine
+import uniffi.olm.VerificationRequest
 
 /** Class representing a device that supports E2EE in the Matrix world
  *
@@ -34,13 +37,31 @@ internal class Device(
         private val sender: RequestSender,
         private val listeners: ArrayList<VerificationService.Listener>,
 ) {
+    /** Request an interactive verification to begin
+     *
+     * This sends out a m.key.verification.request event over to-device messaging to
+     * to this device.
+     */
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun requestVerification(methods: List<VerificationMethod>): VerificationRequest? {
+        val stringMethods = prepareMethods(methods)
+        val result = withContext(Dispatchers.IO) {
+            machine.requestVerificationWithDevice(inner.userId, inner.deviceId, stringMethods)
+        }
+
+        return if (result != null) {
+            this.sender.sendVerificationRequest(result.request)
+            result.verification
+        } else {
+            null
+        }
+    }
+
     /** Start an interactive verification with this device
      *
      * This sends out a m.key.verification.start event with the method set to
      * m.sas.v1 to this device using to-device messaging.
      */
-    // TODO this has been deprecated in the spec, add a requestVerification() method
-    // to this class and use that one instead
     @Throws(CryptoStoreErrorException::class)
     suspend fun startVerification(): SasVerification? {
         val result = withContext(Dispatchers.IO) {

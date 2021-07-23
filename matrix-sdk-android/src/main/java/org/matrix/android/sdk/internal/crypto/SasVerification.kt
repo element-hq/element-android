@@ -33,6 +33,7 @@ import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Sas
 import uniffi.olm.Verification
 
+/** Class representing a short auth string verification flow */
 internal class SasVerification(
         private val machine: OlmMachine,
         private var inner: Sas,

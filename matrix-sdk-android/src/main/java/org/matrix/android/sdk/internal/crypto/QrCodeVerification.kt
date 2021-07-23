@@ -32,6 +32,7 @@ import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.QrCode
 import uniffi.olm.Verification
 
+/** Class representing a QR code based verification flow */
 internal class QrCodeVerification(
         private val machine: OlmMachine,
         private var request: VerificationRequest,
