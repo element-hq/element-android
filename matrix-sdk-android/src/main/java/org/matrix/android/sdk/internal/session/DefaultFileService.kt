@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificateWithProgress
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.file.AtomicFileCreator
 import org.matrix.android.sdk.internal.util.md5
 import org.matrix.android.sdk.internal.util.writeToFile
 import timber.log.Timber
@@ -96,6 +97,9 @@ internal class DefaultFileService @Inject constructor(
             }
         }
 
+        var atomicFileDownload: AtomicFileCreator? = null
+        var atomicFileDecrypt: AtomicFileCreator? = null
+
         if (existingDownload != null) {
             // FIXME If the first downloader cancels then we'll unfortunately be cancelled too.
             return existingDownload.await()
@@ -131,8 +135,11 @@ internal class DefaultFileService @Inject constructor(
                     Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${!source.exhausted()}")
 
                     // Write the file to cache (encrypted version if the file is encrypted)
-                    writeToFile(source.inputStream(), cachedFiles.file)
+                    // Write to a part file first, so if we abort before done, we don't have a broken cached file
+                    val atomicFileCreator = AtomicFileCreator(cachedFiles.file).also { atomicFileDownload = it }
+                    writeToFile(source.inputStream(), atomicFileCreator.partFile)
                     response.close()
+                    atomicFileCreator.commit()
                 } else {
                     Timber.v("## FileService: cache hit for $url")
                 }
@@ -145,8 +152,10 @@ internal class DefaultFileService @Inject constructor(
                     Timber.v("## FileService: decrypt file")
                     // Ensure the parent folder exists
                     cachedFiles.decryptedFile.parentFile?.mkdirs()
+                    // Write to a part file first, so if we abort before done, we don't have a broken cached file
+                    val atomicFileCreator = AtomicFileCreator(cachedFiles.decryptedFile).also { atomicFileDecrypt = it }
                     val decryptSuccess = cachedFiles.file.inputStream().use { inputStream ->
-                        cachedFiles.decryptedFile.outputStream().buffered().use { outputStream ->
+                        atomicFileCreator.partFile.outputStream().buffered().use { outputStream ->
                             MXEncryptedAttachments.decryptAttachment(
                                     inputStream,
                                     elementToDecrypt,
@@ -154,6 +163,7 @@ internal class DefaultFileService @Inject constructor(
                             )
                         }
                     }
+                    atomicFileCreator.commit()
                     if (!decryptSuccess) {
                         throw IllegalStateException("Decryption error")
                     }
@@ -173,6 +183,11 @@ internal class DefaultFileService @Inject constructor(
             Timber.v("## FileService additional to notify is > 0 ")
         }
         toNotify?.completeWith(result)
+
+        result.onFailure {
+            atomicFileDownload?.cancel()
+            atomicFileDecrypt?.cancel()
+        }
 
         return result.getOrThrow()
     }
