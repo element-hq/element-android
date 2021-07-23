@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.list
+package org.matrix.android.sdk.api.session.room.model.create
 
-import im.vector.app.features.home.RoomListDisplayMode
+import org.matrix.android.sdk.api.session.events.model.Content
 
-interface RoomListSectionBuilder {
-    fun buildSections(mode: RoomListDisplayMode) : List<RoomsSection>
+data class CreateRoomStateEvent(
+        /**
+         * Required. The type of event to send.
+         */
+        val type: String,
 
-    fun dispose()
-}
+        /**
+         * Required. The content of the event.
+         */
+        val content: Content,
+
+        /**
+         * The state_key of the state event. Defaults to an empty string.
+         */
+        val stateKey: String = ""
+)
