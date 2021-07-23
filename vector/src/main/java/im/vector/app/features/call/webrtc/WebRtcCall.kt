@@ -45,6 +45,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallIdGenerator
 import org.matrix.android.sdk.api.session.call.CallState
@@ -90,6 +91,8 @@ private const val STREAM_ID = "userMedia"
 private const val AUDIO_TRACK_ID = "${STREAM_ID}a0"
 private const val VIDEO_TRACK_ID = "${STREAM_ID}v0"
 private val DEFAULT_AUDIO_CONSTRAINTS = MediaConstraints()
+
+private val loggerTag = LoggerTag("WebRtcCall", LoggerTag.VOIP)
 
 class WebRtcCall(
         val mxCall: MxCall,
@@ -195,7 +198,7 @@ class WebRtcCall(
             .subscribe {
                 // omit empty :/
                 if (it.isNotEmpty()) {
-                    Timber.v("## Sending local ice candidates to call")
+                    Timber.tag(loggerTag.value).v("Sending local ice candidates to call")
                     // it.forEach { peerConnection?.addIceCandidate(it) }
                     mxCall.sendLocalCallCandidates(it.mapToCallCandidate())
                 }
@@ -213,7 +216,7 @@ class WebRtcCall(
     fun onRenegotiationNeeded(restartIce: Boolean) {
         sessionScope?.launch(dispatcher) {
             if (mxCall.state != CallState.CreateOffer && mxCall.opponentVersion == 0) {
-                Timber.v("Opponent does not support renegotiation: ignoring onRenegotiationNeeded event")
+                Timber.tag(loggerTag.value).v("Opponent does not support renegotiation: ignoring onRenegotiationNeeded event")
                 return@launch
             }
             val constraints = MediaConstraints()
@@ -221,7 +224,7 @@ class WebRtcCall(
                 constraints.mandatory.add(MediaConstraints.KeyValuePair("IceRestart", "true"))
             }
             val peerConnection = peerConnection ?: return@launch
-            Timber.v("## VOIP creating offer...")
+            Timber.tag(loggerTag.value).v("creating offer...")
             makingOffer = true
             try {
                 val sessionDescription = peerConnection.awaitCreateOffer(constraints) ?: return@launch
@@ -241,7 +244,7 @@ class WebRtcCall(
                 }
             } catch (failure: Throwable) {
                 // Need to handle error properly.
-                Timber.v("Failure while creating offer")
+                Timber.tag(loggerTag.value).v("Failure while creating offer")
             } finally {
                 makingOffer = false
             }
@@ -270,7 +273,7 @@ class WebRtcCall(
                 }
             }
         }
-        Timber.v("## VOIP creating peer connection...with iceServers $iceServers ")
+        Timber.tag(loggerTag.value).v("creating peer connection...with iceServers $iceServers ")
         val rtcConfig = PeerConnection.RTCConfiguration(iceServers).apply {
             sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
         }
@@ -317,7 +320,7 @@ class WebRtcCall(
 
     fun acceptIncomingCall() {
         sessionScope?.launch {
-            Timber.v("## VOIP acceptIncomingCall from state ${mxCall.state}")
+            Timber.tag(loggerTag.value).v("acceptIncomingCall from state ${mxCall.state}")
             if (mxCall.state == CallState.LocalRinging) {
                 internalAcceptIncomingCall()
             }
@@ -336,7 +339,7 @@ class WebRtcCall(
                         sender.dtmf()?.insertDtmf(digit, 100, 70)
                         return@launch
                     } catch (failure: Throwable) {
-                        Timber.v("Fail to send Dtmf digit")
+                        Timber.tag(loggerTag.value).v("Fail to send Dtmf digit")
                     }
                 }
             }
@@ -345,7 +348,7 @@ class WebRtcCall(
 
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer?, remoteViewRenderer: SurfaceViewRenderer, mode: String?) {
         sessionScope?.launch(dispatcher) {
-            Timber.v("## VOIP attachViewRenderers localRendeder $localViewRenderer / $remoteViewRenderer")
+            Timber.tag(loggerTag.value).v("attachViewRenderers localRendeder $localViewRenderer / $remoteViewRenderer")
             localSurfaceRenderers.addIfNeeded(localViewRenderer)
             remoteSurfaceRenderers.addIfNeeded(remoteViewRenderer)
             when (mode) {
@@ -392,7 +395,7 @@ class WebRtcCall(
     }
 
     private suspend fun detachRenderersInternal(renderers: List<SurfaceViewRenderer>?) = withContext(dispatcher) {
-        Timber.v("## VOIP detachRenderers")
+        Timber.tag(loggerTag.value).v("detachRenderers")
         if (renderers.isNullOrEmpty()) {
             // remove all sinks
             localSurfaceRenderers.forEach {
@@ -425,12 +428,12 @@ class WebRtcCall(
         // 2. Access camera (if video call) + microphone, create local stream
         createLocalStream()
         attachViewRenderersInternal()
-        Timber.v("## VOIP remoteCandidateSource $remoteCandidateSource")
+        Timber.tag(loggerTag.value).v("remoteCandidateSource $remoteCandidateSource")
         remoteIceCandidateDisposable = remoteCandidateSource.subscribe({
-            Timber.v("## VOIP adding remote ice candidate $it")
+            Timber.tag(loggerTag.value).v("adding remote ice candidate $it")
             peerConnection?.addIceCandidate(it)
         }, {
-            Timber.v("## VOIP failed to add remote ice candidate $it")
+            Timber.tag(loggerTag.value).v("failed to add remote ice candidate $it")
         })
         // Now we wait for negotiation callback
     }
@@ -456,14 +459,14 @@ class WebRtcCall(
             SessionDescription(SessionDescription.Type.OFFER, it)
         }
         if (offerSdp == null) {
-            Timber.v("We don't have any offer to process")
+            Timber.tag(loggerTag.value).v("We don't have any offer to process")
             return@withContext
         }
-        Timber.v("Offer sdp for invite: ${offerSdp.description}")
+        Timber.tag(loggerTag.value).v("Offer sdp for invite: ${offerSdp.description}")
         try {
             peerConnection?.awaitSetRemoteDescription(offerSdp)
         } catch (failure: Throwable) {
-            Timber.v("Failure putting remote description")
+            Timber.tag(loggerTag.value).v("Failure putting remote description")
             endCall(reason = EndCallReason.UNKWOWN_ERROR)
             return@withContext
         }
@@ -475,12 +478,12 @@ class WebRtcCall(
         createAnswer()?.also {
             mxCall.accept(it.description)
         }
-        Timber.v("## VOIP remoteCandidateSource $remoteCandidateSource")
+        Timber.tag(loggerTag.value).v("remoteCandidateSource $remoteCandidateSource")
         remoteIceCandidateDisposable = remoteCandidateSource.subscribe({
-            Timber.v("## VOIP adding remote ice candidate $it")
+            Timber.tag(loggerTag.value).v("adding remote ice candidate $it")
             peerConnection?.addIceCandidate(it)
         }, {
-            Timber.v("## VOIP failed to add remote ice candidate $it")
+            Timber.tag(loggerTag.value).v("failed to add remote ice candidate $it")
         })
     }
 
@@ -492,7 +495,7 @@ class WebRtcCall(
 
     private fun createLocalStream() {
         val peerConnectionFactory = peerConnectionFactoryProvider.get() ?: return
-        Timber.v("Create local stream for call ${mxCall.callId}")
+        Timber.tag(loggerTag.value).v("Create local stream for call ${mxCall.callId}")
         configureAudioTrack(peerConnectionFactory)
         // add video track if needed
         if (mxCall.isVideoCall) {
@@ -505,7 +508,7 @@ class WebRtcCall(
         val audioSource = peerConnectionFactory.createAudioSource(DEFAULT_AUDIO_CONSTRAINTS)
         val audioTrack = peerConnectionFactory.createAudioTrack(AUDIO_TRACK_ID, audioSource)
         audioTrack.setEnabled(true)
-        Timber.v("Add audio track $AUDIO_TRACK_ID to call ${mxCall.callId}")
+        Timber.tag(loggerTag.value).v("Add audio track $AUDIO_TRACK_ID to call ${mxCall.callId}")
         peerConnection?.addTrack(audioTrack, listOf(STREAM_ID))
         localAudioSource = audioSource
         localAudioTrack = audioTrack
@@ -547,7 +550,7 @@ class WebRtcCall(
 
                 override fun onCameraClosed() {
                     super.onCameraClosed()
-                    Timber.v("onCameraClosed")
+                    Timber.tag(loggerTag.value).v("onCameraClosed")
                     // This could happen if you open the camera app in chat
                     // We then register in order to restart capture as soon as the camera is available again
                     videoCapturerIsInError = true
@@ -555,16 +558,16 @@ class WebRtcCall(
                     cameraAvailabilityCallback = object : CameraManager.AvailabilityCallback() {
                         override fun onCameraUnavailable(cameraId: String) {
                             super.onCameraUnavailable(cameraId)
-                            Timber.v("On camera unavailable: $cameraId")
+                            Timber.tag(loggerTag.value).v("On camera unavailable: $cameraId")
                         }
 
                         override fun onCameraAccessPrioritiesChanged() {
                             super.onCameraAccessPrioritiesChanged()
-                            Timber.v("onCameraAccessPrioritiesChanged")
+                            Timber.tag(loggerTag.value).v("onCameraAccessPrioritiesChanged")
                         }
 
                         override fun onCameraAvailable(cameraId: String) {
-                            Timber.v("On camera available: $cameraId")
+                            Timber.tag(loggerTag.value).v("On camera available: $cameraId")
                             if (cameraId == camera.name) {
                                 videoCapturer?.startCapture(currentCaptureFormat.width, currentCaptureFormat.height, currentCaptureFormat.fps)
                                 cameraManager?.unregisterAvailabilityCallback(this)
@@ -577,7 +580,7 @@ class WebRtcCall(
 
             val videoSource = peerConnectionFactory.createVideoSource(videoCapturer.isScreencast)
             val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
-            Timber.v("## VOIP Local video source created")
+            Timber.tag(loggerTag.value).v("Local video source created")
 
             videoCapturer.initialize(surfaceTextureHelper, context, videoSource.capturerObserver)
             // HD
@@ -585,7 +588,7 @@ class WebRtcCall(
             this.videoCapturer = videoCapturer
 
             val videoTrack = peerConnectionFactory.createVideoTrack(VIDEO_TRACK_ID, videoSource)
-            Timber.v("Add video track $VIDEO_TRACK_ID to call ${mxCall.callId}")
+            Timber.tag(loggerTag.value).v("Add video track $VIDEO_TRACK_ID to call ${mxCall.callId}")
             videoTrack.setEnabled(true)
             peerConnection?.addTrack(videoTrack, listOf(STREAM_ID))
             localVideoSource = videoSource
@@ -595,7 +598,7 @@ class WebRtcCall(
 
     fun setCaptureFormat(format: CaptureFormat) {
         sessionScope?.launch(dispatcher) {
-            Timber.v("## VOIP setCaptureFormat $format")
+            Timber.tag(loggerTag.value).v("setCaptureFormat $format")
             videoCapturer?.changeCaptureFormat(format.width, format.height, format.fps)
             currentCaptureFormat = format
         }
@@ -689,14 +692,14 @@ class WebRtcCall(
 
     fun switchCamera() {
         sessionScope?.launch(dispatcher) {
-            Timber.v("## VOIP switchCamera")
+            Timber.tag(loggerTag.value).v("switchCamera")
             if (mxCall.state is CallState.Connected && mxCall.isVideoCall) {
                 val oppositeCamera = getOppositeCameraIfAny() ?: return@launch
                 videoCapturer?.switchCamera(
                         object : CameraVideoCapturer.CameraSwitchHandler {
                             // Invoked on success. |isFrontCamera| is true if the new camera is front facing.
                             override fun onCameraSwitchDone(isFrontCamera: Boolean) {
-                                Timber.v("## VOIP onCameraSwitchDone isFront $isFrontCamera")
+                                Timber.tag(loggerTag.value).v("onCameraSwitchDone isFront $isFrontCamera")
                                 cameraInUse = oppositeCamera
                                 localSurfaceRenderers.forEach {
                                     it.get()?.setMirror(isFrontCamera)
@@ -707,7 +710,7 @@ class WebRtcCall(
                             }
 
                             override fun onCameraSwitchError(errorDescription: String?) {
-                                Timber.v("## VOIP onCameraSwitchError isFront $errorDescription")
+                                Timber.tag(loggerTag.value).v("onCameraSwitchError isFront $errorDescription")
                             }
                         }, oppositeCamera.name
                 )
@@ -716,7 +719,7 @@ class WebRtcCall(
     }
 
     private suspend fun createAnswer(): SessionDescription? {
-        Timber.w("## VOIP createAnswer")
+        Timber.tag(loggerTag.value).w("createAnswer")
         val peerConnection = peerConnection ?: return null
         val constraints = MediaConstraints().apply {
             mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
@@ -727,7 +730,7 @@ class WebRtcCall(
             peerConnection.awaitSetLocalDescription(localDescription)
             localDescription
         } catch (failure: Throwable) {
-            Timber.v("Fail to create answer")
+            Timber.tag(loggerTag.value).v("Fail to create answer")
             null
         }
     }
@@ -768,7 +771,7 @@ class WebRtcCall(
         sessionScope?.launch(dispatcher) {
             // reportError("Weird-looking stream: " + stream);
             if (stream.audioTracks.size > 1 || stream.videoTracks.size > 1) {
-                Timber.e("## VOIP StreamObserver weird looking stream: $stream")
+                Timber.tag(loggerTag.value).e("StreamObserver weird looking stream: $stream")
                 // TODO maybe do something more??
                 endCall(EndCallReason.UNKWOWN_ERROR)
                 return@launch
@@ -834,7 +837,7 @@ class WebRtcCall(
                 if (it.sdpMid.isNullOrEmpty() || it.candidate.isNullOrEmpty()) {
                     return@forEach
                 }
-                Timber.v("## VOIP onCallIceCandidateReceived for call ${mxCall.callId} sdp: ${it.candidate}")
+                Timber.tag(loggerTag.value).v("onCallIceCandidateReceived for call ${mxCall.callId} sdp: ${it.candidate}")
                 val iceCandidate = IceCandidate(it.sdpMid, it.sdpMLineIndex, it.candidate)
                 remoteCandidateSource.onNext(iceCandidate)
             }
@@ -843,7 +846,7 @@ class WebRtcCall(
 
     fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
         sessionScope?.launch(dispatcher) {
-            Timber.v("## VOIP onCallAnswerReceived ${callAnswerContent.callId}")
+            Timber.tag(loggerTag.value).v("onCallAnswerReceived ${callAnswerContent.callId}")
             val sdp = SessionDescription(SessionDescription.Type.ANSWER, callAnswerContent.answer.sdp)
             try {
                 peerConnection?.awaitSetRemoteDescription(sdp)
@@ -863,7 +866,7 @@ class WebRtcCall(
             val type = description?.type
             val sdpText = description?.sdp
             if (type == null || sdpText == null) {
-                Timber.i("Ignoring invalid m.call.negotiate event")
+                Timber.tag(loggerTag.value).i("Ignoring invalid m.call.negotiate event")
                 return@launch
             }
             val peerConnection = peerConnection ?: return@launch
@@ -878,7 +881,7 @@ class WebRtcCall(
 
             ignoreOffer = !polite && offerCollision
             if (ignoreOffer) {
-                Timber.i("Ignoring colliding negotiate event because we're impolite")
+                Timber.tag(loggerTag.value).i("Ignoring colliding negotiate event because we're impolite")
                 return@launch
             }
             val prevOnHold = computeIsLocalOnHold()
@@ -891,7 +894,7 @@ class WebRtcCall(
                     }
                 }
             } catch (failure: Throwable) {
-                Timber.e(failure, "Failed to complete negotiation")
+                Timber.tag(loggerTag.value).e(failure, "Failed to complete negotiation")
             }
             val nowOnHold = computeIsLocalOnHold()
             wasLocalOnHold = nowOnHold
@@ -937,7 +940,7 @@ class WebRtcCall(
             val session = sessionProvider.get() ?: return@launch
             val newAssertedIdentity = callAssertedIdentityContent.assertedIdentity ?: return@launch
             if (newAssertedIdentity.id == null && newAssertedIdentity.displayName == null) {
-                Timber.v("Asserted identity received with no relevant information, skip")
+                Timber.tag(loggerTag.value).v("Asserted identity received with no relevant information, skip")
                 return@launch
             }
             remoteAssertedIdentity = newAssertedIdentity

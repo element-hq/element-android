@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.call.model
 
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.call.CallIdGenerator
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
@@ -47,6 +48,8 @@ import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import timber.log.Timber
 import java.math.BigDecimal
+
+private val loggerTag = LoggerTag("MxCallImpl", LoggerTag.VOIP)
 
 internal class MxCallImpl(
         override val callId: String,
@@ -94,7 +97,7 @@ internal class MxCallImpl(
             try {
                 it.onStateUpdate(this)
             } catch (failure: Throwable) {
-                Timber.d("dispatchStateChange failed for call $callId : ${failure.localizedMessage}")
+                Timber.tag(loggerTag.value).d("dispatchStateChange failed for call $callId : ${failure.localizedMessage}")
             }
         }
     }
@@ -110,7 +113,7 @@ internal class MxCallImpl(
 
     override fun offerSdp(sdpString: String) {
         if (!isOutgoing) return
-        Timber.v("## VOIP offerSdp $callId")
+        Timber.tag(loggerTag.value).v("offerSdp $callId")
         state = CallState.Dialing
         CallInviteContent(
                 callId = callId,
@@ -125,7 +128,7 @@ internal class MxCallImpl(
     }
 
     override fun sendLocalCallCandidates(candidates: List<CallCandidate>) {
-        Timber.v("Send local call canditates $callId: $candidates")
+        Timber.tag(loggerTag.value).v("Send local call canditates $callId: $candidates")
         CallCandidatesContent(
                 callId = callId,
                 partyId = ourPartyId,
@@ -142,11 +145,11 @@ internal class MxCallImpl(
 
     override fun reject() {
         if (opponentVersion < 1) {
-            Timber.v("Opponent version is less than 1 ($opponentVersion): sending hangup instead of reject")
+            Timber.tag(loggerTag.value).v("Opponent version is less than 1 ($opponentVersion): sending hangup instead of reject")
             hangUp(EndCallReason.USER_HANGUP)
             return
         }
-        Timber.v("## VOIP reject $callId")
+        Timber.tag(loggerTag.value).v("reject $callId")
         CallRejectContent(
                 callId = callId,
                 partyId = ourPartyId,
@@ -158,7 +161,7 @@ internal class MxCallImpl(
     }
 
     override fun hangUp(reason: EndCallReason?) {
-        Timber.v("## VOIP hangup $callId")
+        Timber.tag(loggerTag.value).v("hangup $callId")
         CallHangupContent(
                 callId = callId,
                 partyId = ourPartyId,
@@ -171,7 +174,7 @@ internal class MxCallImpl(
     }
 
     override fun accept(sdpString: String) {
-        Timber.v("## VOIP accept $callId")
+        Timber.tag(loggerTag.value).v("accept $callId")
         if (isOutgoing) return
         state = CallState.Answering
         CallAnswerContent(
@@ -186,7 +189,7 @@ internal class MxCallImpl(
     }
 
     override fun negotiate(sdpString: String, type: SdpType) {
-        Timber.v("## VOIP negotiate $callId")
+        Timber.tag(loggerTag.value).v("negotiate $callId")
         CallNegotiateContent(
                 callId = callId,
                 partyId = ourPartyId,
@@ -199,7 +202,7 @@ internal class MxCallImpl(
     }
 
     override fun selectAnswer() {
-        Timber.v("## VOIP select answer $callId")
+        Timber.tag(loggerTag.value).v("select answer $callId")
         if (isOutgoing) return
         state = CallState.Answering
         CallSelectAnswerContent(
@@ -220,7 +223,7 @@ internal class MxCallImpl(
         val profileInfo = try {
             getProfileInfoTask.execute(profileInfoParams)
         } catch (failure: Throwable) {
-            Timber.v("Fail fetching profile info of $targetUserId while transferring call")
+            Timber.tag(loggerTag.value).v("Fail fetching profile info of $targetUserId while transferring call")
             null
         }
         CallReplacesContent(

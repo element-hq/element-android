@@ -468,7 +468,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                         setSmallIcon(R.drawable.ic_call_answer)
                     }
                 }
-                .setTimeoutAfter(2000)
+                // This is a trick to make the previous notification with same id disappear as cancel notification is not working with Foreground Service.
+                .setTimeoutAfter(1)
                 .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setCategory(NotificationCompat.CATEGORY_CALL)
                 .build()
