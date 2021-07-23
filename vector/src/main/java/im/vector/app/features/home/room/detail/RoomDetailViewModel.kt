@@ -631,6 +631,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleEndRecordingVoiceMessage(isCancelled: Boolean) {
+        voiceMessageHelper.stopPlayback()
         if (isCancelled) {
             voiceMessageHelper.deleteRecording()
         } else {
