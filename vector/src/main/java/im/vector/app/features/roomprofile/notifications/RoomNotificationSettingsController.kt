@@ -22,8 +22,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.profiles.notifications.notificationSettingsFooterItem
 import im.vector.app.core.epoxy.profiles.notifications.radioButtonItem
 import im.vector.app.core.epoxy.profiles.notifications.textHeaderItem
-import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.genericHeaderItem
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import javax.inject.Inject
 
