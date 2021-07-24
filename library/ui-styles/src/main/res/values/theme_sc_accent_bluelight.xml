@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_dark_bluelight">#03a9f4</color>
+    <color name="accent_sc_dark_bluelight_alpha25">#3f03a9f4</color>
+    <color name="accent_sc_dark_bluelight_pale">@color/accent_sc_dark_bluelight</color>
+    <color name="accent_sc_dark_bluelight_dark">@color/accent_sc_dark_bluelight_alpha25</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.BlueLight">
+        <item name="android:colorAccent">@color/accent_sc_dark_bluelight</item>
+        <item name="colorAccent">@color/accent_sc_dark_bluelight</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.BlueLight">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_bluelight_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_bluelight</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_bluelight</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_bluelight_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_bluelight_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.BlueLight</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.BlueLight">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_bluelight_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_bluelight</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_bluelight</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_bluelight_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_bluelight_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.BlueLight</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Colored.BlueLight">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_bluelight_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_bluelight</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_bluelight</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_bluelight_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.BlueLight</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_bluelight_alpha25</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Colored.BlueLight">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_bluelight_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_bluelight</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_bluelight</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_bluelight_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.BlueLight</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_bluelight_alpha25</item>
+    </style>
+
+
+    <style name="AppTheme.SC.BlueLight" parent="AppTheme.Base.SC.BlueLight" />
+
+    <style name="AppTheme.SC.Dark.BlueLight" parent="AppTheme.Base.SC.Dark.BlueLight" />
+
+    <style name="AppTheme.SC.Colored.BlueLight" parent="AppTheme.Base.SC.Colored.BlueLight" />
+
+    <style name="AppTheme.SC.Dark.Colored.BlueLight" parent="AppTheme.Base.SC.Dark.Colored.BlueLight" />
+
+
+    <style name="AppTheme.AttachmentsPreview.SC.BlueLight" parent="AppTheme.Base.SC.BlueLight"/>
+
+    <style name="AppTheme.Transparent.SC.BlueLight">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_bluelight_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_bluelight</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_bluelight</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_bluelight_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_bluelight_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.BlueLight</item>
+    </style>
+
+</resources>

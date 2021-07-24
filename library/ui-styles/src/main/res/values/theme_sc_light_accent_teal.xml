@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_light_teal">#008577</color>
+    <color name="accent_sc_light_teal_alpha25">#3f008577</color>
+    <color name="accent_sc_light_teal_pale">@color/accent_sc_light_teal</color>
+    <color name="accent_sc_light_teal_dark">@color/accent_sc_light_teal_alpha25</color>
+    <color name="accent_sc_light_teal_noalpha12">#e0f0ee</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Light.Teal">
+        <item name="android:colorAccent">@color/accent_sc_light_teal</item>
+        <item name="colorAccent">@color/accent_sc_light_teal</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Light.Teal">
+        <!-- SC additions -->
+        <item name="colorAccent">@color/accent_sc_light_teal</item>
+        <item name="android:colorAccent">@color/accent_sc_light_teal</item>
+        <item name="colorAccentPale">@color/accent_sc_light_teal_pale</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_light_teal_noalpha12</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light.Teal</item>
+    </style>
+
+    <!-- Default AppTheme for usage where settings don't apply -->
+    <style name="AppTheme.SC.Light.Teal" parent="AppTheme.Base.SC.Light.Teal" />
+
+</resources>

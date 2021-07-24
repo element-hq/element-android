@@ -43,7 +43,7 @@ class MatrixItemColorProvider @Inject constructor(
             USER_COLORING_FROM_PL -> {
                 colorProvider.getColorFromAttribute(
                         when {
-                            userInRoomInformation?.userPowerLevel == null -> R.attr.user_color_pl_0
+                            userInRoomInformation?.userPowerLevel == null -> R.attr.colorAccent // This is also used for avatars in the room overview
                             userInRoomInformation.userPowerLevel >= 100 -> R.attr.user_color_pl_100
                             userInRoomInformation.userPowerLevel >= 95 -> R.attr.user_color_pl_95
                             userInRoomInformation.userPowerLevel >= 51 -> R.attr.user_color_pl_51

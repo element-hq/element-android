@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_dark_purple">#673ab7</color>
+    <color name="accent_sc_dark_purple_alpha25">#3f673ab7</color>
+    <color name="accent_sc_dark_purple_pale">@color/accent_sc_dark_purple</color>
+    <color name="accent_sc_dark_purple_dark">@color/accent_sc_dark_purple_alpha25</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Purple">
+        <item name="android:colorAccent">@color/accent_sc_dark_purple</item>
+        <item name="colorAccent">@color/accent_sc_dark_purple</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Purple">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_purple_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_purple</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_purple</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_purple_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_purple_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Purple</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Purple">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_purple_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_purple</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_purple</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_purple_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_purple_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Purple</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Colored.Purple">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_purple_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_purple</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_purple</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_purple_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Purple</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_purple_alpha25</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Colored.Purple">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_purple_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_purple</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_purple</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_purple_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Purple</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_purple_alpha25</item>
+    </style>
+
+
+    <style name="AppTheme.SC.Purple" parent="AppTheme.Base.SC.Purple" />
+
+    <style name="AppTheme.SC.Dark.Purple" parent="AppTheme.Base.SC.Dark.Purple" />
+
+    <style name="AppTheme.SC.Colored.Purple" parent="AppTheme.Base.SC.Colored.Purple" />
+
+    <style name="AppTheme.SC.Dark.Colored.Purple" parent="AppTheme.Base.SC.Dark.Colored.Purple" />
+
+
+    <style name="AppTheme.AttachmentsPreview.SC.Purple" parent="AppTheme.Base.SC.Purple"/>
+
+    <style name="AppTheme.Transparent.SC.Purple">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_purple_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_purple</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_purple</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_purple_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_purple_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Purple</item>
+    </style>
+
+</resources>

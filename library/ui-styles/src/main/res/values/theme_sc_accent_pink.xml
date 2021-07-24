@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_dark_pink">#f48fb1</color>
+    <color name="accent_sc_dark_pink_alpha25">#3ff48fb1</color>
+    <color name="accent_sc_dark_pink_pale">@color/accent_sc_dark_pink</color>
+    <color name="accent_sc_dark_pink_dark">@color/accent_sc_dark_pink_alpha25</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Pink">
+        <item name="android:colorAccent">@color/accent_sc_dark_pink</item>
+        <item name="colorAccent">@color/accent_sc_dark_pink</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Pink">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_pink_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_pink</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_pink</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_pink_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_pink_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Pink</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Pink">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_pink_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_pink</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_pink</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_pink_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_pink_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Pink</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Colored.Pink">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_pink_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_pink</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_pink</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_pink_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Pink</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_pink_alpha25</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Colored.Pink">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_pink_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_pink</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_pink</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_pink_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Pink</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_pink_alpha25</item>
+    </style>
+
+
+    <style name="AppTheme.SC.Pink" parent="AppTheme.Base.SC.Pink" />
+
+    <style name="AppTheme.SC.Dark.Pink" parent="AppTheme.Base.SC.Dark.Pink" />
+
+    <style name="AppTheme.SC.Colored.Pink" parent="AppTheme.Base.SC.Colored.Pink" />
+
+    <style name="AppTheme.SC.Dark.Colored.Pink" parent="AppTheme.Base.SC.Dark.Colored.Pink" />
+
+
+    <style name="AppTheme.AttachmentsPreview.SC.Pink" parent="AppTheme.Base.SC.Pink"/>
+
+    <style name="AppTheme.Transparent.SC.Pink">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_pink_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_pink</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_pink</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_pink_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_pink_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Pink</item>
+    </style>
+
+</resources>

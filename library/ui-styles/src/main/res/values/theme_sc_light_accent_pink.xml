@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_light_pink">#e91e63</color>
+    <color name="accent_sc_light_pink_alpha25">#3fe91e63</color>
+    <color name="accent_sc_light_pink_pale">@color/accent_sc_light_pink</color>
+    <color name="accent_sc_light_pink_dark">@color/accent_sc_light_pink_alpha25</color>
+    <color name="accent_sc_light_pink_noalpha12">#fce4ec</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Light.Pink">
+        <item name="android:colorAccent">@color/accent_sc_light_pink</item>
+        <item name="colorAccent">@color/accent_sc_light_pink</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Light.Pink">
+        <!-- SC additions -->
+        <item name="colorAccent">@color/accent_sc_light_pink</item>
+        <item name="android:colorAccent">@color/accent_sc_light_pink</item>
+        <item name="colorAccentPale">@color/accent_sc_light_pink_pale</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_light_pink_noalpha12</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light.Pink</item>
+    </style>
+
+    <!-- Default AppTheme for usage where settings don't apply -->
+    <style name="AppTheme.SC.Light.Pink" parent="AppTheme.Base.SC.Light.Pink" />
+
+</resources>

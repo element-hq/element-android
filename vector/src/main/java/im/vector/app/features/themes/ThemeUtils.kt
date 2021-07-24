@@ -19,12 +19,12 @@ package im.vector.app.features.themes
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
+import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.graphics.drawable.DrawableCompat
@@ -41,6 +41,8 @@ object ThemeUtils {
     const val APPLICATION_THEME_KEY = "APPLICATION_THEME_KEY"
     const val APPLICATION_DARK_THEME_KEY = "APPLICATION_DARK_THEME_KEY"
     const val SYSTEM_DARK_THEME_PRE_TEN = "SYSTEM_DARK_THEME_PRE_TEN"
+    const val SETTINGS_SC_ACCENT_LIGHT = "SETTINGS_SC_ACCENT_LIGHT"
+    const val SETTINGS_SC_ACCENT_DARK = "SETTINGS_SC_ACCENT_DARK"
 
     // the theme possible values
     //private const val SYSTEM_THEME_VALUE = "system" // SC does not use this
@@ -56,15 +58,16 @@ object ThemeUtils {
 
     private var currentLightTheme = AtomicReference<String>(null)
     private var currentDarkTheme = AtomicReference<String>(null)
+    private var currentLightThemeAccent = AtomicReference<String>(null)
+    private var currentDarkThemeAccent = AtomicReference<String>(null)
 
     // The default theme // SC: from upstream, ignore
     //private const val DEFAULT_THEME = SYSTEM_THEME_VALUE
 
-    private var currentTheme = AtomicReference<String>(null)
+    //private var currentTheme = AtomicReference<String>(null)
 
     private val mColorByAttr = HashMap<Int, Int>()
 
-    private var mIsScTheme = false
     private var mUseDarkTheme = false
     private var mThemeInitialized = false
 
@@ -101,8 +104,9 @@ object ThemeUtils {
         val lightTheme = getApplicationLightTheme(context)
         val darkTheme = getApplicationDarkTheme(context)
         if (lightTheme != darkTheme && darkThemePossible(context)) {
-            mThemeInitialized = false;
-            setApplicationTheme(context.applicationContext, getApplicationLightTheme(context), getApplicationDarkTheme(context))
+            mThemeInitialized = false
+            setApplicationTheme(context.applicationContext, getApplicationLightTheme(context), getApplicationDarkTheme(context),
+                    getApplicationLightThemeAccent(context), getApplicationDarkThemeAccent(context))
         }
     }
 
@@ -110,7 +114,9 @@ object ThemeUtils {
     fun init(context: Context) {
         val lightTheme = getApplicationLightTheme(context)
         val darkTheme = getApplicationDarkTheme(context)
-        setApplicationTheme(context, lightTheme, darkTheme)
+        val lightAccent = getApplicationLightThemeAccent(context)
+        val darkAccent = getApplicationDarkThemeAccent(context)
+        setApplicationTheme(context, lightTheme, darkTheme, lightAccent, darkAccent)
     }
 
     /**
@@ -206,6 +212,28 @@ object ThemeUtils {
         }
     }
 
+    fun getApplicationLightThemeAccent(context: Context): String {
+        val currentAccent = this.currentLightThemeAccent.get()
+        return if (currentAccent == null) {
+            val accentFromPref = DefaultSharedPreferences.getInstance(context).getString(SETTINGS_SC_ACCENT_LIGHT, "green") ?: "green"
+            this.currentLightThemeAccent.set(accentFromPref)
+            accentFromPref
+        } else {
+            currentAccent
+        }
+    }
+
+    fun getApplicationDarkThemeAccent(context: Context): String {
+        val currentAccent = this.currentDarkThemeAccent.get()
+        return if (currentAccent == null) {
+            val accentFromPref = DefaultSharedPreferences.getInstance(context).getString(SETTINGS_SC_ACCENT_DARK, "green") ?: "green"
+            this.currentDarkThemeAccent.set(accentFromPref)
+            accentFromPref
+        } else {
+            currentAccent
+        }
+    }
+
     /**
      * @return true if system theme is dark
      */
@@ -220,9 +248,11 @@ object ThemeUtils {
      *
      * @param aTheme the new theme
      */
-    fun setApplicationTheme(context: Context, aLightTheme: String, aDarkTheme: String) {
+    fun setApplicationTheme(context: Context, aLightTheme: String, aDarkTheme: String, aLightAccent: String, aDarkAccent: String) {
         currentLightTheme.set(aLightTheme)
         currentDarkTheme.set(aDarkTheme)
+        currentLightThemeAccent.set(aLightAccent)
+        currentDarkThemeAccent.set(aDarkAccent)
         val aTheme = if (useDarkTheme(context)) aDarkTheme else aLightTheme
         context.setTheme(
                 when (aTheme) {
@@ -230,12 +260,12 @@ object ThemeUtils {
                     THEME_LIGHT_VALUE  -> R.style.Theme_Vector_Light
                     THEME_DARK_VALUE   -> R.style.Theme_Vector_Dark
                     THEME_BLACK_VALUE  -> R.style.Theme_Vector_Black
-                    THEME_SC_LIGHT_VALUE -> R.style.AppTheme_SC_Light
-                    THEME_SC_VALUE     -> R.style.AppTheme_SC
-                    THEME_SC_DARK_VALUE -> R.style.AppTheme_SC_Dark
-                    THEME_SC_COLORED_VALUE -> R.style.AppTheme_SC_Colored
-                    THEME_SC_DARK_COLORED_VALUE -> R.style.AppTheme_SC_Dark_Colored
-                    else               -> R.style.AppTheme_SC_Light
+                    THEME_SC_LIGHT_VALUE -> getAccentedThemeRes(R.style.AppTheme_SC_Light, aLightAccent)
+                    THEME_SC_VALUE     -> getAccentedThemeRes(R.style.AppTheme_SC, aDarkAccent)
+                    THEME_SC_DARK_VALUE -> getAccentedThemeRes(R.style.AppTheme_SC_Dark, aDarkAccent)
+                    THEME_SC_COLORED_VALUE -> getAccentedThemeRes(R.style.AppTheme_SC_Colored, aDarkAccent)
+                    THEME_SC_DARK_COLORED_VALUE -> getAccentedThemeRes(R.style.AppTheme_SC_Dark_Colored, aDarkAccent)
+                    else               -> getAccentedThemeRes(R.style.AppTheme_SC_Light, aLightAccent)
                 }
         )
 
@@ -244,11 +274,23 @@ object ThemeUtils {
     }
 
     fun setApplicationLightTheme(context: Context, theme: String) {
-        setApplicationTheme(context, theme, getApplicationDarkTheme(context))
+        setApplicationTheme(context, theme, getApplicationDarkTheme(context),
+                getApplicationLightThemeAccent(context), getApplicationDarkThemeAccent(context))
     }
 
     fun setApplicationDarkTheme(context: Context, theme: String) {
-        setApplicationTheme(context, getApplicationLightTheme(context), theme)
+        setApplicationTheme(context, getApplicationLightTheme(context), theme,
+                getApplicationLightThemeAccent(context), getApplicationDarkThemeAccent(context))
+    }
+
+    fun setApplicationLightThemeAccent(context: Context, themeAccent: String) {
+        setApplicationTheme(context, getApplicationLightTheme(context), getApplicationDarkTheme(context),
+                themeAccent, getApplicationDarkThemeAccent(context))
+    }
+
+    fun setApplicationDarkThemeAccent(context: Context, themeAccent: String) {
+        setApplicationTheme(context, getApplicationLightTheme(context), getApplicationDarkTheme(context),
+                getApplicationLightThemeAccent(context), themeAccent)
     }
 
     /**
@@ -262,11 +304,11 @@ object ThemeUtils {
             THEME_LIGHT_VALUE  -> activity.setTheme(otherThemes.light)
             THEME_DARK_VALUE   -> activity.setTheme(otherThemes.dark)
             THEME_BLACK_VALUE  -> activity.setTheme(otherThemes.black)
-            THEME_SC_LIGHT_VALUE     -> activity.setTheme(otherThemes.sc_light)
-            THEME_SC_VALUE     -> activity.setTheme(otherThemes.sc)
-            THEME_SC_DARK_VALUE     -> activity.setTheme(otherThemes.sc_dark)
-            THEME_SC_COLORED_VALUE     -> activity.setTheme(otherThemes.sc_colored)
-            THEME_SC_DARK_COLORED_VALUE     -> activity.setTheme(otherThemes.sc_dark_colored)
+            THEME_SC_LIGHT_VALUE     -> activity.setTheme(getAccentedThemeRes(otherThemes.sc_light, getApplicationLightThemeAccent(activity)))
+            THEME_SC_VALUE     -> activity.setTheme(getAccentedThemeRes(otherThemes.sc, getApplicationDarkThemeAccent(activity)))
+            THEME_SC_DARK_VALUE     -> activity.setTheme(getAccentedThemeRes(otherThemes.sc_dark, getApplicationDarkThemeAccent(activity)))
+            THEME_SC_COLORED_VALUE     -> activity.setTheme(getAccentedThemeRes(otherThemes.sc_colored, getApplicationDarkThemeAccent(activity)))
+            THEME_SC_DARK_COLORED_VALUE     -> activity.setTheme(getAccentedThemeRes(otherThemes.sc_dark_colored, getApplicationDarkThemeAccent(activity)))
         }
 
         mColorByAttr.clear()
@@ -335,4 +377,107 @@ object ThemeUtils {
         DrawableCompat.setTint(tinted, color)
         return tinted
     }
+
+    @StyleRes
+    private fun getAccentedThemeRes(@StyleRes resId: Int, themeAccent: String): Int {
+        return when (resId) {
+            R.style.AppTheme_SC_Light -> {
+                when (themeAccent) {
+                    "green" -> resId
+                    "bluelight" -> R.style.AppTheme_SC_Light_BlueLight
+                    "amber" -> R.style.AppTheme_SC_Light_Amber
+                    "cyan" -> R.style.AppTheme_SC_Light_Cyan
+                    "gold" -> R.style.AppTheme_SC_Light_Gold
+                    "lime" -> R.style.AppTheme_SC_Light_Lime
+                    "orange" -> R.style.AppTheme_SC_Light_Orange
+                    "pink" -> R.style.AppTheme_SC_Light_Pink
+                    "purple" -> R.style.AppTheme_SC_Light_Purple
+                    "red" -> R.style.AppTheme_SC_Light_Red
+                    "teal" -> R.style.AppTheme_SC_Light_Teal
+                    "turquoise" -> R.style.AppTheme_SC_Light_Turquoise
+                    "yellow" -> R.style.AppTheme_SC_Light_Yellow
+                    // Do not change this comment for automatic light theme insertion
+                    else -> resId
+                }
+            }
+            R.style.AppTheme_SC -> {
+                when (themeAccent) {
+                    "green" -> resId
+                    "bluelight" -> R.style.AppTheme_SC_BlueLight
+                    "amber" -> R.style.AppTheme_SC_Amber
+                    "cyan" -> R.style.AppTheme_SC_Cyan
+                    "gold" -> R.style.AppTheme_SC_Gold
+                    "lime" -> R.style.AppTheme_SC_Lime
+                    "orange" -> R.style.AppTheme_SC_Orange
+                    "pink" -> R.style.AppTheme_SC_Pink
+                    "purple" -> R.style.AppTheme_SC_Purple
+                    "red" -> R.style.AppTheme_SC_Red
+                    "teal" -> R.style.AppTheme_SC_Teal
+                    "turquoise" -> R.style.AppTheme_SC_Turquoise
+                    "yellow" -> R.style.AppTheme_SC_Yellow
+                    // Do not change this comment for automatic black theme insertion
+                    else -> resId
+                }
+            }
+            R.style.AppTheme_SC_Dark -> {
+                when (themeAccent) {
+                    "green" -> resId
+                    "bluelight" -> R.style.AppTheme_SC_Dark_BlueLight
+                    "amber" -> R.style.AppTheme_SC_Dark_Amber
+                    "cyan" -> R.style.AppTheme_SC_Dark_Cyan
+                    "gold" -> R.style.AppTheme_SC_Dark_Gold
+                    "lime" -> R.style.AppTheme_SC_Dark_Lime
+                    "orange" -> R.style.AppTheme_SC_Dark_Orange
+                    "pink" -> R.style.AppTheme_SC_Dark_Pink
+                    "purple" -> R.style.AppTheme_SC_Dark_Purple
+                    "red" -> R.style.AppTheme_SC_Dark_Red
+                    "teal" -> R.style.AppTheme_SC_Dark_Teal
+                    "turquoise" -> R.style.AppTheme_SC_Dark_Turquoise
+                    "yellow" -> R.style.AppTheme_SC_Dark_Yellow
+                    // Do not change this comment for automatic dark theme insertion
+                    else -> resId
+                }
+            }
+            R.style.AppTheme_SC_Colored -> {
+                when (themeAccent) {
+                    "green" -> resId
+                    "bluelight" -> R.style.AppTheme_SC_Colored_BlueLight
+                    "amber" -> R.style.AppTheme_SC_Colored_Amber
+                    "cyan" -> R.style.AppTheme_SC_Colored_Cyan
+                    "gold" -> R.style.AppTheme_SC_Colored_Gold
+                    "lime" -> R.style.AppTheme_SC_Colored_Lime
+                    "orange" -> R.style.AppTheme_SC_Colored_Orange
+                    "pink" -> R.style.AppTheme_SC_Colored_Pink
+                    "purple" -> R.style.AppTheme_SC_Colored_Purple
+                    "red" -> R.style.AppTheme_SC_Colored_Red
+                    "teal" -> R.style.AppTheme_SC_Colored_Teal
+                    "turquoise" -> R.style.AppTheme_SC_Colored_Turquoise
+                    "yellow" -> R.style.AppTheme_SC_Colored_Yellow
+                    // Do not change this comment for automatic black colored theme insertion
+                    else -> resId
+                }
+            }
+            R.style.AppTheme_SC_Dark_Colored -> {
+                when (themeAccent) {
+                    "green" -> resId
+                    "bluelight" -> R.style.AppTheme_SC_Dark_Colored_BlueLight
+                    "amber" -> R.style.AppTheme_SC_Dark_Colored_Amber
+                    "cyan" -> R.style.AppTheme_SC_Dark_Colored_Cyan
+                    "gold" -> R.style.AppTheme_SC_Dark_Colored_Gold
+                    "lime" -> R.style.AppTheme_SC_Dark_Colored_Lime
+                    "orange" -> R.style.AppTheme_SC_Dark_Colored_Orange
+                    "pink" -> R.style.AppTheme_SC_Dark_Colored_Pink
+                    "purple" -> R.style.AppTheme_SC_Dark_Colored_Purple
+                    "red" -> R.style.AppTheme_SC_Dark_Colored_Red
+                    "teal" -> R.style.AppTheme_SC_Dark_Colored_Teal
+                    "turquoise" -> R.style.AppTheme_SC_Dark_Colored_Turquoise
+                    "yellow" -> R.style.AppTheme_SC_Dark_Colored_Yellow
+                    // Do not change this comment for automatic dark colored theme insertion
+                    else -> resId
+                }
+            }
+            else -> resId
+        }
+    }
+
 }

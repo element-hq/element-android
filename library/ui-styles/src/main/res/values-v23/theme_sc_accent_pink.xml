@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.Pink.v23" parent="AppTheme.Base.SC.Pink">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Pink.v23" parent="AppTheme.Base.SC.Dark.Pink">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Colored.Pink.v23" parent="AppTheme.Base.SC.Colored.Pink">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Colored.Pink.v23" parent="AppTheme.Base.SC.Dark.Colored.Pink">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Pink" parent="AppTheme.SC.Pink.v23"/>
+
+    <style name="AppTheme.SC.Dark.Pink" parent="AppTheme.SC.Dark.Pink.v23"/>
+
+    <style name="AppTheme.SC.Colored.Pink" parent="AppTheme.SC.Colored.Pink.v23"/>
+
+    <style name="AppTheme.SC.Dark.Colored.Pink" parent="AppTheme.SC.Dark.Colored.Pink.v23"/>
+
+</resources>

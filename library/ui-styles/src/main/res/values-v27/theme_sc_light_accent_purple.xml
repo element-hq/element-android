@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.Light.Purple.v27" parent="AppTheme.SC.Light.Purple.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Light.Purple" parent="AppTheme.SC.Light.Purple.v27" />
+
+</resources>

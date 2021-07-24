@@ -49,4 +49,106 @@
         <item>from-id</item>
     </string-array>
 
+    <string-array name="sc_accent_color_dark_entries" translatable="false">
+        <item>@string/sc_accent_green</item>
+        <item>@string/sc_accent_amber</item> <!-- Dark Amber name -->
+        <item>@string/sc_accent_bluelight</item> <!-- Dark BlueLight name -->
+        <item>@string/sc_accent_cyan</item> <!-- Dark Cyan name -->
+        <item>@string/sc_accent_gold</item> <!-- Dark Gold name -->
+        <item>@string/sc_accent_lime</item> <!-- Dark Lime name -->
+        <item>@string/sc_accent_orange</item> <!-- Dark Orange name -->
+        <item>@string/sc_accent_pink</item> <!-- Dark Pink name -->
+        <item>@string/sc_accent_purple</item> <!-- Dark Purple name -->
+        <item>@string/sc_accent_red</item> <!-- Dark Red name -->
+        <item>@string/sc_accent_teal</item> <!-- Dark Teal name -->
+        <item>@string/sc_accent_turquoise</item> <!-- Dark Turquoise name -->
+        <item>@string/sc_accent_yellow</item> <!-- Dark Yellow name -->
+        <!-- do not change this comment for dark accent entry generation -->
+    </string-array>
+
+    <string-array name="sc_accent_color_dark_values" translatable="false">
+        <item>green</item>
+        <item>amber</item> <!-- Dark Amber id -->
+        <item>bluelight</item> <!-- Dark BlueLight id -->
+        <item>cyan</item> <!-- Dark Cyan id -->
+        <item>gold</item> <!-- Dark Gold id -->
+        <item>lime</item> <!-- Dark Lime id -->
+        <item>orange</item> <!-- Dark Orange id -->
+        <item>pink</item> <!-- Dark Pink id -->
+        <item>purple</item> <!-- Dark Purple id -->
+        <item>red</item> <!-- Dark Red id -->
+        <item>teal</item> <!-- Dark Teal id -->
+        <item>turquoise</item> <!-- Dark Turquoise id -->
+        <item>yellow</item> <!-- Dark Yellow id -->
+        <!-- do not change this comment for dark accent value generation -->
+    </string-array>
+
+    <string-array name="sc_accent_color_dark_previews" translatable="false">
+        <item>#8bc34a</item>
+        <item>#ffab00</item> <!-- Dark Amber accent -->
+        <item>#03a9f4</item> <!-- Dark BlueLight accent -->
+        <item>#00bcd4</item> <!-- Dark Cyan accent -->
+        <item>#CFB53B</item> <!-- Dark Gold accent -->
+        <item>#cddc39</item> <!-- Dark Lime accent -->
+        <item>#ff9800</item> <!-- Dark Orange accent -->
+        <item>#f48fb1</item> <!-- Dark Pink accent -->
+        <item>#673ab7</item> <!-- Dark Purple accent -->
+        <item>#ff0000</item> <!-- Dark Red accent -->
+        <item>#80cbc4</item> <!-- Dark Teal accent -->
+        <item>#00FFFF</item> <!-- Dark Turquoise accent -->
+        <item>#ffeb3b</item> <!-- Dark Yellow accent -->
+        <!-- do not change this comment for dark accent preview generation -->
+    </string-array>
+
+    <string-array name="sc_accent_color_light_entries" translatable="false">
+        <item>@string/sc_accent_green</item>
+        <item>@string/sc_accent_amber</item> <!-- Light Amber name -->
+        <item>@string/sc_accent_bluelight</item> <!-- Light BlueLight name -->
+        <item>@string/sc_accent_cyan</item> <!-- Light Cyan name -->
+        <item>@string/sc_accent_gold</item> <!-- Light Gold name -->
+        <item>@string/sc_accent_lime</item> <!-- Light Lime name -->
+        <item>@string/sc_accent_orange</item> <!-- Light Orange name -->
+        <item>@string/sc_accent_pink</item> <!-- Light Pink name -->
+        <item>@string/sc_accent_purple</item> <!-- Light Purple name -->
+        <item>@string/sc_accent_red</item> <!-- Light Red name -->
+        <item>@string/sc_accent_teal</item> <!-- Light Teal name -->
+        <item>@string/sc_accent_turquoise</item> <!-- Light Turquoise name -->
+        <item>@string/sc_accent_yellow</item> <!-- Light Yellow name -->
+        <!-- do not change this comment for light accent entry generation -->
+    </string-array>
+
+    <string-array name="sc_accent_color_light_values" translatable="false">
+        <item>green</item>
+        <item>amber</item> <!-- Light Amber id -->
+        <item>bluelight</item> <!-- Light BlueLight id -->
+        <item>cyan</item> <!-- Light Cyan id -->
+        <item>gold</item> <!-- Light Gold id -->
+        <item>lime</item> <!-- Light Lime id -->
+        <item>orange</item> <!-- Light Orange id -->
+        <item>pink</item> <!-- Light Pink id -->
+        <item>purple</item> <!-- Light Purple id -->
+        <item>red</item> <!-- Light Red id -->
+        <item>teal</item> <!-- Light Teal id -->
+        <item>turquoise</item> <!-- Light Turquoise id -->
+        <item>yellow</item> <!-- Light Yellow id -->
+        <!-- do not change this comment for light accent value generation -->
+    </string-array>
+
+    <string-array name="sc_accent_color_light_previews" translatable="false">
+        <item>#8bc34a</item>
+        <item>#ffa000</item> <!-- Light Amber accent -->
+        <item>#03a9f4</item> <!-- Light BlueLight accent -->
+        <item>#00bcd4</item> <!-- Light Cyan accent -->
+        <item>#CFB53B</item> <!-- Light Gold accent -->
+        <item>#cddc39</item> <!-- Light Lime accent -->
+        <item>#ff9800</item> <!-- Light Orange accent -->
+        <item>#e91e63</item> <!-- Light Pink accent -->
+        <item>#673ab7</item> <!-- Light Purple accent -->
+        <item>#ff0000</item> <!-- Light Red accent -->
+        <item>#008577</item> <!-- Light Teal accent -->
+        <item>#00C1C1</item> <!-- Light Turquoise accent -->
+        <item>#fdd835</item> <!-- Light Yellow accent -->
+        <!-- do not change this comment for light accent preview generation -->
+    </string-array>
+
 </resources>

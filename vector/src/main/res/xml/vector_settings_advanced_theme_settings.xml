@@ -2,6 +2,33 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:title="@string/settings_theme_colors">
+
+        <Preference
+            android:key="SC_ACCENT_DISCLAIMER"
+            android:summary="@string/settings_sc_accent_disclaimer" />
+
+        <de.spiritcroc.preference.ColorMatrixListPreference
+            android:key="SETTINGS_SC_ACCENT_LIGHT"
+            android:title="@string/setting_sc_accent_color_light"
+            android:summary="%s"
+            android:entries="@array/sc_accent_color_light_entries"
+            android:entryValues="@array/sc_accent_color_light_values"
+            android:defaultValue="green"
+            app:entryPreviews="@array/sc_accent_color_light_previews" />
+
+        <de.spiritcroc.preference.ColorMatrixListPreference
+            android:key="SETTINGS_SC_ACCENT_DARK"
+            android:title="@string/setting_sc_accent_color_dark"
+            android:summary="%s"
+            android:entries="@array/sc_accent_color_dark_entries"
+            android:entryValues="@array/sc_accent_color_dark_values"
+            android:defaultValue="green"
+            app:entryPreviews="@array/sc_accent_color_dark_previews" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_user_colors">
 
         <im.vector.app.core.preference.VectorListPreference

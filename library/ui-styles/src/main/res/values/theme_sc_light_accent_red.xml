@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_light_red">#ff0000</color>
+    <color name="accent_sc_light_red_alpha25">#3fff0000</color>
+    <color name="accent_sc_light_red_pale">@color/accent_sc_light_red</color>
+    <color name="accent_sc_light_red_dark">@color/accent_sc_light_red_alpha25</color>
+    <color name="accent_sc_light_red_noalpha12">#ffe0e0</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Light.Red">
+        <item name="android:colorAccent">@color/accent_sc_light_red</item>
+        <item name="colorAccent">@color/accent_sc_light_red</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Light.Red">
+        <!-- SC additions -->
+        <item name="colorAccent">@color/accent_sc_light_red</item>
+        <item name="android:colorAccent">@color/accent_sc_light_red</item>
+        <item name="colorAccentPale">@color/accent_sc_light_red_pale</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_light_red_noalpha12</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light.Red</item>
+    </style>
+
+    <!-- Default AppTheme for usage where settings don't apply -->
+    <style name="AppTheme.SC.Light.Red" parent="AppTheme.Base.SC.Light.Red" />
+
+</resources>

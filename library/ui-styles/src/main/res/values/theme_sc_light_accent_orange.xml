@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_light_orange">#ff9800</color>
+    <color name="accent_sc_light_orange_alpha25">#3fff9800</color>
+    <color name="accent_sc_light_orange_pale">@color/accent_sc_light_orange</color>
+    <color name="accent_sc_light_orange_dark">@color/accent_sc_light_orange_alpha25</color>
+    <color name="accent_sc_light_orange_noalpha12">#fff2e0</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Light.Orange">
+        <item name="android:colorAccent">@color/accent_sc_light_orange</item>
+        <item name="colorAccent">@color/accent_sc_light_orange</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Light.Orange">
+        <!-- SC additions -->
+        <item name="colorAccent">@color/accent_sc_light_orange</item>
+        <item name="android:colorAccent">@color/accent_sc_light_orange</item>
+        <item name="colorAccentPale">@color/accent_sc_light_orange_pale</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_light_orange_noalpha12</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light.Orange</item>
+    </style>
+
+    <!-- Default AppTheme for usage where settings don't apply -->
+    <style name="AppTheme.SC.Light.Orange" parent="AppTheme.Base.SC.Light.Orange" />
+
+</resources>

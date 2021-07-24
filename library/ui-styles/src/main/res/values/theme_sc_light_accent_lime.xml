@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_light_lime">#cddc39</color>
+    <color name="accent_sc_light_lime_alpha25">#3fcddc39</color>
+    <color name="accent_sc_light_lime_pale">@color/accent_sc_light_lime</color>
+    <color name="accent_sc_light_lime_dark">@color/accent_sc_light_lime_alpha25</color>
+    <color name="accent_sc_light_lime_noalpha12">#f9fae7</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Light.Lime">
+        <item name="android:colorAccent">@color/accent_sc_light_lime</item>
+        <item name="colorAccent">@color/accent_sc_light_lime</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Light.Lime">
+        <!-- SC additions -->
+        <item name="colorAccent">@color/accent_sc_light_lime</item>
+        <item name="android:colorAccent">@color/accent_sc_light_lime</item>
+        <item name="colorAccentPale">@color/accent_sc_light_lime_pale</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_light_lime_noalpha12</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light.Lime</item>
+    </style>
+
+    <!-- Default AppTheme for usage where settings don't apply -->
+    <style name="AppTheme.SC.Light.Lime" parent="AppTheme.Base.SC.Light.Lime" />
+
+</resources>

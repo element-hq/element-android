@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_light_yellow">#fdd835</color>
+    <color name="accent_sc_light_yellow_alpha25">#3ffdd835</color>
+    <color name="accent_sc_light_yellow_pale">@color/accent_sc_light_yellow</color>
+    <color name="accent_sc_light_yellow_dark">@color/accent_sc_light_yellow_alpha25</color>
+    <color name="accent_sc_light_yellow_noalpha12">#fefae6</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Light.Yellow">
+        <item name="android:colorAccent">@color/accent_sc_light_yellow</item>
+        <item name="colorAccent">@color/accent_sc_light_yellow</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Light.Yellow">
+        <!-- SC additions -->
+        <item name="colorAccent">@color/accent_sc_light_yellow</item>
+        <item name="android:colorAccent">@color/accent_sc_light_yellow</item>
+        <item name="colorAccentPale">@color/accent_sc_light_yellow_pale</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_light_yellow_noalpha12</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light.Yellow</item>
+    </style>
+
+    <!-- Default AppTheme for usage where settings don't apply -->
+    <style name="AppTheme.SC.Light.Yellow" parent="AppTheme.Base.SC.Light.Yellow" />
+
+</resources>

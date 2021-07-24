@@ -79,5 +79,25 @@
 
     <string name="settings_advanced_theme_settings">Advanced theme settings</string>
     <string name="settings_user_colors">User colors</string>
+    <string name="settings_theme_colors">Theme colors</string>
+    <string name="setting_sc_accent_color_light">Accent color for light themes</string>
+    <string name="setting_sc_accent_color_dark">Accent color for dark themes</string>
+    <string name="settings_sc_accent_disclaimer">Note that these color settings only apply to SC themes, and not Element themes.</string>
+
+    <!-- Accent colors -->
+    <string name="sc_accent_green">Green</string>
+    <string name="sc_accent_amber">Amber</string>
+    <string name="sc_accent_bluelight">Light blue</string>
+    <string name="sc_accent_cyan">Cyan</string>
+    <string name="sc_accent_gold">Gold</string>
+    <string name="sc_accent_lime">Lime</string>
+    <string name="sc_accent_orange">Orange</string>
+    <string name="sc_accent_pink">Pink</string>
+    <string name="sc_accent_purple">Purple</string>
+    <string name="sc_accent_red">Red</string>
+    <string name="sc_accent_teal">Teal</string>
+    <string name="sc_accent_turquoise">Turquoise</string>
+    <string name="sc_accent_yellow">Yellow</string>
+    <!-- do not change this comment for accent generation -->
 
 </resources>

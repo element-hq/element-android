@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.Orange.v27" parent="AppTheme.SC.Orange.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Orange.v27" parent="AppTheme.SC.Dark.Orange.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Colored.Orange.v27" parent="AppTheme.SC.Colored.Orange.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Colored.Orange.v27" parent="AppTheme.SC.Dark.Colored.Orange.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Orange" parent="AppTheme.SC.Orange.v27" />
+
+    <style name="AppTheme.SC.Dark.Orange" parent="AppTheme.SC.Dark.Orange.v27" />
+
+    <style name="AppTheme.SC.Colored.Orange" parent="AppTheme.SC.Colored.Orange.v27" />
+
+    <style name="AppTheme.SC.Dark.Colored.Orange" parent="AppTheme.SC.Dark.Colored.Orange.v27" />
+
+</resources>

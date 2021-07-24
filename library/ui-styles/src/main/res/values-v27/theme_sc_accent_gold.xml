@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.Gold.v27" parent="AppTheme.SC.Gold.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Gold.v27" parent="AppTheme.SC.Dark.Gold.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Colored.Gold.v27" parent="AppTheme.SC.Colored.Gold.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Colored.Gold.v27" parent="AppTheme.SC.Dark.Colored.Gold.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Gold" parent="AppTheme.SC.Gold.v27" />
+
+    <style name="AppTheme.SC.Dark.Gold" parent="AppTheme.SC.Dark.Gold.v27" />
+
+    <style name="AppTheme.SC.Colored.Gold" parent="AppTheme.SC.Colored.Gold.v27" />
+
+    <style name="AppTheme.SC.Dark.Colored.Gold" parent="AppTheme.SC.Dark.Colored.Gold.v27" />
+
+</resources>

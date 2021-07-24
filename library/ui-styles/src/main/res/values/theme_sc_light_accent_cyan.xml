@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_light_cyan">#00bcd4</color>
+    <color name="accent_sc_light_cyan_alpha25">#3f00bcd4</color>
+    <color name="accent_sc_light_cyan_pale">@color/accent_sc_light_cyan</color>
+    <color name="accent_sc_light_cyan_dark">@color/accent_sc_light_cyan_alpha25</color>
+    <color name="accent_sc_light_cyan_noalpha12">#e0f6f9</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Light.Cyan">
+        <item name="android:colorAccent">@color/accent_sc_light_cyan</item>
+        <item name="colorAccent">@color/accent_sc_light_cyan</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Light.Cyan">
+        <!-- SC additions -->
+        <item name="colorAccent">@color/accent_sc_light_cyan</item>
+        <item name="android:colorAccent">@color/accent_sc_light_cyan</item>
+        <item name="colorAccentPale">@color/accent_sc_light_cyan_pale</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_light_cyan_noalpha12</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light.Cyan</item>
+    </style>
+
+    <!-- Default AppTheme for usage where settings don't apply -->
+    <style name="AppTheme.SC.Light.Cyan" parent="AppTheme.Base.SC.Light.Cyan" />
+
+</resources>

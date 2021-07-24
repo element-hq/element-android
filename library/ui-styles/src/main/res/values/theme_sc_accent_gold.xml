@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_dark_gold">#CFB53B</color>
+    <color name="accent_sc_dark_gold_alpha25">#3fCFB53B</color>
+    <color name="accent_sc_dark_gold_pale">@color/accent_sc_dark_gold</color>
+    <color name="accent_sc_dark_gold_dark">@color/accent_sc_dark_gold_alpha25</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Gold">
+        <item name="android:colorAccent">@color/accent_sc_dark_gold</item>
+        <item name="colorAccent">@color/accent_sc_dark_gold</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Gold">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_gold_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_gold</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_gold</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_gold_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_gold_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Gold</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Gold">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_gold_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_gold</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_gold</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_gold_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_gold_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Gold</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Colored.Gold">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_gold_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_gold</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_gold</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_gold_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Gold</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_gold_alpha25</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Colored.Gold">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_gold_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_gold</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_gold</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_gold_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Gold</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_gold_alpha25</item>
+    </style>
+
+
+    <style name="AppTheme.SC.Gold" parent="AppTheme.Base.SC.Gold" />
+
+    <style name="AppTheme.SC.Dark.Gold" parent="AppTheme.Base.SC.Dark.Gold" />
+
+    <style name="AppTheme.SC.Colored.Gold" parent="AppTheme.Base.SC.Colored.Gold" />
+
+    <style name="AppTheme.SC.Dark.Colored.Gold" parent="AppTheme.Base.SC.Dark.Colored.Gold" />
+
+
+    <style name="AppTheme.AttachmentsPreview.SC.Gold" parent="AppTheme.Base.SC.Gold"/>
+
+    <style name="AppTheme.Transparent.SC.Gold">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_gold_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_gold</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_gold</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_gold_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_gold_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Gold</item>
+    </style>
+
+</resources>

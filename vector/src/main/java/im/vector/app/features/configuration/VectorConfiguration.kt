@@ -112,6 +112,8 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
                 + "_" + FontScale.getFontScaleValue(context).preferenceValue
                 + "_" + ThemeUtils.getApplicationLightTheme(context)
                 + "_" + ThemeUtils.getApplicationDarkTheme(context)
+                + "_" + ThemeUtils.getApplicationLightThemeAccent(context)
+                + "_" + ThemeUtils.getApplicationDarkThemeAccent(context)
                 + "_" + ThemeUtils.useDarkTheme(context).toString())
     }
 }

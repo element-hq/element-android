@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_dark_amber">#ffab00</color>
+    <color name="accent_sc_dark_amber_alpha25">#3fffab00</color>
+    <color name="accent_sc_dark_amber_pale">@color/accent_sc_dark_amber</color>
+    <color name="accent_sc_dark_amber_dark">@color/accent_sc_dark_amber_alpha25</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Amber">
+        <item name="android:colorAccent">@color/accent_sc_dark_amber</item>
+        <item name="colorAccent">@color/accent_sc_dark_amber</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Amber">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_amber_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_amber</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_amber</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_amber_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_amber_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Amber</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Amber">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_amber_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_amber</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_amber</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_amber_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_amber_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Amber</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Colored.Amber">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_amber_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_amber</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_amber</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_amber_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Amber</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_amber_alpha25</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Colored.Amber">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_amber_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_amber</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_amber</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_amber_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Amber</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_amber_alpha25</item>
+    </style>
+
+
+    <style name="AppTheme.SC.Amber" parent="AppTheme.Base.SC.Amber" />
+
+    <style name="AppTheme.SC.Dark.Amber" parent="AppTheme.Base.SC.Dark.Amber" />
+
+    <style name="AppTheme.SC.Colored.Amber" parent="AppTheme.Base.SC.Colored.Amber" />
+
+    <style name="AppTheme.SC.Dark.Colored.Amber" parent="AppTheme.Base.SC.Dark.Colored.Amber" />
+
+
+    <style name="AppTheme.AttachmentsPreview.SC.Amber" parent="AppTheme.Base.SC.Amber"/>
+
+    <style name="AppTheme.Transparent.SC.Amber">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_amber_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_amber</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_amber</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_amber_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_amber_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Amber</item>
+    </style>
+
+</resources>
