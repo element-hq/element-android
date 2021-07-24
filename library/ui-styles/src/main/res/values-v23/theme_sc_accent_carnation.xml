@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.Carnation.v23" parent="AppTheme.Base.SC.Carnation">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Carnation.v23" parent="AppTheme.Base.SC.Dark.Carnation">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Colored.Carnation.v23" parent="AppTheme.Base.SC.Colored.Carnation">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Colored.Carnation.v23" parent="AppTheme.Base.SC.Dark.Colored.Carnation">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Carnation" parent="AppTheme.SC.Carnation.v23"/>
+
+    <style name="AppTheme.SC.Dark.Carnation" parent="AppTheme.SC.Dark.Carnation.v23"/>
+
+    <style name="AppTheme.SC.Colored.Carnation" parent="AppTheme.SC.Colored.Carnation.v23"/>
+
+    <style name="AppTheme.SC.Dark.Colored.Carnation" parent="AppTheme.SC.Dark.Colored.Carnation.v23"/>
+
+</resources>

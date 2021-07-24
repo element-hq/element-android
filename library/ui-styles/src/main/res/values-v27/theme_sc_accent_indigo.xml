@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.Indigo.v27" parent="AppTheme.SC.Indigo.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Indigo.v27" parent="AppTheme.SC.Dark.Indigo.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Colored.Indigo.v27" parent="AppTheme.SC.Colored.Indigo.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Colored.Indigo.v27" parent="AppTheme.SC.Dark.Colored.Indigo.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Indigo" parent="AppTheme.SC.Indigo.v27" />
+
+    <style name="AppTheme.SC.Dark.Indigo" parent="AppTheme.SC.Dark.Indigo.v27" />
+
+    <style name="AppTheme.SC.Colored.Indigo" parent="AppTheme.SC.Colored.Indigo.v27" />
+
+    <style name="AppTheme.SC.Dark.Colored.Indigo" parent="AppTheme.SC.Dark.Colored.Indigo.v27" />
+
+</resources>

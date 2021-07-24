@@ -98,6 +98,10 @@
     <string name="sc_accent_teal">Teal</string>
     <string name="sc_accent_turquoise">Turquoise</string>
     <string name="sc_accent_yellow">Yellow</string>
+    <string name="sc_accent_carnation">Carnation</string>
+    <string name="sc_accent_denim">Denim</string>
+    <string name="sc_accent_indigo">Indigo</string>
+    <string name="sc_accent_lava">Lava</string>
     <!-- do not change this comment for accent generation -->
 
 </resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.Lava.v23" parent="AppTheme.Base.SC.Lava">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Lava.v23" parent="AppTheme.Base.SC.Dark.Lava">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Colored.Lava.v23" parent="AppTheme.Base.SC.Colored.Lava">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Colored.Lava.v23" parent="AppTheme.Base.SC.Dark.Colored.Lava">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Lava" parent="AppTheme.SC.Lava.v23"/>
+
+    <style name="AppTheme.SC.Dark.Lava" parent="AppTheme.SC.Dark.Lava.v23"/>
+
+    <style name="AppTheme.SC.Colored.Lava" parent="AppTheme.SC.Colored.Lava.v23"/>
+
+    <style name="AppTheme.SC.Dark.Colored.Lava" parent="AppTheme.SC.Dark.Colored.Lava.v23"/>
+
+</resources>

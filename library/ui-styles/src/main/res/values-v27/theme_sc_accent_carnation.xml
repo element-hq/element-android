@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.Carnation.v27" parent="AppTheme.SC.Carnation.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Carnation.v27" parent="AppTheme.SC.Dark.Carnation.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Colored.Carnation.v27" parent="AppTheme.SC.Colored.Carnation.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Colored.Carnation.v27" parent="AppTheme.SC.Dark.Colored.Carnation.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Carnation" parent="AppTheme.SC.Carnation.v27" />
+
+    <style name="AppTheme.SC.Dark.Carnation" parent="AppTheme.SC.Dark.Carnation.v27" />
+
+    <style name="AppTheme.SC.Colored.Carnation" parent="AppTheme.SC.Colored.Carnation.v27" />
+
+    <style name="AppTheme.SC.Dark.Colored.Carnation" parent="AppTheme.SC.Dark.Colored.Carnation.v27" />
+
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_light_indigo">#536DFE</color>
+    <color name="accent_sc_light_indigo_alpha25">#3f536DFE</color>
+    <color name="accent_sc_light_indigo_pale">@color/accent_sc_light_indigo</color>
+    <color name="accent_sc_light_indigo_dark">@color/accent_sc_light_indigo_alpha25</color>
+    <color name="accent_sc_light_indigo_noalpha12">#eaedfe</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Light.Indigo">
+        <item name="android:colorAccent">@color/accent_sc_light_indigo</item>
+        <item name="colorAccent">@color/accent_sc_light_indigo</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Light.Indigo">
+        <!-- SC additions -->
+        <item name="colorAccent">@color/accent_sc_light_indigo</item>
+        <item name="android:colorAccent">@color/accent_sc_light_indigo</item>
+        <item name="colorAccentPale">@color/accent_sc_light_indigo_pale</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_light_indigo_noalpha12</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light.Indigo</item>
+    </style>
+
+    <!-- Default AppTheme for usage where settings don't apply -->
+    <style name="AppTheme.SC.Light.Indigo" parent="AppTheme.Base.SC.Light.Indigo" />
+
+</resources>

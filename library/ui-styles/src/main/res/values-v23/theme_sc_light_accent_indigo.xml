@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.Light.Indigo.v23" parent="AppTheme.Base.SC.Light.Indigo">
+        <item name="android:statusBarColor">@color/background_sc_light_statusbar</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="AppTheme.SC.Light.Indigo" parent="AppTheme.SC.Light.Indigo.v23"/>
+
+</resources>

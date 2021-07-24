@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_dark_indigo">#536DFE</color>
+    <color name="accent_sc_dark_indigo_alpha25">#3f536DFE</color>
+    <color name="accent_sc_dark_indigo_pale">@color/accent_sc_dark_indigo</color>
+    <color name="accent_sc_dark_indigo_dark">@color/accent_sc_dark_indigo_alpha25</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Indigo">
+        <item name="android:colorAccent">@color/accent_sc_dark_indigo</item>
+        <item name="colorAccent">@color/accent_sc_dark_indigo</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Indigo">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_indigo_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_indigo</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_indigo</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_indigo_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_indigo_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Indigo</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Indigo">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_indigo_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_indigo</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_indigo</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_indigo_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_indigo_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Indigo</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Colored.Indigo">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_indigo_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_indigo</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_indigo</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_indigo_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Indigo</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_indigo_alpha25</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Colored.Indigo">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_indigo_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_indigo</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_indigo</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_indigo_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Indigo</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_indigo_alpha25</item>
+    </style>
+
+
+    <style name="AppTheme.SC.Indigo" parent="AppTheme.Base.SC.Indigo" />
+
+    <style name="AppTheme.SC.Dark.Indigo" parent="AppTheme.Base.SC.Dark.Indigo" />
+
+    <style name="AppTheme.SC.Colored.Indigo" parent="AppTheme.Base.SC.Colored.Indigo" />
+
+    <style name="AppTheme.SC.Dark.Colored.Indigo" parent="AppTheme.Base.SC.Dark.Colored.Indigo" />
+
+
+    <style name="AppTheme.AttachmentsPreview.SC.Indigo" parent="AppTheme.Base.SC.Indigo"/>
+
+    <style name="AppTheme.Transparent.SC.Indigo">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_indigo_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_indigo</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_indigo</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_indigo_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_indigo_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Indigo</item>
+    </style>
+
+</resources>

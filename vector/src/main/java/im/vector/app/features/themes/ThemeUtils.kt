@@ -396,6 +396,10 @@ object ThemeUtils {
                     "teal" -> R.style.AppTheme_SC_Light_Teal
                     "turquoise" -> R.style.AppTheme_SC_Light_Turquoise
                     "yellow" -> R.style.AppTheme_SC_Light_Yellow
+                    "carnation" -> R.style.AppTheme_SC_Light_Carnation
+                    "denim" -> R.style.AppTheme_SC_Light_Denim
+                    "indigo" -> R.style.AppTheme_SC_Light_Indigo
+                    "lava" -> R.style.AppTheme_SC_Light_Lava
                     // Do not change this comment for automatic light theme insertion
                     else -> resId
                 }
@@ -415,6 +419,10 @@ object ThemeUtils {
                     "teal" -> R.style.AppTheme_SC_Teal
                     "turquoise" -> R.style.AppTheme_SC_Turquoise
                     "yellow" -> R.style.AppTheme_SC_Yellow
+                    "carnation" -> R.style.AppTheme_SC_Carnation
+                    "denim" -> R.style.AppTheme_SC_Denim
+                    "indigo" -> R.style.AppTheme_SC_Indigo
+                    "lava" -> R.style.AppTheme_SC_Lava
                     // Do not change this comment for automatic black theme insertion
                     else -> resId
                 }
@@ -434,6 +442,10 @@ object ThemeUtils {
                     "teal" -> R.style.AppTheme_SC_Dark_Teal
                     "turquoise" -> R.style.AppTheme_SC_Dark_Turquoise
                     "yellow" -> R.style.AppTheme_SC_Dark_Yellow
+                    "carnation" -> R.style.AppTheme_SC_Dark_Carnation
+                    "denim" -> R.style.AppTheme_SC_Dark_Denim
+                    "indigo" -> R.style.AppTheme_SC_Dark_Indigo
+                    "lava" -> R.style.AppTheme_SC_Dark_Lava
                     // Do not change this comment for automatic dark theme insertion
                     else -> resId
                 }
@@ -453,6 +465,10 @@ object ThemeUtils {
                     "teal" -> R.style.AppTheme_SC_Colored_Teal
                     "turquoise" -> R.style.AppTheme_SC_Colored_Turquoise
                     "yellow" -> R.style.AppTheme_SC_Colored_Yellow
+                    "carnation" -> R.style.AppTheme_SC_Colored_Carnation
+                    "denim" -> R.style.AppTheme_SC_Colored_Denim
+                    "indigo" -> R.style.AppTheme_SC_Colored_Indigo
+                    "lava" -> R.style.AppTheme_SC_Colored_Lava
                     // Do not change this comment for automatic black colored theme insertion
                     else -> resId
                 }
@@ -472,6 +488,10 @@ object ThemeUtils {
                     "teal" -> R.style.AppTheme_SC_Dark_Colored_Teal
                     "turquoise" -> R.style.AppTheme_SC_Dark_Colored_Turquoise
                     "yellow" -> R.style.AppTheme_SC_Dark_Colored_Yellow
+                    "carnation" -> R.style.AppTheme_SC_Dark_Colored_Carnation
+                    "denim" -> R.style.AppTheme_SC_Dark_Colored_Denim
+                    "indigo" -> R.style.AppTheme_SC_Dark_Colored_Indigo
+                    "lava" -> R.style.AppTheme_SC_Dark_Colored_Lava
                     // Do not change this comment for automatic dark colored theme insertion
                     else -> resId
                 }

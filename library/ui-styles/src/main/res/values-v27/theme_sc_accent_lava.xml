@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.Lava.v27" parent="AppTheme.SC.Lava.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Lava.v27" parent="AppTheme.SC.Dark.Lava.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Colored.Lava.v27" parent="AppTheme.SC.Colored.Lava.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Colored.Lava.v27" parent="AppTheme.SC.Dark.Colored.Lava.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Lava" parent="AppTheme.SC.Lava.v27" />
+
+    <style name="AppTheme.SC.Dark.Lava" parent="AppTheme.SC.Dark.Lava.v27" />
+
+    <style name="AppTheme.SC.Colored.Lava" parent="AppTheme.SC.Colored.Lava.v27" />
+
+    <style name="AppTheme.SC.Dark.Colored.Lava" parent="AppTheme.SC.Dark.Colored.Lava.v27" />
+
+</resources>

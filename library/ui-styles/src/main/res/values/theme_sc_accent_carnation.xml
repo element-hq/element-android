@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_dark_carnation">#ffa6c9</color>
+    <color name="accent_sc_dark_carnation_alpha25">#3fffa6c9</color>
+    <color name="accent_sc_dark_carnation_pale">@color/accent_sc_dark_carnation</color>
+    <color name="accent_sc_dark_carnation_dark">@color/accent_sc_dark_carnation_alpha25</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Carnation">
+        <item name="android:colorAccent">@color/accent_sc_dark_carnation</item>
+        <item name="colorAccent">@color/accent_sc_dark_carnation</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Carnation">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_carnation_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_carnation</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_carnation</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_carnation_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_carnation_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Carnation</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Carnation">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_carnation_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_carnation</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_carnation</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_carnation_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_carnation_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Carnation</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Colored.Carnation">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_carnation_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_carnation</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_carnation</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_carnation_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Carnation</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_carnation_alpha25</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Colored.Carnation">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_carnation_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_carnation</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_carnation</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_carnation_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Carnation</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_carnation_alpha25</item>
+    </style>
+
+
+    <style name="AppTheme.SC.Carnation" parent="AppTheme.Base.SC.Carnation" />
+
+    <style name="AppTheme.SC.Dark.Carnation" parent="AppTheme.Base.SC.Dark.Carnation" />
+
+    <style name="AppTheme.SC.Colored.Carnation" parent="AppTheme.Base.SC.Colored.Carnation" />
+
+    <style name="AppTheme.SC.Dark.Colored.Carnation" parent="AppTheme.Base.SC.Dark.Colored.Carnation" />
+
+
+    <style name="AppTheme.AttachmentsPreview.SC.Carnation" parent="AppTheme.Base.SC.Carnation"/>
+
+    <style name="AppTheme.Transparent.SC.Carnation">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_carnation_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_carnation</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_carnation</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_carnation_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_carnation_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Carnation</item>
+    </style>
+
+</resources>

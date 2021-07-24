@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_light_lava">#B20120</color>
+    <color name="accent_sc_light_lava_alpha25">#3fB20120</color>
+    <color name="accent_sc_light_lava_pale">@color/accent_sc_light_lava</color>
+    <color name="accent_sc_light_lava_dark">@color/accent_sc_light_lava_alpha25</color>
+    <color name="accent_sc_light_lava_noalpha12">#f5e0e4</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Light.Lava">
+        <item name="android:colorAccent">@color/accent_sc_light_lava</item>
+        <item name="colorAccent">@color/accent_sc_light_lava</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Light.Lava">
+        <!-- SC additions -->
+        <item name="colorAccent">@color/accent_sc_light_lava</item>
+        <item name="android:colorAccent">@color/accent_sc_light_lava</item>
+        <item name="colorAccentPale">@color/accent_sc_light_lava_pale</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_light_lava_noalpha12</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light.Lava</item>
+    </style>
+
+    <!-- Default AppTheme for usage where settings don't apply -->
+    <style name="AppTheme.SC.Light.Lava" parent="AppTheme.Base.SC.Light.Lava" />
+
+</resources>

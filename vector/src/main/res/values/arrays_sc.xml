@@ -63,6 +63,10 @@
         <item>@string/sc_accent_teal</item> <!-- Dark Teal name -->
         <item>@string/sc_accent_turquoise</item> <!-- Dark Turquoise name -->
         <item>@string/sc_accent_yellow</item> <!-- Dark Yellow name -->
+        <item>@string/sc_accent_carnation</item> <!-- Dark Carnation name -->
+        <item>@string/sc_accent_denim</item> <!-- Dark Denim name -->
+        <item>@string/sc_accent_indigo</item> <!-- Dark Indigo name -->
+        <item>@string/sc_accent_lava</item> <!-- Dark Lava name -->
         <!-- do not change this comment for dark accent entry generation -->
     </string-array>
 
@@ -80,6 +84,10 @@
         <item>teal</item> <!-- Dark Teal id -->
         <item>turquoise</item> <!-- Dark Turquoise id -->
         <item>yellow</item> <!-- Dark Yellow id -->
+        <item>carnation</item> <!-- Dark Carnation id -->
+        <item>denim</item> <!-- Dark Denim id -->
+        <item>indigo</item> <!-- Dark Indigo id -->
+        <item>lava</item> <!-- Dark Lava id -->
         <!-- do not change this comment for dark accent value generation -->
     </string-array>
 
@@ -97,6 +105,10 @@
         <item>#80cbc4</item> <!-- Dark Teal accent -->
         <item>#00FFFF</item> <!-- Dark Turquoise accent -->
         <item>#ffeb3b</item> <!-- Dark Yellow accent -->
+        <item>#ffa6c9</item> <!-- Dark Carnation accent -->
+        <item>#1560BD</item> <!-- Dark Denim accent -->
+        <item>#536DFE</item> <!-- Dark Indigo accent -->
+        <item>#EB0028</item> <!-- Dark Lava accent -->
         <!-- do not change this comment for dark accent preview generation -->
     </string-array>
 
@@ -114,6 +126,10 @@
         <item>@string/sc_accent_teal</item> <!-- Light Teal name -->
         <item>@string/sc_accent_turquoise</item> <!-- Light Turquoise name -->
         <item>@string/sc_accent_yellow</item> <!-- Light Yellow name -->
+        <item>@string/sc_accent_carnation</item> <!-- Light Carnation name -->
+        <item>@string/sc_accent_denim</item> <!-- Light Denim name -->
+        <item>@string/sc_accent_indigo</item> <!-- Light Indigo name -->
+        <item>@string/sc_accent_lava</item> <!-- Light Lava name -->
         <!-- do not change this comment for light accent entry generation -->
     </string-array>
 
@@ -131,6 +147,10 @@
         <item>teal</item> <!-- Light Teal id -->
         <item>turquoise</item> <!-- Light Turquoise id -->
         <item>yellow</item> <!-- Light Yellow id -->
+        <item>carnation</item> <!-- Light Carnation id -->
+        <item>denim</item> <!-- Light Denim id -->
+        <item>indigo</item> <!-- Light Indigo id -->
+        <item>lava</item> <!-- Light Lava id -->
         <!-- do not change this comment for light accent value generation -->
     </string-array>
 
@@ -148,6 +168,10 @@
         <item>#008577</item> <!-- Light Teal accent -->
         <item>#00C1C1</item> <!-- Light Turquoise accent -->
         <item>#fdd835</item> <!-- Light Yellow accent -->
+        <item>#fb83b2</item> <!-- Light Carnation accent -->
+        <item>#1560BD</item> <!-- Light Denim accent -->
+        <item>#536DFE</item> <!-- Light Indigo accent -->
+        <item>#B20120</item> <!-- Light Lava accent -->
         <!-- do not change this comment for light accent preview generation -->
     </string-array>
 

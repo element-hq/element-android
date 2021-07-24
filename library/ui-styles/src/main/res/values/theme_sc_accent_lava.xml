@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_dark_lava">#EB0028</color>
+    <color name="accent_sc_dark_lava_alpha25">#3fEB0028</color>
+    <color name="accent_sc_dark_lava_pale">@color/accent_sc_dark_lava</color>
+    <color name="accent_sc_dark_lava_dark">@color/accent_sc_dark_lava_alpha25</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Lava">
+        <item name="android:colorAccent">@color/accent_sc_dark_lava</item>
+        <item name="colorAccent">@color/accent_sc_dark_lava</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Lava">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_lava_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_lava</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_lava</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_lava_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_lava_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Lava</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Lava">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_lava_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_lava</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_lava</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_lava_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_lava_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Lava</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Colored.Lava">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_lava_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_lava</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_lava</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_lava_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Lava</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_lava_alpha25</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Colored.Lava">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_lava_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_lava</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_lava</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_lava_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Lava</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_lava_alpha25</item>
+    </style>
+
+
+    <style name="AppTheme.SC.Lava" parent="AppTheme.Base.SC.Lava" />
+
+    <style name="AppTheme.SC.Dark.Lava" parent="AppTheme.Base.SC.Dark.Lava" />
+
+    <style name="AppTheme.SC.Colored.Lava" parent="AppTheme.Base.SC.Colored.Lava" />
+
+    <style name="AppTheme.SC.Dark.Colored.Lava" parent="AppTheme.Base.SC.Dark.Colored.Lava" />
+
+
+    <style name="AppTheme.AttachmentsPreview.SC.Lava" parent="AppTheme.Base.SC.Lava"/>
+
+    <style name="AppTheme.Transparent.SC.Lava">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_lava_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_lava</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_lava</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_lava_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_lava_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Lava</item>
+    </style>
+
+</resources>
