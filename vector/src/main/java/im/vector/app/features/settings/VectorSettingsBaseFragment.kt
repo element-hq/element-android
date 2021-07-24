@@ -20,7 +20,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
-import androidx.preference.PreferenceFragmentCompat
+import de.spiritcroc.preference.ScPreferenceFragment
 import im.vector.app.R
 import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.HasScreenInjector
@@ -33,7 +33,7 @@ import io.reactivex.disposables.Disposable
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
-abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScreenInjector {
+abstract class VectorSettingsBaseFragment : ScPreferenceFragment(), HasScreenInjector {
 
     val vectorActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
