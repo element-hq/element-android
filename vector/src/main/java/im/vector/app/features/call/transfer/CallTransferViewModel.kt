@@ -57,7 +57,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
     private val call = callManager.getCallById(initialState.callId)
     private val callListener = object : WebRtcCall.Listener {
         override fun onStateUpdate(call: MxCall) {
-            if (call.state == CallState.Terminated) {
+            if (call.state is CallState.Ended) {
                 _viewEvents.post(CallTransferViewEvents.Dismiss)
             }
         }

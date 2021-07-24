@@ -253,12 +253,12 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
 
         queryParams.roomCategoryFilter?.let {
             when (it) {
-                RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                 RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.beginGroup()
                         .greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0).or()
                         .equalTo(RoomSummaryEntityFields.MARKED_UNREAD, true).endGroup()
-                RoomCategoryFilter.ALL -> {
+                RoomCategoryFilter.ALL                     -> {
                     // nop
                 }
             }
@@ -282,17 +282,17 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             query.equalTo(RoomSummaryEntityFields.ROOM_TYPE, it)
         }
         when (queryParams.roomCategoryFilter) {
-            RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-            RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+            RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
             RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.beginGroup()
                     .greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0).or()
                     .equalTo(RoomSummaryEntityFields.MARKED_UNREAD, true).endGroup()
-            RoomCategoryFilter.ALL -> Unit // nop
+            RoomCategoryFilter.ALL                     -> Unit // nop
         }
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")
         when (queryParams.activeSpaceFilter) {
-            is ActiveSpaceFilter.ActiveSpace -> {
+            is ActiveSpaceFilter.ActiveSpace  -> {
                 // It's annoying but for now realm java does not support querying in primitive list :/
                 // https://github.com/realm/realm-java/issues/5361
                 if (queryParams.activeSpaceFilter.currentSpaceId == null) {
@@ -310,8 +310,8 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             }
         }
 
-        if (queryParams.activeGroupId != null) {
-            query.contains(RoomSummaryEntityFields.GROUP_IDS, queryParams.activeGroupId!!)
+        queryParams.activeGroupId?.let { activeGroupId ->
+            query.contains(RoomSummaryEntityFields.GROUP_IDS, activeGroupId)
         }
         return query
     }
