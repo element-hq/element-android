@@ -533,7 +533,7 @@
     <string name="e2e_re_request_encryption_key">Küsi oma muudest sessioonidest krüptimisvõtmed uuesti.</string>
     <string name="e2e_re_request_encryption_key_sent">Võtmete jagamise päring on saadetud.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Päring on saadetud</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Palun käivita ${app_name} mõnes muus seadmes, mis suudab neid sõnumeid dekrüptoda ja seega saata krüptovõtmeid siia sessiooni.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Palun käivita ${app_name} mõnes muus seadmes, mis suudab neid sõnumeid dekrüptida ja seega saata krüptovõtmeid siia sessiooni.</string>
     <string name="read_receipts_list">Lugemisteatiste loend</string>
     <string name="groups_list">Gruppide loend</string>
     <plurals name="membership_changes">
