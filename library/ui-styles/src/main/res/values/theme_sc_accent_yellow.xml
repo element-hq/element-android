@@ -3,8 +3,8 @@
 
     <!-- COLORS -->
 
-    <color name="accent_sc_dark_yellow">#ffeb3b</color>
-    <color name="accent_sc_dark_yellow_alpha25">#3fffeb3b</color>
+    <color name="accent_sc_dark_yellow">#FBC02D</color>
+    <color name="accent_sc_dark_yellow_alpha25">#3fFBC02D</color>
     <color name="accent_sc_dark_yellow_pale">@color/accent_sc_dark_yellow</color>
     <color name="accent_sc_dark_yellow_dark">@color/accent_sc_dark_yellow_alpha25</color>
 

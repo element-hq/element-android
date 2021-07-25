@@ -85,7 +85,8 @@
     <string name="settings_sc_accent_disclaimer">Note that these color settings only apply to SC themes, and not Element themes.</string>
 
     <!-- Accent colors -->
-    <string name="sc_accent_green">Green</string>
+    <string name="sc_accent_greenlight">Light green</string>
+    <string name="sc_accent_greendark">Dark green</string>
     <string name="sc_accent_amber">Amber</string>
     <string name="sc_accent_bluelight">Light blue</string>
     <string name="sc_accent_cyan">Cyan</string>
@@ -102,6 +103,7 @@
     <string name="sc_accent_denim">Denim</string>
     <string name="sc_accent_indigo">Indigo</string>
     <string name="sc_accent_lava">Lava</string>
+    <string name="sc_accent_blue">Blue</string>
     <!-- do not change this comment for accent generation -->
 
 </resources>

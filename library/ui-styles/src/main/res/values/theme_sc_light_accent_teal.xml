@@ -21,7 +21,7 @@
     <!-- THEMES -->
 
     <style name="AppTheme.Base.SC.Light.Teal">
-        <!-- SC additions -->
+        <item name="vctr_reaction_background_on">@color/accent_sc_light_teal_noalpha12</item>
         <item name="colorAccent">@color/accent_sc_light_teal</item>
         <item name="android:colorAccent">@color/accent_sc_light_teal</item>
         <item name="colorAccentPale">@color/accent_sc_light_teal_pale</item>

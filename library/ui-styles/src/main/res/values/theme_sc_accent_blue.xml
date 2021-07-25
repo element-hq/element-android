@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_dark_blue">#2196F3</color>
+    <color name="accent_sc_dark_blue_alpha25">#3f2196F3</color>
+    <color name="accent_sc_dark_blue_pale">@color/accent_sc_dark_blue</color>
+    <color name="accent_sc_dark_blue_dark">@color/accent_sc_dark_blue_alpha25</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Blue">
+        <item name="android:colorAccent">@color/accent_sc_dark_blue</item>
+        <item name="colorAccent">@color/accent_sc_dark_blue</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Blue">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_blue_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_blue</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_blue</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_blue_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_blue_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Blue</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Blue">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_blue_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_blue</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_blue</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_blue_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_blue_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Blue</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Colored.Blue">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_blue_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_blue</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_blue</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_blue_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Blue</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_blue_alpha25</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark.Colored.Blue">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_blue_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_blue</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_blue</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_blue_pale</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Blue</item>
+
+        <item name="sc_message_bg_outgoing">@color/accent_sc_dark_blue_alpha25</item>
+    </style>
+
+
+    <style name="AppTheme.SC.Blue" parent="AppTheme.Base.SC.Blue" />
+
+    <style name="AppTheme.SC.Dark.Blue" parent="AppTheme.Base.SC.Dark.Blue" />
+
+    <style name="AppTheme.SC.Colored.Blue" parent="AppTheme.Base.SC.Colored.Blue" />
+
+    <style name="AppTheme.SC.Dark.Colored.Blue" parent="AppTheme.Base.SC.Dark.Colored.Blue" />
+
+
+    <style name="AppTheme.AttachmentsPreview.SC.Blue" parent="AppTheme.Base.SC.Blue"/>
+
+    <style name="AppTheme.Transparent.SC.Blue">
+        <item name="vctr_reaction_background_on">@color/accent_sc_dark_blue_dark</item>
+        <item name="colorAccent">@color/accent_sc_dark_blue</item>
+        <item name="android:colorAccent">@color/accent_sc_dark_blue</item>
+        <item name="colorAccentPale">@color/accent_sc_dark_blue_pale</item>
+        <item name="message_highlight_bg_color">@color/accent_sc_dark_blue_alpha25</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Blue</item>
+    </style>
+
+</resources>

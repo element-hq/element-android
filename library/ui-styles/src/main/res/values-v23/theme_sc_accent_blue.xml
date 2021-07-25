@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.Blue.v23" parent="AppTheme.Base.SC.Blue">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Blue.v23" parent="AppTheme.Base.SC.Dark.Blue">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Colored.Blue.v23" parent="AppTheme.Base.SC.Colored.Blue">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Colored.Blue.v23" parent="AppTheme.Base.SC.Dark.Colored.Blue">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Blue" parent="AppTheme.SC.Blue.v23"/>
+
+    <style name="AppTheme.SC.Dark.Blue" parent="AppTheme.SC.Dark.Blue.v23"/>
+
+    <style name="AppTheme.SC.Colored.Blue" parent="AppTheme.SC.Colored.Blue.v23"/>
+
+    <style name="AppTheme.SC.Dark.Colored.Blue" parent="AppTheme.SC.Dark.Colored.Blue.v23"/>
+
+</resources>

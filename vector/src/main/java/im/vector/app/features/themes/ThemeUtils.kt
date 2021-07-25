@@ -400,6 +400,8 @@ object ThemeUtils {
                     "denim" -> R.style.AppTheme_SC_Light_Denim
                     "indigo" -> R.style.AppTheme_SC_Light_Indigo
                     "lava" -> R.style.AppTheme_SC_Light_Lava
+                    "blue" -> R.style.AppTheme_SC_Light_Blue
+                    "greendark" -> R.style.AppTheme_SC_Light_GreenDark
                     // Do not change this comment for automatic light theme insertion
                     else -> resId
                 }
@@ -423,6 +425,8 @@ object ThemeUtils {
                     "denim" -> R.style.AppTheme_SC_Denim
                     "indigo" -> R.style.AppTheme_SC_Indigo
                     "lava" -> R.style.AppTheme_SC_Lava
+                    "blue" -> R.style.AppTheme_SC_Blue
+                    "greendark" -> R.style.AppTheme_SC_GreenDark
                     // Do not change this comment for automatic black theme insertion
                     else -> resId
                 }
@@ -446,6 +450,8 @@ object ThemeUtils {
                     "denim" -> R.style.AppTheme_SC_Dark_Denim
                     "indigo" -> R.style.AppTheme_SC_Dark_Indigo
                     "lava" -> R.style.AppTheme_SC_Dark_Lava
+                    "blue" -> R.style.AppTheme_SC_Dark_Blue
+                    "greendark" -> R.style.AppTheme_SC_Dark_GreenDark
                     // Do not change this comment for automatic dark theme insertion
                     else -> resId
                 }
@@ -469,6 +475,8 @@ object ThemeUtils {
                     "denim" -> R.style.AppTheme_SC_Colored_Denim
                     "indigo" -> R.style.AppTheme_SC_Colored_Indigo
                     "lava" -> R.style.AppTheme_SC_Colored_Lava
+                    "blue" -> R.style.AppTheme_SC_Colored_Blue
+                    "greendark" -> R.style.AppTheme_SC_Colored_GreenDark
                     // Do not change this comment for automatic black colored theme insertion
                     else -> resId
                 }
@@ -492,6 +500,8 @@ object ThemeUtils {
                     "denim" -> R.style.AppTheme_SC_Dark_Colored_Denim
                     "indigo" -> R.style.AppTheme_SC_Dark_Colored_Indigo
                     "lava" -> R.style.AppTheme_SC_Dark_Colored_Lava
+                    "blue" -> R.style.AppTheme_SC_Dark_Colored_Blue
+                    "greendark" -> R.style.AppTheme_SC_Dark_Colored_GreenDark
                     // Do not change this comment for automatic dark colored theme insertion
                     else -> resId
                 }

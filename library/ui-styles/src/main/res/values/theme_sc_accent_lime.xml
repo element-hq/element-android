@@ -3,8 +3,8 @@
 
     <!-- COLORS -->
 
-    <color name="accent_sc_dark_lime">#cddc39</color>
-    <color name="accent_sc_dark_lime_alpha25">#3fcddc39</color>
+    <color name="accent_sc_dark_lime">#AFB42B</color>
+    <color name="accent_sc_dark_lime_alpha25">#3fAFB42B</color>
     <color name="accent_sc_dark_lime_pale">@color/accent_sc_dark_lime</color>
     <color name="accent_sc_dark_lime_dark">@color/accent_sc_dark_lime_alpha25</color>
 

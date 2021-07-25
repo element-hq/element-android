@@ -3,8 +3,8 @@
 
     <!-- COLORS -->
 
-    <color name="accent_sc_dark_turquoise">#00FFFF</color>
-    <color name="accent_sc_dark_turquoise_alpha25">#3f00FFFF</color>
+    <color name="accent_sc_dark_turquoise">#00C1C1</color>
+    <color name="accent_sc_dark_turquoise_alpha25">#3f00C1C1</color>
     <color name="accent_sc_dark_turquoise_pale">@color/accent_sc_dark_turquoise</color>
     <color name="accent_sc_dark_turquoise_dark">@color/accent_sc_dark_turquoise_alpha25</color>
 

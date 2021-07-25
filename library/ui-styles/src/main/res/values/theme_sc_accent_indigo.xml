@@ -3,8 +3,8 @@
 
     <!-- COLORS -->
 
-    <color name="accent_sc_dark_indigo">#536DFE</color>
-    <color name="accent_sc_dark_indigo_alpha25">#3f536DFE</color>
+    <color name="accent_sc_dark_indigo">#5C6BC0</color>
+    <color name="accent_sc_dark_indigo_alpha25">#3f5C6BC0</color>
     <color name="accent_sc_dark_indigo_pale">@color/accent_sc_dark_indigo</color>
     <color name="accent_sc_dark_indigo_dark">@color/accent_sc_dark_indigo_alpha25</color>
 

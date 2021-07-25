@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- COLORS -->
+
+    <color name="accent_sc_light_blue">#2196F3</color>
+    <color name="accent_sc_light_blue_alpha25">#3f2196F3</color>
+    <color name="accent_sc_light_blue_pale">@color/accent_sc_light_blue</color>
+    <color name="accent_sc_light_blue_dark">@color/accent_sc_light_blue_alpha25</color>
+    <color name="accent_sc_light_blue_noalpha12">#e4f2fd</color>
+
+
+    <!-- STYLES -->
+
+    <style name="Vector.BottomSheet.SC.Light.Blue">
+        <item name="android:colorAccent">@color/accent_sc_light_blue</item>
+        <item name="colorAccent">@color/accent_sc_light_blue</item>
+    </style>
+
+
+    <!-- THEMES -->
+
+    <style name="AppTheme.Base.SC.Light.Blue">
+        <item name="vctr_reaction_background_on">@color/accent_sc_light_blue_noalpha12</item>
+        <item name="colorAccent">@color/accent_sc_light_blue</item>
+        <item name="android:colorAccent">@color/accent_sc_light_blue</item>
+        <item name="colorAccentPale">@color/accent_sc_light_blue_pale</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_light_blue_noalpha12</item>
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light.Blue</item>
+    </style>
+
+    <!-- Default AppTheme for usage where settings don't apply -->
+    <style name="AppTheme.SC.Light.Blue" parent="AppTheme.Base.SC.Light.Blue" />
+
+</resources>

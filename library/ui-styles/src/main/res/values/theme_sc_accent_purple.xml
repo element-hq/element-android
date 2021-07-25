@@ -3,8 +3,8 @@
 
     <!-- COLORS -->
 
-    <color name="accent_sc_dark_purple">#673ab7</color>
-    <color name="accent_sc_dark_purple_alpha25">#3f673ab7</color>
+    <color name="accent_sc_dark_purple">#9575CD</color>
+    <color name="accent_sc_dark_purple_alpha25">#3f9575CD</color>
     <color name="accent_sc_dark_purple_pale">@color/accent_sc_dark_purple</color>
     <color name="accent_sc_dark_purple_dark">@color/accent_sc_dark_purple_alpha25</color>
 
