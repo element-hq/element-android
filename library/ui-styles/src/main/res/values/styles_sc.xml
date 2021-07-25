@@ -25,11 +25,19 @@
     </style>
 
     <style name="Vector.BottomSheet.SC.Light" parent="Theme.Vector.BottomSheetDialog.Light">
+        <item name="colorPrimary">?android:colorAccent</item>
+        <item name="colorSecondary">?android:colorAccent</item>
+        <item name="colorSurface">@color/background_sc_light</item>
+        <item name="colorOnSurface">@color/text_color_primary_sc_light</item>
+        <item name="colorError">@color/element_alert_dark</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/text_color_primary_sc_light</item>
+        <item name="android:textColorLink">@color/element_link_light</item>
+        <item name="android:textColorPrimary">@color/text_color_primary_sc_light</item>
+        <item name="android:textColorSecondary">@color/text_color_secondary_sc_light</item>
         <!-- Accent color -->
         <item name="android:colorAccent">@color/accent_sc</item>
         <item name="colorAccent">@color/accent_sc</item>
-        <item name="colorPrimary">?android:colorAccent</item>
-        <item name="colorSecondary">?android:colorAccent</item>
     </style>
 
     <style name="Widget.Vector.TextInputLayout.Dark.SC" parent="Widget.Vector.TextInputLayout">
