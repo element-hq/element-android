@@ -37,8 +37,11 @@ class EventHtmlRenderer @Inject constructor(private val htmlConfigure: MatrixHtm
 
     private fun resolveCodeBlockBackground() =
         ThemeUtils.getColor(context, R.attr.code_block_bg_color)
+    private fun resolveQuoteBarColor() =
+            ThemeUtils.getColor(context, R.attr.quote_bar_color)
 
     private var codeBlockBackground: Int = resolveCodeBlockBackground()
+    private var quoteBarColor: Int = resolveQuoteBarColor()
 
     interface PostProcessor {
         fun afterRender(renderedText: Spannable)
@@ -52,6 +55,7 @@ class EventHtmlRenderer @Inject constructor(private val htmlConfigure: MatrixHtm
                             super.configureTheme(builder)
                             builder.codeBlockBackgroundColor(codeBlockBackground)
                                     .codeBackgroundColor(codeBlockBackground)
+                                    .blockQuoteColor(quoteBarColor)
                         }
                     }
             ))
@@ -60,8 +64,17 @@ class EventHtmlRenderer @Inject constructor(private val htmlConfigure: MatrixHtm
     private var markwon: Markwon = buildMarkwon()
     get() {
         val newCodeBlockBackground = resolveCodeBlockBackground()
+        val newQuoteBarColor = resolveQuoteBarColor()
+        var changed = false
         if (codeBlockBackground != newCodeBlockBackground) {
             codeBlockBackground = newCodeBlockBackground
+            changed = true
+        }
+        if (quoteBarColor != newQuoteBarColor) {
+            quoteBarColor = newQuoteBarColor
+            changed = true
+        }
+        if (changed) {
             field = buildMarkwon()
         }
         return field

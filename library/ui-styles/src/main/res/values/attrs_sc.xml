@@ -17,6 +17,7 @@
 
         <attr name="message_highlight_bg_color" format="color" />
         <attr name="code_block_bg_color" format="color" />
+        <attr name="quote_bar_color" format="color" />
 
         <attr name="user_color_pl_100" format="color" />
         <attr name="user_color_pl_95" format="color" />
