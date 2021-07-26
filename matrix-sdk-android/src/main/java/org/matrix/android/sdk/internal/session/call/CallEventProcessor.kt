@@ -20,10 +20,13 @@ import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.model.EventInsertType
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
+
+private val loggerTag = LoggerTag("CallEventProcessor", LoggerTag.VOIP)
 
 @SessionScope
 internal class CallEventProcessor @Inject constructor(private val callSignalingHandler: CallSignalingHandler)
@@ -71,14 +74,8 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
     }
 
     private fun dispatchToCallSignalingHandlerIfNeeded(event: Event) {
-        val now = System.currentTimeMillis()
         event.roomId ?: return Unit.also {
-            Timber.w("Event with no room id ${event.eventId}")
-        }
-        val age = now - (event.ageLocalTs ?: now)
-        if (age > 40_000) {
-            // Too old to ring?
-            return
+            Timber.tag(loggerTag.value).w("Event with no room id ${event.eventId}")
         }
         callSignalingHandler.onCallEvent(event)
     }

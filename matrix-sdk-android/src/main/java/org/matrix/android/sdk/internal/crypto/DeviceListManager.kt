@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.auth.data.Credentials
@@ -336,7 +337,12 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
             downloadKeysForUsersTask.execute(params)
         } catch (throwable: Throwable) {
             Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
-            onKeysDownloadFailed(filteredUsers)
+            if (throwable is CancellationException) {
+                // the crypto module is getting closed, so we cannot access the DB anymore
+                Timber.w("The crypto module is closed, ignoring this error")
+            } else {
+                onKeysDownloadFailed(filteredUsers)
+            }
             throw throwable
         }
         Timber.v("## CRYPTO | doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
