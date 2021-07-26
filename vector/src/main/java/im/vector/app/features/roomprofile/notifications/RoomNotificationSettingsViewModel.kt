@@ -25,6 +25,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.rx.rx
@@ -44,8 +45,14 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel {
-            val fragment: RoomNotificationSettingsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
+            val fragmentModelContext = (viewModelContext as FragmentViewModelContext)
+            return if (fragmentModelContext.fragment is RoomNotificationSettingsFragment) {
+                val fragment: RoomNotificationSettingsFragment = fragmentModelContext.fragment()
+                fragment.viewModelFactory.create(state)
+            } else {
+                val fragment: RoomListQuickActionsBottomSheet = fragmentModelContext.fragment()
+                fragment.roomNotificationSettingsViewModelFactory.create(state)
+            }
         }
     }
 

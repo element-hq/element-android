@@ -30,7 +30,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener

@@ -20,6 +20,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
@@ -32,6 +33,7 @@ data class RoomNotificationSettingsViewState(
         val notificationState: Async<RoomNotificationState> = Uninitialized,
 )  : MvRxState {
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
+    constructor(args: RoomListActionsArgs) : this(roomId = args.roomId)
 }
 
 data class AvatarData (
