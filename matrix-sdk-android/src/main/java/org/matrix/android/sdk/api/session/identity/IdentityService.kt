@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.session.identity
 
+import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
+
 /**
  * Provides access to the identity server configuration and services identity server can provide
  */
@@ -121,6 +123,9 @@ interface IdentityService {
      */
     suspend fun getShareStatus(threePids: List<ThreePid>): Map<ThreePid, SharedState>
 
+    suspend fun sign3pidInvitation(identiyServer: String, token: String, secret: String) : SignInvitationResult
+
     fun addListener(listener: IdentityServiceListener)
+
     fun removeListener(listener: IdentityServiceListener)
 }

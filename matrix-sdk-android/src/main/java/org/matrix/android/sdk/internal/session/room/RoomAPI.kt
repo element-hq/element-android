@@ -254,7 +254,7 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "join/{roomIdOrAlias}")
     suspend fun join(@Path("roomIdOrAlias") roomIdOrAlias: String,
                      @Query("server_name") viaServers: List<String>,
-                     @Body params: Map<String, String?>): JoinRoomResponse
+                     @Body params:  @JvmSuppressWildcards Map<String, Any>): JoinRoomResponse
 
     /**
      * Leave the given room.
