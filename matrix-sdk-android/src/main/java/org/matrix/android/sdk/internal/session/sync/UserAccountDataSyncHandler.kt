@@ -83,7 +83,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
     // If we get some direct chat invites, we synchronize the user account data including those.
     suspend fun synchronizeWithServerIfNeeded(invites: Map<String, InvitedRoomSync>) {
         if (invites.isNullOrEmpty()) return
-        val directChats = directChatsHelper.getLocalUserAccount()
+        val directChats = directChatsHelper.getLocalDirectMessages()
         var hasUpdate = false
         monarchy.doWithRealm { realm ->
             invites.forEach { (roomId, _) ->
