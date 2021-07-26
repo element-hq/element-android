@@ -53,7 +53,12 @@ object PermalinkParser {
                 .filter { it.isNotEmpty() }
                 .take(2)
 
-        val identifier = params.getOrNull(0)
+        // the base domain permalinks don't have the mxid in the first param but in the second after /user/mxid
+        var identifier = params.getOrNull(0);
+        if (identifier.equals("user")) {
+            identifier = params.getOrNull(1)
+        }
+
         val extraParameter = params.getOrNull(1)
         return when {
             identifier.isNullOrEmpty()             -> PermalinkData.FallbackLink(uri)
