@@ -146,7 +146,7 @@ class VectorCallViewModel @AssistedInject constructor(
 
         override fun onAudioDevicesChange() {
             val currentSoundDevice = callManager.audioManager.selectedDevice ?: return
-            if (currentSoundDevice == CallAudioManager.Device.PHONE) {
+            if (currentSoundDevice == CallAudioManager.Device.Phone) {
                 proximityManager.start()
             } else {
                 proximityManager.stop()
@@ -184,7 +184,7 @@ class VectorCallViewModel @AssistedInject constructor(
             callManager.addCurrentCallListener(currentCallListener)
             webRtcCall.addListener(callListener)
             val currentSoundDevice = callManager.audioManager.selectedDevice
-            if (currentSoundDevice == CallAudioManager.Device.PHONE) {
+            if (currentSoundDevice == CallAudioManager.Device.Phone) {
                 proximityManager.start()
             }
             setState {
@@ -194,7 +194,7 @@ class VectorCallViewModel @AssistedInject constructor(
                         isVideoCall = webRtcCall.mxCall.isVideoCall,
                         callState = Success(webRtcCall.mxCall.state),
                         callInfo = webRtcCall.extractCallInfo(),
-                        device = currentSoundDevice ?: CallAudioManager.Device.PHONE,
+                        device = currentSoundDevice ?: CallAudioManager.Device.Phone,
                         isLocalOnHold = webRtcCall.isLocalOnHold,
                         isRemoteOnHold = webRtcCall.isRemoteOnHold,
                         availableDevices = callManager.audioManager.availableDevices,

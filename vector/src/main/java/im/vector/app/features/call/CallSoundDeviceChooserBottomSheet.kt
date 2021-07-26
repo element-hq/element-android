@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
-import im.vector.app.R
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetGenericListBinding
@@ -52,23 +51,28 @@ class CallSoundDeviceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
     private fun render(available: Set<CallAudioManager.Device>, current: CallAudioManager.Device) {
         views.bottomSheetRecyclerView.withModels {
             available.forEach { device ->
-                bottomSheetActionItem {
-                    id(device.ordinal)
-                    textRes(device.titleRes)
-                    iconRes(device.drawableRes)
-                    selected(current == device)
-                    listener {
-                        callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(device))
-                        dismiss()
-                    }
+                val title = when (device) {
+                    is CallAudioManager.Device.WirelessHeadset -> device.name ?: getString(device.titleRes)
+                    else                                       -> getString(device.titleRes)
+                }
+
+            bottomSheetActionItem {
+                id(device.titleRes)
+                text(title)
+                iconRes(device.drawableRes)
+                selected(current == device)
+                listener {
+                    callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(device))
+                    dismiss()
                 }
             }
         }
     }
+}
 
-    companion object {
-        fun newInstance(): RoomListQuickActionsBottomSheet {
-            return RoomListQuickActionsBottomSheet()
-        }
+companion object {
+    fun newInstance(): RoomListQuickActionsBottomSheet {
+        return RoomListQuickActionsBottomSheet()
     }
+}
 }

@@ -23,6 +23,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
 import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 import java.util.HashSet
@@ -34,11 +35,11 @@ class CallAudioManager(private val context: Context, val configChange: (() -> Un
     private var audioDeviceDetector: AudioDeviceDetector? = null
     private var audioDeviceRouter: AudioDeviceRouter? = null
 
-    enum class Device(@StringRes val titleRes: Int, @DrawableRes val drawableRes: Int) {
-        PHONE(R.string.sound_device_phone,R.drawable.ic_sound_device_phone),
-        SPEAKER(R.string.sound_device_speaker,R.drawable.ic_sound_device_speaker),
-        HEADSET(R.string.sound_device_headset,R.drawable.ic_sound_device_headphone),
-        WIRELESS_HEADSET(R.string.sound_device_wireless_headset,R.drawable.ic_sound_device_headphone)
+    sealed class Device(@StringRes val titleRes: Int, @DrawableRes val drawableRes: Int) {
+        object Phone : Device(R.string.sound_device_phone, R.drawable.ic_sound_device_phone)
+        object Speaker : Device(R.string.sound_device_speaker, R.drawable.ic_sound_device_speaker)
+        object Headset : Device(R.string.sound_device_headset, R.drawable.ic_sound_device_headphone)
+        data class WirelessHeadset(val name: String?) : Device(R.string.sound_device_wireless_headset, R.drawable.ic_sound_device_wireless)
     }
 
     enum class Mode {
@@ -136,19 +137,19 @@ class CallAudioManager(private val context: Context, val configChange: (() -> Un
             userSelectedDevice = null
             return true
         }
-        val bluetoothAvailable = _availableDevices.contains(Device.WIRELESS_HEADSET)
-        val headsetAvailable = _availableDevices.contains(Device.HEADSET)
+        val availableBluetoothDevice = _availableDevices.firstOrNull { it is Device.WirelessHeadset }
+        val headsetAvailable = _availableDevices.contains(Device.Headset)
 
         // Pick the desired device based on what's available and the mode.
         var audioDevice: Device
-        audioDevice = if (bluetoothAvailable) {
-            Device.WIRELESS_HEADSET
+        audioDevice = if (availableBluetoothDevice != null) {
+            availableBluetoothDevice
         } else if (headsetAvailable) {
-            Device.HEADSET
+            Device.Headset
         } else if (mode == Mode.VIDEO_CALL) {
-            Device.SPEAKER
+            Device.Speaker
         } else {
-            Device.PHONE
+            Device.Phone
         }
         // Consider the user's selection
         if (userSelectedDevice != null && _availableDevices.contains(userSelectedDevice)) {
