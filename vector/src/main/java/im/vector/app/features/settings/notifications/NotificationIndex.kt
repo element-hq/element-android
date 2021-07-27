@@ -39,7 +39,6 @@ val PushRule.notificationIndex: NotificationIndex? get() =
         ruleMatches(this, targetRule)
     }
 
-
 private fun ruleMatches(rule: PushRule, targetRule: PushRule): Boolean {
     // Rules match if both are disabled, or if both are enabled and their highlight/sound/notify actions match up.
     return (!rule.enabled && !targetRule.enabled)

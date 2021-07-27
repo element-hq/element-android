@@ -17,8 +17,6 @@
 package im.vector.app.features.settings.notifications
 
 import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.pushrules.toJson
 
 fun getStandardAction(ruleId: String, index: NotificationIndex): StandardActions? {
     return when (ruleId) {
