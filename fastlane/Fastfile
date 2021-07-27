@@ -37,6 +37,8 @@ platform :android do
             "android.injected.signing.key.password": key_pass
         }
     )
-    upload_to_play_store
+    upload_to_play_store(
+        apk: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+    )
   end
 end
