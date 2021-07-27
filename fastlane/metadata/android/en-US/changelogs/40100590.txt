@@ -1,0 +1,3 @@
+- Update codebase to Element v1.1.14
+- Theme improvements for messages with markdown
+- Setting to choose the accent color for SC themes
