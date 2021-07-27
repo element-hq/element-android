@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.composer
 
+import android.animation.Animator
 import android.content.Context
 import android.text.format.DateUtils
 import android.util.AttributeSet
@@ -23,6 +24,7 @@ import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import com.visualizer.amplitude.AudioRecordView
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.hardware.vibrate
@@ -192,7 +194,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 views.voiceMessageLockArrow.translationY = 0F
             }
             RecordingState.LOCKING    -> {
-                views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_unlocked)
+                views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_locked)
                 val translationAmount = -distanceY.coerceIn(0F, distanceToLock)
                 views.voiceMessageMicButton.translationY = translationAmount
                 views.voiceMessageLockArrow.translationY = translationAmount
@@ -320,7 +322,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voicePlaybackWaveform.apply {
             post {
                 // TODO We could avoid recreating the whole view here and just call update() with the new value(s).
-                recreate()
+                //recreate()
                 amplitudeList.forEach { amplitude ->
                     update(amplitude)
                 }
@@ -349,6 +351,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessageTimer.isVisible = true
         views.voiceMessageSlideToCancel.alpha = 1f
         views.voiceMessageSendButton.isVisible = false
+        views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_unlocked)
     }
 
     private fun hideRecordingViews() {

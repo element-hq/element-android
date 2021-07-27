@@ -79,7 +79,11 @@ class VoiceMessageHelper @Inject constructor(
                 return outputFileUri
                         ?.toMultiPickerAudioType(context)
                         ?.apply {
-                            waveform = amplitudeList
+                            waveform = if (amplitudeList.size < 50) {
+                                amplitudeList
+                            } else {
+                                amplitudeList.chunked(amplitudeList.size / 50) { items -> items.maxOrNull() ?: 0 }
+                            }
                         }
             } ?: return null
         } catch (e: FileNotFoundException) {
@@ -154,7 +158,7 @@ class VoiceMessageHelper @Inject constructor(
 
     private fun startRecordingAmplitudes() {
         amplitudeTicker?.stop()
-        amplitudeTicker = CountUpTimer(100).apply {
+        amplitudeTicker = CountUpTimer(50).apply {
             tickListener = object : CountUpTimer.TickListener {
                 override fun onTick(milliseconds: Long) {
                     onAmplitudeTick()

@@ -74,6 +74,8 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
             holder.progressLayout.isVisible = false
         }
 
+        holder.voicePlaybackWaveform.setOnLongClickListener(attributes.itemLongClickListener)
+
         holder.voicePlaybackWaveform.post {
             holder.voicePlaybackWaveform.recreate()
             waveform.forEach { amplitude ->
