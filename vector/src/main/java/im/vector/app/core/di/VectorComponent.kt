@@ -31,6 +31,7 @@ import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
@@ -65,6 +66,7 @@ import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import javax.inject.Singleton
 
 @Component(modules = [VectorModule::class])
@@ -166,6 +168,8 @@ interface VectorComponent {
     fun webRtcCallManager(): WebRtcCallManager
 
     fun roomSummaryHolder(): RoomSummariesHolder
+
+    fun jitsiActiveConferenceHolder(): JitsiActiveConferenceHolder
 
     @Component.Factory
     interface Factory {

@@ -38,8 +38,8 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
-import im.vector.app.features.call.conference.extractConferenceUrl
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.CommandParser
@@ -67,7 +67,6 @@ import org.commonmark.renderer.html.HtmlRenderer
 import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -121,6 +120,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val chatEffectManager: ChatEffectManager,
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
+        private val activeConferenceHolder: JitsiActiveConferenceHolder,
         timelineFactory: TimelineFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
@@ -254,7 +254,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                 copy(
                         jitsiState = jitsiState.copy(
                                 confId = jitsiConfId,
-                                widgetId = jitsiWidget?.widgetId
+                                widgetId = jitsiWidget?.widgetId,
+                                hasJoined = activeConferenceHolder.isJoined(jitsiConfId)
                         )
                 )
             }
@@ -363,9 +364,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         when (action.broadcastEvent.type) {
             BroadcastEvent.Type.CONFERENCE_JOINED,
             BroadcastEvent.Type.CONFERENCE_TERMINATED -> {
-                if (action.broadcastEvent.extractConferenceUrl()?.endsWith(state.jitsiState.confId).orFalse()) {
-                    setState { copy(jitsiState = jitsiState.copy(hasJoined = action.broadcastEvent.type == BroadcastEvent.Type.CONFERENCE_JOINED)) }
-                }
+                setState { copy(jitsiState = jitsiState.copy(hasJoined = activeConferenceHolder.isJoined(jitsiState.confId))) }
             }
             else                                      -> Unit
         }
@@ -683,8 +682,9 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.invite           -> state.canInvite
             R.id.open_matrix_apps -> true
             R.id.voice_call       -> state.isWebRTCCallOptionAvailable()
-            R.id.video_call       -> state.isWebRTCCallOptionAvailable() || state.jitsiState.widgetId == null || state.jitsiState.hasJoined
-            R.id.join_conference  -> state.jitsiState.widgetId != null && !state.jitsiState.hasJoined
+            R.id.video_call       -> state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
+            // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
+            R.id.join_conference  -> state.jitsiState.confId != null && !state.jitsiState.hasJoined
             R.id.search           -> true
             R.id.dev_tools        -> vectorPreferences.developerMode()
             else                  -> false

@@ -18,7 +18,10 @@ package im.vector.app.features.home.room.detail
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.core.platform.ButtonStateView
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
@@ -26,6 +29,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 
 /**
  * Describes the current send mode:
@@ -96,7 +100,9 @@ data class RoomDetailViewState(
 
     fun isWebRTCCallOptionAvailable() = (asyncRoomSummary.invoke()?.joinedMembersCount ?: 0) <= 2
 
-    fun hasActiveJitsiWidget() = jitsiState.confId != null
+    // This checks directly on the active room widgets.
+    // It can differs for a short period of time on the JitsiState as its computed async.
+    fun hasActiveJitsiWidget() = activeRoomWidgets()?.any { it.type == WidgetType.Jitsi && it.isActive }.orFalse()
 
     fun isDm() = asyncRoomSummary()?.isDirect == true
 }
