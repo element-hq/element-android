@@ -92,4 +92,8 @@ interface StateService {
      * @param eventTypes Set of eventType to observe. If empty, all state events will be observed
      */
     fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStringValue = QueryStringValue.NoCondition): LiveData<List<Event>>
+
+    suspend fun setJoinRulePublic()
+    suspend fun setJoinRuleInviteOnly()
+    suspend fun setJoinRuleRestricted(allowList: List<String>)
 }

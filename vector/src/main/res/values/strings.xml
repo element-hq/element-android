@@ -1484,7 +1484,7 @@
     <string name="room_create_member_of_space_name_can_join">Members of Space %s can find, preview and join.</string>
     <string name="allow_space_member_to_find_and_access">Allow space members to find and access.</string>
     <string name="spaces_which_can_access">Spaces which can access</string>
-    <string name="decide_which_spaces_can_access">Decide which spaces can access this room.  If a space is selected its members will be able to find  and join Room name.</string>
+    <string name="decide_which_spaces_can_access">Decide which spaces can access this room. If a space is selected its members will be able to find and join Room name.</string>
     <string name="select_spaces">Select spaces</string>
     <string name="tap_to_edit_spaces">Tap to edit spaces</string>
     <string name="decide_who_can_find_and_join">Decide who can find and join this room.</string>
@@ -3478,6 +3478,8 @@
 
     <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone.  You’ll be able to change this in room settings anytime.</string>
     <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone.  You’ll be able to change this in room settings anytime.</string>
+    <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
+    <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
 
-    <string name="upgrade_room_for_restricted_note">Please note upgrading will make a new version of the room.  All current messages will stay in this archived room.</string>
+    <string name="upgrade_room_for_restricted_note">Please note upgrading will make a new version of the room. All current messages will stay in this archived room.</string>
 </resources>

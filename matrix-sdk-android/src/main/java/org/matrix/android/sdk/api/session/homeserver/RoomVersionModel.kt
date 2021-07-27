@@ -16,11 +16,10 @@
 
 package org.matrix.android.sdk.api.session.homeserver
 
-import com.squareup.moshi.JsonClass
-
 data class RoomVersionCapabilities(
         val defaultRoomVersion: String,
         val supportedVersion: List<RoomVersionInfo>,
+        // Keys are capabilities defined per spec, as for now knock or restricted
         val capabilities: Map<String, RoomCapabilitySupport>?
 )
 
@@ -29,7 +28,6 @@ data class RoomVersionInfo(
         val status: RoomVersionStatus
 )
 
-@JsonClass(generateAdapter = true)
 data class RoomCapabilitySupport(
         val preferred: String?,
         val support: List<String>

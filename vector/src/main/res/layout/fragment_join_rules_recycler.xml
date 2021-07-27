@@ -32,7 +32,7 @@
 
         <Button
             android:id="@+id/cancelButton"
-            style="@style/Widget.Vector.Button.Outlined"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"

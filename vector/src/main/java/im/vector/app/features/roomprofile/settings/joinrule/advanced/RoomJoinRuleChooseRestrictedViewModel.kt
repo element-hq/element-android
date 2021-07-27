@@ -188,6 +188,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
 
     fun handleSubmit() = withState { state ->
         setState { copy(updatingStatus = Loading()) }
+
         viewModelScope.launch {
             try {
                 when (state.currentRoomJoinRules) {

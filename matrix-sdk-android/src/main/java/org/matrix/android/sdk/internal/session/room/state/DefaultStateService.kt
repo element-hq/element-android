@@ -36,11 +36,13 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
+import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val stateEventDataSource: StateEventDataSource,
                                                                private val sendStateTask: SendStateTask,
-                                                               private val fileUploader: FileUploader
+                                                               private val fileUploader: FileUploader,
+                                                               private val viaParameterFinder: ViaParameterFinder
 ) : StateService {
 
     @AssistedFactory
@@ -167,5 +169,21 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 body = emptyMap(),
                 stateKey = null
         )
+    }
+
+    override suspend fun setJoinRulePublic() {
+        updateJoinRule(RoomJoinRules.PUBLIC, null)
+    }
+
+    override suspend fun setJoinRuleInviteOnly() {
+        updateJoinRule(RoomJoinRules.INVITE, null)
+    }
+
+    override suspend fun setJoinRuleRestricted(allowList: List<String>) {
+        // we need to compute correct via parameters and check if PL are correct
+        val allowEntries = allowList.map { spaceId ->
+            RoomJoinRulesAllowEntry(spaceId, viaParameterFinder.computeViaParamsForRestricted(spaceId, 3))
+        }
+        updateJoinRule(RoomJoinRules.RESTRICTED, null, allowEntries)
     }
 }
