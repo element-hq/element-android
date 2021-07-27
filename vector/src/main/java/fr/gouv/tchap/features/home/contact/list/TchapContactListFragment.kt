@@ -40,7 +40,6 @@ import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.checkPermissions
-import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.DialogInviteByIdBinding
 import im.vector.app.databinding.FragmentTchapContactListBinding
@@ -70,11 +69,6 @@ class TchapContactListFragment @Inject constructor(
         setupRecyclerView()
         setupSearchView()
         setupUserConsent()
-
-        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, requireActivity(), loadContactsActivityResultLauncher,
-                        R.string.permissions_rationale_msg_contacts)) {
-            viewModel.handle(TchapContactListAction.LoadContacts)
-        }
     }
 
     override fun onDestroyView() {
@@ -182,11 +176,13 @@ class TchapContactListFragment @Inject constructor(
         viewModel.handle(TchapContactListAction.OpenSearch)
     }
 
-    private val loadContactsActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+    private val loadContactsActivityResultLauncher = registerForPermissionsResult { allGranted, _ ->
         if (allGranted) {
             viewModel.handle(TchapContactListAction.LoadContacts)
-        } else if (deniedPermanently) {
-            activity?.onPermissionDeniedDialog(R.string.permissions_denied_add_contact)
         }
+        // TODO manage denied contact permission properly.
+//        else if (deniedPermanently) {
+//            activity?.onPermissionDeniedDialog(R.string.permissions_denied_add_contact)
+//        }
     }
 }
