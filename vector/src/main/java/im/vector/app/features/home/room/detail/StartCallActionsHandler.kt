@@ -88,8 +88,7 @@ class StartCallActionsHandler(
                     ))
                 } else {
                     if (state.hasActiveJitsiWidget()) {
-                        // A conference is already in progress!
-                        showDialogWithMessage(fragment.getString(R.string.conference_call_in_progress))
+                        // A conference is already in progress, return
                     } else {
                         MaterialAlertDialogBuilder(fragment.requireContext())
                                 .setTitle(if (isVideoCall) R.string.video_meeting else R.string.audio_meeting)

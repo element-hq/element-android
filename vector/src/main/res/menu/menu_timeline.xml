@@ -37,6 +37,12 @@
         app:showAsAction="always"
         tools:visible="true" />
 
+    <item android:id="@+id/join_conference"
+        android:title="@string/join"
+        app:actionLayout="@layout/view_join_conference"
+        app:showAsAction="always"
+        />
+
     <item
         android:id="@+id/open_matrix_apps"
         android:title="@string/room_add_matrix_apps"

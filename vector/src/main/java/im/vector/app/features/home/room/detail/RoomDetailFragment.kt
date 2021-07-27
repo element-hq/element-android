@@ -64,6 +64,7 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -806,6 +807,10 @@ class RoomDetailFragment @Inject constructor(
                 onOptionsItemSelected(menuItem)
             }
         }
+        val joinConfItem = menu.findItem(R.id.join_conference)
+        joinConfItem.actionView.findViewById<MaterialButton>(R.id.join_conference_button).setOnClickListener {
+            roomDetailViewModel.handle(RoomDetailAction.JoinJitsiCall)
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -814,7 +819,7 @@ class RoomDetailFragment @Inject constructor(
         }
         withState(roomDetailViewModel) { state ->
             // Set the visual state of the call buttons (voice/video) to enabled/disabled according to user permissions
-            val hasCallInRoom = callManager.getCallsByRoomId(state.roomId).isNotEmpty()
+            val hasCallInRoom = callManager.getCallsByRoomId(state.roomId).isNotEmpty() || state.jitsiState.hasJoined
             val callButtonsEnabled = !hasCallInRoom && when (state.asyncRoomSummary.invoke()?.joinedMembersCount) {
                 1    -> false
                 2    -> state.isAllowedToStartWebRTCCall

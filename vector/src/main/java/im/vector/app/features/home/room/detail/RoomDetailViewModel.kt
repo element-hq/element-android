@@ -60,7 +60,6 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
@@ -684,7 +683,8 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.invite           -> state.canInvite
             R.id.open_matrix_apps -> true
             R.id.voice_call       -> state.isWebRTCCallOptionAvailable()
-            R.id.video_call       -> true
+            R.id.video_call       -> state.isWebRTCCallOptionAvailable() || state.jitsiState.widgetId == null || state.jitsiState.hasJoined
+            R.id.join_conference  -> state.jitsiState.widgetId != null && !state.jitsiState.hasJoined
             R.id.search           -> true
             R.id.dev_tools        -> vectorPreferences.developerMode()
             else                  -> false
