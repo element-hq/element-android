@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings
+package im.vector.app.features.settings.notifications
 
 import im.vector.app.R
 import org.matrix.android.sdk.api.pushrules.RuleIds
 
-class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
+class VectorSettingsGlobalNotificationPreferenceFragment
     : VectorSettingsPushRuleNotificationPreferenceFragment() {
 
-    override var titleRes: Int = R.string.settings_notification_mentions_and_keywords
+    override var titleRes: Int = R.string.settings_notification_global
 
-    override val preferenceXmlRes = R.xml.vector_settings_notification_mentions_and_keywords
+    override val preferenceXmlRes = R.xml.vector_settings_notification_global
 
     override val prefKeyToPushRuleId: Map<String, String>
         get() = mapOf(
-                "SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,
-                "SETTINGS_PUSH_RULE_CONTAINING_MY_USER_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_USER_NAME,
-                "SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY" to RuleIds.RULE_ID_ROOM_NOTIF
+                "SETTINGS_PUSH_RULE_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY" to RuleIds.RULE_ID_ONE_TO_ONE_ROOM,
+                "SETTINGS_PUSH_RULE_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY" to RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS,
+                "SETTINGS_PUSH_RULE_MESSAGES_IN_E2E_ONE_ONE_CHAT_PREFERENCE_KEY" to RuleIds.RULE_ID_ONE_TO_ONE_ENCRYPTED_ROOM,
+                "SETTINGS_PUSH_RULE_MESSAGES_IN_E2E_GROUP_CHAT_PREFERENCE_KEY" to RuleIds.RULE_ID_ENCRYPTED
         )
 }

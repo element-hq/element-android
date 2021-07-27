@@ -21,7 +21,6 @@ import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.internal.session.SessionScope
-import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
@@ -51,7 +50,6 @@ internal class DefaultCallSignalingService @Inject constructor(
     }
 
     override fun getCallWithId(callId: String): MxCall? {
-        Timber.v("## VOIP getCallWithId $callId all calls ${activeCallHandler.getActiveCallsLiveData().value?.map { it.callId }}")
         return activeCallHandler.getCallWithId(callId)
     }
 

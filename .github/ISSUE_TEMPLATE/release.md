@@ -7,24 +7,24 @@ assignees: bmarty
 
 ---
 
-For the example, we are releasing the version 1.1.10
+For the example, we are releasing the version 1.1.10. Delete this line and replace 1.1.10 with the version in the issue content.
 
 ### Before the release
 
 - [ ] Weblate sync, fix lint issue if any (in a dedicated PR)
 - [ ] Check the update of the store descriptions (using Google Translate if necessary) to ensure that the changes are acceptable to be published to the stores.
+- [ ] Run the script `./tools/release/pushPlayStoreMetaData.sh`. You can check in the GooglePlay console the Activity log to check the effect.
 
 ### Do the release
 
 - [ ] Create release with gitflow, branch name `release/1.1.10`
-- [ ] Run the script `./tools/release/pushPlayStoreMetaData.sh`. You can check in the GooglePlay console the Activity log to check the effect.
 - [ ] Run `./tools/import_emojis.py` and commit the change if any.
 - [ ] Run `./tools/import_sas_strings.py` and commit the change if any. If there is no change since a while, ping Travis
 - [ ] Check the crashes from the PlayStore
-- [ ] Check the rageshake with the current dev version. For instance https://github.com/matrix-org/element-android-rageshakes/labels/1.1.10-dev
+- [ ] Check the rageshake with the current dev version: https://github.com/matrix-org/element-android-rageshakes/labels/1.1.10-dev
 - [ ] Run the integration test, and especially `UiAllScreensSanityTest.allScreensTest()`
 - [ ] Create an account on matrix.org
-- [ ] Run towncrier: `./towncrier --version v1.1.10` (add `--draft` for a preview)
+- [ ] Run towncrier: `towncrier --version v1.1.10 --draft` (remove `--draft` do write the file CHANGES.md)
 - [ ] Add file for fastlane under ./fastlane/metadata/android/en-US/changelogs
 - [ ] Push the branch and start a draft PR (will not be merged), to check that the CI is happy with all the changes.
 - [ ] Finish release with gitflow, delete the draft PR

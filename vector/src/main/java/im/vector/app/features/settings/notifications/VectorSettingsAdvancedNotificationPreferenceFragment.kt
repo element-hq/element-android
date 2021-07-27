@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.app.features.settings
+package im.vector.app.features.settings.notifications
 
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
@@ -21,6 +21,7 @@ import im.vector.app.R
 import im.vector.app.core.preference.PushRulePreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.toast
+import im.vector.app.features.settings.VectorSettingsBaseFragment
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
@@ -45,24 +46,29 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
                     preference.isVisible = false
                 } else {
                     preference.isVisible = true
-                    preference.setPushRule(ruleAndKind)
+                    val initialIndex = ruleAndKind.pushRule.notificationIndex
+                    preference.setIndex(initialIndex)
                     preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                        val newRule = preference.createNewRule(newValue as Int)
-                        if (newRule != null) {
+                        val newIndex = newValue as NotificationIndex
+                        val standardAction = getStandardAction(ruleAndKind.pushRule.ruleId, newIndex)
+                        if (standardAction != null) {
+                            val enabled = standardAction != StandardActions.Disabled
+                            val newActions = standardAction.actions
                             displayLoadingView()
 
                             lifecycleScope.launch {
                                 val result = runCatching {
                                     session.updatePushRuleActions(ruleAndKind.kind,
-                                            preference.ruleAndKind?.pushRule ?: ruleAndKind.pushRule,
-                                            newRule)
+                                            ruleAndKind.pushRule.ruleId,
+                                            enabled,
+                                            newActions)
                                 }
                                 if (!isAdded) {
                                     return@launch
                                 }
                                 hideLoadingView()
                                 result.onSuccess {
-                                    preference.setPushRule(ruleAndKind.copy(pushRule = newRule))
+                                    preference.setIndex(newIndex)
                                 }
                                 result.onFailure { failure ->
                                     // Restore the previous value

@@ -30,7 +30,7 @@ import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
 import im.vector.app.space
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -46,19 +46,20 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.rx.asObservable
 
-class SpaceRoomListSectionBuilder(
-        val session: Session,
-        val stringProvider: StringProvider,
-        val appStateHandler: AppStateHandler,
-        val viewModelScope: CoroutineScope,
-        private val suggestedRoomJoiningState: LiveData<Map<String, Async<Unit>>>,
+class RoomListSectionBuilderSpace(
+        private val session: Session,
+        private val stringProvider: StringProvider,
+        private val appStateHandler: AppStateHandler,
+        private val viewModelScope: CoroutineScope,
         private val autoAcceptInvites: AutoAcceptInvites,
-        val onDisposable: (Disposable) -> Unit,
-        val onUdpatable: (UpdatableLivePageResult) -> Unit,
-        val onlyOrphansInHome: Boolean = false
+        private val onUpdatable: (UpdatableLivePageResult) -> Unit,
+        private val suggestedRoomJoiningState: LiveData<Map<String, Async<Unit>>>,
+        private val onlyOrphansInHome: Boolean = false
 ) : RoomListSectionBuilder {
 
-    val pagedListConfig = PagedList.Config.Builder()
+    private val disposables = CompositeDisposable()
+
+    private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(10)
             .setInitialLoadSizeHint(20)
             .setEnablePlaceholders(true)
@@ -70,12 +71,15 @@ class SpaceRoomListSectionBuilder(
         val activeSpaceAwareQueries = mutableListOf<RoomListViewModel.ActiveSpaceQueryUpdater>()
         when (mode) {
             RoomListDisplayMode.PEOPLE        -> {
+                // 4 sections Invites / Fav / Dms / Low Priority
                 buildDmSections(sections, activeSpaceAwareQueries)
             }
             RoomListDisplayMode.ROOMS         -> {
+                // 6 sections invites / Fav / Rooms / Low Priority / Server notice / Suggested rooms
                 buildRoomsSections(sections, activeSpaceAwareQueries)
             }
             RoomListDisplayMode.FILTERED      -> {
+                // Used when searching for rooms
                 withQueryParams(
                         {
                             it.memberships = Membership.activeMemberships()
@@ -84,7 +88,7 @@ class SpaceRoomListSectionBuilder(
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
                             session.getFilteredPagedRoomSummariesLive(qpm)
                                     .let { updatableFilterLivePageResult ->
-                                        onUdpatable(updatableFilterLivePageResult)
+                                        onUpdatable(updatableFilterLivePageResult)
                                         sections.add(RoomsSection(name, updatableFilterLivePageResult.livePagedList))
                                     }
                         }
@@ -134,13 +138,14 @@ class SpaceRoomListSectionBuilder(
                         updater.updateForSpaceId(selectedSpace?.roomId)
                     }
                 }.also {
-                    onDisposable.invoke(it)
+                    disposables.add(it)
                 }
 
         return sections
     }
 
-    private fun buildRoomsSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
+    private fun buildRoomsSections(sections: MutableList<RoomsSection>,
+                                   activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections = sections,
@@ -248,7 +253,7 @@ class SpaceRoomListSectionBuilder(
         }.subscribe {
             liveSuggestedRooms.postValue(it)
         }.also {
-            onDisposable.invoke(it)
+            disposables.add(it)
         }
         sections.add(
                 RoomsSection(
@@ -259,9 +264,11 @@ class SpaceRoomListSectionBuilder(
         )
     }
 
-    private fun buildDmSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
+    private fun buildDmSections(sections: MutableList<RoomsSection>,
+                                activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
         if (autoAcceptInvites.showInvites()) {
-            addSection(sections = sections,
+            addSection(
+                    sections = sections,
                     activeSpaceUpdaters = activeSpaceAwareQueries,
                     nameRes = R.string.invitations_header,
                     notifyOfLocalEcho = true,
@@ -273,7 +280,8 @@ class SpaceRoomListSectionBuilder(
             }
         }
 
-        addSection(sections,
+        addSection(
+                sections,
                 activeSpaceAwareQueries,
                 R.string.bottom_action_favourites,
                 false,
@@ -284,7 +292,8 @@ class SpaceRoomListSectionBuilder(
             it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
         }
 
-        addSection(sections,
+        addSection(
+                sections,
                 activeSpaceAwareQueries,
                 R.string.bottom_action_people_x,
                 false,
@@ -292,7 +301,19 @@ class SpaceRoomListSectionBuilder(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, null)
+        }
+
+        addSection(
+                sections,
+                activeSpaceAwareQueries,
+                R.string.low_priority_header,
+                false,
+                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, true, null)
         }
     }
 
@@ -306,7 +327,6 @@ class SpaceRoomListSectionBuilder(
         withQueryParams(
                 { query.invoke(it) },
                 { roomQueryParams ->
-
                     val name = stringProvider.getString(nameRes)
                     session.getFilteredPagedRoomSummariesLive(
                             roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
@@ -349,7 +369,6 @@ class SpaceRoomListSectionBuilder(
                         }
                     }.livePagedList
                             .let { livePagedList ->
-
                                 // use it also as a source to update count
                                 livePagedList.asObservable()
                                         .observeOn(Schedulers.computation())
@@ -366,7 +385,7 @@ class SpaceRoomListSectionBuilder(
                                                             }
                                                     )
                                         }.also {
-                                            onDisposable.invoke(it)
+                                            disposables.add(it)
                                         }
 
                                 sections.add(
@@ -409,5 +428,9 @@ class SpaceRoomListSectionBuilder(
             }
             RoomListViewModel.SpaceFilterStrategy.NONE                  -> this
         }
+    }
+
+    override fun dispose() {
+        disposables.dispose()
     }
 }

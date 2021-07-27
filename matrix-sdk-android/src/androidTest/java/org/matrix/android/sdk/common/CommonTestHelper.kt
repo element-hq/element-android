@@ -78,7 +78,7 @@ class CommonTestHelper(context: Context) {
     }
 
     /**
-     * Create a Home server configuration, with Http connection allowed for test
+     * Create a homeserver configuration, with Http connection allowed for test
      */
     fun createHomeServerConfig(): HomeServerConnectionConfig {
         return HomeServerConnectionConfig.Builder()

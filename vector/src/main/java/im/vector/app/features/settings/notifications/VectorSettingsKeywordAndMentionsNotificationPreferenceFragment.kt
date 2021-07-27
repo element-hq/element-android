@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings
+package im.vector.app.features.settings.notifications
 
 import im.vector.app.R
 import org.matrix.android.sdk.api.pushrules.RuleIds
 
-class VectorSettingsOtherNotificationPreferenceFragment
+class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
     : VectorSettingsPushRuleNotificationPreferenceFragment() {
 
-    override var titleRes: Int = R.string.settings_notification_other
+    override var titleRes: Int = R.string.settings_notification_mentions_and_keywords
 
-    override val preferenceXmlRes = R.xml.vector_settings_notification_other
+    override val preferenceXmlRes = R.xml.vector_settings_notification_mentions_and_keywords
 
     override val prefKeyToPushRuleId: Map<String, String>
         get() = mapOf(
-                "SETTINGS_PUSH_RULE_INVITED_TO_ROOM_PREFERENCE_KEY" to RuleIds.RULE_ID_INVITE_ME,
-                "SETTINGS_PUSH_RULE_CALL_INVITATIONS_PREFERENCE_KEY" to RuleIds.RULE_ID_CALL,
-                "SETTINGS_PUSH_RULE_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY" to RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS,
-                "SETTINGS_PUSH_RULE_ROOMS_UPGRADED_KEY" to RuleIds.RULE_ID_TOMBSTONE
+                "SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,
+                "SETTINGS_PUSH_RULE_CONTAINING_MY_USER_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_USER_NAME,
+                "SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY" to RuleIds.RULE_ID_ROOM_NOTIF
         )
 }

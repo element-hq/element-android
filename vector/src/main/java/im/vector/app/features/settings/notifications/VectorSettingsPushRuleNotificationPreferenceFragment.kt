@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings
+package im.vector.app.features.settings.notifications
 
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.core.utils.toast
+import im.vector.app.features.settings.VectorSettingsBaseFragment
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.pushrules.RuleIds
@@ -97,27 +98,28 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
                 // The rule is not defined, hide the preference
                 preference.isVisible = false
             } else {
-                var oldRuleAndKind: PushRuleAndKind = ruleAndKind
                 preference.isVisible = true
-                preference.isChecked = ruleStatusIndexFor(ruleAndKind)
+                val initialIndex = ruleAndKind.pushRule.notificationIndex
+                preference.isChecked = initialIndex != NotificationIndex.OFF
                 preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    val newRule = createNewRule(ruleAndKind, newValue as Boolean)
+                    val newIndex = if (newValue as Boolean) NotificationIndex.NOISY else NotificationIndex.OFF
+                    val standardAction = getStandardAction(ruleAndKind.pushRule.ruleId, newIndex) ?: return@OnPreferenceChangeListener false
+                    val enabled = standardAction != StandardActions.Disabled
+                    val newActions = standardAction.actions
                     displayLoadingView()
 
                     lifecycleScope.launch {
                         val result = runCatching {
-                            session.updatePushRuleActions(
-                                    oldRuleAndKind.kind,
-                                    oldRuleAndKind.pushRule,
-                                    newRule
-                            )
+                            session.updatePushRuleActions(ruleAndKind.kind,
+                                    ruleAndKind.pushRule.ruleId,
+                                    enabled,
+                                    newActions)
                         }
                         if (!isAdded) {
                             return@launch
                         }
                         hideLoadingView()
                         result.onSuccess {
-                            oldRuleAndKind = oldRuleAndKind.copy(pushRule = newRule)
                             preference.isChecked = newValue
                         }
                         result.onFailure { failure ->
