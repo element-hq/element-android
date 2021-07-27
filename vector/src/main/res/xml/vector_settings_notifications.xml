@@ -31,10 +31,10 @@
 
         <im.vector.app.core.preference.VectorPreference
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
-            android:key="SETTINGS_NOTIFICATION_GLOBAL_PREFERENCE_KEY"
+            android:key="SETTINGS_NOTIFICATION_DEFAULT_PREFERENCE_KEY"
             android:persistent="false"
-            android:title="@string/settings_notification_global"
-            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsGlobalNotificationPreferenceFragment"
+            android:title="@string/settings_notification_default"
+            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsDefaultNotificationPreferenceFragment"
             app:isPreferenceVisible="@bool/useNotificationSettingsV2"/>
 
         <im.vector.app.core.preference.VectorPreference

@@ -31,16 +31,7 @@ import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
 abstract class VectorSettingsPushRuleNotificationPreferenceFragment
     : VectorSettingsBaseFragment() {
 
-    /**
-     * @return the bing rule status boolean
-     */
-    fun ruleStatusIndexFor(ruleAndKind: PushRuleAndKind): Boolean {
-        val rule = ruleAndKind.pushRule
-        if (rule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
-            return rule.shouldNotify() || rule.shouldNotNotify() && !rule.enabled
-        }
-        return rule.enabled && !rule.shouldNotNotify()
-    }
+    abstract val prefKeyToPushRuleId: Map<String, String>
 
     /**
      * Create a push rule with the updated checkbox status.
@@ -89,6 +80,18 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
             safeRule
         }
     }
+
+    /**
+     * @return the bing rule status boolean
+     */
+    private fun ruleStatusIndexFor(ruleAndKind: PushRuleAndKind): Boolean {
+        val rule = ruleAndKind.pushRule
+        if (rule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
+            return rule.shouldNotify() || rule.shouldNotNotify() && !rule.enabled
+        }
+        return rule.enabled && !rule.shouldNotNotify()
+    }
+
 
     override fun bindPref() {
         for (preferenceKey in prefKeyToPushRuleId.keys) {
@@ -139,5 +142,4 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
         listView?.adapter?.notifyDataSetChanged()
     }
 
-    abstract val prefKeyToPushRuleId: Map<String, String>
 }

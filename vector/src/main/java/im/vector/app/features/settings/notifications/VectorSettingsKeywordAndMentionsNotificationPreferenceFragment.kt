@@ -26,8 +26,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
 
     override val preferenceXmlRes = R.xml.vector_settings_notification_mentions_and_keywords
 
-    override val prefKeyToPushRuleId: Map<String, String>
-        get() = mapOf(
+    override val prefKeyToPushRuleId = mapOf(
                 "SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,
                 "SETTINGS_PUSH_RULE_CONTAINING_MY_USER_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_USER_NAME,
                 "SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY" to RuleIds.RULE_ID_ROOM_NOTIF

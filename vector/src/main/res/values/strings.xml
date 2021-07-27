@@ -1087,7 +1087,7 @@
     <string name="settings_notification_advanced">Advanced Notification Settings</string>
     <string name="settings_notification_by_event">Notification importance by event</string>
 
-    <string name="settings_notification_global">Global Notifications</string>
+    <string name="settings_notification_default">Default Notifications</string>
     <string name="settings_notification_mentions_and_keywords">Mentions and Keywords</string>
     <string name="settings_notification_other">Other</string>
 
