@@ -1,1 +1,1 @@
-Reorganise Advanced Notifications in to Global Notifications, Keywords and Mentions, Other (This feature is hidden in the release ui until a future release date.)
+Reorganise Advanced Notifications in to Default Notifications, Keywords and Mentions, Other (This feature is hidden in the release ui until a future release date.)
