@@ -123,7 +123,7 @@ internal class DefaultRoomService @Inject constructor(
         joinRoomTask.execute(JoinRoomTask.Params(roomIdOrAlias, reason, viaServers))
     }
 
-    override suspend fun joinRoom(roomIdOrAlias: String,
+    override suspend fun joinRoom(roomId: String,
                                   reason: String?,
                                   thirdPartySigned: SignInvitationResult) {
         joinRoomTask.execute(JoinRoomTask.Params(roomIdOrAlias, reason, thirdPartySigned = thirdPartySigned))
