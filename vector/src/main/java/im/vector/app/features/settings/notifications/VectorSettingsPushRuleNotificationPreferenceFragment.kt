@@ -92,7 +92,6 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
         return rule.enabled && !rule.shouldNotNotify()
     }
 
-
     override fun bindPref() {
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorCheckboxPreference>(preferenceKey)!!
@@ -141,5 +140,4 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
     private fun refreshDisplay() {
         listView?.adapter?.notifyDataSetChanged()
     }
-
 }
