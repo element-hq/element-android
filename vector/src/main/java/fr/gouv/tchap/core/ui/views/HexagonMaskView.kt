@@ -62,7 +62,6 @@ class HexagonMaskView @JvmOverloads constructor(
         fillPaint.apply {
             isAntiAlias = true
             style = Paint.Style.FILL
-
         }
 
         context.withStyledAttributes(attrs, R.styleable.HexagonMaskView) {
@@ -102,7 +101,6 @@ class HexagonMaskView @JvmOverloads constructor(
     public override fun onDraw(canvas: Canvas) {
         // Apply a clip to draw the bitmap inside an hexagon shape
         canvas.apply {
-
             // Fill the hexagon
             drawPath(hexagonPath, fillPaint)
 
@@ -128,7 +126,6 @@ class HexagonMaskView @JvmOverloads constructor(
 
     companion object {
         private const val DEFAULT_DIVIDER = 2
-        private const val PERCENT_VALUE = 100
         private const val MAX_RATIO = 100
         private const val DEFAULT_RATIO = 3
     }

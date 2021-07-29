@@ -23,7 +23,6 @@
             android:drawablePadding="4dp"
             android:fontFamily="sans-serif-medium"
             android:textSize="14sp"
-            android:textStyle="normal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/tchap_room_creation_forum_room_title"
@@ -36,7 +35,6 @@
             android:layout_marginTop="8dp"
             android:fontFamily="sans-serif"
             android:textColor="@color/palette_tchap_greyish_brown"
-            android:textStyle="normal"
             app:layout_constraintTop_toBottomOf="@id/roomTypeTitle"
             tools:text="@string/tchap_room_creation_forum_room_info" />
 

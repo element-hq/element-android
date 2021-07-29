@@ -71,6 +71,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
     }
 
     private fun initUserDomain() {
+        // TODO: it should be better to update User.getBestName function to compute the displayname
         val displayName = session.run { getUser(myUserId) }
                 ?.displayName
                 ?.takeUnless { it.isEmpty() }

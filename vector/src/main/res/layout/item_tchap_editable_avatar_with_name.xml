@@ -44,6 +44,7 @@
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:contentDescription="@string/room_encrypted"
+        android:visibility="gone"
         app:layout_constraintCircle="@id/itemEditableAvatarImageContainer"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="50dp"
@@ -59,8 +60,8 @@
         android:scaleType="center"
         android:src="@drawable/ic_delete"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/itemEditableAvatarImageContainer"
-        app:layout_constraintTop_toTopOf="@+id/itemEditableAvatarImageContainer"
+        app:layout_constraintEnd_toEndOf="@id/itemEditableAvatarImageContainer"
+        app:layout_constraintTop_toTopOf="@id/itemEditableAvatarImageContainer"
         app:tint="?colorError"
         tools:ignore="MissingPrefix" />
 

@@ -119,8 +119,8 @@ abstract class TchapRoomAvatarWithNameItem : EpoxyModelWithHolder<TchapRoomAvata
         }
         val isAvatarLoaded = imageUri != null || matrixItem?.avatarUrl?.isNotEmpty() == true
         holder.addImage.isVisible = enabled && !isAvatarLoaded
-        // holder.delete.isVisible = enabled && isAvatarLoaded
-        // holder.delete.onClick(deleteListener?.takeIf { enabled })
+        holder.delete.isVisible = enabled && isAvatarLoaded
+        holder.delete.onClick(deleteListener?.takeIf { enabled })
         holder.roomTypeIcon.setImageResource(when (roomType) {
             TchapRoomType.PRIVATE  -> R.drawable.ic_tchap_room_lock_red_bordered
             TchapRoomType.EXTERNAL -> R.drawable.ic_tchap_room_lock_orange_bordered
