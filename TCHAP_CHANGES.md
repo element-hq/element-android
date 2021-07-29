@@ -25,6 +25,7 @@ Improvements 🙌:
  - Implement the users/info endpoint to get users status #87
  - Design Tchap contact cells #98
  - [Contacts list] open the DM (if any) for the selected user #129
+ - [Home screen] Set up the (+) button on the rooms list #109
 
 
 =======================================================

@@ -7,7 +7,6 @@
     <string name="start_message">Bienvenue dans Tchap</string>
 
     <!-- tchap room creation -->
-    <string name="tchap_room_creation_title">Nouveau salon</string>
     <string name="tchap_action_next">Suivant</string>
     <string name="tchap_room_creation_avatar">Ajouter\nune photo</string>
     <string name="tchap_room_creation_name">Nommer le salon</string>
@@ -71,6 +70,7 @@
         <item quantity="other">Historique limité à %d jours</item>
     </plurals>
     <string name="tchap_room_invited_you">%s vous a invité</string>
+    <string name="tchap_fab_join_public_room">Rejoindre un forum depuis l\'annuaire</string>
 
     <!-- tchap scan media -->
     <string name="tchap_scan_media_unavailable">Analyse Indisponible</string>

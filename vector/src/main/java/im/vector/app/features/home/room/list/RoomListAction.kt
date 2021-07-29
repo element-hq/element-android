@@ -32,6 +32,7 @@ sealed class RoomListAction : VectorViewModelAction {
     data class JoinSuggestedRoom(val roomId: String, val viaServers: List<String>?) : RoomListAction()
     data class ShowRoomDetails(val roomId: String, val viaServers: List<String>?) : RoomListAction()
     object CreateDirectChat : RoomListAction()
-    data class OpenRoomDirectory(val filter: String) : RoomListAction()
+    data class CreateRoom(val initialName: String = "") : RoomListAction()
+    data class OpenRoomDirectory(val filter: String = "") : RoomListAction()
     object CancelSearch : RoomListAction()
 }

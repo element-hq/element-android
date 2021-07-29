@@ -1428,8 +1428,8 @@
     <string name="group_all_communities">Toutes les communautés</string>
     <string name="room_preview_no_preview">Impossible d’avoir un aperçu de ce salon</string>
     <string name="template_room_preview_world_readable_room_not_supported_yet">L’aperçu des salons visibles par tout le monde n’est pas encore pris en charge par ${app_name}</string>
-    <string name="fab_menu_create_room">Salons</string>
-    <string name="fab_menu_create_chat">Conversations privées</string>
+    <string name="fab_menu_create_room">Nouveau salon/forum</string>
+    <string name="fab_menu_create_chat">Nouveau message direct</string>
     <string name="create_room_title">Nouveau salon</string>
     <string name="create_room_action_create">CRÉER</string>
     <string name="create_room_name_hint">Nom du salon</string>

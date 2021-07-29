@@ -2135,8 +2135,8 @@
     <string name="template_room_preview_world_readable_room_not_supported_yet">The preview of world-readable room is not supported yet in ${app_name}</string>
     <string name="room_preview_not_found">This room is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
     <string name="room_preview_no_preview_join">"This room can't be previewed. Do you want to join it?"</string>
-    <string name="fab_menu_create_room">"Rooms"</string>
-    <string name="fab_menu_create_chat">"Direct Messages"</string>
+    <string name="fab_menu_create_room">"New room/forum"</string>
+    <string name="fab_menu_create_chat">"New Direct Messages"</string>
 
     <!-- Create room screen -->
     <string name="create_room_title">"New Room"</string>
