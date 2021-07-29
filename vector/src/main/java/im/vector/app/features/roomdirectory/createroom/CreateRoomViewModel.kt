@@ -28,6 +28,9 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.android.sdk.api.session.events.model.TchapEventType.STATE_ROOM_ACCESS_RULES
+import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
+import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRulesContent
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -39,11 +42,13 @@ import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
+import org.matrix.android.sdk.api.session.room.model.create.CreateRoomStateEvent
 import timber.log.Timber
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted private val initialState: CreateRoomViewState,
@@ -162,20 +167,24 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
     private fun setTopic(action: CreateRoomAction.SetTopic) = setState { copy(roomTopic = action.topic) }
 
     private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState {
+        val roomAccessRules = if (action.restricted) RoomAccessRules.RESTRICTED else RoomAccessRules.UNRESTRICTED
+        val roomVisibilityType = when {
+            action.isPublic   -> CreateRoomViewState.RoomVisibilityType.Public("")
+            action.restricted -> CreateRoomViewState.RoomVisibilityType.Private
+            else              -> CreateRoomViewState.RoomVisibilityType.External
+        }
         if (action.isPublic) {
             copy(
-                    roomVisibilityType = CreateRoomViewState.RoomVisibilityType.Public(""),
+                    roomVisibilityType = roomVisibilityType,
+                    roomAccessRules = roomAccessRules,
                     // Reset any error in the form about alias
                     asyncCreateRoomRequest = Uninitialized,
                     isEncrypted = false
             )
         } else {
             copy(
-                    roomVisibilityType = if (action.restricted) {
-                        CreateRoomViewState.RoomVisibilityType.Private
-                    } else {
-                        CreateRoomViewState.RoomVisibilityType.External
-                    },
+                    roomVisibilityType = roomVisibilityType,
+                    roomAccessRules = roomAccessRules,
                     isEncrypted = adminE2EByDefault
             )
         }
@@ -228,9 +237,11 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                             // Preset
                             preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                             roomAliasName = state.roomVisibilityType.aliasLocalPart
+                            // Room access rule
+                            setRoomAccessRule(this, RoomAccessRules.RESTRICTED)
                         }
-                        CreateRoomViewState.RoomVisibilityType.External,
-                        CreateRoomViewState.RoomVisibilityType.Private   -> {
+                        CreateRoomViewState.RoomVisibilityType.Private,
+                        CreateRoomViewState.RoomVisibilityType.External  -> {
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PRIVATE
                             // Preset
@@ -244,6 +255,9 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     if (state.isEncrypted) {
                         enableEncryption()
                     }
+
+                    // Room access rule
+                    setRoomAccessRule(this, state.roomAccessRules)
                 }
 
         // TODO: Should this be non-cancellable?
@@ -273,6 +287,26 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                         _viewEvents.post(CreateRoomViewEvents.Failure(failure))
                     }
             )
+        }
+    }
+
+    /**
+     * Force the room access rule in the room creation parameters.
+     *
+     * @param roomParams the room creation parameters.
+     * @param roomAccessRules the expected room access rules, set null to remove any existing value.
+     */
+    private fun setRoomAccessRule(roomParams: CreateRoomParams, roomAccessRules: RoomAccessRules?) {
+        // Remove the existing value if any.
+        roomParams.initialStates.removeAll { it.type == STATE_ROOM_ACCESS_RULES }
+        if (roomAccessRules != null) {
+            val roomAccessRulesEvent = CreateRoomStateEvent(
+                    STATE_ROOM_ACCESS_RULES,
+                    RoomAccessRulesContent(
+                            roomAccessRules.value
+                    ).toContent()
+            )
+            roomParams.initialStates.add(roomAccessRulesEvent)
         }
     }
 }
