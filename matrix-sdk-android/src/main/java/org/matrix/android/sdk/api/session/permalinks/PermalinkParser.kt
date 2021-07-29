@@ -55,7 +55,7 @@ object PermalinkParser {
                 .filter { it.isNotEmpty() }
                 .take(2)
 
-        // the the element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the mxid in the first param (like matrix.to does - https://matrix.to/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid
+        // the element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the mxid in the first param (like matrix.to does - https://matrix.to/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid
         var identifier = params.getOrNull(0);
         if (identifier.equals("user")) {
             identifier = params.getOrNull(1)
