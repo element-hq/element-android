@@ -39,6 +39,10 @@ class CallEventGrouper(private val myUserId: String, val callId: String) {
         return getAnswer() == null && getHangup() == null && getReject() == null
     }
 
+    fun isInCall(): Boolean{
+        return getHangup() == null && getReject() == null
+    }
+
     /**
      * Returns true if there are only events from the other side - we missed the call
      */

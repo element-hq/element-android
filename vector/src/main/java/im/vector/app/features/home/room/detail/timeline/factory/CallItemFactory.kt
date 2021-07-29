@@ -36,7 +36,6 @@ import javax.inject.Inject
 class CallItemFactory @Inject constructor(
         private val session: Session,
         private val userPreferencesProvider: UserPreferencesProvider,
-        private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper,
         private val messageColorProvider: MessageColorProvider,
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
@@ -51,10 +50,9 @@ class CallItemFactory @Inject constructor(
         val roomId = event.roomId
         val informationData = messageInformationDataFactory.create(params)
         val callKind = if (callEventGrouper.isVideo()) CallTileTimelineItem.CallKind.VIDEO else CallTileTimelineItem.CallKind.AUDIO
-        val isRinging = callEventGrouper.isRinging()
         return when (event.root.getClearType()) {
             EventType.CALL_ANSWER -> {
-                if (isRinging || showHiddenEvents) {
+                if (callEventGrouper.isInCall() || showHiddenEvents) {
                     createCallTileTimelineItem(
                             roomId = roomId,
                             callId = callEventGrouper.callId,
@@ -63,14 +61,14 @@ class CallItemFactory @Inject constructor(
                             callback = params.callback,
                             highlight = params.isHighlighted,
                             informationData = informationData,
-                            isStillActive = isRinging
+                            isStillActive = callEventGrouper.isInCall()
                     )
                 } else {
                     null
                 }
             }
             EventType.CALL_INVITE -> {
-                if (isRinging || showHiddenEvents) {
+                if (callEventGrouper.isRinging() || showHiddenEvents) {
                     createCallTileTimelineItem(
                             roomId = roomId,
                             callId = callEventGrouper.callId,
@@ -79,7 +77,7 @@ class CallItemFactory @Inject constructor(
                             callback = params.callback,
                             highlight = params.isHighlighted,
                             informationData = informationData,
-                            isStillActive = isRinging
+                            isStillActive = callEventGrouper.isRinging()
                     )
                 } else {
                     null
