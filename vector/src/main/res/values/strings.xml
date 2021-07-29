@@ -3449,9 +3449,8 @@
     <string name="a11y_delete_recorded_voice_message">Delete recorded voice message</string>
     <string name="voice_message_release_to_send_toast">Hold to record, release to send</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds left</string>
-    <string name="voice_message_tap_on_waveform_to_stop_toast">Tap on your recording to stop or listen</string>
+    <string name="voice_message_tap_to_stop_toast">Tap on your recording to stop or listen</string>
     <string name="labs_use_voice_message">Enable voice message</string>
-    <string name="voice_message_tap_to_stop_toast">Tap on the wavelength to stop and playback</string>
     <string name="error_voice_message_unable_to_play">Cannot play this voice message</string>
     <string name="error_voice_message_unable_to_record">Cannot record a voice message</string>
     <string name="error_voice_message_cannot_reply_or_edit">Cannot reply or edit while voice message is active</string>

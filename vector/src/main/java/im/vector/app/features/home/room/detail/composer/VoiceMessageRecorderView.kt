@@ -16,15 +16,14 @@
 
 package im.vector.app.features.home.room.detail.composer
 
-import android.animation.Animator
 import android.content.Context
 import android.text.format.DateUtils
 import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import com.visualizer.amplitude.AudioRecordView
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.hardware.vibrate
@@ -75,8 +74,8 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private var recordingTicker: CountUpTimer? = null
 
     private val dimensionConverter = DimensionConverter(context.resources)
-    private val minimumMove = dimensionConverter.dpToPx(10)
-    private val distanceToLock = dimensionConverter.dpToPx(34).toFloat()
+    private val minimumMove = dimensionConverter.dpToPx(16)
+    private val distanceToLock = dimensionConverter.dpToPx(48).toFloat()
     private val distanceToCancel = dimensionConverter.dpToPx(120).toFloat()
     private val rtlXMultiplier = context.resources.getInteger(R.integer.rtl_x_multiplier)
 
@@ -89,28 +88,28 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     fun initVoiceRecordingViews() {
-        hideRecordingViews()
+        hideRecordingViews(null)
         stopRecordingTicker()
 
         views.voiceMessageMicButton.isVisible = true
         views.voiceMessageSendButton.isVisible = false
+
+        views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.recreate() }
     }
 
     private fun initListeners() {
         views.voiceMessageSendButton.setOnClickListener {
             stopRecordingTicker()
-            hideRecordingViews()
+            hideRecordingViews(isCancelled = false)
             views.voiceMessageSendButton.isVisible = false
             recordingState = RecordingState.NONE
-            callback?.onVoiceRecordingEnded(isCancelled = false)
         }
 
         views.voiceMessageDeletePlayback.setOnClickListener {
             stopRecordingTicker()
-            hideRecordingViews()
+            hideRecordingViews(isCancelled = true)
             views.voiceMessageSendButton.isVisible = false
             recordingState = RecordingState.NONE
-            callback?.onVoiceRecordingEnded(isCancelled = true)
         }
 
         views.voicePlaybackWaveform.setOnClickListener {
@@ -135,6 +134,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
+                    if (recordingState == RecordingState.CANCELLED) return@setOnTouchListener false
                     handleMicActionMove(event)
                     true
                 }
@@ -162,12 +162,11 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     private fun handleMicActionUp() {
-        if (recordingState != RecordingState.LOCKED) {
+        if (recordingState != RecordingState.LOCKED && recordingState != RecordingState.NONE) {
             stopRecordingTicker()
             val isCancelled = recordingState == RecordingState.NONE || recordingState == RecordingState.CANCELLED
-            callback?.onVoiceRecordingEnded(isCancelled)
             recordingState = RecordingState.NONE
-            hideRecordingViews()
+            hideRecordingViews(isCancelled = isCancelled)
         }
     }
 
@@ -185,7 +184,10 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 val translationAmount = distanceX.coerceAtMost(distanceToCancel)
                 views.voiceMessageMicButton.translationX = -translationAmount * rtlXMultiplier
                 views.voiceMessageSlideToCancel.translationX = -translationAmount / 2 * rtlXMultiplier
-                views.voiceMessageSlideToCancel.alpha = 1 - translationAmount / distanceToCancel / 3
+                val reducedAlpha = (1 - translationAmount / distanceToCancel / 1.5).toFloat()
+                views.voiceMessageSlideToCancel.alpha = reducedAlpha
+                views.voiceMessageTimerIndicator.alpha = reducedAlpha
+                views.voiceMessageTimer.alpha = reducedAlpha
                 views.voiceMessageLockBackground.isVisible = false
                 views.voiceMessageLockImage.isVisible = false
                 views.voiceMessageLockArrow.isVisible = false
@@ -198,13 +200,13 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 val translationAmount = -distanceY.coerceIn(0F, distanceToLock)
                 views.voiceMessageMicButton.translationY = translationAmount
                 views.voiceMessageLockArrow.translationY = translationAmount
+                views.voiceMessageLockArrow.alpha = 1 - (-translationAmount / distanceToLock)
                 // Reset X translations
                 views.voiceMessageMicButton.translationX = 0F
                 views.voiceMessageSlideToCancel.translationX = 0F
             }
             RecordingState.CANCELLED  -> {
-                callback?.onVoiceRecordingEnded(true)
-                hideRecordingViews()
+                hideRecordingViews(isCancelled = true)
             }
             RecordingState.LOCKED     -> {
                 if (isRecordingStateChanged) { // Do not update views if it was already in locked state.
@@ -299,6 +301,10 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessageToast.postDelayed(hideToastRunnable, 2_000)
     }
 
+    private fun hideToast() {
+        views.voiceMessageToast.isVisible = false
+    }
+
     private val hideToastRunnable = Runnable {
         views.voiceMessageToast.isVisible = false
     }
@@ -322,7 +328,8 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voicePlaybackWaveform.apply {
             post {
                 // TODO We could avoid recreating the whole view here and just call update() with the new value(s).
-                //recreate()
+                //  Currently it is broken if a configuration change occurs.
+                recreate()
                 amplitudeList.forEach { amplitude ->
                     update(amplitude)
                 }
@@ -340,46 +347,132 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessageMicButton.updateLayoutParams<MarginLayoutParams> {
             setMargins(0, 0, 0, 0)
         }
+        views.voiceMessageMicButton.animate().scaleX(1.5f).scaleY(1.5f).setDuration(300).start()
+
         views.voiceMessageLockBackground.isVisible = true
-        views.voiceMessageLockBackground.animate().setDuration(300).translationY(-dimensionConverter.dpToPx(148).toFloat()).start()
+        views.voiceMessageLockBackground.animate().setDuration(300).translationY(-dimensionConverter.dpToPx(180).toFloat()).start()
         views.voiceMessageLockImage.isVisible = true
         views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_unlocked)
-        views.voiceMessageLockImage.animate().setDuration(500).translationY(-dimensionConverter.dpToPx(148).toFloat()).start()
+        views.voiceMessageLockImage.animate().setDuration(500).translationY(-dimensionConverter.dpToPx(180).toFloat()).start()
         views.voiceMessageLockArrow.isVisible = true
+        views.voiceMessageLockArrow.alpha = 1f
         views.voiceMessageSlideToCancel.isVisible = true
         views.voiceMessageTimerIndicator.isVisible = true
         views.voiceMessageTimer.isVisible = true
         views.voiceMessageSlideToCancel.alpha = 1f
+        views.voiceMessageTimerIndicator.alpha = 1f
+        views.voiceMessageTimer.alpha = 1f
         views.voiceMessageSendButton.isVisible = false
-        views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_unlocked)
     }
 
-    private fun hideRecordingViews() {
-        views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic)
-        views.voiceMessageMicButton.animate().translationX(0f).translationY(0f).setDuration(0).start()
-        views.voiceMessageMicButton.updateLayoutParams<MarginLayoutParams> {
-            if (rtlXMultiplier == -1) {
-                // RTL
-                setMargins(dimensionConverter.dpToPx(10), 0, 0, dimensionConverter.dpToPx(12))
-            } else {
-                setMargins(0, 0, dimensionConverter.dpToPx(12), dimensionConverter.dpToPx(10))
-            }
+    private fun hideRecordingViews(isCancelled: Boolean?) {
+        // We need to animate the lock image first
+        if (recordingState != RecordingState.LOCKED || isCancelled.orFalse()) {
+            views.voiceMessageLockImage.isVisible = false
+            views.voiceMessageLockImage.animate().translationY(0f).start()
+            views.voiceMessageLockBackground.isVisible = false
+            views.voiceMessageLockBackground.animate().translationY(0f).start()
+        } else {
+            animateLockImageWithBackground()
         }
-        views.voiceMessageLockBackground.isVisible = false
-        views.voiceMessageLockBackground.animate().translationY(0f).start()
-        views.voiceMessageLockImage.isVisible = false
-        views.voiceMessageLockImage.animate().translationY(0f).start()
         views.voiceMessageLockArrow.isVisible = false
         views.voiceMessageLockArrow.animate().translationY(0f).start()
         views.voiceMessageSlideToCancel.isVisible = false
         views.voiceMessageSlideToCancel.animate().translationX(0f).translationY(0f).start()
-        views.voiceMessageTimerIndicator.isVisible = false
-        views.voiceMessageTimer.isVisible = false
         views.voiceMessagePlaybackLayout.isVisible = false
+
+        if (recordingState != RecordingState.LOCKED) {
+            views.voiceMessageMicButton
+                    .animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .translationX(0f)
+                    .translationY(0f)
+                    .setDuration(150)
+                    .withEndAction {
+                        views.voiceMessageTimerIndicator.isVisible = false
+                        views.voiceMessageTimer.isVisible = false
+                        resetMicButtonUi()
+                        isCancelled?.let {
+                            callback?.onVoiceRecordingEnded(it)
+                        }
+                    }
+                    .start()
+        } else {
+            views.voiceMessageTimerIndicator.isVisible = false
+            views.voiceMessageTimer.isVisible = false
+            views.voiceMessageMicButton.apply {
+                scaleX = 1f
+                scaleY = 1f
+                translationX = 0f
+                translationY  = 0f
+            }
+            isCancelled?.let {
+                callback?.onVoiceRecordingEnded(it)
+            }
+        }
+
+        // Hide toasts if user cancelled recording before the timeout of the toast.
+        if (recordingState == RecordingState.CANCELLED || recordingState == RecordingState.NONE) {
+            hideToast()
+        }
+    }
+
+    private fun resetMicButtonUi() {
+        views.voiceMessageMicButton.isVisible = true
+        views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic)
+        views.voiceMessageMicButton.updateLayoutParams<MarginLayoutParams> {
+            if (rtlXMultiplier == -1) {
+                // RTL
+                setMargins(dimensionConverter.dpToPx(12), 0, 0, dimensionConverter.dpToPx(12))
+            } else {
+                setMargins(0, 0, dimensionConverter.dpToPx(12), dimensionConverter.dpToPx(12))
+            }
+        }
+    }
+
+    private fun animateLockImageWithBackground() {
+        views.voiceMessageLockBackground.updateLayoutParams {
+            height = dimensionConverter.dpToPx(78)
+        }
+        views.voiceMessageLockBackground.apply {
+            animate()
+                    .scaleX(0f)
+                    .scaleY(0f)
+                    .setDuration(400L)
+                    .withEndAction {
+                        updateLayoutParams {
+                            height = dimensionConverter.dpToPx(180)
+                        }
+                        isVisible = false
+                        scaleX = 1f
+                        scaleY = 1f
+                        animate().translationY(0f).start()
+                    }
+                    .start()
+        }
+
+        // Lock image animation
+        views.voiceMessageMicButton.isInvisible = true
+        views.voiceMessageLockImage.apply {
+            isVisible = true
+            animate()
+                    .scaleX(0f)
+                    .scaleY(0f)
+                    .setDuration(400L)
+                    .withEndAction {
+                        isVisible = false
+                        scaleX = 1f
+                        scaleY = 1f
+                        translationY = 0f
+                        resetMicButtonUi()
+                    }
+                    .start()
+        }
     }
 
     private fun showRecordingLockedViews() {
-        hideRecordingViews()
+        hideRecordingViews(null)
         views.voiceMessagePlaybackLayout.isVisible = true
         views.voiceMessagePlaybackTimerIndicator.isVisible = true
         views.voicePlaybackControlButton.isVisible = false

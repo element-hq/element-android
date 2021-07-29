@@ -9,21 +9,21 @@
 
     <View
         android:id="@+id/voiceMessageLockBackground"
-        android:layout_width="52dp"
-        android:layout_height="160dp"
+        android:layout_width="78dp"
+        android:layout_height="180dp"
         android:background="@drawable/bg_voice_message_lock"
         android:backgroundTint="?vctr_system"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/voiceMessageMicButton"
-        tools:translationY="-148dp"
+        tools:translationY="-180dp"
         tools:visibility="visible" />
 
     <ImageButton
         android:id="@+id/voiceMessageMicButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginBottom="12dp"
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/a11y_start_voice_message"
@@ -64,8 +64,10 @@
         android:id="@+id/voiceMessageTimer"
         style="@style/Widget.Vector.TextView.Body.Medium"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="4dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
         android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/voiceMessageMicButton"
@@ -91,23 +93,35 @@
         app:layout_constraintTop_toTopOf="@id/voiceMessageMicButton"
         tools:visibility="visible" />
 
+    <!-- Slide to cancel text should go under this view -->
+    <View
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:background="?android:colorBackground"
+        app:layout_constraintBottom_toBottomOf="@id/voiceMessageTimer"
+        app:layout_constraintStart_toEndOf="@id/voiceMessageTimer"
+        app:layout_constraintTop_toTopOf="@id/voiceMessageTimer" />
+
     <ImageView
         android:id="@+id/voiceMessageLockImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="28dp"
         android:contentDescription="@string/a11y_lock_voice_message"
         android:src="@drawable/ic_voice_message_unlocked"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@id/voiceMessageLockBackground"
-        app:layout_constraintStart_toStartOf="@id/voiceMessageLockBackground"
+        app:layout_constraintEnd_toEndOf="@id/voiceMessageMicButton"
+        app:layout_constraintStart_toStartOf="@id/voiceMessageMicButton"
         app:layout_constraintTop_toTopOf="@id/voiceMessageLockBackground"
+        tools:translationY="-180dp"
         tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/voiceMessageLockArrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="14dp"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_voice_lock_arrow"
         android:visibility="gone"
@@ -173,7 +187,7 @@
                 android:layout_height="32dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/bg_voice_play_pause_button"
-                android:backgroundTint="?android:colorBackground"
+                android:backgroundTint="?vctr_system"
                 android:contentDescription="@string/a11y_play_voice_message"
                 android:src="@drawable/ic_play_pause_play"
                 app:layout_constraintBottom_toBottomOf="parent"
