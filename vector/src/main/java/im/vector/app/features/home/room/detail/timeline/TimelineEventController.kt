@@ -41,6 +41,7 @@ import im.vector.app.features.home.room.detail.timeline.factory.MergedHeaderItem
 import im.vector.app.features.home.room.detail.timeline.factory.ReadReceiptsItemFactory
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
+import im.vector.app.features.home.room.detail.timeline.helper.CallEventGrouper
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineControllerInterceptorHelper
@@ -48,7 +49,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventDiff
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem_
@@ -56,7 +56,6 @@ import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptsItem
-import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
@@ -164,6 +163,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     // Map eventId to adapter position
     private val adapterPositionMapping = HashMap<String, Int>()
+    private val callEventGroupers = HashMap<String, CallEventGrouper>()
+    private val receiptsByEvent = HashMap<String, MutableList<ReadReceipt>>()
     private val modelCache = arrayListOf<CacheItemData?>()
     private var currentSnapshot: List<TimelineEvent> = emptyList()
     private var inSubmitList: Boolean = false
@@ -353,8 +354,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         if (modelCache.isEmpty()) {
             return
         }
-        val receiptsByEvents = getReadReceiptsByShownEvent()
-        val lastSentEventWithoutReadReceipts = searchLastSentEventWithoutReadReceipts(receiptsByEvents)
+        preprocessReverseEvents()
+        val lastSentEventWithoutReadReceipts = searchLastSentEventWithoutReadReceipts(receiptsByEvent)
         (0 until modelCache.size).forEach { position ->
             val event = currentSnapshot[position]
             val nextEvent = currentSnapshot.nextOrNull(position)
@@ -362,22 +363,28 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val nextDisplayableEvent = currentSnapshot.subList(position + 1, currentSnapshot.size).firstOrNull {
                 timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId)
             }
-            val params = TimelineItemFactoryParams(
-                    event = event,
-                    prevEvent = prevEvent,
-                    nextEvent = nextEvent,
-                    nextDisplayableEvent = nextDisplayableEvent,
-                    partialState = partialState,
-                    lastSentEventIdWithoutReadReceipts = lastSentEventWithoutReadReceipts,
-                    callback = callback
-            )
             // Should be build if not cached or if model should be refreshed
             if (modelCache[position] == null || modelCache[position]?.isCacheable == false) {
+                val callEventGrouper = if (EventType.isCallEvent(event.root.getClearType())) {
+                    (event.root.getClearContent()?.get("call_id") as? String)?.let { callId -> callEventGroupers[callId] }
+                } else {
+                    null
+                }
+                val params = TimelineItemFactoryParams(
+                        event = event,
+                        prevEvent = prevEvent,
+                        nextEvent = nextEvent,
+                        nextDisplayableEvent = nextDisplayableEvent,
+                        partialState = partialState,
+                        lastSentEventIdWithoutReadReceipts = lastSentEventWithoutReadReceipts,
+                        callback = callback,
+                        callEventGrouper = callEventGrouper
+                )
                 modelCache[position] = buildCacheItem(params)
             }
             val itemCachedData = modelCache[position] ?: return@forEach
             // Then update with additional models if needed
-            modelCache[position] = itemCachedData.enrichWithModels(event, nextEvent, position, receiptsByEvents)
+            modelCache[position] = itemCachedData.enrichWithModels(event, nextEvent, position, receiptsByEvent)
         }
     }
 
@@ -450,15 +457,18 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         return null
     }
 
-    private fun getReadReceiptsByShownEvent(): Map<String, List<ReadReceipt>> {
-        val receiptsByEvent = HashMap<String, MutableList<ReadReceipt>>()
-        if (!userPreferencesProvider.shouldShowReadReceipts()) {
-            return receiptsByEvent
-        }
-        var lastShownEventId: String? = null
+    private fun preprocessReverseEvents() {
+        receiptsByEvent.clear()
+        callEventGroupers.clear()
         val itr = currentSnapshot.listIterator(currentSnapshot.size)
+        var lastShownEventId: String? = null
         while (itr.hasPrevious()) {
             val event = itr.previous()
+            if (EventType.isCallEvent(event.root.getClearType())) {
+                (event.root.getClearContent()?.get("call_id") as? String)?.also { callId ->
+                    callEventGroupers.getOrPut(callId) { CallEventGrouper(session.myUserId, callId) }.add(event)
+                }
+            }
             val currentReadReceipts = ArrayList(event.readReceipts).filter {
                 it.user.userId != session.myUserId
             }
@@ -471,7 +481,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val existingReceipts = receiptsByEvent.getOrPut(lastShownEventId) { ArrayList() }
             existingReceipts.addAll(currentReadReceipts)
         }
-        return receiptsByEvent
     }
 
     private fun buildDaySeparatorItem(originServerTs: Long?): DaySeparatorItem {

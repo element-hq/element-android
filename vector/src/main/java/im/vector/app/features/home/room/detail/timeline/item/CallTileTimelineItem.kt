@@ -15,6 +15,7 @@
  */
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.content.res.Resources
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -72,8 +73,20 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             CallStatus.IN_CALL  -> renderInCallStatus(holder)
             CallStatus.REJECTED -> renderRejectedStatus(holder)
             CallStatus.ENDED    -> renderEndedStatus(holder)
+            CallStatus.MISSED   -> renderMissedStatus(holder)
         }
         renderSendState(holder.view, null, holder.failedToSendIndicator)
+    }
+
+    private fun renderMissedStatus(holder: Holder) {
+        holder.acceptRejectViewGroup.isVisible = false
+        holder.statusView.isVisible = true
+        val status = if (attributes.callKind == CallKind.VIDEO) {
+            holder.resources.getQuantityString(R.plurals.missed_video_call, 1)
+        } else {
+            holder.resources.getQuantityString(R.plurals.missed_audio_call, 1)
+        }
+        holder.statusView.text = status
     }
 
     private fun renderEndedStatus(holder: Holder) {
@@ -91,7 +104,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
                 attributes.callback?.onTimelineItemAction(callbackAction)
             }
         } else {
-            holder.statusView.text = holder.view.context.getString(R.string.call_tile_other_declined, attributes.userOfInterest.getBestName())
+            holder.statusView.text = holder.resources.getString(R.string.call_tile_other_declined, attributes.userOfInterest.getBestName())
         }
     }
 
@@ -166,7 +179,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
                 if (attributes.informationData.sentByMe) {
                     holder.statusView.setText(R.string.call_tile_you_started_call)
                 } else {
-                    holder.statusView.text = holder.view.context.getString(R.string.call_tile_other_started_call, attributes.userOfInterest.getBestName())
+                    holder.statusView.text = holder.resources.getString(R.string.call_tile_other_started_call, attributes.userOfInterest.getBestName())
                 }
             }
         }
@@ -182,6 +195,9 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         val statusView by bind<TextView>(R.id.itemCallStatusTextView)
         val endGuideline by bind<View>(R.id.messageEndGuideline)
         val failedToSendIndicator by bind<ImageView>(R.id.messageFailToSendIndicator)
+
+        val resources: Resources
+            get() = view.context.resources
     }
 
     companion object {
@@ -215,6 +231,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         INVITED,
         IN_CALL,
         REJECTED,
+        MISSED,
         ENDED;
 
         fun isActive() = this == INVITED || this == IN_CALL
