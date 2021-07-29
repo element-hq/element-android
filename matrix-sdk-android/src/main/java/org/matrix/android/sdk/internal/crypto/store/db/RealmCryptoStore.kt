@@ -51,7 +51,6 @@ import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
-import org.matrix.android.sdk.internal.crypto.model.toEntity
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.crypto.store.SavedKeyBackupKeyInfo
@@ -280,23 +279,34 @@ internal class RealmCryptoStore @Inject constructor(
     override fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?) {
         doRealmTransaction(realmConfiguration) { realm ->
             if (devices == null) {
+                Timber.d("Remove user $userId")
                 // Remove the user
                 UserEntity.delete(realm, userId)
             } else {
                 val userEntity = UserEntity.getOrCreate(realm, userId)
-                // Add the devices
-                val currentDevices = userEntity.devices.toList()
-                val newDevices = devices.values.map { cryptoDeviceInfo -> cryptoDeviceInfo.toEntity() }
-                newDevices.forEach { deviceInfoEntity ->
-                    // Maintain first time seen
-                    val existing = currentDevices
-                            .firstOrNull { it.deviceId == deviceInfoEntity.deviceId && it.identityKey == deviceInfoEntity.identityKey }
-                    deviceInfoEntity.firstTimeSeenLocalTs = existing?.firstTimeSeenLocalTs ?: System.currentTimeMillis()
-                    realm.insertOrUpdate(deviceInfoEntity)
+                // First delete the removed devices
+                val deviceIds = devices.keys
+                userEntity.devices.iterator().forEach { deviceInfoEntity ->
+                    if (deviceInfoEntity.deviceId !in deviceIds) {
+                        Timber.d("Remove device ${deviceInfoEntity.deviceId} of user $userId")
+                        deviceInfoEntity.deleteOnCascade()
+                    }
                 }
-                // Ensure all other devices are deleted
-                userEntity.devices.clearWith { it.deleteOnCascade() }
-                userEntity.devices.addAll(newDevices)
+                // Then update existing devices or add new one
+                devices.values.forEach { cryptoDeviceInfo ->
+                    val existingDeviceInfoEntity = userEntity.devices.firstOrNull { it.deviceId == cryptoDeviceInfo.deviceId }
+                    if (existingDeviceInfoEntity == null) {
+                        // Add the device
+                        Timber.d("Add device ${cryptoDeviceInfo.deviceId} of user $userId")
+                        val newEntity = CryptoMapper.mapToEntity(cryptoDeviceInfo)
+                        newEntity.firstTimeSeenLocalTs = System.currentTimeMillis()
+                        userEntity.devices.add(newEntity)
+                    } else {
+                        // Update the device
+                        Timber.d("Update device ${cryptoDeviceInfo.deviceId} of user $userId")
+                        CryptoMapper.updateDeviceInfoEntity(existingDeviceInfoEntity, cryptoDeviceInfo)
+                    }
+                }
             }
         }
     }

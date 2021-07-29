@@ -77,7 +77,3 @@ data class CryptoDeviceInfo(
 internal fun CryptoDeviceInfo.toRest(): DeviceKeys {
     return CryptoInfoMapper.map(this)
 }
-
-internal fun CryptoDeviceInfo.toEntity(): DeviceInfoEntity {
-    return CryptoMapper.mapToEntity(this)
-}
