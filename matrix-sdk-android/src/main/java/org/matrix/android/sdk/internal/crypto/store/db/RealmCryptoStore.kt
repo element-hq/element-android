@@ -937,7 +937,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getDeviceKeysUploaded(): Boolean {
+    override fun areDeviceKeysUploaded(): Boolean {
         return doWithRealm(realmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.deviceKeysSentToServer
         } ?: false

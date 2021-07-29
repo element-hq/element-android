@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
-// TODO Give a way to include other initial states
 open class CreateRoomParams {
     /**
      * A public visibility indicates that the room will be shown in the published room list.
@@ -102,6 +101,13 @@ open class CreateRoomParams {
      * Future versions of the specification may allow the server to clobber other keys.
      */
     val creationContent = mutableMapOf<String, Any>()
+
+    /**
+     * A list of state events to set in the new room. This allows the user to override the default state events
+     * set in the new room. The expected format of the state events are an object with type, state_key and content keys set.
+     * Takes precedence over events set by preset, but gets overridden by name and topic keys.
+     */
+    val initialStates = mutableListOf<CreateRoomStateEvent>()
 
     /**
      * Set to true to disable federation of this room.
