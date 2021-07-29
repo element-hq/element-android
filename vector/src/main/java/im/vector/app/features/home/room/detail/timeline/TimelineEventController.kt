@@ -230,9 +230,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     private val interceptorHelper = TimelineControllerInterceptorHelper(
             ::positionOfReadMarker,
-            adapterPositionMapping,
-            userPreferencesProvider,
-            callManager
+            adapterPositionMapping
     )
 
     init {

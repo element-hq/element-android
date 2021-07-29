@@ -46,7 +46,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         get() = attributes
 
     override fun isCacheable(): Boolean {
-        return attributes.callKind != CallKind.CONFERENCE
+        return attributes.callKind == CallKind.CONFERENCE
     }
 
     @EpoxyAttribute
