@@ -283,21 +283,20 @@ internal class RealmCryptoStore @Inject constructor(
                 // Remove the user
                 UserEntity.delete(realm, userId)
             } else {
-                UserEntity.getOrCreate(realm, userId)
-                        .let { u ->
-                            // Add the devices
-                            val currentKnownDevices = u.devices.toList()
-                            val new = devices.map { entry -> entry.value.toEntity() }
-                            new.forEach { entity ->
-                                // Maintain first time seen
-                                val existing = currentKnownDevices.firstOrNull { it.deviceId == entity.deviceId && it.identityKey == entity.identityKey }
-                                entity.firstTimeSeenLocalTs = existing?.firstTimeSeenLocalTs ?: System.currentTimeMillis()
-                                realm.insertOrUpdate(entity)
-                            }
-                            // Ensure all other devices are deleted
-                            u.devices.clearWith { it.deleteOnCascade() }
-                            u.devices.addAll(new)
-                        }
+                val userEntity = UserEntity.getOrCreate(realm, userId)
+                // Add the devices
+                val currentDevices = userEntity.devices.toList()
+                val newDevices = devices.values.map { cryptoDeviceInfo -> cryptoDeviceInfo.toEntity() }
+                newDevices.forEach { deviceInfoEntity ->
+                    // Maintain first time seen
+                    val existing = currentDevices
+                            .firstOrNull { it.deviceId == deviceInfoEntity.deviceId && it.identityKey == deviceInfoEntity.identityKey }
+                    deviceInfoEntity.firstTimeSeenLocalTs = existing?.firstTimeSeenLocalTs ?: System.currentTimeMillis()
+                    realm.insertOrUpdate(deviceInfoEntity)
+                }
+                // Ensure all other devices are deleted
+                userEntity.devices.clearWith { it.deleteOnCascade() }
+                userEntity.devices.addAll(newDevices)
             }
         }
     }
