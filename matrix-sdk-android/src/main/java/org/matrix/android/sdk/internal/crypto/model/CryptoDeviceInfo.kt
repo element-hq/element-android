@@ -18,8 +18,6 @@ package org.matrix.android.sdk.internal.crypto.model
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceKeys
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
-import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMapper
-import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntity
 
 data class CryptoDeviceInfo(
         val deviceId: String,
