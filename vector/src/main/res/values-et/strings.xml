@@ -533,7 +533,7 @@
     <string name="e2e_re_request_encryption_key">Küsi oma muudest sessioonidest krüptimisvõtmed uuesti.</string>
     <string name="e2e_re_request_encryption_key_sent">Võtmete jagamise päring on saadetud.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Päring on saadetud</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Palun käivita ${app_name} mõnes muus seadmes, mis suudab neid sõnumeid dekrüptoda ja seega saata krüptovõtmeid siia sessiooni.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Palun käivita ${app_name} mõnes muus seadmes, mis suudab neid sõnumeid dekrüptida ja seega saata krüptovõtmeid siia sessiooni.</string>
     <string name="read_receipts_list">Lugemisteatiste loend</string>
     <string name="groups_list">Gruppide loend</string>
     <plurals name="membership_changes">
@@ -1197,7 +1197,7 @@
     <string name="room_resend_unsent_messages">Saada saatmata sõnumid uuesti</string>
     <string name="room_delete_unsent_messages">Kustuta saatmata sõnumid</string>
     <string name="room_message_file_not_found">Faili ei leidunud</string>
-    <string name="room_do_not_have_permission_to_post">Sul ei ole õigusi siia jututuppa kirjutamiseks</string>
+    <string name="room_do_not_have_permission_to_post">Sul ei ole õigusi siia jututuppa kirjutamiseks.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d uus sõnum</item>
         <item quantity="other">%d uut sõnumit</item>
@@ -1608,7 +1608,7 @@
     <string name="deactivate_account_submit">Deaktiveeri konto</string>
     <string name="error_empty_field_enter_user_name">Palun sisesta kasutajanimi.</string>
     <string name="error_empty_field_your_password">Palun sisesta oma salasõna.</string>
-    <string name="room_tombstone_versioned_description">See jututuba on asendatud teise jututoaga ning ei ole enam kasutusel</string>
+    <string name="room_tombstone_versioned_description">See jututuba on asendatud teise jututoaga ning ei ole enam kasutusel.</string>
     <string name="room_tombstone_continuation_link">Vestlus jätkub siin</string>
     <string name="room_tombstone_continuation_description">See jututuba on järg varasemale vestlusele</string>
     <string name="room_tombstone_predecessor_link">Vanemate sõnumite nägemiseks klõpsi siin</string>
@@ -2815,4 +2815,29 @@
     <string name="create_space_alias_hint">Kogukonnakeskuse aadressid</string>
     <string name="space_settings_alias_subtitle">Selle kogukonnakeskuse hallatud ja nähtavad aadressid.</string>
     <string name="space_settings_alias_title">Kogukonnakeskuse aadressid</string>
+    <string name="settings_server_room_version_unstable">ebapüsiv</string>
+    <string name="settings_server_room_version_stable">stabiilne</string>
+    <string name="room_upgrade_to_recommended_version">Uuenda see jututoa versioon soovitatud versioonini</string>
+    <string name="room_using_unstable_room_version">Selle jututoa versioon on %s ning see koduserver on tema märkinud ebastabiilseks.</string>
+    <string name="upgrade_room_no_power_to_manage">Jututoa versiooni uuendamiseks on sul vaja õigusi</string>
+    <string name="upgrade_room_update_parent_space">Uuenda automaatselt ka kogukonnakeskust, kus jututuba osaleb</string>
+    <string name="upgrade_room_auto_invite">Kutsu automaatselt kasutajaid</string>
+    <string name="upgrade_public_room_from_to">Sa oled uuendamas jututoa versiooni: %s -&gt; %s.</string>
+    <string name="upgrade_room_warning">Jututoa versiooni uuendamine on erandlik tegevus ning soovitame seda vaid siis kui ta on vigade tõttu raskestikasutatav, tal puuduvad uued funktsionaalsused või temas leidub turvavigu.
+\nTavaliselt versiooniuuendus mõjutab vaid seda viisi kuidas andmeid töödeldakse serveris.</string>
+    <string name="upgrade_private_room">Uuenda omavaheline jututuba</string>
+    <string name="upgrade_public_room">Uuenda avalik jututuba</string>
+    <string name="upgrade">Uuenda</string>
+    <string name="it_may_take_some_time">Palun oota rahulikult. Selleks võib kuluda natuke aega.</string>
+    <string name="joining_replacement_room">Liitu asenduseks mõeldud jututoaga</string>
+    <string name="command_description_upgrade_room">Uuendab jututoa uue versioonini</string>
+    <string name="settings_server_default_room_version">Vaikimisi versioon</string>
+    <string name="settings_server_room_versions">Jututubade versioonid 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Selle asemel verifitseeri võrreldes emoji\'sid</string>
+    <string name="verification_scan_with_this_device">Skaneeri selle seadmega</string>
+    <string name="verification_scan_self_notice">Skaneeri koodi oma teise seadmega või vaheta pooli ning skaneeri selle seadmega</string>
+    <string name="hs_client_url">Koduserveri API aadress</string>
+    <string name="missing_permissions_title">Õigused on puudu</string>
+    <string name="denied_permission_camera">Selle tegevuse jaoks palun luba seadistustes sellele rakendusele kaamera kasutamine.</string>
+    <string name="denied_permission_generic">Selle tegevuse jaoks puuduvad sul õigused. Palun jaga vajalikud õigused süsteemi seadistustest.</string>
 </resources>

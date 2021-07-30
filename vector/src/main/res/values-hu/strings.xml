@@ -467,7 +467,7 @@
     <string name="room_resend_unsent_messages">El nem küldött üzenetek újraküldése</string>
     <string name="room_delete_unsent_messages">El nem küldött üzenetek törlése</string>
     <string name="room_message_file_not_found">Fájl nem található</string>
-    <string name="room_do_not_have_permission_to_post">Nincs engedélyed hogy üzenetet hagyj ebbe a szobában</string>
+    <string name="room_do_not_have_permission_to_post">Nincs engedélyed hogy üzenetet hagyj ebbe a szobában.</string>
     <string name="ssl_trust">Megbízom benne</string>
     <string name="ssl_do_not_trust">Nem bízom meg benne</string>
     <string name="ssl_logout_account">Kijelentkezés</string>
@@ -949,7 +949,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="command_description_nick">Becenév megváltoztatása</string>
     <string name="command_description_markdown">Markdown ki-,bekapcsolása</string>
     <string name="command_description_clear_scalar_token">Matrix-kisalkalmazás-token törlése</string>
-    <string name="room_tombstone_versioned_description">Ez a szoba le lett cserélve és már nem aktív</string>
+    <string name="room_tombstone_versioned_description">Ez a szoba le lett cserélve és már nem aktív.</string>
     <string name="room_tombstone_continuation_link">A beszélgetés itt folytatódik</string>
     <string name="room_tombstone_continuation_description">Ez a szoba egy másik beszélgetés folytatása</string>
     <string name="room_tombstone_predecessor_link">Régebbi üzenetek megjelenítéséhez kattints ide</string>
@@ -2820,4 +2820,29 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="create_space_alias_hint">Tér cím</string>
     <string name="space_settings_alias_subtitle">Tér címek megjelenítése és kezelése.</string>
     <string name="space_settings_alias_title">Tér címek</string>
+    <string name="room_upgrade_to_recommended_version">A szoba fejlesztése a javasolt verzióra</string>
+    <string name="room_using_unstable_room_version">A szoba verziója: %s, amelyet a Matrix-kiszolgáló instabilnak tekint.</string>
+    <string name="upgrade_room_no_power_to_manage">A szoba fejlesztéséhez engedélyre van szükséged</string>
+    <string name="upgrade_room_update_parent_space">Szülő tér automatikus frissítése</string>
+    <string name="upgrade_room_auto_invite">Felhasználók automatikus meghívása</string>
+    <string name="upgrade_public_room_from_to">A szobát fejleszted %s verzióról %s verzióra.</string>
+    <string name="upgrade_room_warning">A szoba fejlesztése haladó művelet és általában akkor ajánlott, ha a szoba valami hiba miatt instabil, hiányzik belőle valamilyen funkció vagy biztonsági hiányosság van benne.
+\nEz általában a szoba szerveren való feldolgozásának módját érinti.</string>
+    <string name="upgrade_private_room">Privát szoba fejlesztése</string>
+    <string name="upgrade_public_room">Nyilvános szoba fejlesztése</string>
+    <string name="upgrade">Fejlesztés</string>
+    <string name="it_may_take_some_time">Kérlek légy türelmes, hosszabb ideig is eltarthat.</string>
+    <string name="joining_replacement_room">Belépés a csere szobába</string>
+    <string name="command_description_upgrade_room">Szoba fejlesztése új verzióra</string>
+    <string name="settings_server_room_version_unstable">instabil</string>
+    <string name="settings_server_room_version_stable">stabil</string>
+    <string name="settings_server_default_room_version">Alapértelmezett verzió</string>
+    <string name="settings_server_room_versions">Szoba verziók 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Ellenőrzés inkább emodzsik összehasonlításával</string>
+    <string name="verification_scan_with_this_device">Beolvasás ezzel az eszközzel</string>
+    <string name="verification_scan_self_notice">Olvasd be a kódot egy másik eszközöddel vagy válts és olvasd be ezzel az eszközzel</string>
+    <string name="hs_client_url">Matrix szerver API URL</string>
+    <string name="missing_permissions_title">Hiányzó engedélyek</string>
+    <string name="denied_permission_camera">A művelethez a rendszer beállításokban engedélyezni kell a kamera használatát.</string>
+    <string name="denied_permission_generic">Ehhez a művelethez néhány engedély hiányzik amit a rendszer beállításokban lehet megadni.</string>
 </resources>

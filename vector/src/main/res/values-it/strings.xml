@@ -573,7 +573,7 @@
     <string name="room_resend_unsent_messages">Rispedisci messaggi non inviati</string>
     <string name="room_delete_unsent_messages">Elimina i messaggi non inviati</string>
     <string name="room_message_file_not_found">File non trovato</string>
-    <string name="room_do_not_have_permission_to_post">Non hai il permesso di pubblicare in questa stanza</string>
+    <string name="room_do_not_have_permission_to_post">Non hai il permesso di pubblicare in questa stanza.</string>
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Fidati</string>
     <string name="ssl_do_not_trust">Non fidarti</string>
@@ -1078,7 +1078,7 @@
     <string name="command_description_nick">Cambia il tuo nome visualizzato</string>
     <string name="command_description_markdown">Markdown attivo / spento</string>
     <string name="command_description_clear_scalar_token">Per correggere la gestione dei widget</string>
-    <string name="room_tombstone_versioned_description">Questa stanza è stata sostituita da un\'altra e non è più attiva</string>
+    <string name="room_tombstone_versioned_description">Questa stanza è stata sostituita da un\'altra e non è più attiva.</string>
     <string name="room_tombstone_continuation_link">La conversazione continua qui</string>
     <string name="room_tombstone_continuation_description">Questa stanza contiene una conversazione cominciata altrove</string>
     <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi precedenti</string>
@@ -2869,4 +2869,29 @@
     <string name="create_space_alias_hint">Indirizzo dello spazio</string>
     <string name="space_settings_alias_subtitle">Vedi e gestisci gli indirizzi di questo spazio.</string>
     <string name="space_settings_alias_title">Indirizzi dello spazio</string>
+    <string name="room_upgrade_to_recommended_version">Aggiorna la stanza alla versione consigliata</string>
+    <string name="room_using_unstable_room_version">La versione di questa stanza è %s, che questo homeserver ha segnalato come <i>instabile</i>.</string>
+    <string name="upgrade_room_no_power_to_manage">Ti serve il permesso per aggiornare una stanza</string>
+    <string name="upgrade_room_update_parent_space">Aggiorna il padre dello spazio automaticamente</string>
+    <string name="upgrade_room_auto_invite">Invita utenti automaticamente</string>
+    <string name="upgrade_public_room_from_to">Aggiornerai questa stanza dalla %s alla %s.</string>
+    <string name="upgrade_room_warning">L\'aggiornamento di una stanza è un\'azione avanzata e solitamente è consigliata quando una stanza è instabile a causa di errori, funzionalità mancanti o vulnerabilità di sicurezza.
+\nDi solito influisce solo su come la stanza viene elaborata sul server.</string>
+    <string name="upgrade_private_room">Aggiorna stanza privata</string>
+    <string name="upgrade_public_room">Aggiorna stanza pubblica</string>
+    <string name="upgrade">Aggiorna</string>
+    <string name="it_may_take_some_time">Abbi pazienza, potrebbe volerci un po\' di tempo.</string>
+    <string name="joining_replacement_room">Entra nella stanza sostitutiva</string>
+    <string name="command_description_upgrade_room">Aggiorna una stanza ad una nuova versione</string>
+    <string name="settings_server_room_version_unstable">instabile</string>
+    <string name="settings_server_room_version_stable">stabile</string>
+    <string name="settings_server_default_room_version">Versione predefinita</string>
+    <string name="settings_server_room_versions">Versioni stanza 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Verifica confrontando gli emoji</string>
+    <string name="verification_scan_with_this_device">Scansiona con questo dispositivo</string>
+    <string name="verification_scan_self_notice">Scansiona il codice con l\'altro dispositivo o scambia e scansiona con questo dispositivo</string>
+    <string name="hs_client_url">URL delle API dell\'homeserver</string>
+    <string name="missing_permissions_title">Autorizzazioni mancanti</string>
+    <string name="denied_permission_camera">Per eseguire questa azione, concedi l\'autorizzazione Fotocamera dalle impostazioni di sistema.</string>
+    <string name="denied_permission_generic">Mancano alcune autorizzazioni per eseguire questa azione, concedile dalle impostazioni di sistema.</string>
 </resources>

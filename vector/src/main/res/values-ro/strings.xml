@@ -290,4 +290,13 @@
     <string name="soft_logout_signin_title">Conectare</string>
     <string name="ssl_logout_account">Deconectare</string>
     <string name="logout">Deconectare</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Serverele care se potrivesc %s au fost eliminate din lista.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Tu ai schimbat lista de acces in aceasta cameră.</string>
+    <string name="notice_room_server_acl_updated_title">%s a schimbat lista de acces pentru această cameră.</string>
+    <string name="notice_room_server_acl_set_allowed">• Serverele care se potrivesc %s sunt permise.</string>
+    <string name="notice_room_server_acl_set_banned">• Serverele care se potrivesc %s sunt interzise.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Tu ai setat lista de acces in aceasta cameră.</string>
+    <string name="notice_end_to_end">%1$s porniți criptarea de la un capat la altul (%2$s)</string>
+    <string name="notice_made_future_room_visibility_by_you">Ați făcut istoria camerei viitoare vizibilă pentru %1$s</string>
+    <string name="notice_made_future_room_visibility">%1$s a făcut istoria camerei viitoare vizibilă pentru %2$s</string>
 </resources>

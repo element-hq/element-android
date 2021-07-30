@@ -577,7 +577,7 @@
     <string name="room_resend_unsent_messages">Reenviar mensagens não-enviadas</string>
     <string name="room_delete_unsent_messages">Deletar mensagens não-enviadas</string>
     <string name="room_message_file_not_found">Arquivo não encontrado</string>
-    <string name="room_do_not_have_permission_to_post">Você não tem permissão para postar nesta sala</string>
+    <string name="room_do_not_have_permission_to_post">Você não tem permissão para postar nesta sala.</string>
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_do_not_trust">Não confiar</string>
@@ -1121,7 +1121,7 @@
     <string name="deactivate_account_prompt_password">Para continuar, por favor entre sua senha:</string>
     <string name="deactivate_account_submit">Desativar Conta</string>
     <string name="error_empty_field_your_password">Por favor entre sua senha.</string>
-    <string name="room_tombstone_versioned_description">Esta sala tem sido substituída e não está mais ativa</string>
+    <string name="room_tombstone_versioned_description">Esta sala tem sido substituída e não está mais ativa.</string>
     <string name="room_tombstone_continuation_link">A conversa continua aqui</string>
     <string name="room_tombstone_continuation_description">Esta sala é uma continuação de uma outra conversa</string>
     <string name="room_tombstone_predecessor_link">Clique aqui para ver mensagens mais antigas</string>
@@ -2099,7 +2099,7 @@
     <string name="settings_active_sessions_signout_device">Fazer signout desta sessão</string>
     <string name="settings_failed_to_get_crypto_device_info">Nenhuma informação criptográfica disponível</string>
     <string name="settings_active_sessions_verified_device_desc">Esta sessão é confiada para mensageria segura porque você a verificou:</string>
-    <string name="settings_active_sessions_unverified_device_desc">Verifique esta sessão para marcá-la como confiada &amp; garantir-lhe acesso a mensagens encriptadas. Se você não fez signin a esta sessão sua conta pode estar comprometida:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Verifique esta sessão para marcá-la como confiada &amp; conceder-lhe acesso a mensagens encriptadas. Se você não fez signin a esta sessão sua conta pode estar comprometida:</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="one">%d sessão ativa</item>
         <item quantity="other">%d sessões ativas</item>
@@ -2107,7 +2107,7 @@
     <string name="crosssigning_verify_this_session">Verificar este login</string>
     <string name="crosssigning_other_user_not_trust">Outras(os) usuárias(os) podem não confiar nela</string>
     <string name="complete_security">Completar Segurança</string>
-    <string name="verification_open_other_to_verify">Use uma sessão existente para verificar esta aqui, garantindo-lhe acesso a mensagens encriptadas.</string>
+    <string name="verification_open_other_to_verify">Use uma sessão existente para verificar esta aqui, concedendo-lhe acesso a mensagens encriptadas.</string>
     <string name="verification_profile_verify">Verificar</string>
     <string name="verification_profile_verified">Verificada(o)</string>
     <string name="verification_profile_warning">Aviso</string>
@@ -2164,7 +2164,7 @@
     <string name="refresh">Recarregar</string>
     <string name="new_session">Novo login. Foi você\?</string>
     <string name="new_session_review">Toque para revisar &amp; verificar</string>
-    <string name="verify_new_session_notice">Use esta sessão para verificar sua nova, garantindo-lhe acesso a mensagens encriptadas.</string>
+    <string name="verify_new_session_notice">Use esta sessão para verificar sua nova, concedendo-lhe acesso a mensagens encriptadas.</string>
     <string name="verify_new_session_was_not_me">Não foi eu</string>
     <string name="verify_new_session_compromized">Sua conta pode estar comprometida</string>
     <string name="verify_cancel_self_verification_from_untrusted">Se você cancelar, você não vai ser capaz de ler mensagens encriptadas neste dispositivo, e outras(os) usuárias(os) não vão confiar nele</string>
@@ -2289,7 +2289,7 @@
     <string name="cross_signing_verify_by_text">Verificar Manualmente por Texto</string>
     <string name="crosssigning_verify_session">Verificar login</string>
     <string name="cross_signing_verify_by_emoji">Verificar Interativamente por Emoji</string>
-    <string name="confirm_your_identity">Confirme sua identidade ao verificar este login desde uma de suas outras sessões, garantindo-lhe acesso a mensagens encriptadas.</string>
+    <string name="confirm_your_identity">Confirme sua identidade ao verificar este login desde uma de suas outras sessões, concedendo-lhe acesso a mensagens encriptadas.</string>
     <string name="mark_as_verified">Marcar como Confiada</string>
     <string name="error_empty_field_choose_user_name">Por favor escolha um nome de usuária(o).</string>
     <string name="error_empty_field_choose_password">Por favor escolha uma senha.</string>
@@ -2435,7 +2435,7 @@
     <string name="settings_emails_and_phone_numbers_summary">Gerenciar emails e números de telefone linkados a sua conta Matrix</string>
     <string name="settings_text_message_sent_hint">Código</string>
     <string name="login_msisdn_notice">Por favor use o formato internacional (número de telefone deve começar com \'+\')</string>
-    <string name="confirm_your_identity_quad_s">Confirme sua identidade ao verificar este login, garantindo-lhe acesso a mensagens encriptadas.</string>
+    <string name="confirm_your_identity_quad_s">Confirme sua identidade ao verificar este login, concedendo-lhe acesso a mensagens encriptadas.</string>
     <string name="error_opening_banned_room">Não dá para abrir uma sala de onde você foi banida(o).</string>
     <string name="room_error_not_found">Não dá para encontrar esta sala. Assegure-se que ela existe.</string>
     <string name="universal_link_malformed">O link foi malformado</string>
@@ -2885,4 +2885,29 @@
     <string name="create_space_alias_hint">Endereço de espaço</string>
     <string name="space_settings_alias_subtitle">Ver e gerenciar endereços deste espaço.</string>
     <string name="space_settings_alias_title">Endereços de espaço</string>
+    <string name="room_upgrade_to_recommended_version">Fazer upgrade para a versão de sala recomendada</string>
+    <string name="room_using_unstable_room_version">Esta sala está rodando versão de sala %s, que este servidorcasa tem marcado como instável.</string>
+    <string name="upgrade_room_no_power_to_manage">Você precisa de permissão para fazer upgrade de uma sala</string>
+    <string name="upgrade_room_update_parent_space">Fazer update de pai de espaço automaticamente</string>
+    <string name="upgrade_room_auto_invite">Convidar usuárias(os) automaticamente</string>
+    <string name="upgrade_public_room_from_to">Você vai fazer upgrade desta sala de %s para %s.</string>
+    <string name="upgrade_room_warning">Fazer upgrade de uma sala é uma ação avançada e é geralmente recomendado quando uma sala está instável devido a bugs, funcionalidades faltando ou vulnerabilidades de segurança.
+\nIsto geralmente só afeta como a sala é processada no servidor.</string>
+    <string name="upgrade_private_room">Fazer upgrade de sala privada</string>
+    <string name="upgrade_public_room">Fazer upgrade de sala pública</string>
+    <string name="upgrade">Fazer upgrade</string>
+    <string name="it_may_take_some_time">Por favor seja paciente, pode levar algum tempo.</string>
+    <string name="joining_replacement_room">Juntar-se a sala de substituição</string>
+    <string name="command_description_upgrade_room">Faz upgrade de uma sala para uma nova versão</string>
+    <string name="settings_server_room_version_unstable">instável</string>
+    <string name="settings_server_room_version_stable">estável</string>
+    <string name="settings_server_default_room_version">Versão Default</string>
+    <string name="settings_server_room_versions">Versões de Sala 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Verificar ao comparar emoji em vez disso</string>
+    <string name="verification_scan_with_this_device">Scannar com este dispositivo</string>
+    <string name="verification_scan_self_notice">Scanne o código com seu outro dispositivo ou troque e scanne com este dispositivo</string>
+    <string name="hs_client_url">URL de API de Servidorcasa</string>
+    <string name="missing_permissions_title">Permissões faltando</string>
+    <string name="denied_permission_camera">Para performar esta ação, por favor conceda a permissão Câmera a partir das configurações de sistema.</string>
+    <string name="denied_permission_generic">Algumas permissões estão faltando para performar esta ação, por favor conceda as permissões a partir das configurações de sistema.</string>
 </resources>
