@@ -43,8 +43,6 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
-import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -224,14 +222,14 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
             return@withState
         }
 
-        if (state.roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Public
-                && state.roomVisibilityType.aliasLocalPart.isBlank()) {
-            // we require an alias for public rooms
-            setState {
-                copy(asyncCreateRoomRequest = Fail(CreateRoomFailure.AliasError(RoomAliasError.AliasIsBlank)))
-            }
-            return@withState
-        }
+//        if (state.roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Public
+//                && state.roomVisibilityType.aliasLocalPart.isBlank()) {
+//            // we require an alias for public rooms
+//            setState {
+//                copy(asyncCreateRoomRequest = Fail(CreateRoomFailure.AliasError(RoomAliasError.AliasIsBlank)))
+//            }
+//            return@withState
+//        }
 
         setState {
             copy(asyncCreateRoomRequest = Loading())
@@ -248,7 +246,9 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                             visibility = RoomDirectoryVisibility.PUBLIC
                             // Preset
                             preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                            roomAliasName = state.roomVisibilityType.aliasLocalPart
+                            // In case of a public room, the room alias is mandatory.
+                            // That's why, we deduce the room alias from the room name.
+                            roomAliasName = TchapUtils.createRoomAliasName(state.roomName)
                             historyVisibility = RoomHistoryVisibility.WORLD_READABLE
                         }
                         CreateRoomViewState.RoomVisibilityType.Private,

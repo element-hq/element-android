@@ -19,6 +19,7 @@ package fr.gouv.tchap.core.utils
 import im.vector.app.core.utils.safeCapitalize
 import org.matrix.android.sdk.api.MatrixPatterns
 import java.util.Locale
+import java.util.Random
 
 object TchapUtils {
 
@@ -171,6 +172,31 @@ object TchapUtils {
             }
         }
         return displayName
+    }
+
+    /**
+     * Create a room alias name with a prefix.
+     *
+     * @param prefix
+     * @return the suggested alias name.
+     */
+    fun createRoomAliasName(prefix: String): String {
+        return prefix.trim()
+                .replace("[^a-zA-Z0-9]".toRegex(), "") + getRandomString()
+    }
+
+    /**
+     * Generate a random room alias of 7 characters to avoid empty room alias.
+     */
+    fun getRandomString(): String {
+        val randomChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        val stringBuilder = StringBuilder()
+        val rnd = Random()
+        while (stringBuilder.length < 11) { // length of the random string.
+            val index = (rnd.nextFloat() * randomChars.length).toInt()
+            stringBuilder.append(randomChars[index])
+        }
+        return stringBuilder.toString()
     }
 
     private const val DISPLAY_NAME_FIRST_DELIMITER = "["
