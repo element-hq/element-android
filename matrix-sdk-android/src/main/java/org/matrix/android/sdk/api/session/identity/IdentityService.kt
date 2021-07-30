@@ -123,6 +123,15 @@ interface IdentityService {
      */
     suspend fun getShareStatus(threePids: List<ThreePid>): Map<ThreePid, SharedState>
 
+    /**
+     * When one performs a 3pid invite and the third party identifier is unknown, the home server
+     * will store the invitation in the Identity server and store some information in the room state membership event.
+     * The email invite will contains the token and secret that can be used to claim the stored invitation
+     *
+     * To aid clients who may not be able to perform crypto themselves,
+     * the identity server offers some crypto functionality to help in accepting invitations.
+     * This is less secure than the client doing it itself, but may be useful where this isn't possible.
+     */
     suspend fun sign3pidInvitation(identiyServer: String, token: String, secret: String) : SignInvitationResult
 
     fun addListener(listener: IdentityServiceListener)

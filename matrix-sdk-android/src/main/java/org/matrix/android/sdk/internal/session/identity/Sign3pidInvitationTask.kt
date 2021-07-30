@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session.identity
 
 import dagger.Lazy
 import okhttp3.OkHttpClient
-import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
+import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
@@ -34,7 +34,7 @@ internal interface Sign3pidInvitationTask : Task<Sign3pidInvitationTask.Params, 
 }
 
 internal class DefaultSign3pidInvitationTask @Inject constructor(
-        @AuthenticatedIdentity
+        @Unauthenticated
         private val okHttpClient: Lazy<OkHttpClient>,
         private val retrofitFactory: RetrofitFactory,
         @UserId private val userId: String

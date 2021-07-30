@@ -238,7 +238,6 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
                 }
             }
         }
-
     }
 
     private fun handleJoinRoom() = withState { state ->

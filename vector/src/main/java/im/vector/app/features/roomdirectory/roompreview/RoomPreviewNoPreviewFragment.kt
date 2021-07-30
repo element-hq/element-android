@@ -126,7 +126,10 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
                                         }
                                         +"\n"
                                         span {
-                                            text = getString(R.string.link_this_email_with_your_account)
+                                            text = getString(
+                                                    R.string.link_this_email_with_your_account,
+                                                    getString(R.string.link_this_email_settings_link)
+                                            )
                                                     .toSpannable()
                                                     .tappableMatchingText(getString(R.string.link_this_email_settings_link), object : ClickableSpan() {
                                                         override fun onClick(widget: View) {

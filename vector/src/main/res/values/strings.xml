@@ -3544,9 +3544,12 @@
     <string name="help_space_members">Help space members find private rooms</string>
     <string name="to_help_space_members_find_and_join">To help space members find and join a private room, go to that room’s settings by tapping on the avatar.</string>
 
+    <!-- %s will be replaced by an email at runtime -->
     <string name="this_invite_to_this_room_was_sent">This invite to this room was sent to %s which is not associated with your account</string>
+    <!-- %s will be replaced by an email at runtime -->
     <string name="this_invite_to_this_space_was_sent">This invite to this space was sent to %s which is not associated with your account</string>
-    <!-- this is the part of link_this_email_with_your_account that should be a link-->
+
     <string name="link_this_email_settings_link">Link this email with your account</string>
-    <string name="link_this_email_with_your_account">Link this email with your account in Settings to receive invites directly in Element.</string>
+    <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
+    <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
 </resources>

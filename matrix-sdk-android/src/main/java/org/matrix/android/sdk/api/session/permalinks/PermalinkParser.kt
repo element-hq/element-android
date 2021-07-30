@@ -67,12 +67,7 @@ object PermalinkParser {
             MatrixPatterns.isGroupId(identifier)   -> PermalinkData.GroupLink(groupId = identifier)
             MatrixPatterns.isRoomId(identifier)    -> {
                 // Can't rely on built in parsing because it's messing around the signurl
-                val paramList = fragment.substringAfter("?").split('&').mapNotNull {
-                    val splitNameValue = it.split("=")
-                    if (splitNameValue.size == 2) {
-                        Pair(splitNameValue[0], URLDecoder.decode(splitNameValue[1], "UTF-8"))
-                    } else null
-                }
+                val paramList = safeExtractParams(fragment)
                 val signUrl = paramList.firstOrNull { it.first == "signurl" }?.second
                 val email = paramList.firstOrNull { it.first == "email" }?.second
                 if (signUrl.isNullOrEmpty().not() && email.isNullOrEmpty().not()) {
@@ -116,6 +111,13 @@ object PermalinkParser {
             }
             else                                   -> PermalinkData.FallbackLink(uri)
         }
+    }
+
+    private fun safeExtractParams(fragment: String) = fragment.substringAfter("?").split('&').mapNotNull {
+        val splitNameValue = it.split("=")
+        if (splitNameValue.size == 2) {
+            Pair(splitNameValue[0], URLDecoder.decode(splitNameValue[1], "UTF-8"))
+        } else null
     }
 
     private fun String.getViaParameters(): List<String> {
