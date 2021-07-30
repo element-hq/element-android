@@ -182,6 +182,7 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -1371,7 +1372,7 @@ class RoomDetailFragment @Inject constructor(
                 if (state.canSendMessage) {
                     if (!views.voiceMessageRecorderView.isActive()) {
                         views.composerLayout.isVisible = true
-                        views.voiceMessageRecorderView.isVisible = vectorPreferences.labsUseVoiceMessage()
+                        views.voiceMessageRecorderView.isVisible = vectorPreferences.labsUseVoiceMessage() && views.composerLayout.text?.isBlank().orFalse()
                         views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                         views.notificationAreaView.render(NotificationAreaView.State.Hidden)
                         views.composerLayout.alwaysShowSendButton = !vectorPreferences.labsUseVoiceMessage()
