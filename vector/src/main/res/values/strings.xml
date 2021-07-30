@@ -3439,7 +3439,7 @@
     <string name="room_upgrade_to_recommended_version">Upgrade to the recommended room version</string>
 
     <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
-    
+
     <string name="a11y_start_voice_message">Start Voice Message</string>
     <string name="voice_message_slide_to_cancel">Slide to cancel</string>
     <string name="a11y_lock_voice_message">Voice Message Lock</string>
