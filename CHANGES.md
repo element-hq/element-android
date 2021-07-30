@@ -1,3 +1,15 @@
+Changes in Element v1.1.15 (2021-07-30)
+=======================================
+
+Features ✨
+----------
+ - Voice Message implementation (Currently under Labs Settings and disabled by default). ([#3598](https://github.com/vector-im/element-android/issues/3598))
+
+SDK API changes ⚠️
+------------------
+ - updatePushRuleActions signature has been updated to more explicitly enabled/disable the rule and update the actions. It's behaviour has also been changed to match the web with the enable/disable requests being sent on every invocation and actions sent when needed(not null). ([#3681](https://github.com/vector-im/element-android/issues/3681))
+
+
 Changes in Element 1.1.14 (2021-07-23)
 ======================================
 
