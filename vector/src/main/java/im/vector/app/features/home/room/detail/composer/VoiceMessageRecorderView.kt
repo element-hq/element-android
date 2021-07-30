@@ -88,6 +88,8 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     fun initVoiceRecordingViews() {
+        recordingState = RecordingState.NONE
+
         hideRecordingViews(null)
         stopRecordingTicker()
 
@@ -327,9 +329,6 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private fun renderRecordingWaveform(amplitudeList: List<Int>) {
         views.voicePlaybackWaveform.apply {
             post {
-                // TODO We could avoid recreating the whole view here and just call update() with the new value(s).
-                //  Currently it is broken if a configuration change occurs.
-                recreate()
                 amplitudeList.forEach { amplitude ->
                     update(amplitude)
                 }
