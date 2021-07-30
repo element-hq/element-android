@@ -46,6 +46,7 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomStateEvent
@@ -248,6 +249,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                             // Preset
                             preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                             roomAliasName = state.roomVisibilityType.aliasLocalPart
+                            historyVisibility = RoomHistoryVisibility.WORLD_READABLE
                         }
                         CreateRoomViewState.RoomVisibilityType.Private,
                         CreateRoomViewState.RoomVisibilityType.External  -> {
@@ -255,6 +257,8 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                             visibility = RoomDirectoryVisibility.PRIVATE
                             // Preset
                             preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
+                            // Hide the encrypted messages sent before the member is invited.
+                            historyVisibility = RoomHistoryVisibility.INVITED
                         }
                     }.exhaustive
                     // Disabling federation
