@@ -9,6 +9,7 @@ Features ✨:
  - Set up the Home screen - Rooms and Contacts lists #5
  - Support the room access rules state event #90
  - [Home screen] Toolbar + Search mode #52
+ - [Room Creation] Set up the new room creation screen
 
 Improvements 🙌:
  - Replace Element references with the actual Tchap information #1
