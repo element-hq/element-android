@@ -639,7 +639,7 @@
     <string name="room_resend_unsent_messages">Znovu odeslat neodeslané zprávy</string>
     <string name="room_delete_unsent_messages">Smazat neodeslané zprávy</string>
     <string name="room_message_file_not_found">Soubor nenalezen</string>
-    <string name="room_do_not_have_permission_to_post">Nemáte právo odesílat v této místnosti</string>
+    <string name="room_do_not_have_permission_to_post">Nemáte právo odesílat v této místnosti.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d nová zpráva</item>
         <item quantity="few">%d nové zprávy</item>
@@ -1356,7 +1356,7 @@
     <string name="deactivate_account_submit">Deaktivovat účet</string>
     <string name="error_empty_field_enter_user_name">Zadejte, prosím, uživatelské jméno.</string>
     <string name="error_empty_field_your_password">Prosím, zadejte své heslo.</string>
-    <string name="room_tombstone_versioned_description">Tato místnost byla nahrazena a není již aktivní</string>
+    <string name="room_tombstone_versioned_description">Tato místnost byla nahrazena a není již aktivní.</string>
     <string name="room_tombstone_continuation_link">Konverzace pokračuje tady</string>
     <string name="room_tombstone_continuation_description">Tato místnost je pokračováním jiné konverzace</string>
     <string name="room_tombstone_predecessor_link">Po kliknutí zde uvidíte starší zprávy</string>
@@ -2868,4 +2868,29 @@
     <string name="create_space_alias_hint">Adresa prostoru</string>
     <string name="space_settings_alias_subtitle">Prohlédnout a spravovat adresy tohoto prostoru.</string>
     <string name="space_settings_alias_title">Adresy prostorů</string>
+    <string name="room_upgrade_to_recommended_version">Aktualizujte na doporučenou verzi místnosti</string>
+    <string name="room_using_unstable_room_version">Tato místnost používá místnost verze %s, kterou homeserver označil za nestabilní.</string>
+    <string name="upgrade_room_no_power_to_manage">K aktualizaci místnosti potřebujete oprávnění</string>
+    <string name="upgrade_room_update_parent_space">Automaticky aktualizovat mateřský prostor</string>
+    <string name="upgrade_room_auto_invite">Automaticky pozvat uživatele</string>
+    <string name="upgrade_public_room_from_to">Budete aktualizovat tuto místnost z %s na %s.</string>
+    <string name="upgrade_room_warning">Aktualizace místnosti je pokročilá akce a obvykle se doporučuje tehdy, je-li místnost nestabilní kvůli chybám, chybějícím funkcím nebo slabým místům v zabezpečení.
+\nObvykle má vliv pouze na to, jak server místnost zpracovává.</string>
+    <string name="upgrade_private_room">Aktualizovat soukromou místnost</string>
+    <string name="upgrade_public_room">Aktualizovat veřejnou místnost</string>
+    <string name="upgrade">Aktualizace</string>
+    <string name="it_may_take_some_time">Buďte, prosím, trpěliví, může to chvíli trvat.</string>
+    <string name="joining_replacement_room">Vstupte do náhradní místnosti</string>
+    <string name="command_description_upgrade_room">Aktualizuje místnost na novou verzi</string>
+    <string name="settings_server_room_version_unstable">nestabilní</string>
+    <string name="settings_server_room_version_stable">stabilní</string>
+    <string name="settings_server_default_room_version">Výchozí verze</string>
+    <string name="settings_server_room_versions">Verze místností 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Raději ověřit porovnáním emoji</string>
+    <string name="verification_scan_with_this_device">Oskenovat tímto zařízením</string>
+    <string name="verification_scan_self_notice">Oskenujte kód svým dalším zařízením nebo přepněte a oskenujte tímto zařízením</string>
+    <string name="hs_client_url">URL API Homeserveru</string>
+    <string name="missing_permissions_title">Chybějící oprávnění</string>
+    <string name="denied_permission_camera">Pro provedení této akce udělte, prosím, oprávnění Fotoaparát v systémových nastaveních.</string>
+    <string name="denied_permission_generic">Některá z oprávnění potřebných k provedení akce chybí, prosím, udělte oprávnění v systémových nastaveních.</string>
 </resources>

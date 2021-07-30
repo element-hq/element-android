@@ -413,7 +413,7 @@
     <string name="preview">Попередній перегляд</string>
     <string name="reject">Відхилити</string>
     <!-- Room -->
-    <string name="room_jump_to_first_unread">До першого непрочитаного повідомлення.</string>
+    <string name="room_jump_to_first_unread">Перейти до непрочитаного</string>
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">%s запросив(ла) вас приєднатися до цієї кімнати</string>
     <string name="room_preview_unlinked_email_warning">Запрошення надіслано на адресу %s, не пов\'язану з цим обліковим записом.\nВи можете увійти під іншим обліковим записом чи приєднати email до цього.</string>
@@ -474,7 +474,7 @@
     <string name="room_resend_unsent_messages">Надіслати ненадіслані повідомлення знову</string>
     <string name="room_delete_unsent_messages">Видалити ненадіслані повідомлення</string>
     <string name="room_message_file_not_found">Файл не знайдено</string>
-    <string name="room_do_not_have_permission_to_post">Ви не маєте права писати повідомлення в цій кімнаті</string>
+    <string name="room_do_not_have_permission_to_post">Ви не маєте дозволу писати повідомлення у цій кімнаті.</string>
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Довіряти</string>
     <string name="ssl_do_not_trust">Не довіряти</string>
@@ -1047,7 +1047,7 @@
     <string name="deactivate_account_prompt_password">Для продовження, будь ласка, введіть Ваш пароль:</string>
     <string name="deactivate_account_submit">Деактивувати обліковий запис</string>
     <string name="error_empty_field_your_password">Будь ласка, введіть Ваш пароль.</string>
-    <string name="room_tombstone_versioned_description">Ця кімната була замінена та більше не активна</string>
+    <string name="room_tombstone_versioned_description">Ця кімната була замінена та більше не активна.</string>
     <string name="room_tombstone_continuation_link">Продовження розмови тут</string>
     <string name="room_tombstone_continuation_description">Ця кімната є продовженням іншої розмови</string>
     <string name="room_tombstone_predecessor_link">Натисніть сюди, щоб побачити старіші повідомлення</string>

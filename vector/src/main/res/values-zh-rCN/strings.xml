@@ -431,7 +431,7 @@
     <string name="room_resend_unsent_messages">重新发送未发送的消息</string>
     <string name="room_delete_unsent_messages">删除未发送的消息</string>
     <string name="room_message_file_not_found">文件未找到</string>
-    <string name="room_do_not_have_permission_to_post">你没有发送到这个聊天室的权限</string>
+    <string name="room_do_not_have_permission_to_post">你没有在这个聊天室发帖的权限。</string>
     <string name="ssl_trust">信任</string>
     <string name="ssl_do_not_trust">不信任</string>
     <string name="ssl_logout_account">注销</string>
@@ -955,7 +955,7 @@
     <string name="command_description_nick">更改你显示的昵称</string>
     <string name="command_description_markdown">打开/关闭 markdown</string>
     <string name="command_description_clear_scalar_token">修复 Matrix Apps 管理</string>
-    <string name="room_tombstone_versioned_description">这个聊天室已经被替换并且不再活跃</string>
+    <string name="room_tombstone_versioned_description">这个聊天室已经被替换并且不再活跃。</string>
     <string name="room_tombstone_continuation_link">对话在此继续</string>
     <string name="room_tombstone_continuation_description">这个聊天室是另一个对话的延续</string>
     <string name="room_tombstone_predecessor_link">点击此处查看更早的消息</string>
@@ -2772,4 +2772,29 @@
     <string name="create_space_alias_hint">空间地址</string>
     <string name="space_settings_alias_subtitle">查看和管理这个空间的地址。</string>
     <string name="space_settings_alias_title">空间地址</string>
+    <string name="room_upgrade_to_recommended_version">升级到推荐的聊天室版本</string>
+    <string name="room_using_unstable_room_version">这个聊天室运行聊天室版本 %s，此主服务器已将其标记为不稳定。</string>
+    <string name="upgrade_room_no_power_to_manage">您需要权限才能升级聊天室</string>
+    <string name="upgrade_room_update_parent_space">自动更新空间父级</string>
+    <string name="upgrade_room_auto_invite">自动邀请用户</string>
+    <string name="upgrade_public_room_from_to">你将把此聊天室从 %s 升级到 %s。</string>
+    <string name="upgrade_room_warning">升级聊天室是一项高级操作，通常建议在由于错误、缺少功能或安全漏洞造成聊天室不稳定时进行此操作。
+\n这通常只会影响此服务器如何处理该聊天室。</string>
+    <string name="upgrade_private_room">升级私人聊天室</string>
+    <string name="upgrade_public_room">升级公共聊天室</string>
+    <string name="upgrade">升级</string>
+    <string name="it_may_take_some_time">请耐心等待，这可能需要一些时间。</string>
+    <string name="joining_replacement_room">加入替换聊天室</string>
+    <string name="command_description_upgrade_room">将聊天室升级到新版本</string>
+    <string name="settings_server_room_version_unstable">不稳定</string>
+    <string name="settings_server_room_version_stable">稳定</string>
+    <string name="settings_server_default_room_version">默认版本</string>
+    <string name="settings_server_room_versions">聊天室版本 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">通过比较表情符号来验证</string>
+    <string name="verification_scan_with_this_device">使用此设备扫描</string>
+    <string name="verification_scan_self_notice">使用您的其他设备扫描代码或切换并使用此设备扫描</string>
+    <string name="hs_client_url">主服务器 API 网址</string>
+    <string name="missing_permissions_title">缺少权限</string>
+    <string name="denied_permission_camera">要执行此操作，请从系统设置中授予相机权限。</string>
+    <string name="denied_permission_generic">缺少执行此操作的某些权限，请从系统设置中授予权限。</string>
 </resources>

@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: teemade ja välimuse uuendused ning videokõne-järgse kokkujooksmise parandused
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.1.12
