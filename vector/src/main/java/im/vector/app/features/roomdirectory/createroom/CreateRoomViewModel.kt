@@ -237,8 +237,6 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                             // Preset
                             preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                             roomAliasName = state.roomVisibilityType.aliasLocalPart
-                            // Room access rule
-                            setRoomAccessRule(this, RoomAccessRules.RESTRICTED)
                         }
                         CreateRoomViewState.RoomVisibilityType.Private,
                         CreateRoomViewState.RoomVisibilityType.External  -> {
