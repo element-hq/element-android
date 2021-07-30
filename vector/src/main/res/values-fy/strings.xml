@@ -854,7 +854,7 @@
     <string name="settings_troubleshoot_test_foreground_service_started_title">Notifikaasje Tsjinst</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Ynstellingen Kontrolearje</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sesje Ynstellingen.</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">Oan it útfieren... (%1$d of %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Oan it útfieren… (%1$d of %2$d)</string>
     <string name="settings_profile_picture">Profyl Ôfbylding</string>
     <string name="room_sliding_menu_version_x">Ferzje %s</string>
     <string name="room_sliding_menu_version">Ferzje</string>
