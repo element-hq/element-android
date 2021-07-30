@@ -27,7 +27,10 @@ import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.preference.VectorListPreference
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.databinding.DialogSelectTextSizeBinding
+import im.vector.app.features.MainActivity
+import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
@@ -64,6 +67,14 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 true
             } else {
                 false
+            }
+        }
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME)!!.let { pref ->
+            pref.isChecked = vectorPreferences.prefSpacesShowAllRoomInHome()
+            pref.setOnPreferenceChangeListener { _, _ ->
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
+                true
             }
         }
 

@@ -30,6 +30,16 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
+    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/spaces_header">
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME"
+            android:title="@string/preference_show_all_rooms_in_home"
+            android:summary="@string/all_rooms_youre_in_will_be_shown_in_home" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_composer">
 
         <im.vector.app.core.preference.VectorSwitchPreference
