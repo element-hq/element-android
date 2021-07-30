@@ -78,8 +78,10 @@ class SpaceMenuViewModel @AssistedInject constructor(
                 it.getOrNull()?.let {
                     if (it.membership == Membership.LEAVE) {
                         setState { copy(leavingState = Success(Unit)) }
-                        // switch to home?
-                        appStateHandler.setCurrentSpace(null, session)
+                        if (appStateHandler.safeActiveSpaceId() == initialState.spaceId) {
+                            // switch to home?
+                            appStateHandler.setCurrentSpace(null, session)
+                        }
                     }
                 }
             }

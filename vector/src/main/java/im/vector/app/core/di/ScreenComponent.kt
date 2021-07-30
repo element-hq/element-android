@@ -89,6 +89,7 @@ import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
+import im.vector.app.features.spaces.leave.SpaceLeaveAdvancedActivity
 import im.vector.app.features.spaces.manage.SpaceManageActivity
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.terms.ReviewTermsActivity
@@ -172,6 +173,7 @@ interface ScreenComponent {
     fun inject(activity: SpaceExploreActivity)
     fun inject(activity: SpaceManageActivity)
     fun inject(activity: RoomJoinRuleActivity)
+    fun inject(activity: SpaceLeaveAdvancedActivity)
 
     /* ==========================================================================================
      * BottomSheets

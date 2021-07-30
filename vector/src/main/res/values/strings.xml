@@ -3487,6 +3487,7 @@
     <string name="you_will_leave_all_in">You will leave all rooms and spaces in %s.</string>
     <string name="dont_leave_any">Don’t leave any rooms and spaces</string>
     <string name="leave_specific_ones">Leave specific rooms and spaces</string>
+    <string name="pick_tings_to_leave">Pick things to leave</string>
 
     <string name="space_add_existing_rooms">Add existing rooms and space</string>
     <string name="space_add_rooms">Add rooms</string>

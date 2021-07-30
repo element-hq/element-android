@@ -16,6 +16,7 @@
 
 package im.vector.app.features.spaces
 
+import android.app.Activity
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Parcelable
@@ -32,11 +33,13 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.databinding.BottomSheetLeaveSpaceBinding
+import im.vector.app.features.spaces.leave.SpaceLeaveAdvancedActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
 import me.gujun.android.span.span
@@ -66,6 +69,15 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
 
     private val spaceArgs: SpaceBottomSheetSettingsArgs by args()
 
+    private val cherryPickLeaveActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            // nothing actually?
+        } else {
+            // move back to default
+            settingsViewModel.handle(SpaceMenuViewAction.SetAutoLeaveAll)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.autoLeaveRadioGroup.checkedChanges()
@@ -80,6 +92,10 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
                         }
                         views.leaveSelected.id -> {
                             settingsViewModel.handle(SpaceMenuViewAction.SetAutoLeaveSelected)
+                            // launch dedicated activity
+                            cherryPickLeaveActivityResult.launch(
+                                    SpaceLeaveAdvancedActivity.newIntent(requireContext(), spaceArgs.spaceId)
+                            )
                         }
                     }
                 }
@@ -142,16 +158,22 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
             views.leaveProgress.isVisible = false
         }
 
-        when (state.leaveMode) {
-            SpaceMenuState.LeaveMode.LEAVE_ALL      -> {
-                views.autoLeaveRadioGroup.check(views.leaveAll.id)
+        val hasChildren = (spaceSummary.spaceChildren?.size ?: 0) > 0
+        if (hasChildren) {
+            views.autoLeaveRadioGroup.isVisible = true
+            when (state.leaveMode) {
+                SpaceMenuState.LeaveMode.LEAVE_ALL      -> {
+                    views.autoLeaveRadioGroup.check(views.leaveAll.id)
+                }
+                SpaceMenuState.LeaveMode.LEAVE_NONE     -> {
+                    views.autoLeaveRadioGroup.check(views.leaveNone.id)
+                }
+                SpaceMenuState.LeaveMode.LEAVE_SELECTED -> {
+                    views.autoLeaveRadioGroup.check(views.leaveSelected.id)
+                }
             }
-            SpaceMenuState.LeaveMode.LEAVE_NONE     -> {
-                views.autoLeaveRadioGroup.check(views.leaveNone.id)
-            }
-            SpaceMenuState.LeaveMode.LEAVE_SELECTED -> {
-                views.autoLeaveRadioGroup.check(views.leaveSelected.id)
-            }
+        } else {
+            views.autoLeaveRadioGroup.isVisible = false
         }
     }
 
