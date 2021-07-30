@@ -106,6 +106,8 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 
     companion object : MvRxViewModelFactory<CreateRoomViewModel, CreateRoomViewState> {
 
+        private const val AGENT_SERVER_DOMAIN = "Agent"
+
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: CreateRoomViewState): CreateRoomViewModel? {
             val fragment: CreateRoomFragment = (viewModelContext as FragmentViewModelContext).fragment()
@@ -174,18 +176,27 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
             else              -> CreateRoomViewState.RoomVisibilityType.External
         }
         if (action.isPublic) {
+            val userHSDomain = TchapUtils.getHomeServerDisplayNameFromMXIdentifier(session.myUserId)
+            val isAgentServerDomain = userHSDomain.equals(AGENT_SERVER_DOMAIN, ignoreCase = true)
             copy(
                     roomVisibilityType = roomVisibilityType,
                     roomAccessRules = roomAccessRules,
                     // Reset any error in the form about alias
                     asyncCreateRoomRequest = Uninitialized,
-                    isEncrypted = false
+                    isEncrypted = false,
+                    // Public rooms are not federated by default except for agent server domain
+                    disableFederation = !isAgentServerDomain,
+                    isFederationSettingAvailable = !isAgentServerDomain
+
             )
         } else {
             copy(
                     roomVisibilityType = roomVisibilityType,
                     roomAccessRules = roomAccessRules,
-                    isEncrypted = adminE2EByDefault
+                    isEncrypted = adminE2EByDefault,
+                    // Private rooms are all federated
+                    disableFederation = false,
+                    isFederationSettingAvailable = true
             )
         }
     }

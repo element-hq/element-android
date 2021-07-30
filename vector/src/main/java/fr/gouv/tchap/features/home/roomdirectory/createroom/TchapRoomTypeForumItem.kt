@@ -39,6 +39,9 @@ abstract class TchapRoomTypeForumItem : EpoxyModelWithHolder<TchapRoomTypeForumI
     var checked: Boolean = false
 
     @EpoxyAttribute
+    var switchVisible: Boolean = true
+
+    @EpoxyAttribute
     var clickListener: ClickListener? = null
 
     @EpoxyAttribute
@@ -60,7 +63,7 @@ abstract class TchapRoomTypeForumItem : EpoxyModelWithHolder<TchapRoomTypeForumI
         holder.switchView.text = holder.view.context.getString(R.string.tchap_room_creation_limited_domain, userDomain.orEmpty())
         holder.description2View.isVisible = selected
         holder.switchView.isChecked = checked
-        holder.switchView.isVisible = selected
+        holder.switchView.isVisible = selected && switchVisible
         holder.switchView.setOnCheckedChangeListener(checkListener)
     }
 

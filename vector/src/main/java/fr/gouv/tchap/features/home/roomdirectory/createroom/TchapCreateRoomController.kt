@@ -78,6 +78,7 @@ class TchapCreateRoomController @Inject constructor(
             userDomain(viewState.userDomain)
             selected(viewState.roomVisibilityType is RoomVisibilityType.Public)
             checked(viewState.disableFederation)
+            switchVisible(viewState.isFederationSettingAvailable)
             clickListener { host.listener?.setIsPublic(isPublic = true, isRestricted = true) }
             checkListener { _, isChecked -> host.listener?.setDisableFederation(isChecked) }
         }

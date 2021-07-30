@@ -16,6 +16,7 @@
 
 package fr.gouv.tchap.core.utils
 
+import im.vector.app.core.utils.safeCapitalize
 import org.matrix.android.sdk.api.MatrixPatterns
 import java.util.Locale
 
@@ -28,6 +29,25 @@ object TchapUtils {
      * in case of "!AAAAAAA:matrix.test.org", this will return "matrix.test.org".
      */
     fun getHomeServerNameFromMXIdentifier(mxId: String): String = mxId.substringAfter(":", "")
+
+    /**
+     * Get the Tchap display name of the homeserver mentioned in a matrix identifier.
+     * The identifier type may be any matrix identifier type: user id, room id, ...
+     * The returned name is capitalize.
+     * The Tchap HS display name is the component mentioned before the suffix "tchap.gouv.fr"
+     * For example in case of "@jean-philippe.martin-modernisation.fr:name1.tchap.gouv.fr", this will return "Name1".
+     * in case of "@jean-philippe.martin-modernisation.fr:agent.name2.tchap.gouv.fr", this will return "Name2".
+     */
+    fun getHomeServerDisplayNameFromMXIdentifier(mxId: String): String {
+        var homeserverName = getHomeServerNameFromMXIdentifier(mxId)
+        if (homeserverName.contains("tchap.gouv.fr")) {
+            val components = homeserverName.split("\\.".toRegex())
+            if (components.size >= 4) {
+                homeserverName = components[components.size - 4]
+            }
+        }
+        return homeserverName.safeCapitalize(Locale.getDefault())
+    }
 
     /**
      * Tells whether a homeserver name corresponds to an external server or not
