@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.sync
 
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import javax.inject.Inject
@@ -38,7 +39,7 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
     }
 
     private suspend fun updateDirectUserIds(directUserIdsToUpdate: Map<String, String>) {
-        val directChats = directChatsHelper.getLocalDirectMessages()
+        val directChats = directChatsHelper.getLocalDirectMessages().toMutable()
         var hasUpdate = false
         directUserIdsToUpdate.forEach { (roomId, candidateUserId) ->
             // consider room is a DM if referenced in the DM dictionary
