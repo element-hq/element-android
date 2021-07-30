@@ -420,7 +420,7 @@
     <string name="auth_recaptcha_message">Este servidorcasa gostaria de assegurar que você não é um robô</string>
     <string name="auth_username_in_use">Nome de usuária(o) em uso</string>
     <string name="auth_home_server">Servidorcasa:</string>
-    <string name="auth_identity_server">Servidor de Identidade:</string>
+    <string name="auth_identity_server">Servidor de identidade:</string>
     <string name="auth_reset_password_next_step_button">Eu tenho verificado meu endereço de email</string>
     <string name="auth_reset_password_message">Para resettar sua senha, entre o endereço de email linkado a sua conta:</string>
     <string name="auth_reset_password_missing_email">O endereço de email linkado a sua conta deve ser entrado.</string>
@@ -698,7 +698,7 @@
     <string name="devices_delete_submit_button_label">Submeter</string>
     <string name="settings_logged_in">Feito login como</string>
     <string name="settings_home_server">Servidorcasa</string>
-    <string name="settings_identity_server">Servidor de Identidade</string>
+    <string name="settings_identity_server">Servidor de identidade</string>
     <string name="account_email_validation_title">Verificação Pendente</string>
     <string name="account_email_validation_message">Por favor cheque seu email e clique no link que ele contém. Uma vez que isto for feito, clique em continuar.</string>
     <string name="account_email_validation_error">Incapaz de verificar endereço de email. Por favor cheque seu email e clique no link que ele contém. Uma vez que isto for feito, clique em continuar.</string>
@@ -1179,8 +1179,8 @@
     <string name="settings_troubleshoot_test_fcm_failed">Falha para recuperar token do FCM:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registro de Token</string>
-    <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrado com sucesso a ServidorCasa.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Falha para registrar token FCM a ServidorCasa:
+    <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrado com sucesso a servidorcasa.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Falha para registrar token FCM a servidorcasa:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Serviço de Notificações</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Serviço de Notificações está rodando.</string>
@@ -1360,7 +1360,7 @@
     <string name="settings_add_3pid_confirm_password_title">Confirme sua senha</string>
     <string name="template_settings_add_3pid_flow_not_supported">Você não pode fazer isto desde ${app_name} mobile</string>
     <string name="settings_add_3pid_authentication_needed">Autenticação é requerida</string>
-    <string name="settings_notification_privacy_no_background_sync">O app <b>não</b> precisa de se conectar ao ServidorCasa no background, isto deveria reduzir uso de bateria</string>
+    <string name="settings_notification_privacy_no_background_sync">O app <b>não</b> precisa de se conectar ao servidorcasa no background, isto deveria reduzir uso de bateria</string>
     <string name="settings_background_fdroid_sync_mode">Modo Sinc no Background</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimizado para bateria</string>
     <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} vai sincar em background de maneira que preserva recursos limitados do dispositivo (bateria).
@@ -1375,8 +1375,8 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nA sinc pode ser adiada dependendo dos recursos (bateria) ou estado do dispositivo (sono).</string>
     <string name="settings_integrations">Integrações</string>
-    <string name="settings_integrations_summary">Use um Gerenciador de Integração para gerenciar bots, bridges, widgets e pacotes de stickers.
-\nGerenciadores de Integração recebem dados de configuração, e podem modificar widgets, enviar convites de sala e definir níveis de poder em seu nome.</string>
+    <string name="settings_integrations_summary">Use um gerenciador de integrações para gerenciar bots, bridges, widgets e pacotes de stickers.
+\nGerenciadores de integrações recebem dados de configuração, e podem modificar widgets, enviar convites de sala e definir níveis de poder em seu nome.</string>
     <string name="settings_send_message_with_enter_summary">Botão enter do teclado suave vai enviar mensagem em vez de adicionar uma quebra de linha</string>
     <string name="settings_secure_backup_section_title">Backup Seguro</string>
     <string name="settings_secure_backup_manage">Gerenciar</string>
@@ -1390,7 +1390,7 @@
     <string name="settings_discovery_manage">Gerenciar suas configurações de descoberta.</string>
     <string name="settings_data_save_mode_summary">Modo de economia de dados aplica um filtro específico para que atualizações de presença e notificações de digitação sejam filtradas fora.</string>
     <string name="settings_integration_allow">Permitir integrações</string>
-    <string name="settings_integration_manager">Gerenciador de Integração</string>
+    <string name="settings_integration_manager">Gerenciador de integrações</string>
     <string name="disabled_integration_dialog_title">Integrações estão desativadas</string>
     <string name="disabled_integration_dialog_content">Ative \'Permitir integrações\' em Configurações para fazer isto.</string>
     <string name="settings_change_password_submit">Atualizar Senha</string>
@@ -1453,7 +1453,7 @@
     <string name="room_widget_webview_access_camera">Usar a câmera</string>
     <string name="room_widget_webview_access_microphone">Usar o microfone</string>
     <string name="room_widget_webview_read_protected_media">Ler Mídia protegida por DRM</string>
-    <string name="integration_manager_not_configured">Nenhum gerenciador de integração configurado.</string>
+    <string name="integration_manager_not_configured">Nenhum gerenciador de integrações configurado.</string>
     <string name="widget_integration_review_terms">Para continuar você precisa aceitar os Termos deste serviço.</string>
     <string name="you_added_a_new_device_with_info">Uma nova sessão está requisitando chaves de encriptação.
 \nNome de sessão: %1$s
@@ -1502,7 +1502,7 @@
 \n
 \nAviso: este arquivo pode ser deletado se o aplicativo for desinstalado.</string>
     <string name="recovery_key_export_saved">A chave de recuperação tem sido salva.</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">Um backup já existe em seu ServidorCasa</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Um backup já existe em seu servidorcasa</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Parece que você já tem configurado backup de chave de uma outra sessão. Você quer substituí-lo pelo que você está criando\?</string>
     <string name="keys_backup_setup_override_replace">Substituir</string>
     <string name="keys_backup_setup_override_stop">Parar</string>
@@ -1610,7 +1610,7 @@
     <string name="sas_cancelled_dialog_title">Requisição Cancelada</string>
     <string name="sas_cancelled_by_other">A outra parte cancelou a verificação.
 \n%s</string>
-    <string name="sas_cancelled_by_me">A verificação foi cancelada.
+    <string name="sas_cancelled_by_me">A verificação está cancelada.
 \nRazão: %s</string>
     <string name="sas_verification_request_notification_channel">Verificação de Sessão Interativa</string>
     <string name="sas_incoming_request_notif_title">Requisição de Verificação</string>
@@ -1626,7 +1626,7 @@
     <string name="sas_error_m_key_mismatch">Disparidade de chave</string>
     <string name="sas_error_m_user_error">Disparidade de usuária(o)</string>
     <string name="sas_error_unknown">Erro Desconhecido</string>
-    <string name="identity_server_not_defined">Você não está usando nenhum Servidor de Identidade</string>
+    <string name="identity_server_not_defined">Você não está usando nenhum servidor de identidade</string>
     <string name="identity_server_not_defined_for_password_reset">Nenhum servidor de identidade está configurado, ele é requerido para resettar sua senha.</string>
     <string name="error_user_already_logged_in">Parece que você está tentando se conectar a um outro servidorcasa. Você quer fazer signout\?</string>
     <string name="edit">Editar</string>
@@ -2178,7 +2178,7 @@
 \n- A conexão de internet que qualquer um dos dois dispositivos está usando
 \n
 \nNós recomendamos que você mude sua senha &amp; chave de recuperação em Configurações imediatamente.</string>
-    <string name="verify_cancelled_notice">Verifique seus dispositivos desde Configurações.</string>
+    <string name="verify_cancelled_notice">Verificação tem sido cancelada. Você pode começar verificação de novo.</string>
     <string name="verification_cancelled">Verificação Cancelada</string>
     <string name="recovery_passphrase">Frasepasse de Recuperação</string>
     <string name="message_key">Chave de Mensagem</string>
@@ -2553,7 +2553,7 @@
     <string name="attachment_viewer_item_x_of_y">%1$d de %2$d</string>
     <string name="a11y_create_direct_message_by_qr_code">Criar uma nova conversa direta ao scannar um QR code</string>
     <string name="a11y_create_direct_message_by_mxid">Criar uma nova conversa direta por ID Matrix</string>
-    <string name="identity_server_consent_dialog_content">A fim de descobrir contatos existentes que você conhece, você aceita enviar seus dados de contato (números de telefone e/ou emails) para o Servidor de Identidade configurado (%1$s)\?
+    <string name="identity_server_consent_dialog_content">A fim de descobrir contatos existentes que você conhece, você aceita enviar seus dados de contato (números de telefone e/ou emails) para o servidor de identidade configurado (%1$s)\?
 \n
 \nPara mais privacidade, os dados enviados serão hashados antes de serem enviados.</string>
     <string name="identity_server_consent_dialog_title">Enviar emails e números de telefone</string>
@@ -2910,4 +2910,12 @@
     <string name="missing_permissions_title">Permissões faltando</string>
     <string name="denied_permission_camera">Para performar esta ação, por favor conceda a permissão Câmera a partir das configurações de sistema.</string>
     <string name="denied_permission_generic">Algumas permissões estão faltando para performar esta ação, por favor conceda as permissões a partir das configurações de sistema.</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Chamada de vídeo perdida</item>
+        <item quantity="other">%d chamadas de vídeo perdidas</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Chamadad de áudio perdida</item>
+        <item quantity="other">%d chamadas de áudio perdidas</item>
+    </plurals>
 </resources>
