@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail
 
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.app.core.platform.DefaultListUpdateCallback
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -24,7 +25,8 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.util.concurrent.CopyOnWriteArrayList
 
 class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
-                                 private val timelineEventController: TimelineEventController) : DefaultListUpdateCallback {
+                                 private val timelineEventController: TimelineEventController,
+                                 private val parentView: View) : DefaultListUpdateCallback {
 
     private val newTimelineEventIds = CopyOnWriteArrayList<String>()
     private var forceScroll = false
@@ -62,7 +64,8 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
                 layoutManager.scrollToPositionWithOffset(0, 0)
             } else {
                 timelineEventController.searchPositionOfEvent(scrollToEvent)?.let {
-                    layoutManager.scrollToPosition(it)
+                    // Scroll such that the scrolled-to event is moved up 1/4 of the screen
+                    layoutManager.scrollToPositionWithOffset(it, parentView.measuredHeight / 4)
                 }
             }
             return
