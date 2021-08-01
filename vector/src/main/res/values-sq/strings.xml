@@ -452,7 +452,7 @@
     <string name="reject">Hidheni tej</string>
     <string name="list_members">Anëtarë liste</string>
     <string name="room_sync_in_progress">Po njëkohësohet…</string>
-    <string name="room_jump_to_first_unread">Hidhu te të palexuarit.</string>
+    <string name="room_jump_to_first_unread">Hidhu te të palexuarit</string>
     <string name="room_preview_invitation_format">Jeni ftuar të merrni pjesë në këtë dhomë nga %s</string>
     <string name="room_preview_try_join_an_unknown_room_default">një dhomë</string>
     <string name="room_creation_title">Fjalosje e Re</string>
@@ -526,7 +526,7 @@
     <string name="room_resend_unsent_messages">Ridërgo mesazhet e padërguara</string>
     <string name="room_delete_unsent_messages">Fshi mesazhet e padërguar</string>
     <string name="room_message_file_not_found">S’u gjet kartelë</string>
-    <string name="room_do_not_have_permission_to_post">S’keni leje të postoni në këtë dhomë</string>
+    <string name="room_do_not_have_permission_to_post">S’keni leje të postoni në këtë dhomë.</string>
     <string name="ssl_trust">Besoje</string>
     <string name="ssl_do_not_trust">Mos i zër besë</string>
     <string name="ssl_logout_account">Dalje</string>
@@ -923,7 +923,7 @@
     <string name="your_unverified_device_requesting">Sesioni juaj i paverifikuar \'%s\' po kërkon kyçe fshehtëzimi.</string>
     <string name="command_description_deop_user">I heq cilësinë e operatorit përdoruesit me ID-në e dhënë</string>
     <string name="dialog_user_consent_content">Që të vazhdohet të përdoret shërbyesi home %1$s, duhet të shqyrtoni dhe pajtoheni me termat dhe kushtet.</string>
-    <string name="room_tombstone_versioned_description">Kjo dhomë është zëvendësuar dhe s’është më aktive</string>
+    <string name="room_tombstone_versioned_description">Kjo dhomë është zëvendësuar dhe s’është më aktive.</string>
     <string name="room_tombstone_continuation_description">Kjo dhomë është një vazhdim i një bisede tjetër</string>
     <string name="resource_limit_hard_default">Ky shërbyes home ka tejkaluar një nga kufijtë mbi burimet.</string>
     <string name="resource_limit_hard_mau">Ky shërbyes home ka tejkaluar kufirin Përdorues Aktivë Mujorë.</string>
@@ -2805,4 +2805,29 @@
     <string name="create_space_alias_hint">Adresë hapësire</string>
     <string name="space_settings_alias_title">Adresa hapësire</string>
     <string name="space_settings_alias_subtitle">Shihni dhe administroni adresa në këtë hapësirë.</string>
+    <string name="room_upgrade_to_recommended_version">Përmirësoje me versionin e rekomanduar të dhomës</string>
+    <string name="room_using_unstable_room_version">Kjo dhomë po xhiron nën versionin %s, të cilin ky shërbyes Home e konsideron si të paqëndrueshëm.</string>
+    <string name="upgrade_room_no_power_to_manage">Ju duhen leje për të përmirësua një dhomë</string>
+    <string name="upgrade_room_update_parent_space">Përditëso automatikisht mëmë hapësire</string>
+    <string name="upgrade_room_auto_invite">Fto përdorues automatikisht</string>
+    <string name="upgrade_public_room_from_to">Do ta përmirësoni këtë dhomë nga %s në %s.</string>
+    <string name="upgrade_room_warning">Përmirësimi i një dhome është një veprim i thelluar dhe zakonisht i rekomanduar kur një dhomë është e paqëndrueshme për shkak të metash, veçorish që mungojnë ose cenueshmëri sigurie.
+\nZakonisht kjo prek vetëm mënyrën se si trajtohet dhoma te shërbyesi.</string>
+    <string name="upgrade_private_room">Përmirësoni dhomë private</string>
+    <string name="upgrade_public_room">Përmirësoni dhomë publike</string>
+    <string name="upgrade">Përmirësoje</string>
+    <string name="it_may_take_some_time">Ju lutemi, bëni durim, mund të zgjasë ca.</string>
+    <string name="joining_replacement_room">Hyni te dhoma zëvendësuese</string>
+    <string name="command_description_upgrade_room">E përmirëson një dhomë me një version të ri</string>
+    <string name="settings_server_room_version_unstable">i paqëndrueshëm</string>
+    <string name="settings_server_room_version_stable">i qëndrueshëm</string>
+    <string name="settings_server_default_room_version">Version Parazgjedhje</string>
+    <string name="settings_server_room_versions">Versione Dhome 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Verifikoji duke krahasuar emoji</string>
+    <string name="verification_scan_with_this_device">Skanoni me këtë pajisje</string>
+    <string name="verification_scan_self_notice">Skanojeni kodin me pajisjen tuaj tjetër, ose kaloni në të dhe skanoni me këtë pajisje</string>
+    <string name="hs_client_url">URL API Shërbyesi Home</string>
+    <string name="missing_permissions_title">Mungojnë leje</string>
+    <string name="denied_permission_camera">Për kryerjen e këtij veprimi, ju lutemi, akordoni leje Kamerës që nga rregullimet e sistemit.</string>
+    <string name="denied_permission_generic">Për kryerjen e këtij veprimi mungojnë disa leje, ju lutemi, akordojini lejet që nga rregullimet e sistemit.</string>
 </resources>
