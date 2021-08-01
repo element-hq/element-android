@@ -40,6 +40,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
+import android.widget.Scroller
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
@@ -55,6 +56,7 @@ import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -208,39 +210,57 @@ import java.net.URL
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.math.PI
+import kotlin.math.absoluteValue
+import kotlin.math.sin
 
-open class SmoothLinearLayoutManger : LinearLayoutManager {
-    constructor(context: Context?) : super(context, VERTICAL, false)
-    constructor(context: Context?, orientation: Int, reverseLayout: Boolean) : super(context, orientation, reverseLayout) {}
-
-    override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State, position: Int) {
-        val smoothScroller: RecyclerView.SmoothScroller = CenterSmoothScroller(recyclerView.context)
-        smoothScroller.targetPosition = position
-        startSmoothScroll(smoothScroller)
-    }
-
-    private inner class CenterSmoothScroller(context: Context?) : LinearSmoothScroller(context) {
-        @Nullable
-        override fun computeScrollVectorForPosition(targetPosition: Int): PointF? {
-            return this@SmoothLinearLayoutManger.computeScrollVectorForPosition(targetPosition)
-        }
-
-        override fun calculateDtToFit(viewStart: Int, viewEnd: Int, boxStart: Int, boxEnd: Int, snapPreference: Int): Int {
-            return boxStart + (boxEnd - boxStart) / 2 - (viewStart + (viewEnd - viewStart) / 2)
-        }
-
-        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-            // todo make it smoother
-            // displayMetrics.heightPixels
-            return 0.2f
-        }
-
-        override fun getVerticalSnapPreference(): Int {
-            return SNAP_TO_START
-        }
-    }
-}
-
+//open class SmoothLinearLayoutManger : LinearLayoutManager {
+//    constructor(context: Context?) : super(context, VERTICAL, false)
+//    constructor(context: Context?, orientation: Int, reverseLayout: Boolean) : super(context, orientation, reverseLayout) {}
+//
+//    override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State, position: Int) {
+//        val smoothScroller: RecyclerView.SmoothScroller = CenterSmoothScroller(
+//                recyclerView.context,
+//                recyclerView.verticalScrollbarPosition.toFloat()
+//        )
+//
+//        smoothScroller.targetPosition = position
+//        startSmoothScroll(smoothScroller)
+//    }
+//
+//    private inner class CenterSmoothScroller(context: Context?, rh: Float) : LinearSmoothScroller(context) {
+//        private val target = rh
+//
+//        @Nullable
+//        override fun computeScrollVectorForPosition(targetPosition: Int): PointF? {
+//            return this@SmoothLinearLayoutManger.computeScrollVectorForPosition(targetPosition)
+//        }
+//
+//        override fun calculateDtToFit(viewStart: Int, viewEnd: Int, boxStart: Int, boxEnd: Int, snapPreference: Int): Int {
+//            return boxStart + (boxEnd - boxStart) / 2 - (viewStart + (viewEnd - viewStart) / 2)
+//        }
+//
+//        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+//            Timber.i("target: $target")
+//            Timber.i("hp: ${displayMetrics.heightPixels}")
+//            // todo make it smoother
+//            val toTop = target - displayMetrics.heightPixels
+//            Timber.i("to top: $toTop")
+//            if (toTop <= 0) {
+//                // lower than screen
+//                val sinVal = (toTop.toDouble().absoluteValue / displayMetrics.heightPixels) * (PI / 2)
+//                Timber.i("sin: ${0.5f * sin(sinVal).toFloat() + 0.1f}")
+//                return 0.5f * sin(sinVal).toFloat() + 0.1f
+//            }
+//            Timber.i("return: 0.5")
+//            return 0.5f
+//        }
+//
+//        override fun getVerticalSnapPreference(): Int {
+//            return SNAP_TO_START
+//        }
+//    }
+//}
 
 @Parcelize
 data class RoomDetailArgs(
@@ -323,10 +343,12 @@ open class RoomDetailFragment @Inject constructor(
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
     private lateinit var knownCallsViewModel: SharedKnownCallsViewModel
 
-    private lateinit var layoutManager: SmoothLinearLayoutManger
-//    private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var layoutManager: LinearLayoutManager
+
+    //    private lateinit var layoutManager: LinearLayoutManager
     private lateinit var jumpToBottomViewVisibilityManager: JumpToBottomViewVisibilityManager
-//    private lateinit var smoothScroller: RecyclerView.SmoothScroller
+
+    //    private lateinit var smoothScroller: RecyclerView.SmoothScroller
     private var modelBuildListener: OnModelBuildFinishedListener? = null
 
     private lateinit var attachmentsHelper: AttachmentsHelper
@@ -775,12 +797,26 @@ open class RoomDetailFragment @Inject constructor(
                 scrollOnNewMessageCallback.forceScrollOnNextUpdate()
                 roomDetailViewModel.timeline.restartWithEventId(null)
             } else {
-                // L784: RecyclerView.State(), : any problem it has?
-                layoutManager.smoothScrollToPosition(
-                        views.timelineRecyclerView,
-                        RecyclerView.State(),
-                        0
+                val topView: View? = layoutManager.getChildAt(0)
+                var topHeight = topView?.let { layoutManager.getPosition(it) }
+                val scroller = Scroller(
+                        views.timelineRecyclerView.context,
+                        FastOutLinearInInterpolator()
                 )
+                if (topHeight != null) {
+                    Timber.i("th: $topHeight")
+                    Timber.i("lm: ${views.timelineRecyclerView.height}")
+                    topHeight = views.timelineRecyclerView.height - topHeight
+                    Timber.i("th2: $topHeight")
+                    scroller.startScroll(0, topHeight, 0, 0, 300)
+                }
+//                scroller
+//                    FastOutLinearInInterpolator()
+//                layoutManager.smoothScrollToPosition(
+//                        views.timelineRecyclerView,
+//                        RecyclerView.State(),
+//                        0
+//                )
             }
         }
         jumpToBottomViewVisibilityManager = JumpToBottomViewVisibilityManager(
@@ -1130,7 +1166,7 @@ open class RoomDetailFragment @Inject constructor(
         timelineEventController.timeline = roomDetailViewModel.timeline
 
         views.timelineRecyclerView.trackItemsVisibilityChange()
-        layoutManager = object : SmoothLinearLayoutManger(context, RecyclerView.VERTICAL, true) {
+        layoutManager = object : LinearLayoutManager(context, RecyclerView.VERTICAL, true) {
             override fun onLayoutCompleted(state: RecyclerView.State?) {
                 super.onLayoutCompleted(state)
                 updateJumpToReadMarkerViewVisibility()
