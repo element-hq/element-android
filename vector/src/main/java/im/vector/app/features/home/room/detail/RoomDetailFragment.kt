@@ -27,6 +27,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
+import android.text.format.DateUtils
 import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -81,6 +82,7 @@ import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequests
+import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
@@ -94,6 +96,7 @@ import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.KeyboardStateUtils
+import im.vector.app.core.utils.PERMISSIONS_FOR_VOICE_MESSAGE
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.colorizeMatchingText
@@ -102,6 +105,7 @@ import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.onPermissionDeniedDialog
+import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.saveMedia
@@ -127,6 +131,7 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.home.room.detail.composer.TextComposerView
+import im.vector.app.features.home.room.detail.composer.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
@@ -134,12 +139,14 @@ import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBot
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
@@ -164,6 +171,7 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
@@ -176,11 +184,13 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
@@ -231,7 +241,8 @@ class RoomDetailFragment @Inject constructor(
         private val imageContentRenderer: ImageContentRenderer,
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
-        private val callManager: WebRtcCallManager
+        private val callManager: WebRtcCallManager,
+        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker
 ) :
         VectorBaseFragment<FragmentRoomDetailBinding>(),
         TimelineEventController.Callback,
@@ -338,6 +349,7 @@ class RoomDetailFragment @Inject constructor(
         setupConfBannerView()
         setupEmojiPopup()
         setupFailedMessagesWarningView()
+        setupVoiceMessageView()
 
         views.roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
@@ -379,7 +391,12 @@ class RoomDetailFragment @Inject constructor(
 
         roomDetailViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.Failure                          -> showErrorInSnackbar(it.throwable)
+                is RoomDetailViewEvents.Failure                          -> {
+                    if (it.throwable is VoiceFailure.UnableToRecord) {
+                        onCannotRecord()
+                    }
+                    showErrorInSnackbar(it.throwable)
+                }
                 is RoomDetailViewEvents.OnNewTimelineEvents              -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
                 is RoomDetailViewEvents.ActionSuccess                    -> displayRoomDetailActionSuccess(it)
                 is RoomDetailViewEvents.ActionFailure                    -> displayRoomDetailActionFailure(it)
@@ -419,6 +436,11 @@ class RoomDetailFragment @Inject constructor(
             handleShareData()
             handleSpaceShare()
         }
+    }
+
+    private fun onCannotRecord() {
+        // Update the UI, cancel the animation
+        views.voiceMessageRecorderView.initVoiceRecordingViews()
     }
 
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
@@ -603,6 +625,45 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onRetryClicked() {
                 roomDetailViewModel.handle(RoomDetailAction.ResendAll)
+            }
+        }
+    }
+
+    private val permissionVoiceMessageLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            // In this case, let the user start again the gesture
+        } else if (deniedPermanently) {
+            vectorBaseActivity.onPermissionDeniedSnackbar(R.string.denied_permission_voice_message)
+        }
+    }
+
+    private fun setupVoiceMessageView() {
+        views.voiceMessageRecorderView.voiceMessagePlaybackTracker = voiceMessagePlaybackTracker
+
+        views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
+            override fun onVoiceRecordingStarted(): Boolean {
+                return if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
+                    views.composerLayout.isInvisible = true
+                    roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
+                    vibrate(requireContext())
+                    true
+                } else {
+                    // Permission dialog is displayed
+                    false
+                }
+            }
+
+            override fun onVoiceRecordingEnded(isCancelled: Boolean) {
+                views.composerLayout.isInvisible = false
+                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled))
+            }
+
+            override fun onVoiceRecordingPlaybackModeOn() {
+                roomDetailViewModel.handle(RoomDetailAction.PauseRecordingVoiceMessage)
+            }
+
+            override fun onVoicePlaybackButtonClicked() {
+                roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseRecordingPlayback)
             }
         }
     }
@@ -922,6 +983,8 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.exitSpecialMode()
         views.composerLayout.collapse()
 
+        views.voiceMessageRecorderView.isVisible = text.isBlank() && vectorPreferences.labsUseVoiceMessage()
+
         updateComposerText(text)
         views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
     }
@@ -938,7 +1001,12 @@ class RoomDetailFragment @Inject constructor(
         }
 
         val messageContent: MessageContent? = event.getLastMessageContent()
-        val nonFormattedBody = messageContent?.body ?: ""
+        val nonFormattedBody = if (messageContent is MessageAudioContent && messageContent.voiceMessageIndicator != null) {
+            val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
+            getString(R.string.voice_message_reply_content, formattedDuration)
+        } else {
+            messageContent?.body ?: ""
+        }
         var formattedBody: CharSequence? = null
         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
@@ -968,6 +1036,7 @@ class RoomDetailFragment @Inject constructor(
                 // need to do it here also when not using quick reply
                 focusComposerAndShowKeyboard()
                 views.composerLayout.views.composerRelatedMessageImage.isVisible = isImageVisible
+                views.voiceMessageRecorderView.isVisible = false
             }
         }
         focusComposerAndShowKeyboard()
@@ -1008,6 +1077,10 @@ class RoomDetailFragment @Inject constructor(
         notificationDrawerManager.setCurrentRoom(null)
 
         roomDetailViewModel.handle(RoomDetailAction.SaveDraft(views.composerLayout.text.toString()))
+
+        // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
+        roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions)
+        views.voiceMessageRecorderView.initVoiceRecordingViews()
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
@@ -1146,6 +1219,7 @@ class RoomDetailFragment @Inject constructor(
                     }
                     return when (model) {
                         is MessageFileItem,
+                        is MessageVoiceItem,
                         is MessageImageVideoItem,
                         is MessageTextItem -> {
                             return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
@@ -1247,7 +1321,14 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onTextBlankStateChanged(isBlank: Boolean) {
-                // No op
+                if (!views.composerLayout.views.sendButton.isVisible && vectorPreferences.labsUseVoiceMessage()) {
+                    // Animate alpha to prevent overlapping with the animation of the send button
+                    views.voiceMessageRecorderView.alpha = 0f
+                    views.voiceMessageRecorderView.isVisible = true
+                    views.voiceMessageRecorderView.animate().alpha(1f).setDuration(300).start()
+                } else {
+                    views.voiceMessageRecorderView.isVisible = false
+                }
             }
         }
     }
@@ -1258,8 +1339,9 @@ class RoomDetailFragment @Inject constructor(
             return
         }
         if (text.isNotBlank()) {
-            // We collapse ASAP, if not there will be a slight anoying delay
+            // We collapse ASAP, if not there will be a slight annoying delay
             views.composerLayout.collapse(true)
+            views.voiceMessageRecorderView.isVisible = vectorPreferences.labsUseVoiceMessage()
             lockSendButton = true
             roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
             emojiPopup.dismiss()
@@ -1308,22 +1390,28 @@ class RoomDetailFragment @Inject constructor(
             views.jumpToBottomView.count = summary.notificationCount
             views.jumpToBottomView.drawBadge = summary.scIsUnread(ScSdkPreferences(context))
             timelineEventController.update(state)
-            views.inviteView.visibility = View.GONE
+            views.inviteView.isVisible = false
             if (state.tombstoneEvent == null) {
                 if (state.canSendMessage) {
-                    views.composerLayout.visibility = View.VISIBLE
-                    views.composerLayout.setRoomEncrypted(summary.isEncrypted)
-                    views.notificationAreaView.render(NotificationAreaView.State.Hidden)
+                    if (!views.voiceMessageRecorderView.isActive()) {
+                        views.composerLayout.isVisible = true
+                        views.voiceMessageRecorderView.isVisible = vectorPreferences.labsUseVoiceMessage() && views.composerLayout.text?.isBlank().orFalse()
+                        views.composerLayout.setRoomEncrypted(summary.isEncrypted)
+                        views.notificationAreaView.render(NotificationAreaView.State.Hidden)
+                        views.composerLayout.alwaysShowSendButton = !vectorPreferences.labsUseVoiceMessage()
+                    }
                 } else {
-                    views.composerLayout.visibility = View.GONE
+                    views.composerLayout.isVisible = false
+                    views.voiceMessageRecorderView.isVisible = false
                     views.notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost)
                 }
             } else {
-                views.composerLayout.visibility = View.GONE
+                views.composerLayout.isVisible = false
+                views.voiceMessageRecorderView.isVisible = false
                 views.notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
             }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
-            views.inviteView.visibility = View.VISIBLE
+            views.inviteView.isVisible = true
             views.inviteView.render(inviter, VectorInviteView.Mode.LARGE, state.changeMembershipState)
             // Intercept click event
             views.inviteView.setOnClickListener { }
@@ -1749,6 +1837,10 @@ class RoomDetailFragment @Inject constructor(
         navigator.openBigImageViewer(requireActivity(), sharedView, mxcUrl, title)
     }
 
+    override fun onVoiceControlButtonClicked(eventId: String, messageAudioContent: MessageAudioContent) {
+        roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseVoicePlayback(eventId, messageAudioContent))
+    }
+
     private fun onShareActionClicked(action: EventSharedAction.Share) {
         if (action.messageContent is MessageTextContent) {
             shareText(requireContext(), action.messageContent.body)
@@ -1852,13 +1944,21 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is EventSharedAction.Edit                       -> {
-                roomDetailViewModel.handle(RoomDetailAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
+                if (!views.voiceMessageRecorderView.isActive()) {
+                    roomDetailViewModel.handle(RoomDetailAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
+                } else {
+                    requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
+                }
             }
             is EventSharedAction.Quote                      -> {
                 roomDetailViewModel.handle(RoomDetailAction.EnterQuoteMode(action.eventId, views.composerLayout.text.toString()))
             }
             is EventSharedAction.Reply                      -> {
-                roomDetailViewModel.handle(RoomDetailAction.EnterReplyMode(action.eventId, views.composerLayout.text.toString()))
+                if (!views.voiceMessageRecorderView.isActive()) {
+                    roomDetailViewModel.handle(RoomDetailAction.EnterReplyMode(action.eventId, views.composerLayout.text.toString()))
+                } else {
+                    requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
+                }
             }
             is EventSharedAction.CopyPermalink              -> {
                 val permalink = session.permalinkService().createPermalink(roomDetailArgs.roomId, action.eventId)
