@@ -9,7 +9,7 @@
 
     <View
         android:id="@+id/voiceMessageLockBackground"
-        android:layout_width="78dp"
+        android:layout_width="48dp"
         android:layout_height="180dp"
         android:background="@drawable/bg_voice_message_lock"
         android:backgroundTint="?vctr_system"
@@ -21,10 +21,10 @@
 
     <ImageButton
         android:id="@+id/voiceMessageMicButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/a11y_start_voice_message"
         android:src="@drawable/ic_voice_mic"
@@ -33,15 +33,17 @@
 
     <ImageButton
         android:id="@+id/voiceMessageSendButton"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/bg_send"
         android:contentDescription="@string/send"
         android:scaleType="center"
         android:src="@drawable/ic_send"
         android:visibility="gone"
+        app:tint="?android:textColorHint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingPrefix"
         tools:layout_marginBottom="180dp"
         tools:visibility="visible" />
 
@@ -161,7 +163,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/bg_voice_playback"
-            android:backgroundTint="?vctr_content_quinary"
+            android:backgroundTint="?voice_message_playback_background_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/voiceMessageDeletePlayback"

@@ -82,7 +82,6 @@ class TextComposerView @JvmOverloads constructor(
             }
 
             override fun onTextBlankStateChanged(isBlank: Boolean) {
-                /*
                 val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank || alwaysShowSendButton
                 TransitionManager.endTransitions(this@TextComposerView)
                 if (views.sendButton.isVisible != shouldShowSendButton) {
@@ -92,7 +91,6 @@ class TextComposerView @JvmOverloads constructor(
                     )
                     views.sendButton.isInvisible = !shouldShowSendButton
                 }
-                 */
                 updateSendButtonColor(isBlank)
                 callback?.onTextBlankStateChanged(isBlank)
             }
@@ -125,10 +123,8 @@ class TextComposerView @JvmOverloads constructor(
         currentConstraintSetId = R.layout.composer_layout_constraint_set_compact
         applyNewConstraintSet(animate, transitionComplete)
 
-        /*
         val shouldShowSendButton = !views.composerEditText.text.isNullOrEmpty() || alwaysShowSendButton
         views.sendButton.isInvisible = !shouldShowSendButton
-        */
     }
 
     fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
@@ -138,7 +134,7 @@ class TextComposerView @JvmOverloads constructor(
         }
         currentConstraintSetId = R.layout.composer_layout_constraint_set_expanded
         applyNewConstraintSet(animate, transitionComplete)
-        //views.sendButton.isInvisible = false
+        views.sendButton.isInvisible = false
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {

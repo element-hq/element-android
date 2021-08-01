@@ -79,6 +79,7 @@
         <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light</item>
 
         <!-- SC additions -->
+        <item name="colorBackgroundFloating">@color/background_floating_sc_light</item>
         <item name="colorAccent">@color/accent_sc</item>
         <item name="android:colorAccent">@color/accent_sc</item>
         <item name="sc_message_bg_incoming">@color/background_sc_light_secondary</item>
@@ -100,6 +101,9 @@
         <item name="android:navigationBarColor">@color/background_black_sc</item>
 
         <item name="vctr_jump_to_unread_style">@style/Widget.Vector.JumpToUnread.SC.Light</item>
+
+        <!-- Voice Message -->
+        <item name="vctr_voice_message_toast_background">@color/background_floating_sc</item> <!-- needs dark background -->
     </style>
 
     <!-- Default AppTheme for usage where settings don't apply -->

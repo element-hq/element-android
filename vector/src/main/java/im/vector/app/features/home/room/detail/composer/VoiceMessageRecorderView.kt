@@ -104,6 +104,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             stopRecordingTicker()
             hideRecordingViews(isCancelled = false)
             views.voiceMessageSendButton.isVisible = false
+            views.voiceMessageMicButton.isVisible = true
             recordingState = RecordingState.NONE
         }
 
@@ -111,6 +112,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             stopRecordingTicker()
             hideRecordingViews(isCancelled = true)
             views.voiceMessageSendButton.isVisible = false
+            views.voiceMessageMicButton.isVisible = true
             recordingState = RecordingState.NONE
         }
 
@@ -343,10 +345,13 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     private fun showRecordingViews() {
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic_recording)
+        views.voiceMessageMicButton.isVisible = true
+        /* This is a no-op for SchildiChat
         views.voiceMessageMicButton.updateLayoutParams<MarginLayoutParams> {
             setMargins(0, 0, 0, 0)
         }
-        views.voiceMessageMicButton.animate().scaleX(1.5f).scaleY(1.5f).setDuration(300).start()
+         */
+        //views.voiceMessageMicButton.animate().scaleX(1.5f).scaleY(1.5f).setDuration(300).start()
 
         views.voiceMessageLockBackground.isVisible = true
         views.voiceMessageLockBackground.animate().setDuration(300).translationY(-dimensionConverter.dpToPx(180).toFloat()).start()
@@ -418,8 +423,12 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     private fun resetMicButtonUi() {
-        views.voiceMessageMicButton.isVisible = true
+        if (!views.voiceMessageSendButton.isVisible) {
+            views.voiceMessageMicButton.isVisible = true
+        }
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic)
+        /* This is from Element, and I have no idea why they just didn't make it symmetric from the layout... well I did!
+        // Also, SchildiChat layout doesn't need any margin there, and doesn't enlarge the icon during recording, so no code needed here
         views.voiceMessageMicButton.updateLayoutParams<MarginLayoutParams> {
             if (rtlXMultiplier == -1) {
                 // RTL
@@ -428,6 +437,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 setMargins(0, 0, dimensionConverter.dpToPx(12), dimensionConverter.dpToPx(12))
             }
         }
+         */
     }
 
     private fun animateLockImageWithBackground() {
@@ -476,6 +486,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessagePlaybackTimerIndicator.isVisible = true
         views.voicePlaybackControlButton.isVisible = false
         views.voiceMessageSendButton.isVisible = true
+        views.voiceMessageMicButton.isInvisible = true
         renderToast(context.getString(R.string.voice_message_tap_to_stop_toast))
     }
 
