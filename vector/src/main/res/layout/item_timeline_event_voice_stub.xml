@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/voiceLayout"
     android:layout_width="match_parent"
+    android:minWidth="999999dp"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -11,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_voice_playback"
-        android:backgroundTint="?vctr_content_quinary"
+        android:backgroundTint="?voice_message_playback_background_color"
         android:minHeight="48dp"
         android:paddingStart="8dp"
         android:paddingTop="6dp"

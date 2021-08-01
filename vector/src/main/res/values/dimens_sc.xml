@@ -6,4 +6,7 @@
     <!-- messageAvatarImageView.marginStart -->
     <dimen name="dual_bubble_one_side_avatar_offset">8dp</dimen>
 
+    <!-- As found in various layout stubs in item_timeline_event_base.xml -->
+    <dimen name="no_bubble_margin_end">56dp</dimen>
+
 </resources>

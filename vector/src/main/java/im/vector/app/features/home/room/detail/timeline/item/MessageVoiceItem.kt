@@ -16,10 +16,12 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.content.Context
 import android.text.format.DateUtils
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -29,6 +31,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.themes.BubbleThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
@@ -128,9 +131,24 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         val voicePlaybackTime by bind<TextView>(R.id.voicePlaybackTime)
         val voicePlaybackWaveform by bind<AudioRecordView>(R.id.voicePlaybackWaveform)
         val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)
+        val voicePlaybackLayout by bind<ConstraintLayout>(R.id.voicePlaybackLayout)
     }
 
     companion object {
         private const val STUB_ID = R.id.messageContentVoiceStub
+    }
+
+    override fun messageBubbleAllowed(context: Context): Boolean {
+        return true
+    }
+
+    override fun setBubbleLayout(holder: Holder, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
+        super.setBubbleLayout(holder, bubbleStyle, bubbleStyleSetting, reverseBubble)
+
+        if (BubbleThemeUtils.drawsActualBubbles(bubbleStyle)) {
+            (holder.voiceLayout.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = 0
+        } else {
+            (holder.voiceLayout.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = holder.voiceLayout.resources.getDimensionPixelSize(R.dimen.no_bubble_margin_end)
+        }
     }
 }

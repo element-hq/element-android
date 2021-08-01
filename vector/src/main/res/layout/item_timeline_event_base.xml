@@ -189,9 +189,8 @@
                 <ViewStub
                     android:id="@+id/messageContentVoiceStub"
                     style="@style/TimelineContentStubBaseParams"
-                    android:layout_marginEnd="56dp"
                     android:layout="@layout/item_timeline_event_voice_stub"
-                    tools:visibility="visible" />
+                    tools:visibility="gone" />
 
             </FrameLayout>
 
