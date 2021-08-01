@@ -796,6 +796,7 @@ class RoomDetailFragment @Inject constructor(
                 scrollOnNewMessageCallback.forceScrollOnNextUpdate()
                 roomDetailViewModel.timeline.restartWithEventId(null)
             } else {
+                roomDetailViewModel.timeline.setInitialEventId(null)
                 layoutManager.scrollToPosition(0)
             }
         }

@@ -54,8 +54,16 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
 
     override fun onInserted(position: Int, count: Int) {
         if (initialForceScroll) {
-            timelineEventController.searchPositionOfEvent(initialForceScrollEventId)?.let {
-                layoutManager.scrollToPosition(it)
+            var scrollToEvent = initialForceScrollEventId
+            if (initialForceScrollEventId == null) {
+                scrollToEvent = timelineEventController.timeline?.getInitialEventId()
+            }
+            if (scrollToEvent == null) {
+                layoutManager.scrollToPositionWithOffset(0, 0)
+            } else {
+                timelineEventController.searchPositionOfEvent(scrollToEvent)?.let {
+                    layoutManager.scrollToPosition(it)
+                }
             }
             return
         }
@@ -64,7 +72,7 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
         }
         if (forceScroll) {
             forceScroll = false
-            layoutManager.scrollToPosition(0)
+            layoutManager.scrollToPositionWithOffset(0, 0)
             return
         }
         if (layoutManager.findFirstVisibleItemPosition() > 1) {
@@ -79,8 +87,7 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
             while (newTimelineEventIds.lastOrNull() != firstNewItemIds) {
                 newTimelineEventIds.removeLastOrNull()
             }
-            //layoutManager.scrollToPosition(0)
-            layoutManager.scrollToPositionWithOffset(0, Integer.MAX_VALUE)
+            layoutManager.scrollToPositionWithOffset(0, 0)
         }
     }
 }

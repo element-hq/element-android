@@ -225,6 +225,10 @@ internal class DefaultTimeline(
         return initialEventId
     }
 
+    override fun setInitialEventId(eventId: String?) {
+        initialEventId = eventId
+    }
+
     override fun getTimelineEventAtIndex(index: Int): TimelineEvent? {
         return builtEvents.getOrNull(index)
     }

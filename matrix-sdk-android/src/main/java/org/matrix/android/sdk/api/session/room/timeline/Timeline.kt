@@ -62,6 +62,11 @@ interface Timeline {
     fun getInitialEventId(): String?
 
     /**
+     * Change initial event id
+     */
+    fun setInitialEventId(eventId: String?)
+
+    /**
      * Check if the timeline can be enriched by paginating.
      * @param direction the direction to check in
      * @return true if timeline can be enriched
