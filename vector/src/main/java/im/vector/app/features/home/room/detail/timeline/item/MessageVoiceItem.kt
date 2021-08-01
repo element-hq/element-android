@@ -98,16 +98,19 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
     private fun renderIdleState(holder: Holder) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
+        holder.voicePlaybackControlButton.contentDescription = holder.view.context.resources.getString(R.string.a11y_play_voice_message)
         holder.voicePlaybackTime.text = formatPlaybackTime(duration)
     }
 
     private fun renderPlayingState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
+        holder.voicePlaybackControlButton.contentDescription = holder.view.context.resources.getString(R.string.a11y_pause_voice_message)
         holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 
     private fun renderPausedState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Paused) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
+        holder.voicePlaybackControlButton.contentDescription = holder.view.context.resources.getString(R.string.a11y_play_voice_message)
         holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 

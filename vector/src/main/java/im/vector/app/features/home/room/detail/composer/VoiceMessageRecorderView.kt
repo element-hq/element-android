@@ -20,6 +20,7 @@ import android.content.Context
 import android.text.format.DateUtils
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -476,12 +477,14 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         views.voiceMessagePlaybackTimerIndicator.isVisible = true
         views.voicePlaybackControlButton.isVisible = false
         views.voiceMessageSendButton.isVisible = true
+        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
         renderToast(context.getString(R.string.voice_message_tap_to_stop_toast))
     }
 
     private fun showPlaybackViews() {
         views.voiceMessagePlaybackTimerIndicator.isVisible = false
         views.voicePlaybackControlButton.isVisible = true
+        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         callback?.onVoiceRecordingPlaybackModeOn()
     }
 
@@ -507,12 +510,14 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             is VoiceMessagePlaybackTracker.Listener.State.Playing   -> {
                 views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
+                views.voicePlaybackControlButton.contentDescription = resources.getString(R.string.a11y_pause_voice_message)
                 val formattedTimerText = DateUtils.formatElapsedTime((state.playbackTime / 1000).toLong())
                 views.voicePlaybackTime.text = formattedTimerText
             }
             is VoiceMessagePlaybackTracker.Listener.State.Paused,
             is VoiceMessagePlaybackTracker.Listener.State.Idle      -> {
                 views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
+                views.voicePlaybackControlButton.contentDescription = resources.getString(R.string.a11y_play_voice_message)
             }
         }
     }
