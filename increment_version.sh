@@ -156,6 +156,7 @@ git_changelog() {
         | grep -v "Added translation using Weblate" \
         | grep -v "Translated using Weblate" \
         | grep -v "weblate/sc" \
+        | grep -v "\\[merge.*\\]" \
         || echo "No significant changes since the last stable release"
 }
 
