@@ -67,6 +67,16 @@ interface Timeline {
     fun setInitialEventId(eventId: String?)
 
     /**
+     * Offset for the initial event, e.g. if we want to load the event just below said id
+     */
+    fun getInitialEventIdOffset(): Int
+
+    /**
+     * Set the offset for the initial event, e.g. if we want to load the event just below said id
+     */
+    fun setInitialEventIdOffset(offset: Int)
+
+    /**
      * Check if the timeline can be enriched by paginating.
      * @param direction the direction to check in
      * @return true if timeline can be enriched

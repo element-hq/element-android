@@ -131,11 +131,16 @@ class RoomDetailViewModel @AssistedInject constructor(
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
-    private val eventId = initialState.eventId
+    private val eventId = initialState.eventId ?: if (vectorPreferences.loadRoomAtFirstUnread()) room.roomSummary()?.readMarkerId else null
     private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsInvisible>()
     private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
-    val timeline = timelineFactory.createTimeline(viewModelScope, room, eventId)
+    val timeline = timelineFactory.createTimeline(viewModelScope, room, eventId).apply {
+        // Target the event just below $eventId in case that it is the readMarkerId
+        if (initialState.eventId == null && eventId != null) {
+            setInitialEventIdOffset(-1)
+        }
+    }
 
     // Same lifecycle than the ViewModel (survive to screen rotation)
     val previewUrlRetriever = PreviewUrlRetriever(session, viewModelScope)
@@ -184,8 +189,10 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeActiveRoomWidgets()
         observePowerLevel()
         room.getRoomSummaryLive()
-        viewModelScope.launch(Dispatchers.IO) {
-            tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+        if (!vectorPreferences.loadRoomAtFirstUnread()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+            }
         }
         // Inform the SDK that the room is displayed
         viewModelScope.launch(Dispatchers.IO) {
@@ -507,6 +514,9 @@ class RoomDetailViewModel @AssistedInject constructor(
             mostRecentDisplayedEvent?.root?.eventId?.also {
                 session.coroutineScope.launch(NonCancellable) {
                     tryOrNull { room.setReadMarker(it) }
+                    if (vectorPreferences.loadRoomAtFirstUnread()) {
+                        tryOrNull { room.setReadReceipt(it) }
+                    }
                 }
             }
             mostRecentDisplayedEvent = null
@@ -1312,10 +1322,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeEventDisplayedActions() {
-        // We are buffering scroll events for one second
+        // We are buffering scroll events for half a second
         // and keep the most recent one to set the read receipt on.
         visibleEventsObservable
-                .buffer(1, TimeUnit.SECONDS)
+                .buffer(500, TimeUnit.MILLISECONDS)
                 .filter { it.isNotEmpty() }
                 .subscribeBy(onNext = { actions ->
                     val bufferedMostRecentDisplayedEvent = actions.maxByOrNull { it.event.displayIndex }?.event ?: return@subscribeBy

@@ -61,6 +61,7 @@ private const val MIN_FETCHING_COUNT = 30
 internal class DefaultTimeline(
         private val roomId: String,
         private var initialEventId: String? = null,
+        private var initialEventIdOffset: Int = 0,
         private val realmConfiguration: RealmConfiguration,
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
@@ -145,7 +146,7 @@ internal class DefaultTimeline(
 
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
-            Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
+            Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId (offset $initialEventIdOffset)")
             timelineInput.listeners.add(this)
             BACKGROUND_HANDLER.post {
                 eventDecryptor.start()
@@ -195,7 +196,7 @@ internal class DefaultTimeline(
         if (isStarted.compareAndSet(true, false)) {
             isReady.set(false)
             timelineInput.listeners.remove(this)
-            Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
+            Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId (offset $initialEventIdOffset)")
             cancelableBag.cancel()
             BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
             BACKGROUND_HANDLER.post {
@@ -217,6 +218,7 @@ internal class DefaultTimeline(
     override fun restartWithEventId(eventId: String?) {
         dispose()
         initialEventId = eventId
+        initialEventIdOffset = 0
         start()
         postSnapshot()
     }
@@ -227,6 +229,14 @@ internal class DefaultTimeline(
 
     override fun setInitialEventId(eventId: String?) {
         initialEventId = eventId
+    }
+
+    override fun getInitialEventIdOffset(): Int {
+        return initialEventIdOffset
+    }
+
+    override fun setInitialEventIdOffset(offset: Int) {
+        initialEventIdOffset = offset
     }
 
     override fun getTimelineEventAtIndex(index: Int): TimelineEvent? {

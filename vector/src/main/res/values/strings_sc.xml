@@ -84,6 +84,9 @@
     <string name="setting_sc_accent_color_dark">Accent color for dark themes</string>
     <string name="settings_sc_accent_disclaimer">Note that these color settings only apply to SC themes, and not Element themes.</string>
 
+    <string name="settings_open_chats_at_first_unread">Open at first unread</string>
+    <string name="settings_open_chats_at_first_unread_summary">Open chats at the first unread message instead of at the bottom.</string>
+
     <!-- Accent colors -->
     <string name="sc_accent_greenlight">Light green</string>
     <string name="sc_accent_greendark">Dark green</string>

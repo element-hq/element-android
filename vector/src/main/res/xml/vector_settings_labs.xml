@@ -36,6 +36,12 @@
 
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"
+        android:key="SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD"
+        android:title="@string/settings_open_chats_at_first_unread"
+        android:summary="@string/settings_open_chats_at_first_unread_summary" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
         android:key="SYSTEM_DARK_THEME_PRE_TEN"
         android:title="@string/settings_system_dark_theme_pre_ten"
         android:summary="@string/settings_system_dark_theme_pre_ten_summary" />

@@ -203,6 +203,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_USER_COLOR_MODE_DM = "SETTINGS_USER_COLOR_MODE_DM"
         private const val SETTINGS_USER_COLOR_MODE_DEFAULT = "SETTINGS_USER_COLOR_MODE_DEFAULT"
         private const val SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM = "SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM"
+        private const val SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD = "SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
@@ -995,6 +996,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             isDirect -> SETTINGS_USER_COLOR_MODE_DM
             else -> SETTINGS_USER_COLOR_MODE_DEFAULT
         }, MatrixItemColorProvider.USER_COLORING_DEFAULT) ?: MatrixItemColorProvider.USER_COLORING_DEFAULT
+    }
+
+    // SC addition
+    fun loadRoomAtFirstUnread(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD, false)
     }
 
     /**

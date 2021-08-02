@@ -23,6 +23,7 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.math.max
 
 class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
                                  private val timelineEventController: TimelineEventController,
@@ -32,7 +33,6 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
     private var forceScroll = false
     var initialForceScroll = false
     var initialForceScrollEventId: String? = null
-        get() = field ?: timelineEventController.timeline?.getInitialEventId()
 
     fun addNewTimelineEventIds(eventIds: List<String>) {
         // Disable initial force scroll
@@ -57,8 +57,10 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
     override fun onInserted(position: Int, count: Int) {
         if (initialForceScroll) {
             var scrollToEvent = initialForceScrollEventId
+            var scrollOffset = 0
             if (initialForceScrollEventId == null) {
                 scrollToEvent = timelineEventController.timeline?.getInitialEventId()
+                scrollOffset = timelineEventController.timeline?.getInitialEventIdOffset() ?: 0
             }
             if (scrollToEvent == null) {
                 layoutManager.scrollToPositionWithOffset(0, 0)
@@ -67,7 +69,8 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
                     // Scroll such that the scrolled-to event is moved down 1/3 of the screen.
                     // To do that, we actually scroll the view above out by 2/3 (since we can only control the distance
                     // from the bottom of the view, not the top).
-                    layoutManager.scrollToPositionWithOffset(it + 1, parentView.measuredHeight * 2 / 3)
+                    val scrollToPosition = max(it + scrollOffset + 1, 0)
+                    layoutManager.scrollToPositionWithOffset(scrollToPosition, parentView.measuredHeight * 2 / 3)
                 }
             }
             return
