@@ -222,7 +222,7 @@
     <string name="notice_room_server_acl_allow_is_empty">🎉 Tutti i server sono banditi! Questa stanza non può più essere usata.</string>
     <string name="notice_room_server_acl_updated_no_change">Nessuna modifica.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• I server che corrispondono a IP alfabetici ora sono banditi.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• I server che corrispondono a IP alfabetici ora sono permessi.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• I server che corrispondono a IP alfabetici ora sono ammessi.</string>
     <string name="notice_room_server_acl_updated_was_allowed">• I server che corrispondono a %s sono stati rimossi dalla lista degli ammessi.</string>
     <string name="notice_room_server_acl_updated_allowed">• I server che corrispondono a %s ora sono ammessi.</string>
     <string name="notice_room_server_acl_updated_was_banned">• I server che corrispondono a %s sono stati rimossi dalla lista di ban.</string>
@@ -230,7 +230,7 @@
     <string name="notice_room_server_acl_updated_title_by_you">Hai cambiato le ACL del server per questa stanza.</string>
     <string name="notice_room_server_acl_updated_title">%s ha cambiato le ACL del server per questa stanza.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">• I server che corrispondono a IP alfabetici sono banditi.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• I server che corrispondono a IP alfabetici sono permessi.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• I server che corrispondono a IP alfabetici sono ammessi.</string>
     <string name="notice_room_server_acl_set_allowed">• I server che corrispondono a %s sono ammessi.</string>
     <string name="notice_room_server_acl_set_banned">• I server che corrispondono a %s sono banditi.</string>
     <string name="notice_room_server_acl_set_title_by_you">Hai impostato le ACL del server per questa stanza.</string>
@@ -367,7 +367,7 @@
     <string name="login">Accedi</string>
     <string name="logout">Disconnetti</string>
     <string name="hs_url">URL dell\'homeserver</string>
-    <string name="identity_url">URL dell\'Identity Server</string>
+    <string name="identity_url">URL del server di identità</string>
     <string name="search">Cerca</string>
     <string name="start_new_chat">Avvia una nuova chat diretta</string>
     <string name="start_voice_call">Avvia chiamata audio</string>
@@ -1204,8 +1204,8 @@
     <string name="settings_troubleshoot_test_fcm_failed">Recupero fallito del token FCM:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registrazione Token</string>
-    <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrato con successo sull\'Home Server.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">E\'fallita la registrazione del Token FCM sull\'Home Server:
+    <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrato con successo sull\'homeserver.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">È fallita la registrazione del token FCM sull\'homeserver:
 \n %1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Servizi di notifica</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Servizio di notifiche in esecuzione.</string>
@@ -1408,7 +1408,7 @@
     <string name="media_source_choose">Scegli</string>
     <string name="settings_play_shutter_sound">Riproduci il suono dell\'otturatore</string>
     <string name="action_mark_room_read">Segna come letto</string>
-    <string name="settings_notification_privacy_no_background_sync">L\'app <b>non</b> ha bisogno di connettersi in background all\'Home Server. Ciò dovrebbe ridurre il consumo della batteria</string>
+    <string name="settings_notification_privacy_no_background_sync">L\'app <b>non</b> ha bisogno di connettersi in secondo piano all\'homeserver. Ciò dovrebbe ridurre il consumo della batteria</string>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: %2$d messaggio</item>
         <item quantity="other">%1$s: %2$d messaggi</item>
@@ -1472,7 +1472,7 @@
     <string name="sas_error_m_key_mismatch">Le chiavi non corrispondono</string>
     <string name="sas_error_m_user_error">L\'utente non corrisponde</string>
     <string name="sas_error_unknown">Errore sconosciuto</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">Esiste già un backup sul tuo Home Server</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Esiste già un backup sul tuo homeserver</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Sembra tu abbia già impostato il backup delle chiavi crittografiche da un\'altra sessione. Vuoi sostituirlo con il backup che stai creando\?</string>
     <string name="keys_backup_setup_override_replace">Sostituisci</string>
     <string name="keys_backup_setup_override_stop">Ferma</string>
@@ -1567,7 +1567,7 @@
     <string name="room_directory_search_hint">Nome o ID stanza (#esempio:matrix.org)</string>
     <string name="labs_swipe_to_reply_in_timeline">Attiva lo swipe per rispondere nella timeline</string>
     <string name="link_copied_to_clipboard">Link URL copiato negli appunti</string>
-    <string name="settings_integration_manager">Gestore delle integrazioni</string>
+    <string name="settings_integration_manager">Gestore di integrazioni</string>
     <string name="integration_manager_not_configured">Non è stato configurato nessun Integration Manager.</string>
     <string name="add_by_matrix_id">Aggiungi per ID utente</string>
     <string name="creating_direct_room">Creazione stanza …</string>
@@ -1619,7 +1619,7 @@
     <string name="settings_discovery_manage">Configura l\'Identity Server per trovare e farsi trovare dagli altri utenti.</string>
     <string name="encryption_information_device_name_with_warning">Nome pubblico (visibile alle persone con cui comunichi)</string>
     <string name="device_name_warning">Il nome pubblico di una sessione è visibile alle persone con cui comunichi</string>
-    <string name="identity_server_not_defined">Non stai usando alcun Identity Server</string>
+    <string name="identity_server_not_defined">Non stai usando alcun server di identità</string>
     <string name="identity_server_not_defined_for_password_reset">Nessun Identity Server configurato. E\' necessario per poter ripristinare la tua password.</string>
     <string name="error_user_already_logged_in">Pare che tu stia provando a connetterti ad un altro homeserver. Vuoi disconnetterti da qui\?</string>
     <string name="identity_server">Identity Server</string>
@@ -1700,8 +1700,8 @@
     <string name="template_settings_add_3pid_flow_not_supported">Non puoi farlo da ${app_name} mobile</string>
     <string name="settings_add_3pid_authentication_needed">E\'necessaria l\'autenticazione</string>
     <string name="settings_integrations">Integrazioni</string>
-    <string name="settings_integrations_summary">Usa un Integration Manager per gestire bot, bridge, widget e pacchetti di sticker.
-\nGli Integration Manager possono ricevere dati di configurazione, modificare widget, mandare inviti alle stanze e modificare permessi a tuo nome.</string>
+    <string name="settings_integrations_summary">Usa un gestore di integrazioni per gestire bot, bridge, widget e pacchetti di sticker.
+\nI gestori di integrazioni possono ricevere dati di configurazione, modificare widget, mandare inviti alle stanze e modificare permessi a tuo nome.</string>
     <string name="settings_integration_allow">Permetti l\'uso di integrazioni</string>
     <string name="room_widget_activity_title">Widget</string>
     <string name="room_widget_permission_title">Carica widget</string>
@@ -2065,7 +2065,7 @@
 \n- La connessione internet usata da uno dei dispositivi
 \n
 \nTi consigliamo di cambiare immediatamente la password e le chiavi di recupero nelle impostazioni.</string>
-    <string name="verify_cancelled_notice">Verifica i tuoi dispositivi nelle impostazioni.</string>
+    <string name="verify_cancelled_notice">La verifica è stata annullata. Puoi iniziarne una nuova.</string>
     <string name="verification_cancelled">Verifica annullata</string>
     <string name="recovery_passphrase">Passphrase di ripristino</string>
     <string name="message_key">Chiave dei messaggi</string>
@@ -2536,7 +2536,7 @@
     <string name="attachment_viewer_item_x_of_y">%1$d di %2$d</string>
     <string name="a11y_create_direct_message_by_qr_code">Crea una nuova conversazione diretta scansionando un codice QR</string>
     <string name="a11y_create_direct_message_by_mxid">Crea una nuova conversazione diretta tramite ID utente</string>
-    <string name="identity_server_consent_dialog_content">Per trovare gli utenti che già conosci, accetti di inviare le informazioni di contatto (numeri di telefono e/o email) all\'Identity Server configurato (%1$s)\?
+    <string name="identity_server_consent_dialog_content">Per trovare gli utenti che già conosci, accetti di inviare le tue informazioni di contatto (numeri di telefono e/o email) al server di identità configurato (%1$s)\?
 \n
 \nPer garantire la privacy, i dati verranno inviati in forma oscurata (hashing).</string>
     <string name="identity_server_consent_dialog_title">Invio di email e numeri di telefono</string>
@@ -2894,4 +2894,12 @@
     <string name="missing_permissions_title">Autorizzazioni mancanti</string>
     <string name="denied_permission_camera">Per eseguire questa azione, concedi l\'autorizzazione Fotocamera dalle impostazioni di sistema.</string>
     <string name="denied_permission_generic">Mancano alcune autorizzazioni per eseguire questa azione, concedile dalle impostazioni di sistema.</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Videochiamata persa</item>
+        <item quantity="other">%d videochiamate perse</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Telefonata persa</item>
+        <item quantity="other">%d telefonate perse</item>
+    </plurals>
 </resources>
