@@ -47,6 +47,9 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
     var roomTopic: String? = null
 
     @EpoxyAttribute
+    var roomDomain: String? = null
+
+    @EpoxyAttribute
     var nbOfMembers: Int = 0
 
     @EpoxyAttribute
@@ -64,8 +67,9 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
 
         avatarRenderer.render(matrixItem, holder.avatarView)
         holder.nameView.text = matrixItem.displayName
+        holder.domainView.text = roomDomain
         holder.aliasView.setTextOrHide(roomAlias)
-        holder.topicView.setTextOrHide(roomTopic)
+        holder.topicView.text = roomTopic
         // TODO Use formatter for big numbers?
         holder.counterView.text = nbOfMembers.toString()
 
@@ -86,6 +90,7 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
 
         val avatarView by bind<ImageView>(R.id.itemPublicRoomAvatar)
         val nameView by bind<TextView>(R.id.itemPublicRoomName)
+        val domainView by bind<TextView>(R.id.itemPublicRoomDomain)
         val aliasView by bind<TextView>(R.id.itemPublicRoomAlias)
         val topicView by bind<TextView>(R.id.itemPublicRoomTopic)
         val counterView by bind<TextView>(R.id.itemPublicRoomMembersCount)
