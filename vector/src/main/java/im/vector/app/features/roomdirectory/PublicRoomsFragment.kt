@@ -19,7 +19,6 @@ package im.vector.app.features.roomdirectory
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
@@ -37,7 +36,6 @@ import im.vector.app.databinding.FragmentPublicRoomsBinding
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import io.reactivex.rxkotlin.subscribeBy
-
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import timber.log.Timber
@@ -61,8 +59,6 @@ class PublicRoomsFragment @Inject constructor(
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentPublicRoomsBinding {
         return FragmentPublicRoomsBinding.inflate(inflater, container, false)
     }
-
-    override fun getMenuRes() = R.menu.menu_room_directory
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -107,17 +103,6 @@ class PublicRoomsFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_room_directory_change_protocol -> {
-                sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
-                true
-            }
-            else                                     ->
-                super.onOptionsItemSelected(item)
-        }
-    }
-
     private fun setupRecyclerView() {
         views.publicRoomsList.trackItemsVisibilityChange()
         views.publicRoomsList.configureWith(publicRoomsController)
@@ -141,17 +126,17 @@ class PublicRoomsFragment @Inject constructor(
                 .disposeOnDestroyView()
     }
 
-    override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState) {
+    override fun onPublicRoomClicked(publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData, joinState: JoinState) {
         Timber.v("PublicRoomClicked: $publicRoom")
-        withState(viewModel) { state ->
+        withState(viewModel) { _ ->
             when (joinState) {
                 JoinState.JOINED -> {
                     navigator.openRoom(requireActivity(), publicRoom.roomId)
                 }
                 else             -> {
                     // ROOM PREVIEW
-                    navigator.openRoomPreview(requireActivity(), publicRoom, state.roomDirectoryData)
-                }
+                    navigator.openRoomPreview(requireActivity(), publicRoom, roomDirectoryData)
+                };
             }
         }
     }
@@ -159,10 +144,6 @@ class PublicRoomsFragment @Inject constructor(
     override fun onPublicRoomJoin(publicRoom: PublicRoom) {
         Timber.v("PublicRoomJoinClicked: $publicRoom")
         viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom.roomId))
-    }
-
-    override fun loadMore() {
-        viewModel.handle(RoomDirectoryAction.LoadMore)
     }
 
     private var initialValueSet = false
