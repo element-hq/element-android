@@ -79,11 +79,15 @@
                 android:paddingStart="@dimen/layout_horizontal_margin"
                 android:paddingEnd="@dimen/layout_horizontal_margin">
 
-                <ImageView
+                <fr.gouv.tchap.core.ui.views.HexagonMaskView
                     android:id="@+id/roomPreviewNoPreviewAvatar"
                     android:layout_width="128dp"
                     android:layout_height="128dp"
                     android:layout_marginTop="60dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/avatar"
+                    android:scaleType="centerCrop"
                     android:importantForAccessibility="no"
                     tools:src="@sample/room_round_avatars" />
 
