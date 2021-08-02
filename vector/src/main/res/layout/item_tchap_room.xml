@@ -34,7 +34,7 @@
             android:id="@+id/roomAvatarImageView"
             android:layout_width="@dimen/tchap_item_room_circle_avatar_size"
             android:layout_height="@dimen/tchap_item_room_circle_avatar_size"
-            android:layout_gravity="center"
+            android:layout_margin="3dp"
             android:contentDescription="@string/avatar"
             tools:src="@tools:sample/avatars" />
 
