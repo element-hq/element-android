@@ -41,7 +41,7 @@
         tools:visibility="visible" />
 
     <im.vector.app.features.home.room.list.widget.TchapRoomsFabMenuView
-        android:id="@+id/createGroupRoomButton"
+        android:id="@+id/createRoomFabMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"

@@ -122,12 +122,7 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
                 if (isDirect) {
                     holder.avatarImageView
                 } else {
-                    holder.avatarHexagonImageView.apply {
-                        setBorderSettings(
-                                ContextCompat.getColor(holder.view.context, R.color.element_room_01),
-                                1
-                        )
-                    }
+                    holder.avatarHexagonImageView
                 }
         )
     }
@@ -146,13 +141,13 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
                 TchapRoomType.PRIVATE  -> {
                     text = holder.view.context.getString(R.string.tchap_room_private_room_type)
                     setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_private))
-                    resource = R.drawable.ic_tchap_room_lock_red
+                    resource = R.drawable.ic_tchap_room_lock_red_bordered
                     visibility = View.VISIBLE
                 }
                 TchapRoomType.EXTERNAL -> {
                     text = holder.view.context.getString(R.string.tchap_room_extern_room_type)
                     setTextColor(ContextCompat.getColor(holder.view.context, R.color.tchap_room_external))
-                    resource = R.drawable.ic_tchap_room_lock_orange
+                    resource = R.drawable.ic_tchap_room_lock_orange_bordered
                     visibility = View.VISIBLE
                 }
                 TchapRoomType.FORUM    -> {

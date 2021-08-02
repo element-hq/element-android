@@ -52,8 +52,8 @@
     <color name="palette_tchap_pale_grey">#f2f5f8</color>
     <color name="palette_tchap_coral">#eb5757</color>
     <color name="palette_tchap_coral_alpha70">#b2eb5757</color>
-    <color name="palette_tchap_pumpkin_orange">#f07a12</color>
-    <color name="palette_tchap_pumpkin_orange_alpha70">#b2f07a12</color>
+    <color name="palette_tchap_pumpkin_orange">#EF8425</color>
+    <color name="palette_tchap_pumpkin_orange_alpha70">#b2EF8425</color>
     <color name="palette_tchap_jade_green">#27ae60</color>
     <color name="palette_tchap_jade_green_alpha70">#b227ae60</color>
     <color name="palette_tchap_greyish_brown">#4f4f4f</color>

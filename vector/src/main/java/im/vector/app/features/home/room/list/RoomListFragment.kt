@@ -122,7 +122,7 @@ class RoomListFragment @Inject constructor(
         }
 
         views.createChatFabMenu.listener = this
-        views.createGroupRoomButton.listener = this
+        views.createRoomFabMenu.listener = this
 
         sharedActionViewModel
                 .observe()
@@ -174,6 +174,7 @@ class RoomListFragment @Inject constructor(
         footerController.listener = null
         // TODO Cleanup listener on the ConcatAdapter's adapters?
         stateRestorer.clear()
+        views.createRoomFabMenu.listener = null
         views.createChatFabMenu.listener = null
         concatAdapter = null
         super.onDestroyView()
@@ -203,15 +204,12 @@ class RoomListFragment @Inject constructor(
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = true
             RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.isVisible = true
-            RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.isVisible = true
+            RoomListDisplayMode.ROOMS         -> views.createRoomFabMenu.isVisible = true
             else                              -> Unit // No button in this mode
         }
 
         views.createChatRoomButton.debouncedClicks {
             fabCreateDirectChat()
-        }
-        views.createGroupRoomButton.debouncedClicks {
-            fabOpenRoomDirectory()
         }
 
         // Hide FAB when list is scrolling
@@ -219,17 +217,19 @@ class RoomListFragment @Inject constructor(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         views.createChatFabMenu.removeCallbacks(showFabRunnable)
+                        views.createRoomFabMenu.removeCallbacks(showFabRunnable)
 
                         when (newState) {
                             RecyclerView.SCROLL_STATE_IDLE     -> {
                                 views.createChatFabMenu.postDelayed(showFabRunnable, 250)
+                                views.createRoomFabMenu.postDelayed(showFabRunnable, 250)
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
                                     RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.hide()
                                     RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.hide()
-                                    RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.hide()
+                                    RoomListDisplayMode.ROOMS         -> views.createRoomFabMenu.hide()
                                     else                              -> Unit
                                 }
                             }
@@ -382,7 +382,7 @@ class RoomListFragment @Inject constructor(
             when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
                 RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.show()
-                RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.show()
+                RoomListDisplayMode.ROOMS         -> views.createRoomFabMenu.show()
                 else                              -> Unit
             }
         }
@@ -475,7 +475,7 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        if (views.createChatFabMenu.onBackPressed()) {
+        if (views.createChatFabMenu.onBackPressed() || views.createRoomFabMenu.onBackPressed()) {
             return true
         }
         return false

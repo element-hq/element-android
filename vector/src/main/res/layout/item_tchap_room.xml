@@ -34,7 +34,7 @@
             android:id="@+id/roomAvatarImageView"
             android:layout_width="@dimen/tchap_item_room_circle_avatar_size"
             android:layout_height="@dimen/tchap_item_room_circle_avatar_size"
-            android:layout_gravity="center"
+            android:layout_margin="3dp"
             android:contentDescription="@string/avatar"
             tools:src="@tools:sample/avatars" />
 
@@ -53,10 +53,11 @@
             android:layout_width="@dimen/tchap_item_room_hexagon_avatar_size"
             android:layout_height="@dimen/tchap_item_room_hexagon_avatar_size"
             android:adjustViewBounds="true"
-            android:visibility="gone"
             android:background="@android:color/transparent"
             android:contentDescription="@string/avatar"
             android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:borderColor="@color/element_room_01"
             tools:src="@tools:sample/avatars"
             tools:visibility="visible" />
 

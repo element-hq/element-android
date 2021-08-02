@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/bg_tchap_forum_pressed" android:state_pressed="true" /> <!-- pressed -->
+    <item android:drawable="@drawable/bg_tchap_forum_pressed" android:state_focused="true" /> <!-- focused -->
+    <item android:drawable="@drawable/bg_tchap_forum_pressed" android:state_selected="true" /> <!-- selected -->
+    <item android:drawable="@drawable/bg_tchap_room_type" /> <!-- default -->
+</selector>

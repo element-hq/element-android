@@ -15,18 +15,18 @@
         <item quantity="one">Limiter l’historique du salon à %d jour</item>
         <item quantity="other">Limiter l’historique du salon à %d jours</item>
     </plurals>
-    <string name="tchap_room_creation_disable_federation">Limiter l’accès à ce salon aux membres du domaine \"%s\"</string>
-    <string name="tchap_room_creation_public_info">Un forum peut être rejoint par tous les utilisateurs excepté les invités externes. Il ne doit contenir aucune donnée sensible.</string>
+    <string name="tchap_room_creation_limited_domain">Limité à mon domaine (%s)</string>
+    <string name="tchap_room_creation_public_info">Il ne doit contenir aucune donnée sensible.</string>
     <string name="tchap_room_invite_member_title">Inviter au salon</string>
     <string name="tchap_room_invite_member_action">Valider</string>
     <string name="tchap_room_creation_save_avatar_failed">La sauvegarde de la photo du salon a échoué. \n Que souhaitez-vous faire ?</string>
     <string name="tchap_room_creation_room_type_title">Type de salon</string>
-    <string name="tchap_room_creation_private_room_title">Salon privé</string>
-    <string name="tchap_room_creation_extern_room_title">Salon privé ouvert aux externes</string>
-    <string name="tchap_room_creation_forum_room_title">Salon forum</string>
-    <string name="tchap_room_creation_private_room_info">Accessible à tous les utilisateurs sur invitation d’un administrateur.</string>
-    <string name="tchap_room_creation_extern_room_info">Accessible à tous les utilisateurs et aux invités externes sur invitation d’un administrateur.</string>
-    <string name="tchap_room_creation_forum_room_info">Accessible à tous les utilisateurs à partir de la liste des forums ou d’un lien partagé.</string>
+    <string name="tchap_room_creation_private_room_title">Privé</string>
+    <string name="tchap_room_creation_extern_room_title">Privé avec externes</string>
+    <string name="tchap_room_creation_forum_room_title">Forum</string>
+    <string name="tchap_room_creation_private_room_info">Chiffré et accessible uniquement aux agents publics sur invitation d\'un administrateur.</string>
+    <string name="tchap_room_creation_extern_room_info">Chiffré et accessible à tous les agents publics et aux invités externes sur invitation d\'un administrateur.</string>
+    <string name="tchap_room_creation_forum_room_info">Non chiffré et accessible automatiquement et uniquement à tous les agents publics depuis l\'annuaire (ou un lien partagé).</string>
 
     <!-- tchap new strings -->
     <string name="tchap_room_admin_leave_prompt_msg">Voulez-vous vraiment quitter cette conversation ?\n\nElle ne sera plus administrée, et vous risquez de ne plus pouvoir la joindre de nouveau.</string>
