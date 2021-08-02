@@ -68,4 +68,6 @@
     <string name="setting_sc_accent_color_dark">Barva akcentu pro tmavý režim</string>
     <string name="settings_theme_colors">Barvy motivu</string>
     <string name="settings_sc_accent_disclaimer">Tato nastavení barev platí pouze pro barevné režimy SC, nikoli pro Element.</string>
+    <string name="settings_open_chats_at_first_unread_summary">Otevřít chaty na první nepřečtené zprávě místo na konci.</string>
+    <string name="settings_open_chats_at_first_unread">Otevřít na první nepřečtené zprávě</string>
 </resources>
