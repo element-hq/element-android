@@ -67,9 +67,9 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
         setupRecyclerView()
 
         // Give the current data to our controller. There maybe a better way to do that...
-        withState(viewModel) {
-            roomDirectoryPickerController.currentRoomDirectoryData = it.roomDirectoryData
-        }
+//        withState(viewModel) {
+//            roomDirectoryPickerController.currentRoomDirectoryData = it.roomDirectoryData
+//        }
     }
 
     override fun onDestroyView() {

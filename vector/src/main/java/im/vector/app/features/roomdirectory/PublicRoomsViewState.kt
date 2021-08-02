@@ -34,7 +34,6 @@ data class PublicRoomsViewState(
         val joinedRoomsIds: Set<String> = emptySet(),
         // keys are room alias or roomId
         val changeMembershipStates: Map<String, ChangeMembershipState> = emptyMap(),
-        val roomDirectoryData: RoomDirectoryData = RoomDirectoryData(),
 
         val asyncThirdPartyRequest: Async<Map<String, ThirdPartyProtocol>> = Uninitialized,
         // computed
