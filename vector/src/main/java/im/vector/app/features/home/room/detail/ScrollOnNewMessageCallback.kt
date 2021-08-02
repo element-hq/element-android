@@ -64,8 +64,10 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
                 layoutManager.scrollToPositionWithOffset(0, 0)
             } else {
                 timelineEventController.searchPositionOfEvent(scrollToEvent)?.let {
-                    // Scroll such that the scrolled-to event is moved up 1/4 of the screen
-                    layoutManager.scrollToPositionWithOffset(it, parentView.measuredHeight / 4)
+                    // Scroll such that the scrolled-to event is moved down 1/3 of the screen.
+                    // To do that, we actually scroll the view above out by 2/3 (since we can only control the distance
+                    // from the bottom of the view, not the top).
+                    layoutManager.scrollToPositionWithOffset(it + 1, parentView.measuredHeight * 2 / 3)
                 }
             }
             return
