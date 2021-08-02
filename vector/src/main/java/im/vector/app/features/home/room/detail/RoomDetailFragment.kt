@@ -797,7 +797,7 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.timeline.restartWithEventId(null)
             } else {
                 roomDetailViewModel.timeline.setInitialEventId(null)
-                layoutManager.scrollToPosition(0)
+                layoutManager.scrollToPositionWithOffset(0, 0)
             }
         }
 
