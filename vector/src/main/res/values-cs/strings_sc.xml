@@ -70,4 +70,23 @@
     <string name="settings_sc_accent_disclaimer">Tato nastavení barev platí pouze pro barevné režimy SC, nikoli pro Element.</string>
     <string name="settings_open_chats_at_first_unread_summary">Otevřít chaty na první nepřečtené zprávě místo na konci.</string>
     <string name="settings_open_chats_at_first_unread">Otevřít na první nepřečtené zprávě</string>
+    <string name="sc_accent_cyan">Tyrkysová</string>
+    <string name="sc_accent_gold">Zlatá</string>
+    <string name="sc_accent_lime">Limetková</string>
+    <string name="sc_accent_orange">Oranžová</string>
+    <string name="sc_accent_greenlight">Světle zelená</string>
+    <string name="sc_accent_greendark">Tmavě zelená</string>
+    <string name="sc_accent_amber">Jantarová</string>
+    <string name="sc_accent_bluelight">Světle modrá</string>
+    <string name="sc_accent_pink">Růžová</string>
+    <string name="sc_accent_purple">Nachová</string>
+    <string name="sc_accent_red">Červená</string>
+    <string name="sc_accent_teal">Modrozelená</string>
+    <string name="sc_accent_turquoise">Tyrkysová</string>
+    <string name="sc_accent_yellow">Žlutá</string>
+    <string name="sc_accent_carnation">Karafiátová</string>
+    <string name="sc_accent_indigo">Indigo</string>
+    <string name="sc_accent_lava">Lávová</string>
+    <string name="sc_accent_blue">Modrá</string>
+    <string name="sc_accent_denim">Džínová</string>
 </resources>
