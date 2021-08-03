@@ -20,6 +20,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
@@ -83,6 +84,7 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
             matrixItem(publicRoom.toMatrixItem())
             roomAlias(publicRoom.getPrimaryAlias())
             roomTopic(publicRoom.topic)
+            roomDomain(TchapUtils.getHomeServerDisplayNameFromMXIdentifier(publicRoom.roomId))
             nbOfMembers(publicRoom.numJoinedMembers)
 
             val roomChangeMembership = viewState.changeMembershipStates[publicRoom.roomId] ?: ChangeMembershipState.Unknown

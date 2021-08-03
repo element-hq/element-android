@@ -12,71 +12,92 @@
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="97dp">
 
-    <ImageView
+    <fr.gouv.tchap.core.ui.views.HexagonMaskView
         android:id="@+id/itemPublicRoomAvatar"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="@dimen/tchap_item_room_hexagon_avatar_size"
+        android:layout_height="@dimen/tchap_item_room_hexagon_avatar_size"
         android:layout_marginStart="8dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/avatar"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@sample/room_round_avatars" />
+        tools:src="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/itemPublicRoomName"
         style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
-        android:maxLines="2"
+        android:maxLines="1"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomTopic"
-        app:layout_constraintEnd_toStartOf="@+id/itemPublicRoomButtonState"
+        app:layout_constraintEnd_toStartOf="@+id/itemPublicRoomDomain"
         app:layout_constraintStart_toEndOf="@id/itemPublicRoomAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="@sample/rooms.json/data/name" />
 
     <TextView
+        android:id="@+id/itemPublicRoomDomain"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="12dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/tchap_app_name"
+        android:textColor="?vctr_content_primary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/itemPublicRoomName"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Modernisation" />
+
+    <TextView
         android:id="@+id/itemPublicRoomTopic"
         style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="22dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center_vertical"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:textColor="?vctr_content_primary"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomMembersCount"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:minLines="2"
+        android:maxLines="2"
+        android:textColor="?vctr_content_secondary"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
+        app:layout_constraintEnd_toStartOf="@+id/itemPublicRoomMembersCount"
         app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
         app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomName"
-        tools:text="@sample/rooms.json/data/topic"
-        tools:visibility="visible" />
+        tools:text="@sample/rooms.json/data/topic" />
 
     <TextView
         android:id="@+id/itemPublicRoomMembersCount"
         style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="8dp"
-        android:drawablePadding="8dp"
-        android:gravity="center_vertical"
-        android:minWidth="56dp"
+        android:layout_marginEnd="4dp"
         android:textColor="?vctr_content_secondary"
-        app:drawableStartCompat="@drawable/ic_user"
-        app:drawableTint="?vctr_content_secondary"
-        app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
-        app:layout_constraintStart_toStartOf="@+id/itemPublicRoomName"
-        app:layout_constraintTop_toBottomOf="@+id/itemPublicRoomTopic"
+        app:layout_constraintBottom_toBottomOf="@+id/itemPublicRoomTopic"
+        app:layout_constraintEnd_toStartOf="@+id/itemPublicRoomMembersCountIcon"
         tools:text="148" />
+
+    <ImageView
+        android:id="@+id/itemPublicRoomMembersCountIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_tchap_people"
+        app:layout_constraintBottom_toBottomOf="@+id/itemPublicRoomMembersCount"
+        app:layout_constraintTop_toTopOf="@+id/itemPublicRoomMembersCount"
+        app:layout_constraintEnd_toEndOf="@+id/itemPublicRoomDomain"
+        app:tint="?vctr_content_secondary" />
 
     <TextView
         android:id="@+id/itemPublicRoomAlias"
@@ -90,6 +111,7 @@
         android:minWidth="40dp"
         android:singleLine="true"
         android:textColor="?vctr_content_secondary"
+        android:visibility="gone"
         app:layout_constraintBaseline_toBaselineOf="@+id/itemPublicRoomMembersCount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/itemPublicRoomMembersCount"
@@ -101,6 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
+        android:visibility="gone"
         app:bsv_button_text="@string/join"
         app:bsv_loaded_image_src="@drawable/ic_tick"
         app:bsv_use_flat_button="true"
