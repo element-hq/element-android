@@ -34,6 +34,7 @@
             android:contentDescription="@string/avatar"
             android:scaleType="centerCrop"
             android:visibility="gone"
+            app:borderColor="@color/element_room_01"
             tools:src="@tools:sample/avatars"
             tools:visibility="visible" />
     </FrameLayout>

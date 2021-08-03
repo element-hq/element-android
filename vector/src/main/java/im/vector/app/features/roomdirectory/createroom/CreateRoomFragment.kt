@@ -22,6 +22,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -29,6 +30,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.features.home.roomdirectory.createroom.TchapCreateRoomController
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
@@ -52,11 +54,11 @@ data class CreateRoomArgs(
 ) : Parcelable
 
 class CreateRoomFragment @Inject constructor(
-        private val createRoomController: CreateRoomController,
+        private val createRoomController: TchapCreateRoomController,
         val createRoomViewModelFactory: CreateRoomViewModel.Factory,
         colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentCreateRoomBinding>(),
-        CreateRoomController.Listener,
+        TchapCreateRoomController.Listener,
         GalleryOrCameraDialogHelper.Listener,
         OnBackPressed {
 
@@ -130,8 +132,8 @@ class CreateRoomFragment @Inject constructor(
         viewModel.handle(CreateRoomAction.SetTopic(newTopic))
     }
 
-    override fun setIsPublic(isPublic: Boolean) {
-        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic))
+    override fun setIsPublic(isPublic: Boolean, isRestricted: Boolean) {
+        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic, isRestricted))
     }
 
     override fun setAliasLocalPart(aliasLocalPart: String) {
@@ -151,7 +153,8 @@ class CreateRoomFragment @Inject constructor(
     }
 
     override fun submit() {
-        viewModel.handle(CreateRoomAction.Create)
+        // viewModel.handle(CreateRoomAction.Create)
+        Toast.makeText(requireContext(), "Not implemented yet", Toast.LENGTH_SHORT).show()
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {

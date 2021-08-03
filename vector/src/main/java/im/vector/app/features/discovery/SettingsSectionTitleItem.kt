@@ -23,6 +23,7 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_settings_section_title)
 abstract class SettingsSectionTitleItem : EpoxyModelWithHolder<SettingsSectionTitleItem.Holder>() {
@@ -34,6 +35,9 @@ abstract class SettingsSectionTitleItem : EpoxyModelWithHolder<SettingsSectionTi
     @StringRes
     var titleResId: Int? = null
 
+    @EpoxyAttribute
+    var showBackground: Boolean = true
+
     override fun bind(holder: Holder) {
         super.bind(holder)
 
@@ -41,6 +45,13 @@ abstract class SettingsSectionTitleItem : EpoxyModelWithHolder<SettingsSectionTi
             holder.textView.setText(titleResId!!)
         } else {
             holder.textView.setTextOrHide(title)
+        }
+        holder.textView.apply {
+            if (showBackground) {
+                setBackgroundColor(ThemeUtils.getColor(context, R.attr.vctr_header_background))
+            } else {
+                background = null
+            }
         }
     }
 

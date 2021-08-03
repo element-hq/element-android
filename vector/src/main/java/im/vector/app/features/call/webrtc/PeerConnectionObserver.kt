@@ -16,6 +16,7 @@
 
 package im.vector.app.features.call.webrtc
 
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.webrtc.DataChannel
@@ -25,10 +26,12 @@ import org.webrtc.PeerConnection
 import org.webrtc.RtpReceiver
 import timber.log.Timber
 
+private val loggerTag = LoggerTag("PeerConnectionObserver", LoggerTag.VOIP)
+
 class PeerConnectionObserver(private val webRtcCall: WebRtcCall) : PeerConnection.Observer {
 
     override fun onConnectionChange(newState: PeerConnection.PeerConnectionState?) {
-        Timber.v("## VOIP StreamObserver onConnectionChange: $newState")
+        Timber.tag(loggerTag.value).v("StreamObserver onConnectionChange: $newState")
         when (newState) {
             /**
              * Every ICE transport used by the connection is either in use (state "connected" or "completed")
@@ -79,20 +82,20 @@ class PeerConnectionObserver(private val webRtcCall: WebRtcCall) : PeerConnectio
     }
 
     override fun onIceCandidate(iceCandidate: IceCandidate) {
-        Timber.v("## VOIP StreamObserver onIceCandidate: $iceCandidate")
+        Timber.tag(loggerTag.value).v("StreamObserver onIceCandidate: $iceCandidate")
         webRtcCall.onIceCandidate(iceCandidate)
     }
 
     override fun onDataChannel(dc: DataChannel) {
-        Timber.v("## VOIP StreamObserver onDataChannel: ${dc.state()}")
+        Timber.tag(loggerTag.value).v("StreamObserver onDataChannel: ${dc.state()}")
     }
 
     override fun onIceConnectionReceivingChange(receiving: Boolean) {
-        Timber.v("## VOIP StreamObserver onIceConnectionReceivingChange: $receiving")
+        Timber.tag(loggerTag.value).v("StreamObserver onIceConnectionReceivingChange: $receiving")
     }
 
     override fun onIceConnectionChange(newState: PeerConnection.IceConnectionState) {
-        Timber.v("## VOIP StreamObserver onIceConnectionChange IceConnectionState:$newState")
+        Timber.tag(loggerTag.value).v("StreamObserver onIceConnectionChange IceConnectionState:$newState")
         when (newState) {
             /**
              * the ICE agent is gathering addresses or is waiting to be given remote candidates through
@@ -145,29 +148,29 @@ class PeerConnectionObserver(private val webRtcCall: WebRtcCall) : PeerConnectio
     }
 
     override fun onAddStream(stream: MediaStream) {
-        Timber.v("## VOIP StreamObserver onAddStream: $stream")
+        Timber.tag(loggerTag.value).v("StreamObserver onAddStream: $stream")
         webRtcCall.onAddStream(stream)
     }
 
     override fun onRemoveStream(stream: MediaStream) {
-        Timber.v("## VOIP StreamObserver onRemoveStream")
+        Timber.tag(loggerTag.value).v("StreamObserver onRemoveStream")
         webRtcCall.onRemoveStream()
     }
 
     override fun onIceGatheringChange(newState: PeerConnection.IceGatheringState) {
-        Timber.v("## VOIP StreamObserver onIceGatheringChange: $newState")
+        Timber.tag(loggerTag.value).v("StreamObserver onIceGatheringChange: $newState")
     }
 
     override fun onSignalingChange(newState: PeerConnection.SignalingState) {
-        Timber.v("## VOIP StreamObserver onSignalingChange: $newState")
+        Timber.tag(loggerTag.value).v("StreamObserver onSignalingChange: $newState")
     }
 
     override fun onIceCandidatesRemoved(candidates: Array<out IceCandidate>) {
-        Timber.v("## VOIP StreamObserver onIceCandidatesRemoved: ${candidates.contentToString()}")
+        Timber.tag(loggerTag.value).v("StreamObserver onIceCandidatesRemoved: ${candidates.contentToString()}")
     }
 
     override fun onRenegotiationNeeded() {
-        Timber.v("## VOIP StreamObserver onRenegotiationNeeded")
+        Timber.tag(loggerTag.value).v("StreamObserver onRenegotiationNeeded")
         webRtcCall.onRenegotiationNeeded(restartIce = false)
     }
 
@@ -178,6 +181,6 @@ class PeerConnectionObserver(private val webRtcCall: WebRtcCall) : PeerConnectio
      * gets a new set of tracks because the media element being captured loaded a new source.
      */
     override fun onAddTrack(p0: RtpReceiver?, p1: Array<out MediaStream>?) {
-        Timber.v("## VOIP StreamObserver onAddTrack")
+        Timber.tag(loggerTag.value).v("StreamObserver onAddTrack")
     }
 }

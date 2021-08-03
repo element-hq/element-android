@@ -28,6 +28,7 @@
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/publicRoomsFilter"
+                android:theme="@style/AppTheme.Toolbar.SearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:queryHint="@string/room_directory_search_hint" />
@@ -45,6 +46,7 @@
             android:icon="@drawable/ic_plus_circle"
             android:minHeight="@dimen/layout_touch_size"
             android:text="@string/create_new_room"
+            android:visibility="gone"
             app:iconPadding="13dp"
             app:iconTint="?colorPrimary"
             app:layout_constraintStart_toStartOf="parent"

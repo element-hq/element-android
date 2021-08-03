@@ -48,6 +48,7 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomS
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
+import im.vector.app.features.home.room.list.widget.TchapRoomsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orTrue
@@ -71,7 +72,8 @@ class RoomListFragment @Inject constructor(
         RoomListListener,
         OnBackPressed,
         FilteredRoomFooterItem.Listener,
-        NotifsFabMenuView.Listener {
+        NotifsFabMenuView.Listener,
+        TchapRoomsFabMenuView.Listener {
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -113,12 +115,14 @@ class RoomListFragment @Inject constructor(
                 is RoomListViewEvents.Done                      -> Unit
                 is RoomListViewEvents.NavigateToMxToBottomSheet -> handleShowMxToLink(it.link)
                 RoomListViewEvents.CreateDirectChat             -> handleCreateDirectChat()
+                is RoomListViewEvents.CreateRoom                -> handleCreateRoom(it.initialName)
                 is RoomListViewEvents.OpenRoomDirectory         -> handleOpenRoomDirectory(it.filter)
                 RoomListViewEvents.CancelSearch                 -> Unit
             }.exhaustive
         }
 
         views.createChatFabMenu.listener = this
+        views.createRoomFabMenu.listener = this
 
         sharedActionViewModel
                 .observe()
@@ -170,6 +174,7 @@ class RoomListFragment @Inject constructor(
         footerController.listener = null
         // TODO Cleanup listener on the ConcatAdapter's adapters?
         stateRestorer.clear()
+        views.createRoomFabMenu.listener = null
         views.createChatFabMenu.listener = null
         concatAdapter = null
         super.onDestroyView()
@@ -185,6 +190,11 @@ class RoomListFragment @Inject constructor(
         roomListViewModel.handle(RoomListAction.CancelSearch)
     }
 
+    private fun handleCreateRoom(name: String) {
+        navigator.openCreateRoom(requireActivity(), name)
+        roomListViewModel.handle(RoomListAction.CancelSearch)
+    }
+
     private fun handleOpenRoomDirectory(filter: String) {
         navigator.openRoomDirectory(requireActivity(), filter)
         roomListViewModel.handle(RoomListAction.CancelSearch)
@@ -194,15 +204,12 @@ class RoomListFragment @Inject constructor(
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = true
             RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.isVisible = true
-            RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.isVisible = true
+            RoomListDisplayMode.ROOMS         -> views.createRoomFabMenu.isVisible = true
             else                              -> Unit // No button in this mode
         }
 
         views.createChatRoomButton.debouncedClicks {
             fabCreateDirectChat()
-        }
-        views.createGroupRoomButton.debouncedClicks {
-            fabOpenRoomDirectory()
         }
 
         // Hide FAB when list is scrolling
@@ -210,17 +217,19 @@ class RoomListFragment @Inject constructor(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         views.createChatFabMenu.removeCallbacks(showFabRunnable)
+                        views.createRoomFabMenu.removeCallbacks(showFabRunnable)
 
                         when (newState) {
                             RecyclerView.SCROLL_STATE_IDLE     -> {
                                 views.createChatFabMenu.postDelayed(showFabRunnable, 250)
+                                views.createRoomFabMenu.postDelayed(showFabRunnable, 250)
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
                                     RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.hide()
                                     RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.hide()
-                                    RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.hide()
+                                    RoomListDisplayMode.ROOMS         -> views.createRoomFabMenu.hide()
                                     else                              -> Unit
                                 }
                             }
@@ -238,7 +247,7 @@ class RoomListFragment @Inject constructor(
 
     // FilteredRoomFooterItem.Listener
     override fun createRoom(initialName: String) {
-        navigator.openCreateRoom(requireActivity(), initialName)
+        roomListViewModel.handle(RoomListAction.CreateRoom(initialName))
     }
 
     override fun createDirectChat() {
@@ -249,13 +258,17 @@ class RoomListFragment @Inject constructor(
         roomListViewModel.handle(RoomListAction.OpenRoomDirectory(initialFilter))
     }
 
-    // NotifsFabMenuView.Listener
+    // NotifsFabMenuView.Listener, TchapRoomFabMenuView.Listener
     override fun fabCreateDirectChat() {
-        navigator.openCreateDirectRoom(requireActivity())
+        roomListViewModel.handle(RoomListAction.CreateDirectChat)
     }
 
     override fun fabOpenRoomDirectory() {
-        navigator.openRoomDirectory(requireActivity(), "")
+        roomListViewModel.handle(RoomListAction.OpenRoomDirectory(""))
+    }
+
+    override fun fabCreateRoom() {
+        roomListViewModel.handle(RoomListAction.CreateRoom())
     }
 
     private fun setupRecyclerView() {
@@ -369,7 +382,7 @@ class RoomListFragment @Inject constructor(
             when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
                 RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.show()
-                RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.show()
+                RoomListDisplayMode.ROOMS         -> views.createRoomFabMenu.show()
                 else                              -> Unit
             }
         }
@@ -462,7 +475,7 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        if (views.createChatFabMenu.onBackPressed()) {
+        if (views.createChatFabMenu.onBackPressed() || views.createRoomFabMenu.onBackPressed()) {
             return true
         }
         return false

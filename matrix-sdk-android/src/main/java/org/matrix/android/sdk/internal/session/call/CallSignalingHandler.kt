@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.call
 
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.call.CallListener
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
@@ -35,6 +36,9 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
+
+private val loggerTag = LoggerTag("CallSignalingHandler", LoggerTag.VOIP)
+private const val MAX_AGE_TO_RING = 40_000
 
 @SessionScope
 internal class CallSignalingHandler @Inject constructor(private val activeCallHandler: ActiveCallHandler,
@@ -111,12 +115,12 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
             return
         }
         if (call.isOutgoing) {
-            Timber.v("Got selectAnswer for an outbound call: ignoring")
+            Timber.tag(loggerTag.value).v("Got selectAnswer for an outbound call: ignoring")
             return
         }
         val selectedPartyId = content.selectedPartyId
         if (selectedPartyId == null) {
-            Timber.w("Got nonsensical select_answer with null selected_party_id: ignoring")
+            Timber.tag(loggerTag.value).w("Got nonsensical select_answer with null selected_party_id: ignoring")
             return
         }
         callListenersDispatcher.onCallSelectAnswerReceived(content)
@@ -130,7 +134,7 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
             return
         }
         if (call.opponentPartyId != null && !call.partyIdsMatches(content)) {
-            Timber.v("Ignoring candidates from party ID ${content.partyId} we have chosen party ID ${call.opponentPartyId}")
+            Timber.tag(loggerTag.value).v("Ignoring candidates from party ID ${content.partyId} we have chosen party ID ${call.opponentPartyId}")
             return
         }
         callListenersDispatcher.onCallIceCandidateReceived(call, content)
@@ -163,10 +167,10 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
         // party ID must match (our chosen partner hanging up the call) or be undefined (we haven't chosen
         // a partner yet but we're treating the hangup as a reject as per VoIP v0)
         if (call.opponentPartyId != null && !call.partyIdsMatches(content)) {
-            Timber.v("Ignoring hangup from party ID ${content.partyId} we have chosen party ID ${call.opponentPartyId}")
+            Timber.tag(loggerTag.value).v("Ignoring hangup from party ID ${content.partyId} we have chosen party ID ${call.opponentPartyId}")
             return
         }
-        if (call.state != CallState.Terminated) {
+        if (call.state !is CallState.Ended) {
             activeCallHandler.removeCall(content.callId)
             callListenersDispatcher.onCallHangupReceived(content)
         }
@@ -180,12 +184,18 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
         if (event.roomId == null || event.senderId == null) {
             return
         }
+        val now = System.currentTimeMillis()
+        val age = now - (event.ageLocalTs ?: now)
+        if (age > MAX_AGE_TO_RING) {
+            Timber.tag(loggerTag.value).w("Call invite is too old to ring.")
+            return
+        }
         val content = event.getClearContent().toModel<CallInviteContent>() ?: return
 
         content.callId ?: return
         if (invitedCallIds.contains(content.callId)) {
             // Call is already known, maybe due to fast lane. Ignore
-            Timber.d("Ignoring already known call invite")
+            Timber.tag(loggerTag.value).d("Ignoring already known call invite")
             return
         }
         val incomingCall = mxCallFactory.createIncomingCall(
@@ -214,7 +224,8 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
             callListenersDispatcher.onCallManagedByOtherSession(content.callId)
         } else {
             if (call.opponentPartyId != null) {
-                Timber.v("Ignoring answer from party ID ${content.partyId} we already have an answer from ${call.opponentPartyId}")
+                Timber.tag(loggerTag.value)
+                        .v("Ignoring answer from party ID ${content.partyId} we already have an answer from ${call.opponentPartyId}")
                 return
             }
             mxCallFactory.updateOutgoingCallWithOpponentData(call, event.senderId, content, content.capabilities)
@@ -231,7 +242,7 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
             activeCallHandler.getCallWithId(it)
         }
         if (currentCall == null) {
-            Timber.v("Call with id $callId is null")
+            Timber.tag(loggerTag.value).v("Call with id $callId is null")
         }
         return currentCall
     }

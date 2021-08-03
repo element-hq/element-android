@@ -245,25 +245,27 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
         query.equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
 
-        when (queryParams.roomCategoryFilter) {
-            RoomCategoryFilter.ONLY_DM                 -> {
-                query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                query.beginsWith(RoomSummaryEntityFields.DIRECT_USER_ID, "@")
-            }
-            RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-            RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-            RoomCategoryFilter.ALL                     -> {
-                // Tchap: we ignore DMs with directUserId different from a matrix id.
-                // directUserId could be an email if the user has no account and he was invited by email.
-                query.beginGroup()
-                query.beginGroup()
-                query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                query.and()
-                query.beginsWith(RoomSummaryEntityFields.DIRECT_USER_ID, "@")
-                query.endGroup()
-                query.or()
-                query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-                query.endGroup()
+        queryParams.roomCategoryFilter?.let {
+            when (it) {
+                RoomCategoryFilter.ONLY_DM                 -> {
+                    query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                    query.beginsWith(RoomSummaryEntityFields.DIRECT_USER_ID, "@")
+                }
+                RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
+                RoomCategoryFilter.ALL                     -> {
+                    // Tchap: we ignore DMs with directUserId different from a matrix id.
+                    // directUserId could be an email if the user has no account and he was invited by email.
+                    query.beginGroup()
+                    query.beginGroup()
+                    query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                    query.and()
+                    query.beginsWith(RoomSummaryEntityFields.DIRECT_USER_ID, "@")
+                    query.endGroup()
+                    query.or()
+                    query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                    query.endGroup()
+                }
             }
         }
 
@@ -286,15 +288,15 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             query.equalTo(RoomSummaryEntityFields.ROOM_TYPE, it)
         }
         when (queryParams.roomCategoryFilter) {
-            RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-            RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+            RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
             RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-            RoomCategoryFilter.ALL -> Unit // nop
+            RoomCategoryFilter.ALL                     -> Unit // nop
         }
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")
         when (queryParams.activeSpaceFilter) {
-            is ActiveSpaceFilter.ActiveSpace -> {
+            is ActiveSpaceFilter.ActiveSpace  -> {
                 // It's annoying but for now realm java does not support querying in primitive list :/
                 // https://github.com/realm/realm-java/issues/5361
                 if (queryParams.activeSpaceFilter.currentSpaceId == null) {
@@ -312,8 +314,8 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             }
         }
 
-        if (queryParams.activeGroupId != null) {
-            query.contains(RoomSummaryEntityFields.GROUP_IDS, queryParams.activeGroupId!!)
+        queryParams.activeGroupId?.let { activeGroupId ->
+            query.contains(RoomSummaryEntityFields.GROUP_IDS, activeGroupId)
         }
         return query
     }

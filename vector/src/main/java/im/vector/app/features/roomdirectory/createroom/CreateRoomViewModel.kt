@@ -28,6 +28,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -57,6 +58,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 
     init {
         initHomeServerName()
+        initUserDomain()
         initAdminE2eByDefault()
     }
 
@@ -66,6 +68,16 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     homeServerName = session.myUserId.getDomain()
             )
         }
+    }
+
+    private fun initUserDomain() {
+        // TODO: it should be better to update User.getBestName function to compute the displayname
+        val displayName = session.run { getUser(myUserId) }
+                ?.displayName
+                ?.takeUnless { it.isEmpty() }
+                ?: TchapUtils.computeDisplayNameFromUserId(session.myUserId).orEmpty()
+
+        setState { copy(userDomain = TchapUtils.getDomainFromDisplayName(displayName)) }
     }
 
     private var adminE2EByDefault = true
@@ -159,7 +171,11 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
             )
         } else {
             copy(
-                    roomVisibilityType = CreateRoomViewState.RoomVisibilityType.Private,
+                    roomVisibilityType = if (action.restricted) {
+                        CreateRoomViewState.RoomVisibilityType.Private
+                    } else {
+                        CreateRoomViewState.RoomVisibilityType.External
+                    },
                     isEncrypted = adminE2EByDefault
             )
         }
@@ -206,14 +222,15 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     topic = state.roomTopic.takeIf { it.isNotBlank() }
                     avatarUri = state.avatarUri
                     when (state.roomVisibilityType) {
-                        is CreateRoomViewState.RoomVisibilityType.Public  -> {
+                        is CreateRoomViewState.RoomVisibilityType.Public -> {
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PUBLIC
                             // Preset
                             preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                             roomAliasName = state.roomVisibilityType.aliasLocalPart
                         }
-                        is CreateRoomViewState.RoomVisibilityType.Private -> {
+                        CreateRoomViewState.RoomVisibilityType.External,
+                        CreateRoomViewState.RoomVisibilityType.Private   -> {
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PRIVATE
                             // Preset

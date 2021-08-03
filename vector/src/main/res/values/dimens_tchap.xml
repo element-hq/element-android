@@ -4,4 +4,8 @@
     <dimen name="tchap_item_room_avatar_size">56dp</dimen>
     <dimen name="tchap_item_room_circle_avatar_size">50dp</dimen>
     <dimen name="tchap_item_room_hexagon_avatar_size">56dp</dimen>
+    <dimen name="tchap_hexagon_stroke_width">0.26dp</dimen>
+
+    <!-- Create room -->
+    <dimen name="tchap_room_item_stroke_width">3dp</dimen>
 </resources>

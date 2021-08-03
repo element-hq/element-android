@@ -17,6 +17,7 @@
 package fr.gouv.tchap.core.utils
 
 import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
+import im.vector.app.features.roomdirectory.createroom.CreateRoomViewState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 enum class TchapRoomType {
@@ -31,14 +32,22 @@ object RoomUtils {
     fun getRoomType(roomSummary: RoomSummary): TchapRoomType {
         return when {
             roomSummary.isEncrypted -> when (roomSummary.accessRules) {
-                RoomAccessRules.RESTRICTED -> TchapRoomType.PRIVATE
+                RoomAccessRules.RESTRICTED   -> TchapRoomType.PRIVATE
                 RoomAccessRules.UNRESTRICTED -> TchapRoomType.EXTERNAL
-                RoomAccessRules.DIRECT -> TchapRoomType.DIRECT
-                null -> if (roomSummary.isDirect) TchapRoomType.DIRECT else TchapRoomType.PRIVATE
+                RoomAccessRules.DIRECT       -> TchapRoomType.DIRECT
+                null                         -> if (roomSummary.isDirect) TchapRoomType.DIRECT else TchapRoomType.PRIVATE
                 else                         -> TchapRoomType.UNKNOWN
             }
             roomSummary.isPublic    -> TchapRoomType.FORUM
             else                    -> TchapRoomType.UNKNOWN
+        }
+    }
+
+    fun getRoomType(roomVisibilityType: CreateRoomViewState.RoomVisibilityType): TchapRoomType {
+        return when (roomVisibilityType) {
+            CreateRoomViewState.RoomVisibilityType.External  -> TchapRoomType.EXTERNAL
+            CreateRoomViewState.RoomVisibilityType.Private   -> TchapRoomType.PRIVATE
+            is CreateRoomViewState.RoomVisibilityType.Public -> TchapRoomType.FORUM
         }
     }
 }

@@ -163,7 +163,7 @@ class UiAllScreensSanityTest {
     }
 
     private fun createRoom() {
-        clickOn(R.id.createGroupRoomButton)
+        clickOn(R.id.createRoomFabMenu)
         waitUntilActivityVisible<RoomDirectoryActivity> {
             assertDisplayed(R.id.publicRoomsList)
         }

@@ -32,7 +32,8 @@ sealed class RoomListViewEvents : VectorViewEvents {
     data class NavigateToMxToBottomSheet(val link: String) : RoomListViewEvents()
 
     object CreateDirectChat : RoomListViewEvents()
-    data class OpenRoomDirectory(val filter: String = "") : RoomListViewEvents()
+    data class CreateRoom(val initialName: String) : RoomListViewEvents()
+    data class OpenRoomDirectory(val filter: String) : RoomListViewEvents()
 
     object CancelSearch : RoomListViewEvents()
 }

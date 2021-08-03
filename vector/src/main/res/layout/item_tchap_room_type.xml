@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/roomItemContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_tchap_room_type"
+        android:padding="12dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/roomTypeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_tchap_forum"
+            android:drawablePadding="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/tchap_room_creation_forum_room_title"
+            tools:textColor="@color/palette_tchap_jade_green" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/roomDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/palette_tchap_greyish_brown"
+            app:layout_constraintTop_toBottomOf="@id/roomTypeTitle"
+            tools:text="@string/tchap_room_creation_forum_room_info" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/roomDescription2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/palette_tchap_greyish_brown"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/roomDescription"
+            tools:text="@string/tchap_room_creation_public_info"
+            tools:visibility="visible" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/toggleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/palette_tchap_greyish_brown"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/roomDescription2"
+            tools:checked="true"
+            tools:text="@string/tchap_room_creation_limited_domain"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

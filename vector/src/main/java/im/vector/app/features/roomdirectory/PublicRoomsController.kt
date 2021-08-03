@@ -17,7 +17,6 @@
 package im.vector.app.features.roomdirectory
 
 import com.airbnb.epoxy.TypedEpoxyController
-import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
@@ -55,26 +54,15 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
                 text(host.stringProvider.getString(R.string.no_result_placeholder))
             }
         } else {
-            publicRooms.forEach {
-                buildPublicRoom(it, viewState)
+            publicRooms.toSortedMap(compareByDescending { it.numJoinedMembers }).forEach {
+                buildPublicRoom(it.key, it.value, viewState)
             }
 
             unknownRoomItem?.addTo(this)
 
-            if ((viewState.hasMore && viewState.asyncPublicRoomsRequest is Success)
-                    || viewState.asyncPublicRoomsRequest is Incomplete) {
+            if (viewState.asyncPublicRoomsRequest is Incomplete) {
                 loadingItem {
-                    // Change id to avoid list to scroll automatically when first results are displayed
-                    if (publicRooms.isEmpty()) {
-                        id("loading")
-                    } else {
-                        id("loadMore")
-                    }
-                    onVisibilityStateChanged { _, _, visibilityState ->
-                        if (visibilityState == VisibilityState.VISIBLE) {
-                            host.callback?.loadMore()
-                        }
-                    }
+                    id("loading")
                 }
             }
         }
@@ -83,12 +71,11 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
             errorWithRetryItem {
                 id("error")
                 text(host.errorFormatter.toHumanReadable(viewState.asyncPublicRoomsRequest.error))
-                listener { host.callback?.loadMore() }
             }
         }
     }
 
-    private fun buildPublicRoom(publicRoom: PublicRoom, viewState: PublicRoomsViewState) {
+    private fun buildPublicRoom(publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData, viewState: PublicRoomsViewState) {
         val host = this
         publicRoomItem {
             avatarRenderer(host.avatarRenderer)
@@ -112,15 +99,15 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
                 host.callback?.onPublicRoomJoin(publicRoom)
             }
             globalListener {
-                host.callback?.onPublicRoomClicked(publicRoom, joinState)
+                host.callback?.onPublicRoomClicked(publicRoom, roomDirectoryData, joinState)
             }
         }
     }
 
     private fun PublicRoomsViewState.buildUnknownRoomIfNeeded(): UnknownRoomItem? {
         val roomIdOrAlias = currentFilter.trim()
-        val isAlias = MatrixPatterns.isRoomAlias(roomIdOrAlias) && !publicRooms.any { it.canonicalAlias == roomIdOrAlias }
-        val isRoomId = !isAlias && MatrixPatterns.isRoomId(roomIdOrAlias) && !publicRooms.any { it.roomId == roomIdOrAlias }
+        val isAlias = MatrixPatterns.isRoomAlias(roomIdOrAlias) && !publicRooms.any { it.key.canonicalAlias == roomIdOrAlias }
+        val isRoomId = !isAlias && MatrixPatterns.isRoomId(roomIdOrAlias) && !publicRooms.any { it.key.roomId == roomIdOrAlias }
         val roomItem = when {
             isAlias  -> MatrixItem.RoomAliasItem(roomIdOrAlias, roomIdOrAlias)
             isRoomId -> MatrixItem.RoomItem(roomIdOrAlias)
@@ -141,8 +128,7 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
 
     interface Callback {
         fun onUnknownRoomClicked(roomIdOrAlias: String)
-        fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState)
+        fun onPublicRoomClicked(publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData, joinState: JoinState)
         fun onPublicRoomJoin(publicRoom: PublicRoom)
-        fun loadMore()
     }
 }

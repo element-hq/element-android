@@ -26,6 +26,7 @@ Improvements 🙌:
  - Design Tchap contact cells #98
  - [Contacts list] open the DM (if any) for the selected user #129
  - Set up the application icon (Btchap/Tchap/Tchap secure) #102
+ - [Home screen] Set up the (+) button on the rooms list #109
 
 
 =======================================================
