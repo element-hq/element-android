@@ -97,7 +97,7 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
             android:title="@string/settings_notification_troubleshoot"
-            app:fragment="im.vector.app.features.settings.VectorSettingsNotificationsTroubleshootFragment" />
+            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsNotificationsTroubleshootFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
