@@ -35,6 +35,8 @@ object RuleIds {
     // Default Content Rules
     const val RULE_ID_CONTAIN_USER_NAME = ".m.rule.contains_user_name"
 
+    const val RULE_ID_KEYWORDS = "_keywords"
+
     // Default Underride Rules
     const val RULE_ID_CALL = ".m.rule.call"
     const val RULE_ID_ONE_TO_ONE_ENCRYPTED_ROOM = ".m.rule.encrypted_room_one_to_one"

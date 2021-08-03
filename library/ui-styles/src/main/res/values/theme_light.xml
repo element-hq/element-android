@@ -136,7 +136,7 @@
         <item name="vctr_social_login_button_gitlab_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Gitlab.Light</item>
 
         <item name="vctr_jump_to_unread_style">@style/Widget.Vector.JumpToUnread.Light</item>
-
+        <item name="vctr_keyword_style">@style/Widget.Vector.Keyword</item>
     </style>
 
     <style name="Theme.Vector.Light" parent="Base.Theme.Vector.Light" />

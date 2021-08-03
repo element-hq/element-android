@@ -15,6 +15,7 @@
  */
 package org.matrix.android.sdk.api.pushrules
 
+import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.rest.RuleSet
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -39,7 +40,7 @@ interface PushRuleService {
 
     suspend fun updatePushRuleActions(kind: RuleKind, ruleId: String, enable: Boolean, actions: List<Action>?)
 
-    suspend fun removePushRule(kind: RuleKind, pushRule: PushRule)
+    suspend fun removePushRule(kind: RuleKind, ruleId: String)
 
     fun addPushRuleListener(listener: PushRuleListener)
 
@@ -56,4 +57,6 @@ interface PushRuleService {
         fun onEventRedacted(redactedEventId: String)
         fun batchFinish()
     }
+
+    fun getKeywords(): LiveData<Set<String>>
 }

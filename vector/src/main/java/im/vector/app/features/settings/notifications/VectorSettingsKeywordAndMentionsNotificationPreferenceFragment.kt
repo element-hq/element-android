@@ -16,8 +16,24 @@
 
 package im.vector.app.features.settings.notifications
 
+import android.os.Bundle
+import android.view.View
+import androidx.lifecycle.lifecycleScope
+import androidx.preference.CheckBoxPreference
+import androidx.preference.Preference
 import im.vector.app.R
+import im.vector.app.core.preference.KeywordPreference
+import im.vector.app.core.preference.VectorCheckboxPreference
+import im.vector.app.core.utils.toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.pushrules.RuleIds
+import org.matrix.android.sdk.api.pushrules.RuleKind
+import org.matrix.android.sdk.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
+import org.matrix.android.sdk.api.pushrules.toJson
+import org.matrix.android.sdk.rx.rx
 
 class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
     : VectorSettingsPushRuleNotificationPreferenceFragment() {
@@ -25,6 +41,131 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
     override var titleRes: Int = R.string.settings_notification_mentions_and_keywords
 
     override val preferenceXmlRes = R.xml.vector_settings_notification_mentions_and_keywords
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        session.getKeywords().observe(viewLifecycleOwner, this::updateWithKeywords)
+    }
+
+    override fun bindPref() {
+        super.bindPref()
+        val keywordRules = session.getPushRules().content?.filter { !it.ruleId.startsWith(".") }.orEmpty()
+//        val keywords = keywordRules.map(PushRule::ruleId).toSortedSet()
+
+        val keywordPreference = findPreference<VectorCheckboxPreference>("SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_KEYWORDS_PREFERENCE_KEY")!!
+        val anyEnabledKeywords = keywordRules.any(PushRule::enabled)
+        keywordPreference.isChecked = anyEnabledKeywords
+        keywordPreference.isEnabled = keywordRules.isNotEmpty()
+        var currentChecked = anyEnabledKeywords
+        keywordPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val keywords = session.getKeywords().value ?: return@OnPreferenceChangeListener false
+            val newChecked = newValue as Boolean
+            displayLoadingView()
+            session.getKeywords()
+            updateKeywordPushRules(keywords, newChecked){  result ->
+                hideLoadingView()
+                if (!isAdded) {
+                    return@updateKeywordPushRules
+                }
+                result.onSuccess {
+                    currentChecked = newChecked
+                    keywordPreference.isChecked = newChecked
+                }
+                result.onFailure {
+                    refreshDisplay()
+                    activity?.toast(errorFormatter.toHumanReadable(it))
+                }
+            }
+            false
+        }
+
+        val editKeywordPreference = findPreference<KeywordPreference>("SETTINGS_KEYWORD_EDIT")!!
+        editKeywordPreference.keywords = session.getKeywords().value.orEmpty()
+        editKeywordPreference.listener  = object: KeywordPreference.Listener {
+            override fun didAddKeyword(keyword: String) {
+                addKeyword(keyword, currentChecked)
+                scrollToPreference(editKeywordPreference)
+            }
+
+            override fun didRemoveKeyword(keyword: String) {
+                removeKeyword(keyword)
+                scrollToPreference(editKeywordPreference)
+            }
+        }
+
+    }
+
+    fun updateKeywordPushRules(keywords: Set<String>, checked: Boolean, completion: (Result<Unit>) -> Unit) {
+        val newIndex = if (checked) NotificationIndex.NOISY else NotificationIndex.OFF
+        val standardAction = getStandardAction(RuleIds.RULE_ID_KEYWORDS, newIndex) ?: return
+        val enabled = standardAction != StandardActions.Disabled
+        val newActions = standardAction.actions
+
+        lifecycleScope.launch {
+            val results = keywords.map {
+                runCatching {
+                    withContext(Dispatchers.Default) {
+                        session.updatePushRuleActions(RuleKind.CONTENT,
+                                it,
+                                enabled,
+                                newActions)
+                    }
+                }
+            }
+            val firstError = results.firstNotNullOfOrNull(Result<Unit>::exceptionOrNull)
+            if (firstError == null){
+                completion(Result.success(Unit))
+            } else {
+                completion(Result.failure(firstError))
+            }
+        }
+    }
+
+    fun updateWithKeywords (keywords: Set<String>) {
+        val editKeywordPreference = findPreference<KeywordPreference>("SETTINGS_KEYWORD_EDIT") ?: return
+        editKeywordPreference.keywords = keywords
+    }
+
+    fun addKeyword(keyword: String, checked: Boolean) {
+        val newIndex = if (checked) NotificationIndex.NOISY else NotificationIndex.OFF
+        val standardAction = getStandardAction(RuleIds.RULE_ID_KEYWORDS, newIndex) ?: return
+        val enabled = standardAction != StandardActions.Disabled
+        val newActions = standardAction.actions ?: return
+        val newRule = PushRule(actions = newActions.toJson(), pattern = keyword, enabled = enabled, ruleId = keyword)
+        displayLoadingView()
+        lifecycleScope.launch {
+            val result = runCatching {
+                session.addPushRule(RuleKind.CONTENT, newRule)
+            }
+            if (!isAdded) {
+                return@launch
+            }
+            hideLoadingView()
+            // Already added to UI, no-op on success
+            result.onFailure {
+                // Just display an error on failure, keywords will update when push rules refreshed
+                activity?.toast(errorFormatter.toHumanReadable(it))
+            }
+        }
+    }
+
+    fun removeKeyword(keyword: String) {
+        displayLoadingView()
+        lifecycleScope.launch {
+            val result = runCatching {
+                session.removePushRule(RuleKind.CONTENT, keyword)
+            }
+            if (!isAdded) {
+                return@launch
+            }
+            hideLoadingView()
+            // Already added to UI, no-op on success
+            result.onFailure {
+                // Just display an error on failure, keywords will update when push rules refreshed
+                activity?.toast(errorFormatter.toHumanReadable(it))
+            }
+        }
+    }
 
     override val prefKeyToPushRuleId = mapOf(
                 "SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,

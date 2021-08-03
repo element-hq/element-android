@@ -1,0 +1,111 @@
+/*
+ * Copyright (c) 2021 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package im.vector.app.core.preference
+
+import android.content.Context
+import android.util.AttributeSet
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import androidx.preference.PreferenceViewHolder
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import im.vector.app.R
+import java.util.SortedSet
+
+class KeywordPreference : VectorPreference {
+
+    interface Listener {
+        fun didAddKeyword(keyword: String)
+        fun didRemoveKeyword(keyword: String)
+    }
+
+    var keywords: Set<String>
+        get() {
+            return _keywords
+        }
+        set(value) {
+            val newLinkedSet:LinkedHashSet<String> = linkedSetOf()
+            newLinkedSet.addAll(value.sorted())
+            _keywords = newLinkedSet
+            notifyChanged()
+        }
+
+    var listener: Listener? = null
+
+    private var _keywords: LinkedHashSet<String> = linkedSetOf()
+
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
+
+    init {
+        layoutResource = R.layout.vector_preference_chip_group
+    }
+
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+
+        holder.itemView.setOnClickListener(null)
+        holder.itemView.setOnLongClickListener(null)
+
+        val chipEditText = holder.findViewById(R.id.chipEditText) as? EditText ?: return
+        val chipGroup = holder.findViewById(R.id.chipGroup) as? ChipGroup ?: return
+
+        chipEditText.text = null
+        chipGroup.removeAllViews()
+
+        keywords.forEach {
+            addChipToGroup(it, chipGroup)
+        }
+
+        chipEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId != EditorInfo.IME_ACTION_DONE) {
+                return@setOnEditorActionListener false
+            }
+            val keyword = chipEditText.text.toString().trim()
+            if (keyword.isEmpty()){
+                return@setOnEditorActionListener false
+            }
+            _keywords.add(keyword)
+            listener?.didAddKeyword(keyword)
+            onPreferenceChangeListener?.onPreferenceChange(this, _keywords)
+            notifyChanged()
+            chipEditText.text = null
+            return@setOnEditorActionListener true
+        }
+
+    }
+
+    private fun addChipToGroup(keyword: String, chipGroup: ChipGroup) {
+        val chip = Chip(context, null, R.attr.vctr_keyword_style)
+        chip.text = keyword
+        chip.isClickable = true
+        chip.isCheckable = false
+        chip.isCloseIconVisible = true
+        chip.clipBounds
+        chipGroup.addView(chip)
+
+        chip.setOnCloseIconClickListener {
+            _keywords.remove(keyword)
+            listener?.didRemoveKeyword(keyword)
+            onPreferenceChangeListener?.onPreferenceChange(this, _keywords)
+            notifyChanged()
+        }
+    }
+}

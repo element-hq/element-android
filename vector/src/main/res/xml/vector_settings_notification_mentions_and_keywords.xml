@@ -6,18 +6,23 @@
 
         <im.vector.app.core.preference.VectorCheckboxPreference
             android:key="SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY"
-            android:persistent="false"
             android:title="@string/settings_messages_containing_display_name" />
 
         <im.vector.app.core.preference.VectorCheckboxPreference
             android:key="SETTINGS_PUSH_RULE_CONTAINING_MY_USER_NAME_PREFERENCE_KEY"
-            android:persistent="false"
             android:title="@string/settings_messages_containing_username" />
 
         <im.vector.app.core.preference.VectorCheckboxPreference
             android:key="SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY"
-            android:persistent="false"
             android:title="@string/settings_messages_at_room" />
+
+        <im.vector.app.core.preference.VectorCheckboxPreference
+            android:key="SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_KEYWORDS_PREFERENCE_KEY"
+            android:title="@string/settings_messages_containing_keywords" />
+
+        <im.vector.app.core.preference.KeywordPreference
+            android:key="SETTINGS_KEYWORD_EDIT"
+            />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 </androidx.preference.PreferenceScreen>

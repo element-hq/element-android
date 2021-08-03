@@ -25,7 +25,7 @@ import javax.inject.Inject
 internal interface RemovePushRuleTask : Task<RemovePushRuleTask.Params, Unit> {
     data class Params(
             val kind: RuleKind,
-            val pushRule: PushRule
+            val ruleId: String
     )
 }
 
@@ -36,7 +36,7 @@ internal class DefaultRemovePushRuleTask @Inject constructor(
 
     override suspend fun execute(params: RemovePushRuleTask.Params) {
         return executeRequest(globalErrorReceiver) {
-            pushRulesApi.deleteRule(params.kind.value, params.pushRule.ruleId)
+            pushRulesApi.deleteRule(params.kind.value, params.ruleId)
         }
     }
 }
