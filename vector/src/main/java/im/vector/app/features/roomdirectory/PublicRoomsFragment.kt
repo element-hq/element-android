@@ -136,7 +136,7 @@ class PublicRoomsFragment @Inject constructor(
                 else             -> {
                     // ROOM PREVIEW
                     navigator.openRoomPreview(requireActivity(), publicRoom, roomDirectoryData)
-                };
+                }
             }
         }
     }
