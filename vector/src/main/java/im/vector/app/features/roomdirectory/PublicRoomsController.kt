@@ -55,9 +55,13 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
                 text(host.stringProvider.getString(R.string.no_result_placeholder))
             }
         } else {
-            publicRooms.toSortedMap(compareByDescending { it.numJoinedMembers }).forEach {
-                buildPublicRoom(it.key, it.value, viewState)
-            }
+            publicRooms.toSortedMap(compareByDescending<PublicRoom> { it.numJoinedMembers }
+                    .thenBy { TchapUtils.getHomeServerDisplayNameFromMXIdentifier(it.roomId) }
+                    .thenBy(String.CASE_INSENSITIVE_ORDER) { it.toMatrixItem().displayName.toString() }
+                    .thenBy { it.roomId })
+                    .forEach {
+                        buildPublicRoom(it.key, it.value, viewState)
+                    }
 
             unknownRoomItem?.addTo(this)
 
