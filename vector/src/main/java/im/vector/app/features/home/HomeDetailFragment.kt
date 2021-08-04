@@ -184,6 +184,7 @@ class HomeDetailFragment @Inject constructor(
                     handleInviteByEmailFailed(getString(R.string.tchap_invite_sending_succeeded) + "\n" + getString(R.string.tchap_send_invite_confirmation))
                 is HomeDetailViewEvents.GetPlatform                       -> platformViewModel.handle(PlatformAction.DiscoverTchapPlatform(viewEvent.email))
                 is HomeDetailViewEvents.OpenDirectChat                    -> openRoom(viewEvent.roomId)
+                is HomeDetailViewEvents.PromptCreateDirectChat            -> showCreateRoomDialog(viewEvent.userId)
                 is HomeDetailViewEvents.Failure                           -> showFailure(viewEvent.throwable)
             }
         }.exhaustive
@@ -497,11 +498,11 @@ class HomeDetailFragment @Inject constructor(
                     }
             if (fragmentToShow == null) {
                 when (tab) {
-                    is HomeTab.RoomList -> {
+                    is HomeTab.RoomList    -> {
                         val params = RoomListParams(tab.displayMode)
                         add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
                     }
-                    is HomeTab.DialPad  -> {
+                    is HomeTab.DialPad     -> {
                         add(R.id.roomListContainer, createDialPadFragment())
                     }
                     is HomeTab.ContactList -> {
@@ -628,6 +629,19 @@ class HomeDetailFragment @Inject constructor(
     private fun openRoom(roomId: String) {
         navigator.openRoom(requireActivity(), roomId)
         cancelSearch()
+    }
+
+    private fun showCreateRoomDialog(userId: String) {
+        val displayName = TchapUtils.computeDisplayNameFromUserId(userId) ?: ""
+        val name = TchapUtils.getNameFromDisplayName(displayName)
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.fab_menu_create_chat)
+                .setMessage(getString(R.string.tchap_dialog_prompt_new_direct_chat, name))
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    viewModel.handle(HomeDetailAction.CreateDirectMessage(userId))
+                }
+                .setNegativeButton(R.string.no, null)
+                .show()
     }
 
     private fun handleInviteByEmailFailed(message: String) {

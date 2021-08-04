@@ -28,6 +28,9 @@
     <string name="tchap_room_creation_extern_room_info">Encrypted and accessible to all agent users and to external guests by invitation of an administrator.</string>
     <string name="tchap_room_creation_forum_room_info">Unencrypted and accessible automatically and only to all agent users from the forum directory (or a shared link).</string>
 
+    <!-- tchap direct messages -->
+    <string name="tchap_dialog_prompt_new_direct_chat">You don\'t have a direct chat with %s, do you want to send him an invitation?</string>
+
     <!-- tchap new strings -->
     <string name="tchap_room_admin_leave_prompt_msg">Are you sure you want to leave the room?\n\nThe room will no longer be administered, and you may not be able to join it again</string>
     <string name="tchap_invite_contacts_to_tchap">Invite contacts in Tchap</string>

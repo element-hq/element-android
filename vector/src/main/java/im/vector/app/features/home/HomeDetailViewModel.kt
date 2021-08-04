@@ -63,7 +63,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val callManager: WebRtcCallManager,
                                                       private val directRoomHelper: DirectRoomHelper,
                                                       private val appStateHandler: AppStateHandler,
-private val autoAcceptInvites: AutoAcceptInvites)
+                                                      private val autoAcceptInvites: AutoAcceptInvites)
     : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
@@ -109,6 +109,7 @@ private val autoAcceptInvites: AutoAcceptInvites)
             is HomeDetailAction.InviteByEmail            -> handleIndividualInviteByEmail(action)
             is HomeDetailAction.SelectContact            -> handleSelectContact(action)
             is HomeDetailAction.CreateDiscussion         -> handleCreateDiscussion(action)
+            is HomeDetailAction.CreateDirectMessage      -> handleCreateDirectMessage(action)
             HomeDetailAction.UnauthorizedEmail           -> handleUnauthorizedEmail()
         }
     }
@@ -200,7 +201,7 @@ private val autoAcceptInvites: AutoAcceptInvites)
         if (directRoomId != null) {
             _viewEvents.post(HomeDetailViewEvents.OpenDirectChat(directRoomId))
         } else {
-            // Todo: handle direct room creation
+            _viewEvents.post(HomeDetailViewEvents.PromptCreateDirectChat(action.userId))
         }
     }
 
@@ -243,6 +244,18 @@ private val autoAcceptInvites: AutoAcceptInvites)
                 // Notify the user that the invite has been already sent
                 _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
             }
+        }
+    }
+
+    private fun handleCreateDirectMessage(action: HomeDetailAction.CreateDirectMessage) {
+        viewModelScope.launch {
+            val roomId = try {
+                directRoomHelper.ensureDMExists(action.userId)
+            } catch (failure: Throwable) {
+                _viewEvents.post(HomeDetailViewEvents.Failure(failure))
+                return@launch
+            }
+            _viewEvents.post(HomeDetailViewEvents.OpenDirectChat(roomId = roomId))
         }
     }
 

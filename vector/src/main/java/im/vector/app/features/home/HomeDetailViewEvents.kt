@@ -28,5 +28,6 @@ sealed class HomeDetailViewEvents : VectorViewEvents {
     object InviteNoTchapUserByEmail : HomeDetailViewEvents()
     data class GetPlatform(val email: String) : HomeDetailViewEvents()
     data class OpenDirectChat(val roomId: String) : HomeDetailViewEvents()
+    data class PromptCreateDirectChat(val userId: String) : HomeDetailViewEvents()
     data class Failure(val throwable: Throwable) : HomeDetailViewEvents()
 }
