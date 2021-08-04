@@ -146,11 +146,6 @@ class HomeDetailFragment @Inject constructor(
         setupKeysBackupBanner()
         setupActiveCallView()
 
-        withState(viewModel) {
-            // Update the navigation view if needed (for when we restore the tabs)
-            views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
-        }
-
         viewModel.selectSubscribe(this, HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
             when (roomGroupingMethod) {
                 is RoomGroupingMethod.ByLegacyGroup -> {
@@ -454,6 +449,11 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupBottomNavigationView() {
+        withState(viewModel) {
+            // Update the navigation view if needed (for when we restore the tabs)
+            views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
+        }
+
         views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
         views.bottomNavigationView.setOnItemSelectedListener {
             val tab = when (it.itemId) {
