@@ -141,7 +141,7 @@ dependencies {
     implementation "ru.noties.markwon:core:$markwon_version"
 
     // Image
-    implementation 'androidx.exifinterface:exifinterface:1.3.2'
+    implementation 'androidx.exifinterface:exifinterface:1.3.3'
 
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
