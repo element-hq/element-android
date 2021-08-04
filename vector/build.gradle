@@ -109,7 +109,6 @@ android {
     ndkVersion "21.3.6528147"
 
     defaultConfig {
-        applicationId "im.vector.app"
         // Set to API 21: see #405
         minSdkVersion 21
         targetSdkVersion 30
@@ -214,8 +213,6 @@ android {
 
     buildTypes {
         debug {
-            resValue "string", "app_name", "Tchap dbg"
-
             resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             // Set to true if you want to enable strict mode in debug
@@ -225,8 +222,6 @@ android {
         }
 
         release {
-            resValue "string", "app_name", "Tchap"
-
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
@@ -292,6 +287,8 @@ android {
         secure {
             dimension "target"
 
+            resValue "string", "app_name", "Tchap"
+
             applicationId "fr.gouv.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}"
         }
@@ -299,12 +296,16 @@ android {
         preprod {
             dimension "target"
 
+            resValue "string", "app_name", "Btchap"
+
             applicationId "fr.gouv.rie.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_b"
         }
 
         agent {
             dimension "target"
+
+            resValue "string", "app_name", "Tchap"
 
             applicationId "fr.gouv.tchap.a"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_a"
