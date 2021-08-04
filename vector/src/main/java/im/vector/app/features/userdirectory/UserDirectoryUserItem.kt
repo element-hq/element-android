@@ -44,6 +44,7 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.setOnClickListener(clickListener)
+        // TODO: it should be better to update User.getBestName function to compute the displayname
         val displayName = matrixItem.displayName
                 ?.takeUnless { it.isEmpty() }
                 ?: TchapUtils.computeDisplayNameFromUserId(matrixItem.id).orEmpty()

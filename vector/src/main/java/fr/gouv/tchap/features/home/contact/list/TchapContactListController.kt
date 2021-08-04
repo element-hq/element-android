@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
@@ -76,7 +77,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
             }
         }
 
-        buildlocalContacts(currentState)
+        buildLocalContacts(currentState)
 
         when (val asyncUsers = currentState.directoryUsers) {
             is Uninitialized -> {
@@ -91,7 +92,7 @@ class TchapContactListController @Inject constructor(private val session: Sessio
         }
     }
 
-    private fun buildlocalContacts(currentState: TchapContactListViewState) {
+    private fun buildLocalContacts(currentState: TchapContactListViewState) {
         val host = this
         userListHeaderItem {
             id("local_header", 1)
@@ -99,8 +100,13 @@ class TchapContactListController @Inject constructor(private val session: Sessio
         }
 
         currentState.filteredLocalUsers.toMutableList().sortedWith() { contact1, contact2 ->
-            val lhs = contact1.getBestName()
-            val rhs = contact2.getBestName()
+            // TODO: it should be better to update User.getBestName function to compute the displayname
+            val lhs = contact1.displayName
+                    ?.takeUnless { it.isEmpty() }
+                    ?: TchapUtils.computeDisplayNameFromUserId(contact1.userId).orEmpty()
+            val rhs = contact2.displayName
+                    ?.takeUnless { it.isEmpty() }
+                    ?: TchapUtils.computeDisplayNameFromUserId(contact2.userId).orEmpty()
 
             String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs)
         }.forEach { item ->
