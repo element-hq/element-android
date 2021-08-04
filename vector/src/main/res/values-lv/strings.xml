@@ -2336,4 +2336,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="missing_permissions_title">Trūkst atļauju</string>
     <string name="denied_permission_camera">Lai veiktu šo darbību, lūdzu, piešķiriet kamerai atļauju sistēmas iestatījumos.</string>
     <string name="denied_permission_generic">Lai veiktu šo darbību, trūkst dažu atļauju. Lūdzu, sistēmas Iestatījumos piešķiriet atļaujas.</string>
+    <string name="spaces_header">Vietnes</string>
+    <string name="spaces_invited_header">Uzaicinājumi</string>
+    <string name="suggested_header">Ieteiktās telpas</string>
 </resources>
