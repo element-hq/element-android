@@ -28,6 +28,7 @@ Improvements 🙌:
  - [Contacts list] open the DM (if any) for the selected user #129
  - Set up the application icon (Btchap/Tchap/Tchap secure) #102
  - [Home screen] Set up the (+) button on the rooms list #109
+ - Set up the variant Tchap without voip #161
 
 
 =======================================================
