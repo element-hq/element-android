@@ -86,4 +86,6 @@
     <string name="sc_accent_indigo">Индиго</string>
     <string name="sc_accent_lava">Лава</string>
     <string name="sc_accent_blue">Синий</string>
+    <string name="settings_open_chats_at_first_unread">Открыть сначала непрочитанное</string>
+    <string name="settings_open_chats_at_first_unread_summary">Открывайте чаты на первом непрочитанном сообщении, а не внизу.</string>
 </resources>
