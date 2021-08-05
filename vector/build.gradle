@@ -270,10 +270,14 @@ android {
 
         withvoip {
             dimension "voip"
+
+            buildConfigField "boolean", "IS_VOIP_SUPPORTED", "true"
         }
 
         withoutvoip {
             dimension "voip"
+
+            buildConfigField "boolean", "IS_VOIP_SUPPORTED", "false"
         }
 
         withpinning {
@@ -499,7 +503,7 @@ dependencies {
     implementation('com.facebook.react:react-native-webrtc:1.87.3-jitsi-6624067@aar')
 
     // Jitsi
-    implementation('org.jitsi.react:jitsi-meet-sdk:3.1.0') {
+    withvoipImplementation('org.jitsi.react:jitsi-meet-sdk:3.1.0') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
