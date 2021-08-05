@@ -500,7 +500,7 @@ dependencies {
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('com.facebook.react:react-native-webrtc:1.87.3-jitsi-6624067@aar')
+    withvoipImplementation('com.facebook.react:react-native-webrtc:1.87.3-jitsi-6624067@aar')
 
     // Jitsi
     withvoipImplementation('org.jitsi.react:jitsi-meet-sdk:3.1.0') {

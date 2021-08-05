@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/roomToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:transitionName="toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/roomToolbarContentView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/roomToolbarAvatarImageView"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:contentDescription="@string/avatar"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@sample/room_round_avatars" />
+
+                <im.vector.app.core.ui.views.ShieldImageView
+                    android:id="@+id/roomToolbarDecorationImageView"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintCircle="@+id/roomToolbarAvatarImageView"
+                    app:layout_constraintCircleAngle="135"
+                    app:layout_constraintCircleRadius="20dp"
+                    tools:ignore="MissingConstraints" />
+
+                <TextView
+                    android:id="@+id/roomToolbarTitleView"
+                    style="@style/Widget.Tchap.Toolbar.TextView.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    app:layout_constraintBottom_toTopOf="@+id/roomToolbarSubtitleView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@sample/rooms.json/data/name" />
+
+                <TextView
+                    android:id="@+id/roomToolbarSubtitleView"
+                    style="@style/Widget.Vector.TextView.Body"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="?vctr_content_primary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
+                    app:layout_constraintTop_toBottomOf="@+id/roomToolbarTitleView"
+                    tools:text="@sample/rooms.json/data/topic" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/timelineRecyclerViewBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="composerLayout,notificationAreaView,failedMessagesWarningView" />
+
+    <im.vector.app.features.sync.widget.SyncStateView
+        android:id="@+id/syncStateView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+
+    <im.vector.app.core.ui.views.CurrentCallsView
+        android:id="@+id/activeCallView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/syncStateView"
+        tools:visibility="visible" />
+
+    <im.vector.app.core.ui.views.ActiveConferenceView
+        android:id="@+id/activeConferenceView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/activeCallView"
+        tools:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/timelineRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:overScrollMode="always"
+        app:layout_constraintBottom_toTopOf="@+id/timelineRecyclerViewBarrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activeConferenceView"
+        tools:listitem="@layout/item_timeline_event_base" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/jumpToReadMarkerView"
+        style="?vctr_jump_to_unread_style"
+        app:chipIcon="@drawable/ic_jump_to_unread"
+        app:closeIcon="@drawable/ic_close_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:text="@string/room_jump_to_first_unread"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activeConferenceView"
+        tools:visibility="visible" />
+
+
+    <im.vector.app.core.ui.views.NotificationAreaView
+        android:id="@+id/notificationAreaView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <im.vector.app.core.ui.views.FailedMessagesWarningView
+        android:id="@+id/failedMessagesWarningView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/composerLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+    <im.vector.app.features.home.room.detail.composer.TextComposerView
+        android:id="@+id/composerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:colorBackground"
+        android:minHeight="56dp"
+        android:transitionName="composer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <im.vector.app.features.invite.VectorInviteView
+        android:id="@+id/inviteView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?android:colorBackground"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        tools:visibility="gone" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/badgeBarrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="composerLayout,notificationAreaView, failedMessagesWarningView" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/activeCallPiPWrap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/jumpToReadMarkerView">
+
+        <FrameLayout
+            android:id="@+id/activeCallPiP"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <im.vector.app.core.platform.BadgeFloatingActionButton
+        android:id="@+id/jumpToBottomView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/a11y_jump_to_bottom"
+        android:src="@drawable/ic_expand_more"
+        app:backgroundTint="#FFFFFF"
+        app:badgeBackgroundColor="?colorPrimary"
+        app:badgeTextColor="?colorOnPrimary"
+        app:badgeTextPadding="2dp"
+        app:badgeTextSize="10sp"
+        app:layout_constraintBottom_toTopOf="@id/badgeBarrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@android:color/black" />
+
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/viewKonfetti"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
+
+    <com.jetradarmobile.snowfall.SnowfallView
+        android:id="@+id/viewSnowFall"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?vctr_chat_effect_snow_background"
+        android:visibility="invisible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
