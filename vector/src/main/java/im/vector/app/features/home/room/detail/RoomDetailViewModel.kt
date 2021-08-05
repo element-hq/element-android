@@ -189,9 +189,11 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeActiveRoomWidgets()
         observePowerLevel()
         room.getRoomSummaryLive()
-        if (!vectorPreferences.loadRoomAtFirstUnread()) {
-            viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (!vectorPreferences.loadRoomAtFirstUnread()) {
                 tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+            } else {
+                tryOrNull { room.setMarkedUnread(false) }
             }
         }
         // Inform the SDK that the room is displayed
