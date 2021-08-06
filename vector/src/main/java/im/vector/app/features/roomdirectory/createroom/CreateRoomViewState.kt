@@ -20,6 +20,7 @@ import android.net.Uri
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
 import org.matrix.android.sdk.api.extensions.orTrue
 
 data class CreateRoomViewState(
@@ -27,9 +28,11 @@ data class CreateRoomViewState(
         val roomName: String = "",
         val roomTopic: String = "",
         val roomVisibilityType: RoomVisibilityType = RoomVisibilityType.Private,
+        val roomAccessRules: RoomAccessRules = RoomAccessRules.RESTRICTED,
         val isEncrypted: Boolean = false,
         val showAdvanced: Boolean = false,
         val disableFederation: Boolean = true,
+        val isFederationSettingAvailable: Boolean = true,
         val homeServerName: String = "",
         val userDomain: String = "",
         val hsAdminHasDisabledE2E: Boolean = false,
@@ -52,7 +55,6 @@ data class CreateRoomViewState(
 
     sealed class RoomVisibilityType {
         object Private : RoomVisibilityType()
-        object External : RoomVisibilityType()
         data class Public(val aliasLocalPart: String) : RoomVisibilityType()
     }
 }

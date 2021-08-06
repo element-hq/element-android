@@ -28,13 +28,9 @@ import timber.log.Timber
 data class RoomAccessRulesContent(
         @Json(name = "rule") val rule: String? = null
 ) {
-    val accessRules: RoomAccessRules? = when (rule) {
-        "direct" -> RoomAccessRules.DIRECT
-        "restricted" -> RoomAccessRules.RESTRICTED
-        "unrestricted" -> RoomAccessRules.UNRESTRICTED
-        else         -> {
-            Timber.w("Invalid value for RoomAccessRules: `$rule`")
-            null
-        }
-    }
+    val accessRules: RoomAccessRules? = RoomAccessRules.values().firstOrNull { it.value == rule }
+            ?: run {
+                Timber.w("Invalid value for RoomAccessRules: `$rule`")
+                null
+            }
 }

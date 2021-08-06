@@ -18,6 +18,7 @@ package fr.gouv.tchap.features.home.roomdirectory.createroom
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Loading
+import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
 import fr.gouv.tchap.core.utils.RoomUtils
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -48,7 +49,7 @@ class TchapCreateRoomController @Inject constructor(
             imageUri(viewState.avatarUri)
             clickListener { host.listener?.onAvatarChange() }
             deleteListener { host.listener?.onAvatarDelete() }
-            roomType(RoomUtils.getRoomType(viewState.roomVisibilityType))
+            roomType(RoomUtils.getRoomType(viewState.roomVisibilityType, viewState.roomAccessRules))
 
             value(viewState.roomName)
             hint(host.stringProvider.getString(R.string.create_room_name_hint))
@@ -64,13 +65,19 @@ class TchapCreateRoomController @Inject constructor(
         tchapRoomTypePrivateItem {
             id("privateRoomItem")
             selected(viewState.roomVisibilityType == RoomVisibilityType.Private)
-            clickListener { host.listener?.setIsPublic(isPublic = false, isRestricted = true) }
+            clickListener {
+                host.listener?.setIsPublic(isPublic = false)
+                host.listener?.setRoomAccessRules(isRestricted = true)
+            }
         }
 
         tchapRoomTypeExternalItem {
             id("externalRoomItem")
-            selected(viewState.roomVisibilityType == RoomVisibilityType.External)
-            clickListener { host.listener?.setIsPublic(isPublic = false, isRestricted = false) }
+            selected(viewState.roomVisibilityType == RoomVisibilityType.Private)
+            clickListener {
+                host.listener?.setIsPublic(isPublic = false)
+                host.listener?.setRoomAccessRules(isRestricted = false)
+            }
         }
 
         tchapRoomTypeForumItem {
@@ -78,7 +85,11 @@ class TchapCreateRoomController @Inject constructor(
             userDomain(viewState.userDomain)
             selected(viewState.roomVisibilityType is RoomVisibilityType.Public)
             checked(viewState.disableFederation)
-            clickListener { host.listener?.setIsPublic(isPublic = true, isRestricted = true) }
+            switchVisible(viewState.isFederationSettingAvailable)
+            clickListener {
+                host.listener?.setIsPublic(isPublic = true)
+                host.listener?.setRoomAccessRules(isRestricted = true)
+            }
             checkListener { _, isChecked -> host.listener?.setDisableFederation(isChecked) }
         }
 
@@ -95,7 +106,8 @@ class TchapCreateRoomController @Inject constructor(
         fun onAvatarChange()
         fun onNameChange(newName: String)
         fun onTopicChange(newTopic: String)
-        fun setIsPublic(isPublic: Boolean, isRestricted: Boolean)
+        fun setIsPublic(isPublic: Boolean)
+        fun setRoomAccessRules(isRestricted: Boolean)
         fun setAliasLocalPart(aliasLocalPart: String)
         fun setIsEncrypted(isEncrypted: Boolean)
         fun toggleShowAdvanced()

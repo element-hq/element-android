@@ -22,7 +22,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -43,7 +42,6 @@ import im.vector.app.databinding.FragmentCreateRoomBinding
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import javax.inject.Inject
 
@@ -132,8 +130,12 @@ class CreateRoomFragment @Inject constructor(
         viewModel.handle(CreateRoomAction.SetTopic(newTopic))
     }
 
-    override fun setIsPublic(isPublic: Boolean, isRestricted: Boolean) {
-        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic, isRestricted))
+    override fun setIsPublic(isPublic: Boolean) {
+        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic))
+    }
+
+    override fun setRoomAccessRules(isRestricted: Boolean) {
+        viewModel.handle(CreateRoomAction.SetRoomAccessRules(isRestricted))
     }
 
     override fun setAliasLocalPart(aliasLocalPart: String) {
@@ -153,8 +155,7 @@ class CreateRoomFragment @Inject constructor(
     }
 
     override fun submit() {
-        // viewModel.handle(CreateRoomAction.Create)
-        Toast.makeText(requireContext(), "Not implemented yet", Toast.LENGTH_SHORT).show()
+         viewModel.handle(CreateRoomAction.Create)
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
