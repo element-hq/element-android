@@ -63,7 +63,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val callManager: WebRtcCallManager,
                                                       private val directRoomHelper: DirectRoomHelper,
                                                       private val appStateHandler: AppStateHandler,
-private val autoAcceptInvites: AutoAcceptInvites)
+                                                      private val autoAcceptInvites: AutoAcceptInvites)
     : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
@@ -103,13 +103,14 @@ private val autoAcceptInvites: AutoAcceptInvites)
 
     override fun handle(action: HomeDetailAction) {
         when (action) {
-            is HomeDetailAction.SwitchTab                -> handleSwitchTab(action)
-            HomeDetailAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
-            is HomeDetailAction.StartCallWithPhoneNumber -> handleStartCallWithPhoneNumber(action)
-            is HomeDetailAction.InviteByEmail            -> handleIndividualInviteByEmail(action)
-            is HomeDetailAction.SelectContact            -> handleSelectContact(action)
-            is HomeDetailAction.CreateDiscussion         -> handleCreateDiscussion(action)
-            HomeDetailAction.UnauthorizedEmail           -> handleUnauthorizedEmail()
+            is HomeDetailAction.SwitchTab                   -> handleSwitchTab(action)
+            HomeDetailAction.MarkAllRoomsRead               -> handleMarkAllRoomsRead()
+            is HomeDetailAction.StartCallWithPhoneNumber    -> handleStartCallWithPhoneNumber(action)
+            is HomeDetailAction.InviteByEmail               -> handleIndividualInviteByEmail(action)
+            is HomeDetailAction.SelectContact               -> handleSelectContact(action)
+            is HomeDetailAction.CreateDirectMessageByEmail  -> handleCreateDirectMessage(action)
+            is HomeDetailAction.CreateDirectMessageByUserId -> handleCreateDirectMessage(action)
+            HomeDetailAction.UnauthorizedEmail              -> handleUnauthorizedEmail()
         }
     }
 
@@ -190,17 +191,19 @@ private val autoAcceptInvites: AutoAcceptInvites)
                 _viewEvents.post(HomeDetailViewEvents.GetPlatform(action.email))
             } else {
                 val userId = data.find { it.threePid.value == action.email }?.matrixId
-                userId?.let { _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(it)) }
+                userId?.let {
+                    session.getUser(userId)?.let { _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(it)) }
+                }
             }
         }
     }
 
     private fun handleSelectContact(action: HomeDetailAction.SelectContact) {
-        val directRoomId = session.getExistingDirectRoomWithUser(action.userId)
+        val directRoomId = session.getExistingDirectRoomWithUser(action.user.userId)
         if (directRoomId != null) {
             _viewEvents.post(HomeDetailViewEvents.OpenDirectChat(directRoomId))
         } else {
-            // Todo: handle direct room creation
+            _viewEvents.post(HomeDetailViewEvents.PromptCreateDirectChat(action.user))
         }
     }
 
@@ -215,13 +218,13 @@ private val autoAcceptInvites: AutoAcceptInvites)
         }
     }
 
-    private fun handleCreateDiscussion(action: HomeDetailAction.CreateDiscussion) = withState {
+    private fun handleCreateDirectMessage(action: HomeDetailAction.CreateDirectMessageByEmail) = withState {
         it.inviteEmail ?: return@withState
 
         if (it.existingRoom.isNullOrEmpty()) {
             // Send the invite if the email is authorized
             viewModelScope.launch {
-                createDiscussion(it.inviteEmail)
+                createDirectMessage(it.inviteEmail)
             }
         } else {
             // There is already a discussion with this email
@@ -233,7 +236,7 @@ private val autoAcceptInvites: AutoAcceptInvites)
                 viewModelScope.launch {
                     try {
                         revokePendingInviteAndLeave(it.existingRoom)
-                        createDiscussion(it.inviteEmail)
+                        createDirectMessage(it.inviteEmail)
                     } catch (failure: Throwable) {
                         // Ignore the error, notify the user that the invite has been already sent
                         _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
@@ -246,7 +249,19 @@ private val autoAcceptInvites: AutoAcceptInvites)
         }
     }
 
-    private suspend fun createDiscussion(email: String) {
+    private fun handleCreateDirectMessage(action: HomeDetailAction.CreateDirectMessageByUserId) {
+        viewModelScope.launch {
+            val roomId = try {
+                directRoomHelper.ensureDMExists(action.userId)
+            } catch (failure: Throwable) {
+                _viewEvents.post(HomeDetailViewEvents.Failure(failure))
+                return@launch
+            }
+            _viewEvents.post(HomeDetailViewEvents.OpenDirectChat(roomId = roomId))
+        }
+    }
+
+    private suspend fun createDirectMessage(email: String) {
         val roomParams = CreateRoomParams()
                 .apply {
                     invite3pids.add(ThreePid.Email(email))

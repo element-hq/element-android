@@ -28,6 +28,9 @@
     <string name="tchap_room_creation_extern_room_info">Chiffré et accessible à tous les agents publics et aux invités externes sur invitation d\'un administrateur.</string>
     <string name="tchap_room_creation_forum_room_info">Non chiffré et accessible automatiquement et uniquement à tous les agents publics depuis l\'annuaire (ou un lien partagé).</string>
 
+    <!-- tchap direct messages -->
+    <string name="tchap_dialog_prompt_new_direct_chat">Vous n\'avez pas de message direct avec %s, voulez-vous lui envoyer une invitation ?</string>
+
     <!-- tchap new strings -->
     <string name="tchap_room_admin_leave_prompt_msg">Voulez-vous vraiment quitter cette conversation ?\n\nElle ne sera plus administrée, et vous risquez de ne plus pouvoir la joindre de nouveau.</string>
     <string name="tchap_invite_contacts_to_tchap">Inviter à rejoindre Tchap</string>
