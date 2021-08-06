@@ -23,9 +23,9 @@
     <string name="notice_answered_call">%s ответил(а) на звонок.</string>
     <string name="notice_ended_call">%s завершил(а) вызов.</string>
     <string name="notice_made_future_room_visibility">%1$s сделал(а) будущую историю комнаты видимой %2$s</string>
-    <string name="notice_room_visibility_invited">всем членам, с момента их приглашения.</string>
-    <string name="notice_room_visibility_joined">всем членам, с момента присоединения.</string>
-    <string name="notice_room_visibility_shared">всем членам.</string>
+    <string name="notice_room_visibility_invited">всем участникам, с момента их приглашения.</string>
+    <string name="notice_room_visibility_joined">всем участникам, с момента присоединения.</string>
+    <string name="notice_room_visibility_shared">всем участникам.</string>
     <string name="notice_room_visibility_world_readable">всем.</string>
     <string name="notice_room_visibility_unknown">неизвестно (%s).</string>
     <string name="notice_end_to_end">%1$s включил(а) сквозное шифрование (%2$s)</string>
@@ -760,9 +760,9 @@
     <string name="room_settings_room_access_rules_pref_dialog_title">Кто имеет доступ к комнате?</string>
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Все</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Только члены (с момента выбора этой опции)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">Только члены (с момента приглашения)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Только члены (с момента присоединения)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Только участники (с момента выбора этой опции)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Только участники (с момента приглашения)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Только участники (с момента присоединения)</string>
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Для генерации ссылки команда должна иметь адрес.</string>
     <string name="room_settings_room_access_entry_only_invited">Только приглашенные</string>
@@ -2850,7 +2850,7 @@
     <string name="spaces_no_server_support_title">Похоже, что ваш домашний сервер пока не поддерживает пространства</string>
     <string name="spaces_feeling_experimental_subspace">Чувствуете себя экспериментатором\?
 \nВы можете добавить существующие пространства в пространство.</string>
-    <string name="labs_space_show_orphan_in_home">Экспериментальное пространство - показывать в доме только сирот</string>
+    <string name="labs_space_show_orphan_in_home">Экспериментальное пространство - показывать в Главной только сирот</string>
     <string name="space_manage_rooms_and_spaces">Управление комнатами и пространствами</string>
     <string name="space_mark_as_not_suggested">Отметить как не рекомендуется</string>
     <string name="space_mark_as_suggested">Отметить как рекомендуется</string>
