@@ -254,7 +254,7 @@ class HomeDetailFragment @Inject constructor(
                 is PlatformViewEvents.Failure -> viewModel.handle(HomeDetailAction.UnauthorizedEmail)
                 is PlatformViewEvents.Success -> {
                     if (it.platform.hs.isNotEmpty()) {
-                        viewModel.handle(HomeDetailAction.CreateDiscussion(TchapUtils.isExternalTchapServer(it.platform.hs)))
+                        viewModel.handle(HomeDetailAction.CreateDirectMessageByEmail(TchapUtils.isExternalTchapServer(it.platform.hs)))
                     } else {
                         viewModel.handle(HomeDetailAction.UnauthorizedEmail)
                     }
@@ -638,7 +638,7 @@ class HomeDetailFragment @Inject constructor(
                 .setTitle(R.string.fab_menu_create_chat)
                 .setMessage(getString(R.string.tchap_dialog_prompt_new_direct_chat, name))
                 .setPositiveButton(R.string.yes) { _, _ ->
-                    viewModel.handle(HomeDetailAction.CreateDirectMessage(user.userId))
+                    viewModel.handle(HomeDetailAction.CreateDirectMessageByUserId(user.userId))
                 }
                 .setNegativeButton(R.string.no, null)
                 .show()

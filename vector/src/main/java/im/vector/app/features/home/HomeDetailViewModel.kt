@@ -103,14 +103,14 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
     override fun handle(action: HomeDetailAction) {
         when (action) {
-            is HomeDetailAction.SwitchTab                -> handleSwitchTab(action)
-            HomeDetailAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
-            is HomeDetailAction.StartCallWithPhoneNumber -> handleStartCallWithPhoneNumber(action)
-            is HomeDetailAction.InviteByEmail            -> handleIndividualInviteByEmail(action)
-            is HomeDetailAction.SelectContact            -> handleSelectContact(action)
-            is HomeDetailAction.CreateDiscussion         -> handleCreateDiscussion(action)
-            is HomeDetailAction.CreateDirectMessage      -> handleCreateDirectMessage(action)
-            HomeDetailAction.UnauthorizedEmail           -> handleUnauthorizedEmail()
+            is HomeDetailAction.SwitchTab                   -> handleSwitchTab(action)
+            HomeDetailAction.MarkAllRoomsRead               -> handleMarkAllRoomsRead()
+            is HomeDetailAction.StartCallWithPhoneNumber    -> handleStartCallWithPhoneNumber(action)
+            is HomeDetailAction.InviteByEmail               -> handleIndividualInviteByEmail(action)
+            is HomeDetailAction.SelectContact               -> handleSelectContact(action)
+            is HomeDetailAction.CreateDirectMessageByEmail  -> handleCreateDirectMessage(action)
+            is HomeDetailAction.CreateDirectMessageByUserId -> handleCreateDirectMessage(action)
+            HomeDetailAction.UnauthorizedEmail              -> handleUnauthorizedEmail()
         }
     }
 
@@ -218,13 +218,13 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         }
     }
 
-    private fun handleCreateDiscussion(action: HomeDetailAction.CreateDiscussion) = withState {
+    private fun handleCreateDirectMessage(action: HomeDetailAction.CreateDirectMessageByEmail) = withState {
         it.inviteEmail ?: return@withState
 
         if (it.existingRoom.isNullOrEmpty()) {
             // Send the invite if the email is authorized
             viewModelScope.launch {
-                createDiscussion(it.inviteEmail)
+                createDirectMessage(it.inviteEmail)
             }
         } else {
             // There is already a discussion with this email
@@ -236,7 +236,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 viewModelScope.launch {
                     try {
                         revokePendingInviteAndLeave(it.existingRoom)
-                        createDiscussion(it.inviteEmail)
+                        createDirectMessage(it.inviteEmail)
                     } catch (failure: Throwable) {
                         // Ignore the error, notify the user that the invite has been already sent
                         _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
@@ -249,7 +249,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         }
     }
 
-    private fun handleCreateDirectMessage(action: HomeDetailAction.CreateDirectMessage) {
+    private fun handleCreateDirectMessage(action: HomeDetailAction.CreateDirectMessageByUserId) {
         viewModelScope.launch {
             val roomId = try {
                 directRoomHelper.ensureDMExists(action.userId)
@@ -261,7 +261,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         }
     }
 
-    private suspend fun createDiscussion(email: String) {
+    private suspend fun createDirectMessage(email: String) {
         val roomParams = CreateRoomParams()
                 .apply {
                     invite3pids.add(ThreePid.Email(email))
