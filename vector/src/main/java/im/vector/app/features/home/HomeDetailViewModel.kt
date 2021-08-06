@@ -191,17 +191,19 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 _viewEvents.post(HomeDetailViewEvents.GetPlatform(action.email))
             } else {
                 val userId = data.find { it.threePid.value == action.email }?.matrixId
-                userId?.let { _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(it)) }
+                userId?.let {
+                    session.getUser(userId)?.let { _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(it)) }
+                }
             }
         }
     }
 
     private fun handleSelectContact(action: HomeDetailAction.SelectContact) {
-        val directRoomId = session.getExistingDirectRoomWithUser(action.userId)
+        val directRoomId = session.getExistingDirectRoomWithUser(action.user.userId)
         if (directRoomId != null) {
             _viewEvents.post(HomeDetailViewEvents.OpenDirectChat(directRoomId))
         } else {
-            _viewEvents.post(HomeDetailViewEvents.PromptCreateDirectChat(action.userId))
+            _viewEvents.post(HomeDetailViewEvents.PromptCreateDirectChat(action.user))
         }
     }
 

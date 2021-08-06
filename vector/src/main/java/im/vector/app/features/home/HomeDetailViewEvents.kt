@@ -17,17 +17,18 @@
 package im.vector.app.features.home
 
 import im.vector.app.core.platform.VectorViewEvents
+import org.matrix.android.sdk.api.session.user.model.User
 
 sealed class HomeDetailViewEvents : VectorViewEvents {
     object Loading : HomeDetailViewEvents()
     object CallStarted : HomeDetailViewEvents()
     data class FailToCall(val failure: Throwable) : HomeDetailViewEvents()
-    data class InviteIgnoredForDiscoveredUser(val userId: String) : HomeDetailViewEvents()
+    data class InviteIgnoredForDiscoveredUser(val user: User) : HomeDetailViewEvents()
     data class InviteIgnoredForUnauthorizedEmail(val email: String) : HomeDetailViewEvents()
     data class InviteIgnoredForExistingRoom(val email: String) : HomeDetailViewEvents()
     object InviteNoTchapUserByEmail : HomeDetailViewEvents()
     data class GetPlatform(val email: String) : HomeDetailViewEvents()
     data class OpenDirectChat(val roomId: String) : HomeDetailViewEvents()
-    data class PromptCreateDirectChat(val userId: String) : HomeDetailViewEvents()
+    data class PromptCreateDirectChat(val user: User) : HomeDetailViewEvents()
     data class Failure(val throwable: Throwable) : HomeDetailViewEvents()
 }

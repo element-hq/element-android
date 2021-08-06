@@ -77,6 +77,7 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
@@ -175,7 +176,7 @@ class HomeDetailFragment @Inject constructor(
                 HomeDetailViewEvents.CallStarted                          -> dismissLoadingDialog()
                 is HomeDetailViewEvents.FailToCall                        -> showFailure(viewEvent.failure)
                 HomeDetailViewEvents.Loading                              -> showLoadingDialog()
-                is HomeDetailViewEvents.InviteIgnoredForDiscoveredUser    -> handleExistingUser(viewEvent.userId)
+                is HomeDetailViewEvents.InviteIgnoredForDiscoveredUser    -> handleExistingUser(viewEvent.user)
                 is HomeDetailViewEvents.InviteIgnoredForUnauthorizedEmail ->
                     handleInviteByEmailFailed(getString(R.string.tchap_invite_unauthorized_message, viewEvent.email))
                 is HomeDetailViewEvents.InviteIgnoredForExistingRoom      ->
@@ -184,7 +185,7 @@ class HomeDetailFragment @Inject constructor(
                     handleInviteByEmailFailed(getString(R.string.tchap_invite_sending_succeeded) + "\n" + getString(R.string.tchap_send_invite_confirmation))
                 is HomeDetailViewEvents.GetPlatform                       -> platformViewModel.handle(PlatformAction.DiscoverTchapPlatform(viewEvent.email))
                 is HomeDetailViewEvents.OpenDirectChat                    -> openRoom(viewEvent.roomId)
-                is HomeDetailViewEvents.PromptCreateDirectChat            -> showCreateRoomDialog(viewEvent.userId)
+                is HomeDetailViewEvents.PromptCreateDirectChat            -> showCreateRoomDialog(viewEvent.user)
                 is HomeDetailViewEvents.Failure                           -> showFailure(viewEvent.throwable)
             }
         }.exhaustive
@@ -396,7 +397,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun onSelectContact(action: TchapContactListSharedAction.OnSelectContact) {
-        viewModel.handle(HomeDetailAction.SelectContact(action.user.userId))
+        viewModel.handle(HomeDetailAction.SelectContact(action.user))
     }
 
     private fun setupKeysBackupBanner() {
@@ -631,14 +632,13 @@ class HomeDetailFragment @Inject constructor(
         cancelSearch()
     }
 
-    private fun showCreateRoomDialog(userId: String) {
-        val displayName = TchapUtils.computeDisplayNameFromUserId(userId) ?: ""
-        val name = TchapUtils.getNameFromDisplayName(displayName)
+    private fun showCreateRoomDialog(user: User) {
+        val name = user.displayName?.let { TchapUtils.getNameFromDisplayName(it) }
         MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.fab_menu_create_chat)
                 .setMessage(getString(R.string.tchap_dialog_prompt_new_direct_chat, name))
                 .setPositiveButton(R.string.yes) { _, _ ->
-                    viewModel.handle(HomeDetailAction.CreateDirectMessage(userId))
+                    viewModel.handle(HomeDetailAction.CreateDirectMessage(user.userId))
                 }
                 .setNegativeButton(R.string.no, null)
                 .show()
@@ -648,12 +648,12 @@ class HomeDetailFragment @Inject constructor(
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    private fun handleExistingUser(userId: String) {
+    private fun handleExistingUser(user: User) {
         MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.permissions_rationale_popup_title)
                 .setMessage(R.string.tchap_invite_not_sent_for_discovered_user)
                 .setPositiveButton(R.string.ok) { _, _ ->
-                    viewModel.handle(HomeDetailAction.SelectContact(userId))
+                    viewModel.handle(HomeDetailAction.SelectContact(user))
                 }
                 .show()
     }
