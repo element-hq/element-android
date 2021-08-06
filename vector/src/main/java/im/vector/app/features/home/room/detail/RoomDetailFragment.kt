@@ -268,6 +268,8 @@ class RoomDetailFragment @Inject constructor(
         }
 
         private const val ircPattern = " (IRC)"
+
+        const val TARGET_SCROLL_OUT_FACTOR = 7f/8f
     }
 
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
@@ -835,10 +837,10 @@ class RoomDetailFragment @Inject constructor(
             scrollOnHighlightedEventCallback.scheduleScrollTo(action.eventId)
         } else {
             views.timelineRecyclerView.stopScroll()
-            // Scroll such that the scrolled-to event is moved down 1/3 of the screen.
-            // To do that, we actually scroll the view above out by 2/3 (since we can only control the distance
+            // Scroll such that the scrolled-to event is moved down (1-TARGET_SCROLL_OUT_FACTOR) of the screen.
+            // To do that, we actually scroll the view above out by TARGET_SCROLL_OUT_FACTOR (since we can only control the distance
             // from the bottom of the view, not the top).
-            layoutManager.scrollToPositionWithOffset(scrollPosition + 1, views.timelineRecyclerView.measuredHeight * 2 / 3)
+            layoutManager.scrollToPositionWithOffset(scrollPosition + 1, (views.timelineRecyclerView.measuredHeight * TARGET_SCROLL_OUT_FACTOR).toInt())
         }
     }
 
