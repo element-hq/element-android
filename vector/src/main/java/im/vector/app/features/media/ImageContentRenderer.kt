@@ -21,6 +21,8 @@ import android.net.Uri
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -90,12 +92,28 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
     /**
      * For url preview
      */
-    fun render(mxcUrl: String, imageView: ImageView): Boolean {
+    fun render(mxcUrl: String, imageView: ImageView, hideOnFail: Boolean = false): Boolean {
         val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
         val imageUrl = contentUrlResolver.resolveFullSize(mxcUrl) ?: return false
 
         GlideApp.with(imageView)
                 .load(imageUrl)
+                .listener(object: RequestListener<Drawable> {
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                        Timber.e("Rendering url $imageUrl failed: $e")
+                        if (hideOnFail) {
+                            imageView.isGone = true
+                        }
+                        return false
+                    }
+
+                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        if (hideOnFail) {
+                            imageView.isVisible = true
+                        }
+                        return false
+                    }
+                })
                 .into(imageView)
         return true
     }

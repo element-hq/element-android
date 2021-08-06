@@ -152,7 +152,7 @@ class PreviewUrlView @JvmOverloads constructor(
 
         isVisible = true
         views.urlPreviewTitle.setTextOrHide(previewUrlData.title)
-        views.urlPreviewImage.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, views.urlPreviewImage) }.orFalse()
+        views.urlPreviewImage.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, views.urlPreviewImage, hideOnFail = true) }.orFalse()
         views.urlPreviewDescription.setTextOrHide(previewUrlData.description)
         views.urlPreviewSite.setTextOrHide(siteText)
     }
