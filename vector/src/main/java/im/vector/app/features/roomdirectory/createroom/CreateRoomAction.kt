@@ -23,7 +23,8 @@ sealed class CreateRoomAction : VectorViewModelAction {
     data class SetAvatar(val imageUri: Uri?) : CreateRoomAction()
     data class SetName(val name: String) : CreateRoomAction()
     data class SetTopic(val topic: String) : CreateRoomAction()
-    data class SetIsPublic(val isPublic: Boolean, val restricted: Boolean) : CreateRoomAction()
+    data class SetIsPublic(val isPublic: Boolean) : CreateRoomAction()
+    data class SetRoomAccessRules(val restricted: Boolean) : CreateRoomAction()
     data class SetRoomAliasLocalPart(val aliasLocalPart: String) : CreateRoomAction()
     data class SetIsEncrypted(val isEncrypted: Boolean) : CreateRoomAction()
 

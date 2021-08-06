@@ -121,6 +121,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
             is CreateRoomAction.SetName               -> setName(action)
             is CreateRoomAction.SetTopic              -> setTopic(action)
             is CreateRoomAction.SetIsPublic           -> setIsPublic(action)
+            is CreateRoomAction.SetRoomAccessRules    -> setRoomAccessRules(action)
             is CreateRoomAction.SetRoomAliasLocalPart -> setRoomAliasLocalPart(action)
             is CreateRoomAction.SetIsEncrypted        -> setIsEncrypted(action)
             is CreateRoomAction.Create                -> doCreateRoom()
@@ -168,36 +169,35 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
     private fun setTopic(action: CreateRoomAction.SetTopic) = setState { copy(roomTopic = action.topic) }
 
     private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState {
-        val roomAccessRules = if (action.restricted) RoomAccessRules.RESTRICTED else RoomAccessRules.UNRESTRICTED
-        val roomVisibilityType = when {
-            action.isPublic   -> CreateRoomViewState.RoomVisibilityType.Public("")
-            action.restricted -> CreateRoomViewState.RoomVisibilityType.Private
-            else              -> CreateRoomViewState.RoomVisibilityType.External
-        }
         if (action.isPublic) {
             val userHSDomain = TchapUtils.getHomeServerDisplayNameFromMXIdentifier(session.myUserId)
             val isAgentServerDomain = userHSDomain.equals(AGENT_SERVER_DOMAIN, ignoreCase = true)
             copy(
-                    roomVisibilityType = roomVisibilityType,
-                    roomAccessRules = roomAccessRules,
+                    roomVisibilityType = CreateRoomViewState.RoomVisibilityType.Public(""),
                     // Reset any error in the form about alias
                     asyncCreateRoomRequest = Uninitialized,
                     isEncrypted = false,
                     // Public rooms are not federated by default except for agent server domain
                     disableFederation = !isAgentServerDomain,
                     isFederationSettingAvailable = !isAgentServerDomain
-
             )
         } else {
             copy(
-                    roomVisibilityType = roomVisibilityType,
-                    roomAccessRules = roomAccessRules,
+                    roomVisibilityType = CreateRoomViewState.RoomVisibilityType.Private,
                     isEncrypted = adminE2EByDefault,
                     // Private rooms are all federated
                     disableFederation = false,
-                    isFederationSettingAvailable = true
+                    isFederationSettingAvailable = false
             )
         }
+    }
+
+    private fun setRoomAccessRules(action: CreateRoomAction.SetRoomAccessRules) = setState {
+        val roomAccessRules = if (action.restricted) RoomAccessRules.RESTRICTED else RoomAccessRules.UNRESTRICTED
+
+        copy(
+                roomAccessRules = roomAccessRules
+        )
     }
 
     private fun setRoomAliasLocalPart(action: CreateRoomAction.SetRoomAliasLocalPart) {
@@ -222,15 +222,6 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
             return@withState
         }
 
-//        if (state.roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Public
-//                && state.roomVisibilityType.aliasLocalPart.isBlank()) {
-//            // we require an alias for public rooms
-//            setState {
-//                copy(asyncCreateRoomRequest = Fail(CreateRoomFailure.AliasError(RoomAliasError.AliasIsBlank)))
-//            }
-//            return@withState
-//        }
-
         setState {
             copy(asyncCreateRoomRequest = Loading())
         }
@@ -251,8 +242,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                             roomAliasName = TchapUtils.createRoomAliasName(state.roomName)
                             historyVisibility = RoomHistoryVisibility.WORLD_READABLE
                         }
-                        CreateRoomViewState.RoomVisibilityType.Private,
-                        CreateRoomViewState.RoomVisibilityType.External  -> {
+                        CreateRoomViewState.RoomVisibilityType.Private  -> {
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PRIVATE
                             // Preset
@@ -270,7 +260,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     }
 
                     // Room access rule
-                    setRoomAccessRule(this, state.roomAccessRules)
+                    setRoomAccessRulesInInitialStates(this, state.roomAccessRules)
                 }
 
         // TODO: Should this be non-cancellable?
@@ -309,7 +299,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
      * @param roomParams the room creation parameters.
      * @param roomAccessRules the expected room access rules, set null to remove any existing value.
      */
-    private fun setRoomAccessRule(roomParams: CreateRoomParams, roomAccessRules: RoomAccessRules?) {
+    private fun setRoomAccessRulesInInitialStates(roomParams: CreateRoomParams, roomAccessRules: RoomAccessRules?) {
         // Remove the existing value if any.
         roomParams.initialStates.removeAll { it.type == STATE_ROOM_ACCESS_RULES }
         if (roomAccessRules != null) {

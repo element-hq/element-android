@@ -43,11 +43,15 @@ object RoomUtils {
         }
     }
 
-    fun getRoomType(roomVisibilityType: CreateRoomViewState.RoomVisibilityType): TchapRoomType {
+    fun getRoomType(roomVisibilityType: CreateRoomViewState.RoomVisibilityType, accessRules: RoomAccessRules): TchapRoomType {
         return when (roomVisibilityType) {
-            CreateRoomViewState.RoomVisibilityType.External  -> TchapRoomType.EXTERNAL
-            CreateRoomViewState.RoomVisibilityType.Private   -> TchapRoomType.PRIVATE
-            is CreateRoomViewState.RoomVisibilityType.Public -> TchapRoomType.FORUM
+            CreateRoomViewState.RoomVisibilityType.Private -> when (accessRules) {
+                RoomAccessRules.RESTRICTED   -> TchapRoomType.PRIVATE
+                RoomAccessRules.UNRESTRICTED -> TchapRoomType.EXTERNAL
+                RoomAccessRules.DIRECT       -> TchapRoomType.DIRECT
+                else                         -> TchapRoomType.UNKNOWN
+            }
+            is CreateRoomViewState.RoomVisibilityType.Public    -> TchapRoomType.FORUM
         }
     }
 }

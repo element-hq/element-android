@@ -55,7 +55,6 @@ data class CreateRoomViewState(
 
     sealed class RoomVisibilityType {
         object Private : RoomVisibilityType()
-        object External : RoomVisibilityType()
         data class Public(val aliasLocalPart: String) : RoomVisibilityType()
     }
 }
