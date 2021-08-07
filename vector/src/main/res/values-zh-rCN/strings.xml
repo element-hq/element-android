@@ -1415,7 +1415,7 @@
     <string name="invite_no_identity_server_error">在你的设置中添加身份服务器以执行此操作。</string>
     <string name="room_participants_action_cancel_invite">取消邀请</string>
     <string name="room_participants_power_level_demote_warning_title">降低你自己的级别？</string>
-    <string name="room_participants_power_level_demote_warning_prompt">你家无法撤销此操作因为你正在降低你的级别，如果你是聊天室中最后一个特权用户将无法恢复特权。</string>
+    <string name="room_participants_power_level_demote_warning_prompt">你正在降低你的级别，此操作无法撤销。如果你是聊天室中最后一个特权用户，你将无法恢复特权。</string>
     <string name="room_participants_power_level_demote">降级</string>
     <string name="room_participants_action_ignore_title">忽略用户</string>
     <string name="room_participants_action_ignore_prompt_msg">忽略此用户将从你共享的聊天室移除他们的消息。
