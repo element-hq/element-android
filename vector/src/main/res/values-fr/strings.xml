@@ -681,7 +681,7 @@
     <string name="room_offline_notification">La connexion au serveur a été perdue.</string>
     <string name="room_unsent_messages_notification">Messages non envoyés. %1$s ou %2$s maintenant \?</string>
     <string name="room_unknown_devices_messages_notification">Messages non envoyés car des sessions inconnues sont présentes. %1$s ou %2$s maintenant \?</string>
-    <string name="room_do_not_have_permission_to_post">Vous n’avez pas la permission de poster dans ce salon</string>
+    <string name="room_do_not_have_permission_to_post">Vous n’avez pas la permission de poster dans ce salon.</string>
     <string name="ssl_fingerprint_hash">Empreinte (%s) :</string>
     <string name="ssl_could_not_verify">Impossible de vérifier l’identité du serveur distant.</string>
     <string name="ssl_cert_not_trust">Cela pourrait signifier que quelqu’un intercepte malicieusement votre trafic ou que votre téléphone ne fait pas confiance au certificat fourni par le serveur distant.</string>
@@ -991,7 +991,7 @@
     <string name="command_description_nick">Change le nom d’affichage</string>
     <string name="command_description_markdown">Markdown activé/désactivé</string>
     <string name="command_description_clear_scalar_token">Pour réparer la gestion des applications Matrix</string>
-    <string name="room_tombstone_versioned_description">Ce salon a été remplacé et n’est plus actif</string>
+    <string name="room_tombstone_versioned_description">Ce salon a été remplacé et n’est plus actif.</string>
     <string name="room_tombstone_continuation_link">La conversation continue ici</string>
     <string name="room_tombstone_continuation_description">Ce salon est la suite d’une autre conversation</string>
     <string name="room_tombstone_predecessor_link">Cliquer ici pour voir les anciens messages</string>
@@ -1986,7 +1986,7 @@
 \n- La connexion internet utilisée par un des deux appareils
 \n
 \nNous vous recommandons de modifier immédiatement votre mot de passe et votre clé de récupération dans les paramètres.</string>
-    <string name="verify_cancelled_notice">Vérifiez vos appareils depuis les paramètres.</string>
+    <string name="verify_cancelled_notice">La vérification a été annulée. Vous pouvez redémarrer la vérification.</string>
     <string name="verification_cancelled">Vérification annulée</string>
     <string name="recovery_passphrase">Phrase de récupération</string>
     <string name="message_key">clé des messages</string>
@@ -2822,4 +2822,37 @@
     <string name="create_space_alias_hint">Adresse de l’espace</string>
     <string name="space_settings_alias_subtitle">Afficher et gérer les adresses de cet espace.</string>
     <string name="space_settings_alias_title">Adresse de l’espace</string>
+    <string name="room_upgrade_to_recommended_version">Mettre à jour vers la version de salon recommandée</string>
+    <string name="room_using_unstable_room_version">Ce salon utilise la version %s de salon, que ce serveur d’accueil considère comme instable.</string>
+    <string name="upgrade_room_no_power_to_manage">Vous devez avoir le droit de mettre à jour ce salon</string>
+    <string name="upgrade_room_update_parent_space">Mettre à jour automatiquement l’espace parent</string>
+    <string name="upgrade_room_auto_invite">Inviter automatiquement des utilisateurs</string>
+    <string name="upgrade_public_room_from_to">Vous allez mettre à jour ce salon de %s à %s.</string>
+    <string name="upgrade_room_warning">La mise-à-jour d’un salon est une action avancée et n’est normalement recommandé que si un salon est instable à cause de bogues, fonctionnalités manquantes, ou failles de sécurité.
+\nCela n’affecte normalement que la manière dont le salon est géré par le serveur.</string>
+    <string name="upgrade_private_room">Mettre à jour un salon privé</string>
+    <string name="upgrade_public_room">Mettre à jour un salon public</string>
+    <string name="upgrade">Mettre à jour</string>
+    <string name="it_may_take_some_time">Soyez patient, cela peut prendre du temps.</string>
+    <string name="joining_replacement_room">Rejoindre le salon remplaçant</string>
+    <string name="command_description_upgrade_room">Mettre à jour un salon vers une nouvelle version</string>
+    <string name="settings_server_room_version_unstable">instable</string>
+    <string name="settings_server_room_version_stable">stable</string>
+    <string name="settings_server_default_room_version">Version par défaut</string>
+    <string name="settings_server_room_versions">Versions du salon 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Vérifier en comparant des émoticônes à la place</string>
+    <string name="verification_scan_with_this_device">Scanner avec cet appareil</string>
+    <string name="verification_scan_self_notice">Scannez le code avec votre autre appareil, ou échangez et scannez avec cet appareil</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Appel vidéo manqué</item>
+        <item quantity="other">%d appels vidéos manqués</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Appel vocal manqué</item>
+        <item quantity="other">%d appels vocaux manqués</item>
+    </plurals>
+    <string name="hs_client_url">URL de l’API du serveur d’accueil</string>
+    <string name="missing_permissions_title">Permissions manquantes</string>
+    <string name="denied_permission_camera">Pour effectuer cette action, veuillez autoriser la permission Caméra depuis les réglages système.</string>
+    <string name="denied_permission_generic">Certaines permissions manquent pour effectuer cette action, veuillez autoriser ces permissions depuis les réglages système.</string>
 </resources>
