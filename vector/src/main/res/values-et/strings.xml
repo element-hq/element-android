@@ -222,10 +222,10 @@
     <string name="notice_room_server_acl_updated_no_change">Muudatusi ei ole.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Nüüd on keelatud serverid, mille ip-aadress vastab mustrile.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Nüüd on lubatud serverid, mille ip-aadress vastab mustrile.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• Server, mille nimes leidub %s, eemaldati lubatud serverite loendist.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Serverid, mille nimes leidub %s, eemaldati lubatud serverite loendist.</string>
     <string name="notice_room_server_acl_updated_allowed">• Nüüd on lubatud serverid, mille nimes leidub %s.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Server, mille nimes leidub %s eemaldati keeluloendist.</string>
-    <string name="notice_room_server_acl_updated_banned">• Keelatud on server, mille nimes leidub %s.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Serverid, mille nimes leidub %s eemaldati keeluloendist.</string>
+    <string name="notice_room_server_acl_updated_banned">• Keelatud on serverid, mille nimes leidub %s.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Sina muutsid selle jututoa jaoks serverite pääsuloendit.</string>
     <string name="notice_room_server_acl_updated_title">%s muutis selle jututoa jaoks serverite pääsuloendit.</string>
     <string name="notice_room_server_acl_set_title_by_you">Sina kirjeldasid selle jututoa jaoks serverite pääsuloendi.</string>
@@ -2289,7 +2289,7 @@
 \n - Sinu või teise osapoole internetiühendus
 \n
 \nPalun vaheta seadistuste lehelt koheselt oma kasutajakonto salasõna ja taastevõti.</string>
-    <string name="verify_cancelled_notice">Seadistuste lehelt verifitseeri oma seade.</string>
+    <string name="verify_cancelled_notice">Verifitseerimine on katkestatud. Soovi korral saad seda uuesti alustada.</string>
     <string name="verification_cancelled">Verifitseerimine on tühistatud</string>
     <string name="recovery_passphrase">Taastamiseks mõeldud paroolifraas</string>
     <string name="message_key">Sõnumite krüptovõti</string>
@@ -2840,4 +2840,12 @@
     <string name="missing_permissions_title">Õigused on puudu</string>
     <string name="denied_permission_camera">Selle tegevuse jaoks palun luba seadistustes sellele rakendusele kaamera kasutamine.</string>
     <string name="denied_permission_generic">Selle tegevuse jaoks puuduvad sul õigused. Palun jaga vajalikud õigused süsteemi seadistustest.</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Vastamata videokõne</item>
+        <item quantity="other">%d vastamata videokõnet</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Vastamata kõne</item>
+        <item quantity="other">%d vastamata kõnet</item>
+    </plurals>
 </resources>
