@@ -1,0 +1,2 @@
+Main changes in this version: Fix error when sending encrypted message if someone in the room logs out.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.1.16
