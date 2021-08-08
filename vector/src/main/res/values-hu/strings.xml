@@ -1943,7 +1943,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n- Valamelyik eszköz által használt internet elérés
 \n
 \nJavasoljuk, hogy azonnal cseréld le a jelszavadat és a visszaállítási kulcsot a Beállításokban.</string>
-    <string name="verify_cancelled_notice">Ellenőrizd az eszközödet a Beállításokból.</string>
+    <string name="verify_cancelled_notice">Ellenőrzés megszakítva. Újrakezdheted az ellenőrzést.</string>
     <string name="verification_cancelled">Ellenőrzés megszakítva</string>
     <string name="recovery_passphrase">Visszaállítási jelmondat</string>
     <string name="message_key">Üzenet Kulcs</string>
@@ -2845,4 +2845,12 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="missing_permissions_title">Hiányzó engedélyek</string>
     <string name="denied_permission_camera">A művelethez a rendszer beállításokban engedélyezni kell a kamera használatát.</string>
     <string name="denied_permission_generic">Ehhez a művelethez néhány engedély hiányzik amit a rendszer beállításokban lehet megadni.</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Nem fogadott videóhívás</item>
+        <item quantity="other">%d nem fogadott videóhívás</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Nem fogadott hanghívás</item>
+        <item quantity="other">%d nem fogadott hanghívás</item>
+    </plurals>
 </resources>
