@@ -1044,6 +1044,9 @@ class RoomDetailFragment @Inject constructor(
         notificationDrawerManager.setCurrentRoom(roomDetailArgs.roomId)
         roomDetailPendingActionStore.data?.let { handlePendingAction(it) }
         roomDetailPendingActionStore.data = null
+
+        // Removed listeners should be set again
+        setupVoiceMessageView()
     }
 
     private fun handlePendingAction(roomDetailPendingAction: RoomDetailPendingAction) {
