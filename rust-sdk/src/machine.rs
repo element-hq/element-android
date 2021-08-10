@@ -12,6 +12,7 @@ use ruma::{
             keys::{
                 claim_keys::Response as KeysClaimResponse, get_keys::Response as KeysQueryResponse,
                 upload_keys::Response as KeysUploadResponse,
+                upload_signatures::Response as SignatureUploadResponse,
             },
             sync::sync_events::{DeviceLists as RumaDeviceLists, ToDevice},
             to_device::send_event_to_device::Response as ToDeviceResponse,
@@ -31,14 +32,15 @@ use tokio::runtime::Runtime;
 use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
 use matrix_sdk_crypto::{
     decrypt_key_export, encrypt_key_export, matrix_qrcode::QrVerificationData, EncryptionSettings,
-    LocalTrust, OlmMachine as InnerMachine, Verification as RustVerification,
+    LocalTrust, OlmMachine as InnerMachine, UserIdentities, Verification as RustVerification,
 };
 
 use crate::{
-    error::{CryptoStoreError, DecryptionError, MachineCreationError},
+    error::{CryptoStoreError, DecryptionError, SecretImportError, SignatureError},
     responses::{response_from_string, OutgoingVerificationRequest, OwnedResponse},
-    DecryptedEvent, Device, DeviceLists, KeyImportError, KeysImportResult, ProgressListener,
-    QrCode, Request, RequestType, RequestVerificationResult, ScanResult, StartSasResult,
+    BootstrapCrossSigningResult, CrossSigningKeyExport, CrossSigningStatus, DecryptedEvent, Device,
+    DeviceLists, KeyImportError, KeysImportResult, ProgressListener, QrCode, Request, RequestType,
+    RequestVerificationResult, ScanResult, SignatureUploadRequest, StartSasResult, UserIdentity,
     Verification, VerificationRequest,
 };
 
@@ -68,7 +70,7 @@ impl OlmMachine {
     /// * `device_id` - The unique ID of the device that owns this machine.
     ///
     /// * `path` - The path where the state of the machine should be persisted.
-    pub fn new(user_id: &str, device_id: &str, path: &str) -> Result<Self, MachineCreationError> {
+    pub fn new(user_id: &str, device_id: &str, path: &str) -> Result<Self, CryptoStoreError> {
         let user_id = UserId::try_from(user_id)?;
         let device_id = device_id.into();
         let runtime = Runtime::new().unwrap();
@@ -91,6 +93,67 @@ impl OlmMachine {
         self.inner.device_id().to_string()
     }
 
+    /// Get the display name of our own device.
+    pub fn display_name(&self) -> Result<Option<String>, CryptoStoreError> {
+        Ok(self.runtime.block_on(self.inner.dislpay_name())?)
+    }
+
+    /// Get a cross signing user identity for the given user ID.
+    pub fn get_identity(&self, user_id: &str) -> Result<Option<UserIdentity>, CryptoStoreError> {
+        let user_id = UserId::try_from(user_id)?;
+
+        Ok(
+            if let Some(identity) = self.runtime.block_on(self.inner.get_identity(&user_id))? {
+                Some(self.runtime.block_on(UserIdentity::from_rust(identity))?)
+            } else {
+                None
+            },
+        )
+    }
+
+    /// Check if a user identity is considered to be verified by us.
+    pub fn is_identity_verified(&self, user_id: &str) -> Result<bool, CryptoStoreError> {
+        let user_id = UserId::try_from(user_id)?;
+
+        Ok(
+            if let Some(identity) = self.runtime.block_on(self.inner.get_identity(&user_id))? {
+                match identity {
+                    UserIdentities::Own(i) => i.is_verified(),
+                    UserIdentities::Other(i) => i.verified(),
+                }
+            } else {
+                false
+            },
+        )
+    }
+
+    /// Manually the user with the given user ID.
+    ///
+    /// This method will attempt to sign the user identity using either our
+    /// private cross signing key, for other user identities, or our device keys
+    /// for our own user identity.
+    ///
+    /// This methid can fail if we don't have the private part of our user-signing
+    /// key.
+    ///
+    /// Returns a request that needs to be sent out for the user identity to be
+    /// marked as verified.
+    pub fn verify_identity(&self, user_id: &str) -> Result<SignatureUploadRequest, SignatureError> {
+        let user_id = UserId::try_from(user_id)?;
+
+        let user_identity = self.runtime.block_on(self.inner.get_identity(&user_id))?;
+
+        if let Some(user_identity) = user_identity {
+            Ok(match user_identity {
+                UserIdentities::Own(i) => self.runtime.block_on(i.verify())?,
+                UserIdentities::Other(i) => self.runtime.block_on(i.verify())?,
+            }
+            .into())
+        } else {
+            Err(SignatureError::UnknownUserIdentity(user_id.to_string()))
+        }
+    }
+
     /// Get a `Device` from the store.
     ///
     /// # Arguments
@@ -109,6 +172,39 @@ impl OlmMachine {
             .runtime
             .block_on(self.inner.get_device(&user_id, device_id.into()))?
             .map(|d| d.into()))
+    }
+
+    /// Manually the device of the given user with the given device ID.
+    ///
+    /// This method will attempt to sign the device using our private cross
+    /// signing key.
+    ///
+    /// This method will always fail if the device belongs to someone else, we
+    /// can only sign our own devices.
+    ///
+    /// It can also fail if we don't have the private part of our self-signing
+    /// key.
+    ///
+    /// Returns a request that needs to be sent out for the device to be marked
+    /// as verified.
+    pub fn verify_device(
+        &self,
+        user_id: &str,
+        device_id: &str,
+    ) -> Result<SignatureUploadRequest, SignatureError> {
+        let user_id = UserId::try_from(user_id)?;
+        let device = self
+            .runtime
+            .block_on(self.inner.get_device(&user_id, device_id.into()))?;
+
+        if let Some(device) = device {
+            Ok(self.runtime.block_on(device.verify())?.into())
+        } else {
+            Err(SignatureError::UnknownDevice(
+                user_id.to_string(),
+                device_id.to_string(),
+            ))
+        }
     }
 
     /// Mark the device of the given user with the given device id as trusted.
@@ -205,6 +301,9 @@ impl OlmMachine {
             }
             RequestType::KeysClaim => {
                 KeysClaimResponse::try_from_http_response(response).map(Into::into)
+            }
+            RequestType::SignatureUpload => {
+                SignatureUploadResponse::try_from_http_response(response).map(Into::into)
             }
         }
         .expect("Can't convert json string to response");
@@ -305,21 +404,7 @@ impl OlmMachine {
         Ok(self
             .runtime
             .block_on(self.inner.get_missing_sessions(users.iter()))?
-            .map(|(request_id, request)| Request::KeysClaim {
-                request_id: request_id.to_string(),
-                one_time_keys: request
-                    .one_time_keys
-                    .into_iter()
-                    .map(|(u, d)| {
-                        (
-                            u.to_string(),
-                            d.into_iter()
-                                .map(|(k, v)| (k.to_string(), v.to_string()))
-                                .collect(),
-                        )
-                    })
-                    .collect(),
-            }))
+            .map(|r| r.into()))
     }
 
     /// Share a room key with the given list of users for the given room.
@@ -867,6 +952,8 @@ impl OlmMachine {
             if let Some(verification) = self.inner.get_verification(&user_id, flow_id) {
                 match verification {
                     RustVerification::SasV1(v) => {
+                        // TODO there's a signature upload request here, we'll
+                        // want to return that one as well.
                         self.runtime.block_on(v.confirm())?.0.map(|r| r.into())
                     }
                     RustVerification::QrV1(v) => v.confirm_scanning().map(|r| r.into()),
@@ -1113,5 +1200,50 @@ impl OlmMachine {
                         .map(|v| [v.0.into(), v.1.into(), v.2.into()].to_vec())
                 })
             })
+    }
+
+    /// Create a new private cross signing identity and create a request to
+    /// upload the public part of it to the server.
+    pub fn bootstrap_cross_signing(&self) -> Result<BootstrapCrossSigningResult, CryptoStoreError> {
+        Ok(self
+            .runtime
+            .block_on(self.inner.bootstrap_cross_signing(true))?
+            .into())
+    }
+
+    /// Get the status of the private cross signing keys.
+    ///
+    /// This can be used to check which private cross signing keys we have
+    /// stored locally.
+    pub fn cross_signing_status(&self) -> CrossSigningStatus {
+        self.runtime
+            .block_on(self.inner.cross_signing_status())
+            .into()
+    }
+
+    /// Export all our private cross signing keys.
+    ///
+    /// The export will contain the seed for the ed25519 keys as a base64
+    /// encoded string.
+    ///
+    /// This method returns `None` if we don't have any private cross signing keys.
+    pub fn export_cross_signing_keys(&self) -> Option<CrossSigningKeyExport> {
+        self.runtime
+            .block_on(self.inner.export_cross_signing_keys())
+            .map(|e| e.into())
+    }
+
+    /// Import our private cross signing keys.
+    ///
+    /// The export needs to contain the seed for the ed25519 keys as a base64
+    /// encoded string.
+    pub fn import_cross_signing_keys(
+        &self,
+        export: CrossSigningKeyExport,
+    ) -> Result<(), SecretImportError> {
+        self.runtime
+            .block_on(self.inner.import_cross_signing_keys(export.into()))?;
+
+        Ok(())
     }
 }

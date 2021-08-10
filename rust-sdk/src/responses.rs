@@ -3,13 +3,18 @@
 use std::{collections::HashMap, convert::TryFrom};
 
 use http::Response;
+use matrix_sdk_common::uuid::Uuid;
 use serde_json::json;
 
 use ruma::{
     api::client::r0::{
         keys::{
-            claim_keys::Response as KeysClaimResponse, get_keys::Response as KeysQueryResponse,
+            claim_keys::{Request as KeysClaimRequest, Response as KeysClaimResponse},
+            get_keys::Response as KeysQueryResponse,
             upload_keys::Response as KeysUploadResponse,
+            upload_signatures::{
+                Request as RustSignatureUploadRequest, Response as SignatureUploadResponse,
+            },
         },
         sync::sync_events::DeviceLists as RumaDeviceLists,
         to_device::send_event_to_device::Response as ToDeviceResponse,
@@ -21,8 +26,64 @@ use ruma::{
 
 use matrix_sdk_crypto::{
     IncomingResponse, OutgoingRequest, OutgoingVerificationRequest as SdkVerificationRequest,
-    RoomMessageRequest, ToDeviceRequest,
+    RoomMessageRequest, ToDeviceRequest, UploadSigningKeysRequest as RustUploadSigningKeysRequest,
 };
+
+pub struct SignatureUploadRequest {
+    pub body: String,
+}
+
+impl From<RustSignatureUploadRequest> for SignatureUploadRequest {
+    fn from(r: RustSignatureUploadRequest) -> Self {
+        Self {
+            body: serde_json::to_string(&r.signed_keys)
+                .expect("Can't serialize signature upload request"),
+        }
+    }
+}
+
+pub struct UploadSigningKeysRequest {
+    pub master_key: String,
+    pub self_signing_key: String,
+    pub user_signing_key: String,
+}
+
+impl From<RustUploadSigningKeysRequest> for UploadSigningKeysRequest {
+    fn from(r: RustUploadSigningKeysRequest) -> Self {
+        Self {
+            master_key: serde_json::to_string(
+                &r.master_key.expect("Request didn't contain a master key"),
+            )
+            .expect("Can't serialize cross signing master key"),
+            self_signing_key: serde_json::to_string(
+                &r.self_signing_key
+                    .expect("Request didn't contain a self-signing key"),
+            )
+            .expect("Can't serialize cross signing self-signing key"),
+            user_signing_key: serde_json::to_string(
+                &r.user_signing_key
+                    .expect("Request didn't contain a user-signing key"),
+            )
+            .expect("Can't serialize cross signing user-signing key"),
+        }
+    }
+}
+
+pub struct BootstrapCrossSigningResult {
+    pub upload_signing_keys_request: UploadSigningKeysRequest,
+    pub signature_request: SignatureUploadRequest,
+}
+
+impl From<(RustUploadSigningKeysRequest, RustSignatureUploadRequest)>
+    for BootstrapCrossSigningResult
+{
+    fn from(requests: (RustUploadSigningKeysRequest, RustSignatureUploadRequest)) -> Self {
+        Self {
+            upload_signing_keys_request: requests.0.into(),
+            signature_request: requests.1.into(),
+        }
+    }
+}
 
 pub enum OutgoingVerificationRequest {
     ToDevice {
@@ -87,6 +148,10 @@ pub enum Request {
         event_type: String,
         content: String,
     },
+    SignatureUpload {
+        request_id: String,
+        body: String,
+    },
 }
 
 impl From<OutgoingRequest> for Request {
@@ -114,8 +179,13 @@ impl From<OutgoingRequest> for Request {
                 }
             }
             ToDeviceRequest(t) => Request::from(t),
-            SignatureUpload(_) => todo!("Uploading signatures isn't yet supported"),
+            SignatureUpload(t) => Request::SignatureUpload {
+                request_id: r.request_id().to_string(),
+                body: serde_json::to_string(&t.signed_keys)
+                    .expect("Can't serialize signature upload request"),
+            },
             RoomMessage(r) => Request::from(r),
+            KeysClaim(c) => (*r.request_id(), c.clone()).into(),
         }
     }
 }
@@ -126,6 +196,28 @@ impl From<ToDeviceRequest> for Request {
             request_id: r.txn_id_string(),
             event_type: r.event_type.to_string(),
             body: serde_json::to_string(&r.messages).expect("Can't serialize to-device body"),
+        }
+    }
+}
+
+impl From<(Uuid, KeysClaimRequest)> for Request {
+    fn from(request_tuple: (Uuid, KeysClaimRequest)) -> Self {
+        let (request_id, request) = request_tuple;
+
+        Request::KeysClaim {
+            request_id: request_id.to_string(),
+            one_time_keys: request
+                .one_time_keys
+                .into_iter()
+                .map(|(u, d)| {
+                    (
+                        u.to_string(),
+                        d.into_iter()
+                            .map(|(k, v)| (k.to_string(), v.to_string()))
+                            .collect(),
+                    )
+                })
+                .collect(),
         }
     }
 }
@@ -163,6 +255,7 @@ pub enum RequestType {
     KeysClaim,
     KeysUpload,
     ToDevice,
+    SignatureUpload,
 }
 
 pub struct DeviceLists {
@@ -197,6 +290,7 @@ pub(crate) enum OwnedResponse {
     KeysUpload(KeysUploadResponse),
     KeysQuery(KeysQueryResponse),
     ToDevice(ToDeviceResponse),
+    SignatureUpload(SignatureUploadResponse),
 }
 
 impl From<KeysClaimResponse> for OwnedResponse {
@@ -223,6 +317,12 @@ impl From<ToDeviceResponse> for OwnedResponse {
     }
 }
 
+impl From<SignatureUploadResponse> for OwnedResponse {
+    fn from(response: SignatureUploadResponse) -> Self {
+        Self::SignatureUpload(response)
+    }
+}
+
 impl<'a> Into<IncomingResponse<'a>> for &'a OwnedResponse {
     fn into(self) -> IncomingResponse<'a> {
         match self {
@@ -230,6 +330,7 @@ impl<'a> Into<IncomingResponse<'a>> for &'a OwnedResponse {
             OwnedResponse::KeysQuery(r) => IncomingResponse::KeysQuery(r),
             OwnedResponse::KeysUpload(r) => IncomingResponse::KeysUpload(r),
             OwnedResponse::ToDevice(r) => IncomingResponse::ToDevice(r),
+            OwnedResponse::SignatureUpload(r) => IncomingResponse::SignatureUpload(r),
         }
     }
 }

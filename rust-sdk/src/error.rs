@@ -2,16 +2,9 @@
 
 use matrix_sdk_crypto::{
     store::CryptoStoreError as InnerStoreError, KeyExportError, MegolmError, OlmError,
+    SignatureError as InnerSignatureError, SecretImportError as RustSecretImportError,
 };
 use ruma::identifiers::Error as RumaIdentifierError;
-
-#[derive(Debug, thiserror::Error)]
-pub enum MachineCreationError {
-    #[error(transparent)]
-    Identifier(#[from] RumaIdentifierError),
-    #[error(transparent)]
-    CryptoStore(#[from] InnerStoreError),
-}
 
 #[derive(Debug, thiserror::Error)]
 pub enum KeyImportError {
@@ -19,6 +12,28 @@ pub enum KeyImportError {
     Export(#[from] KeyExportError),
     #[error(transparent)]
     CryptoStore(#[from] InnerStoreError),
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum SecretImportError {
+    #[error(transparent)]
+    CryptoStore(#[from] InnerStoreError),
+    #[error(transparent)]
+    Import(#[from] RustSecretImportError),
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum SignatureError {
+    #[error(transparent)]
+    Signature(#[from] InnerSignatureError),
+    #[error(transparent)]
+    Identifier(#[from] RumaIdentifierError),
+    #[error(transparent)]
+    CryptoStore(#[from] InnerStoreError),
+    #[error("Unknown device {0} {1}")]
+    UnknownDevice(String, String),
+    #[error("Unknown user identity {0}")]
+    UnknownUserIdentity(String),
 }
 
 #[derive(Debug, thiserror::Error)]

@@ -11,16 +11,26 @@ callback interface ProgressListener {
 };
 
 [Error]
-enum MachineCreationError {
-    "Identifier",
-    "CryptoStore",
-};
-
-[Error]
 enum KeyImportError {
     "Export",
     "CryptoStore",
 };
+
+[Error]
+enum SignatureError {
+    "Signature",
+    "Identifier",
+    "CryptoStore",
+    "UnknownDevice",
+    "UnknownUserIdentity",
+};
+
+[Error]
+enum SecretImportError {
+    "Import",
+    "CryptoStore",
+};
+
 
 [Error]
 enum CryptoStoreError {
@@ -63,6 +73,45 @@ dictionary Device {
     boolean is_blocked;
     boolean locally_trusted;
     boolean cross_signing_trusted;
+};
+
+[Enum]
+interface UserIdentity {
+    Own(
+        string user_id,
+        boolean trusts_our_own_device,
+        string master_key,
+        string self_signing_key,
+        string user_signing_key
+    );
+    Other(
+        string user_id,
+        string master_key,
+        string self_signing_key
+    );
+};
+
+dictionary CrossSigningStatus {
+    boolean has_master;
+    boolean has_self_signing;
+    boolean has_user_signing;
+};
+
+dictionary CrossSigningKeyExport {
+    string? master_key;
+    string? self_signing_key;
+    string? user_signing_key;
+};
+
+dictionary UploadSigningKeysRequest {
+    string master_key;
+    string self_signing_key;
+    string user_signing_key;
+};
+
+dictionary BootstrapCrossSigningResult {
+   UploadSigningKeysRequest upload_signing_keys_request; 
+   SignatureUploadRequest signature_request;
 };
 
 dictionary CancelInfo {
@@ -155,6 +204,11 @@ interface Request {
     KeysQuery(string request_id, sequence<string> users);
     KeysClaim(string request_id, record<DOMString, record<DOMString, string>> one_time_keys);
     RoomMessage(string request_id, string room_id, string event_type, string content);
+    SignatureUpload(string request_id, string body);
+};
+
+dictionary SignatureUploadRequest {
+    string body;
 };
 
 enum RequestType {
@@ -162,10 +216,11 @@ enum RequestType {
     "KeysClaim",
     "KeysUpload",
     "ToDevice",
+    "SignatureUpload",
 };
 
 interface OlmMachine {
-    [Throws=MachineCreationError]
+    [Throws=CryptoStoreError]
     constructor([ByRef] string user_id, [ByRef] string device_id, [ByRef] string path);
 
     record<DOMString, string> identity_keys();
@@ -191,9 +246,15 @@ interface OlmMachine {
     string encrypt([ByRef] string room_id, [ByRef] string event_type, [ByRef] string content);
 
     [Throws=CryptoStoreError]
+    UserIdentity? get_identity([ByRef] string user_id);
+    [Throws=SignatureError]
+    SignatureUploadRequest verify_identity([ByRef] string user_id);
+    [Throws=CryptoStoreError]
     Device? get_device([ByRef] string user_id, [ByRef] string device_id);
     [Throws=CryptoStoreError]
     void mark_device_as_trusted([ByRef] string user_id, [ByRef] string device_id);
+    [Throws=SignatureError]
+    SignatureUploadRequest verify_device([ByRef] string user_id, [ByRef] string device_id);
     [Throws=CryptoStoreError]
     sequence<Device> get_user_devices([ByRef] string user_id);
 
@@ -268,4 +329,13 @@ interface OlmMachine {
     );
     [Throws=CryptoStoreError]
     void discard_room_key([ByRef] string room_id);
+
+    CrossSigningStatus cross_signing_status();
+    [Throws=CryptoStoreError]
+    BootstrapCrossSigningResult bootstrap_cross_signing();
+    CrossSigningKeyExport? export_cross_signing_keys();
+    [Throws=SecretImportError]
+    void import_cross_signing_keys(CrossSigningKeyExport export);
+    [Throws=CryptoStoreError]
+    boolean is_identity_verified([ByRef] string user_id);
 };
