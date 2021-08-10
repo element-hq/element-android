@@ -1415,7 +1415,7 @@
     <string name="invite_no_identity_server_error">在你的设置中添加身份服务器以执行此操作。</string>
     <string name="room_participants_action_cancel_invite">取消邀请</string>
     <string name="room_participants_power_level_demote_warning_title">降低你自己的级别？</string>
-    <string name="room_participants_power_level_demote_warning_prompt">你家无法撤销此操作因为你正在降低你的级别，如果你是聊天室中最后一个特权用户将无法恢复特权。</string>
+    <string name="room_participants_power_level_demote_warning_prompt">你正在降低你的级别，此操作无法撤销。如果你是聊天室中最后一个特权用户，你将无法恢复特权。</string>
     <string name="room_participants_power_level_demote">降级</string>
     <string name="room_participants_action_ignore_title">忽略用户</string>
     <string name="room_participants_action_ignore_prompt_msg">忽略此用户将从你共享的聊天室移除他们的消息。
@@ -1451,8 +1451,8 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \n取决于资源（电量）或设备状态（睡眠）同步可能会延迟。</string>
     <string name="settings_integrations">集成</string>
-    <string name="settings_integrations_summary">使用集成管理器管理机器人，桥接，部件和贴纸包。
-\n集成管理器接收配置数据，可以代表你修改部件，发送聊天室邀请及设置特权等级。</string>
+    <string name="settings_integrations_summary">使用集成管理器管理机器人、桥接、部件和贴纸包。
+\n集成管理器接收配置数据，可以代表你修改部件、发送聊天室邀请及设置特权等级。</string>
     <string name="settings_secure_backup_section_title">安全备份</string>
     <string name="settings_secure_backup_manage">管理</string>
     <string name="settings_secure_backup_setup">设置安全备份</string>
@@ -2024,7 +2024,7 @@
 \n- 设备使用的网络连接
 \n
 \n我们推荐你在设置中立即更换你的密码和恢复密钥。</string>
-    <string name="verify_cancelled_notice">通过设置验证你的设备。</string>
+    <string name="verify_cancelled_notice">已取消验证。 您可以重新开始验证。</string>
     <string name="verification_cancelled">验证已取消</string>
     <string name="recovery_passphrase">恢复密语</string>
     <string name="message_key">消息密钥</string>
@@ -2474,11 +2474,11 @@
     <string name="error_unauthorized">未验证，缺少有效验证凭证</string>
     <string name="action_return">返回</string>
     <string name="system_theme">系统默认</string>
-    <string name="notice_room_server_acl_updated_banned">• 匹配 %s 的服务器已被屏蔽。</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• IP 地址匹配的服务器已被屏蔽。</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• IP 地址匹配的服务器已被允许。</string>
-    <string name="notice_room_server_acl_set_banned">• 匹配 %s 的服务器已被屏蔽。</string>
-    <string name="notice_room_server_acl_set_allowed">• 匹配 %s 的服务器已被允许。</string>
+    <string name="notice_room_server_acl_updated_banned">• 匹配 %s 的服务器现已被屏蔽。</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• 已封禁匹配 IP 地址的服务器。</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• 已允许匹配 IP 地址的服务器。</string>
+    <string name="notice_room_server_acl_set_banned">• 匹配 %s 的服务器被屏蔽。</string>
+    <string name="notice_room_server_acl_set_allowed">• 已允许匹配 %s 的服务器。</string>
     <string name="a11y_checked">已勾选</string>
     <string name="a11y_selected">已选中</string>
     <string name="call_only_active">活跃通话（%1$s）</string>
@@ -2746,11 +2746,11 @@
     <string name="event_status_sent_message">消息已发送</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 所有服务器都被禁止参与！此聊天室已无法再使用。</string>
     <string name="notice_room_server_acl_updated_no_change">无更改。</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• 服务器匹配 IP 常量，现已被封禁。</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• 服务器匹配 IP 常量，现已被允许。</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• 服务器符合 %s 已从允许列表中移除。</string>
-    <string name="notice_room_server_acl_updated_allowed">• 服务器符合 %s 现已被允许。</string>
-    <string name="notice_room_server_acl_updated_was_banned">• 服务器符合 %s 已从封禁列表中移除。</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• 已封禁匹配 IP 地址的服务器。</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• 现已允许匹配 IP 地址的服务器。</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• 已从允许列表中移除匹配 %s 的服务器。</string>
+    <string name="notice_room_server_acl_updated_allowed">• 已允许匹配 %s 的服务器。</string>
+    <string name="notice_room_server_acl_updated_was_banned">• 已从封禁列表中移除匹配 %s 的服务器。</string>
     <string name="unnamed_room">未命名的聊天室</string>
     <string name="private_space">私有空间</string>
     <string name="public_space">公开空间</string>
@@ -2797,4 +2797,10 @@
     <string name="missing_permissions_title">缺少权限</string>
     <string name="denied_permission_camera">要执行此操作，请从系统设置中授予相机权限。</string>
     <string name="denied_permission_generic">缺少执行此操作的某些权限，请从系统设置中授予权限。</string>
+    <plurals name="missed_video_call">
+        <item quantity="other">%d 个未接视频电话</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="other">%d 个未接音频电话</item>
+    </plurals>
 </resources>

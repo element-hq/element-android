@@ -214,18 +214,18 @@
     <string name="room_displayname_3_members">%1$s, %2$s 與 %3$s</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 禁止所有伺服器參與！無法再使用此聊天室。</string>
     <string name="notice_room_server_acl_updated_no_change">無變更。</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• 禁止伺服器符合 IP 文字。</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• 允許伺服器符合 IP 文字。</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• 伺服器符合 %s 已從允許清單中移除。</string>
-    <string name="notice_room_server_acl_updated_allowed">• 允許伺服器符合 %s。</string>
-    <string name="notice_room_server_acl_updated_was_banned">• 伺服器符合 %s 已從禁止清單中移除。</string>
-    <string name="notice_room_server_acl_updated_banned">• 現在禁止伺服器符合 %s。</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• 禁止符合 IP 文字的伺服器。</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• 允許符合 IP 文字的伺服器。</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• 符合 %s 的伺服器已從允許清單中移除。</string>
+    <string name="notice_room_server_acl_updated_allowed">• 允許符合 %s 的伺服器。</string>
+    <string name="notice_room_server_acl_updated_was_banned">• 符合 %s 的伺服器已從禁止清單中移除。</string>
+    <string name="notice_room_server_acl_updated_banned">• 現在禁止符合 %s 的伺服器。</string>
     <string name="notice_room_server_acl_updated_title_by_you">您為此聊天室變更了伺服器 ACL。</string>
     <string name="notice_room_server_acl_updated_title">%s 為此聊天室變更了伺服器 ACL。</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• 禁止伺服器符合 IP 文字。</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• 允許伺服器符合 IP 文字。</string>
-    <string name="notice_room_server_acl_set_allowed">• 已允許伺服器符合 %s。</string>
-    <string name="notice_room_server_acl_set_banned">• 已禁止伺服器符合 %s。</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• 禁止符合 IP 文字的伺服器。</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• 允許符合 IP 文字的伺服器。</string>
+    <string name="notice_room_server_acl_set_allowed">• 已允許符合 %s 的伺服器。</string>
+    <string name="notice_room_server_acl_set_banned">• 已禁止符合 %s 的伺服器。</string>
     <string name="notice_room_server_acl_set_title_by_you">您為此聊天室設定了伺服器 ACL。</string>
     <string name="notice_room_server_acl_set_title">%s 為此聊天室設定了伺服器 ACL。</string>
     <string name="notice_room_canonical_alias_no_change_by_you">您變更了此聊天室的地址。</string>
@@ -456,8 +456,8 @@
     <string name="room_info_room_name">聊天室名稱</string>
     <string name="room_info_room_topic">聊天室主題</string>
     <string name="call">通話</string>
-    <string name="call_connected">通話已連接</string>
-    <string name="call_connecting">通話正在連接…</string>
+    <string name="call_connected">通話已連線</string>
+    <string name="call_connecting">通話正在連線……</string>
     <string name="call_ended">通話結束</string>
     <string name="call_ring">正在通話…</string>
     <string name="incoming_call">來電</string>
@@ -1971,7 +1971,7 @@
 \n- 任一裝置正在使用的網際網路連線
 \n
 \n我們建議您立刻在設定中變更您的密碼與復原金鑰。</string>
-    <string name="verify_cancelled_notice">透過設定驗證您的裝置。</string>
+    <string name="verify_cancelled_notice">已取消驗證。您可以再次開始驗證。</string>
     <string name="verification_cancelled">驗證已取消</string>
     <string name="recovery_passphrase">復原通關密語</string>
     <string name="message_key">訊息金鑰</string>
@@ -2787,4 +2787,10 @@
     <string name="missing_permissions_title">缺少權限</string>
     <string name="denied_permission_camera">要執行此動作，請從系統設定中授予「相機」權限。</string>
     <string name="denied_permission_generic">缺少執行此動作的部份權限，請從系統設定中授予權限。</string>
+    <plurals name="missed_video_call">
+        <item quantity="other">%d 通未接聽通話</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="other">%d 通未接聽通話</item>
+    </plurals>
 </resources>

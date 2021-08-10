@@ -1,1 +1,0 @@
-Spaces - Support Restricted Room via room capabilities API

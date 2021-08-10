@@ -935,7 +935,7 @@
     <string name="media_slider_saved">Opslein</string>
     <string name="media_picker_both_capture_title">In foto as fideo meitsje</string>
     <string name="media_picker_cannot_record_video">Kin gjin fideo opnimme</string>
-    <string name="call"></string>
+    <string name="call"/>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_cancel_download">It delheljen ôfbrekke\?</string>
@@ -1036,4 +1036,16 @@
     <string name="notice_room_avatar_changed_by_you">Jo hawwe de keamer ôfbylding feroare</string>
     <string name="notice_room_avatar_changed">%1$s hat de keamer ôfbylding feroare</string>
     <string name="notice_avatar_url_changed">%1$s hat syn profylfoto feroare</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Jo hawwe %1$s harren útnûging ynlutsen. Reden: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s hat %2$s harren útnûging ynlutsen. Reden: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Jo hawwe de útnûging foar %1$s akseptearre. Reden: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s hat de útnûging foar %2$s akseptearre. Reden: %3$s</string>
+    <string name="notice_room_unban_by_you">Jo hawwe %1$s net mear ferballe</string>
+    <string name="notice_room_unban">%1$s hat %2$s net mear ferballe</string>
+    <plurals name="room_details_selected">
+        <item quantity="one">%d selektearre</item>
+        <item quantity="other">%d selektearre</item>
+    </plurals>
+    <string name="search_members_hint">Keamerleden filterje</string>
+    <string name="soft_logout_title">Jo binne útlogd</string>
 </resources>
