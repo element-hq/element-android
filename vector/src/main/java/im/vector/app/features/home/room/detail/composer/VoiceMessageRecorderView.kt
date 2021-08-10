@@ -428,6 +428,10 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         if (recordingState == RecordingState.CANCELLED || recordingState == RecordingState.NONE) {
             hideToast()
         }
+
+        if (isCancelled.orFalse()) {
+            vibrate(context)
+        }
     }
 
     private fun resetMicButtonUi() {
