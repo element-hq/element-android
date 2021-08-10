@@ -1335,7 +1335,7 @@
     <string name="keys_backup_setup_override_stop">Стоп</string>
     <string name="keys_backup_setup_override_replace">Замінити</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Схоже у вас вже є резервна копія ключа налаштування з іншого сеансу. Хочете замінити його тим, який ви створюєте\?</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">Резервна копія вже існує на вашому HomeServer</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Резервна копія вже існує на вашому homeserver</string>
     <string name="recovery_key_export_saved">Ключ відновлення збережено.</string>
     <string name="recovery_key_export_saved_as_warning">Ключ відновлення збережено до теки «%s».
 \n
@@ -1516,7 +1516,7 @@
     <string name="settings_show_room_member_state_events_summary">Включає події запрошення/приєднання/виходу/видалення/заборони та зміни зображень профілю/видимих імен.</string>
     <string name="settings_show_room_member_state_events">Показати стан подій учасників кімнати</string>
     <string name="settings_cryptography_manage_keys">Керування криптографічними ключами</string>
-    <string name="settings_integrations_summary">Використовуйте Менеджер інтеграції для керування ботами, мостами, знадобами та пакунками наліпок.
+    <string name="settings_integrations_summary">Використовуйте менеджер інтеграції для керування ботами, мостами, знадобами та пакунками наліпок.
 \nМенеджери інтеграції отримують дані конфігурації та можуть змінювати знадоби, надсилати запрошення до кімнати та надавати права від вашого імені.</string>
     <string name="settings_integrations">Інтеграції</string>
     <plurals name="seconds">
@@ -1538,7 +1538,7 @@
 \nЗалежно від стану ресурсів вашого пристрою, синхронізацію може бути відкладено операційною системою.</string>
     <string name="settings_background_fdroid_sync_mode_battery">Оптимізовано для батареї</string>
     <string name="settings_background_fdroid_sync_mode">Режим фонової синхронізації</string>
-    <string name="settings_notification_privacy_no_background_sync">Застосунки <b>не</b> потребують з\'єднання з HomeServer у фоновому режимі, це має скоротити споживання батареї</string>
+    <string name="settings_notification_privacy_no_background_sync">Застосунки <b>не</b> потребують з\'єднання з homeserver у фоновому режимі, це має скоротити споживання батареї</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Нехтувати оптимізацією</string>
     <string name="settings_troubleshoot_test_battery_failed">Якщо користувач залишає пристрій від\'єднаним та нерухомим впродовж певного часу з вимкненим екраном, пристрій переходить у режим дрімання. Це запобігає доступу програм до мережі та відкладає їх завдання, синхронізацію та стандартні сигнали тривоги.</string>
     <string name="template_settings_troubleshoot_test_battery_success">Оптимізація акумулятора не впливає на ${app_name}.</string>
@@ -1570,9 +1570,9 @@
     <string name="settings_troubleshoot_test_push_loop_success">Застосунок отримує PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Застосунок очікує PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">Випробувальне надсилання</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Не вдалося зареєструвати токен FCM на HomeServer:
+    <string name="settings_troubleshoot_test_token_registration_failed">Не вдалося зареєструвати токен FCM на homeserver:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_token_registration_success">Токен FCM успішно зареєстровано на HomeServer.</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Токен FCM успішно зареєстровано на homeserver.</string>
     <string name="settings_troubleshoot_test_token_registration_title">Реєстрація токена</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Додати обліковий запис</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
@@ -2022,9 +2022,9 @@
     <string name="settings_discovery_please_enter_server">Зазначте, будь ласка, адресу сервера ідентифікації</string>
     <string name="settings_discovery_bad_identity_server">Неможливо під\'єднатись до сервера ідентифікації</string>
     <string name="settings_discovery_enter_identity_server">Зазначте адресу сервера ідентифікації</string>
-    <string name="identity_server_consent_dialog_content">Чи погоджуєтесь ви надіслати дані ваших контактів (номери телефонів та/або електронні адреси) на налаштований сервер ідентифікації(%1$s) задля виявлення відомих вам наявних контактів\?
+    <string name="identity_server_consent_dialog_content">Чи погоджуєтесь ви надіслати дані ваших контактів (номери телефонів та/або електронні адреси) на налаштований сервер ідентифікації(%1$s) для виявлення відомих вам наявних контактів\?
 \n
-\nДля поліпшення приватності дані буде захешовано перед надсиланням.</string>
+\nДля поліпшення приватності дані буде хешовано перед надсиланням.</string>
     <string name="room_list_catchup_welcome_title">Ласкаво просимо!</string>
     <string name="global_retry">Повторити</string>
     <string name="settings_discovery_disconnect_identity_server_info">Від\'єднання від вашого сервера ідентифікації означатиме, що ви не будете виявними для інших користувачів та не зможете запрошувати інших через електронну пошту або номер телефону.</string>

@@ -289,12 +289,12 @@ internal class RealmCryptoStore @Inject constructor(
                 val devicesToDelete = ArrayList<DeviceInfoEntity>()
                 userEntity.devices.iterator().forEach { deviceInfoEntity ->
                     if (deviceInfoEntity.deviceId !in deviceIds) {
-                        Timber.d("Remove device ${deviceInfoEntity.deviceId} of user $userId")
                         devicesToDelete.add(deviceInfoEntity)
                     }
                 }
                 while (devicesToDelete.isNotEmpty()) {
                     val device = devicesToDelete.removeAt(0)
+                    Timber.d("Remove device ${device.deviceId} of user $userId")
                     device.deleteOnCascade()
                 }
                 // Then update existing devices or add new one

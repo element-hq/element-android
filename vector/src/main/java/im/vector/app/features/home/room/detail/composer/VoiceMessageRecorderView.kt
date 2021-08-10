@@ -328,11 +328,11 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         }
     }
 
-    private fun renderRecordingWaveform(amplitudeList: List<Int>) {
-        views.voicePlaybackWaveform.apply {
-            post {
-                amplitudeList.forEach { amplitude ->
-                    update(amplitude)
+    private fun renderRecordingWaveform(amplitudeList: Array<Int>) {
+        post {
+            views.voicePlaybackWaveform.apply {
+                amplitudeList.iterator().forEach {
+                    update(it)
                 }
             }
         }
@@ -409,7 +409,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 scaleX = 1f
                 scaleY = 1f
                 translationX = 0f
-                translationY  = 0f
+                translationY = 0f
             }
             isCancelled?.let {
                 callback?.onVoiceRecordingEnded(it)
@@ -514,7 +514,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
         when (state) {
             is VoiceMessagePlaybackTracker.Listener.State.Recording -> {
-                renderRecordingWaveform(state.amplitudeList)
+                renderRecordingWaveform(state.amplitudeList.toTypedArray())
             }
             is VoiceMessagePlaybackTracker.Listener.State.Playing   -> {
                 views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)

@@ -87,7 +87,7 @@
     <string name="matrix_only_filter">Hanya kontak Matrix</string>
     <string name="rooms_header">Ruang</string>
     <string name="send_bug_report">Laporan bug</string>
-    <string name="send_bug_report_app_crashed">"Aplikasi gagal saat terakhir digunakan. Apakah Anda ingin membuka  halaman laporan kegagalan?"</string>
+    <string name="send_bug_report_app_crashed">Aplikasi gagal saat terakhir digunakan. Apakah Anda ingin membuka halaman laporan kegagalan\?</string>
     <string name="join_room">Gabung di Ruang</string>
     <string name="identity_url">URL Server Identity</string>
     <string name="start_voice_call">Mulai Panggilan Suara</string>
@@ -194,7 +194,7 @@
     <string name="auth_reset_password_error_unauthorized">Verifikasi alamat email gagal: pastikan tautan yang termuat di email telah diklik</string>
     <string name="auth_reset_password_success_message">Kata sandi Anda telah disetel ulang.
 \n
-\nAnda telah dikeluarkan dari seluruh sesi dan tidak lagi menerima push notification. Untuk kembali menerima pemberitahuan, masuklah kembali dengan tiap perangkat.</string>
+\nAnda telah dikeluarkan dari seluruh sesi dan tidak lagi menerima push notification. Untuk kembali menerima pemberitahuan, masuklah kembali di setiap perangkat.</string>
     <string name="login_error_network_error">Tidak dapat masuk: Gangguan jaringan</string>
     <string name="login_error_registration_network_error">Tidak dapat mendaftar: Gangguan jaringan</string>
     <string name="login_error_unable_register_mail_ownership">Tidak dapat mendaftar : gagal memastikan kepemilikan alamat email</string>
@@ -286,11 +286,11 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} memerlukan izin untuk mengakses daftar kontak Anda untuk menemukan pengguna Matrix lain berdasarkan email dan nomor telepon mereka.
 \n
 \nApakah anda bersedia bila ${app_name} mengakses daftar kontak Anda\?</string>
-    <string name="permissions_action_not_performed_missing_permissions">Mohon Maaf. Aksi ini tidak dapat dilakukan karena belum menerima izin terkait</string>
+    <string name="permissions_action_not_performed_missing_permissions">Mohon maaf. Aksi tidak dilakukan karena izin-izin yang kurang</string>
     <string name="list_members">Daftar Anggota</string>
     <string name="open_chat_header">Buka kop</string>
     <string name="room_sync_in_progress">Menyinkronkan…</string>
-    <string name="room_jump_to_first_unread">Arahkan ke pesan pertama yang belum terbaca.</string>
+    <string name="room_jump_to_first_unread">Arahkan ke yang belum terbaca</string>
     <string name="room_preview_invitation_format">Anda telah diundang untuk bergabung ke ruang ini oleh %s</string>
     <string name="room_preview_unlinked_email_warning">Undangan ini dikirim oleh %s, yang tidak terhubung dengan akun ini.
 \nAnda mungkin ingin masuk dengan akun lain, atau tambahkan email ini ke akun Anda.</string>
@@ -315,7 +315,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
         <item quantity="other">%dj</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="other">$dh</item>
+        <item quantity="other">%dh</item>
     </plurals>
     <string name="room_participants_leave_prompt_title">Tinggalkan ruang</string>
     <string name="room_participants_leave_prompt_msg">Apa benar Anda ingin meninggalkan ruang ini?</string>
@@ -375,7 +375,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="room_resend_unsent_messages">Kirim ulang pesan yang belum terkirim</string>
     <string name="room_delete_unsent_messages">Hapus pesan yang belum terkirim</string>
     <string name="room_message_file_not_found">Berkas tidak ditemukan</string>
-    <string name="room_do_not_have_permission_to_post">Anda belum mendapat permisi untuk mengirim di ruang ini</string>
+    <string name="room_do_not_have_permission_to_post">Anda tidak mempunyai ijin untuk mengirim di ruang ini.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="other">%d pesan baru</item>
     </plurals>
@@ -566,16 +566,16 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="avatar">Avatar</string>
     <string name="dialog_user_consent_submit">Baca sekarang</string>
     <string name="deactivate_account_title">Deaktivasi Akun</string>
-    <string name="deactivate_account_content">Ini akan mengakibatkan akun Anda tidak dapat digunakan secara permanen. Anda tidak akan dapat masuk dan orang lain tidak dapat mendaftar ulang dengan ID pengguna yang sama. Ini akan mengakibatkan akun Anda keluar dari semua ruang tempat Anda berpartisipasi serta menghapus semua detail akun dari identity server Anda. <b> Tindakan ini tidak dapat diubah kembali</b>.
+    <string name="deactivate_account_content">Ini akan mengakibatkan akun Anda tidak dapat digunakan secara permanen. Anda tidak akan dapat masuk dan orang lain tidak dapat mendaftar ulang dengan ID pengguna yang sama. Ini akan mengakibatkan akun Anda keluar dari semua ruang tempat Anda berpartisipasi serta menghapus semua detail akun dari server identitas Anda. <b>Tindakan ini tidak dapat diubah</b>.
 \n
-\nMenonaktifkan akun Anda <b> tidak serta-merta membuat kami melupakan pesan-pesan yang Anda kirim</b>. Jika Anda ingin kami melupakan pesan-pesan Anda, mohon centang kotak berikut.
+\nMenonaktifkan akun Anda <b>tidak membuat kami melupakan pesan-pesan yang Anda kirim secara default</b>. Jika Anda ingin kami melupakan pesan-pesan Anda, mohon centang kotak berikut.
 \n
-\nKeterbacaan pesan di Matrix serupa dengan email. Dengan kami melupakan pesan-pesan Anda, berarti pesan-pesan yang Anda kirim tidak akan dibagikan kepada pengguna baru ataupun yang belum terdaftar. Tetapi pengguna yang terdaftar dan telah dapat mengakses pesan-pesan tersebut masih bisa membaca rangkap yang mereka simpan.</string>
+\nKeterbacaan pesan di Matrix serupa dengan email. Dengan kami melupakan pesan-pesan Anda berarti pesan-pesan yang Anda kirim tidak akan dibagikan kepada pengguna baru ataupun yang belum terdaftar, tetapi pengguna yang terdaftar yang mempunyai mengakses pesan-pesan tersebut masih bisa mengakses salinan mereka.</string>
     <string name="deactivate_account_delete_checkbox">Mohon lupakan semua pesan yang telah kukirim ketika akunku dideaktivasi (Peringatan: ini akan mengakibatkan pengguna mendatang membaca percakapan yang tidak lengkap)</string>
     <string name="deactivate_account_prompt_password">Untuk melanjutkan, masukkan kata sandi Anda:</string>
     <string name="deactivate_account_submit">Deaktivasi Akun</string>
     <string name="error_empty_field_your_password">Mohon masukkan kata sandi Anda.</string>
-    <string name="room_tombstone_versioned_description">Ruang ini telah berubah dan tidak lagi aktif</string>
+    <string name="room_tombstone_versioned_description">Ruang ini telah berubah dan tidak lagi aktif.</string>
     <string name="room_tombstone_continuation_link">Percakapan berlanjut di sini</string>
     <string name="room_tombstone_continuation_description">Ruang ini adalah kelanjutan percakapan lain</string>
     <string name="room_tombstone_predecessor_link">Klik di sini untuk melihat pesan lama</string>
@@ -606,9 +606,9 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="encryption_information_verify_device_warning2">Apabila cocok, tekan tombol verifikasi berikut.
 Apabila tidak, seseorang sedang menyadap perangkat ini dan mungkin perlu diblokir.
 Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
-    <string name="unknown_devices_alert_message">Ruang ini terdapat sesi yang yang belum diverifikasi.
-\nIni artinya, tidak ada jaminan pengguna sesi tersebut sesuai dengan klaim mereka.
-\nKami sarankan Anda untuk memverifikasi untuk setiap sesi terlebih dahulu sebelum melanjutkan, namun Anda juga boleh mengirim ulang pesan tanpa verifikasi bila anda memilih demikian.
+    <string name="unknown_devices_alert_message">Ruang ini terdapat sesi tidak dikenal yang belum diverifikasi.
+\nIni artinya tidak ada jaminan pengguna sesi tersebut sesuai dengan klaim mereka.
+\nKami sarankan Anda untuk memverifikasi untuk setiap sesi terlebih dahulu sebelum melanjutkan, namun Anda juga boleh mengirim ulang pesan tanpa verifikasi bila Anda memilih demikian.
 \n
 \nSesi yang tak dikenal:</string>
     <string name="directory_server_fail_to_retrieve_server">Server mungkin belum siap atau kelebihan beban</string>
@@ -838,7 +838,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Pendaftaran Token</string>
     <string name="settings_troubleshoot_test_token_registration_success">Sukses mendaftarkan token FCM di HomeServer.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Gagal mendaftarkan token FCM ke HomeServer:
+    <string name="settings_troubleshoot_test_token_registration_failed">Gagal mendaftarkan token FCM ke homeserver:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Layanan Pemberitahuan</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Layanan Pemberitahuan sedang berjalan.</string>
@@ -908,4 +908,79 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_show_join_leave_messages">Tunjukkan kejadian bergabung dan meninggalkan</string>
     <string name="settings_show_join_leave_messages_summary">Undangan, pengeluaran, dan larangan tidak terpengaruh.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Tunjukkan kejadian akun</string>
+    <string name="notice_room_server_acl_set_allowed">• Server-server yang cocok dengan %s diizinkan.</string>
+    <string name="notice_room_server_acl_set_banned">• Server-server yang cocok dengan %s dilarangkan.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Anda mengatur server ACL untuk ruangan ini.</string>
+    <string name="notice_room_server_acl_set_title">%s mengatur server ACL untuk ruangan ini.</string>
+    <string name="notice_direct_room_update_by_you">Anda meningkatkan di sini.</string>
+    <string name="notice_direct_room_update">%s meningkatkan di sini.</string>
+    <string name="notice_room_update_by_you">Anda meningkatkan ruangan ini.</string>
+    <string name="notice_room_update">%s meningkatkan ruangan ini.</string>
+    <string name="notice_end_to_end_by_you">Anda mengaktifkan enkripsi ujung-ke-ujung (%1$s)</string>
+    <string name="notice_end_to_end">%1$s mengaktifkan enkripsi ujung-ke-ujung (%2$s)</string>
+    <string name="notice_room_visibility_unknown">tidak diketahui (%s).</string>
+    <string name="notice_room_visibility_world_readable">siapa pun.</string>
+    <string name="notice_room_visibility_shared">semua anggota ruangan.</string>
+    <string name="notice_room_visibility_joined">semua anggota ruangan, dari kapan mereka bergabung.</string>
+    <string name="notice_room_visibility_invited">semua anggota ruangan, dari kapan mereka diundang.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Anda membuat riwayat pesanan masa depan terlihat dengan %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s membuat riwayat pesanan masa depan terlihat dengan %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Anda membuat riwayat ruangan masa depan terlihat dengan %1$s</string>
+    <string name="notice_made_future_room_visibility">%1$s membuat riwayat ruangan masa depan terlihat dengan %2$s</string>
+    <string name="notice_ended_call_by_you">Anda mengakhiri panggilan.</string>
+    <string name="notice_ended_call">%s mengakhiri panggilan.</string>
+    <string name="notice_call_candidates">%s mengirimkan data untuk mengatur panggilan.</string>
+    <string name="notice_call_candidates_by_you">Anda mengirimkan data untuk mengatur panggilan.</string>
+    <string name="notice_answered_call">%s menjawab panggilan.</string>
+    <string name="notice_answered_call_by_you">Anda menjawab panggilan.</string>
+    <string name="notice_placed_voice_call_by_you">Anda menempatkan panggilan suara.</string>
+    <string name="notice_placed_voice_call">%s menempatkan panggilan suara.</string>
+    <string name="notice_placed_video_call_by_you">Anda menempatkan panggilan video.</string>
+    <string name="notice_placed_video_call">%s menempatkan panggilan video.</string>
+    <string name="notice_room_name_changed_by_you">Anda mengubah nama kamar menjadi: %1$s</string>
+    <string name="notice_room_name_changed">%1$s mengubah nama ruangan menjadi: %2$s</string>
+    <string name="notice_room_avatar_changed_by_you">Anda mengubah avatar ruangan</string>
+    <string name="notice_room_avatar_changed">%1$s mengubah avatar ruangan</string>
+    <string name="notice_room_topic_changed_by_you">Anda mengubah topik menjadi: %1$s</string>
+    <string name="notice_room_topic_changed">%1$s mengubah topik menjadi: %2$s</string>
+    <string name="notice_display_name_removed_by_you">Anda menghapus nama tampilan Anda (sebelumnya adalah %1$s)</string>
+    <string name="notice_display_name_changed_from_by_you">Anda mengubah nama tampilan Anda dari %1$s ke %2$s</string>
+    <string name="notice_display_name_removed">%1$s menghapus nama tampilan mereka (sebelumnya adalah %2$s)</string>
+    <string name="notice_display_name_changed_from">%1$s mengubah nama tampilan mereka dari %2$s ke %3$s</string>
+    <string name="notice_display_name_set_by_you">Anda menetapkan nama tampilan Anda ke %1$s</string>
+    <string name="notice_display_name_set">%1$s menetapkan nama tampilannya ke %2$s</string>
+    <string name="notice_avatar_url_changed_by_you">Anda mengubah avatar Anda</string>
+    <string name="notice_avatar_url_changed">%1$s mengubah avatarnya</string>
+    <string name="notice_room_withdraw_by_you">Anda menarik undangannya %1$s</string>
+    <string name="notice_room_withdraw">%1$s menarik undangannya %2$s</string>
+    <string name="notice_room_ban_by_you">Anda mencekal %1$s</string>
+    <string name="notice_room_ban">%1$s mencekal %2$s</string>
+    <string name="notice_room_unban_by_you">Anda membatalkan pencekalan %1$s</string>
+    <string name="notice_room_unban">%1$s membatalkan pencekalan %2$s</string>
+    <string name="notice_room_kick_by_you">Anda meng-kick %1$s</string>
+    <string name="notice_room_kick">%1$s meng-kick %2$s</string>
+    <string name="notice_room_reject_by_you">Anda menolak undangan</string>
+    <string name="notice_room_reject">%1$s menolak undangan</string>
+    <string name="notice_direct_room_leave_by_you">Anda meninggalkan ruangan</string>
+    <string name="notice_direct_room_leave">%1$s meninggalkan ruangan</string>
+    <string name="notice_room_leave_by_you">Anda meninggalkan ruangan</string>
+    <string name="notice_room_leave">%1$s meninggalkan ruangan</string>
+    <string name="notice_direct_room_join_by_you">Anda bergabung</string>
+    <string name="notice_direct_room_join">%1$s bergabung</string>
+    <string name="notice_room_join_by_you">Anda bergabung ruangan</string>
+    <string name="notice_room_join">%1$s bergabung ruangan</string>
+    <string name="notice_room_invite_you">%1$s mengundang Anda</string>
+    <string name="notice_room_invite_by_you">Anda mengundang %1$s</string>
+    <string name="notice_room_invite">%1$s mengundang %2$s</string>
+    <string name="notice_direct_room_created_by_you">Anda membuat diskusi</string>
+    <string name="notice_direct_room_created">%1$s membuat diskusi</string>
+    <string name="notice_room_created_by_you">Anda membuat ruangan</string>
+    <string name="notice_room_created">%1$s menciptakan ruangan</string>
+    <string name="notice_room_invite_no_invitee_by_you">Undangan Anda</string>
+    <string name="notice_room_invite_no_invitee">Undangan %s</string>
+    <string name="summary_you_sent_sticker">Kamu mengirim sticker.</string>
+    <string name="summary_user_sent_sticker">%1$s mengirim stiker.</string>
+    <string name="summary_you_sent_image">Anda mengirim gambar.</string>
+    <string name="summary_user_sent_image">%1$s mengirim gambar.</string>
+    <string name="summary_message">%1$s: %2$s</string>
 </resources>
