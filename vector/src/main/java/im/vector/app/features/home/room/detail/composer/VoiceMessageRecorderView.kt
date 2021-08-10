@@ -220,6 +220,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             RecordingState.STARTED    -> {
                 showRecordingViews()
+                val translationAmount = distanceX.coerceAtMost(distanceToCancel)
+                views.voiceMessageMicButton.translationX = -translationAmount * rtlXMultiplier
+                views.voiceMessageSlideToCancel.translationX = -translationAmount / 2 * rtlXMultiplier
             }
             RecordingState.NONE       -> Timber.d("VoiceMessageRecorderView shouldn't be in NONE state while moving.")
             RecordingState.PLAYBACK   -> Timber.d("VoiceMessageRecorderView shouldn't be in PLAYBACK state while moving.")
@@ -235,7 +238,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         if (recordingState == RecordingState.STARTED) {
             // Determine if cancelling or locking for the first move action.
             if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1))
-                    && distanceX > distanceY) {
+                    && distanceX > distanceY && distanceX > lastDistanceX) {
                 recordingState = RecordingState.CANCELLING
             } else if (currentY < firstY && distanceY > distanceX) {
                 recordingState = RecordingState.LOCKING
