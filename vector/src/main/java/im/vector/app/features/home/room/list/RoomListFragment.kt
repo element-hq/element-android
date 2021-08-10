@@ -265,7 +265,12 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun fabOpenRoomDirectory() {
-        navigator.openRoomDirectory(requireActivity(), "")
+        if (vectorPreferences.simplifiedMode()) {
+            // Simplified mode: don't browse room directories, just create a room
+            navigator.openCreateRoom(requireActivity())
+        } else {
+            navigator.openRoomDirectory(requireActivity(), "")
+        }
     }
 
     private fun setupRecyclerView() {
