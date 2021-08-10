@@ -1,0 +1,12 @@
+SchildiChat ist ein Client für das Matrix-Protokoll und basiert auf der Element-Codebasis.
+Im Gegensatz zu vergleichbaren Anwendungen bietet SchildiChat eine klassischere Oberfläche, wie sie von anderen verbreiteten Messengern bekannt ist, ohne dabei auf die volle Funktionalität der Referenzimplementierung zu verzichten.
+
+Das Matrix-Protokoll ist ein dezentralisierter Ansatz für die moderne Nachrichtenübermittlung, und erlaubt hierbei Ende-zu-Ende-Verschlüsselung, einen gemeinsamen Verlauf über mehrere Geräte, und mehr.
+
+Verglichen mit der Element-Referenzanwendung bietet SchildiChat folgende Änderungen:
+- Eine gemeinsame Liste für Direkt-Chats und Gruppen
+- Optionale Nachrichtenblasen
+- Weitere Verbesserungen bezüglich der Benutzerfreundlichkeit und zusätzliche Einstellungen zur Konfiguration der App
+
+SchildiChat ist quelloffen: https://github.com/SchildiChat/SchildiChat-android
+Mehr Informationen zum Matrix-Protokoll: https://matrix.org/
