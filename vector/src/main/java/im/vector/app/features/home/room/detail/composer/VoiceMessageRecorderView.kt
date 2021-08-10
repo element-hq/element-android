@@ -250,7 +250,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1))
                     && distanceX > distanceY && distanceX > lastDistanceX) {
                 recordingState = RecordingState.CANCELLING
-            } else if (currentY < firstY && distanceY > distanceX) {
+            } else if (currentY < firstY && distanceY > distanceX && distanceY > lastDistanceY) {
                 recordingState = RecordingState.LOCKING
             }
         } else if (recordingState == RecordingState.CANCELLING) {
