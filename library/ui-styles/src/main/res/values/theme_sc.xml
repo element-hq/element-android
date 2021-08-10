@@ -96,6 +96,7 @@
         <item name="user_color_pl_95">@color/user_color_sc_pl_95</item>
         <item name="user_color_pl_100">@color/user_color_sc_pl_100</item>
         <item name="voice_message_playback_background_color">#1fffffff</item>
+        <item name="verification_request_background">?colorBackgroundFloating</item>
 
         <item name="android:statusBarColor">@color/background_black_sc</item>
         <item name="android:navigationBarColor">@color/background_black_sc</item>

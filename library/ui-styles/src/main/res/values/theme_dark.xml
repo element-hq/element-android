@@ -134,6 +134,7 @@
         <item name="user_color_pl_95">@color/user_color_element_pl_95</item>
         <item name="user_color_pl_100">@color/user_color_element_pl_100</item>
         <item name="voice_message_playback_background_color">?vctr_content_quinary</item>
+        <item name="verification_request_background">?vctr_notice_secondary</item>
 
         <item name="android:statusBarColor">@color/android_status_bar_background_dark</item>
         <item name="android:navigationBarColor">@color/android_navigation_bar_background_dark</item>

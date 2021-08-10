@@ -165,7 +165,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                     pr.roomId ?: ""
                             )
                         }
-                        colorAttribute = R.attr.vctr_notice_secondary
+                        colorAttribute = R.attr.verification_request_background
                         // 5mn expiration
                         expirationTimestamp = System.currentTimeMillis() + (5 * 60 * 1000L)
                     }
