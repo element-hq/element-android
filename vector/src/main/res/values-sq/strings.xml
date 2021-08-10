@@ -228,7 +228,7 @@
     <string name="notice_room_server_acl_updated_allowed">• Shërbyesit që kanë përputhje me %s tani janë të lejuar.</string>
     <string name="notice_room_server_acl_updated_was_banned">• Shërbyesit që kanë përputhje me %s u hoqën nga lista e ndalimeve.</string>
     <string name="notice_room_server_acl_updated_banned">• Shërbyesit që kanë përputhje me %s tani janë të ndaluar.</string>
-    <string name="notice_room_server_acl_set_allowed">• Shërbyesit që kanë përputhje me %s janë të ndaluar.</string>
+    <string name="notice_room_server_acl_set_allowed">• Shërbyesit që kanë përputhje me %s janë të lejuar.</string>
     <string name="notice_room_server_acl_set_banned">• Shërbyesit që kanë përputhje me %s janë të ndaluar.</string>
     <string name="notice_room_canonical_alias_no_change_by_you">Ndryshuat adresat për këtë dhomë.</string>
     <string name="notice_room_canonical_alias_no_change">%1$s ndryshoi adresat për këtë dhomë.</string>
@@ -397,7 +397,7 @@
     <string name="auth_recaptcha_message">Ky shërbyes Home do të donte të sigurohej se s’jeni robot</string>
     <string name="auth_username_in_use">Emër përdoruesi në përdorim</string>
     <string name="auth_home_server">Shërbyes Home:</string>
-    <string name="auth_identity_server">Shërbyes Identitetesh:</string>
+    <string name="auth_identity_server">Shërbyes identitetesh:</string>
     <string name="auth_reset_password_next_step_button">E kam verifikuar adresën time email</string>
     <string name="auth_reset_password_message">Që të ricaktoni fjalëkalimin, jepni adresën email të lidhur me llogarinë tuaj:</string>
     <string name="auth_reset_password_missing_email">Duhet dhënë adresa email e lidhur me llogarinë tuaj.</string>
@@ -452,7 +452,7 @@
     <string name="reject">Hidheni tej</string>
     <string name="list_members">Anëtarë liste</string>
     <string name="room_sync_in_progress">Po njëkohësohet…</string>
-    <string name="room_jump_to_first_unread">Hidhu te të palexuarit.</string>
+    <string name="room_jump_to_first_unread">Hidhu te të palexuarit</string>
     <string name="room_preview_invitation_format">Jeni ftuar të merrni pjesë në këtë dhomë nga %s</string>
     <string name="room_preview_try_join_an_unknown_room_default">një dhomë</string>
     <string name="room_creation_title">Fjalosje e Re</string>
@@ -526,7 +526,7 @@
     <string name="room_resend_unsent_messages">Ridërgo mesazhet e padërguara</string>
     <string name="room_delete_unsent_messages">Fshi mesazhet e padërguar</string>
     <string name="room_message_file_not_found">S’u gjet kartelë</string>
-    <string name="room_do_not_have_permission_to_post">S’keni leje të postoni në këtë dhomë</string>
+    <string name="room_do_not_have_permission_to_post">S’keni leje të postoni në këtë dhomë.</string>
     <string name="ssl_trust">Besoje</string>
     <string name="ssl_do_not_trust">Mos i zër besë</string>
     <string name="ssl_logout_account">Dalje</string>
@@ -660,7 +660,7 @@
     <string name="devices_delete_submit_button_label">Parashtroje</string>
     <string name="settings_logged_in">I futur si</string>
     <string name="settings_home_server">Shërbyes Home</string>
-    <string name="settings_identity_server">Shërbyes Identitetesh</string>
+    <string name="settings_identity_server">Shërbyes identitetesh</string>
     <string name="settings_user_interface">Ndërfaqe përdoruesi</string>
     <string name="settings_interface_language">Gjuhë</string>
     <string name="settings_select_language">Zgjidhni gjuhë</string>
@@ -923,7 +923,7 @@
     <string name="your_unverified_device_requesting">Sesioni juaj i paverifikuar \'%s\' po kërkon kyçe fshehtëzimi.</string>
     <string name="command_description_deop_user">I heq cilësinë e operatorit përdoruesit me ID-në e dhënë</string>
     <string name="dialog_user_consent_content">Që të vazhdohet të përdoret shërbyesi home %1$s, duhet të shqyrtoni dhe pajtoheni me termat dhe kushtet.</string>
-    <string name="room_tombstone_versioned_description">Kjo dhomë është zëvendësuar dhe s’është më aktive</string>
+    <string name="room_tombstone_versioned_description">Kjo dhomë është zëvendësuar dhe s’është më aktive.</string>
     <string name="room_tombstone_continuation_description">Kjo dhomë është një vazhdim i një bisede tjetër</string>
     <string name="resource_limit_hard_default">Ky shërbyes home ka tejkaluar një nga kufijtë mbi burimet.</string>
     <string name="resource_limit_hard_mau">Ky shërbyes home ka tejkaluar kufirin Përdorues Aktivë Mujorë.</string>
@@ -1132,8 +1132,8 @@
     <string name="settings_troubleshoot_test_fcm_failed">S’u arrit të merreh token FCM:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Regjistrim Token-i</string>
-    <string name="settings_troubleshoot_test_token_registration_success">Token-i FCM u regjistrua me sukses te Shërbyes Home.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">S’u arrit të regjistrohej token FCM te Shërbyes Home:
+    <string name="settings_troubleshoot_test_token_registration_success">Token-i FCM u regjistrua me sukses te shërbyesi Home.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">S’u arrit të regjistrohej token FCM te shërbyesi Home:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Shërbim Njoftimesh</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Shërbimi i Njoftimeve po xhiron.</string>
@@ -1402,7 +1402,7 @@
     <string name="sas_error_m_key_mismatch">Mospërputhje kyçesh</string>
     <string name="sas_error_m_user_error">Mospërputhje përdoruesish</string>
     <string name="sas_error_unknown">Gabim i Panjohur</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">Ka tashmë një kopjeruajtje te Shërbyesi juaj Home</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Ka tashmë një kopjeruajtje te shërbyesi juaj Home</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Duket sikur keni tashmë kopjeruajtje kyçesh nga një sesion tjetër. Doni të zëvendësohet me atë që po krijoni\?</string>
     <string name="keys_backup_setup_override_replace">Zëvendësoje</string>
     <string name="keys_backup_setup_override_stop">Ndale</string>
@@ -1473,7 +1473,7 @@
     <string name="send_suggestion_sent">Faleminderit, sugjerimi u dërgua me sukses</string>
     <string name="send_suggestion_failed">S’u arrit të dërgohej sugjerimi (%s)</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Shfaq te rrjedha kohore akte të fshehura</string>
-    <string name="settings_integration_manager">Përgjegjës Integrimesh</string>
+    <string name="settings_integration_manager">Përgjegjës integrimesh</string>
     <string name="integration_manager_not_configured">Pa përgjegjës Integrimesh të formësuar.</string>
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
@@ -1545,7 +1545,7 @@
     <string name="settings_discovery_manage">Administroni rregullimet tuaja për zbulime.</string>
     <string name="encryption_information_device_name_with_warning">Emër publik (i dukshëm për persona me të cilët komunikoni)</string>
     <string name="device_name_warning">Emri publik i një sesioni është i dukshëm për persona me të cilët komunikoni</string>
-    <string name="identity_server_not_defined">S’po përdorni ndonjë Shërbyes Identitetesh</string>
+    <string name="identity_server_not_defined">S’po përdorni ndonjë shërbyes identitetesh</string>
     <string name="identity_server_not_defined_for_password_reset">S’ka shërbyes identitetesh të formësuar, kjo është e domosdoshme për ricaktimin e fjalëkalimit tuaj.</string>
     <string name="error_user_already_logged_in">Duket se po rrekeni të lidheni me një tjetër shërbyes Home. Doni të bëhet dalja\?</string>
     <string name="labs_swipe_to_reply_in_timeline">Që të përgjigjeni te rrjedha kohore, aktivizoni fërkimin</string>
@@ -1626,8 +1626,8 @@
     <string name="template_settings_add_3pid_flow_not_supported">Këtë s’e bëni dot që nga ${app_name} për celular</string>
     <string name="settings_add_3pid_authentication_needed">Lypset mirëfilltësim</string>
     <string name="settings_integrations">Integrime</string>
-    <string name="settings_integrations_summary">Përdorni një Përgjegjës Integrimesh që të administroni robotë, ura, widget-e dhe paketa ngjitësish.
-\nPërgjegjësit e Integrimeve marrin të dhëna formësimi dhe mund të ndryshojnë widget-e, të dërgojnë ftesa për në dhoma dhe të caktojnë shkallë pushteti në emrin tuaj.</string>
+    <string name="settings_integrations_summary">Përdorni një përgjegjës integrimesh që të administroni robotë, ura, widget-e dhe paketa ngjitësish.
+\nPërgjegjësit e integrimeve marrin të dhëna formësimi dhe mund të ndryshojnë widget-e, të dërgojnë ftesa për në dhoma dhe të caktojnë shkallë pushteti në emrin tuaj.</string>
     <string name="settings_integration_allow">Lejo integrim</string>
     <string name="room_widget_activity_title">Widget</string>
     <string name="room_widget_permission_title">Ngarko Widget</string>
@@ -1999,7 +1999,7 @@
 \n- Lidhja internet që përdor njëra pajisje, ose tjetra
 \n
 \nKëshillojmë të ndryshoni menjëherë fjalëkalimin &amp; kyçin tuaj të rimarrjeve te Rregullimet.</string>
-    <string name="verify_cancelled_notice">Verifikoni pajisjet tuaja që prej Rregullimeve.</string>
+    <string name="verify_cancelled_notice">Verifikimi u anulua. Mund ta rifilloni verifikimin.</string>
     <string name="verification_cancelled">Verifikimi u Anulua</string>
     <string name="recovery_passphrase">Frazëkalim Rikthimesh</string>
     <string name="message_key">Kyç Mesazhesh</string>
@@ -2469,7 +2469,7 @@
     <string name="attachment_viewer_item_x_of_y">%1$d nga %2$d</string>
     <string name="a11y_create_direct_message_by_qr_code">Krijoni një bisedë të re të drejtpërdrejtë duke skanuar një kod QR</string>
     <string name="a11y_create_direct_message_by_mxid">Krijoni një bisedë të re të drejtpërdrejtë përmes ID-je Matrix</string>
-    <string name="identity_server_consent_dialog_content">Që të mund të zbulohet kontakte ekzistuese që njihni, pranoni të dërgohen të dhënat tuaja të kontaktit (numra telefonash dhe/ose email-e) te Shërbyesi i formësuar për Identitete (%1$s)\?
+    <string name="identity_server_consent_dialog_content">Që të mund të zbulohet kontakte ekzistuese që njihni, pranoni të dërgohen të dhënat tuaja të kontaktit (numra telefonash dhe/ose email-e) te shërbyesi i formësuar për identitete (%1$s)\?
 \n
 \nPër më tepër privatësi, të dhënat e dërguara do të kodohen, para se të dërgohen.</string>
     <string name="identity_server_consent_dialog_title">Dërgoni email-e dhe numra telefonash</string>
@@ -2805,4 +2805,37 @@
     <string name="create_space_alias_hint">Adresë hapësire</string>
     <string name="space_settings_alias_title">Adresa hapësire</string>
     <string name="space_settings_alias_subtitle">Shihni dhe administroni adresa në këtë hapësirë.</string>
+    <string name="room_upgrade_to_recommended_version">Përmirësoje me versionin e rekomanduar të dhomës</string>
+    <string name="room_using_unstable_room_version">Kjo dhomë po xhiron nën versionin %s, të cilin ky shërbyes Home e konsideron si të paqëndrueshëm.</string>
+    <string name="upgrade_room_no_power_to_manage">Ju duhen leje për të përmirësua një dhomë</string>
+    <string name="upgrade_room_update_parent_space">Përditëso automatikisht mëmë hapësire</string>
+    <string name="upgrade_room_auto_invite">Fto përdorues automatikisht</string>
+    <string name="upgrade_public_room_from_to">Do ta përmirësoni këtë dhomë nga %s në %s.</string>
+    <string name="upgrade_room_warning">Përmirësimi i një dhome është një veprim i thelluar dhe zakonisht i rekomanduar kur një dhomë është e paqëndrueshme për shkak të metash, veçorish që mungojnë ose cenueshmëri sigurie.
+\nZakonisht kjo prek vetëm mënyrën se si trajtohet dhoma te shërbyesi.</string>
+    <string name="upgrade_private_room">Përmirësoni dhomë private</string>
+    <string name="upgrade_public_room">Përmirësoni dhomë publike</string>
+    <string name="upgrade">Përmirësoje</string>
+    <string name="it_may_take_some_time">Ju lutemi, bëni durim, mund të zgjasë ca.</string>
+    <string name="joining_replacement_room">Hyni te dhoma zëvendësuese</string>
+    <string name="command_description_upgrade_room">E përmirëson një dhomë me një version të ri</string>
+    <string name="settings_server_room_version_unstable">i paqëndrueshëm</string>
+    <string name="settings_server_room_version_stable">i qëndrueshëm</string>
+    <string name="settings_server_default_room_version">Version Parazgjedhje</string>
+    <string name="settings_server_room_versions">Versione Dhome 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Verifikoji duke krahasuar emoji</string>
+    <string name="verification_scan_with_this_device">Skanoni me këtë pajisje</string>
+    <string name="verification_scan_self_notice">Skanojeni kodin me pajisjen tuaj tjetër, ose kaloni në të dhe skanoni me këtë pajisje</string>
+    <string name="hs_client_url">URL API Shërbyesi Home</string>
+    <string name="missing_permissions_title">Mungojnë leje</string>
+    <string name="denied_permission_camera">Për kryerjen e këtij veprimi, ju lutemi, akordoni leje Kamerës që nga rregullimet e sistemit.</string>
+    <string name="denied_permission_generic">Për kryerjen e këtij veprimi mungojnë disa leje, ju lutemi, akordojini lejet që nga rregullimet e sistemit.</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Thirrje video e humbur</item>
+        <item quantity="other">%d thirrje video të humbura</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Thirrje audio e humbur</item>
+        <item quantity="other">%d thirrje audio të humbura</item>
+    </plurals>
 </resources>
