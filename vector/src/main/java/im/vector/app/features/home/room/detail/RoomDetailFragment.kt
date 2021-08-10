@@ -971,7 +971,7 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.exitSpecialMode()
         views.composerLayout.collapse()
 
-        views.voiceMessageRecorderView.isVisible = text.isBlank() && vectorPreferences.labsUseVoiceMessage()
+        views.voiceMessageRecorderView.isVisible = text.isBlank()
 
         updateComposerText(text)
         views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
@@ -1298,7 +1298,7 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onTextBlankStateChanged(isBlank: Boolean) {
-                if (!views.composerLayout.views.sendButton.isVisible && vectorPreferences.labsUseVoiceMessage()) {
+                if (!views.composerLayout.views.sendButton.isVisible) {
                     // Animate alpha to prevent overlapping with the animation of the send button
                     views.voiceMessageRecorderView.alpha = 0f
                     views.voiceMessageRecorderView.isVisible = true
@@ -1318,7 +1318,7 @@ class RoomDetailFragment @Inject constructor(
         if (text.isNotBlank()) {
             // We collapse ASAP, if not there will be a slight annoying delay
             views.composerLayout.collapse(true)
-            views.voiceMessageRecorderView.isVisible = vectorPreferences.labsUseVoiceMessage()
+            views.voiceMessageRecorderView.isVisible = true
             lockSendButton = true
             roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
             emojiPopup.dismiss()
@@ -1372,10 +1372,10 @@ class RoomDetailFragment @Inject constructor(
                 if (state.canSendMessage) {
                     if (!views.voiceMessageRecorderView.isActive()) {
                         views.composerLayout.isVisible = true
-                        views.voiceMessageRecorderView.isVisible = vectorPreferences.labsUseVoiceMessage() && views.composerLayout.text?.isBlank().orFalse()
+                        views.voiceMessageRecorderView.isVisible = views.composerLayout.text?.isBlank().orFalse()
                         views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                         views.notificationAreaView.render(NotificationAreaView.State.Hidden)
-                        views.composerLayout.alwaysShowSendButton = !vectorPreferences.labsUseVoiceMessage()
+                        views.composerLayout.alwaysShowSendButton = false
                     }
                 } else {
                     views.composerLayout.isVisible = false
