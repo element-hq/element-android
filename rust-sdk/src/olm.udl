@@ -180,6 +180,11 @@ dictionary RequestVerificationResult {
     OutgoingVerificationRequest request;
 };
 
+dictionary ConfirmVerificationResult {
+    OutgoingVerificationRequest request;
+    SignatureUploadRequest? signature_request;
+};
+
 [Enum]
 interface Verification {
     SasV1(Sas sas);
@@ -296,7 +301,7 @@ interface OlmMachine {
     );
 
     [Throws=CryptoStoreError]
-    OutgoingVerificationRequest? confirm_verification([ByRef] string user_id, [ByRef] string flow_id);
+    ConfirmVerificationResult? confirm_verification([ByRef] string user_id, [ByRef] string flow_id);
     OutgoingVerificationRequest? cancel_verification(
         [ByRef] string user_id,
         [ByRef] string flow_id,

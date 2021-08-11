@@ -38,10 +38,10 @@ use matrix_sdk_crypto::{
 use crate::{
     error::{CryptoStoreError, DecryptionError, SecretImportError, SignatureError},
     responses::{response_from_string, OutgoingVerificationRequest, OwnedResponse},
-    BootstrapCrossSigningResult, CrossSigningKeyExport, CrossSigningStatus, DecryptedEvent, Device,
-    DeviceLists, KeyImportError, KeysImportResult, ProgressListener, QrCode, Request, RequestType,
-    RequestVerificationResult, ScanResult, SignatureUploadRequest, StartSasResult, UserIdentity,
-    Verification, VerificationRequest,
+    BootstrapCrossSigningResult, ConfirmVerificationResult, CrossSigningKeyExport,
+    CrossSigningStatus, DecryptedEvent, Device, DeviceLists, KeyImportError, KeysImportResult,
+    ProgressListener, QrCode, Request, RequestType, RequestVerificationResult, ScanResult,
+    SignatureUploadRequest, StartSasResult, UserIdentity, Verification, VerificationRequest,
 };
 
 /// A high level state machine that handles E2EE for Matrix.
@@ -945,18 +945,26 @@ impl OlmMachine {
         &self,
         user_id: &str,
         flow_id: &str,
-    ) -> Result<Option<OutgoingVerificationRequest>, CryptoStoreError> {
+    ) -> Result<Option<ConfirmVerificationResult>, CryptoStoreError> {
         let user_id = UserId::try_from(user_id)?;
 
         Ok(
             if let Some(verification) = self.inner.get_verification(&user_id, flow_id) {
                 match verification {
                     RustVerification::SasV1(v) => {
-                        // TODO there's a signature upload request here, we'll
-                        // want to return that one as well.
-                        self.runtime.block_on(v.confirm())?.0.map(|r| r.into())
+                        let (request, signature_request) = self.runtime.block_on(v.confirm())?;
+
+                        request.map(|r| ConfirmVerificationResult {
+                            request: r.into(),
+                            signature_request: signature_request.map(|s| s.into()),
+                        })
                     }
-                    RustVerification::QrV1(v) => v.confirm_scanning().map(|r| r.into()),
+                    RustVerification::QrV1(v) => {
+                        v.confirm_scanning().map(|r| ConfirmVerificationResult {
+                            request: r.into(),
+                            signature_request: None,
+                        })
+                    }
                 }
             } else {
                 None

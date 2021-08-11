@@ -29,7 +29,7 @@ pub use responses::{
 pub use users::UserIdentity;
 pub use verification::{
     CancelInfo, QrCode, RequestVerificationResult, Sas, ScanResult, StartSasResult, Verification,
-    VerificationRequest,
+    VerificationRequest, ConfirmVerificationResult,
 };
 
 /// Callback that will be passed over the FFI to report progress

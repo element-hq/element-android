@@ -204,12 +204,19 @@ internal class SasVerification(
 
     @Throws(CryptoStoreErrorException::class)
     private suspend fun confirm() {
-        val request = withContext(Dispatchers.IO) {
+        val result = withContext(Dispatchers.IO) {
             machine.confirmVerification(inner.otherUserId, inner.flowId)
         }
-        if (request != null) {
-            this.sender.sendVerificationRequest(request)
+
+        if (result != null) {
+            this.sender.sendVerificationRequest(result.request)
             dispatchTxUpdated()
+
+            val signatureRequest = result.signatureRequest
+
+            if (signatureRequest != null) {
+                this.sender.sendSignatureUpload(signatureRequest)
+            }
         }
     }
 

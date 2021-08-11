@@ -3,7 +3,7 @@ use matrix_sdk_crypto::{
     VerificationRequest as InnerVerificationRequest,
 };
 
-use crate::OutgoingVerificationRequest;
+use crate::{OutgoingVerificationRequest, SignatureUploadRequest};
 
 /// Enum representing the different verification flows we support.
 pub enum Verification {
@@ -163,6 +163,16 @@ pub struct RequestVerificationResult {
     /// The request that needs to be sent out to notify the other side that
     /// we're requesting verification to begin.
     pub request: OutgoingVerificationRequest,
+}
+
+/// A result type for confirming verifications.
+pub struct ConfirmVerificationResult {
+    /// The request that needs to be sent out to notify the other side that we
+    /// confirmed the verification.
+    pub request: OutgoingVerificationRequest,
+    /// A request that will upload signatures of the verified device or user, if
+    /// the verification is completed and we're able to sign devices or users
+    pub signature_request: Option<SignatureUploadRequest>,
 }
 
 /// The verificatoin request object which then can transition into some concrete
