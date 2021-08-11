@@ -219,6 +219,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             RecordingState.CANCELLED  -> {
                 hideRecordingViews(isCancelled = true)
+                vibrate(context)
             }
             RecordingState.LOCKED     -> {
                 if (isRecordingStateChanged) { // Do not update views if it was already in locked state.
@@ -427,10 +428,6 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         // Hide toasts if user cancelled recording before the timeout of the toast.
         if (recordingState == RecordingState.CANCELLED || recordingState == RecordingState.NONE) {
             hideToast()
-        }
-
-        if (isCancelled.orFalse()) {
-            vibrate(context)
         }
     }
 
