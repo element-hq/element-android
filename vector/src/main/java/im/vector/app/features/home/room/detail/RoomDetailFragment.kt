@@ -1044,6 +1044,9 @@ class RoomDetailFragment @Inject constructor(
         notificationDrawerManager.setCurrentRoom(roomDetailArgs.roomId)
         roomDetailPendingActionStore.data?.let { handlePendingAction(it) }
         roomDetailPendingActionStore.data = null
+
+        // Removed listeners should be set again
+        setupVoiceMessageView()
     }
 
     private fun handlePendingAction(roomDetailPendingAction: RoomDetailPendingAction) {
@@ -1318,7 +1321,6 @@ class RoomDetailFragment @Inject constructor(
         if (text.isNotBlank()) {
             // We collapse ASAP, if not there will be a slight annoying delay
             views.composerLayout.collapse(true)
-            views.voiceMessageRecorderView.isVisible = vectorPreferences.labsUseVoiceMessage()
             lockSendButton = true
             roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
             emojiPopup.dismiss()
