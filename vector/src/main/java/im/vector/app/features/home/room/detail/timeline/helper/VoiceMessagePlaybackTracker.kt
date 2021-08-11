@@ -68,7 +68,8 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
                 .forEach { key ->
                     val state = states[key]
                     if (state is Listener.State.Playing) {
-                        setState(key, Listener.State.Paused(state.playbackTime))
+                        // Paused(state.playbackTime) state should also be considered later.
+                        setState(key, Listener.State.Idle)
                     }
                 }
     }
