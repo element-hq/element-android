@@ -51,6 +51,7 @@ import org.unifiedpush.android.connector.MessagingReceiver
 import org.unifiedpush.android.connector.MessagingReceiverHandler
 import timber.log.Timber
 
+@JsonClass(generateAdapter = true)
 data class UnifiedPushMessage(
         val notification: Notification
         )
@@ -117,10 +118,10 @@ val upHandler = object: MessagingReceiverHandler {
 
         if (UPHelper.isEmbeddedDistributor(context)) {
             notification = moshi.adapter(Notification::class.java)
-                    .fromJson(message)!!
+                    .fromJson(message) ?: return
         } else {
             val data = moshi.adapter(UnifiedPushMessage::class.java)
-                    .fromJson(message)!!
+                    .fromJson(message) ?: return
             notification = data.notification
             notification.unread = notification.counts.unread
         }
