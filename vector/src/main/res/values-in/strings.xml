@@ -1157,7 +1157,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="title_activity_verify_device">Verifikasi sesi</string>
     <string name="notification_sync_init">Inisialisasi layanan</string>
     <string name="system_theme">Standar Sistem</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">Anda mengaktifkan enkripsi ujung-ke-ujung. (algoritma tidak dikenali %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Anda mengaktifkan enkripsi ujung-ke-ujung. (algoritma tidak dikenali %1$s).</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s mengaktifkan enkripsi ujung-ke-ujung. (algoritma tidak dikenali %2$s).</string>
     <string name="notice_end_to_end_ok_by_you">Anda mengaktifkan enkripsi ujung-ke-ujung.</string>
     <string name="notice_end_to_end_ok">%1$s mengaktifkan enkripsi ujung-ke-ujung.</string>
