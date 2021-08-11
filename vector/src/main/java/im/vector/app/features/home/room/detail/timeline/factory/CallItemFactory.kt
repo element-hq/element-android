@@ -24,7 +24,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvide
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
-import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData

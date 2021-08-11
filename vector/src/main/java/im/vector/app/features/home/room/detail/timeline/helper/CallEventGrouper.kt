@@ -44,10 +44,10 @@ class CallEventGrouper(private val myUserId: String, val callId: String) {
     }
 
     /**
-     * Returns true if there are only events from the other side - we missed the call
+     * Returns true if there are only events from one side.
      */
     fun callWasMissed(): Boolean {
-        return events.none { it.senderInfo.userId == myUserId }
+        return events.distinctBy { it.senderInfo.userId }.size == 1
     }
 
     private fun getAnswer(): TimelineEvent? {

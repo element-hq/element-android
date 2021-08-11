@@ -358,7 +358,7 @@ class NoticeEventFormatter @Inject constructor(
                 }
             EventType.CALL_REJECT     ->
                 if (event.isSentByCurrentUser()) {
-                    sp.getString(R.string.call_tile_you_declined, "")
+                    sp.getString(R.string.call_tile_you_declined_call)
                 } else {
                     sp.getString(R.string.call_tile_other_declined, senderName)
                 }
