@@ -47,10 +47,11 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         val notificationViewState = state.notificationSettingsViewState
         val roomSummary = notificationViewState.roomSummary() ?: return
         val host = this
-        val showFull = state.roomListActionsArgs.mode == RoomListActionsArgs.Mode.FULL
         val isV2 = BuildConfig.USE_NOTIFICATION_SETTINGS_V2
+        // V2 always shows full details as we no longer display the sheet from RoomProfile > Notifications
+        val showFull = state.roomListActionsArgs.mode == RoomListActionsArgs.Mode.FULL || isV2
 
-        if (showFull || isV2) {
+        if (showFull) {
             // Preview, favorite, settings
             bottomSheetRoomPreviewItem {
                 id("room_preview")
@@ -91,7 +92,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
             RoomListQuickActionsSharedAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
         }
 
-        if (showFull || isV2) {
+        if (showFull) {
             RoomListQuickActionsSharedAction.Leave(roomSummary.roomId, showIcon = !isV2).toBottomSheetItem(5)
         }
     }
