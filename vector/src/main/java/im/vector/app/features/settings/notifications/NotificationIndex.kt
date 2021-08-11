@@ -19,14 +19,10 @@ package im.vector.app.features.settings.notifications
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.toJson
 
-enum class NotificationIndex(val index: Int) {
-    OFF(0),
-    SILENT(1),
-    NOISY(2);
-
-    companion object {
-        fun fromInt(index: Int) = values().first { it.index == index }
-    }
+enum class NotificationIndex {
+    OFF,
+    SILENT,
+    NOISY;
 }
 
 /**
