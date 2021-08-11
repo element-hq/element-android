@@ -990,7 +990,7 @@
     <string name="settings_notification_privacy_normal">عادی</string>
     <string name="settings_notification_privacy_reduced">محرمانگی کاهش‌یافته</string>
     <string name="settings_notification_privacy_need_permission">کاره برای اجرا در پس‌زمینه نیاز به اجازه دارد</string>
-    <string name="settings_notification_privacy_no_background_sync">کاره در پس‌زمینه، به وصل شدن به کارساز خانگی نیاز <b>ندارد</b>. این کار نصرف باتری را کاهش می‌دهد</string>
+    <string name="settings_notification_privacy_no_background_sync">کاره در پس‌زمینه، به وصل شدن به کارساز خانگی نیاز <b>ندارد</b>. این کار مصرف باتری را کاهش می‌دهد</string>
     <string name="settings_notification_ringtone">صدای آگاهی</string>
     <string name="settings_system_preferences_summary">گزینش رنگ چراغ، لرزش، صدا و…</string>
     <string name="settings_containing_my_display_name">پیام‌های شامل نام نمایشی</string>
@@ -1476,7 +1476,7 @@
     <string name="new_session">ورود جدید. خودتان بودید؟</string>
     <string name="new_session_review">برای بازبینی و تأیید بزنید</string>
     <string name="verify_new_session_was_not_me">من نبودم</string>
-    <string name="verify_cancelled_notice">تأیید افزاره‌هایتان از تنظیمات.</string>
+    <string name="verify_cancelled_notice">تأیید لغو شد. می‌توانید تأیید را دوباره آغاز کنید.</string>
     <string name="verification_cancelled">تأیید لغو شد</string>
     <string name="recovery_passphrase">عبارت عبور بازیابی</string>
     <string name="message_key">کلید پیام</string>
@@ -1726,9 +1726,9 @@
     <string name="settings_troubleshoot_test_push_loop_success">برنامه Push دریافت کرد</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">برنامه منتظر دریافت Push است</string>
     <string name="settings_troubleshoot_test_push_loop_title">تست ‌Push</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">ثبت توکن FCM در سرور موفقیت آمیز نبود:
+    <string name="settings_troubleshoot_test_token_registration_failed">شکست در ثبت ژتون FCM در کارساز خانگی:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_token_registration_success">توکن FCM با موفقیت در سرور ثبت شد.</string>
+    <string name="settings_troubleshoot_test_token_registration_success">ژتون FCM با موفقیت در کارساز خانگی ثبت شد.</string>
     <string name="settings_troubleshoot_test_token_registration_title">ثبت توکن</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">افزودن حساب کاربری</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
@@ -2100,7 +2100,7 @@
     <string name="event_redacted">پیام پاک شد</string>
     <string name="error_user_already_logged_in">به نظر در تلاش برای وصل شدن به کارساز خانگی دیگری هستید. می‌خواهید خارج شوید؟</string>
     <string name="identity_server_not_defined_for_password_reset">برای بازنشانی گذرواژه‌ی خود نیاز به پیکربندی سرور هویت‌سنجی دارید.</string>
-    <string name="identity_server_not_defined">شما از سرور هویت‌سنجی استفاده نمی‌کنید</string>
+    <string name="identity_server_not_defined">از هیچ کارساز هویتی استفاده نمی‌کنید</string>
     <string name="sas_error_unknown">خطای نامشخص</string>
     <string name="sas_error_m_user_error">عدم تطابق کاربر</string>
     <string name="sas_error_m_key_mismatch">عدم تطابق کلید</string>
@@ -2200,7 +2200,7 @@
     <string name="keys_backup_setup_backup_started_message">کلیدهای رمزگذاری شما اکنون در پس زمینه در حال پشتیبان‌گیری بر روی سرور است. تهیه نسخه‌ی پشتیبان اولیه ممکن است چند دقیقه طول بکشد.</string>
     <string name="keys_backup_setup_step3_generating_key_status">در حال تولید کلید پشتیبان با استفاده از کلید امنیتی، این ممکن است چند ثانیه زمان ببرد.</string>
     <string name="keys_backup_setup_override_backup_prompt_description">به نظر می‌رسد شما در یک نشست دیگر کلید پشتیبان تهیه کرده‌اید. آیا می‌خواهید آن را با موردی که ایجاد می‌کنید جایگزین کنید؟</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">یک نسخه‌ی پشتیبان از قبل در سرور وجود دارد</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">از پیش، پشتیبانی روی کارساز خانگیتان وجود دارد</string>
     <string name="recovery_key_export_saved">کلید بازیابی ذخیره شد.</string>
     <string name="recovery_key_export_saved_as_warning">کلید بازیابی در \\\'%s\\\' ذخیره شده است.
 \n
@@ -2443,9 +2443,9 @@
     <string name="start_chatting">آغاز به گپ</string>
     <string name="settings_export_trail">برون‌ریزی بازرسی</string>
     <string name="create_room_disable_federation_description">اگر اتاق فقط برای تعامل با افراد داخل سرور خانه شما می‌باشد، این قابلیت را فعال کنید. این تنظیم را بعدا نمی‌توانید تغییر دهید.</string>
-    <string name="identity_server_consent_dialog_content">آیا می‌خواهید جهت کشف مخاطبینی که می شناسید، داده های مخاطب خود را (شماره تلفن و ایمیل) به سرور هویت‌سنجی(%1$s) ارسال کنید؟
+    <string name="identity_server_consent_dialog_content">با فرستادن داده‌های آشنایانتان (شماره‌های تلفن و/یا رایانامه‌ها) به کارساز هویت پیکربندی شده (%1$s) برای کشف آشنایان موجود، موافقت می‌کنید؟
 \n
-\nبرای حفظ حریم خصوصی بیشتر، داده‌ها قبل از ارسال هش می‌شوند.</string>
+\nبرای محرمانگی بیش‌تر، داده‌ها پیش از ارسال، درهم ریخته می‌شوند.</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">یک کلید امنیتی ایجاد کنید تا در مکانی امن مانند سامانه مدیریت رمز عبور یا گاوصندوق آن را ذخیره کنید.</string>
     <string name="identity_server_error_no_current_binding_error">در حال حاضر هیچ ارتباطی با این شناسه وجود ندارد.</string>
     <string name="confirm_your_identity_quad_s">هویت خود را تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
@@ -2650,16 +2650,16 @@
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">لیترال‌های آی‌پی برای تطبیق سرور هم‌اکنون ممنوع شد.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">لیترال‌های آی‌پی برای تطبیق سرور هم‌اکنون اجازه داده‌شد.</string>
     <string name="notice_room_server_acl_updated_was_allowed">تطبیق سرور %s از لیست موارد مجاز حذف گردید.</string>
-    <string name="notice_room_server_acl_updated_allowed">تطبیق سرور %s هم‌اکنون اجازه داده‌شد.</string>
+    <string name="notice_room_server_acl_updated_allowed">• اکنون‌کارسازهای مطابق با %s مجاز شده‌اند.</string>
     <string name="notice_room_server_acl_updated_was_banned">تطبیق سرور %s از لیست ممنوعیت‌ها حذف شد.</string>
-    <string name="notice_room_server_acl_updated_banned">تطبیق سرور %s هم‌اکنون ممنوع شد.</string>
+    <string name="notice_room_server_acl_updated_banned">• اکنون کارسازهای مطابق با %s تحریم شده‌اند.</string>
     <string name="notice_room_server_acl_updated_title_by_you">شما سطح کنترل دسترسی این اتاق را تغییر دادید.</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">لیترال‌های آی‌پی برای تطبیق سرور اجازه داده شده‌است.</string>
     <string name="notice_room_server_acl_set_title">%s سطح کنترل دسترسی‌ها برای این اتاق را بر روی سرور تنظیم کرد.</string>
     <string name="notice_room_server_acl_updated_title">%s سطح کنترل دسترسی برای این اتاق را تغییر داد.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">لیترال‌های آی‌پی برای تطبیق سرور ممنوع است.</string>
-    <string name="notice_room_server_acl_set_allowed">تطبیق سرور %s اجازه داده شده‌است.</string>
-    <string name="notice_room_server_acl_set_banned">تطبیق سرور %s ممنوع شده‌است.</string>
+    <string name="notice_room_server_acl_set_allowed">• کارسازهای مطابق با %s مجازند.</string>
+    <string name="notice_room_server_acl_set_banned">• کارسازهای مطابق با %s تحریم شده‌اند.</string>
     <string name="notice_room_server_acl_set_title_by_you">شما ACL های سرور را برای این اتاق تنظیم کردید.</string>
     <string name="event_status_delete_all_failed_dialog_message">مطمئنید که می‌خواهید تمام پیام‌های فرستاده نشده در این اتاق را حذف کنید؟</string>
     <string name="event_status_delete_all_failed_dialog_title">حذف پیام‌های فرستاده نشده</string>
@@ -2729,7 +2729,7 @@
     <string name="create_spaces_make_sure_access">مطمئن شوید که افراد درست به %s دسترسی دارند. می‌توانید بعدها این را تغییر دهید.</string>
     <string name="command_description_create_space">ساخت یک فضا</string>
     <string name="room_settings_room_access_restricted_description">هر کسی در فضای این اتاق، می‌تواند اتاق را یافته و به آن بپیوندد. فقط مدیران این اتاق می توانند آن را به فضایی بیفزایند.</string>
-    <string name="room_settings_room_access_restricted_title">فضا‌ها</string>
+    <string name="room_settings_room_access_restricted_title">فقط اعضای فضا</string>
     <string name="spaces_header">فضا‌ها</string>
     <string name="create_spaces_who_are_you_working_with">با چه کسانی کار می‌کنی؟</string>
     <string name="create_spaces_join_info_help">برای پیوستن به یک فضای موجود، نیاز به دعوت دارید.</string>
@@ -2840,4 +2840,40 @@
 \nمی‌توانید فضاهای موجود را به فضایی بیفزایید.</string>
     <string name="labs_space_show_orphan_in_home">فضای آزمایشی - فقط نمایش یتسم‌ها در خانه</string>
     <string name="call_transfer_consulting_with">مشاوره با %1$s</string>
+    <string name="voice_message_reply_content">پیام صوتی (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">نمی‌توان هنگام فعّال بودن پیام صوتی، پاسخ داد یا ویراست</string>
+    <string name="error_voice_message_unable_to_record">نمی‌توان پیام صوتی ضبط کرد</string>
+    <string name="error_voice_message_unable_to_play">نمی‌توان این پیام صوتی را پخش کرد</string>
+    <string name="labs_use_voice_message">به کار انداختن پیام صوتی</string>
+    <string name="voice_message_tap_to_stop_toast">برای توقّف یا شمیدن، روی ضبطتان بزنید</string>
+    <string name="voice_message_n_seconds_warning_toast">%1$dث مانده</string>
+    <string name="voice_message_release_to_send_toast">برای ضبط نگه دارید. برای فرستادن رها کنید</string>
+    <string name="a11y_delete_recorded_voice_message">حذف پیام صوتی ضبط‌شده</string>
+    <string name="a11y_recording_voice_message">ضبط کردن پیام صوتی</string>
+    <string name="a11y_pause_voice_message">مکث پیام صوتی</string>
+    <string name="a11y_play_voice_message">پخش پیام صوتی</string>
+    <string name="a11y_lock_voice_message">قفل پیام صوتی</string>
+    <string name="voice_message_slide_to_cancel">برای لغو، بکشید</string>
+    <string name="a11y_start_voice_message">آغاز پیام صوتی</string>
+    <string name="upgrade_required">نیازمند ارتقا</string>
+    <string name="sent_a_voice_message">صدا</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">دیگر فضاها یا اتاق‌هایی که ممکن است نشناسید</string>
+    <string name="space_you_know_that_contains_this_room">فضاهایی که می‌دانید شامل این اتاقند</string>
+    <string name="decide_who_can_find_and_join">تصمیم بگیرید چه کسانی می‌توانند این اتاق را یافته و به آن بپیوندند.</string>
+    <string name="tap_to_edit_spaces">برای ویرایش فضاها، ضربه بزنید</string>
+    <string name="select_spaces">گزینش فضاها</string>
+    <string name="decide_which_spaces_can_access">تصمیم بگیرید چه فضاهایی می‌توانند به این اتاق دسترسی داشته باشند.اگر فضایی گزیده سود، اعضایش قادر خواهند بود نام اتاق را یافته و به آن بپیوندند.</string>
+    <string name="spaces_which_can_access">فضاهایی که می‌توانند دسترسی داشته باشند</string>
+    <string name="allow_space_member_to_find_and_access">اجازه به اعضای فضا برای یافتن و دسترسی.</string>
+    <string name="room_create_member_of_space_name_can_join">اعضای فضای %s می‌توانند یافته، دیده و بپیوندند.</string>
+    <string name="room_settings_room_access_private_invite_only_title">خصوصی (فقط با دعوت)</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">تماس تصویری بی‌پاسخ</item>
+        <item quantity="other">%d تماس تصویری بی‌پاسخ</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">تماس صوتی بی‌پاسخ</item>
+        <item quantity="other">%d تماس صوتی بی‌پاسخ</item>
+    </plurals>
+    <string name="denied_permission_voice_message">لطفاً برای فرستادن پیام صوتی، اجازهٔ میکروفون را اعطا کنید.</string>
 </resources>
