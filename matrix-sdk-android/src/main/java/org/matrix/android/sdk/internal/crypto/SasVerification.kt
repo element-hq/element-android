@@ -29,7 +29,6 @@ import org.matrix.android.sdk.internal.crypto.verification.UpdateDispatcher
 import org.matrix.android.sdk.internal.crypto.verification.getEmojiForCode
 import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.OlmMachine
-import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Sas
 import uniffi.olm.Verification
 
@@ -44,6 +43,7 @@ internal class SasVerification(
     private val dispatcher = UpdateDispatcher(listeners)
 
     private fun dispatchTxUpdated() {
+        refreshData()
         this.dispatcher.dispatchTxUpdated(this)
     }
 
@@ -65,16 +65,17 @@ internal class SasVerification(
         get() {
             refreshData()
             val cancelInfo = this.inner.cancelInfo
+
             return when {
-                cancelInfo != null         -> {
+                cancelInfo != null    -> {
                     val cancelCode = safeValueOf(cancelInfo.cancelCode)
                     VerificationTxState.Cancelled(cancelCode, cancelInfo.cancelledByUs)
                 }
-                this.inner.isDone          -> VerificationTxState.Verified
-                this.inner.haveWeConfirmed -> VerificationTxState.ShortCodeAccepted
-                this.inner.canBePresented  -> VerificationTxState.ShortCodeReady
-                this.inner.hasBeenAccepted -> VerificationTxState.Accepted
-                else                       -> VerificationTxState.OnStarted
+                inner.isDone          -> VerificationTxState.Verified
+                inner.haveWeConfirmed -> VerificationTxState.ShortCodeAccepted
+                inner.canBePresented  -> VerificationTxState.ShortCodeReady
+                inner.hasBeenAccepted -> VerificationTxState.Accepted
+                else                  -> VerificationTxState.OnStarted
             }
         }
         @Suppress("UNUSED_PARAMETER")
@@ -197,7 +198,6 @@ internal class SasVerification(
 
         if (request != null) {
             this.sender.sendVerificationRequest(request)
-            refreshData()
             dispatchTxUpdated()
         }
     }
@@ -209,6 +209,7 @@ internal class SasVerification(
         }
         if (request != null) {
             this.sender.sendVerificationRequest(request)
+            dispatchTxUpdated()
         }
     }
 
@@ -216,21 +217,9 @@ internal class SasVerification(
         val request = this.machine.cancelVerification(this.inner.otherUserId, inner.flowId, code.value)
 
         if (request != null) {
-            sendRequest(request)
+            runBlocking { sender.sendVerificationRequest(request) }
+            dispatchTxUpdated()
         }
-    }
-
-    /** Send out a verification request in a blocking manner
-     *
-     * This is useful since the public methods to accept/confirm/cancel the verification
-     * aren't suspendable but sending a request out obviously should be. This bridges the
-     * gap between our suspendable and non-suspendable methods.
-     */
-    private fun sendRequest(request: OutgoingVerificationRequest) {
-        runBlocking { sender.sendVerificationRequest(request) }
-
-        refreshData()
-        dispatchTxUpdated()
     }
 
     /** Fetch fresh data from the Rust side for our verification flow */

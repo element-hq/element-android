@@ -42,6 +42,7 @@ internal class QrCodeVerification(
     private val dispatcher = UpdateDispatcher(listeners)
 
     private fun dispatchTxUpdated() {
+        refreshData()
         this.dispatcher.dispatchTxUpdated(this)
     }
 
@@ -101,9 +102,7 @@ internal class QrCodeVerification(
                     inner.reciprocated     -> VerificationTxState.Started
                     inner.hasBeenConfirmed -> VerificationTxState.WaitingOtherReciprocateConfirm
                     inner.otherSideScanned -> VerificationTxState.QrScannedByOther
-                    else                   -> {
-                        VerificationTxState.None
-                    }
+                    else                   -> VerificationTxState.None
                 }
             } else {
                 VerificationTxState.None
@@ -182,6 +181,7 @@ internal class QrCodeVerification(
 
         if (request != null) {
             this.sender.sendVerificationRequest(request)
+            dispatchTxUpdated()
         }
     }
 
@@ -189,21 +189,9 @@ internal class QrCodeVerification(
         val request = this.machine.cancelVerification(this.request.otherUser(), this.request.flowId(), code.value)
 
         if (request != null) {
-            sendRequest(request)
+            runBlocking { sender.sendVerificationRequest(request) }
+            dispatchTxUpdated()
         }
-    }
-
-    /** Send out a verification request in a blocking manner
-     *
-     * This is useful since the public methods to accept/confirm/cancel the verification
-     * aren't suspendable but sending a request out obviously should be. This bridges the
-     * gap between our suspendable and non-suspendable methods.
-     */
-    private fun sendRequest(request: OutgoingVerificationRequest) {
-        runBlocking { sender.sendVerificationRequest(request) }
-
-        refreshData()
-        dispatchTxUpdated()
     }
 
     /** Fetch fresh data from the Rust side for our verification flow */
