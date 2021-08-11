@@ -21,7 +21,6 @@ import androidx.annotation.StringRes
 import im.vector.app.R
 import im.vector.app.core.platform.VectorSharedAction
 
-
 sealed class RoomListQuickActionsSharedAction(
         @StringRes val titleRes: Int,
         @DrawableRes val iconResId: Int?,
@@ -61,7 +60,7 @@ sealed class RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_favorite_add,
             R.drawable.ic_star_24dp)
 
-    data class Leave(val roomId: String, val showIcon: Boolean=true) : RoomListQuickActionsSharedAction(
+    data class Leave(val roomId: String, val showIcon: Boolean = true) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_leave,
             if (showIcon) R.drawable.ic_room_actions_leave else null,
             true

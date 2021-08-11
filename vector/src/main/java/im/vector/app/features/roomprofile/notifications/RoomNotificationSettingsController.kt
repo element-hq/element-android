@@ -38,14 +38,6 @@ class RoomNotificationSettingsController @Inject constructor() : TypedEpoxyContr
         setData(null)
     }
 
-    @StringRes
-    private fun titleForNotificationState(notificationState: RoomNotificationState): Int? = when(notificationState) {
-        RoomNotificationState.ALL_MESSAGES_NOISY -> R.string.room_settings_all_messages
-        RoomNotificationState.MENTIONS_ONLY      -> R.string.room_settings_mention_and_keyword_only
-        RoomNotificationState.MUTE               -> R.string.room_settings_none
-        else -> null
-    }
-
     override fun buildModels(data: RoomNotificationSettingsViewState?) {
         val host = this
         data ?: return
@@ -72,5 +64,13 @@ class RoomNotificationSettingsController @Inject constructor() : TypedEpoxyContr
                 host.callback?.didSelectAccountSettingsLink()
             }
         }
+    }
+
+    @StringRes
+    private fun titleForNotificationState(notificationState: RoomNotificationState): Int? = when (notificationState) {
+        RoomNotificationState.ALL_MESSAGES_NOISY -> R.string.room_settings_all_messages
+        RoomNotificationState.MENTIONS_ONLY      -> R.string.room_settings_mention_and_keyword_only
+        RoomNotificationState.MUTE               -> R.string.room_settings_none
+        else -> null
     }
 }

@@ -43,20 +43,12 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
 
     var listener: Listener? = null
 
-    @StringRes
-    private fun titleForNotificationState(notificationState: RoomNotificationState): Int? = when(notificationState) {
-        RoomNotificationState.ALL_MESSAGES_NOISY -> R.string.room_settings_all_messages
-        RoomNotificationState.MENTIONS_ONLY      -> R.string.room_settings_mention_and_keyword_only
-        RoomNotificationState.MUTE               -> R.string.room_settings_none
-        else -> null
-    }
-
     override fun buildModels(state: RoomListQuickActionViewState) {
         val notificationViewState = state.notificationSettingsViewState
         val roomSummary = notificationViewState.roomSummary() ?: return
         val host = this
         val showFull = state.roomListActionsArgs.mode == RoomListActionsArgs.Mode.FULL
-        var isV2 = BuildConfig.USE_NOTIFICATION_SETTINGS_V2
+        val isV2 = BuildConfig.USE_NOTIFICATION_SETTINGS_V2
 
         if (showFull || isV2) {
             // Preview, favorite, settings
@@ -102,9 +94,15 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         if (showFull || isV2) {
             RoomListQuickActionsSharedAction.Leave(roomSummary.roomId, showIcon = !isV2).toBottomSheetItem(5)
         }
-
     }
 
+    @StringRes
+    private fun titleForNotificationState(notificationState: RoomNotificationState): Int? = when (notificationState) {
+        RoomNotificationState.ALL_MESSAGES_NOISY -> R.string.room_settings_all_messages
+        RoomNotificationState.MENTIONS_ONLY      -> R.string.room_settings_mention_and_keyword_only
+        RoomNotificationState.MUTE               -> R.string.room_settings_none
+        else -> null
+    }
     private fun RoomListQuickActionsSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
         val host = this@RoomListQuickActionsEpoxyController
         val selected = when (this) {
@@ -117,9 +115,9 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         return bottomSheetActionItem {
             id("action_$index")
             selected(selected)
-            if(iconResId != null){
+            if (iconResId != null) {
                 iconRes(iconResId)
-            } else{
+            } else {
                 showIcon(false)
             }
             textRes(titleRes)

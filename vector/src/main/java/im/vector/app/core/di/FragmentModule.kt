@@ -723,7 +723,6 @@ interface FragmentModule {
     @FragmentKey(RoomNotificationSettingsFragment::class)
     fun bindRoomNotificationSettingsFragment(fragment: RoomNotificationSettingsFragment): Fragment
 
-
     @Binds
     @IntoMap
     @FragmentKey(SearchFragment::class)

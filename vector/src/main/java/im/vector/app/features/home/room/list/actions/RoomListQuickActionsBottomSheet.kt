@@ -34,7 +34,6 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsAction
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewEvents
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewModel
-import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewState
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import javax.inject.Inject
@@ -50,11 +49,6 @@ data class RoomListActionsArgs(
         NOTIFICATIONS
     }
 }
-
-data class RoomListQuickActionViewState(
-        val roomListActionsArgs: RoomListActionsArgs,
-        val notificationSettingsViewState: RoomNotificationSettingsViewState
-)
 
 /**
  * Bottom sheet fragment that shows room information with list of contextual actions
@@ -98,7 +92,7 @@ class RoomListQuickActionsBottomSheet :
         roomListActionsEpoxyController.listener = this
 
         viewModel.observeViewEvents {
-            when(it){
+            when (it) {
                 is RoomNotificationSettingsViewEvents.Failure -> listener?.handleFailure(it.throwable)
             }
         }

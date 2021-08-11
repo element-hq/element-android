@@ -483,7 +483,6 @@ class RoomListFragment @Inject constructor(
 
         bottomSheet.show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
 
-
         return true
     }
 

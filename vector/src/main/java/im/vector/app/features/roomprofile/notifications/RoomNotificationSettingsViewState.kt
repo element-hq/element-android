@@ -30,13 +30,13 @@ data class RoomNotificationSettingsViewState(
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
         val roomEncrypted: Boolean = false,
-        val notificationState: Async<RoomNotificationState> = Uninitialized,
+        val notificationState: Async<RoomNotificationState> = Uninitialized
 )  : MvRxState {
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
     constructor(args: RoomListActionsArgs) : this(roomId = args.roomId)
 }
 
-data class AvatarData (
+data class AvatarData(
         val displayName: String,
         val avatarUrl: String
 )
@@ -61,6 +61,7 @@ val RoomNotificationSettingsViewState.notificationOptions: List<RoomNotification
     get() {
         return if (roomEncrypted) {
             listOf(RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.MUTE)
-        } else
+        } else {
             listOf(RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.MENTIONS_ONLY, RoomNotificationState.MUTE)
+        }
     }

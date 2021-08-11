@@ -28,7 +28,6 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 
-
 @EpoxyModelClass(layout = R.layout.item_radio)
 abstract class RadioButtonItem : VectorEpoxyModel<RadioButtonItem.Holder>() {
 

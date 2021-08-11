@@ -36,8 +36,9 @@ abstract class TextHeaderItem : VectorEpoxyModel<TextHeaderItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        if (textRes != null) {
-            holder.textView.setText(textRes!!)
+        val textResource = textRes
+        if (textResource != null) {
+            holder.textView.setText(textResource)
         } else {
             holder.textView.text = text
         }
