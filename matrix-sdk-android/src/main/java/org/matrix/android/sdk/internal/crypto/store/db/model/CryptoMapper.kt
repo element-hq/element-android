@@ -44,23 +44,32 @@ object CryptoMapper {
     ))
 
     internal fun mapToEntity(deviceInfo: CryptoDeviceInfo): DeviceInfoEntity {
-        return DeviceInfoEntity(
-                primaryKey = DeviceInfoEntity.createPrimaryKey(deviceInfo.userId, deviceInfo.deviceId),
-                userId = deviceInfo.userId,
-                deviceId = deviceInfo.deviceId,
-                algorithmListJson = listMigrationAdapter.toJson(deviceInfo.algorithms),
-                keysMapJson = mapMigrationAdapter.toJson(deviceInfo.keys),
-                signatureMapJson = mapMigrationAdapter.toJson(deviceInfo.signatures),
-                isBlocked = deviceInfo.isBlocked,
-                trustLevelEntity = deviceInfo.trustLevel?.let {
-                    TrustLevelEntity(
-                            crossSignedVerified = it.crossSigningVerified,
-                            locallyVerified = it.locallyVerified
-                    )
-                },
-                // We store the device name if present now
-                unsignedMapJson = deviceInfo.unsigned?.deviceDisplayName
-        )
+        return DeviceInfoEntity(primaryKey = DeviceInfoEntity.createPrimaryKey(deviceInfo.userId, deviceInfo.deviceId))
+                .also { updateDeviceInfoEntity(it, deviceInfo) }
+    }
+
+    internal fun updateDeviceInfoEntity(entity: DeviceInfoEntity, deviceInfo: CryptoDeviceInfo) {
+        entity.userId = deviceInfo.userId
+        entity.deviceId = deviceInfo.deviceId
+        entity.algorithmListJson = listMigrationAdapter.toJson(deviceInfo.algorithms)
+        entity.keysMapJson = mapMigrationAdapter.toJson(deviceInfo.keys)
+        entity.signatureMapJson = mapMigrationAdapter.toJson(deviceInfo.signatures)
+        entity.isBlocked = deviceInfo.isBlocked
+        val deviceInfoTrustLevel = deviceInfo.trustLevel
+        if (deviceInfoTrustLevel == null) {
+            entity.trustLevelEntity?.deleteFromRealm()
+            entity.trustLevelEntity = null
+        } else {
+            if (entity.trustLevelEntity == null) {
+                // Create a new TrustLevelEntity object
+                entity.trustLevelEntity = TrustLevelEntity()
+            }
+            // Update the existing TrustLevelEntity object
+            entity.trustLevelEntity?.crossSignedVerified = deviceInfoTrustLevel.crossSigningVerified
+            entity.trustLevelEntity?.locallyVerified = deviceInfoTrustLevel.locallyVerified
+        }
+        // We store the device name if present now
+        entity.unsignedMapJson = deviceInfo.unsigned?.deviceDisplayName
     }
 
     internal fun mapToModel(deviceInfoEntity: DeviceInfoEntity): CryptoDeviceInfo {
