@@ -74,19 +74,19 @@
     <string name="notice_direct_room_update_by_you">You upgraded here.</string>
     <string name="notice_room_server_acl_set_title">%s set the server ACLs for this room.</string>
     <string name="notice_room_server_acl_set_title_by_you">You set the server ACLs for this room.</string>
-    <string name="notice_room_server_acl_set_banned">• Server matching %s are banned.</string>
-    <string name="notice_room_server_acl_set_allowed">• Server matching %s are allowed.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• Server matching IP literals are allowed.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Server matching IP literals are banned.</string>
+    <string name="notice_room_server_acl_set_banned">• Servers matching %s are banned.</string>
+    <string name="notice_room_server_acl_set_allowed">• Servers matching %s are allowed.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servers matching IP literals are allowed.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servers matching IP literals are banned.</string>
 
     <string name="notice_room_server_acl_updated_title">%s changed the server ACLs for this room.</string>
     <string name="notice_room_server_acl_updated_title_by_you">You changed the server ACLs for this room.</string>
-    <string name="notice_room_server_acl_updated_banned">• Server matching %s are now banned.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Server matching %s were removed from the ban list.</string>
-    <string name="notice_room_server_acl_updated_allowed">• Server matching %s are now allowed.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• Server matching %s were removed from the allowed list.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Server matching IP literals are now allowed.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Server matching IP literals are now banned.</string>
+    <string name="notice_room_server_acl_updated_banned">• Servers matching %s are now banned.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Servers matching %s were removed from the ban list.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Servers matching %s are now allowed.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Servers matching %s were removed from the allowed list.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servers matching IP literals are now allowed.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servers matching IP literals are now banned.</string>
     <string name="notice_room_server_acl_updated_no_change">No change.</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 All servers are banned from participating! This room can no longer be used.</string>
 
@@ -389,6 +389,7 @@
     <!-- Permissions denied forever -->
     <string name="denied_permission_generic">Some permissions are missing to perform this action, please grant the permissions from the system settings.</string>
     <string name="denied_permission_camera">To perform this action, please grant the Camera permission from the system settings.</string>
+    <string name="denied_permission_voice_message">To send voice messages, please grant the Microphone permission.</string>
 
     <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
     <string name="ongoing_conference_call">Ongoing conference call.\nJoin as %1$s or %2$s</string>
@@ -727,6 +728,14 @@
     <string name="call_connected">Call connected</string>
     <string name="call_connecting">Call connecting…</string>
     <string name="call_ended">Call ended</string>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Missed audio call</item>
+        <item quantity="other">%d missed audio calls</item>
+    </plurals>
+    <plurals name="missed_video_call">
+        <item quantity="one">Missed video call</item>
+        <item quantity="other">%d missed video calls</item>
+    </plurals>
     <string name="call_ring">Calling…</string>
     <string name="incoming_call">Incoming Call</string>
     <string name="incoming_video_call">Incoming Video Call</string>
@@ -1081,6 +1090,12 @@
     <string name="settings_notification_advanced">Advanced Notification Settings</string>
     <string name="settings_notification_by_event">Notification importance by event</string>
 
+    <string name="settings_notification_default">Default Notifications</string>
+    <string name="settings_notification_mentions_and_keywords">Mentions and Keywords</string>
+    <string name="settings_notification_other">Other</string>
+
+    <string name="settings_notification_notify_me_for">Notify me for</string>
+
     <string name="settings_notification_privacy">Notification privacy</string>
     <string name="settings_notification_troubleshoot">Troubleshoot Notifications</string>
     <string name="settings_troubleshoot_diagnostic">Troubleshooting diagnostics</string>
@@ -1189,14 +1204,27 @@
     <string name="settings_silent_notifications_preferences">Configure Silent Notifications</string>
     <string name="settings_system_preferences_summary">Choose LED color, vibration, sound…</string>
 
-
+    <string name="settings_messages_in_e2e_one_to_one">Encrypted messages in one-to-one chats</string>
+    <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
+    <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
     <string name="settings_containing_my_display_name">Msgs containing my display name</string>
     <string name="settings_containing_my_user_name">Msgs containing my user name</string>
     <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
     <string name="settings_messages_in_group_chat">Msgs in group chats</string>
     <string name="settings_invited_to_room">When I’m invited to a room</string>
-    <string name="settings_call_invitations">Call invitations</string>
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
+
+    <string name="settings_messages_containing_display_name">Messages containing my display name</string>
+    <string name="settings_messages_containing_username">Messages containing my username</string>
+    <string name="settings_messages_direct_messages">Direct messages</string>
+    <string name="settings_encrypted_direct_messages">Encrypted direct messages</string>
+    <string name="settings_group_messages">Group messages</string>
+    <string name="settings_encrypted_group_messages">Encrypted group messages</string>
+    <string name="settings_messages_at_room">Messages containing @room</string>
+    <string name="settings_room_invitations">Room invitations</string>
+    <string name="settings_call_invitations">Call invitations</string>
+    <string name="settings_messages_by_bot">Messages by bot</string>
+    <string name="settings_room_upgrades">Room upgrades</string>
 
     <string name="settings_background_sync">Background synchronization</string>
     <string name="settings_background_fdroid_sync_mode">Background Sync Mode</string>
@@ -1472,11 +1500,21 @@
     <string name="room_settings_room_access_entry_knock">Anyone can knock on the room, members can then accept or reject</string>
     <string name="room_settings_room_access_entry_unknown">Unknown access setting (%s)</string>
     <string name="room_settings_room_access_private_title">Private</string>
+    <string name="room_settings_room_access_private_invite_only_title">Private (Invite Only)</string>
     <string name="room_settings_room_access_private_description">Only people invited can find and join</string>
     <string name="room_settings_room_access_public_title">Public</string>
     <string name="room_settings_room_access_public_description">Anyone can find the room and join</string>
-    <string name="room_settings_room_access_restricted_title">Spaces</string>
+    <string name="room_settings_room_access_restricted_title">Space members only</string>
     <string name="room_settings_room_access_restricted_description">Anyone in a space with this room can find and join it. Only admins of this room can add it to a space.</string>
+    <string name="room_create_member_of_space_name_can_join">Members of Space %s can find, preview and join.</string>
+    <string name="allow_space_member_to_find_and_access">Allow space members to find and access.</string>
+    <string name="spaces_which_can_access">Spaces which can access</string>
+    <string name="decide_which_spaces_can_access">Decide which spaces can access this room. If a space is selected its members will be able to find and join Room name.</string>
+    <string name="select_spaces">Select spaces</string>
+    <string name="tap_to_edit_spaces">Tap to edit spaces</string>
+    <string name="decide_who_can_find_and_join">Decide who can find and join this room.</string>
+    <string name="space_you_know_that_contains_this_room">Space you know that contain this room</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Other spaces or rooms you might not know</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Banned users</string>
@@ -2620,6 +2658,7 @@
     <string name="sent_a_video">Video.</string>
     <string name="sent_an_image">Image.</string>
     <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_a_voice_message">Voice</string>
     <string name="sent_a_file">File</string>
     <string name="send_a_sticker">Sticker</string>
     <string name="sent_a_poll">Poll</string>
@@ -2869,7 +2908,7 @@
         One of the following may be compromised:\n\n- Your password\n- Your homeserver\n- This device, or the other device\n- The internet connection either device is using\n\nWe recommend you change your password &amp; recovery key in Settings immediately.
     </string>
 
-    <string name="verify_cancelled_notice">Verify your devices from Settings.</string>
+    <string name="verify_cancelled_notice">Verification has been cancelled. You can start verification again.</string>
     <string name="verification_cancelled">Verification Cancelled</string>
 
     <string name="recovery_passphrase">Recovery Passphrase</string>
@@ -2952,10 +2991,6 @@
     <string name="error_failed_to_import_keys">Failed to import keys</string>
 
     <string name="settings_notification_configuration">Notifications configuration</string>
-    <string name="settings_messages_at_room">Messages containing @room</string>
-    <string name="settings_messages_in_e2e_one_to_one">Encrypted messages in one-to-one chats</string>
-    <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
-    <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
     <string name="settings_troubleshoot_title">Troubleshoot</string>
     <string name="settings_notification_advanced_summary">Set notification importance by event</string>
 
@@ -3431,6 +3466,7 @@
     <string name="it_may_take_some_time">Please be patient, it may take some time.</string>
 
     <string name="upgrade">Upgrade</string>
+    <string name="upgrade_required">Upgrade Required</string>
     <string name="upgrade_public_room">Upgrade public room</string>
     <string name="upgrade_private_room">Upgrade private room</string>
     <string name="upgrade_room_warning">Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.\nThis usually only affects how the room is processed on the server.</string>
@@ -3438,9 +3474,31 @@
     <string name="upgrade_room_auto_invite">Automatically invite users</string>
     <string name="upgrade_room_update_parent_space">Automatically update space parent</string>
     <string name="upgrade_room_no_power_to_manage">You need permission to upgrade a room</string>
+    <string name="allow_anyone_in_room_to_access">Allow anyone in %s to find and access. You can select other spaces too.</string>
 
     <string name="room_using_unstable_room_version">This room is running room version %s, which this homeserver has marked as unstable.</string>
     <string name="room_upgrade_to_recommended_version">Upgrade to the recommended room version</string>
 
     <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
+
+    <string name="a11y_start_voice_message">Start Voice Message</string>
+    <string name="voice_message_slide_to_cancel">Slide to cancel</string>
+    <string name="a11y_lock_voice_message">Voice Message Lock</string>
+    <string name="a11y_play_voice_message">Play Voice Message</string>
+    <string name="a11y_pause_voice_message">Pause Voice Message</string>
+    <string name="a11y_recording_voice_message">Recording voice message</string>
+    <string name="a11y_delete_recorded_voice_message">Delete recorded voice message</string>
+    <string name="voice_message_release_to_send_toast">Hold to record, release to send</string>
+    <string name="voice_message_n_seconds_warning_toast">%1$ds left</string>
+    <string name="voice_message_tap_to_stop_toast">Tap on your recording to stop or listen</string>
+    <string name="labs_use_voice_message">Enable voice message</string>
+    <string name="error_voice_message_unable_to_play">Cannot play this voice message</string>
+    <string name="error_voice_message_unable_to_record">Cannot record a voice message</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Cannot reply or edit while voice message is active</string>
+    <string name="voice_message_reply_content">Voice Message (%1$s)</string>
+
+    <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
+    <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
+
+    <string name="upgrade_room_for_restricted_note">Please note upgrading will make a new version of the room. All current messages will stay in this archived room.</string>
 </resources>

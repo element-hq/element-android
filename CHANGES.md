@@ -1,3 +1,55 @@
+Changes in Element v1.1.16 (2021-08-09)
+=======================================
+
+Features ✨
+----------
+ - Spaces - Support Restricted Room via room capabilities API ([#3509](https://github.com/vector-im/element-android/issues/3509))
+ - Spaces | Support restricted room access in room settings ([#3665](https://github.com/vector-im/element-android/issues/3665))
+
+Bugfixes 🐛
+----------
+ - Fix crash when opening Troubleshoot Notifications ([#3778](https://github.com/vector-im/element-android/issues/3778))
+ - Fix error when sending encrypted message if someone in the room logs out. ([#3792](https://github.com/vector-im/element-android/issues/3792))
+ - Voice Message - Amplitude update java.util.ConcurrentModificationException ([#3796](https://github.com/vector-im/element-android/issues/3796))
+
+
+Changes in Element v1.1.15 (2021-07-30)
+=======================================
+
+Features ✨
+----------
+ - Voice Message implementation (Currently under Labs Settings and disabled by default). ([#3598](https://github.com/vector-im/element-android/issues/3598))
+
+SDK API changes ⚠️
+------------------
+ - updatePushRuleActions signature has been updated to more explicitly enabled/disable the rule and update the actions. It's behaviour has also been changed to match the web with the enable/disable requests being sent on every invocation and actions sent when needed(not null). ([#3681](https://github.com/vector-im/element-android/issues/3681))
+
+
+Changes in Element 1.1.14 (2021-07-23)
+======================================
+
+Features ✨
+----------
+ - Add low priority section in DM tab ([#3463](https://github.com/vector-im/element-android/issues/3463))
+ - Show missed call notification. ([#3710](https://github.com/vector-im/element-android/issues/3710))
+
+Bugfixes 🐛
+----------
+ - Don't use the transaction ID of the verification for the request ([#3589](https://github.com/vector-im/element-android/issues/3589))
+ - Avoid incomplete downloads in cache ([#3656](https://github.com/vector-im/element-android/issues/3656))
+ - Fix a crash which can happen when user signs out ([#3720](https://github.com/vector-im/element-android/issues/3720))
+ - Ensure OTKs are uploaded when the session is created ([#3724](https://github.com/vector-im/element-android/issues/3724))
+
+SDK API changes ⚠️
+------------------
+ - Add initialState support to CreateRoomParams (#3713) ([#3713](https://github.com/vector-im/element-android/issues/3713))
+
+Other changes
+-------------
+ - Apply grammatical fixes to the Server ACL timeline messages. ([#3721](https://github.com/vector-im/element-android/issues/3721))
+ - Add tags in the log, especially for VoIP, but can be used for other features in the future ([#3723](https://github.com/vector-im/element-android/issues/3723))
+
+
 Changes in Element v1.1.13 (2021-07-19)
 =======================================
 
