@@ -2835,4 +2835,17 @@
     <string name="room_create_member_of_space_name_can_join">%s 空间的成员可找到、预览和加入。</string>
     <string name="room_settings_room_access_private_invite_only_title">私人（仅限邀请）</string>
     <string name="denied_permission_voice_message">要发送语音消息，请授予麦克风权限。</string>
+    <string name="settings_room_upgrades">聊天室升级</string>
+    <string name="settings_messages_by_bot">机器人消息</string>
+    <string name="settings_room_invitations">聊天室邀请</string>
+    <string name="settings_encrypted_group_messages">加密的群组消息</string>
+    <string name="settings_group_messages">群组消息</string>
+    <string name="settings_encrypted_direct_messages">加密的私信</string>
+    <string name="settings_messages_direct_messages">私信</string>
+    <string name="settings_messages_containing_username">包含我的用户名的消息</string>
+    <string name="settings_messages_containing_display_name">包含我的显示名称的消息</string>
+    <string name="settings_notification_notify_me_for">通知事项</string>
+    <string name="settings_notification_other">其他</string>
+    <string name="settings_notification_mentions_and_keywords">提及和关键词</string>
+    <string name="settings_notification_default">默认通知</string>
 </resources>
