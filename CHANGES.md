@@ -1,3 +1,17 @@
+Changes in Element v1.2.0 (2021-08-12)
+======================================
+
+Features ✨
+----------
+ - Reorganise Advanced Notifications in to Default Notifications, Keywords and Mentions, Other (This feature is hidden in the release ui until a future release date.) ([#3646](https://github.com/vector-im/element-android/issues/3646))
+ - Voice Message - Enable by default, remove from labs ([#3817](https://github.com/vector-im/element-android/issues/3817))
+
+Bugfixes 🐛
+----------
+ - Voice Message - UI Improvements ([#3798](https://github.com/vector-im/element-android/issues/3798))
+ - Stop VMs playing in the timeline if a new VM recording is started ([#3802](https://github.com/vector-im/element-android/issues/3802))
+
+
 Changes in Element v1.1.16 (2021-08-09)
 =======================================
 
