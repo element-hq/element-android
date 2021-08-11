@@ -37,14 +37,18 @@ abstract class NotificationSettingsFooterItem : VectorEpoxyModel<NotificationSet
     override fun bind(holder: Holder) {
         super.bind(holder)
         val accountSettingsString = holder.view.context.getString(R.string.room_settings_room_notifications_account_settings)
-        val manageNotificationsString = StringBuilder(holder.view.context.getString(R.string.room_settings_room_notifications_manage_notifications, accountSettingsString))
+        val manageNotificationsString = holder.view.context.getString(
+                R.string.room_settings_room_notifications_manage_notifications,
+                accountSettingsString
+        )
+        val manageNotificationsBuilder = StringBuilder(manageNotificationsString)
         if (encrypted) {
             val encryptionNotice = holder.view.context.getString(R.string.room_settings_room_notifications_encryption_notice)
-            manageNotificationsString.appendLine().append(encryptionNotice)
+            manageNotificationsBuilder.appendLine().append(encryptionNotice)
         }
 
         holder.textView.setTextWithColoredPart(
-                manageNotificationsString.toString(),
+                manageNotificationsBuilder.toString(),
                 accountSettingsString,
                 underline = true
         ) {
