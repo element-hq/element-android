@@ -31,9 +31,9 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.internal.crypto.OlmMachine
-import org.matrix.android.sdk.internal.crypto.RequestSender
+import org.matrix.android.sdk.internal.crypto.OwnUserIdentity
 import org.matrix.android.sdk.internal.crypto.SasVerification
-import org.matrix.android.sdk.internal.crypto.VerificationRequest
+import org.matrix.android.sdk.internal.crypto.UserIdentity
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
@@ -124,10 +124,7 @@ internal class UpdateDispatcher(private val listeners: ArrayList<VerificationSer
     }
 }
 
-internal class RustVerificationService(
-        private val olmMachine: OlmMachine,
-        private val requestSender: RequestSender,
-) : VerificationService {
+internal class RustVerificationService(private val olmMachine: OlmMachine) : VerificationService {
     private val dispatcher = UpdateDispatcher(this.olmMachine.verificationListeners)
 
     /** The main entry point for the verification service
@@ -280,19 +277,13 @@ internal class RustVerificationService(
             otherUserId: String,
             otherDevices: List<String>?
     ): PendingVerificationRequest {
-        val stringMethods = prepareMethods(methods)
-
-        val result = this.olmMachine.inner().requestSelfVerification(stringMethods)
-        runBlocking {
-            requestSender.sendVerificationRequest(result!!.request)
+        val verification = when (val identity = runBlocking { olmMachine.getIdentity(otherUserId) }) {
+            is OwnUserIdentity -> runBlocking { identity.requestVerification(methods) }
+            is UserIdentity -> throw IllegalArgumentException("This method doesn't support verification of other users devices")
+            null -> throw IllegalArgumentException("Cross signing has not been bootstrapped for our own user")
         }
 
-        return VerificationRequest(
-                this.olmMachine.inner(),
-                result!!.verification,
-                this.requestSender,
-                this.olmMachine.verificationListeners
-        ).toPendingVerificationRequest()
+        return verification.toPendingVerificationRequest()
     }
 
     override fun requestKeyVerificationInDMs(
@@ -302,20 +293,13 @@ internal class RustVerificationService(
             localId: String?
     ): PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $otherUserId in room $roomId")
-        val stringMethods = prepareMethods(methods)
-        val content = this.olmMachine.inner().verificationRequestContent(otherUserId, stringMethods)!!
-
-        val eventID = runBlocking {
-            requestSender.sendRoomMessage(EventType.MESSAGE, roomId, content, localId!!)
+        val verification = when (val identity = runBlocking { olmMachine.getIdentity(otherUserId) }) {
+            is UserIdentity -> runBlocking { identity.requestVerification(methods, roomId, localId!!) }
+            is OwnUserIdentity -> throw IllegalArgumentException("This method doesn't support verification of our own user")
+            null -> throw IllegalArgumentException("The user that we wish to verify doesn't support cross signing")
         }
 
-        val innerRequest = this.olmMachine.inner().requestVerification(otherUserId, roomId, eventID, stringMethods)!!
-        return VerificationRequest(
-                this.olmMachine.inner(),
-                innerRequest,
-                this.requestSender,
-                this.olmMachine.verificationListeners
-        ).toPendingVerificationRequest()
+        return verification.toPendingVerificationRequest()
     }
 
     override fun readyPendingVerification(

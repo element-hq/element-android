@@ -24,26 +24,34 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.internal.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
+import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
+import uniffi.olm.CrossSigningKeyExport
+import uniffi.olm.CrossSigningStatus
 import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.DecryptionErrorException
-import uniffi.olm.Device as InnerDevice
 import uniffi.olm.DeviceLists
 import uniffi.olm.KeyRequestPair
 import uniffi.olm.Logger
@@ -51,6 +59,7 @@ import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
+import uniffi.olm.UserIdentity as RustUserIdentity
 import uniffi.olm.setLogger
 
 class CryptoLogger : Logger {
@@ -83,27 +92,34 @@ internal class LiveDevice(
     }
 }
 
-fun setRustLogger() {
-    setLogger(CryptoLogger() as Logger)
+internal class LiveUserIdentity(
+        internal var userId: String,
+        private var observer: UserIdentityUpdateObserver,
+) : MutableLiveData<Optional<MXCrossSigningInfo>>() {
+    override fun onActive() {
+        observer.addUserIdentityUpdateListener(this)
+    }
+
+    override fun onInactive() {
+        observer.removeUserIdentityUpdateListener(this)
+    }
 }
 
-/** Convert a Rust Device into a Kotlin CryptoDeviceInfo */
-private fun toCryptoDeviceInfo(device: InnerDevice): CryptoDeviceInfo {
-    val keys = device.keys.map { (keyId, key) -> "$keyId:$device.deviceId" to key }.toMap()
+internal class LivePrivateCrossSigningKeys(
+        private var observer: PrivateCrossSigningKeysUpdateObserver,
+) : MutableLiveData<Optional<PrivateKeysInfo>>() {
 
-    return CryptoDeviceInfo(
-            device.deviceId,
-            device.userId,
-            device.algorithms,
-            keys,
-            // TODO pass the signatures here, do we need this, why should the
-            // Kotlin side care about signatures?
-            mapOf(),
-            UnsignedDeviceInfo(device.displayName),
-            DeviceTrustLevel(crossSigningVerified = device.crossSigningTrusted, locallyVerified = device.locallyTrusted),
-            device.isBlocked,
-            // TODO
-            null)
+    override fun onActive() {
+        observer.addUserIdentityUpdateListener(this)
+    }
+
+    override fun onInactive() {
+        observer.removeUserIdentityUpdateListener(this)
+    }
+}
+
+fun setRustLogger() {
+    setLogger(CryptoLogger() as Logger)
 }
 
 internal class DeviceUpdateObserver {
@@ -118,6 +134,30 @@ internal class DeviceUpdateObserver {
     }
 }
 
+internal class UserIdentityUpdateObserver {
+    internal val listeners = ConcurrentHashMap<LiveUserIdentity, String>()
+
+    fun addUserIdentityUpdateListener(userIdentity: LiveUserIdentity) {
+        listeners[userIdentity] = userIdentity.userId
+    }
+
+    fun removeUserIdentityUpdateListener(userIdentity: LiveUserIdentity) {
+        listeners.remove(userIdentity)
+    }
+}
+
+internal class PrivateCrossSigningKeysUpdateObserver {
+    internal val listeners = ConcurrentHashMap<LivePrivateCrossSigningKeys, Unit>()
+
+    fun addUserIdentityUpdateListener(liveKeys: LivePrivateCrossSigningKeys) {
+        listeners[liveKeys] = Unit
+    }
+
+    fun removeUserIdentityUpdateListener(liveKeys: LivePrivateCrossSigningKeys) {
+        listeners.remove(liveKeys)
+    }
+}
+
 internal class OlmMachine(
         user_id: String,
         device_id: String,
@@ -127,6 +167,8 @@ internal class OlmMachine(
 ) {
     private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
     private val deviceUpdateObserver = deviceObserver
+    private val userIdentityUpdateObserver = UserIdentityUpdateObserver()
+    private val privateKeysUpdateObserver = PrivateCrossSigningKeysUpdateObserver()
     internal val verificationListeners = ArrayList<VerificationService.Listener>()
 
     /** Get our own user ID. */
@@ -148,10 +190,41 @@ internal class OlmMachine(
         return this.inner
     }
 
-    fun ownDevice(): CryptoDeviceInfo {
+    /** Update all of our live device listeners. */
+    private suspend fun updateLiveDevices() {
+        for ((liveDevice, users) in deviceUpdateObserver.listeners) {
+            val devices = getCryptoDeviceInfo(users)
+            liveDevice.postValue(devices)
+        }
+    }
+
+    private suspend fun updateLiveUserIdentities() {
+        for ((liveIdentity, userId) in userIdentityUpdateObserver.listeners) {
+            val identity = getIdentity(userId)?.toMxCrossSigningInfo().toOptional()
+            liveIdentity.postValue(identity)
+        }
+    }
+
+    private suspend fun updateLivePrivateKeys() {
+        val keys = this.exportCrossSigningKeys().toOptional()
+
+        for (liveKeys in privateKeysUpdateObserver.listeners.keys()) {
+            liveKeys.postValue(keys)
+        }
+    }
+
+    /**
+     * Get our own device info as [CryptoDeviceInfo].
+     */
+    suspend fun ownDevice(): CryptoDeviceInfo {
         val deviceId = this.deviceId()
 
         val keys = this.identityKeys().map { (keyId, key) -> "$keyId:$deviceId" to key }.toMap()
+
+        val crossSigningVerified = when (val ownIdentity = this.getIdentity(this.userId())) {
+            is OwnUserIdentity -> ownIdentity.trustsOurOwnDevice()
+            else               -> false
+        }
 
         return CryptoDeviceInfo(
                 this.deviceId(),
@@ -161,7 +234,7 @@ internal class OlmMachine(
                 keys,
                 mapOf(),
                 UnsignedDeviceInfo(),
-                DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
+                DeviceTrustLevel(crossSigningVerified, locallyVerified = true),
                 false,
                 null)
     }
@@ -170,7 +243,7 @@ internal class OlmMachine(
      * Get the list of outgoing requests that need to be sent to the homeserver.
      *
      * After the request was sent out and a successful response was received the response body
-     * should be passed back to the state machine using the markRequestAsSent() method.
+     * should be passed back to the state machine using the [markRequestAsSent] method.
      *
      * @return the list of requests that needs to be sent to the homeserver
      */
@@ -197,6 +270,7 @@ internal class OlmMachine(
 
                 if (requestType == RequestType.KEYS_QUERY) {
                     updateLiveDevices()
+                    updateLiveUserIdentities()
                 }
             }
 
@@ -218,23 +292,29 @@ internal class OlmMachine(
             toDevice: ToDeviceSyncResponse?,
             deviceChanges: DeviceListResponse?,
             keyCounts: DeviceOneTimeKeysCountSyncResponse?
-    ): ToDeviceSyncResponse =
-            withContext(Dispatchers.IO) {
-                val counts: MutableMap<String, Int> = mutableMapOf()
+    ): ToDeviceSyncResponse {
+        val response = withContext(Dispatchers.IO) {
+            val counts: MutableMap<String, Int> = mutableMapOf()
 
-                if (keyCounts?.signedCurve25519 != null) {
-                    counts["signed_curve25519"] = keyCounts.signedCurve25519
-                }
-
-                val devices =
-                        DeviceLists(
-                                deviceChanges?.changed ?: listOf(), deviceChanges?.left ?: listOf())
-                val adapter =
-                        MoshiProvider.providesMoshi().adapter(ToDeviceSyncResponse::class.java)
-                val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
-
-                adapter.fromJson(inner.receiveSyncChanges(events, devices, counts))!!
+            if (keyCounts?.signedCurve25519 != null) {
+                counts["signed_curve25519"] = keyCounts.signedCurve25519
             }
+
+            val devices =
+                    DeviceLists(
+                            deviceChanges?.changed ?: listOf(), deviceChanges?.left ?: listOf())
+            val adapter =
+                    MoshiProvider.providesMoshi().adapter(ToDeviceSyncResponse::class.java)
+            val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
+
+            adapter.fromJson(inner.receiveSyncChanges(events, devices, counts))!!
+        }
+
+        // We may get cross signing keys over a to-device event, update our listeners.
+        this.updateLivePrivateKeys()
+
+        return response
+    }
 
     /**
      * Mark the given list of users to be tracked, triggering a key query request for them.
@@ -251,13 +331,13 @@ internal class OlmMachine(
      * Generate one-time key claiming requests for all the users we are missing sessions for.
      *
      * After the request was sent out and a successful response was received the response body
-     * should be passed back to the state machine using the markRequestAsSent() method.
+     * should be passed back to the state machine using the [markRequestAsSent] method.
      *
-     * This method should be called every time before a call to shareRoomKey() is made.
+     * This method should be called every time before a call to [shareRoomKey] is made.
      *
      * @param users The list of users for which we would like to establish 1:1 Olm sessions for.
      *
-     * @return A keys claim request that needs to be sent out to the server.
+     * @return A [Request.KeysClaim] request that needs to be sent out to the server.
      */
     @Throws(CryptoStoreErrorException::class)
     suspend fun getMissingSessions(users: List<String>): Request? =
@@ -279,7 +359,7 @@ internal class OlmMachine(
      * @param users The list of users which are considered to be members of the room and should
      * receive the room key.
      *
-     * @return The list of requests that need to be sent out.
+     * @return The list of [Request.ToDevice] that need to be sent out.
      */
     @Throws(CryptoStoreErrorException::class)
     suspend fun shareRoomKey(roomId: String, users: List<String>): List<Request> =
@@ -288,21 +368,18 @@ internal class OlmMachine(
     /**
      * Encrypt the given event with the given type and content for the given room.
      *
-     * **Note**: A room key needs to be shared with the group of users that are members in the given
-     * room. If this is not done this method will panic.
+     * **Note**: A room key needs to be shared with the group of users that are members
+     * in the given room. If this is not done this method will panic.
      *
      * The usual flow to encrypt an event using this state machine is as follows:
      *
      * 1. Get the one-time key claim request to establish 1:1 Olm sessions for
-     * ```
-     *    the room members of the room we wish to participate in. This is done
-     *    using the [`get_missing_sessions()`](#method.get_missing_sessions)
-     *    method. This method call should be locked per call.
-     * ```
-     * 2. Share a room key with all the room members using the shareRoomKey().
-     * ```
-     *    This method call should be locked per room.
-     * ```
+     * the room members of the room we wish to participate in. This is done
+     * using the [getMissingSessions] method. This method call should be locked per call.
+     *
+     * 2. Share a room key with all the room members using the [shareRoomKey].
+     * This method call should be locked per room.
+     *
      * 3. Encrypt the event using this method.
      *
      * 4. Send the encrypted event to the server.
@@ -316,7 +393,7 @@ internal class OlmMachine(
      *
      * @param content the JSON content of the event
      *
-     * @return The encrypted version of the content
+     * @return The encrypted version of the [Content]
      */
     @Throws(CryptoStoreErrorException::class)
     suspend fun encrypt(roomId: String, eventType: String, content: Content): Content =
@@ -334,7 +411,7 @@ internal class OlmMachine(
      *
      * @param event The serialized encrypted version of the event.
      *
-     * @return the decrypted version of the event.
+     * @return the decrypted version of the event as a [MXEventDecryptionResult].
      */
     @Throws(MXCryptoError::class)
     suspend fun decryptRoomEvent(event: Event): MXEventDecryptionResult =
@@ -421,8 +498,43 @@ internal class OlmMachine(
                 ImportRoomKeysResult(result.total, result.imported)
             }
 
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun getIdentity(userId: String): UserIdentities? {
+        val identity = withContext(Dispatchers.IO) {
+            inner.getIdentity(userId)
+        }
+        val adapter = MoshiProvider.providesMoshi().adapter(RestKeyInfo::class.java)
+
+        return when (identity) {
+            is RustUserIdentity.Other -> {
+                val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel()
+                val selfSigningKey = adapter.fromJson(identity.selfSigningKey)!!.toCryptoModel()
+
+                UserIdentity(identity.userId, masterKey, selfSigningKey, this, this.requestSender)
+            }
+            is RustUserIdentity.Own   -> {
+                val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel()
+                val selfSigningKey = adapter.fromJson(identity.selfSigningKey)!!.toCryptoModel()
+                val userSigningKey = adapter.fromJson(identity.userSigningKey)!!.toCryptoModel()
+
+                OwnUserIdentity(
+                        identity.userId,
+                        masterKey,
+                        selfSigningKey,
+                        userSigningKey,
+                        identity.trustsOurOwnDevice,
+                        this,
+                        this.requestSender
+                )
+            }
+            null                      -> null
+        }
+    }
+
     /**
      * Get a `Device` from the store.
+     *
+     * This method returns our own device as well.
      *
      * @param userId The id of the device owner.
      *
@@ -437,19 +549,23 @@ internal class OlmMachine(
             // using our ownDevice method
             ownDevice()
         } else {
-            val device = getRawDevice(userId, deviceId) ?: return null
-            toCryptoDeviceInfo(device)
+            getDevice(userId, deviceId)?.toCryptoDeviceInfo()
         }
     }
 
-    private suspend fun getRawDevice(userId: String, deviceId: String): InnerDevice? =
-        withContext(Dispatchers.IO) {
-            inner.getDevice(userId, deviceId)
-        }
-
+    @Throws(CryptoStoreErrorException::class)
     suspend fun getDevice(userId: String, deviceId: String): Device? {
-        val device = this.getRawDevice(userId, deviceId) ?: return null
+        val device = withContext(Dispatchers.IO) {
+            inner.getDevice(userId, deviceId)
+        } ?: return null
+
         return Device(this.inner, device, this.requestSender, this.verificationListeners)
+    }
+
+    suspend fun getUserDevices(userId: String): List<Device> {
+        return withContext(Dispatchers.IO) {
+            inner.getUserDevices(userId).map { Device(inner, it, requestSender, verificationListeners) }
+        }
     }
 
     /**
@@ -460,34 +576,16 @@ internal class OlmMachine(
      * @return The list of Devices or an empty list if there aren't any.
      */
     @Throws(CryptoStoreErrorException::class)
-    suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo> {
-        val devices = withContext(Dispatchers.IO) {
-            inner.getUserDevices(userId).map { toCryptoDeviceInfo(it) }.toMutableList()
-        }
+    suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
+        val devices = this.getUserDevices(userId).map { it.toCryptoDeviceInfo() }.toMutableList()
 
         // EA doesn't differentiate much between our own and other devices of
         // while the rust-sdk does, append our own device here.
-        val ownDevice = this.ownDevice()
-        
-        if (userId == ownDevice.userId) {
-            devices.add(ownDevice)
+        if (userId == this.userId()) {
+            devices.add(this.ownDevice())
         }
 
         return devices
-    }
-
-    suspend fun getUserDevicesMap(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
-        val userMap = MXUsersDevicesMap<CryptoDeviceInfo>()
-
-        for (user in userIds) {
-            val devices = getUserDevices(user)
-
-            for (device in devices) {
-                userMap.setObject(user, device.deviceId, device)
-            }
-        }
-
-        return userMap
     }
 
     /**
@@ -497,34 +595,45 @@ internal class OlmMachine(
      *
      * @return The list of Devices or an empty list if there aren't any.
      */
-    suspend fun getUserDevices(userIds: List<String>): List<CryptoDeviceInfo> {
+    private suspend fun getCryptoDeviceInfo(userIds: List<String>): List<CryptoDeviceInfo> {
         val plainDevices: ArrayList<CryptoDeviceInfo> = arrayListOf()
 
         for (user in userIds) {
-            val devices = getUserDevices(user)
+            val devices = this.getCryptoDeviceInfo(user)
             plainDevices.addAll(devices)
         }
 
         return plainDevices
     }
 
-    /** Mark the device for the given user with the given device ID as trusted
-     *
-     * This will mark the device locally as trusted, it won't upload any type of cross
-     * signing signature
-     * */
-    @Throws(CryptoStoreErrorException::class)
-    internal suspend fun markDeviceAsTrusted(userId: String, deviceId: String) =
-        withContext(Dispatchers.IO) {
-            inner.markDeviceAsTrusted(userId, deviceId)
+    suspend fun getUserDevicesMap(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
+        val userMap = MXUsersDevicesMap<CryptoDeviceInfo>()
+
+        for (user in userIds) {
+            val devices = this.getCryptoDeviceInfo(user)
+
+            for (device in devices) {
+                userMap.setObject(user, device.deviceId, device)
+            }
         }
 
-    /** Update all of our live device listeners. */
-    private suspend fun updateLiveDevices() {
-        for ((liveDevice, users) in deviceUpdateObserver.listeners) {
-            val devices = getUserDevices(users)
-            liveDevice.postValue(devices)
-        }
+        return userMap
+    }
+
+    suspend fun getLiveUserIdentity(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
+        val identity = this.getIdentity(userId)?.toMxCrossSigningInfo().toOptional()
+        val liveIdentity = LiveUserIdentity(userId, this.userIdentityUpdateObserver)
+        liveIdentity.value = identity
+
+        return liveIdentity
+    }
+
+    suspend fun getLivePrivateCrossSigningKeys(): LiveData<Optional<PrivateKeysInfo>> {
+        val keys = this.exportCrossSigningKeys().toOptional()
+        val liveKeys = LivePrivateCrossSigningKeys(this.privateKeysUpdateObserver)
+        liveKeys.value = keys
+
+        return liveKeys
     }
 
     /**
@@ -538,7 +647,7 @@ internal class OlmMachine(
      * @return The list of Devices or an empty list if there aren't any.
      */
     suspend fun getLiveDevices(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
-        val plainDevices = getUserDevices(userIds)
+        val plainDevices = getCryptoDeviceInfo(userIds)
         val devices = LiveDevice(userIds, deviceUpdateObserver)
         devices.value = plainDevices
 
@@ -556,7 +665,7 @@ internal class OlmMachine(
      * @param userId The ID of the user for which we would like to fetch the
      * verification requests
      *
-     * @return The list of VerificationRequests that we share with the given user
+     * @return The list of [VerificationRequest] that we share with the given user
      */
     fun getVerificationRequests(userId: String): List<VerificationRequest> {
         return this.inner.getVerificationRequests(userId).map {
@@ -585,9 +694,10 @@ internal class OlmMachine(
         }
     }
 
-    /** Get an active verification for the given user and given flow ID
+    /** Get an active verification for the given user and given flow ID.
      *
-     * This can return a SAS verification or a QR code verification
+     * @return Either a [SasVerification] verification or a [QrCodeVerification]
+     * verification.
      */
     fun getVerification(userId: String, flowId: String): VerificationTransaction? {
         return when (val verification = this.inner.getVerification(userId, flowId)) {
@@ -612,5 +722,42 @@ internal class OlmMachine(
                 }
             }
         }
+    }
+
+    suspend fun bootstrapCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?) {
+        val requests =  withContext(Dispatchers.IO) {
+            inner.bootstrapCrossSigning()
+        }
+
+        this.requestSender.uploadCrossSigningKeys(requests.uploadSigningKeysRequest, uiaInterceptor)
+        this.requestSender.sendSignatureUpload(requests.signatureRequest)
+    }
+
+    /**
+     * Get the status of our private cross signing keys, i.e. which private keys do we have stored locally.
+     */
+    fun crossSigningStatus(): CrossSigningStatus {
+        return this.inner.crossSigningStatus()
+    }
+
+    suspend fun exportCrossSigningKeys(): PrivateKeysInfo? {
+        val export = withContext(Dispatchers.IO) {
+            inner.exportCrossSigningKeys()
+
+        } ?: return null
+
+        return PrivateKeysInfo(export.masterKey, export.selfSigningKey, export.userSigningKey)
+    }
+
+    suspend fun importCrossSigningKeys(export: PrivateKeysInfo): UserTrustResult {
+        val rustExport = CrossSigningKeyExport(export.master, export.selfSigned, export.user)
+
+        withContext(Dispatchers.IO) {
+            inner.importCrossSigningKeys(rustExport)
+        }
+
+        this.updateLivePrivateKeys()
+        // TODO map the errors from importCrossSigningKeys to the UserTrustResult
+        return UserTrustResult.Success
     }
 }

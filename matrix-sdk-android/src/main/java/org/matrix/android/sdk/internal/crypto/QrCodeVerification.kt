@@ -28,7 +28,6 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.verification.UpdateDispatcher
 import uniffi.olm.CryptoStoreErrorException
 import uniffi.olm.OlmMachine
-import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.QrCode
 import uniffi.olm.Verification
 

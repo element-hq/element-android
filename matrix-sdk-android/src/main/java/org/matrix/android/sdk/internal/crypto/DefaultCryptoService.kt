@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -51,7 +52,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
+import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
@@ -66,6 +67,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
+import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
@@ -78,6 +80,8 @@ import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
+import org.matrix.android.sdk.internal.crypto.tasks.UploadSignaturesTask
+import org.matrix.android.sdk.internal.crypto.tasks.UploadSigningKeysTask
 import org.matrix.android.sdk.internal.crypto.verification.RustVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -98,6 +102,8 @@ import timber.log.Timber
 import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Request
 import uniffi.olm.RequestType
+import uniffi.olm.SignatureUploadRequest
+import uniffi.olm.UploadSigningKeysRequest
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
@@ -109,7 +115,9 @@ internal class RequestSender @Inject constructor(
         private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
         private val uploadKeysTask: UploadKeysTask,
         private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
+        private val signaturesUploadTask: UploadSignaturesTask,
         private val sendVerificationMessageTask: Lazy<DefaultSendVerificationMessageTask>,
+        private val uploadSigningKeysTask: UploadSigningKeysTask,
 ) {
 
     suspend fun claimKeys(request: Request.KeysClaim): String {
@@ -161,6 +169,55 @@ internal class RequestSender @Inject constructor(
         return this.sendVerificationMessageTask.get().execute(params)
     }
 
+    suspend fun sendSignatureUpload(request: Request.SignatureUpload) {
+        sendSignatureUpload(request.body)
+    }
+
+    suspend fun sendSignatureUpload(request: SignatureUploadRequest) {
+        sendSignatureUpload(request.body)
+    }
+
+    private suspend fun sendSignatureUpload(body: String) {
+        val adapter = MoshiProvider.providesMoshi().adapter<Map<String, Map<String, Any>>>(Map::class.java)
+        val signatures = adapter.fromJson(body)!!
+        val params = UploadSignaturesTask.Params(signatures)
+        this.signaturesUploadTask.execute(params)
+    }
+
+    suspend fun uploadCrossSigningKeys(
+            request: UploadSigningKeysRequest,
+            interactiveAuthInterceptor: UserInteractiveAuthInterceptor?
+    ) {
+        val adapter = MoshiProvider.providesMoshi().adapter<RestKeyInfo>(RestKeyInfo::class.java)
+        val masterKey = adapter.fromJson(request.masterKey)!!.toCryptoModel()
+        val selfSigningKey = adapter.fromJson(request.selfSigningKey)!!.toCryptoModel()
+        val userSigningKey = adapter.fromJson(request.userSigningKey)!!.toCryptoModel()
+
+        val uploadSigningKeysParams = UploadSigningKeysTask.Params(
+                masterKey,
+                userSigningKey,
+                selfSigningKey,
+                null
+        )
+
+        try {
+            uploadSigningKeysTask.execute(uploadSigningKeysParams)
+        } catch (failure: Throwable) {
+            if (interactiveAuthInterceptor == null
+                    || !handleUIA(
+                            failure = failure,
+                            interceptor = interactiveAuthInterceptor,
+                            retryBlock = { authUpdate ->
+                                uploadSigningKeysTask.execute(uploadSigningKeysParams.copy(userAuthParam = authUpdate))
+                            }
+                    )
+            ) {
+                Timber.d("## UIA: propagate failure")
+                throw failure
+            }
+        }
+    }
+
     suspend fun sendToDevice(request: Request.ToDevice) {
         sendToDevice(request.eventType, request.body, request.requestId)
     }
@@ -208,7 +265,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val mxCryptoConfig: MXCryptoConfig,
         // The key backup service.
         private val keysBackupService: DefaultKeysBackupService,
-        private val crossSigningService: DefaultCrossSigningService,
         // Actions
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
         // Tasks
@@ -231,6 +287,9 @@ internal class DefaultCryptoService @Inject constructor(
 
     // The verification service.
     private var verificationService: RustVerificationService? = null
+
+    // The cross signing service.
+    private var crossSigningService: RustCrossSigningService? = null
 
     private val deviceObserver: DeviceUpdateObserver = DeviceUpdateObserver()
 
@@ -294,7 +353,9 @@ internal class DefaultCryptoService @Inject constructor(
         return if (longFormat) "Rust SDK 0.3" else "0.3"
     }
 
-    override fun getMyDevice(): CryptoDeviceInfo = this.olmMachine!!.ownDevice()
+    override fun getMyDevice(): CryptoDeviceInfo {
+        return runBlocking { olmMachine!!.ownDevice() }
+    }
 
     override fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
@@ -394,7 +455,8 @@ internal class DefaultCryptoService @Inject constructor(
             setRustLogger()
             val machine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver, sender)
             olmMachine = machine
-            verificationService = RustVerificationService(machine, this.sender)
+            verificationService = RustVerificationService(machine)
+            crossSigningService = RustCrossSigningService(machine)
             Timber.v(
                     "## CRYPTO | Successfully started up an Olm machine for " +
                             "${userId}, ${deviceId}, identity keys: ${this.olmMachine?.identityKeys()}")
@@ -453,13 +515,28 @@ internal class DefaultCryptoService @Inject constructor(
         return verificationService!!
     }
 
-    override fun crossSigningService() = crossSigningService
+    override fun crossSigningService(): CrossSigningService {
+        if (crossSigningService == null) {
+            internalStart()
+        }
+
+        return crossSigningService!!
+    }
 
     /**
      * A sync response has been received
      */
     suspend fun onSyncCompleted() {
         if (isStarted()) {
+            sendOutgoingRequests()
+            // This isn't a copy paste error. Sending the outgoing requests may
+            // claim one-time keys and establish 1-to-1 Olm sessions with devices, while some
+            // outgoing requests are waiting for an Olm session to be established (e.g. forwarding
+            // room keys or sharing secrets).
+
+            // The second call sends out those requests that are waiting for the
+            // keys claim request to be sent out.
+            // This could be omitted but then devices might be waiting for the next
             sendOutgoingRequests()
         }
 
@@ -491,7 +568,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
         return runBlocking {
-            this@DefaultCryptoService.olmMachine?.getUserDevices(userId) ?: listOf()
+            this@DefaultCryptoService.olmMachine?.getCryptoDeviceInfo(userId) ?: listOf()
         }
     }
 
@@ -572,7 +649,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @return the stored device keys for a user.
      */
     override fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo> {
-        return cryptoStore.getUserDevices(userId)?.values?.toMutableList() ?: ArrayList()
+        return this.getCryptoDeviceInfo(userId).toMutableList()
     }
 
     private fun isEncryptionEnabledForInvitedUser(): Boolean {
@@ -845,34 +922,44 @@ internal class DefaultCryptoService @Inject constructor(
         olmMachine!!.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, response)
     }
 
+    private suspend fun signatureUpload(request: Request.SignatureUpload) {
+        this.sender.sendSignatureUpload(request)
+        olmMachine!!.markRequestAsSent(request.requestId, RequestType.SIGNATURE_UPLOAD, "{}")
+    }
+
     private suspend fun sendOutgoingRequests() {
         outgoingRequestsLock.withLock {
             coroutineScope {
                 olmMachine!!.outgoingRequests().map {
                     when (it) {
-                        is Request.KeysUpload  -> {
+                        is Request.KeysUpload      -> {
                             async {
                                 uploadKeys(it)
                             }
                         }
-                        is Request.KeysQuery   -> {
+                        is Request.KeysQuery       -> {
                             async {
                                 queryKeys(it)
                             }
                         }
-                        is Request.ToDevice    -> {
+                        is Request.ToDevice        -> {
                             async {
                                 sendToDevice(it)
                             }
                         }
-                        is Request.KeysClaim   -> {
+                        is Request.KeysClaim       -> {
                             async {
                                 claimKeys(it)
                             }
                         }
-                        is Request.RoomMessage -> {
+                        is Request.RoomMessage     -> {
                             async {
                                 sender.sendRoomMessage(it)
+                            }
+                        }
+                        is Request.SignatureUpload -> {
+                            async {
+                                signatureUpload(it)
                             }
                         }
                     }
