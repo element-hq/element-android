@@ -2935,4 +2935,17 @@
     <string name="room_create_member_of_space_name_can_join">Členové prostoru %s mohou vyhledávat, prohlížet a připojovat se.</string>
     <string name="room_settings_room_access_private_invite_only_title">Soukromé (pouze pro pozvané)</string>
     <string name="denied_permission_voice_message">Chcete-li odesílat hlasové zprávy, povolte oprávnění mikrofonu.</string>
+    <string name="settings_room_upgrades">Aktualizace místnosti</string>
+    <string name="settings_messages_by_bot">Zprávy od bota</string>
+    <string name="settings_room_invitations">Pozvánky do místnosti</string>
+    <string name="settings_encrypted_group_messages">Šifrované skupinové zprávy</string>
+    <string name="settings_group_messages">Skupinové zprávy</string>
+    <string name="settings_encrypted_direct_messages">Šifrované přímé zprávy</string>
+    <string name="settings_messages_direct_messages">Přímé zprávy</string>
+    <string name="settings_messages_containing_username">Zprávy obsahující mé uživatelské jméno</string>
+    <string name="settings_messages_containing_display_name">Zprávy obsahující mé zobrazované jméno</string>
+    <string name="settings_notification_notify_me_for">Upozorněte mě na</string>
+    <string name="settings_notification_other">Další</string>
+    <string name="settings_notification_mentions_and_keywords">Zmínky a klíčová slova</string>
+    <string name="settings_notification_default">Výchozí oznámení</string>
 </resources>
