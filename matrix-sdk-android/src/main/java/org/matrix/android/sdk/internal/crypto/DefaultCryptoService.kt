@@ -88,6 +88,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.foldToCallback
+import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
@@ -227,9 +228,11 @@ internal class RequestSender @Inject constructor(
     }
 
     suspend fun sendToDevice(eventType: String, body: String, transactionId: String) {
-        // TODO this produces floats for the Olm type fields, which are integers originally.
         val adapter = MoshiProvider
                 .providesMoshi()
+                .newBuilder()
+                .add(CheckNumberType.JSON_ADAPTER_FACTORY)
+                .build()
                 .adapter<Map<String, HashMap<String, Any>>>(Map::class.java)
         val jsonBody = adapter.fromJson(body)!!
 
