@@ -17,6 +17,7 @@ package im.vector.app.features.home.room.list.actions
 
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
@@ -55,7 +56,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         val roomSummary = notificationViewState.roomSummary() ?: return
         val host = this
         val showFull = state.roomListActionsArgs.mode == RoomListActionsArgs.Mode.FULL
-        var isV2 = true
+        var isV2 = BuildConfig.USE_NOTIFICATION_SETTINGS_V2
 
         if (showFull || isV2) {
             // Preview, favorite, settings
