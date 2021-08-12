@@ -48,13 +48,13 @@ class WidgetItemFactory @Inject constructor(
         val previousWidgetContent: WidgetContent? = event.root.resolvedPrevContent().toModel()
 
         return when (WidgetType.fromString(widgetContent.type ?: previousWidgetContent?.type ?: "")) {
-            WidgetType.Jitsi -> createJitsiItem(params, widgetContent, previousWidgetContent)
+            WidgetType.Jitsi -> createJitsiItem(params, widgetContent)
             // There is lot of other widget types we could improve here
             else             -> noticeItemFactory.create(params)
         }
     }
 
-    private fun createJitsiItem(params: TimelineItemFactoryParams, widgetContent: WidgetContent, prevWidgetContent: WidgetContent?): VectorEpoxyModel<*>? {
+    private fun createJitsiItem(params: TimelineItemFactoryParams, widgetContent: WidgetContent): VectorEpoxyModel<*>? {
         val informationData = informationDataFactory.create(params)
         val event = params.event
         val roomId = event.roomId
@@ -63,7 +63,13 @@ class WidgetItemFactory @Inject constructor(
         val jitsiWidgetEventsGroup = params.eventsGroup?.let { JitsiWidgetEventsGroup(it) } ?: return null
         val isCallStillActive = jitsiWidgetEventsGroup.isStillActive()
         val showHiddenEvents = userPreferencesProvider.shouldShowHiddenEvents()
-        if (isActiveTile && !isCallStillActive && !showHiddenEvents) return null
+        if (isActiveTile && !isCallStillActive) {
+            return if (showHiddenEvents) {
+                noticeItemFactory.create(params)
+            } else {
+                null
+            }
+        }
         val callStatus = if (isActiveTile && widgetContent.id == params.partialState.jitsiState.widgetId) {
             if (params.partialState.jitsiState.hasJoined) {
                 CallTileTimelineItem.CallStatus.IN_CALL
@@ -73,9 +79,8 @@ class WidgetItemFactory @Inject constructor(
         } else {
             CallTileTimelineItem.CallStatus.ENDED
         }
-        val fakeCallId = widgetContent.id ?: prevWidgetContent?.id ?: return null
         val attributes = CallTileTimelineItem.Attributes(
-                callId = fakeCallId,
+                callId = jitsiWidgetEventsGroup.callId,
                 callKind = CallTileTimelineItem.CallKind.CONFERENCE,
                 callStatus = callStatus,
                 informationData = informationData,

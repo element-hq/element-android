@@ -57,14 +57,25 @@ class TimelineEventsGroups {
         val content = root.getClearContent()
         return if (EventType.isCallEvent(type)) {
             (content?.get("call_id") as? String)
-        } else {
+        } else if (type == EventType.STATE_ROOM_WIDGET || type == EventType.STATE_ROOM_WIDGET_LEGACY) {
             val widgetContent: WidgetContent = root.getClearContent().toModel() ?: return null
-            val isJitsi = WidgetType.fromString(widgetContent.type ?: "") == WidgetType.Jitsi
-            if (isJitsi) {
-                widgetContent.id
+            if (widgetContent.isActive()) {
+                widgetContent.getJitsiIdOrNull()
             } else {
-                null
+                val prevWidgetContent: WidgetContent = root.resolvedPrevContent().toModel() ?: return null
+                prevWidgetContent.getJitsiIdOrNull()
             }
+        } else {
+            null
+        }
+    }
+
+    private fun WidgetContent.getJitsiIdOrNull(): String? {
+        val isJitsi = WidgetType.fromString(type ?: "") == WidgetType.Jitsi
+        return if (isJitsi) {
+            id
+        } else {
+            null
         }
     }
 
@@ -74,6 +85,8 @@ class TimelineEventsGroups {
 }
 
 class JitsiWidgetEventsGroup(private val group: TimelineEventsGroup) {
+
+    val callId: String = group.groupId
 
     fun isStillActive(): Boolean {
         return group.events.none {

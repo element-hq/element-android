@@ -40,6 +40,7 @@ class CallItemFactory @Inject constructor(
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
+        private val noticeItemFactory: NoticeItemFactory,
         private val roomSummariesHolder: RoomSummariesHolder) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
@@ -50,9 +51,9 @@ class CallItemFactory @Inject constructor(
         val roomId = event.roomId
         val informationData = messageInformationDataFactory.create(params)
         val callKind = if (callEventGrouper.isVideo()) CallTileTimelineItem.CallKind.VIDEO else CallTileTimelineItem.CallKind.AUDIO
-        return when (event.root.getClearType()) {
+        val callItem = when (event.root.getClearType()) {
             EventType.CALL_ANSWER -> {
-                if (callEventGrouper.isInCall() || showHiddenEvents) {
+                if (callEventGrouper.isInCall()) {
                     createCallTileTimelineItem(
                             roomId = roomId,
                             callId = callEventGrouper.callId,
@@ -69,7 +70,7 @@ class CallItemFactory @Inject constructor(
                 }
             }
             EventType.CALL_INVITE -> {
-                if (callEventGrouper.isRinging() || showHiddenEvents) {
+                if (callEventGrouper.isRinging()) {
                     createCallTileTimelineItem(
                             roomId = roomId,
                             callId = callEventGrouper.callId,
@@ -112,6 +113,12 @@ class CallItemFactory @Inject constructor(
                 )
             }
             else                  -> null
+        }
+        return if (callItem == null && showHiddenEvents) {
+            // Fallback to notice item for showing hidden events
+            noticeItemFactory.create(params)
+        } else {
+            callItem
         }
     }
 
