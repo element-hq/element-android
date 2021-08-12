@@ -989,7 +989,7 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.exitSpecialMode()
         views.composerLayout.collapse()
 
-        views.voiceMessageRecorderView.isVisible = text.isBlank()
+        views.voiceMessageRecorderView.isVisible = text.isBlank() && vectorPreferences.useVoiceMessage()
 
         updateComposerText(text)
         views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
@@ -1330,7 +1330,7 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onTextBlankStateChanged(isBlank: Boolean) {
-                if (!views.composerLayout.views.sendButton.isVisible) {
+                if (!views.composerLayout.views.sendButton.isVisible && vectorPreferences.useVoiceMessage()) {
                     // Animate alpha to prevent overlapping with the animation of the send button
                     views.voiceMessageRecorderView.alpha = 0f
                     views.voiceMessageRecorderView.isVisible = true
@@ -1403,10 +1403,10 @@ class RoomDetailFragment @Inject constructor(
                 if (state.canSendMessage) {
                     if (!views.voiceMessageRecorderView.isActive()) {
                         views.composerLayout.isVisible = true
-                        views.voiceMessageRecorderView.isVisible = views.composerLayout.text?.isBlank().orFalse()
+                        views.voiceMessageRecorderView.isVisible = vectorPreferences.useVoiceMessage() && views.composerLayout.text?.isBlank().orFalse()
                         views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                         views.notificationAreaView.render(NotificationAreaView.State.Hidden)
-                        views.composerLayout.alwaysShowSendButton = false
+                        views.composerLayout.alwaysShowSendButton = !vectorPreferences.useVoiceMessage()
                     }
                 } else {
                     views.composerLayout.isVisible = false
