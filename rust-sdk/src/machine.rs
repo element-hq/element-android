@@ -287,7 +287,7 @@ impl OlmMachine {
     ) -> Result<(), CryptoStoreError> {
         let id = Uuid::parse_str(request_id).expect("Can't parse request id");
 
-        let response = response_from_string(&response_body);
+        let response = response_from_string(response_body);
 
         let response: OwnedResponse = match request_type {
             RequestType::KeysUpload => {
@@ -703,7 +703,7 @@ impl OlmMachine {
         let user_id = UserId::try_from(user_id).ok()?;
         let methods = methods
             .into_iter()
-            .map(|m| VerificationMethod::from(m))
+            .map(VerificationMethod::from)
             .collect();
 
         if let Some(verification) = self.inner.get_verification_request(&user_id, flow_id) {
@@ -733,7 +733,7 @@ impl OlmMachine {
 
         let methods = methods
             .into_iter()
-            .map(|m| VerificationMethod::from(m))
+            .map(VerificationMethod::from)
             .collect();
 
         Ok(if let Some(identity) = identity.and_then(|i| i.other()) {
@@ -781,7 +781,7 @@ impl OlmMachine {
 
         let methods = methods
             .into_iter()
-            .map(|m| VerificationMethod::from(m))
+            .map(VerificationMethod::from)
             .collect();
 
         Ok(if let Some(identity) = identity.and_then(|i| i.other()) {
@@ -818,7 +818,7 @@ impl OlmMachine {
 
         let methods = methods
             .into_iter()
-            .map(|m| VerificationMethod::from(m))
+            .map(VerificationMethod::from)
             .collect();
 
         Ok(
@@ -856,7 +856,7 @@ impl OlmMachine {
 
         let methods = methods
             .into_iter()
-            .map(|m| VerificationMethod::from(m))
+            .map(VerificationMethod::from)
             .collect();
 
         Ok(if let Some(identity) = identity.and_then(|i| i.own()) {
@@ -1025,7 +1025,7 @@ impl OlmMachine {
             .get_verification(&user_id, flow_id)
             .and_then(|v| {
                 v.qr_v1()
-                    .and_then(|qr| qr.to_bytes().map(|b| encode(b)).ok())
+                    .and_then(|qr| qr.to_bytes().map(encode).ok())
             })
     }
 

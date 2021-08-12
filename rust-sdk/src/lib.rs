@@ -93,12 +93,12 @@ impl From<matrix_sdk_crypto::CrossSigningKeyExport> for CrossSigningKeyExport {
     }
 }
 
-impl Into<matrix_sdk_crypto::CrossSigningKeyExport> for CrossSigningKeyExport {
-    fn into(self) -> matrix_sdk_crypto::CrossSigningKeyExport {
+impl From<CrossSigningKeyExport> for matrix_sdk_crypto::CrossSigningKeyExport {
+    fn from(e: CrossSigningKeyExport) -> Self {
         matrix_sdk_crypto::CrossSigningKeyExport {
-            master_key: self.master_key,
-            self_signing_key: self.self_signing_key,
-            user_signing_key: self.user_signing_key,
+            master_key: e.master_key,
+            self_signing_key: e.self_signing_key,
+            user_signing_key: e.user_signing_key,
         }
     }
 }

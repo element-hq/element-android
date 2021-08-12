@@ -263,15 +263,15 @@ pub struct DeviceLists {
     pub left: Vec<String>,
 }
 
-impl Into<RumaDeviceLists> for DeviceLists {
-    fn into(self) -> RumaDeviceLists {
+impl From<DeviceLists> for RumaDeviceLists {
+    fn from(d: DeviceLists) -> Self {
         assign!(RumaDeviceLists::new(), {
-            changed: self
+            changed: d
                 .changed
                 .into_iter()
                 .filter_map(|u| UserId::try_from(u).ok())
                 .collect(),
-            left: self
+            left: d
                 .left
                 .into_iter()
                 .filter_map(|u| UserId::try_from(u).ok())
@@ -323,9 +323,9 @@ impl From<SignatureUploadResponse> for OwnedResponse {
     }
 }
 
-impl<'a> Into<IncomingResponse<'a>> for &'a OwnedResponse {
-    fn into(self) -> IncomingResponse<'a> {
-        match self {
+impl<'a> From<&'a OwnedResponse> for IncomingResponse<'a> {
+    fn from(r: &'a OwnedResponse) -> Self {
+        match r {
             OwnedResponse::KeysClaim(r) => IncomingResponse::KeysClaim(r),
             OwnedResponse::KeysQuery(r) => IncomingResponse::KeysQuery(r),
             OwnedResponse::KeysUpload(r) => IncomingResponse::KeysUpload(r),
