@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
 import im.vector.app.R
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewRemoveJitsiWidgetBinding
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -43,6 +44,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
         object Progress : State()
     }
 
+    private val dimensionConverter = DimensionConverter(context.resources)
     private val views: ViewRemoveJitsiWidgetBinding
     private var state: State = State.Unmount
     var onCompleteSliding: (() -> Unit)? = null
@@ -74,7 +76,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
                 MotionEvent.ACTION_MOVE   -> {
                     if (currentState is State.Sliding) {
                         val translationX = (currentState.initialX + event.rawX).coerceAtLeast(0f)
-                        val hasReachedActivationThreshold = views.removeJitsiSlidingContainer.width + translationX >= views.removeJitsiHangupContainer.x
+                        val hasReachedActivationThreshold = translationX >= views.root.width / 4
                         updateState(State.Sliding(currentState.initialX, translationX, hasReachedActivationThreshold))
                     }
                     true

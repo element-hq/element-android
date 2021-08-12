@@ -3303,7 +3303,7 @@
     <string name="call_transfer_transfer_to_title">Transfer to %1$s</string>
     <string name="call_transfer_unknown_person">Unknown person</string>
 
-    <string name="call_slide_to_end_conference">Slide to end the call for everyone</string>
+    <string name="call_slide_to_end_conference">Slide to end the call</string>
 
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
