@@ -85,10 +85,12 @@ class TextComposerView @JvmOverloads constructor(
                 val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank || alwaysShowSendButton
                 TransitionManager.endTransitions(this@TextComposerView)
                 if (views.sendButton.isVisible != shouldShowSendButton) {
+                    /* This causes some weird layout bug when using gboard clipboard to paste longer texts
                     TransitionManager.beginDelayedTransition(
                             this@TextComposerView,
                             AutoTransition().also { it.duration = 150 }
                     )
+                     */
                     views.sendButton.isInvisible = !shouldShowSendButton
                 }
                 updateSendButtonColor(isBlank)
