@@ -88,4 +88,6 @@
     <string name="sc_accent_blue">Синий</string>
     <string name="settings_open_chats_at_first_unread">Открыть сначала непрочитанное</string>
     <string name="settings_open_chats_at_first_unread_summary">Открывайте чаты на первом непрочитанном сообщении, а не внизу.</string>
+    <string name="settings_show_voice_message_recorder_ui">Голосовые сообщения</string>
+    <string name="settings_show_voice_message_recorder_ui_summary">Показать кнопку для записи голосовых сообщений</string>
 </resources>
