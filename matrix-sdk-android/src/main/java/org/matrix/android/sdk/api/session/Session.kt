@@ -57,6 +57,10 @@ import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationManager
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationResult
+import org.matrix.android.sdk.internal.crypto.dehydration.RehydrationResult
+import org.matrix.android.sdk.internal.crypto.model.MXExportedOlmDevice
 
 /**
  * This interface defines interactions with a session.
@@ -287,4 +291,10 @@ interface Session :
      * Maintenance API, allows to print outs info on DB size to logcat
      */
     fun logDbUsageInfo()
+
+    fun importOlmDevice(deviceId: String, exportedOlmDevice: MXExportedOlmDevice)
+
+    suspend fun dehydrateDevice(): DehydrationResult
+
+    suspend fun rehydrateDevice(): RehydrationResult
 }

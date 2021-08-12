@@ -21,6 +21,10 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
@@ -60,7 +64,9 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         if (context.applicationContext !is Configuration.Provider) {
             WorkManager.initialize(context, Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build())
         }
-        ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+        GlobalScope.launch(Dispatchers.Main) {
+            ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+        }
     }
 
     fun getUserAgent() = userAgentHolder.userAgent

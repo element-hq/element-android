@@ -918,7 +918,7 @@ internal class DefaultCryptoService @Inject constructor(
                 signatures = objectSigner.signObject(canonicalJson)
         )
 
-        val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null)
+        val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null, null)
         uploadKeysTask.execute(uploadDeviceKeysParams)
 
         cryptoStore.setDeviceKeysUploaded(true)

@@ -25,6 +25,9 @@ import org.matrix.android.sdk.internal.crypto.CryptoModule
 import org.matrix.android.sdk.internal.crypto.SendGossipRequestWorker
 import org.matrix.android.sdk.internal.crypto.SendGossipWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationManager
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationModule
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationResult
 import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessageWorker
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.federation.FederationModule
@@ -95,7 +98,8 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             CallModule::class,
             SearchModule::class,
             ThirdPartyModule::class,
-            SpaceModule::class
+            SpaceModule::class,
+            DehydrationModule::class
         ]
 )
 @SessionScope

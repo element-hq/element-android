@@ -43,6 +43,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationManager
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
@@ -353,6 +354,10 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindEventSenderProcessorAsSessionLifecycleObserver(processor: EventSenderProcessorCoroutine): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindDehydrationManager(processor: DehydrationManager): DehydrationManager
 
     @Binds
     abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService

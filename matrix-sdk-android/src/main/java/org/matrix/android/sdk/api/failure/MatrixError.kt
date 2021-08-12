@@ -189,5 +189,8 @@ data class MatrixError(
 
         // Possible value for "limit_type"
         const val LIMIT_TYPE_MAU = "monthly_active_user"
+
+        /** the state of the SDK was not expected */
+        const val BAD_STATE = "M_BAD_STATE"
     }
 }

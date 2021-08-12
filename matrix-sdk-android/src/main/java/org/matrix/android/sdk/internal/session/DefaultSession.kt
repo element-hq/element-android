@@ -64,6 +64,10 @@ import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.auth.SSO_UIA_FALLBACK_PATH
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationManager
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationResult
+import org.matrix.android.sdk.internal.crypto.dehydration.RehydrationResult
+import org.matrix.android.sdk.internal.crypto.model.MXExportedOlmDevice
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
@@ -128,7 +132,8 @@ internal class DefaultSession @Inject constructor(
         private val spaceService: Lazy<SpaceService>,
         private val openIdService: Lazy<OpenIdService>,
         @UnauthenticatedWithCertificate
-        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
+        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
+        private val dehydrationManager: Lazy<DehydrationManager>
 ) : Session,
         GlobalErrorHandler.Listener,
         RoomService by roomService.get(),
@@ -158,6 +163,8 @@ internal class DefaultSession @Inject constructor(
 
     override val isOpenable: Boolean
         get() = sessionParamsStore.get(sessionId)?.isTokenValid ?: false
+
+    private var exportedOlmDeviceToImport: MXExportedOlmDevice? = null
 
     @MainThread
     override fun open() {
@@ -325,5 +332,21 @@ internal class DefaultSession @Inject constructor(
 
     override fun logDbUsageInfo() {
         RealmDebugTools(realmConfiguration).logInfo("Session")
+    }
+
+    override fun importOlmDevice(deviceId: String, exportedOlmDevice: MXExportedOlmDevice) {
+        exportedOlmDeviceToImport = exportedOlmDevice
+    }
+
+    override suspend fun dehydrateDevice(): DehydrationResult {
+        return dehydrationManager.get().dehydrateDevice("Backup device", getDehydrationKey())
+    }
+
+    override suspend fun rehydrateDevice(): RehydrationResult {
+        return dehydrationManager.get().rehydrateDevice(getDehydrationKey())
+    }
+
+    private fun getDehydrationKey(): ByteArray {
+        return "6fXK17pQFUrFqOnxt3wrqz8RHkQUT9vQ".toByteArray(Charsets.UTF_8)
     }
 }

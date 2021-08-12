@@ -64,6 +64,16 @@ internal interface CryptoApi {
     suspend fun uploadKeys(@Body body: KeysUploadBody): KeysUploadResponse
 
     /**
+     * Upload device and/or one-time keys.
+     * Doc: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-upload
+     *
+     * @param deviceId ID of the owner of the keys
+     * @param body the keys to be sent.
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/upload/{deviceId}")
+    suspend fun uploadKeys(@Path("deviceId") deviceId: String, @Body body: KeysUploadBody): KeysUploadResponse
+
+    /**
      * Download device keys.
      * Doc: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-query
      *
