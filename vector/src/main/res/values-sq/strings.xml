@@ -2870,4 +2870,17 @@
     <string name="room_create_member_of_space_name_can_join">Anëtarë të Hapësirës %s mund ta gjejnë, parashohin dhe hyjnë në të.</string>
     <string name="room_settings_room_access_private_invite_only_title">Private (Vetëm Me Ftesa)</string>
     <string name="denied_permission_voice_message">Për të dërguar mesazhe zanorë, ju lutemi, akordoni leje Mikrofoni.</string>
+    <string name="settings_room_upgrades">Përmirësime dhome</string>
+    <string name="settings_messages_by_bot">Mesazhe nga roboti</string>
+    <string name="settings_room_invitations">Ftesa për në dhoma</string>
+    <string name="settings_encrypted_group_messages">Mesazhe të fshehtëzuar grupi</string>
+    <string name="settings_group_messages">Mesazhe grupi</string>
+    <string name="settings_encrypted_direct_messages">Mesazhe të drejtpërdrejtë të fshehtëzuar</string>
+    <string name="settings_messages_direct_messages">Mesazhe të drejtpërdrejtë</string>
+    <string name="settings_messages_containing_username">Mesazhe që përmbajnë emrin tim të përdoruesit</string>
+    <string name="settings_messages_containing_display_name">Mesazhe që përmbajnë emrin tim të ekranit</string>
+    <string name="settings_notification_notify_me_for">Njoftomë për</string>
+    <string name="settings_notification_other">Tjetër</string>
+    <string name="settings_notification_mentions_and_keywords">Përmendje dhe Fjalëkyçe</string>
+    <string name="settings_notification_default">Njoftime Parazgjedhje</string>
 </resources>
