@@ -1,0 +1,2 @@
+Principaux changements pour cette version : ajout des messages vocaux dans les expérimentations.
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.1.15
