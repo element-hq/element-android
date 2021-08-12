@@ -89,4 +89,6 @@
     <string name="sc_accent_lava">Lávová</string>
     <string name="sc_accent_blue">Modrá</string>
     <string name="sc_accent_denim">Džínová</string>
+    <string name="settings_show_voice_message_recorder_ui">Hlasové zprávy</string>
+    <string name="settings_show_voice_message_recorder_ui_summary">Zobrazit tlačítko pro nahrávání hlasových zpráv</string>
 </resources>
