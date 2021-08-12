@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.model.MXKey
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
@@ -77,6 +78,10 @@ internal class OneTimeKeysUploader @Inject constructor(
         // discard the oldest private keys first. This will eventually clean
         // out stale private keys that won't receive a message.
         val keyLimit = floor(maxOneTimeKeys / 2.0).toInt()
+        if (oneTimeKeyCount == null) {
+            // Ask the server how many otk he has
+            oneTimeKeyCount = fetchOtkCount()
+        }
         val oneTimeKeyCountFromSync = oneTimeKeyCount
         if (oneTimeKeyCountFromSync != null) {
             // We need to keep a pool of one time public keys on the server so that
@@ -90,16 +95,21 @@ internal class OneTimeKeysUploader @Inject constructor(
             // private keys clogging up our local storage.
             // So we need some kind of engineering compromise to balance all of
             // these factors.
-            try {
+            tryOrNull("Unable to upload OTK") {
                 val uploadedKeys = uploadOTK(oneTimeKeyCountFromSync, keyLimit)
                 Timber.v("## uploadKeys() : success, $uploadedKeys key(s) sent")
-            } finally {
-                oneTimeKeyCheckInProgress = false
             }
         } else {
             Timber.w("maybeUploadOneTimeKeys: waiting to know the number of OTK from the sync")
-            oneTimeKeyCheckInProgress = false
             lastOneTimeKeyCheck = 0
+        }
+        oneTimeKeyCheckInProgress = false
+    }
+
+    private suspend fun fetchOtkCount(): Int? {
+        return tryOrNull("Unable to get OTK count") {
+            val result = uploadKeysTask.execute(UploadKeysTask.Params(null, null))
+            result.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)
         }
     }
 

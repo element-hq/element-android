@@ -23,14 +23,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import im.vector.lib.ui.styles.R
-import im.vector.lib.ui.styles.databinding.ActivityTestMaterialThemeBinding
+import im.vector.lib.ui.styles.databinding.ActivityDebugMaterialThemeBinding
+import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
 
 // Rendering is not the same with VectorBaseActivity
 abstract class DebugMaterialThemeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val views = ActivityTestMaterialThemeBinding.inflate(layoutInflater)
+        val views = ActivityDebugMaterialThemeBinding.inflate(layoutInflater)
         setContentView(views.root)
 
         setSupportActionBar(views.debugToolbar)
@@ -50,19 +51,36 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
         }
 
         views.debugShowDialog.setOnClickListener {
-            MaterialAlertDialogBuilder(this)
-                    .setTitle("Dialog title")
-                    .setMessage("Dialog content")
-                    .setIcon(R.drawable.ic_debug_icon)
-                    .setPositiveButton("Positive", null)
-                    .setNegativeButton("Negative", null)
-                    .setNeutralButton("Neutral", null)
-                    .show()
+            showTestDialog(0)
+        }
+
+        views.debugShowDialogDestructive.setOnClickListener {
+            showTestDialog(R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
+        }
+
+        views.debugShowDialogNegativeDestructive.setOnClickListener {
+            showTestDialog(R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
+        }
+
+        views.debugShowProgressDialog.setOnClickListener {
+            MaterialProgressDialog(this)
+                    .show(message = "Progress Dialog\nLine 2", cancellable = true)
         }
 
         views.debugShowBottomSheet.setOnClickListener {
             DebugBottomSheet().show(supportFragmentManager, "TAG")
         }
+    }
+
+    private fun showTestDialog(theme: Int) {
+        MaterialAlertDialogBuilder(this, theme)
+                .setTitle("Dialog title")
+                .setMessage("Dialog content\nLine 2")
+                .setIcon(R.drawable.ic_debug_icon)
+                .setPositiveButton("Positive", null)
+                .setNegativeButton("Negative", null)
+                .setNeutralButton("Neutral", null)
+                .show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

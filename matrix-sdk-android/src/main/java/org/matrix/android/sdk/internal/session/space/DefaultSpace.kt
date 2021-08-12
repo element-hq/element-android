@@ -86,6 +86,12 @@ internal class DefaultSpace(
         )
     }
 
+    override fun getChildInfo(roomId: String): SpaceChildContent? {
+        return room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
+                .firstOrNull()
+                ?.content.toModel<SpaceChildContent>()
+    }
+
     override suspend fun setChildrenOrder(roomId: String, order: String?) {
         val existing = room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
                 .firstOrNull()

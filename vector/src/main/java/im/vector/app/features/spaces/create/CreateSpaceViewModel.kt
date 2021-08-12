@@ -35,13 +35,27 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.AliasAvailabilityResult
+import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 
 class CreateSpaceViewModel @AssistedInject constructor(
         @Assisted initialState: CreateSpaceState,
+        private val session: Session,
         private val stringProvider: StringProvider,
         private val createSpaceViewModelTask: CreateSpaceViewModelTask,
         private val errorFormatter: ErrorFormatter
 ) : VectorViewModel<CreateSpaceState, CreateSpaceAction, CreateSpaceEvents>(initialState) {
+
+    init {
+        setState {
+            copy(
+                    homeServerName = session.myUserId.getDomain()
+            )
+        }
+    }
 
     @AssistedFactory
     interface Factory {
@@ -81,16 +95,39 @@ class CreateSpaceViewModel @AssistedInject constructor(
             }
             is CreateSpaceAction.NameChanged            -> {
                 setState {
-                    copy(
-                            nameInlineError = null,
-                            name = action.name
-                    )
+                    if (aliasManuallyModified) {
+                        copy(
+                                nameInlineError = null,
+                                name = action.name,
+                                aliasVerificationTask = Uninitialized
+                        )
+                    } else {
+                        val tentativeAlias =
+                                MatrixPatterns.candidateAliasFromRoomName(action.name)
+                        copy(
+                                nameInlineError = null,
+                                name = action.name,
+                                aliasLocalPart = tentativeAlias,
+                                aliasVerificationTask = Uninitialized
+                        )
+                    }
                 }
             }
             is CreateSpaceAction.TopicChanged           -> {
                 setState {
                     copy(
                             topic = action.topic
+                    )
+                }
+            }
+            is CreateSpaceAction.SpaceAliasChanged      -> {
+                // This called only when the alias is change manually
+                // not when programmatically changed via a change on name
+                setState {
+                    copy(
+                            aliasManuallyModified = true,
+                            aliasLocalPart = action.aliasLocalPart,
+                            aliasVerificationTask = Uninitialized
                     )
                 }
             }
@@ -204,12 +241,38 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToChoosePrivateType)
             } else {
+                // it'a public space, let's check alias
+                val aliasLocalPart = state.aliasLocalPart
+                _viewEvents.post(CreateSpaceEvents.ShowModalLoading(null))
                 setState {
-                    copy(
-                            step = CreateSpaceState.Step.AddRooms
-                    )
+                    copy(aliasVerificationTask = Loading())
                 }
-                _viewEvents.post(CreateSpaceEvents.NavigateToAddRooms)
+                viewModelScope.launch {
+                    try {
+                        when (val result = session.checkAliasAvailability(aliasLocalPart)) {
+                            AliasAvailabilityResult.Available       -> {
+                                setState {
+                                    copy(
+                                            step = CreateSpaceState.Step.AddRooms
+                                    )
+                                }
+                                _viewEvents.post(CreateSpaceEvents.HideModalLoading)
+                                _viewEvents.post(CreateSpaceEvents.NavigateToAddRooms)
+                            }
+                            is AliasAvailabilityResult.NotAvailable -> {
+                                setState {
+                                    copy(aliasVerificationTask = Fail(result.roomAliasError))
+                                }
+                                _viewEvents.post(CreateSpaceEvents.HideModalLoading)
+                            }
+                        }
+                    } catch (failure: Throwable) {
+                        setState {
+                            copy(aliasVerificationTask = Fail(failure))
+                        }
+                        _viewEvents.post(CreateSpaceEvents.HideModalLoading)
+                    }
+                }
             }
         }
     }
@@ -221,6 +284,9 @@ class CreateSpaceViewModel @AssistedInject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                val alias = if (state.spaceType == SpaceType.Public) {
+                    state.aliasLocalPart
+                } else null
                 val result = createSpaceViewModelTask.execute(
                         CreateSpaceTaskParams(
                                 spaceName = spaceName,
@@ -230,7 +296,8 @@ class CreateSpaceViewModel @AssistedInject constructor(
                                 defaultRooms = state.defaultRooms
                                         ?.entries
                                         ?.sortedBy { it.key }
-                                        ?.mapNotNull { it.value } ?: emptyList()
+                                        ?.mapNotNull { it.value } ?: emptyList(),
+                                spaceAlias = alias
                         )
                 )
                 when (result) {
@@ -260,10 +327,22 @@ class CreateSpaceViewModel @AssistedInject constructor(
                         )
                     }
                     is CreateSpaceTaskResult.FailedToCreateSpace -> {
-                        setState {
-                            copy(creationResult = Fail(result.failure))
+                        if (result.failure is CreateRoomFailure.AliasError) {
+                            setState {
+                                copy(
+                                        step = CreateSpaceState.Step.SetDetails,
+                                        aliasVerificationTask = Fail(result.failure.aliasError),
+                                        creationResult = Uninitialized
+                                )
+                            }
+                            _viewEvents.post(CreateSpaceEvents.HideModalLoading)
+                            _viewEvents.post(CreateSpaceEvents.NavigateToDetails)
+                        } else {
+                            setState {
+                                copy(creationResult = Fail(result.failure))
+                            }
+                            _viewEvents.post(CreateSpaceEvents.ShowModalError(errorFormatter.toHumanReadable(result.failure)))
                         }
-                        _viewEvents.post(CreateSpaceEvents.ShowModalError(errorFormatter.toHumanReadable(result.failure)))
                     }
                 }
             } catch (failure: Throwable) {

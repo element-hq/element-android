@@ -206,7 +206,7 @@ class AttachmentTypeSelectorView(context: Context,
     /**
      * The all possible types to pick with their required permissions.
      */
-    enum class Type(val permissionsBit: Int) {
+    enum class Type(val permissions: List<String>) {
         CAMERA(PERMISSIONS_FOR_TAKING_PHOTO),
         GALLERY(PERMISSIONS_EMPTY),
         FILE(PERMISSIONS_EMPTY),

@@ -28,7 +28,7 @@ import org.matrix.android.sdk.internal.crypto.store.SavedKeyBackupKeyInfo
 
 interface KeysBackupService {
     /**
-     * Retrieve the current version of the backup from the home server
+     * Retrieve the current version of the backup from the homeserver
      *
      * It can be different than keysBackupVersion.
      * @param callback onSuccess(null) will be called if there is no backup on the server

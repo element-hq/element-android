@@ -17,11 +17,13 @@
 package im.vector.app.features.home.room.list
 
 import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
@@ -37,7 +39,8 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                                                  private val dateFormatter: VectorDateFormatter,
                                                  private val stringProvider: StringProvider,
                                                  private val typingHelper: TypingHelper,
-                                                 private val avatarRenderer: AvatarRenderer) {
+                                                 private val avatarRenderer: AvatarRenderer,
+                                                 private val errorFormatter: ErrorFormatter) {
 
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
@@ -55,12 +58,21 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     fun createSuggestion(spaceChildInfo: SpaceChildInfo,
                          suggestedRoomJoiningStates: Map<String, Async<Unit>>,
                          listener: RoomListListener?): VectorEpoxyModel<*> {
+        val error = (suggestedRoomJoiningStates[spaceChildInfo.childRoomId] as? Fail)?.error
         return SpaceChildInfoItem_()
                 .id("sug_${spaceChildInfo.childRoomId}")
                 .matrixItem(spaceChildInfo.toMatrixItem())
                 .avatarRenderer(avatarRenderer)
                 .topic(spaceChildInfo.topic)
-                .buttonLabel(stringProvider.getString(R.string.join))
+                .errorLabel(
+                        error?.let {
+                            stringProvider.getString(R.string.error_failed_to_join_room, errorFormatter.toHumanReadable(it))
+                        }
+                )
+                .buttonLabel(
+                        if (error != null) stringProvider.getString(R.string.global_retry)
+                        else stringProvider.getString(R.string.join)
+                )
                 .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
                 .memberCount(spaceChildInfo.activeMemberCount ?: 0)
                 .buttonClickListener { listener?.onJoinSuggestedRoom(spaceChildInfo) }

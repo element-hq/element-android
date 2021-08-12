@@ -112,7 +112,7 @@ class LoginTermsFragment @Inject constructor(
     }
 
     override fun updateWithState(state: LoginViewState) {
-        policyController.homeServer = state.homeServerUrl.toReducedUrl()
+        policyController.homeServer = state.homeServerUrlFromUser.toReducedUrl()
         renderState()
     }
 

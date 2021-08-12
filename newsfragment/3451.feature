@@ -1,1 +1,0 @@
-Adds support for receiving MSC3086 Asserted Identity events.

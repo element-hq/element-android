@@ -234,10 +234,10 @@
     <string name="notice_room_server_acl_updated_banned">• Servery shodující se s %s jsou nyní zakázány.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Změnili jste ACL serveru pro tuto místnost.</string>
     <string name="notice_room_server_acl_updated_title">%s změnil(a) ACL serveru pro tuto místnost.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• Server shodující se doslovně s IP je povolen.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Server shodující se doslovně s IP je zakázán.</string>
-    <string name="notice_room_server_acl_set_allowed">• Server shodující se s %s je povolen.</string>
-    <string name="notice_room_server_acl_set_banned">• Server shodující se s %s je zakázán.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servery shodující se doslovně s IP jsou povoleny.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servery shodující se doslovně s IP jsou zakázány.</string>
+    <string name="notice_room_server_acl_set_allowed">• Servery shodující se s %s jsou povoleny.</string>
+    <string name="notice_room_server_acl_set_banned">• Servery shodující se s %s jsou zakázány.</string>
     <string name="notice_room_server_acl_set_title_by_you">Nastavili jste ACL serveru pro tuto místnost.</string>
     <string name="notice_room_server_acl_set_title">%s nastavili ACL serveru pro tuto místnost.</string>
     <string name="notice_room_canonical_alias_no_change_by_you">Změnili jste adresy pro tuto místnost.</string>
@@ -385,7 +385,7 @@
     <string name="login">Přihlásit se</string>
     <string name="logout">Odhlásit se</string>
     <string name="hs_url">Adresa domovského serveru</string>
-    <string name="identity_url">Adresa URL serveru identit</string>
+    <string name="identity_url">URL serveru identit</string>
     <string name="search">Hledat</string>
     <string name="start_new_chat">Začít novou konverzaci</string>
     <string name="start_voice_call">Zahájit hlasový hovor</string>
@@ -549,7 +549,7 @@
     <string name="list_members">Zobrazit členy</string>
     <string name="open_chat_header">Otevřít záhlaví</string>
     <string name="room_sync_in_progress">Synchronizuji…</string>
-    <string name="room_jump_to_first_unread">Přejít na první nepřečtenou zprávu.</string>
+    <string name="room_jump_to_first_unread">Přejít na nepřečtené</string>
     <string name="room_preview_try_join_an_unknown_room_default">místnost</string>
     <string name="room_creation_title">Nová konverzace</string>
     <string name="room_creation_add_member">Přidat člena</string>
@@ -639,7 +639,7 @@
     <string name="room_resend_unsent_messages">Znovu odeslat neodeslané zprávy</string>
     <string name="room_delete_unsent_messages">Smazat neodeslané zprávy</string>
     <string name="room_message_file_not_found">Soubor nenalezen</string>
-    <string name="room_do_not_have_permission_to_post">Nemáte právo odesílat v této místnosti</string>
+    <string name="room_do_not_have_permission_to_post">Nemáte právo odesílat v této místnosti.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d nová zpráva</item>
         <item quantity="few">%d nové zprávy</item>
@@ -870,7 +870,7 @@
     <string name="settings_notification_privacy_normal">Normální</string>
     <string name="settings_notification_privacy_reduced">Snížené soukromí</string>
     <string name="settings_notification_privacy_need_permission">Aplikaci potřebuje svolení k chodu na pozadí</string>
-    <string name="settings_notification_privacy_no_background_sync">Aplikace na pozadí opravdu <b>nepotřebuje</b> spojení k domovskému serveru, to by mělo snížit spotřebu</string>
+    <string name="settings_notification_privacy_no_background_sync">Aplikace na pozadí opravdu <b>nepotřebuje</b> spojení k domovskému serveru, to by mělo snížit spotřebu energie</string>
     <string name="settings_notification_privacy_fcm">• Oznámení se posílají pomocí Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Oznámení pouze obsahují metadata</string>
     <string name="settings_notification_privacy_secure_message_content">• Obsah oznámení je <b>bezpečně uložen přímo na domovském serveru Matrixu</b></string>
@@ -1356,7 +1356,7 @@
     <string name="deactivate_account_submit">Deaktivovat účet</string>
     <string name="error_empty_field_enter_user_name">Zadejte, prosím, uživatelské jméno.</string>
     <string name="error_empty_field_your_password">Prosím, zadejte své heslo.</string>
-    <string name="room_tombstone_versioned_description">Tato místnost byla nahrazena a není již aktivní</string>
+    <string name="room_tombstone_versioned_description">Tato místnost byla nahrazena a není již aktivní.</string>
     <string name="room_tombstone_continuation_link">Konverzace pokračuje tady</string>
     <string name="room_tombstone_continuation_description">Tato místnost je pokračováním jiné konverzace</string>
     <string name="room_tombstone_predecessor_link">Po kliknutí zde uvidíte starší zprávy</string>
@@ -1523,7 +1523,7 @@
     <string name="sas_error_m_key_mismatch">Neshoda klíčů</string>
     <string name="sas_error_m_user_error">Neshoda uživatelů</string>
     <string name="sas_error_unknown">Neznámá chyba</string>
-    <string name="identity_server_not_defined">Nepoužíváte žádný server pro identity</string>
+    <string name="identity_server_not_defined">Nepoužíváte žádný server identit</string>
     <string name="identity_server_not_defined_for_password_reset">Není konfigurován žádný server pro identity, musíte přenastavit heslo.</string>
     <string name="error_user_already_logged_in">Vypadá to, že se chcete připojit k jinému domovskému serveru. Chcete se odhlásit\?</string>
     <string name="edit">Upravit</string>
@@ -2048,7 +2048,7 @@
 \n- Spojení do internetu obou zařízení
 \n
 \nDoporučujeme, abyste okamžitě změnili heslo a klíč obnovy v nastavení.</string>
-    <string name="verify_cancelled_notice">Ověřit svá zařízení v nastavení.</string>
+    <string name="verify_cancelled_notice">Ověření bylo zrušeno. Můžete je znovu spustit.</string>
     <string name="verification_cancelled">Ověření zrušeno</string>
     <string name="recovery_passphrase">Přístupová fráze pro obnovu</string>
     <string name="message_key">Klíč zpráv</string>
@@ -2528,7 +2528,7 @@
     <string name="attachment_viewer_item_x_of_y">%1$d z %2$d</string>
     <string name="a11y_create_direct_message_by_mxid">Založit novou přímou konverzaci pomocí Matrix ID</string>
     <string name="a11y_create_direct_message_by_qr_code">Založit novou přímou konverzaci pomocí skenu QR kódu</string>
-    <string name="identity_server_consent_dialog_content">Abyste nalezli existující kontakty, jež znáte, souhlasíte s odesláním svých kontaktních údajů (telefonní čísla nebo emailové adresy) na nastavený server pro identity (%1$s)\?
+    <string name="identity_server_consent_dialog_content">Abyste nalezli existující kontakty, jež znáte, souhlasíte s odesláním svých kontaktních údajů (telefonní čísla nebo emailové adresy) na nastavený server identit (%1$s)\?
 \n
 \nZa účelem soukromí budou data před odesláním hašována.</string>
     <string name="identity_server_consent_dialog_title">Poslat emailové adresy a telefonní čísla</string>
@@ -2794,7 +2794,7 @@
     <string name="command_description_create_space">Založit prostor</string>
     <string name="search_hint_room_name">Hledat jméno</string>
     <string name="room_settings_room_access_restricted_description">Kdokoli v prostoru s touto místností ji může nalézt a vstoupit. Jen správci místnosti ji mohou připojit k prostoru.</string>
-    <string name="room_settings_room_access_restricted_title">Prostory</string>
+    <string name="room_settings_room_access_restricted_title">Pouze členové prostoru</string>
     <string name="room_settings_room_access_public_description">Kdokoli může místnost nalézt a vstoupit</string>
     <string name="room_settings_room_access_public_title">Veřejná</string>
     <string name="room_settings_room_access_private_description">Pouze pozvaní mohou místnost nalézt a vstoupit</string>
@@ -2859,4 +2859,80 @@
     <string name="directory_add_a_new_server_prompt">Zadejte název nového serveru, který chcete prozkoumat.</string>
     <string name="directory_add_a_new_server">Přidat nový server</string>
     <string name="directory_your_server">Váš server</string>
+    <string name="continue_anyway">Přesto pokračovat</string>
+    <string name="teammate_spaces_might_not_join">V současné době se lidé nemohou připojit k soukromým místnostem, které jste vytvořili.
+\n
+\nV rámci beta verze to zlepšíme, ale jen jsme vás chtěli informovat.</string>
+    <string name="teammate_spaces_arent_quite_ready">Prostory pro spolupracovníky nejsou ještě zcela připravené, ale přesto je můžete vyzkoušet</string>
+    <string name="error_failed_to_join_room">Omlouváme se, došlo k chybě během pokusu o přistoupení: %s</string>
+    <string name="create_space_alias_hint">Adresa prostoru</string>
+    <string name="space_settings_alias_subtitle">Prohlédnout a spravovat adresy tohoto prostoru.</string>
+    <string name="space_settings_alias_title">Adresy prostorů</string>
+    <string name="room_upgrade_to_recommended_version">Aktualizujte na doporučenou verzi místnosti</string>
+    <string name="room_using_unstable_room_version">Tato místnost používá místnost verze %s, kterou homeserver označil za nestabilní.</string>
+    <string name="upgrade_room_no_power_to_manage">K aktualizaci místnosti potřebujete oprávnění</string>
+    <string name="upgrade_room_update_parent_space">Automaticky aktualizovat mateřský prostor</string>
+    <string name="upgrade_room_auto_invite">Automaticky pozvat uživatele</string>
+    <string name="upgrade_public_room_from_to">Budete aktualizovat tuto místnost z %s na %s.</string>
+    <string name="upgrade_room_warning">Aktualizace místnosti je pokročilá akce a obvykle se doporučuje tehdy, je-li místnost nestabilní kvůli chybám, chybějícím funkcím nebo slabým místům v zabezpečení.
+\nObvykle má vliv pouze na to, jak server místnost zpracovává.</string>
+    <string name="upgrade_private_room">Aktualizovat soukromou místnost</string>
+    <string name="upgrade_public_room">Aktualizovat veřejnou místnost</string>
+    <string name="upgrade">Aktualizace</string>
+    <string name="it_may_take_some_time">Buďte, prosím, trpěliví, může to chvíli trvat.</string>
+    <string name="joining_replacement_room">Vstupte do náhradní místnosti</string>
+    <string name="command_description_upgrade_room">Aktualizuje místnost na novou verzi</string>
+    <string name="settings_server_room_version_unstable">nestabilní</string>
+    <string name="settings_server_room_version_stable">stabilní</string>
+    <string name="settings_server_default_room_version">Výchozí verze</string>
+    <string name="settings_server_room_versions">Verze místností 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Raději ověřit porovnáním emoji</string>
+    <string name="verification_scan_with_this_device">Oskenovat tímto zařízením</string>
+    <string name="verification_scan_self_notice">Oskenujte kód svým dalším zařízením nebo přepněte a oskenujte tímto zařízením</string>
+    <string name="hs_client_url">URL API Homeserveru</string>
+    <string name="missing_permissions_title">Chybějící oprávnění</string>
+    <string name="denied_permission_camera">Pro provedení této akce udělte, prosím, oprávnění Fotoaparát v systémových nastaveních.</string>
+    <string name="denied_permission_generic">Některá z oprávnění potřebných k provedení akce chybí, prosím, udělte oprávnění v systémových nastaveních.</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Zmeškaný video hovor</item>
+        <item quantity="few">%d zmeškané video hovory</item>
+        <item quantity="other">%d zmeškaných video hovorů</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Zmeškaný hlasový hovor</item>
+        <item quantity="few">%d zmeškané hlasové hovory</item>
+        <item quantity="other">%d zmeškaných hlasových hovorů</item>
+    </plurals>
+    <string name="decide_which_spaces_can_access">Rozhodněte, které prostory mají přístup do této místnosti. Pokud je vybrán prostor, jeho členové budou moci najít název místnosti a připojit se k ní.</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Další prostory nebo místnosti, které možná neznáte</string>
+    <string name="space_you_know_that_contains_this_room">Prostor, o kterém víte, že obsahuje tuto místnost</string>
+    <string name="decide_who_can_find_and_join">Rozhodněte, kdo může tuto místnost najít a připojit se k ní.</string>
+    <string name="tap_to_edit_spaces">Klepnutím upravíte prostory</string>
+    <string name="allow_anyone_in_room_to_access">Povolit vyhledání a přístup komukoli v %s. Můžete vybrat i další prostory.</string>
+    <string name="upgrade_required">Vyžadována aktualizace</string>
+    <string name="upgrade_room_for_restricted_no_param">Každý, kdo se nachází v nadřazeném prostoru, bude moci tuto místnost najít a připojit se k ní - není třeba všechny zvát ručně. Tuto možnost budete moci kdykoli změnit v nastavení místnosti.</string>
+    <string name="upgrade_room_for_restricted">Kdokoli v %s bude moci tuto místnost najít a připojit se k ní - není třeba všechny zvát ručně. Toto nastavení budete moci kdykoli změnit v nastavení místnosti.</string>
+    <string name="voice_message_tap_to_stop_toast">Klepnutím na nahrávku ji zastavíte nebo posloucháte</string>
+    <string name="select_spaces">Vybrat prostory</string>
+    <string name="upgrade_room_for_restricted_note">Upozorňujeme, že aktualizací vznikne nová verze místnosti. Všechny aktuální zprávy zůstanou v této archivované místnosti.</string>
+    <string name="voice_message_reply_content">Hlasová zpráva (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Nelze odpovídat ani upravovat, když je hlasová zpráva aktivní</string>
+    <string name="error_voice_message_unable_to_record">Nelze nahrát hlasovou zprávu</string>
+    <string name="error_voice_message_unable_to_play">Nelze přehrát tuto hlasovou zprávu</string>
+    <string name="labs_use_voice_message">Povolit hlasovou zprávu</string>
+    <string name="voice_message_n_seconds_warning_toast">%1$ds zbývá</string>
+    <string name="voice_message_release_to_send_toast">Podržením nahrajte, uvolněním odešlete</string>
+    <string name="a11y_delete_recorded_voice_message">Odstranit nahranou hlasovou zprávu</string>
+    <string name="a11y_recording_voice_message">Nahrát hlasovou zprávu</string>
+    <string name="a11y_pause_voice_message">Pozastavit hlasovou zprávu</string>
+    <string name="a11y_play_voice_message">Přehrát hlasovou zprávu</string>
+    <string name="a11y_lock_voice_message">Zámek hlasové zprávy</string>
+    <string name="voice_message_slide_to_cancel">Posunutím zrušíte</string>
+    <string name="a11y_start_voice_message">Zahájení hlasové zprávy</string>
+    <string name="sent_a_voice_message">Hlasová zpráva</string>
+    <string name="spaces_which_can_access">Prostory, které mají přístup</string>
+    <string name="allow_space_member_to_find_and_access">Umožněte členům prostoru ho najít a zpřístupnit.</string>
+    <string name="room_create_member_of_space_name_can_join">Členové prostoru %s mohou vyhledávat, prohlížet a připojovat se.</string>
+    <string name="room_settings_room_access_private_invite_only_title">Soukromé (pouze pro pozvané)</string>
+    <string name="denied_permission_voice_message">Chcete-li odesílat hlasové zprávy, povolte oprávnění mikrofonu.</string>
 </resources>

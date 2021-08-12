@@ -70,7 +70,7 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
     private fun initAdminE2eByDefault() {
         viewModelScope.launch(Dispatchers.IO) {
             val adminE2EByDefault = tryOrNull {
-                rawService.getElementWellknown(session.myUserId)
+                rawService.getElementWellknown(session.sessionParams)
                         ?.isE2EByDefault()
                         ?: true
             } ?: true

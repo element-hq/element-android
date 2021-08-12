@@ -314,6 +314,12 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.launchToCallback(coroutineDispatchers.crypto, NoOpMatrixCallback()) {
             // Open the store
             cryptoStore.open()
+
+            if (!cryptoStore.areDeviceKeysUploaded()) {
+                // Schedule upload of OTK
+                oneTimeKeysUploader.updateOneTimeKeyCount(0)
+            }
+
             // this can throw if no network
             tryOrNull {
                 uploadDeviceKeys()
@@ -905,7 +911,7 @@ internal class DefaultCryptoService @Inject constructor(
      * Upload my user's device keys.
      */
     private suspend fun uploadDeviceKeys() {
-        if (cryptoStore.getDeviceKeysUploaded()) {
+        if (cryptoStore.areDeviceKeysUploaded()) {
             Timber.d("Keys already uploaded, nothing to do")
             return
         }

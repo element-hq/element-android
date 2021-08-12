@@ -164,7 +164,7 @@
     <string name="create_account">Criar conta</string>
     <string name="login">Iniciar sessão</string>
     <string name="logout">Sair</string>
-    <string name="hs_url">URL do "Home Server"</string>
+    <string name="hs_url">URL do homeserver</string>
     <string name="identity_url">URL do "Identity Server"</string>
     <string name="search">Pesquisar</string>
     <string name="start_new_chat">Iniciar nova conversa</string>
@@ -209,7 +209,7 @@
 Poderá adicionar o seu email ao seu perfil nas definições.</string>
     <string name="auth_recaptcha_message">Este servidor quer ter a certeza de que você não é um robô</string>
     <string name="auth_username_in_use">Nome de utilizador já existe</string>
-    <string name="auth_home_server">Servidor local (home server):</string>
+    <string name="auth_home_server">Servidor local (homeserver):</string>
     <string name="auth_identity_server">Servidor de Identidade:</string>
     <string name="auth_reset_password_next_step_button">Verifiquei o meu endereço de email</string>
     <string name="auth_reset_password_message">Para redefinir a sua palavra-passe, introduza o endereço de e-mail associado à sua conta:</string>
@@ -489,7 +489,7 @@ Para continuar, insira a sua palavra-passe.</string>
     <string name="devices_delete_pswd">Palavra-passe:</string>
     <string name="devices_delete_submit_button_label">Submeter</string>
     <string name="settings_logged_in">Conectado como</string>
-    <string name="settings_home_server">Servidor (Home Server)</string>
+    <string name="settings_home_server">Servidor (homeserver)</string>
     <string name="settings_identity_server">Servidor de identidade</string>
     <string name="account_email_validation_title">Verificação pendente</string>
     <string name="account_email_validation_message">Verifique o seu e-mail e clique no link que contém. Uma vez feito isso, clique em continuar.</string>

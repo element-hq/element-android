@@ -24,11 +24,13 @@ import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
+import org.matrix.android.sdk.api.session.room.model.create.RestrictedRoomPreset
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -45,6 +47,7 @@ data class CreateSpaceTaskParams(
         val spaceName: String,
         val spaceTopic: String?,
         val spaceAvatar: Uri? = null,
+        val spaceAlias: String? = null,
         val isPublic: Boolean,
         val defaultRooms: List<String> = emptyList()
 )
@@ -57,7 +60,13 @@ class CreateSpaceViewModelTask @Inject constructor(
 
     override suspend fun execute(params: CreateSpaceTaskParams): CreateSpaceTaskResult {
         val spaceID = try {
-            session.spaceService().createSpace(params.spaceName, params.spaceTopic, params.spaceAvatar, params.isPublic)
+            session.spaceService().createSpace(
+                    params.spaceName,
+                    params.spaceTopic,
+                    params.spaceAvatar,
+                    params.isPublic,
+                    params.spaceAlias
+            )
         } catch (failure: Throwable) {
             return CreateSpaceTaskResult.FailedToCreateSpace(failure)
         }
@@ -68,7 +77,7 @@ class CreateSpaceViewModelTask @Inject constructor(
         val childIds = mutableListOf<String>()
 
         val e2eByDefault = tryOrNull {
-            rawService.getElementWellknown(session.myUserId)
+            rawService.getElementWellknown(session.sessionParams)
                     ?.isE2EByDefault()
                     ?: true
         } ?: true
@@ -86,13 +95,26 @@ class CreateSpaceViewModelTask @Inject constructor(
                                         }
                                 )
                             } else {
-                                if (vectorPreferences.labsUseExperimentalRestricted()) {
+                                val homeServerCapabilities = session
+                                        .getHomeServerCapabilities()
+                                val restrictedSupport = homeServerCapabilities
+                                        .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
+
+                                val createRestricted = when (restrictedSupport) {
+                                    HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED          -> true
+                                    HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
+                                    else                                                            -> false
+                                }
+                                if (createRestricted) {
                                     session.createRoom(CreateRoomParams().apply {
                                         this.name = roomName
-                                        this.joinRuleRestricted = listOf(
-                                                RoomJoinRulesAllowEntry(
-                                                        spaceID = spaceID,
-                                                        via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
+                                        this.featurePreset = RestrictedRoomPreset(
+                                                homeServerCapabilities,
+                                                listOf(
+                                                        RoomJoinRulesAllowEntry(
+                                                                spaceID = spaceID,
+                                                                via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
+                                                        )
                                                 )
                                         )
                                         if (e2eByDefault) {

@@ -91,13 +91,13 @@ sealed class BootstrapStep {
     // Use will be asked to choose between passphrase or recovery key, or to start process if a key backup exists
     data class FirstForm(val keyBackUpExist: Boolean, val reset: Boolean = false) : BootstrapStep()
 
-    data class SetupPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
-    data class ConfirmPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
+    object SetupPassphrase : BootstrapStep()
+    object ConfirmPassphrase : BootstrapStep()
 
     data class AccountReAuth(val failure: String? = null) : BootstrapStep()
 
     abstract class GetBackupSecretForMigration : BootstrapStep()
-    data class GetBackupSecretPassForMigration(val isPasswordVisible: Boolean, val useKey: Boolean) : GetBackupSecretForMigration()
+    data class GetBackupSecretPassForMigration(val useKey: Boolean) : GetBackupSecretForMigration()
     object GetBackupSecretKeyForMigration : GetBackupSecretForMigration()
 
     object Initializing : BootstrapStep()

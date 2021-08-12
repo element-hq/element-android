@@ -26,7 +26,32 @@
             android:persistent="false"
             android:summary="@string/settings_notification_advanced_summary"
             android:title="@string/settings_notification_advanced"
-            app:fragment="im.vector.app.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment" />
+            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment"
+            app:isPreferenceVisible="@bool/useNotificationSettingsV1" />
+
+        <im.vector.app.core.preference.VectorPreference
+            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+            android:key="SETTINGS_NOTIFICATION_DEFAULT_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_notification_default"
+            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsDefaultNotificationPreferenceFragment"
+            app:isPreferenceVisible="@bool/useNotificationSettingsV2"/>
+
+        <im.vector.app.core.preference.VectorPreference
+            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+            android:key="SETTINGS_NOTIFICATION_KEYWORD_AND_MENTIONS_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_notification_mentions_and_keywords"
+            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsKeywordAndMentionsNotificationPreferenceFragment"
+            app:isPreferenceVisible="@bool/useNotificationSettingsV2"/>
+
+        <im.vector.app.core.preference.VectorPreference
+            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+            android:key="SETTINGS_NOTIFICATION_OTHER_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_notification_other"
+            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsOtherNotificationPreferenceFragment"
+            app:isPreferenceVisible="@bool/useNotificationSettingsV2"/>
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
@@ -97,7 +122,7 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
             android:title="@string/settings_notification_troubleshoot"
-            app:fragment="im.vector.app.features.settings.VectorSettingsNotificationsTroubleshootFragment" />
+            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsNotificationsTroubleshootFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
