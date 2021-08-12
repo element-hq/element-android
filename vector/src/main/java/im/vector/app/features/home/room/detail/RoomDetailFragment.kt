@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail
 
+import android.animation.ArgbEvaluator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -216,6 +217,10 @@ import java.net.URL
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import android.animation.ValueAnimator
+
+
+
 
 @Parcelize
 data class RoomDetailArgs(
@@ -867,8 +872,21 @@ class RoomDetailFragment @Inject constructor(
             }
         }
         val joinConfItem = menu.findItem(R.id.join_conference)
-        joinConfItem.actionView.findViewById<MaterialButton>(R.id.join_conference_button).setOnClickListener {
-            roomDetailViewModel.handle(RoomDetailAction.JoinJitsiCall)
+        joinConfItem.actionView.findViewById<MaterialButton>(R.id.join_conference_button).also { joinButton ->
+            joinButton.setOnClickListener { roomDetailViewModel.handle(RoomDetailAction.JoinJitsiCall) }
+            val colorFrom = ContextCompat.getColor(joinButton.context, R.color.palette_element_green)
+            // This is a special color, not defined in the palette
+            val colorTo = Color.parseColor("#0BAC7E")
+            // Animate button color to highlight
+            ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
+                repeatMode = ValueAnimator.REVERSE
+                repeatCount = ValueAnimator.INFINITE
+                duration = 500
+                addUpdateListener { animator ->
+                    val color = animator.animatedValue as Int
+                    joinButton.setBackgroundColor(color)
+                }
+            }.start()
         }
     }
 
