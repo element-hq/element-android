@@ -22,18 +22,9 @@ import android.view.View
 import android.widget.RadioGroup
 import androidx.preference.PreferenceViewHolder
 import im.vector.app.R
+import im.vector.app.features.settings.notifications.NotificationIndex
 
 class PushRulePreference : VectorPreference {
-
-    enum class NotificationIndex(val index: Int) {
-        OFF(0),
-        SILENT(1),
-        NOISY(2);
-
-        companion object {
-            fun fromInt(index: Int) = values().first { it.index == index }
-        }
-    }
 
     /**
      * @return the selected push rule index
@@ -66,7 +57,7 @@ class PushRulePreference : VectorPreference {
      */
     private fun refreshSummary() {
         summary = context.getString(when (index) {
-            NotificationIndex.OFF           -> R.string.notification_off
+            NotificationIndex.OFF         -> R.string.notification_off
             NotificationIndex.SILENT      -> R.string.notification_silent
             NotificationIndex.NOISY, null -> R.string.notification_noisy
         })
@@ -83,7 +74,7 @@ class PushRulePreference : VectorPreference {
         radioGroup?.setOnCheckedChangeListener(null)
 
         when (index) {
-            NotificationIndex.OFF       -> {
+            NotificationIndex.OFF    -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleOff)
             }
             NotificationIndex.SILENT -> {

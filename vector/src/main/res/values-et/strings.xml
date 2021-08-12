@@ -2741,7 +2741,7 @@
     <string name="a11y_unchecked">Pole kontrollitud</string>
     <string name="search_hint_room_name">Otsi nime alusel</string>
     <string name="room_settings_room_access_restricted_description">Kõik sellise kogukonnakeskuse liikmed, kuhu see jututuba kuulub, võivad seda leida ja temaga liituda. Ainult selle jututoa haldajad võivad teda kogukonnakeskusesse liita.</string>
-    <string name="room_settings_room_access_restricted_title">Kogukonnakeskused</string>
+    <string name="room_settings_room_access_restricted_title">Vaid kogukonna liikmetele</string>
     <string name="room_settings_room_access_public_description">Kõik võivad jututuba leida ja sellega liituda</string>
     <string name="room_settings_room_access_public_title">Avalik</string>
     <string name="room_settings_room_access_private_description">Jututuba saab leida ja sellega liituda vaid kutsete alusel</string>
@@ -2848,4 +2848,16 @@
         <item quantity="one">Vastamata kõne</item>
         <item quantity="other">%d vastamata kõnet</item>
     </plurals>
+    <string name="upgrade_required">Vajalik on uuendus</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Muud kogukonnad ja jututoad, mida sa ei pruugi teada</string>
+    <string name="space_you_know_that_contains_this_room">Sulle teadaolevad kogukonnad, milles osaleb see jututuba</string>
+    <string name="room_create_member_of_space_name_can_join">%s kogukonna liikmed saavad leida, vaadata eelvaadet ja liituda.</string>
+    <string name="decide_who_can_find_and_join">Vali kes saavad seda kogukonda leida ja võivad temaga liituda.</string>
+    <string name="tap_to_edit_spaces">Kogukondade muutmiseks klõpsi</string>
+    <string name="select_spaces">Vali kogukonnad</string>
+    <string name="decide_which_spaces_can_access">Vali mis kogukonnad pääsevad ligi sellele jututoale. Valitud kogukonna liikmed saavad seda jututuba leida ja temaga liituda.</string>
+    <string name="spaces_which_can_access">Kogukonnad, mis pääsevad ligi</string>
+    <string name="allow_space_member_to_find_and_access">Luba kogukonna liikmetel leida ja vaadata.</string>
+    <string name="room_settings_room_access_private_invite_only_title">Privaatne (vaid kutse alusel)</string>
+    <string name="denied_permission_voice_message">Häälsõnumite saatmiseks palun anna rakendusele õigus mikrofoni kasutada.</string>
 </resources>

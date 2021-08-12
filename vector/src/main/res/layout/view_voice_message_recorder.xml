@@ -40,7 +40,7 @@
         android:scaleType="center"
         android:src="@drawable/ic_send"
         android:visibility="gone"
-        app:tint="?android:textColorHint"
+        app:tint="?android:colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingPrefix"

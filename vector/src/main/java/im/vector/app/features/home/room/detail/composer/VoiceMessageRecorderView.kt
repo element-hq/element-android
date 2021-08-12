@@ -20,6 +20,7 @@ import android.content.Context
 import android.text.format.DateUtils
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -85,6 +86,15 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
         initVoiceRecordingViews()
         initListeners()
+    }
+
+    override fun onVisibilityChanged(changedView: View, visibility: Int) {
+        super.onVisibilityChanged(changedView, visibility)
+        if (changedView == this && visibility == VISIBLE) {
+            views.voiceMessageMicButton.contentDescription = context.getString(R.string.a11y_start_voice_message)
+        } else {
+            views.voiceMessageMicButton.contentDescription = ""
+        }
     }
 
     fun initVoiceRecordingViews() {
@@ -211,6 +221,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             RecordingState.CANCELLED  -> {
                 hideRecordingViews(isCancelled = true)
+                vibrate(context)
             }
             RecordingState.LOCKED     -> {
                 if (isRecordingStateChanged) { // Do not update views if it was already in locked state.
@@ -222,6 +233,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             RecordingState.STARTED    -> {
                 showRecordingViews()
+                val translationAmount = distanceX.coerceAtMost(distanceToCancel)
+                views.voiceMessageMicButton.translationX = -translationAmount * rtlXMultiplier
+                views.voiceMessageSlideToCancel.translationX = -translationAmount / 2 * rtlXMultiplier
             }
             RecordingState.NONE       -> Timber.d("VoiceMessageRecorderView shouldn't be in NONE state while moving.")
             RecordingState.PLAYBACK   -> Timber.d("VoiceMessageRecorderView shouldn't be in PLAYBACK state while moving.")
@@ -237,9 +251,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         if (recordingState == RecordingState.STARTED) {
             // Determine if cancelling or locking for the first move action.
             if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1))
-                    && distanceX > distanceY) {
+                    && distanceX > distanceY && distanceX > lastDistanceX) {
                 recordingState = RecordingState.CANCELLING
-            } else if (currentY < firstY && distanceY > distanceX) {
+            } else if (currentY < firstY && distanceY > distanceX && distanceY > lastDistanceY) {
                 recordingState = RecordingState.LOCKING
             }
         } else if (recordingState == RecordingState.CANCELLING) {
@@ -518,12 +532,14 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             is VoiceMessagePlaybackTracker.Listener.State.Playing   -> {
                 views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
+                views.voicePlaybackControlButton.contentDescription = context.getString(R.string.a11y_pause_voice_message)
                 val formattedTimerText = DateUtils.formatElapsedTime((state.playbackTime / 1000).toLong())
                 views.voicePlaybackTime.text = formattedTimerText
             }
             is VoiceMessagePlaybackTracker.Listener.State.Paused,
             is VoiceMessagePlaybackTracker.Listener.State.Idle      -> {
                 views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
+                views.voicePlaybackControlButton.contentDescription = context.getString(R.string.a11y_play_voice_message)
             }
         }
     }

@@ -156,8 +156,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE = "SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE"
         const val SETTINGS_LABS_SPACES_HOME_AS_ORPHAN = "SETTINGS_LABS_SPACES_HOME_AS_ORPHAN"
 
-        const val SETTINGS_LABS_VOICE_MESSAGE = "SETTINGS_LABS_VOICE_MESSAGE"
-
         private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
@@ -204,6 +202,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_USER_COLOR_MODE_DEFAULT = "SETTINGS_USER_COLOR_MODE_DEFAULT"
         private const val SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM = "SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM"
         private const val SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD = "SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD"
+        private const val SETTINGS_VOICE_MESSAGE = "SETTINGS_VOICE_MESSAGE"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
@@ -1003,6 +1002,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.getBoolean(SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD, false)
     }
 
+    // Element removed this, SC added it back (but this time, default to true)
+    fun useVoiceMessage(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_VOICE_MESSAGE, true)
+    }
+
     /**
      * The user enable protecting app access with pin code.
      * Currently we use the pin code store to know if the pin is enabled, so this is not used
@@ -1099,9 +1103,5 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.edit {
             putInt(TAKE_PHOTO_VIDEO_MODE, mode)
         }
-    }
-
-    fun labsUseVoiceMessage(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_VOICE_MESSAGE, false)
     }
 }

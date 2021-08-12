@@ -87,6 +87,9 @@
     <string name="settings_open_chats_at_first_unread">Open at first unread</string>
     <string name="settings_open_chats_at_first_unread_summary">Open chats at the first unread message instead of at the bottom.</string>
 
+    <string name="settings_show_voice_message_recorder_ui">Voice messages</string>
+    <string name="settings_show_voice_message_recorder_ui_summary">Show a button to record voice messages</string>
+
     <!-- Accent colors -->
     <string name="sc_accent_greenlight">Light green</string>
     <string name="sc_accent_greendark">Dark green</string>

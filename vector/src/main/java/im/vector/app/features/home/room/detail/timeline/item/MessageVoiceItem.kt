@@ -74,6 +74,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
             contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, izLocalFile, holder.progressLayout)
         } else {
             holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_cross)
+            holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.error_voice_message_unable_to_play)
             holder.progressLayout.isVisible = false
         }
 
@@ -101,16 +102,19 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
     private fun renderIdleState(holder: Holder) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
+        holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_voice_message)
         holder.voicePlaybackTime.text = formatPlaybackTime(duration)
     }
 
     private fun renderPlayingState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
+        holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_pause_voice_message)
         holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 
     private fun renderPausedState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Paused) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
+        holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_voice_message)
         holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 

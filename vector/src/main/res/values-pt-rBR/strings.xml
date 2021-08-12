@@ -2743,7 +2743,7 @@
     </plurals>
     <string name="settings_server_upload_size_title">Limite de upload de arquivo do servidor</string>
     <string name="room_settings_room_access_restricted_description">Qualquer pessoa num espaço com esta sala pode encontrá-la e juntar-se a ela. Somente admins desta sala podem adicioná-la a um espaço.</string>
-    <string name="room_settings_room_access_restricted_title">Espaços</string>
+    <string name="room_settings_room_access_restricted_title">Membros de espaço somente</string>
     <string name="room_settings_room_access_public_description">Qualquer pessoa pode encontrar a sala e juntar-se</string>
     <string name="room_settings_room_access_public_title">Pública</string>
     <string name="room_settings_room_access_private_description">Somente pessoas convidadas podem encontrar e juntar-se</string>
@@ -2918,4 +2918,36 @@
         <item quantity="one">Chamadad de áudio perdida</item>
         <item quantity="other">%d chamadas de áudio perdidas</item>
     </plurals>
+    <string name="upgrade_room_for_restricted_note">Por favor note que fazer upgrade vai fazer uma nova versão da sala. Todas as mensagens atuais vão permanecer nesta sala arquivada.</string>
+    <string name="upgrade_room_for_restricted_no_param">Qualquer pessoa em um espaço pai vai ser capaz de encontrar e juntar-se a esta sala - não precisa convidar manualmente todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
+    <string name="upgrade_room_for_restricted">Qualquer pessoa em %s vai ser capaz de encontrar e juntar-se a esta sala - não precisa convidar todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
+    <string name="voice_message_reply_content">Mensagem de Voz (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Não dá para responder ou editar enquanto mensagem de voz está ativa</string>
+    <string name="error_voice_message_unable_to_record">Não dá para gravar uma mensagem de voz</string>
+    <string name="error_voice_message_unable_to_play">Não dá para tocar esta mensagem de voz</string>
+    <string name="labs_use_voice_message">Habilitar mensagem de voz</string>
+    <string name="voice_message_tap_to_stop_toast">Toque em sua gravação para parar ou escutar</string>
+    <string name="voice_message_n_seconds_warning_toast">%1$ds restando</string>
+    <string name="voice_message_release_to_send_toast">Segure para gravar, solte para enviar</string>
+    <string name="a11y_delete_recorded_voice_message">Deletar mensagem de voz gravada</string>
+    <string name="a11y_recording_voice_message">Gravando mensagem de voz</string>
+    <string name="a11y_pause_voice_message">Pausar Mensagem de Voz</string>
+    <string name="a11y_play_voice_message">Tocar Mensagem de Voz</string>
+    <string name="a11y_lock_voice_message">Cadeado de Mensagem de Voz</string>
+    <string name="voice_message_slide_to_cancel">Deslize para cancelar</string>
+    <string name="a11y_start_voice_message">Começar Mensagem de Voz</string>
+    <string name="allow_anyone_in_room_to_access">Permitir qualquer pessoa em %s a encontrar e acessar. Você pode selecionar outros espaços também.</string>
+    <string name="upgrade_required">Upgrade Requerido</string>
+    <string name="sent_a_voice_message">Voz</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Outros espaços ou salas que você poderia não saber</string>
+    <string name="space_you_know_that_contains_this_room">Espaço que você sabe que contém esta sala</string>
+    <string name="decide_who_can_find_and_join">Decida quem pode encontrar e juntar-se a esta sala.</string>
+    <string name="tap_to_edit_spaces">Toque para editar espaços</string>
+    <string name="select_spaces">Selecionar espaços</string>
+    <string name="decide_which_spaces_can_access">Decida que espaços podem acessar esta sala. Se um espaço é selecionado seus membros vão ser capazes de encontrar e juntar-se a Nome de sala.</string>
+    <string name="spaces_which_can_access">Espaços que podem acessar</string>
+    <string name="allow_space_member_to_find_and_access">Permitir membros de espaço a encontrar e acessar.</string>
+    <string name="room_create_member_of_space_name_can_join">Membros de Escpaço %s podem encontrar, previsualizar e juntar-se.</string>
+    <string name="room_settings_room_access_private_invite_only_title">Privada (Convite Somente)</string>
+    <string name="denied_permission_voice_message">Para enviar mensagens de voz, por favor conceda a permissão Microfone.</string>
 </resources>
