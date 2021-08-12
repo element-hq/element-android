@@ -2825,4 +2825,17 @@
     <string name="room_create_member_of_space_name_can_join">空間 %s 的成員可以找到、預覽並加入。</string>
     <string name="room_settings_room_access_private_invite_only_title">私人（僅邀請）</string>
     <string name="denied_permission_voice_message">要傳送語音訊息，請授予「麥克風」權限。</string>
+    <string name="settings_room_upgrades">聊天室升級</string>
+    <string name="settings_messages_by_bot">機器人訊息</string>
+    <string name="settings_room_invitations">聊天室邀請</string>
+    <string name="settings_encrypted_group_messages">已加密的群組訊息</string>
+    <string name="settings_group_messages">群組訊息</string>
+    <string name="settings_encrypted_direct_messages">已加密的直接訊息</string>
+    <string name="settings_messages_direct_messages">直接訊息</string>
+    <string name="settings_messages_containing_username">訊息包含了我的使用者名稱</string>
+    <string name="settings_messages_containing_display_name">訊息包含了我的顯示名稱</string>
+    <string name="settings_notification_notify_me_for">通知我</string>
+    <string name="settings_notification_other">其他</string>
+    <string name="settings_notification_mentions_and_keywords">提及與關鍵字</string>
+    <string name="settings_notification_default">預設通知</string>
 </resources>
