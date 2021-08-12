@@ -21,6 +21,7 @@ import im.vector.app.features.call.vectorCallService
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
+import im.vector.app.features.home.room.detail.timeline.helper.CallSignalingEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
@@ -45,7 +46,7 @@ class CallItemFactory @Inject constructor(
         val event = params.event
         if (event.root.eventId == null) return null
         val showHiddenEvents = userPreferencesProvider.shouldShowHiddenEvents()
-        val callEventGrouper = params.callEventGrouper ?: return null
+        val callEventGrouper = params.eventsGroup?.let { CallSignalingEventsGroup(it) } ?: return null
         val roomId = event.roomId
         val informationData = messageInformationDataFactory.create(params)
         val callKind = if (callEventGrouper.isVideo()) CallTileTimelineItem.CallKind.VIDEO else CallTileTimelineItem.CallKind.AUDIO
@@ -60,7 +61,8 @@ class CallItemFactory @Inject constructor(
                             callback = params.callback,
                             highlight = params.isHighlighted,
                             informationData = informationData,
-                            isStillActive = callEventGrouper.isInCall()
+                            isStillActive = callEventGrouper.isInCall(),
+                            formattedDuration = callEventGrouper.formattedDuration()
                     )
                 } else {
                     null
@@ -76,7 +78,8 @@ class CallItemFactory @Inject constructor(
                             callback = params.callback,
                             highlight = params.isHighlighted,
                             informationData = informationData,
-                            isStillActive = callEventGrouper.isRinging()
+                            isStillActive = callEventGrouper.isRinging(),
+                            formattedDuration = callEventGrouper.formattedDuration()
                     )
                 } else {
                     null
@@ -91,7 +94,8 @@ class CallItemFactory @Inject constructor(
                         callback = params.callback,
                         highlight = params.isHighlighted,
                         informationData = informationData,
-                        isStillActive = false
+                        isStillActive = false,
+                        formattedDuration = callEventGrouper.formattedDuration()
                 )
             }
             EventType.CALL_HANGUP -> {
@@ -103,7 +107,8 @@ class CallItemFactory @Inject constructor(
                         callback = params.callback,
                         highlight = params.isHighlighted,
                         informationData = informationData,
-                        isStillActive = false
+                        isStillActive = false,
+                        formattedDuration = callEventGrouper.formattedDuration()
                 )
             }
             else                  -> null
@@ -118,6 +123,7 @@ class CallItemFactory @Inject constructor(
             informationData: MessageInformationData,
             highlight: Boolean,
             isStillActive: Boolean,
+            formattedDuration: String,
             callback: TimelineEventController.Callback?
     ): CallTileTimelineItem? {
         val correctedRoomId = session.vectorCallService.userMapper.nativeRoomForVirtualRoom(roomId) ?: roomId
@@ -129,6 +135,7 @@ class CallItemFactory @Inject constructor(
                     callStatus = callStatus,
                     informationData = informationData,
                     avatarRenderer = it.avatarRenderer,
+                    formattedDuration = formattedDuration,
                     messageColorProvider = messageColorProvider,
                     itemClickListener = it.itemClickListener,
                     itemLongClickListener = it.itemLongClickListener,

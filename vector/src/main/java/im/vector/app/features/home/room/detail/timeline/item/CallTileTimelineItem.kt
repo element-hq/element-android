@@ -16,6 +16,7 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.content.res.Resources
+import android.telecom.Call
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -95,7 +96,19 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
 
     private fun renderEndedStatus(holder: Holder) {
         holder.acceptRejectViewGroup.isVisible = false
-        holder.statusView.setStatus(R.string.call_tile_ended)
+        when (attributes.callKind) {
+            CallKind.VIDEO      -> {
+                val endCallStatus = holder.resources.getString(R.string.call_tile_video_call_has_ended, attributes.formattedDuration)
+                holder.statusView.setStatus(endCallStatus)
+            }
+            CallKind.AUDIO      -> {
+                val endCallStatus = holder.resources.getString(R.string.call_tile_voice_call_has_ended, attributes.formattedDuration)
+                holder.statusView.setStatus(endCallStatus)
+            }
+            CallKind.CONFERENCE -> {
+                holder.statusView.setStatus(R.string.call_tile_ended)
+            }
+        }
     }
 
     private fun renderRejectedStatus(holder: Holder) {
@@ -194,6 +207,10 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             }
         }
         when {
+            // Invite state for conference should show as InCallStatus
+            attributes.callKind == CallKind.CONFERENCE -> {
+                holder.statusView.setStatus(R.string.call_tile_video_active)
+            }
             attributes.informationData.sentByMe -> {
                 holder.statusView.setStatus(R.string.call_ringing)
             }
@@ -207,8 +224,13 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     }
 
     private fun TextView.setStatus(@StringRes statusRes: Int, @DrawableRes drawableRes: Int? = null) {
+        val status = resources.getString(statusRes)
+        setStatus(status, drawableRes)
+    }
+
+    private fun TextView.setStatus(status: String, @DrawableRes drawableRes: Int? = null) {
         setLeftDrawable(drawableRes ?: attributes.callKind.icon)
-        setText(statusRes)
+        text = status
     }
 
     class Holder : AbsBaseMessageItem.Holder(STUB_ID) {
@@ -235,6 +257,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             val callStatus: CallStatus,
             val userOfInterest: MatrixItem,
             val isStillActive: Boolean,
+            val formattedDuration: String,
             val callback: TimelineEventController.Callback? = null,
             override val informationData: MessageInformationData,
             override val avatarRenderer: AvatarRenderer,

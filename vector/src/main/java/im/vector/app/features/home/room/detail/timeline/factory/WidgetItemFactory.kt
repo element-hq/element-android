@@ -16,16 +16,16 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
+import im.vector.app.features.home.room.detail.timeline.helper.JitsiWidgetEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
@@ -38,6 +38,7 @@ class WidgetItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val messageColorProvider: MessageColorProvider,
         private val avatarRenderer: AvatarRenderer,
+        private val userPreferencesProvider: UserPreferencesProvider,
         private val roomSummariesHolder: RoomSummariesHolder
 ) {
 
@@ -58,8 +59,12 @@ class WidgetItemFactory @Inject constructor(
         val event = params.event
         val roomId = event.roomId
         val userOfInterest = roomSummariesHolder.get(roomId)?.toMatrixItem() ?: return null
-        val isActive = widgetContent.isActive()
-        val callStatus = if (isActive && widgetContent.id == params.partialState.jitsiState.widgetId) {
+        val isActiveTile = widgetContent.isActive()
+        val jitsiWidgetEventsGroup = params.eventsGroup?.let { JitsiWidgetEventsGroup(it) } ?: return null
+        val isCallStillActive = jitsiWidgetEventsGroup.isStillActive()
+        val showHiddenEvents = userPreferencesProvider.shouldShowHiddenEvents()
+        if (isActiveTile && !isCallStillActive && !showHiddenEvents) return null
+        val callStatus = if (isActiveTile && widgetContent.id == params.partialState.jitsiState.widgetId) {
             if (params.partialState.jitsiState.hasJoined) {
                 CallTileTimelineItem.CallStatus.IN_CALL
             } else {
@@ -68,7 +73,6 @@ class WidgetItemFactory @Inject constructor(
         } else {
             CallTileTimelineItem.CallStatus.ENDED
         }
-
         val fakeCallId = widgetContent.id ?: prevWidgetContent?.id ?: return null
         val attributes = CallTileTimelineItem.Attributes(
                 callId = fakeCallId,
@@ -83,7 +87,8 @@ class WidgetItemFactory @Inject constructor(
                 readReceiptsCallback = params.callback,
                 userOfInterest = userOfInterest,
                 callback = params.callback,
-                isStillActive = isActive
+                isStillActive = isCallStillActive,
+                formattedDuration = ""
         )
         return CallTileTimelineItem_()
                 .attributes(attributes)
