@@ -1,0 +1,44 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  keystore = ENV["keystore"]
+  keystore_pass = ENV["keystorepass"]
+  key_alias = ENV["keyalias"]
+  key_pass = ENV["keypass"]
+
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(
+        task: "clean assembleGplayRelease",
+        properties: {
+            "android.injected.signing.store.file": keystore,
+            "android.injected.signing.store.password": keystore_pass,
+            "android.injected.signing.key.alias": key_alias,
+            "android.injected.signing.key.password": key_pass
+        }
+    )
+    upload_to_play_store(
+        apk: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+    )
+  end
+end
