@@ -25,11 +25,11 @@ features = ["lax_deserialize"]
 
 [dependencies.matrix-sdk-common]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "b2ff6cb6ae3d1983a510262021cba27a1bc70d77"
+rev = "9bae87b0ac213f9d37c033e76ea3a336e164cf02"
 
 [dependencies.matrix-sdk-crypto]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "b2ff6cb6ae3d1983a510262021cba27a1bc70d77"
+rev = "9bae87b0ac213f9d37c033e76ea3a336e164cf02"
 features = ["sled_cryptostore"]
 
 [dependencies.tokio]
@@ -43,7 +43,3 @@ features = ["client-api"]
 
 [build-dependencies]
 uniffi_build = "0.12.0"
-
-[patch.crates-io]
-ruma = { git = "https://github.com/matrix-org/ruma/", branch = "secrets" }
-ruma-identifiers = { git = "https://github.com/matrix-org/ruma", branch = "secrets" }
