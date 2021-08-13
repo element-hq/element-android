@@ -23,9 +23,9 @@
     <string name="notice_answered_call">%s ответил(а) на звонок.</string>
     <string name="notice_ended_call">%s завершил(а) вызов.</string>
     <string name="notice_made_future_room_visibility">%1$s сделал(а) будущую историю комнаты видимой %2$s</string>
-    <string name="notice_room_visibility_invited">всем членам, с момента их приглашения.</string>
-    <string name="notice_room_visibility_joined">всем членам, с момента присоединения.</string>
-    <string name="notice_room_visibility_shared">всем членам.</string>
+    <string name="notice_room_visibility_invited">всем участникам, с момента их приглашения.</string>
+    <string name="notice_room_visibility_joined">всем участникам, с момента присоединения.</string>
+    <string name="notice_room_visibility_shared">всем участникам.</string>
     <string name="notice_room_visibility_world_readable">всем.</string>
     <string name="notice_room_visibility_unknown">неизвестно (%s).</string>
     <string name="notice_end_to_end">%1$s включил(а) сквозное шифрование (%2$s)</string>
@@ -236,16 +236,16 @@
     <string name="notice_room_server_acl_allow_is_empty">🎉 Всем серверам запрещено участвовать! Эта комната больше не может быть использована.</string>
     <string name="notice_room_server_acl_updated_no_change">Без изменений.</string>
     <string name="room_displayname_empty_room_was">Пустая комната (была %s)</string>
-    <string name="notice_room_server_acl_set_banned">• Соответствующий сервер %s заблокирован.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Сервер, соответствующий буквальным IP-адресам, теперь запрещён.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Сервер, соответствующий буквальным IP-адресам, теперь разрешён.</string>
-    <string name="notice_room_server_acl_updated_banned">• Сервер, соответствующий %s, теперь запрещён.</string>
-    <string name="notice_room_server_acl_updated_allowed">• Сервер, соответствующий %s, теперь разрешён.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Сервер, соответствующий %s, был удалён из списка блокировки.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Сервер, соответствующий буквальным IP-адресам, запрещён.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• Сервер, соответствующий буквальным IP-адресам, разрешён.</string>
-    <string name="notice_room_server_acl_set_allowed">• Сервер, соответствующий %s, разрешён.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• Сервер, соответствующий %s, был удалён из разрешённого списка.</string>
+    <string name="notice_room_server_acl_set_banned">• Соответствующие серверы %s заблокированы.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Серверы, соответствующие буквальным IP-адресам, теперь запрещены.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Серверы, соответствующие буквальным IP-адресам, теперь разрешены.</string>
+    <string name="notice_room_server_acl_updated_banned">• Серверы, соответствующие %s, теперь запрещены.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Серверы, соответствующие %s, теперь разрешены.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Серверы, соответствующие %s, были удалены из списка блокировки.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Серверы, соответствующие буквальным IP-адресам, запрещены.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Серверы, соответствующие буквальным IP-адресам, разрешены.</string>
+    <string name="notice_room_server_acl_set_allowed">• Серверы, соответствующие %s, разрешены.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Серверы, соответствующие %s, были удалены из разрешённого списка.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Вы изменили права доступа сервера (ACL) для этой комнаты.</string>
     <string name="notice_room_server_acl_updated_title">%s изменил права доступа сервера (ACL) для этой комнаты.</string>
     <string name="notice_room_server_acl_set_title_by_you">Вы настроили права доступа сервера (ACL) для этой комнаты.</string>
@@ -392,7 +392,7 @@
     <string name="create_account">Создать аккаунт</string>
     <string name="login">Войти</string>
     <string name="logout">Выйти</string>
-    <string name="hs_url">URL сервера</string>
+    <string name="hs_url">URL домашнего сервера</string>
     <string name="identity_url">URL сервера авторизации</string>
     <string name="search">Поиск</string>
     <string name="start_new_chat">Начать новый чат</string>
@@ -435,9 +435,9 @@
     <string name="auth_threepid_warning_message">Регистрация одновременно по email и номеру телефона пока не поддерживается. Только номер телефона будет связан с аккаунтом. 
 \n
 \nВы можете добавить свой email в настройках профиля.</string>
-    <string name="auth_recaptcha_message">Проверка не являетесь ли вы роботом</string>
+    <string name="auth_recaptcha_message">Этот домашний сервер хочет убедиться, что вы не робот</string>
     <string name="auth_username_in_use">Логин уже используется</string>
-    <string name="auth_home_server">Сервер:</string>
+    <string name="auth_home_server">Домашний сервер:</string>
     <string name="auth_identity_server">Сервер идентификации:</string>
     <string name="auth_reset_password_next_step_button">Я проверил мой email адрес</string>
     <string name="auth_reset_password_message">Для сброса пароля введите email привязанный к учетной записи:</string>
@@ -529,7 +529,7 @@
     <string name="preview">Просмотр</string>
     <string name="reject">Отклонить</string>
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Перейти к первому непрочитанному сообщению.</string>
+    <string name="room_jump_to_first_unread">Перейти к непрочитанному</string>
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">%s пригласил вас присоединиться к этой комнате</string>
     <string name="room_preview_unlinked_email_warning">Приглашение пришло на адрес %s, который не связан с этим аккаунтом.
@@ -591,7 +591,7 @@
     <string name="room_resend_unsent_messages">Отправить неотправленные сообщения</string>
     <string name="room_delete_unsent_messages">Удалить неотправленные сообщения</string>
     <string name="room_message_file_not_found">Файл не найден</string>
-    <string name="room_do_not_have_permission_to_post">У вас нет прав писать сообщения в этом чате</string>
+    <string name="room_do_not_have_permission_to_post">У вас нет прав писать сообщения в этом чате.</string>
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Доверять</string>
     <string name="ssl_do_not_trust">Не доверять</string>
@@ -711,7 +711,7 @@
     <string name="devices_delete_pswd">Пароль:</string>
     <string name="devices_delete_submit_button_label">Отправить</string>
     <string name="settings_logged_in">Авторизован как</string>
-    <string name="settings_home_server">Сервер</string>
+    <string name="settings_home_server">Домашний сервер</string>
     <string name="settings_identity_server">Сервер идентификации</string>
     <string name="account_email_validation_title">Ожидается подтверждение</string>
     <string name="account_email_validation_message">Проверьте электронную почту и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
@@ -760,9 +760,9 @@
     <string name="room_settings_room_access_rules_pref_dialog_title">Кто имеет доступ к комнате?</string>
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Все</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Только члены (с момента выбора этой опции)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">Только члены (с момента приглашения)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Только члены (с момента присоединения)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Только участники (с момента выбора этой опции)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Только участники (с момента приглашения)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Только участники (с момента присоединения)</string>
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Для генерации ссылки команда должна иметь адрес.</string>
     <string name="room_settings_room_access_entry_only_invited">Только приглашенные</string>
@@ -855,7 +855,7 @@
     <string name="select_room_directory">Выбор списка комнат</string>
     <string name="directory_server_fail_to_retrieve_server">Сервер возможно недоступен или перегружен</string>
     <string name="directory_server_type_homeserver">Введите домашний сервер для отображения списка публичных комнат</string>
-    <string name="directory_server_placeholder">URL домашнего сервера</string>
+    <string name="directory_server_placeholder">Имя сервера</string>
     <string name="directory_server_all_rooms_on_server">Все комнаты на сервере %s</string>
     <string name="directory_server_native_rooms">Все местные комнаты %s</string>
     <!-- historical -->
@@ -1116,7 +1116,7 @@
     <string name="command_description_kick_user">Выкинуть пользователя с заданным ID</string>
     <string name="command_description_nick">Изменить ваш псевдоним</string>
     <string name="command_description_markdown">Вкл/выкл markdown</string>
-    <string name="room_tombstone_versioned_description">Эта комната была заменена и больше не активна</string>
+    <string name="room_tombstone_versioned_description">Эта комната была заменена и больше не активна.</string>
     <string name="room_tombstone_continuation_link">Этот разговор продолжается здесь</string>
     <string name="room_tombstone_continuation_description">Эта комната является продолжением другого разговора</string>
     <string name="room_tombstone_predecessor_link">Нажмите здесь для просмотра старых сообщений</string>
@@ -1249,8 +1249,8 @@
     <string name="settings_troubleshoot_test_fcm_failed">Не удалось получить токен FCM: 
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Регистрация токена</string>
-    <string name="settings_troubleshoot_test_token_registration_success">Токен FCM успешно зарегистрирован на сервере.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Не удалось зарегистрировать токен FCM на сервере: 
+    <string name="settings_troubleshoot_test_token_registration_success">Токен FCM успешно зарегистрирован на домашнем сервере.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Не удалось зарегистрировать токен FCM на домашнем сервере:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Служба уведомлений</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Служба уведомлений запущена.</string>
@@ -1671,7 +1671,7 @@
     <string name="settings_background_sync_update_error">Не удалось обновить настройки.</string>
     <string name="settings_set_workmanager_delay">Предпочтительный интервал синхронизации</string>
     <string name="settings_discovery_category">Обнаружение</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Будет использовать%s в качестве помощника, если ваш домашний сервер не предлагает его (ваш IP-адрес будет доступен во время разговора)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Будет использовать %s в качестве помощника, если ваш домашний сервер не предлагает его (ваш IP-адрес будет доступен во время разговора)</string>
     <string name="invite_no_identity_server_error">Добавьте идентификационный сервер в свои настройки, чтобы выполнить это действие.</string>
     <string name="settings_background_fdroid_sync_mode">Режим фоновой синхронизации</string>
     <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} будет синхронизироваться в фоновом режиме таким образом, чтобы сохранить ограниченные ресурсы устройства (батарея).
@@ -1932,7 +1932,7 @@
     <string name="no_connectivity_to_the_server_indicator">Соединение с сервером потеряно</string>
     <string name="verification_cannot_access_other_session">Используйте пароль восстановления или ключ</string>
     <string name="e2e_use_keybackup">Разблокировать историю зашифрованных сообщений</string>
-    <string name="verify_cancelled_notice">Проверьте свои устройства в разделе Настройки.</string>
+    <string name="verify_cancelled_notice">Проверка была отменена. Вы можете начать проверку снова.</string>
     <string name="recovery_passphrase">Парольная фраза для восстановления</string>
     <string name="account_password">Пароль учётной записи</string>
     <string name="set_recovery_passphrase">Задайте %s</string>
@@ -2078,7 +2078,7 @@
     <string name="room_join_rules_invite_by_you">Вы сделали комнату только по приглашению.</string>
     <string name="login_splash_text2">Сохраняйте приватность ваших переписок с помощью шифрования</string>
     <string name="login_splash_text3">Расширьте и персонализируйте свой опыт использования</string>
-    <string name="login_server_matrix_org_text">Присоединяйтесь к миллионам бесплатных на самом большом публичном сервере</string>
+    <string name="login_server_matrix_org_text">Присоединяйтесь к миллионам бесплатно на крупнейшем публичном сервере</string>
     <string name="login_signin_to">Войти в %1$s</string>
     <string name="login_server_url_form_common_notice">Введите адрес сервера, который вы хотите использовать</string>
     <string name="login_reset_password_notice">На ваш почтовый ящик будет отправлено письмо с подтверждением установки нового пароля.</string>
@@ -2676,9 +2676,9 @@
     <string name="room_settings_room_read_history_dialog_subtitle">Изменение того, кто может читать историю, будет применяться только к будущим сообщениям в этой комнате. Видимость существующей истории не изменится.</string>
     <string name="action_unpublish">Отменить публикацию</string>
     <string name="action_add">Добавить</string>
-    <string name="default_message_emote_snow">отправляет снег ❄️</string>
+    <string name="default_message_emote_snow">отправляет снегопад ❄️</string>
     <string name="default_message_emote_confetti">отправляет конфетти 🎉</string>
-    <string name="command_snow">Отправляет данное сообщение со снегом</string>
+    <string name="command_snow">Отправляет данное сообщение со снегопадом</string>
     <string name="command_confetti">Отправляет данное сообщение с конфетти</string>
     <string name="login_clear_homeserver_history">Очистить историю</string>
     <string name="login_social_sso">Единая точка входа</string>
@@ -2821,4 +2821,187 @@
     <string name="initial_sync_start_server_computing">Начальная синхронизация:
 \nОжидание ответа сервера…</string>
     <string name="event_status_sent_message">Сообщение отправлено</string>
+    <string name="send_feedback_space_title">Отзыв о пространствах</string>
+    <string name="space_settings_alias_title">Адреса пространства</string>
+    <string name="error_failed_to_join_room">Извините, при попытке присоединиться произошла ошибка: %s</string>
+    <string name="room_upgrade_to_recommended_version">Обновить до рекомендованной версии комнаты</string>
+    <string name="room_using_unstable_room_version">В этой комнате запущена версия комнаты %s, которую этот домашний сервер пометил как нестабильную.</string>
+    <string name="upgrade_room_no_power_to_manage">Для обновления комнаты необходимо разрешение</string>
+    <string name="upgrade_room_update_parent_space">Автоматическое обновление родительского пространства</string>
+    <string name="upgrade_room_auto_invite">Автоматическое приглашение пользователей</string>
+    <string name="upgrade_public_room_from_to">Вы обновили эту комнату с %s до %s.</string>
+    <string name="upgrade_room_warning">Обновление комнаты - это расширенное действие, которое обычно рекомендуется, когда комната работает нестабильно из-за ошибок, отсутствующих функций или уязвимостей безопасности.
+\nОбычно это влияет только на то, как комната обрабатывается на сервере.</string>
+    <string name="upgrade_private_room">Модернизировать приватную комнату</string>
+    <string name="upgrade_public_room">Модернизировать публичную комнату</string>
+    <string name="upgrade">Обновление</string>
+    <string name="it_may_take_some_time">Пожалуйста, будьте терпеливы, это может занять некоторое время.</string>
+    <string name="joining_replacement_room">Присоединиться к замещающей комнате</string>
+    <string name="teammate_spaces_might_not_join">В настоящее время люди не могут присоединиться к созданным вами приватным комнатам.
+\n
+\nМы улучшим это в рамках бета-версии, но мы просто хотели сообщить вам об этом.</string>
+    <string name="teammate_spaces_arent_quite_ready">Пространства для членов команды еще не совсем готовы, но вы все еще можете их попробовать</string>
+    <string name="unnamed_room">Комната без названия</string>
+    <string name="this_space_has_no_rooms_admin">Некоторые комнаты могут быть скрыты, потому что они приватные, и вам нужно приглашение.</string>
+    <string name="this_space_has_no_rooms_not_admin">Некоторые комнаты могут быть скрыты, потому что они приватные, и вам нужно приглашение.
+\nУ вас нет разрешения на добавление комнат.</string>
+    <string name="this_space_has_no_rooms">В этом пространстве нет комнат</string>
+    <string name="spaces_no_server_support_description">Для получения дополнительной информации обратитесь к администратору домашнего сервера</string>
+    <string name="spaces_no_server_support_title">Похоже, что ваш домашний сервер пока не поддерживает пространства</string>
+    <string name="spaces_feeling_experimental_subspace">Чувствуете себя экспериментатором\?
+\nВы можете добавить существующие пространства в пространство.</string>
+    <string name="labs_space_show_orphan_in_home">Экспериментальное пространство - показывать в Главной только сирот</string>
+    <string name="space_manage_rooms_and_spaces">Управление комнатами и пространствами</string>
+    <string name="space_mark_as_not_suggested">Отметить как не рекомендуется</string>
+    <string name="space_mark_as_suggested">Отметить как рекомендуется</string>
+    <string name="space_suggested">Предложенно</string>
+    <string name="make_this_space_public">Сделайте это пространство публичным</string>
+    <string name="space_settings_manage_rooms">Управление комнатами</string>
+    <string name="looking_for_someone_not_in_space">Ищете кого-то не в %s\?</string>
+    <string name="user_invites_you">%s приглашает вас</string>
+    <string name="labs_use_restricted_join_rule_desc">Предупреждение: требует поддержки сервера и экспериментальной версии комнаты</string>
+    <string name="labs_use_restricted_join_rule">Экспериментальное пространство - Ограниченная комната.</string>
+    <string name="you_are_invited">Вы приглашены</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Пространства - это новый способ группировки комнат и людей.</string>
+    <string name="spaces_beta_welcome_to_spaces">Добро пожаловать в Пространства!</string>
+    <string name="space_add_rooms">Добавить комнаты</string>
+    <string name="space_add_existing_rooms">Добавить существующие комнаты и пространство</string>
+    <string name="space_leave_prompt_msg_as_admin">Вы являетесь администратором этого пространства, перед уходом убедитесь, что передали права администратора другому пользователю.</string>
+    <string name="space_leave_prompt_msg_private">Это пространство не является публичным. Вы не сможете присоединиться к нему без приглашения.</string>
+    <string name="space_leave_prompt_msg_only_you">Вы здесь единственный человек. Если вы уйдёте, никто не сможет присоединиться в будущем, включая вас.</string>
+    <string name="space_leave_prompt_msg">Вы уверены, что хотите покинуть пространство\?</string>
+    <string name="leave_space">Покинуть пространство</string>
+    <string name="space_add_child_title">Добавить комнаты</string>
+    <string name="space_explore_activity_title">Список комнат</string>
+    <plurals name="space_people_you_know">
+        <item quantity="one">%d человек, которого вы знаете, уже присоединился</item>
+        <item quantity="few">%d человека, которых вы знаете, уже присоединились</item>
+        <item quantity="many">%d человек, которых вы знаете, уже присоединились</item>
+        <item quantity="other">%d человек, которых вы знаете, уже присоединились</item>
+    </plurals>
+    <string name="suggested_rooms_pills_on_empty_header">Добро пожаловать в %1$s, %2$s.</string>
+    <string name="suggested_rooms_pills_on_empty_text">Вы ещё не находитесь ни в одной комнате. Ниже приведены некоторые предлагаемые комнаты, но вы можете посмотреть другие с помощью зелёной кнопки внизу справа.</string>
+    <string name="room_alias_preview_not_found">В данный момент этот псевдоним недоступен.
+\nПовторите попытку позже или попросите администратора комнаты проверить, есть ли у вас доступ.</string>
+    <string name="join_anyway">Присоединиться в любом случае</string>
+    <string name="join_space">Присоединиться к пространству</string>
+    <string name="create_space">Создать пространство</string>
+    <string name="skip_for_now">Пока пропустить</string>
+    <string name="share_space_link_message">Присоединяйтесь к моему пространству %1$s %2$s</string>
+    <string name="invite_just_to_this_room_desc">Они не будут участвовать в %s</string>
+    <string name="invite_just_to_this_room">Только в эту комнату</string>
+    <string name="invite_to_space_with_name_desc">Они смогут изучить %s</string>
+    <string name="invite_to_space_with_name">Пригласить в %s</string>
+    <string name="invite_by_link">Поделиться ссылкой</string>
+    <string name="invite_by_mxid">Пригласить по имени пользователя</string>
+    <string name="invite_by_email">Пригласить по электронной почте</string>
+    <string name="invite_people_to_your_space_desc">На данный момент здесь только вы. С другими в %s будет ещё лучше.</string>
+    <string name="invite_to_space">Пригласить в %s</string>
+    <string name="invite_people_menu">Пригласить людей</string>
+    <string name="invite_people_to_your_space">Пригласите людей в свое пространство</string>
+    <string name="create_space_topic_hint">Описание</string>
+    <string name="create_spaces_loading_message">Создание пространства…</string>
+    <string name="create_spaces_default_public_random_room_name">Случайный</string>
+    <string name="create_spaces_default_public_room_name">Общие</string>
+    <string name="create_spaces_room_private_header_desc">Давайте создадим комнату для каждого из них. Позже можно добавить и другие, в том числе уже существующие.</string>
+    <string name="create_spaces_room_private_header">Над чем вы работаете\?</string>
+    <string name="create_spaces_room_public_header_desc">Мы создадим для них комнаты. Позже вы сможете добавить и другие.</string>
+    <string name="create_spaces_room_public_header">Какие обсуждения вы хотите провести в %s\?</string>
+    <string name="create_space_error_empty_field_space_name">Дайте ему название, чтобы продолжить.</string>
+    <string name="create_spaces_details_private_header">Добавьте некоторые детали, чтобы помочь людям идентифицировать его. Вы сможете изменить их в любой момент.</string>
+    <string name="create_spaces_details_public_header">Добавьте некоторые детали, чтобы помочь ему выделиться. Вы сможете изменить их в любой момент.</string>
+    <string name="activity_create_space_title">Создание пространства</string>
+    <string name="space_type_private_desc">Только по приглашениям, лучше для себя или команды</string>
+    <string name="space_type_private">Приватное</string>
+    <string name="space_type_public_desc">Открыто для всех, лучше всего подходит для сообществ</string>
+    <string name="space_type_public">Публичное</string>
+    <string name="create_spaces_private_teammates">Приватное пространство для вас и членов команды</string>
+    <string name="create_spaces_organise_rooms">Приватное пространство для организации ваших комнат</string>
+    <string name="create_spaces_me_and_teammates">Я и члены команды</string>
+    <string name="create_spaces_just_me">Только я</string>
+    <string name="create_spaces_make_sure_access">Убедитесь, что нужные люди имеют доступ к %s. Вы сможете изменить это позже.</string>
+    <string name="create_spaces_who_are_you_working_with">С кем вы работаете\?</string>
+    <string name="create_spaces_join_info_help">Чтобы присоединиться к существующему пространству, вам необходимо получить приглашение.</string>
+    <string name="create_spaces_you_can_change_later">Вы сможете изменить это позже</string>
+    <string name="create_spaces_choose_type_label">Какой тип пространства вы хотите создать\?</string>
+    <string name="create_spaces_type_header">Пространства - это новый способ группировки комнат и людей</string>
+    <string name="your_private_space">Ваше приватное пространство</string>
+    <string name="your_public_space">Ваше публичное пространство</string>
+    <string name="add_space">Добавить простанство</string>
+    <string name="private_space">Приватное пространство</string>
+    <string name="public_space">Публичное пространство</string>
+    <string name="command_description_upgrade_room">Обновляет комнату до новой версии</string>
+    <string name="command_description_leave_room">Покинуть комнату с заданным id (или текущую комнату, если null)</string>
+    <string name="command_description_join_space">Присоединитесь к пространству с заданным id</string>
+    <string name="command_description_create_space">Создать пространство</string>
+    <string name="a11y_public_space">Это пространство публичное</string>
+    <string name="a11y_public_room">Эта комната публичная</string>
+    <string name="a11y_unchecked">Непроверенные</string>
+    <string name="call_transfer_unknown_person">Неизвестное лицо</string>
+    <string name="call_transfer_transfer_to_title">Перевести на %1$s</string>
+    <string name="call_transfer_consulting_with">Запросить с %1$s</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">Отправить видео в исходном размере</item>
+        <item quantity="few">Отправить видео в исходном размере</item>
+        <item quantity="many">Отправить видео в исходном размере</item>
+        <item quantity="other">Отправить видео в исходном размере</item>
+    </plurals>
+    <string name="send_images_and_video_with_original_size">Отправить медиафайлы в исходном размере</string>
+    <string name="settings_server_room_version_unstable">нестабильная</string>
+    <string name="settings_server_room_version_stable">стабильная</string>
+    <string name="settings_server_default_room_version">Версия по умолчанию</string>
+    <string name="settings_server_room_versions">Версии комнаты 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Проверьте, сравнив эмодзи</string>
+    <string name="verification_scan_with_this_device">Сканирование с помощью этого устройства</string>
+    <string name="verification_scan_self_notice">Сканируйте код с помощью другого устройства или переключитесь и сканируйте с помощью этого устройства</string>
+    <string name="create_space_alias_hint">Адрес пространства</string>
+    <string name="error_file_too_big_simple">Файл слишком большой для загрузки.</string>
+    <string name="a11y_beta">Эта функция находится в бета-версии</string>
+    <string name="search_hint_room_name">Поиск по имени</string>
+    <string name="send_file_step_compressing_video">Сжатие видео %d%%</string>
+    <string name="send_file_step_compressing_image">Сжатие изображения…</string>
+    <string name="give_feedback">Дать отзыв</string>
+    <string name="feedback_failed">Отзыв не отправлен (%s)</string>
+    <string name="feedback_sent">Спасибо, ваш отзыв успешно отправлен</string>
+    <string name="you_may_contact_me">Вы можете связаться со мной, если у вас возникнут какие-либо последующие вопросы</string>
+    <string name="send_feedback_space_info">Вы используете бета-версию пространств. Ваши отзывы помогут при разработке следующих версий. Ваша платформа и имя пользователя будут отмечены, чтобы мы могли максимально использовать ваш отзыв.</string>
+    <string name="feedback">Отзыв</string>
+    <string name="error_jitsi_join_conf">Извините, при попытке присоединиться к конференции произошла ошибка</string>
+    <string name="directory_add_a_new_server_error_already_added">Этот сервер уже присутствует в списке</string>
+    <string name="directory_add_a_new_server_error">Не удается найти этот сервер или список его комнат</string>
+    <string name="directory_add_a_new_server_prompt">Введите имя нового сервера, который вы хотите исследовать.</string>
+    <string name="directory_add_a_new_server">Добавить новый сервер</string>
+    <string name="directory_your_server">Ваш сервер</string>
+    <string name="room_settings_room_access_restricted_description">Любой человек в пространстве с этой комнатой может найти её и присоединиться к ней. Только администраторы этой комнаты могут добавить её в пространство.</string>
+    <string name="room_settings_room_access_restricted_title">Пространства</string>
+    <string name="room_settings_room_access_public_description">Любой желающий может найти комнату и присоединиться</string>
+    <string name="room_settings_room_access_public_title">Публичный</string>
+    <string name="room_settings_room_access_private_description">Только приглашенные люди могут найти и присоединиться</string>
+    <string name="room_settings_room_access_private_title">Приватный</string>
+    <string name="room_settings_room_access_entry_unknown">Неизвестная настройка доступа (%s)</string>
+    <string name="room_settings_room_access_entry_knock">Любой может постучаться в комнату, участники могут принять или отклонить его</string>
+    <string name="space_settings_alias_subtitle">Просмотреть и управлять адресами этого пространства.</string>
+    <string name="room_settings_guest_access_title">Разрешить гостям присоединяться</string>
+    <string name="continue_anyway">Продолжить в любом случае</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Пропущенный видеозвонок</item>
+        <item quantity="few">%d пропущенных видеозвонка</item>
+        <item quantity="many">%d пропущенных видеозвонков</item>
+        <item quantity="other">%d пропущенных видеозвонков</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Пропущенный аудиовызов</item>
+        <item quantity="few">%d пропущенных аудиовызова</item>
+        <item quantity="many">%d пропущенных аудиовызовов</item>
+        <item quantity="other">%d пропущенных аудиовызовов</item>
+    </plurals>
+    <string name="use_as_default_and_do_not_ask_again">Использовать по умолчанию и больше не спрашивать</string>
+    <string name="option_always_ask">Всегда спрашивать</string>
+    <string name="hs_client_url">URL API домашнего сервера</string>
+    <string name="spaces_header">Пространства</string>
+    <string name="spaces_invited_header">Приглашения</string>
+    <string name="suggested_header">Предлагаемые комнаты</string>
+    <string name="missing_permissions_title">Отсутствующие разрешения</string>
+    <string name="denied_permission_camera">Для выполнения этого действия, пожалуйста, предоставьте разрешение Камеры в настройках системы.</string>
+    <string name="denied_permission_generic">Для выполнения этого действия отсутствуют некоторые разрешения, пожалуйста, предоставьте разрешения в настройках системы.</string>
 </resources>

@@ -1,3 +1,44 @@
+Changes in Element v1.2.0 (2021-08-12)
+======================================
+
+Features ✨
+----------
+ - Reorganise Advanced Notifications in to Default Notifications, Keywords and Mentions, Other (This feature is hidden in the release ui until a future release date.) ([#3646](https://github.com/vector-im/element-android/issues/3646))
+ - Voice Message - Enable by default, remove from labs ([#3817](https://github.com/vector-im/element-android/issues/3817))
+
+Bugfixes 🐛
+----------
+ - Voice Message - UI Improvements ([#3798](https://github.com/vector-im/element-android/issues/3798))
+ - Stop VMs playing in the timeline if a new VM recording is started ([#3802](https://github.com/vector-im/element-android/issues/3802))
+
+
+Changes in Element v1.1.16 (2021-08-09)
+=======================================
+
+Features ✨
+----------
+ - Spaces - Support Restricted Room via room capabilities API ([#3509](https://github.com/vector-im/element-android/issues/3509))
+ - Spaces | Support restricted room access in room settings ([#3665](https://github.com/vector-im/element-android/issues/3665))
+
+Bugfixes 🐛
+----------
+ - Fix crash when opening Troubleshoot Notifications ([#3778](https://github.com/vector-im/element-android/issues/3778))
+ - Fix error when sending encrypted message if someone in the room logs out. ([#3792](https://github.com/vector-im/element-android/issues/3792))
+ - Voice Message - Amplitude update java.util.ConcurrentModificationException ([#3796](https://github.com/vector-im/element-android/issues/3796))
+
+
+Changes in Element v1.1.15 (2021-07-30)
+=======================================
+
+Features ✨
+----------
+ - Voice Message implementation (Currently under Labs Settings and disabled by default). ([#3598](https://github.com/vector-im/element-android/issues/3598))
+
+SDK API changes ⚠️
+------------------
+ - updatePushRuleActions signature has been updated to more explicitly enabled/disable the rule and update the actions. It's behaviour has also been changed to match the web with the enable/disable requests being sent on every invocation and actions sent when needed(not null). ([#3681](https://github.com/vector-im/element-android/issues/3681))
+
+
 Changes in Element 1.1.14 (2021-07-23)
 ======================================
 
