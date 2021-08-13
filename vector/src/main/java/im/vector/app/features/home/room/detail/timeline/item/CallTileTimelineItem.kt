@@ -73,9 +73,9 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         // Sent by me means I made the call and opponent missed it.
         if (attributes.informationData.sentByMe) {
             if (attributes.callKind.isVoiceCall) {
-                holder.statusView.setStatus(R.string.call_tile_no_answer, R.drawable.ic_missed_voice_call_small)
+                holder.statusView.setStatus(R.string.call_tile_no_answer, R.drawable.ic_voice_call_declined)
             } else {
-                holder.statusView.setStatus(R.string.call_tile_no_answer, R.drawable.ic_missed_video_call_small)
+                holder.statusView.setStatus(R.string.call_tile_no_answer, R.drawable.ic_video_call_declined)
             }
         } else {
             if (attributes.callKind.isVoiceCall) {
@@ -112,7 +112,14 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     }
 
     private fun renderRejectedStatus(holder: Holder) {
-        holder.acceptRejectViewGroup.isVisible = false
+        holder.acceptRejectViewGroup.isVisible = true
+        holder.acceptView.setText(R.string.call_tile_call_back)
+        holder.acceptView.setLeftDrawable(attributes.callKind.icon, R.attr.colorOnPrimary)
+        holder.acceptView.onClick {
+            val callbackAction = RoomDetailAction.StartCall(attributes.callKind == CallKind.VIDEO)
+            attributes.callback?.onTimelineItemAction(callbackAction)
+        }
+        holder.rejectView.isVisible = false
         // Sent by me means I rejected the call made by opponent.
         if (attributes.informationData.sentByMe) {
             if (attributes.callKind.isVoiceCall) {
@@ -120,16 +127,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             } else {
                 holder.statusView.setStatus(R.string.call_tile_video_declined, R.drawable.ic_video_call_declined)
             }
-            holder.acceptRejectViewGroup.isVisible = true
-            holder.acceptView.setText(R.string.call_tile_call_back)
-            holder.acceptView.setLeftDrawable(attributes.callKind.icon, R.attr.colorOnPrimary)
-            holder.acceptView.onClick {
-                val callbackAction = RoomDetailAction.StartCall(attributes.callKind == CallKind.VIDEO)
-                attributes.callback?.onTimelineItemAction(callbackAction)
-            }
-            holder.rejectView.isVisible = false
         } else {
-            holder.acceptRejectViewGroup.isVisible = false
             if (attributes.callKind.isVoiceCall) {
                 holder.statusView.setStatus(R.string.call_tile_no_answer, R.drawable.ic_voice_call_declined)
             } else {
