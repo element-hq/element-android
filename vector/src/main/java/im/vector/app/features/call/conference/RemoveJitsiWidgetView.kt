@@ -44,7 +44,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
         object Progress : State()
     }
 
-    private val dimensionConverter = DimensionConverter(context.resources)
     private val views: ViewRemoveJitsiWidgetBinding
     private var state: State = State.Unmount
     var onCompleteSliding: (() -> Unit)? = null
@@ -89,7 +88,10 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 
     fun render(roomDetailViewState: RoomDetailViewState) {
         val summary = roomDetailViewState.asyncRoomSummary()
-        val newState = if (summary?.membership != Membership.JOIN || !roomDetailViewState.isAllowedToManageWidgets || roomDetailViewState.jitsiState.widgetId == null) {
+        val newState = if (summary?.membership != Membership.JOIN ||
+                roomDetailViewState.isWebRTCCallOptionAvailable() ||
+                !roomDetailViewState.isAllowedToManageWidgets ||
+                roomDetailViewState.jitsiState.widgetId == null) {
             State.Unmount
         } else if (roomDetailViewState.jitsiState.deleteWidgetInProgress) {
             State.Progress

@@ -745,7 +745,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.voice_call       -> state.isWebRTCCallOptionAvailable()
             R.id.video_call       -> state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
             // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
-            R.id.join_conference  -> state.jitsiState.confId != null && !state.jitsiState.hasJoined
+            R.id.join_conference  -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
             R.id.search           -> true
             R.id.dev_tools        -> vectorPreferences.developerMode()
             else                  -> false
