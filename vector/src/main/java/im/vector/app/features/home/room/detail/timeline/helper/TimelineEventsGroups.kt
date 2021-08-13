@@ -58,22 +58,7 @@ class TimelineEventsGroups {
         return if (EventType.isCallEvent(type)) {
             (content?.get("call_id") as? String)
         } else if (type == EventType.STATE_ROOM_WIDGET || type == EventType.STATE_ROOM_WIDGET_LEGACY) {
-            val widgetContent: WidgetContent = root.getClearContent().toModel() ?: return null
-            if (widgetContent.isActive()) {
-                widgetContent.getJitsiIdOrNull()
-            } else {
-                val prevWidgetContent: WidgetContent = root.resolvedPrevContent().toModel() ?: return null
-                prevWidgetContent.getJitsiIdOrNull()
-            }
-        } else {
-            null
-        }
-    }
-
-    private fun WidgetContent.getJitsiIdOrNull(): String? {
-        val isJitsi = WidgetType.fromString(type ?: "") == WidgetType.Jitsi
-        return if (isJitsi) {
-            id
+            root.stateKey
         } else {
             null
         }

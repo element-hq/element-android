@@ -70,7 +70,7 @@ class WidgetItemFactory @Inject constructor(
                 null
             }
         }
-        val callStatus = if (isActiveTile && widgetContent.id == params.partialState.jitsiState.widgetId) {
+        val callStatus = if (isActiveTile && params.event.root.stateKey == params.partialState.jitsiState.widgetId) {
             if (params.partialState.jitsiState.hasJoined) {
                 CallTileTimelineItem.CallStatus.IN_CALL
             } else {
