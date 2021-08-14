@@ -2815,4 +2815,19 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="denied_permission_voice_message">Para enviar mensajes de voz has de otorgar el permiso de Micrófono.</string>
     <string name="denied_permission_camera">Para llevar a cabo esta acción has de otorgar el permiso de Cámara en las preferencias del sistema.</string>
     <string name="denied_permission_generic">Se requieren permisos para llevar a cabo esta acción. Por favor, otórgalos desde las preferencias del sistema.</string>
+    <string name="create_room_disable_federation_title">Impedir a cualquiera que no forme parte de %s unirse a este sala</string>
+    <string name="identity_server_consent_dialog_content">Con la finalidad de descubrir contactos existentes que conozcas, ¿aceptas enviar tus datos de contacto (números de teléfono y/o emails) al servidor identidad configurado (%1$s)\?
+\n
+\nPara una mayor privacidad, los datos serán encriptados antes de ser enviados.</string>
+    <string name="settings_discovery_consent_action_give_consent">Dar consentimiento</string>
+    <string name="settings_discovery_consent_action_revoke">Revocar consentimiento</string>
+    <string name="settings_discovery_consent_notice_off">No has dado consentimiento para enviar emails y números de teléfono a este servidor identidad para descubrir otros usuarios desde tus contactos.</string>
+    <string name="settings_discovery_consent_notice_on">Has dado tu consentimiento para enviar emails y números de teléfono a este servidor identidad para descubrir a otros usuarios desde tus contactos.</string>
+    <string name="feedback">Realimentación</string>
+    <string name="directory_add_a_new_server_error_already_added">Este servidor ya está presente en esta lista</string>
+    <string name="directory_add_a_new_server_error">No se pudo encontrar este servidor o su lista de salas</string>
+    <string name="directory_add_a_new_server_prompt">Introduce el nombre del servidor que quieras explorar.</string>
+    <string name="directory_add_a_new_server">Añadir un nuevo servidor</string>
+    <string name="directory_your_server">Tu servidor</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Otros espacios o habitaciones que puede que no conozcas</string>
 </resources>
